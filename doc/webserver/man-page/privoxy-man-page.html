@@ -2,7 +2,7 @@
 <HTML><HEAD><TITLE>Manpage of PRIVOXY</TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></HEAD><BODY>
 <H1>PRIVOXY</H1>
-Section:  (1)<BR>Updated: 08 April 2002<BR><A HREF="#index">Index</A>
+Section:  (1)<BR>Updated: 18 April 2002<BR><A HREF="#index">Index</A>
 <HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -34,10 +34,10 @@ Print version info and exit.
 Don't  become  a daemon, i.e. don't fork and become process group
 leader, don't detach from controlling tty, and do all logging there.
 <DT><B>--pidfile </B><I>pidfile</I><B></B><DD>
-After (optionally) writing the PID file, assume the user  ID  of  user
-and the GID of group, or, if the optional group was not given, the
-default group  of user.  Exit if the privileges are not sufficient to
-do so.
+On startup, write the process ID to <I>pidfile</I>.
+Delete the <I>pidfile</I> on exit.
+Failiure to create or delete the <I>pidfile</I>
+is non-fatal. If no <B>--pidfile</B> option is given, no PID file will be used.
 <DT><B>--user </B><I>user[.group]</I><B></B><DD>
 After (optionally) writing the PID file, assume the user ID of
 <I>user</I> and the GID of
@@ -68,17 +68,8 @@ tastes. <B>Privoxy</B> has application for both
 stand-alone systems and multi-user networks.
 <P>
 
-<B>Privoxy</B> is based on the code of the 
-<B>Internet Junkbuster</B> (tm).
-<B>Junkbuster</B> was originally written by JunkBusters
-Corporation, and was released as free open-source software under the GNU GPL.
-Stefan Waldherr made many improvements, and started the SourceForge project
-to continue development.
-<P>
-
-<B>Privoxy</B> continues the
-<B>Junkbuster</B> tradition, but adds many 
-refinements, enhancements and new features.
+<B>Privoxy</B> is based on <B>Internet
+Junkbuster</B> (tm).
 <A NAME="lbAF">&nbsp;</A>
 <H2>INSTALLATION AND USAGE</H2>
 
@@ -304,6 +295,9 @@ Sourceforge.
 <A HREF="http://config.privoxy.org">http://config.privoxy.org</A>
 may work in some situations where the first does not.
 <P>
+<A HREF="http://p.p/">http://p.p/</A>  
+to submit ``misses'' to the developers. 
+<P>
 <A HREF="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</A>
 <P>
 <A HREF="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</A>
@@ -316,23 +310,20 @@ may work in some situations where the first does not.
 
 <P>
 <PRE>
- Stefan Waldherr
- Andreas Oesterhelt
  Jon Foster
- Markus Breitenbach
+ Andreas Oesterhelt
+ Stefan Waldherr
  Thomas Steudten
- David Schmidt (OS/2, Mac OSX ports)
- Gabriel L. Somlo
- Hal Burgiss (docs)
- Haroon Rafique
- John Venvertloh
- Joerg Strohmayer
  Rodney Stromlund
  Rodrigo Barbosa (RPM specfiles)
- Sarantis Paskalis
- Shamim Mohamed
- G&#225;bor Lipt&#225;k
+ Hal Burgiss (docs)
  Alexander Lazic
+ G&#225;bor Lipt&#225;k
+ Guy
+ Haroon Rafique
+ David Schmidt (OS/2, Mac OSX ports)
+ Joerg Strohmayer
+ Sarantis Paskalis
 </PRE>
 
 <A NAME="lbAN">&nbsp;</A>
@@ -379,6 +370,6 @@ along with this program; if not, write to the Free Software Foundation, Inc.,
 This document was created by
 man2html,
 using the manual pages.<BR>
-Time: 15:13:15 GMT, April 08, 2002
+Time: 15:21:38 GMT, April 18, 2002
 </BODY>
 </HTML>
