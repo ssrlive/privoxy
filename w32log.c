@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.2 2001/05/20 01:21:20 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.3 2001/05/20 15:07:54 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.2 2001/05/20 01:21:20 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.3  2001/05/20 15:07:54  jongfoster
+ *    File is now ignored if _WIN_CONSOLE is defined.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS

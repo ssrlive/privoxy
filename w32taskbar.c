@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.2 2001/05/20 15:07:54 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1.1.1 2001/05/15 13:59:08 o
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.2  2001/05/20 15:07:54  jongfoster
+ *    File is now ignored if _WIN_CONSOLE is defined.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
  *    Initial import of version 2.9.3 source tree
  *
