@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.15 2001/07/29 17:40:43 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.16 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,12 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.15 2001/07/29 17:40:43 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.16  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.15  2001/07/29 17:40:43  jongfoster
  *    Fixed compiler warning by adding a cast
  *
@@ -182,14 +188,18 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    inaddr.sin_family      = AF_INET;
    csp->http->host_ip_addr_str = strdup(inet_ntoa(inaddr.sin_addr));
 
+#ifndef _WIN32
    if (sizeof(inaddr.sin_port) == sizeof(short))
+#endif /* ndef _WIN32 */
    {
       inaddr.sin_port = htons((short)portnum);
    }
+#ifndef _WIN32
    else
    {
       inaddr.sin_port = htonl(portnum);
    }
+#endif /* ndef _WIN32 */
 
    if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) < 0)
    {
@@ -379,14 +389,18 @@ int bind_port(const char *hostnam, int portnum)
    inaddr.sin_family      = AF_INET;
    inaddr.sin_addr.s_addr = resolve_hostname_to_ip(hostnam);
 
+#ifndef _WIN32
    if (sizeof(inaddr.sin_port) == sizeof(short))
+#endif /* ndef _WIN32 */
    {
       inaddr.sin_port = htons((short)portnum);
    }
+#ifndef _WIN32
    else
    {
       inaddr.sin_port = htonl(portnum);
    }
+#endif /* ndef _WIN32 */
 
    fd = socket(AF_INET, SOCK_STREAM, 0);
 
