@@ -300,10 +300,6 @@ SOURCE=.\win32.h
 # PROP Default_Filter "rc,ico,bmp"
 # Begin Source File
 
-SOURCE=.\icons\denyrule.ico
-# End Source File
-# Begin Source File
-
 SOURCE=.\icons\ico00001.ico
 # End Source File
 # Begin Source File
@@ -333,10 +329,6 @@ SOURCE=.\icons\ico00007.ico
 # Begin Source File
 
 SOURCE=.\icons\ico00008.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\icons\icon1.ico
 # End Source File
 # Begin Source File
 
