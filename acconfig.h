@@ -37,6 +37,14 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.15  2001/12/30 14:07:31  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.14  2001/10/23 21:24:09  jongfoster
  *    Support for FEATURE_CGI_EDIT_ACTIONS
  *
@@ -327,6 +335,26 @@
  * (presumably something to do with MultiThreading?)
  */
 #undef __MT__
+
+/* If the (nonstandard and thread-safe) function gethostbyname_r
+ * is available, select which signature to use
+ */
+#undef HAVE_GETHOSTBYNAME_R_6_ARGS
+#undef HAVE_GETHOSTBYNAME_R_5_ARGS
+#undef HAVE_GETHOSTBYNAME_R_3_ARGS
+
+/* If the (nonstandard and thread-safe) function gethostbyaddr_r
+ * is available, select which signature to use
+ */
+#undef HAVE_GETHOSTBYADDR_R_8_ARGS
+#undef HAVE_GETHOSTBYADDR_R_7_ARGS
+#undef HAVE_GETHOSTBYADDR_R_5_ARGS
+
+/* Define if you have gmtime_r and localtime_r with a signature
+ * of (struct time *, struct tm *)
+ */
+#undef HAVE_GMTIME_R
+#undef HAVE_LOCALTIME_R
 
 @BOTTOM@
 
