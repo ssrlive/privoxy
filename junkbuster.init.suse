@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init.suse,v $
+#     Revision 1.6  2002/03/09 14:56:34  swa
+#     wrong user.group
+#
 #     Revision 1.5  2002/03/08 21:39:59  oes
 #     setgid to nogroup
 #
@@ -68,9 +71,6 @@ case "$1" in
         echo -n "Starting The Internet Junkbuster"
         if [ ! -f /var/run/junkbuster.pid ] || ! kill -0 `cat /var/run/junkbuster.pid` 2> /dev/null; then
            /usr/sbin/junkbuster --user junkbuster.junkbuster --pidfile /var/run/junkbuster.pid /etc/junkbuster/config 2> /dev/null
-
-# SuSE: Ist der else-Teil nötig?
-
         else     
            false 
         fi
@@ -86,10 +86,15 @@ case "$1" in
         kill -HUP `cat /var/run/junkbuster.pid`
         rc_status -v
         ;;
-    restart)
+    try-restart)
         $0 stop && $0 start
 	rc_status
         ;;
+    restart)
+        $0 stop
+        $0 start
+        rc_status
+        ;;           
     status)
 	echo -n "Checking for The Internet Junkbuster"
         checkproc /usr/sbin/junkbuster
@@ -100,9 +105,4 @@ case "$1" in
         exit 1
 esac
 
-# SuSE: Kann das so ersetzt werden?
-
-#test "$return" = "$rc_done" || exit 1
-#exit 0
-
-rc_exit 
+rc_exit
