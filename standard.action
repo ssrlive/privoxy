@@ -2,10 +2,10 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.3 2002/07/29 21:41:36 jongfoster Exp $
+#  $Id: standard.action,v 1.4 2002/09/11 10:47:11 oes Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
-#                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
+#                 http://www.privoxy.org/user-manual/actions-file.html
 #
 #  Copyright   :  Written by and Copyright
 #                 Privoxy team. http://www.privoxy.org/
