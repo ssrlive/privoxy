@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.29 2001/09/16 17:34:27 jongfoster Exp $
+# $Id: Makefile.in,v 1.30 2001/09/19 17:55:49 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.30  2001/09/19 17:55:49  oes
+# Fixed CFLAGS
+#
 # Revision 1.29  2001/09/16 17:34:27  jongfoster
 # Removing showargs.[ch], adding cgi(simple|edit).[ch]
 # Replacing $(OBJEXT) with @OBJEXT@ - this seems to be a common source
@@ -370,6 +373,22 @@ dok:
 	cd doc/source && db2html -s ldp.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && db2html -s ldp.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
+#############################################################################
+#
+# Webserver
+#
+# moves dokumentation to webserver
+#
+#############################################################################
+webserver:
+	$(ECHO) -------------------------------------------------------
+	$(ECHO) You have run make dok before, right?
+	$(ECHO) Note that this command scps all stuff to the webserver,
+	$(ECHO) it will not remove obsolete documents.
+	$(ECHO) -------------------------------------------------------
+	chmod -R a+r doc/webserver
+	find doc/webserver -type d -exec chmod a+rx {} \;
+	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
 #############################################################################
 # Source file dependencies

@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.1 2001/09/12 15:36:41 swa Exp $
+ $Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -21,7 +21,7 @@
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.1 2001/09/12 15:36:41 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -38,7 +38,7 @@ configure the Internet Junkbuster. The Internet Junkbuster is an application
 that provides privacy and security to the user of the world wide web.
  </para>
  <para>
-You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/doc/user-manual/">http://ijbswa.sourceforge.net/doc/user-manual/</ulink>.
+You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
  </para>
 
  <para>
@@ -136,6 +136,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.2  2001/09/13 15:27:40  swa
+ cosmetics
+
  Revision 1.1  2001/09/12 15:36:41  swa
  source files for junkbuster documentation
 
