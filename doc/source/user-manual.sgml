@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.4 2001/09/24 01:27:56 hal9 Exp $
+ $Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.4 2001/09/24 01:27:56 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -115,13 +115,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <sect2>
 <title>History</title>
 <para>
- <application>Junkbuster</application> was originally written by <ulink
+ <application>Junkbuster</application> was originally written by Anonymouse 
+ Coders and <ulink
  url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBusters
  Corporation</ulink>, and was released as free open-source software under the
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
  url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
- rekindle development. 
+ rekindle development. The last stable release was v2.0.2.
 </para>
 
 </sect2>
@@ -280,6 +281,59 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-os2"><title>OS/2</title>
+
+<!--
+Thanx David Schmidt!
+-->
+
+<para>
+ The OS/2 version of <application>Junkbuster</application> requires the EMX
+ runtime library to be installed.  The EMX runtime library is available on
+ the hobbes OS/2 archive, among many other locations:
+ <ulink url="http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&amp;button=Search&amp;key=emxrt.zip&amp;stype=all&amp;sort=type&amp;dir=%2Fpub%2Fos2%2Fdev%2Femx%2Fv0.9d">http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&amp;button=Search&amp;key=emxrt.zip&amp;stype=all&amp;sort=type&amp;dir=%2Fpub%2Fos2%2Fdev%2Femx%2Fv0.9d</ulink>
+</para>
+
+<para>
+ <application>Junkbuster</application> is packaged in a WarpIN self-
+ installing archive.  The self-installing program will be named depending
+ on the release version, something like:
+ <filename>ijbos123.exe</filename>.  In order to install it, simply run
+ this executable or double-click on its icon and follow the WarpIN
+ installation panels.  A shadow of the <application>Junkbuster</application>
+ executable will be placed in your startup folder so it will start 
+ automatically whenever OS/2 starts.
+</para>
+
+<para>
+ The directory you choose to install <application>Junkbuster</application>
+ into will contain all of the configuration files.
+</para>
+
+<para>
+ If you would like to build binary images on OS/2 yourself, you will need
+ a working EMX/GCC environment, plus several Unix-like tools.  The Hobbes
+ OS/2 archive is a good place to start when building such an environment.
+ A set of Unix-like tools named gnupack is located here:
+ <ulink url="http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&amp;key=gnupack&amp;stype=all&amp;sort=type&amp;dir=%2Fpub%2Fos2%2Fapps">http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&amp;key=gnupack&amp;stype=all&amp;sort=type&amp;dir=%2Fpub%2Fos2%2Fapps</ulink>
+</para>
+<para>
+ Once you have the source code unpacked as above, you can build the binaries
+ from the <filename>current/</filename> directory:
+</para>
+
+<para>
+ <screen>
+ autoconf
+ sh configure
+ make
+ </screen>
+</para>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-win"><title>Windows</title>
 <para>I need help on this. Not a clue here. Also for 
 configuration section below.
@@ -288,7 +342,7 @@ configuration section below.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-other"><title>Other</title>
-<para>I need help on this too. OS/2? What others?
+<para>I need help on this too. What others?
 </para>
 </sect2>
 
@@ -301,8 +355,8 @@ configuration section below.
 <sect1 id="configuration"><title>Junkbuster Configuration</title>
 <para>
  For Unix and Linux, all configuraton files are located in
- <filename>/etc/junkbuster/</filename> by default. For MS Windows and OS/2,
- these are all in the same directory as the <application>Junkbuster</application>
+ <filename>/etc/junkbuster/</filename> by default. For MS Windows, these 
+ are all in the same directory as the <application>Junkbuster</application>
  executable. The name and number of configuration files has changed from
  previous versions, and is subject to change as development progresses.
 </para>
@@ -319,7 +373,7 @@ configuration section below.
   <listitem>
    <para>
      The main configuration file is named <filename>config</filename>
-     on Linux, Unix and OS/2, and <filename>junkbustr.txt</filename> on Windows.
+     on Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
    </para>
   </listitem> 
 
@@ -356,7 +410,7 @@ configuration section below.
 <title>The Main Configuration File</title>
 <para>
  Again, the main configuration file is named <filename>config</filename> on
- Linux, Unix and OS/2, and <filename>junkbustr.txt</filename> on Windows.
+ Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:
@@ -419,7 +473,7 @@ configuration section below.
 
 <para>
  On <application>Windows</application>, <application>Junkbuster</application>
- looks for these files in the same directory as the executable.  On Unix and OS/2,
+ looks for these files in the same directory as the executable.  On Unix,
  <application>Junkbuster</application> looks for these files in the current
  working directory.  In either case, an absolute path name can be used to
  avoid problems.
@@ -2468,9 +2522,6 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
- Revision 1.4  2001/09/24 01:27:56  hal9
- Draft. Unfinished.
-
  Revision 1.2  2001/09/13 15:27:40  swa
  cosmetics
 
