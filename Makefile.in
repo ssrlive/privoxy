@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.15 2001/07/13 13:48:07 oes Exp $
+# $Id: Makefile.in,v 1.16 2001/07/15 19:45:33 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.16  2001/07/15 19:45:33  jongfoster
+# Added support for linking with POSIX threads library
+#
 # Revision 1.15  2001/07/13 13:48:07  oes
 #  - Moved STATIC #define for pcre to (ac)config.h
 #  - Made -Ipcre depandant on static pcre compilation to
@@ -200,31 +203,22 @@ SUFFIX     = .txt:o
 .SUFFIXES  : .txt
 
 %.txt:
-	sed -e 's/$$/&/' < $< > $@
+	sed -e $$'s,$$,\r,' < $< > $@ 
+
 
 inifiles: $(W32_INIS)
 
 junkbstr.txt: config
-	sed	-e 's!\(/etc/junkbuster\|.\)/blocklist!sblock.txt!' \
-			-e 's!\(/etc/junkbuster\|.\)/popup!spopup.txt!' \
-			-e 's!\(/etc/junkbuster\|.\)/cookiefile!scookie.txt!' \
-			-e 's!\(/etc/junkbuster\|.\)/forward!sforward.txt!' \
+	sed	-e 's!\(/etc/junkbuster\|.\)/actionsfile!sactions.txt!' \
 			-e 's!\(/etc/junkbuster\|.\)/trust!strust.txt!' \
-			-e 's!\(/etc/junkbuster\|.\)/aclfile!sacl.txt!' \
 			-e 's!\(/var/log/junkbuster\|.\)/jarfile!jar.log!' \
-			-e 's!\(/var/log/junkbuster\|.\)/junkbuster\.log!junkbstr.log!' \
-			-e 's!\(/etc/junkbuster\|.\)/imagelist!simage.txt!' \
+			-e 's!\(/var/log/junkbuster\|.\)/logfile!junkbstr.log!' \
 			-e 's!\(/etc/junkbuster\|.\)/re_filterfile!sregexp.txt!' \
-			-e 's!$$!&!' \
+			-e $$'s,$$,\r,' \
 			-e 's!#Win32-only: !!' \
 	< $< > $@
 
-saclfile.txt: aclfile
-sblock.txt: blocklist
-scookie.txt: cookiefile
-sforward.txt: forward
-simage.txt: imagelist
-spopup.txt: popup
+sactions.txt: actionslist
 strust.txt: trust
 sregexp.txt: re_filterfile
 
