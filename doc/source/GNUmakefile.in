@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.6 2002/09/06 01:58:28 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.7 2002/09/16 06:04:34 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -350,8 +350,9 @@ config-file: $(DOC_DIR)/doc_version.tmp
 	@$(ECHO)  "****************************************************"
 	@$(ECHO)  "The output file is config.new."
 	@$(ECHO)  "Now -- you need to hand edit the results!!!"
-	@$(ECHO)  "In particular, check the Debug levels, and the"
-	@$(ECHO)  "permit-access, forward & socks examples. They"
+	@$(ECHO)  "In particular, check the Debug levels, the"
+	@$(ECHO)  "permit-access, forward & socks examples and the"
+	@$(ECHO)  "various user-manual examples, which all"
 	@$(ECHO)  "probably got hammered."
 	@$(ECHO)  "****************************************************"
 
@@ -386,6 +387,11 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.7  2002/09/16 06:04:34  hal9
+# Improved $(VERSION) handling, and related cleanups, with minor changes to most
+# targets. Renamed all dok-* targets to doc-*, and added some backward
+# compatibility targets.
+#
 # Revision 1.6  2002/09/06 01:58:28  hal9
 # Create a separate INSTALL file, and remove install instructions from README.
 # INSTALL is built from dok-readme target.
