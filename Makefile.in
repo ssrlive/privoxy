@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.20 2001/08/02 22:04:29 jongfoster Exp $
+# $Id: Makefile.in,v 1.21 2001/09/10 11:12:49 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.21  2001/09/10 11:12:49  oes
+# Turning on -Wall
+#
 # Revision 1.20  2001/08/02 22:04:29  jongfoster
 # Removing some remaining references to obsolete w32rulesdlg.[ch]
 #
@@ -272,7 +275,7 @@ redhat-dist:
 
 
 #############################################################################
-# suse distribution
+# suse distribution (need to be root to build)
 #############################################################################
 
 suse-dist:
@@ -283,8 +286,19 @@ suse-dist:
 	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-suse.spec
 	tar --exclude "CVS" --exclude "junkbuster-rh.spec" -cvzf ../ijbswa.tar.gz .
 # verify all files in their correct location needs to be done
-	cd .. && rpm -ta ijbswa.tar.gz
+# never use buildroot to define the location inside the spec
+# file or suse will fuck up the build process.
+	cd .. && rpm -ta --buildroot /tmp/xxx ijbswa.tar.gz
 
+# handle with care. use with root.
+suse-clean:
+	rpm -e junkbuster
+	rm -rf /etc/junkbuster
+	rm -rf /var/log/junkbuster
+	rm -f /etc/init.d/junkbuster
+	rm -f /usr/sbin/junkbuster
+	rm -f /usr/sbin/rcjunkbuster
+	rm -f /usr/share/man/man1/junkbuster.1.gz
 
 #############################################################################
 # Windows distribution
