@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.10 2001/05/26 15:26:15 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.11 2001/05/26 17:27:53 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.10 2001/05/26 15:26:15 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.11  2001/05/26 17:27:53  jongfoster
+ *    Added support for CLF and fixed LOG_LEVEL_LOG.
+ *    Also did CRLF->LF fix of my previous patch.
+ *
  *    Revision 1.10  2001/05/26 15:26:15  jongfoster
  *    ACL feature now provides more security by immediately dropping
  *    connections from untrusted hosts.
@@ -708,7 +712,17 @@ static void chat(struct client_state *csp)
 #ifdef PCRS
                if (filtering)
                {
-                  re_process_buffer(csp);
+                  p = re_process_buffer(csp);
+                  hdr = sed(server_patterns, add_server_headers, csp);
+                  n = strlen(hdr);
+                  if ((write_socket(csp->cfd, hdr, n) != n)
+                      || (write_socket(csp->cfd, p, csp->content_length) != csp->content_length))
+                  {
+                     log_error(LOG_LEVEL_CONNECT, "write modified content to client failed: %E");
+                     return;
+                  }
+               freez(hdr);
+               freez(p);
                }
 #endif /* def PCRS */
                break; /* "game over, man" */
@@ -819,7 +833,7 @@ static void chat(struct client_state *csp)
 
             if (csp->is_text  &&  /* It's a text / * MIME-Type */
                 !http->ssl    &&  /* We talk plaintext */
-                block_popups)
+                block_popups)     /* Policy allows */
             {
                block_popups_now = 1;
             }
@@ -846,8 +860,8 @@ static void chat(struct client_state *csp)
 
 #endif /* def PCRS */
 
-            if ((write_socket(csp->cfd, hdr, n) != n)
-                || (NOT_FILTERING_AND (n = flush_socket(csp->cfd, csp) < 0)))
+            if (NOT_FILTERING_AND ((write_socket(csp->cfd, hdr, n) != n)
+                || (n = flush_socket(csp->cfd, csp) < 0)))
             {
                log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
@@ -1090,7 +1104,7 @@ static void listen_loop(void)
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
       sweep();
 
-      if ( NULL == (csp = (struct client_state *) malloc(sizeof(*csp))) )
+      if ( NULL == (csp = (struct client_state *) zalloc(sizeof(*csp))) )
       {
          log_error(LOG_LEVEL_FATAL, "malloc(%d) for csp failed: %E", sizeof(*csp));
          continue;

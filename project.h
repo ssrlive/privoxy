@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.4 2001/05/22 18:46:04 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.5 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,13 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.5  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.4  2001/05/22 18:46:04  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -266,13 +273,8 @@ struct client_state
 #endif /* def FORCE_LOAD */
 
 #ifdef TOGGLE
-   /*
-    * by haroon - most of credit to srt19170
-    * We add an "on/off" toggle here that is used to effectively toggle
-    * the Junkbuster off or on
-    */
    int   toggled_on;
-#endif
+#endif /* def TOGGLE */
 
    char *ip_addr_str;
    long  ip_addr_long;
@@ -316,6 +318,7 @@ struct client_state
 
 #ifdef PCRS
      struct file_list *rlist;   /* Perl re_filterfile */
+     size_t content_length;     /* Length after processing */ 
 #endif /* def PCRS */
 
 #ifdef TRUST_FILES

@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.3 2001/05/22 18:46:04 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.4 2001/05/26 15:26:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.4  2001/05/26 15:26:15  jongfoster
+ *    ACL feature now provides more security by immediately dropping
+ *    connections from untrusted hosts.
+ *
  *    Revision 1.3  2001/05/22 18:46:04  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -148,7 +152,7 @@ extern char *add_stats(char *s);
 #endif /* def STATISTICS */
 
 #ifdef PCRS
-extern void re_process_buffer(struct client_state *csp);
+extern char *re_process_buffer(struct client_state *csp);
 #endif /* def PCRS */
 
 /* Revision control strings from this header and associated .c file */
