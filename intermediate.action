@@ -1,10 +1,10 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/ijb-advanced.action,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/ijb-intermediate.action,v $
 # 
-#  $Id: ijb-advanced.action,v 1.1 2001/12/02 15:26:49 swa Exp $
+#  $Id: ijb-intermediate.action,v 1.2 2002/03/13 14:24:09 swa Exp $
 #
-#  Purpose     :  Most agressive actions file, see
+#  Purpose     :  More agressive actions file, see
 #                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
 # 
 # We value your feedback. However, to provide you with the best support,

@@ -27,6 +27,11 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.24  2002/03/16 20:39:54  oes
+#      - Added descriptions to the filters so users will know what they select in the cgi editor
+#      - Added content-cookies filter
+#      - Bugfixed many jobs (Thanks to Al for some hints)
+#
 #     Revision 1.22  2002/03/12 13:42:50  oes
 #     Fixing & Optimizing REs
 #
