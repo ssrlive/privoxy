@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.4 2001/06/08 20:53:36 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.5 2001/06/09 09:13:29 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.5  2001/06/09 09:13:29  swa
+# description shorter
+#
 # Revision 1.4  2001/06/08 20:53:36  swa
 # use buildroot, export init to separate file (better manageability)
 #
@@ -45,13 +48,14 @@ Name:         junkbuster
 Packager:     Stefan Waldherr <stefan@waldherr.org>
 
 Copyright:    GPL
-BuildRoot: /tmp/junkbuster-rpmbuild
+# buildroot does not work under f*cking suse :-(
+#BuildRoot: /tmp/junkbuster-rpmbuild
 Group:        Networking/Utilities
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
-Version: 2.9
-Release: 4
+Version: 2.9.8
+Release: 1
 Summary:      The Internet Junkbuster
 Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 
@@ -82,6 +86,7 @@ SuSE series: n
 %build
 ./configure
 make
+strip junkbuster
 
 #
 # -----------------------------------------------------------------------------
@@ -90,19 +95,21 @@ make
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,share/man/man1},etc/{junkbuster,junkbuster/templates,init.d}}
 
+# make sure that we can write in the log directory
+chown nobody.nogroup $RPM_BUILD_ROOT/var/log/junkbuster
 install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT/etc/init.d/junkbuster
-ln -sf $RPM_BUILD_ROOT/etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
+ln -sf /etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
 
 install -m 755 junkbuster $RPM_BUILD_ROOT/usr/sbin
 install -d $RPM_BUILD_ROOT/etc/junkbuster
 install -d $RPM_BUILD_ROOT/etc/junkbuster/templates
-install -m 644 permissionsfile $RPM_BUILD_ROOT/etc/junkbuster
+install -m 644 actionsfile $RPM_BUILD_ROOT/etc/junkbuster
 install -m 644 re_filterfile $RPM_BUILD_ROOT/etc/junkbuster
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
 cat config | \
     sed 's/^confdir.*/confdir \/etc\/junkbuster/g' | \
-#    sed 's/^permissionsfile.*/permissionsfile \/etc\/junkbuster\/permissionsfile/g' | \
+    sed 's/^actionsfile.*/actionsfile \/etc\/junkbuster\/actionsfile/g' | \
 #    sed 's/^re_filterfile.*/re_filterfile \/etc\/junkbuster\/re_filterfile/g' | \
 #    sed 's/^logfile.*/logfile \/var\/log\/junkbuster\/logfile/g' | \
 #    sed 's/^jarfile.*/jarfile \/var\/log\/junkbuster\/jarfile/g' | \
@@ -114,9 +121,7 @@ cp -f config.tmp config
 install -m 644 config $RPM_BUILD_ROOT/etc/junkbuster
 #install -m 644 forward $RPM_BUILD_ROOT/etc/junkbuster
 install -m 644 trust $RPM_BUILD_ROOT/etc/junkbuster
-install -m 644 templates/default $RPM_BUILD_ROOT/etc/junkbuster/templates
-install -m 644 templates/show-status $RPM_BUILD_ROOT/etc/junkbuster/templates
-install -m 644 templates/show-status-file $RPM_BUILD_ROOT/etc/junkbuster/templates
+install -m 644 templates/* $RPM_BUILD_ROOT/etc/junkbuster/templates
 install -m 644 junkbuster.1 $RPM_BUILD_ROOT/usr/share/man/man1
 %{?suse_check}
 
@@ -142,6 +147,7 @@ sbin/insserv etc/init.d/
 %config(noreplace) /etc/junkbuster
 /etc/init.d/junkbuster
 /usr/sbin/rcjunkbuster
+/var/log/junkbuster
 
 #
 # -----------------------------------------------------------------------------
