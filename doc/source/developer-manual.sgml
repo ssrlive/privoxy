@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $
+ $Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -29,13 +29,22 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+
+ ========================================================================
+ NOTE: Please read developer-manual/documentation.html before touching 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
+ ========================================================================
+
 -->
 
 <article id="index">
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -144,62 +153,336 @@ following guidelines for changing stuff in the code. If it is
 </sect1>	
 	
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="documentation"><title>Documentation Guidelines</title>
+<sect1 id="documentation"><title>Documentation Guidelines</title>
+  <para>
+    All formal documents are maintained in docbook SGML and located in the
+    <computeroutput>doc/source</computeroutput> directory. You will need
+    <ulink url="http://www.docbook.org">docbook</ulink> and the docbook
+    stylesheets (or comparable alternatives), and either
+    <application>jade</application> or <application>openjade</application>
+    (recommended) installed in order to build docs from source. Currently
+    there is <ulink
+    url="../user-manual/index.html"><citetitle>user-manual</citetitle></ulink>,
+    <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and,
+    of course this, the <citetitle>developer-manual</citetitle> in this
+    format. The <citetitle>README</citetitle>, is also now maintained 
+    as SGML. The <citetitle>README</citetitle> in the top-level source 
+    directory is a generated file. <emphasis>DO NOT edit this
+    directly</emphasis>. Edit the SGML source!
+    </para> 
     <para>
-        All formal documents are maintained in docbook SGML and located
-        in the <computeroutput>doc/source</computeroutput> directory. You will
-        need <ulink url="http://www.docbook.org">docbook</ulink> and the
-        docbook stylesheets (or comparable alternatives), and either 
-        <application>jade</application> or <application>openjade</application> 
-        installed in order to build docs from source. Currently there is 
-        <ulink
-        url="../user-manual/index.html"><citetitle>user-manual</citetitle></ulink>,
-        <ulink
-        url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>,
-        and, of course this, the <citetitle>developer-manual</citetitle> in
-        this format.
-        </para>
-        <para>
-         Other, less formal documents (e.g. README, LICENSE) are 
-         maintained as plain text files in the toplevel source 
-         directory.
-        </para>
-        <para>
-         Packagers are encouraged to include this documentation. For those
-         without the ability to build the docs locally, text versions of 
-         each are kept in CVS. Or HTML versions can be downloaded from the <ulink
-         url="http://www.privoxy.org">www.privoxy.org</ulink> website, which
-         should be fairly current.
-        </para>
-        <para>
-          Formal documents are built with the Makefile targets of 
-          <computeroutput>make dok</computeroutput>, or alternately
-          <computeroutput>make redhat-dok</computeroutput>. If you 
-          have problems, try both. The build process uses the document 
-          SGML sources in <computeroutput>doc/source</computeroutput> to
-          update all text files in <computeroutput>doc/text</computeroutput>
-          and to update all HTML documents in
-          <computeroutput>doc/webserver</computeroutput>.
-        </para>
-        <para>
-         Documentation writers should please make sure documents build 
-         successfully before committing to CVS.
-        </para>
-        <para>
-        How do you update the webserver (i.e. the pages on privoxy.org)?
-        <orderedlist numeration="arabic">
-                <listitem><para>
+     Other, less formal documents (e.g. AUTHORS, LICENSE) are maintained as
+     plain text files in the toplevel source directory. At least for the 
+     time being.
+    </para>
+    <para>
+     Packagers are encouraged to include this documentation. For those without
+     the ability to build the docs locally, text versions of each are kept in
+     CVS. Or HTML versions can be downloaded from the <ulink
+     url="http://www.privoxy.org">www.privoxy.org</ulink> website, which
+     should be fairly current. (This is only a temporary solution.)
+    </para>
+    <para>
+     Formal documents are built with the Makefile targets of
+     <computeroutput>make dok</computeroutput>, or alternately
+     <computeroutput>make redhat-dok</computeroutput>. If you have problems,
+     try both. The build process uses the document SGML sources in
+     <computeroutput>doc/source</computeroutput> to update all text files in
+     <computeroutput>doc/text</computeroutput> and to update all HTML
+     documents in <computeroutput>doc/webserver</computeroutput>.
+    </para>
+    <para>
+     Documentation writers should please make sure documents build
+     successfully before committing to CVS.
+    </para>
+    <para>
+     How do you update the webserver (i.e. the pages on privoxy.org)?
+     
+     <orderedlist numeration="arabic">
+      <listitem><para>
         First, build the docs by running <computeroutput>make
         dok</computeroutput> (or alternately <computeroutput>make
         redhat-dok</computeroutput>).                 
-                </para></listitem>
-                <listitem><para>
-        Run <computeroutput>make webserver</computeroutput> which copies all files from
-<computeroutput>doc/webserver</computeroutput> to the sourceforge webserver
-via scp.
-                </para></listitem>
-        </orderedlist>
+      </para></listitem>
+      <listitem><para>
+        Run <computeroutput>make webserver</computeroutput> which copies all
+        files from <computeroutput>doc/webserver</computeroutput> to the
+        sourceforge webserver via scp.
+      </para></listitem>
+     </orderedlist>
   </para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="sgml">
+<title>Quickstart to Docbook and SGML</title>
+<para>
+ If you are not familiar with SGML, it is a markup language similar to HTML. 
+ In fact, HTML is an SGML application. Both use <quote>tags</quote>
+ to format text and other content. SGML tags are much more varied, 
+ and flexible, but do much of the same kinds of things. The tags, 
+ or <quote>elements</quote>, are definable in SGML. There is no 
+ set <quote>standards</quote>. Since we are using
+ <application>Docbook</application>, our tags are those that are 
+ defined by <application>Docbook</application>. Much of how the 
+ finish document is rendered is determined by the <quote>stylesheets</quote>.
+ The stylesheets determine how each tag gets translated to HTML, or 
+ other formats.
+</para>
+
+<para>
+ Tags in SGML need to be always <quote>closed</quote>. If not, you 
+ will likely generate errors. Example: 
+ <literal>&lt;title&gt;My Title&lt;/title&gt;</literal>. They are 
+ also case-insensitive, but we strongly suggest using all lower 
+ case. This keeps compatibility with [Docbook] <application>XML</application>.
+</para>
+
+<para>
+ Our documents use <quote>sections</quote> for the most part. Sections
+ will be processed into HTML headers (e.g. <literal>h1</literal> for 
+ <literal>sect1</literal>). The <application>Docbook</application> stylesheets
+ will use these to also generate the Table of Contents for each doc. Our 
+ TOC's are set to a depth of three. Meaning <literal>sect1</literal>, 
+ <literal>sect2</literal>, and <literal>sect3</literal> will have TOC 
+ entries, but <literal>sect4</literal> will not. Each section requires 
+ a <literal>&lt;title&gt;</literal> element, and at least one 
+ <literal>&lt;para&gt;</literal>. There is a limit of five section 
+ levels in Docbook, but generally three should be sufficient for our 
+ purposes.
+</para>
+
+<para>
+ Some common elements that you likely will use: 
+</para>
+
+<simplelist>
+ <member>
+  <emphasis>&lt;para&gt;&lt;/para&gt;</emphasis>, paragraph delimiter. Most 
+  text needs to be within paragraph elements.
+ </member>
+ <member>
+  <emphasis>&lt;emphasis&gt;&lt;/emphasis&gt;</emphasis>, stylesheets make this
+ italics.
+ </member>
+  <member>
+  <emphasis>&lt;filename&gt;&lt;/filename&gt;</emphasis>, files and directories.
+ </member>
+ <member>
+  <emphasis>&lt;command&gt;&lt;/command&gt;</emphasis>, command examples.
+ </member>
+ <member>
+  <emphasis>&lt;literallayout&gt;&lt;/literllayout&gt;</emphasis>, like 
+  <literal>&lt;pre&gt;</literal>, more or less.
+ </member>
+  <member>
+  <emphasis>&lt;itemizedlist&gt;&lt;/itemizdelist&gt;</emphasis>, list with bullets.
+ </member>
+ <member>
+  <emphasis>&lt;listitem&gt;&lt;/listitem&gt;</emphasis>, member of the above.
+ </member>
+  <member>
+   <emphasis>&lt;screen&gt;&lt;/screen&gt;</emphasis>, screen output, implies 
+   <literal>&lt;literallayout&gt;</literal>.
+ </member>
+ <member>
+  <emphasis>&lt;ulink url="example.com"&gt;&lt;/ulink&gt;</emphasis>, like 
+  HTML <literal>&lt;a&gt;</literal> tag.
+ </member>
+  <member>
+   <emphasis>&lt;quote&gt;&lt;/quote&gt;</emphasis>, for, doh, quoting text. 
+ </member>
+</simplelist>
+
+<para>
+ Look at any of the existing docs for examples of all these and more.
+</para>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+  <sect2 id="docstyle">
+  <title><application>Privoxy</application> Documentation Style</title>
+   <para>
+    It will be easier if everyone follows a similar writing style. This 
+    just makes it easier to read what someone else has written if it 
+    is all done in a similar fashion.
+   </para>
+   <para>
+    Here it is:
+   </para>
+   <para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       All tags should be lower case.
+      </para>
+    </listitem> 
+    <listitem>
+     <para>
+       Tags delimiting a block of text should be on their own line. 
+       Like:
+       <literallayout>
+ &lt;para&gt;
+  Some text goes here.
+ &lt;/para&gt;
+       </literallayout>
+       Tags marking individual words, or few words, should be in-line:
+       <literallayout>
+  Just to &lt;emphasis&gt;emphasize&lt;/emphasis&gt;, some text goes here.
+       </literallayout>
+     </para>
+   </listitem> 
+   <listitem>
+    <para>
+      Tags should be nested like:
+       <literallayout>
+ &lt;para&gt;
+  &lt;itemizedlist&gt;
+   &lt;para&gt;
+    &lt;listitem&gt;
+      Some text goes here in our list example.
+     &lt;/listitem&gt;
+   &lt;/para&gt;
+  &lt;/itemizedlist&gt;
+ &lt;/para&gt;
+       </literallayout>
+      This makes it easier to find the text amongst the tags ;-)
+    </para>
+   </listitem> 
+   <listitem>
+    <para>
+     Use white space to separate logical divisions within a document, 
+     like between sections. Running everything together consistently 
+     makes it harder to read and work on.
+    </para>
+   </listitem> 
+   <listitem>
+    <para>
+     Do not hesitate to make comments. Comments can either use the 
+     &lt;comment&gt; element, or the &lt;!--  --&gt; style comment 
+     familiar from HTML.
+    </para>
+  </listitem> 
+  <listitem>
+   <para>
+     We have an international audience. Refrain from slang, or English 
+     idiosyncrasies (too many to list :).
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    Our documents are available in differing formats. Right now, they 
+    are just plain text, and HTML, but PDF, and others is always a 
+    future possibility. Be careful with URLs (&lt;ulink&gt;), and avoid 
+    this mistake:
+   </para>
+   <para>
+     My favorite site is &lt;ulink url="http://example.com"&gt;here&lt;/ulink&gt;.
+   </para>
+   <para>
+     This will render as <quote>My favorite site is here</quote>, which is 
+     not real helpful in a text doc. Better like this:
+   </para>
+   <para>
+     My favorite site is &lt;ulink url="http://example.com"&gt;example.com&lt;/ulink&gt;.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    All documents should be spell checked occasionally.
+    <application>aspell</application> can check SGML with the
+    <literal>-H</literal> option. (<application>ispell</application> I think
+    too.)
+   </para>
+  </listitem> 
+
+  </itemizedlist>
+ </para> 
+  
+  </sect2>
+
+  
+ <!--   ~~~~~       New section      ~~~~~     -->
+
+ <sect2><title>Privoxy Custom Entities</title>
+ <para>
+  <application>Privoxy</application> documentation is using 
+  a number of customized <quote>entities</quote> to facilitate 
+  documentation maintenance. 
+ </para>
+ <para>
+  We are using a set of <quote>boilerplate</quote> files with generic text,
+  that is used by multiple docs. This way we can write something once, and use
+  it repeatedly without having to re-write the same content over and over again.
+  If editing such a file, keep in mind that it should be
+  <emphasis>generic</emphasis>. That is the purpose; so it can be used in varying 
+  contexts without additional modifications.
+ </para>
+ <para>
+  We are also using what <application>Docbook</application> calls 
+  <quote>internal entities</quote>. These are like variables in 
+  programming. Well, sort of. For instance, we have the
+  <literal>p-version</literal> entity that contains the current 
+  <application>Privoxy</application> version string. You are strongly 
+  encouraged to use these where possible. Some of these obviously 
+  require re-setting with each release. A sampling of custom entities are
+  listed below. See any of the main docs for examples.
+ </para>
+
+ <para>
+  <itemizedlist>
+  <listitem>
+   <para>
+    Re-cyclable <quote>boilerplate</quote> text entities are defined like:
+   </para>
+   <para>
+    <literal>&lt;!entity supported SYSTEM "supported.sgml"&gt;</literal>
+   </para>
+   <para>
+     In this example, the contents of the file,
+     <filename>supported.sgml</filename> is available for inclusion anywhere 
+     in the doc. To make this happen, just reference the now defined 
+     entity: <literal>&#38;supported;</literal> (starts with an ampersand 
+     and ends with a semi-colon), and the contents will be dumped into 
+     the finished doc at that point.
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    Commonly used <quote>internal entities</quote>:
+  </para>
+  <simplelist>
+   <member>
+    <emphasis>p-version</emphasis>: the <application>Privoxy</application> 
+    version string, e.g. <quote>2.9.13</quote>.
+   </member>
+   <member>
+    <emphasis>p-status</emphasis>: the project status, either 
+    <quote>ALPHA</quote>, <quote>BETA</quote>, or <quote>STABLE</quote>.
+   </member>
+   <member>
+    <emphasis>p-not-stable</emphasis>: use to conditionally include 
+    text in <quote>not stable</quote> releases (e.g. <quote>BETA</quote>).
+   </member>
+   <member>
+    <emphasis>p-stable</emphasis>: just the opposite.
+   </member>
+   <member>
+    <emphasis>p-text</emphasis>: this doc is only generated as text.
+   </member>
+  </simplelist>
+ </listitem> 
+ </itemizedlist>
+ </para> 
+ <para>
+  There are others in various places that are defined for a specific 
+  purpose. Read the source!
+ </para>
+ 
+ </sect2>
+  
  </sect1>
 
 <!--     <listitem><para>be consistent with the redirect script (i.e. the <application>Privoxy</application> program -->
@@ -1332,7 +1615,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1392,7 +1675,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2118,6 +2401,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.23  2002/04/04 18:46:47  swa
+  consistent look. reuse of copyright, history et. al.
+
   Revision 1.22  2002/04/04 17:27:56  swa
   more single file to be included at multiple points. make maintaining easier
 
