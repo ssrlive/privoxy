@@ -6,7 +6,7 @@
 # 
 #
 # Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                IJBSWA team.  http://ijbswa.sourceforge.net
+#                Privoxy team.  http://ijbswa.sourceforge.net
 #
 #                Original Author: Copyright (C) 2001 Jonathan Foster
 #                http://www.jon-foster.co.uk/
@@ -31,6 +31,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-url,v $
+#    Revision 1.5  2002/01/23 00:26:45  jongfoster
+#    Reducing length of URLs
+#    Where encoded and unencoded versions of a string existed, removing
+#    the unencoded one.
+#
 #    Revision 1.4  2002/01/17 21:33:00  jongfoster
 #    Replacing all references to the URL of the config interface
 #    with @default-cgi@

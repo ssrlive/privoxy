@@ -1,6 +1,6 @@
 ##########################################################
 #
-# Toggle Output template for Foobar.
+# Toggle Output template for Privoxy.
 #
 #
 # USING HTML TEMPLATES:
@@ -15,7 +15,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Foobar.
+#   will be replaced by the version number of Privoxy.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -53,7 +53,7 @@
 #  unstable:
 #    this is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Foobar adminstrator has
+#    An e-mail address for the local Privoxy adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -70,7 +70,7 @@
 
 <head>
   
-  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Foobar@@my-hostname@</title>
+  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Privoxy@@my-hostname@</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -79,7 +79,7 @@
 <body bgcolor="#eeeeee" marginwidth="3" marginheight="3"
 leftmargin="3" rightmargin="3" topmargin="3" bottommargin="3">
 <center>
-<a href="@default-cgi@" target="_blank">Foobar</a> is 
+<a href="@default-cgi@" target="_blank">Privoxy</a> is 
 <b>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</b>.
 <a href="@default-cgi@toggle?mini=y&set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@"
 >@if-enabled-then@[Disable]@else-not-enabled@[Enable]@endif-enabled@</a>

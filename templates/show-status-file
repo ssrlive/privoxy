@@ -1,6 +1,6 @@
 ##########################################################
 #
-# Show-Status-CGI Output template for Foobar.
+# Show-Status-CGI Output template for Privoxy.
 # (Variant for the show-file mode)
 #
 # USING HTML TEMPLATES:
@@ -15,7 +15,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Foobar.
+#   will be replaced by the version number of Privoxy.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -61,7 +61,7 @@
 #  unstable:
 #    This is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Foobar adminstrator has
+#    An e-mail address for the local Privoxy adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -76,7 +76,7 @@
 <html>
 
 <head>
-  <title>Foobar@@my-hostname@: Contents of @file-description@</title>
+  <title>Privoxy@@my-hostname@: Contents of @file-description@</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -132,10 +132,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <h2>Local Foobar support:</h2>
+        <h2>Local Privoxy support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Foobar installation.         
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Privoxy installation.         
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->

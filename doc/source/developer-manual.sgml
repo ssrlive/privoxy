@@ -6,10 +6,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $
+ $Id: developer-manual.sgml,v 1.8 2002/03/23 15:13:11 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
- FOOBAR team.  http://ijbswa.sourceforge.net
+ Privoxy team.  http://ijbswa.sourceforge.net
 
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
@@ -18,14 +18,14 @@
 
 <article id="index">
   <artheader>
-    <title>foobar Developer Manual</title>
+    <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.8 2002/03/23 15:13:11 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
         <affiliation>
-          <orgname>By: foobar Developers</orgname>
+          <orgname>By: Privoxy Developers</orgname>
         </affiliation>
       </author>
     </authorgroup>
@@ -34,12 +34,12 @@
       <para>
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other
-issues. <application>foobar</application> is a web proxy with advanced
+issues. <application>Privoxy</application> is a web proxy with advanced
 filtering capabilities for protecting privacy, filtering web page content,
 managing cookies, controlling access, and removing ads, banners, pop-ups and
-other obnoxious Internet Junk. <application>foobar</application> has a very
+other obnoxious Internet Junk. <application>Privoxy</application> has a very
 flexible configuration and can be customized to suit individual needs and
-tastes. <application>foobar</application> has application for both stand-alone
+tastes. <application>Privoxy</application> has application for both stand-alone
 systems and multi-user networks.
  </para>
       <para>
@@ -62,7 +62,7 @@ Please see the Contact section in the user-manual if you want to contact the dev
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="quickstart"><title>Quickstart to Foobar Development</title>
+  <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>To be filled.
 </para>
   </sect1>
@@ -89,7 +89,7 @@ via scp.
   </para>
  </sect1>
 
-<!--     <listitem><para>be consistent with the redirect script (i.e. the <application>foobar</application> program -->
+<!--     <listitem><para>be consistent with the redirect script (i.e. the <application>Privoxy</application> program -->
 <!--       points via the redirect URL at sf to valid end-points in the document)</para></listitem> -->
 
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -99,7 +99,7 @@ via scp.
 
     <para>This set of standards is designed to make our lives easier.  It is
     developed with the simple goal of helping us keep the "new and improved
-    <application>foobar</application>" consistent and reliable. Thus making
+    <application>Privoxy</application>" consistent and reliable. Thus making
     maintenance easier and increasing chances of success of the
     project.</para>
 
@@ -339,7 +339,7 @@ if ( 1 == X )
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
     template, class, true, false, ...). This is in case we ever
-    decide to port Foobar to C++.</para>
+    decide to port Privoxy to C++.</para>
 
     <para><emphasis>Example:</emphasis></para>
 <programlisting>
@@ -366,7 +366,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
     template, class, true, false, ...). This is in case we ever
-    decide to port Foobar to C++.</para>
+    decide to port Privoxy to C++.</para>
 
     <para><emphasis>Example:</emphasis></para>
 <programlisting>
@@ -824,7 +824,7 @@ for ( size_t cnt = 0; cnt &lt; len; cnt ++ )
     char *s2 );</para>
 
     <para>I could then not use it to compare argv's in main: int main(
-    int argc, const char *argv[] ) { strcmp( argv[0], "foobars"
+    int argc, const char *argv[] ) { strcmp( argv[0], "privoxy"
     ); }</para>
 
     <para>Both these pointers are *const*! If the c runtime library
@@ -1219,7 +1219,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.8 2002/03/23 15:13:11 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1227,7 +1227,7 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:2
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                FOOBAR team.  http://ijbswa.sourceforge.net
+ *                PRIVOXY team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1279,7 +1279,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.8 2002/03/23 15:13:11 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1287,7 +1287,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                FOOBAR team.  http://ijbswa.sourceforge.net
+ *                PRIVOXY team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1399,20 +1399,20 @@ Remove any existing rpm with rpm -e
           <listitem><para>
 Remove any file that was left over. This includes (but is not limited to)
       <itemizedlist>
-                <listitem><para>/var/log/foobar</para></listitem>
-                <listitem><para>/etc/foobar</para></listitem>
-                <listitem><para>/usr/sbin/foobar</para></listitem>
-                <listitem><para>/etc/init.d/foobar</para></listitem>
-                <listitem><para>/usr/doc/foobar*</para></listitem>
+                <listitem><para>/var/log/privoxy</para></listitem>
+                <listitem><para>/etc/privoxy</para></listitem>
+                <listitem><para>/usr/sbin/privoxy</para></listitem>
+                <listitem><para>/etc/init.d/privoxy</para></listitem>
+                <listitem><para>/usr/doc/privoxy*</para></listitem>
               </itemizedlist>
 </para></listitem>
           <listitem><para>
 Install the rpm. Any error messages?
 </para></listitem>
-          <listitem><para>start,stop,status <application>foobar</application> with the specific script
-      (e.g. /etc/rc.d/init/foobar stop). Reboot your machine. Does
+          <listitem><para>start,stop,status <application>Privoxy</application> with the specific script
+      (e.g. /etc/rc.d/init/privoxy stop). Reboot your machine. Does
       autostart work?</para></listitem>
-          <listitem><para>Start browsing. Does <application>foobar</application> work? Logfile written?</para></listitem>
+          <listitem><para>Start browsing. Does <application>Privoxy</application> work? Logfile written?</para></listitem>
           <listitem><para>Remove the rpm. Any error messages? All files removed?</para></listitem>
         </orderedlist>
 </para>
@@ -1426,7 +1426,7 @@ at sourceforge. Three simple steps:
         <itemizedlist>
           
           <listitem><para>Select category: the distribution you test on.</para></listitem>
-          <listitem><para>Select group: the version of <application>foobar</application> that we are about to release.</para></listitem>
+          <listitem><para>Select group: the version of <application>Privoxy</application> that we are about to release.</para></listitem>
           <listitem><para>Fill the Summary and Detailed Description with something
               intelligent (keep it short and precise).</para>
           </listitem>
@@ -1476,6 +1476,12 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.8  2002/03/23 15:13:11  swa
+  renamed every reference to the old name with foobar.
+  fixed "application foobar application" tag, fixed
+  "the foobar" with "foobar". left junkbustser in cvs
+  comments and remarks to history untouched.
+
   Revision 1.7  2002/03/11 13:13:27  swa
   correct feedback channels
 

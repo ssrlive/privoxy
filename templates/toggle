@@ -1,6 +1,6 @@
 ##########################################################
 #
-# Toggle Output template for Foobar.
+# Toggle Output template for Privoxy.
 #
 #
 # USING HTML TEMPLATES:
@@ -15,7 +15,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Foobar.
+#   will be replaced by the version number of Privoxy.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -53,7 +53,7 @@
 #  unstable:
 #    this is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Foobar adminstrator has
+#    An e-mail address for the local Privoxy adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -70,7 +70,7 @@
 
 <head>
   
-  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Foobar@@my-hostname@</title>
+  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Privoxy@@my-hostname@</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -88,14 +88,14 @@
 
     <tr>
       <td bgcolor=#eeeeee>
-        <h2>Foobar is @if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</h2>
+        <h2>Privoxy is @if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</h2>
           <blockquote>
-            <p>When enabled, Foobar performs its magic - blocking
+            <p>When enabled, Privoxy performs its magic - blocking
                adverts, filtering cookies, regex-filtering, etc.</p>
-            <p>When disabled, Foobar behaves as a normal HTTP proxy,
+            <p>When disabled, Privoxy behaves as a normal HTTP proxy,
                and will not affect your web browsing.</p>
             <p><a href="@default-cgi@toggle?set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@">Click
-               here</a> to @if-enabled-then@disable@else-not-enabled@enable@endif-enabled@ Foobar.</p>
+               here</a> to @if-enabled-then@disable@else-not-enabled@enable@endif-enabled@ Privoxy.</p>
           </blockquote>
       </td>
     </tr>
@@ -121,11 +121,11 @@
                (Netscape), and run them with a single click.</p>
 
             <ul>
-              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable Foobar</a></li>
-              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable Foobar</a></li>
-              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle Foobar</a>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable Privoxy</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable Privoxy</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle Privoxy</a>
                   (Toggles between enabled and disabled)</li>
-              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View Foobar Status</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View Privoxy Status</a></li>
             </ul>
 
             <p><b>Credit:</b> The site which gave me the general idea for these
@@ -139,7 +139,7 @@
 
     <tr>
       <td bgcolor=#eeeeee>
-        <h2>More Foobar:</h2>
+        <h2>More Privoxy:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>
@@ -177,10 +177,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <h2>Local Foobar support:</h2>
+        <h2>Local Privoxy support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Foobar installation.         
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Privoxy installation.         
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->

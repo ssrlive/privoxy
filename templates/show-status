@@ -1,6 +1,6 @@
 ##########################################################
 #
-# Show-Status-CGI Output template for Foobar.
+# Show-Status-CGI Output template for Privoxy.
 #
 # USING HTML TEMPLATES:
 # ---------------------
@@ -14,7 +14,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Foobar.
+#   will be replaced by the version number of Privoxy.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -47,10 +47,10 @@
 #    software.
 #
 #  redirect-url:
-#    The URL to a script that will redirect to the Foobar
+#    The URL to a script that will redirect to the Privoxy
 #    documentation for a given item  
 #  invocation:
-#    The command line with whitch Foobar was invoked
+#    The command line with whitch Privoxy was invoked
 #  options:
 #    The options read from the configfile, linked to their
 #    explanations, plus warnings if parsing acl or forward
@@ -59,7 +59,7 @@
 #    A HTML-formatted list of the individual source file cvs versions
 #  defines:
 #    A HTML-formatted list of all conditional #defines used when
-#    Foobar was compiled
+#    Privoxy was compiled
 #
 #  
 # CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
@@ -68,7 +68,7 @@
 #  unstable:
 #    This is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Foobar adminstrator has
+#    An e-mail address for the local Privoxy adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -80,7 +80,7 @@
 #    true, have-help-info is true.  Used to conditionally include
 #    a grey box for any and all help info.
 #  statistics:
-#    Foobar was compiled with statistics support
+#    Privoxy was compiled with statistics support
 #  have-stats:
 #    There have been previous requests and statistics have
 #    been collected. In this case, the following symbols
@@ -94,9 +94,9 @@
 #  have-no-stats:
 #    There haven't any statistics been collected yet
 #  pcrs-support:
-#    Foobar was compiled with pcrs support
+#    Privoxy was compiled with pcrs support
 #  trust-support:
-#    Foobar was compiled with trust support
+#    Privoxy was compiled with trust support
 #  actions-filename:
 #    The path to the actions file.
 #  re-filter-filename:
@@ -108,7 +108,7 @@
 <html>
 
 <head>
-  <title>Foobar@@my-hostname@: Proxy Status</title>
+  <title>Privoxy@@my-hostname@: Proxy Status</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -238,7 +238,7 @@
           <tr>
              <td><code>FEATURE_TOGGLE</code></td>
              <td>@if-FEATURE_TOGGLE-then@ Yes @else-not-FEATURE_TOGGLE@ No @endif-FEATURE_TOGGLE@</td>
-             <td>Allow Foobar to be "disabled" so it is just a normal non-blocking non-anonymizing proxy.</td>
+             <td>Allow Privoxy to be "disabled" so it is just a normal non-blocking non-anonymizing proxy.</td>
           </tr>
           <tr>
              <td><code>FEATURE_TRUST</code></td>
@@ -249,7 +249,7 @@
              <td><code>REGEX_GNU</code></td>
              <td>@if-REGEX_GNU-then@ Yes @else-not-REGEX_GNU@ No @endif-REGEX_GNU@</td>
              <td rowspan="2">Changes the type of pattern matching done on URL paths.  PCRE is by far the best.
-             The old GNU style will slow down Foobar and increase the executable's size.  If both of
+             The old GNU style will slow down Privoxy and increase the executable's size.  If both of
              these are disabled, simple prefix matching is done, but this is very inflexible.</td>
           </tr>
           <tr>
@@ -274,7 +274,7 @@
 
     <tr>
       <td bgcolor=#dddddd>
-        <h2>More Foobar:</h2>
+        <h2>More Privoxy:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>
@@ -312,10 +312,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <h2>Local Foobar support:</h2>
+        <h2>Local Privoxy support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Foobar installation.         
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Privoxy installation.         
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->
