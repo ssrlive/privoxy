@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.2 2002/09/05 04:25:05 hal9 Exp $
+ $Id: faq.sgml,v 2.3 2002/09/13 11:50:55 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.2 2002/09/05 04:25:05 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.3 2002/09/13 11:50:55 oes Exp $</pubdate>
 
 <!--
 
@@ -838,7 +838,7 @@ with a browser? Does that not raise security issues?</title>
  url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink></literal>
  option, which may be commented out with a <quote>#</quote> symbol. Make sure
  it is uncommented, and assign it the address of the LAN gateway interface,
- and port number to use. Assuming your LAN address is 192.168.1.1 and you
+ and port number to use. Assuming your server's LAN address is 192.168.1.1 and you
  wish to run <application>Privoxy</application> on port 8118, this line
  should look like:
 </para>
@@ -854,8 +854,31 @@ with a browser? Does that not raise security issues?</title>
 </para>
 
 <para>
+ Alternately, you can have <application>Privoxy</application> listen on 
+ all available interfaces:
+</para>
+
+<para>
+ <screen>
+  listen-address    :8118</screen>
+</para>
+
+<para>
+ And then use <application>Privoxy's</application> 
+ <ulink
+ url="../user-manual/config.html#PERMIT-ACCESS">permit-access</ulink> 
+ feature to limit connections. A firewall in this situation is recommended 
+ as well.
+</para>
+
+<para>
+ The above steps should be the same for any TCP network, regardless of
+ operating system.
+</para>
+
+<para>
  If you run <application>Privoxy</application> on a LAN with untrusted users,
- we recommend that you double-check the <ulink
+ we recommend that you double-check all <ulink
  url="../user-manual/config.html#ACCESS-CONTROL">access control and security</ulink>
  options!
 </para>
@@ -1387,6 +1410,14 @@ ads used to be. Why?</title>
  for efficiency reasons, which exposes them to the full power of 
  <application>Privoxy</application>'s ad blocking.
 </para>
+<para>
+ <quote>Content cookies</quote> (those that are embedded in the actual HTML or
+ JS page content, see <literal><ulink
+ url="../user-manual/actions-file.html#FILTER-CONTENT-COOKIES">filter{content-cookies}</ulink></literal>), 
+ in an SSL transaction will be impossible to block under these conditions. 
+ Fortunately, this does not seem to be a very common scenario since most 
+ cookies come by traditional means.
+</para>
 
 </sect2>
 
@@ -1675,6 +1706,13 @@ every time I start IE. What gives?</title>
   so do not configure your browser to use <application>Privoxy</application>
   as an FTP proxy. The same is true for any protocol other than HTTP or HTTPS.
  </para>
+ <para>
+  Most browsers understand FTP as well as HTTP. If you connect to a site, with
+  a URL like <literal>ftp://ftp.example.com</literal>, your browser is making
+  an FTP connection, and not a HTTP connection. So while your browser may 
+  speak FTP, <application>Privoxy</application> does not, and cannot proxy 
+  such traffic.
+ </para>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -1835,6 +1873,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.3  2002/09/13 11:50:55  oes
+Added MicroSuck topic; Updated PHP bug topic
+
 Revision 2.2  2002/09/05 04:25:05  hal9
 Sync with 3.0 branch. No new content.
 
