@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.2 2002/03/24 11:40:14 swa Exp $
+# $Id: privoxy-rh.spec,v 1.3 2002/03/24 12:56:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -89,7 +89,7 @@ mkdir -p %{buildroot}%{_sbindir} \
 ## Gziping the documentation files is not recomended - morcego
 #gzip README AUTHORS ChangeLog %{name}.1 || /bin/true
 
-install -s -m 744 jbng %{buildroot}%{_sbindir}/jbng
+install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 
 ## We need to change the man section internaly on the manpage
 ## -- morcego (sugestion by Hal Burgiss)
@@ -189,7 +189,7 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %dir %{privoxyconf}/templates
 %attr(0744,privoxy,privoxy) %dir %{_localstatedir}/log/%{name}
 
-%attr(0744,privoxy,privoxy)%{_sbindir}/jbng
+%attr(0744,privoxy,privoxy)%{_sbindir}/%{name}
 
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
@@ -480,6 +480,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.3  2002/03/24 12:56:21  swa
+# name change related issues.
+#
 # Revision 1.2  2002/03/24 11:40:14  swa
 # name change
 #

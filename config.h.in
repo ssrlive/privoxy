@@ -3,7 +3,7 @@
 #define CONFIG_H_INCLUDED
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/acconfig.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.in,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -12,7 +12,7 @@
  *                getting ludicrously long with feature defines.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,7 +37,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: acconfig.h,v $
+ *    $Log: config.h.in,v $
+ *    Revision 1.20  2002/03/22 18:12:53  jongfoster
+ *    Bumping version number to 2.9.12
+ *
  *    Revision 1.18  2002/03/08 16:40:28  oes
  *    Added FEATURE_NO_GIFS
  *
@@ -316,7 +319,7 @@
 #undef FEATURE_STATISTICS
 
 /*
- * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
+ * Allow Privoxy to be "disabled" so it is just a normal non-blocking
  * non-anonymizing proxy.  This is useful if you're trying to access a
  * blocked or broken site - just change the setting in the config file,
  * or use the handy "Disable" menu option in the Windows GUI.
