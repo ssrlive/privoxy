@@ -1,5 +1,5 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-<!entity % dummy "INCLUDE"> 
+<!entity % dummy "IGNORE"> 
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.90 2002/04/23 21:41:25 hal9 Exp $
+ $Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.90 2002/04/23 21:41:25 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -273,7 +273,7 @@
  <application>Privoxy</application> will be installed in the subdirectory
  <literal>/Applications/Privoxy.app</literal>.
  <application>Privoxy</application> will set itself up to start 
- automatically on system bringup via
+ automatically on system bring-up via
  <literal>/System/Library/StartupItems/Privoxy</literal>.
 </para>
 </sect3>
@@ -302,7 +302,7 @@
 <sect2 id="installation-source"><title>Building from Source</title>
 
 <!-- include buildsource.sgml boilerplate: -->
-&buildsource;
+ &buildsource;
 <!-- end boilerplate -->
 </sect2>
 
@@ -327,8 +327,9 @@
  configuration files will not migrate. The functionality of the old
  <filename>blockfile</filename>, <filename>cookiefile</filename> and
  <filename>imagelist</filename>, are now combined into the
- <quote>actions file</quote>  (<filename>default.action</filename>
- for most installations).
+ <quote>actions files</quote>.  <filename>default.action</filename>, 
+ is the main actions file. Local exceptions should best be put into 
+ <filename>user.action</filename>.
 </para>
 <para>
  A <quote>filter file</quote> (typically <filename>default.filter</filename>)
@@ -340,7 +341,7 @@
  If upgrading from a 2.0.x version, you will have to use the new config 
  files, and possibly adapt any personal rules from your older files.
  When porting personal rules over from the old <filename>blockfile</filename>
- to the new actions file, please note that even the pattern syntax has
+ to the new actions files, please note that even the pattern syntax has
  changed. If upgrading from 2.9.x development versions, it is still
  recommended to use the new configuration files.
 </para>
@@ -377,9 +378,10 @@
   <para>
    The primary configuration file for cookie management, ad and banner 
    blocking, and many other aspects of <application>Privoxy</application>
-   configuration is <filename>default.action</filename>. It is strongly
+   configuration is in the <quote>actions</quote> files. It is strongly
    recommended to become familiar with the new actions concept below, 
-   before modifying this file.
+   before modifying these files. Locally defined rules 
+   should go into <filename>user.action</filename>.
   </para>
  </listitem> 
   <listitem>
@@ -477,14 +479,14 @@
 
 <para>
  You will probably want to keep an eye out for sites that require persistent
- cookies, and add these to <filename>default.action</filename> as needed. By
+ cookies, and add these to your actions configuration as needed. By
  default, most of these will be accepted only during the current browser
  session (aka <quote>session cookies</quote>), until you add them to the
  configuration. If you want the browser to handle this instead, you will need
- to edit <filename>default.action</filename> and disable this feature. If you
- use more than one browser, it would make more sense to let
- <application>Privoxy</application> handle this. In which case, the
- browser(s) should be set to accept all cookies.
+ to edit <filename>user.action</filename> (or through the web based interface)
+ and disable this feature. If you use more than one browser, it would make more
+ sense to let <application>Privoxy</application> handle this. In which case,
+ the browser(s) should be set to accept all cookies.
 </para>
 
 <para>
@@ -501,7 +503,7 @@
  (like <application>Mozilla</application> or recent versions of I.E.), you might
  try to force HTTP/1.0 compatibility. For Mozilla, look under <literal>Edit -&gt;
  Preferences -&gt; Debug -&gt; Networking</literal>.
- Alternatively, set the <quote>+downgrade</quote> config option in
+ Alternatively, set the <quote>+downgrade-http-version</quote> config option in
  <filename>default.action</filename> which will downgrade your browser's HTTP
  requests from HTTP/1.1 to HTTP/1.0 before processing them.
 </para>
@@ -510,11 +512,11 @@
  After running <application>Privoxy</application> for a while, you can 
  start to fine tune the configuration to suit your personal, or site, 
  preferences and requirements. There are many, many aspects that can 
- be customized. <quote>Actions</quote> (as specified in <filename>default.action</filename>) 
+ be customized. <quote>Actions</quote> 
  can be adjusted by pointing your browser to 
  <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
  (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), 
- and then follow the link to <quote>edit the actions list</quote>. 
+ and then follow the link to <quote>View &#38; Change the Current Configuration</quote>. 
  (This is an internal page and does not require Internet access.)
 </para>
 
@@ -523,7 +525,7 @@
  configuration can be viewed from this page, including 
  current configuration parameters, source code version numbers, 
  the browser's request headers, and <quote>actions</quote> that apply 
- to a given URL. In addition to the <filename>default.action</filename> file 
+ to a given URL. In addition to the actions file 
  editor mentioned above, <application>Privoxy</application> can also 
  be turned <quote>on</quote> and <quote>off</quote> (toggled) from this page.
 </para>
@@ -548,7 +550,8 @@
 <para>
  If you can't get rid of the problem at all, think you've found a bug in
  Privoxy, want to propose a new feature or smarter rules, please see the 
- chapter "Contacting the Developers, .." below.
+ chapter <ulink url="contact.html"><quote>Contacting the
+ Developers</quote></ulink> below. 
 </para>
 
 </sect2>
@@ -664,22 +667,20 @@
 <para>
  <screen>
 
-Please choose from the following options:
+Privoxy Menu:
 
-    * Privoxy main page
-    * Show information about the current configuration
-    * Show the source code version numbers
-    * Show the request headers.
-    * Show which actions apply to a URL and why
+    * View & change the current configuration
+    * View the source code version numbers
+    * View the request headers.
+    * Look up which actions apply to a URL and why
     * Toggle Privoxy on or off
-    * Edit the actions list
 
  </screen>
 </para>
 
 <para>
- This should be self-explanatory. Note the last item is an editor for the
- <quote>actions list</quote>, which is where much of the ad, banner, cookie,
+ This should be self-explanatory. Note the first item leads to an editor for the
+ <quote>actions list</quote>, which is where the ad, banner, cookie,
  and URL blocking magic is configured as well as other advanced features of
  <application>Privoxy</application>. This is an easy way to adjust various
  aspects of <application>Privoxy</application> configuration. The actions
@@ -706,7 +707,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2>
+<sect2 id="confoverview">
 <title>Configuration Files Overview</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
@@ -718,9 +719,9 @@ Please choose from the following options:
 </para>
 
 <para>
- The installed defaults provide a reasonable starting point, though possibly
- aggressive by some standards. For the time being, there are only three
- default configuration files (this may change in time):
+ The installed defaults provide a reasonable starting point, though 
+ some settings may be aggressive by some standards. For the time being, the
+ principle configuration files are:
 </para>
 
 <para>
@@ -730,20 +731,32 @@ Please choose from the following options:
    <para>
      The main configuration file is named <filename>config</filename>
      on Linux, Unix, BSD, OS/2, and AmigaOS and <filename>config.txt</filename>
-     on Windows.
+     on Windows. This is a required file.
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <filename>default.action</filename> (the actions file) is used to define
-    which of a set of various <quote>actions</quote> relating to images, banners, 
-    pop-ups, access restrictions, banners and cookies are to be applied, and where.
-    There is a web based editor for this file that can be accessed at <ulink
+    <filename>default.action</filename> (the main actions file) is used to define
+    the default settings for various <quote>actions</quote> relating to images, banners, 
+    pop-ups, access restrictions, banners and cookies.
+   </para>
+   <para>
+    Multiple actions files may be defined in <filename>config</filename>. These 
+    are processed in the order they are defined. Local customizations and locally 
+    preferred exceptions to the default policies as defined in
+    <filename>default.action</filename> are probably best applied in
+    <filename>user.action</filename>, which should be preserved across
+    upgrades. <filename>standard.action</filename> is also included. This is mostly 
+    for <application>Privoxy's</application> internal use.
+   </para>
+   <para>    
+    There is also a web based editor for this file that can be accessed at
+    <ulink
     url="http://config.privoxy.org/edit-actions/">http://config.privoxy.org/edit-actions/</ulink>
-    (Shortcut: <ulink url="http://p.p/edit-actions/">http://p.p/edit-actions/</ulink>).
-    (Other actions files are included as well with differing levels of filtering 
-    and blocking, e.g. <filename>basic.action</filename>.)
+    (Shortcut: <ulink
+    url="http://p.p/edit-actions/">http://p.p/edit-actions/</ulink>) for the
+    various actions files. 
    </para>
   </listitem> 
 
@@ -752,7 +765,7 @@ Please choose from the following options:
     <filename>default.filter</filename> (the filter file) can be used to re-write the raw
     page content, including viewable text as well as embedded HTML and JavaScript,
     and whatever else lurks on any given web page. The filtering jobs are only
-    pre-defined here; whether to apply them or not is up to the actions file.
+    pre-defined here; whether to apply them or not is up to the actions files.
    </para>
   </listitem> 
 
@@ -770,7 +783,7 @@ Please choose from the following options:
 </para>
 
 <para>
- <filename>default.action</filename> and <filename>default.filter</filename> 
+ The actions files and <filename>default.filter</filename> 
  can use Perl style <link linkend="regex">regular expressions</link> for
  maximum flexibility. 
 </para>
@@ -798,7 +811,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2>
+<sect2 id="config">
 <title>The Main Configuration File</title>
 <para>
  Again, the main configuration file is named <filename>config</filename> on
@@ -839,7 +852,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="conf-log-loc">
 <title>Configuration and Log File Locations</title>
 
 <para>
@@ -850,7 +863,7 @@ Please choose from the following options:
 </para>
 
 
-<sect4><title>confdir</title>
+<sect4 id="confdir"><title>confdir</title>
 
 <variablelist>
  <varlistentry>
@@ -896,7 +909,7 @@ Please choose from the following options:
 </sect4>
 
 
-<sect4><title>logdir</title>
+<sect4 id="logdir"><title>logdir</title>
 
 <variablelist>
  <varlistentry>
@@ -937,14 +950,19 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>actionsfile</title>
+<sect4 id="actionsfile"><title>
+<anchor id="default.action">
+<anchor id="standard.action">
+<anchor id="user.action">
+actionsfile
+</title>
 
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
   <listitem>
    <para>
-    The actions file to use
+    The actions file(s) to use
    </para>
   </listitem>
  </varlistentry>
@@ -957,14 +975,24 @@ Please choose from the following options:
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para>default.action (Unix) <emphasis>or</emphasis> default.action.txt (Windows)</para>
+   <simplelist>
+    <member>
+     <msgtext><literallayout>  standard     # Internal purposes, recommended not editing</literallayout></msgtext>
+    </member>
+    <member>
+     <msgtext><literallayout>  default      # Main actions file</literallayout></msgtext>
+    </member>
+    <member>
+     <msgtext><literallayout>  user         # User customizations</literallayout></msgtext>
+    </member>
+   </simplelist>
   </listitem>
  </varlistentry>
  <varlistentry>
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    No action is taken at all. Simple neutral proxying. 
+    No actions are taken at all. Simple neutral proxying. 
    </para>
   </listitem>
  </varlistentry>
@@ -972,19 +1000,23 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    There is no point in using <application>Privoxy</application> without
-    an actions file. There are three different actions files included in the
-    distribution, with varying degrees of aggressiveness: 
-    <filename>default.action</filename>, <filename>intermediate.action</filename> and
-    <filename>advanced.action</filename>.
+    Multiple <literal>actionsfile</literal> lines are OK and are in fact recommended!
+   </para>
+   <para> 
+    The default values include standard.action, which is used for internal
+    purposes and should be loaded, default.action, which is the
+    <quote>main</quote> actions file maintained by the developers, and
+    user.action, where you can make your personal additions.
+   </para>
+   <para> 
+    There is no point in using <application>Privoxy</application> without an actions file.
    </para>
   </listitem>
  </varlistentry>
 </variablelist>
 </sect4>
 
-<sect4><title>filterfile</title>
-
+<sect4 id="filterfile"><title><anchor id="default.filter">filterfile</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1012,7 +1044,7 @@ Please choose from the following options:
    <para>
     No textual content filtering takes place, i.e. all
     <literal>+filter{<replaceable class="parameter">name</replaceable>}</literal>
-    actions in the actions file are turned off
+    actions in the actions files are turned off
    </para>
   </listitem>
  </varlistentry>
@@ -1032,7 +1064,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>logfile</title>
+<sect4 id="logfile"><title>logfile</title>
 
 <variablelist>
  <varlistentry>
@@ -1093,7 +1125,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>jarfile</title>
+<sect4 id="jarfile"><title>jarfile</title>
 
 <variablelist>
  <varlistentry>
@@ -1135,7 +1167,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>trustfile</title>
+<sect4 id="trustfile"><title>trustfile</title>
 
 <variablelist>
  <varlistentry>
@@ -1198,7 +1230,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="local-set-up">
 <title>Local Set-up Documentation</title>
 
   <para>
@@ -1207,7 +1239,7 @@ Please choose from the following options:
     you, what you block and why you do that, your policies etc.
    </para>
 
-<sect4><title>trust-info-url</title>
+<sect4 id="trust-info-url"><title>trust-info-url</title>
 
 <variablelist>
  <varlistentry>
@@ -1259,7 +1291,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>admin-address</title>
+<sect4 id="admin-address"><title>admin-address</title>
 
 <variablelist>
  <varlistentry>
@@ -1303,7 +1335,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>proxy-info-url</title>
+<sect4 id="proxy-info-url"><title>proxy-info-url</title>
 
 <variablelist>
  <varlistentry>
@@ -1356,7 +1388,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="debugging">
 <title>Debugging</title>
 
  <para>
@@ -1366,7 +1398,7 @@ Please choose from the following options:
   command line option when debugging.
  </para>
 
-<sect4><title>debug</title>
+<sect4 id="debug"><title>debug</title>
 
 <variablelist>
  <varlistentry>
@@ -1445,7 +1477,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>single-threaded</title>
+<sect4 id="single-threaded"><title>single-threaded</title>
 
 <variablelist>
  <varlistentry>
@@ -1493,7 +1525,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="access-control">
 <title>Access Control and Security</title>
 
  <para>
@@ -1501,7 +1533,7 @@ Please choose from the following options:
   of <application>Privoxy</application>'s configuration.
  </para>
 
-<sect4><title>listen-address</title>
+<sect4 id="listen-address"><title>listen-address</title>
 
 <variablelist>
  <varlistentry>
@@ -1549,7 +1581,7 @@ Please choose from the following options:
    <para>
     If you leave out the IP address, <application>Privoxy</application> will
     bind to all interfaces (addresses) on your machine and may become reachable
-    from the Internet. In that case, consider using access control lists (acl's)
+    from the Internet. In that case, consider using access control lists (ACL's)
     (see <quote>ACLs</quote> below), or a firewall.
    </para>
   </listitem>
@@ -1573,7 +1605,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>toggle</title>
+<sect4 id="toggle"><title>toggle</title>
 
 <variablelist>
  <varlistentry>
@@ -1625,7 +1657,7 @@ Please choose from the following options:
 </sect4>
 
 
-<sect4><title>enable-remote-toggle</title>
+<sect4 id="enable-remote-toggle"><title>enable-remote-toggle</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1682,7 +1714,7 @@ Please choose from the following options:
 </sect4>
 
 
-<sect4><title>enable-edit-actions</title>
+<sect4 id="enable-edit-actions"><title>enable-edit-actions</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1733,7 +1765,11 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>ACLs: permit-access and deny-access</title>
+<sect4 id="acls"><title>
+<anchor id="permit-acces">
+<anchor id="deny-acces">
+ACLs: permit-access and deny-access</title>
+
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1854,7 +1890,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>buffer-limit</title>
+<sect4 id="buffer-limit"><title>buffer-limit</title>
 
 <variablelist>
  <varlistentry>
@@ -1936,7 +1972,7 @@ Please choose from the following options:
  supports the SOCKS 4 and SOCKS 4A protocols.
 </para>
 
-<sect4><title>forward</title>
+<sect4 id="forward"><title>forward</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1955,7 +1991,7 @@ Please choose from the following options:
    </para>
    <para>
     Where <replaceable class="parameter">target_domain</replaceable> is a domain name pattern (see the
-    chapter on domain matching in the actions file),
+    chapter on domain matching in the <filename>default.action</filename> file),
     <replaceable class="parameter">http_parent</replaceable> is the address of the parent HTTP proxy
     as an IP addresses in dotted decimal notation or as a valid DNS name (or <quote>.</quote> to denote
     <quote>no forwarding</quote>, and the optional 
@@ -2017,7 +2053,11 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>forward-socks4 and forward-socks4a</title>
+<sect4 id="socks"><title>
+<anchor id="forward-socks4">
+<anchor id="forward-socks4a">
+forward-socks4 and forward-socks4a</title>
+
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -2037,7 +2077,7 @@ Please choose from the following options:
    </para>
    <para>
     Where <replaceable class="parameter">target_domain</replaceable> is a domain name pattern (see the
-    chapter on domain matching in the actions file),
+    chapter on domain matching in the <filename>default.action</filename> file),
     <replaceable class="parameter">http_parent</replaceable> and <replaceable class="parameter">socks_proxy</replaceable>
     are IP addresses in dotted decimal notation or valid DNS names (<replaceable class="parameter">http_parent</replaceable>
     may be <quote>.</quote> to denote <quote>no HTTP forwarding</quote>), and the optional 
@@ -2105,7 +2145,7 @@ Please choose from the following options:
 </variablelist>
 </sect4>
 
-<sect4><title>Advanced Forwarding Examples</title>
+<sect4 id="advanced-forwarding-examples"><title>Advanced Forwarding Examples</title>
 
 <para>
  If you have links to multiple ISPs that provide various special content 
@@ -2189,13 +2229,14 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="windows-gui">
 <title>Windows GUI Options</title>
 <para>
  <application>Privoxy</application> has a number of options specific to the
  Windows GUI interface:
 </para>
 
+<anchor id="activity-animation">
 <para>
  If <quote>activity-animation</quote> is set to 1, the
  <application>Privoxy</application> icon will animate when
@@ -2212,6 +2253,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-messages">
 <para>
  If <quote>log-messages</quote> is set to 1,
  <application>Privoxy</application> will log messages to the console
@@ -2228,6 +2270,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-buffer-size">
 <para> 
  If <quote>log-buffer-size</quote> is set to 1, the size of the log buffer,
  i.e. the amount of memory used for the log messages displayed in the
@@ -2249,6 +2292,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-max-lines">
 <para>
  <application>log-max-lines</application> is the maximum number of lines held
  in the log buffer. See above.
@@ -2264,6 +2308,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-highlight-messages">
 <para>
  If <quote>log-highlight-messages</quote> is set to 1,
  <application>Privoxy</application> will highlight portions of the log
@@ -2280,6 +2325,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-font-name">
 <para>
  The font used in the console window:
 </para>
@@ -2294,6 +2340,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="log-font-size">
 <para>
  Font size used in the console window:
 </para>
@@ -2308,6 +2355,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="show-on-task-bar">
 <para>  
  <quote>show-on-task-bar</quote> controls whether or not
  <application>Privoxy</application> will appear as a button on the Task bar
@@ -2324,6 +2372,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="close-button-minimizes">
 <para>
  If <quote>close-button-minimizes</quote> is set to 1, the Windows close
  button will minimize <application>Privoxy</application> instead of closing
@@ -2340,6 +2389,7 @@ Please choose from the following options:
  </literal>
 </para>
 
+<anchor id="hide-console">
 <para>
  The <quote>hide-console</quote> option is specific to the MS-Win console
  version of <application>Privoxy</application>. If this option is used,
@@ -2364,16 +2414,20 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="actionsfile">
-<title>The Actions File</title>
+<sect2 id="actions-file">
+<title>Actions Files</title>
 
 <para>
- The actions file (<filename>default.action</filename>, formerly:
- <filename>actionsfile</filename> or <filename>ijb.action</filename>) is used
- to define what actions <application>Privoxy</application> takes for which
- URLs, and thus determines how ad images, cookies and various other aspects
- of HTTP content and transactions are handled on which sites (or even parts
- thereof).
+ The actions files are used to define what actions
+ <application>Privoxy</application> takes for which URLs, and thus determines
+ how ad images, cookies and various other aspects of HTTP content and
+ transactions are handled, and on which sites (or even parts thereof). There 
+ are three such files included with <application>Privoxy</application>, 
+ with slightly different purposes. <filename>default.action</filename> sets
+ the default policies. <filename>standard.action</filename> is used by 
+ <application>Privoxy</application> and the web based editor to set 
+ pre-defined values (and normally should not be edited). Local exceptions 
+ are best done in <filename>user.action</filename>.
 </para>
 
 <para> 
@@ -2385,10 +2439,11 @@ Please choose from the following options:
 </para>
 
 <para>
- An actions file typically has sections. At the top, <quote>aliases</quote> are 
- defined (discussed below), then the default set of rules which will apply 
- universally to all sites and pages. And then below that is generally a lengthy 
- set of exceptions to the defined universal policies.
+ An actions file typically has sections. Near the top, <quote>aliases</quote> are 
+ optionally defined (discussed <ulink
+ url="configuration.html#ALIASES">below</ulink>), then the default set of rules
+ which will apply universally to all sites and pages. And then below that,
+ exceptions to the defined universal policies. 
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -2409,9 +2464,9 @@ Please choose from the following options:
 
 <para>
  We have tried to provide you with reasonable rules to start from in the
- distribution actions file. But there is no general rule of thumb on these
+ distribution actions files. But there is no general rule of thumb on these
  things. There just are too many variables, and sites are constantly changing.
- Sooner or later you will want to change the rules (and read this chapter).
+ Sooner or later you will want to change the rules (and read this chapter again :).
 </para>
 </sect3>
 
@@ -2419,14 +2474,14 @@ Please choose from the following options:
 <sect3>
 <title>How to Edit</title>
 <para>
- The easiest way to edit the <quote>actions</quote> file is with a browser by
+ The easiest way to edit the <quote>actions</quote> files is with a browser by
  using our browser-based editor, which is available at <ulink
  url="http://config.privoxy.org/edit-actions">http://config.privoxy.org/edit-actions</ulink>.
 </para>
 
 <para>
  If you prefer plain text editing to GUIs, you can of course also directly edit the
- <filename>default.action</filename> file.
+ the actions files.
 </para>
 </sect3>
 
@@ -2434,7 +2489,7 @@ Please choose from the following options:
 <sect3>
 <title>How Actions are Applied to URLs</title>
 <para>
- The actions file is divided into sections. There are special sections,
+ Actions files are divided into sections. There are special sections,
  like the <quote>alias</quote> sections which will be discussed later. For now
  let's concentrate on regular sections: They have a heading line (often split
  up to multiple lines for readability) which consist of a list of actions,
@@ -2625,7 +2680,8 @@ Please choose from the following options:
 
 <para>
  Note that the path pattern is automatically left-anchored at the <quote>/</quote>,
- i.e. it matches as if it would start with a <quote>^</quote>.
+ i.e. it matches as if it would start with a <quote>^</quote> (regular expression speak 
+ for the beginning of a line).
 </para>
 
 <para>
@@ -2649,12 +2705,12 @@ Please choose from the following options:
 <sect3 id="actions">
 <title>Actions</title>
 <para>
- Actions are enabled if preceded with a <quote>+</quote>, and disabled if 
- preceded with a <quote>-</quote>. So a <quote>+action</quote> means 
- <quote>do that action</quote>, e.g. <quote>+block</quote> means please 
- <quote>block the following URLs and/or patterns</quote>. All actions are
- disabled by default, until they are explicitly enabled somewhere in an actions
- file.
+ All actions are disabled by default, until they are explicitly enabled
+ somewhere in an actions file. Actions are turned on if preceded with a
+ <quote>+</quote>, and turned off if preceded with a <quote>-</quote>. So a
+ <quote>+action</quote> means <quote>do that action</quote>, e.g.
+ <quote>+block</quote> means please <quote>block the following URL
+ patterns</quote>. 
 </para>
 
 <para> 
@@ -2705,9 +2761,9 @@ Please choose from the following options:
  <listitem>
   <para>  
   <!-- oes, or someone, check this. Re-worded 04/20/02 HB. -->
-   Multi-value, e.g. <quote>{+/-add-header{Name: value}}</quote> ot
-   <quote>{+/-wafer{name=value}}</quote>), where some value needs to be defined
-   in addition to simply enabling the actino. Examples:
+   Multi-value, e.g. <quote>{+/-add-header{Name: value}}</quote> or
+   <quote>{+/-send-wafer{name=value}}</quote>), where some value needs to be defined
+   in addition to simply enabling the action. Examples:
   </para>
   <para>
    <literal>
@@ -2726,19 +2782,21 @@ Please choose from the following options:
 </para>
 
 <para>
- If nothing is specified in this file, no <quote>actions</quote> are taken.
- So in this case <application>Privoxy</application> would just be a
- normal, non-blocking, non-anonymizing proxy. You must specifically
- enable the privacy and blocking features you need (although the 
- provided default <filename>default.action</filename> file will 
- give a good starting point).
+ If nothing is specified in any actions file, no <quote>actions</quote> are
+ taken. So in this case <application>Privoxy</application> would just be a
+ normal, non-blocking, non-anonymizing proxy. You must specifically enable the
+ privacy and blocking features you need (although the provided default actions
+ files will give a good starting point).
 </para>
 
 <para>
  Later defined actions always over-ride earlier ones.  So exceptions 
  to any rules you make, should come in the latter part of the file. For
  multi-valued actions, the actions are applied in the order they are
- specified.
+ specified. Actions files are processed in the order they are defined 
+ in <filename>config</filename> (the default installation has three 
+ actions files). It also quite possible for any given URL pattern to 
+ match more than one action!
 </para>
 
 <!-- start actions listing -->
@@ -2847,7 +2905,7 @@ Please choose from the following options:
   <listitem>
     <literallayout>
      <emphasis>{+block}</emphasis>
-     <emphasis>.example.com</emphasis>
+     <emphasis>.banners.example.com</emphasis>
      <emphasis>.ads.r.us</emphasis>
     </literallayout>
   </listitem>
@@ -2857,20 +2915,28 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    <application>Privoxy</application> will display its 
-    special <quote>BLOCKED</quote> page if a URL matches one of the 
-    blocked patterns. If there is sufficient space, a large red 
-    banner will appear with a friendly message about why the page 
-    was blocked, and a way to go there anyway. If there is insufficient 
-    space a smaller blocked page will appear without the red banner.
-    One exception is if the URL matches both <quote>+block</quote> 
-    and <quote>+image</quote>, then it can be handled by 
-    <quote>+image-blocker</quote> (see below).
+    If a URL matches one of the blocked patterns, <application>Privoxy</application>
+    will intercept the URL and display its special <quote>BLOCKED</quote> page
+    instead. If there is sufficient space, a large red banner will appear with
+    a friendly message about why the page was blocked, and a way to go there
+    anyway. If there is insufficient space a smaller blocked page will appear
+    without the red banner.
+   </para>
+
+   <para> 
+    A very important exception is if the URL <emphasis>matches both</emphasis> <quote>+block</quote> 
+    and <ulink
+    url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
+    then it will be handled by 
+    <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+    (see below). It is important to understand this process, in order 
+    to understand how <application>Privoxy</application> is able to deal with 
+    ads and other objectionable content.
    </para>
    <para>
     The <quote>+filter</quote> action can also perform some of the 
     same functionality as <quote>+block</quote>, but by virtue of very 
-    different programming techniques, and is typically used for different 
+    different programming techniques, and is most often used for different 
     reasons.
    </para>
   </listitem>
@@ -2940,8 +3006,8 @@ Please choose from the following options:
 </sect4>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="downgrade">
-<title><emphasis>+downgrade</emphasis></title>
+<sect4 id="downgrade-http-version">
+<title><emphasis>+downgrade-http-version</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -2956,7 +3022,7 @@ Please choose from the following options:
   <term>Typical uses:</term>
   <listitem>
    <para>
-    <quote>+downgrade</quote> will downgrade HTTP/1.1 client requests to
+    <quote>+downgrade-http-version</quote> will downgrade HTTP/1.1 client requests to
     HTTP/1.0 and downgrade the responses as well.
    </para>
   </listitem>
@@ -2975,7 +3041,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+downgrade}</emphasis>
+     <emphasis>{+downgrade-http-version}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -2988,7 +3054,7 @@ Please choose from the following options:
     Use this action for servers that use HTTP/1.1 protocol features that
     <application>Privoxy</application> doesn't handle well yet. HTTP/1.1 is
     only partially implemented. Default is not to downgrade requests. This is
-    an infrequently needed action, and is used to help with problem sites only.
+    an infrequently needed action, and is used to help with rare problem sites only.
    </para>
   </listitem>
  </varlistentry>
@@ -3016,7 +3082,7 @@ Please choose from the following options:
     The <quote>+fast-redirects</quote> action enables interception of 
     <quote>redirect</quote> requests from one server to another, which 
     are used to track users.<application>Privoxy</application> can cut off
-    all but the last valid URL in redirect request and send a local redirect
+    all but the last valid URL in a redirect request and send a local redirect
     back to your browser without contacting the intermediate site(s).
    </para>
   </listitem>
@@ -3060,8 +3126,8 @@ Please choose from the following options:
     the advertisers.
    </para>
    <para>
-    This is a normally on feature, and often requires exceptions for sites that
-    are sensitive to defeating this mechanism.
+    This is a normally <quote>on</quote> feature, and often requires exceptions
+    for sites that are sensitive to defeating this mechanism.
    </para>
   </listitem>
  </varlistentry>
@@ -3178,7 +3244,7 @@ Please choose from the following options:
    <para>
     This is potentially a very powerful feature! And requires a knowledge 
     of regular expressions if you want to <quote>roll your own</quote>.
-    Filtering operates on a line by line basis.
+    Filtering operates on a line by line basis throughout the entire page.
    </para>
    <para>
     Filtering requires buffering the page content, which may appear to
@@ -3188,7 +3254,8 @@ Please choose from the following options:
     noticeable on slower connections.
    </para>
    <para>
-    Filtering can achieve some of the effects as the <quote>+block</quote> 
+    Filtering can achieve some of the effects as the 
+    <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink>
     action, i.e. it can be used to block ads and banners. In the overall 
     scheme of things, filtering is one of the last things <quote>Privoxy</quote> 
     does with a web page. So other actions are applied first.
@@ -3201,8 +3268,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-forwarded">
-<title><emphasis>+hide-forwarded</emphasis></title>
+<sect4 id="hide-forwarded-for-headers">
+<title><emphasis>+hide-forwarded-for-headers</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3235,7 +3302,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+hide-forwarded}</emphasis>
+     <emphasis>{+hide-forwarded-for-headers}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3255,8 +3322,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-from">
-<title><emphasis>+hide-from</emphasis></title>
+<sect4 id="hide-from-header">
+<title><emphasis>+hide-from-header</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3290,7 +3357,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+hide-from{block}}</emphasis>
+     <emphasis>{+hide-from-header{block}}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3300,7 +3367,8 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    The keyword <quote>block</quote> will completely remove the header.
+    The keyword <quote>block</quote> will completely remove the header 
+    (not to be confused with the <quote>+block</quote> action).
     Alternately, you can specify any value you prefer to send to the web
     server.
    </para>
@@ -3313,8 +3381,8 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect4 id="hide-referer">
-<title><emphasis>+hide-referer</emphasis></title>
-<anchor id="hide-referrer">
+<title><emphasis><anchor id="hide-referrer">+hide-referer</emphasis></title>
+
 
 <variablelist>
  <varlistentry>
@@ -3434,8 +3502,8 @@ Please choose from the following options:
 </sect4>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="image">
-<title><emphasis>+image</emphasis></title>
+<sect4 id="handle-as-image">
+<title><emphasis>+handle-as-image</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3451,7 +3519,8 @@ Please choose from the following options:
   <listitem>
    <para>
     To define what <application>Privoxy</application> should treat 
-    automatically as an image.
+    automatically as an image, and is an important ingredient of how 
+    ads are handled.
    </para>
   </listitem>
  </varlistentry>
@@ -3469,7 +3538,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+image}</emphasis>
+     <emphasis>{+handle-as-image}</emphasis>
      <emphasis>/.*\.(gif|jpg|jpeg|png|bmp|ico)</emphasis>
     </literallayout>
   </listitem>
@@ -3481,8 +3550,9 @@ Please choose from the following options:
    <para>
     This only has meaning if the URL (or pattern) also is
     <quote>+block</quote>ed, in which case a <quote>blocked</quote> image can
-    be sent rather than a HTML page. (See <quote>+image-blocker{}</quote> below
-    for the control over what is actually sent.)    
+    be sent rather than a HTML page. (See 
+    <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+     below for control over what will actually be displayed by the browser.)    
    </para>
    <para>
     There is little reason to change the default definition for this.
@@ -3495,8 +3565,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="image-blocker">
-<title><emphasis>+image-blocker</emphasis></title>
+<sect4 id="set-image-blocker">
+<title><emphasis>+set-image-blocker</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3511,8 +3581,11 @@ Please choose from the following options:
   <term>Typical uses:</term>
   <listitem>
    <para>
-    Decide what to do with URLs that end up tagged with both <quote>{+block}</quote>
-    and <quote>{+image}</quote>, e.g an advertisement.
+    Decide what to do with URLs that end up tagged with <emphasis>both</emphasis> 
+    <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink>
+    and <ulink
+    url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
+    e.g an advertisement.
    </para>
   </listitem>
  </varlistentry>
@@ -3521,14 +3594,17 @@ Please choose from the following options:
   <term>Possible values:</term>
   <listitem>
    <para>
-    There are four available options: <quote>-image-blocker</quote> will send a HTML
+    There are four available options: <quote>-set-image-blocker</quote> will send a HTML
     <quote>blocked</quote> page, usually resulting in a <quote>broken
-    image</quote> icon. <quote>+image-blocker{blank}</quote> will send a 1x1
-    transparent GIF image. <quote>+image-blocker{pattern}</quote> will send a
+    image</quote> icon.
+    <quote>+set-image-blocker{<emphasis>blank</emphasis>}</quote> will send a
+    1x1 transparent GIF image.
+    <quote>+set-image-blocker{<emphasis>pattern</emphasis>}</quote> will send a
     checkerboard type pattern (the default). And finally,
-    <quote>+image-blocker{http://xyz.com}</quote> will send a HTTP temporary
-    redirect to the specified image. This has the advantage of the icon being
-    being cached by the browser, which will speed up the display.
+    <quote>+set-image-blocker{<emphasis>http://xyz.com</emphasis>}</quote> will
+    send a HTTP temporary redirect to the specified image. This has the
+    advantage of the icon being being cached by the browser, which will speed
+    up the display.
    </para>
   </listitem>
  </varlistentry>
@@ -3537,7 +3613,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+image-blocker{blank}}</emphasis>
+     <emphasis>{+set-image-blocker{blank}}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3547,13 +3623,14 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    If you want <emphasis>invisible</emphasis> ads, they need to be both
-    defined as <emphasis>images</emphasis> and <emphasis>blocked</emphasis>.
-    And then, <quote>image-blocker</quote> should be set to
+    If you want <emphasis>invisible</emphasis> ads, they need to meet 
+    criteria as matching both <emphasis>images</emphasis> and <emphasis>blocked</emphasis>
+    actions. And then, <quote>image-blocker</quote> should be set to
     <quote>blank</quote> for invisibility. Note you cannot treat HTML pages as
-    images in most cases. For instance, frames require an HTML page to display.
-    So a frame that is an ad, cannot be treated as an image. Forcing an
-    <quote>image</quote> in this situation just will not work.
+    images in most cases. For instance, frames require an HTML page to
+    display. So a frame that is an ad, typically cannot be treated as an image.
+    Forcing an <quote>image</quote> in this situation just will not work
+    reliably. 
    </para>
   </listitem>
  </varlistentry>
@@ -3600,10 +3677,11 @@ Please choose from the following options:
   <listitem>
    <!-- I had trouble getting the spacing to look right in my browser -->
    <!-- I probably have the wrong font setup, bollocks. -->
+   <!-- Apparently the emphasis tag uses a proportional font no matter what -->
     <literallayout>
-     <emphasis>+limit-connect{443}</emphasis>                      # This is the default and need not be specified.
-     <emphasis>+limit-connect{80,443}</emphasis>                 # Ports 80 and 443 are OK.
-     <emphasis>+limit-connect{-3, 7, 20-100, 500-}</emphasis> # Port less than 3, 7, 20 to 100 and above 500 are OK.
+     <emphasis>+limit-connect{443}</emphasis>                       # This is the default and need not be specified.
+     <emphasis>+limit-connect{80,443}</emphasis>                  # Ports 80 and 443 are OK.
+     <emphasis>+limit-connect{-3, 7, 20-100, 500-}</emphasis>   # Port less than 3, 7, 20 to 100 and above 500 are OK.
     </literallayout>
   </listitem>
  </varlistentry>
@@ -3636,8 +3714,8 @@ Please choose from the following options:
 </sect4>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="no-compression">
-<title><emphasis>+no-compression</emphasis></title>
+<sect4 id="prevent-compression">
+<title><emphasis>+prevent-compression</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3670,7 +3748,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+no-compression}</emphasis>
+     <emphasis>{+prevent-compression}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3681,10 +3759,14 @@ Please choose from the following options:
   <listitem>
    <para>
     Some websites do this, which can be a problem for
-    <application>Privoxy</application>, since <quote>+filter</quote>,
-    <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work
-    on compressed data. This will slow down connections to those websites,
-    though. Default typically is to turn <quote>no-compression</quote> on.
+    <application>Privoxy</application>, since 
+    <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>,
+    <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+    and <ulink
+    url="configuration.html#GIF-DEANIMATE"><quote>+gif-deanimate</quote></ulink>
+    will not work on compressed data. This will slow down connections to those
+    websites, though. Default typically is to turn
+    <quote>prevent-compression</quote> on.
    </para>
   </listitem>
  </varlistentry>
@@ -3693,8 +3775,8 @@ Please choose from the following options:
 </sect4>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="no-cookies-keep">
-<title><emphasis>+no-cookies-keep</emphasis></title>
+<sect4 id="session-cookies-only">
+<title><emphasis>+session-cookies-only</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3709,7 +3791,7 @@ Please choose from the following options:
   <term>Typical uses:</term>
   <listitem>
    <para>
-    Allow cookies for the current browser session only.
+    Allow cookies for the current browser session <emphasis>only</emphasis>.
    </para>
   </listitem>
  </varlistentry>
@@ -3724,10 +3806,10 @@ Please choose from the following options:
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Example usage (disabling):</term>
   <listitem>
     <literallayout>
-     <emphasis>{+no-cookies-keep}</emphasis>
+     <emphasis>{-session-cookies-only}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3737,11 +3819,17 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    If websites set cookies, <quote>no-cookies-keep</quote> will make sure
+    If websites set cookies, <quote>+session-cookies-only</quote> will make sure
     they are erased when you exit and restart your web browser. This makes
     profiling cookies useless, but won't break sites which require cookies so
     that you can log in for transactions. This is generally turned on for all 
-    sites. Sometimes referred to as <quote>session cookies</quote>.
+    sites, and is the recommended setting.
+   </para>
+   <para>
+    <quote>+prevent-*-cookies</quote> actions should be turned off as well (see
+    below), for <quote>+session-cookies-only</quote> to work. Or, else no cookies 
+    will get through at all. For, <quote>persistent</quote> cookies that survive 
+    across browser sessions, see below as well.
    </para>
   </listitem>
  </varlistentry>
@@ -3751,8 +3839,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="no-cookies-read">
-<title><emphasis>+no-cookies-read</emphasis></title>
+<sect4 id="prevent-reading-cookies">
+<title><emphasis>+prevent-reading-cookies</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3786,7 +3874,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+no-cookies-read}</emphasis>
+     <emphasis>{+prevent-reading-cookies}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3796,8 +3884,15 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    Often used in conjunction with <quote>+no-cookies-set</quote> to 
-    disable persistant cookies completely.
+    Often used in conjunction with <quote>+prevent-setting-cookies</quote> to 
+    disable cookies completely. Note that 
+    <ulink url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
+    requires these to both be disabled (or else it never gets any cookies to cache).
+   </para>
+   <para>
+    For <quote>persistent</quote> cookies to work (i.e. they survive across browser 
+    sessions and reboots), all three cookie settings should be <quote>off</quote> 
+    for the specified sites.
    </para>
   </listitem>
  </varlistentry>
@@ -3807,8 +3902,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="no-cookies-set">
-<title><emphasis>+no-cookies-set</emphasis></title>
+<sect4 id="prevent-setting-cookies">
+<title><emphasis>+prevent-setting-cookies</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3823,7 +3918,7 @@ Please choose from the following options:
   <term>Typical uses:</term>
   <listitem>
    <para>
-    Explicitly block the web server from sending cookies to your 
+    Explicitly block the web server from storing cookies on your 
     system.
    </para>
   </listitem>
@@ -3842,7 +3937,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+no-cookies-set}</emphasis>
+     <emphasis>{+prevent-setting-cookies}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3852,8 +3947,8 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    Often used in conjunction with <quote>+no-cookies-read</quote> to 
-    disable persistant cookies completely.
+    Often used in conjunction with <quote>+prevent-reading-cookies</quote> to 
+    disable cookies completely (see above).
    </para>
   </listitem>
  </varlistentry>
@@ -3862,11 +3957,9 @@ Please choose from the following options:
 </sect4>
 
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="no-popup">
-<title><emphasis>+no-popup</emphasis></title>
-<anchor id="no-popups">
-
+<!--   ~~~~~       Nvarlistentryew section      ~~~~~     -->
+<sect4 id="kill-popup">
+<title><emphasis>+kill-popups<anchor id="kill-popups"></emphasis></title>
 <variablelist>
  <varlistentry>
   <term>Type:</term>
@@ -3898,7 +3991,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+no-popup}</emphasis>
+     <emphasis>{+kill-popups}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3908,13 +4001,18 @@ Please choose from the following options:
   <term>Notes:</term>
   <listitem>
    <para>
-    <quote>+no-popup</quote> uses a built in filter to disable pop-ups
-    that use the <literal>window.open()</literal> function, etc.
-   </para>
+    <quote>+kill-popups</quote> uses a built in filter to disable pop-ups
+    that use the <literal>window.open()</literal> function, etc. This is 
+    one of the first actions processed by <application>Privoxy</application>
+    as it contacts the remote web server. This action is not always 100% reliable, 
+    and is supplemented by <quote>+filter{<emphasis>popups</emphasis>}</quote>.
+    </para>
+  <!-- 
    <para>
-    An alternate spelling is <quote>+no-popups</quote>, which is 
+    An alternate spelling is <quote>+kill-popup</quote>, which is 
     interchangeable.
    </para>
+ --> 
   </listitem>
  </varlistentry>
 
@@ -3923,8 +4021,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="vanilla-wafer">
-<title><emphasis>+vanilla-wafer</emphasis></title>
+<sect4 id="send-vanilla-wafer">
+<title><emphasis>+send-vanilla-wafer</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -3958,7 +4056,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+vanilla-wafer}</emphasis>
+     <emphasis>{+send-vanilla-wafer}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -3970,7 +4068,7 @@ Please choose from the following options:
    <para>
     This action only applies if you are using a <filename>jarfile</filename>
     for saving cookies. Of course, this is a (relatively) unique header and 
-    could be used to track you.
+    could conceivably be used to track you.
    </para>
   </listitem>
  </varlistentry>
@@ -3980,8 +4078,8 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="wafer">
-<title><emphasis>+wafer</emphasis></title>
+<sect4 id="send-wafer">
+<title><emphasis>+send-wafer</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -4014,7 +4112,7 @@ Please choose from the following options:
   <term>Example usage:</term>
   <listitem>
     <literallayout>
-     <emphasis>{+wafer{name=value}}</emphasis>
+     <emphasis>{+send-wafer{name=value}}</emphasis>
      <emphasis>.example.com</emphasis>
     </literallayout>
   </listitem>
@@ -4042,8 +4140,11 @@ Please choose from the following options:
  the action with a <quote>-</quote>, in place of the <quote>+</quote>. Also, 
  that some actions are turned on in the default section of the actions file, 
  and require little to no additional configuration. These are just <quote>on</quote>.
- Some actions that are turned on the default section do typically require
- exceptions to be listed in the lower sections of actions file.
+ But, other actions that are turned on the default section <emphasis>do
+ typically require</emphasis> exceptions to be listed in the lower sections of
+ actions file. E.g. by default no URLs are <quote>blocked</quote> (i.e. in 
+ the default definitions of <filename>default.action</filename>). We need 
+ exceptions to this in order to enable ad blocking.
 </para>
 
 <para>
@@ -4051,35 +4152,35 @@ Please choose from the following options:
 </para>
 
 <para>
- Turn off cookies by default, then allow a few through for specified sites:
+ Turn off cookies by default, then allow a few through for specified sites 
+ (showing an excerpt from the <quote>default</quote> section of an actions
+ file ONLY):
 </para>
   
 <para>
  <literal>
   <msgtext> 
    <literallayout>
- # Turn off all persistent cookies
- { +no-cookies-read }
- { +no-cookies-set }
- 
- # Allow cookies for this browser session ONLY
- { +no-cookies-keep }
+ # Excerpt only:
+ # Allow cookies to and from the server, but
+ # for this browser session ONLY
+ { 
+   # other actions normally listed here...
+   -prevent-setting-cookies \
+   -prevent-reading-cookies \
+   +session-cookies-only   \  
+ }
+ / # match all URLs
 
  # Exceptions to the above, sites that benefit from persistent cookies
- # that saved from one browser session to the next.
- { -no-cookies-read }
- { -no-cookies-set }
- { -no-cookies-keep }
- .javasoft.com
- .sun.com
- .yahoo.com
- .msdn.microsoft.com
- .redhat.com
+ # that are saved from one browser session to the next.
+ { -session-cookies-only }
+  .javasoft.com
+  .sun.com
+  .yahoo.com
+  .msdn.microsoft.com
+  .redhat.com
 
- # Alternative way of saying the same thing
- {-no-cookies-set -no-cookies-read -no-cookies-keep}
- .sourceforge.net
- .sf.net
    </literallayout>
   </msgtext> 
  </literal>
@@ -4093,13 +4194,17 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
- # Turn them off!
- {+fast-redirects}
+ # Turn them off (excerpt only)!
+ {
+  # other actions normally listed here...
+  +fast-redirects
+ }
+ / # match all URLs
  
  # Reverse it for these two sites, which don't work right without it.
  {-fast-redirects}
- www.ukc.ac.uk/cgi-bin/wac\.cgi\?
- login.yahoo.com
+  www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+  login.yahoo.com
    </literallayout>
   </msgtext> 
  </literal>
@@ -4115,14 +4220,18 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
- # Run everything through the filter file, using only the
+ # Run everything through the filter file, using only certain
  # specified sections:
- +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
- +filter{webbugs} +filter{nimda} +filter{banners-by-size}
+ {
+  # other actions normally listed here...
+  +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}\
+  +filter{webbugs} +filter{nimda} +filter{banners-by-size}
+ }
+ / #match all URLs
               
- # Then disable filtering of code from sourceforge!
+ # Then disable filtering of code from all sourceforge domains!
  {-filter}
- .cvs.sourceforge.net
+  .sourceforge.net
    </literallayout>
   </msgtext> 
  </literal>
@@ -4130,9 +4239,11 @@ Please choose from the following options:
 
 <para>
  Now some URLs that we want <quote>blocked</quote> (normally generates 
- the <quote>blocked</quote> banner). Many of these use 
- <link linkend="regex">regular expressions</link> that will expand to match
- multiple URLs: </para>
+ the <quote>blocked</quote> banner). Typically, the <quote>block</quote>
+ action is off by default in the upper section of an actions file, then enabled
+ against certain URLs and patterns in the lower part of the file. Many of these use <link
+ linkend="regex">regular expressions</link> that will expand to match multiple
+ URLs: </para>
 
 <para>
  <literal>
@@ -4140,48 +4251,16 @@ Please choose from the following options:
    <literallayout>
   # Blocklist:
   {+block}
-  /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
-  /.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
+  ad*.
+  .*ads.
+  banner?.
+  count*.
+  /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+  /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
+  .hitbox.com 
   /.*/(ng)?adclient\.cgi
   /.*/(plain|live|rotate)[-_.]?ads?/
-  /.*/(sponsor)s?[0-9]?/
-  /.*/_?(plain|live)?ads?(-banners)?/
   /.*/abanners/
-  /.*/ad(sdna_image|gifs?)/
-  /.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
-  /.*/adbanners/
-  /.*/adserver
-  /.*/adstream\.cgi
-  /.*/adv((er)?ts?|ertis(ing|ements?))?/
-  /.*/banner_?ads/
-  /.*/banners?/
-  /.*/banners?\.cgi/
-  /.*/cgi-bin/centralad/getimage
-  /.*/images/addver\.gif
-  /.*/images/marketing/.*\.(gif|jpe?g)
-  /.*/popupads/
-  /.*/siteads/
-  /.*/sponsor.*\.gif
-  /.*/sponsors?[0-9]?/
-  /.*/advert[0-9]+\.jpg
-  /Media/Images/Adds/
-  /ad_images/
-  /adimages/
-  /.*/ads/
-  /bannerfarm/
-  /grafikk/annonse/
-  /graphics/defaultAd/
-  /image\.ng/AdType
-  /image\.ng/transactionID
-  /images/.*/.*_anim\.gif # alvin brattli
-  /ip_img/.*\.(gif|jpe?g)
-  /rotateads/
-  /rotations/ 
-  /worldnet/ad\.cgi
-  /cgi-bin/nph-adclick.exe/
-  /.*/Image/BannerAdvertising/
-  /.*/ad-bin/
-  /.*/adlib/server\.cgi
   /autoads/
    </literallayout>
   </msgtext> 
@@ -4192,9 +4271,10 @@ Please choose from the following options:
  Note that many of these actions have the potential to cause a page to
  misbehave, possibly even not to display at all. There are many ways 
  a site designer may choose to design his site, and what HTTP header 
- content he may depend on. There is no way to have hard and fast rules 
- for all sites. See the <link linkend="ACTIONSANAT">Appendix</link>
- for a brief example on troubleshooting actions.
+ content, and other criteria, he may depend on. There is no way to have hard
+ and fast rules for all sites. See the <link
+ linkend="ACTIONSANAT">Appendix</link> for a brief example on troubleshooting
+ actions.
 </para>
 </sect4>
 
@@ -4204,7 +4284,7 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
+<sect3 id="aliases">
 <title>Aliases</title>
 <para>
  Custom <quote>actions</quote>, known to <application>Privoxy</application>
@@ -4214,9 +4294,10 @@ Please choose from the following options:
  <quote>{</quote> or <quote>}</quote>. But please use only <quote>a</quote>-
  <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
  <quote>-</quote>. Alias names are not case sensitive, and 
- <emphasis>must be defined  before anything</emphasis> else in the
- <filename>default.action</filename>file! And there can only be one set of
- <quote>aliases</quote> defined.
+ <emphasis>must be defined before other actions</emphasis> in the
+ actions file! And there can only be one set of <quote>aliases</quote>
+ defined per file. Each actions file may have its own aliases, but they are 
+ only visible within that file.
 </para>
 
 <para>
@@ -4229,17 +4310,16 @@ Please choose from the following options:
    <literallayout>
  # Useful custom aliases we can use later. These must come first!
  {{alias}}
- +no-cookies = +no-cookies-set +no-cookies-read
- -no-cookies = -no-cookies-set -no-cookies-read
- fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
- shop        = -no-cookies -filter -fast-redirects
- +imageblock = +block +image
+ +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
+ -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
+ fragile     = -block -prevent-cookies -filter -fast-redirects -hide-referer -kill-popups
+ shop        = -prevent-cookies -filter -fast-redirects
+ +imageblock = +block +handle-as-image
 
- #For people who don't like to type too much:  ;-)
- c0 = +no-cookies
- c1 = -no-cookies
- c2 = -no-cookies-set +no-cookies-read
- c3 = +no-cookies-set -no-cookies-read
+ # Aliases defined from other aliases, for people who don't like to type 
+ # too much:  ;-)
+ c0 = +prevent-cookies
+ c1 = -prevent-cookies
  #... etc.  Customize to your heart's content.
    </literallayout>
   </msgtext> 
@@ -4248,7 +4328,9 @@ Please choose from the following options:
 
 <para>
  Some examples using our <quote>shop</quote> and <quote>fragile</quote>
- aliases from above:
+ aliases from above. These would appear in the lower sections of an 
+ actions file as exceptions to the default actions (as defined in the 
+ upper section):
 </para>
 
 <para>
@@ -4258,21 +4340,20 @@ Please choose from the following options:
  # These sites are very complex and require
  # minimal interference.
  {fragile}
- .office.microsoft.com
- .windowsupdate.microsoft.com
- .nytimes.com
+  .office.microsoft.com
+  .windowsupdate.microsoft.com
+  .nytimes.com
 
  # Shopping sites - but we still want to block ads.
  {shop}
- .quietpc.com
- .worldpay.com   # for quietpc.com
- .jungle.com
- .scan.co.uk
+  .quietpc.com
+  .worldpay.com   # for quietpc.com
+  .scan.co.uk
 
  # These shops require pop-ups also 
- {shop -no-popups}
- .dabs.com
- .overclockers.co.uk
+ {shop -kill-popups}
+  .dabs.com
+  .overclockers.co.uk
    </literallayout>
   </msgtext> 
  </literal>
@@ -4292,7 +4373,7 @@ Please choose from the following options:
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="filterfile">
+<sect2 id="filter-file">
 <title>The Filter File</title>
 <para>
  Any web page can be dynamically modified with the filter file. This
@@ -4454,10 +4535,8 @@ Requests</title>
 </para>
 
 <para>
- New <filename>default.actions</filename> files will occasionally be made
- available based on your feedback. These 
- will be announced on the 
- <ulink
+ New, improved <filename>default.action</filename> files will occasionally be made
+ available based on your feedback. These will be announced on the <ulink
  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
  list.
 </para>
@@ -4583,7 +4662,7 @@ Requests</title>
   special characters (e.g. <quote>.</quote>) needs to be taken literally and
   not as a special meta-character. Example: <quote>example\.com</quote>, makes 
   sure the period is recognized only as a period (and not expanded to its 
-  metacharacter meaning of any single character).
+  meta-character meaning of any single character).
  </member>
 </simplelist></para>
 
@@ -4952,20 +5031,30 @@ Requests</title>
  <itemizedlist>
  <listitem>
   <para>
-   First, the web browser requests a page, and this request is intercepted by 
-  <application>Privoxy</application> immediately.
+   First, your web browser requests a web page. The browser knows to send 
+   the request to <application>Privoxy</application>, who in turn, 
+   will relay the request to the remote web server after passing a few quick
+   tests: 
   </para>
  </listitem> 
  <listitem>
   <para>
-   <application>Privoxy</application> traps any request for internal CGI 
-  pages (e.g http://p.p/) and relays these back to the browser.
+   <application>Privoxy</application> traps any request for its own internal CGI 
+  pages (e.g http://p.p/) and sends these back to the browser.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If the URL matches a <quote>+block</quote> pattern, then it is blocked 
-   and the banner displayed.
+   Next, <application>Privoxy</application> checks to see if the URL 
+   matches any <ulink
+   url="configuration.html#BLOCK"><quote>+block</quote></ulink> patterns. If
+   so, the remote web server is not contacted, and the URL is then further
+   checked against <quote>+handle-as-image</quote>. If both match, then the
+   setting of <ulink url="configuration.html#SET-IMAGE-BLOCKER">
+   <quote>+set-image-blocker</quote></ulink> is used to display whichever
+   option is appropriate. If <ulink
+   url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
+   does not match, then the <quote>BLOCKED</quote> banner page is displayed.
   </para>
  </listitem> 
  <listitem>
@@ -4976,40 +5065,44 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   <quote>+fast-redirect</quote> is processed, stripping unwanted parts 
-   of the request web page URL.
+   <ulink
+   url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
+   is processed, stripping unwanted parts of the requested web page URL.
   </para>
  </listitem> 
  <listitem>
   <para>
-   At this point, <application>Privoxy</application> relays the request to the
-   web server, and requests the page (assuming nothing up to this point has
+   At this point, <application>Privoxy</application> now relays the URL to the
+   web server, requesting the page (assuming nothing up to this point has
    prevented getting us from this far).
   </para>
  </listitem> 
  <listitem>
   <para>
    The first few hundred bytes are read from the web server and 
-   <quote>+kill-popups</quote> is processed, if enabled.
+   <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+   is processed, if enabled.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If <quote>+filter</quote> applies, the rest of the page is read into
-   memory and then the filters are processed. Filters are applied in the order they
-   are specified in the <filename>default.filter</filename> file.  The entire
-   page, which is now filtered, is then sent by
-   <application>Privoxy</application> to your browser.
+   If <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+   applies, the rest of the page is read into memory and then the filter rules
+   (from <filename>default.filter</filename>) are processed. Filters are
+   applied in the order they are specified in the
+   <filename>default.filter</filename> file.  The entire page, which is now
+   filtered, is then sent by <application>Privoxy</application> back to your
+   browser.
   </para>
  </listitem> 
  <listitem>
   <para>
-   As the browser receives the filtered page content, it will read and request any
-   embedded URLs on the page, e.g. an ad image. As the browser requests these
+   As the browser receives the now filtered page content, it will read and request any
+   embedded URLs on the page, e.g. ad images. As the browser requests these
    secondary URLs from whatever server they may be on,
    <application>Privoxy</application> handles these same as above, and the process
-   is repeated for each such URL. Note that a fancy web page may have many, many
-   such URLs for graphics, frames, etc.
+   is repeated all over again for each such URL. Note that a fancy web page may
+   have many, many such embedded URLs for graphics, frames, etc.
   </para>
  </listitem> 
  
@@ -5039,7 +5132,7 @@ Requests</title>
  One quick test to see if <application>Privoxy</application> is causing a problem 
  or not, is to disable it temporarily. This should be the first troubleshooting 
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
- and easy way to do this (be sure to flush caches afterwards!).
+ and easy way to do this (be sure to flush caches afterward!).
 </para>
 
 <para>
@@ -5066,81 +5159,76 @@ Requests</title>
 </para>
 
 <para>
- Let's look at an example, <ulink url="http://google.com">google.com</ulink>, 
- one section at a time:
+ Let's try an example, <ulink url="http://google.com">google.com</ulink>, 
+ and look at it one section at a time:
 </para>
 
 <para>
  <screen>
- System default actions:
-
- { -add-header -block -deanimate-gifs -downgrade -fast-redirects -filter 
-   -hide-forwarded -hide-from -hide-referer -hide-user-agent -image 
-   -image-blocker -limit-connect -no-compression -no-cookies-keep 
-   -no-cookies-read -no-cookies-set -no-popups -vanilla-wafer -wafer }
- 
- </screen>
-</para>
-
-<para>
- This is the top section, and only tells us of the compiled in defaults. This 
- is basically what <application>Privoxy</application> would do if there 
- were not any <quote>actions</quote> defined, i.e. it does nothing. Every action 
- is disabled. This is not particularly informative for our purposes here. OK,
- next section:
-</para>
-
-<para>
- <screen>
-
  Matches for http://google.com:
 
- { -add-header -block +deanimate-gifs -downgrade +fast-redirects 
-   +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
-   +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
-   +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
-   -hide-user-agent -image +image-blocker{blank} +no-compression 
-   +no-cookies-keep -no-cookies-read -no-cookies-set +no-popups 
-   -vanilla-wafer -wafer }
-   /
+--- File standard ---
+(no matches in this file)
 
- { -no-cookies-keep -no-cookies-read -no-cookies-set }
-  .google.com
+--- File default ---
+
+{ -add-header -block +deanimate-gifs{last} -downgrade-http-version +fast-redirects 
+ -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
+ +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
+ +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
+ +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
+ -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
+ +prevent-compression +session-cookies-only +prevent-reading-cookies 
+ +prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+/
+
+ { -prevent-setting-cookies -prevent-reading-cookies }
+ .google.com
 
  { -fast-redirects }
-  .google.com
+ .google.com
 
- </screen>
+--- File user ---
+(no matches in this file)  
+
+</screen>
 </para>
 
 <para>
- This is much more informative, and tells us how we have defined our 
- <quote>actions</quote>, and which ones match for our example, 
- <quote>google.com</quote>. The first grouping shows our default 
- settings, which would apply to all URLs. If you look at your <quote>actions</quote>
- file, this would be the section just below the <quote>aliases</quote> section 
- near the top. This applies to all URLs as signified by the single forward
- slash -- <quote>/</quote>.
+ This tells us how we have defined our <quote>actions</quote>, and which ones
+ match for our example, <quote>google.com</quote>. The first listing is 
+ for the <filename>standard.action</filename>. No hits at all here on
+ <quote>standard</quote>. Then next is <quote>default</quote>, or our
+ <filename>default.action</filename> file. The large, multi-line listing, is
+ how the actions are set to match for all URLs, i.e. our default settings. If
+ you look at your <quote>actions</quote> file, this would be the section just
+ below the <quote>aliases</quote> section near the top. This will apply to all
+ URLs as signified by the single forward slash at the end of the listing --
+ <quote>/</quote>.
  
 </para>
 
 <para>
- These are the default actions we have enabled. But we can define additional
- actions that would be exceptions to these general rules, and then list 
- specific URLs that these exceptions would apply to. Last match wins.
- Just below this then are two explicit matches for <quote>.google.com</quote>.
- The first is negating our various cookie blocking actions (i.e. we will allow
- cookies here). The second is allowing <quote>fast-redirects</quote>. Note
- that there is a leading dot here -- <quote>.google.com</quote>. This will
- match any hosts and sub-domains, in the google.com domain also, such as
- <quote>www.google.com</quote>. So, apparently, we have these actions defined
- somewhere in the lower part of our actions file, and
- <quote>google.com</quote> is referenced in these sections.
-
+ But we can define additional actions that would be exceptions to these general
+ rules, and then list specific URLs (or patterns) that these exceptions would
+ apply to. Last match wins. Just below this then are two explicit matches for
+ <quote>.google.com</quote>. The first is negating our various cookie blocking
+ actions (i.e. we will allow cookies here). The second is allowing
+ <quote>fast-redirects</quote> to take place. Note that there is a leading dot
+ here -- <quote>.google.com</quote>. This will match any hosts and sub-domains,
+ in the google.com domain also, such as <quote>www.google.com</quote>. So,
+ apparently, we have these two actions defined somewhere in the lower part of our
+ actions file, and <quote>google.com</quote> is referenced somewhere in these
+ latter sections.
 </para>
 
 <para>
- And now we pull it altogether in the bottom section and summarize how
+ Then, for our <filename>user.action</filename> file, we again have no hits, as 
+ signified by <quote>File user</quote>.
+</para>
+
+<para>
+ And finally we pull it altogether in the bottom section and summarize how
  <application>Privoxy</application> is applying all its <quote>actions</quote> 
  to <quote>google.com</quote>:
 
@@ -5150,16 +5238,21 @@ Requests</title>
  <screen>
 
  Final results:
-
- -add-header -block -deanimate-gifs -downgrade -fast-redirects 
- +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
- +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
- +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
- -hide-user-agent -image +image-blocker{blank} -limit-connect +no-compression 
- -no-cookies-keep -no-cookies-read -no-cookies-set +no-popups -vanilla-wafer 
- -wafer
-
+ -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects 
+ -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
+ +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
+ +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
+ +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
+ -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
+ +prevent-compression +session-cookies-only -prevent-reading-cookies 
+ -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer 
+ 
  </screen>
+</para>
+
+<para>
+ Notice the only difference here to the previous listing, is to 
+ <quote>fast-redirects</quote> and the two cookie settings.
 </para>
 
 <para>
@@ -5169,13 +5262,13 @@ Requests</title>
 <para>
  <screen>
 
- { +block +image }
+ { +block +handle-as-image }
   .ad.doubleclick.net
 
- { +block +image }
+ { +block +handle-as-image }
   ad*.
 
- { +block +image }
+ { +block +handle-as-image }
   .doubleclick.net
 
  </screen>
@@ -5183,7 +5276,7 @@ Requests</title>
 
 <para>
  We'll just show the interesting part here, the explicit matches. It is 
- matched three different times. Each as an <quote>+block +image</quote>,
+ matched three different times. Each as an <quote>+block +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
  <quote>+imageblock</quote>. (<quote>Aliases</quote> are defined in the 
  first section of the actions file and typically used to combine more 
@@ -5197,7 +5290,7 @@ Requests</title>
  though ;-) Note that if you want an ad or obnoxious 
  URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
  is done here -- as both a <quote>+block</quote> <emphasis>and</emphasis> an
- <quote>+image</quote>. The custom alias <quote>+imageblock</quote> does this
+ <quote>+handle-as-image</quote>. The custom alias <quote>+imageblock</quote> does this
  for us.
 </para>
 
@@ -5211,16 +5304,16 @@ Requests</title>
 
  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
 
- { -add-header -block +deanimate-gifs -downgrade +fast-redirects 
-   +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
+ { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects 
+   +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups} 
    +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
-   +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
-   -hide-user-agent -image +image-blocker{blank} +no-compression 
-   +no-cookies-keep -no-cookies-read -no-cookies-set +no-popups 
-   -vanilla-wafer -wafer }
+   +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
+   +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
+   +prevent-compression +session-cookies-only +prevent-setting-cookies 
+   +prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }
    /
 
- { +block +image }
+ { +block +handle-as-image }
   /ads
 
  </screen>
@@ -5286,8 +5379,8 @@ Requests</title>
 
 <para>
  <quote>{shop}</quote> is an <quote>alias</quote> that expands to 
- <quote>{ -filter -no-cookies -no-cookies-keep }</quote>. Or you could do 
- your own exception to negate filtering:
+ <quote>{ -filter -prevent-setting-cookies -prevent-reading-cookies }</quote>.
+ Or you could do your own exception to negate filtering:
 
 </para>
 
@@ -5298,6 +5391,11 @@ Requests</title>
  .forbes.com
  
  </screen>
+</para>
+
+<para>
+ This would probably be most appropriately put in <filename>user.action</filename>, 
+ for personal user exceptions.
 </para>
 
 <para>
@@ -5332,6 +5430,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.91  2002/04/24 02:39:31  hal9
+ Add 'Chain of Events' section.
+
  Revision 1.90  2002/04/23 21:41:25  hal9
  Linuxconf is deprecated on RH, substitute chkconfig.
 
