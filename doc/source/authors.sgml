@@ -3,7 +3,7 @@
 
  Purpose     :  AUTHORS file for Privoxy
                 
- $Id: authors.sgml,v 1.3 2002/04/08 22:59:26 hal9 Exp $
+ $Id: authors.sgml,v 1.4 2002/04/10 18:45:14 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -30,7 +30,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity % dummy "INCLUDE"> 
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">

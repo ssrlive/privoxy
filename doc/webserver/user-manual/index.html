@@ -49,7 +49,7 @@ CLASS="ORGNAME"
 ></DIV
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $<BR></P
+>$Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -63,9 +63,13 @@ NAME="AEN9"
  </P
 ><P
 >  The user manual gives users information on how to install, configure and use
-  <SPAN
+  <A
+HREF="http://www.privoxy.org/"
+TARGET="_top"
+><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
+></A
 >.
   </P
 ><P
@@ -89,28 +93,11 @@ CLASS="APPLICATION"
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is based on the code of the 
- <SPAN
+> is based on <SPAN
 CLASS="APPLICATION"
->Internet Junkbuster</SPAN
-> (tm).
- <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> was originally written by Junkbusters
- Corporation, and was released as free open-source software under the GNU GPL.
- Stefan Waldherr made many improvements, and started the SourceForge project
- to continue development.</P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> continues the
- <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> tradition, but adds many 
- refinements, enhancements and new features.</P
+>Internet
+ Junkbuster</SPAN
+> (tm).</P
 ><P
 >  You can find the latest version of the user manual at  <A
 HREF="http://www.privoxy.org/user-manual/"
@@ -150,7 +137,7 @@ HREF="introduction.html"
 ><DL
 ><DT
 >1.1. <A
-HREF="introduction.html#AEN38"
+HREF="introduction.html#NEWFEATURES"
 >New Features</A
 ></DT
 ></DL
@@ -164,38 +151,53 @@ HREF="installation.html"
 ><DL
 ><DT
 >3.1. <A
-HREF="installation.html#INSTALLATION-SOURCE"
->Source</A
+HREF="installation.html#INSTALLATION-PACKAGES"
+>Binary Packages</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1.1. <A
-HREF="installation.html#INSTALLATION-RH"
->Red Hat</A
+HREF="installation.html#INSTALLATION-PACK-RPM"
+>Red Hat and SuSE RPMs</A
 ></DT
 ><DT
 >3.1.2. <A
-HREF="installation.html#INSTALLATION-SUSE"
->SuSE</A
+HREF="installation.html#INSTALLATION-DEB"
+>Debian</A
 ></DT
 ><DT
 >3.1.3. <A
+HREF="installation.html#INSTALLATION-PACK-WIN"
+>Windows</A
+></DT
+><DT
+>3.1.4. <A
+HREF="installation.html#INSTALLATION-PACK-BINTGZ"
+>Solaris, NetBSD, FreeBSD, HP-UX</A
+></DT
+><DT
+>3.1.5. <A
 HREF="installation.html#INSTALLATION-OS2"
 >OS/2</A
 ></DT
 ><DT
->3.1.4. <A
-HREF="installation.html#INSTALLATION-WIN"
->Windows</A
+>3.1.6. <A
+HREF="installation.html#INSTALLATION-MAC"
+>Max OSX</A
 ></DT
 ><DT
->3.1.5. <A
-HREF="installation.html#INSTALLATION-OTHER"
->Other</A
+>3.1.7. <A
+HREF="installation.html#INSTALLATION-AMIGA"
+>AmigaOS</A
 ></DT
 ></DL
 ></DD
+><DT
+>3.2. <A
+HREF="installation.html#INSTALLATION-SOURCE"
+>Building from Source</A
+></DT
 ></DL
 ></DD
 ><DT
@@ -210,7 +212,20 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >4.1. <A
-HREF="quickstart.html#AEN223"
+HREF="quickstart.html#UPGRADERSNOTE"
+>Note to Upgraders</A
+></DT
+><DT
+>4.2. <A
+HREF="quickstart.html#STARTUP"
+>Starting <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+></DT
+><DT
+>4.3. <A
+HREF="quickstart.html#CMDOPTIONS"
 >Command Line Options</A
 ></DT
 ></DL
@@ -227,7 +242,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >5.1. <A
-HREF="configuration.html#AEN268"
+HREF="configuration.html#AEN324"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -235,39 +250,44 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >5.2. <A
-HREF="configuration.html#AEN286"
+HREF="configuration.html#AEN343"
 >Configuration Files Overview</A
 ></DT
 ><DT
 >5.3. <A
-HREF="configuration.html#AEN317"
+HREF="configuration.html#AEN383"
 >The Main Configuration File</A
 ></DT
 ><DD
 ><DL
 ><DT
 >5.3.1. <A
-HREF="configuration.html#AEN350"
->Defining Other Configuration Files</A
+HREF="configuration.html#AEN402"
+>Configuration and Log File Locations</A
 ></DT
 ><DT
 >5.3.2. <A
-HREF="configuration.html#AEN443"
->Other Configuration Options</A
+HREF="configuration.html#AEN622"
+>Local Set-up Documentation</A
 ></DT
 ><DT
 >5.3.3. <A
-HREF="configuration.html#AEN580"
->Access Control List (ACL)</A
+HREF="configuration.html#AEN706"
+>Debugging</A
 ></DT
 ><DT
 >5.3.4. <A
+HREF="configuration.html#AEN772"
+>Access Control and Security</A
+></DT
+><DT
+>5.3.5. <A
 HREF="configuration.html#FORWARDING"
 >Forwarding</A
 ></DT
 ><DT
->5.3.5. <A
-HREF="configuration.html#AEN778"
+>5.3.6. <A
+HREF="configuration.html#AEN1143"
 >Windows GUI Options</A
 ></DT
 ></DL
@@ -281,17 +301,32 @@ HREF="configuration.html#ACTIONSFILE"
 ><DL
 ><DT
 >5.4.1. <A
-HREF="configuration.html#AEN880"
->URL Domain and Path Syntax</A
+HREF="configuration.html#AEN1234"
+>Finding the Right Mix</A
 ></DT
 ><DT
 >5.4.2. <A
-HREF="configuration.html#AEN956"
->Actions</A
+HREF="configuration.html#AEN1240"
+>How to Edit</A
 ></DT
 ><DT
 >5.4.3. <A
-HREF="configuration.html#AEN1278"
+HREF="configuration.html#AEN1247"
+>How Actions are Applied to URLs</A
+></DT
+><DT
+>5.4.4. <A
+HREF="configuration.html#AEN1256"
+>Patterns</A
+></DT
+><DT
+>5.4.5. <A
+HREF="configuration.html#ACTIONS"
+>Actions</A
+></DT
+><DT
+>5.4.6. <A
+HREF="configuration.html#AEN2110"
 >Aliases</A
 ></DT
 ></DL
@@ -303,7 +338,7 @@ HREF="configuration.html#FILTERFILE"
 ></DT
 ><DT
 >5.6. <A
-HREF="configuration.html#AEN1344"
+HREF="configuration.html#AEN2176"
 >Templates</A
 ></DT
 ></DL
@@ -335,7 +370,7 @@ HREF="copyright.html"
 ><DL
 ><DT
 >7.1. <A
-HREF="copyright.html#AEN1394"
+HREF="copyright.html#AEN2227"
 >Copyright</A
 ></DT
 ><DT
@@ -364,7 +399,7 @@ HREF="appendix.html#REGEX"
 ></DT
 ><DT
 >9.2. <A
-HREF="appendix.html#AEN1602"
+HREF="appendix.html#AEN2452"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -381,6 +416,11 @@ HREF="appendix.html#BOOKMARKLETS"
 ></DD
 ><DT
 >9.3. <A
+HREF="appendix.html#CHAIN"
+>Chain of Events</A
+></DT
+><DT
+>9.4. <A
 HREF="appendix.html#ACTIONSANAT"
 >Anatomy of an Action</A
 ></DT

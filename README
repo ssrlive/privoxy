@@ -99,7 +99,7 @@ Then, in either case, to build from unpacked tarball or CVS source:
                                                                                
 
 If you have gnu make, you can have the first four steps automatically done for
-you by just typing:
+you by just typing
 
   make                                                                         
                                                                                
@@ -133,14 +133,13 @@ Or for SuSE: /etc/rc.d/privoxy start
  CONFIGURATION
 -------------- 
 
-See: 'config', 'default.action', 'user.action', and 'default.filter'.
-'user.action' is for personal configuration. These are all well commented. Most
-of the magic is in '*.action' files. 'user.action' should be used for any
-actions customizations. On Unix-like systems, these files are installed in /etc
-/privoxy. On Windows, then wherever the executable itself is installed. There
-are many significant changes and advances since Junkbuster v2.0.x. The
-user-manual has a run down of configuration options, and examples: http://
-www.privoxy.org/user-manual/.
+See: 'config', 'default.action', 'standard.action', 'user.action', and
+'default.filter'. 'user.action' is for personal configuration. These are all
+well commented. Most of the magic is in '*.action' files. On Unix-like systems,
+these files are installed in /etc/privoxy. On Windows, then wherever the
+executable itself is installed. There are many significant changes and advances
+since Junkbuster v2.0.x. The user-manual has a run down of configuration
+options, and examples: http://www.privoxy.org/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or whatever
 you specify in the config file under 'listen-address'. DEFAULT is localhost:

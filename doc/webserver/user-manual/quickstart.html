@@ -76,6 +76,156 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 ></A
 ></H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="UPGRADERSNOTE"
+>4.1. Note to Upgraders</A
+></H2
+><P
+> There are very significant changes from older versions of 
+ <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> to the current
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. Configuration is substantially 
+ changed. <SPAN
+CLASS="APPLICATION"
+>Junkbuster 2.0.x</SPAN
+> and earlier 
+ configuration files will not migrate. The functionality of the old
+ <TT
+CLASS="FILENAME"
+>blockfile</TT
+>, <TT
+CLASS="FILENAME"
+>cookiefile</TT
+> and
+ <TT
+CLASS="FILENAME"
+>imagelist</TT
+>, are now combined into the
+ <SPAN
+CLASS="QUOTE"
+>"actions file"</SPAN
+>  (<TT
+CLASS="FILENAME"
+>default.action</TT
+>
+ for most installations).</P
+><P
+> A <SPAN
+CLASS="QUOTE"
+>"filter file"</SPAN
+> (typically <TT
+CLASS="FILENAME"
+>default.filter</TT
+>)
+ is new as of <SPAN
+CLASS="APPLICATION"
+>Privoxy 2.9.x</SPAN
+>, and provides some
+ of the new sophistication (explained below). <TT
+CLASS="FILENAME"
+>config</TT
+> is 
+ much the same as before.</P
+><P
+> If upgrading from a 2.0.x version, you will have to use the new config 
+ files, and possibly adapt any personal rules from your older files.
+ When porting personal rules over from the old <TT
+CLASS="FILENAME"
+>blockfile</TT
+>
+ to the new actions file, please note that even the pattern syntax has
+ changed. If upgrading from 2.9.x development versions, it is still
+ recommended to use the new configuration files.</P
+><P
+> A quick list of things to be aware of before upgrading: </P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>   The default listening port is now 8118 due to a conflict with another 
+   service (NAS).
+  </P
+></LI
+><LI
+><P
+>  
+    Some installers may remove earlier versions completely. Save any 
+    important configuration files!
+  </P
+></LI
+><LI
+><P
+>   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is controllable with a web browser 
+   at the special URL: <A
+HREF="http://config.privoxy.org/"
+TARGET="_top"
+>http://config.privoxy.org/</A
+>
+   (Shortcut: <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>). Many
+   aspects of configuration can be done here, including temporarily disabling
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+  </P
+></LI
+><LI
+><P
+>   The primary configuration file for cookie management, ad and banner 
+   blocking, and many other aspects of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+   configuration is <TT
+CLASS="FILENAME"
+>default.action</TT
+>. It is strongly
+   recommended to become familiar with the new actions concept below, 
+   before modifying this file.
+  </P
+></LI
+><LI
+><P
+>   
+   Some installers may not automatically start
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> after installation.
+  </P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="STARTUP"
+>4.2. Starting <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+></H2
 ><P
 > Before launching <SPAN
 CLASS="APPLICATION"
@@ -86,8 +236,8 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >
  as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
- and port 8118 (earlier versions used port 800). This is the one required 
- configuration that must be done! </P
+ and port 8118 (earlier versions used port 8000). This is the one
+ configuration step that must be done! </P
 ><P
 > 
  With <SPAN
@@ -117,12 +267,12 @@ CLASS="QUOTE"
  localhost, Port: 8118). Include if HTTPS proxy support too.</P
 ><P
 > After doing this, flush your browser's disk and memory caches to force a
- re-reading of all pages and get rid of any ads that may be cached. You 
+ re-reading of all pages and to get rid of any ads that may be cached. You 
  are now ready to start enjoying the benefits of using
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->.</P
+>!</P
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -148,14 +298,19 @@ CLASS="SCREEN"
 ></TABLE
 ></P
 ><P
-> An init script is provided for SuSE and Redhat.</P
+> See <A
+HREF="quickstart.html#CMDOPTIONS"
+>below</A
+> for other command line options.</P
+><P
+> An init script is provided for SuSE and Red Hat.</P
 ><P
 > For for SuSE: <B
 CLASS="COMMAND"
->/etc/rc.d/privoxy start</B
+>rcprivoxy start</B
 ></P
 ><P
-> For RedHat: <B
+> For Red Hat and Debian: <B
 CLASS="COMMAND"
 >/etc/rc.d/init.d/privoxy start</B
 ></P
@@ -180,17 +335,17 @@ CLASS="APPLICATION"
 > will fail to start.</P
 ><P
 > The included default configuration files should give a reasonable starting
- point, though may be somewhat aggressive in blocking junk. Most of the 
- per site configuration is done in the <SPAN
+ point. Most of the per site configuration is done in the
+ <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> files. These 
- are where various cookie actions are defined, ad and banner blocking, 
- and other aspects of <SPAN
+> files. These are where various cookie actions are
+ defined, ad and banner blocking, and other aspects of
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> configuration. There 
- are several such files included, with varying levels of aggressiveness. </P
+> configuration. There are several such
+ files included, with varying levels of aggressiveness. </P
 ><P
 > You will probably want to keep an eye out for sites that require persistent
  cookies, and add these to <TT
@@ -198,41 +353,57 @@ CLASS="FILENAME"
 >default.action</TT
 > as needed. By
  default, most of these will be accepted only during the current browser
- session, until you add them to the configuration. If you want the browser to
- handle this instead, you will need to edit
- <TT
+ session (aka <SPAN
+CLASS="QUOTE"
+>"session cookies"</SPAN
+>), until you add them to the
+ configuration. If you want the browser to handle this instead, you will need
+ to edit <TT
 CLASS="FILENAME"
 >default.action</TT
-> and disable this feature. If you use more
- than one browser, it would make more sense to let
+> and disable this feature. If you
+ use more than one browser, it would make more sense to let
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> handle this. In which case, the browser(s)
- should be set to accept all cookies.</P
+> handle this. In which case, the
+ browser(s) should be set to accept all cookies.</P
+><P
+> Another feature where you will probably want to define exceptions for trusted
+ sites is the popup-killing (through the <TT
+CLASS="LITERAL"
+>+popup</TT
+> and
+ <TT
+CLASS="LITERAL"
+>+filter{popups}</TT
+> actions), because your favorite shopping,
+ banking, or leisure site may need popups. </P
 ><P
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is HTTP/1.1 compliant,  but not all 1.1
- features are as yet implemented. If browsers that support HTTP/1.1 (like
- <SPAN
+> is HTTP/1.1 compliant,  but not all of
+ the optional 1.1 features are as yet supported. In the unlikely event that
+ you experience inexplicable problems with browsers that use HTTP/1.1 per default
+ (like <SPAN
 CLASS="APPLICATION"
 >Mozilla</SPAN
-> or recent versions of I.E.) experience
- problems, you might try to force HTTP/1.0 compatibility. For Mozilla, look
- under <TT
+> or recent versions of I.E.), you might
+ try to force HTTP/1.0 compatibility. For Mozilla, look under <TT
 CLASS="LITERAL"
->Edit -&#62; Preferences -&#62; Debug -&#62; Networking</TT
+>Edit -&#62;
+ Preferences -&#62; Debug -&#62; Networking</TT
 >.
- Or set the <SPAN
+ Alternatively, set the <SPAN
 CLASS="QUOTE"
 >"+downgrade"</SPAN
 > config option in
  <TT
 CLASS="FILENAME"
 >default.action</TT
->.</P
+> which will downgrade your browser's HTTP
+ requests from HTTP/1.1 to HTTP/1.0 before processing them.</P
 ><P
 > After running <SPAN
 CLASS="APPLICATION"
@@ -249,10 +420,15 @@ CLASS="FILENAME"
 >) 
  can be adjusted by pointing your browser to 
  <A
+HREF="http://config.privoxy.org/"
+TARGET="_top"
+>http://config.privoxy.org/</A
+>
+ (shortcut: <A
 HREF="http://p.p/"
 TARGET="_top"
 >http://p.p/</A
->, 
+>), 
  and then follow the link to <SPAN
 CLASS="QUOTE"
 >"edit the actions list"</SPAN
@@ -283,42 +459,46 @@ CLASS="QUOTE"
 > and <SPAN
 CLASS="QUOTE"
 >"off"</SPAN
-> from this page.</P
+> (toggled) from this page.</P
 ><P
-> If you encounter problems, please verify it is a
+> If you encounter problems, try loading the page without
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> bug, by disabling
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, and then trying the same page. 
- Also, try another browser if possible to eliminate browser or site 
- problems. Before reporting it as a bug, see if there is not a configuration
- option that is enabled that is causing the page not to load. You can then add
- an exception for that page or site. For instance, try adding it to the
- <TT
-CLASS="LITERAL"
->{fragile}</TT
-> section of <TT
-CLASS="FILENAME"
->default.action</TT
->.
- This will turn off most actions for this site. For more on troubleshooting
- problem sites, see the <A
+>. If that helps, enter the URL where
+ you have the problems into <A
+HREF="http://p.p/show-url-info"
+TARGET="_top"
+>the browser
+ based rule tracing utility</A
+>. See which rules apply and why, and
+ then try turning them off for that site one after the other, until the problem
+ is gone. When you have found the culprit, you might want to turn the rest on
+ again.</P
+><P
+> If the above paragraph sounds gibberish to you, you might want to <A
+HREF="configuration.html#ACTIONSFILE"
+TARGET="_top"
+>read more about the actions concept</A
+>
+ or even dive deep into the <A
 HREF="appendix.html#ACTIONSANAT"
 TARGET="_top"
->Appendix</A
->. If a bug, please report it
- to the developers (see below). </P
+>Appendix
+ on actions</A
+>.</P
+><P
+> If you can't get rid of the problem at all, think you've found a bug in
+ Privoxy, want to propose a new feature or smarter rules, please see the 
+ chapter "Contacting the Developers, .." below.</P
+></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN223"
->4.1. Command Line Options</A
+NAME="CMDOPTIONS"
+>4.3. Command Line Options</A
 ></H2
 ><P
 > <SPAN
@@ -338,7 +518,7 @@ CLASS="EMPHASIS"
 >
   </P
 ><P
->     Print version info and exit, Unix only.
+>     Print version info and exit. Unix only.
   </P
 ></LI
 ><LI
@@ -349,7 +529,7 @@ CLASS="EMPHASIS"
 >
   </P
 ><P
->   Print a short usage info and exit, Unix only.
+>   Print short usage info and exit. Unix only.
   </P
 ></LI
 ><LI
@@ -361,7 +541,7 @@ CLASS="EMPHASIS"
   </P
 ><P
 >   Don't become a daemon, i.e. don't fork and become process group
-   leader, don't detach from controlling tty. Unix only.
+   leader, and don't detach from controlling tty. Unix only.
   </P
 ></LI
 ><LI
@@ -380,7 +560,7 @@ CLASS="EMPHASIS"
    <I
 CLASS="EMPHASIS"
 >FILE</I
-> on exit. Failiure to create or delete the
+> on exit. Failure to create or delete the
    <I
 CLASS="EMPHASIS"
 >FILE</I
@@ -432,7 +612,11 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"config.txt"</SPAN
 > instead). Specify 
-    full path to avoid confusion.
+    full path to avoid confusion. If no config file is found, 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will fail to start.
   </P
 ></LI
 ></UL

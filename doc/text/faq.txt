@@ -14,13 +14,7 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
-originally written by Junkbusters Corporation, and was released as free
-open-source software under the GNU GPL. Stefan Waldherr made many improvements,
-and started the SourceForge project to continue development.
-
-Privoxy continues the Junkbuster tradition, but adds many refinements,
-enhancements and new features.
+Privoxy is based on Internet Junkbuster (tm).
 
 You can find the latest version of the document at http://www.privoxy.org/faq/.
 Please see the Contact section if you want to contact the developers.
@@ -172,12 +166,13 @@ configuration is now.
 
 1.4. What are some of the new features?
 
-  * Integrated browser based configuration and control utility (http://p.p).
-    Browser-based tracing of rule and filter effects.
+  * Integrated browser based configuration and control utility at http://
+    config.privoxy.org/ (shortcut: http://p.p/). Browser-based tracing of rule
+    and filter effects. Remote toggling.
    
   * Blocking of annoying pop-up browser windows.
    
-  * HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+  * HTTP/1.1 compliant (but not all optional 1.1 features are supported).
    
   * Support for Perl Compatible Regular Expressions in the configuration files,
     and generally a more sophisticated and flexible configuration syntax over
@@ -186,7 +181,7 @@ configuration is now.
   * GIF de-animation.
    
   * Web page content filtering (removes banners based on size, invisible
-    "web-bugs", JavaScript, pop-ups, status bar abuse, etc.)
+    "web-bugs", JavaScript and HTML annoyances, pop-ups, etc.)
    
   * Bypass many click-tracking scripts (avoids script redirection).
    
@@ -201,11 +196,14 @@ configuration is now.
   * Improved signal handling, and a true daemon mode (Unix).
    
   * Builds from source on most UNIX-like systems. Packages available for: Linux
-    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11
-    and AmigaOS.
+    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11,
+    NetBSD and AmigaOS.
    
-  * In addition, the configuration is much more powerful and versatile
-    over-all.
+  * Every feature now controllable on a per-site or per-location basis,
+    configuration more powerful and versatile over-all.
+   
+  * Many smaller new features added, limitations and bugs removed, and security
+    holes fixed.
    
 -------------------------------------------------------------------------------
 
@@ -324,9 +322,7 @@ just like a web server does.
 2.2. Which operating systems are supported?
 
 At present, Privoxy is known to run on Win32, Mac OSX, OS/2, AmigaOS, Linux
-(RedHat, Suse, Debian), FreeBSD, and many flavors of Unix. There are source and
-binary releases for these available for download at http://sourceforge.net/
-project/showfiles.php?group_id=11118.
+(RedHat, Suse, Debian), FreeBSD, NetBSD, BeOS, and many flavors of Unix.
 
 But any operating system that runs TCP/IP, can conceivably take advantage of
 Privoxy in a networked situation where Privoxy would run as a server on a LAN

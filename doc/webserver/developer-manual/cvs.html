@@ -1,7 +1,7 @@
 <HTML
 ><HEAD
 ><TITLE
->Version Control Guidelines</TITLE
+>The CVS Repository</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.64
@@ -10,11 +10,11 @@ REL="HOME"
 TITLE="Privoxy Developer Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
-TITLE="Coding Guidelines"
-HREF="coding.html"><LINK
+TITLE="Quickstart to Privoxy Development"
+HREF="quickstart.html"><LINK
 REL="NEXT"
-TITLE="Testing Guidelines"
-HREF="testing.html"><LINK
+TITLE="Documentation Guidelines"
+HREF="documentation.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
 HREF="../p_doc.css"></HEAD
@@ -44,7 +44,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="coding.html"
+HREF="quickstart.html"
 >Prev</A
 ></TD
 ><TD
@@ -57,7 +57,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="testing.html"
+HREF="documentation.html"
 >Next</A
 ></TD
 ></TR
@@ -71,11 +71,176 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CVS"
->6. Version Control Guidelines</A
+>4. The CVS Repository</A
 ></H1
 ><P
->To be filled. note on cvs comments. Don't only comment what you did,
-    but also why you did it!</P
+>      If you intend to help us with programming, documentation or packaging
+      you will need write access to our holy grail, the CVS repository.
+      Please read this chapter completely before accessing via CVS.
+    </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CVSACCESS"
+>4.1. Access to CVS</A
+></H2
+><P
+>        The project's CVS repository is hosted on
+        <A
+HREF="http://sourceforge.net/"
+TARGET="_top"
+>SourceForge.</A
+>
+        Please refer to the chapters 6 and 7 in
+        <A
+HREF="http://sourceforge.net/docman/?group_id=1"
+TARGET="_top"
+>SF's site
+        documentation</A
+> for the technical access details for your
+        operating system. For historical reasons, the CVS server is
+        called <TT
+CLASS="LITERAL"
+>cvs.ijbswa.sourceforge.net</TT
+>, the repository is
+        called <TT
+CLASS="LITERAL"
+>ijbswa</TT
+>, and the source tree module is called
+        <TT
+CLASS="LITERAL"
+>current</TT
+>.
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CVSCOMMIT"
+>4.2. CVS Commit Guideline</A
+></H2
+><P
+>        The source tree is the heart of every software project. Every effort must
+        be made to ensure that it is readable, compilable and consistent at all
+        times. We therefore ask anyone with CVS access to strictly adhere to the
+        following guidelines:
+        <P
+></P
+><UL
+><LI
+><P
+>            Never (read: <I
+CLASS="EMPHASIS"
+>never, ever</I
+>) be tempted to commit
+            that small change without testing it thoroughly first. When we're
+            close to a public release, ask a fellow developer to review your 
+            changes.
+          </P
+></LI
+><LI
+><P
+>            Your commit message should give a concise overview of <I
+CLASS="EMPHASIS"
+>what you
+            changed</I
+> (no big details) and <I
+CLASS="EMPHASIS"
+>why you changed it</I
+>
+            Just check previous messages for good examples.
+          </P
+></LI
+><LI
+><P
+>            Don't use the same message on multiple files, unless it equally applies to
+            all those files.
+          </P
+></LI
+><LI
+><P
+>            If your changes span multiple files, and the code won't recompile unless
+            all changes are commited (e.g. when changing the signature of a function),
+            then commit all files one after another, without long delays in beween.
+            If necessary, prepare the commit messages in advance.
+          </P
+></LI
+><LI
+><P
+>            Before changing things on CVS, make sure that your changes are in line
+            with the team's general consensus on what should be done (see below).
+          </P
+></LI
+></UL
+>
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CVSWHENASK"
+>4.3. Discussing Changes First</A
+></H2
+><P
+>        We don't have a too formal policy on this, just use common sense. Hints: If it is..
+        <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>            ..a bugfix / clean-up / cosmetic thing: shoot
+          </P
+></LI
+><LI
+><P
+>            ..a new feature that can be turned off: shoot
+          </P
+></LI
+><LI
+><P
+>            ..a clear improvement w/o side effects on other parts of the code: shoot
+          </P
+></LI
+><LI
+><P
+>            ..a matter of taste: <A
+HREF="mailto:developers@privoxy.org"
+TARGET="_top"
+>ask the list</A
+>
+          </P
+></LI
+><LI
+><P
+>            ..a major redesign of some part of the code: <A
+HREF="mailto:developers@privoxy.org"
+TARGET="_top"
+>ask
+            the list</A
+>
+          </P
+></LI
+></OL
+>
+      </P
+><P
+>        Note that near a major public release, we get a bit more cautious - if
+        unsure, it doesn't hurt to ask first. There is always the possibility
+        to submit a patch to the <A
+HREF="http://sourceforge.net/tracker/?atid=311118&group_id=11118&func=browse"
+TARGET="_top"
+>patches
+        tracker</A
+> instead.
+      </P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -92,7 +257,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="coding.html"
+HREF="quickstart.html"
 >Prev</A
 ></TD
 ><TD
@@ -108,7 +273,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="testing.html"
+HREF="documentation.html"
 >Next</A
 ></TD
 ></TR
@@ -117,7 +282,7 @@ HREF="testing.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Coding Guidelines</TD
+>Quickstart to Privoxy Development</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -127,7 +292,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Testing Guidelines</TD
+>Documentation Guidelines</TD
 ></TR
 ></TABLE
 ></DIV

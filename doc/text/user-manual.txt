@@ -2,9 +2,9 @@ Privoxy User Manual
 
 By: Privoxy Developers
 
-$Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $
+$Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $
 
-The user manual gives users information on how to install, configure and use
+The user manual gives users information on how to install, configure and use 
 Privoxy.
 
 Privoxy is a web proxy with advanced filtering capabilities for protecting
@@ -14,13 +14,7 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
-originally written by Junkbusters Corporation, and was released as free
-open-source software under the GNU GPL. Stefan Waldherr made many improvements,
-and started the SourceForge project to continue development.
-
-Privoxy continues the Junkbuster tradition, but adds many refinements,
-enhancements and new features.
+Privoxy is based on Internet Junkbuster (tm).
 
 You can find the latest version of the user manual at http://www.privoxy.org/
 user-manual/. Please see the Contact section on how to contact the developers.
@@ -35,17 +29,23 @@ Table of Contents
    
 3. Installation
    
-    3.1. Source
+    3.1. Binary Packages
        
-        3.1.1. Red Hat
-        3.1.2. SuSE
-        3.1.3. OS/2
-        3.1.4. Windows
-        3.1.5. Other
+        3.1.1. Red Hat and SuSE RPMs
+        3.1.2. Debian
+        3.1.3. Windows
+        3.1.4. Solaris, NetBSD, FreeBSD, HP-UX
+        3.1.5. OS/2
+        3.1.6. Max OSX
+        3.1.7. AmigaOS
        
+    3.2. Building from Source
+   
 4. Quickstart to Using Privoxy
    
-    4.1. Command Line Options
+    4.1. Note to Upgraders
+    4.2. Starting Privoxy
+    4.3. Command Line Options
    
 5. Privoxy Configuration
    
@@ -53,17 +53,21 @@ Table of Contents
     5.2. Configuration Files Overview
     5.3. The Main Configuration File
        
-        5.3.1. Defining Other Configuration Files
-        5.3.2. Other Configuration Options
-        5.3.3. Access Control List (ACL)
-        5.3.4. Forwarding
-        5.3.5. Windows GUI Options
+        5.3.1. Configuration and Log File Locations
+        5.3.2. Local Set-up Documentation
+        5.3.3. Debugging
+        5.3.4. Access Control and Security
+        5.3.5. Forwarding
+        5.3.6. Windows GUI Options
        
     5.4. The Actions File
        
-        5.4.1. URL Domain and Path Syntax
-        5.4.2. Actions
-        5.4.3. Aliases
+        5.4.1. Finding the Right Mix
+        5.4.2. How to Edit
+        5.4.3. How Actions are Applied to URLs
+        5.4.4. Patterns
+        5.4.5. Actions
+        5.4.6. Aliases
        
     5.5. The Filter File
     5.6. Templates
@@ -85,7 +89,8 @@ Table of Contents
        
         9.2.1. Bookmarklets
        
-    9.3. Anatomy of an Action
+    9.3. Chain of Events
+    9.4. Anatomy of an Action
    
 -------------------------------------------------------------------------------
 
@@ -106,16 +111,17 @@ sources). And there may be bugs, though hopefully not many!
 
 1.1. New Features
 
-In addition to Internet Junkbuster's traditional feature of ad and banner
+In addition to Internet Junkbuster's traditional features of ad and banner
 blocking and cookie management, Privoxy provides new features, some of them
 currently under development:
 
-  * Integrated browser based configuration and control utility (http://p.p).
-    Browser-based tracing of rule and filter effects.
+  * Integrated browser based configuration and control utility at http://
+    config.privoxy.org/ (shortcut: http://p.p/). Browser-based tracing of rule
+    and filter effects. Remote toggling.
    
   * Blocking of annoying pop-up browser windows.
    
-  * HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+  * HTTP/1.1 compliant (but not all optional 1.1 features are supported).
    
   * Support for Perl Compatible Regular Expressions in the configuration files,
     and generally a more sophisticated and flexible configuration syntax over
@@ -124,7 +130,7 @@ currently under development:
   * GIF de-animation.
    
   * Web page content filtering (removes banners based on size, invisible
-    "web-bugs", JavaScript, pop-ups, status bar abuse, etc.)
+    "web-bugs", JavaScript and HTML annoyances, pop-ups, etc.)
    
   * Bypass many click-tracking scripts (avoids script redirection).
    
@@ -139,42 +145,137 @@ currently under development:
   * Improved signal handling, and a true daemon mode (Unix).
    
   * Builds from source on most UNIX-like systems. Packages available for: Linux
-    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11
-    and AmigaOS.
+    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11,
+    NetBSD and AmigaOS.
    
-  * In addition, the configuration is much more powerful and versatile
-    over-all.
+  * Every feature now controllable on a per-site or per-location basis,
+    configuration more powerful and versatile over-all.
+   
+  * Many smaller new features added, limitations and bugs removed, and security
+    holes fixed.
    
 -------------------------------------------------------------------------------
 
 3. Installation
 
-Privoxy is available as raw source code (tarball or via CVS), or pre-compiled
-binaries for various platforms. See the Privoxy Project Page for the most up to
-date release information. Privoxy is also available via CVS. This is the
-recommended approach at this time. But please be aware that CVS is constantly
-changing, and it may break in mysterious ways.
+Privoxy is available both in convenient pre-compiled packages for a wide range
+of operating systems, and as raw source code. For most users, we recommend
+using the packages, which can be downloaded from our Privoxy Project Page.
+
+If you like to live on the bleeding edge and are not afraid of using possibly
+unstable development versions, you can check out the up-to-the-minute version
+directly from the CVS repository or simply download the nightly CVS tarball.
 
 At present, Privoxy is known to run on Win32, Mac OSX, OS/2, AmigaOS, Linux
-(RedHat, Suse, Debian), FreeBSD, and many flavors of Unix. There are source and
-binary releases for these available for download at http://sourceforge.net/
-project/showfiles.php?group_id=11118.
+(RedHat, Suse, Debian), FreeBSD, NetBSD, BeOS, and many flavors of Unix.
 
 -------------------------------------------------------------------------------
 
-3.1. Source
+3.1. Binary Packages
 
-There are several ways to install Privoxy.
+Note: If you have a previous Junkbuster or Privoxy installation on your system,
+you will need to remove it. Some platforms do this for you as part of their
+installation procedure. (See below for your platform).
 
-To build Privoxy from source, autoconf and GNU make (gmake) are required.
-Source is available as gzipped tar archives. For this, first unpack the source:
+In any case be sure to backup your old configuration if it is valuable to you.
+See the note to upgraders.
+
+How to install the binary packages depends on your operating system:
+
+-------------------------------------------------------------------------------
+
+3.1.1. Red Hat and SuSE RPMs
+
+RPMs can be installed with rpm -Uvh privoxy-2.9.14-1.rpm, and will use /etc/
+privoxy for the location of configuration files.
+
+Note that on Red Hat, Privoxy will not be automatically started on system boot.
+You will need to enable that using chkconfig, ntsysv, or similar method.
+
+If you have problems with failed dependencies, try rebuilding the SRC RPM: rpm
+--rebuild privoxy-2.9.14-1.src.rpm;. This will use your locally installed
+libraries and RPM version.
+
+Also note that if you have a Junkbuster RPM installed on your system, you need
+to remove it first, because the packages conflict. Otherwise, RPM will try to
+remove Junkbuster automatically, before installing Privoxy.
+
+-------------------------------------------------------------------------------
+
+3.1.2. Debian
+
+FIXME.
+
+-------------------------------------------------------------------------------
+
+3.1.3. Windows
+
+Just double-click the installer, which will guide you through the installation
+process.
+
+-------------------------------------------------------------------------------
+
+3.1.4. Solaris, NetBSD, FreeBSD, HP-UX
+
+Create a new directory, cd to it, then unzip and untar the archive. For the
+most part, you'll have to figure out where things go. FIXME.
+
+-------------------------------------------------------------------------------
+
+3.1.5. OS/2
+
+First, make sure that no previous installations of Junkbuster and / or Privoxy
+are left on your system. You can do this by
+
+Then, just double-click the WarpIN self-installing archive, which will guide
+you through the installation process. A shadow of the Privoxy executable will
+be placed in your startup folder so it will start automatically whenever OS/2
+starts.
+
+The directory you choose to install Privoxy into will contain all of the
+configuration files.
+
+-------------------------------------------------------------------------------
+
+3.1.6. Max OSX
+
+Unzip the downloaded package (you can either double-click on the file in the
+finder, or on the desktop if you downloaded it there). Then, double-click on
+the package installer icon and follow the installation process. Privoxy will be
+installed in the subdirectory /Applications/Privoxy.app. Privoxy will set
+itself up to start automatically on system bringup via /System/Library/
+StartupItems/Privoxy.
+
+-------------------------------------------------------------------------------
+
+3.1.7. AmigaOS
+
+Copy and then unpack the lha archive to a suitable location. All necessary
+files will be installed into Privoxy directory, including all configuration and
+log files. To uninstall, just remove this directory.
+
+Start Privoxy (with RUN <>NIL:) in your startnet script (AmiTCP), in s:
+user-startup (RoadShow), as startup program in your startup script (Genesis),
+or as startup action (Miami and MiamiDx). Privoxy will automatically quit when
+you quit your TCP/IP stack (just ignore the harmless warning your TCP/IP stack
+may display that Privoxy is still running).
+
+-------------------------------------------------------------------------------
+
+3.2. Building from Source
+
+To build Privoxy from source, autoheader, autoconf, GNU make (gmake), and, of
+course, a C compiler are required.
+
+When building from a source tarball (either release version or nightly CVS
+tarball), first unpack the source:
 
  tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]                           
  cd privoxy-2.9.14-beta                                                        
                                                                                
 
-For retrieving the current CVS sources, you'll need the CVS package installed
-first. Note CVS source is development quality, and may not be stable, or well
+For retrieving the current CVS sources, you'll need CVS installed. Note that
+sources from CVS are development quality, and may not be stable, or well
 tested. To download CVS source:
 
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
@@ -189,112 +290,74 @@ Then, in either case, to build from unpacked tarball or CVS source:
 
  autoheader                                                                    
  autoconf                                                                      
- ./configure      (--help to see options)                                      
- make             (the make from gnu, gmake for *BSD)                          
+ ./configure      # (--help to see options)                                    
+ make             # (the make from gnu, gmake for *BSD)                        
  su                                                                            
- make -n install  (to see where all the files will go)                         
- make install     (to really install)                                          
+ make -n install  # (to see where all the files will go)                       
+ make install     # (to really install)                                        
                                                                                
 
-Redhat and SuSE src and binary RPMs can be built with "make redhat-dist" or "
-make suse-dist" from unpacked sources. You will need to run "autoconf;
-autoheader; ./configure" beforehand. *BSD will require gmake (from http://
-www.gnu.org).
+If you have gnu make, you can have the first four steps automatically done for
+you by just typing
 
-For Redhat and SuSE Linux RPM packages, see below.
-
--------------------------------------------------------------------------------
-
-3.1.1. Red Hat
-
-To build Redhat RPM packages from source, install source as above. Then:
-
- autoheader                                                                    
- autoconf                                                                      
- ./configure                                                                   
- make redhat-dist                                                              
+  make                                                                         
                                                                                
 
-This will create both binary and src RPMs in the usual places. Example:
+in the freshly downloaded or unpacked source directory.
 
-   /usr/src/redhat/RPMS/i686/privoxy-2.9.14-1.i686.rpm
-
-   /usr/src/redhat/SRPMS/privoxy-2.9.14-1.src.rpm
-
-To install, of course:
-
- rpm -Uvv /usr/src/redhat/RPMS/i686/privoxy-2.9.14-1.i686.rpm                  
-                                                                               
-
-This will place the Privoxy configuration files in /etc/privoxy/, and log files
-in /var/log/privoxy/. Run "chkconfig privoxy on" to have Privoxy start
-automatically during init. 
-
--------------------------------------------------------------------------------
-
-3.1.2. SuSE
-
-To build SuSE RPM packages, install source as above. Then:
-
- autoheader                                                                    
- autoconf                                                                      
- ./configure                                                                   
- make suse-dist                                                                
-                                                                               
-
-This will create both binary and src RPMs in the usual places. Example:
-
-   /usr/src/packages/RPMS/i686/privoxy-2.9.14-1.i686.rpm
-
-   /usr/src/packages/SRPMS/privoxy-2.9.14-1.src.rpm
-
-To install, of course:
-
- rpm -Uvv /usr/src/packages/RPMS/i686/privoxy-2.9.14-1.i686.rpm                
-                                                                               
-
-This will place the Privoxy configuration files in /etc/privoxy/, and log files
-in /var/log/privoxy/.
-
--------------------------------------------------------------------------------
-
-3.1.3. OS/2
-
-Privoxy is packaged in a WarpIN self- installing archive. The self-installing
-program will be named depending on the release version, something like:
-privoxyos2_setup_2.9.14.exe. In order to install it, simply run this executable
-or double-click on its icon and follow the WarpIN installation panels. A shadow
-of the Privoxy executable will be placed in your startup folder so it will
-start automatically whenever OS/2 starts.
-
-The directory you choose to install Privoxy into will contain all of the
-configuration files.
-
--------------------------------------------------------------------------------
-
-3.1.4. Windows
-
-Click-click. (I need help on this. Not a clue here. Also for configuration
-section below. HB.)
-
--------------------------------------------------------------------------------
-
-3.1.5. Other
-
-Some quick notes on other Operating Systems.
-
-For FreeBSD (and other *BSDs?), the build will require gmake instead of the
-included make. gmake is available from http://www.gnu.org. The rest should be
-the same as above for Linux/Unix.
+For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
+self-extracting installers, building on platforms with special requirements
+etc, please consult the developer manual.
 
 -------------------------------------------------------------------------------
 
 4. Quickstart to Using Privoxy
 
+4.1. Note to Upgraders
+
+There are very significant changes from older versions of Junkbuster to the
+current Privoxy. Configuration is substantially changed. Junkbuster 2.0.x and
+earlier configuration files will not migrate. The functionality of the old
+blockfile, cookiefile and imagelist, are now combined into the "actions file"
+(default.action for most installations).
+
+A "filter file" (typically default.filter) is new as of Privoxy 2.9.x, and
+provides some of the new sophistication (explained below). config is much the
+same as before.
+
+If upgrading from a 2.0.x version, you will have to use the new config files,
+and possibly adapt any personal rules from your older files. When porting
+personal rules over from the old blockfile to the new actions file, please note
+that even the pattern syntax has changed. If upgrading from 2.9.x development
+versions, it is still recommended to use the new configuration files.
+
+A quick list of things to be aware of before upgrading:
+
+  * The default listening port is now 8118 due to a conflict with another
+    service (NAS).
+   
+  * Some installers may remove earlier versions completely. Save any important
+    configuration files!
+   
+  * Privoxy is controllable with a web browser at the special URL: http://
+    config.privoxy.org/ (Shortcut: http://p.p/). Many aspects of configuration
+    can be done here, including temporarily disabling Privoxy.
+   
+  * The primary configuration file for cookie management, ad and banner
+    blocking, and many other aspects of Privoxy configuration is
+    default.action. It is strongly recommended to become familiar with the new
+    actions concept below, before modifying this file.
+   
+  * Some installers may not automatically start Privoxy after installation.
+   
+-------------------------------------------------------------------------------
+
+4.2. Starting Privoxy
+
 Before launching Privoxy for the first time, you will want to configure your
 browser(s) to use Privoxy as a HTTP and HTTPS proxy. The default is localhost
-for the proxy address, and port 8118 (earlier versions used port 800). This is
-the one required configuration that must be done!
+for the proxy address, and port 8118 (earlier versions used port 8000). This is
+the one configuration step that must be done!
 
 With Netscape (and Mozilla), this can be set under Edit -> Preferences ->
 Advanced -> Proxies -> HTTP Proxy. For Internet Explorer: Tools -> Internet
@@ -303,8 +366,8 @@ the appropriate info (Address: localhost, Port: 8118). Include if HTTPS proxy
 support too.
 
 After doing this, flush your browser's disk and memory caches to force a
-re-reading of all pages and get rid of any ads that may be cached. You are now
-ready to start enjoying the benefits of using Privoxy.
+re-reading of all pages and to get rid of any ads that may be cached. You are
+now ready to start enjoying the benefits of using Privoxy!
 
 Privoxy is typically started by specifying the main configuration file to be
 used on the command line. Example Unix startup command:
@@ -314,11 +377,13 @@ used on the command line. Example Unix startup command:
                                                                                
                                                                                
 
-An init script is provided for SuSE and Redhat.
+See below for other command line options.
 
-For for SuSE: /etc/rc.d/privoxy start
+An init script is provided for SuSE and Red Hat.
 
-For RedHat: /etc/rc.d/init.d/privoxy start
+For for SuSE: rcprivoxy start
+
+For Red Hat and Debian: /etc/rc.d/init.d/privoxy start
 
 If no configuration file is specified on the command line, Privoxy will look
 for a file named config in the current directory. Except on Win32 where it will
@@ -326,70 +391,80 @@ try config.txt. If no file is specified on the command line and no default
 configuration file can be found, Privoxy will fail to start.
 
 The included default configuration files should give a reasonable starting
-point, though may be somewhat aggressive in blocking junk. Most of the per site
-configuration is done in the "actions" files. These are where various cookie
-actions are defined, ad and banner blocking, and other aspects of Privoxy
-configuration. There are several such files included, with varying levels of
-aggressiveness.
+point. Most of the per site configuration is done in the "actions" files. These
+are where various cookie actions are defined, ad and banner blocking, and other
+aspects of Privoxy configuration. There are several such files included, with
+varying levels of aggressiveness.
 
 You will probably want to keep an eye out for sites that require persistent
 cookies, and add these to default.action as needed. By default, most of these
-will be accepted only during the current browser session, until you add them to
-the configuration. If you want the browser to handle this instead, you will
-need to edit default.action and disable this feature. If you use more than one
-browser, it would make more sense to let Privoxy handle this. In which case,
-the browser(s) should be set to accept all cookies.
+will be accepted only during the current browser session (aka "session
+cookies"), until you add them to the configuration. If you want the browser to
+handle this instead, you will need to edit default.action and disable this
+feature. If you use more than one browser, it would make more sense to let
+Privoxy handle this. In which case, the browser(s) should be set to accept all
+cookies.
 
-Privoxy is HTTP/1.1 compliant, but not all 1.1 features are as yet implemented.
-If browsers that support HTTP/1.1 (like Mozilla or recent versions of I.E.)
-experience problems, you might try to force HTTP/1.0 compatibility. For
-Mozilla, look under Edit -> Preferences -> Debug -> Networking. Or set the
-"+downgrade" config option in default.action.
+Another feature where you will probably want to define exceptions for trusted
+sites is the popup-killing (through the +popup and +filter{popups} actions),
+because your favorite shopping, banking, or leisure site may need popups.
+
+Privoxy is HTTP/1.1 compliant, but not all of the optional 1.1 features are as
+yet supported. In the unlikely event that you experience inexplicable problems
+with browsers that use HTTP/1.1 per default (like Mozilla or recent versions of
+I.E.), you might try to force HTTP/1.0 compatibility. For Mozilla, look under
+Edit -> Preferences -> Debug -> Networking. Alternatively, set the "+downgrade"
+config option in default.action which will downgrade your browser's HTTP
+requests from HTTP/1.1 to HTTP/1.0 before processing them.
 
 After running Privoxy for a while, you can start to fine tune the configuration
 to suit your personal, or site, preferences and requirements. There are many,
 many aspects that can be customized. "Actions" (as specified in default.action)
-can be adjusted by pointing your browser to http://p.p/, and then follow the
-link to "edit the actions list". (This is an internal page and does not require
-Internet access.)
+can be adjusted by pointing your browser to http://config.privoxy.org/
+(shortcut: http://p.p/), and then follow the link to "edit the actions list".
+(This is an internal page and does not require Internet access.)
 
 In fact, various aspects of Privoxy configuration can be viewed from this page,
 including current configuration parameters, source code version numbers, the
 browser's request headers, and "actions" that apply to a given URL. In addition
 to the default.action file editor mentioned above, Privoxy can also be turned
-"on" and "off" from this page.
+"on" and "off" (toggled) from this page.
 
-If you encounter problems, please verify it is a Privoxy bug, by disabling
-Privoxy, and then trying the same page. Also, try another browser if possible
-to eliminate browser or site problems. Before reporting it as a bug, see if
-there is not a configuration option that is enabled that is causing the page
-not to load. You can then add an exception for that page or site. For instance,
-try adding it to the {fragile} section of default.action. This will turn off
-most actions for this site. For more on troubleshooting problem sites, see the 
-Appendix. If a bug, please report it to the developers (see below).
+If you encounter problems, try loading the page without Privoxy. If that helps,
+enter the URL where you have the problems into the browser based rule tracing
+utility. See which rules apply and why, and then try turning them off for that
+site one after the other, until the problem is gone. When you have found the
+culprit, you might want to turn the rest on again.
+
+If the above paragraph sounds gibberish to you, you might want to read more
+about the actions concept or even dive deep into the Appendix on actions.
+
+If you can't get rid of the problem at all, think you've found a bug in
+Privoxy, want to propose a new feature or smarter rules, please see the chapter
+"Contacting the Developers, .." below.
 
 -------------------------------------------------------------------------------
 
-4.1. Command Line Options
+4.3. Command Line Options
 
 Privoxy may be invoked with the following command-line options:
 
   * --version
    
-    Print version info and exit, Unix only.
+    Print version info and exit. Unix only.
    
   * --help
    
-    Print a short usage info and exit, Unix only.
+    Print short usage info and exit. Unix only.
    
   * --no-daemon
    
-    Don't become a daemon, i.e. don't fork and become process group leader,
+    Don't become a daemon, i.e. don't fork and become process group leader, and
     don't detach from controlling tty. Unix only.
    
   * --pidfile FILE
    
-    On startup, write the process ID to FILE. Delete the FILE on exit. Failiure
+    On startup, write the process ID to FILE. Delete the FILE on exit. Failure
     to create or delete the FILE is non-fatal. If no FILE option is given, no
     PID file will be used. Unix only.
    
@@ -403,7 +478,8 @@ Privoxy may be invoked with the following command-line options:
    
     If no configfile is included on the command line, Privoxy will look for a
     file named "config" in the current directory (except on Win32 where it will
-    look for "config.txt" instead). Specify full path to avoid confusion.
+    look for "config.txt" instead). Specify full path to avoid confusion. If no
+    config file is found, Privoxy will fail to start.
    
 -------------------------------------------------------------------------------
 
@@ -417,15 +493,16 @@ easily with a web browser.
 
 5.1. Controlling Privoxy with Your Web Browser
 
-Privoxy can be reached by the special URL http://p.p/ (or alternately http://
-config.privoxy.org/), which is an internal page. You will see the following
-section: 
+Privoxy's user interface can be reached through the special URL http://
+config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
+without Internet access. You will see the following section: 
 
  Please choose from the following options:                                     
                                                                                
+    * Privoxy main page                                                        
     * Show information about the current configuration                         
     * Show the source code version numbers                                     
-    * Show the client's request headers.                                       
+    * Show the request headers.                                                
     * Show which actions apply to a URL and why                                
     * Toggle Privoxy on or off                                                 
     * Edit the actions list                                                    
@@ -436,13 +513,14 @@ This should be self-explanatory. Note the last item is an editor for the
 "actions list", which is where much of the ad, banner, cookie, and URL blocking
 magic is configured as well as other advanced features of Privoxy. This is an
 easy way to adjust various aspects of Privoxy configuration. The actions file,
-and other configuration files, are explained in detail below. Privoxy will
-automatically detect any changes to these files.
+and other configuration files, are explained in detail below.
 
 "Toggle Privoxy On or Off" is handy for sites that might have problems with
-your current actions and filters, or just to test if a site misbehaves, whether
-it is Privoxy causing the problem or not. Privoxy continues to run as a proxy
-in this case, but all filtering is disabled. 
+your current actions and filters. You can in fact use it as a test to see
+whether it is Privoxy causing the problem or not. Privoxy continues to run as a
+proxy in this case, but all filtering is disabled. There is even a toggle 
+Bookmarklet offered, so that you can toggle Privoxy with one click from your
+browser.
 
 -------------------------------------------------------------------------------
 
@@ -461,21 +539,34 @@ configuration files (this may change in time):
   * The main configuration file is named config on Linux, Unix, BSD, OS/2, and
     AmigaOS and config.txt on Windows.
    
-  * The default.action file is used to define various "actions" relating to
-    images, banners, pop-ups, access restrictions, banners and cookies. There
-    is a CGI based editor for this file that can be accessed via http://p.p.
+  * default.action (the actions file) is used to define which of a set of
+    various "actions" relating to images, banners, pop-ups, access
+    restrictions, banners and cookies are to be applied, and where. There is a
+    web based editor for this file that can be accessed at http://
+    config.privoxy.org/edit-actions/ (Shortcut: http://p.p/edit-actions/).
     (Other actions files are included as well with differing levels of
     filtering and blocking, e.g. basic.action.)
    
-  * The default.filter file can be used to re-write the raw page content,
-    including viewable text as well as embedded HTML and JavaScript, and
-    whatever else lurks on any given web page.
+  * default.filter (the filter file) can be used to re-write the raw page
+    content, including viewable text as well as embedded HTML and JavaScript,
+    and whatever else lurks on any given web page. The filtering jobs are only
+    pre-defined here; whether to apply them or not is up to the actions file.
    
+All files use the "#" character to denote a comment (the rest of the line will
+be ignored) and understand line continuation through placing a backslash ("\")
+as the very last character in a line. If the # is preceded by a backslash, it
+looses its special function. Placing a # in front of an otherwise valid
+configuration line to prevent it from being interpreted is called "commenting
+out" that line.
+
 default.action and default.filter can use Perl style regular expressions for
-maximum flexibility. All files use the "#" character to denote a comment. Such
-lines are not processed by Privoxy. After making any changes, there is no need
-to restart Privoxy in order for the changes to take effect. Privoxy should
-detect such changes automatically.
+maximum flexibility.
+
+After making any changes, there is no need to restart Privoxy in order for the
+changes to take effect. Privoxy detects such changes automatically. Note,
+however, that it may take one or two additional requests for the change to take
+effect. When changing the listening address of Privoxy, these "wake up"
+requests must obviously be sent to the old listening address.
 
 While under development, the configuration content is subject to change. The
 below documentation may not be accurate by the time you read this. Also, what
@@ -491,550 +582,855 @@ and config.txt on Windows. Configuration lines consist of an initial keyword
 followed by a list of values, all separated by whitespace (any number of spaces
 or tabs). For example:
 
-  blockfile blocklist.ini
+  confdir /etc/privoxy
    
 
-Indicates that the blockfile is named "blocklist.ini". (A default installation
-does not use this.)
+Assigns the value /etc/privoxy to the option confdir and thus indicates that
+the configuration directory is named "/etc/privoxy/".
 
-A "#" indicates a comment. Any part of a line following a "#" is ignored,
-except if the "#" is preceded by a "\".
+All options in the config file except for confdir and logdir are optional.
+Watch out in the below description for what happens if you leave them unset.
 
-Thus, by placing a "#" at the start of an existing configuration line, you can
-make it a comment and it will be treated as if it weren't there. This is called
-"commenting out" an option and can be useful to turn off features: If you
-comment out the "logfile" line, Privoxy will not log to a file at all. Watch
-for the "default:" section in each explanation to see what happens if the
-option is left unset (or commented out).
-
-Long lines can be continued on the next line by using a "\" as the very last
-character.
-
-There are various aspects of Privoxy behavior that can be tuned.
+The main config file controls all aspects of Privoxy's operation that are not
+location dependent (i.e. they apply universally, no matter where you may be
+surfing).
 
 -------------------------------------------------------------------------------
 
-5.3.1. Defining Other Configuration Files
+5.3.1. Configuration and Log File Locations
 
-Privoxy can use a number of other files to tell it what ads to block, what
-cookies to accept, and perform other functions. This section of the
-configuration file tells Privoxy where to find all those other files.
-
-On Windows and AmigaOS, Privoxy looks for these files in the same directory as
-the executable. On Unix and OS/2, Privoxy looks for these files in the current
-working directory. In either case, an absolute path name can be used to avoid
-problems.
-
-When development goes modular and multi-user, the blocker, filter, and per-user
-config will be stored in subdirectories of "confdir". For now, only confdir/
-templates is used for storing HTML templates for CGI results.
-
-The location of the configuration files:
-
-  confdir /etc/privoxy       # No trailing /, please.
-   
-
-The directory where all logging (i.e. logfile and jarfile) takes place. No
-trailing "/", please:
-
-  logdir /var/log/privoxy
-   
-
-Note that all file specifications below are relative to the above two
-directories!
-
-The "default.action" file contains patterns to specify the actions to apply to
-requests for each site. Default: Cookies to and from all destinations are kept
-only during the current browser session (i.e. they are not saved to disk).
-Pop-ups are disabled for all sites. All sites are filtered through selected
-sections of "default.filter". No sites are blocked. Privoxy displays a
-checkboard type pattern for filtered ads and other images. The syntax of this
-file is explained in detail below. Other "actions" files are included, and you
-are free to use any of them. They have varying degrees of aggressiveness.
-
-  actionsfile default.action
-   
-
-The "default.filter" file contains content modification rules that use "regular
-expressions". These rules permit powerful changes on the content of Web pages,
-e.g., you could disable your favorite JavaScript annoyances, re-write the
-actual displayed text, or just have some fun replacing "Microsoft" with
-"MicroSuck" wherever it appears on a Web page. Default: whatever the developers
-are playing with :-/
-
-Filtering requires buffering the page content, which may appear to slow down
-page rendering since nothing is displayed until all content has passed the
-filters. (It does not really take longer, but seems that way since the page is
-not incrementally displayed.) This effect will be more noticeable on slower
-connections. 
-
-  filterfile default.filter
-   
-
-The logfile is where all logging and error messages are written. The logfile
-can be useful for tracking down a problem with Privoxy (e.g., it's not blocking
-an ad you think it should block) but in most cases you probably will never look
-at it.
-
-Your logfile will grow indefinitely, and you will probably want to periodically
-remove it. On Unix systems, you can do this with a cron job (see "man cron").
-For Redhat, a logrotate script has been included.
-
-On SuSE Linux systems, you can place a line like "/var/log/privoxy.* +1024k 644
-nobody.nogroup" in /etc/logfiles, with the effect that cron.daily will
-automatically archive, gzip, and empty the log, when it exceeds 1M size.
-
-Default: Log to the a file named logfile. Comment out to disable logging.
-
-  logfile logfile
-   
-
-The "jarfile" defines where Privoxy stores the cookies it intercepts. Note that
-if you use a "jarfile", it may grow quite large. Default: Don't store
-intercepted cookies.
-
-  #jarfile jarfile
-   
-
-If you specify a "trustfile", Privoxy will only allow access to sites that are
-named in the trustfile. You can also mark sites as trusted referrers, with the
-effect that access to untrusted sites will be granted, if a link from a trusted
-referrer was used. The link target will then be added to the "trustfile". This
-is a very restrictive feature that typical users most probably want to leave
-disabled. Default: Disabled, don't use the trust mechanism.
-
-  #trustfile trust
-   
-
-If you use the trust mechanism, it is a good idea to write up some on-line
-documentation about your blocking policy and to specify the URL(s) here. They
-will appear on the page that your users receive when they try to access
-untrusted content. Use multiple times for multiple URLs. Default: Don't display
-links on the "untrusted" info page.
-
-  trust-info-url http://www.example.com/why_we_block.html
-  trust-info-url http://www.example.com/what_we_allow.html
-   
+Privoxy can (and normally does) use a number of other files for additional
+configuration and logging. This section of the configuration file tells Privoxy
+where to find those other files.
 
 -------------------------------------------------------------------------------
 
-5.3.2. Other Configuration Options
+5.3.1.1. confdir
 
-This part of the configuration file contains options that control how Privoxy
-operates.
-
-"Admin-address" should be set to the email address of the proxy administrator.
-It is used in many of the proxy-generated pages. Default: fill@me.in.please.
-
-  #admin-address fill@me.in.please
+Specifies:
    
-
-"Proxy-info-url" can be set to a URL that contains more info about this Privoxy
-installation, it's configuration and policies. It is used in many of the
-proxy-generated pages and its use is highly recommended in multi-user
-installations, since your users will want to know why certain content is
-blocked or modified. Default: Don't show a link to on-line documentation.
-
-  proxy-info-url http://www.example.com/proxy.html
+    The directory where the other configuration files are located
    
-
-"Listen-address" specifies the address and port where Privoxy will listen for
-connections from your Web browser. The default is to listen on the localhost
-port 8118, and this is suitable for most users. (In your web browser, under
-proxy configuration, list the proxy server as "localhost" and the port as
-"8118").
-
-If you already have another service running on port 8118, or if you want to
-serve requests from other machines (e.g. on your local network) as well, you
-will need to override the default. The syntax is "listen-address
-[<ip-address>]:<port>". If you leave out the IP address, Privoxy will bind to
-all interfaces (addresses) on your machine and may become reachable from the
-Internet. In that case, consider using access control lists (acl's) (see
-"aclfile" above), or a firewall.
-
-For example, suppose you are running Privoxy on a machine which has the address
-192.168.0.1 on your local private network (192.168.0.0) and has another outside
-connection with a different address. You want it to serve requests from inside
-only:
-
-  listen-address 192.168.0.1:8118
+Type of value:
    
-
-If you want it to listen on all addresses (including the outside connection):
-
-  listen-address :8118
+    Path name
    
-
-If you do this, consider using ACLs (see "aclfile" above). Note: you will need
-to point your browser(s) to the address and port that you have configured here.
-Default: localhost:8118 (127.0.0.1:8118).
-
-The debug option sets the level of debugging information to log in the logfile
-(and to the console in the Windows version). A debug level of 1 is informative
-because it will show you each request as it happens. Higher levels of debug are
-probably only of interest to developers.
-
-  debug         1 # GPC   = show each GET/POST/CONNECT request
-  debug         2 # CONN  = show each connection status
-  debug         4 # IO    = show I/O status
-  debug         8 # HDR   = show header parsing
-  debug        16 # LOG   = log all data into the logfile
-  debug        32 # FRC   = debug force feature
-  debug        64 # REF   = debug regular expression filter 
-  debug       128 #       = debug fast redirects
-  debug       256 #       = debug GIF de-animation
-  debug       512 # CLF   = Common Log Format
-  debug      1024 #       = debug kill pop-ups
-  debug      4096 # INFO  = Startup banner and warnings.
-  debug      8192 # ERROR = Non-fatal errors
-    
-
-It is highly recommended that you enable ERROR reporting (debug 8192), at least
-until v3.0 is released.
-
-The reporting of FATAL errors (i.e. ones which crash Privoxy) is always on and
-cannot be disabled.
-
-If you want to use CLF (Common Log Format), you should set "debug 512" ONLY, do
-not enable anything else.
-
-Multiple "debug" directives, are OK - they're logical-OR'd together.
-
-  debug 15 # same as setting the first 4 listed above
+Default value:
    
-
-Default:
-
-  debug 1 # URLs
-  debug 4096 # Info
-  debug 8192 # Errors - *we highly recommended enabling this*
+    /etc/privoxy (Unix) or Privoxy installation dir (Windows)
    
-
-Privoxy normally uses "multi-threading", a software technique that permits it
-to handle many different requests simultaneously. In some cases you may wish to
-disable this -- particularly if you're trying to debug a problem. The
-"single-threaded" option forces Privoxy to handle requests sequentially.
-Default: Multi-threaded mode.
-
-  #single-threaded
+Effect if unset:
    
-
-"toggle" allows you to temporarily disable all Privoxy's filtering. Just set
-"toggle 0".
-
-The Windows version of Privoxy puts an icon in the system tray, which also
-allows you to change this option. If you right-click on that icon (or select
-the "Options" menu), one choice is "Enable". Clicking on enable toggles Privoxy
-on and off. This is useful if you want to temporarily disable Privoxy, e.g., to
-access a site that requires cookies which you would otherwise have blocked.
-This can also be toggled via a web browser at the Privoxy internal address of 
-http://p.p on any platform.
-
-"toggle 1" means Privoxy runs normally, "toggle 0" means that Privoxy becomes a
-non-anonymizing non-blocking proxy. Default: 1 (on).
-
-  toggle 1
+    Mandatory
    
-
-For content filtering, i.e. the "+filter" and "+deanimate-gif" actions, it is
-necessary that Privoxy buffers the entire document body. This can be
-potentially dangerous, since a server could just keep sending data indefinitely
-and wait for your RAM to exhaust. With nasty consequences.
-
-The buffer-limit option lets you set the maximum size in Kbytes that each
-buffer may use. When the documents buffer exceeds this size, it is flushed to
-the client unfiltered and no further attempt to filter the rest of it is made.
-Remember that there may multiple threads running, which might require
-increasing the "buffer-limit" Kbytes each, unless you have enabled
-"single-threaded" above.
-
-  buffer-limit 4069
+Notes:
    
-
-To enable the web-based default.action file editor set enable-edit-actions to
-1, or 0 to disable. Note that you must have compiled Privoxy with support for
-this feature, otherwise this option has no effect. This internal page can be
-reached at http://p.p.
-
-Security note: If this is enabled, anyone who can use the proxy can edit the
-actions file, and their changes will affect all users. For shared proxies, you
-probably want to disable this. Default: enabled.
-
-  enable-edit-actions 1
+    No trailing "/", please
    
-
-Allow Privoxy to be toggled on and off remotely, using your web browser. Set
-"enable-remote-toggle"to 1 to enable, and 0 to disable. Note that you must have
-compiled Privoxy with support for this feature, otherwise this option has no
-effect.
-
-Security note: If this is enabled, anyone who can use the proxy can toggle it
-on or off (see http://p.p), and their changes will affect all users. For shared
-proxies, you probably want to disable this. Default: enabled.
-
-  enable-remote-toggle 1
+    When development goes modular and multi-user, the blocker, filter, and
+    per-user config will be stored in subdirectories of "confdir". For now, the
+    configuration directory structure is flat, except for confdir/templates,
+    where the HTML templates for CGI output reside (e.g. Privoxy's 404 error
+    page).
    
+-------------------------------------------------------------------------------
+
+5.3.1.2. logdir
+
+Specifies:
+   
+    The directory where all logging takes place (i.e. where logfile and jarfile
+    are located)
+   
+Type of value:
+   
+    Path name
+   
+Default value:
+   
+    /var/log/privoxy (Unix) or Privoxy installation dir (Windows)
+   
+Effect if unset:
+   
+    Mandatory
+   
+Notes:
+   
+    No trailing "/", please
+   
+-------------------------------------------------------------------------------
+
+5.3.1.3. actionsfile
+
+Specifies:
+   
+    The actions file to use
+   
+Type of value:
+   
+    File name, relative to confdir
+   
+Default value:
+   
+    default.action (Unix) or default.action.txt (Windows)
+   
+Effect if unset:
+   
+    No action is taken at all. Simple neutral proxying.
+   
+Notes:
+   
+    There is no point in using Privoxy without an actions file. There are three
+    different actions files included in the distribution, with varying degrees
+    of aggressiveness: default.action, intermediate.action and advanced.action.
+   
+-------------------------------------------------------------------------------
+
+5.3.1.4. filterfile
+
+Specifies:
+   
+    The filter file to use
+   
+Type of value:
+   
+    File name, relative to confdir
+   
+Default value:
+   
+    default.filter (Unix) or default.filter.txt (Windows)
+   
+Effect if unset:
+   
+    No textual content filtering takes place, i.e. all +filter{name} actions in
+    the actions file are turned off
+   
+Notes:
+   
+    The "default.filter" file contains content modification rules that use
+    "regular expressions". These rules permit powerful changes on the content
+    of Web pages, e.g., you could disable your favorite JavaScript annoyances,
+    re-write the actual displayed text, or just have some fun replacing
+    "Microsoft" with "MicroSuck" wherever it appears on a Web page.
+   
+-------------------------------------------------------------------------------
+
+5.3.1.5. logfile
+
+Specifies:
+   
+    The log file to use
+   
+Type of value:
+   
+    File name, relative to logdir
+   
+Default value:
+   
+    logfile (Unix) or privoxy.log (Windows)
+   
+Effect if unset:
+   
+    No log file is used, all log messages go to the console (stderr).
+   
+Notes:
+   
+    The windows version will additionally log to the console.
+   
+    The logfile is where all logging and error messages are written. The level
+    of detail and number of messages are set with the debug option (see below).
+    The logfile can be useful for tracking down a problem with Privoxy (e.g.,
+    it's not blocking an ad you think it should block) but in most cases you
+    probably will never look at it.
+   
+    Your logfile will grow indefinitely, and you will probably want to
+    periodically remove it. On Unix systems, you can do this with a cron job
+    (see "man cron"). For Red Hat, a logrotate script has been included.
+   
+    On SuSE Linux systems, you can place a line like "/var/log/privoxy.* +1024k
+    644 nobody.nogroup" in /etc/logfiles, with the effect that cron.daily will
+    automatically archive, gzip, and empty the log, when it exceeds 1M size.
+   
+-------------------------------------------------------------------------------
+
+5.3.1.6. jarfile
+
+Specifies:
+   
+    The file to store intercepted cookies in
+   
+Type of value:
+   
+    File name, relative to logdir
+   
+Default value:
+   
+    jarfile (Unix) or privoxy.jar (Windows)
+   
+Effect if unset:
+   
+    Intercepted cookies are not stored at all.
+   
+Notes:
+   
+    The jarfile may grow to ridiculous sizes over time.
+   
+-------------------------------------------------------------------------------
+
+5.3.1.7. trustfile
+
+Specifies:
+   
+    The trust file to use
+   
+Type of value:
+   
+    File name, relative to confdir
+   
+Default value:
+   
+    Unset (commented out). When activated: trust (Unix) or trust.txt (Windows)
+   
+Effect if unset:
+   
+    The whole trust mechanism is turned off.
+   
+Notes:
+   
+    The trust mechanism is an experimental feature for building white-lists and
+    should be used with care. It is NOT recommended for the casual user.
+   
+    If you specify a trust file, Privoxy will only allow access to sites that
+    are named in the trustfile. You can also mark sites as trusted referrers
+    (with +), with the effect that access to untrusted sites will be granted,
+    if a link from a trusted referrer was used. The link target will then be
+    added to the "trustfile". Possible applications include limiting Internet
+    access for children.
+   
+    If you use + operator in the trust file, it may grow considerably over
+    time.
+   
+-------------------------------------------------------------------------------
+
+5.3.2. Local Set-up Documentation
+
+If you intend to operate Privoxy for more users that just yourself, it might be
+a good idea to let them know how to reach you, what you block and why you do
+that, your policies etc.
 
 -------------------------------------------------------------------------------
 
-5.3.3. Access Control List (ACL)
+5.3.2.1. trust-info-url
 
-Access controls are included at the request of some ISPs and systems
-administrators, and are not usually needed by individual users. Please note the
-warnings in the FAQ that this proxy is not intended to be a substitute for a
-firewall or to encourage anyone to defer addressing basic security weaknesses.
-
-If no access settings are specified, the proxy talks to anyone that connects.
-If any access settings file are specified, then the proxy talks only to IP
-addresses permitted somewhere in this file and not denied later in this file.
-
-Summary -- if using an ACL:
-
-Client must have permission to receive service.
-
-LAST match in ACL wins.
-
-Default behavior is to deny service.
-
-The syntax for an entry in the Access Control List is:
-
-  ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
+Specifies:
    
-
-Where the individual fields are:
-
- ACTION      = "permit-access" or "deny-access"
-
- SRC_ADDR    = client hostname or dotted IP address
- SRC_MASKLEN = number of bits in the subnet mask for the source
-
- DST_ADDR    = server or forwarder hostname or dotted IP address
- DST_MASKLEN = number of bits in the subnet mask for the target
+    A URL to be displayed in the error page that users will see if access to an
+    untrusted page is denied.
    
-
-The field separator (FS) is whitespace (space or tab).
-
-IMPORTANT NOTE: If Privoxy is using a forwarder (see below) or a gateway for a
-particular destination URL, the DST_ADDR that is examined is the address of the
-forwarder or the gateway and NOT the address of the ultimate target. This is
-necessary because it may be impossible for the local Privoxy to determine the
-address of the ultimate target (that's often what gateways are used for).
-
-Here are a few examples to show how the ACL features work:
-
-"localhost" is OK -- no DST_ADDR implies that ALL destination addresses are OK:
-
-  permit-access localhost
+Type of value:
    
-
-A silly example to illustrate permitting any host on the class-C subnet with
-Privoxy to go anywhere:
-
-  permit-access www.privoxy.com/24
+    URL
    
-
-Except deny one particular IP address from using it at all:
-
-  deny-access ident.privoxy.com
+Default value:
    
-
-You can also specify an explicit network address and subnet mask. Explicit
-addresses do not have to be resolved to be used.
-
-  permit-access 207.153.200.0/24
+    Two example URL are provided
    
-
-A subnet mask of 0 matches anything, so the next line permits everyone.
-
-  permit-access 0.0.0.0/0
+Effect if unset:
    
-
-Note, you cannot say:
-
-  permit-access .org
+    No links are displayed on the "untrusted" error page.
    
-
-to allow all *.org domains. Every IP address listed must resolve fully.
-
-An ISP may want to provide a Privoxy that is accessible by "the world" and yet
-restrict use of some of their private content to hosts on its internal network
-(i.e. its own subscribers). Say, for instance the ISP owns the Class-B IP
-address block 123.124.0.0 (a 16 bit netmask). This is how they could do it:
-
- permit-access 0.0.0.0/0 0.0.0.0/0   # other clients can go anywhere 
-                                       # with the following exceptions:
- 
- deny-access   0.0.0.0/0   123.124.0.0/16 # block all external requests for
-                                          # sites on the ISP's network
-
- permit 0.0.0.0/0 www.my_isp.com        # except for the ISP's main 
-                                          # web site
-
- permit 123.124.0.0/16 0.0.0.0/0          # the ISP's clients can go 
-                                          # anywhere
+Notes:
    
+    The value of this option only matters if the experimental trust mechanism
+    has been activated. (See trustfile above.)
+   
+    If you use the trust mechanism, it is a good idea to write up some on-line
+    documentation about your trust policy and to specify the URL(s) here. Use
+    multiple times for multiple URLs.
+   
+    The URL(s) should be added to the trustfile as well, so users don't end up
+    locked out from the information on why they were locked out in the first
+    place!
+   
+-------------------------------------------------------------------------------
 
-Note that if some hostnames are listed with multiple IP addresses, the primary
-value returned by DNS (via gethostbyname()) is used. Default: Anyone can access
-the proxy.
+5.3.2.2. admin-address
+
+Specifies:
+   
+    An email address to reach the proxy administrator.
+   
+Type of value:
+   
+    Email address
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    No email address is displayed on error pages and the CGI user interface.
+   
+Notes:
+   
+    If both admin-address and proxy-info-url are unset, the whole "Local
+    Privoxy Support" box on all generated pages will not be shown.
+   
+-------------------------------------------------------------------------------
+
+5.3.2.3. proxy-info-url
+
+Specifies:
+   
+    A URL to documentation about the local Privoxy setup, configuration or
+    policies.
+   
+Type of value:
+   
+    URL
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    No link to local documentation is displayed on error pages and the CGI user
+    interface.
+   
+Notes:
+   
+    If both admin-address and proxy-info-url are unset, the whole "Local
+    Privoxy Support" box on all generated pages will not be shown.
+   
+    This URL shouldn't be blocked ;-)
+   
+-------------------------------------------------------------------------------
+
+5.3.3. Debugging
+
+These options are mainly useful when tracing a problem. Note that you might
+also want to invoke Privoxy with the --no-daemon command line option when
+debugging.
 
 -------------------------------------------------------------------------------
 
-5.3.4. Forwarding
+5.3.3.1. debug
 
-This feature allows chaining of HTTP requests via multiple proxies. It can be
-used to better protect privacy and confidentiality when accessing specific
-domains by routing requests to those domains to a special purpose filtering
-proxy such as lpwa.com. Or to use a caching proxy to speed up browsing.
-
-It can also be used in an environment with multiple networks to route requests
-via multiple gateways allowing transparent access to multiple networks without
-having to modify browser configurations.
-
-Also specified here are SOCKS proxies. Privoxy SOCKS 4 and SOCKS 4A. The
-difference is that SOCKS 4A will resolve the target hostname using DNS on the
-SOCKS server, not our local DNS client.
-
-The syntax of each line is:
-
- forward target_domain[:port] http_proxy_host[:port]
- forward-socks4 target_domain[:port] socks_proxy_host[:port] http_proxy_host[:
-port]
- forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:
-port]
+Specifies:
    
-
-If http_proxy_host is ".", then requests are not forwarded to a HTTP proxy but
-are made directly to the web servers.
-
-Lines are checked in sequence, and the last match wins.
-
-There is an implicit line equivalent to the following, which specifies that
-anything not finding a match on the list is to go out without forwarding or
-gateway protocol, like so:
-
-  forward .* . # implicit
+    Key values that determine what information gets logged.
    
-
-In the following common configuration, everything goes to Lucent's LPWA, except
-SSL on port 443 (which it doesn't handle):
-
- forward .* lpwa.com:8000
- forward :443 .
+Type of value:
    
-
-Some users have reported difficulties related to LPWA's use of "." as the last
-element of the domain, and have said that this can be fixed with this:
-
-  forward lpwa. lpwa.com:8000
+    Integer values
    
-
-(NOTE: the syntax for specifying target_domain has changed since the previous
-paragraph was written -- it will not work now. More information is welcome.)
-
-In this fictitious example, everything goes via an ISP's caching proxy, except
-requests to that ISP:
-
- forward .* caching.myisp.net:8000
- forward myisp.net .
+Default value:
    
-
-For the @home network, we're told the forwarding configuration is this:
-
-  forward .* proxy:8080
+    12289 (i.e.: URLs plus informational and warning messages)
    
-
-Also, we're told they insist on getting cookies and JavaScript, so you should
-allow cookies from home.com. We consider JavaScript a potential security risk.
-Java need not be enabled.
-
-In this example direct connections are made to all "internal" domains, but
-everything else goes through Lucent's LPWA by way of the company's SOCKS
-gateway to the Internet.
-
- forward-socks4 .* lpwa.com:8000 firewall.my_company.com:1080
- forward my_company.com .
+Effect if unset:
    
-
-This is how you could set up a site that always uses SOCKS but no forwarders:
-
-  forward-socks4a .* . firewall.my_company.com:1080
+    Nothing gets logged.
    
-
-An advanced example for network administrators:
-
-If you have links to multiple ISPs that provide various special content to
-their subscribers, you can configure forwarding to pass requests to the
-specific host that's connected to that ISP so that everybody can see all of the
-content on all of the ISPs.
-
-This is a bit tricky, but here's an example:
-
-host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
-isp-b.com. host-a can run a Privoxy proxy with forwarding like this:
-
- forward .* .
- forward isp-b.com host-b:8118
+Notes:
    
-
-host-b can run a Privoxy proxy with forwarding like this:
-
- forward .* .
- forward isp-a.com host-a:8118
+    The available debug levels are:
    
-
-Now, anyone on the Internet (including users on host-a and host-b) can set
-their browser's proxy to either host-a or host-b and be able to browse the
-content on isp-a or isp-b.
-
-Here's another practical example, for University of Kent at Canterbury students
-with a network connection in their room, who need to use the University's Squid
-web cache.
-
- forward *. ssbcache.ukc.ac.uk:3128  # Use the proxy, except for:
- forward .ukc.ac.uk .  # Anything on the same domain as us
- forward * .  # Host with no domain specified
- forward 129.12.*.* .  # A dotted IP on our /16 network.
- forward 127.*.*.* .  # Loopback address
- forward localhost.localdomain .  # Loopback address
- forward www.ukc.mirror.ac.uk .  # Specific host
+      debug         1 # show each GET/POST/CONNECT request             
+      debug         2 # show each connection status                    
+      debug         4 # show I/O status                                
+      debug         8 # show header parsing                            
+      debug        16 # log all data into the logfile                  
+      debug        32 # debug force feature                            
+      debug        64 # debug regular expression filter                
+      debug       128 # debug fast redirects                           
+      debug       256 # debug GIF de-animation                         
+      debug       512 # Common Log Format                              
+      debug      1024 # debug kill pop-ups                             
+      debug      4096 # Startup banner and warnings.                   
+      debug      8192 # Non-fatal errors                               
+                                                                       
    
+    To select multiple debug levels, you can either add them or use multiple
+    debug lines.
+   
+    A debug level of 1 is informative because it will show you each request as
+    it happens. 1, 4096 and 8192 are highly recommended so that you will notice
+    when things go wrong. The other levels are probably only of interest if you
+    are hunting down a specific problem. They can produce a hell of an output
+    (especially 16).
+   
+    The reporting of fatal errors (i.e. ones which crash Privoxy) is always on
+    and cannot be disabled.
+   
+    If you want to use CLF (Common Log Format), you should set "debug 512" ONLY
+    and not enable anything else.
+   
+-------------------------------------------------------------------------------
+
+5.3.3.2. single-threaded
+
+Specifies:
+   
+    Whether to run only one server thread
+   
+Type of value:
+   
+    None
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    Multi-threaded (or, where unavailable: forked) operation, i.e. the ability
+    to serve multiple requests simultaneously.
+   
+Notes:
+   
+    This option is only there for debug purposes and you should never need to
+    use it. It will drastically reduce performance.
+   
+-------------------------------------------------------------------------------
+
+5.3.4. Access Control and Security
+
+This section of the config file controls the security-relevant aspects of
+Privoxy's configuration.
+
+-------------------------------------------------------------------------------
+
+5.3.4.1. listen-address
+
+Specifies:
+   
+    The IP address and TCP port on which Privoxy will listen for client
+    requests.
+   
+Type of value:
+   
+    [IP-Address]:Port
+   
+Default value:
+   
+    localhost:8118
+   
+Effect if unset:
+   
+    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended
+    for home users who run Privoxy on the same machine as their browser.
+   
+Notes:
+   
+    You will need to configure your browser(s) to this proxy address and port.
+   
+    If you already have another service running on port 8118, or if you want to
+    serve requests from other machines (e.g. on your local network) as well,
+    you will need to override the default.
+   
+    If you leave out the IP address, Privoxy will bind to all interfaces
+    (addresses) on your machine and may become reachable from the Internet. In
+    that case, consider using access control lists (acl's) (see "ACLs" below),
+    or a firewall.
+   
+Example:
+   
+    Suppose you are running Privoxy on a machine which has the address
+    192.168.0.1 on your local private network (192.168.0.0) and has another
+    outside connection with a different address. You want it to serve requests
+    from inside only:
+   
+      listen-address  192.168.0.1:8118                                 
+                                                                       
+   
+-------------------------------------------------------------------------------
+
+5.3.4.2. toggle
+
+Specifies:
+   
+    Initial state of "toggle" status
+   
+Type of value:
+   
+    1 or 0
+   
+Default value:
+   
+    1
+   
+Effect if unset:
+   
+    Act as if toggled on
+   
+Notes:
+   
+    If set to 0, Privoxy will start in "toggled off" mode, i.e. behave like a
+    normal, content-neutral proxy. See enable-remote-toggle below. This is not
+    really useful anymore, since toggling is much easier via the web interface
+    then via editing the conf file.
+   
+    The windows version will only display the toggle icon in the system tray if
+    this option is present.
+   
+-------------------------------------------------------------------------------
+
+5.3.4.3. enable-remote-toggle
+
+Specifies:
+   
+    Whether or not the web-based toggle feature may be used
+   
+Type of value:
+   
+    0 or 1
+   
+Default value:
+   
+    1
+   
+Effect if unset:
+   
+    The web-based toggle feature is disabled.
+   
+Notes:
+   
+    When toggled off, Privoxy acts like a normal, content-neutral proxy, i.e.
+    it acts as if none of the actions applied to any URL.
+   
+    For the time being, access to the toggle feature can not be controlled
+    separately by "ACLs" or HTTP authentication, so that everybody who can
+    access Privoxy (see "ACLs" and listen-address above) can toggle it for all
+    users. So this option is not recommended for multi-user environments with
+    untrusted users.
+   
+    Note that you must have compiled Privoxy with support for this feature,
+    otherwise this option has no effect.
+   
+-------------------------------------------------------------------------------
+
+5.3.4.4. enable-edit-actions
+
+Specifies:
+   
+    Whether or not the web-based actions file editor may be used
+   
+Type of value:
+   
+    0 or 1
+   
+Default value:
+   
+    1
+   
+Effect if unset:
+   
+    The web-based actions file editor is disabled.
+   
+Notes:
+   
+    For the time being, access to the editor can not be controlled separately
+    by "ACLs" or HTTP authentication, so that everybody who can access Privoxy
+    (see "ACLs" and listen-address above) can modify its configuration for all
+    users. So this option is not recommended for multi-user environments with
+    untrusted users.
+   
+    Note that you must have compiled Privoxy with support for this feature,
+    otherwise this option has no effect.
+   
+-------------------------------------------------------------------------------
+
+5.3.4.5. ACLs: permit-access and deny-access
+
+Specifies:
+   
+    Who can access what.
+   
+Type of value:
+   
+    src_addr[/src_masklen] [dst_addr[/dst_masklen]]
+   
+    Where src_addr and dst_addr are IP addresses in dotted decimal notation or
+    valid DNS names, and src_masklen and dst_masklen are subnet masks in CIDR
+    notation, i.e. integer values from 2 to 30 representing the length (in
+    bits) of the network address. The masks and the whole destination part are
+    optional.
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    Don't restrict access further than implied by listen-address
+   
+Notes:
+   
+    Access controls are included at the request of ISPs and systems
+    administrators, and are not usually needed by individual users. For a
+    typical home user, it will normally suffice to ensure that Privoxy only
+    listens on the localhost or internal (home) network address by means of the
+    listen-address option.
+   
+    Please see the warnings in the FAQ that this proxy is not intended to be a
+    substitute for a firewall or to encourage anyone to defer addressing basic
+    security weaknesses.
+   
+    Multiple ACL lines are OK. If any ACLs are specified, then the Privoxy
+    talks only to IP addresses that match at least one permit-access line and
+    don't match any subsequent deny-access line. In other words, the last match
+    wins, with the default being deny-access.
+   
+    If Privoxy is using a forwarder (see forward below) for a particular
+    destination URL, the dst_addr that is examined is the address of the
+    forwarder and NOT the address of the ultimate target. This is necessary
+    because it may be impossible for the local Privoxy to determine the IP
+    address of the ultimate target (that's often what gateways are used for).
+   
+    You should prefer using IP addresses over DNS names, because the address
+    lookups take time. All DNS names must resolve! You can not use domain
+    patterns like "*.org" or partial domain names. If a DNS name resolves to
+    multiple IP addresses, only the first one is used.
+   
+    Denying access to particular sites by ACL may have undesired side effects
+    if the site in question is hosted on a machine which also hosts other
+    sites.
+   
+Examples:
+   
+    Explicitly define the default behavior if no ACL and listen-address are
+    set: "localhost" is OK. The absence of a dst_addr implies that all
+    destination addresses are OK:
+   
+      permit-access  localhost                                         
+                                                                       
+   
+    Allow any host on the same class C subnet as www.privoxy.org access to
+    nothing but www.example.com:
+   
+      permit-access  www.privoxy.org/24 www.example.com/32             
+                                                                       
+   
+    Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
+    with the exception that 192.168.45.73 may not access
+    www.dirty-stuff.example.com:
+   
+      permit-access  192.168.45.64/26                                  
+      deny-access    192.168.45.73    www.dirty-stuff.example.com      
+                                                                       
+   
+-------------------------------------------------------------------------------
+
+5.3.4.6. buffer-limit
+
+Specifies:
+   
+    Maximum size of the buffer for content filtering.
+   
+Type of value:
+   
+    Size in Kbytes
+   
+Default value:
+   
+    4096
+   
+Effect if unset:
+   
+    Use a 4MB (4096 KB) limit.
+   
+Notes:
+   
+    For content filtering, i.e. the +filter and +deanimate-gif actions, it is
+    necessary that Privoxy buffers the entire document body. This can be
+    potentially dangerous, since a server could just keep sending data
+    indefinitely and wait for your RAM to exhaust -- with nasty consequences.
+    Hence this option.
+   
+    When a document buffer size reaches the buffer-limit, it is flushed to the
+    client unfiltered and no further attempt to filter the rest of the document
+    is made. Remember that there may be multiple threads running, which might
+    require up to buffer-limit Kbytes each, unless you have enabled
+    "single-threaded" above.
+   
+-------------------------------------------------------------------------------
+
+5.3.5. Forwarding
+
+This feature allows routing of HTTP requests through a chain of multiple
+proxies. It can be used to better protect privacy and confidentiality when
+accessing specific domains by routing requests to those domains through an
+anonymous public proxy (see e.g. http://www.multiproxy.org/anon_list.htm) Or to
+use a caching proxy to speed up browsing. Or chaining to a parent proxy may be
+necessary because the machine that Privoxy runs on has no direct Internet
+access.
+
+Also specified here are SOCKS proxies. Privoxy supports the SOCKS 4 and SOCKS
+4A protocols.
+
+-------------------------------------------------------------------------------
+
+5.3.5.1. forward
+
+Specifies:
+   
+    To which parent HTTP proxy specific requests should be routed.
+   
+Type of value:
+   
+    target_domain[:port] http_parent[/port]
+   
+    Where target_domain is a domain name pattern (see the chapter on domain
+    matching in the actions file), http_parent is the address of the parent
+    HTTP proxy as an IP addresses in dotted decimal notation or as a valid DNS
+    name (or "." to denote "no forwarding", and the optional port parameters
+    are TCP ports, i.e. integer values from 1 to 64535
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    Don't use parent HTTP proxies.
+   
+Notes:
+   
+    If http_parent is ".", then requests are not forwarded to another HTTP
+    proxy but are made directly to the web servers.
+   
+    Multiple lines are OK, they are checked in sequence, and the last match
+    wins.
+   
+Examples:
+   
+    Everything goes to an example anonymizing proxy, except SSL on port 443
+    (which it doesn't handle):
+   
+      forward   .*     anon-proxy.example.org:8080                     
+      forward   :443   .                                               
+                                                                       
+   
+    Everything goes to our example ISP's caching proxy, except for requests to
+    that ISP's sites:
+   
+      forward   .*.                caching-proxy.example-isp.net:8000  
+      forward   .example-isp.net   .                                   
+                                                                       
+   
+-------------------------------------------------------------------------------
+
+5.3.5.2. forward-socks4 and forward-socks4a
+
+Specifies:
+   
+    Through which SOCKS proxy (and to which parent HTTP proxy) specific
+    requests should be routed.
+   
+Type of value:
+   
+    target_domain[:port] socks_proxy[/port] http_parent[/port]
+   
+    Where target_domain is a domain name pattern (see the chapter on domain
+    matching in the actions file), http_parent and socks_proxy are IP addresses
+    in dotted decimal notation or valid DNS names (http_parent may be "." to
+    denote "no HTTP forwarding"), and the optional port parameters are TCP
+    ports, i.e. integer values from 1 to 64535
+   
+Default value:
+   
+    Unset
+   
+Effect if unset:
+   
+    Don't use SOCKS proxies.
+   
+Notes:
+   
+    Multiple lines are OK, they are checked in sequence, and the last match
+    wins.
+   
+    The difference between forward-socks4 and forward-socks4a is that in the
+    SOCKS 4A protocol, the DNS resolution of the target hostname happens on the
+    SOCKS server, while in SOCKS 4 it happens locally.
+   
+    If http_parent is ".", then requests are not forwarded to another HTTP
+    proxy but are made (HTTP-wise) directly to the web servers, albeit through
+    a SOCKS proxy.
+   
+Examples:
+   
+    From the company example.com, direct connections are made to all "internal"
+    domains, but everything outbound goes through their ISP's proxy by way of
+    example.com's corporate SOCKS 4A gateway to the Internet.
+   
+      forward-socks4a   .*.            socks-gw.example.com:1080  www-cache.example-isp.net:8080 
+      forward           .example.com   .                                                         
+                                                                                                 
+   
+    A rule that uses a SOCKS 4 gateway for all destinations but no HTTP parent
+    looks like this:
+   
+      forward-socks4   .*.            socks-gw.example.com:1080  .     
+                                                                       
+   
+-------------------------------------------------------------------------------
+
+5.3.5.3. Advanced Forwarding Examples
+
+If you have links to multiple ISPs that provide various special content only to
+their subscribers, you can configure multiple Privoxies which have connections
+to the respective ISPs to act as forwarders to each other, so that your users
+can see the internal content of all ISPs.
+
+Assume that host-a has a PPP connection to isp-a.net. And host-b has a PPP
+connection to isp-b.net. Both run Privoxy. Their forwarding configuration can
+look like this:
+
+host-a:
+
+  forward    .*.         .                                                     
+  forward    .isp-b.net  host-b:8118                                           
+                                                                               
+
+host-b:
+
+  forward    .*.         .                                                     
+  forward    .isp-a.net  host-a:8118                                           
+                                                                               
+
+Now, your users can set their browser's proxy to use either host-a or host-b
+and be able to browse the internal content of both isp-a and isp-b.
 
 If you intend to chain Privoxy and squid locally, then chain as browser ->
 squid -> privoxy is the recommended way.
 
-Your squid configuration could then look like this (assuming that the IP
-address of the box is 192.168.0.1 ):
+Assuming that Privoxy and squid run on the same box, your squid configuration
+could then look like this:
 
-  # Define Privoxy as parent cache 
-  
-  cache_peer 192.168.0.1 parent 8118 0 no-query
+  # Define Privoxy as parent proxy (without ICP)                               
+  cache_peer 127.0.0.1 parent 8118 7 no-query                                  
+                                                                               
+  # Define ACL for protocol FTP                                                
+  acl ftp proto FTP                                                            
+                                                                               
+  # Do not forward FTP requests to Privoxy                                     
+  always_direct allow ftp                                                      
+                                                                               
+  # Forward all the rest to Privoxy                                            
+  never_direct allow all                                                       
+                                                                               
 
-  # don't listen to the whole world
-  http_port 192.168.0.1:3128
-
-  # define the local lan
-  acl mylocallan src 192.168.0.1-192.168.0.5/255.255.255.255
-
-  # grant access for http to local lan
-  http_access allow mylocallan
-  
-  # Define ACL for protocol FTP 
-  acl FTP proto FTP 
-
-  # Do not forward ACL FTP to privoxy
-  always_direct allow FTP 
-
-  # Do not forward ACL CONNECT (https) to privoxy
-  always_direct allow CONNECT 
-
-  # Forward the rest to privoxy
-  never_direct allow all 
-   
+You would then need to change your browser's proxy settings to squid's address
+and port. Squid normally uses port 3128. If unsure consult http_port in
+squid.conf.
 
 -------------------------------------------------------------------------------
 
-5.3.5. Windows GUI Options
+5.3.6. Windows GUI Options
 
 Privoxy has a number of options specific to the Windows GUI interface:
 
@@ -1104,128 +1500,202 @@ console.
 
 5.4. The Actions File
 
-The "default.action" file (formerly actionsfile or ijb.action) is used to
-define what actions Privoxy takes, and thus determines how ad images, cookies
-and various other aspects of HTTP content and transactions are handled. These
-can be accepted or rejected for all sites, or just those sites you choose. See
-below for a complete list of actions.
+The actions file (default.action, formerly: actionsfile or ijb.action) is used
+to define what actions Privoxy takes for which URLs, and thus determines how ad
+images, cookies and various other aspects of HTTP content and transactions are
+handled on which sites (or even parts thereof).
 
 Anything you want can blocked, including ads, banners, or just some obnoxious
 URL that you would rather not see. Cookies can be accepted or rejected, or
-accepted only during the current browser session (i.e. not written to disk).
-Changes to default.action should be immediately visible to Privoxy without the
-need to restart.
+accepted only during the current browser session (i.e. not written to disk),
+content can be modified, JavaScripts tamed, user-tracking fooled, and much
+more. See below for a complete list of available actions.
 
-Note that some sites may misbehave, or possibly not work at all with some
-actions. This may require some tinkering with the rules to get the most mileage
-of Privoxy's features, and still be able to see and enjoy just what you want
-to. There is no general rule of thumb on these things. There just are too many
-variables, and sites are always changing. 
-
-The easiest way to edit the "actions" file is with a browser by loading http://
-p.p/, and then select "Edit Actions List". A text editor can also be used.
-
-To determine which actions apply to a request, the URL of the request is
-compared to all patterns in this file. Every time it matches, the list of
-applicable actions for the URL is incrementally updated. You can trace this
-process by visiting http://p.p/show-url-info.
-
-There are four types of lines in this file: comments (begin with a "#"
-character), actions, aliases and patterns, all of which are explained below, as
-well as the configuration file syntax that Privoxy understands. 
+An actions file typically has sections. At the top, "aliases" are defined
+(discussed below), then the default set of rules which will apply universally
+to all sites and pages. And then below that is generally a lengthy set of
+exceptions to the defined universal policies.
 
 -------------------------------------------------------------------------------
 
-5.4.1. URL Domain and Path Syntax
+5.4.1. Finding the Right Mix
+
+Note that some actions like cookie suppression or script disabling may render
+some sites unusable, which rely on these techniques to work properly. Finding
+the right mix of actions is not easy and certainly a matter of personal taste.
+In general, it can be said that the more "aggressive" your default settings (in
+the top section of the actions file) are, the more exceptions for "trusted"
+sites you will have to make later. If, for example, you want to kill popup
+windows per default, you'll have to make exceptions from that rule for sites
+that you regularly use and that require popups for actually useful content,
+like maybe your bank, favorite shop, or newspaper.
+
+We have tried to provide you with reasonable rules to start from in the
+distribution actions file. But there is no general rule of thumb on these
+things. There just are too many variables, and sites are constantly changing.
+Sooner or later you will want to change the rules (and read this chapter).
+
+-------------------------------------------------------------------------------
+
+5.4.2. How to Edit
+
+The easiest way to edit the "actions" file is with a browser by using our
+browser-based editor, which is available at http://config.privoxy.org/
+edit-actions.
+
+If you prefer plain text editing to GUIs, you can of course also directly edit
+the default.action file.
+
+-------------------------------------------------------------------------------
+
+5.4.3. How Actions are Applied to URLs
+
+The actions file is divided into sections. There are special sections, like the
+"alias" sections which will be discussed later. For now let's concentrate on
+regular sections: They have a heading line (often split up to multiple lines
+for readability) which consist of a list of actions, separated by whitespace
+and enclosed in curly braces. Below that, there is a list of URL patterns, each
+on a separate line.
+
+To determine which actions apply to a request, the URL of the request is
+compared to all patterns in this file. Every time it matches, the list of
+applicable actions for the URL is incrementally updated, using the heading of
+the section in which the pattern is located. If multiple matches for the same
+URL set the same action differently, the last match wins.
+
+You can trace this process by visiting http://config.privoxy.org/show-url-info.
+
+More detail on this is provided in the Appendix, Anatomy of an Action.
+
+-------------------------------------------------------------------------------
+
+5.4.4. Patterns
 
 Generally, a pattern has the form <domain>/<path>, where both the <domain> and
-<path> part are optional. If you only specify a domain part, the "/" can be
-left out:
+<path> are optional. (This is why the pattern / matches all URLs).
 
-www.example.com - is a domain only pattern and will match any request to
-"www.example.com".
+www.example.com/
+   
+    is a domain-only pattern and will match any request to www.example.com,
+    regardless of which document on that server is requested.
+   
+www.example.com
+   
+    means exactly the same. For domain-only patterns, the trailing / may be
+    omitted.
+   
+www.example.com/index.html
+   
+    matches only the single document /index.html on www.example.com.
+   
+/index.html
+   
+    matches the document /index.html, regardless of the domain, i.e. on any web
+    server.
+   
+index.html
+   
+    matches nothing, since it would be interpreted as a domain name and there
+    is no top-level domain called .html.
+   
+-------------------------------------------------------------------------------
 
-www.example.com/ - means exactly the same.
-
-www.example.com/index.html - matches only the single document "/index.html" on
-"www.example.com".
-
-/index.html - matches the document "/index.html", regardless of the domain. So
-would match any page named "index.html" on any site.
-
-index.html - matches nothing, since it would be interpreted as a domain name
-and there is no top-level domain called ".html".
+5.4.4.1. The Domain Pattern
 
 The matching of the domain part offers some flexible options: if the domain
 starts or ends with a dot, it becomes unanchored at that end. For example:
 
-.example.com - matches any domain or sub-domain that ENDS in ".example.com".
-
-www. - matches any domain that STARTS with "www".
-
+.example.com
+   
+    matches any domain that ENDS in .example.com
+   
+www.
+   
+    matches any domain that STARTS with www.
+   
+.example.
+   
+    matches any domain that CONTAINS .example. (Correctly speaking: It matches
+    any FQDN that contains example as a domain.)
+   
 Additionally, there are wild-cards that you can use in the domain names
 themselves. They work pretty similar to shell wild-cards: "*" stands for zero
-or more arbitrary characters, "?" stands for any single character. And you can
-define character classes in square brackets and they can be freely mixed:
+or more arbitrary characters, "?" stands for any single character, you can
+define character classes in square brackets and all of that can be freely
+mixed:
 
-ad*.example.com - matches "adserver.example.com", "ads.example.com", etc but
-not "sfads.example.com".
+ad*.example.com
+   
+    matches "adserver.example.com", "ads.example.com", etc but not
+    "sfads.example.com"
+   
+*ad*.example.com
+   
+    matches all of the above, and then some.
+   
+.?pix.com
+   
+    matches www.ipix.com, pictures.epix.com, a.b.c.d.e.upix.com etc.
+   
+www[1-9a-ez].example.c*
+   
+    matches www1.example.com, www4.example.cc, wwwd.example.cy,
+    wwwz.example.com etc., but not wwww.example.com.
+   
+-------------------------------------------------------------------------------
 
-*ad*.example.com - matches all of the above, and then some.
+5.4.4.2. The Path Pattern
 
-.?pix.com - matches "www.ipix.com", "pictures.epix.com", "a.b.c.d.e.upix.com",
-etc.
+Privoxy uses Perl compatible regular expressions (through the PCRE library) for
+matching the path.
 
-www[1-9a-ez].example.com - matches "www1.example.com", "www4.example.com",
-"wwwd.example.com", "wwwz.example.com", etc., but not "wwww.example.com".
+There is an Appendix with a brief quick-start into regular expressions, and
+full (very technical) documentation on PCRE regex syntax is available on-line
+at http://www.pcre.org/man.txt. You might also find the Perl man page on
+regular expressions (man perlre) useful, which is available on-line at http://
+www.perldoc.com/perl5.6/pod/perlre.html.
 
-If Privoxy was compiled with "pcre" support (the default), Perl compatible
-regular expressions can be used. These are more flexible and powerful than
-other types of "regular expressions". See the pcre/docs/ directory or "man
-perlre" (also available on http://www.perldoc.com/perl5.6/pod/perlre.html) for
-details. A brief discussion of regular expressions is in the Appendix. For
-instance:
+Note that the path pattern is automatically left-anchored at the "/", i.e. it
+matches as if it would start with a "^".
 
-/.*/advert[0-9]+\.jpe?g - would match a URL from any domain, with any path that
-includes "advert" followed immediately by one or more digits, then a "." and
-ending in either "jpeg" or "jpg". So we match "example.com/ads/advert2.jpg",
-and "www.example.com/ads/banners/advert39.jpeg", but not "www.example.com/ads/
-banners/advert39.gif" (no gifs in the example pattern).
-
-Please note that matching in the path is case INSENSITIVE by default, but you
-can switch to case sensitive at any point in the pattern by using the "(?-i)"
-switch:
-
-www.example.com/(?-i)PaTtErN.* - will match only documents whose path starts
-with "PaTtErN" in exactly this capitalization.
+Please also note that matching in the path is case INSENSITIVE by default, but
+you can switch to case sensitive at any point in the pattern by using the "(?
+-i)" switch: www.example.com/(?-i)PaTtErN.* will match only documents whose
+path starts with PaTtErN in exactly this capitalization.
 
 -------------------------------------------------------------------------------
 
-5.4.2. Actions
+5.4.5. Actions
 
 Actions are enabled if preceded with a "+", and disabled if preceded with a
-"-". Actions are invoked by enclosing the action name in curly braces (e.g.
-{+some_action}), followed by a list of URLs to which the action applies. There
-are three classes of actions:
+"-". So a "+action" means "do that action", e.g. "+block" means please "block
+the following URLs and/or patterns". All actions are disabled by default, until
+they are explicitly enabled somewhere in an actions file.
 
-  * Boolean (e.g. "+/-block"):
+Actions are invoked by enclosing the action name in curly braces (e.g.
+{+some_action}), followed by a list of URLs (or patterns that match URLs) to
+which the action applies. There are three classes of actions:
+
+  * Boolean, i.e the action can only be "on" or "off". Examples:
    
       {+name}        # enable this action
       {-name}        # disable this action
          
    
-  * parameterized (e.g. "+/-hide-user-agent"):
+  * Parameterized, e.g. "+/-hide-user-agent{ Mozilla 1.0 }", where some value
+    is required in order to enable this type of action. Examples:
    
       {+name{param}}  # enable action and set parameter to "param"
-      {-name}         # disable action
+      {-name}         # disable action ("parameter") can be omitted
          
    
-  * Multi-value (e.g. "{+/-add-header{Name: value}}", "{+/-wafer{name=value}}
-    "):
+  * Multi-value, e.g. "{+/-add-header{Name: value}}" ot "{+/-wafer{name=value}}
+    "), where some value needs to be defined in addition to simply enabling the
+    actino. Examples:
    
-      {+name{param}}   # enable action and add parameter "param"
-      {-name{param}}   # remove the parameter "param"
-      {-name}          # disable this action totally
+      {+name{param=value}}   # enable action and set "param" to "value"
+      {-name{param=value}}   # remove the parameter "param" completely
+      {-name}                # disable this action totally and remove param too
          
    
 If nothing is specified in this file, no "actions" are taken. So in this case
@@ -1239,21 +1709,97 @@ the actions are applied in the order they are specified.
 
 The list of valid Privoxy "actions" are:
 
-  * Add the specified HTTP header, which is not checked for validity. You may
-    specify this many times to specify many different headers:
+-------------------------------------------------------------------------------
+
+5.4.5.1. +add-header{Name: value}
+
+Type:
    
-      +add-header{Name: value}
-         
+    Multi-value.
    
-  * Block this URL totally. In a default installation, a "blocked" URL will
-    result in bright red banner that says "BLOCKED", with a reason why it is
-    being blocked, and an option to see it anyway. The page displayed for this
-    is the "blocked" template file.
+Typical uses:
    
-      +block
-         
+    Send a user defined HTTP header to the web server.
    
-  * De-animate all animated GIF images, i.e. reduce them to their last frame.
+Possible values:
+   
+    Any value is possible. Validity of the defined HTTP headers is not checked.
+   
+Example usage:
+   
+         {+add-header{X-User-Tracking: sucks}}
+         .example.com
+        
+   
+Notes:
+   
+    This action may be specified multiple times, in order to define multiple
+    headers. This is rarely needed for the typical user. If you don't know what
+    "HTTP headers" are, you definitely don't need to worry about this one.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.2. +block
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Used to block a URL from reaching your browser. The URL may be anything,
+    but is typically used to block ads or other obnoxious content.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+block}
+         .example.com
+         .ads.r.us
+        
+   
+Notes:
+   
+    Privoxy will display its special "BLOCKED" page if a URL matches one of the
+    blocked patterns. If there is sufficient space, a large red banner will
+    appear with a friendly message about why the page was blocked, and a way to
+    go there anyway. If there is insufficient space a smaller blocked page will
+    appear without the red banner. One exception is if the URL matches both
+    "+block" and "+image", then it can be handled by "+image-blocker" (see
+    below).
+   
+    The "+filter" action can also perform some of the same functionality as
+    "+block", but by virtue of very different programming techniques, and is
+    typically used for different reasons.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.3. +deanimate-gifs
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    To stop those annoying, distracting animated GIF images.
+   
+Possible values:
+   
+    "last" or "first"
+   
+Example usage:
+   
+          {+deanimate-gifs{last}}
+          .example.com
+        
+   
+Notes:
+   
+    De-animate all animated GIF images, i.e. reduce them to their last frame.
     This will also shrink the images considerably (in bytes, not pixels!). If
     the option "first" is given, the first frame of the animation is used as
     the replacement. If "last" is given, the last frame of the animation is
@@ -1261,19 +1807,64 @@ The list of valid Privoxy "actions" are:
     but also has the risk of not showing the entire last frame (if it is only a
     delta to an earlier frame).
    
-      +deanimate-gifs{last}
-      +deanimate-gifs{first}
-         
+-------------------------------------------------------------------------------
+
+5.4.5.4. +downgrade
+
+Type:
    
-  * "+downgrade" will downgrade HTTP/1.1 client requests to HTTP/1.0 and
-    downgrade the responses as well. Use this action for servers that use HTTP/
-    1.1 protocol features that Privoxy doesn't handle well yet. HTTP/1.1 is
-    only partially implemented. Default is not to downgrade requests.
+    Boolean.
    
-      +downgrade
-         
+Typical uses:
    
-  * Many sites, like yahoo.com, don't just link to other sites. Instead, they
+    "+downgrade" will downgrade HTTP/1.1 client requests to HTTP/1.0 and
+    downgrade the responses as well.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+downgrade}
+         .example.com
+        
+   
+Notes:
+   
+    Use this action for servers that use HTTP/1.1 protocol features that
+    Privoxy doesn't handle well yet. HTTP/1.1 is only partially implemented.
+    Default is not to downgrade requests. This is an infrequently needed
+    action, and is used to help with problem sites only.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.5. +fast-redirects
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    The "+fast-redirects" action enables interception of "redirect" requests
+    from one server to another, which are used to track users.Privoxy can cut
+    off all but the last valid URL in redirect request and send a local
+    redirect back to your browser without contacting the intermediate site(s).
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+fast-redirects}
+         .example.com
+        
+   
+Notes:
+   
+    Many sites, like yahoo.com, don't just link to other sites. Instead, they
     will link to some script on their own server, giving the destination as a
     parameter, which will then redirect you to the final target. URLs resulting
     from this scheme typically look like: http://some.place/some_script?http://
@@ -1286,113 +1877,287 @@ The list of valid Privoxy "actions" are:
     ask the server for one redirect after the other. Plus, it feeds the
     advertisers.
    
-    The "+fast-redirects" option enables interception of these types of
-    requests by Privoxy, who will cut off all but the last valid URL in the
-    request and send a local redirect back to your browser without contacting
-    the intermediate site(s).
+    This is a normally on feature, and often requires exceptions for sites that
+    are sensitive to defeating this mechanism.
    
-      +fast-redirects
-         
+-------------------------------------------------------------------------------
+
+5.4.5.6. +filter
+
+Type:
    
-  * Apply the filters in the section_header section of the default.filter file
-    to the site(s). default.filter sections are grouped according to like
-    functionality. Filters can be used to re-write any of the raw page content.
-    This is a potentially a very powerful feature!
+    Parameterized.
    
-     +filter{section_header}
-         
+Typical uses:
    
-    Filter sections that are pre-defined in the supplied default.filter
-    include:
+    Apply page filtering as defined by named sections of the default.filter
+    file to the specified site(s). "Filtering" can be any modification of the
+    raw page content, including re-writing or deletion of content.
    
-        html-annoyances: Get rid of particularly annoying HTML abuse.
-       
-        js-annoyances: Get rid of particularly annoying JavaScript abuse
-       
-        no-poups: Kill all popups in JS and HTML
-       
-        frameset-borders: Give frames a border
-       
-        webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
-       
-        no-refresh: Automatic refresh sucks on auto-dialup lines
-       
-        fun: Text replacements for subversive browsing fun!
-       
-        nimda: Remove (virus) Nimda code.
-       
-        banners-by-size: Kill banners by size
-       
-        crude-parental: Kill all web pages that contain the words "sex" or     
-        "warez"                                                                
-       
-  * Block any existing X-Forwarded-for header, and do not add a new one:
+Possible values:
    
-      +hide-forwarded
-         
+    "+filter" must include the name of one of the section identifiers from
+    default.filter (or whatever filterfile is specified in config).
    
-  * If the browser sends a "From:" header containing your e-mail address, this
-    either completely removes the header ("block"), or changes it to the
-    specified e-mail address.
+Example usage (from the current default.filter):
    
-      +hide-from{block}
-      +hide-from{spam@sittingduck.xqq}
-         
+    +filter{html-annoyances}: Get rid of particularly annoying HTML abuse.
    
-  * Don't send the "Referer:" (sic) header to the web site. You can block it,
-    forge a URL to the same server as the request (which is preferred because
-    some sites will not send images otherwise) or set it to a constant, user
-    defined string of your choice.
+    +filter{js-annoyances}: Get rid of particularly annoying JavaScript abuse
    
-      +hide-referer{block}
-      +hide-referer{forge}
-      +hide-referer{http://nowhere.com}
-         
+    +filter{content-cookies}: Kill cookies that come in the HTML or JS content
    
-  * Alternative spelling of "+hide-referer". It has the same parameters, and
-    can be freely mixed with, "+hide-referer". ("referrer" is the correct
-    English spelling, however the HTTP specification has a bug - it requires it
-    to be spelled "referer".)
+    +filter{popups}: Kill all popups in JS and HTML
    
-      +hide-referrer{...}
-         
+    +filter{frameset-borders}: Give frames a border and make them resizable
    
-  * Change the "User-Agent:" header so web servers can't tell your browser
-    type. Warning! This breaks many web sites. Specify the user-agent value you
-    want. Example, pretend to be using Netscape on Linux:
+    +filter{webbugs}: Squish WebBugs (1x1 invisible GIFs used for user         
+    tracking)                                                                  
    
-      +hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}
-         
+    +filter{refresh-tags}: Kill automatic refresh tags (for dial-on-demand     
+    setups)                                                                    
    
-  * Treat this URL as an image. This only matters if it's also "+block"ed, in
-    which case a "blocked" image can be sent rather than a HTML page. See
-    "+image-blocker{}" below for the control over what is actually sent. If you
-    want invisible ads, they should be defined as images and blocked. And also,
-    "image-blocker" should be set to "blank". Note you cannot treat HTML pages
-    as images in most cases. For instance, frames require an HTML page to
-    display. So a frame that is an ad, cannot be treated as an image. Forcing
-    an "image" in this situation just will not work.
+    +filter{fun}: Text replacements for subversive browsing fun!
    
-      +image
-         
+    +filter{nimda}: Remove Nimda (virus) code.
    
-  * Decides what to do with URLs that end up tagged with "{+block +image}", e.g
-    an advertizement. There are five options. "-image-blocker" will send a HTML
+    +filter{banners-by-size}: Kill banners by size (very efficient!)
+   
+    +filter{shockwave-flash}: Kill embedded Shockwave Flash objects
+   
+    +filter{crude-parental}: Kill all web pages that contain the words "sex" or
+    "warez"                                                                    
+   
+Notes:
+   
+    This is potentially a very powerful feature! And requires a knowledge of
+    regular expressions if you want to "roll your own". Filtering operates on a
+    line by line basis.
+   
+    Filtering requires buffering the page content, which may appear to slow
+    down page rendering since nothing is displayed until all content has passed
+    the filters. (It does not really take longer, but seems that way since the
+    page is not incrementally displayed.) This effect will be more noticeable
+    on slower connections.
+   
+    Filtering can achieve some of the effects as the "+block" action, i.e. it
+    can be used to block ads and banners. In the overall scheme of things,
+    filtering is one of the last things "Privoxy" does with a web page. So
+    other actions are applied first.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.7. +hide-forwarded
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Block any existing X-Forwarded-for HTTP header, and do not add a new one.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+hide-forwarded}
+         .example.com
+        
+   
+Notes:
+   
+    It is fairly safe to leave this on. It does not seem to break many sites.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.8. +hide-from
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    To block the browser from sending your email address in a "From:" header.
+   
+Possible values:
+   
+    Keyword: "block", or any user defined value.
+   
+Example usage:
+   
+         {+hide-from{block}}
+         .example.com
+        
+   
+Notes:
+   
+    The keyword "block" will completely remove the header. Alternately, you can
+    specify any value you prefer to send to the web server.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.9. +hide-referer
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    Don't send the "Referer:" (sic) HTTP header to the web site. Or,
+    alternately send a forged header instead.
+   
+Possible values:
+   
+    Prevent the header from being sent with the keyword, "block". Or, "forge" a
+    URL to one from the same server as the request. Or, set to user defined
+    value of your choice.
+   
+Example usage:
+   
+         {+hide-referer{forge}}
+         .example.com
+        
+   
+Notes:
+   
+    "forge" is the preferred option here, since some servers will not send
+    images back otherwise.
+   
+    "+hide-referrer" is an alternate spelling of "+hide-referer". It has the
+    exact same parameters, and can be freely mixed with, "+hide-referer".
+    ("referrer" is the correct English spelling, however the HTTP specification
+    has a bug - it requires it to be spelled as "referer".)
+   
+-------------------------------------------------------------------------------
+
+5.4.5.10. +hide-user-agent
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    To change the "User-Agent:" header so web servers can't tell your browser
+    type. Who's business is it anyway?
+   
+Possible values:
+   
+    Any user defined string.
+   
+Example usage:
+   
+         {+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}}
+         .msn.com
+        
+   
+Notes:
+   
+    Warning! This breaks many web sites that depend on this in order to
+    determine how the target browser will respond to various requests. Use with
+    caution.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.11. +image
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    To define what Privoxy should treat automatically as an image.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+image}
+         /.*\.(gif|jpg|jpeg|png|bmp|ico)
+        
+   
+Notes:
+   
+    This only has meaning if the URL (or pattern) also is "+block"ed, in which
+    case a "blocked" image can be sent rather than a HTML page. (See
+    "+image-blocker{}" below for the control over what is actually sent.)
+   
+    There is little reason to change the default definition for this.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.12. +image-blocker
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    Decide what to do with URLs that end up tagged with both "{+block}" and "
+    {+image}", e.g an advertisement.
+   
+Possible values:
+   
+    There are four available options: "-image-blocker" will send a HTML
     "blocked" page, usually resulting in a "broken image" icon. "+image-blocker
-    {blank}" will send a 1x1 transparent GIF image. And finally,
+    {blank}" will send a 1x1 transparent GIF image. "+image-blocker{pattern}"
+    will send a checkerboard type pattern (the default). And finally,
     "+image-blocker{http://xyz.com}" will send a HTTP temporary redirect to the
     specified image. This has the advantage of the icon being being cached by
-    the browser, which will speed up the display. "+image-blocker{pattern}"
-    will send a checkboard type pattern
+    the browser, which will speed up the display.
    
-      +image-blocker{blank}
-      +image-blocker{pattern}
-      +image-blocker{http://p.p/send-banner}
-         
+Example usage:
    
-  * By default (i.e. in the absence of a "+limit-connect" action), Privoxy will
-    only allow CONNECT requests to port 443, which is the standard port for
-    https as a precaution.
+         {+image-blocker{blank}}
+         .example.com
+        
+   
+Notes:
+   
+    If you want invisible ads, they need to be both defined as images and
+    blocked. And then, "image-blocker" should be set to "blank" for
+    invisibility. Note you cannot treat HTML pages as images in most cases. For
+    instance, frames require an HTML page to display. So a frame that is an ad,
+    cannot be treated as an image. Forcing an "image" in this situation just
+    will not work.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.13. +limit-connect
+
+Type:
+   
+    Parameterized.
+   
+Typical uses:
+   
+    By default, Privoxy only allows HTTP CONNECT requests to port 443 (the
+    standard, secure HTTPS port). Use "+limit-connect" to disable this
+    altogether, or to allow more ports.
+   
+Possible values:
+   
+    Any valid port number, or port number range.
+   
+Example usages:
+   
+         +limit-connect{443}                      #
+     This is the default and need not be specified.
+         +limit-connect{80,443}                 # Ports 80 and 443 are OK.
+         +limit-connect{-3, 7, 20-100, 500-} #
+     Port less than 3, 7, 20 to 100 and above 500 are OK.
+        
+   
+Notes:
    
     The CONNECT methods exists in HTTP to allow access to secure websites
     (https:// URLs) through proxies. It works very simply: the proxy connects
@@ -1404,65 +2169,219 @@ The list of valid Privoxy "actions" are:
     If you want to allow CONNECT for more ports than this, or want to forbid
     CONNECT altogether, you can specify a comma separated list of ports and
     port ranges (the latter using dashes, with the minimum defaulting to 0 and
-    max to 65K):
+    max to 65K).
    
-      +limit-connect{443} # This is the default and need no be specified.
-      +limit-connect{80,443} # Ports 80 and 443 are OK.
-      +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100
-       #and above 500 are OK.
-         
+    If you don't know what any of this means, there probably is no reason to
+    change this one.
    
-  * "+no-compression" prevents the website from compressing the data. Some
-    websites do this, which can be a problem for Privoxy, since "+filter",
+-------------------------------------------------------------------------------
+
+5.4.5.14. +no-compression
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Prevent the specified websites from compressing HTTP data.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+no-compression}
+         .example.com
+        
+   
+Notes:
+   
+    Some websites do this, which can be a problem for Privoxy, since "+filter",
     "+no-popup" and "+gif-deanimate" will not work on compressed data. This
-    will slow down connections to those websites, though. Default is
-    "no-compression" is turned on.
+    will slow down connections to those websites, though. Default typically is
+    to turn "no-compression" on.
    
-      +nocompression
-         
+-------------------------------------------------------------------------------
+
+5.4.5.15. +no-cookies-keep
+
+Type:
    
-  * If the website sets cookies, "no-cookies-keep" will make sure they are
-    erased when you exit and restart your web browser. This makes profiling
-    cookies useless, but won't break sites which require cookies so that you
-    can log in for transactions. Default: on.
+    Boolean.
    
-      +no-cookies-keep
-         
+Typical uses:
    
-  * Prevent the website from reading cookies:
+    Allow cookies for the current browser session only.
    
-      +no-cookies-read
-         
+Possible values:
    
-  * Prevent the website from setting cookies:
+    N/A
    
-      +no-cookies-set
-         
+Example usage:
    
-  * Filter the website through a built-in filter to disable those obnoxious
-    JavaScript pop-up windows via window.open(), etc. The two alternative
-    spellings are equivalent.
+         {+no-cookies-keep}
+         .example.com
+        
    
-      +no-popup
-      +no-popups
-         
+Notes:
    
-  * This action only applies if you are using a jarfile for saving cookies. It
-    sends a cookie to every site stating that you do not accept any copyright
-    on cookies sent to you, and asking them not to track you. Of course, this
-    is a (relatively) unique header they could use to track you.
+    If websites set cookies, "no-cookies-keep" will make sure they are erased
+    when you exit and restart your web browser. This makes profiling cookies
+    useless, but won't break sites which require cookies so that you can log in
+    for transactions. This is generally turned on for all sites. Sometimes
+    referred to as "session cookies".
    
-      +vanilla-wafer
-         
+-------------------------------------------------------------------------------
+
+5.4.5.16. +no-cookies-read
+
+Type:
    
-  * This allows you to add an arbitrary cookie. It can be specified multiple
-    times in order to add as many cookies as you like.
+    Boolean.
    
-      +wafer{name=value}
-         
+Typical uses:
    
-The meaning of any of the above is reversed by preceding the action with a "-",
-in place of the "+".
+    Explicitly prevent the web server from reading any cookies on your system.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+no-cookies-read}
+         .example.com
+        
+   
+Notes:
+   
+    Often used in conjunction with "+no-cookies-set" to disable persistant
+    cookies completely.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.17. +no-cookies-set
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Explicitly block the web server from sending cookies to your system.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+no-cookies-set}
+         .example.com
+        
+   
+Notes:
+   
+    Often used in conjunction with "+no-cookies-read" to disable persistant
+    cookies completely.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.18. +no-popup
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Stop those annoying JavaScript pop-up windows!
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+no-popup}
+         .example.com
+        
+   
+Notes:
+   
+    "+no-popup" uses a built in filter to disable pop-ups that use the
+    window.open() function, etc.
+   
+    An alternate spelling is "+no-popups", which is interchangeable.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.19. +vanilla-wafer
+
+Type:
+   
+    Boolean.
+   
+Typical uses:
+   
+    Sends a cookie for every site stating that you do not accept any copyright
+    on cookies sent to you, and asking them not to track you.
+   
+Possible values:
+   
+    N/A
+   
+Example usage:
+   
+         {+vanilla-wafer}
+         .example.com
+        
+   
+Notes:
+   
+    This action only applies if you are using a jarfile for saving cookies. Of
+    course, this is a (relatively) unique header and could be used to track
+    you.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.20. +wafer
+
+Type:
+   
+    Multi-value.
+   
+Typical uses:
+   
+    This allows you to send an arbitrary, user definable cookie.
+   
+Possible values:
+   
+    User specified cookie name and corresponding value.
+   
+Example usage:
+   
+         {+wafer{name=value}}
+         .example.com
+        
+   
+Notes:
+   
+    This can be specified multiple times in order to add as many cookies as you
+    like.
+   
+-------------------------------------------------------------------------------
+
+5.4.5.21. Actions Examples
+
+Note that the meaning of any of the above examples is reversed by preceding the
+action with a "-", in place of the "+". Also, that some actions are turned on
+in the default section of the actions file, and require little to no additional
+configuration. These are just "on". Some actions that are turned on the default
+section do typically require exceptions to be listed in the lower sections of
+actions file.
 
 Some examples:
 
@@ -1471,10 +2390,12 @@ Turn off cookies by default, then allow a few through for specified sites:
  # Turn off all persistent cookies
  { +no-cookies-read }
  { +no-cookies-set }
+ 
  # Allow cookies for this browser session ONLY
  { +no-cookies-keep }
 
  # Exceptions to the above, sites that benefit from persistent cookies
+ # that saved from one browser session to the next.
  { -no-cookies-read }
  { -no-cookies-set }
  { -no-cookies-keep }
@@ -1502,7 +2423,7 @@ Now turn off "fast redirects", and then we allow two exceptions:
    
 
 Turn on page filtering according to rules in the defined sections of
-refilterfile, and make one exception for sourceforge:
+default.filter, and make one exception for Sourceforge:
 
  # Run everything through the filter file, using only the
  # specified sections:
@@ -1572,7 +2493,7 @@ Appendix for a brief example on troubleshooting actions.
 
 -------------------------------------------------------------------------------
 
-5.4.3. Aliases
+5.4.6. Aliases
 
 Custom "actions", known to Privoxy as "aliases", can be defined by combining
 other "actions". These can in turn be invoked just like the built-in "actions".
@@ -1609,14 +2530,14 @@ Some examples using our "shop" and "fragile" aliases from above:
  .windowsupdate.microsoft.com
  .nytimes.com
 
- # Shopping sites - still want to block ads.
+ # Shopping sites - but we still want to block ads.
  {shop}
  .quietpc.com
  .worldpay.com   # for quietpc.com
  .jungle.com
  .scan.co.uk
 
- # These shops require pop-ups
+ # These shops require pop-ups also 
  {shop -no-popups}
  .dabs.com
  .overclockers.co.uk
@@ -1760,10 +2681,11 @@ developers by accessing a special page and filling out the brief, required
 form. Conversely, you can also report pages, images, etc. that Privoxy is
 blocking, but should not. The form itself does require Internet access.
 
-To do this, point your browser to Privoxy at http://p.p/, and then select 
-Actions file feedback system, near the bottom of the page. Paste in the URL
-that is the cause of the unwanted behavior, and follow the prompts. The
-developers will try to incorporate your submission into future versions.
+To do this, point your browser to Privoxy at http://config.privoxy.org/
+(shortcut: http://p.p/), and then select Actions file feedback system, near the
+bottom of the page. Paste in the URL that is the cause of the unwanted
+behavior, and follow the prompts. The developers will try to incorporate a fix
+for the problem you reported into future versions.
 
 New default.actions files will occasionally be made available based on your
 feedback. These will be announced on the ijbswa-announce list.
@@ -1878,19 +2800,26 @@ or.
 
 \ - The "escape" character denotes that the following character should be taken
 literally. This is used where one of the special characters (e.g. ".") needs to
-be taken literally and not as a special meta-character.                        
+be taken literally and not as a special meta-character. Example: "example      
+\.com", makes sure the period is recognized only as a period (and not expanded 
+to its metacharacter meaning of any single character).                         
 
 [] - Characters enclosed in brackets will be matched if any of the enclosed    
-characters are encountered.                                                    
+characters are encountered. For instance, "[0-9]" matches any numeric digit    
+(zero through nine). As an example, we can combine this with "+" to match any  
+digit one of more times: "[0-9]+".                                             
 
 () - parentheses are used to group a sub-expression, or multiple               
 sub-expressions.                                                               
 
 | - The "bar" character works like an "or" conditional statement. A match is   
-successful if the sub-expression on either side of "|" matches.                
+successful if the sub-expression on either side of "|" matches. As an example: 
+"/(this|that) example/" uses grouping and the bar character and would match    
+either "this example" or "that example", and nothing else.                     
 
 s/string1/string2/g - This is used to rewrite strings of text. "string1" is    
-replaced by "string2" in this example.                                         
+replaced by "string2" in this example. There must of course be a match on      
+"string1" first.                                                               
 
 These are just some of the ones you are likely to use when matching URLs with
 Privoxy, and is a long way from a definitive list. This is enough to get us
@@ -2016,7 +2945,7 @@ friendly error message. Internet access is not necessary either.
    
         http://config.privoxy.org/edit-actions
        
-These may be bookmarked for quick reference. 
+These may be bookmarked for quick reference. See next. 
 
 -------------------------------------------------------------------------------
 
@@ -2031,7 +2960,7 @@ by clicking the links below (although that should work for testing).
 To save them, right-click the link and choose "Add to Favorites" (IE) or "Add
 Bookmark" (Netscape). You will get a warning that the bookmark "may not be
 safe" - just click OK. Then you can run the Bookmarklet directly from your
-favourites/bookmarks. For even faster access, you can put them on the "Links"
+favorites/bookmarks. For even faster access, you can put them on the "Links"
 bar (IE) or the "Personal Toolbar" (Netscape), and run them with a single
 click.
 
@@ -2050,27 +2979,77 @@ www.bookmarklets.com. They have more information about bookmarklets.
 
 -------------------------------------------------------------------------------
 
-9.3. Anatomy of an Action
+9.3. Chain of Events
+
+Let's take a quick look at the basic sequence of events when a web page is
+requested by your browser and Privoxy is on duty:
+
+  * First, the web browser requests a page, and this request is intercepted by
+    Privoxy immediately.
+   
+  * Privoxy traps any request for internal CGI pages (e.g http://p.p/) and
+    relays these back to the browser.
+   
+  * If the URL matches a "+block" pattern, then it is blocked and the banner
+    displayed.
+   
+  * Untrusted URLs are blocked. If URLs are being added to the trust file, then
+    that is done.
+   
+  * "+fast-redirect" is processed, stripping unwanted parts of the request web
+    page URL.
+   
+  * At this point, Privoxy relays the request to the web server, and requests
+    the page (assuming nothing up to this point has prevented getting us from
+    this far).
+   
+  * The first few hundred bytes are read from the web server and "+kill-popups"
+    is processed, if enabled.
+   
+  * If "+filter" applies, the rest of the page is read into memory and then the
+    filters are processed. Filters are applied in the order they are specified
+    in the default.filter file. The entire page, which is now filtered, is then
+    sent by Privoxy to your browser.
+   
+  * As the browser receives the filtered page content, it will read and request
+    any embedded URLs on the page, e.g. an ad image. As the browser requests
+    these secondary URLs from whatever server they may be on, Privoxy handles
+    these same as above, and the process is repeated for each such URL. Note
+    that a fancy web page may have many, many such URLs for graphics, frames,
+    etc.
+   
+-------------------------------------------------------------------------------
+
+9.4. Anatomy of an Action
 
 The way Privoxy applies "actions" and "filters" to any given URL can be
 complex, and not always so easy to understand what is happening. And sometimes
 we need to be able to see just what Privoxy is doing. Especially, if something
-Privoxy is doing is causing us a problem inadvertantly. It can be a little
+Privoxy is doing is causing us a problem inadvertently. It can be a little
 daunting to look at the actions and filters files themselves, since they tend
 to be filled with "regular expressions" whose consequences are not always so
-obvious. Privoxy provides the http://config.privoxy.org/show-url-info page that
-can show us very specifically how actions are being applied to any given URL.
-This is a big help for troubleshooting.
+obvious.
+
+One quick test to see if Privoxy is causing a problem or not, is to disable it
+temporarily. This should be the first troubleshooting step. See the
+Bookmarklets section on a quick and easy way to do this (be sure to flush
+caches afterwards!).
+
+Privoxy also provides the http://config.privoxy.org/show-url-info page that can
+show us very specifically how actions are being applied to any given URL. This
+is a big help for troubleshooting.
 
 First, enter one URL (or partial URL) at the prompt, and then Privoxy will tell
 us how the current configuration will handle it. This will not help with
-filtering effects from the default.filter file! It also will not tell you about
-any other URLs that may be embedded within the URL you are testing. For
-instance, images such as ads are expressed as URLs within the raw page source
-of HTML pages. So you will only get info for the actual URL that is pasted into
-the prompt area -- not any sub-URLs. If you want to know about embedded URLs
-like ads, you will have to dig those out of the HTML source. Use your browser's
-"View Page Source" option for this. Or right click on the ad, and grab the URL.
+filtering effects (i.e. the "+filter" action) from the default.filter file
+since this is handled very differently and not so easy to trap! It also will
+not tell you about any other URLs that may be embedded within the URL you are
+testing (i.e. a web page). For instance, images such as ads are expressed as
+URLs within the raw page source of HTML pages. So you will only get info for
+the actual URL that is pasted into the prompt area -- not any sub-URLs. If you
+want to know about embedded URLs like ads, you will have to dig those out of
+the HTML source. Use your browser's "View Page Source" option for this. Or
+right click on the ad, and grab the URL.
 
 Let's look at an example, google.com, one section at a time:
 
@@ -2117,7 +3096,7 @@ the top. This applies to all URLs as signified by the single forward slash -- "
 These are the default actions we have enabled. But we can define additional
 actions that would be exceptions to these general rules, and then list specific
 URLs that these exceptions would apply to. Last match wins. Just below this
-then are two explict matches for ".google.com". The first is negating our
+then are two explicit matches for ".google.com". The first is negating our
 various cookie blocking actions (i.e. we will allow cookies here). The second
 is allowing "fast-redirects". Note that there is a leading dot here --
 ".google.com". This will match any hosts and sub-domains, in the google.com
@@ -2126,7 +3105,7 @@ defined somewhere in the lower part of our actions file, and "google.com" is
 referenced in these sections. 
 
 And now we pull it altogether in the bottom section and summarize how Privoxy
-is appying all its "actions" to "google.com": 
+is applying all its "actions" to "google.com": 
 
   Final results:                                                               
                                                                                
@@ -2187,7 +3166,7 @@ giving us problems. We are getting a blank page. Hmmm...
 
 Ooops, the "/adsl/" is matching "/ads"! But we did not want this at all! Now we
 see why we get the blank page. We could now add a new action below this that
-explictly does not block (-block) pages with "adsl". There are various ways to
+explicitly does not block (-block) pages with "adsl". There are various ways to
 handle such exceptions. Example:
 
   { -block }                                                                   

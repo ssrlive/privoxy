@@ -49,7 +49,7 @@ CLASS="ORGNAME"
 ></DIV
 ><P
 CLASS="PUBDATE"
->$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $<BR></P
+>$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -66,49 +66,6 @@ NAME="AEN9"
  team. It provides guidance on coding, testing, documentation and other
  issues. 
  </P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is a web proxy with advanced filtering
- capabilities for protecting privacy, filtering web page content, managing
- cookies, controlling access, and removing ads, banners, pop-ups and other
- obnoxious Internet junk. <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> has a very
- flexible configuration and can be customized to suit individual needs and
- tastes. <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> has application for both
- stand-alone systems and multi-user networks.</P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is based on the code of the 
- <SPAN
-CLASS="APPLICATION"
->Internet Junkbuster</SPAN
-> (tm).
- <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> was originally written by Junkbusters
- Corporation, and was released as free open-source software under the GNU GPL.
- Stefan Waldherr made many improvements, and started the SourceForge project
- to continue development.</P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> continues the
- <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> tradition, but adds many 
- refinements, enhancements and new features.</P
 ><P
 > You can find the latest version of the this manual at <A
 HREF="http://www.privoxy.org/developer-manual/"
@@ -150,18 +107,42 @@ HREF="quickstart.html"
 ></DT
 ><DT
 >4. <A
+HREF="cvs.html"
+>The CVS Repository</A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="cvs.html#CVSACCESS"
+>Access to CVS</A
+></DT
+><DT
+>4.2. <A
+HREF="cvs.html#CVSCOMMIT"
+>CVS Commit Guideline</A
+></DT
+><DT
+>4.3. <A
+HREF="cvs.html#CVSWHENASK"
+>Discussing Changes First</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
 HREF="documentation.html"
 >Documentation Guidelines</A
 ></DT
 ><DD
 ><DL
 ><DT
->4.1. <A
+>5.1. <A
 HREF="documentation.html#SGML"
 >Quickstart to Docbook and SGML</A
 ></DT
 ><DT
->4.2. <A
+>5.2. <A
 HREF="documentation.html#DOCSTYLE"
 ><SPAN
 CLASS="APPLICATION"
@@ -169,58 +150,58 @@ CLASS="APPLICATION"
 > Documentation Style</A
 ></DT
 ><DT
->4.3. <A
-HREF="documentation.html#AEN186"
+>5.3. <A
+HREF="documentation.html#AEN214"
 >Privoxy Custom Entities</A
 ></DT
 ></DL
 ></DD
 ><DT
->5. <A
+>6. <A
 HREF="coding.html"
 >Coding Guidelines</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.1. <A
+>6.1. <A
 HREF="coding.html#S1"
 >Introduction</A
 ></DT
 ><DT
->5.2. <A
+>6.2. <A
 HREF="coding.html#S2"
 >Using Comments</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.2.1. <A
+>6.2.1. <A
 HREF="coding.html#S3"
 >Comment, Comment, Comment</A
 ></DT
 ><DT
->5.2.2. <A
+>6.2.2. <A
 HREF="coding.html#S4"
 >Use blocks for comments</A
 ></DT
 ><DT
->5.2.3. <A
+>6.2.3. <A
 HREF="coding.html#S5"
 >Keep Comments on their own line</A
 ></DT
 ><DT
->5.2.4. <A
+>6.2.4. <A
 HREF="coding.html#S6"
 >Comment each logical step</A
 ></DT
 ><DT
->5.2.5. <A
+>6.2.5. <A
 HREF="coding.html#S7"
 >Comment All Functions Thoroughly</A
 ></DT
 ><DT
->5.2.6. <A
+>6.2.6. <A
 HREF="coding.html#S8"
 >Comment at the end of braces if the
     content is more than one screen length</A
@@ -228,155 +209,155 @@ HREF="coding.html#S8"
 ></DL
 ></DD
 ><DT
->5.3. <A
+>6.3. <A
 HREF="coding.html#S9"
 >Naming Conventions</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.3.1. <A
+>6.3.1. <A
 HREF="coding.html#S10"
 >Variable Names</A
 ></DT
 ><DT
->5.3.2. <A
+>6.3.2. <A
 HREF="coding.html#S11"
 >Function Names</A
 ></DT
 ><DT
->5.3.3. <A
+>6.3.3. <A
 HREF="coding.html#S12"
 >Header file prototypes</A
 ></DT
 ><DT
->5.3.4. <A
+>6.3.4. <A
 HREF="coding.html#S13"
 >Enumerations, and #defines</A
 ></DT
 ><DT
->5.3.5. <A
+>6.3.5. <A
 HREF="coding.html#S14"
 >Constants</A
 ></DT
 ></DL
 ></DD
 ><DT
->5.4. <A
+>6.4. <A
 HREF="coding.html#S15"
 >Using Space</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.4.1. <A
+>6.4.1. <A
 HREF="coding.html#S16"
 >Put braces on a line by themselves.</A
 ></DT
 ><DT
->5.4.2. <A
+>6.4.2. <A
 HREF="coding.html#S17"
 >ALL control statements should have a
     block</A
 ></DT
 ><DT
->5.4.3. <A
+>6.4.3. <A
 HREF="coding.html#S18"
 >Do not belabor/blow-up boolean
     expressions</A
 ></DT
 ><DT
->5.4.4. <A
+>6.4.4. <A
 HREF="coding.html#S19"
 >Use white space freely because it is
     free</A
 ></DT
 ><DT
->5.4.5. <A
+>6.4.5. <A
 HREF="coding.html#S20"
 >Don't use white space around structure
     operators</A
 ></DT
 ><DT
->5.4.6. <A
+>6.4.6. <A
 HREF="coding.html#S21"
 >Make the last brace of a function stand
     out</A
 ></DT
 ><DT
->5.4.7. <A
+>6.4.7. <A
 HREF="coding.html#S22"
 >Use 3 character indentions</A
 ></DT
 ></DL
 ></DD
 ><DT
->5.5. <A
+>6.5. <A
 HREF="coding.html#S23"
 >Initializing</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.5.1. <A
+>6.5.1. <A
 HREF="coding.html#S24"
 >Initialize all variables</A
 ></DT
 ></DL
 ></DD
 ><DT
->5.6. <A
+>6.6. <A
 HREF="coding.html#S25"
 >Functions</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.6.1. <A
+>6.6.1. <A
 HREF="coding.html#S26"
 >Name functions that return a boolean as a
     question.</A
 ></DT
 ><DT
->5.6.2. <A
+>6.6.2. <A
 HREF="coding.html#S27"
 >Always specify a return type for a
     function.</A
 ></DT
 ><DT
->5.6.3. <A
+>6.6.3. <A
 HREF="coding.html#S28"
 >Minimize function calls when iterating by
     using variables</A
 ></DT
 ><DT
->5.6.4. <A
+>6.6.4. <A
 HREF="coding.html#S29"
 >Pass and Return by Const Reference</A
 ></DT
 ><DT
->5.6.5. <A
+>6.6.5. <A
 HREF="coding.html#S30"
 >Pass and Return by Value</A
 ></DT
 ><DT
->5.6.6. <A
+>6.6.6. <A
 HREF="coding.html#S31"
 >Names of include files</A
 ></DT
 ><DT
->5.6.7. <A
+>6.6.7. <A
 HREF="coding.html#S32"
 >Provide multiple inclusion
     protection</A
 ></DT
 ><DT
->5.6.8. <A
+>6.6.8. <A
 HREF="coding.html#S33"
 >Use `extern "C"` when appropriate</A
 ></DT
 ><DT
->5.6.9. <A
+>6.6.9. <A
 HREF="coding.html#S34"
 >Where Possible, Use Forward Struct
     Declaration Instead of Includes</A
@@ -384,65 +365,65 @@ HREF="coding.html#S34"
 ></DL
 ></DD
 ><DT
->5.7. <A
+>6.7. <A
 HREF="coding.html#S35"
 >General Coding Practices</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.7.1. <A
+>6.7.1. <A
 HREF="coding.html#S36"
 >Turn on warnings</A
 ></DT
 ><DT
->5.7.2. <A
+>6.7.2. <A
 HREF="coding.html#S37"
 >Provide a default case for all switch
     statements</A
 ></DT
 ><DT
->5.7.3. <A
+>6.7.3. <A
 HREF="coding.html#S38"
 >Try to avoid falling through cases in a
     switch statement.</A
 ></DT
 ><DT
->5.7.4. <A
+>6.7.4. <A
 HREF="coding.html#S39"
 >Use 'long' or 'short' Instead of
     'int'</A
 ></DT
 ><DT
->5.7.5. <A
+>6.7.5. <A
 HREF="coding.html#S40"
 >Don't mix size_t and other types</A
 ></DT
 ><DT
->5.7.6. <A
+>6.7.6. <A
 HREF="coding.html#S41"
 >Declare each variable and struct on its
     own line.</A
 ></DT
 ><DT
->5.7.7. <A
+>6.7.7. <A
 HREF="coding.html#S42"
 >Use malloc/zalloc sparingly</A
 ></DT
 ><DT
->5.7.8. <A
+>6.7.8. <A
 HREF="coding.html#S43"
 >The Programmer Who Uses 'malloc' is
     Responsible for Ensuring 'free'</A
 ></DT
 ><DT
->5.7.9. <A
+>6.7.9. <A
 HREF="coding.html#S44"
 >Add loaders to the `file_list' structure
     and in order</A
 ></DT
 ><DT
->5.7.10. <A
+>6.7.10. <A
 HREF="coding.html#S45"
 >"Uncertain" new code and/or changes to
     existing code, use FIXME</A
@@ -450,18 +431,13 @@ HREF="coding.html#S45"
 ></DL
 ></DD
 ><DT
->5.8. <A
+>6.8. <A
 HREF="coding.html#S46"
 >Addendum: Template for files and function
     comment blocks:</A
 ></DT
 ></DL
 ></DD
-><DT
->6. <A
-HREF="cvs.html"
->Version Control Guidelines</A
-></DT
 ><DT
 >7. <A
 HREF="testing.html"
@@ -484,7 +460,7 @@ HREF="testing.html#TESTING-REPORT"
 ><DT
 >8. <A
 HREF="newrelease.html"
->Releasing a new version</A
+>Releasing a New Version</A
 ></DT
 ><DD
 ><DL
@@ -495,92 +471,106 @@ HREF="newrelease.html#BEFORERELEASE"
 ></DT
 ><DT
 >8.2. <A
-HREF="newrelease.html#NEWRELEASE-WEB"
->Update the webserver</A
+HREF="newrelease.html#THERELEASE"
+>Building and Releasing the Packages</A
+></DT
+><DD
+><DL
+><DT
+>8.2.1. <A
+HREF="newrelease.html#NEWRELEASE-TARBALL"
+>Source Tarball</A
 ></DT
 ><DT
->8.3. <A
+>8.2.2. <A
 HREF="newrelease.html#NEWRELEASE-RPM"
 >SuSE or Red Hat</A
 ></DT
 ><DT
->8.4. <A
+>8.2.3. <A
 HREF="newrelease.html#NEWRELEASE-OS2"
 >OS/2</A
 ></DT
 ><DT
->8.5. <A
+>8.2.4. <A
 HREF="newrelease.html#NEWRELEASE-SOLARIS"
 >Solaris</A
 ></DT
 ><DT
->8.6. <A
+>8.2.5. <A
 HREF="newrelease.html#NEWRELEASE-WINDOWS"
 >Windows</A
 ></DT
 ><DT
->8.7. <A
+>8.2.6. <A
 HREF="newrelease.html#NEWRELEASE-DEBIAN"
 >Debian</A
 ></DT
 ><DT
->8.8. <A
+>8.2.7. <A
 HREF="newrelease.html#NEWRELEASE-MACOSX"
 >Mac OSX</A
 ></DT
 ><DT
->8.9. <A
+>8.2.8. <A
 HREF="newrelease.html#NEWRELEASE-FREEBSD"
 >FreeBSD</A
 ></DT
 ><DT
->8.10. <A
-HREF="newrelease.html#NEWRELEASE-TARBALL"
->Tarball</A
-></DT
-><DT
->8.11. <A
+>8.2.9. <A
 HREF="newrelease.html#NEWRELEASE-HPUX"
 >HP-UX 11</A
 ></DT
 ><DT
->8.12. <A
+>8.2.10. <A
 HREF="newrelease.html#NEWRELEASE-AMIGA"
 >Amiga OS</A
 ></DT
 ><DT
->8.13. <A
+>8.2.11. <A
 HREF="newrelease.html#NEWRELEASE-AIX"
 >AIX</A
 ></DT
 ></DL
 ></DD
 ><DT
+>8.3. <A
+HREF="newrelease.html#AFTERRELEASE"
+>After the Release</A
+></DT
+></DL
+></DD
+><DT
 >9. <A
+HREF="webserver-update.html"
+>Update the Webserver</A
+></DT
+><DT
+>10. <A
 HREF="contact.html"
 >Contacting the developers, Bug Reporting and Feature Requests</A
 ></DT
 ><DT
->10. <A
+>11. <A
 HREF="copyright.html"
 >Copyright and History</A
 ></DT
 ><DD
 ><DL
 ><DT
->10.1. <A
-HREF="copyright.html#AEN962"
+>11.1. <A
+HREF="copyright.html#AEN987"
 >Copyright</A
 ></DT
 ><DT
->10.2. <A
-HREF="copyright.html#AEN969"
+>11.2. <A
+HREF="copyright.html#AEN994"
 >History</A
 ></DT
 ></DL
 ></DD
 ><DT
->11. <A
+>12. <A
 HREF="seealso.html"
 >See also</A
 ></DT

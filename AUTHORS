@@ -3,27 +3,24 @@
 
 Current Project Developers:
 
- Stefan Waldherr
- Andreas Oesterhelt
  Jon Foster
+ Andreas Oesterhelt
+ Stefan Waldherr
  
- Markus Breitenbach
  Thomas Steudten
+ Rodney Stromlund
 
 Current Project Contributors:
 
- David Schmidt (OS/2, Mac OSX ports)
- Gabriel L. Somlo
- Hal Burgiss (docs)
- Haroon Rafique
- John Venvertloh
- Joerg Strohmayer
- Rodney Stromlund
  Rodrigo Barbosa (RPM specfiles)
- Sarantis Paskalis
- Shamim Mohamed
- Gábor Lipták
+ Hal Burgiss (docs)
  Alexander Lazic
+ Gábor Lipták
+ Guy
+ Haroon Rafique
+ David Schmidt (OS/2, Mac OSX ports)
+ Joerg Strohmayer
+ Sarantis Paskalis
 
 Originally developed by:
 
@@ -33,17 +30,17 @@ Originally developed by:
 Thanks to the many people who have tested Privoxy, reported bugs, or made
 suggestions. These include (in alphabetical order):
 
- Aaron Hamid
- Andrew J. Caines
- Bart Schelstraete
- Clifford Caoile
- Darren Wiebe
- Guy
  Ken Arromdee
+ Reiner Buehl
+ Andrew J. Caines
+ Clifford Caoile
+ Peter E
+ Aaron Hamid
  Magnus Holmgren
  Paul Lieverse
- Peter E
- Reiner Buehl
+ Roberto Ragusa
+ Bart Schelstraete
+ Darren Wiebe
 
 If we've missed you off this list, please let us know!
 

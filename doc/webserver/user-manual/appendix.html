@@ -159,6 +159,7 @@ CLASS="QUOTE"
  building complex patterns however. Let's look at a few of the common ones,
  and then some examples:</P
 ><P
+><P
 ></P
 ><TABLE
 BORDER="0"
@@ -191,6 +192,8 @@ CLASS="QUOTE"
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -209,6 +212,8 @@ CLASS="EMPHASIS"
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -227,6 +232,8 @@ CLASS="EMPHASIS"
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -245,6 +252,8 @@ CLASS="EMPHASIS"
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -264,13 +273,20 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"."</SPAN
 >) needs to be taken literally and
-  not as a special meta-character.
+  not as a special meta-character. Example: <SPAN
+CLASS="QUOTE"
+>"example\.com"</SPAN
+>, makes 
+  sure the period is recognized only as a period (and not expanded to its 
+  metacharacter meaning of any single character).
  </TD
 ></TR
 ></TBODY
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -282,13 +298,26 @@ BORDER="0"
 CLASS="EMPHASIS"
 >[]</I
 > - Characters enclosed in brackets will be matched if
-  any of the enclosed characters are encountered.
+  any of the enclosed characters are encountered. For instance, <SPAN
+CLASS="QUOTE"
+>"[0-9]"</SPAN
+>
+  matches any numeric digit (zero through nine). As an example, we can combine 
+  this with <SPAN
+CLASS="QUOTE"
+>"+"</SPAN
+> to match any digit one of more times: <SPAN
+CLASS="QUOTE"
+>"[0-9]+"</SPAN
+>.
  </TD
 ></TR
 ></TBODY
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -307,6 +336,8 @@ CLASS="EMPHASIS"
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -328,13 +359,27 @@ CLASS="QUOTE"
   sub-expression on either side of <SPAN
 CLASS="QUOTE"
 >"|"</SPAN
-> matches.
+> matches. As an example:
+  <SPAN
+CLASS="QUOTE"
+>"/(this|that) example/"</SPAN
+> uses grouping and the bar character 
+  and would match either <SPAN
+CLASS="QUOTE"
+>"this example"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"that
+  example"</SPAN
+>, and nothing else.
  </TD
 ></TR
 ></TBODY
 ></TABLE
 ><P
 ></P
+></P
+><P
 ><P
 ></P
 ><TABLE
@@ -353,12 +398,16 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"string2"</SPAN
 > in this
-  example.
+  example. There must of course be a match on <SPAN
+CLASS="QUOTE"
+>"string1"</SPAN
+> first.
  </TD
 ></TR
 ></TBODY
 ></TABLE
 ><P
+></P
 ></P
 ><P
 > These are just some of the ones you are likely to use when matching URLs with 
@@ -702,7 +751,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1602"
+NAME="AEN2452"
 >9.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -751,7 +800,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN1617"
+NAME="AEN2467"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -779,7 +828,7 @@ TARGET="_top"
     Show information about the current configuration: 
   </P
 ><A
-NAME="AEN1624"
+NAME="AEN2474"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -799,7 +848,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN1629"
+NAME="AEN2479"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -819,7 +868,7 @@ TARGET="_top"
    Show the client's request headers:
   </P
 ><A
-NAME="AEN1634"
+NAME="AEN2484"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -839,7 +888,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN1639"
+NAME="AEN2489"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -863,7 +912,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN1645"
+NAME="AEN2495"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -880,7 +929,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN1649"
+NAME="AEN2499"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -894,7 +943,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN1652"
+NAME="AEN2502"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -914,7 +963,7 @@ TARGET="_top"
    Edit the actions list file:
   </P
 ><A
-NAME="AEN1657"
+NAME="AEN2507"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -931,7 +980,7 @@ TARGET="_top"
 ></UL
 ></P
 ><P
-> These may be bookmarked for quick reference.&#13;</P
+> These may be bookmarked for quick reference. See next.&#13;</P
 ><DIV
 CLASS="SECT3"
 ><H3
@@ -969,7 +1018,7 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"may not be safe"</SPAN
 > - just click OK. Then you can run the
- Bookmarklet directly from your favourites/bookmarks. For even faster access,
+ Bookmarklet directly from your favorites/bookmarks. For even faster access,
  you can put them on the <SPAN
 CLASS="QUOTE"
 >"Links"</SPAN
@@ -1044,8 +1093,124 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
+NAME="CHAIN"
+>9.3. Chain of Events</A
+></H2
+><P
+> Let's take a quick look at the basic sequence of events when a web page is 
+ requested by your browser and <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is on duty:</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>   First, the web browser requests a page, and this request is intercepted by 
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> immediately.
+  </P
+></LI
+><LI
+><P
+>   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> traps any request for internal CGI 
+  pages (e.g http://p.p/) and relays these back to the browser.
+  </P
+></LI
+><LI
+><P
+>   If the URL matches a <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+> pattern, then it is blocked 
+   and the banner displayed.
+  </P
+></LI
+><LI
+><P
+>   Untrusted URLs are blocked. If URLs are being added to the
+   <TT
+CLASS="FILENAME"
+>trust</TT
+> file, then that is done.
+  </P
+></LI
+><LI
+><P
+>   <SPAN
+CLASS="QUOTE"
+>"+fast-redirect"</SPAN
+> is processed, stripping unwanted parts 
+   of the request web page URL.
+  </P
+></LI
+><LI
+><P
+>   At this point, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> relays the request to the
+   web server, and requests the page (assuming nothing up to this point has
+   prevented getting us from this far).
+  </P
+></LI
+><LI
+><P
+>   The first few hundred bytes are read from the web server and 
+   <SPAN
+CLASS="QUOTE"
+>"+kill-popups"</SPAN
+> is processed, if enabled.
+  </P
+></LI
+><LI
+><P
+>   If <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+> applies, the rest of the page is read into
+   memory and then the filters are processed. Filters are applied in the order they
+   are specified in the <TT
+CLASS="FILENAME"
+>default.filter</TT
+> file.  The entire
+   page, which is now filtered, is then sent by
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to your browser.
+  </P
+></LI
+><LI
+><P
+>   As the browser receives the filtered page content, it will read and request any
+   embedded URLs on the page, e.g. an ad image. As the browser requests these
+   secondary URLs from whatever server they may be on,
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> handles these same as above, and the process
+   is repeated for each such URL. Note that a fancy web page may have many, many
+   such URLs for graphics, frames, etc.
+  </P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
 NAME="ACTIONSANAT"
->9.3. Anatomy of an Action</A
+>9.4. Anatomy of an Action</A
 ></H2
 ><P
 > The way <SPAN
@@ -1071,16 +1236,29 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is doing
- is causing us a problem inadvertantly. It can be a little daunting to look at
+ is causing us a problem inadvertently. It can be a little daunting to look at
  the actions and filters files themselves, since they tend to be filled with
  <SPAN
 CLASS="QUOTE"
 >"regular expressions"</SPAN
 > whose consequences are not always 
- so obvious. <SPAN
+ so obvious. </P
+><P
+> One quick test to see if <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> provides the 
+> is causing a problem 
+ or not, is to disable it temporarily. This should be the first troubleshooting 
+ step. See <A
+HREF="appendix.html#BOOKMARKLETS"
+>the Bookmarklets</A
+> section on a quick 
+ and easy way to do this (be sure to flush caches afterwards!).</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> also provides the 
  <A
 HREF="http://config.privoxy.org/show-url-info"
 TARGET="_top"
@@ -1090,8 +1268,7 @@ TARGET="_top"
 CLASS="APPLICATION"
 >actions</SPAN
 >
- are being applied to any given URL. This is a big help for troubleshooting.
- </P
+ are being applied to any given URL. This is a big help for troubleshooting.</P
 ><P
 > First, enter one URL (or partial URL) at the prompt, and then
  <SPAN
@@ -1099,20 +1276,25 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > will tell us 
  how the current configuration will handle it. This will not
- help with filtering effects from the <TT
+ help with filtering effects (i.e. the <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+> action) from the
+ <TT
 CLASS="FILENAME"
 >default.filter</TT
-> file! It
- also will not tell you about any other URLs that may be embedded within the
- URL you are testing. For instance, images such as ads are expressed as URLs
- within the raw page source of HTML pages. So you will only get info for the
- actual URL that is pasted into the prompt area -- not any sub-URLs. If you
- want to know about embedded URLs like ads, you will have to dig those out of
- the HTML source. Use your browser's <SPAN
+> file since this is handled very differently 
+ and not so easy to trap! It also will not tell you about any other URLs that
+ may be embedded within the URL you are testing (i.e. a web page). For
+ instance, images such as ads are expressed as URLs within the raw page source
+ of HTML pages. So you will only get info for the actual URL that is pasted
+ into the prompt area -- not any sub-URLs. If you want to know about embedded
+ URLs like ads, you will have to dig those out of the HTML source. Use your
+ browser's <SPAN
 CLASS="QUOTE"
 >"View Page Source"</SPAN
-> option
- for this. Or right click on the ad, and grab the URL.</P
+> option for this. Or right click on
+ the ad, and grab the URL.</P
 ><P
 > Let's look at an example, <A
 HREF="http://google.com"
@@ -1212,7 +1394,7 @@ CLASS="QUOTE"
 > These are the default actions we have enabled. But we can define additional
  actions that would be exceptions to these general rules, and then list 
  specific URLs that these exceptions would apply to. Last match wins.
- Just below this then are two explict matches for <SPAN
+ Just below this then are two explicit matches for <SPAN
 CLASS="QUOTE"
 >".google.com"</SPAN
 >.
@@ -1240,7 +1422,7 @@ CLASS="QUOTE"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is appying all its <SPAN
+> is applying all its <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
 > 
@@ -1383,7 +1565,7 @@ CLASS="QUOTE"
 >"/ads"</SPAN
 >! But 
  we did not want this at all! Now we see why we get the blank page. We could
- now add a new action below this that explictly does <I
+ now add a new action below this that explicitly does <I
 CLASS="EMPHASIS"
 >not</I
 >

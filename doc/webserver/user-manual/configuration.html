@@ -95,7 +95,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN268"
+NAME="AEN324"
 >5.1. Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -105,18 +105,19 @@ CLASS="APPLICATION"
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> can be reached by the special 
+>'s user interface can be reached through the special 
  URL <A
-HREF="http://p.p/"
-TARGET="_top"
->http://p.p/</A
-> (or alternately
- <A
 HREF="http://config.privoxy.org/"
 TARGET="_top"
 >http://config.privoxy.org/</A
+>
+ (shortcut: <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
 >), 
- which is an internal page. You will see the following section:&#13;</P
+ which is a built-in page and works without Internet access.
+ You will see the following section:&#13;</P
 ><P
 > <TABLE
 BORDER="0"
@@ -128,9 +129,10 @@ WIDTH="100%"
 CLASS="SCREEN"
 >&#13;Please choose from the following options:
 
+    * Privoxy main page
     * Show information about the current configuration
     * Show the source code version numbers
-    * Show the client's request headers.
+    * Show the request headers.
     * Show which actions apply to a URL and why
     * Toggle Privoxy on or off
     * Edit the actions list
@@ -155,19 +157,14 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > configuration. The actions
- file, and other configuration files, are explained in detail below. 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> will automatically detect any changes 
- to these files.</P
+ file, and other configuration files, are explained in detail below. </P
 ><P
 > <SPAN
 CLASS="QUOTE"
 >"Toggle Privoxy On or Off"</SPAN
 > is handy for sites that might 
- have problems with your current actions and filters, or just to test if 
- a site misbehaves, whether it is <SPAN
+ have problems with your current actions and filters. You can in fact use
+ it as a test to see whether it is <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > 
@@ -175,14 +172,23 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > continues 
- to run as a proxy in this case, but all filtering is disabled.&#13;</P
+ to run as a proxy in this case, but all filtering is disabled. There
+ is even a toggle <A
+HREF="appendix.html#BOOKMARKLETS"
+>Bookmarklet</A
+> offered, so
+ that you can toggle <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with one click from
+ your browser.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN286"
+NAME="AEN343"
 >5.2. Configuration Files Overview</A
 ></H2
 ><P
@@ -221,21 +227,26 @@ CLASS="FILENAME"
 ></LI
 ><LI
 ><P
->    The <TT
+>    <TT
 CLASS="FILENAME"
 >default.action</TT
-> file is used  to define various 
-    <SPAN
+> (the actions file) is used to define
+    which of a set of various <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> relating to images, banners, pop-ups, access
-    restrictions, banners and cookies. There is a CGI based editor for this
-    file that can be accessed via <A
-HREF="http://p.p"
+> relating to images, banners, 
+    pop-ups, access restrictions, banners and cookies are to be applied, and where.
+    There is a web based editor for this file that can be accessed at <A
+HREF="http://config.privoxy.org/edit-actions/"
 TARGET="_top"
->http://p.p</A
->. (Other actions 
-    files are included as well with differing levels of filtering 
+>http://config.privoxy.org/edit-actions/</A
+>
+    (Shortcut: <A
+HREF="http://p.p/edit-actions/"
+TARGET="_top"
+>http://p.p/edit-actions/</A
+>).
+    (Other actions files are included as well with differing levels of filtering 
     and blocking, e.g. <TT
 CLASS="FILENAME"
 >basic.action</TT
@@ -244,16 +255,40 @@ CLASS="FILENAME"
 ></LI
 ><LI
 ><P
->    The <TT
+>    <TT
 CLASS="FILENAME"
 >default.filter</TT
-> file can be used to re-write the raw
+> (the filter file) can be used to re-write the raw
     page content, including viewable text as well as embedded HTML and JavaScript,
-    and whatever else lurks on any given web page.
+    and whatever else lurks on any given web page. The filtering jobs are only
+    pre-defined here; whether to apply them or not is up to the actions file.
    </P
 ></LI
 ></UL
 ></P
+><P
+> All files use the <SPAN
+CLASS="QUOTE"
+>"<TT
+CLASS="LITERAL"
+>#</TT
+>"</SPAN
+> character to denote a
+ comment (the rest of the line will be ignored) and understand line continuation
+ through placing a backslash ("<TT
+CLASS="LITERAL"
+>\</TT
+>") as the very last character
+ in a line. If the <TT
+CLASS="LITERAL"
+>#</TT
+> is preceded by a backslash, it looses
+ its special function. Placing a <TT
+CLASS="LITERAL"
+>#</TT
+> in front of an otherwise
+ valid configuration line to prevent it from being interpreted is called "commenting
+ out" that line.</P
 ><P
 > <TT
 CLASS="FILENAME"
@@ -262,19 +297,13 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >default.filter</TT
 > 
- can use Perl style regular expressions for maximum flexibility. All files use
- the <SPAN
-CLASS="QUOTE"
->"<TT
-CLASS="LITERAL"
->#</TT
->"</SPAN
-> character to denote a comment. Such
- lines are not processed by <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->. After
- making any changes, there is no need to restart
+ can use Perl style <A
+HREF="appendix.html#REGEX"
+>regular expressions</A
+> for
+ maximum flexibility. </P
+><P
+> After making any changes, there is no need to restart
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -282,8 +311,20 @@ CLASS="APPLICATION"
  effect. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> should detect such changes 
- automatically.</P
+> detects such changes 
+ automatically. Note, however, that it may take one or two additional
+ requests for the change to take effect. When changing the listening address
+ of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, these <SPAN
+CLASS="QUOTE"
+>"wake up"</SPAN
+> requests
+ must obviously be sent to the <I
+CLASS="EMPHASIS"
+>old</I
+> listening address.</P
 ><P
 > While under development, the configuration content is subject to change. 
  The below documentation may not be accurate by the time you read this. 
@@ -298,7 +339,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN317"
+NAME="AEN383"
 >5.3. The Main Configuration File</A
 ></H2
 ><P
@@ -320,1151 +361,1727 @@ CLASS="LITERAL"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->blockfile blocklist.ini</I
+>confdir /etc/privoxy</I
 ><br>
 &nbsp;&nbsp;&nbsp;</P
-> 
+>
  </TT
-></P
+> </P
 ><P
-> Indicates that the blockfile is named <SPAN
-CLASS="QUOTE"
->"blocklist.ini"</SPAN
->. (A 
- default installation does not use this.)</P
-><P
-> A <SPAN
-CLASS="QUOTE"
->"<TT
+> Assigns the value <TT
 CLASS="LITERAL"
->#</TT
->"</SPAN
-> indicates a comment.  Any part of a
- line following a <SPAN
-CLASS="QUOTE"
->"<TT
+>/etc/privoxy</TT
+> to the option
+ <TT
 CLASS="LITERAL"
->#</TT
->"</SPAN
-> is ignored, except if
- the <SPAN
+>confdir</TT
+> and thus indicates that the configuration
+ directory is named <SPAN
 CLASS="QUOTE"
->"<TT
-CLASS="LITERAL"
->#</TT
->"</SPAN
-> is preceded by a
- <SPAN
-CLASS="QUOTE"
->"<TT
-CLASS="LITERAL"
->\</TT
->"</SPAN
+>"/etc/privoxy/"</SPAN
 >.</P
 ><P
-> Thus, by placing a <SPAN
-CLASS="QUOTE"
->"<TT
+> All options in the config file except for <TT
 CLASS="LITERAL"
->#</TT
->"</SPAN
-> at the start of an
- existing configuration line, you can make it a comment and it will be treated
- as if it weren't there. This is called <SPAN
-CLASS="QUOTE"
->"commenting out"</SPAN
-> an
- option and can be useful to turn off features: If you comment out the
- <SPAN
-CLASS="QUOTE"
->"logfile"</SPAN
-> line, <SPAN
+>confdir</TT
+> and
+ <TT
+CLASS="LITERAL"
+>logdir</TT
+> are optional. Watch out in the below description
+ for what happens if you leave them unset.</P
+><P
+> The main config file controls all aspects of <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will not
- log to a file at all. Watch for the <SPAN
-CLASS="QUOTE"
->"default:"</SPAN
-> section in each
- explanation to see what happens if the option is left unset (or commented
- out). </P
-><P
-> Long lines can be continued on the next line by using a
- <SPAN
-CLASS="QUOTE"
->"<TT
-CLASS="LITERAL"
->\</TT
->"</SPAN
-> as the very last character.</P
-><P
-> There are various aspects of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> behavior 
- that can be tuned.</P
+>'s
+ operation that are not location dependent (i.e. they apply universally, no matter
+ where you may be surfing).</P
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN350"
->5.3.1. Defining Other Configuration Files</A
+NAME="AEN402"
+>5.3.1. Configuration and Log File Locations</A
 ></H3
 ><P
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> can use a number of other files to tell it
- what ads to block, what cookies to accept, and perform other functions.  This
- section of the configuration file tells <SPAN
+> can (and normally does) use a number of
+ other files for additional configuration and logging.
+ This section of the configuration file tells <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
- where to find all those other files. </P
+ where to find those other files. </P
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN407"
+>5.3.1.1. confdir</A
+></H4
 ><P
-> On <SPAN
-CLASS="APPLICATION"
->Windows</SPAN
-> and <SPAN
-CLASS="APPLICATION"
->AmigaOS</SPAN
->,
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> looks for these files in the same
- directory as the executable.  On Unix and  OS/2,
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> looks for these files in the current
- working directory. In either case, an absolute path name can be used to
- avoid problems.</P
-><P
-> When development goes modular and multi-user, the blocker, filter, and
- per-user config will be stored in subdirectories of <SPAN
-CLASS="QUOTE"
->"confdir"</SPAN
->.
- For now, only <TT
-CLASS="FILENAME"
->confdir/templates</TT
-> is used for storing HTML
- templates for CGI results. </P
-><P
-> The location of the configuration files:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->confdir  /etc/privoxy</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;No&nbsp;trailing&nbsp;/,&nbsp;please.<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> The directory where all logging (i.e. <TT
-CLASS="FILENAME"
->logfile</TT
-> and 
- <TT
-CLASS="FILENAME"
->jarfile</TT
->) takes place. No trailing
- <SPAN
+>The directory where the other configuration files are located</P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Path name</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>/etc/privoxy (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> installation dir (Windows) </P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Mandatory</I
+></P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    No trailing <SPAN
 CLASS="QUOTE"
 >"<TT
 CLASS="LITERAL"
 >/</TT
 >"</SPAN
->, please: </P
+>, please
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->logdir  /var/log/privoxy</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>    When development goes modular and multi-user, the blocker, filter, and
+    per-user config will be stored in subdirectories of <SPAN
+CLASS="QUOTE"
+>"confdir"</SPAN
+>.
+    For now, the configuration directory structure is flat, except for 
+    <TT
+CLASS="FILENAME"
+>confdir/templates</TT
+>, where the HTML templates for CGI 
+    output reside (e.g. <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> 404 error page). 
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN439"
+>5.3.1.2. logdir</A
+></H4
+><P
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> Note that all file specifications below are relative to 
- the above two directories!</P
+>    The directory where all logging takes place (i.e. where <TT
+CLASS="FILENAME"
+>logfile</TT
+> and 
+    <TT
+CLASS="FILENAME"
+>jarfile</TT
+> are located) 
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-> The <SPAN
-CLASS="QUOTE"
->"default.action"</SPAN
-> file contains patterns to specify the
- actions to apply to requests for each site. Default: Cookies to and from all
- destinations are kept only during the current browser session (i.e. they are
- not saved to disk). Pop-ups are disabled for all sites. All sites are
- filtered through selected sections of <SPAN
-CLASS="QUOTE"
->"default.filter"</SPAN
->. No sites
- are blocked. <SPAN
+>Path name</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>/var/log/privoxy (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> displays a checkboard type
- pattern for filtered ads and other images. The syntax of this file is
- explained in detail <A
-HREF="configuration.html#ACTIONSFILE"
->below</A
->. Other
- <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> files are included, and you are free to use any of
- them. They have varying degrees of aggressiveness.</P
+> installation dir (Windows) </P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+><I
 CLASS="EMPHASIS"
->actionsfile  default.action</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>Mandatory</I
 ></P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
-> The <SPAN
+>    No trailing <SPAN
+CLASS="QUOTE"
+>"<TT
+CLASS="LITERAL"
+>/</TT
+>"</SPAN
+>, please
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN469"
+>5.3.1.3. actionsfile</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The actions file to use
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>File name, relative to <TT
+CLASS="LITERAL"
+>confdir</TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>default.action (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> default.action.txt (Windows)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No action is taken at all. Simple neutral proxying. 
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    There is no point in using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> without
+    an actions file. There are three different actions files included in the
+    distribution, with varying degrees of aggressiveness: 
+    <TT
+CLASS="FILENAME"
+>default.action</TT
+>, <TT
+CLASS="FILENAME"
+>intermediate.action</TT
+> and
+    <TT
+CLASS="FILENAME"
+>advanced.action</TT
+>.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN498"
+>5.3.1.4. filterfile</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The filter file to use
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>File name, relative to <TT
+CLASS="LITERAL"
+>confdir</TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>default.filter (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> default.filter.txt (Windows)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No textual content filtering takes place, i.e. all
+    <TT
+CLASS="LITERAL"
+>+filter{<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>}</TT
+>
+    actions in the actions file are turned off
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The <SPAN
 CLASS="QUOTE"
 >"default.filter"</SPAN
 > file contains content modification rules 
- that use <SPAN
+    that use <SPAN
 CLASS="QUOTE"
 >"regular expressions"</SPAN
 >. These rules permit powerful
- changes on the content of Web pages, e.g., you could disable your favorite
- JavaScript annoyances, re-write the actual displayed text, or just have some
- fun replacing <SPAN
+    changes on the content of Web pages, e.g., you could disable your favorite
+    JavaScript annoyances, re-write the actual displayed text, or just have some
+    fun replacing <SPAN
 CLASS="QUOTE"
 >"Microsoft"</SPAN
 > with <SPAN
 CLASS="QUOTE"
 >"MicroSuck"</SPAN
 > wherever
- it appears on a Web page. Default: whatever the developers are playing with
- :-/</P
+    it appears on a Web page.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN529"
+>5.3.1.5. logfile</A
+></H4
 ><P
-> Filtering requires buffering the page content, which may appear to slow down
- page rendering since nothing is displayed until all content has passed 
- the filters. (It does not really take longer, but seems that way since 
- the page is not incrementally displayed.) This effect will be more noticeable
- on slower connections.&#13;</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->filterfile  default.filter</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> The logfile is where all logging and error messages are written. The logfile
- can be useful for tracking down a problem with
- <SPAN
+>    The log file to use
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>File name, relative to <TT
+CLASS="LITERAL"
+>logdir</TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>logfile (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> privoxy.log (Windows)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No log file is used, all log messages go to the console (<TT
+CLASS="LITERAL"
+>stderr</TT
+>).
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The windows version will additionally log to the console.
+   </P
+><P
+>    The logfile is where all logging and error messages are written. The level
+    of detail and number of messages are set with the <TT
+CLASS="LITERAL"
+>debug</TT
+>
+    option (see below). The logfile can be useful for tracking down a problem with
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > (e.g., it's not blocking an ad you
- think it should block) but in most cases you probably will never look at it.</P
+    think it should block) but in most cases you probably will never look at it.
+   </P
 ><P
-> Your logfile will grow indefinitely, and you will probably want to
- periodically remove it.  On Unix systems, you can do this with a cron job
- (see <SPAN
+>    Your logfile will grow indefinitely, and you will probably want to
+    periodically remove it.  On Unix systems, you can do this with a cron job
+    (see <SPAN
 CLASS="QUOTE"
 >"man cron"</SPAN
->). For Redhat, a <B
+>). For Red Hat, a <B
 CLASS="COMMAND"
 >logrotate</B
 > 
- script has been included.</P
+    script has been included.
+   </P
 ><P
-> On SuSE Linux systems, you can place a line like <SPAN
+>    On SuSE Linux systems, you can place a line like <SPAN
 CLASS="QUOTE"
 >"/var/log/privoxy.*
- +1024k 644 nobody.nogroup"</SPAN
+    +1024k 644 nobody.nogroup"</SPAN
 > in <TT
 CLASS="FILENAME"
 >/etc/logfiles</TT
 >, with
- the effect that cron.daily will automatically archive, gzip, and empty the
- log, when it exceeds 1M size.</P
+    the effect that cron.daily will automatically archive, gzip, and empty the
+    log, when it exceeds 1M size.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN564"
+>5.3.1.6. jarfile</A
+></H4
 ><P
-> Default: Log to the a file named <TT
-CLASS="FILENAME"
->logfile</TT
->. 
- Comment out to disable logging.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->logfile  logfile</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> The <SPAN
-CLASS="QUOTE"
->"jarfile"</SPAN
-> defines where
- <SPAN
+>    The file to store intercepted cookies in
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>File name, relative to <TT
+CLASS="LITERAL"
+>logdir</TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>jarfile (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> privoxy.jar (Windows)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Intercepted cookies are not stored at all.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The jarfile may grow to ridiculous sizes over time.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN589"
+>5.3.1.7. trustfile</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The trust file to use
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>File name, relative to <TT
+CLASS="LITERAL"
+>confdir</TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Unset (commented out)</I
+>. When activated: trust (Unix) <I
+CLASS="EMPHASIS"
+>or</I
+> trust.txt (Windows)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    The whole trust mechanism is turned off.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The trust mechanism is an experimental feature for building white-lists and should
+    be used with care. It is <I
+CLASS="EMPHASIS"
+>NOT</I
+> recommended for the casual user.
+   </P
+><P
+>    If you specify a trust file, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> stores the cookies it intercepts.  Note
- that if you use a <SPAN
-CLASS="QUOTE"
->"jarfile"</SPAN
->, it may grow quite large. Default:
- Don't store intercepted cookies.</P
-><P
-> <TT
+> will only allow
+    access to sites that are named in the trustfile. 
+    You can also mark sites as trusted referrers (with <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->#jarfile  jarfile</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> If you specify a <SPAN
+>+</TT
+>), with
+    the effect that access to untrusted sites will be granted, if a link from a
+    trusted referrer was used.
+    The link target will then be added to the <SPAN
 CLASS="QUOTE"
 >"trustfile"</SPAN
->,
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> will only allow access to sites that
- are named in the trustfile. You can also mark sites as trusted referrers,
- with the effect that access to untrusted sites will be granted, if a link
- from a trusted referrer was used. The link target will then be added to the
- <SPAN
-CLASS="QUOTE"
->"trustfile"</SPAN
->. This is a very restrictive feature that typical
- users most probably want to leave disabled. Default: Disabled, don't use the
- trust mechanism.</P
+>.
+    Possible applications include limiting Internet access for children.
+   </P
 ><P
-> <TT
+>    If you use <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->#trustfile  trust</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> If you use the trust mechanism, it is a good idea to write up some on-line
- documentation about your blocking policy and to specify the URL(s) here. They
- will appear on the page that your users receive when they try to access
- untrusted content. Use multiple times for multiple URLs. Default: Don't
- display links on the <SPAN
-CLASS="QUOTE"
->"untrusted"</SPAN
-> info page.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->trust-info-url http://www.example.com/why_we_block.html</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->trust-info-url http://www.example.com/what_we_allow.html</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
+>+</TT
+> operator in the trust file, it may grow considerably over time.
+   </P
+></DD
+></DL
+></DIV
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN443"
->5.3.2. Other Configuration Options</A
+NAME="AEN622"
+>5.3.2. Local Set-up Documentation</A
 ></H3
 ><P
-> This part of the configuration file contains options that control how
- <SPAN
+>    If you intend to operate <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> operates.</P
+> for more users
+    that just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies etc.
+   </P
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN626"
+>5.3.2.1. trust-info-url</A
+></H4
 ><P
-> <SPAN
-CLASS="QUOTE"
->"Admin-address"</SPAN
-> should be set to the email address of the proxy
- administrator. It is used in many of the proxy-generated pages. Default:
- fill@me.in.please.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->#admin-address  fill@me.in.please</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> <SPAN
-CLASS="QUOTE"
->"Proxy-info-url"</SPAN
-> can be set to a URL that contains more info
- about this <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> installation, it's
- configuration and policies. It is used in many of the proxy-generated pages
- and its use is highly recommended in multi-user installations, since your
- users will want to know why certain content is blocked or modified. Default:
- Don't show a link to on-line documentation.</P
+>    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-> <TT
+>URL</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>Two example URL are provided</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No links are displayed on the "untrusted" error page.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The value of this option only matters if the experimental trust mechanism has been
+    activated. (See <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->proxy-info-url  http://www.example.com/proxy.html</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>trustfile</TT
+> above.)
+   </P
+><P
+>    If you use the trust mechanism, it is a good idea to write up some on-line
+    documentation about your trust policy and to specify the URL(s) here.
+    Use multiple times for multiple URLs.
+   </P
+><P
+>    The URL(s) should be added to the trustfile as well, so users don't end up
+    locked out from the information on why they were locked out in the first place!
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN652"
+>5.3.2.2. admin-address</A
+></H4
+><P
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> <SPAN
-CLASS="QUOTE"
->"Listen-address"</SPAN
-> specifies the address and port where
- <SPAN
+>    An email address to reach the proxy administrator.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Email address</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No email address is displayed on error pages and the CGI user interface.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If both <TT
+CLASS="LITERAL"
+>admin-address</TT
+> and <TT
+CLASS="LITERAL"
+>proxy-info-url</TT
+>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN678"
+>5.3.2.3. proxy-info-url</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    A URL to documentation about the local <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will listen for connections from your
- Web browser.  The default is to listen on the localhost port 8118, and
- this is suitable for most users.  (In your web browser, under proxy
- configuration, list the proxy server as <SPAN
-CLASS="QUOTE"
->"localhost"</SPAN
-> and the
- port as <SPAN
-CLASS="QUOTE"
->"8118"</SPAN
->).</P
+> setup,
+    configuration or policies.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-> If you already have another service running on port 8118, or if you want to
- serve requests from other machines (e.g. on your local network) as well, you
- will need to override the default. The syntax is 
- <SPAN
-CLASS="QUOTE"
->"listen-address [&#60;ip-address&#62;]:&#60;port&#62;"</SPAN
->. If you leave
- out the IP address, <SPAN
+>URL</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No link to local documentation is displayed on error pages and the CGI user interface.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If both <TT
+CLASS="LITERAL"
+>admin-address</TT
+> and <TT
+CLASS="LITERAL"
+>proxy-info-url</TT
+>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </P
+><P
+>    This URL shouldn't be blocked ;-)
+   </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN706"
+>5.3.3. Debugging</A
+></H3
+><P
+>  These options are mainly useful when tracing a problem.
+  Note that you might also want to invoke
+  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will bind to all
- interfaces (addresses) on your machine and may become reachable from the
- Internet. In that case, consider using access control lists (acl's) (see
- <SPAN
-CLASS="QUOTE"
->"aclfile"</SPAN
-> above), or a firewall.</P
+> with the <TT
+CLASS="LITERAL"
+>--no-daemon</TT
+>
+  command line option when debugging.
+ </P
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN711"
+>5.3.3.1. debug</A
+></H4
 ><P
-> For example, suppose you are running <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Key values that determine what information gets logged.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Integer values</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>12289 (i.e.: URLs plus informational and warning messages)</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Nothing gets logged.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The available debug levels are:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  debug         1 # show each GET/POST/CONNECT request
+  debug         2 # show each connection status
+  debug         4 # show I/O status
+  debug         8 # show header parsing
+  debug        16 # log all data into the logfile
+  debug        32 # debug force feature
+  debug        64 # debug regular expression filter 
+  debug       128 # debug fast redirects
+  debug       256 # debug GIF de-animation
+  debug       512 # Common Log Format
+  debug      1024 # debug kill pop-ups
+  debug      4096 # Startup banner and warnings.
+  debug      8192 # Non-fatal errors
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    To select multiple debug levels, you can either add them or use
+    multiple <TT
+CLASS="LITERAL"
+>debug</TT
+> lines.
+   </P
+><P
+>    A debug level of 1 is informative because it will show you each request
+    as it happens. <I
+CLASS="EMPHASIS"
+>1, 4096 and 8192 are highly recommended</I
+>
+    so that you will notice when things go wrong. The other levels are probably
+    only of interest if you are hunting down a specific problem. They can produce
+    a hell of an output (especially 16).
+    
+   </P
+><P
+>    The reporting of <I
+CLASS="EMPHASIS"
+>fatal</I
+> errors (i.e. ones which crash 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>) is always on and cannot be disabled.
+   </P
+><P
+>    If you want to use CLF (Common Log Format), you should set <SPAN
+CLASS="QUOTE"
+>"debug
+    512"</SPAN
+> <I
+CLASS="EMPHASIS"
+>ONLY</I
+> and not enable anything else.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN746"
+>5.3.3.2. single-threaded</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether to run only one server thread
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>None</I
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Multi-threaded (or, where unavailable: forked) operation, i.e. the ability to
+    serve multiple requests simultaneously.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This option is only there for debug purposes and you should never
+    need to use it. <I
+CLASS="EMPHASIS"
+>It will drastically reduce performance.</I
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN772"
+>5.3.4. Access Control and Security</A
+></H3
+><P
+>  This section of the config file controls the security-relevant aspects
+  of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s configuration.
+ </P
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN776"
+>5.3.4.1. listen-address</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The IP address and TCP port on which <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will
+    listen for client requests.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>[<TT
+CLASS="REPLACEABLE"
+><I
+>IP-Address</I
+></TT
+>]:<TT
+CLASS="REPLACEABLE"
+><I
+>Port</I
+></TT
+></P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>localhost:8118</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended for
+    home users who run <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> on the same machine as
+    their browser.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    You will need to configure your browser(s) to this proxy address and port.
+   </P
+><P
+>    If you already have another service running on port 8118, or if you want to
+    serve requests from other machines (e.g. on your local network) as well, you
+    will need to override the default.
+   </P
+><P
+>    If you leave out the IP address, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will
+    bind to all interfaces (addresses) on your machine and may become reachable
+    from the Internet. In that case, consider using access control lists (acl's)
+    (see <SPAN
+CLASS="QUOTE"
+>"ACLs"</SPAN
+> below), or a firewall.
+   </P
+></DD
+><DT
+>Example:</DT
+><DD
+><P
+>     Suppose you are running <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > on
- a machine which has the address 192.168.0.1 on your local private network
- (192.168.0.0) and has another outside connection with a different address.
- You want it to serve requests from inside only:</P
+     a machine which has the address 192.168.0.1 on your local private network
+     (192.168.0.0) and has another outside connection with a different address.
+     You want it to serve requests from inside only:
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->listen-address  192.168.0.1:8118</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> If you want it to listen on all addresses (including the outside
- connection):</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->listen-address  :8118</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> If you do this, consider using ACLs (see <SPAN
-CLASS="QUOTE"
->"aclfile"</SPAN
-> above). Note:
- you will need to point your browser(s) to the address and port that you have
- configured here. Default: localhost:8118 (127.0.0.1:8118).</P
-><P
-> The debug option sets the level of debugging information to log in the
- logfile (and to the console in the Windows version).  A debug level of 1 is
- informative because it will show you each request as it happens.  Higher
- levels of debug are probably only of interest to developers.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;#&nbsp;GPC&nbsp;&nbsp;&nbsp;=&nbsp;show&nbsp;each&nbsp;GET/POST/CONNECT&nbsp;request<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;#&nbsp;CONN&nbsp;&nbsp;=&nbsp;show&nbsp;each&nbsp;connection&nbsp;status<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;#&nbsp;IO&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;show&nbsp;I/O&nbsp;status<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;#&nbsp;HDR&nbsp;&nbsp;&nbsp;=&nbsp;show&nbsp;header&nbsp;parsing<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;#&nbsp;LOG&nbsp;&nbsp;&nbsp;=&nbsp;log&nbsp;all&nbsp;data&nbsp;into&nbsp;the&nbsp;logfile<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32&nbsp;#&nbsp;FRC&nbsp;&nbsp;&nbsp;=&nbsp;debug&nbsp;force&nbsp;feature<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64&nbsp;#&nbsp;REF&nbsp;&nbsp;&nbsp;=&nbsp;debug&nbsp;regular&nbsp;expression&nbsp;filter&nbsp;<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;128&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;debug&nbsp;fast&nbsp;redirects<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;256&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;debug&nbsp;GIF&nbsp;de-animation<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;512&nbsp;#&nbsp;CLF&nbsp;&nbsp;&nbsp;=&nbsp;Common&nbsp;Log&nbsp;Format<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1024&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;debug&nbsp;kill&nbsp;pop-ups<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4096&nbsp;#&nbsp;INFO&nbsp;&nbsp;=&nbsp;Startup&nbsp;banner&nbsp;and&nbsp;warnings.<br>
-&nbsp;&nbsp;debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8192&nbsp;#&nbsp;ERROR&nbsp;=&nbsp;Non-fatal&nbsp;errors<br>
-&nbsp;&nbsp;&nbsp;&nbsp;</P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  listen-address  192.168.0.1:8118
+    </PRE
+></TD
+></TR
+></TABLE
 >
- </TT
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN814"
+>5.3.4.2. toggle</A
+></H4
+><P
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> It is <I
-CLASS="EMPHASIS"
->highly recommended</I
-> that you enable ERROR
- reporting (debug 8192), at least until v3.0 is released.</P
+>    Initial state of "toggle" status
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-> The reporting of FATAL errors (i.e. ones which crash 
- <SPAN
+>1 or 0</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>1</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Act as if toggled on
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If set to 0, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->) is always on and cannot be disabled.</P
-><P
-> If you want to use CLF (Common Log Format), you should set <SPAN
+> will start in
+    <SPAN
 CLASS="QUOTE"
->"debug
- 512"</SPAN
-> ONLY, do not enable anything else.</P
-><P
-> Multiple <SPAN
-CLASS="QUOTE"
->"debug"</SPAN
-> directives, are OK - they're logical-OR'd
- together. </P
-><P
-> <TT
+>"toggled off"</SPAN
+> mode, i.e. behave like a normal, content-neutral
+    proxy. See <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->debug    15     # same as setting the first 4 listed above</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Default:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->debug   1     # URLs</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->debug   4096  # Info</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->debug   8192  # Errors - *we highly recommended enabling this*</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> normally uses
- <SPAN
-CLASS="QUOTE"
->"multi-threading"</SPAN
->, a software technique that permits it to
- handle many different requests simultaneously. In some cases you may wish to
- disable this -- particularly if you're trying to debug a problem.  The
- <SPAN
-CLASS="QUOTE"
->"single-threaded"</SPAN
-> option forces
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to handle requests sequentially.
- Default: Multi-threaded mode.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->#single-threaded</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> <SPAN
-CLASS="QUOTE"
->"toggle"</SPAN
-> allows you to temporarily disable all
- <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
->  filtering. Just set <SPAN
-CLASS="QUOTE"
->"toggle
- 0"</SPAN
->.</P
-><P
-> The Windows version of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> puts an icon in
- the system tray, which also allows you to change this option.  If you
- right-click on that icon (or select the <SPAN
-CLASS="QUOTE"
->"Options"</SPAN
-> menu), one
- choice is <SPAN
-CLASS="QUOTE"
->"Enable"</SPAN
->. Clicking on enable toggles
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> on and off. This is useful if you want
- to temporarily disable <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, e.g., to access
- a site that requires cookies which you would otherwise have blocked. This can also
- be toggled via a web browser at the <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
+>enable-remote-toggle</TT
 >
- internal address of <A
-HREF="http://p.p"
+    below. This is not really useful anymore, since toggling is much easier
+    via <A
+HREF="http://config.privoxy.org/toggle"
 TARGET="_top"
->http://p.p</A
-> on 
- any platform.</P
-><P
-> <SPAN
-CLASS="QUOTE"
->"toggle 1"</SPAN
-> means <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> runs
- normally, <SPAN
-CLASS="QUOTE"
->"toggle 0"</SPAN
-> means that
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> becomes a non-anonymizing non-blocking
- proxy. Default: 1 (on). </P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->toggle    1</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> For content filtering, i.e. the <SPAN
-CLASS="QUOTE"
->"+filter"</SPAN
-> and
- <SPAN
-CLASS="QUOTE"
->"+deanimate-gif"</SPAN
-> actions, it is necessary that 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> buffers the entire document body.
- This can be potentially dangerous, since a server could just keep sending
- data indefinitely and wait for your RAM to exhaust. With nasty consequences.</P
-><P
-> The <SPAN
-CLASS="APPLICATION"
->buffer-limit</SPAN
-> option lets you set the maximum
- size in Kbytes that each buffer may use. When the documents buffer exceeds
- this size, it is flushed to the client unfiltered and no further attempt to
- filter the rest of it is made. Remember that there may multiple threads
- running, which might require increasing the <SPAN
-CLASS="QUOTE"
->"buffer-limit"</SPAN
->
- Kbytes <I
-CLASS="EMPHASIS"
->each</I
->, unless you have enabled 
- <SPAN
-CLASS="QUOTE"
->"single-threaded"</SPAN
-> above.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->buffer-limit    4069</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> To enable the web-based <TT
+>the web
+    interface</A
+> then via editing the <TT
 CLASS="FILENAME"
->default.action</TT
-> file editor set
- <SPAN
+>conf</TT
+> file.
+   </P
+><P
+>    The windows version will only display the toggle icon in the system tray
+    if this option is present.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN843"
+>5.3.4.3. enable-remote-toggle</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether or not the <A
+HREF="http://config.privoxy.org/toggle"
+TARGET="_top"
+>web-based toggle
+    feature</A
+> may be used
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>0 or 1</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>1</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    The web-based toggle feature is disabled.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    When toggled off, <SPAN
 CLASS="APPLICATION"
->enable-edit-actions</SPAN
-> to 1, or 0 to disable.  Note
- that you must have compiled <SPAN
+>Privoxy</SPAN
+> acts like a normal,
+    content-neutral proxy, i.e. it acts as if none of the actions applied to
+    any URL.
+   </P
+><P
+>    For the time being, access to the toggle feature can <I
+CLASS="EMPHASIS"
+>not</I
+> be
+    controlled separately by <SPAN
+CLASS="QUOTE"
+>"ACLs"</SPAN
+> or HTTP authentication,
+    so that everybody who can access <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> (see
+    <SPAN
+CLASS="QUOTE"
+>"ACLs"</SPAN
+> and <TT
+CLASS="LITERAL"
+>listen-address</TT
+> above) can
+    toggle it for all users. So this option is <I
+CLASS="EMPHASIS"
+>not recommended</I
+>
+    for multi-user environments with untrusted users.
+   </P
+><P
+>    Note that you must have compiled <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > with
- support for this feature, otherwise this option has no effect. This 
- internal page can be reached at <A
-HREF="http://p.p"
-TARGET="_top"
->http://p.p</A
->.
- </P
-><P
-> Security note: If this is enabled, anyone who can use the proxy
- can edit the actions file, and their changes will affect all users.
- For shared proxies, you probably want to disable this. Default: enabled.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->enable-edit-actions    1</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Allow <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to be toggled on and off
- remotely, using your web browser.  Set <SPAN
-CLASS="QUOTE"
->"enable-remote-toggle"</SPAN
->to
- 1 to enable, and 0 to disable.  Note that you must have compiled 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> with support for this feature,
- otherwise this option has no effect.</P
-><P
-> Security note:  If this is enabled, anyone who can use the proxy can toggle
- it on or off (see <A
-HREF="http://p.p"
-TARGET="_top"
->http://p.p</A
->), and
- their changes will affect all users. For shared proxies, you probably want to
- disable this. Default: enabled.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->enable-remote-toggle    1</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
+    support for this feature, otherwise this option has no effect. 
+   </P
+></DD
+></DL
+></DIV
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
 ><A
-NAME="AEN580"
->5.3.3. Access Control List (ACL)</A
-></H3
-><P
-> Access controls are included at the request of some ISPs and systems
- administrators, and are not usually needed by individual users. Please note
- the warnings in the FAQ that this proxy is not intended to be a substitute
- for a firewall or to encourage anyone to defer addressing basic security
- weaknesses.</P
-><P
-> If no access settings are specified, the proxy talks to anyone that
- connects. If any access settings file are specified, then the proxy
- talks only to IP addresses permitted somewhere in this file and not
- denied later in this file.</P
-><P
-> Summary -- if using an ACL:</P
+NAME="AEN877"
+>5.3.4.4. enable-edit-actions</A
+></H4
 ><P
 ></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->   Client must have permission to receive service.
-  </TD
-></TR
-></TBODY
-></TABLE
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-></P
+>    Whether or not the <A
+HREF="http://config.privoxy.org/edit-actions"
+TARGET="_top"
+>web-based actions
+    file editor</A
+> may be used
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->   LAST match in ACL wins.
-  </TD
-></TR
-></TBODY
-></TABLE
+>0 or 1</P
+></DD
+><DT
+>Default value:</DT
+><DD
 ><P
-></P
+>1</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
 ><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->   Default behavior is to deny service.
-  </TD
-></TR
-></TBODY
-></TABLE
+>    The web-based actions file editor is disabled.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
-></P
-><P
-> The syntax for an entry in the Access Control List is:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;ACTION&nbsp;&nbsp;&nbsp;&nbsp;SRC_ADDR[/SRC_MASKLEN]&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;DST_ADDR[/DST_MASKLEN]&nbsp;]<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Where the individual fields are:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
+>    For the time being, access to the editor can <I
 CLASS="EMPHASIS"
->ACTION</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<SPAN
+>not</I
+> be
+    controlled separately by <SPAN
 CLASS="QUOTE"
->"permit-access"</SPAN
->&nbsp;or&nbsp;<SPAN
-CLASS="QUOTE"
->"deny-access"</SPAN
-><br>
-<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->SRC_ADDR</I
->&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;client&nbsp;hostname&nbsp;or&nbsp;dotted&nbsp;IP&nbsp;address<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->SRC_MASKLEN</I
->&nbsp;=&nbsp;number&nbsp;of&nbsp;bits&nbsp;in&nbsp;the&nbsp;subnet&nbsp;mask&nbsp;for&nbsp;the&nbsp;source<br>
-<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->DST_ADDR</I
->&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;server&nbsp;or&nbsp;forwarder&nbsp;hostname&nbsp;or&nbsp;dotted&nbsp;IP&nbsp;address<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->DST_MASKLEN</I
->&nbsp;=&nbsp;number&nbsp;of&nbsp;bits&nbsp;in&nbsp;the&nbsp;subnet&nbsp;mask&nbsp;for&nbsp;the&nbsp;target<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> 
- The field separator (FS) is whitespace (space or tab).</P
-><P
-> IMPORTANT NOTE: If <SPAN
+>"ACLs"</SPAN
+> or HTTP authentication,
+    so that everybody who can access <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is using a
- forwarder (see below) or a gateway for a particular destination URL, the
- <TT
+> (see
+    <SPAN
+CLASS="QUOTE"
+>"ACLs"</SPAN
+> and <TT
 CLASS="LITERAL"
->DST_ADDR</TT
-> that is examined is the address of the forwarder
- or the gateway and <I
+>listen-address</TT
+> above) can
+    modify its configuration for all users. So this option is <I
+CLASS="EMPHASIS"
+>not
+    recommended</I
+> for multi-user environments with untrusted users.
+   </P
+><P
+>    Note that you must have compiled <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with
+    support for this feature, otherwise this option has no effect. 
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN909"
+>5.3.4.5. ACLs: permit-access and deny-access</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Who can access what.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>src_addr</I
+></TT
+>[/<TT
+CLASS="REPLACEABLE"
+><I
+>src_masklen</I
+></TT
+>]
+    [<TT
+CLASS="REPLACEABLE"
+><I
+>dst_addr</I
+></TT
+>[/<TT
+CLASS="REPLACEABLE"
+><I
+>dst_masklen</I
+></TT
+>]]
+   </P
+><P
+>    Where <TT
+CLASS="REPLACEABLE"
+><I
+>src_addr</I
+></TT
+> and 
+   <TT
+CLASS="REPLACEABLE"
+><I
+>dst_addr</I
+></TT
+> are IP addresses in dotted decimal notation or valid
+    DNS names, and <TT
+CLASS="REPLACEABLE"
+><I
+>src_masklen</I
+></TT
+> and
+    <TT
+CLASS="REPLACEABLE"
+><I
+>dst_masklen</I
+></TT
+> are subnet masks in CIDR notation, i.e. integer
+    values from 2 to 30 representing the length (in bits) of the network address. The masks and the whole
+    destination part are optional.
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Don't restrict access further than implied by <TT
+CLASS="LITERAL"
+>listen-address</TT
+>
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Access controls are included at the request of ISPs and systems
+    administrators, and <I
+CLASS="EMPHASIS"
+>are not usually needed by individual users</I
+>.
+    For a typical home user, it will normally suffice to ensure that 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> only listens on the localhost or internal (home)
+    network address by means of the <TT
+CLASS="LITERAL"
+>listen-address</TT
+> option.
+   </P
+><P
+>    Please see the warnings in the FAQ that this proxy is not intended to be a substitute
+    for a firewall or to encourage anyone to defer addressing basic security
+    weaknesses.
+   </P
+><P
+>    Multiple ACL lines are OK.
+    If any ACLs are specified, then the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    talks only to IP addresses that match at least one <TT
+CLASS="LITERAL"
+>permit-access</TT
+> line
+    and don't match any subsequent <TT
+CLASS="LITERAL"
+>deny-access</TT
+> line. In other words, the
+    last match wins, with the default being <TT
+CLASS="LITERAL"
+>deny-access</TT
+>.
+   </P
+><P
+>    If <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is using a forwarder (see <TT
+CLASS="LITERAL"
+>forward</TT
+> below)
+    for a particular destination URL, the <TT
+CLASS="REPLACEABLE"
+><I
+>dst_addr</I
+></TT
+>
+    that is examined is the address of the forwarder and <I
 CLASS="EMPHASIS"
 >NOT</I
-> the address of the ultimate
- target. This is necessary because it may be impossible for the local
- <SPAN
+> the address
+    of the ultimate target. This is necessary because it may be impossible for the local
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> to determine the address of the
- ultimate target (that's often what gateways are used for).</P
+> to determine the IP address of the
+    ultimate target (that's often what gateways are used for).
+   </P
 ><P
-> Here are a few examples to show how the ACL features work:</P
+>    You should prefer using IP addresses over DNS names, because the address lookups take
+    time. All DNS names must resolve! You can <I
+CLASS="EMPHASIS"
+>not</I
+> use domain patterns
+    like <SPAN
+CLASS="QUOTE"
+>"*.org"</SPAN
+> or partial domain names. If a DNS name resolves to multiple
+    IP addresses, only the first one is used.
+   </P
 ><P
-> <SPAN
+>    Denying access to particular sites by ACL may have undesired side effects
+    if the site in question is hosted on a machine which also hosts other sites.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    Explicitly define the default behavior if no ACL and
+    <TT
+CLASS="LITERAL"
+>listen-address</TT
+> are set: <SPAN
 CLASS="QUOTE"
 >"localhost"</SPAN
-> is OK -- no DST_ADDR implies that
- <I
+>
+    is OK. The absence of a <TT
+CLASS="REPLACEABLE"
+><I
+>dst_addr</I
+></TT
+> implies that
+    <I
 CLASS="EMPHASIS"
->ALL</I
-> destination addresses are OK:</P
+>all</I
+> destination addresses are OK:
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->permit-access  localhost</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  permit-access  localhost
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    Allow any host on the same class C subnet as www.privoxy.org access to
+    nothing but www.example.com:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  permit-access  www.privoxy.org/24 www.example.com/32
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
+    with the exception that 192.168.45.73 may not access www.dirty-stuff.example.com:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  permit-access  192.168.45.64/26
+  deny-access    192.168.45.73    www.dirty-stuff.example.com
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN978"
+>5.3.4.6. buffer-limit</A
+></H4
+><P
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> A silly example to illustrate permitting any host on the class-C subnet with
- <SPAN
+>    Maximum size of the buffer for content filtering.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Size in Kbytes</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>4096</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Use a 4MB (4096 KB) limit.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    For content filtering, i.e. the <TT
+CLASS="LITERAL"
+>+filter</TT
+> and
+    <TT
+CLASS="LITERAL"
+>+deanimate-gif</TT
+> actions, it is necessary that 
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> to go anywhere:</P
+> buffers the entire document body.
+    This can be potentially dangerous, since a server could just keep sending
+    data indefinitely and wait for your RAM to exhaust -- with nasty consequences.
+    Hence this option.
+   </P
 ><P
-> <TT
+>    When a document buffer size reaches the <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->permit-access    www.privoxy.com/24</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Except deny one particular IP address from using it at all:</P
-><P
-> <TT
+>buffer-limit</TT
+>, it is
+    flushed to the client unfiltered and no further attempt to
+    filter the rest of the document is made. Remember that there may be multiple threads
+    running, which might require up to <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>buffer-limit</TT
+> Kbytes
+    <I
 CLASS="EMPHASIS"
->deny-access      ident.privoxy.com</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> You can also specify an explicit network address and subnet mask.
- Explicit addresses do not have to be resolved to be used.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->permit-access    207.153.200.0/24</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> A subnet mask of 0 matches anything, so the next line permits everyone.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->permit-access    0.0.0.0/0</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Note, you <I
-CLASS="EMPHASIS"
->cannot</I
-> say:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->permit-access    .org</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> to allow all *.org domains. Every IP address listed must resolve fully.</P
-><P
-> An ISP may want to provide a <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> that is
- accessible by <SPAN
+>each</I
+>, unless you have enabled <SPAN
 CLASS="QUOTE"
->"the world"</SPAN
-> and yet restrict use of some of their
- private content to hosts on its internal network (i.e. its own subscribers).
- Say, for instance the ISP owns the Class-B IP address block 123.124.0.0 (a 16
- bit netmask). This is how they could do it:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->permit-access 0.0.0.0/0   0.0.0.0/0</I
->&nbsp;&nbsp;&nbsp;#&nbsp;other&nbsp;clients&nbsp;can&nbsp;go&nbsp;anywhere&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;with&nbsp;the&nbsp;following&nbsp;exceptions:<br>
-&nbsp;<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->deny-access</I
->&nbsp;&nbsp;&nbsp;0.0.0.0/0&nbsp;&nbsp;&nbsp;123.124.0.0/16&nbsp;#&nbsp;block&nbsp;all&nbsp;external&nbsp;requests&nbsp;for<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;sites&nbsp;on&nbsp;the&nbsp;ISP's&nbsp;network<br>
-<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->permit 0.0.0.0/0   www.my_isp.com</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;except&nbsp;for&nbsp;the&nbsp;ISP's&nbsp;main&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;web&nbsp;site<br>
-<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->permit 123.124.0.0/16 0.0.0.0/0</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;the&nbsp;ISP's&nbsp;clients&nbsp;can&nbsp;go&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;anywhere<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> Note that if some hostnames are listed with multiple IP addresses, 
- the primary value returned by DNS (via gethostbyname()) is used. Default:
- Anyone can access the proxy.</P
+>"single-threaded"</SPAN
+>
+    above.
+   </P
+></DD
+></DL
+></DIV
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT3"
@@ -1472,303 +2089,454 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FORWARDING"
->5.3.4. Forwarding</A
+>5.3.5. Forwarding</A
 ></H3
 ><P
-> This feature allows chaining of HTTP requests via multiple proxies.
+> This feature allows routing of HTTP requests through a chain of
+ multiple proxies.
  It can be used to better protect privacy and confidentiality when
  accessing specific domains by routing requests to those domains
- to a special purpose filtering proxy such as lpwa.com. Or to use 
- a caching proxy to speed up browsing.</P
-><P
-> It can also be used in an environment with multiple networks to route
- requests via multiple gateways allowing transparent access to multiple
- networks without having to modify browser configurations.</P
+ through an anonymous public proxy (see e.g. <A
+HREF="http://www.multiproxy.org/anon_list.htm"
+TARGET="_top"
+>http://www.multiproxy.org/anon_list.htm</A
+>)
+ Or to use a caching proxy to speed up browsing. Or chaining to a parent
+ proxy may be necessary because the machine that <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ runs on has no direct Internet access.</P
 ><P
 > Also specified here are SOCKS proxies. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
- SOCKS 4 and SOCKS 4A. The difference is that SOCKS 4A will resolve the target
- hostname using DNS on the SOCKS server, not our local DNS client.</P
+ supports the SOCKS 4 and SOCKS 4A protocols.</P
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN1016"
+>5.3.5.1. forward</A
+></H4
 ><P
-> The syntax of each line is:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->forward target_domain[:port] http_proxy_host[:port]</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward-socks4  target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> If http_proxy_host is <SPAN
+>    To which parent HTTP proxy specific requests should be routed.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>target_domain</I
+></TT
+>[:<TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+>]
+    <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+>[/<TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+>]
+   </P
+><P
+>    Where <TT
+CLASS="REPLACEABLE"
+><I
+>target_domain</I
+></TT
+> is a domain name pattern (see the
+    chapter on domain matching in the actions file),
+    <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+> is the address of the parent HTTP proxy
+    as an IP addresses in dotted decimal notation or as a valid DNS name (or <SPAN
 CLASS="QUOTE"
 >"."</SPAN
->, then requests are not forwarded to a
- HTTP proxy but are made directly to the web servers.</P
+> to denote
+    <SPAN
+CLASS="QUOTE"
+>"no forwarding"</SPAN
+>, and the optional 
+    <TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+> parameters are TCP ports, i.e. integer
+    values from 1 to 64535
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
 ><P
-> Lines are checked in sequence, and the last match wins.</P
-><P
-> There is an implicit line equivalent to the following, which specifies that
- anything not finding a match on the list is to go out without forwarding
- or gateway protocol, like so:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+><I
 CLASS="EMPHASIS"
->forward   .*   .       </I
->#&nbsp;implicit<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>Unset</I
 ></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
 ><P
-> In the following common configuration, everything goes to Lucent's LPWA,
- except SSL on port 443 (which it doesn't handle):</P
+>    Don't use parent HTTP proxies.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->forward   .*     lpwa.com:8000</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward   :443   .</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> 
- Some users have reported difficulties related to LPWA's use of
- <SPAN
+>    If <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+> is <SPAN
 CLASS="QUOTE"
 >"."</SPAN
-> as the last element of the domain, and have said that this
- can be fixed with this:</P
+>, then requests are not
+    forwarded to another HTTP proxy but are made directly to the web servers.
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->forward   lpwa.  lpwa.com:8000</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>    Multiple lines are OK, they are checked in sequence, and the last match wins.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    Everything goes to an example anonymizing proxy, except SSL on port 443 (which it doesn't handle):
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward   .*     anon-proxy.example.org:8080
+  forward   :443   .
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    Everything goes to our example ISP's caching proxy, except for requests
+    to that ISP's sites:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward   .*.                caching-proxy.example-isp.net:8000
+  forward   .example-isp.net   .
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN1062"
+>5.3.5.2. forward-socks4 and forward-socks4a</A
+></H4
+><P
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
 ><P
-> (NOTE: the syntax for specifying target_domain has changed since the
- previous paragraph was written -- it will not work now.  More information
- is welcome.)</P
+>    Through which SOCKS proxy (and to which parent HTTP proxy) specific requests should be routed.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
 ><P
-> In this fictitious example, everything goes via an ISP's caching proxy,
- except requests to that ISP:</P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>target_domain</I
+></TT
+>[:<TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+>]
+    <TT
+CLASS="REPLACEABLE"
+><I
+>socks_proxy</I
+></TT
+>[/<TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+>]
+    <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+>[/<TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+>]
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
+>    Where <TT
+CLASS="REPLACEABLE"
+><I
+>target_domain</I
+></TT
+> is a domain name pattern (see the
+    chapter on domain matching in the actions file),
+    <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+> and <TT
+CLASS="REPLACEABLE"
+><I
+>socks_proxy</I
+></TT
+>
+    are IP addresses in dotted decimal notation or valid DNS names (<TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+>
+    may be <SPAN
+CLASS="QUOTE"
+>"."</SPAN
+> to denote <SPAN
+CLASS="QUOTE"
+>"no HTTP forwarding"</SPAN
+>), and the optional 
+    <TT
+CLASS="REPLACEABLE"
+><I
+>port</I
+></TT
+> parameters are TCP ports, i.e. integer values from 1 to 64535
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><I
 CLASS="EMPHASIS"
->forward    .*         caching.myisp.net:8000</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward    myisp.net  .</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+>Unset</I
 ></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
 ><P
-> For the @home network, we're told the forwarding configuration is this:</P
+>    Don't use SOCKS proxies.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
-> <TT
+>    Multiple lines are OK, they are checked in sequence, and the last match wins.
+   </P
+><P
+>    The difference between <TT
 CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->forward    .*    proxy:8080</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
+>forward-socks4</TT
+> and <TT
+CLASS="LITERAL"
+>forward-socks4a</TT
+>
+    is that in the SOCKS 4A protocol, the DNS resolution of the target hostname happens on the SOCKS
+    server, while in SOCKS 4 it happens locally.
+   </P
 ><P
-> Also, we're told they insist on getting cookies and JavaScript, so you should 
- allow cookies from home.com. We consider JavaScript a potential security risk.
- Java need not be enabled.</P
+>    If <TT
+CLASS="REPLACEABLE"
+><I
+>http_parent</I
+></TT
+> is <SPAN
+CLASS="QUOTE"
+>"."</SPAN
+>, then requests are not
+    forwarded to another HTTP proxy but are made (HTTP-wise) directly to the web servers, albeit through
+    a SOCKS proxy.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
 ><P
-> In this example direct connections are made to all <SPAN
+>     From the company example.com, direct connections are made to all
+     <SPAN
 CLASS="QUOTE"
 >"internal"</SPAN
+> domains, but everything outbound goes through
+     their ISP's proxy by way of example.com's corporate SOCKS 4A gateway to
+     the Internet.
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward-socks4a   .*.            socks-gw.example.com:1080  www-cache.example-isp.net:8080
+  forward           .example.com   .
+    </PRE
+></TD
+></TR
+></TABLE
 >
- domains, but everything else goes through Lucent's LPWA by way of the
- company's SOCKS gateway to the Internet.</P
+   </P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
+>    A rule that uses a SOCKS 4 gateway for all destinations but no HTTP parent looks like this:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward-socks4   .*.            socks-gw.example.com:1080  .
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN1116"
+>5.3.5.3. Advanced Forwarding Examples</A
+></H4
+><P
+> If you have links to multiple ISPs that provide various special content 
+ only to their subscribers, you can configure multiple <SPAN
+CLASS="APPLICATION"
+>Privoxies</SPAN
+>
+ which have connections to the respective ISPs to act as forwarders to each other, so that
+ <I
 CLASS="EMPHASIS"
->forward-socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward    my_company.com  .</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
+>your</I
+> users can see the internal content of all ISPs.</P
 ><P
-> This is how you could set up a site that always uses SOCKS but no forwarders:</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->forward-socks4a   .*  .  firewall.my_company.com:1080</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
-><P
-> An advanced example for network administrators:</P
-><P
-> If you have links to multiple ISPs that provide various special content to
- their subscribers, you can configure forwarding to pass requests to the
- specific host that's connected to that ISP so that everybody can see all
- of the content on all of the ISPs.</P
-><P
-> This is a bit tricky, but here's an example:</P
-><P
-> host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
- isp-b.com. host-a can run a <SPAN
+> Assume that host-a has a PPP connection to isp-a.net. And host-b has a PPP connection to
+ isp-b.net. Both run <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> proxy with
- forwarding like this: </P
+>. Their forwarding
+ configuration can look like this:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->forward    .*         .</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward    isp-b.com  host-b:8118</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+> host-a:</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward    .*.         .
+  forward    .isp-b.net  host-b:8118
+ </PRE
+></TD
+></TR
+></TABLE
 ></P
 ><P
-> host-b can run a <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> proxy with forwarding
- like this: </P
+> host-b:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->forward    .*          .</I
-><br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward    isp-a.com   host-a:8118</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward    .*.         .
+  forward    .isp-a.net  host-a:8118
+ </PRE
+></TD
+></TR
+></TABLE
 ></P
 ><P
-> Now, <I
-CLASS="EMPHASIS"
->anyone</I
-> on the Internet (including users on host-a
- and host-b) can set their browser's proxy to <I
-CLASS="EMPHASIS"
->either</I
->
- host-a or host-b and be able to browse the content on isp-a or isp-b.</P
-><P
-> Here's another practical example, for University of Kent at
- Canterbury students with a network connection in their room, who
- need to use the University's Squid web cache.</P
-><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->forward  *. ssbcache.ukc.ac.uk:3128</I
->&nbsp;&nbsp;#&nbsp;Use&nbsp;the&nbsp;proxy,&nbsp;except&nbsp;for:<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  .ukc.ac.uk            .    </I
->&nbsp;#&nbsp;Anything&nbsp;on&nbsp;the&nbsp;same&nbsp;domain&nbsp;as&nbsp;us<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  *                     .    </I
->&nbsp;#&nbsp;Host&nbsp;with&nbsp;no&nbsp;domain&nbsp;specified<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  129.12.*.*            .    </I
->&nbsp;#&nbsp;A&nbsp;dotted&nbsp;IP&nbsp;on&nbsp;our&nbsp;/16&nbsp;network.<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  127.*.*.*             .    </I
->&nbsp;#&nbsp;Loopback&nbsp;address<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  localhost.localdomain .    </I
->&nbsp;#&nbsp;Loopback&nbsp;address<br>
-&nbsp;<I
-CLASS="EMPHASIS"
->forward  www.ukc.mirror.ac.uk  .    </I
->&nbsp;#&nbsp;Specific&nbsp;host<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
-></P
+> Now, your users can set their browser's proxy to use either
+ host-a or host-b and be able to browse the internal content
+ of both isp-a and isp-b.</P
 ><P
 > If you intend to chain <SPAN
 CLASS="APPLICATION"
@@ -1783,52 +2551,60 @@ CLASS="LITERAL"
 >browser -&#62; squid -&#62; privoxy</TT
 > is the recommended way. </P
 ><P
->Your squid configuration could then look like this (assuming that the IP
-address of the box is <TT
-CLASS="LITERAL"
->192.168.0.1</TT
-> ):</P
+> Assuming that <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and <SPAN
+CLASS="APPLICATION"
+>squid</SPAN
+>
+ run on the same box, your squid configuration could then look like this:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;#&nbsp;Define&nbsp;Privoxy&nbsp;as&nbsp;parent&nbsp;cache&nbsp;<br>
-&nbsp;&nbsp;<br>
-&nbsp;&nbsp;cache_peer&nbsp;192.168.0.1&nbsp;parent&nbsp;8118&nbsp;0&nbsp;no-query<br>
-<br>
-&nbsp;&nbsp;#&nbsp;don't&nbsp;listen&nbsp;to&nbsp;the&nbsp;whole&nbsp;world<br>
-&nbsp;&nbsp;http_port&nbsp;192.168.0.1:3128<br>
-<br>
-&nbsp;&nbsp;#&nbsp;define&nbsp;the&nbsp;local&nbsp;lan<br>
-&nbsp;&nbsp;acl&nbsp;mylocallan&nbsp;src&nbsp;192.168.0.1-192.168.0.5/255.255.255.255<br>
-<br>
-&nbsp;&nbsp;#&nbsp;grant&nbsp;access&nbsp;for&nbsp;http&nbsp;to&nbsp;local&nbsp;lan<br>
-&nbsp;&nbsp;http_access&nbsp;allow&nbsp;mylocallan<br>
-&nbsp;&nbsp;<br>
-&nbsp;&nbsp;#&nbsp;Define&nbsp;ACL&nbsp;for&nbsp;protocol&nbsp;FTP&nbsp;<br>
-&nbsp;&nbsp;acl&nbsp;FTP&nbsp;proto&nbsp;FTP&nbsp;<br>
-<br>
-&nbsp;&nbsp;#&nbsp;Do&nbsp;not&nbsp;forward&nbsp;ACL&nbsp;FTP&nbsp;to&nbsp;privoxy<br>
-&nbsp;&nbsp;always_direct&nbsp;allow&nbsp;FTP&nbsp;<br>
-<br>
-&nbsp;&nbsp;#&nbsp;Do&nbsp;not&nbsp;forward&nbsp;ACL&nbsp;CONNECT&nbsp;(https)&nbsp;to&nbsp;privoxy<br>
-&nbsp;&nbsp;always_direct&nbsp;allow&nbsp;CONNECT&nbsp;<br>
-<br>
-&nbsp;&nbsp;#&nbsp;Forward&nbsp;the&nbsp;rest&nbsp;to&nbsp;privoxy<br>
-&nbsp;&nbsp;never_direct&nbsp;allow&nbsp;all&nbsp;<br>
-&nbsp;&nbsp;&nbsp;</P
-> 
- </TT
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  # Define Privoxy as parent proxy (without ICP) 
+  cache_peer 127.0.0.1 parent 8118 7 no-query 
+
+  # Define ACL for protocol FTP 
+  acl ftp proto FTP 
+
+  # Do not forward FTP requests to Privoxy
+  always_direct allow ftp 
+
+  # Forward all the rest to Privoxy
+  never_direct allow all 
+ </PRE
+></TD
+></TR
+></TABLE
 ></P
+><P
+> You would then need to change your browser's proxy settings to <SPAN
+CLASS="APPLICATION"
+>squid</SPAN
+>'s address and port.
+ Squid normally uses port 3128. If unsure consult <TT
+CLASS="LITERAL"
+>http_port</TT
+> in <TT
+CLASS="FILENAME"
+>squid.conf</TT
+>.</P
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN778"
->5.3.5. Windows GUI Options</A
+NAME="AEN1143"
+>5.3.6. Windows GUI Options</A
 ></H3
 ><P
 > <SPAN
@@ -2066,10 +2842,10 @@ NAME="ACTIONSFILE"
 >5.4. The Actions File</A
 ></H2
 ><P
-> The <SPAN
-CLASS="QUOTE"
->"default.action"</SPAN
-> file (formerly
+> The actions file (<TT
+CLASS="FILENAME"
+>default.action</TT
+>, formerly:
  <TT
 CLASS="FILENAME"
 >actionsfile</TT
@@ -2080,160 +2856,297 @@ CLASS="FILENAME"
  to define what actions <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> takes, and thus
- determines how ad images, cookies and various other aspects of HTTP content
- and transactions are handled. These can be accepted or rejected for all
- sites, or just those sites you choose. See below for a complete list of 
- actions. </P
+> takes for which
+ URLs, and thus determines how ad images, cookies and various other aspects
+ of HTTP content and transactions are handled on which sites (or even parts
+ thereof).</P
 ><P
 > 
  Anything you want can blocked, including ads, banners, or just some obnoxious
  URL that you would rather not see. Cookies can be accepted or rejected, or
- accepted only during the current browser session (i.e. not written to disk).
- Changes to <TT
-CLASS="FILENAME"
->default.action</TT
-> should be immediately visible
- to <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> without the need to restart.</P
+ accepted only during the current browser session (i.e. not written to disk),
+ content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
+ See below for a complete list of available actions.</P
 ><P
-> Note that some sites may misbehave, or possibly not work at all with some 
- actions. This may require some tinkering with the rules to get the most 
- mileage of <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> features, and still be 
- able to see and enjoy just what you want to. There is no general rule of
- thumb on these things. There just are too many variables, and sites are 
- always changing.&#13;</P
-><P
-> The easiest way to edit the <SPAN
+> An actions file typically has sections. At the top, <SPAN
 CLASS="QUOTE"
->"actions"</SPAN
-> file is with a browser by
- loading <A
-HREF="http://p.p/"
-TARGET="_top"
->http://p.p/</A
->, and then select
- <SPAN
-CLASS="QUOTE"
->"Edit Actions List"</SPAN
->. A text editor can also be used.</P
-><P
-> To determine which actions apply to a request, the URL of the request is
- compared to all patterns in this file. Every time it matches, the list of
- applicable actions for the URL is incrementally updated. You can trace
- this process by visiting <A
-HREF="http://p.p/show-url-info"
-TARGET="_top"
->http://p.p/show-url-info</A
->. </P
-><P
-> There are four types of lines in this file: comments (begin with a 
- <SPAN
-CLASS="QUOTE"
->"#"</SPAN
-> character), actions, aliases and patterns, all of which are
- explained below, as well as the configuration file syntax that 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> understands.&#13;</P
+>"aliases"</SPAN
+> are 
+ defined (discussed below), then the default set of rules which will apply 
+ universally to all sites and pages. And then below that is generally a lengthy 
+ set of exceptions to the defined universal policies.</P
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN880"
->5.4.1. URL Domain and Path Syntax</A
+NAME="AEN1234"
+>5.4.1. Finding the Right Mix</A
 ></H3
 ><P
-> Generally, a pattern has the form &#60;domain&#62;/&#60;path&#62;, where both the
- &#60;domain&#62; and &#60;path&#62; part are optional. If you only specify a
- domain part, the <SPAN
+> Note that some actions like cookie suppression or script disabling may
+ render some sites unusable, which rely on these techniques to work properly.
+ Finding the right mix of actions is not easy and certainly a matter of personal
+ taste. In general, it can be said that the more <SPAN
 CLASS="QUOTE"
->"/"</SPAN
-> can be left out:</P
-><P
-> <I
-CLASS="EMPHASIS"
->www.example.com</I
-> - is a domain only pattern and will match any request to
- <SPAN
-CLASS="QUOTE"
->"www.example.com"</SPAN
->.</P
-><P
-> <I
-CLASS="EMPHASIS"
->www.example.com/</I
-> - means exactly the same.</P
-><P
-> <I
-CLASS="EMPHASIS"
->www.example.com/index.html</I
-> - matches only the single
- document <SPAN
-CLASS="QUOTE"
->"/index.html"</SPAN
-> on <SPAN
-CLASS="QUOTE"
->"www.example.com"</SPAN
->.</P
-><P
-> <I
-CLASS="EMPHASIS"
->/index.html</I
-> - matches the document <SPAN
-CLASS="QUOTE"
->"/index.html"</SPAN
->, 
- regardless of the domain. So would match any page named <SPAN
-CLASS="QUOTE"
->"index.html"</SPAN
+>"aggressive"</SPAN
 >
- on any site.</P
-><P
-> <I
-CLASS="EMPHASIS"
->index.html</I
-> - matches nothing, since it would be
- interpreted as a domain name and there is no top-level domain called
- <SPAN
+ your default settings (in the top section of the actions file) are,
+ the more exceptions for <SPAN
 CLASS="QUOTE"
->".html"</SPAN
+>"trusted"</SPAN
+> sites you will have to
+ make later. If, for example, you want to kill popup windows per default, you'll
+ have to make exceptions from that rule for sites that you regularly use
+ and that require popups for actually useful content, like maybe your bank,
+ favorite shop, or newspaper.</P
+><P
+> We have tried to provide you with reasonable rules to start from in the
+ distribution actions file. But there is no general rule of thumb on these
+ things. There just are too many variables, and sites are constantly changing.
+ Sooner or later you will want to change the rules (and read this chapter).</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN1240"
+>5.4.2. How to Edit</A
+></H3
+><P
+> The easiest way to edit the <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> file is with a browser by
+ using our browser-based editor, which is available at <A
+HREF="http://config.privoxy.org/edit-actions"
+TARGET="_top"
+>http://config.privoxy.org/edit-actions</A
 >.</P
+><P
+> If you prefer plain text editing to GUIs, you can of course also directly edit the
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+> file.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN1247"
+>5.4.3. How Actions are Applied to URLs</A
+></H3
+><P
+> The actions file is divided into sections. There are special sections,
+ like the <SPAN
+CLASS="QUOTE"
+>"alias"</SPAN
+> sections which will be discussed later. For now
+ let's concentrate on regular sections: They have a heading line (often split
+ up to multiple lines for readability) which consist of a list of actions,
+ separated by whitespace and enclosed in curly braces. Below that, there
+ is a list of URL patterns, each on a separate line.</P
+><P
+> To determine which actions apply to a request, the URL of the request is
+ compared to all patterns in this file. Every time it matches, the list of
+ applicable actions for the URL is incrementally updated, using the heading
+ of the section in which the pattern is located. If multiple matches for
+ the same URL set the same action differently, the last match wins.</P
+><P
+> You can trace this process by visiting <A
+HREF="http://config.privoxy.org/show-url-info"
+TARGET="_top"
+>http://config.privoxy.org/show-url-info</A
+>.</P
+><P
+> More detail on this is provided in the Appendix, <A
+HREF="appendix.html#ACTIONSANAT"
+> Anatomy of an Action</A
+>.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN1256"
+>5.4.4. Patterns</A
+></H3
+><P
+> Generally, a pattern has the form <TT
+CLASS="LITERAL"
+>&#60;domain&#62;/&#60;path&#62;</TT
+>,
+ where both the <TT
+CLASS="LITERAL"
+>&#60;domain&#62;</TT
+> and <TT
+CLASS="LITERAL"
+>&#60;path&#62;</TT
+>
+ are optional. (This is why the pattern <TT
+CLASS="LITERAL"
+>/</TT
+> matches all URLs).</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>www.example.com/</TT
+></DT
+><DD
+><P
+>    is a domain-only pattern and will match any request to <TT
+CLASS="LITERAL"
+>www.example.com</TT
+>,
+    regardless of which document on that server is requested.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>www.example.com</TT
+></DT
+><DD
+><P
+>    means exactly the same. For domain-only patterns, the trailing <TT
+CLASS="LITERAL"
+>/</TT
+> may
+    be omitted.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>www.example.com/index.html</TT
+></DT
+><DD
+><P
+>    matches only the single document <TT
+CLASS="LITERAL"
+>/index.html</TT
+>
+    on <TT
+CLASS="LITERAL"
+>www.example.com</TT
+>.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>/index.html</TT
+></DT
+><DD
+><P
+>    matches the document <TT
+CLASS="LITERAL"
+>/index.html</TT
+>, regardless of the domain,
+    i.e. on <I
+CLASS="EMPHASIS"
+>any</I
+> web server.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>index.html</TT
+></DT
+><DD
+><P
+>    matches nothing, since it would be  interpreted as a domain name and
+    there is no top-level domain called <TT
+CLASS="LITERAL"
+>.html</TT
+>.
+   </P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN1296"
+>5.4.4.1. The Domain Pattern</A
+></H4
 ><P
 > The matching of the domain part offers some flexible options: if the
  domain starts or ends with a dot, it becomes unanchored at that end. 
  For example:</P
 ><P
-> <I
-CLASS="EMPHASIS"
->.example.com</I
-> - matches any domain or sub-domain that
- <I
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com</TT
+></DT
+><DD
+><P
+>    matches any domain that <I
 CLASS="EMPHASIS"
 >ENDS</I
-> in <SPAN
-CLASS="QUOTE"
->".example.com"</SPAN
->.</P
+> in
+    <TT
+CLASS="LITERAL"
+>.example.com</TT
+>
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>www.</TT
+></DT
+><DD
 ><P
-> <I
-CLASS="EMPHASIS"
->www.</I
-> - matches any domain that <I
+>    matches any domain that <I
 CLASS="EMPHASIS"
 >STARTS</I
 > with
- <SPAN
-CLASS="QUOTE"
->"www"</SPAN
->.</P
+    <TT
+CLASS="LITERAL"
+>www.</TT
+>
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.example.</TT
+></DT
+><DD
+><P
+>    matches any domain that <I
+CLASS="EMPHASIS"
+>CONTAINS</I
+> <TT
+CLASS="LITERAL"
+>.example.</TT
+>
+    (Correctly speaking: It matches any FQDN that contains <TT
+CLASS="LITERAL"
+>example</TT
+> as a domain.)
+   </P
+></DD
+></DL
+></DIV
 ><P
 > Additionally, there are wild-cards that you can use in the domain names
  themselves. They work pretty similar to shell wild-cards: <SPAN
@@ -2244,134 +3157,147 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"?"</SPAN
 > stands for
- any single character. And you can define character classes in square
- brackets and they can be freely mixed:</P
+ any single character, you can define character classes in square
+ brackets and all of that can be freely mixed:</P
 ><P
-> <I
-CLASS="EMPHASIS"
->ad*.example.com</I
-> - matches <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>ad*.example.com</TT
+></DT
+><DD
+><P
+>    matches <SPAN
 CLASS="QUOTE"
 >"adserver.example.com"</SPAN
 >, 
- <SPAN
+    <SPAN
 CLASS="QUOTE"
 >"ads.example.com"</SPAN
 >, etc but not <SPAN
 CLASS="QUOTE"
 >"sfads.example.com"</SPAN
->.</P
+>
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>*ad*.example.com</TT
+></DT
+><DD
 ><P
-> <I
-CLASS="EMPHASIS"
->*ad*.example.com</I
-> - matches all of the above, and then some.</P
+>    matches all of the above, and then some.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.?pix.com</TT
+></DT
+><DD
 ><P
-> <I
-CLASS="EMPHASIS"
->.?pix.com</I
-> - matches <SPAN
-CLASS="QUOTE"
->"www.ipix.com"</SPAN
+>    matches <TT
+CLASS="LITERAL"
+>www.ipix.com</TT
 >,
- <SPAN
-CLASS="QUOTE"
->"pictures.epix.com"</SPAN
->, <SPAN
-CLASS="QUOTE"
->"a.b.c.d.e.upix.com"</SPAN
->, etc. </P
+    <TT
+CLASS="LITERAL"
+>pictures.epix.com</TT
+>, <TT
+CLASS="LITERAL"
+>a.b.c.d.e.upix.com</TT
+> etc. 
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>www[1-9a-ez].example.c*</TT
+></DT
+><DD
 ><P
-> <I
-CLASS="EMPHASIS"
->www[1-9a-ez].example.com</I
-> - matches <SPAN
-CLASS="QUOTE"
->"www1.example.com"</SPAN
+>     matches <TT
+CLASS="LITERAL"
+>www1.example.com</TT
 >, 
- <SPAN
-CLASS="QUOTE"
->"www4.example.com"</SPAN
->, <SPAN
-CLASS="QUOTE"
->"wwwd.example.com"</SPAN
+     <TT
+CLASS="LITERAL"
+>www4.example.cc</TT
+>, <TT
+CLASS="LITERAL"
+>wwwd.example.cy</TT
 >, 
- <SPAN
-CLASS="QUOTE"
->"wwwz.example.com"</SPAN
->, etc., but <I
+     <TT
+CLASS="LITERAL"
+>wwwz.example.com</TT
+> etc., but <I
 CLASS="EMPHASIS"
 >not</I
 > 
- <SPAN
-CLASS="QUOTE"
->"wwww.example.com"</SPAN
->.</P
+     <TT
+CLASS="LITERAL"
+>wwww.example.com</TT
+>.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="AEN1358"
+>5.4.4.2. The Path Pattern</A
+></H4
 ><P
-> If <SPAN
+> <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> was compiled with
- <SPAN
-CLASS="QUOTE"
->"pcre"</SPAN
-> support (the default), Perl compatible regular expressions
- can be used. These are more flexible and powerful than other types 
- of <SPAN
-CLASS="QUOTE"
->"regular expressions"</SPAN
->. See the <TT
-CLASS="FILENAME"
->pcre/docs/</TT
-> directory or <SPAN
-CLASS="QUOTE"
->"man
- perlre"</SPAN
-> (also available on  <A
+> uses Perl compatible regular expressions
+ (through the <A
+HREF="http://www.pcre.org/"
+TARGET="_top"
+>PCRE</A
+> library) for
+ matching the path.</P
+><P
+> There is an <A
+HREF="appendix.html#REGEX"
+>Appendix</A
+> with a brief quick-start into regular
+ expressions, and full (very technical) documentation on PCRE regex syntax is available on-line
+ at <A
+HREF="http://www.pcre.org/man.txt"
+TARGET="_top"
+>http://www.pcre.org/man.txt</A
+>.
+ You might also find the Perl man page on regular expressions (<TT
+CLASS="LITERAL"
+>man perlre</TT
+>)
+ useful, which is available on-line at <A
 HREF="http://www.perldoc.com/perl5.6/pod/perlre.html"
 TARGET="_top"
 >http://www.perldoc.com/perl5.6/pod/perlre.html</A
->)
- for details. A brief discussion of regular expressions is in the 
- <A
-HREF="appendix.html#REGEX"
->Appendix</A
->. For instance:</P
+>.</P
 ><P
-> <I
-CLASS="EMPHASIS"
->/.*/advert[0-9]+\.jpe?g</I
->  - would match a URL from any
- domain, with any path that includes <SPAN
+> Note that the path pattern is automatically left-anchored at the <SPAN
 CLASS="QUOTE"
->"advert"</SPAN
-> followed
- immediately by one or more digits, then a <SPAN
+>"/"</SPAN
+>,
+ i.e. it matches as if it would start with a <SPAN
 CLASS="QUOTE"
->"."</SPAN
-> and ending in
- either <SPAN
-CLASS="QUOTE"
->"jpeg"</SPAN
-> or <SPAN
-CLASS="QUOTE"
->"jpg"</SPAN
->. So we match
- <SPAN
-CLASS="QUOTE"
->"example.com/ads/advert2.jpg"</SPAN
->, and
- <SPAN
-CLASS="QUOTE"
->"www.example.com/ads/banners/advert39.jpeg"</SPAN
->, but not
- <SPAN
-CLASS="QUOTE"
->"www.example.com/ads/banners/advert39.gif"</SPAN
-> (no gifs in the
- example pattern).</P
+>"^"</SPAN
+>.</P
 ><P
-> Please note that matching in the path is case
+> Please also note that matching in the path is case
  <I
 CLASS="EMPHASIS"
 >INSENSITIVE</I
@@ -2380,28 +3306,28 @@ CLASS="EMPHASIS"
  <SPAN
 CLASS="QUOTE"
 >"(?-i)"</SPAN
-> switch:</P
-><P
-> <I
-CLASS="EMPHASIS"
->www.example.com/(?-i)PaTtErN.*</I
-> - will match only
- documents whose path starts with <SPAN
-CLASS="QUOTE"
->"PaTtErN"</SPAN
+> switch:
+ <TT
+CLASS="LITERAL"
+>www.example.com/(?-i)PaTtErN.*</TT
+> will match only
+ documents whose path starts with <TT
+CLASS="LITERAL"
+>PaTtErN</TT
 > in
  <I
 CLASS="EMPHASIS"
 >exactly</I
 > this capitalization.</P
 ></DIV
+></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN956"
->5.4.2. Actions</A
+NAME="ACTIONS"
+>5.4.5. Actions</A
 ></H3
 ><P
 > Actions are enabled if preceded with a <SPAN
@@ -2411,9 +3337,28 @@ CLASS="QUOTE"
  preceded with a <SPAN
 CLASS="QUOTE"
 >"-"</SPAN
->. Actions are invoked by enclosing the 
- action name in curly braces (e.g. {+some_action}), followed by a list of 
- URLs to which the action applies. There are three classes of actions:</P
+>. So a <SPAN
+CLASS="QUOTE"
+>"+action"</SPAN
+> means 
+ <SPAN
+CLASS="QUOTE"
+>"do that action"</SPAN
+>, e.g. <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+> means please 
+ <SPAN
+CLASS="QUOTE"
+>"block the following URLs and/or patterns"</SPAN
+>. All actions are
+ disabled by default, until they are explicitly enabled somewhere in an actions
+ file.</P
+><P
+> 
+ Actions are invoked by enclosing the action name in curly braces (e.g.
+ {+some_action}), followed by a list of URLs (or patterns that match URLs) to
+ which the action applies. There are three classes of actions: </P
 ><P
 > <P
 ></P
@@ -2421,11 +3366,15 @@ CLASS="QUOTE"
 ><LI
 ><P
 >  
-   Boolean (e.g. <SPAN
+   Boolean, i.e the action can only be <SPAN
 CLASS="QUOTE"
->"+/-block"</SPAN
->):
-  </P
+>"on"</SPAN
+> or
+   <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+>. Examples: 
+ </P
 ><P
 >   <TT
 CLASS="LITERAL"
@@ -2448,10 +3397,12 @@ CLASS="EMPHASIS"
 ><LI
 ><P
 >  
-   parameterized (e.g. <SPAN
+   Parameterized, e.g. <SPAN
 CLASS="QUOTE"
->"+/-hide-user-agent"</SPAN
->):
+>"+/-hide-user-agent{ Mozilla 1.0 }"</SPAN
+>, 
+   where some value is required in order to enable this type of action.
+   Examples:
   </P
 ><P
 >   <TT
@@ -2468,7 +3419,10 @@ CLASS="QUOTE"
 &nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >{-name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;action<br>
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;action&nbsp;(<SPAN
+CLASS="QUOTE"
+>"parameter"</SPAN
+>)&nbsp;can&nbsp;be&nbsp;omitted<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
 > 
    </TT
@@ -2478,13 +3432,16 @@ CLASS="EMPHASIS"
 ><LI
 ><P
 >  
-   Multi-value (e.g. <SPAN
+  
+   Multi-value, e.g. <SPAN
 CLASS="QUOTE"
 >"{+/-add-header{Name: value}}"</SPAN
->, <SPAN
+> ot
+   <SPAN
 CLASS="QUOTE"
 >"{+/-wafer{name=value}}"</SPAN
->):
+>), where some value needs to be defined
+   in addition to simply enabling the actino. Examples:
   </P
 ><P
 >   <TT
@@ -2493,22 +3450,28 @@ CLASS="LITERAL"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+name{param}}</I
->&nbsp;&nbsp;&nbsp;#&nbsp;enable&nbsp;action&nbsp;and&nbsp;add&nbsp;parameter&nbsp;<SPAN
+>{+name{param=value}}</I
+>&nbsp;&nbsp;&nbsp;#&nbsp;enable&nbsp;action&nbsp;and&nbsp;set&nbsp;<SPAN
 CLASS="QUOTE"
 >"param"</SPAN
+>&nbsp;to&nbsp;<SPAN
+CLASS="QUOTE"
+>"value"</SPAN
 ><br>
 &nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{-name{param}}</I
+>{-name{param=value}}</I
 >&nbsp;&nbsp;&nbsp;#&nbsp;remove&nbsp;the&nbsp;parameter&nbsp;<SPAN
 CLASS="QUOTE"
 >"param"</SPAN
-><br>
+>&nbsp;completely<br>
 &nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >{-name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;this&nbsp;action&nbsp;totally<br>
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;this&nbsp;action&nbsp;totally&nbsp;and&nbsp;remove&nbsp;<SPAN
+CLASS="APPLICATION"
+>param</SPAN
+>&nbsp;too<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
 > 
    </TT
@@ -2546,225 +3509,483 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"actions"</SPAN
 > are:</P
-><P
-> <P
-></P
-><UL
-><LI
-><P
->  
-   Add the specified HTTP header, which is not checked for validity.
-   You may specify this many times to specify many different headers:
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="ADD-HEADER"
+>5.4.5.1. <I
 CLASS="EMPHASIS"
 >+add-header{Name: value}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
 ><P
->  
-   Block this URL totally. In a default installation, a <SPAN
-CLASS="QUOTE"
->"blocked"</SPAN
->
-   URL will result in bright red banner that says <SPAN
-CLASS="QUOTE"
->"BLOCKED"</SPAN
->, 
-   with a reason why it is being blocked, and an option to see it anyway.
-   The page displayed for this is the <SPAN
-CLASS="QUOTE"
->"blocked"</SPAN
-> template 
-   file.
-  </P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>Multi-value.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Send a user defined HTTP header to the web server.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    Any value is possible. Validity of the defined HTTP headers is not checked.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+add-header{X-User-Tracking: sucks}}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This action may be specified multiple times, in order to define multiple 
+    headers. This is rarely needed for the typical user. If you don't know what 
+    <SPAN
+CLASS="QUOTE"
+>"HTTP headers"</SPAN
+> are, you definitely don't need to worry about this 
+    one.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="BLOCK"
+>5.4.5.2. <I
 CLASS="EMPHASIS"
 >+block</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
 ><P
->  
-   De-animate all animated GIF images, i.e. reduce them to their last frame.
-   This will also shrink the images considerably (in bytes, not pixels!). If
-   the option <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Used to block a URL from reaching your browser. The URL may be 
+    anything, but is typically used to block ads or other obnoxious 
+    content.    
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>N/A</P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+block}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.ads.r.us</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will display its 
+    special <SPAN
+CLASS="QUOTE"
+>"BLOCKED"</SPAN
+> page if a URL matches one of the 
+    blocked patterns. If there is sufficient space, a large red 
+    banner will appear with a friendly message about why the page 
+    was blocked, and a way to go there anyway. If there is insufficient 
+    space a smaller blocked page will appear without the red banner.
+    One exception is if the URL matches both <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+> 
+    and <SPAN
+CLASS="QUOTE"
+>"+image"</SPAN
+>, then it can be handled by 
+    <SPAN
+CLASS="QUOTE"
+>"+image-blocker"</SPAN
+> (see below).
+   </P
+><P
+>    The <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+> action can also perform some of the 
+    same functionality as <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+>, but by virtue of very 
+    different programming techniques, and is typically used for different 
+    reasons.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="DEANIMATE-GIFS"
+>5.4.5.3. <I
+CLASS="EMPHASIS"
+>+deanimate-gifs</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    To stop those annoying, distracting animated GIF images.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    <SPAN
+CLASS="QUOTE"
+>"last"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"first"</SPAN
+>
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+deanimate-gifs{last}}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    De-animate all animated GIF images, i.e. reduce them to their last frame.
+    This will also shrink the images considerably (in bytes, not pixels!). If
+    the option <SPAN
 CLASS="QUOTE"
 >"first"</SPAN
 > is given, the first frame of the animation
-   is used as the replacement. If <SPAN
+    is used as the replacement. If <SPAN
 CLASS="QUOTE"
 >"last"</SPAN
-> is given, the last frame
-   of the animation is used instead, which probably makes more sense for most
-   banner animations, but also has the risk of not showing the entire last
-   frame (if it is only a delta to an earlier frame).
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+> is given, the last
+    frame of the animation is used instead, which probably makes more sense for
+    most banner animations, but also has the risk of not showing the entire
+    last frame (if it is only a delta to an earlier frame).
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="DOWNGRADE"
+>5.4.5.4. <I
 CLASS="EMPHASIS"
->+deanimate-gifs{last}</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+deanimate-gifs{first}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>+downgrade</I
+></A
+></H4
 ><P
->   <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    <SPAN
 CLASS="QUOTE"
 >"+downgrade"</SPAN
 > will downgrade HTTP/1.1 client requests to
-   HTTP/1.0 and downgrade the responses as well. Use this action for servers
-   that use HTTP/1.1 protocol features that
-   <SPAN
+    HTTP/1.0 and downgrade the responses as well.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+downgrade}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Use this action for servers that use HTTP/1.1 protocol features that
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> doesn't handle well yet. HTTP/1.1 
-   is only partially implemented. Default is not to downgrade requests.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+> doesn't handle well yet. HTTP/1.1 is
+    only partially implemented. Default is not to downgrade requests. This is
+    an infrequently needed action, and is used to help with problem sites only.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="FAST-REDIRECTS"
+>5.4.5.5. <I
 CLASS="EMPHASIS"
->+downgrade</I
+>+fast-redirects</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    The <SPAN
+CLASS="QUOTE"
+>"+fast-redirects"</SPAN
+> action enables interception of 
+    <SPAN
+CLASS="QUOTE"
+>"redirect"</SPAN
+> requests from one server to another, which 
+    are used to track users.<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can cut off
+    all but the last valid URL in redirect request and send a local redirect
+    back to your browser without contacting the intermediate site(s).
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+fast-redirects}</I
 ><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
 >  
-   Many sites, like yahoo.com, don't just link to other sites. Instead, they
-   will link to some script on their own server, giving the destination as a
-   parameter, which will then redirect you to the final target. URLs resulting
-   from this scheme typically look like:
-   <I
+    Many sites, like yahoo.com, don't just link to other sites. Instead, they
+    will link to some script on their own server, giving the destination as a
+    parameter, which will then redirect you to the final target. URLs
+    resulting from this scheme typically look like:
+    <I
 CLASS="EMPHASIS"
 >http://some.place/some_script?http://some.where-else</I
 >.
   </P
 ><P
->   Sometimes, there are even multiple consecutive redirects encoded in the
-   URL. These redirections via scripts make your web browsing more traceable,
-   since the server from which you follow such a link can see where you go to.
-   Apart from that, valuable bandwidth and time is wasted, while your browser
-   ask the server for one redirect after the other. Plus, it feeds the
-   advertisers.
-  </P
+>    Sometimes, there are even multiple consecutive redirects encoded in the
+    URL. These redirections via scripts make your web browsing more traceable,
+    since the server from which you follow such a link can see where you go
+    to. Apart from that, valuable bandwidth and time is wasted, while your
+    browser ask the server for one redirect after the other. Plus, it feeds
+    the advertisers.
+   </P
 ><P
->   The <SPAN
-CLASS="QUOTE"
->"+fast-redirects"</SPAN
-> option enables interception of these
-   types of requests by <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, who will cut off
-   all but the last valid URL in the request and send a local redirect back to
-   your browser without contacting the intermediate site(s).
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+fast-redirects</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
-><P
->  
-   Apply the filters in the <TT
-CLASS="LITERAL"
->section_header</TT
-> 
-   section of the <TT
-CLASS="FILENAME"
->default.filter</TT
-> file to the site(s).
-   <TT
-CLASS="FILENAME"
->default.filter</TT
-> sections are grouped according to like
-   functionality. <SPAN
-CLASS="APPLICATION"
->Filters</SPAN
-> can be used to 
-   re-write any of the raw page content. This is a potentially a 
-   very powerful feature!
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;<I
-CLASS="EMPHASIS"
->+filter{section_header}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-><P
->   
-   Filter sections that are pre-defined in the supplied
-   <TT
-CLASS="FILENAME"
->default.filter</TT
-> include:
-  </P
+>    This is a normally on feature, and often requires exceptions for sites that
+    are sensitive to defeating this mechanism.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
 ><A
-NAME="AEN1066"
+NAME="FILTER"
+>5.4.5.6. <I
+CLASS="EMPHASIS"
+>+filter</I
 ></A
-><BLOCKQUOTE
-CLASS="BLOCKQUOTE"
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Apply page filtering as defined by named sections of the
+    <TT
+CLASS="FILENAME"
+>default.filter</TT
+> file to the specified site(s). 
+    <SPAN
+CLASS="QUOTE"
+>"Filtering"</SPAN
+> can be any modification of the raw 
+    page content, including re-writing or deletion of content.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+> must include the name of one of the section identifiers
+    from <TT
+CLASS="FILENAME"
+>default.filter</TT
+> (or whatever
+    <I
+CLASS="EMPHASIS"
+>filterfile</I
+> is specified in <TT
+CLASS="FILENAME"
+>config</TT
+>).
+   </P
+></DD
+><DT
+>Example usage (from the current <TT
+CLASS="FILENAME"
+>default.filter</TT
+>):</DT
+><DD
 ><P
 ></P
 ><TABLE
@@ -2772,9 +3993,9 @@ BORDER="0"
 ><TBODY
 ><TR
 ><TD
->     <I
+>    <I
 CLASS="EMPHASIS"
->html-annoyances</I
+>+filter{html-annoyances}</I
 >:  Get rid of particularly annoying HTML abuse.
    </TD
 ></TR
@@ -2791,7 +4012,7 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->js-annoyances</I
+>+filter{js-annoyances}</I
 >:    Get rid of particularly annoying JavaScript abuse
    </TD
 ></TR
@@ -2808,7 +4029,24 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->no-poups</I
+>+filter{content-cookies}</I
+>:   Kill cookies that come in the HTML or JS content 
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <I
+CLASS="EMPHASIS"
+>+filter{popups}</I
 >:         Kill all popups in JS and HTML
    </TD
 ></TR
@@ -2825,8 +4063,8 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->frameset-borders</I
->: Give frames a border
+>+filter{frameset-borders}</I
+>: Give frames a border and make them resizable 
    </TD
 ></TR
 ></TBODY
@@ -2842,7 +4080,7 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->webbugs</I
+>+filter{webbugs}</I
 >:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
    </TD
 ></TR
@@ -2859,8 +4097,8 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->no-refresh</I
->:       Automatic refresh sucks on auto-dialup lines
+>+filter{refresh-tags}</I
+>:     Kill automatic refresh tags (for dial-on-demand setups) 
    </TD
 ></TR
 ></TBODY
@@ -2876,7 +4114,7 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->fun</I
+>+filter{fun}</I
 >:              Text replacements  for subversive browsing fun!
    </TD
 ></TR
@@ -2893,25 +4131,8 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->nimda</I
->:            Remove (virus) Nimda code.
-   </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->     <I
-CLASS="EMPHASIS"
->banners-by-size</I
->:  Kill banners by size
+>+filter{nimda}</I
+>:            Remove Nimda (virus) code.
    </TD
 ></TR
 ></TBODY
@@ -2927,7 +4148,44 @@ BORDER="0"
 ><TD
 >    <I
 CLASS="EMPHASIS"
->crude-parental</I
+>+filter{banners-by-size}</I
+>:  Kill banners by size (<I
+CLASS="EMPHASIS"
+>very</I
+> efficient!)
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <I
+CLASS="EMPHASIS"
+>+filter{shockwave-flash}</I
+>:   Kill embedded Shockwave Flash objects
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <I
+CLASS="EMPHASIS"
+>+filter{crude-parental}</I
 >:   Kill all web pages that contain the words "sex" or "warez"
    </TD
 ></TR
@@ -2935,519 +4193,1149 @@ CLASS="EMPHASIS"
 ></TABLE
 ><P
 ></P
-></BLOCKQUOTE
-></LI
-><LI
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
->  
-   Block any existing X-Forwarded-for header, and do not add a new one:
-  </P
+>    This is potentially a very powerful feature! And requires a knowledge 
+    of regular expressions if you want to <SPAN
+CLASS="QUOTE"
+>"roll your own"</SPAN
+>.
+    Filtering operates on a line by line basis.
+   </P
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>    Filtering requires buffering the page content, which may appear to
+    slow down page rendering since nothing is displayed until all content has
+    passed the filters. (It does not really take longer, but seems that way
+    since the page is not incrementally displayed.) This effect will be more
+    noticeable on slower connections.
+   </P
+><P
+>    Filtering can achieve some of the effects as the <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+> 
+    action, i.e. it can be used to block ads and banners. In the overall 
+    scheme of things, filtering is one of the last things <SPAN
+CLASS="QUOTE"
+>"Privoxy"</SPAN
+> 
+    does with a web page. So other actions are applied first.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="HIDE-FORWARDED"
+>5.4.5.7. <I
 CLASS="EMPHASIS"
 >+hide-forwarded</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
 ><P
->  
-   If the browser sends a <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Block any existing X-Forwarded-for HTTP header, and do not add a new one.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+hide-forwarded}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    It is fairly safe to leave this on. It does not seem to break many sites.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="HIDE-FROM"
+>5.4.5.8. <I
+CLASS="EMPHASIS"
+>+hide-from</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    To block the browser from sending your email address in a <SPAN
 CLASS="QUOTE"
 >"From:"</SPAN
-> header containing your e-mail
-   address, this either completely removes the header (<SPAN
+>
+    header.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    Keyword: <SPAN
 CLASS="QUOTE"
 >"block"</SPAN
->), or
-   changes it to the specified e-mail address.
-  </P
+>, or any user defined value.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+hide-from{block}</I
+>{+hide-from{block}}</I
 ><br>
-&nbsp;&nbsp;<I
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+hide-from{spam@sittingduck.xqq}</I
+>.example.com</I
 ><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
->  
-   Don't send the <SPAN
+>    The keyword <SPAN
+CLASS="QUOTE"
+>"block"</SPAN
+> will completely remove the header.
+    Alternately, you can specify any value you prefer to send to the web
+    server.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="HIDE-REFERER"
+>5.4.5.9. <I
+CLASS="EMPHASIS"
+>+hide-referer</I
+></A
+></H4
+><A
+NAME="HIDE-REFERRER"
+></A
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>     Don't send the <SPAN
 CLASS="QUOTE"
 >"Referer:"</SPAN
-> (sic) header to the web site.  You
-   can block it, forge a URL to the same server as the request (which is
-   preferred because some sites will not send images otherwise) or set it to a
-   constant, user defined string of your choice.
-  </P
+> (sic) HTTP header to the web site.
+     Or, alternately send a forged header instead.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>     Prevent the header from being sent with the keyword, <SPAN
+CLASS="QUOTE"
+>"block"</SPAN
+>.
+     Or, <SPAN
+CLASS="QUOTE"
+>"forge"</SPAN
+> a URL to one from the same server as the request.
+     Or, set to user defined value of your choice.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+hide-referer{block}</I
+>{+hide-referer{forge}}</I
 ><br>
-&nbsp;&nbsp;<I
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+hide-referer{forge}</I
+>.example.com</I
 ><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+hide-referer{http://nowhere.com}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="QUOTE"
+>"forge"</SPAN
+> is the preferred option here, since some servers will
+    not send images back otherwise.
+   </P
 ><P
 >  
-   Alternative spelling of <SPAN
+   <SPAN
+CLASS="QUOTE"
+>"+hide-referrer"</SPAN
+> is an alternate spelling of
+   <SPAN
 CLASS="QUOTE"
 >"+hide-referer"</SPAN
->.  It has the same
-   parameters, and can be freely mixed with, <SPAN
+>. It has the exact same parameters, and can be freely
+   mixed with, <SPAN
 CLASS="QUOTE"
 >"+hide-referer"</SPAN
->.
-   (<SPAN
+>. (<SPAN
 CLASS="QUOTE"
 >"referrer"</SPAN
-> is the correct English spelling, however the HTTP
-   specification has a bug - it requires it to be spelled <SPAN
+> is the
+   correct English spelling, however the HTTP specification has a bug - it
+   requires it to be spelled as <SPAN
 CLASS="QUOTE"
 >"referer"</SPAN
 >.) 
   </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="HIDE-USER-AGENT"
+>5.4.5.10. <I
 CLASS="EMPHASIS"
->+hide-referrer{...}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>+hide-user-agent</I
+></A
+></H4
 ><P
->  
-   Change the <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    To change the <SPAN
 CLASS="QUOTE"
 >"User-Agent:"</SPAN
-> header so web servers can't tell your
-   browser type.  Warning! This breaks many web sites.  Specify the
-   user-agent value you want. Example, pretend to be using Netscape on
-   Linux:
-  </P
+> header so web servers can't tell
+    your browser type. Who's business is it anyway?
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>    Any user defined string.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}</I
+>{+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}}</I
 ><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.msn.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
->  
-   Treat this URL as an image.  This only matters if it's also <SPAN
+>     Warning! This breaks many web sites that depend on this in order 
+     to determine how the target browser will respond to various 
+     requests. Use with caution.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="IMAGE"
+>5.4.5.11. <I
+CLASS="EMPHASIS"
+>+image</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    To define what <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> should treat 
+    automatically as an image.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+image}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>/.*\.(gif|jpg|jpeg|png|bmp|ico)</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This only has meaning if the URL (or pattern) also is
+    <SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
->ed,
-   in which case a <SPAN
+>ed, in which case a <SPAN
 CLASS="QUOTE"
 >"blocked"</SPAN
-> image can be sent rather than a HTML page.
-   See <SPAN
+> image can
+    be sent rather than a HTML page. (See <SPAN
 CLASS="QUOTE"
 >"+image-blocker{}"</SPAN
-> below for the control over what is actually sent.
-   If you want <I
+> below
+    for the control over what is actually sent.)    
+   </P
+><P
+>    There is little reason to change the default definition for this.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="IMAGE-BLOCKER"
+>5.4.5.12. <I
+CLASS="EMPHASIS"
+>+image-blocker</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Decide what to do with URLs that end up tagged with both <SPAN
+CLASS="QUOTE"
+>"{+block}"</SPAN
+>
+    and <SPAN
+CLASS="QUOTE"
+>"{+image}"</SPAN
+>, e.g an advertisement.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    There are four available options: <SPAN
+CLASS="QUOTE"
+>"-image-blocker"</SPAN
+> will send a HTML
+    <SPAN
+CLASS="QUOTE"
+>"blocked"</SPAN
+> page, usually resulting in a <SPAN
+CLASS="QUOTE"
+>"broken
+    image"</SPAN
+> icon. <SPAN
+CLASS="QUOTE"
+>"+image-blocker{blank}"</SPAN
+> will send a 1x1
+    transparent GIF image. <SPAN
+CLASS="QUOTE"
+>"+image-blocker{pattern}"</SPAN
+> will send a
+    checkerboard type pattern (the default). And finally,
+    <SPAN
+CLASS="QUOTE"
+>"+image-blocker{http://xyz.com}"</SPAN
+> will send a HTTP temporary
+    redirect to the specified image. This has the advantage of the icon being
+    being cached by the browser, which will speed up the display.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+image-blocker{blank}}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If you want <I
 CLASS="EMPHASIS"
 >invisible</I
-> ads, they should be defined as 
-   <I
+> ads, they need to be both
+    defined as <I
 CLASS="EMPHASIS"
 >images</I
 > and <I
 CLASS="EMPHASIS"
 >blocked</I
->. And also, 
-   <SPAN
+>.
+    And then, <SPAN
 CLASS="QUOTE"
 >"image-blocker"</SPAN
->  should be set to <SPAN
+> should be set to
+    <SPAN
 CLASS="QUOTE"
 >"blank"</SPAN
->. Note you 
-   cannot treat HTML pages as images in most cases. For instance, frames 
-   require an HTML page to display. So a frame that is an ad, cannot be 
-   treated as an image. Forcing an <SPAN
+> for invisibility. Note you cannot treat HTML pages as
+    images in most cases. For instance, frames require an HTML page to display.
+    So a frame that is an ad, cannot be treated as an image. Forcing an
+    <SPAN
 CLASS="QUOTE"
 >"image"</SPAN
-> in this 
-   situation just will not work.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+> in this situation just will not work.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="LIMIT-CONNECT"
+>5.4.5.13. <I
 CLASS="EMPHASIS"
->+image</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>+limit-connect</I
+></A
+></H4
 ><P
-> Decides what to do with URLs that end up tagged with <SPAN
-CLASS="QUOTE"
->"{+block
-  +image}"</SPAN
->, e.g an advertizement. There are five options.
-  <SPAN
-CLASS="QUOTE"
->"-image-blocker"</SPAN
-> will send a HTML <SPAN
-CLASS="QUOTE"
->"blocked"</SPAN
-> page,
-  usually resulting in a <SPAN
-CLASS="QUOTE"
->"broken image"</SPAN
-> icon.
-<SPAN
-CLASS="QUOTE"
->"+image-blocker{blank}"</SPAN
-> will send a 1x1 transparent GIF
-image. And finally, <SPAN
-CLASS="QUOTE"
->"+image-blocker{http://xyz.com}"</SPAN
-> will send a
-HTTP temporary redirect to the specified image. This has the advantage of the
-icon being being cached by the browser, which will speed up the display.
-<SPAN
-CLASS="QUOTE"
->"+image-blocker{pattern}"</SPAN
-> will send a checkboard type pattern
-  </P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+image-blocker{blank}</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+image-blocker{pattern}</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+image-blocker{http://p.p/send-banner}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>Parameterized.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
 ><P
-> 
-   By default (i.e. in the absence of a <SPAN
-CLASS="QUOTE"
->"+limit-connect"</SPAN
->
-   action), <SPAN
+>    By default, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will only allow CONNECT
-   requests to port 443, which is the standard port for https as a 
-   precaution.
-  </P
+> only allows HTTP CONNECT
+    requests to port 443 (the standard, secure HTTPS port). Use 
+    <SPAN
+CLASS="QUOTE"
+>"+limit-connect"</SPAN
+> to disable this altogether, or to allow 
+    more ports.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
 ><P
->   The CONNECT methods exists in HTTP to allow access to secure websites
-   (https:// URLs) through proxies. It works very simply: the proxy
-   connects to the server on the specified port, and then short-circuits
-   its connections to the client <I
+>    Any valid port number, or port number range.
+   </P
+></DD
+><DT
+>Example usages:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>+limit-connect{443}</I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;This&nbsp;is&nbsp;the&nbsp;default&nbsp;and&nbsp;need&nbsp;not&nbsp;be&nbsp;specified.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>+limit-connect{80,443}</I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Ports&nbsp;80&nbsp;and&nbsp;443&nbsp;are&nbsp;OK.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>+limit-connect{-3, 7, 20-100, 500-}</I
+>&nbsp;#&nbsp;Port&nbsp;less&nbsp;than&nbsp;3,&nbsp;7,&nbsp;20&nbsp;to&nbsp;100&nbsp;and&nbsp;above&nbsp;500&nbsp;are&nbsp;OK.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The CONNECT methods exists in HTTP to allow access to secure websites
+    (https:// URLs) through proxies. It works very simply: the proxy connects
+    to the server on the specified port, and then short-circuits its
+    connections to the client <I
 CLASS="EMPHASIS"
 >and</I
 > to the remote proxy.
-   This can be a big security hole, since CONNECT-enabled proxies can
-   be abused as TCP relays very easily.
+    This can be a big security hole, since CONNECT-enabled proxies can be
+    abused as TCP relays very easily.
   </P
 ><P
 > 
    If you want to allow CONNECT for more ports than this, or want to forbid
    CONNECT altogether, you can specify a comma separated list of ports and
    port ranges (the latter using dashes, with the minimum defaulting to 0 and
-   max to 65K):
+   max to 65K).
   </P
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>   If you don't know what any of this means, there probably is no reason to 
+   change this one.
+  </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="NO-COMPRESSION"
+>5.4.5.14. <I
+CLASS="EMPHASIS"
+>+no-compression</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Prevent the specified websites from compressing HTTP data.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+limit-connect{443}                 # This is the default and need no be specified.</I
+>{+no-compression}</I
 ><br>
-&nbsp;&nbsp;<I
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->+limit-connect{80,443}              # Ports 80 and 443 are OK.</I
+>.example.com</I
 ><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->                                    #and above 500 are OK.</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
 ><P
->   <SPAN
-CLASS="QUOTE"
->"+no-compression"</SPAN
-> prevents the website from compressing the
-   data. Some websites do this, which can be a problem for
-   <SPAN
+>    Some websites do this, which can be a problem for
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >, since <SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
 >,
-   <SPAN
+    <SPAN
 CLASS="QUOTE"
 >"+no-popup"</SPAN
 > and <SPAN
 CLASS="QUOTE"
 >"+gif-deanimate"</SPAN
-> will not work on
-   compressed data. This will slow down connections to those websites,
-   though. Default is <SPAN
+> will not work
+    on compressed data. This will slow down connections to those websites,
+    though. Default typically is to turn <SPAN
 CLASS="QUOTE"
 >"no-compression"</SPAN
-> is turned on.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+> on.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="NO-COOKIES-KEEP"
+>5.4.5.15. <I
 CLASS="EMPHASIS"
->+nocompression</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>+no-cookies-keep</I
+></A
+></H4
 ><P
->  
-   If the website sets cookies, <SPAN
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Allow cookies for the current browser session only.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+no-cookies-keep}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If websites set cookies, <SPAN
 CLASS="QUOTE"
 >"no-cookies-keep"</SPAN
 > will make sure
-   they are erased when you exit and restart your web browser. This makes
-   profiling cookies useless, but won't break sites which require cookies so
-   that you can log in for transactions. Default: on.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+no-cookies-keep</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
-><P
->  
-   Prevent the website from reading cookies:
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+    they are erased when you exit and restart your web browser. This makes
+    profiling cookies useless, but won't break sites which require cookies so
+    that you can log in for transactions. This is generally turned on for all 
+    sites. Sometimes referred to as <SPAN
+CLASS="QUOTE"
+>"session cookies"</SPAN
+>.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="NO-COOKIES-READ"
+>5.4.5.16. <I
 CLASS="EMPHASIS"
 >+no-cookies-read</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
 ><P
->  
-   Prevent the website from setting cookies:
-  </P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Explicitly prevent the web server from reading any cookies on your 
+    system.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+no-cookies-read}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Often used in conjunction with <SPAN
+CLASS="QUOTE"
+>"+no-cookies-set"</SPAN
+> to 
+    disable persistant cookies completely.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="NO-COOKIES-SET"
+>5.4.5.17. <I
 CLASS="EMPHASIS"
 >+no-cookies-set</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
 ><P
->  
-   Filter the website through a built-in filter to disable those obnoxious 
-   JavaScript pop-up windows via window.open(), etc. The two alternative
-   spellings are equivalent.
-  </P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
 ><P
->   <TT
-CLASS="LITERAL"
->    <P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Explicitly block the web server from sending cookies to your 
+    system.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+no-cookies-set}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Often used in conjunction with <SPAN
+CLASS="QUOTE"
+>"+no-cookies-read"</SPAN
+> to 
+    disable persistant cookies completely.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="NO-POPUP"
+>5.4.5.18. <I
 CLASS="EMPHASIS"
 >+no-popup</I
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+no-popups</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+></A
+></H4
+><A
+NAME="NO-POPUPS"
+></A
 ><P
->  
-   This action only applies if you are using a <TT
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Stop those annoying JavaScript pop-up windows! 
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+no-popup}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="QUOTE"
+>"+no-popup"</SPAN
+> uses a built in filter to disable pop-ups
+    that use the <TT
+CLASS="LITERAL"
+>window.open()</TT
+> function, etc.
+   </P
+><P
+>    An alternate spelling is <SPAN
+CLASS="QUOTE"
+>"+no-popups"</SPAN
+>, which is 
+    interchangeable.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="VANILLA-WAFER"
+>5.4.5.19. <I
+CLASS="EMPHASIS"
+>+vanilla-wafer</I
+></A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    Sends a cookie for every site stating that you do not accept any copyright
+    on cookies sent to you, and asking them not to track you.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+vanilla-wafer}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This action only applies if you are using a <TT
 CLASS="FILENAME"
 >jarfile</TT
 >
-   for saving cookies. It sends a cookie to every site stating that you do not
-   accept any copyright on cookies sent to you, and asking them not to track
-   you.  Of course, this is a (relatively) unique header they could use to
-   track you.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
+    for saving cookies. Of course, this is a (relatively) unique header and 
+    could be used to track you.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="WAFER"
+>5.4.5.20. <I
 CLASS="EMPHASIS"
->+vanilla-wafer</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-><LI
+>+wafer</I
+></A
+></H4
 ><P
->  
-   This allows you to add an arbitrary cookie. It can be specified multiple
-   times in order to add as many cookies as you like.
-  </P
-><P
->   <TT
-CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->+wafer{name=value}</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
->
-  </P
-></LI
-></UL
 ></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Type:</DT
+><DD
 ><P
-> The meaning of any of the above is reversed by preceding the action with a 
- <SPAN
+>Multi-value.</P
+></DD
+><DT
+>Typical uses:</DT
+><DD
+><P
+>    This allows you to send an arbitrary, user definable cookie.
+   </P
+></DD
+><DT
+>Possible values:</DT
+><DD
+><P
+>    User specified cookie name and corresponding value.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>{+wafer{name=value}}</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
+CLASS="EMPHASIS"
+>.example.com</I
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This can be specified multiple times in order to add as many cookies as you
+    like.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT4"
+><H3
+CLASS="SECT4"
+><A
+NAME="ACT-EXAMPLES"
+>5.4.5.21. Actions Examples</A
+></H3
+><P
+> Note that the meaning of any of the above examples is reversed by preceding
+ the action with a <SPAN
 CLASS="QUOTE"
 >"-"</SPAN
 >, in place of the <SPAN
 CLASS="QUOTE"
 >"+"</SPAN
->.</P
+>. Also, 
+ that some actions are turned on in the default section of the actions file, 
+ and require little to no additional configuration. These are just <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+>.
+ Some actions that are turned on the default section do typically require
+ exceptions to be listed in the lower sections of actions file.</P
 ><P
 > Some examples:</P
 ><P
@@ -3460,10 +5348,12 @@ CLASS="LITERALLAYOUT"
 >&nbsp;#&nbsp;Turn&nbsp;off&nbsp;all&nbsp;persistent&nbsp;cookies<br>
 &nbsp;{&nbsp;+no-cookies-read&nbsp;}<br>
 &nbsp;{&nbsp;+no-cookies-set&nbsp;}<br>
+&nbsp;<br>
 &nbsp;#&nbsp;Allow&nbsp;cookies&nbsp;for&nbsp;this&nbsp;browser&nbsp;session&nbsp;ONLY<br>
 &nbsp;{&nbsp;+no-cookies-keep&nbsp;}<br>
 <br>
 &nbsp;#&nbsp;Exceptions&nbsp;to&nbsp;the&nbsp;above,&nbsp;sites&nbsp;that&nbsp;benefit&nbsp;from&nbsp;persistent&nbsp;cookies<br>
+&nbsp;#&nbsp;that&nbsp;saved&nbsp;from&nbsp;one&nbsp;browser&nbsp;session&nbsp;to&nbsp;the&nbsp;next.<br>
 &nbsp;{&nbsp;-no-cookies-read&nbsp;}<br>
 &nbsp;{&nbsp;-no-cookies-set&nbsp;}<br>
 &nbsp;{&nbsp;-no-cookies-keep&nbsp;}<br>
@@ -3506,9 +5396,9 @@ CLASS="LITERALLAYOUT"
 > Turn on page filtering according to rules in the defined sections 
  of <TT
 CLASS="FILENAME"
->refilterfile</TT
+>default.filter</TT
 >, and make one exception for 
- sourceforge:
+ Sourceforge:
  </P
 ><P
 > <TT
@@ -3535,8 +5425,12 @@ CLASS="QUOTE"
  the <SPAN
 CLASS="QUOTE"
 >"blocked"</SPAN
-> banner). Many of these use regular expressions
- that will expand to match multiple URLs:</P
+> banner). Many of these use 
+ <A
+HREF="appendix.html#REGEX"
+>regular expressions</A
+> that will expand to match
+ multiple URLs: </P
 ><P
 > <TT
 CLASS="LITERAL"
@@ -3602,13 +5496,14 @@ HREF="appendix.html#ACTIONSANAT"
 >
  for a brief example on troubleshooting actions.</P
 ></DIV
+></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1278"
->5.4.3. Aliases</A
+NAME="AEN2110"
+>5.4.6. Aliases</A
 ></H3
 ><P
 > Custom <SPAN
@@ -3718,14 +5613,14 @@ CLASS="LITERALLAYOUT"
 &nbsp;.windowsupdate.microsoft.com<br>
 &nbsp;.nytimes.com<br>
 <br>
-&nbsp;#&nbsp;Shopping&nbsp;sites&nbsp;-&nbsp;still&nbsp;want&nbsp;to&nbsp;block&nbsp;ads.<br>
+&nbsp;#&nbsp;Shopping&nbsp;sites&nbsp;-&nbsp;but&nbsp;we&nbsp;still&nbsp;want&nbsp;to&nbsp;block&nbsp;ads.<br>
 &nbsp;{shop}<br>
 &nbsp;.quietpc.com<br>
 &nbsp;.worldpay.com&nbsp;&nbsp;&nbsp;#&nbsp;for&nbsp;quietpc.com<br>
 &nbsp;.jungle.com<br>
 &nbsp;.scan.co.uk<br>
 <br>
-&nbsp;#&nbsp;These&nbsp;shops&nbsp;require&nbsp;pop-ups<br>
+&nbsp;#&nbsp;These&nbsp;shops&nbsp;require&nbsp;pop-ups&nbsp;also&nbsp;<br>
 &nbsp;{shop&nbsp;-no-popups}<br>
 &nbsp;.dabs.com<br>
 &nbsp;.overclockers.co.uk<br>
@@ -3872,7 +5767,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1344"
+NAME="AEN2176"
 >5.6. Templates</A
 ></H2
 ><P

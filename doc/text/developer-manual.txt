@@ -2,25 +2,10 @@ Privoxy Developer Manual
 
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $
+$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
-
-Privoxy is a web proxy with advanced filtering capabilities for protecting
-privacy, filtering web page content, managing cookies, controlling access, and
-removing ads, banners, pop-ups and other obnoxious Internet junk. Privoxy has a
-very flexible configuration and can be customized to suit individual needs and
-tastes. Privoxy has application for both stand-alone systems and multi-user
-networks.
-
-Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
-originally written by Junkbusters Corporation, and was released as free
-open-source software under the GNU GPL. Stefan Waldherr made many improvements,
-and started the SourceForge project to continue development.
-
-Privoxy continues the Junkbuster tradition, but adds many refinements,
-enhancements and new features.
 
 You can find the latest version of the this manual at http://www.privoxy.org/
 developer-manual/. Please see the Contact section on how to contact the
@@ -32,105 +17,114 @@ Table of Contents
  
 1. Introduction
 3. Quickstart to Privoxy Development
-4. Documentation Guidelines
+4. The CVS Repository
    
-    4.1. Quickstart to Docbook and SGML
-    4.2. Privoxy Documentation Style
-    4.3. Privoxy Custom Entities
+    4.1. Access to CVS
+    4.2. CVS Commit Guideline
+    4.3. Discussing Changes First
    
-5. Coding Guidelines
+5. Documentation Guidelines
    
-    5.1. Introduction
-    5.2. Using Comments
+    5.1. Quickstart to Docbook and SGML
+    5.2. Privoxy Documentation Style
+    5.3. Privoxy Custom Entities
+   
+6. Coding Guidelines
+   
+    6.1. Introduction
+    6.2. Using Comments
        
-        5.2.1. Comment, Comment, Comment
-        5.2.2. Use blocks for comments
-        5.2.3. Keep Comments on their own line
-        5.2.4. Comment each logical step
-        5.2.5. Comment All Functions Thoroughly
-        5.2.6. Comment at the end of braces if the content is more than one
+        6.2.1. Comment, Comment, Comment
+        6.2.2. Use blocks for comments
+        6.2.3. Keep Comments on their own line
+        6.2.4. Comment each logical step
+        6.2.5. Comment All Functions Thoroughly
+        6.2.6. Comment at the end of braces if the content is more than one
             screen length
        
-    5.3. Naming Conventions
+    6.3. Naming Conventions
        
-        5.3.1. Variable Names
-        5.3.2. Function Names
-        5.3.3. Header file prototypes
-        5.3.4. Enumerations, and #defines
-        5.3.5. Constants
+        6.3.1. Variable Names
+        6.3.2. Function Names
+        6.3.3. Header file prototypes
+        6.3.4. Enumerations, and #defines
+        6.3.5. Constants
        
-    5.4. Using Space
+    6.4. Using Space
        
-        5.4.1. Put braces on a line by themselves.
-        5.4.2. ALL control statements should have a block
-        5.4.3. Do not belabor/blow-up boolean expressions
-        5.4.4. Use white space freely because it is free
-        5.4.5. Don't use white space around structure operators
-        5.4.6. Make the last brace of a function stand out
-        5.4.7. Use 3 character indentions
+        6.4.1. Put braces on a line by themselves.
+        6.4.2. ALL control statements should have a block
+        6.4.3. Do not belabor/blow-up boolean expressions
+        6.4.4. Use white space freely because it is free
+        6.4.5. Don't use white space around structure operators
+        6.4.6. Make the last brace of a function stand out
+        6.4.7. Use 3 character indentions
        
-    5.5. Initializing
+    6.5. Initializing
        
-        5.5.1. Initialize all variables
+        6.5.1. Initialize all variables
        
-    5.6. Functions
+    6.6. Functions
        
-        5.6.1. Name functions that return a boolean as a question.
-        5.6.2. Always specify a return type for a function.
-        5.6.3. Minimize function calls when iterating by using variables
-        5.6.4. Pass and Return by Const Reference
-        5.6.5. Pass and Return by Value
-        5.6.6. Names of include files
-        5.6.7. Provide multiple inclusion protection
-        5.6.8. Use `extern "C"` when appropriate
-        5.6.9. Where Possible, Use Forward Struct Declaration Instead of
+        6.6.1. Name functions that return a boolean as a question.
+        6.6.2. Always specify a return type for a function.
+        6.6.3. Minimize function calls when iterating by using variables
+        6.6.4. Pass and Return by Const Reference
+        6.6.5. Pass and Return by Value
+        6.6.6. Names of include files
+        6.6.7. Provide multiple inclusion protection
+        6.6.8. Use `extern "C"` when appropriate
+        6.6.9. Where Possible, Use Forward Struct Declaration Instead of
             Includes
        
-    5.7. General Coding Practices
+    6.7. General Coding Practices
        
-        5.7.1. Turn on warnings
-        5.7.2. Provide a default case for all switch statements
-        5.7.3. Try to avoid falling through cases in a switch statement.
-        5.7.4. Use 'long' or 'short' Instead of 'int'
-        5.7.5. Don't mix size_t and other types
-        5.7.6. Declare each variable and struct on its own line.
-        5.7.7. Use malloc/zalloc sparingly
-        5.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
+        6.7.1. Turn on warnings
+        6.7.2. Provide a default case for all switch statements
+        6.7.3. Try to avoid falling through cases in a switch statement.
+        6.7.4. Use 'long' or 'short' Instead of 'int'
+        6.7.5. Don't mix size_t and other types
+        6.7.6. Declare each variable and struct on its own line.
+        6.7.7. Use malloc/zalloc sparingly
+        6.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
             'free'
-        5.7.9. Add loaders to the `file_list' structure and in order
-        5.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
+        6.7.9. Add loaders to the `file_list' structure and in order
+        6.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
        
-    5.8. Addendum: Template for files and function comment blocks:
+    6.8. Addendum: Template for files and function comment blocks:
    
-6. Version Control Guidelines
 7. Testing Guidelines
    
     7.1. Testplan for releases
     7.2. Test reports
    
-8. Releasing a new version
+8. Releasing a New Version
    
     8.1. Before the Release
-    8.2. Update the webserver
-    8.3. SuSE or Red Hat
-    8.4. OS/2
-    8.5. Solaris
-    8.6. Windows
-    8.7. Debian
-    8.8. Mac OSX
-    8.9. FreeBSD
-    8.10. Tarball
-    8.11. HP-UX 11
-    8.12. Amiga OS
-    8.13. AIX
+    8.2. Building and Releasing the Packages
+       
+        8.2.1. Source Tarball
+        8.2.2. SuSE or Red Hat
+        8.2.3. OS/2
+        8.2.4. Solaris
+        8.2.5. Windows
+        8.2.6. Debian
+        8.2.7. Mac OSX
+        8.2.8. FreeBSD
+        8.2.9. HP-UX 11
+        8.2.10. Amiga OS
+        8.2.11. AIX
+       
+    8.3. After the Release
    
-9. Contacting the developers, Bug Reporting and Feature Requests
-10. Copyright and History
+9. Update the Webserver
+10. Contacting the developers, Bug Reporting and Feature Requests
+11. Copyright and History
    
-    10.1. Copyright
-    10.2. History
+    11.1. Copyright
+    11.2. History
    
-11. See also
+12. See also
 
 -------------------------------------------------------------------------------
 
@@ -152,25 +146,79 @@ porting, are all important jobs as well.
 You'll need an account on Sourceforge to support our development. Mail your ID
 to the list and wait until a project manager has added you.
 
-For the time being (read, this section is under construction), please note the
-following guidelines for changing stuff in the code. If it is
-
- 1. A bugfix / clean-up / cosmetic thing: shoot
-   
- 2. A new feature that can be turned off: shoot
-   
- 3. A clear improvement w/o side effects on other parts of the code: shoot
-   
- 4. A matter of taste: ask the list
-   
- 5. A major redesign of some part of the code: ask the list
-   
-Note that near a major public release, we get a bit more cautious - if unsure,
-it doesn't hurt to ask first.
+For the time being (read, this section is under construction), please refer to
+the extensive comments in the source code.
 
 -------------------------------------------------------------------------------
 
-4. Documentation Guidelines
+4. The CVS Repository
+
+If you intend to help us with programming, documentation or packaging you will
+need write access to our holy grail, the CVS repository. Please read this
+chapter completely before accessing via CVS.
+
+-------------------------------------------------------------------------------
+
+4.1. Access to CVS
+
+The project's CVS repository is hosted on SourceForge. Please refer to the
+chapters 6 and 7 in SF's site documentation for the technical access details
+for your operating system. For historical reasons, the CVS server is called
+cvs.ijbswa.sourceforge.net, the repository is called ijbswa, and the source
+tree module is called current.
+
+-------------------------------------------------------------------------------
+
+4.2. CVS Commit Guideline
+
+The source tree is the heart of every software project. Every effort must be
+made to ensure that it is readable, compilable and consistent at all times. We
+therefore ask anyone with CVS access to strictly adhere to the following
+guidelines:
+
+  * Never (read: never, ever) be tempted to commit that small change without
+    testing it thoroughly first. When we're close to a public release, ask a
+    fellow developer to review your changes.
+   
+  * Your commit message should give a concise overview of what you changed (no
+    big details) and why you changed it Just check previous messages for good
+    examples.
+   
+  * Don't use the same message on multiple files, unless it equally applies to
+    all those files.
+   
+  * If your changes span multiple files, and the code won't recompile unless
+    all changes are commited (e.g. when changing the signature of a function),
+    then commit all files one after another, without long delays in beween. If
+    necessary, prepare the commit messages in advance.
+   
+  * Before changing things on CVS, make sure that your changes are in line with
+    the team's general consensus on what should be done (see below).
+   
+-------------------------------------------------------------------------------
+
+4.3. Discussing Changes First
+
+We don't have a too formal policy on this, just use common sense. Hints: If it
+is..
+
+ 1. ..a bugfix / clean-up / cosmetic thing: shoot
+   
+ 2. ..a new feature that can be turned off: shoot
+   
+ 3. ..a clear improvement w/o side effects on other parts of the code: shoot
+   
+ 4. ..a matter of taste: ask the list
+   
+ 5. ..a major redesign of some part of the code: ask the list
+   
+Note that near a major public release, we get a bit more cautious - if unsure,
+it doesn't hurt to ask first. There is always the possibility to submit a patch
+to the patches tracker instead.
+
+-------------------------------------------------------------------------------
+
+5. Documentation Guidelines
 
 All formal documents are maintained in Docbook SGML and located in the doc/
 source/* directory. You will need Docbook, the Docbook DTD's and the Docbook
@@ -213,7 +261,7 @@ been updated (this is done just prior to a new release).
 
 -------------------------------------------------------------------------------
 
-4.1. Quickstart to Docbook and SGML
+5.1. Quickstart to Docbook and SGML
 
 If you are not familiar with SGML, it is a markup language similar to HTML.
 Actually, not a mark up language per se, but a language used to define markup
@@ -255,9 +303,12 @@ are some exceptions).
 
 Look at any of the existing docs for examples of all these and more.
 
+You might also find "Writing Documentation Using DocBook - A Crash Course"
+useful.
+
 -------------------------------------------------------------------------------
 
-4.2. Privoxy Documentation Style
+5.2. Privoxy Documentation Style
 
 It will be easier if everyone follows a similar writing style. This just makes
 it easier to read what someone else has written if it is all done in a similar
@@ -328,7 +379,7 @@ Here it is:
    
 -------------------------------------------------------------------------------
 
-4.3. Privoxy Custom Entities
+5.3. Privoxy Custom Entities
 
 Privoxy documentation is using a number of customized "entities" to facilitate
 documentation maintenance.
@@ -370,9 +421,9 @@ Read the source!
 
 -------------------------------------------------------------------------------
 
-5. Coding Guidelines
+6. Coding Guidelines
 
-5.1. Introduction
+6.1. Introduction
 
 This set of standards is designed to make our lives easier. It is developed
 with the simple goal of helping us keep the "new and improved Privoxy"
@@ -385,9 +436,9 @@ changes/improvements and in general feel good about ourselves. ;->
 
 -------------------------------------------------------------------------------
 
-5.2. Using Comments
+6.2. Using Comments
 
-5.2.1. Comment, Comment, Comment
+6.2.1. Comment, Comment, Comment
 
 Explanation:
 
@@ -422,7 +473,7 @@ is actually being done.
 
 -------------------------------------------------------------------------------
 
-5.2.2. Use blocks for comments
+6.2.2. Use blocks for comments
 
 Explanation:
 
@@ -462,7 +513,7 @@ line as the code.
 
 -------------------------------------------------------------------------------
 
-5.2.3. Keep Comments on their own line
+6.2.3. Keep Comments on their own line
 
 Explanation:
 
@@ -512,7 +563,7 @@ short DoSomethingVeryImportant(
 
 -------------------------------------------------------------------------------
 
-5.2.4. Comment each logical step
+6.2.4. Comment each logical step
 
 Explanation:
 
@@ -527,7 +578,7 @@ these are usually major logic containers.
 
 -------------------------------------------------------------------------------
 
-5.2.5. Comment All Functions Thoroughly
+6.2.5. Comment All Functions Thoroughly
 
 Explanation:
 
@@ -544,7 +595,7 @@ document.
 
 -------------------------------------------------------------------------------
 
-5.2.6. Comment at the end of braces if the content is more than one screen
+6.2.6. Comment at the end of braces if the content is more than one screen
 length
 
 Explanation:
@@ -577,9 +628,9 @@ if ( 1 == X )
 
 -------------------------------------------------------------------------------
 
-5.3. Naming Conventions
+6.3. Naming Conventions
 
-5.3.1. Variable Names
+6.3.1. Variable Names
 
 Explanation:
 
@@ -599,7 +650,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
 
 -------------------------------------------------------------------------------
 
-5.3.2. Function Names
+6.3.2. Function Names
 
 Explanation:
 
@@ -620,7 +671,7 @@ int loadSomeFile( struct client_state *csp )
 
 -------------------------------------------------------------------------------
 
-5.3.3. Header file prototypes
+6.3.3. Header file prototypes
 
 Explanation:
 
@@ -640,7 +691,7 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-5.3.4. Enumerations, and #defines
+6.3.4. Enumerations, and #defines
 
 Explanation:
 
@@ -667,7 +718,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-5.3.5. Constants
+6.3.5. Constants
 
 Explanation:
 
@@ -693,9 +744,9 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-5.4. Using Space
+6.4. Using Space
 
-5.4.1. Put braces on a line by themselves.
+6.4.1. Put braces on a line by themselves.
 
 Explanation:
 
@@ -738,7 +789,7 @@ while ( more lines are read )
 
 -------------------------------------------------------------------------------
 
-5.4.2. ALL control statements should have a block
+6.4.2. ALL control statements should have a block
 
 Explanation:
 
@@ -768,7 +819,7 @@ above also applies.
 
 -------------------------------------------------------------------------------
 
-5.4.3. Do not belabor/blow-up boolean expressions
+6.4.3. Do not belabor/blow-up boolean expressions
 
 Example:
 
@@ -784,7 +835,7 @@ knowledge of C/C++. (Hope I do not offend by that last comment ... 8-)
 
 -------------------------------------------------------------------------------
 
-5.4.4. Use white space freely because it is free
+6.4.4. Use white space freely because it is free
 
 Explanation:
 
@@ -804,7 +855,7 @@ firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
 
 -------------------------------------------------------------------------------
 
-5.4.5. Don't use white space around structure operators
+6.4.5. Don't use white space around structure operators
 
 Explanation:
 
@@ -825,7 +876,7 @@ Instead of: aStruct -> aMember; aStruct . aMember; FunctionName ();
 
 -------------------------------------------------------------------------------
 
-5.4.6. Make the last brace of a function stand out
+6.4.6. Make the last brace of a function stand out
 
 Example:
 
@@ -856,7 +907,7 @@ of function comments.
 
 -------------------------------------------------------------------------------
 
-5.4.7. Use 3 character indentions
+6.4.7. Use 3 character indentions
 
 Explanation:
 
@@ -889,9 +940,9 @@ int function1( ... )
 
 -------------------------------------------------------------------------------
 
-5.5. Initializing
+6.5. Initializing
 
-5.5.1. Initialize all variables
+6.5.1. Initialize all variables
 
 Explanation:
 
@@ -914,9 +965,9 @@ Status: developer-discretion if and only if the variable is assigned a value
 
 -------------------------------------------------------------------------------
 
-5.6. Functions
+6.6. Functions
 
-5.6.1. Name functions that return a boolean as a question.
+6.6.1. Name functions that return a boolean as a question.
 
 Explanation:
 
@@ -931,7 +982,7 @@ IsWebPageBlank();
 
 -------------------------------------------------------------------------------
 
-5.6.2. Always specify a return type for a function.
+6.6.2. Always specify a return type for a function.
 
 Explanation:
 
@@ -941,7 +992,7 @@ type if the function does not need to return anything.
 
 -------------------------------------------------------------------------------
 
-5.6.3. Minimize function calls when iterating by using variables
+6.6.3. Minimize function calls when iterating by using variables
 
 Explanation:
 
@@ -981,7 +1032,7 @@ loop.
 
 -------------------------------------------------------------------------------
 
-5.6.4. Pass and Return by Const Reference
+6.6.4. Pass and Return by Const Reference
 
 Explanation:
 
@@ -998,7 +1049,7 @@ should too.
 
 -------------------------------------------------------------------------------
 
-5.6.5. Pass and Return by Value
+6.6.5. Pass and Return by Value
 
 Explanation:
 
@@ -1011,7 +1062,7 @@ would not work. So, to be consistent, we should declare all prototypes with
 
 -------------------------------------------------------------------------------
 
-5.6.6. Names of include files
+6.6.6. Names of include files
 
 Explanation:
 
@@ -1036,7 +1087,7 @@ This duplicates the #include "file.h" behavior.
 
 -------------------------------------------------------------------------------
 
-5.6.7. Provide multiple inclusion protection
+6.6.7. Provide multiple inclusion protection
 
 Explanation:
 
@@ -1055,7 +1106,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-5.6.8. Use `extern "C"` when appropriate
+6.6.8. Use `extern "C"` when appropriate
 
 Explanation:
 
@@ -1078,7 +1129,7 @@ extern "C"
 
 -------------------------------------------------------------------------------
 
-5.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
+6.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
 
 Explanation:
 
@@ -1101,9 +1152,9 @@ Status: Use with discretion.
 
 -------------------------------------------------------------------------------
 
-5.7. General Coding Practices
+6.7. General Coding Practices
 
-5.7.1. Turn on warnings
+6.7.1. Turn on warnings
 
 Explanation
 
@@ -1113,7 +1164,7 @@ possible.
 
 -------------------------------------------------------------------------------
 
-5.7.2. Provide a default case for all switch statements
+6.7.2. Provide a default case for all switch statements
 
 Explanation:
 
@@ -1153,7 +1204,7 @@ Status: Programmer discretion is advised.
 
 -------------------------------------------------------------------------------
 
-5.7.3. Try to avoid falling through cases in a switch statement.
+6.7.3. Try to avoid falling through cases in a switch statement.
 
 Explanation:
 
@@ -1172,7 +1223,7 @@ fall through and reason why you felt it was necessary.
 
 -------------------------------------------------------------------------------
 
-5.7.4. Use 'long' or 'short' Instead of 'int'
+6.7.4. Use 'long' or 'short' Instead of 'int'
 
 Explanation:
 
@@ -1186,7 +1237,7 @@ forget the exact typedefs now). Should we add these to IJB now that we have a
 
 -------------------------------------------------------------------------------
 
-5.7.5. Don't mix size_t and other types
+6.7.5. Don't mix size_t and other types
 
 Explanation:
 
@@ -1198,7 +1249,7 @@ can.
 
 -------------------------------------------------------------------------------
 
-5.7.6. Declare each variable and struct on its own line.
+6.7.6. Declare each variable and struct on its own line.
 
 Explanation:
 
@@ -1227,7 +1278,7 @@ Status: developer-discretion.
 
 -------------------------------------------------------------------------------
 
-5.7.7. Use malloc/zalloc sparingly
+6.7.7. Use malloc/zalloc sparingly
 
 Explanation:
 
@@ -1244,7 +1295,7 @@ list, then it should definitely be allocated via `malloc'.
 
 -------------------------------------------------------------------------------
 
-5.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
+6.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
 
 Explanation:
 
@@ -1270,7 +1321,7 @@ and freeing data structures (complex or nested).
 
 -------------------------------------------------------------------------------
 
-5.7.9. Add loaders to the `file_list' structure and in order
+6.7.9. Add loaders to the `file_list' structure and in order
 
 Explanation:
 
@@ -1283,7 +1334,7 @@ KILLPOPUPs, it is clear that it should come first.
 
 -------------------------------------------------------------------------------
 
-5.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
+6.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
 
 Explanation:
 
@@ -1308,53 +1359,53 @@ from the project).
 
 -------------------------------------------------------------------------------
 
-5.8. Addendum: Template for files and function comment blocks:
+6.8. Addendum: Template for files and function comment blocks:
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $"; 
-/*********************************************************************                          
- *                                                                                              
- * File        :  $Source$                                                                      
- *                                                                                              
- * Purpose     :  (Fill me in with a good description!)                                         
- *                                                                                              
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                             
- *                Privoxy team. http://www.privoxy.org/                                         
- *                                                                                              
- *                Based on the Internet Junkbuster originally written                           
- *                by and Copyright (C) 1997 Anonymous Coders and                                
- *                Junkbusters Corporation.  http://www.junkbusters.com                          
- *                                                                                              
- *                This program is free software; you can redistribute it                        
- *                and/or modify it under the terms of the GNU General                           
- *                Public License as published by the Free Software                              
- *                Foundation; either version 2 of the License, or (at                           
- *                your option) any later version.                                               
- *                                                                                              
- *                This program is distributed in the hope that it will                          
- *                be useful, but WITHOUT ANY WARRANTY; without even the                         
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                          
- *                PARTICULAR PURPOSE.  See the GNU General Public                               
- *                License for more details.                                                     
- *                                                                                              
- *                The GNU General Public License should be included with                        
- *                this file.  If not, you can view it at                                        
- *                http://www.gnu.org/copyleft/gpl.html                                          
- *                or write to the Free Software Foundation, Inc., 59                            
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                        
- *                                                                                              
- * Revisions   :                                                                                
- *    $Log$                                                                                     
- *                                                                                              
- *********************************************************************/                         
-                                                                                                
-                                                                                                
-#include "config.h"                                                                             
-                                                                                                
-   ...necessary include files for us to do our work...                                          
-                                                                                                
-const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                               
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $"; 
+/*********************************************************************                         
+ *                                                                                             
+ * File        :  $Source$                                                                     
+ *                                                                                             
+ * Purpose     :  (Fill me in with a good description!)                                        
+ *                                                                                             
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                            
+ *                Privoxy team. http://www.privoxy.org/                                        
+ *                                                                                             
+ *                Based on the Internet Junkbuster originally written                          
+ *                by and Copyright (C) 1997 Anonymous Coders and                               
+ *                Junkbusters Corporation.  http://www.junkbusters.com                         
+ *                                                                                             
+ *                This program is free software; you can redistribute it                       
+ *                and/or modify it under the terms of the GNU General                          
+ *                Public License as published by the Free Software                             
+ *                Foundation; either version 2 of the License, or (at                          
+ *                your option) any later version.                                              
+ *                                                                                             
+ *                This program is distributed in the hope that it will                         
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                        
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                         
+ *                PARTICULAR PURPOSE.  See the GNU General Public                              
+ *                License for more details.                                                    
+ *                                                                                             
+ *                The GNU General Public License should be included with                       
+ *                this file.  If not, you can view it at                                       
+ *                http://www.gnu.org/copyleft/gpl.html                                         
+ *                or write to the Free Software Foundation, Inc., 59                           
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                       
+ *                                                                                             
+ * Revisions   :                                                                               
+ *    $Log$                                                                                    
+ *                                                                                             
+ *********************************************************************/                        
+                                                                                               
+                                                                                               
+#include "config.h"                                                                            
+                                                                                               
+   ...necessary include files for us to do our work...                                         
+                                                                                               
+const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                              
 
 Note: This declares the rcs variables that should be added to the
 "show-proxy-args" page. If this is a brand new creation by you, you are free to
@@ -1367,71 +1418,71 @@ can.
 
 Example for file header comments:
 
-#ifndef _FILENAME_H                                                                           
-#define _FILENAME_H                                                                           
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $" 
-/*********************************************************************                        
- *                                                                                            
- * File        :  $Source$                                                                    
- *                                                                                            
- * Purpose     :  (Fill me in with a good description!)                                       
- *                                                                                            
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                           
- *                Privoxy team. http://www.privoxy.org/                                       
- *                                                                                            
- *                Based on the Internet Junkbuster originally written                         
- *                by and Copyright (C) 1997 Anonymous Coders and                              
- *                Junkbusters Corporation.  http://www.junkbusters.com                        
- *                                                                                            
- *                This program is free software; you can redistribute it                      
- *                and/or modify it under the terms of the GNU General                         
- *                Public License as published by the Free Software                            
- *                Foundation; either version 2 of the License, or (at                         
- *                your option) any later version.                                             
- *                                                                                            
- *                This program is distributed in the hope that it will                        
- *                be useful, but WITHOUT ANY WARRANTY; without even the                       
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                        
- *                PARTICULAR PURPOSE.  See the GNU General Public                             
- *                License for more details.                                                   
- *                                                                                            
- *                The GNU General Public License should be included with                      
- *                this file.  If not, you can view it at                                      
- *                http://www.gnu.org/copyleft/gpl.html                                        
- *                or write to the Free Software Foundation, Inc., 59                          
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                      
- *                                                                                            
- * Revisions   :                                                                              
- *    $Log$                                                                                   
- *                                                                                            
- *********************************************************************/                       
-                                                                                              
-                                                                                              
-#include "project.h"                                                                          
-                                                                                              
-#ifdef __cplusplus                                                                            
-extern "C" {                                                                                  
-#endif                                                                                        
-                                                                                              
-   ... function headers here ...                                                              
-                                                                                              
-                                                                                              
-/* Revision control strings from this header and associated .c file */                        
-extern const char FILENAME_rcs[];                                                             
-extern const char FILENAME_h_rcs[];                                                           
-                                                                                              
-                                                                                              
-#ifdef __cplusplus                                                                            
-} /* extern "C" */                                                                            
-#endif                                                                                        
-                                                                                              
-#endif /* ndef _FILENAME_H */                                                                 
-                                                                                              
-/*                                                                                            
-  Local Variables:                                                                            
-  tab-width: 3                                                                                
-  end:                                                                                        
-*/                                                                                            
+#ifndef _FILENAME_H                                                                          
+#define _FILENAME_H                                                                          
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $" 
+/*********************************************************************                       
+ *                                                                                           
+ * File        :  $Source$                                                                   
+ *                                                                                           
+ * Purpose     :  (Fill me in with a good description!)                                      
+ *                                                                                           
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                          
+ *                Privoxy team. http://www.privoxy.org/                                      
+ *                                                                                           
+ *                Based on the Internet Junkbuster originally written                        
+ *                by and Copyright (C) 1997 Anonymous Coders and                             
+ *                Junkbusters Corporation.  http://www.junkbusters.com                       
+ *                                                                                           
+ *                This program is free software; you can redistribute it                     
+ *                and/or modify it under the terms of the GNU General                        
+ *                Public License as published by the Free Software                           
+ *                Foundation; either version 2 of the License, or (at                        
+ *                your option) any later version.                                            
+ *                                                                                           
+ *                This program is distributed in the hope that it will                       
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                      
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                       
+ *                PARTICULAR PURPOSE.  See the GNU General Public                            
+ *                License for more details.                                                  
+ *                                                                                           
+ *                The GNU General Public License should be included with                     
+ *                this file.  If not, you can view it at                                     
+ *                http://www.gnu.org/copyleft/gpl.html                                       
+ *                or write to the Free Software Foundation, Inc., 59                         
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                     
+ *                                                                                           
+ * Revisions   :                                                                             
+ *    $Log$                                                                                  
+ *                                                                                           
+ *********************************************************************/                      
+                                                                                             
+                                                                                             
+#include "project.h"                                                                         
+                                                                                             
+#ifdef __cplusplus                                                                           
+extern "C" {                                                                                 
+#endif                                                                                       
+                                                                                             
+   ... function headers here ...                                                             
+                                                                                             
+                                                                                             
+/* Revision control strings from this header and associated .c file */                       
+extern const char FILENAME_rcs[];                                                            
+extern const char FILENAME_h_rcs[];                                                          
+                                                                                             
+                                                                                             
+#ifdef __cplusplus                                                                           
+} /* extern "C" */                                                                           
+#endif                                                                                       
+                                                                                             
+#endif /* ndef _FILENAME_H */                                                                
+                                                                                             
+/*                                                                                           
+  Local Variables:                                                                           
+  tab-width: 3                                                                               
+  end:                                                                                       
+*/                                                                                           
 
 Example for function comments:
 
@@ -1457,13 +1508,6 @@ int FUNCTION_NAME( void *param1, const char *x )
 
 Note: If we all follow this practice, we should be able to parse our code to
 create a "self-documenting" web page.
-
--------------------------------------------------------------------------------
-
-6. Version Control Guidelines
-
-To be filled. note on cvs comments. Don't only comment what you did, but also
-why you did it!
 
 -------------------------------------------------------------------------------
 
@@ -1518,17 +1562,21 @@ Do not mail to the mailinglist (we cannot keep track on issues there).
 
 -------------------------------------------------------------------------------
 
-8. Releasing a new version
+8. Releasing a New Version
 
-To minimize trouble with distribution contents, web-page errors and the like,
-we strongly encourage you to follow this section if you prepare a new release
-of code or new pages on the webserver.
+When we release versions of Privoxy, our work leaves our cozy secret lab and
+has to work in the cold RealWorld[tm]. Once it is released, there is no way to
+call it back, so it is very important that great care is taken to ensure that
+everything runs fine, and not to introduce problems in the very last minute.
+
+So when releasing a new version, please adhere exactly to the procedure
+outlined in this chapter.
 
 The following programs are required to follow this process: ncftpput (ncftp),
-scp (ssh), gmake (GNU's version of make), autoconf, cvs, ???.
+scp, ssh (ssh), gmake (GNU's version of make), autoconf, cvs.
 
-Replace X, Y and Z with the actual version number (X = major, Y = minor, Z =
-point):
+In the following text, replace X, Y and Z with the actual version number (X =
+major, Y = minor, Z = point):
 
 -------------------------------------------------------------------------------
 
@@ -1540,12 +1588,8 @@ The following must be done by one of the developers prior to each new release.
     days has had a chance to yell "no!" in case they have pending changes/fixes
     in their pipelines.
    
-  * Increment the version number in configure.in in CVS. Also, increase or
-    reset the RPM release number in configure.in as appropriate. Do NOT touch
-    version information after export from CVS. All packages will use the
-    version and release data from configure.in. Local files should not be
-    changed, except prior to a CVS commit!!! This way we are all on the same
-    page!
+  * Increment the version number and increase or reset the RPM release number
+    in configure.in as appropriate.
    
   * If the default actionsfile has changed since last release, bump up its
     version info in this line:
@@ -1556,62 +1600,77 @@ The following must be done by one of the developers prior to each new release.
     Then change the version info in doc/webserver/actions/index.php, line:
     '$required_actions_file_version = "A.B";'
    
+  * If the HTML documentation is not in sync with the SGML sources you need to
+    regenerate it. (If in doubt, just do it.) See the Section "Updating the
+    webserver" in this manual for details.
+   
   * Commit all files that were changed in the above steps!
    
   * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z". Don't
     use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
    
-  * The first package uploaded should be the official "tarball" release, as
-    required by the GPL. This is built with the "make tarball-dist" Makefile
-    target, and then can be uploaded with "make tarball-upload" (see below).
-   
 -------------------------------------------------------------------------------
 
-8.2. Update the webserver
+8.2. Building and Releasing the Packages
 
-All files must be group-readable and group-writable (or no one else will be
-able to change them)! To update the webserver, create any pages locally in the
-doc/webserver/* directory (or create new directories under doc/webserver), then
-do
+Now the individual packages can be built and released. Note that for GPL
+reasons the first package to be released is always the source tarball.
 
-  make webserver                                                               
+For all types of packages, including the source tarball, you must make sure
+that you build from clean sources by exporting the right version from CVS into
+an empty directory:.
+
+  mkdir dist # delete or choose different name if it already exists                                 
+  cd dist                                                                                           
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                         
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current 
+                                                                                                    
+
+Do NOT change a single bit, including, but not limited to version information
+after export from CVS. This is to make sure that all release packages, and with
+them, all future bug reports, are based on exactly the same code.
+
+Please find additional instructions for the source tarball and the individual
+platform dependent binary packages below.
+
+-------------------------------------------------------------------------------
+
+8.2.1. Source Tarball
+
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then run:
+
+  cd current                                                                   
+  autoheader && autoconf && ./configure                                        
                                                                                
 
-This will do the upload to the webserver (www.privoxy.org).
+Then do:
 
-Note that "make dok" (or "make redhat-dok") creates doc/webserver/user-manual,
-doc/webserver/developer-manual, doc/webserver/faq and doc/webserver/index.html
-automatically. (doc/webserver/man-page/privoxy-man-page.html is created by a
-separate Makefile target, "make man", due to dependencies on some obscure perl
-scripts. See comments in GNUmakefile.)
+  make tarball-dist                                                            
+                                                                               
 
-Someone should also commit these to CVS so that packagers without the ability
-to build docs locally, have access to them. This is a separate step, and should
-also be done before each official release.
+To upload the package to Sourceforge, simply issue
 
-Please do NOT use any other means of transferring files to the webserver. "make
-webserver" not only uploads, but will make sure that the appropriate
-permissions are preserved for shared group access.
+  make tarball-upload                                                          
+                                                                               
+
+Go to the displayed URL and release the file publicly on Sourceforge. For the
+change log field, use the relevant section of the ChangeLog file.
 
 -------------------------------------------------------------------------------
 
-8.3. SuSE or Red Hat
+8.2.2. SuSE or Red Hat
 
-Ensure that you have the latest code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-first.
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do
 
-  make suse-dist or make redhat-dist                                           
+  make suse-dist (or make redhat-dist)                                         
                                                                                
 
 To upload the package to Sourceforge, simply issue
@@ -1619,19 +1678,19 @@ To upload the package to Sourceforge, simply issue
   make suse-upload (or make redhat-upload)                                     
                                                                                
 
-Go to the displayed URL and release the file publicly on Sourceforge.
+Go to the displayed URL and release the file publicly on Sourceforge. Use the
+release notes and çhange log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.4. OS/2
+8.2.3. OS/2
 
-Ensure that you have the latest code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then get the OS/2
+Setup module:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                          
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd ..                                                                                              
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup                
-                                                                                                     
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup 
+                                                                                      
 
 You will need a mix of development tools. The main compilation takes place with
 IBM Visual Age C++. Some ancillary work takes place with GNU tools, available
@@ -1656,29 +1715,25 @@ You're now ready to build. Run:
   os2build                                                                     
                                                                                
 
-And in the ./files directory you will have the WarpIN-installable executable.
+You will find the WarpIN-installable executable in the ./files directory.
 Upload this anonymously to uploads.sourceforge.net/incoming, create a release
-for it, and you're done.
+for it, and you're done. Use the release notes and Change Log from the source
+tarball package.
 
 -------------------------------------------------------------------------------
 
-8.5. Solaris
+8.2.4. Solaris
 
-Login to Sourceforge's compilefarm via ssh
+Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
                                                                                
 
-Choose the right operating system (not the Debian one). If you have downloaded
-Privoxy before,
+Choose the right operating system (not the Debian one). When logged in, make
+sure that you have freshly exported the right version into an empty directory.
+(See "Building and releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-If not, please checkout Privoxy via CVS first. Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1689,25 +1744,22 @@ Then run
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make solaris-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publicly.
+archive to Sourceforge's ftp server and release the file publicly. Use the
+release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.6. Windows
+8.2.5. Windows
 
 You should ensure you have the latest version of Cygwin (from http://
 www.cygwin.com/). Run the following commands from within a Cygwin bash shell.
 
-First check out a clean copy of the correct code version, by running:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then get the Windows
+setup module:
 
-        mkdir dist                                                                                    
-        cd dist                                                                                       
-        cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                     
-        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z . 
-                                                                                                      
-
-(Note: It is important that this is a clean copy of the code, do not re-use a
-working directory after you have manually compiled there).
+        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup 
+                                                                                             
 
 Then you can build the package. This is fully automated, and is controlled by
 winsetup/GNUmakefile. All you need to do is:
@@ -1717,21 +1769,17 @@ winsetup/GNUmakefile. All you need to do is:
                                                                                
 
 Now you can manually rename privoxy_setup.exe to privoxy_setup_X_Y_Z.exe, and
-upload it to SourceForge.
+upload it to SourceForge. When releasing the package on SourceForge, use the
+release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.7. Debian
+8.2.6. Debian
 
-Ensure that you have the latest code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then, run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-first. Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1739,18 +1787,18 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.8. Mac OSX
+8.2.7. Mac OSX
 
-Ensure that you have the latest code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then get the Mac OSX
+setup module:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                          
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd ..                                                                                              
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup                
-                                                                                                     
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup 
+                                                                                      
 
-From the osxsetup directory, run:
+Then run:
 
+  cd osxsetup                                                                  
   build                                                                        
                                                                                
 
@@ -1767,33 +1815,23 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
                                                                                
 
 You can then upload privoxyosx_setup_x.y.z.zip anonymously to
-uploads.sourceforge.net/incoming, create a release for it, and you're done.
+uploads.sourceforge.net/incoming, create a release for it, and you're done. Use
+the release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.9. FreeBSD
-
-Change the version number of Privoxy in the configure.in file. Run:
-
-  autoheader && autoconf && ./configure                                        
-                                                                               
-
-Then ...
+8.2.8. FreeBSD
 
 Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
                                                                                
 
-Choose the right operating system.
+Choose the right operating system. When logged in, make sure that you have
+freshly exported the right version into an empty directory. (See "Building and
+releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1804,49 +1842,17 @@ Then run:
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make freebsd-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publicly.
+archive to Sourceforge's ftp server and release the file publicly. Use the
+release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.10. Tarball
+8.2.9. HP-UX 11
 
-Ensure that you have the right code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-first. Run:
-
-  autoheader && autoconf && ./configure                                        
-                                                                               
-
-Then do:
-
-  make tarball-dist                                                            
-                                                                               
-
-To upload the package to Sourceforge, simply issue
-
-  make tarball-upload                                                          
-                                                                               
-
-Goto the displayed URL and release the file publicly on Sourceforge.
-
--------------------------------------------------------------------------------
-
-8.11. HP-UX 11
-
-Ensure that you have the latest code version. Hence run:
-
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-first. Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1854,17 +1860,12 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.12. Amiga OS
+8.2.10. Amiga OS
 
-Ensure that you have the latest code version. Hence run:
+First, make sure that you have freshly exported the right version into an empty
+directory. (See "Building and releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-first. Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1872,22 +1873,18 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.13. AIX
+8.2.11. AIX
 
 Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
                                                                                
 
-Choose the right operating system. If you have downloaded Privoxy before:
+Choose the right operating system. When logged in, make sure that you have
+freshly exported the right version into an empty directory. (See "Building and
+releasing packages" above). Then run:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-  cd current                                                                                          
-                                                                                                      
-
-If not, please checkout Privoxy via CVS first. Run:
-
+  cd current                                                                   
   autoheader && autoconf && ./configure                                        
                                                                                
 
@@ -1898,11 +1895,54 @@ Then run:
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make aix-upload on
 the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publicly.
+archive to Sourceforge's ftp server and release the file publicly. Use the
+release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-9. Contacting the developers, Bug Reporting and Feature Requests
+8.3. After the Release
+
+When all (or: most of the) packages have been uploaded and made available, send
+an email to the announce mailing list, Subject: "Version X.Y.Z available for
+download". Be sure to include the download location, the release notes and the
+change log.
+
+-------------------------------------------------------------------------------
+
+9. Update the Webserver
+
+When updating the webserver, please follow these steps to make sure that no
+broken links, incosistent contents or permission problems will occur:
+
+If you have changed anything in the documentation source SGML files, do:
+
+  make dok # (or make redkat-dok if make dok doesn't work for you)             
+                                                                               
+
+That will generate doc/webserver/user-manual, doc/webserver/developer-manual,
+doc/webserver/faq and doc/webserver/index.html automatically.
+
+If you changed the manual page source, generate doc/webserver/man-page/
+privoxy-man-page.html by running "make man". (This is a separate target due to
+dependencies on some obscure perl scripts. See comments in GNUmakefile.)
+
+If you want to add new files to the webserver, create them locally in the doc/
+webserver/* directory (or create new directories under doc/webserver).
+
+Next, commit any changes from the above steps to CVS. All set? Then do
+
+  make webserver                                                               
+                                                                               
+
+This will do the upload to the webserver (www.privoxy.org) and ensure all files
+and directories there are group writable.
+
+Please do NOT use any other means of transferring files to the webserver to
+avoid permission problems.
+
+-------------------------------------------------------------------------------
+
+10. Contacting the developers, Bug Reporting and Feature Requests
 
 We value your feedback. However, to provide you with the best support, please
 note:
@@ -1948,9 +1988,9 @@ note:
    
 -------------------------------------------------------------------------------
 
-10. Copyright and History
+11. Copyright and History
 
-10.1. Copyright
+11.1. Copyright
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -1969,7 +2009,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-10.2. History
+11.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
@@ -1983,7 +2023,7 @@ grown whiskers ;-).
 
 -------------------------------------------------------------------------------
 
-11. See also
+12. See also
 
 Other references and sites of interest to Privoxy users:
 
