@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.31 2001/10/10 10:56:39 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.32 2001/10/14 22:20:18 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,14 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.31 2001/10/10 10:56:39 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.32  2001/10/14 22:20:18  jongfoster
+ *    - Changes to CGI dispatching method to match CGI names exactly,
+ *      rather than doing a prefix match.
+ *    - No longer need to count the length of the CGI handler names by hand.
+ *    - Adding new handler for 404 error when disptching a CGI, if none of
+ *      the handlers match.
+ *    - Adding new handlers for CGI actionsfile editor.
+ *
  *    Revision 1.31  2001/10/10 10:56:39  oes
  *    Failiure to load template now fatal. Before, the user got a hard-to-understand assertion failure from cgi.c
  *
@@ -372,7 +380,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
     * This is a CGI call.
     */
 
-   return dispatch_cgi_2(csp, path);
+   return dispatch_known_cgi(csp, path);
 }
 
 
