@@ -1,5 +1,5 @@
 /* vim:ts=3: */
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.12 2001/06/09 10:55:28 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.13 2001/06/29 13:32:14 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -37,6 +37,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.12 2001/06/09 10:55:28 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.13  2001/06/29 13:32:14  oes
+ *    Removed logentry from cancelled commit
+ *
  *    Revision 1.12  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -564,12 +567,12 @@ char *bindup(const char *string, int n)
 
    if (NULL == (dup = (char *)malloc(n)))
    {
-	   return NULL;
-	}
+      return NULL;
+   }
    else
-	{
-	  memcpy(dup, string, n);
-	}
+   {
+     memcpy(dup, string, n);
+   }
 
    return dup;
 

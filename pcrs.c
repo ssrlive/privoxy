@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 19:12:45 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.7 2001/06/29 13:33:04 oes Exp $";
 
 /*********************************************************************
  *
@@ -47,6 +47,28 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 19:12:45 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.7  2001/06/29 13:33:04  oes
+ *    - Cleaned up, renamed and reordered functions,
+ *      improved comments
+ *    - Removed my_strsep
+ *    - Replaced globalflag with a general flags int
+ *      that holds PCRS_GLOBAL, PCRS_SUCCESS, and PCRS_TRIVIAL
+ *    - Introduced trivial option that will prevent pcrs
+ *      from honouring backreferences in the substitute,
+ *      which is useful for large substitutes that are
+ *      red in from somewhere and saves the pain of escaping
+ *      the backrefs
+ *    - Introduced convenience function pcrs_free_joblist()
+ *    - Split pcrs_make_job() into pcrs_compile(), which still
+ *      takes a complete s/// comand as argument and parses it,
+ *      and a new function pcrs_make_job, which takes the
+ *      three separate components. This should make for a
+ *      much friendlier frontend.
+ *    - Removed create_pcrs_job() which was useless
+ *    - Fixed a bug in pcrs_execute
+ *    - Success flag is now handled by pcrs instead of user
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.6  2001/06/03 19:12:45  oes
  *    added FIXME
  *
@@ -172,7 +194,7 @@ int pcrs_compile_perl_options(char *optstring, int *flags)
          case 's': rc |= PCRE_DOTALL; break;
          case 'x': rc |= PCRE_EXTENDED; break;
          case 'U': rc |= PCRE_UNGREEDY; break;
-		   case 'T': *flags |= PCRS_TRIVIAL; break;
+   	   case 'T': *flags |= PCRS_TRIVIAL; break;
          default:  break;
       }
    }
@@ -223,10 +245,10 @@ pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, in
 
    if (trivialflag)
    {
- 	   k = length;
+       k = length;
    }
    else
-	{
+   {
       for (i=0; i < length; i++)
       {
          /* Backslash treatment */
@@ -278,7 +300,7 @@ pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, in
          text[k++] = replacement[i];
          quoted = 0;
       }
-	} /* -END- if (!trivialflag) */
+   } /* -END- if (!trivialflag) */
 
    text[k] = '\0';
    r->text = text;
@@ -383,14 +405,14 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
     */
    limit = strlen(command);
    if (limit < 4)
-	{
+   {
       *errptr = PCRS_ERR_CMDSYNTAX;
       return NULL;
    }
    else
-	{
-	  delimiter = command[1];
-	}
+   {
+     delimiter = command[1];
+   }
 
    tokens[l] = (char *) malloc(limit + 1);
 
@@ -399,14 +421,14 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
 
       if (command[i] == delimiter && !quoted)
       {
- 		   if (l == 3)
-			{
-			   l = -1;
+    	   if (l == 3)
+   		{
+   		   l = -1;
             break;
          }
- 	      tokens[0][k++] = '\0';
+          tokens[0][k++] = '\0';
          tokens[++l] = tokens[0] + k;
-	      continue;
+         continue;
       }
 
       else if (command[i] == '\\' && !quoted && i+1 < limit && command[i+1] == delimiter)
@@ -424,12 +446,12 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
     */
    if (l != 3)
    {
-	   *errptr = PCRS_ERR_CMDSYNTAX;
+      *errptr = PCRS_ERR_CMDSYNTAX;
       free(tokens[0]);
       return NULL;
    }
 
-	newjob = pcrs_make_job(tokens[1], tokens[2], tokens[3], errptr);
+   newjob = pcrs_make_job(tokens[1], tokens[2], tokens[3], errptr);
    free(tokens[0]);
    return newjob;
 
@@ -577,7 +599,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
 
    while ((submatches = pcre_exec(job->pattern, job->hints, subject, subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
    {
-	   job->flags |= PCRS_SUCCESS;
+      job->flags |= PCRS_SUCCESS;
       matches[i].submatches = submatches;
       for (k=0; k < submatches; k++)
       {

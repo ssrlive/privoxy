@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.15 2001/06/09 10:55:28 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.16 2001/06/29 13:35:07 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,15 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.15 2001/06/09 10:55:28 jongfost
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.16  2001/06/29 13:35:07  oes
+ *    - Adapted
+ *    - Improved comments
+ *    - Removed init_proxy_args
+ *    - Renamed end_proxy_args(csp) to show_rcs(void)
+ *    - Removed logentry from cancelled commit
+ *    - Destroyed support for ndef SPLIT_PROXY_ARGS (Ooops)
+ *    - Separated the #define list into show_defines()
+ *
  *    Revision 1.15  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -327,7 +336,7 @@ char *show_rcs(void)
 
 #undef SHOW_RCS
 
-	return(b);
+   return(b);
 }
 
 /*********************************************************************

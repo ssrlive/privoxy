@@ -1,6 +1,6 @@
 #ifndef _CGI_H
 #define _CGI_H
-#define CGI_H_VERSION "$Id: cgi.h,v 1.4 2001/06/09 10:50:58 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.5 2001/06/29 13:22:44 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,14 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.5  2001/06/29 13:22:44  oes
+ *    - Cleaned up
+ *    - Added new functions: default_exports(), make_menu(),
+ *      error_response() etc, ranamed others and changed
+ *      param and return types.
+ *    - Removed HTTP/HTML snipplets
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.4  2001/06/09 10:50:58  jongfoster
  *    Changing "show URL info" handler to new style.
  *    Adding "extern" to some function prototypes.
@@ -72,7 +80,7 @@ extern int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 extern int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
                              struct map *parameters);
 extern int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
-			                  struct map *parameters);
+   		                  struct map *parameters);
 
 /* Not exactly a CGI */
 extern struct http_response *error_response(struct client_state *csp, const char *template, int err);

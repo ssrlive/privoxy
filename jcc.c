@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.20 2001/06/09 10:55:28 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.21 2001/06/29 13:29:36 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,20 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.20 2001/06/09 10:55:28 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.21  2001/06/29 13:29:36  oes
+ *    - Cleaned up, improved comments
+ *    - Unified all possible interceptors (CGI,
+ *      block, trust, fast_redirect) in one
+ *      place, with one (CGI) answer generation
+ *      mechansim. Much clearer now.
+ *    - Removed the GIF image generation, which
+ *      is now done in filters.c:block_url()
+ *    - Made error conditions like domain lookup
+ *      failiure or (various) problems while talking
+ *      to the server use cgi.c:error_response()
+ *      instead of generating HTML/HTTP in chat() (yuck!)
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.20  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -536,13 +550,13 @@ static void chat(struct client_state *csp)
  
    if (
        /* a CGI call was detected and answered */
-		 (NULL != (rsp = dispatch_cgi(csp))) 
+   	 (NULL != (rsp = dispatch_cgi(csp))) 
 
        /* or we are enabled and... */
        || (IS_ENABLED_AND (
 
-  	       /* ..the request was blocked */
-		    ( NULL != (rsp = block_url(csp)))
+            /* ..the request was blocked */
+   	    ( NULL != (rsp = block_url(csp)))
 
           /* ..or untrusted */
 #ifdef TRUST_FILES
@@ -552,17 +566,17 @@ static void chat(struct client_state *csp)
           /* ..or a fast redirect kicked in */
 #ifdef FAST_REDIRECTS
           || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) && 
-			     (NULL != (rsp = redirect_url(csp))))
+   		     (NULL != (rsp = redirect_url(csp))))
 #endif /* def FAST_REDIRECTS */
-			 ))
-		)
+   		 ))
+   	)
    {
-	   /* Write the answer to the client */
+      /* Write the answer to the client */
       if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-		     || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+   	     || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
       { 
          log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-	   }
+      }
 
 #ifdef STATISTICS
       /* Count as a rejected request */
@@ -602,28 +616,28 @@ static void chat(struct client_state *csp)
 
       if (errno == EINVAL)
       {
-		   rsp = error_response(csp, "no-such-domain", errno);
+   	   rsp = error_response(csp, "no-such-domain", errno);
 
          log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 404 0", 
                    csp->ip_addr_str, http->cmd);
       }
       else
       {
-		   rsp = error_response(csp, "connect-failed", errno);
+   	   rsp = error_response(csp, "connect-failed", errno);
 
          log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0", 
                    csp->ip_addr_str, http->cmd);
       }
 
-	   /* Write the answer to the client */
+      /* Write the answer to the client */
       if(rsp)
-		{
+   	{
          if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-		        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+   	        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
          { 
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-	      }
-	   }
+         }
+      }
 
       free_http_response(rsp);
       freez(hdr);
@@ -651,14 +665,14 @@ static void chat(struct client_state *csp)
 
          rsp = error_response(csp, "connect-failed", errno);
 
-	      if(rsp)
+         if(rsp)
          {
             if ((write_socket(csp->cfd, rsp->head, n) != n)
-		        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+   	        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
             { 
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-	         }
-	      }
+            }
+         }
 
          free_http_response(rsp);
          freez(hdr);
@@ -751,14 +765,14 @@ static void chat(struct client_state *csp)
 
             rsp = error_response(csp, "connect-failed", errno);
 
-	         if(rsp)
+            if(rsp)
             {
                if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-		            || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+   	            || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
                { 
                   log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-				   }
-				}
+   			   }
+   			}
 
             free_http_response(rsp);
             return;
@@ -1025,7 +1039,6 @@ static void serve(struct client_state *csp)
 
 
 #ifdef __BEOS__
-
 /*********************************************************************
  *
  * Function    :  server_thread
@@ -1044,7 +1057,6 @@ static int32 server_thread(void *data)
    return 0;
 
 }
-
 #endif
 
 

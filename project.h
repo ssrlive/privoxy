@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.18 2001/06/09 10:57:39 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.19 2001/06/29 13:33:36 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,17 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.19  2001/06/29 13:33:36  oes
+ *    - Improved comments
+ *    - Introduced http_request.host_ip_addr_str
+ *    - Introduced http_response.head_length
+ *    - Introduced config.my_ip_addr_str, config.my_hostname,
+ *      config.admin_address and config.proxy_info_url
+ *    - Removed config.proxy_args_header and config.proxy_args_trailer,
+ *      renamed config.proxy_args_invocation to config.proxy_args
+ *    - Removed HTML snipplets and GIFs
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.18  2001/06/09 10:57:39  jongfoster
  *    Adding definition of BUFFER_SIZE.
  *    Changing struct cgi_dispatcher to use "const" strings.

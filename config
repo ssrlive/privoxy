@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.14 2001/06/08 00:25:01 jongfoster Exp $
+# $Id: config,v 1.15 2001/06/29 13:23:20 oes Exp $
 #
 
 #  Table of Contents
@@ -423,7 +423,7 @@ toggle 1
 # There is an implicit line equivalent to the following, which specifies that
 # anything not finding a match on the list is to go out without forwarding
 # or gateway protocol; like so:
-#    forward .*	.  # implicit
+#    forward .*   .  # implicit
 #
 # In the following common configuration, everything goes to Lucent's LPWA,
 # except SSL on port 443 (which it doesn't handle)

@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: permissionsfile,v 1.10 2001/06/09 14:15:11 swa Exp $
+# $Id: actionsfile,v 1.1 2001/06/29 13:17:24 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -429,7 +429,7 @@ a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
 /.*/werb\..*
 /.*/werbebanner/
 /.*/werbung/.*\.(gif|jpe?g)
-/.*/adv\.	# www.telegraaf.nl
+/.*/adv\.   # www.telegraaf.nl
 /.*/advert[0-9]+\.jpg
 /.*bann\.gif
 /Media/Images/Adds/
@@ -837,8 +837,8 @@ www.news.com/Midas/Images/
 www.newscientist.com/houseads
 www.nextcard.com/affiliates/
 www.nikkeibp.asiabiztech.com/image/NAIS4\.gif
-www.nordlys.no/imaker/.*/.*/.*/.....\.gif	# alvin brattli
-www.nordlys.no/imaker/.*/.*/.*/..003		# alvin brattli
+www.nordlys.no/imaker/.*/.*/.*/.....\.gif   # alvin brattli
+www.nordlys.no/imaker/.*/.*/.*/..003   	# alvin brattli
 www.oanda.com/server/banner
 .omdispatch.co.uk
 www.oneandonlynetwork.com

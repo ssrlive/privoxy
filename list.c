@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 19:12:24 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.4 2001/06/29 13:30:22 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,14 @@ const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 19:12:24 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.4  2001/06/29 13:30:22  oes
+ *    - Added Convenience function enlist_unique_header(),
+ *      which takes the Header name and value as separate
+ *      arguments and thus saves the pain of sprintf()ing
+ *      and determining the Header name length to enlist_unique
+ *    - Improved comments
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.3  2001/06/03 19:12:24  oes
  *    functions for new struct map, extended enlist_unique
  *
@@ -226,13 +234,13 @@ void enlist_unique_header(struct list *header, const char *name, const char *val
    if (name == NULL || value == NULL) return;
 
    dummy = strdup(name);
-	dummy = strsav(dummy, ": ");
+   dummy = strsav(dummy, ": ");
    length = strlen(dummy);
 
    while (cur != NULL)
    {
       if ((cur->str != NULL) && 
-			(0 == strncmp(dummy, cur->str, length)))
+   		(0 == strncmp(dummy, cur->str, length)))
       {
          /* Already there */
          return;
@@ -244,7 +252,7 @@ void enlist_unique_header(struct list *header, const char *name, const char *val
 
    if (cur != NULL)
    {
-	   cur->str  = strsav(dummy, value);
+      cur->str  = strsav(dummy, value);
       cur->next = NULL;
 
       last = header->last;
@@ -541,6 +549,7 @@ char *lookup(struct map *map, char *name)
       p = p->next;
    }
    return "";
+
 }
 
 
