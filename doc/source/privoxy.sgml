@@ -1,0 +1,40 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/privoxy.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: privoxy.sgml,v 1.0 2002/04/01 16:24:49 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+-->
+
+<para>
+ <application>Privoxy</application> is a web proxy with advanced filtering
+ capabilities for protecting privacy, filtering web page content, managing
+ cookies, controlling access, and removing ads, banners, pop-ups and other
+ obnoxious Internet junk. <application>Privoxy</application> has a very
+ flexible configuration and can be customized to suit individual needs and
+ tastes. <application>Privoxy</application> has application for both
+ stand-alone systems and multi-user networks.
+</para>
+
+<para>
+ <application>Privoxy</application> is based on the code of the 
+ <application>Internet Junkbuster</application>.
+ <application>Junkbuster</application> was originally written by JunkBusters
+ Corporation, and was released as free open-source software under the GNU GPL.
+ Stefan Waldherr made many improvements, and started the SourceForge project
+ to continue development.
+</para>
+
+<para>
+ <application>Privoxy</application> continues the
+ <application>Junkbuster</application> tradition, but adds many 
+ refinements and enhancements.
+</para>
+
