@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.11 2002/03/25 03:09:51 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.12 2002/03/25 03:11:40 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -33,7 +33,7 @@
 
 Name: privoxy
 Version: 2.9.13
-Release: 1
+Release: 2
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: http://ijbswa.sourceforge.net
@@ -262,6 +262,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon Mar 25 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.13-2
+- Fixing Release number
+
 * Sun Mar 24 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-2
 - Added faq to docs.
@@ -525,6 +529,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.12  2002/03/25 03:11:40  hal9
+# Do it right way this time :/
+#
 # Revision 1.11  2002/03/25 03:09:51  hal9
 # Added faq to docs.
 #
