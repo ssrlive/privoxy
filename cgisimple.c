@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.16 2002/03/07 03:48:38 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.17 2002/03/08 16:43:18 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.16 2002/03/07 03:48:38 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.17  2002/03/08 16:43:18  oes
+ *    Added choice beween GIF and PNG built-in images
+ *
  *    Revision 1.16  2002/03/07 03:48:38  oes
  *     - Changed built-in images from GIF to PNG
  *       (with regard to Unisys patent issue)
@@ -344,7 +347,7 @@ jb_err cgi_send_banner(struct client_state *csp,
    if (imagetype == 'a') /* auto */
    {
       /* Default to logo */
-      imagetype = 'l';
+      imagetype = 'p';
 #ifdef FEATURE_IMAGE_BLOCKING
       if ((csp->action->flags & ACTION_IMAGE_BLOCKER) != 0)
       {
@@ -370,15 +373,15 @@ jb_err cgi_send_banner(struct client_state *csp,
       rsp->content_length = image_blank_length;
 
    }
-   else if (imagetype == 'p') /* pattern */
-   {
-      rsp->body = bindup(image_pattern_data, image_pattern_length);
-      rsp->content_length = image_pattern_length;
-   }   
-   else /* logo */
+   else  if (imagetype == 'l') /* logo */
    {
       rsp->body = bindup(image_logo_data, image_logo_length);
       rsp->content_length = image_logo_length;
+   }   
+   else /* pattern */
+   {
+      rsp->body = bindup(image_pattern_data, image_pattern_length);
+      rsp->content_length = image_pattern_length;
    }   
 
    if (rsp->body == NULL)
