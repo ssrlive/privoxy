@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.16 2001/09/10 10:56:59 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.17 2001/09/13 20:51:29 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.16 2001/09/10 10:56:59 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.17  2001/09/13 20:51:29  jongfoster
+ *    Fixing potential problems with characters >=128 in simplematch()
+ *    This was also a compiler warning.
+ *
  *    Revision 1.16  2001/09/10 10:56:59  oes
  *    Silenced compiler warnings
  *
@@ -182,9 +186,9 @@ void *zalloc(int size)
  * Returns     :  an unsigned long variable with the hashed value.
  *
  *********************************************************************/
-unsigned long hash_string( const char* s )
+unsigned int hash_string( const char* s )
 {
-   unsigned long h = 0ul; 
+   unsigned int h = 0; 
 
    for ( ; *s; ++s )
    {
