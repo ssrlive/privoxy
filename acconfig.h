@@ -37,6 +37,29 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.4  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.3  2001/05/26 01:26:34  jongfoster
  *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
  *    This #define cannot be set from ./configure - there's no point, it
@@ -115,10 +138,33 @@
 #undef VERSION
 
 /*
- * Regular expression matching for URLs.  (Highly recommended).  If this is 
- * not defined then you can ony use prefix matching.
+ * Status of the code: alpha, beta or stable
  */
-#undef REGEX
+#undef CODE_STATUS
+
+/*
+ * Regular expression matching for URLs.  (Highly recommended).  If none of these 
+ * is defined then you can ony use prefix matching.
+ * Don't bother to change this here! Use configure instead.
+ */
+#undef REGEX_GNU
+#undef REGEX_PCRE
+
+/* 
+ * Should pcre be statically built in instead of linkling with libpcre?
+ * (This is determined by configure depending on the availiability of
+ * libpcre and user preferences). The name is ugly, but pcre needs it.
+ * Don't bother to change this here! Use configure instead.
+ */
+#undef STATIC
+
+/* 
+ * Should pcrs be statically built in instead of linkling with libpcrs?
+ * (This is determined by configure depending on the availiability of
+ * libpcrs and user preferences).
+ * Don't bother to change this here! Use configure instead.
+ */
+#undef STATIC_PCRS
 
 /*
  * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
@@ -128,11 +174,6 @@
  * GUI).
  */
 #undef TOGGLE
-
-/*
- * Enables arbitrary content modification regexps
- */
-#undef PCRS
 
 /*
  * If a stream is compressed via gzip (Netscape specific I think), then
@@ -225,11 +266,6 @@
  * Allows the use of jar files to capture cookies.
  */
 #undef JAR_FILES
-
-/*
- * Use PCRE rather than GNU Regex
- */
-#undef PCRE
 
 /*
  * Define this to use the Windows GUI for editing the blocklist.
