@@ -1,6 +1,6 @@
 #ifndef _LIST_H
 #define _LIST_H
-#define LIST_H_VERSION "$Id: list.h,v 1.1 2001/05/31 21:11:53 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.2 2001/06/01 18:49:17 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.2  2001/06/01 18:49:17  jongfoster
+ *    Replaced "list_share" with "list" - the tiny memory gain was not
+ *    worth the extra complexity.
+ *
  *    Revision 1.1  2001/05/31 21:11:53  jongfoster
  *    - Moved linked list support to new "list.c" file.
  *      Structure definitions are still in project.h,
@@ -62,20 +66,23 @@ extern "C" {
 #endif
 
 
-extern void  enlist(struct list *h, const char *s);
-extern void  enlist_unique(struct list *header, const char *str);
+extern void enlist(struct list *h, const char *s);
+extern void enlist_unique(struct list *header, const char *str, int n);
+extern void enlist_first(struct list *header, const char *str);
+extern int   list_remove_item(struct list *header, const char *str);
+
+extern void  list_append_list_unique(struct list *dest, const struct list *src);
+extern void  list_append_list_unique(struct list *dest, const struct list *src);
+extern int   list_remove_list(struct list *header, const struct list *to_remove);
+extern void  list_duplicate(struct list *dest, const struct list *src);
 
 extern void  destroy_list(struct list *h);
 
 extern char *list_to_text(struct list *h);
 
-extern int   list_remove_item(struct list *header, const char *str);
-extern int   list_remove_list(struct list *header, const struct list *to_remove);
-
-extern void  list_append_list_unique(struct list *dest, const struct list *src);
-
-extern void  list_duplicate(struct list *dest, const struct list *src);
-
+extern struct map* map(struct map* map, char *name, int nc, char *value, int vc);
+extern char *lookup(struct map *list, char *name);
+extern void free_map(struct map *list);
 
 /* Revision control strings from this header and associated .c file */
 extern const char list_rcs[];
