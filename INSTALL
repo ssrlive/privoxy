@@ -67,7 +67,7 @@ documentation for the correct command line to do this.
 
 And then /etc/group, like:
 
-  privoxy:*:7777:privoxy                                                       
+  privoxy:*:7777:                                                              
 
 Some binary packages may do this for you.
 
@@ -79,7 +79,7 @@ Then, to build from either unpacked tarball or CVS source:
  make             # (the make from gnu, gmake for *BSD)                        
  su                                                                            
  make -n install  # (to see where all the files will go)                       
- make install     # (to really install)                                        
+ make -s install  # (to really install, -s to silence output)                  
 
 If you have GNU make, you can have the first four steps automatically done for
 you by just typing:
@@ -94,10 +94,20 @@ user and group ownership of the configuration files (which need to be writable
 by the daemon). The specified user must already exist. Or if there is already a
 privoxy user on the system, and no user was specified during configure, make
 install then will use the privoxy user. When starting Privoxy, it should be run
-as this same user.
+as this same user that owns the configuration and log files.
+
+Alternately, you can specify user and group on the make command line, but be
+sure both already exist:
+
+ make -s install  USER=privoxy GROUP=privoxy                                   
+
+If no group is specified, the install will assume a group exists with the same
+name as the specified user.
 
 The default installation path for make install is /usr/local. This may of
-course be customized with the various ./configure path options.
+course be customized with the various ./configure path options. If you are
+doing a root install to anywhere else besides /usr/local, be sure to set the
+appropriate paths with the correct configure options (./configure --help).
 
 If you do install to /usr/local, the install will use sysconfdir=$prefix/etc/
 privoxy by default. All other destinations, and the direct usage of
@@ -117,7 +127,16 @@ default to /var instead of $prefix/var so the logs will go to /var/log/privoxy
 make install will attempt to set the correct values in config (main
 configuration file). You may want to check this to make sure all values are
 correct. If appropriate, an init script will be installed, but it is up to the
-user to determine how and where to start Privoxy.
+user to determine how and where to start Privoxy. The init script should be
+checked for correct paths and values, if anything other than a default install
+is done.
+
+If install finds previous versions of any configuration files, these will not
+be overwritten, and the new ones will be installed with a "new" extension. You
+will then need to manually update the installed configuration files as needed.
+All template files will be overwritten. If you have customized, local
+templates, you should save these first. If a previous version of Privoxy is
+already running, you will have to restart it manually.
 
 For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
 self-extracting installers, building on platforms with special requirements
