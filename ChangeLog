@@ -2,14 +2,16 @@
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
-*** Version 2.2.11 Beta Changes ***
+*** Version 2.2.11 Beta Changes (WIP) ***
+- Various spec file and init script cleanups and improvements.
+- CGI Editor works on OS/2 now.
 - Fix restart failure where sockets were in TIME_WAIT.
 - Fixes for actions cgi editor, make sure we have right file.
-- *READ*: The default listening PORT is NOW 8118!!! Changed from 
+- **READ**: The default listening PORT is NOW 8118!!! Changed from 
 8000 due to conflict with NAS (Network Audio Server, whatever that 
 is.)
 - A --pidfile command line option now, in addition to --help, 
---version, --no-daemon, and configfile. --no-daemon replaces
+--version, --no-daemon, --user and configfile. --no-daemon replaces
 the former -d option and _DEBUG define.
 - Signal handling cleanups (Unix).
 - CGI editor improvements and fixes.
