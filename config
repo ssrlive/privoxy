@@ -1,7 +1,7 @@
 #  Sample Configuration file for Privoxy
 
 #
-# $Id: config,v 1.30 2002/03/24 11:37:39 jongfoster Exp $
+# $Id: config,v 1.31 2002/03/24 12:58:57 swa Exp $
 #
 
 #  Table of Contents
@@ -40,9 +40,13 @@
 #  you can make it a comment and it will be treated as if it weren't there. 
 #  This is called "commenting out" an option and can be useful to turn
 #  off features: If you comment out the "logfile" line, Privoxy will
-#  not log to a file at all. Watch for the "default:" section in each 
-#  explanation to see what happens if the option is left unset (or 
-#  commented out). 
+#  not log to a file at all. 
+#
+#  Watch for the "default:" section in each  explanation to see what
+#  happens if the option is left unset (or commented out).
+#
+#  NOTE: THAT DEFAULT IS NOT NECESSARILY EQUAL TO THE OPTION 
+#        VALUE SET IN THIS SAMPLE CONFIG FILE.
 #
 #  Long lines can be continued on the next line by using a `\' as
 #  the last character.
@@ -150,8 +154,8 @@ jarfile jarfile
 #
 #  Default: Don't display links on the "untrusted" info page.
 #
-trust-info-url http://www.your-site.com/why_we_block.html
-trust-info-url http://www.your-site.com/what_we_allow.html
+trust-info-url http://www.example.com/why_we_block.html
+trust-info-url http://www.example.com/what_we_allow.html
 
 #  4. OPTIONS
 #
@@ -164,7 +168,7 @@ trust-info-url http://www.your-site.com/what_we_allow.html
 #
 #  Default: Do not display an e-mail address
 #
-admin-address fill@me.in.please
+#admin-address privoxy-admin@example.com
 
 #
 #  Proxy-info-url can be set to a URL that contains more info about
@@ -175,7 +179,8 @@ admin-address fill@me.in.please
 #
 #  Default: Don't show a link to online documentation
 #
-proxy-info-url http://www.your-site.com/proxy.html
+#proxy-info-url http://www.example.com/proxy-service.html
+
 
 #
 #  Listen-address specifies the address and port where Privoxy will
