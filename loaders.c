@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.11 2001/05/29 23:25:24 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.12 2001/05/31 17:32:31 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.11 2001/05/29 23:25:24 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.12  2001/05/31 17:32:31  oes
+ *
+ *     - Enhanced domain part globbing with infix and prefix asterisk
+ *       matching and optional unanchored operation
+ *
  *    Revision 1.11  2001/05/29 23:25:24  oes
  *
  *     - load_config_line() and load_permissions_file() now use chomp()
@@ -128,6 +133,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.11 2001/05/29 23:25:24 oes Exp $"
 #endif
 
 #include "project.h"
+#include "list.h"
 #include "loaders.h"
 #include "encode.h"
 #include "filters.h"
@@ -137,6 +143,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.11 2001/05/29 23:25:24 oes Exp $"
 #include "miscutil.h"
 #include "errlog.h"
 #include "gateway.h"
+#include "actions.h"
 
 #ifndef SPLIT_PROXY_ARGS
 /* For strsav */
@@ -159,7 +166,6 @@ const char loaders_h_rcs[] = LOADERS_H_VERSION;
  * Currently active files.
  * These are also entered in the main linked list of files.
  */
-static struct file_list *current_permissions_file  = NULL;
 static struct file_list *current_forwardfile    = NULL;
 
 #ifdef ACL_FILES
@@ -173,9 +179,6 @@ static struct file_list *current_trustfile      = NULL;
 #ifdef PCRS
 static struct file_list *current_re_filterfile  = NULL;
 #endif /* def PCRS */
-
-
-static int create_url_spec(struct url_spec * url, char * buf);
 
 
 /*********************************************************************
@@ -226,9 +229,9 @@ void sweep(void)
           */
          ncsp->config->config_file_list->active = 1;
 
-         if (ncsp->permissions_list)     /* permissions files */
+         if (ncsp->actions_list)     /* actions files */
          {
-            ncsp->permissions_list->active = 1;
+            ncsp->actions_list->active = 1;
          }
 
          if (ncsp->flist)     /* forward files */
@@ -274,6 +277,8 @@ void sweep(void)
 
          destroy_list(ncsp->headers);
          destroy_list(ncsp->cookie_list);
+
+         free_current_action(ncsp->action);
 
 #ifdef STATISTICS
          urls_read++;
@@ -328,7 +333,7 @@ void sweep(void)
  * Returns     :  0 => Ok, everything else is an error.
  *
  *********************************************************************/
-static int create_url_spec(struct url_spec * url, char * buf)
+int create_url_spec(struct url_spec * url, char * buf)
 {
    char *p;
    struct url_spec tmp_url[1];
@@ -430,7 +435,7 @@ static int create_url_spec(struct url_spec * url, char * buf)
 
 /*********************************************************************
  *
- * Function    :  unload_url
+ * Function    :  free_url
  *
  * Description :  Called from the "unloaders".  Freez the url
  *                structure elements.
@@ -441,7 +446,7 @@ static int create_url_spec(struct url_spec * url, char * buf)
  * Returns     :  N/A
  *
  *********************************************************************/
-static void unload_url(struct url_spec *url)
+void free_url(struct url_spec *url)
 {
    if (url == NULL) return;
 
@@ -487,34 +492,6 @@ static void unload_aclfile(void *f)
 #endif /* def ACL_FILES */
 
 
-/*********************************************************************
- *
- * Function    :  unload_permissions_file
- *
- * Description :  Unloads a permissions file.
- *
- * Parameters  :
- *          1  :  file_data = the data structure associated with the
- *                            permissions file.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_permissions_file(void *file_data)
-{
-   struct permissions_spec * next;
-   struct permissions_spec * cur = (struct permissions_spec *)file_data;
-   while (cur != NULL)
-   {
-      next = cur->next;
-      unload_url(cur->url);
-      freez(cur);
-      cur = next;
-   }
-
-}
-
-
 #ifdef TRUST_FILES
 /*********************************************************************
  *
@@ -535,7 +512,7 @@ static void unload_trustfile(void *f)
 
    unload_trustfile(b->next);
 
-   unload_url(b->url);
+   free_url(b->url);
 
    freez(b);
 
@@ -562,7 +539,7 @@ static void unload_forwardfile(void *f)
 
    unload_forwardfile(b->next);
 
-   unload_url(b->url);
+   free_url(b->url);
 
    freez(b->gw->gateway_host);
    freez(b->gw->forward_host);
@@ -924,453 +901,6 @@ load_aclfile_error:
 
 }
 #endif /* def ACL_FILES */
-
-
-struct permission_alias
-{
-   const char * name;
-   unsigned mask;   /* a bit set to "0" = remove permission */
-   unsigned add;    /* a bit set to "1" = add permission */
-   struct permission_alias * next;
-};
-
-
-/*
- * Note: this is special-cased in the code so we don't need to
- * fill in the ->next fields.
- */
-static const struct permission_alias standard_aliases[] =
-{
-   { "+block",          PERMIT_MASK_ALL, PERMIT_BLOCK          },
-/* { "+cookies",        PERMIT_MASK_ALL, PERMIT_COOKIE_SET | PERMIT_COOKIE_READ }, */
-   { "+cookies-read",   PERMIT_MASK_ALL, PERMIT_COOKIE_READ    },
-   { "+cookies-set",    PERMIT_MASK_ALL, PERMIT_COOKIE_SET     },
-   { "+fast-redirects", PERMIT_MASK_ALL, PERMIT_FAST_REDIRECTS },
-   { "+filter",         PERMIT_MASK_ALL, PERMIT_RE_FILTER      },
-   { "+image",          PERMIT_MASK_ALL, PERMIT_IMAGE          },
-   { "+popup",          PERMIT_MASK_ALL, PERMIT_POPUPS         },
-   { "+popups",         PERMIT_MASK_ALL, PERMIT_POPUPS         },
-   { "+referer",        PERMIT_MASK_ALL, PERMIT_REFERER        },
-   { "+referrer",       PERMIT_MASK_ALL, PERMIT_REFERER        },
-   { "-block",          ~PERMIT_BLOCK,          0 },
-/* { "-cookies",        ~(PERMIT_COOKIE_SET | PERMIT_COOKIE_READ), 0 }, */
-   { "-cookies-read",   ~PERMIT_COOKIE_READ,    0 },
-   { "-cookies-set",    ~PERMIT_COOKIE_SET,     0 },
-   { "-fast-redirects", ~PERMIT_FAST_REDIRECTS, 0 },
-   { "-filter",         ~PERMIT_RE_FILTER,      0 },
-   { "-image",          ~PERMIT_IMAGE,          0 },
-   { "-popup",          ~PERMIT_POPUPS,         0 },
-   { "-popups",         ~PERMIT_POPUPS,         0 },
-   { "-referer",        ~PERMIT_REFERER,        0 },
-   { "-referrer",       ~PERMIT_REFERER,        0 },
-   { NULL,              0,                      0 } /* End marker */
-};
-
-
-/*********************************************************************
- *
- * Function    :  load_permissions_file
- *
- * Description :  Read and parse a permissions file and add to files
- *                list.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  0 => Ok, everything else is an error.
- *
- *********************************************************************/
-int load_permissions_file(struct client_state *csp)
-{
-   FILE *fp;
-
-   struct permissions_spec *last_perm;
-   struct permissions_spec *perm;
-   char  buf[BUFSIZ];
-   struct file_list *fs;
-#define MODE_START_OF_FILE 1
-#define MODE_PERMISSIONS   2
-#define MODE_ALIAS         3
-   int mode = MODE_START_OF_FILE;
-   unsigned curmask = PERMIT_MASK_ALL;
-   unsigned curadd  = 0;
-   struct permission_alias * alias_list = NULL;
-
-   if (!check_file_changed(current_permissions_file, csp->config->permissions_file, &fs))
-   {
-      /* No need to load */
-      if (csp)
-      {
-         csp->permissions_list = current_permissions_file;
-      }
-      return 0;
-   }
-   if (!fs)
-   {
-      log_error(LOG_LEVEL_FATAL, "can't load permissions file '%s': error finding file: %E",
-                csp->config->permissions_file);
-      return 1; /* never get here */
-   }
-
-   fs->f = last_perm = (struct permissions_spec *)zalloc(sizeof(*last_perm));
-   if (last_perm == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "can't load permissions file '%s': out of memory!",
-                csp->config->permissions_file);
-      return 1; /* never get here */
-   }
-
-   if ((fp = fopen(csp->config->permissions_file, "r")) == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "can't load permissions file '%s': error opening file: %E",
-                csp->config->permissions_file);
-      return 1; /* never get here */
-   }
-
-   while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
-   {
-      if (*buf == '{')
-      {
-         /* It's a header block */
-         if (buf[1] == '{')
-         {
-            /* It's {{settings}} or {{alias}} */
-            int len = strlen(buf);
-            char * start = buf + 2;
-            char * end = buf + len - 1;
-            if ((len < 5) || (*end-- != '}') || (*end-- != '}'))
-            {
-               /* too short */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid line: %s",
-                  csp->config->permissions_file, buf);
-               return 1; /* never get here */
-            }
-
-            /* Trim leading and trailing whitespace. */
-            end[1] = '\0';
-            chomp(start);
-
-            if (*start == '\0')
-            {
-               /* too short */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid line: {{ }}",
-                  csp->config->permissions_file);
-               return 1; /* never get here */
-            }
-
-            if (0 == strcmpic(start, "alias"))
-            {
-               /* it's an {{alias}} block */
-
-               mode = MODE_ALIAS;
-            }
-            else
-            {
-               /* invalid {{something}} block */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid line: {{%s}}",
-                  csp->config->permissions_file, start);
-               return 1; /* never get here */
-            }
-         }
-         else
-         {
-            /* It's a permissions block */
-
-            int more = 1;
-
-            int len = strlen(buf);
-            char * start = buf + 1;
-            char * end = buf + len - 1;
-
-            if ((len < 3) || (*end-- != '}'))
-            {
-               /* too short */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid line: %s",
-                  csp->config->permissions_file, buf);
-               return 1; /* never get here */
-            }
-
-            end[1] = '\0';
-            chomp(start);
-
-            if (*start == '\0')
-            {
-               /* too short */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid line: { }",
-                  csp->config->permissions_file);
-               return 1; /* never get here */
-            }
-
-            mode    = MODE_PERMISSIONS;
-            
-            curmask = PERMIT_MASK_ALL;
-            curadd  = 0;
-
-            while (more)
-            {
-               const struct permission_alias * alias = standard_aliases;
-               char * option = start;
-               while ((*start != '\0') && (*start != ' ') && (*start != '\t'))
-               {
-                  start++;
-               }
-
-               more = (*start != 0);
-               if (more)
-               {
-                  *start++ = '\0';
-
-                  /* Eat all the whitespace between the options */
-                  while ((*start == ' ') || (*start == '\t'))
-                  {
-                     start++;
-                  }
-               }
-
-               /* handle option in 'option' */
-
-               /* Check for standard permission name */
-               while ( (alias->name != NULL) && (0 != strcmpic(alias->name, option)) )
-               {
-                  alias++;
-               }
-               if (alias->name == NULL)
-               {
-                  /* try user aliases. */
-                  alias = alias_list;
-                  while ( (alias != NULL) && (0 != strcmpic(alias->name, option)) )
-                  {
-                     alias = alias->next;
-                  }
-               }
-               if (alias == NULL)
-               {
-                  /* Bad permission name */
-                  fclose(fp);
-                  log_error(LOG_LEVEL_FATAL, 
-                     "can't load permissions file '%s': invalid permission name: %s",
-                     csp->config->permissions_file, option);
-                  return 1; /* never get here */
-               }
-               curmask &= alias->mask;
-               curadd  &= alias->mask;
-               curadd  |= alias->add;
-            }
-         }
-      }
-      else if (mode == MODE_ALIAS)
-      {
-         /* define an alias */
-         struct permission_alias * new_alias;
-         int more = 1;
-
-         char * start = strchr(buf, '=');
-         char * end = start;
-
-         if ((start == NULL) || (start == buf))
-         {
-            log_error(LOG_LEVEL_FATAL, 
-               "can't load permissions file '%s': invalid alias line: %s",
-               csp->config->permissions_file, buf);
-            return 1; /* never get here */
-         }
-
-         if ((new_alias = zalloc(sizeof(*new_alias))) == NULL)
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL,
-               "can't load permissions file '%s': out of memory!",
-               csp->config->permissions_file);
-            return 1; /* never get here */
-         }
-
-         /* Eat any the whitespace after the '=' */
-         start++;
-         while ((*start == ' ') || (*start == '\t'))
-         {
-            start++;
-         }
-         if (*start == '\0')
-         {
-            log_error(LOG_LEVEL_FATAL, 
-               "can't load permissions file '%s': invalid alias line: %s",
-               csp->config->permissions_file, buf);
-            return 1; /* never get here */
-         }
-
-         /* Eat any the whitespace before the '=' */
-         end--;
-         while ((*end == ' ') || (*end == '\t'))
-         {
-            /*
-             * we already know we must have at least 1 non-ws char
-             * at start of buf - no need to check
-             */
-            end--;
-         }
-         end[1] = '\0';
-
-         new_alias->name = strdup(buf);
-
-         curmask = PERMIT_MASK_ALL;
-         curadd  = 0;
-
-         while (more)
-         {
-            const struct permission_alias * alias = standard_aliases;
-            char * option = start;
-            while ((*start != '\0') && (*start != ' ') && (*start != '\t'))
-            {
-               start++;
-            }
-
-            more = (*start != 0);
-            if (more)
-            {
-               *start++ = '\0';
-
-               /* Eat all the whitespace between the options */
-               while ((*start == ' ') || (*start == '\t'))
-               {
-                  start++;
-               }
-            }
-
-            /* handle option in 'option' */
-
-            /* Check for standard permission name */
-            while ( (alias->name != NULL) && (0 != strcmpic(alias->name, option)) )
-            {
-               alias++;
-            }
-            if (alias->name == NULL)
-            {
-               /* try user aliases. */
-               alias = alias_list;
-               while ( (alias != NULL) && (0 != strcmpic(alias->name, option)) )
-               {
-                  alias = alias->next;
-               }
-            }
-            if (alias == NULL)
-            {
-               /* Bad permission name */
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
-                  "can't load permissions file '%s': invalid permission name: %s",
-                  csp->config->permissions_file, option);
-               return 1; /* never get here */
-            }
-            curmask &= alias->mask;
-            curadd  &= alias->mask;
-            curadd  |= alias->add;
-         }
-
-         /* save alias permissions */
-         new_alias->mask = curmask;
-         new_alias->add  = curadd;
-         
-         /* add to list */
-         new_alias->next = alias_list;
-         alias_list = new_alias;
-      }
-      else if (mode == MODE_PERMISSIONS)
-      {
-         /* it's a URL pattern */
-
-         /* allocate a new node */
-         if ((perm = zalloc(sizeof(*perm))) == NULL)
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL,
-               "can't load permissions file '%s': out of memory!",
-               csp->config->permissions_file);
-            return 1; /* never get here */
-         }
-
-         /* Save flags */
-         perm->mask = curmask;
-         perm->add = curadd;
-
-         /* Save the URL pattern */
-         if (create_url_spec(perm->url, buf))
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL, 
-               "can't load permissions file '%s': cannot create URL permission from: %s",
-               csp->config->permissions_file, buf);
-            return 1; /* never get here */
-         }
-
-         /* add it to the list */
-         last_perm->next = perm;
-         last_perm = perm;
-      }
-      else if (mode == MODE_START_OF_FILE)
-      {
-         /* oops - please have a {} line as 1st line in file. */
-         fclose(fp);
-         log_error(LOG_LEVEL_FATAL, 
-            "can't load permissions file '%s': first line is invalid: %s",
-            csp->config->permissions_file, buf);
-         return 1; /* never get here */
-      }
-      else
-      {
-         /* How did we get here? This is impossible! */
-         fclose(fp);
-         log_error(LOG_LEVEL_FATAL, 
-            "can't load permissions file '%s': INTERNAL ERROR - mode = %d",
-            csp->config->permissions_file, mode);
-         return 1; /* never get here */
-      }
-   }
-
-   fclose(fp);
-   
-   while (alias_list != NULL)
-   {
-      struct permission_alias * next = alias_list->next;
-      freez((char *)alias_list->name);
-      free(alias_list);
-      alias_list = next;
-   }
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   /* the old one is now obsolete */
-   if (current_permissions_file)
-   {
-      current_permissions_file->unloader = unload_permissions_file;
-   }
-
-   fs->next    = files->next;
-   files->next = fs;
-   current_permissions_file = fs;
-
-   if (csp)
-   {
-      csp->permissions_list = fs;
-   }
-
-   return(0);
-
-}
 
 
 #ifdef TRUST_FILES
