@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.25 2001/12/28 01:45:36 steudten Exp $
+# $Id: junkbuster-rh.spec,v 1.26 2002/01/09 18:21:10 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.26  2002/01/09 18:21:10  hal9
+# A few minor updates.
+#
 # Revision 1.25  2001/12/28 01:45:36  steudten
 # Add paranoia check and BuildReq: gzip
 #
@@ -108,7 +111,7 @@ Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.10
-Release: 1
+Release: 2
 Source0: http://www.waldherr.org/junkbuster/ijbswa-%{version}.tar.gz
 Copyright: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -135,8 +138,8 @@ systems and multi-user networks.
 
 %build
 %configure
-make "CFLAGS=$RPM_OPT_FLAGS -Ipcre -Wall"
-strip junkbuster
+make 
+# strip junkbuster
 
 %pre
 /usr/sbin/useradd -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
@@ -150,7 +153,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d 
 
-gzip README AUTHORS junkbuster.1 || /bin/true
+gzip README AUTHORS ChangeLog junkbuster.1 || /bin/true
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
 cp -f junkbuster.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8.gz
 cp -f *.action $RPM_BUILD_ROOT%{ijbconf}/
@@ -222,7 +225,8 @@ fi
 * Wed Jan 09 2002 Hal Burgiss <hal@foobox.net>
 - Removed UID 73. Included user-manual and developer-manual in docs.
   Include other actions files. Default shell is now /bin/false.
-  Userdel user=junkbust.
+  Userdel user=junkbust. ChangeLog was not zipped. Removed 
+  RPM_OPT_FLAGS kludge.
 
 * Fri Dec 28 2001 Thomas Steudten <thomas@steudten.ch>
 - add paranoia check for 'rm -rf $RPM_BUILD_ROOT'
