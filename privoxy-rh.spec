@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.41 2002/07/02 18:16:28 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.42 2002/07/03 20:46:38 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 7
+Release: 8
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -171,17 +171,17 @@ done
 # We should do it for the group as well -- morcego
 # Doing it by brute force. Much cleaner (no more Mr. Nice Guy) -- morcego
 
-# Change the group name. Remove anything left behind.
-groupmod -g %{privoxy_gid} -n %{name} %{oldname} > /dev/null 2>&1 ||:
-groupmod -g %{privoxy_gid} -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
-groupdel %{oldname} > /dev/null 2>&1 ||:
-groupdel %{veryoldname} > /dev/null 2>&1 ||:
-
 # Same for username
 usermod -u %{privoxy_uid} -g %{privoxy_gid} -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
 usermod -u %{privoxy_uid} -g %{privoxy_gid} -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
 userdel %{oldname} > /dev/null 2>&1 ||:
 userdel %{veryoldname} > /dev/null 2>&1 ||:
+
+# Change the group name. Remove anything left behind.
+groupmod -g %{privoxy_gid} -n %{name} %{oldname} > /dev/null 2>&1 ||:
+groupmod -g %{privoxy_gid} -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
+groupdel %{oldname} > /dev/null 2>&1 ||:
+groupdel %{veryoldname} > /dev/null 2>&1 ||:
 
 # Doublecheck to see if the group exist, and that it has the correct gid
 /bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null 2>&1
@@ -242,8 +242,8 @@ fi
 #fi
 # We only remove it we this is not an upgrade
 if [ "$1" = "0" ]; then
-	/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null && %{_sbindir}/groupdel %{name} || /bin/true
 	id privoxy > /dev/null 2>&1 && %{_sbindir}/userdel privoxy || /bin/true
+	/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null && %{_sbindir}/groupdel %{name} || /bin/true
 fi
 
 %clean
@@ -332,6 +332,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Fri Jul 05 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-8
+- Changing delete order for groups and users (users should be first) 
+
 * Wed Jul 03 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-7
 - Changing sed expression that removed CR from the end of the lines. This
@@ -718,6 +722,11 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.42  2002/07/03 20:46:38  morcego
+# - Changing sed expression that removed CR from the end of the lines. This
+#   new one removes any control caracter, and should work with older versions
+#   of sed
+#
 # Revision 1.41  2002/07/02 18:16:28  morcego
 # - Fixing defattr values. File and directory modes where swapped
 #
