@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.31 2002/05/03 17:14:35 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.32 2002/05/16 01:37:29 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -243,6 +243,7 @@ fi
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
 %doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
+%doc doc/webserver/images
 
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
@@ -261,38 +262,41 @@ fi
 %config %{privoxyconf}/default.filter
 %config %{privoxyconf}/trust
 
-%config %{privoxyconf}/templates/untrusted
-%config %{privoxyconf}/templates/toggle-mini
-%config %{privoxyconf}/templates/default
-%config %{privoxyconf}/templates/connect-failed
-%config %{privoxyconf}/templates/show-status-file
-%config %{privoxyconf}/templates/cgi-error-bad-param
-%config %{privoxyconf}/templates/show-version
-%config %{privoxyconf}/templates/cgi-error-file
-%config %{privoxyconf}/templates/cgi-error-404
-%config %{privoxyconf}/templates/cgi-error-parse
-%config %{privoxyconf}/templates/edit-actions-url-form
-%config %{privoxyconf}/templates/no-such-domain
-%config %{privoxyconf}/templates/edit-actions-add-url-form
-%config %{privoxyconf}/templates/cgi-style.css
-%config %{privoxyconf}/templates/edit-actions-for-url-filter
-%config %{privoxyconf}/templates/cgi-error-disabled
-%config %{privoxyconf}/templates/edit-actions-remove-url-form
-%config %{privoxyconf}/templates/show-request
-%config %{privoxyconf}/templates/cgi-error-modified
-%config %{privoxyconf}/templates/mod-unstable-warning
-%config %{privoxyconf}/templates/edit-actions-list
-%config %{privoxyconf}/templates/toggle
-%config %{privoxyconf}/templates/edit-actions-list-section
-%config %{privoxyconf}/templates/mod-title
-%config %{privoxyconf}/templates/edit-actions-list-url
-%config %{privoxyconf}/templates/show-status
+# Please keep these alphabetized so its easier to find one that 
+# is not included.
 %config %{privoxyconf}/templates/blocked
-%config %{privoxyconf}/templates/mod-support-and-service
-%config %{privoxyconf}/templates/mod-local-help
-%config %{privoxyconf}/templates/show-url-info
+%config %{privoxyconf}/templates/cgi-error-404
+%config %{privoxyconf}/templates/cgi-error-bad-param
+%config %{privoxyconf}/templates/cgi-error-disabled
+%config %{privoxyconf}/templates/cgi-error-file
+%config %{privoxyconf}/templates/cgi-error-file-read-only
+%config %{privoxyconf}/templates/cgi-error-modified
+%config %{privoxyconf}/templates/cgi-error-parse
+%config %{privoxyconf}/templates/cgi-style.css
+%config %{privoxyconf}/templates/connect-failed
+%config %{privoxyconf}/templates/default
+%config %{privoxyconf}/templates/edit-actions-add-url-form
 %config %{privoxyconf}/templates/edit-actions-for-url
+%config %{privoxyconf}/templates/edit-actions-for-url-filter
+%config %{privoxyconf}/templates/edit-actions-list
 %config %{privoxyconf}/templates/edit-actions-list-button
+%config %{privoxyconf}/templates/edit-actions-list-section
+%config %{privoxyconf}/templates/edit-actions-list-url
+%config %{privoxyconf}/templates/edit-actions-remove-url-form
+%config %{privoxyconf}/templates/edit-actions-url-form
+%config %{privoxyconf}/templates/mod-local-help
+%config %{privoxyconf}/templates/mod-support-and-service
+%config %{privoxyconf}/templates/mod-title
+%config %{privoxyconf}/templates/mod-unstable-warning
+%config %{privoxyconf}/templates/no-such-domain
+%config %{privoxyconf}/templates/show-request
+%config %{privoxyconf}/templates/show-status
+%config %{privoxyconf}/templates/show-status-file
+%config %{privoxyconf}/templates/show-url-info
+%config %{privoxyconf}/templates/show-version
+%config %{privoxyconf}/templates/toggle
+%config %{privoxyconf}/templates/toggle-mini
+%config %{privoxyconf}/templates/untrusted
 
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
@@ -307,6 +311,11 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Fri May 24 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-1
+- Add another template and alphabetize these for easier tracking.
+- Add doc/images directory.
+
 * Wed May 15 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
 - Add templates/edit-actions-list-button
@@ -649,6 +658,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.32  2002/05/16 01:37:29  hal9
+# Add new template file so CGI stuff works :)
+#
 # Revision 1.31  2002/05/03 17:14:35  morcego
 # *.spec: Version bump to 2.9.15
 # -rh.spec: noreplace for %%{privoxyconf}/config
