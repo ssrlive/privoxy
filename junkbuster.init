@@ -1,7 +1,7 @@
 #!/bin/sh
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
 #                 junkbuster.
@@ -35,7 +35,10 @@
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # 
 #  Revisions   :
-#     $Log: loaders.c,v $
+#     $Log: junkbuster.init,v $
+#     Revision 1.2  2001/05/24 07:52:24  swa
+#     added header. removed ^M.
+#
 # 
 # ********************************************************************/
 
@@ -49,6 +52,7 @@
 # ---------------------------------------------------------------------------
 #
 # SuSE only
+# FIXME: I need to be updated using the latest skeleton script from SuSE
 #
 # ---------------------------------------------------------------------------
 if [ -f /etc/rc.config ]; then
@@ -81,7 +85,7 @@ case "$1" in
     status)
         checkproc /usr/sbin/junkbuster && echo OK || echo No process
         ;;
-   # )
+    *)
         echo "Usage: $0 {start|restart|status|stop}"
         exit 1
 esac
@@ -152,7 +156,7 @@ case "$1" in
                 $0 stop && $0 start
       ;;
 
-  # )
+   *)
       echo "Usage: junkbuster {start|stop|status|restart|reload}"
       exit 1
 esac
