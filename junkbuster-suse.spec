@@ -1,20 +1,39 @@
+# $Id: junkbuster-rh.spec,v 1.2 2001/06/04 18:31:58 swa Exp $
 #
-# spec file for package junkbuster (Version 2.0)
-# 
-# Copyright  (c)  2001  SuSE GmbH  Nuernberg, Germany.
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-# 
-# please send bugfixes or comments to feedback@suse.de.
+# Written by and Copyright (C) 2001 the SourceForge
+# IJBSWA team.  http://ijbswa.sourceforge.net
 #
-
+# Based on the Internet Junkbuster originally written
+# by and Copyright (C) 1997 Anonymous Coders and 
+# Junkbusters Corporation.  http://www.junkbusters.com
+#
+# This program is free software; you can redistribute it 
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
+#
+# The GNU General Public License should be included with
+# this file.  If not, you can view it at
+# http://www.gnu.org/copyleft/gpl.html
+# or write to the Free Software Foundation, Inc., 59
+# Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# $Log: junkbuster-rh.spec,v $
+#
 # neededforbuild  -ijb
 # usedforbuild    -ijb aaa_base aaa_dir autoconf automake base bash bindutil binutils bison bzip compress cpio cracklib db devs diffutils e2fsprogs file fileutils findutils flex gawk gcc gdbm gdbm-devel gettext glibc glibc-devel gpm gppshare groff gzip kbd less libtool libz lx_suse make mktemp modutils ncurses ncurses-devel net-tools netcfg nkitb pam pam-devel patch perl pgp ps rcs rpm sendmail sh-utils shadow strace syslogd sysvinit texinfo textutils timezone unzip util-linux vim xdevel xf86 xshared
 
-Vendor:       SuSE GmbH, Nuernberg, Germany
-Distribution: SuSE Linux 7.1 (i386)
+Vendor:       http://ijbswa.sourceforge.net
+Distribution: defineme
 Name:         junkbuster
-Packager:     feedback@suse.de
+Packager:     Stefan Waldherr <stefan@waldherr.org>
 
 Copyright:    GPL
 Group:        Networking/Utilities
@@ -23,18 +42,22 @@ Obsoletes:    ijb
 Autoreqprov:  on
 Version:      2.0
 Release:      14
-Summary:      The Internet Junkbuster - HTTP Proxy-Server
-Source:  ijb20.tar.Z
-Patch:   ijb20.dif
+Summary:      The Internet Junkbuster
+Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
+atch:   ijb20.dif
 
 %description
-The Internet Junkbuster - HTTP Proxy-Server:
-A non-cacheing HTTP proxy server that runs between a web browser and a web
-server and filters contents as described in the configuration files.
+The Internet Junkbuster (TM) blocks unwanted banner ads and protects
+your privacy from cookies and other threats. It's free under the GPL
+(no warranty), runs under *NIX and works with almost any browser. You
+need to clear you browser's cache and specify the proxy-server,
+described in /usr/doc/junkbuster.  This is a modified version which
+returns a blank GIF for blocked images by default.  But you can
+configure this via /etc/junkbuster/config.
 
 Authors:
 --------
-    junkbuster@junkbusters.com
+    http://ijbswa.sourceforge.net
 
 SuSE series: n
 
