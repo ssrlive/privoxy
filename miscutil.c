@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.27 2002/01/21 00:52:32 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.28 2002/03/03 09:18:03 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.27 2002/01/21 00:52:32 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.28  2002/03/03 09:18:03  joergs
+ *    Made jumbjuster work on AmigaOS again.
+ *
  *    Revision 1.27  2002/01/21 00:52:32  jongfoster
  *    Adding string_join()
  *
@@ -868,11 +871,11 @@ char * make_path(const char * dir, const char * file)
    }
 
    if ((dir == NULL) || (*dir == '\0') /* No directory specified */
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
       || (*file == '\\') || (file[1] == ':') /* Absolute path (DOS) */
-#else /* ifndef _WIN32 */
+#else /* ifndef _WIN32 || __OS2__ */
       || (*file == '/') /* Absolute path (U*ix) */
-#endif /* ifndef _WIN32 */
+#endif /* ifndef _WIN32 || __OS2__  */
       )
    {
       return strdup(file);
@@ -905,17 +908,17 @@ char * make_path(const char * dir, const char * file)
 
 #endif /* defined unix */
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__OS2__)
       if(path[strlen(path)-1] != '\\')
       {
          strcat(path, "\\");
       }
-#else /* ifndef _WIN32 */
+#else /* ifndef _WIN32 || __OS2__ */
       if(path[strlen(path)-1] != '/')
       {
          strcat(path, "/");
       }
-#endif /* ifndef _WIN32 */
+#endif /* ifndef _WIN32 || __OS2__ */
       strcat(path, file);
 
       return path;

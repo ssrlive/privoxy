@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.11 2002/01/23 01:03:31 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.12 2002/03/03 09:18:03 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.11 2002/01/23 01:03:31 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.12  2002/03/03 09:18:03  joergs
+ *    Made jumbjuster work on AmigaOS again.
+ *
  *    Revision 1.11  2002/01/23 01:03:31  jongfoster
  *    Fixing gcc [CygWin] compiler warnings
  *
@@ -703,7 +706,7 @@ jb_err edit_write_file(struct editable_file * file)
    assert(file);
    assert(file->filename);
 
-#ifdef AMIGA
+#if defined(AMIGA) || defined(__OS2__)
    if (NULL == (fp = fopen(file->filename, "w")))
 #else
    if (NULL == (fp = fopen(file->filename, "wt")))
@@ -1534,7 +1537,7 @@ jb_err edit_read_file(struct client_state *csp,
       }
    }
 
-#ifdef AMIGA
+#if defined(AMIGA) || defined(__OS2__)
    if (NULL == (fp = fopen(filename,"r")))
 #else
    if (NULL == (fp = fopen(filename,"rt")))

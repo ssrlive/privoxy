@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.25 2002/01/09 14:32:08 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.26 2002/01/09 19:05:45 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.25 2002/01/09 14:32:08 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.26  2002/01/09 19:05:45  steudten
+ *    Fix big memory leak.
+ *
  *    Revision 1.25  2002/01/09 14:32:08  oes
  *    Added support for gmtime_r and localtime_r.
  *
@@ -594,6 +597,8 @@ void log_error(int loglevel, char *fmt, ...)
 #ifdef _WIN32
             ival = WSAGetLastError();
             sval = w32_socket_strerr(ival, tempbuf);
+#elif __OS2__
+            ival = sock_errno();
 #else /* ifndef _WIN32 */
             ival = errno; 
 #ifdef HAVE_STRERROR
