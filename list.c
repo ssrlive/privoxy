@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 11:03:48 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 19:12:24 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,59 +34,8 @@ const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 11:03:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
- *    Revision 1.3  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
+ *    Revision 1.3  2001/06/03 19:12:24  oes
+ *    functions for new struct map, extended enlist_unique
  *
  *    Revision 1.2  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
@@ -238,6 +187,64 @@ void enlist_unique(struct list *header, const char *str, int n)
    if (cur != NULL)
    {
       cur->str  = (str ? strdup(str) : NULL); /* FIXME check retval */
+      cur->next = NULL;
+
+      last = header->last;
+      if (last == NULL)
+      {
+         last = header;
+      }
+      last->next   = cur;
+      header->last = cur;
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  enlist_unique_header
+ *
+ * Description :  Make a HTTP header from the two strings name and value,
+ *                and append the result into a specified string list,
+ *                if & only if there isn't already a header with that name.
+ *
+ * Parameters  :
+ *          1  :  header = pointer to list 'dummy' header
+ *          2  :  first = first string to add to the list (maybe NULL)
+ *          3  :  second = number of chars to use for uniqueness test
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void enlist_unique_header(struct list *header, const char *name, const char *value)
+{
+   struct list *last;
+   struct list *cur = header->next;
+   int length;
+   char *dummy;
+
+   if (name == NULL || value == NULL) return;
+
+   dummy = strdup(name);
+	dummy = strsav(dummy, ": ");
+   length = strlen(dummy);
+
+   while (cur != NULL)
+   {
+      if ((cur->str != NULL) && 
+			(0 == strncmp(dummy, cur->str, length)))
+      {
+         /* Already there */
+         return;
+      }
+      cur = cur->next;
+   }
+
+   cur = (struct list *)malloc(sizeof(*cur));
+
+   if (cur != NULL)
+   {
+	   cur->str  = strsav(dummy, value);
       cur->next = NULL;
 
       last = header->last;
@@ -476,13 +483,16 @@ void list_append_list_unique(struct list *dest, const struct list *src)
  * Description :  Add a mapping from given name to given value to a
  *                given map.
  *
+ *                Note: Since all strings will be free()d in free_map()
+ *                      later, use the copy flags for constants or
+ *                      strings that will be independantly free()d.
+ *
  * Parameters  :
  *          1  :  map = map to add to
  *          2  :  name = name to add
- *          3  :  nc = flag set if name is string constant, and
- *                must be strdup()d, so it can later be free()d (FIXME!)
+ *          3  :  nc = flag set if a copy of name should be used
  *          4  :  value = value to add
- *          5  :  vc = flag set if value is string constant
+ *          5  :  vc = flag set if a copy of value should be used
  *
  * Returns     :  pointer to extended map, or NULL if failiure
  *
