@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.34 2001/07/30 22:08:36 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.35 2001/07/31 14:44:22 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.34 2001/07/30 22:08:36 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.35  2001/07/31 14:44:22  oes
+ *    Deleted unused size parameter from filter_popups()
+ *
  *    Revision 1.34  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -1074,7 +1077,7 @@ static void chat(struct client_state *csp)
                return;
             }
 
-            !content_filter && (byte_count += n);
+            if(!content_filter) byte_count += n;
 
             /* we're finished with the server's header */
 

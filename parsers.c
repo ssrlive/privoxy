@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.20 2001/07/30 22:08:36 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.21 2001/07/31 14:46:00 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.20 2001/07/30 22:08:36 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.21  2001/07/31 14:46:00  oes
+ *     - Persistant connections now suppressed
+ *     - sed() no longer appends empty header to csp->headers
+ *
  *    Revision 1.20  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -83,7 +87,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.20 2001/07/30 22:08:36 jongfoster
  *    CRLF -> LF
  *
  *    Revision 1.11  2001/05/29 20:11:19  joergs
- *    '/* inside comment' warning removed.
+ *    '/ * inside comment' warning removed.
  *
  *    Revision 1.10  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
@@ -610,7 +614,7 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
 
          if (url)
          {
-            if (p = strchr(url, '/'))
+            if ((p = strchr(url, '/')))
             {
                http->path = strdup(p);
                *p = '\0';
