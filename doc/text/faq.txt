@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.42 2002/04/04 18:46:47 swa Exp $
+$Id: faq.sgml,v 1.43 2002/04/04 21:59:53 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -14,13 +14,13 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster. Junkbuster was
+Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
 originally written by JunkBusters Corporation, and was released as free
 open-source software under the GNU GPL. Stefan Waldherr made many improvements,
 and started the SourceForge project to continue development.
 
-Privoxy continues the Junkbuster tradition, but adds many refinements and
-enhancements.
+Privoxy continues the Junkbuster tradition, but adds many refinements,
+enhancements and new features.
 
 You can find the latest version of the document at http://www.privoxy.org/faq/.
 Please see the Contact section if you want to contact the developers.
@@ -857,21 +857,21 @@ URL: http://p.p/ and select "Toggle Privoxy on or off" from that page.
 
 Other references and sites of interest to Privoxy users:
 
-  http://www.privoxy.org/, The Privoxy Home page.
+http://www.privoxy.org/, The Privoxy Home page.
 
-  http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy on      
+http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy on        
 Sourceforge.                                                                   
 
-  http://p.p/, access Privoxy from your browser. Alternately, http://          
+http://p.p/, access Privoxy from your browser. Alternately, http://            
 config.privoxy.org may work in some situations where the first does not.       
 
-  http://www.junkbusters.com/ht/en/cookies.html
+http://www.junkbusters.com/ht/en/cookies.html
 
-  http://www.waldherr.org/junkbuster/
+http://www.waldherr.org/junkbuster/
 
-  http://privacy.net/analyze/
+http://privacy.net/analyze/
 
- http://www.squid-cache.org/
+http://www.squid-cache.org/
 
  
 

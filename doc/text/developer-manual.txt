@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $
+$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -14,113 +14,125 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster. Junkbuster was
+Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
 originally written by JunkBusters Corporation, and was released as free
 open-source software under the GNU GPL. Stefan Waldherr made many improvements,
 and started the SourceForge project to continue development.
 
-Privoxy continues the Junkbuster tradition, but adds many refinements and
-enhancements.
+Privoxy continues the Junkbuster tradition, but adds many refinements,
+enhancements and new features.
 
 You can find the latest version of the this manual at http://www.privoxy.org/
-developer-manual/. Please see the Contact section of the User Manual on how to
-contact the developers.
+developer-manual/. Please see the Contact section on how to contact the
+developers.
 
 -------------------------------------------------------------------------------
 
 Table of Contents
+ 
 1. Introduction
-2. Quickstart to Privoxy Development
-3. Documentation Guidelines
-4. Coding Guidelines
+3. Quickstart to Privoxy Development
+4. Documentation Guidelines
    
-    4.1. Introduction
-    4.2. Using Comments
+    4.1. Quickstart to Docbook and SGML
+    4.2. Privoxy Documentation Style
+    4.3. Privoxy Custom Entities
+   
+5. Coding Guidelines
+   
+    5.1. Introduction
+    5.2. Using Comments
        
-        4.2.1. Comment, Comment, Comment
-        4.2.2. Use blocks for comments
-        4.2.3. Keep Comments on their own line
-        4.2.4. Comment each logical step
-        4.2.5. Comment All Functions Thoroughly
-        4.2.6. Comment at the end of braces if the content is more than one
+        5.2.1. Comment, Comment, Comment
+        5.2.2. Use blocks for comments
+        5.2.3. Keep Comments on their own line
+        5.2.4. Comment each logical step
+        5.2.5. Comment All Functions Thoroughly
+        5.2.6. Comment at the end of braces if the content is more than one
             screen length
        
-    4.3. Naming Conventions
+    5.3. Naming Conventions
        
-        4.3.1. Variable Names
-        4.3.2. Function Names
-        4.3.3. Header file prototypes
-        4.3.4. Enumerations, and #defines
-        4.3.5. Constants
+        5.3.1. Variable Names
+        5.3.2. Function Names
+        5.3.3. Header file prototypes
+        5.3.4. Enumerations, and #defines
+        5.3.5. Constants
        
-    4.4. Using Space
+    5.4. Using Space
        
-        4.4.1. Put braces on a line by themselves.
-        4.4.2. ALL control statements should have a block
-        4.4.3. Do not belabor/blow-up boolean expressions
-        4.4.4. Use white space freely because it is free
-        4.4.5. Don't use white space around structure operators
-        4.4.6. Make the last brace of a function stand out
-        4.4.7. Use 3 character indentions
+        5.4.1. Put braces on a line by themselves.
+        5.4.2. ALL control statements should have a block
+        5.4.3. Do not belabor/blow-up boolean expressions
+        5.4.4. Use white space freely because it is free
+        5.4.5. Don't use white space around structure operators
+        5.4.6. Make the last brace of a function stand out
+        5.4.7. Use 3 character indentions
        
-    4.5. Initializing
+    5.5. Initializing
        
-        4.5.1. Initialize all variables
+        5.5.1. Initialize all variables
        
-    4.6. Functions
+    5.6. Functions
        
-        4.6.1. Name functions that return a boolean as a question.
-        4.6.2. Always specify a return type for a function.
-        4.6.3. Minimize function calls when iterating by using variables
-        4.6.4. Pass and Return by Const Reference
-        4.6.5. Pass and Return by Value
-        4.6.6. Names of include files
-        4.6.7. Provide multiple inclusion protection
-        4.6.8. Use `extern "C"` when appropriate
-        4.6.9. Where Possible, Use Forward Struct Declaration Instead of
+        5.6.1. Name functions that return a boolean as a question.
+        5.6.2. Always specify a return type for a function.
+        5.6.3. Minimize function calls when iterating by using variables
+        5.6.4. Pass and Return by Const Reference
+        5.6.5. Pass and Return by Value
+        5.6.6. Names of include files
+        5.6.7. Provide multiple inclusion protection
+        5.6.8. Use `extern "C"` when appropriate
+        5.6.9. Where Possible, Use Forward Struct Declaration Instead of
             Includes
        
-    4.7. General Coding Practices
+    5.7. General Coding Practices
        
-        4.7.1. Turn on warnings
-        4.7.2. Provide a default case for all switch statements
-        4.7.3. Try to avoid falling through cases in a switch statement.
-        4.7.4. Use 'long' or 'short' Instead of 'int'
-        4.7.5. Don't mix size_t and other types
-        4.7.6. Declare each variable and struct on its own line.
-        4.7.7. Use malloc/zalloc sparingly
-        4.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
+        5.7.1. Turn on warnings
+        5.7.2. Provide a default case for all switch statements
+        5.7.3. Try to avoid falling through cases in a switch statement.
+        5.7.4. Use 'long' or 'short' Instead of 'int'
+        5.7.5. Don't mix size_t and other types
+        5.7.6. Declare each variable and struct on its own line.
+        5.7.7. Use malloc/zalloc sparingly
+        5.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
             'free'
-        4.7.9. Add loaders to the `file_list' structure and in order
-        4.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
+        5.7.9. Add loaders to the `file_list' structure and in order
+        5.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
        
-    4.8. Addendum: Template for files and function comment blocks:
+    5.8. Addendum: Template for files and function comment blocks:
    
-5. Version Control Guidelines
-6. Testing Guidelines
+6. Version Control Guidelines
+7. Testing Guidelines
    
-    6.1. Testplan for releases
-    6.2. Test reports
+    7.1. Testplan for releases
+    7.2. Test reports
    
-7. Releasing a new version
+8. Releasing a new version
    
-    7.1. Before the Release
-    7.2. Update the webserver
-    7.3. SuSE or Red Hat
-    7.4. OS/2
-    7.5. Solaris
-    7.6. Windows
-    7.7. Debian
-    7.8. Mac OSX
-    7.9. FreeBSD
-    7.10. Tarball
-    7.11. HP-UX 11
-    7.12. Amiga OS
-    7.13. AIX
+    8.1. Before the Release
+    8.2. Update the webserver
+    8.3. SuSE or Red Hat
+    8.4. OS/2
+    8.5. Solaris
+    8.6. Windows
+    8.7. Debian
+    8.8. Mac OSX
+    8.9. FreeBSD
+    8.10. Tarball
+    8.11. HP-UX 11
+    8.12. Amiga OS
+    8.13. AIX
    
-8. Contact the developers
-9. Copyright and History
-10. See also
+9. Contacting the developers, Bug Reporting and Feature Requests
+10. Copyright and History
+   
+    10.1. Copyright
+    10.2. History
+   
+11. See also
+
+-------------------------------------------------------------------------------
 
 1. Introduction
 
@@ -135,7 +147,7 @@ porting, are all important jobs as well.
 
 -------------------------------------------------------------------------------
 
-2. Quickstart to Privoxy Development
+3. Quickstart to Privoxy Development
 
 You'll need an account on Sourceforge to support our development. Mail your ID
 to the list and wait until a project manager has added you.
@@ -155,21 +167,23 @@ following guidelines for changing stuff in the code. If it is
    
 -------------------------------------------------------------------------------
 
-3. Documentation Guidelines
+4. Documentation Guidelines
 
 All formal documents are maintained in docbook SGML and located in the doc/
 source directory. You will need docbook and the docbook stylesheets (or
-comparable alternatives), and either jade or openjade installed in order to
-build docs from source. Currently there is user-manual, FAQ, and, of course
-this, the developer-manual in this format.
+comparable alternatives), and either jade or openjade (recommended) installed
+in order to build docs from source. Currently there is user-manual, FAQ, and,
+of course this, the developer-manual in this format. The README, is also now
+maintained as SGML. The README in the top-level source directory is a generated
+file. DO NOT edit this directly. Edit the SGML source!
 
-Other, less formal documents (e.g. README, LICENSE) are maintained as plain
-text files in the toplevel source directory.
+Other, less formal documents (e.g. AUTHORS, LICENSE) are maintained as plain
+text files in the toplevel source directory. At least for the time being.
 
 Packagers are encouraged to include this documentation. For those without the
 ability to build the docs locally, text versions of each are kept in CVS. Or
 HTML versions can be downloaded from the www.privoxy.org website, which should
-be fairly current.
+be fairly current. (This is only a temporary solution.)
 
 Formal documents are built with the Makefile targets of make dok, or
 alternately make redhat-dok. If you have problems, try both. The build process
@@ -188,9 +202,160 @@ How do you update the webserver (i.e. the pages on privoxy.org)?
    
 -------------------------------------------------------------------------------
 
-4. Coding Guidelines
+4.1. Quickstart to Docbook and SGML
 
-4.1. Introduction
+If you are not familiar with SGML, it is a markup language similar to HTML. In
+fact, HTML is an SGML application. Both use "tags" to format text and other
+content. SGML tags are much more varied, and flexible, but do much of the same
+kinds of things. The tags, or "elements", are definable in SGML. There is no
+set "standards". Since we are using Docbook, our tags are those that are
+defined by Docbook. Much of how the finish document is rendered is determined
+by the "stylesheets". The stylesheets determine how each tag gets translated to
+HTML, or other formats.
+
+Tags in SGML need to be always "closed". If not, you will likely generate
+errors. Example: <title>My Title</title>. They are also case-insensitive, but
+we strongly suggest using all lower case. This keeps compatibility with
+[Docbook] XML.
+
+Our documents use "sections" for the most part. Sections will be processed into
+HTML headers (e.g. h1 for sect1). The Docbook stylesheets will use these to
+also generate the Table of Contents for each doc. Our TOC's are set to a depth
+of three. Meaning sect1, sect2, and sect3 will have TOC entries, but sect4 will
+not. Each section requires a <title> element, and at least one <para>. There is
+a limit of five section levels in Docbook, but generally three should be
+sufficient for our purposes.
+
+Some common elements that you likely will use:
+
+<para></para>, paragraph delimiter. Most text needs to be within paragraph     
+elements.                                                                      
+<emphasis></emphasis>, stylesheets make this italics.                          
+<filename></filename>, files and directories.                                  
+<command></command>, command examples.                                         
+<literallayout></literllayout>, like <pre>, more or less.                      
+<itemizedlist></itemizdelist>, list with bullets.                              
+<listitem></listitem>, member of the above.                                    
+<screen></screen>, screen output, implies <literallayout>.                     
+<ulink url="example.com"></ulink>, like HTML <a> tag.                          
+<quote></quote>, for, doh, quoting text.                                       
+
+Look at any of the existing docs for examples of all these and more.
+
+-------------------------------------------------------------------------------
+
+4.2. Privoxy Documentation Style
+
+It will be easier if everyone follows a similar writing style. This just makes
+it easier to read what someone else has written if it is all done in a similar
+fashion.
+
+Here it is:
+
+  * All tags should be lower case.
+   
+  * Tags delimiting a block of text should be on their own line. Like:
+   
+     <para>
+      Some text goes here.
+     </para>
+           
+   
+    Tags marking individual words, or few words, should be in-line:
+   
+      Just to <emphasis>emphasize</emphasis>, some text goes here.
+           
+   
+  * Tags should be nested and step indented like:
+   
+     <para>
+      <itemizedlist>
+       <para>
+        <listitem>
+          Some text goes here in our list example.
+         </listitem>
+       </para>
+      </itemizedlist>
+     </para>
+           
+   
+    This makes it easier to find the text amongst the tags ;-)
+   
+  * Use white space to separate logical divisions within a document, like
+    between sections. Running everything together consistently makes it harder
+    to read and work on.
+   
+  * Do not hesitate to make comments. Comments can either use the <comment>
+    element, or the <!-- --> style comment familiar from HTML.
+   
+  * We have an international audience. Refrain from slang, or English
+    idiosyncrasies (too many to list :).
+   
+  * Try to keep overall line lengths in source files to 80 characters or less
+    for obvious reasons. This is not always possible, with lenghty URLs for
+    instance.
+   
+  * Our documents are available in differing formats. Right now, they are just
+    plain text, and HTML, but PDF, and others is always a future possibility.
+    Be careful with URLs (<ulink>), and avoid this mistake:
+   
+    My favorite site is <ulink url="http://example.com">here</ulink>.
+   
+    This will render as "My favorite site is here", which is not real helpful
+    in a text doc. Better like this:
+   
+    My favorite site is <ulink url="http://example.com">example.com</ulink>.
+   
+  * All documents should be spell checked occasionally. aspell can check SGML
+    with the -H option. (ispell I think too.)
+   
+-------------------------------------------------------------------------------
+
+4.3. Privoxy Custom Entities
+
+Privoxy documentation is using a number of customized "entities" to facilitate
+documentation maintenance.
+
+We are using a set of "boilerplate" files with generic text, that is used by
+multiple docs. This way we can write something once, and use it repeatedly
+without having to re-write the same content over and over again. If editing
+such a file, keep in mind that it should be generic. That is the purpose; so it
+can be used in varying contexts without additional modifications.
+
+We are also using what Docbook calls "internal entities". These are like
+variables in programming. Well, sort of. For instance, we have the p-version
+entity that contains the current Privoxy version string. You are strongly
+encouraged to use these where possible. Some of these obviously require
+re-setting with each release. A sampling of custom entities are listed below.
+See any of the main docs for examples.
+
+  * Re-cyclable "boilerplate" text entities are defined like:
+   
+    <!entity supported SYSTEM "supported.sgml">
+   
+    In this example, the contents of the file, supported.sgml is available for
+    inclusion anywhere in the doc. To make this happen, just reference the now
+    defined entity: &supported; (starts with an ampersand and ends with a
+    semi-colon), and the contents will be dumped into the finished doc at that
+    point.
+   
+  * Commonly used "internal entities":
+   
+    p-version: the Privoxy version string, e.g. "2.9.13".                      
+    p-status: the project status, either "ALPHA", "BETA", or "STABLE".         
+    p-not-stable: use to conditionally include text in "not stable" releases   
+    (e.g. "BETA").                                                             
+    p-stable: just the opposite.                                               
+    p-text: this doc is only generated as text.                                
+   
+There are others in various places that are defined for a specific purpose.
+Read the source!
+
+-------------------------------------------------------------------------------
+
+5. Coding Guidelines
+
+5.1. Introduction
 
 This set of standards is designed to make our lives easier. It is developed
 with the simple goal of helping us keep the "new and improved Privoxy"
@@ -203,9 +368,9 @@ changes/improvements and in general feel good about ourselves. ;->
 
 -------------------------------------------------------------------------------
 
-4.2. Using Comments
+5.2. Using Comments
 
-4.2.1. Comment, Comment, Comment
+5.2.1. Comment, Comment, Comment
 
 Explanation:
 
@@ -240,7 +405,7 @@ is actually being done.
 
 -------------------------------------------------------------------------------
 
-4.2.2. Use blocks for comments
+5.2.2. Use blocks for comments
 
 Explanation:
 
@@ -280,7 +445,7 @@ line as the code.
 
 -------------------------------------------------------------------------------
 
-4.2.3. Keep Comments on their own line
+5.2.3. Keep Comments on their own line
 
 Explanation:
 
@@ -330,7 +495,7 @@ short DoSomethingVeryImportant(
 
 -------------------------------------------------------------------------------
 
-4.2.4. Comment each logical step
+5.2.4. Comment each logical step
 
 Explanation:
 
@@ -345,7 +510,7 @@ these are usually major logic containers.
 
 -------------------------------------------------------------------------------
 
-4.2.5. Comment All Functions Thoroughly
+5.2.5. Comment All Functions Thoroughly
 
 Explanation:
 
@@ -362,7 +527,7 @@ document.
 
 -------------------------------------------------------------------------------
 
-4.2.6. Comment at the end of braces if the content is more than one screen
+5.2.6. Comment at the end of braces if the content is more than one screen
 length
 
 Explanation:
@@ -395,9 +560,9 @@ if ( 1 == X )
 
 -------------------------------------------------------------------------------
 
-4.3. Naming Conventions
+5.3. Naming Conventions
 
-4.3.1. Variable Names
+5.3.1. Variable Names
 
 Explanation:
 
@@ -417,7 +582,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
 
 -------------------------------------------------------------------------------
 
-4.3.2. Function Names
+5.3.2. Function Names
 
 Explanation:
 
@@ -438,7 +603,7 @@ int loadSomeFile( struct client_state *csp )
 
 -------------------------------------------------------------------------------
 
-4.3.3. Header file prototypes
+5.3.3. Header file prototypes
 
 Explanation:
 
@@ -458,7 +623,7 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-4.3.4. Enumerations, and #defines
+5.3.4. Enumerations, and #defines
 
 Explanation:
 
@@ -485,7 +650,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-4.3.5. Constants
+5.3.5. Constants
 
 Explanation:
 
@@ -511,9 +676,9 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-4.4. Using Space
+5.4. Using Space
 
-4.4.1. Put braces on a line by themselves.
+5.4.1. Put braces on a line by themselves.
 
 Explanation:
 
@@ -556,7 +721,7 @@ while ( more lines are read )
 
 -------------------------------------------------------------------------------
 
-4.4.2. ALL control statements should have a block
+5.4.2. ALL control statements should have a block
 
 Explanation:
 
@@ -586,7 +751,7 @@ above also applies.
 
 -------------------------------------------------------------------------------
 
-4.4.3. Do not belabor/blow-up boolean expressions
+5.4.3. Do not belabor/blow-up boolean expressions
 
 Example:
 
@@ -602,7 +767,7 @@ knowledge of C/C++. (Hope I do not offend by that last comment ... 8-)
 
 -------------------------------------------------------------------------------
 
-4.4.4. Use white space freely because it is free
+5.4.4. Use white space freely because it is free
 
 Explanation:
 
@@ -622,7 +787,7 @@ firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
 
 -------------------------------------------------------------------------------
 
-4.4.5. Don't use white space around structure operators
+5.4.5. Don't use white space around structure operators
 
 Explanation:
 
@@ -643,7 +808,7 @@ Instead of: aStruct -> aMember; aStruct . aMember; FunctionName ();
 
 -------------------------------------------------------------------------------
 
-4.4.6. Make the last brace of a function stand out
+5.4.6. Make the last brace of a function stand out
 
 Example:
 
@@ -674,7 +839,7 @@ of function comments.
 
 -------------------------------------------------------------------------------
 
-4.4.7. Use 3 character indentions
+5.4.7. Use 3 character indentions
 
 Explanation:
 
@@ -707,9 +872,9 @@ int function1( ... )
 
 -------------------------------------------------------------------------------
 
-4.5. Initializing
+5.5. Initializing
 
-4.5.1. Initialize all variables
+5.5.1. Initialize all variables
 
 Explanation:
 
@@ -732,9 +897,9 @@ Status: developer-discrection if and only if the variable is assigned a value
 
 -------------------------------------------------------------------------------
 
-4.6. Functions
+5.6. Functions
 
-4.6.1. Name functions that return a boolean as a question.
+5.6.1. Name functions that return a boolean as a question.
 
 Explanation:
 
@@ -749,7 +914,7 @@ IsWebPageBlank();
 
 -------------------------------------------------------------------------------
 
-4.6.2. Always specify a return type for a function.
+5.6.2. Always specify a return type for a function.
 
 Explanation:
 
@@ -759,7 +924,7 @@ type if the function does not need to return anything.
 
 -------------------------------------------------------------------------------
 
-4.6.3. Minimize function calls when iterating by using variables
+5.6.3. Minimize function calls when iterating by using variables
 
 Explanation:
 
@@ -799,7 +964,7 @@ loop.
 
 -------------------------------------------------------------------------------
 
-4.6.4. Pass and Return by Const Reference
+5.6.4. Pass and Return by Const Reference
 
 Explanation:
 
@@ -816,7 +981,7 @@ should too.
 
 -------------------------------------------------------------------------------
 
-4.6.5. Pass and Return by Value
+5.6.5. Pass and Return by Value
 
 Explanation:
 
@@ -829,7 +994,7 @@ would not work. So, to be consistent, we should declare all prototypes with
 
 -------------------------------------------------------------------------------
 
-4.6.6. Names of include files
+5.6.6. Names of include files
 
 Explanation:
 
@@ -854,7 +1019,7 @@ This duplicates the #include "file.h" behaviour.
 
 -------------------------------------------------------------------------------
 
-4.6.7. Provide multiple inclusion protection
+5.6.7. Provide multiple inclusion protection
 
 Explanation:
 
@@ -873,7 +1038,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-4.6.8. Use `extern "C"` when appropriate
+5.6.8. Use `extern "C"` when appropriate
 
 Explanation:
 
@@ -896,7 +1061,7 @@ extern "C"
 
 -------------------------------------------------------------------------------
 
-4.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
+5.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
 
 Explanation:
 
@@ -919,9 +1084,9 @@ Status: Use with discrection.
 
 -------------------------------------------------------------------------------
 
-4.7. General Coding Practices
+5.7. General Coding Practices
 
-4.7.1. Turn on warnings
+5.7.1. Turn on warnings
 
 Explanation
 
@@ -931,7 +1096,7 @@ possible.
 
 -------------------------------------------------------------------------------
 
-4.7.2. Provide a default case for all switch statements
+5.7.2. Provide a default case for all switch statements
 
 Explanation:
 
@@ -971,7 +1136,7 @@ Status: Programmer discretion is advised.
 
 -------------------------------------------------------------------------------
 
-4.7.3. Try to avoid falling through cases in a switch statement.
+5.7.3. Try to avoid falling through cases in a switch statement.
 
 Explanation:
 
@@ -990,7 +1155,7 @@ fall through and reason why you felt it was necessary.
 
 -------------------------------------------------------------------------------
 
-4.7.4. Use 'long' or 'short' Instead of 'int'
+5.7.4. Use 'long' or 'short' Instead of 'int'
 
 Explanation:
 
@@ -1004,7 +1169,7 @@ forget the exact typedefs now). Should we add these to IJB now that we have a
 
 -------------------------------------------------------------------------------
 
-4.7.5. Don't mix size_t and other types
+5.7.5. Don't mix size_t and other types
 
 Explanation:
 
@@ -1016,7 +1181,7 @@ can.
 
 -------------------------------------------------------------------------------
 
-4.7.6. Declare each variable and struct on its own line.
+5.7.6. Declare each variable and struct on its own line.
 
 Explanation:
 
@@ -1045,7 +1210,7 @@ Status: developer-discrection.
 
 -------------------------------------------------------------------------------
 
-4.7.7. Use malloc/zalloc sparingly
+5.7.7. Use malloc/zalloc sparingly
 
 Explanation:
 
@@ -1062,7 +1227,7 @@ list, then it should definately be allocated via `malloc'.
 
 -------------------------------------------------------------------------------
 
-4.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
+5.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
 
 Explanation:
 
@@ -1088,7 +1253,7 @@ allocating and freeing data structures (complex or nested).
 
 -------------------------------------------------------------------------------
 
-4.7.9. Add loaders to the `file_list' structure and in order
+5.7.9. Add loaders to the `file_list' structure and in order
 
 Explanation:
 
@@ -1101,7 +1266,7 @@ KILLPOPUPs, it is clear that it should come first.
 
 -------------------------------------------------------------------------------
 
-4.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
+5.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
 
 Explanation:
 
@@ -1126,11 +1291,11 @@ from the project).
 
 -------------------------------------------------------------------------------
 
-4.8. Addendum: Template for files and function comment blocks:
+5.8. Addendum: Template for files and function comment blocks:
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $"; 
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $"; 
 /*********************************************************************                          
  *                                                                                              
  * File        :  $Source$                                                                      
@@ -1186,7 +1351,7 @@ Example for file header comments:
 
 #ifndef _FILENAME_H                                                                           
 #define _FILENAME_H                                                                           
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $" 
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $" 
 /*********************************************************************                        
  *                                                                                            
  * File        :  $Source$                                                                    
@@ -1277,20 +1442,20 @@ create a "self-documenting" web page.
 
 -------------------------------------------------------------------------------
 
-5. Version Control Guidelines
+6. Version Control Guidelines
 
 To be filled. note on cvs comments. Don't only comment what you did, but also
 why you did it!
 
 -------------------------------------------------------------------------------
 
-6. Testing Guidelines
+7. Testing Guidelines
 
 To be filled.
 
 -------------------------------------------------------------------------------
 
-6.1. Testplan for releases
+7.1. Testplan for releases
 
 Explain release numbers. major, minor. developer releases. etc.
 
@@ -1319,7 +1484,7 @@ Explain release numbers. major, minor. developer releases. etc.
    
 -------------------------------------------------------------------------------
 
-6.2. Test reports
+7.2. Test reports
 
 Please submit test reports only with the test form at sourceforge. Three simple
 steps:
@@ -1335,7 +1500,7 @@ Do not mail to the mailinglist (we cannot keep track on issues there).
 
 -------------------------------------------------------------------------------
 
-7. Releasing a new version
+8. Releasing a new version
 
 To minimize trouble with distribution contents, webpage errors and the like, we
 strongly encourage you to follow this section if you prepare a new release of
@@ -1346,7 +1511,7 @@ scp (ssh), gmake (GNU's version of make), autoconf, cvs, ???.
 
 -------------------------------------------------------------------------------
 
-7.1. Before the Release
+8.1. Before the Release
 
 The following must be done by one of the developers prior to each new release:
 
@@ -1379,7 +1544,7 @@ The following must be done by one of the developers prior to each new release:
    
 -------------------------------------------------------------------------------
 
-7.2. Update the webserver
+8.2. Update the webserver
 
 All files must be group-readable and group-writable (or no one else will be
 able to change them). To update the webserver, create any pages locally in the
@@ -1399,7 +1564,7 @@ permissions are preserved for shared group access.
 
 -------------------------------------------------------------------------------
 
-7.3. SuSE or Red Hat
+8.3. SuSE or Red Hat
 
 Ensure that you have the latest code version. Hence run:
 
@@ -1427,25 +1592,47 @@ Go to the displayed URL and release the file publicly on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7.4. OS/2
+8.4. OS/2
 
 Ensure that you have the latest code version. Hence run:
 
-  cd current                                                                                          
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-                                                                                                      
+  cd current                                                                                         
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                          
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+  cd ..                                                                                              
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup                
+                                                                                                     
 
-first.
+You will need a mix of development tools. The main compilation takes place with
+IBM Visual Age C++. Some ancillary work takes place with GNU tools, available
+from various sources like hobbes.nmsu.edu. Specificially, you will need
+autoheader, autoconf and sh tools. The packaging takes place with WarpIN,
+available from various sources, including its home page: xworkplace.
 
-  autoheader && autoconf && ./configure                                        
+Change directory to the os2setup directory. Edit the os2build.cmd file to set
+the final executable filename. For example,
+
+  installExeName='privoxyos2_setup_X.Y.Z.exe'                                  
                                                                                
 
-Then do FIXME.
+Next, edit the IJB.wis file so the release number matches in the PACKAGEID
+section:
+
+  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"                       
+                                                                               
+
+You're now ready to build. Run:
+
+  os2build                                                                     
+                                                                               
+
+And in the ./files directory you will have the WarpIN-installable executable.
+Upload this anonymously to uploads.sourceforge.net/incoming, create a release
+for it, and you're done.
 
 -------------------------------------------------------------------------------
 
-7.5. Solaris
+8.5. Solaris
 
 Login to Sourceforge's compilefarm via ssh
 
@@ -1476,7 +1663,7 @@ archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-7.6. Windows
+8.6. Windows
 
 Ensure that you have the latest code version. Hence run
 
@@ -1494,7 +1681,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.7. Debian
+8.7. Debian
 
 Ensure that you have the latest code version. Hence run:
 
@@ -1512,37 +1699,40 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.8. Mac OSX
+8.8. Mac OSX
 
-Login to Sourceforge's compilefarm via ssh
+Ensure that you have the latest code version. Hence run:
 
-  ssh cf.sourceforge.net                                                       
+  cd current                                                                                         
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                          
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+  cd ..                                                                                              
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup                
+                                                                                                     
+
+From the osxsetup directory, run:
+
+  build                                                                        
                                                                                
 
-Choose the right operating system. If you have downloaded Privoxy before,
+This will run autoheader, autoconf and configure as well as make. Finally, it
+will copy over the necessary files to the ./osxsetup/files directory for
+further processing by PackageMaker.
 
-  cd current                                                                                          
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
-                                                                                                      
+Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the
+package name to match the release, and hit the "Create package" button. If you
+specify ./Privoxy.pkg as the output package name, you can then create the
+distributable zip file with the command:
 
-If not, please checkout Privoxy via CVS first. Run:
-
- autoheader && autoconf && ./configure                                         
+zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg                                  
                                                                                
 
-Then run:
-
-  make macosx-dist                                                             
-                                                                               
-
-which creates a gzip'ed tar archive. Sadly, you cannot use make macosx-upload
-on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publicly.
+You can then upload privoxyosx_setup_x.y.z.zip anonymously to
+uploads.sourceforge.net/incoming, create a release for it, and you're done.
 
 -------------------------------------------------------------------------------
 
-7.9. FreeBSD
+8.9. FreeBSD
 
 Change the version number of Privoxy in the configure.in file. Run:
 
@@ -1579,7 +1769,7 @@ archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-7.10. Tarball
+8.10. Tarball
 
 Ensure that you have the latest code version. Hence run:
 
@@ -1608,7 +1798,7 @@ Goto the displayed URL and release the file publicly on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7.11. HP-UX 11
+8.11. HP-UX 11
 
 Ensure that you have the latest code version. Hence run:
 
@@ -1626,7 +1816,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.12. Amiga OS
+8.12. Amiga OS
 
 Ensure that you have the latest code version. Hence run:
 
@@ -1644,7 +1834,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.13. AIX
+8.13. AIX
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1674,19 +1864,101 @@ archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-8. Contact the developers
+9. Contacting the developers, Bug Reporting and Feature Requests
 
-Please see the contact page in the user-manual for details.
+We value your feedback. However, to provide you with the best support, please
+note:
+
+  *  Use the Sourceforge Support Forum to get help:
+       
+     http://sourceforge.net/tracker/?group_id=11118&atid=211118
+       
+   
+  *  Submit bugs only through our Sourceforge Bug Forum:
+     
+     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+        
+   
+    Make sure that the bug has not already been submitted. Please try to verify
+    that it is a Privoxy bug, and not a browser or site bug first. If you are
+    using your own custom configuration, please try the stock configs to see if
+    the problem is a configuration related bug. And if not using the latest
+    development snapshot, please try the latest one. Or even better, CVS
+    sources. Please be sure to include the Privoxy/Junkbuster version,
+    platform, browser, any pertinent log data, any other relevant details
+    (please be specific) and, if possible, some way to reproduce the bug.
+   
+  *  Submit feature requests only through our Sourceforge feature request 
+     forum:
+     
+     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+       
+   
+  *  For any other issues, feel free to use the mailing lists:
+     
+     http://sourceforge.net/mail/?group_id=11118.
+     
+   
+    Anyone interested in actively participating in development and related
+    discussions can also join the appropriate mailing list. Archives are
+    available too.
+   
+-------------------------------------------------------------------------------
+
+10. Copyright and History
+
+10.1. Copyright
+
+Privoxy is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details, which
+is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
+330, Boston, MA 02111-1307, USA.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-9. Copyright and History
+10.2. History
 
-Please see the user-manual for information on Copyright and History.
+Privoxy is evolved, and derived from, the Internet Junkbuster, with many
+improvments and enhancements over the original.
+
+Junkbuster was originally written by Anonymous Coders and Junkbuster's
+Corporation, and was released as free open-source software under the GNU GPL. 
+Stefan Waldherr made many improvements, and started the SourceForge project
+Privoxy to rekindle development. There are now several active developers
+contributing. The last stable release of Junkbuster was v2.0.2, which has now
+grown whiskers ;-).
 
 -------------------------------------------------------------------------------
 
-10. See also
+11. See also
 
-Please see the user-manual for others references.
+Other references and sites of interest to Privoxy users:
+
+http://www.privoxy.org/, The Privoxy Home page.
+
+http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy on        
+Sourceforge.                                                                   
+
+http://p.p/, access Privoxy from your browser. Alternately, http://            
+config.privoxy.org may work in some situations where the first does not.       
+
+http://www.junkbusters.com/ht/en/cookies.html
+
+http://www.waldherr.org/junkbuster/
+
+http://privacy.net/analyze/
+
+http://www.squid-cache.org/
+
+ 
 
