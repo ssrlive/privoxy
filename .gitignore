@@ -48,5 +48,4 @@ vc_release
 vc_release_winthr
 w32.aps
 w32.res
-*.action
 *.txt
