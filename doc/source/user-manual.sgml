@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.113 2002/05/15 21:07:25 oes Exp $
+ $Id: user-manual.sgml,v 1.114 2002/05/16 09:42:50 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.113 2002/05/15 21:07:25 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.114 2002/05/16 09:42:50 oes Exp $</pubdate>
 
 <!--
 
@@ -1146,7 +1146,7 @@ actionsfile
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Default value:</term>
+  <term>Default values:</term>
   <listitem>
    <simplelist>
     <member>
@@ -1199,7 +1199,7 @@ actionsfile
   <term>Specifies:</term>
   <listitem>
    <para>
-    The <link linkend="filter">filter</link> file to use
+    The <link linkend="filter-file">filter file</link> to use
    </para>
   </listitem>
  </varlistentry>
@@ -1220,7 +1220,7 @@ actionsfile
   <listitem>
    <para>
     No textual content filtering takes place, i.e. all
-    <literal>+filter{<replaceable class="parameter">name</replaceable>}</literal>
+    <literal>+<link linkend="filter">filter</link>{<replaceable class="parameter">name</replaceable>}</literal>
     actions in the actions files are turned neutral.
    </para>
   </listitem>
@@ -1229,12 +1229,24 @@ actionsfile
   <term>Notes:</term>
   <listitem>
    <para>
-    The <quote>default.filter</quote> file contains content modification rules 
-    that use <quote>regular expressions</quote>. These rules permit powerful
-    changes on the content of Web pages, e.g., you could disable your favorite
+    The <link linkend="filter-file">filter file</link> contains content modification
+    rules that use <link linkend="regex">regular expressions</link>. These rules permit
+    powerful changes on the content of Web pages, e.g., you could disable your favorite
     JavaScript annoyances, re-write the actual displayed text, or just have some
     fun replacing <quote>Microsoft</quote> with <quote>MicroSuck</quote> wherever
     it appears on a Web page.
+   </para>
+   <para>
+    The
+    <literal>+<link linkend="filter">filter</link>{<replaceable class="parameter">name</replaceable>}</literal>
+    actions rely on the relevant filter (<replaceable class="parameter">name</replaceable>)
+    to be defined in the filter file!
+   </para>
+   <para>
+    A pre-defined filter file called <filename>default.filter</filename> that contains
+    a bunch of handy filters for common problems is included in the distribution.
+    See the section on the <literal><link linkend="filter">filter</link></literal>
+    action for a list.
    </para>
   </listitem>
  </varlistentry>
@@ -4225,7 +4237,7 @@ ad.doubleclick.net
     sense to combine it with any <literal><link linkend="filter">filter</link></literal> action,
     since as soon as one <literal><link linkend="filter">filter</link></literal> applies,
     the whole document needs to be buffered anyway, which destroys the advantage of
-    the <literal>kill-popups</literal> action over it's filter equivalent.
+    the <literal>kill-popups</literal> action over its filter equivalent.
    </para>
    <para>
     Killing all pop-ups is a dangerous business. Many shops and banks rely on
@@ -4884,7 +4896,7 @@ my-internal-testing-server.void</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="act-examples">
-<title>Sample Actions Files</title>
+<title>Actions Files Tutorial</title>
 <para>
  The above chapters have shown <link linkend="actions-file">which actions files
  there are and how they are organized</link>, how actions are <link
@@ -4898,7 +4910,7 @@ my-internal-testing-server.void</screen>
 <sect3><title>default.action</title>
 
 <para>
-Every config file should start with a short comment stating it's purpose:
+Every config file should start with a short comment stating its purpose:
 </para>
 
 <para>
@@ -5239,9 +5251,9 @@ count*.
 # 
 { -<link linkend="BLOCK">block</link> }
 adv[io]*.  # (for advogato.org and advice.*)
-adsl.  
+adsl.      # (has nothing to do with ads)
 ad[ud]*.   # (adult.* and add.*)
-.edu       # Universities
+.edu       # (universities don't host banners (yet!))
 .*loads.   # (downloads, uploads etc)
 
 # By path:
@@ -5322,7 +5334,9 @@ www.ugu.com/sui/ugu/adv</screen>
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
 mercy-for-cookies   = -crunch-all-cookies -session-cookies-only
 fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
-shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
+shop        = mercy-for-cookies -filter{popups} -kill-popups
+allow-ads   = -block -filter{banners-by-size} # (see below)</screen>
+ 
 </para>
 
 <para>
@@ -5411,9 +5425,29 @@ another.popular.site.net/more/junk/here/</screen>
  really shouldn't be filtered, like code on CVS->Web interfaces. Since
  <filename>user.action</filename> has the last word, these exceptions
  won't be valid for the <quote>fun</quote> filtering specified here.
- But you're the boss.
 </para>
 
+<para>
+ Finally, you might think about how your favourite free websites are
+ funded, and find that they rely on displaying banner advertisements
+ to survive. So you might want to specifically allow banners for those
+ sites that you feel provide value to you:
+</para>
+
+<para>
+<screen>
+{ allow-ads }
+.sourceforge.net
+.slashdot.org
+.osdn.net</screen>   
+</para>
+
+<para>
+ Note that <literal>allow-ads</literal> has been aliased to 
+ <literal>-<link linkend="block">block</link></literal>
+ <literal>-<link linkend="filter-banners-by-size">filter{banners-by-size}</link></literal>
+ above.
+</para>
 </sect3>
 </sect2>
 
@@ -5427,129 +5461,306 @@ another.popular.site.net/more/junk/here/</screen>
 
 <sect1 id="filter-file">
 <title>The Filter File</title>
+
 <para>
- Any web page can be dynamically modified with the filter file. This
- modification can be removal, or re-writing, of any web page content,
- including tags and non-visible content. The default filter file is
- oddly enough <filename>default.filter</filename>, located in the config
- directory. 
+ All text substitutions that can be invoked through the
+ <literal><link linkend="filter">filter</link></literal> action
+ must first be defined in the filter file, which is typically
+ called <filename>default.filter</filename> and which can be
+ selected through the <literal>
+ <link linkend="filterfile">filterfile</link></literal> config
+ option.
 </para>
 
 <para>
- This is potentially a very powerful feature, and requires knowledge of both 
- <quote>regular expression</quote> and HTML in order create custom 
- filters. But, there are a number of useful filters included with 
- <application>Privoxy</application> for many common situations.
+ Typical reasons for doing such substitutions are to eliminate
+ common annoyances in HTML and JavaScript, such as pop-up windows,
+ exit consoles, crippled windows without navigation tools, the
+ infamous &lt;BLINK&gt; tag etc, to suppress images with certain
+ width and height attributes (standard banner sizes or web-bugs),
+ or just to have fun. The possibilities are endless.
 </para>
 
 <para>
- The included example file is divided into sections. Each section begins 
- with the <literal>FILTER</literal> keyword, followed by the identifier 
- for that section, e.g. <quote>FILTER: webbugs</quote>. Each section performs
- a similar type of filtering, such as <quote>html-annoyances</quote>.
+ Filtering works on any text-based document type, including plain
+ text, HTML, JavaScript, CSS etc. (all <literal>text/*</literal>
+ MIME types). Substitutions are made at the source level, so if
+ you want to <quote>roll your own</quote> filters, you should be
+ familiar with HTML syntax.
 </para>
 
 <para>
- This file uses regular expressions to alter or remove any string in the
- target page. The expressions can only operate on one line at a time. Some
- examples from the included default <filename>default.filter</filename>:
+ Just like the <link linkend="actions-file">actions files</link>, the
+ filter file is organized in sections, which are called <emphasis>filters</emphasis>
+ here. Each filter consists of a heading line, that starts with the
+ <emphasis>keyword</emphasis> <literal>FILTER:</literal>, followed by
+ the filter's <emphasis>name</emphasis>, and a short (one line) 
+ <emphasis>description</emphasis> of what it does. Below that line
+ come the <emphasis>jobs</emphasis>, i.e. lines that define the actual
+ text substitutions. By convention, the name of a filter
+ should describe what the filter <emphasis>eliminates</emphasis>. The
+ comment is used in the <ulink url="http://config.privoxy.org/">web-based
+ user interface</ulink>.
 </para>
 
 <para>
- Stop web pages from displaying annoying messages in the status bar by
- deleting such references:
+ Once a filter called <replaceable>name</replaceable> has been defined
+ in the filter file, it can be invoked by using an action of the form
+ +<literal><link linkend="filter">filter</link>{<replaceable>name</replaceable>}</literal>
+ in any <link linkend="actions-file">actions file</link>.
+</para>
+ 
+<para>
+ A filter header line for a filter called <quote>foo</quote> could look
+ like this:
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
- FILTER: html-annoyances
-
- # New browser windows should be resizeable and have a location and status
- # bar. Make it so.
- #
- s/resizable="?(no|0)"?/resizable=1/ig s/noresize/yesresize/ig
- s/location="?(no|0)"?/location=1/ig s/status="?(no|0)"?/status=1/ig
- s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
- s/menubar="?(no|0)"?/menubar=1/ig 
-
- # The &lt;BLINK&gt; tag was a crime!
- #
- s*&lt;blink&gt;|&lt;/blink&gt;**ig
-
- # Is this evil? 
- #
- #s/framespacing="?(no|0)"?//ig
- #s/margin(height|width)=[0-9]*//gi
-   </literallayout>
-  </msgtext> 
- </literal>
+ <screen>FILTER: foo Replace all "foo" with "bar"</screen>
 </para>
 
 <para>
- Just for kicks, replace any occurrence of <quote>Microsoft</quote> with
- <quote>MicroSuck</quote>, and have a little fun with topical buzzwords: 
+ Below that line, and up to the next header line, come the jobs that
+ define what text replacements the filter executes. They are specified
+ in a syntax that imitates <ulink url="http://www.perl.org/">Perl</ulink>'s
+ <literal>s///</literal> operator. If you are familiar with Perl, you
+ will find this to be quite intuitive, and may want to look at the
+ <ulink url="http://www.oesterhelt.org/pcrs/pcrs.1.html">PCRS man page</ulink>
+ for the subtle differences to Perl behaviour. Most notably, the non-standard
+ option letter <literal>U</literal> is supported, which turns the default
+ to ungreedy matching.
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
- FILTER: fun
+ If you are new to regular expressions, you might want to take a look at
+ the <link linkend="regex">Appendix on regular expressions</link>, and
+ see the <ulink url="http://perldoc.com/perl5.6.1/pod/perl.html">Perl
+ manual</ulink> for
+ <ulink url="http://perldoc.com/perl5.6.1/pod/perlop.html#s-PATTERN-REPLACEMENT-egimosx">the 
+ <literal>s///</literal> operator's syntax</ulink> and <ulink
+ url="http://perldoc.com/perl5.6.1/pod/perlre.html">Perl-style regular
+ expressions</ulink> in general.
+ The below examples might also help to get you started.
+</para>
 
- s/microsoft(?!.com)/MicroSuck/ig
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 
- # Buzzword Bingo:
- #
- s/industry-leading|cutting-edge|award-winning/&lt;font color=red&gt;&lt;b&gt;BINGO!&lt;/b&gt;&lt;/font&gt;/ig
-   </literallayout>
-  </msgtext> 
- </literal>
+<sect2><title>Filter File Tutorial</title>
+<para>
+ Now, let's complete our <quote>foo</quote> filter. We have already defined
+ the heading, but the jobs are still missing. Since all it does is to replace
+ <quote>foo</quote> with <quote>bar</quote>, there is only one (trivial) job
+ needed:
 </para>
 
 <para>
- Kill those pesky little web-bugs:
+ <screen>s/foo/bar/</screen>
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
- # webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
- FILTER: webbugs
-
- s/&lt;img\s+[^&gt;]*?(width|height)\s*=\s*['"]?1\D[^&gt;]*?(width|height)\s*=\s*['"]?1(\D[^&gt;]*?)?>/&lt;!-- Squished WebBug --&gt;/sig
-   </literallayout>
-  </msgtext> 
- </literal>
+ But wait! Didn't the comment say that <emphasis>all</emphasis> occurrences
+ of <quote>foo</quote> should be replaced? Our current job will only take
+ care of the first <quote>foo</quote> on each page. For global substitution,
+ we'll need to add the <literal>g</literal> option:
 </para>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
-<title>The <emphasis>+filter</emphasis> Action</title>
-<para>
- Filters are enabled with the <link
- linkend="FILTER"><quote>+filter</quote></link> action from within 
- one of the actions files. <quote>+filter</quote> requires one parameter, which 
- should match one of the section identifiers in the filter file itself. Example:
-</para>
-
-<screen>
-  +filter{html-annoyances}
-</screen>
 
 <para>
- This would activate that particular filter. Similarly, <quote>+filter</quote>
- can be turned off for selected sites as:
- <quote>-filter{<replaceable>html-annoyances</replaceable>}</quote>. Remember
- too, all actions are off by default, unless they are explicitly enabled in one
- of the actions files.
+ <screen>s/foo/bar/g</screen>
 </para>
 
+<para>
+ Our complete filter now looks like this:
+</para>
+<para>
+ <screen>FILTER: foo Replace all "foo" with "bar"
+s/foo/bar/g</screen>
+</para>
+
+<para>
+ Let's look at some real filters for more interesting examples. Here you see
+ a filter that protects against some common annoyances that arise from JavaScript
+ abuse. Let's look at its jobs one after the other:
+</para>
+
+
+<para>
+ <screen>
+FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
+
+# Get rid of JavaScript referrer tracking. Test page: http://www.randomoddness.com/untitled.htm
+#
+s|(&lt;script.*)document\.referrer(.*&lt;/script&gt;)|$1"Not Your Business!"$2|Usg</screen>
+</para>
+
+<para>
+ Following the header line and a comment, you see the job. Note that it uses
+ <literal>|</literal> as the delimiter instead of <literal>/</literal>, because
+ the pattern contains a forward slash, which would otherwise have to be escaped
+ by a backslash (<literal>\</literal>).
+</para>
+
+<para>
+ Now, let's examine the pattern: it starts with the text <literal>&lt;script.*</literal>
+ enclosed in parentheses. Since the dot matches any character, and <literal>*</literal>
+ means: <quote>Match an arbitrary number of the element left of myself</quote>, this
+ matches <quote>&lt;script</quote>, followed by <emphasis>any</emphasis> text, i.e.
+ it matches the whole page, from the start of the first &lt;script&gt; tag.
+</para>
+
+<para>
+ That's more than we want, but the pattern continues: <literal>document\.referrer</literal>
+ matches only the exact string <quote>document.referrer</quote>. The dot needed to
+ be <emphasis>escaped</emphasis>, i.e. preceded by a backslash, to take away its
+ special meaning as a joker, and make it just a regular dot. So far, the meaning is:
+ Match from the start of the first &lt;script&gt; tag in a the page, up to, and including,
+ the text <quote>document.referrer</quote>, if <emphasis>both</emphasis> are present
+ in the page (and appear in that order).
+</para>
+
+<para>
+ But there's still more pattern to go. The next element, again enclosed in parentheses,
+ is <literal>.*&lt;/script&gt;</literal>. You already know what <literal>.*</literal>
+ means, so the whole pattern translates to: Match from the start of the first  &lt;script&gt;
+ tag in a page to the end of the last &lt;script&gt; tag, provided that the text
+ <quote>document.referrer</quote> appears somewhere in between.
+</para>
+
+<para>
+ This is still not the whole story, since we have ignored the options and the parentheses:
+ The portions of the page matched by sub-patterns that are enclosed in parentheses, will be
+ remembered and be available through the variables <literal>$1, $2, ...</literal> in
+ the substitute. The <literal>U</literal> option switches to ungreedy matching, which means
+ that the first <literal>.*</literal> in the pattern will only <quote>eat up</quote> all
+ text in between <quote>&lt;script</quote> and the <emphasis>first</emphasis> occurrence
+ of <quote>document.referrer</quote>, and that the second <literal>.*</literal> will
+ only span the text up to the <emphasis>first</emphasis> <quote>&lt;/script&gt;</quote>
+ tag. Furthermore, the <literal>s</literal> option says that the match may span
+ multiple lines in the page, and the <literal>g</literal> option again means that the
+ substitution is global.
+</para>
+
+<para>
+ So, to summarize, the pattern means: Match all scripts that contain the text
+ <quote>document.referrer</quote>. Remember the parts of the script from
+ (and including) the start tag up to (and excluding) the string
+ <quote>document.referrer</quote> as <literal>$1</literal>, and the part following
+ that string, up to and including the closing tag, as <literal>$2</literal>.
+</para>
+
+<para>
+ Now the pattern is deciphered, but wasn't this about substituting things? So
+ lets look at the substitute: <literal>$1"Not Your Business!"$2</literal> is
+ easy to read: The text remembered as <literal>$1</literal>, followed by 
+ <literal>"Not Your Business!"</literal> (<emphasis>including</emphasis>
+ the quotation marks!), followed by the text remembered as <literal>$2</literal>.
+ This produces an exact copy of the original string, with the middle part
+ (the <quote>document.referrer</quote>) replaced by <literal>"Not Your
+ Business!"</literal>.
+</para>
+
+<para>
+ The whole job now reads: Replace <quote>document.referrer</quote> by
+ <literal>"Not Your Business!"</literal> wherever it appears inside a
+ &lt;script&gt tag. Note that this job won't break JavaScript syntax,
+ since both the original and the replacement are syntactically valid
+ string objects. The script just won't have access to the referrer
+ information anymore.
+</para>
+
+<para>
+ We'll show you two other jobs from the JavaScript taming department, but
+ this time only point out the constructs of special interest:
+</para>
+
+<para>
+ <screen>
+# The status bar is for displaying link targets, not pointless blahblah
+#
+s/window\.status\s*=\s*['"].*?['"]/dUmMy=1/ig</screen>
+</para>
+
+<para>
+ <literal>\s</literal> stands for whitespace characters (space, tab, newline,
+ carriage return, form feed), so that <literal>\s*</literal> means: <quote>zero
+ or more whitespace</quote>. The <literal>?</literal> in <literal>.*?</literal>
+ makes this matching of arbitrary text ungreedy. (Note that the <literal>U</literal>
+ option is not set). The <literal>['"]</literal> construct means: <quote>a single
+ <emphasis>or</emphasis> a double quote</quote>.
+</para>
+
+<para>
+ So what does this job do? It replaces assignments of single- or double-quoted
+ strings to the <quote>window.status</quote> object with a dummy assignment
+ (using a variable name that is hopefully odd enough not to conflict with
+ real variables in scripts). Thus, it catches many cases where e.g. pointless
+ descriptions are displayed in the status bar instead of the link target when
+ you move your mouse over links.
+</para>
+
+<para>
+ <screen>
+# Kill OnUnload popups. Yummy. Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
+#
+s/(&lt;body .*)onunload(.*&gt;)/$1never$2/iU</screen>
+</para>
+
+<para>
+ Including the
+ <ulink url="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-eventgroupings-htmlevents">OnUnload
+ event binding</ulink> in the HTML DOM was a <emphasis>CRIME</emphasis>.
+ When I close a browser window, I want it to close and die. Basta.
+ This job replaces the <quote>onunload</quote> attribute in
+ <quote>&lt;body&gt</quote> tags with the dummy word <literal>never</literal>.
+ Note that the <literal>i</literal> option makes the pattern matching
+ case-insensitive.
+</para>
+
+<para>
+ The last example is from the fun department:
+</para>
+
+<para>
+ <screen>
+FILTER: fun Fun text replacements
+
+# Spice the daily news:
+#
+s/microsoft(?!\.com)/MicroSuck/ig</screen>
+</para>
+
+<para>
+ Note the <literal>(?!\.com)</literal> part (a so-called negative lookahead)
+ in the job's pattern, which means: Don't match, if the string 
+ <quote>.com</quote> appears directly following <quote>microsoft</quote>
+ in the page. This prevents links to microsoft.com from being messed, while
+ still replacing the word everywhere else.
+</para>
+
+<para>
+ <screen>
+# Buzzword Bingo (example for extended regex syntax)
+#
+s* industry[ -]leading \
+|  cutting[ -]edge \
+|  award[ -]winning # Comments are OK, too! \
+|  high[ -]performance \
+|  solutions[ -]based \
+|  unmatched \
+|  unparalleled \
+|  unrivalled \
+*&lt;font color="red"&gt;&lt;b&gt;BINGO!&lt;/b&gt;&lt;/font&gt; \
+*igx</screen>
+</para>
+
+<para>
+ The <literal>x</literal> option in this job turns on extended syntax, and allows for
+ e.g. the liberal use of (non-interpreted!) whitespace for nicer formatting.
+</para>
+
+<para>
+ You get the idea?
+</para>
 </sect2>
-
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -6521,6 +6732,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.114  2002/05/16 09:42:50  oes
+ More ulink->link, added some hints to Quickstart section
+
  Revision 1.113  2002/05/15 21:07:25  oes
  Extended and further commented the example actions files
 
