@@ -1077,7 +1077,7 @@ host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 VERSION_MAJOR=2
 VERSION_MINOR=9
 VERSION_POINT=10
-CODE_STATUS="\"alpha\""
+CODE_STATUS="\"beta\""
 
 cat >>confdefs.h <<EOF
 #define VERSION_MAJOR ${VERSION_MAJOR}

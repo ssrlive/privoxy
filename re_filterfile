@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.13  2001/10/13 13:11:20  joergs
+#     Fixed WebBug filter.
+#
 #     Revision 1.12  2001/10/07 15:46:42  oes
 #     Followed Guy's proposal to change the document.cookie job
 #
@@ -163,7 +166,7 @@ s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D
 # Fun stuff
 #
 # ********************************************************************/
-s/microsoft(?!.com)/MicroSuck/ig
+#s/microsoft(?!.com)/MicroSuck/ig
 
 # ********************************************************************/
 #
