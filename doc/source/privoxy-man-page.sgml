@@ -54,7 +54,7 @@
 </refentryinfo>
 <refmeta>
  <refentrytitle>privoxy</refentrytitle>
- <manvolnum>1</manvolnum>
+ <manvolnum>8</manvolnum>
  <refmiscinfo>
   Privoxy &p-version;<![%p-not-stable;[ &p-status;]]>
  </refmiscinfo>
