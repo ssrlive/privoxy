@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.9 2001/07/29 18:43:08 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.10 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,12 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.10  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.9  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.
@@ -117,9 +123,12 @@ extern char *client_ua(const struct parsers *v, char *s, struct client_state *cs
 extern char *client_from(const struct parsers *v, char *s, struct client_state *csp);
 extern char *client_send_cookie(const struct parsers *v, char *s, struct client_state *csp);
 extern char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *csp);
+
 extern void client_cookie_adder(struct client_state *csp);
 extern void client_xtra_adder(struct client_state *csp);
+extern void connection_close_adder(struct client_state *csp); 
 extern void client_x_forwarded_adder(struct client_state *csp);
+
 extern char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp);
 
 extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
