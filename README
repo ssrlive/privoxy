@@ -30,7 +30,6 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *********************************************************************/
-
 
 This README is included with the development version of Junkbuster,
 which will eventually become Junkbuster v3.0. See
@@ -40,13 +39,14 @@ Internet Junkbuster is a web proxy with advanced filtering
 capabilities for protecting privacy and removing ads, banners, pop-ups
 and other obnoxious Internet Junk.
 
+
  INSTALL
 --------
 
 For tarball, first unpack:
 
  tar zxvf ijb_source_*
- cd ijb_source_2.9.8_alpha
+ cd ijb_source_2.9.9_alpha
 
  ./configure
  make
@@ -54,7 +54,9 @@ For tarball, first unpack:
  make install
 
 Redhat and SuSE src and binary RPMs can be built with 'make
-redhat-dist' or 'make suse-dist' (run ./configure first).
+redhat-dist' or 'make suse-dist' (run ./configure first). BSD
+will (probably) require gmake (from http://gnu.org). See the 
+user-manual for OS/2 build instructions.
 
 Junkbuster is also availabe via anonymous CVS:
 
@@ -64,6 +66,7 @@ Junkbuster is also availabe via anonymous CVS:
 This will create a directory named 'current'. Then, 'cd current', and then
 build as above.
 
+
  RUN
 ----
 
@@ -71,12 +74,18 @@ build as above.
 
 Or for RPMS: /etc/rc.d/init.d/junkbuster start
 
+The only command line option supported is the location of the 
+main configuration file. If none is specified, Junkbuster will 
+look for a file named 'config' in the current directory.
+
+
 CONFIGURATION
 -------------
 
-See: 'config', 'actionsfile', and 're_filterfile'. There are many changes and
-advances since v2.0.x. Be sure to set your browsers for HTTP Proxy at
-localhost:8000.
+See: 'config', 'actionsfile', and 're_filterfile'. These are all well
+commented. There are many changes and advances since v2.0.x. Be sure to set
+your browsers for HTTP/HTTPS Proxy at localhost:8000.
+
 
 DOCUMENTATION
 -------------
@@ -87,12 +96,13 @@ files, which are all well commented. These are 'config',
 'actionsfile', and 're_filterfile' in the toplevel source directory.
 
 There is a growing amount of new documentation in the 'doc'
-subdirectory, but it is sparse at this point. In particular, see the
-developer-manual and user-manual there.
+subdirectory, but it is sparse at this point. In particular, see 
+the user-manual there.
 
 Some legacy documentation is also included only to give an idea of
 what Junkbuster can do under doc/obsolete/*. Much has changed since
 these docs were written, so beware.
+
 
 BUGS
 ----
@@ -105,4 +115,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.1 2001/09/13 15:24:30 swa Exp $
+$Id: README,v 1.2 2001/09/14 21:28:12 hal9 Exp $
