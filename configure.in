@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.14 2001/07/30 22:12:11 jongfoster Exp $
+dnl $Id: configure.in,v 1.15 2001/09/12 17:28:59 david__schmidt Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.15  2001/09/12 17:28:59  david__schmidt
+dnl
+dnl OS/2 port: update autoconf'd support for the platform.
+dnl
 dnl Revision 1.14  2001/07/30 22:12:11  jongfoster
 dnl Fixing Solaris build (I hope) and tidying up #defines:
 dnl - All feature #defines are now of the form FEATURE_xxx
@@ -171,7 +175,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.14 $)
+AC_REVISION($Revision: 1.15 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 
@@ -354,6 +358,19 @@ case "$host" in
 esac
 
 AC_SUBST(SOCKET_LIB)
+
+dnl =================================================================
+dnl AmigaOS specific
+dnl =================================================================
+
+AMIGAOS_ONLY=#
+
+case "$host" in
+*-amigaos) AMIGAOS_ONLY=
+;;
+esac
+
+AC_SUBST(AMIGAOS_ONLY)
 
 dnl =================================================================
 dnl Check for standard compiler stuff

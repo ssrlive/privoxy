@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.23 2001/09/12 16:28:42 swa Exp $
+# $Id: Makefile.in,v 1.24 2001/09/12 17:28:59 david__schmidt Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.24  2001/09/12 17:28:59  david__schmidt
+#
+# OS/2 port: update autoconf'd support for the platform.
+#
 # Revision 1.23  2001/09/12 16:28:42  swa
 # added "make dok" section to generate html pages from
 # the sgml source documents. note that the we do not want
@@ -398,15 +402,13 @@ win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pc
 w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/idle.ico icons/junkbust.ico config.h
 	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
 
-## AmigaOS, GCC 2.95.1 (or lower, 2.95.3 does NOT work!)
-#ifeq ($(shell $(CC) $(CFLAGS) -dumpmachine), m68k-amigaos)
-#OBJS += amiga.o
-#CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -Wall -m68020 -Os -noixemul -fbaserel -msmall-code
-#LDFLAGS += -m68020 -noixemul -fbaserel
-#LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
-#amiga.o: amiga.c amiga.h config.h
-#endif
-#
+# AmigaOS
+@AMIGAOS_ONLY@OBJS += amiga.o
+@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -Wall -m68020 -Os -noixemul -fbaserel -msmall-code
+@AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
+@AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
+@AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
+
 
 $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
