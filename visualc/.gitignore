@@ -1,0 +1,13 @@
+*.ncb
+*.plg
+*.opt
+console_debug
+console_debug_winthr
+console_release
+console_release_winthr
+vc_dftables
+vc_dftables_dbg
+vc_debug
+vc_debug_winthr
+vc_release
+vc_release_winthr
