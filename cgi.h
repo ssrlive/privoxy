@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.23 2002/03/24 16:18:15 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.24 2002/03/26 22:29:54 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.24  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.23  2002/03/24 16:18:15  jongfoster
  *    Removing old logo
  *
@@ -66,7 +69,7 @@
  *
  *    CGI actions file editor that works and is actually useful.
  *
- *    Ability to toggle JunkBuster remotely using a CGI call.
+ *    Ability to toggle Junkbuster remotely using a CGI call.
  *
  *    You can turn off both the above features in the main configuration
  *    file, e.g. if you are running a multi-user proxy.

@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.58 2002/03/29 03:33:13 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.59 2002/04/05 15:51:51 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,12 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.58 2002/03/29 03:33:13 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.59  2002/04/05 15:51:51  oes
+ *     - added send-stylesheet CGI
+ *     - bugfix: error-pages now get correct request protocol
+ *     - fixed
+ *     - kludged CGI descriptions and menu not to break JS syntax
+ *
  *    Revision 1.58  2002/03/29 03:33:13  david__schmidt
  *    Fix Mac OSX compiler warnings
  *
@@ -138,7 +144,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.58 2002/03/29 03:33:13 david__schmidt Exp
  *
  *    CGI actions file editor that works and is actually useful.
  *
- *    Ability to toggle JunkBuster remotely using a CGI call.
+ *    Ability to toggle Junkbuster remotely using a CGI call.
  *
  *    You can turn off both the above features in the main configuration
  *    file, e.g. if you are running a multi-user proxy.

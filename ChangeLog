@@ -99,14 +99,14 @@ image).
 Thanks to Jörg Strohmayer (joergs at users.sourceforge.net) for these.
 - Temporary hack to get FORCE_LOAD to work with IE.  I just lowercased the
 FORCE_LOAD_PREFIX.  Needs fixing properly.
-- Most URLs hardcoded into JunkBuster were changed to go through a script
+- Most URLs hardcoded into Junkbuster were changed to go through a script
 e.g. http://ijbswa.sourceforge.net/redirect.php?v=2.9.3&to=faq
 The only other URLs left are the GNU GPL:
   http://www.fsf.org/copyleft/gpl.html
 and the home page:
   http://ijbswa.sourceforge.net/
-... and various URLs which will be intercepted by JunkBuster anyway.
-TODO: Still need to do something with the URLs in JunkBuster Corp's 
+... and various URLs which will be intercepted by Junkbuster anyway.
+TODO: Still need to do something with the URLs in Junkbuster Corp's 
 copyright/trademark notice on the bottom of the show-proxy-args page.
 - PCRE or GNU Regex is now a #define option.
 
@@ -147,7 +147,7 @@ To see command-line options, run "./configure --help".
 This is my first ever autoconf script, so it has some rough edges
 (how PCRE is handled is the roughest).
 -  Error logging code replaced with new module errlog.c, based on the
-one from JunkBusterMT (but with the threading code removed).
+one from JunkbusterMT (but with the threading code removed).
 -  Most of Rodney's 0.21 and 0.21A patches applied. (Marked *).  I did not
 apply all of these, since I had already independently done conditional
 popup file, conditional image file, and integration of popup code.
