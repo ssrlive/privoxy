@@ -1,6 +1,6 @@
 #ifndef _MISCUTIL_H
 #define _MISCUTIL_H
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.1.1.1 2001/05/15 13:59:00 oes Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.2 2001/05/29 09:50:24 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,29 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.2  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:00  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -56,6 +79,9 @@ extern char *safe_strerror(int err);
 
 extern int strcmpic(const char *s1, const char *s2);
 extern int strncmpic(const char *s1, const char *s2, size_t n);
+
+extern char *strsav(char *old, const char *text_to_append);
+extern char *chomp(char *string);
 
 #ifdef __MINGW32__
 extern char *strdup(const char *s);
