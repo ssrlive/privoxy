@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.12  2001/10/07 15:46:42  oes
+#     Followed Guy's proposal to change the document.cookie job
+#
 #     Revision 1.11  2001/09/21 12:34:00  joergs
 #     Added filter to replace "Nimda" code by a warning.
 #
@@ -153,7 +156,7 @@ s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://i.
 # Squish WebBugs:
 #
 # ********************************************************************/
-s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?>/<!-- Squished WebBug -->/sig
+s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D[^>]*?)?>/<!-- Squished WebBug -->/sig
 
 # ********************************************************************/
 #
