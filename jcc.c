@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.18 2001/06/03 11:03:48 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.18 2001/06/03 19:12:16 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.18 2001/06/03 11:03:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.18  2001/06/03 19:12:16  oes
+ *    introduced new cgi handling
+ *
  *    Revision 1.18  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -370,11 +373,11 @@ static void chat(struct client_state *csp)
 #endif /* ndef TOGGLE */
 #ifdef FORCE_LOAD
 #   define IS_NOT_FORCED_AND (!csp->force) && 
-#else /* ifndef TOGGLE */
+#else /* ifndef FORCE_LOAD */
 #   define IS_NOT_FORCED_AND
 #endif /* def FORCE_LOAD */
 
-#define IS_ENABLED_AND IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
+#define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
    char buf[BUFSIZ], *hdr, *p, *req;
    char *err = NULL;
@@ -383,7 +386,7 @@ static void chat(struct client_state *csp)
    int n, maxfd, server_body;
    int ms_iis5_hack = 0;
    int byte_count = 0;
-   const struct gateway *gw;
+   const struct forward_spec * fwd;
    struct http_request *http;
 #ifdef KILLPOPUPS
    int block_popups;         /* bool, 1==will block popups */
@@ -456,7 +459,7 @@ static void chat(struct client_state *csp)
 
    /* decide how to route the HTTP request */
 
-   if ((gw = forward_url(http, csp)) == NULL)
+   if ((fwd = forward_url(http, csp)) == NULL)
    {
       log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
@@ -487,7 +490,7 @@ static void chat(struct client_state *csp)
     *
     */
 
-   if (gw->forward_host)
+   if (fwd->forward_host)
    {
       /* if forwarding, just pass the request as is */
       enlist(csp->headers, http->cmd);
@@ -680,10 +683,10 @@ static void chat(struct client_state *csp)
 
    log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
 
-   if (gw->forward_host)
+   if (fwd->forward_host)
    {
       log_error(LOG_LEVEL_CONNECT, "via %s:%d to: %s",
-               gw->forward_host, gw->forward_port, http->hostport);
+               fwd->forward_host, fwd->forward_port, http->hostport);
    }
    else
    {
@@ -692,7 +695,7 @@ static void chat(struct client_state *csp)
 
    /* here we connect to the server, gateway, or the forwarder */
 
-   csp->sfd = (gw->conn)(gw, http, csp);
+   csp->sfd = forwarded_connect(fwd, http, csp);
 
    if (csp->sfd < 0)
    {
@@ -726,7 +729,7 @@ static void chat(struct client_state *csp)
 
    log_error(LOG_LEVEL_CONNECT, "OK");
 
-   if (gw->forward_host || (http->ssl == 0))
+   if (fwd->forward_host || (http->ssl == 0))
    {
       /* write the client's (modified) header to the server
        * (along with anything else that may be in the buffer)
