@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.28 2002/02/24 14:34:24 jongfoster Exp $
+ $Id: user-manual.sgml,v 1.29 2002/03/02 20:34:07 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -17,10 +17,9 @@
 -->
 
 <!--
-Sun 09/23/01 08:53:31 PM 
+Sat 03/02/02 04:53:47 PM
 
-This is an unfinished, rough draft. Anyone reading this, believe let me 
-know errors!!!!! Stefan, especially you!
+This should be ready for BETA release.
 
 Hal Burgiss <hal@foobox.net>
 -->
@@ -29,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.28 2002/02/24 14:34:24 jongfoster Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.29 2002/03/02 20:34:07 david__schmidt Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -72,19 +71,19 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- This documentation is included with the current development version of
+ This documentation is included with the current BETA version of
  <application>Internet Junkbuster</application> and is incomplete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
- of version 3.0 is currently underway, and includes many significant changes and
- enhancements over earlier verions. The target release date for stable v3.0 is 
- December 2001.
+ of version 3.0 is currently nearing completion, and includes many significant
+ changes and enhancements over earlier versions. The target release date for
+ stable v3.0 RSN.
 </para>
 
 <para>
- Since this is a development version, some features are in the process of
- being implemented. This documentation may be slightly out of sync as a 
- result. And there <emphasis>are</emphasis> bugs, though hopefully not many! 
+ Since this is a BETA version, not all new features are well tested. This
+ documentation may be slightly out of sync as a result. And there
+ <emphasis>may be</emphasis> bugs, though hopefully not many! 
 </para>
 
 
@@ -102,8 +101,9 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-   A browser based configuration utility (WIP at 
-   <ulink url="http://i.j.b">http://i.j.b</ulink>).
+   Integrated browser based configuration and control utility (<ulink
+   url="http://i.j.b">http://i.j.b</ulink>). Browser-based tracing of rule
+   and filter effects.
   </para>
  </listitem> 
 
@@ -116,48 +116,84 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-    Blocking of annoying pop-up browser windows (previously available as a
-    patch). 
+    Blocking of annoying pop-up browser windows.
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   Support for HTTP/1.1 (partially implemented at this point).
+   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
   </para>
  </listitem> 
 
  <listitem>
   <para>
    Support for Perl Compatible Regular Expressions in the configuration files, and 
-   generally a more sophisticated configuration syntax over previous versions.
+   generally a more sophisticated and flexible configuration syntax over
+   previous versions. 
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   Web page content filtering.
+   GIF de-animation. 
   </para>
  </listitem> 
  
  <listitem>
   <para>
-   Multi-threaded.
+   Web page content filtering (removes banners based on size,
+   invisible <quote>web-bugs</quote>, JavaScript, pop-ups, status bar abuse,
+   etc.)
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Bypass many click-tracking scripts (avoids script redirection).
+ 
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Multi-threaded (POSIX and native threads).
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   Auto-detection of config file changes.
+   Auto-detection and re-reading of config file changes.
   </para>
  </listitem> 
 
+ <listitem>
+  <para>
+   User-customizable HTML templates (e.g. 404 error page).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Improved cookie management features (e.g. session based cookies).
+  </para>
+</listitem> 
+
+ <listitem>
+  <para>
+   Builds from source on most UNIX-like systems. Packages available for: Linux
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2.
+ 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   In addition, the configuration is much more powerful and versatile over-all.
+  </para>
+</listitem> 
 
  </itemizedlist>
-</para>
-
-<para>
- In addition, the configuration is much more versatile overall.
 </para>
 
 </sect2>
@@ -412,7 +448,7 @@ configuration section below. HB.)
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="configuration"><title>Junkbuster Configuration</title>
 <para>
- For Unix, *BSD and Linux, all configuraton files are located in
+ For Unix, *BSD and Linux, all configuration files are located in
  <filename>/etc/junkbuster/</filename> by default. For MS Windows and OS/2,
  these are all in the same directory as the
  <application>Junkbuster</application> executable. The name and number of
@@ -445,7 +481,7 @@ configuration section below. HB.)
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
     url="http://i.j.b">http://i.j.b</ulink>. This is the easiest method of
-    configuring actions. (Still under active development. Other actions 
+    configuring actions. (Other actions 
     files are included as well with differing levels of filtering 
     and blocking, e.g. <filename>ijb-basic.action</filename>.)
    </para>
@@ -550,12 +586,12 @@ configuration section below. HB.)
  On <application>Windows</application>, <application>Junkbuster</application>
  looks for these files in the same directory as the executable.  On Unix and 
  OS/2, <application>Junkbuster</application> looks for these files in the current
- working directory.  In either case, an absolute path name can be used to
+ working directory. In either case, an absolute path name can be used to
  avoid problems.
 </para>
 
 <para>
- When development goes modular and multiuser, the blocker, filter, and
+ When development goes modular and multi-user, the blocker, filter, and
  per-user config will be stored in subdirectories of <quote>confdir</quote>.
  For now, only <filename>confdir/templates</filename> is used for storing HTML
  templates for CGI results. 
@@ -600,7 +636,7 @@ configuration section below. HB.)
  The <quote>ijb.action</quote> file contains patterns to specify the actions to
  apply to requests for each site. Default: Cookies to and from all
  destinations are kept only during the current browser session (i.e. they 
- are not saved to disk). Popups are disabled for all sites. All sites are
+ are not saved to disk). Pop-ups are disabled for all sites. All sites are
  filtered if <quote>re_filterfile</quote> specified. No sites are blocked. An
  empty image is displayed for filtered ads and other images (formerly
  <quote>tinygif</quote>). The syntax of this file is explained in detail <link
@@ -620,7 +656,7 @@ configuration section below. HB.)
 <para>
  The <quote>re_filterfile</quote> file contains content modification rules.
  These rules permit powerful changes on the content of Web pages, e.g., you
- could disable your favourite JavaScript annoyances, rewrite the actual
+ could disable your favorite JavaScript annoyances, rewrite the actual
  content, or just have some fun replacing <quote>Microsoft</quote> with
  <quote>MicroSuck</quote> wherever it appears on a Web page. Default: No
  content modification, or whatever the developers are playing with :-/
@@ -696,7 +732,7 @@ configuration section below. HB.)
  with the effect that access to untrusted sites will be granted, if a link
  from a trusted referrer was used. The link target will then be added to the
  <quote>trustfile</quote>. This is a very restrictive feature that typical
- users most propably want to leave disabled. Default: Disabled, don't use the
+ users most probably want to leave disabled. Default: Disabled, don't use the
  trust mechanism.
 </para>
 
@@ -711,7 +747,7 @@ configuration section below. HB.)
 </para>
  
 <para>
- If you use the trust mechanism, it is a good idea to write up some online
+ If you use the trust mechanism, it is a good idea to write up some on-line
  documentation about your blocking policy and to specify the URL(s) here. They
  will appear on the page that your users receive when they try to access
  untrusted content. Use multiple times for multiple URLs. Default: Don't
@@ -767,7 +803,7 @@ configuration section below. HB.)
  configuration and policies. It is used in many of the proxy-generated pages
  and its use is highly recommended in multi-user installations, since your
  users will want to know why certain content is blocked or modified. Default:
- Don't show a link to online documentation.
+ Don't show a link to on-line documentation.
 </para>
 
 <para>
@@ -857,9 +893,9 @@ configuration section below. HB.)
   debug        32 # FRC   = debug force feature
   debug        64 # REF   = debug regular expression filter 
   debug       128 #       = debug fast redirects
-  debug       256 #       = debug GIF deanimation
+  debug       256 #       = debug GIF de-animation
   debug       512 # CLF   = Common Log Format
-  debug      1024 #       = debug kill popups
+  debug      1024 #       = debug kill pop-ups
   debug      4096 # INFO  = Startup banner and warnings.
   debug      8192 # ERROR = Non-fatal errors
     </literallayout>
@@ -971,7 +1007,7 @@ configuration section below. HB.)
 
 <para>
  For content filtering, i.e. the <quote>+filter</quote> and
- <quote>+deanimate-gif</quote> actions, it is neccessary that 
+ <quote>+deanimate-gif</quote> actions, it is necessary that 
  <application>Junkbuster</application> buffers the entire document body.
  This can be potentially dangerous, since a server could just keep sending
  data indefinitely and wait for your RAM to exhaust. With nasty consequences.
@@ -1374,7 +1410,7 @@ configuration section below. HB.)
 </para>
  
 <para>
- (NOTE: the syntax for specifiying target_domain has changed since the
+ (NOTE: the syntax for specifying target_domain has changed since the
  previous paragraph was written -- it will not work now.  More information
  is welcome.)
 </para>
@@ -1835,10 +1871,10 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- Additionally, there are wildcards that you can use in the domain names
- themselves. They work pretty similar to shell wildcards: <quote>*</quote>
+ Additionally, there are wild-cards that you can use in the domain names
+ themselves. They work pretty similar to shell wild-cards: <quote>*</quote>
  stands for zero or more arbitrary characters, <quote>?</quote> stands for
- any single character. And you can define charachter classes in square
+ any single character. And you can define character classes in square
  brackets and they can be freely mixed:
 </para>
 
@@ -1866,7 +1902,7 @@ Removed references to Win32. HB 09/23/01
 <para>
  If <application>Junkbuster</application> was compiled with
  <quote>pcre</quote> support (default), Perl compatible regular expressions
- can be used. See the <filename>pcre/docs/</filename> direcory or <quote>man
+ can be used. See the <filename>pcre/docs/</filename> directory or <quote>man
  perlre</quote> (also available on  <ulink
  url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>)
  for details. A brief discussion of regular expressions is in the 
@@ -2030,7 +2066,7 @@ Removed references to Win32. HB 09/23/01
    This will also shrink the images considerably (in bytes, not pixels!). If
    the option <quote>first</quote> is given, the first frame of the animation
    is used as the replacement. If <quote>last</quote> is given, the last frame
-   of the animation is used instead, which propably makes more sense for most
+   of the animation is used instead, which probably makes more sense for most
    banner animations, but also has the risk of not showing the entire last
    frame (if it is only a delta to an earlier frame).
   </para>
@@ -2075,7 +2111,7 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    Sometimes, there are even multiple consecutive redirects encoded in the
-   URL. These redirections via scripts make your web browing more traceable,
+   URL. These redirections via scripts make your web browsing more traceable,
    since the server from which you follow such a link can see where you go to.
    Apart from that, valuable bandwidth and time is wasted, while your browser
    ask the server for one redirect after the other. Plus, it feeds the
@@ -2451,13 +2487,13 @@ Removed references to Win32. HB 09/23/01
  <literal>
   <msgtext> 
    <literallayout>
- # Turn off all persistant cookies
+ # Turn off all persistent cookies
  { +no-cookies-read }
  { +no-cookies-set }
  # Allow cookies for this browser session ONLY
  { +no-cookies-keep }
 
- # Execeptions to the above, sites that benefit from persistant cookies
+ # Exceptions to the above, sites that benefit from persistent cookies
  { -no-cookies-read }
  { -no-cookies-set }
  { -no-cookies-keep }
@@ -2756,7 +2792,7 @@ Removed references to Win32. HB 09/23/01
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
 <para>
- Install package, then run and enjoy! <application>Junbuster</application> 
+ Install package, then run and enjoy! <application>JunkBuster</application> 
  accepts only one command line option -- the configuration file to be 
  used. Example Unix startup command:
 </para>
@@ -2806,7 +2842,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <para>
  The included default configuration files should give a reasonable starting
  point, though may be somewhat aggressive in blocking junk. You will probably
- want to keep an eye out for sites that require persistant cookies, and add these to
+ want to keep an eye out for sites that require persistent cookies, and add these to
  <filename>ijb.action</filename> as needed. By default, most of these will
  be accepted only during the current browser session, until you add them to
  the configuration. If you want the browser to handle this instead, you will
@@ -2826,7 +2862,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <para>
  HTTP/1.1 support is not fully implemented. If browsers that
  support HTTP/1.1 (like <application>Mozilla</application> or recent versions
- of I.E.) experience problems, you might try to force HTTP/1.0 compatiblity.
+ of I.E.) experience problems, you might try to force HTTP/1.0 compatibility.
  For Mozilla, look under <literal>Edit -&gt; Preferences -&gt; Debug -&gt;
  Networking</literal>. Or set the <quote>+downgrade</quote> config option in
  <filename>ijb.action</filename>.
@@ -2930,7 +2966,7 @@ communication (bugs, feature requests, etc.)
 <para>
  <application>Junkbuster</application> was originally written by Anonymous 
  Coders and <ulink
- url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBusters
+ url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbuster's
  Corporation</ulink>, and was released as free open-source software under the
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
@@ -3000,7 +3036,7 @@ communication (bugs, feature requests, etc.)
  in various config files. Assuming support for <quote>pcre</quote> (Perl
  Compatible Regular Expressions) is compiled in, which is the default. Such
  configuration directives do not require regular expressions, but they can be
- used to increase flexibility by matching a pattern with wildcards against
+ used to increase flexibility by matching a pattern with wild-cards against
  URLs.
 </para>
 
@@ -3015,18 +3051,18 @@ communication (bugs, feature requests, etc.)
  expression against another to see if it matches or not. One of the
  <quote>expressions</quote> is a literal string of readable characters
  (letter, numbers, etc), and the other is a complex string of literal
- characters combined with wildcards, and other special characters, called
- metacharacters. The <quote>metacharacters</quote> have special meanings and
+ characters combined with wild-cards, and other special characters, called
+ meta-characters. The <quote>meta-characters</quote> have special meanings and
  are used to build the complex pattern to be matched against. Perl Compatible
  Regular Expressions is an enhanced form of the regular expression language
  with backward compatibility.
 </para>
 
 <para>
- To make a simple analogy, we do something similar when we use wildcard
+ To make a simple analogy, we do something similar when we use wild-card
  characters when listing files with the <command>dir</command> command in DOS. 
  <literal>*.*</literal> matches all filenames. The <quote>special</quote>
- character here is the asterik which matches any and all characters. We can be
+ character here is the asterisk which matches any and all characters. We can be
  more specific and use <literal>?</literal> to match just individual
  characters. So <quote>dir file?.text</quote> would match
  <quote>file1.txt</quote>, <quote>file2.txt</quote>, etc. We are pattern
@@ -3073,7 +3109,7 @@ communication (bugs, feature requests, etc.)
   <emphasis>\</emphasis> - The <quote>escape</quote> character denotes that
   the following character should be taken literally. This is used where one of the 
   special characters (e.g. <quote>.</quote>) needs to be taken literally and
-  not as a special metacharacter.
+  not as a special meta-character.
  </member>
 </simplelist>
 
@@ -3086,7 +3122,7 @@ communication (bugs, feature requests, etc.)
 
 <simplelist>
  <member>
-  <emphasis>()</emphasis> - pararentheses are used to group a sub-expression,
+  <emphasis>()</emphasis> - parentheses are used to group a sub-expression,
   or multiple sub-expressions.
  </member>
 </simplelist>
@@ -3198,7 +3234,7 @@ communication (bugs, feature requests, etc.)
 
 <para>
  <emphasis><literal>s/microsoft(?!.com)/MicroSuck/i</literal></emphasis> - This is 
- a substitution. <quote>MicroSuck</quote> will replace any occurence of 
+ a substitution. <quote>MicroSuck</quote> will replace any occurrence of 
  <quote>microsoft</quote>.  The <quote>i</quote> at the end of the expression
  means ignore case. The <quote>(?!.com)</quote> means 
  the match should fail if <quote>microsoft</quote> is followed by
@@ -3245,6 +3281,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.29  2002/03/02 20:34:07  david__schmidt
+ Update OS/2 build section
+
  Revision 1.28  2002/02/24 14:34:24  jongfoster
  Formatting changes.  Now changing the doctype to DocBook XML 4.1
  will work - no other changes are needed.
