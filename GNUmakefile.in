@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.98 2002/05/03 14:33:06 oes Exp $
+# $Id: GNUmakefile.in,v 1.99 2002/05/08 13:42:07 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -578,7 +578,7 @@ dok-webserver:
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
-	s/\.\d\.//'\
+	s/\.\d\. //'\
      doc/webserver/index.html && $(RM) doc/source/webserver/*.bak
 
 # Main documentation target.
@@ -820,6 +820,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.99  2002/05/08 13:42:07  hal9
+# This fixes the numbering problem on index.html in contact info section (.1.). Using
+# perl, since its way too convoluted to try to fix proper with docbook.
+#
 # Revision 1.98  2002/05/03 14:33:06  oes
 # Replaced ldp(OK).dsl handling with generation via autoconf; handle all file exeptions to src tarball via find
 #
