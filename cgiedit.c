@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.34 2002/04/26 12:54:17 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.35 2002/04/26 21:50:02 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.34 2002/04/26 12:54:17 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.35  2002/04/26 21:50:02  jongfoster
+ *    Honouring default exports in edit-actions-for-url-filter template.
+ *
  *    Revision 1.34  2002/04/26 12:54:17  oes
  *    Adaptions to changes in actions.c
  *
@@ -2919,6 +2922,9 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
             free_map(line_exports);
          }
       }
+
+      freez(filter_template);
+
       if (!err)
       {
          err = map(exports, "filter-params", 1, result, 0);
