@@ -1,0 +1,35 @@
+<html>
+
+<head>
+  <title>Internet Junkbuster: URL Info</title>
+</head>
+
+<body bgcolor="#ffffff">
+
+  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small></h1>
+
+  <p>Information for: <a href="http://@url@">http://@url@</a></p>
+
+<h3>Default settings:</h3>
+<p><b>{@default@}</b></p>
+
+<h3>Matches:</h3>
+<p>@matches@</p>
+
+<h3>Final settings:</h3>
+<p><b>{@final@}</b></p>
+
+<p>&nbsp;</p>
+
+<p>Back to <a href="http://i.j.b/">JunkBuster front page</a></p>
+
+<p>Or look up another URL, (don't enter the leading &quot;http://&quot;):<br>
+<form method="GET" action="http://i.j.b/show-url-info">
+<input type="text" name="url" size="80" value="@url@"> 
+<input type="submit" value="Info">
+</form>
+</p>
+
+
+</body>
+</html>
