@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.104 2002/05/24 00:03:49 oes Exp $
+# $Id: GNUmakefile.in,v 1.105 2002/05/25 22:48:19 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -457,9 +457,16 @@ hpux-upload:
 # debian distribution
 #############################################################################
 debian-dist:
-	@$(ECHO) coming soon. 
+	@$(ECHO) Creating Debian package.  Will exist in parent directory.
+	dpkg-buildpackage -rfakeroot -us -uc
 debian-upload:
-	@$(ECHO) coming soon. 
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming ../privoxy_$(shell dpkg-parsechangelog | grep "Version" | sed "s/Version: //")_$(shell dpkg --print-architecture).deb
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
+
 
 #############################################################################
 # macosx distribution
@@ -839,6 +846,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.105  2002/05/25 22:48:19  hal9
+# Add -notoc to README build (per oes's dsl magic).
+#
 # Revision 1.104  2002/05/24 00:03:49  oes
 # Use p_doc.css for the Homepage for consistency
 #

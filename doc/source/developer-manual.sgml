@@ -8,8 +8,8 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
+<!entity p-version "3.1.1">
+<!entity p-status "alpha">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $</pubdate>
 
 <!--
 
@@ -1727,7 +1727,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1787,7 +1787,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2449,16 +2449,29 @@ at sourceforge. Three simple steps:
 	First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then, run:
-	</para>
-	<para>
+      </para>
+      <para>
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then do FIXME.
-	</para>
+      </para>
+      <para>
+        Then, run:
+      </para>
+      <para>
+	<programlisting>
+  make debian-dist
+</programlisting>
+      </para>
+      <para>
+        To upload the package to Sourceforge, simply issue
+      </para>
+      <para>
+        <programlisting>
+  make debian-upload
+</programlisting>
+      </para>
     </sect3>
 
     <sect3 id="newrelease-macosx"><title>Mac OSX</title>
@@ -2801,6 +2814,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.46  2002/05/22 17:15:00  oes
+  Updated intro
+
   Revision 1.45  2002/05/19 23:01:54  hal9
   Add small section on general packaging guidelines (e.g. actions files must
   be writable).
