@@ -1,7 +1,5 @@
-/* config.h.  Generated automatically by configure.  */
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef CONFIG_H_INCLUDED
+#define CONFIG_H_INCLUDED
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
@@ -39,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: config.h.win,v $
+ *    Revision 1.9  2001/07/30 22:16:07  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.8  2001/07/25 19:16:27  oes
  *    Bumping version number to 2.9.8
  *
@@ -148,15 +152,6 @@
  *********************************************************************/
 
 
-/* Define to empty if the keyword does not work.  */
-/* #undef const */
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-/* #undef size_t */
-
-/* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 1
-
 /*
  * Version number - Major (X._._)
  */
@@ -187,32 +182,7 @@
  * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
-/* #undef REGEX_GNU */
-#define REGEX_PCRE 1
-
-/* 
- * Should pcre be statically built in instead of linkling with libpcre?
- * (This is determined by configure depending on the availiability of
- * libpcre and user preferences). The name is ugly, but pcre needs it.
- * Don't bother to change this here! Use configure instead.
- */
-#define STATIC_PCRE 1
-
-/* 
- * Should pcrs be statically built in instead of linkling with libpcrs?
- * (This is determined by configure depending on the availiability of
- * libpcrs and user preferences).
- * Don't bother to change this here! Use configure instead.
- */
-#define STATIC_PCRS 1
-
-
-/*
- * Regular expression matching for URLs.  (Highly recommended).
- * If neither of these are defined then you can ony use prefix matching.
- * Don't bother to change this here! Use configure instead.
- */
-/* #undef REGEX_GNU */
+/* #define REGEX_GNU 1 */
 #define REGEX_PCRE 1
 
 /* 
@@ -246,7 +216,7 @@
  * the PCRE regexps.  (Commonly happens with Netscape browsers).
  * This forces it to be uncompressed.
  */
-/* #undef FEATURE_DENY_GZIP */
+#define FEATURE_DENY_GZIP 1
 
 /*
  * Locally redirect remote script-redirect URLs
@@ -326,14 +296,102 @@
  */
 #define FEATURE_TRUST 1
 
-/* Define if you have the bcopy function.  */
-#define HAVE_BCOPY 1
 
-/* Define if you have the memmove function.  */
+/****************************************************************************
+ * The following values are correct for MS VC++97.
+ * You should normally not change them.
+ ***************************************************************************/
+
+
+/*
+ * Defined on Solaris only.  Makes the system libraries thread safe.
+ */
+/* #define _REENTRANT 1 */
+
+/*
+ * Defined on Solaris only.  Without this, many important functions are not
+ * defined in the system headers.
+ */
+/* #define __EXTENSIONS__ 1 */
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with MultiThreading?)
+ */
+#define __MT__ 1
+
+
+/* Define if you have the `bcopy' function. */
+/* #define HAVE_BCOPY 1 */
+
+/* Define if you have the <inttypes.h> header file. */
+/* #define HAVE_INTTYPES_H 1 */
+
+/* Define if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
 
-/* Define if you have the strerror function.  */
+/* Define if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
+/* Define if you have the <stdint.h> header file. */
+/* #define HAVE_STDINT_H 1 */
+
+/* Define if you have the <stdlib.h> header file. */
+#define HAVE_STDLIB_H 1
+
+/* Define if you have the `strerror' function. */
 #define HAVE_STRERROR 1
+
+/* Define if you have the <strings.h> header file. */
+/* #define HAVE_STRINGS_H 1 */
+
+/* Define if you have the <string.h> header file. */
+#define HAVE_STRING_H 1
+
+/* Define if you have the <sys/stat.h> header file. */
+#define HAVE_SYS_STAT_H 1
+
+/* Define if you have the <sys/types.h> header file. */
+#define HAVE_SYS_TYPES_H 1
+
+/* Define if you have the <unistd.h> header file. */
+/* #define HAVE_UNISTD_H 1 */
+
+/* The size of a `char *', as computed by sizeof. */
+#define SIZEOF_CHAR_P 4
+
+/* The size of a `int', as computed by sizeof. */
+#define SIZEOF_INT 4
+
+/* The size of a `long', as computed by sizeof. */
+#define SIZEOF_LONG 4
+
+/* The size of a `long long', as computed by sizeof. */
+/* #define SIZEOF_LONG_LONG ---not supported--- */
+
+/* The size of a `size_t', as computed by sizeof. */
+#define SIZEOF_SIZE_T 4
+
+/* Define if you have the ANSI C header files. */
+#define STDC_HEADERS 1
+
+/* Define to empty if `const' does not conform to ANSI C. */
+/* #define const */
+
+/* Define to `unsigned' if <sys/types.h> does not define. */
+/* #define size_t unsigned */
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with ANSI Standard C?)
+ */
+/* Don't define for MS VC++ or you don't get strdup() declared.
+#ifndef __STDC__
+#define __STDC__ 1
+#endif
+*/
 
 /*
  * Need to set up this define only for the Pthreads library for
@@ -343,4 +401,19 @@
 #define __CLEANUP_C
 #endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
 
-#endif /* _CONFIG_H */
+/*
+ * BEOS does not currently support POSIX threads.
+ * This *should* be detected by ./configure, but let's be sure.
+ */
+#if defined(FEATURE_PTHREAD) && defined(__BEOS__)
+#error BEOS does not support pthread - please run ./configure again with "--disable-pthread"
+
+#endif /* defined(FEATURE_PTHREAD) && defined(__BEOS__) */
+
+
+#ifndef _MSC_VER
+#error This file is only intended for MS VC++ on Win32.  For other compilers, please run configure.
+#endif /* def _MSC_VER */
+
+#endif /* CONFIG_H_INCLUDED */
+

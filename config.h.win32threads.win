@@ -1,10 +1,8 @@
-/* config.h.  Generated automatically by configure.  */
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef CONFIG_H_INCLUDED
+#define CONFIG_H_INCLUDED
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.win32threads.win,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -38,14 +36,20 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h.win32threads.win,v $
- *    Revision 1.3  2001/07/25 19:16:27  oes
+ *    $Log: config.h.win,v $
+ *    Revision 1.9  2001/07/30 22:16:07  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
+ *    Revision 1.8  2001/07/25 19:16:27  oes
  *    Bumping version number to 2.9.8
  *
- *    Revision 1.2  2001/07/21 18:00:07  jongfoster
+ *    Revision 1.7  2001/07/21 18:00:07  jongfoster
  *    Bumping version number to 2.9.7
  *
- *    Revision 1.1  2001/07/15 20:08:40  jongfoster
+ *    Revision 1.6  2001/07/15 20:08:40  jongfoster
  *    New build files for VC++ which provide the option of POSIX
  *    or Win32 threads.
  *
@@ -148,15 +152,6 @@
  *********************************************************************/
 
 
-/* Define to empty if the keyword does not work.  */
-/* #undef const */
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-/* #undef size_t */
-
-/* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 1
-
 /*
  * Version number - Major (X._._)
  */
@@ -187,7 +182,7 @@
  * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
-/* #undef REGEX_GNU */
+/* #define REGEX_GNU 1 */
 #define REGEX_PCRE 1
 
 /* 
@@ -207,30 +202,21 @@
 #define STATIC_PCRS 1
 
 /*
- * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
- * non-anonymizing proxy.  This is useful if you're trying to access a
- * blocked or broken site - just change the setting in the config file
- * and send a SIGHUP (UN*X), or use the handy "Disable" menu option (Windows
- * GUI).
+ * Allows the use of an ACL to control access to the proxy by IP address.
  */
-#define FEATURE_TOGGLE 1
+#define FEATURE_ACL 1
 
 /*
- * If a stream is compressed via gzip (Netscape specific I think), then
- * it cannot be modified with Perl regexps.  This forces it to be 
- * uncompressed.
+ * Allows the use of jar files to capture cookies.
+ */
+#define FEATURE_COOKIE_JAR 1
+
+/*
+ * If a stream is compressed via gzip, then it cannot be filtered through
+ * the PCRE regexps.  (Commonly happens with Netscape browsers).
+ * This forces it to be uncompressed.
  */
 #define FEATURE_DENY_GZIP 1
-
-/*
- * Enables statistics function.
- */
-#define FEATURE_STATISTICS 1
-
-/*
- * Bypass filtering for 1 page only
- */
-#define FEATURE_FORCE_LOAD 1
 
 /*
  * Locally redirect remote script-redirect URLs
@@ -238,9 +224,17 @@
 #define FEATURE_FAST_REDIRECTS 1
 
 /*
- * Kills JavaScript popups - window.open, onunload, etc.
+ * Bypass filtering for 1 page only
  */
-#define FEATURE_KILL_POPUPS 1
+#define FEATURE_FORCE_LOAD 1
+
+/*
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
+ *
+ * Note that this is required if you want to use FEATURE_IMAGE_DETECT_MSIE.
+ */
+#define FEATURE_IMAGE_BLOCKING 1
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
@@ -275,41 +269,129 @@
 #define FEATURE_IMAGE_DETECT_MSIE 1
 
 /*
- * Allow blocking using images as well as HTML.
- * If you do not define this then everything is blocked as HTML.
- *
- * Note that this is required if you want to use DETECT_MSIE_IMAGES.
+ * Kills JavaScript popups - window.open, onunload, etc.
  */
-#define FEATURE_IMAGE_BLOCKING 1
+#define FEATURE_KILL_POPUPS 1
 
 /*
- * Allows the use of ACL files to control access to the proxy by IP address.
+ * Use POSIX threads instead of native threads.
  */
-#define FEATURE_ACL 1
+/* #define FEATURE_PTHREAD 1 */
+
+/*
+ * Enables statistics function.
+ */
+#define FEATURE_STATISTICS 1
+
+/*
+ * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
+ * non-anonymizing proxy.  This is useful if you're trying to access a
+ * blocked or broken site - just change the setting in the config file,
+ * or use the handy "Disable" menu option in the Windows GUI.
+ */
+#define FEATURE_TOGGLE 1
 
 /*
  * Allows the use of trust files.
  */
 #define FEATURE_TRUST 1
 
-/*
- * Allows the use of jar files to capture cookies.
- */
-#define FEATURE_COOKIE_JAR 1
+
+/****************************************************************************
+ * The following values are correct for MS VC++97.
+ * You should normally not change them.
+ ***************************************************************************/
+
 
 /*
- * Use POSIX threads instead of native threads.
+ * Defined on Solaris only.  Makes the system libraries thread safe.
  */
-/* #undef FEATURE_PTHREAD */
+/* #define _REENTRANT 1 */
 
-/* Define if you have the bcopy function.  */
-#define HAVE_BCOPY 1
+/*
+ * Defined on Solaris only.  Without this, many important functions are not
+ * defined in the system headers.
+ */
+/* #define __EXTENSIONS__ 1 */
 
-/* Define if you have the memmove function.  */
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with MultiThreading?)
+ */
+#define __MT__ 1
+
+
+/* Define if you have the `bcopy' function. */
+/* #define HAVE_BCOPY 1 */
+
+/* Define if you have the <inttypes.h> header file. */
+/* #define HAVE_INTTYPES_H 1 */
+
+/* Define if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
 
-/* Define if you have the strerror function.  */
+/* Define if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
+/* Define if you have the <stdint.h> header file. */
+/* #define HAVE_STDINT_H 1 */
+
+/* Define if you have the <stdlib.h> header file. */
+#define HAVE_STDLIB_H 1
+
+/* Define if you have the `strerror' function. */
 #define HAVE_STRERROR 1
+
+/* Define if you have the <strings.h> header file. */
+/* #define HAVE_STRINGS_H 1 */
+
+/* Define if you have the <string.h> header file. */
+#define HAVE_STRING_H 1
+
+/* Define if you have the <sys/stat.h> header file. */
+#define HAVE_SYS_STAT_H 1
+
+/* Define if you have the <sys/types.h> header file. */
+#define HAVE_SYS_TYPES_H 1
+
+/* Define if you have the <unistd.h> header file. */
+/* #define HAVE_UNISTD_H 1 */
+
+/* The size of a `char *', as computed by sizeof. */
+#define SIZEOF_CHAR_P 4
+
+/* The size of a `int', as computed by sizeof. */
+#define SIZEOF_INT 4
+
+/* The size of a `long', as computed by sizeof. */
+#define SIZEOF_LONG 4
+
+/* The size of a `long long', as computed by sizeof. */
+/* #define SIZEOF_LONG_LONG ---not supported--- */
+
+/* The size of a `size_t', as computed by sizeof. */
+#define SIZEOF_SIZE_T 4
+
+/* Define if you have the ANSI C header files. */
+#define STDC_HEADERS 1
+
+/* Define to empty if `const' does not conform to ANSI C. */
+/* #define const */
+
+/* Define to `unsigned' if <sys/types.h> does not define. */
+/* #define size_t unsigned */
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with ANSI Standard C?)
+ */
+/* Don't define for MS VC++ or you don't get strdup() declared.
+#ifndef __STDC__
+#define __STDC__ 1
+#endif
+*/
 
 /*
  * Need to set up this define only for the Pthreads library for
@@ -319,4 +401,19 @@
 #define __CLEANUP_C
 #endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
 
-#endif /* _CONFIG_H */
+/*
+ * BEOS does not currently support POSIX threads.
+ * This *should* be detected by ./configure, but let's be sure.
+ */
+#if defined(FEATURE_PTHREAD) && defined(__BEOS__)
+#error BEOS does not support pthread - please run ./configure again with "--disable-pthread"
+
+#endif /* defined(FEATURE_PTHREAD) && defined(__BEOS__) */
+
+
+#ifndef _MSC_VER
+#error This file is only intended for MS VC++ on Win32.  For other compilers, please run configure.
+#endif /* def _MSC_VER */
+
+#endif /* CONFIG_H_INCLUDED */
+
