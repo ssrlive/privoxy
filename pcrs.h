@@ -1,5 +1,5 @@
-#ifndef _PCRS_H
-#define _PCRS_H
+#ifndef PCRS_H_INCLUDED
+#define PCRS_H_INCLUDED
 
 /*********************************************************************
  *
@@ -26,6 +26,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.5  2001/07/18 17:27:00  oes
+ *    Changed interface; Cosmetics
+ *
  *    Revision 1.4  2001/06/29 13:33:19  oes
  *    - Cleaned up, commented and adapted to reflect the
  *      changes in pcrs.c
@@ -54,10 +57,14 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.4 2001/06/29 13:33:19 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.5 2001/07/18 17:27:00 oes Exp $"
 
 
 #include <pcre.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Constants:
@@ -128,7 +135,11 @@ extern void             pcrs_free_joblist(pcrs_job *joblist);
 extern int              pcrs_compile_perl_options(char *optstring, int *flags);
 extern pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, int *errptr);
 
-#endif /* ndef _PCRS_H */
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif /* ndef PCRS_H_INCLUDED */
 
 /*
   Local Variables:
