@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.15 2002/04/07 17:13:08 oes Exp $
+  $Id: index.php,v 1.16 2002/04/08 08:11:04 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.16  2002/04/08 08:11:04  oes
+  Bumped up actions file number
+
   Revision 1.15  2002/04/07 17:13:08  oes
   Ooops: fixing submit target url
 
@@ -190,11 +193,11 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   <div class="box">
    <p>
     <b>Thank you for reporting a missing or invalid action!</b> 
-    <br>The Privoxy team relies on <b>your</b> feedback to maintain an efficient actions file!
    </p>
 
    <p>
-    Please fill the below form and click to proceed to step 2.
+    The Privoxy team relies on <b>your</b> feedback to maintain an efficient actions file!
+    <br>Please fill the below form and click to proceed to step 2.
    </p>
   </div>
 
