@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.12 2002/03/25 03:11:40 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.14 2002/03/26 14:25:15 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -32,8 +32,11 @@
 %define privoxyconf %{_sysconfdir}/%{name}
 
 Name: privoxy
+# ATTENTION
+# Version and release should be updated acordingly on configure.in and
+# configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.13
-Release: 2
+Release: 3
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: http://ijbswa.sourceforge.net
@@ -248,7 +251,7 @@ fi
 %config %{privoxyconf}/templates/toggle
 %config %{privoxyconf}/templates/toggle-mini
 %config %{privoxyconf}/templates/untrusted
-
+%config %{privoxyconf}/templates/edit-actions-for-url-filter
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
 %ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
@@ -262,6 +265,15 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Mar 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.13-3
+- Added commentary asking to update the release value on the configure
+  script
+
+* Tue Mar 25 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-3
+- Added the missing edit-actions-for-url-filter to templates.
+
 * Mon Mar 25 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.13-2
 - Fixing Release number
@@ -529,6 +541,12 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.14  2002/03/26 14:25:15  hal9
+# Added edit-actions-for-url-filter to templates in %%config
+#
+# Revision 1.13  2002/03/25 13:31:04  morcego
+# Bumping Release tag.
+#
 # Revision 1.12  2002/03/25 03:11:40  hal9
 # Do it right way this time :/
 #
