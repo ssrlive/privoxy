@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.19 2002/01/17 21:04:17 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.20 2002/03/24 12:03:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.19 2002/01/17 21:04:17 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.20  2002/03/24 12:03:47  jongfoster
+ *    Name change
+ *
  *    Revision 1.19  2002/01/17 21:04:17  jongfoster
  *    Replacing hard references to the URL of the config interface
  *    with #defines from project.h
@@ -1109,7 +1112,7 @@ void OnLogCommand(int nCommand)
          EditFile(g_actions_file);
          break;
 
-      case ID_TOOLS_EDITPERLRE:
+      case ID_TOOLS_EDITFILTERS:
          EditFile(g_re_filterfile);
          break;
 
@@ -1164,7 +1167,7 @@ void OnLogInitMenu(HMENU hmenu)
 {
    /* Only enable editors if there is a file to edit */
    EnableMenuItem(hmenu, ID_TOOLS_EDITACTIONS, MF_BYCOMMAND | (g_actions_file ? MF_ENABLED : MF_GRAYED));
-   EnableMenuItem(hmenu, ID_TOOLS_EDITPERLRE, MF_BYCOMMAND | (g_re_filterfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITFILTERS, MF_BYCOMMAND | (g_re_filterfile ? MF_ENABLED : MF_GRAYED));
 #ifdef FEATURE_TRUST
    EnableMenuItem(hmenu, ID_TOOLS_EDITTRUST, MF_BYCOMMAND | (g_trustfile ? MF_ENABLED : MF_GRAYED));
 #endif /* def FEATURE_TRUST */

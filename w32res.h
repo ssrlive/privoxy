@@ -1,6 +1,6 @@
 #ifndef W32RES_H_INCLUDED
 #define W32RES_H_INCLUDED
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.10 2001/07/30 22:08:36 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.11 2002/03/24 12:03:47 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.11  2002/03/24 12:03:47  jongfoster
+ *    Name change
+ *
  *    Revision 1.10  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -143,7 +146,7 @@
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITCONFIG               5000
 #define ID_TOOLS_EDITACTIONS              5001
-#define ID_TOOLS_EDITPERLRE               5002
+#define ID_TOOLS_EDITFILTERS              5002
 
 #ifdef FEATURE_TRUST
 #define ID_TOOLS_EDITTRUST                5003

@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.13  2002/03/24 12:03:47  jongfoster
+ *    Name change
+ *
  *    Revision 1.12  2001/07/30 22:16:07  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -215,7 +218,7 @@ BEGIN
             MENUITEM "&Configuration...",           ID_TOOLS_EDITCONFIG
             MENUITEM                                SEPARATOR
             MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-            MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
+            MENUITEM "&Filters...",                 ID_TOOLS_EDITFILTERS
 #ifdef FEATURE_TRUST
             MENUITEM "&Trust...",                   ID_TOOLS_EDITTRUST
 #endif /* def FEATURE_TRUST */
@@ -256,7 +259,7 @@ BEGIN
         MENUITEM "&Configuration...",           ID_TOOLS_EDITCONFIG
         MENUITEM                                SEPARATOR
         MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-            MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
+            MENUITEM "&Filters...",             ID_TOOLS_EDITFILTERS
 #ifdef FEATURE_TRUST
             MENUITEM "&Trust...",               ID_TOOLS_EDITTRUST
 #endif /* def FEATURE_TRUST */
