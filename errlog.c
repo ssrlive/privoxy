@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.19 2001/09/13 20:08:06 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.20 2001/09/16 23:04:34 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.19 2001/09/13 20:08:06 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.20  2001/09/16 23:04:34  jongfoster
+ *    Fixing a warning
+ *
  *    Revision 1.19  2001/09/13 20:08:06  jongfoster
  *    Adding support for LOG_LEVEL_CGI
  *
@@ -150,11 +153,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.19 2001/09/13 20:08:06 jongfoster E
 #include <stdarg.h>
 #include <string.h>
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
-#endif /* ndef _WIN32 */
+#endif /* !defined(_WIN32) && !defined(__OS2__) */
 
 #include <errno.h>
+#include <assert.h>
 #ifdef FEATURE_PTHREAD
 #include <pthread.h>
 #endif /* def FEATURE_PTHREAD */
@@ -165,6 +169,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.19 2001/09/13 20:08:06 jongfoster E
 #include "w32log.h"
 #endif /* ndef _WIN_CONSOLE */
 #endif /* def _WIN32 */
+
+#ifdef __OS2__
+#define INCL_DOS
+#include <os2.h>
+#endif
 
 #include "errlog.h"
 #include "project.h"
@@ -294,10 +303,14 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
 void log_error(int loglevel, char *fmt, ...)
 {
    va_list ap;
-   char outbuf[BUFFER_SIZE];
+   char *outbuf= NULL;
    char * src = fmt;
    int outc = 0;
    long this_thread = 1;  /* was: pthread_t this_thread;*/
+#ifdef __OS2__
+   PTIB     ptib;
+   APIRET   ulrc;
+#endif /* __OS2__ */
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /*
@@ -320,8 +333,15 @@ void log_error(int loglevel, char *fmt, ...)
    /* FIXME get current thread id */
 #ifdef FEATURE_PTHREAD
    this_thread = (long)pthread_self();
+#elif __OS2__
+  
+   ulrc = DosGetInfoBlocks(&ptib, NULL);
+   if (ulrc == 0)
+     this_thread = ptib -> tib_ptib2 -> tib2_ultid;
 #endif /* def FEATURE_PTHREAD */
 
+   outbuf = (char*)malloc(BUFFER_SIZE);
+   assert(outbuf);
    switch (loglevel)
    {
       case LOG_LEVEL_ERROR:
@@ -743,4 +763,3 @@ static char *w32_socket_strerr(int errcode, char *tmp_buf)
   tab-width: 3
   end:
 */
-

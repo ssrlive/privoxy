@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.37 2001/10/22 15:33:56 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.38 2001/10/23 21:32:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -15,10 +15,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.37 2001/10/22 15:33:56 david__sch
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.37 2001/10/22 15:33:56 david__sch
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.38  2001/10/23 21:32:33  jongfoster
+ *    Adding error-checking to selected functions
+ *
  *    Revision 1.37  2001/10/22 15:33:56  david__schmidt
  *    Special-cased OS/2 out of the Netscape-abort-on-404-in-js problem in
  *    filters.c.  Added a FIXME in front of the offending code.  I'll gladly
@@ -316,11 +319,17 @@ const char filters_rcs[] = "$Id: filters.c,v 1.37 2001/10/22 15:33:56 david__sch
 #include <assert.h>
 
 #ifndef _WIN32
+#ifndef __OS2__
 #include <unistd.h>
+#endif /* ndef __OS2__ */
 #include <netinet/in.h>
 #else
 #include <winsock2.h>
-#endif
+#endif /* ndef _WIN32 */
+
+#ifdef __OS2__
+#include <utils.h>
+#endif /* def __OS2__ */
 
 #include "project.h"
 #include "filters.h"
@@ -516,7 +525,7 @@ int match_portlist(const char *portlist, int port)
    {
       *next++ = '\0';
    }
-   
+
    /*
     * Loop through all items, checking for match
     */
@@ -545,8 +554,8 @@ int match_portlist(const char *portlist, int port)
             free(portlist_copy);
             return(1);
          }
-           
-      }      
+
+      }
 
       /*
        * Jump to next item
@@ -561,7 +570,7 @@ int match_portlist(const char *portlist, int port)
          *next++ = '\0';
       }
    }
-   
+
    free(portlist_copy);
    return 0;
 
@@ -587,7 +596,7 @@ struct http_response *block_url(struct client_state *csp)
 #endif /* def FEATURE_IMAGE_BLOCKING */
    struct http_response *rsp;
 
-   /* 
+   /*
     * If it's not blocked, don't block it ;-)
     */
    if ((csp->action->flags & ACTION_BLOCK) == 0)
@@ -595,7 +604,7 @@ struct http_response *block_url(struct client_state *csp)
       return NULL;
    }
 
-   /* 
+   /*
     * Else, prepare a response
     */
    if (NULL == (rsp = alloc_http_response()))
@@ -664,17 +673,17 @@ struct http_response *block_url(struct client_state *csp)
             return cgi_error_memory();
          }
       }
-   }  
+   }
    else
 #endif /* def FEATURE_IMAGE_BLOCKING */
 
-   /* 
+   /*
     * Else, generate an HTML "blocked" message:
     */
    {
       jb_err err;
       struct map * exports;
-      
+
       /* FIXME */
 #ifdef __EMX__
       /*
@@ -685,7 +694,7 @@ struct http_response *block_url(struct client_state *csp)
        * what the csp->http->user_agent is (yet).  So we can't use
        * it to decide if we should work around the NS bug or not.
        */
-      rsp->status = strdup("200 Request for blocked URL"); 
+      rsp->status = strdup("200 Request for blocked URL");
 #else
       /*
        * Workaround for stupid Netscape bug which prevents
@@ -698,11 +707,11 @@ struct http_response *block_url(struct client_state *csp)
           && !strstr(csp->http->user_agent, "compatible")
           && !strstr(csp->http->user_agent, "Opera"))
       {
-         rsp->status = strdup("200 Request for blocked URL"); 
+         rsp->status = strdup("200 Request for blocked URL");
       }
       else
       {
-         rsp->status = strdup("404 Request for blocked URL"); 
+         rsp->status = strdup("404 Request for blocked URL");
       }
 #endif /* __EMX__ */
       if (rsp->status == NULL)
@@ -781,7 +790,7 @@ struct http_response *trust_url(struct client_state *csp)
       return NULL;
    }
 
-   /* 
+   /*
     * Else, prepare a response:
     */
    if (NULL == (rsp = alloc_http_response()))
@@ -796,7 +805,7 @@ struct http_response *trust_url(struct client_state *csp)
       return cgi_error_memory();
    }
 
-   /* 
+   /*
     * Export the host, port, and referrer information
     */
    err = map(exports, "hostport", 1, csp->http->hostport, 1)
@@ -920,7 +929,7 @@ struct http_response *redirect_url(struct client_state *csp)
    p = q = csp->http->path;
    log_error(LOG_LEVEL_REDIRECTS, "checking path for redirects: %s", p);
 
-   /* 
+   /*
     * find the last URL encoded in the request
     */
    while ((p = strstr(p, "http://")))
@@ -928,7 +937,7 @@ struct http_response *redirect_url(struct client_state *csp)
       q = p++;
    }
 
-   /* 
+   /*
     * if there was any, generate and return a HTTP redirect
     */
    if (q != csp->http->path)
@@ -967,7 +976,7 @@ struct http_response *redirect_url(struct client_state *csp)
  *                using either the info from a previous +image action
  *                or, #ifdef FEATURE_IMAGE_DETECT_MSIE, the info from
  *                the browser's accept header.
- *                
+ *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
@@ -978,13 +987,13 @@ struct http_response *redirect_url(struct client_state *csp)
 int is_imageurl(struct client_state *csp)
 {
 #ifdef FEATURE_IMAGE_DETECT_MSIE
-   if ((csp->accept_types 
+   if ((csp->accept_types
        & (ACCEPT_TYPE_IS_MSIE|ACCEPT_TYPE_MSIE_IMAGE|ACCEPT_TYPE_MSIE_HTML))
        == (ACCEPT_TYPE_IS_MSIE|ACCEPT_TYPE_MSIE_IMAGE))
    {
       return 1;
    }
-   else if ((csp->accept_types 
+   else if ((csp->accept_types
        & (ACCEPT_TYPE_IS_MSIE|ACCEPT_TYPE_MSIE_IMAGE|ACCEPT_TYPE_MSIE_HTML))
        == (ACCEPT_TYPE_IS_MSIE|ACCEPT_TYPE_MSIE_HTML))
    {
@@ -1168,7 +1177,7 @@ int is_untrusted_url(struct client_state *csp)
  * Function    :  pcrs_filter_response
  *
  * Description :  Apply all the pcrs jobs from the joblist (re_filterfile)
- *                to the text buffer that's been accumulated in 
+ *                to the text buffer that's been accumulated in
  *                csp->iob->buf and set csp->content_length to the modified
  *                size and raise the CSP_FLAG_MODIFIED flag if appropriate.
  *
@@ -1177,7 +1186,7 @@ int is_untrusted_url(struct client_state *csp)
  *
  * Returns     :  a pointer to the (newly allocated) modified buffer.
  *                or NULL in case something went wrong
- *                
+ *
  *********************************************************************/
 char *pcrs_filter_response(struct client_state *csp)
 {
@@ -1237,7 +1246,7 @@ char *pcrs_filter_response(struct client_state *csp)
 
    log_error(LOG_LEVEL_RE_FILTER, " produced %d hits (new size %d).", hits, size);
 
-   /* 
+   /*
     * If there were no hits, destroy our copy and let
     * chat() use the original in csp->iob
     */
@@ -1260,7 +1269,7 @@ char *pcrs_filter_response(struct client_state *csp)
  *
  * Function    :  gif_deanimate_response
  *
- * Description :  Deanimate the GIF image that has been accumulated in 
+ * Description :  Deanimate the GIF image that has been accumulated in
  *                csp->iob->buf, set csp->content_length to the modified
  *                size and raise the CSP_FLAG_MODIFIED flag.
  *
@@ -1269,7 +1278,7 @@ char *pcrs_filter_response(struct client_state *csp)
  *
  * Returns     :  a pointer to the (newly allocated) modified buffer.
  *                or NULL in case something went wrong.
- *                
+ *
  *********************************************************************/
 char *gif_deanimate_response(struct client_state *csp)
 {
@@ -1318,7 +1327,7 @@ char *gif_deanimate_response(struct client_state *csp)
       free(in);
       free(out);
       return(p);
-   }  
+   }
 
 }
 
@@ -1337,7 +1346,7 @@ char *gif_deanimate_response(struct client_state *csp)
  * Returns     :  The new size, i.e. the number of bytes from buffer which
  *                are occupied by the stripped body, or 0 in case something
  *                went wrong
- *                
+ *
  *********************************************************************/
 int remove_chunked_transfer_coding(char *buffer, const size_t size)
 {
@@ -1363,7 +1372,7 @@ int remove_chunked_transfer_coding(char *buffer, const size_t size)
       }
       newsize += chunksize;
       from_p += 2;
-      
+
       memmove(to_p, from_p, (size_t) chunksize);
       to_p = buffer + newsize;
       from_p += chunksize + 2;
@@ -1395,7 +1404,7 @@ int remove_chunked_transfer_coding(char *buffer, const size_t size)
  * Returns     :  N/A
  *
  *********************************************************************/
-void url_actions(struct http_request *http, 
+void url_actions(struct http_request *http,
                  struct client_state *csp)
 {
    struct file_list *fl;
@@ -1427,8 +1436,8 @@ void url_actions(struct http_request *http,
  * Returns     :  N/A
  *
  *********************************************************************/
-void apply_url_actions(struct current_action_spec *action, 
-                       struct http_request *http, 
+void apply_url_actions(struct current_action_spec *action,
+                       struct http_request *http,
                        struct url_actions *b)
 {
    struct url_spec url[1];
@@ -1552,7 +1561,7 @@ const struct forward_spec * forward_url(struct http_request *http,
  *                them).
  *
  * FIXME: Returning a structure is horribly inefficient, please can
- *        this structure take a (struct url_spec * dest) 
+ *        this structure take a (struct url_spec * dest)
  *        pointer instead?
  *
  *********************************************************************/
@@ -1623,7 +1632,7 @@ struct url_spec dsplit(char *domain)
  *
  * Function    :  simple_domaincmp
  *
- * Description :  Domain-wise Compare fqdn's.  The comparison is 
+ * Description :  Domain-wise Compare fqdn's.  The comparison is
  *                both left- and right-anchored.  The individual
  *                domain names are compared with simplematch().
  *                This is only used by domaincmp.

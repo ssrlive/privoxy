@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.15 2001/10/14 21:58:22 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.16 2001/10/23 21:30:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -10,10 +10,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.15 2001/10/14 21:58:22 jongfoster
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.15 2001/10/14 21:58:22 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.16  2001/10/23 21:30:30  jongfoster
+ *    Adding error-checking to selected functions.
+ *
  *    Revision 1.15  2001/10/14 21:58:22  jongfoster
  *    Adding support for the CGI-based editor:
  *    - Exported get_actions()
@@ -135,7 +138,7 @@ const char actions_h_rcs[] = ACTIONS_H_VERSION;
 #define AV_REM_MULTI  4 /* -multiopt{string} -multiopt{*}       */
 
 /*
- * We need a structure to hold the name, flag changes, 
+ * We need a structure to hold the name, flag changes,
  * type, and string index.
  */
 struct action_name
@@ -194,7 +197,7 @@ static const struct action_name action_names[] =
  * Returns     :  JB_ERR_OK or JB_ERR_MEMORY
  *
  *********************************************************************/
-jb_err merge_actions (struct action_spec *dest, 
+jb_err merge_actions (struct action_spec *dest,
                       const struct action_spec *src)
 {
    int i;
@@ -271,11 +274,11 @@ jb_err merge_actions (struct action_spec *dest,
  * Returns     :  N/A
  *
  *********************************************************************/
-jb_err copy_action (struct action_spec *dest, 
+jb_err copy_action (struct action_spec *dest,
                     const struct action_spec *src)
 {
    int i;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
    memset(dest, '\0', sizeof(*dest));
 
@@ -306,6 +309,7 @@ jb_err copy_action (struct action_spec *dest,
          return err;
       }
    }
+   return err;
 }
 
 
@@ -362,7 +366,7 @@ void free_action (struct action_spec *src)
  *                       we found an action.
  *          2  :  name = [out] Start of action name, null
  *                       terminated.  NULL on EOL
- *          3  :  value = [out] Start of action value, null 
+ *          3  :  value = [out] Start of action value, null
  *                        terminated.  NULL if none or EOL.
  *
  * Returns     :  JB_ERR_OK => Ok
@@ -399,7 +403,7 @@ jb_err get_action_token(char **line, char **name, char **value)
    *name = str;
 
    /* parse option */
-   while (((ch = *str) != '\0') && 
+   while (((ch = *str) != '\0') &&
           (ch != ' ') && (ch != '\t') && (ch != '{'))
    {
       if (ch == '}')
@@ -488,7 +492,7 @@ jb_err get_actions(char *line,
       if (option)
       {
          /* handle option in 'option' */
-      
+
          /* Check for standard action name */
          const struct action_name * action = action_names;
 
@@ -598,7 +602,7 @@ jb_err get_actions(char *line,
          {
             /* try user aliases. */
             const struct action_alias * alias = alias_list;
-            
+
             while ( (alias != NULL) && (0 != strcmpic(alias->name, option)) )
             {
                alias = alias->next;
@@ -964,14 +968,15 @@ void init_action (struct action_spec *dest)
  *          1  :  dest = Current actions, to modify.
  *          2  :  src = Action to add.
  *
- * Returns     :  N/A
+ * Returns  0  :  no error
+ *        !=0  :  error
  *
  *********************************************************************/
-jb_err merge_current_action (struct current_action_spec *dest, 
+jb_err merge_current_action (struct current_action_spec *dest,
                              const struct action_spec *src)
 {
    int i;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
    dest->flags  &= src->mask;
    dest->flags  |= src->add;
@@ -1012,6 +1017,7 @@ jb_err merge_current_action (struct current_action_spec *dest,
          }
       }
    }
+   return err;
 }
 
 
@@ -1093,7 +1099,7 @@ void free_alias_list(struct action_alias *alias_list)
    {
       struct action_alias * next = alias_list->next;
       alias_list->next = NULL;
-      freez((char *)alias_list->name);
+      freez(alias_list->name);
       free_action(alias_list->action);
       free(alias_list);
       alias_list = next;
@@ -1186,7 +1192,7 @@ int load_actions_file(struct client_state *csp)
             {
                /* too short */
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line: %s",
                   csp->config->actions_file, buf);
                return 1; /* never get here */
@@ -1200,7 +1206,7 @@ int load_actions_file(struct client_state *csp)
             {
                /* too short */
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line: {{ }}",
                   csp->config->actions_file);
                return 1; /* never get here */
@@ -1232,7 +1238,7 @@ int load_actions_file(struct client_state *csp)
                    * appear once.
                    */
                   fclose(fp);
-                  log_error(LOG_LEVEL_FATAL, 
+                  log_error(LOG_LEVEL_FATAL,
                      "can't load actions file '%s': {{settings}} must only appear once, and it must be before anything else.",
                      csp->config->actions_file);
                }
@@ -1246,7 +1252,7 @@ int load_actions_file(struct client_state *csp)
                   /* {{description}} is a singleton and only {{settings}} may proceed it
                    */
                   fclose(fp);
-                  log_error(LOG_LEVEL_FATAL, 
+                  log_error(LOG_LEVEL_FATAL,
                      "can't load actions file '%s': {{description}} must only appear once, and only a {{settings}} block may be above it.",
                      csp->config->actions_file);
                }
@@ -1268,7 +1274,7 @@ int load_actions_file(struct client_state *csp)
                    * completely rewriting the file becomes non-trivial)
                    */
                   fclose(fp);
-                  log_error(LOG_LEVEL_FATAL, 
+                  log_error(LOG_LEVEL_FATAL,
                      "can't load actions file '%s': {{alias}} must only appear once, and it must be before all actions.",
                      csp->config->actions_file, start);
                }
@@ -1278,7 +1284,7 @@ int load_actions_file(struct client_state *csp)
             {
                /* invalid {{something}} block */
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line: {{%s}}",
                   csp->config->actions_file, start);
                return 1; /* never get here */
@@ -1309,7 +1315,7 @@ int load_actions_file(struct client_state *csp)
             if (cur_action == NULL)
             {
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': out of memory",
                   csp->config->actions_file);
                return 1; /* never get here */
@@ -1325,7 +1331,7 @@ int load_actions_file(struct client_state *csp)
             {
                /* No closing } */
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line: %s",
                   csp->config->actions_file, buf);
                return 1; /* never get here */
@@ -1339,7 +1345,7 @@ int load_actions_file(struct client_state *csp)
             {
                /* error */
                fclose(fp);
-               log_error(LOG_LEVEL_FATAL, 
+               log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line: %s",
                   csp->config->actions_file, buf);
                return 1; /* never get here */
@@ -1374,7 +1380,7 @@ int load_actions_file(struct client_state *csp)
 
          if ((start == NULL) || (start == buf))
          {
-            log_error(LOG_LEVEL_FATAL, 
+            log_error(LOG_LEVEL_FATAL,
                "can't load actions file '%s': invalid alias line: %s",
                csp->config->actions_file, buf);
             return 1; /* never get here */
@@ -1409,7 +1415,7 @@ int load_actions_file(struct client_state *csp)
          }
          if (*start == '\0')
          {
-            log_error(LOG_LEVEL_FATAL, 
+            log_error(LOG_LEVEL_FATAL,
                "can't load actions file '%s': invalid alias line: %s",
                csp->config->actions_file, buf);
             return 1; /* never get here */
@@ -1423,12 +1429,12 @@ int load_actions_file(struct client_state *csp)
          {
             /* error */
             fclose(fp);
-            log_error(LOG_LEVEL_FATAL, 
+            log_error(LOG_LEVEL_FATAL,
                "can't load actions file '%s': invalid alias line: %s = %s",
                csp->config->actions_file, buf, start);
             return 1; /* never get here */
          }
-         
+
          /* add to list */
          new_alias->next = alias_list;
          alias_list = new_alias;
@@ -1454,7 +1460,7 @@ int load_actions_file(struct client_state *csp)
          if (create_url_spec(perm->url, buf))
          {
             fclose(fp);
-            log_error(LOG_LEVEL_FATAL, 
+            log_error(LOG_LEVEL_FATAL,
                "can't load actions file '%s': cannot create URL pattern from: %s",
                csp->config->actions_file, buf);
             return 1; /* never get here */
@@ -1468,7 +1474,7 @@ int load_actions_file(struct client_state *csp)
       {
          /* oops - please have a {} line as 1st line in file. */
          fclose(fp);
-         log_error(LOG_LEVEL_FATAL, 
+         log_error(LOG_LEVEL_FATAL,
             "can't load actions file '%s': first line is invalid: %s",
             csp->config->actions_file, buf);
          return 1; /* never get here */
@@ -1477,7 +1483,7 @@ int load_actions_file(struct client_state *csp)
       {
          /* How did we get here? This is impossible! */
          fclose(fp);
-         log_error(LOG_LEVEL_FATAL, 
+         log_error(LOG_LEVEL_FATAL,
             "can't load actions file '%s': INTERNAL ERROR - mode = %d",
             csp->config->actions_file, mode);
          return 1; /* never get here */
@@ -1485,7 +1491,7 @@ int load_actions_file(struct client_state *csp)
    }
 
    fclose(fp);
-   
+
    free_action(cur_action);
 
    free_alias_list(alias_list);

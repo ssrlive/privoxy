@@ -1,21 +1,21 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.28 2001/10/07 15:40:39 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.29 2001/10/23 21:38:53 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
- *                the list of active loaders, and to automatically 
+ *                the list of active loaders, and to automatically
  *                unload files that are no longer in use.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.28 2001/10/07 15:40:39 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.29  2001/10/23 21:38:53  jongfoster
+ *    Adding error-checking to create_url_spec()
+ *
  *    Revision 1.28  2001/10/07 15:40:39  oes
  *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
  *
@@ -189,7 +192,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.28 2001/10/07 15:40:39 oes Exp $"
 #include <ctype.h>
 #include <assert.h>
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
 #endif
 
@@ -295,8 +298,8 @@ void sweep(void)
 
       }
       else
-      /* 
-       * this client is not active, release its resources 
+      /*
+       * this client is not active, release its resources
        * and the ones of all inactive clients that might
        * follow it
        */
@@ -304,22 +307,22 @@ void sweep(void)
          while (!(ncsp->flags & CSP_FLAG_ACTIVE))
          {
             csp->next = ncsp->next;
-   
+
             freez(ncsp->ip_addr_str);
             freez(ncsp->my_ip_addr_str);
             freez(ncsp->my_hostname);
-   
+
 #ifdef FEATURE_TRUST
             freez(ncsp->referrer);
 #endif /* def FEATURE_TRUST */
             freez(ncsp->x_forwarded);
             freez(ncsp->iob->buf);
-   
+
             free_http_request(ncsp->http);
-   
+
             destroy_list(ncsp->headers);
             destroy_list(ncsp->cookie_list);
-   
+
             free_current_action(ncsp->action);
 
 #ifdef FEATURE_STATISTICS
@@ -329,9 +332,9 @@ void sweep(void)
                urls_rejected++;
             }
 #endif /* def FEATURE_STATISTICS */
-   
+
             freez(ncsp);
-            
+
             /* are there any more in sequence after it? */
             if( !(ncsp = csp->next) )
                break;
@@ -530,12 +533,12 @@ void free_url(struct url_spec *url)
  *
  * Description :  Helper function to check if a file needs reloading.
  *                If "current" is still current, return it.  Otherwise
- *                allocates a new (zeroed) "struct file_list", fills 
+ *                allocates a new (zeroed) "struct file_list", fills
  *                in the disk file name and timestamp, and returns it.
  *
  * Parameters  :
  *          1  :  current = The file_list currently being used - will
- *                          be checked to see if it is out of date. 
+ *                          be checked to see if it is out of date.
  *                          May be NULL (which is treated as out of
  *                          date).
  *          2  :  filename = Name of file to check.
@@ -678,7 +681,7 @@ char *read_config_line(char *buf, int buflen, FILE *fp)
          continue;
       }
 
-      /* Remove leading and trailing whitespace */         
+      /* Remove leading and trailing whitespace */
       chomp(buf);
 
       if (*buf)
@@ -944,7 +947,7 @@ int load_re_filterfile(struct client_state *csp)
       /* We have a meaningful line -> make it a job */
       if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
       {
-         log_error(LOG_LEVEL_RE_FILTER, 
+         log_error(LOG_LEVEL_RE_FILTER,
                "Adding re_filter job %s failed with error %d.", buf, error);
          continue;
       }
@@ -976,7 +979,7 @@ int load_re_filterfile(struct client_state *csp)
    return( 0 );
 
 load_re_filterfile_error:
-   log_error(LOG_LEVEL_FATAL, "can't load re_filterfile '%s': %E", 
+   log_error(LOG_LEVEL_FATAL, "can't load re_filterfile '%s': %E",
              csp->config->re_filterfile);
    return(-1);
 
@@ -998,7 +1001,7 @@ load_re_filterfile_error:
  * Returns     :  N/A
  *
  *********************************************************************/
-void add_loader(int (*loader)(struct client_state *), 
+void add_loader(int (*loader)(struct client_state *),
                 struct configuration_spec * config)
 {
    int i;

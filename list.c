@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.10 2001/09/16 17:30:24 jongfoster Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.11 2001/10/23 21:21:03 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -11,10 +11,10 @@ const char list_rcs[] = "$Id: list.c,v 1.10 2001/09/16 17:30:24 jongfoster Exp $
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -34,6 +34,11 @@ const char list_rcs[] = "$Id: list.c,v 1.10 2001/09/16 17:30:24 jongfoster Exp $
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.11  2001/10/23 21:21:03  jongfoster
+ *    New error handling - error codes are now jb_errs, not ints.
+ *    Changed the way map() handles out-of-memory, to dramatically
+ *    reduce the amount of error-checking clutter needed.
+ *
  *    Revision 1.10  2001/09/16 17:30:24  jongfoster
  *    Fixing a compiler warning.
  *
@@ -105,7 +110,7 @@ const char list_rcs[] = "$Id: list.c,v 1.10 2001/09/16 17:30:24 jongfoster Exp $
 #endif
 #include <string.h>
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
 #endif
 
@@ -130,8 +135,8 @@ static int list_is_valid (const struct list *the_list);
  *                then pass it to this function.
  *                (Implementation note:  Rather than calling this
  *                function, you can also just memset the memory to
- *                zero, e.g. if you have a larger structure you 
- *                want to initialize quickly.  However, that isn't 
+ *                zero, e.g. if you have a larger structure you
+ *                want to initialize quickly.  However, that isn't
  *                really good design.)
  *
  * Parameters  :
@@ -157,9 +162,9 @@ void init_list(struct list *the_list)
  *                calling list_init().
  *
  *                (Implementation note:  You *can* reuse the_list
- *                without calling list_init(), but please don't.  
+ *                without calling list_init(), but please don't.
  *                If you want to remove all entries from a list
- *                and still have a usable list, then use 
+ *                and still have a usable list, then use
  *                list_remove_all().)
  *
  * Parameters  :
@@ -177,7 +182,7 @@ void destroy_list (struct list *the_list)
    for (cur_entry = the_list->first; cur_entry ; cur_entry = next_entry)
    {
       next_entry = cur_entry->next;
-      freez((char *)cur_entry->str);
+      freez(cur_entry->str);
       free(cur_entry);
    }
 
@@ -193,7 +198,7 @@ void destroy_list (struct list *the_list)
  * Description :  Check that a string list is valid.  The intended
  *                usage is "assert(list_is_valid(the_list))".
  *                Currently this checks that "the_list->last"
- *                is correct, and that the list dosn't contain 
+ *                is correct, and that the list dosn't contain
  *                circular references.  It is likely to crash if
  *                it's passed complete garbage.
  *
@@ -223,7 +228,7 @@ static int list_is_valid (const struct list *the_list)
       if (cur_entry->str)
       {
          /*
-          * Just check that this string can be accessed - i.e. it's a valid 
+          * Just check that this string can be accessed - i.e. it's a valid
           * pointer.
           */
          strlen(cur_entry->str);
@@ -273,7 +278,7 @@ static int list_is_valid (const struct list *the_list)
  *          2  :  str = string to add to the list (maybe NULL)
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, the_list will be unchanged.
  *
  *********************************************************************/
@@ -329,7 +334,7 @@ jb_err enlist(struct list *the_list, const char *str)
  *          2  :  str = string to add to the list (maybe NULL)
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, the_list will be unchanged.
  *
  *********************************************************************/
@@ -354,7 +359,7 @@ jb_err enlist_first(struct list *the_list, const char *str)
       }
    }
    /* else { cur->str = NULL; }  - implied by zalloc */
-   
+
    cur->next = the_list->first;
 
    the_list->first = cur;
@@ -375,7 +380,7 @@ jb_err enlist_first(struct list *the_list, const char *str)
  * Description :  Append a string into a specified string list,
  *                if & only if it's not there already.
  *                If the num_significant_chars argument is nonzero,
- *                only compare up to the nth character. 
+ *                only compare up to the nth character.
  *
  * Parameters  :
  *          1  :  the_list = pointer to list
@@ -384,7 +389,7 @@ jb_err enlist_first(struct list *the_list, const char *str)
  *                for uniqueness test, or 0 to require an exact match.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, the_list will be unchanged.
  *                "Success" does not indicate whether or not the
  *                item was already in the list.
@@ -444,7 +449,7 @@ jb_err enlist_unique(struct list *the_list, const char *str,
  *          3  :  value = HTTP header value (e.g. "text/html")
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, the_list will be unchanged.
  *                "Success" does not indicate whether or not the
  *                header was already in the list.
@@ -489,7 +494,7 @@ jb_err enlist_unique_header(struct list *the_list, const char *name,
  * Description :  Remove all entries from a list.  On return, the_list
  *                is a valid, empty list.  Note that this is similar
  *                to destroy_list(), but the difference is that this
- *                function guarantees that the list structure is still 
+ *                function guarantees that the list structure is still
  *                valid after the call.
  *
  * Parameters  :
@@ -509,7 +514,7 @@ void list_remove_all(struct list *the_list)
    for (cur_entry = the_list->first; cur_entry ; cur_entry = next_entry)
    {
       next_entry = cur_entry->next;
-      freez((char *)cur_entry->str);
+      freez(cur_entry->str);
       free(cur_entry);
    }
 
@@ -688,7 +693,7 @@ int list_remove_list(struct list *dest, const struct list *src)
  *          1  :  src = pointer to source list for copy.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, dest will be empty.
  *
  *********************************************************************/
@@ -785,7 +790,7 @@ jb_err list_duplicate(struct list *dest, const struct list *src)
  *          2  :  src = pointer to source for merge.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                On error, some (but not all) of src might have
  *                been copied into dest.
  *
@@ -836,7 +841,7 @@ int list_is_empty(const struct list *the_list)
 {
    assert(the_list);
    assert(list_is_valid(the_list));
-   
+
    return (the_list->first == NULL);
 }
 
@@ -881,10 +886,10 @@ void free_map(struct map *the_map)
       return;
    }
 
-   for (cur_entry = the_map->first; cur_entry != NULL; cur_entry = next_entry) 
+   for (cur_entry = the_map->first; cur_entry != NULL; cur_entry = next_entry)
    {
-      freez((char *)cur_entry->name);
-      freez((char *)cur_entry->value);
+      freez(cur_entry->name);
+      freez(cur_entry->value);
 
       next_entry = cur_entry->next;
       free(cur_entry);
@@ -923,9 +928,9 @@ void free_map(struct map *the_map)
  *                    err = map(mymap, "xyz", 1, html_encode(somestring), 0);
  *
  *                err will be set to JB_ERR_MEMORY if either call runs
- *                out-of-memory.  Without these features, you would 
- *                need to check the return value of html_encode in the 
- *                above example for NULL, which (at least) doubles the 
+ *                out-of-memory.  Without these features, you would
+ *                need to check the return value of html_encode in the
+ *                above example for NULL, which (at least) doubles the
  *                amount of error-checking code needed.
  *
  * Parameters  :
@@ -936,7 +941,7 @@ void free_map(struct map *the_map)
  *          5  :  value_needs_copying = flag set if a copy of value should be used
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err map(struct map *the_map,

@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.10 2001/09/22 16:34:44 jongfoster Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.11 2001/10/07 15:42:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -9,10 +9,10 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.10 2001/09/22 16:34:44 jongfo
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -32,6 +32,10 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.10 2001/09/22 16:34:44 jongfo
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.11  2001/10/07 15:42:41  oes
+ *    filter_popups now gets a csp pointer so it can raise the new
+ *      CSP_FLAG_MODIFIED flag.
+ *
  *    Revision 1.10  2001/09/22 16:34:44  jongfoster
  *    Removing unneeded #includes
  *
@@ -94,7 +98,7 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.10 2001/09/22 16:34:44 jongfo
 #include <sys/stat.h>
 #include <ctype.h>
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
 #endif
 
@@ -141,7 +145,7 @@ void filter_popups(char *buff, struct client_state *csp)
          csp->flags |= CSP_FLAG_MODIFIED;
       }
    }
-   
+
    while ((popup = strstr( buff, ".resizeTo(" )) != NULL)
    {
       if ( popup )

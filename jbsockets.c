@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.17 2001/09/13 20:11:46 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.18 2001/09/21 23:02:02 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.17 2001/09/13 20:11:46 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.18  2001/09/21 23:02:02  david__schmidt
+ *    Cleaning up 2 compiler warnings on OS/2.
+ *
  *    Revision 1.17  2001/09/13 20:11:46  jongfoster
  *    Fixing 2 compiler warnings under Win32
  *
@@ -114,7 +117,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.17 2001/09/13 20:11:46 jongfo
 
 #else
 
+#ifndef __OS2__
 #include <unistd.h>
+#endif
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>
@@ -123,13 +128,16 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.17 2001/09/13 20:11:46 jongfo
 
 #ifndef __BEOS__
 #include <netinet/tcp.h>
+#ifndef __OS2__
 #include <arpa/inet.h>
+#endif
 #else
 #include <socket.h>
 #endif
 
-#ifdef __EMX__
+#if defined(__EMX__) || defined (__OS2__)
 #include <sys/select.h>  /* OS/2/EMX needs a little help with select */
+#include <nerrno.h>
 #endif
 
 #endif
@@ -186,7 +194,11 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
 
    if (block_acl(dst, csp))
    {
+#ifdef __OS2__
+      errno = SOCEPERM;
+#else
       errno = EPERM;
+#endif
       return(-1);
    }
 #endif /* def FEATURE_ACL */
@@ -220,39 +232,45 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    }
 #endif /* def TCP_NODELAY */
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
    {
       flags |= O_NDELAY;
       fcntl(fd, F_SETFL, flags);
    }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
 
    while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == -1)
    {
 #ifdef _WIN32
       if (errno == WSAEINPROGRESS)
+#elif __OS2__ 
+      if (sock_errno() == EINPROGRESS)
 #else /* ifndef _WIN32 */
       if (errno == EINPROGRESS)
-#endif /* ndef _WIN32 */
+#endif /* ndef _WIN32 || __OS2__ */
       {
          break;
       }
 
+#ifdef __OS2__ 
+      if (sock_errno() != EINTR)
+#else
       if (errno != EINTR)
+#endif /* __OS2__ */
       {
          close_socket(fd);
          return(-1);
       }
    }
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    if (flags != -1)
    {
       flags &= ~O_NDELAY;
       fcntl(fd, F_SETFL, flags);
    }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
 
    /* wait for connection to complete */
    FD_ZERO(&wfds);
@@ -296,7 +314,7 @@ int write_socket(int fd, const char *buf, int len)
 
    log_error(LOG_LEVEL_LOG, "%N", len, buf);
 
-#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
+#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
    return( send(fd, buf, len, 0));
 #else
    return( write(fd, buf, len));
@@ -337,7 +355,7 @@ int read_socket(int fd, char *buf, int len)
       return(0);
    }
 
-#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
+#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
    return( recv(fd, buf, len, 0));
 #else
    return( read(fd, buf, len));
@@ -363,6 +381,8 @@ void close_socket(int fd)
    closesocket(fd);
 #elif defined(AMIGA)
    CloseSocket(fd); 
+#elif defined(__OS2__)
+   soclose(fd);
 #else
    close(fd);
 #endif

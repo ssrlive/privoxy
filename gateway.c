@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.8 2001/09/13 20:10:12 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -11,10 +11,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Ex
  *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Ex
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.8  2001/09/13 20:10:12  jongfoster
+ *    Fixing missing #include under Windows
+ *
  *    Revision 1.7  2001/09/12 17:58:26  steudten
  *
  *    add #include <string.h>
@@ -88,6 +91,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Ex
 #include <netdb.h>
 #endif /* def __BEOS__ */
 
+#ifdef __OS2__
+#include <utils.h>
+#endif /* def __OS2__ */
+
 #include "project.h"
 #include "jcc.h"
 #include "errlog.h"
@@ -96,7 +103,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Ex
 
 const char gateway_h_rcs[] = GATEWAY_H_VERSION;
 
-static int socks4_connect(const struct forward_spec * fwd, 
+static int socks4_connect(const struct forward_spec * fwd,
                           const char * target_host,
                           int target_port,
                           struct client_state *csp);
@@ -143,8 +150,8 @@ static const char socks_userid[] = "anonymous";
  * Returns     :  -1 => failure, else it is the socket file descriptor.
  *
  *********************************************************************/
-int forwarded_connect(const struct forward_spec * fwd, 
-                      struct http_request *http, 
+int forwarded_connect(const struct forward_spec * fwd,
+                      struct http_request *http,
                       struct client_state *csp)
 {
    const char * dest_host;
@@ -201,7 +208,7 @@ int forwarded_connect(const struct forward_spec * fwd,
  * Returns     :  -1 => failure, else a socket file descriptor.
  *
  *********************************************************************/
-static int socks4_connect(const struct forward_spec * fwd, 
+static int socks4_connect(const struct forward_spec * fwd,
                           const char * target_host,
                           int target_port,
                           struct client_state *csp)
