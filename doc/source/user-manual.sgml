@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.79 2002/04/18 03:18:06 hal9 Exp $
+ $Id: user-manual.sgml,v 1.80 2002/04/18 10:45:19 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.79 2002/04/18 03:18:06 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.80 2002/04/18 10:45:19 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -190,12 +190,9 @@
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, HP-UX</title>
-
+<sect3 id="installation-deb"><title>Debian</title>
 <para>
- Create a new directory, <literal>cd</literal> to it, then unzip and
- untar the archive. For the most part, you'll have to figure out where
- things go. FIXME.
+ FIXME.
 </para>
 </sect3>
 
@@ -209,11 +206,30 @@
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, FreeBSD, HP-UX</title>
+
+<para>
+ Create a new directory, <literal>cd</literal> to it, then unzip and
+ untar the archive. For the most part, you'll have to figure out where
+ things go. FIXME.
+</para>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-os2"><title>OS/2</title>
 
 <para>
- Just double-click the WarpIN self-installing archive, which will guide
- you through the installation process. A shadow of the
+ First, make sure that no previous installations of
+ <application>Junkbuster</application> and / or 
+ <application>Privoxy</application> are left on your
+ system. Be sure to backup your configuration if it
+ is valuable to you. (In that case, also see the
+ <link linkend="upgradersnote">note to upgraders</link>.)
+</para>
+
+<para>
+ Then, just double-click the WarpIN self-installing archive, which will
+ guide you through the installation process. A shadow of the
  <application>Privoxy</application> executable will be placed in your
  startup folder so it will start automatically whenever OS/2 starts.
 </para>
@@ -225,7 +241,7 @@
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-deb"><title>Debian</title>
+<sect3 id="installation-mac"><title>Max OSX</title>
 <para>
  FIXME.
 </para>
@@ -4400,6 +4416,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.80  2002/04/18 10:45:19  oes
+ Moved text to buildsource.sgml, renamed some filters, details
+
  Revision 1.79  2002/04/18 03:18:06  hal9
  Spellcheck, and minor touchups.
 
