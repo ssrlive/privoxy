@@ -27,19 +27,19 @@ function edit_pattern(b,p,ct)
    ct=unescape(ct);
 	nt=window.prompt("Edit this URL pattern:",ct);
 	if ((nt!=null)&&(nt!=ct)&&(nt!=""))
-	{ window.location.href="http://i.j.b/change-pattern?section="+b+"&pattern="+p+"&newval="+escape(nt)+"#s"+b+"url"+p; }
+	{ window.location.href="http://i.j.b/edit-actions-url?filename=@filename@&filename=@filename@&section="+b+"&pattern="+p+"&newval="+escape(nt)+"#s"+b+"url"+p; }
 }
 
 function add_pattern(b)
 {
 	nt=window.prompt("Enter URL pattern to add:", "");
 	if ((nt!=null)&&(nt!=""))
-	{ window.location.href="http://i.j.b/change-pattern?section="+b+"&pattern=new&newval="+escape(nt)+"#s"+b+"urls"; }
+	{ window.location.href="http://i.j.b/edit-actions-add-url?filename=@filename@&section="+b+"&newval="+escape(nt)+"#s"+b+"urls"; }
 }
 
 function edit_actions(b)
 {
-	window.location.href="http://i.j.b/edit-actions?section="+b;
+	window.location.href="http://i.j.b/edit-actions-for-url?filename=@filename@&section="+b;
 }
 
 function not_yet()
@@ -51,6 +51,7 @@ function not_yet()
 </head>
 
 <body>
+<h1>Editing @filename@.action</h1>
 
 @sections@
 

@@ -70,6 +70,8 @@ function disable_unless(target, checkbox)
 
 <p>&nbsp;</p>
 <form method="GET" action="http://i.j.b/edit-actions-submit" id="myform">
+  <input type="hidden" name="filename" value="@filename@">
+  <input type="hidden" name="section" value="@section@">
   <table border="0" width="100%" cellspacing="0">
     <tr align="left">
       <th>Action</th>
@@ -188,16 +190,16 @@ function disable_unless(target, checkbox)
     </tr>
     <tr class="bg1" align="left" valign="top" id="hide_from_opts">
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="from-mode" value="block"
+      <td colspan="4"><input type="radio" name="hide-from-mode" value="block"
         onclick="disable_unless(from_param, from_mode_set)"
         @hide-from-param-block@ id="from_mode_block"><label
         for="from_mode_block">Remove completely</label><br>
-        <input type="radio" name="from-mode" value="CUSTOM" 
+        <input type="radio" name="hide-from-mode" value="CUSTOM" 
         onclick="disable_unless(from_param, from_mode_set)"
         @hide-from-param-custom@ id="from_mode_set"><label
         for="from_mode_set">Fake e-mail address:</label><br>
-        <input type="text" name="from-param" id="from_param" size="40"
-        value="@hide-from-param@"></td>
+        <input type="text" name="hide-from-param" id="from_param"
+        size="40" value="@hide-from-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
       <td class="action">+hide-referer</td>

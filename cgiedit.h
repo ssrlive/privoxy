@@ -1,9 +1,9 @@
 #ifndef CGIEDIT_H_INCLUDED
 #define CGIEDIT_H_INCLUDED
-#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.15 2001/09/16 15:02:35 jongfoster Exp $"
+#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.1 2001/09/16 15:47:37 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.h,v $
  *
  * Purpose     :  CGI-based actionsfile editor.
  *                
@@ -36,7 +36,13 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: cgi.h,v $
+ *    $Log: cgiedit.h,v $
+ *    Revision 1.1  2001/09/16 15:47:37  jongfoster
+ *    First version of CGI-based edit interface.  This is very much a
+ *    work-in-progress, and you can't actually use it to edit anything
+ *    yet.  You must #define FEATURE_CGI_EDIT_ACTIONS for these changes
+ *    to have any effect.
+ *
  *
  **********************************************************************/
 
@@ -52,6 +58,9 @@ extern "C" {
  */
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 extern int cgi_edit_actions        (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_edit_actions_for_url(struct client_state *csp,
                                     struct http_response *rsp,
                                     struct map *parameters);
 extern int cgi_edit_actions_list   (struct client_state *csp,
