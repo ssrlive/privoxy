@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.26 2001/09/16 17:05:14 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.27 2001/09/20 15:45:25 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.26 2001/09/16 17:05:14 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.27  2001/09/20 15:45:25  steudten
+ *
+ *    add casting from size_t to int for printf()
+ *    remove local variable shadow s2
+ *
  *    Revision 1.26  2001/09/16 17:05:14  jongfoster
  *    Removing unused #include showarg.h
  *
@@ -231,10 +236,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.26 2001/09/16 17:05:14 jongfoster
 
 #include "config.h"
 
+#ifndef _WIN32
 #include <stdio.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <ctype.h>
+#endif
+
 #include <string.h>
 
 #ifndef _WIN32
@@ -245,14 +253,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.26 2001/09/16 17:05:14 jongfoster
 #include "list.h"
 #include "parsers.h"
 #include "encode.h"
-#include "filters.h"
-#include "loaders.h"
-#include "jcc.h"
 #include "ssplit.h"
 #include "errlog.h"
 #include "jbsockets.h"
 #include "miscutil.h"
-#include "cgi.h"
 
 const char parsers_h_rcs[] = PARSERS_H_VERSION;
 
