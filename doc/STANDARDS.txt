@@ -933,10 +933,10 @@ project (or conversly exclude from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: $";
+const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.1 2001/06/28 03:01:32 iwanttokeepanon Exp $";
 /*********************************************************************
  *
- * File        :  $Source: $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -966,7 +966,10 @@ const char FILENAME_rcs[] = "$Id: $";
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: $
+ *    $Log: STANDARDS.txt,v $
+ *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
+ *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
+ *
  *
  *********************************************************************/
 
@@ -993,10 +996,10 @@ Example for file header comments:
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: $"
+#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.1 2001/06/28 03:01:32 iwanttokeepanon Exp $"
 /*********************************************************************
  *
- * File        :  $Source: $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1026,7 +1029,10 @@ Example for file header comments:
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: $
+ *    $Log: STANDARDS.txt,v $
+ *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
+ *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
+ *
  *
  *********************************************************************/
 
@@ -1083,6 +1089,35 @@ int FUNCTION_NAME( void *param1, const char *x )
 
 NOTE: If we all follow this practice, we should be able to parse
 our code to create a "self-documenting" web page.
+
+
+** XEmacs and VC mode
+
+
+* Explanation:
+
+These are the files I have in current/doc/CVS.  I am experimenting
+with XEmacs and VC/CVS modes.  Can I check this in?  We will see...
+
+* current/doc/CVS/Entries:
+
+/USER_DOC_IS_WIDELY_OBSOLETED/1.1.1.1/Tue May 15 13:59:57 2001//
+/changes.txt/1.1.1.1/Tue May 15 13:59:50 2001//
+/fb.gif/1.1/Thu May 17 22:56:17 2001//
+/gpl.html/1.2/Thu May 17 22:56:17 2001//
+/ijbfaq.html/1.2/Thu May 17 22:56:17 2001//
+/ijbman.html/1.2/Thu May 17 22:56:17 2001//
+/top.gif/1.1/Thu May 17 22:56:17 2001//
+D/webserver////
+/STANDARDS.txt/1.1/Thu Jun 28 03:01:32 2001//
+
+* current/doc/CVS/Repository:
+
+current/doc
+
+* current/doc/CVS/Root:
+
+:ext:IwantToKeepAnon@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa
 
 
 ** Local variables for this standards file
