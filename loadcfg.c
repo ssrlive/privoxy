@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.11 2001/06/04 18:31:58 swa Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.12 2001/06/05 20:04:09 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.11 2001/06/04 18:31:58 swa Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.12  2001/06/05 20:04:09  jongfoster
+ *    Now uses _snprintf() in place of snprintf() under Win32.
+ *
  *    Revision 1.11  2001/06/04 18:31:58  swa
  *    files are now prefixed with either `confdir' or `logdir'.
  *    `make redhat-dist' replaces both entries confdir and logdir
@@ -329,7 +332,6 @@ static struct file_list *current_configfile = NULL;
 #define hash_show_on_task_bar           215410365ul
 
 
-
 /*********************************************************************
  *
  * Function    :  unload_configfile
@@ -353,6 +355,9 @@ void unload_configfile (void * data)
       config->jar = NULL;
    }
 #endif /* def JAR_FILES */
+
+   freez((char *)config->confdir);
+   freez((char *)config->logdir);
 
    freez((char *)config->haddr);
    freez((char *)config->logfile);
@@ -399,7 +404,6 @@ struct configuration_spec * load_config(void)
    FILE *configfp = NULL;
    struct configuration_spec * config = NULL;
    struct client_state * fake_csp;
-
    struct file_list *fs;
 
    if (!check_file_changed(current_configfile, configfile, &fs))
@@ -462,8 +466,6 @@ struct configuration_spec * load_config(void)
       char arg[BUFSIZ];
       char tmp[BUFSIZ];
 
-      char arg2[BUFSIZ];
-
       strcpy(tmp, buf);
 
       /* Copy command (i.e. up to space or tab) into cmd */
@@ -508,8 +510,7 @@ struct configuration_spec * load_config(void)
 #ifdef TRUST_FILES
          case hash_trustfile :
             freez((char *)config->trustfile);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->confdir, arg);
-            config->trustfile = strdup(arg2);
+            config->trustfile = make_path(config->confdir, arg);
             continue;
 
          case hash_trust_info_url :
@@ -522,10 +523,12 @@ struct configuration_spec * load_config(void)
             continue;
 
          case hash_confdir :
+            freez((char *)config->confdir);
             config->confdir = strdup(arg);
             continue;            
 
          case hash_logdir :
+            freez((char *)config->logdir);
             config->logdir = strdup(arg);
             continue;            
 
@@ -535,21 +538,18 @@ struct configuration_spec * load_config(void)
 
          case hash_actions_file :
             freez((char *)config->actions_file);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->confdir, arg);
-            config->actions_file = strdup(arg2);
+            config->actions_file = make_path(config->confdir, arg);
             continue;
 
          case hash_logfile :
             freez((char *)config->logfile);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->logdir, arg);
-            config->logfile = strdup(arg2);
+            config->logfile = make_path(config->logdir, arg);
             continue;
 
 #ifdef JAR_FILES
          case hash_jarfile :
             freez((char *)config->jarfile);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->logdir, arg);
-            config->jarfile = strdup(arg2);
+            config->jarfile = make_path(config->logdir, arg);
             continue;
 #endif /* def JAR_FILES */
 
@@ -560,15 +560,13 @@ struct configuration_spec * load_config(void)
 
          case hash_forwardfile :
             freez((char *)config->forwardfile);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->confdir, arg);
-            config->forwardfile = strdup(arg2);
+            config->forwardfile = make_path(config->confdir, arg);
             continue;
 
 #ifdef ACL_FILES
          case hash_aclfile :
             freez((char *)config->aclfile);
-				snprintf(arg2, BUFSIZ, "%s/%s", config->confdir, arg);
-            config->aclfile = strdup(arg2);
+            config->aclfile = make_path(config->confdir, arg);
             continue;
 #endif /* def ACL_FILES */
 
