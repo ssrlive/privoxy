@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.20 2001/09/13 23:40:36 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.21 2001/09/13 23:53:03 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.20 2001/09/13 23:40:36 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.21  2001/09/13 23:53:03  jongfoster
+ *    Support for both static and dynamically generated CGI pages.
+ *    Correctly setting Last-Modified: and Expires: HTTP headers.
+ *
  *    Revision 1.20  2001/09/13 23:40:36  jongfoster
  *    (Cosmetic only) Indentation correction
  *
@@ -285,7 +289,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
     */
 
    /* Get mem for response or fail*/
-   if (NULL == ( rsp = zalloc(sizeof(*rsp))))
+   if (NULL == (rsp = alloc_http_response()))
    {
       return NULL;
    }
@@ -818,7 +822,7 @@ struct http_response *error_response(struct client_state *csp, const char *templ
    struct http_response *rsp;
    struct map * exports = default_exports(csp, NULL);
 
-   if (NULL == ( rsp = (struct http_response *)zalloc(sizeof(*rsp))))
+   if (NULL == (rsp = alloc_http_response()))
    {
       return NULL;
    }  
@@ -995,6 +999,23 @@ struct http_response *finish_http_response(struct http_response *rsp)
 
    return(rsp);
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  alloc_http_response
+ *
+ * Description :  Allocates a new http_response structure.
+ *
+ * Parameters  :  N/A
+ *
+ * Returns     :  pointer to a new http_response, or NULL.
+ *
+ *********************************************************************/
+struct http_response * alloc_http_response(void)
+{
+   return (struct http_response *) zalloc(sizeof(struct http_response));
 }
 
 

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.28 2001/09/10 10:18:51 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.29 2001/09/13 23:32:40 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.28 2001/09/10 10:18:51 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.29  2001/09/13 23:32:40  jongfoster
+ *    Moving image data to cgi.c rather than cgi.h
+ *    Fixing a GPF under Win32 (and any other OS that protects global
+ *    constants from being written to).
+ *
  *    Revision 1.28  2001/09/10 10:18:51  oes
  *    Silenced compiler warnings
  *
@@ -472,7 +477,7 @@ struct http_response *block_url(struct client_state *csp)
    /* 
     * Else, prepare a response
     */
-   if (NULL == ( rsp = (struct http_response *)zalloc(sizeof(*rsp))))
+   if (NULL == (rsp = alloc_http_response()))
    {
       return NULL;
    }
@@ -588,7 +593,7 @@ struct http_response *trust_url(struct client_state *csp)
    /* 
     * Else, prepare a response:
     */
-   if (NULL == ( rsp = (struct http_response *)zalloc(sizeof(*rsp))))
+   if (NULL == (rsp = alloc_http_response()))
    {
       return NULL;
    }
@@ -702,7 +707,7 @@ struct http_response *redirect_url(struct client_state *csp)
    {
       log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
 
-      if (NULL == ( rsp = zalloc(sizeof(*rsp))))
+      if (NULL == (rsp = alloc_http_response()))
       {
          return NULL;
       }

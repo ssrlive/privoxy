@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.11 2001/08/05 16:06:20 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.12 2001/09/13 23:31:25 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.12  2001/09/13 23:31:25  jongfoster
+ *    Moving image data to cgi.c rather than cgi.h.
+ *
  *    Revision 1.11  2001/08/05 16:06:20  jongfoster
  *    Modifiying "struct map" so that there are now separate header and
  *    "map_entry" structures.  This means that functions which modify a
@@ -116,8 +119,10 @@ extern struct http_response *error_response(struct client_state *csp, const char
 /*
  * CGI support functions
  */
-extern struct http_response *finish_http_response(struct http_response *rsp);
+extern struct http_response * alloc_http_response(void);
 extern void free_http_response(struct http_response *rsp);
+
+extern struct http_response *finish_http_response(struct http_response *rsp);
 
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
 extern void map_block_killer(struct map *map, const char *name);
