@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.4 2001/06/29 13:30:22 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.5 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.4 2001/06/29 13:30:22 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.5  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.4  2001/06/29 13:30:22  oes
  *    - Added Convenience function enlist_unique_header(),
  *      which takes the Header name and value as separate
@@ -298,7 +301,8 @@ void destroy_list(struct list *header)
  *
  * Function    :  list_to_text
  *
- * Description :  "Flaten" a string list into 1 long \r\n delimited string.
+ * Description :  "Flaten" a string list into 1 long \r\n delimited string,
+ *                adding an empty line at the end.
  *
  * Parameters  :
  *          1  :  h = pointer to list 'dummy' header
@@ -311,9 +315,7 @@ char *list_to_text(struct list *h)
    struct list *p;
    char *ret = NULL;
    char *s;
-   int size;
-
-   size = 0;
+   int size = 2;
 
    for (p = h->next; p ; p = p->next)
    {
@@ -341,6 +343,7 @@ char *list_to_text(struct list *h)
          *s++ = '\r'; *s++ = '\n';
       }
    }
+   *s++ = '\r'; *s++ = '\n';
 
    return(ret);
 
