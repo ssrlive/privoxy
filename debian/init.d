@@ -15,8 +15,10 @@ set -e
 case "$1" in
   start)
 	echo -n "Starting $DESC: "
-	$DAEMON --pidfile $PIDFILE --user $OWNER $CONFIGFILE 2>/dev/null
-	echo "$NAME."
+	start-stop-daemon --oknodo --start --quiet --pidfile $PIDFILE \
+	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE \
+	    2>/dev/null
+ 	echo "$NAME."
 	;;
   stop)
 	echo -n "Stopping $DESC: "
@@ -46,7 +48,8 @@ case "$1" in
 	start-stop-daemon --oknodo --stop --quiet --pidfile $PIDFILE \
 		--exec $DAEMON
 	sleep 1
-	$DAEMON --pidfile $PIDFILE --user $OWNER $CONFIGFILE
+	start-stop-daemon --oknodo --start --quiet --pidfile $PIDFILE \
+	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE
 	;;
   *)
 	N=/etc/init.d/$NAME
