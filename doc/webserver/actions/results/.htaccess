@@ -1,0 +1,11 @@
+# http://privoxy.org/actions/results/.htaccess
+#
+# Keeps user feedback confidential by
+# denying access to everybody.
+#
+# To view the feedback use:
+# ssh ijbswa.sf.net cat /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt
+#
+<Limit GET>
+  Deny from all
+</Limit>

@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.5 2002/04/02 07:22:43 oes Exp $
+  $Id: step3.php,v 1.6 2002/04/03 19:36:04 swa Exp $
 
   $Log: step3.php,v $
+  Revision 1.6  2002/04/03 19:36:04  swa
+  consistent look
+
   Revision 1.5  2002/04/02 07:22:43  oes
   Cosmetics
 
@@ -50,12 +53,16 @@
 <?php
 
 /* 
+ * Config:
+ */
+$logfile = "results/actions-feedback.txt";
+
+/* 
  * For testing:
  */
 //phpinfo();
 //error_reporting(E_ALL);
 error_reporting(E_NONE);
-
 
 
 /* 
@@ -112,7 +119,6 @@ if (!isset($name) || ($name == ""))
 /* 
  * Open the logfile or fail:
  */
-$logfile = "feedback-data.txt";
 $fp = fopen($logfile, "a");
 
 if(!$fp)
