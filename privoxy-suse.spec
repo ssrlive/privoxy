@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.16 2002/04/22 16:32:31 morcego Exp $
+# $Id: privoxy-suse.spec,v 1.17 2002/04/26 15:51:05 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@
 
 # do not set to %{name}
 %define privoxyconf %{_sysconfdir}/privoxy
+%define privoxy_uid 73
+%define privoxy_gid 73
+
 
 Summary:      Privoxy - privacy enhancing proxy
 Vendor:       Privoxy.Org
@@ -40,7 +43,7 @@ Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}.tar.gz
 # not sure if this works
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Packager:     Stefan Waldherr <stefan@waldherr.org>
-License:    GPL
+License:     GPL
 Group:        Networking/Utilities
 URL:          http://www.privoxy.org/
 Autoreqprov:  on
@@ -136,11 +139,11 @@ id privoxy > /dev/null 2>&1
 if [ $? -eq 1 ]; then
 	id junkbust > /dev/null 2>&1 
 	if [ $? -eq 0 ]; then
-		/usr/sbin/usermod -l privoxy -d %{_sysconfdir}/privoxy -s "" junkbust  > /dev/null 2>&1
+		/usr/sbin/usermod -u %{privoxy_uid} -g %{privoxy_gid} -l privoxy -d %{_sysconfdir}/privoxy -s "" junkbust  > /dev/null 2>&1
 	else
 # -r does not work on suse.
-		/usr/sbin/groupadd privoxy
-		/usr/sbin/useradd -d %{_sysconfdir}/privoxy -g privoxy -s "" privoxy > /dev/null 2>&1 
+		/usr/sbin/groupadd -g %{privoxy_gid} privoxy
+		/usr/sbin/useradd -u %{privoxy_uid} -d %{_sysconfdir}/privoxy -g privoxy -s "" privoxy > /dev/null 2>&1 
 	fi
 fi
 
@@ -307,6 +310,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.17  2002/04/26 15:51:05  morcego
+# Changing Vendor value to Privoxy.Org
+#
 # Revision 1.16  2002/04/22 16:32:31  morcego
 # configure.in, *.spec: Bumping release to 2 (2.9.14-2)
 # -rh.spec: uid and gid are now macros
