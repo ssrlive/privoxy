@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 2.4 2003/01/21 02:49:27 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.5 2003/09/22 00:33:01 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
@@ -38,6 +38,11 @@ const char filters_rcs[] = "$Id: filters.c,v 2.4 2003/01/21 02:49:27 david__schm
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.5  2003/09/22 00:33:01  david__schmidt
+ *    Enable sending a custom 'blocked' image.  Shows up as
+ *    "image-blocker-custom-file" parameter in config, and
+ *    "+set-image-blocker{custom}" in action files.
+ *
  *    Revision 2.4  2003/01/21 02:49:27  david__schmidt
  *    Developer TODO 612294: src: C++ keyword as variable name
  *    I changed all ocurrences of 'new' to 'new_something' wherever I found
@@ -1316,7 +1321,7 @@ int is_untrusted_url(struct client_state *csp)
 char *pcrs_filter_response(struct client_state *csp)
 {
    int hits=0;
-   size_t size;
+   size_t size, prev_size;
 
    char *old_buf = csp->iob->cur, *new_buf = NULL;
    pcrs_job *job;
@@ -1375,9 +1380,7 @@ char *pcrs_filter_response(struct client_state *csp)
                continue;
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s...",
-                      csp->http->hostport, csp->http->path, size, b->name);
-
+            prev_size = size;
             /* Apply all jobs from the joblist */
             for (job = b->joblist; NULL != job; job = job->next)
             {
@@ -1386,7 +1389,9 @@ char *pcrs_filter_response(struct client_state *csp)
                old_buf=new_buf;
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
+            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s produced %d hits (new size %d).",
+                      csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
+
             hits += current_hits;
          }
       }
