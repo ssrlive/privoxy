@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.133 2002/10/28 02:12:22 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.134 2002/10/28 06:01:39 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -872,28 +872,28 @@ install-strip:
 # Perhaps the whole user/group validation should be done here, and simplified.
 PROGRAM_V = Privoxy $(VERSION)
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
-	# Quick test for valid USER.
-	if [ -n "$(USER)" ]; then \
+	@# Quick test for valid USER.
+	@if [ -n "$(USER)" ]; then \
 		$(ID) $(USER) >/dev/null || exit 1;\
 	fi
-	# Test for valid group. FIXME. USER does not have to belong to GROUP 
-	# for file ownership purposes.
+	@# Test for valid group. FIXME. USER does not have to belong to GROUP 
+	@# for file ownership purposes.
 # 	if [ -n "$(GROUP_T)" ] && [ -n "$(USER)" ] && ! $(GROUPS) $(USER) | $(GREP) "\<$(GROUP_T)\>" >/dev/null; then \
 # 		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
 # 	fi
 	
-	$(ECHO) "Creating directories, and preparing $(PROGRAM_V) installation"
+	@$(ECHO) "Creating directories, and preparing $(PROGRAM_V) installation"
 	$(CHMOD) $(DIR_MODE) $(MKDIR)
-	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
+	@$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
 		$(LOG_DEST) $(PID_DEST)
-	# Install the executable binary, strip if invoked as install-strip
-	test -n "$(STRIP)" &&\
+	@# Install the executable binary, strip if invoked as install-strip
+	@test -n "$(STRIP)" &&\
 	$(ECHO) Installing $(PROGRAM) stripped executable to $(SBIN_DEST) ||\
 	$(ECHO) Installing $(PROGRAM) executable to $(SBIN_DEST)
 	$(INSTALL) $(INSTALL_P) $(STRIP) $(PROGRAM) $(SBIN_DEST)
      
-	# Install the DOCS and man page. install-sh only does one file at a time.
-	-if [ $(check_doc) = 0 ]; then \
+	@# Install the DOCS and man page. install-sh only does one file at a time.
+	-@if [ $(check_doc) = 0 ]; then \
 		DOC=$(DOC_DEST) ;\
 	else \
 		DOC=$(prefix)/doc/privoxy ;\
@@ -918,13 +918,13 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
 	fi
-	# Not all platforms support gzipped man pages.
-	$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1
+	@# Not all platforms support gzipped man pages.
+	@$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1
 	-$(INSTALL) $(INSTALL_T) privoxy.1  $(MAN_DEST)/privoxy.1
 
-	# Change the config file default directories according to the configured ones
-	$(ECHO) Rewriting config for this installation
-	if [ -f config.base ] ; then \
+	@# Change the config file default directories according to the configured ones
+	@$(ECHO) Rewriting config for this installation
+	@if [ -f config.base ] ; then \
 		$(CAT) config >config~ ;\
 		$(MV) config.base config ;\
 	fi
@@ -933,18 +933,18 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(MV) config config.base
 	$(MV) config.updated config 
 
-	# Install the config support files. Test for root install, and abort 
-	# if there is no privoxy user, and no other user was enabled during 
-	# configure. Later, install init script if appropriate.
-	$(ECHO) Installing templates to $(CONF_DEST)/templates
-	for i in `find templates -type f`; do \
+	@# Install the config support files. Test for root install, and abort 
+	@# if there is no privoxy user, and no other user or group was enabled
+	@# during configure.
+	@$(ECHO) Installing templates to $(CONF_DEST)/templates
+	@for i in `find templates -type f`; do \
 		$(INSTALL) $(INSTALL_T) $$i $(CONF_DEST)/templates ;\
 	done
 
-	# FIXME: group/user validation is overly convoluted.
-	# If superuser install ... we require a minimum of group ownership
-	# of those files the daemon writes to, to be non-root owned.
-	if [ "`$(ID) |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
+	@# FIXME: group/user validation is overly convoluted.
+	@# If superuser install ... we require a minimum of group ownership
+	@# of those files the daemon writes to, to be non-root owned.
+	@if [ "`$(ID) |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
 		if [ x$(USER) = x ] || [ $(USER) = root ]; then \
 			if [ x$(GROUP) = x ] || [ $(GROUP) = root ]; then \
 				if [ "`$(ID) privoxy`" ] && \
@@ -1029,30 +1029,30 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	else \
 		$(ECHO) "No init script installed, install it manually if needed" ;\
 	fi
-	# mmmmm, good.
+	@# mmmmm, good.
 	@$(ECHO) "$(PROGRAM_V) installation succeeded!"
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
 
 # rmdir is used as a precaution since it will not remove non-empty
 # directories. RH init script creates lock file and pid file.
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
-	$(ECHO) Starting Privoxy uninstallation
-	# KILL privoxy if running
-	-if [ -f /etc/redhat-release ] && [ -x /etc/rc.d/init.d/privoxy ]; then \
+	@$(ECHO) Starting Privoxy uninstallation
+	@# KILL privoxy if running
+	-@if [ -f /etc/redhat-release ] && [ -x /etc/rc.d/init.d/privoxy ]; then \
 		/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
 		chkconfig --del $(PROGRAM) 2>/dev/null;\
 	fi
-	-@ test -f $(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
-          $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid` 
-	-@ test -f /var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
-          $(KILL) `$(CAT) /var/run/privoxy.pid `
+	-@test -f $(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+         $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid` || :
+	-@test -f /var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+          $(KILL) `$(CAT) /var/run/privoxy.pid ` || :
 
-	# Program binary
-	$(ECHO) Removing $(PROGRAM) binary
+	@# Program binary
+	@$(ECHO) Removing $(PROGRAM) binary
 	$(RM) $(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
 
-	# config files and dir, and maybe old install backups
-	-if [ -d $(CONF_DEST) ]; then \
+	@# config files and dir, and maybe old install backups
+	-@if [ -d $(CONF_DEST) ]; then \
 		$(ECHO) Saving $(PROGRAM) config files to /tmp/$(PROGRAM)-save ;\
 		$(MKDIR) /tmp/$(PROGRAM)-save ;\
 		cd $(CONF_DEST) ;\
@@ -1060,52 +1060,60 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 			[ -f $$i ] && $(CP) $$i /tmp/$(PROGRAM)-save ;\
 		done ;\
 	fi
-	$(ECHO) Removing $(PROGRAM) config files
-	for i in $(CONFIGS); do \
+	@$(ECHO) Removing $(PROGRAM) config files
+	-@for i in $(CONFIGS); do \
+		test -f $(CONF_DEST)/$$i && $(ECHO) Removing $$i ;\
 		$(RM) $(CONF_DEST)/$$i $(CONF_DEST)/$$i~ $(CONF_DEST)/$$i.new ;\
 	done
-	$(RM) -r $(CONF_DEST)/templates
+	-@test -d $(CONF_DEST)/templates && $(RM) -r $(CONF_DEST)/templates &&\
+	$(ECHO) "Removing $(CONF_DEST)/templates/*"
 	
-	# man page and docs
-	$(ECHO) Removing $(PROGRAM) docs
+	@# man page and docs
+	@$(ECHO) Removing $(PROGRAM) docs
 	-$(RM) $(MAN_DEST)/privoxy.1*
 	-$(RM) -r $(DOC_DEST) || $(RM) -r $(prefix)/doc/privoxy
 
-	# Log and jarfile and pidfile
-	$(ECHO) Removing $(PROGRAM) logs
+	@# Log and jarfile and pidfile
+	@$(ECHO) Removing $(PROGRAM) logs
 	-$(RM) $(LOG_DEST)/logfile $(PID_DEST)/privoxy.pid $(LOG_DEST)/jarfile
 
-	# Final clean up of unused directories. Special handling of CONF and LOG
+	@# Final clean up of unused directories. Special handling of CONF and LOG
      # destinations.
-	$(ECHO) Removing $(PROGRAM) directories
-	for i in $(LOG_DEST) $(CONF_DEST); do \
+	@$(ECHO) Removing $(PROGRAM) directories
+	@for i in $(LOG_DEST) $(CONF_DEST); do \
 		if test -d $$i; then \
+			$(ECHO) Removing $$i ;\
 			$(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
 		fi;\
 	done
-	if [  ! "$(prefix)" = "/usr/local" ] ;then \
+	@if [  ! "$(prefix)" = "/usr/local" ] ;then \
 		for i in $(MAN_DEST) $(MAN_DIR) $(SHARE_DEST)/doc $(SHARE_DEST) $(SBIN_DEST); do \
 			if test -d $$i; then \
+				$(ECHO) Removing $$i ;\
 				$(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
 			fi;\
 		done;\
 		if test $(LOG_DEST) != /var/log/privoxy && test -d $(prefix)/var/log; then \
+			$(ECHO) Removing $(prefix)/var/log ;\
 			$(RMDIR) $(prefix)/var/log || $(ECHO) "$(prefix)/var/log is not empty, not removed";\
 		fi ;\
 		if test $(PID_DEST) != /var/run && test -d $(prefix)/var/run; then \
+			$(ECHO) Removing $(prefix)/var/run ;\
 			$(RMDIR) $(prefix)/var/run || $(ECHO) "$(prefix)/var/run is not empty, not removed";\
 		fi ;\
 		if test $(prefix)/var != /var && test -d $(prefix)/var; then \
+			$(ECHO) Removing $(prefix)/var ;\
 			$(RMDIR) $(prefix)/var || $(ECHO) "$(prefix)/var is not empty, not removed" ;\
 		fi ;\
 		if test $(prefix) != / && test $(prefix) != /usr && test -d $(prefix); then \
+			$(ECHO) Removing $(prefix) ;\
 			$(ECHO) Removing installation directory $(prefix) ;\
 			$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
 		fi;\
 	fi
 
-	# init scripts and logrotate
-	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
+	@# init scripts and logrotate
+	@if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		$(ECHO) Removing $(PROGRAM) init script ;\
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
 			$(RM) /etc/rc.d/rc.privoxy ;\
@@ -1117,7 +1125,7 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 			$(ECHO) "Unable to remove privoxy init script, not installed or permission denied" ;\
 		fi ;\
 	fi
-	$(ECHO) Privoxy uninstalled, bye
+	@$(ECHO) Privoxy uninstalled, bye
 
 coffee:
 	 @perl -e 'print pack "C*", (31,139,8,8,153,63,226,60,2,3,99,111,102,102,101,101,0,109,143,205,13,192,32,8,133,\
@@ -1133,6 +1141,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.134  2002/10/28 06:01:39  hal9
+# Make uninstall: cp -v problems on SF Solaris.
+#
 # Revision 1.133  2002/10/28 02:12:22  hal9
 # Make install/uninstall:
 # - More cleanup of variables
