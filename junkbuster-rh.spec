@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.23 2001/11/06 12:09:03 steudten Exp $
+# $Id: junkbuster-rh.spec,v 1.24 2001/12/01 21:43:14 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.24  2001/12/01 21:43:14  hal9
+# Allowed for new ijb.action file.
+#
 # Revision 1.23  2001/11/06 12:09:03  steudten
 # Compress doc files. Install README and AUTHORS at last as document.
 #
@@ -110,7 +113,7 @@ Group: Networking/Utilities
 URL: http://ijbswa.sourceforge.net/
 Obsoletes: junkbuster-raw junkbuster-blank
 Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
-BuildRequires: perl
+BuildRequires: perl gzip
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
@@ -136,7 +139,7 @@ strip junkbuster
 /usr/sbin/useradd -d /etc/junkbuster -u 73 -r junkbuster -s "" > /dev/null 2>&1 || /bin/true
 
 %install
-rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_mandir}/man8 \
          ${RPM_BUILD_ROOT}/var/log/junkbuster \
@@ -144,7 +147,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d 
 
-gzip README AUTHORS junkbuster.1
+gzip README AUTHORS junkbuster.1 || /bin/true
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
 cp -f junkbuster.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8.gz
 cp -f ijb.action $RPM_BUILD_ROOT%{ijbconf}/ijb.action
@@ -193,7 +196,7 @@ fi
 #fi
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
@@ -210,6 +213,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Dec 28 2001 Thomas Steudten <thomas@steudten.ch>
+- add paranoia check for 'rm -rf $RPM_BUILD_ROOT'
+- add gzip to 'BuildRequires'
+
 * Sat Dec  1 2001 Hal Burgiss <hal@foobox.net>
 - actionsfile is now ijb.action.
 
