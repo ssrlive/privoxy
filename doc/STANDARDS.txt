@@ -215,49 +215,32 @@ if ( 1 == X )
 
 @@@ Explanation:
 
-Capitalize the first letter of each word in a variable name
-except the first word.
+Seperate words via an underscore ('_').
 
 @@@ Example:
 
-int msIis5Hack = 0;
+int ms_iis5_hack = 0;
 
 @@@ Instead of:
 
-int ms_iis5_hack = 0;
-
-@@@ Note: This is not an "enforcable" issue since too much of IJB uses
-the underscore (_) to seperate words.
-
-@@@ Status: developer-discrection.  This item is at developer
-discrection and is currently open to debate by the IJB developer team.
-Too much of IJB violates this proposed standard.
+int msiis5hack = 0;
+int msIis5Hack = 0;
 
 
 @@ Function Names
 
 @@@ Explanation:
 
-Capitalize the first letter of each word in a function name.
+Seperate words via an underscore ('_').
 
 @@@ Example:
 
-int loadAclFile( struct client_state *csp )
+int load_aclfile( struct client_state *csp )
 
 @@@ Instead of:
 
-int load_aclfile( struct client_state *csp )
-
-@@@ Status: developer-discrection.  This item is at developer
-discrection and is currently open to debate by the IJB developer team.
-Too much of IJB violates this proposed standard.
-
-@@@ Note: on the 2 above "standards" ... if enough of the current
-developer team agrees, I can use XEmacs to apply a few regular
-expressions to make the current tree comply with these 2 points.
-Otherwise I will remove them from this document.  Afterall, there is
-no need to add to the "multiple personallity" syndrome that IJB now
-has (or recently had before standardization).
+int loadaclfile( struct client_state *csp )
+int loadAclFile( struct client_state *csp )
 
 
 @@ Header file prototypes
@@ -941,7 +924,7 @@ thing (tm)", it will be easier to identify and include in the project
 
 @@@ Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.2 2001/06/28 04:02:42 iwanttokeepanon Exp $";
+const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.3 2001/07/02 01:50:04 iwanttokeepanon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
@@ -975,6 +958,16 @@ const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.2 2001/06/28 04:02:42 iwantt
  *
  * Revisions   :
  *    $Log: STANDARDS.txt,v $
+ *    Revision 1.3  2001/07/02 01:50:04  iwanttokeepanon
+ *    A modified STANDARDS.txt file.  I removed my XEmacs test lines (commited in v1.2)
+ *    and made the file Outline-mode compatible.  I used "@" for my header lines instead
+ *    of "*" (which interfered in some C comments).  I also removed the formfeed character
+ *    from the `outline-regexp' variable because it interfered with the "H" file header and
+ *    the "C" file header comments.
+ *
+ *    All of the "stardards points/issues" are still available for discussion, cussing,
+ *    and/or flaming <G>.
+ *
  *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
  *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
  *
@@ -1006,7 +999,7 @@ and get to the heart of the code (via `forward-page' and
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.2 2001/06/28 04:02:42 iwanttokeepanon Exp $"
+#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.3 2001/07/02 01:50:04 iwanttokeepanon Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
@@ -1040,6 +1033,16 @@ and get to the heart of the code (via `forward-page' and
  *
  * Revisions   :
  *    $Log: STANDARDS.txt,v $
+ *    Revision 1.3  2001/07/02 01:50:04  iwanttokeepanon
+ *    A modified STANDARDS.txt file.  I removed my XEmacs test lines (commited in v1.2)
+ *    and made the file Outline-mode compatible.  I used "@" for my header lines instead
+ *    of "*" (which interfered in some C comments).  I also removed the formfeed character
+ *    from the `outline-regexp' variable because it interfered with the "H" file header and
+ *    the "C" file header comments.
+ *
+ *    All of the "stardards points/issues" are still available for discussion, cussing,
+ *    and/or flaming <G>.
+ *
  *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
  *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
  *
