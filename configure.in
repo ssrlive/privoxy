@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.79 2002/09/07 02:11:06 hal9 Exp $
+dnl $Id: configure.in,v 1.80 2002/09/26 18:47:46 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.80  2002/09/26 18:47:46  hal9
+dnl This is most of Al's patch for --with-user and --with-group which tests that
+dnl these are valid values, if specified. If not specified, they are left empty.
+dnl
 dnl Revision 1.79  2002/09/07 02:11:06  hal9
 dnl Remove some testing stuff inadvertantly left in.
 dnl
@@ -413,7 +417,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.79 $)
+AC_REVISION($Revision: 1.80 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
@@ -518,6 +522,15 @@ AC_ARG_WITH(debug,
         ]
 )
 
+dnl =================================================================
+dnl Check for user and group validity
+dnl =================================================================
+
+$ID privoxy >/dev/null 2>/dev/null
+if ! test $? -eq 0 ; then
+ AC_MSG_WARN(There is no user 'privoxy' on this system)
+fi
+AC_MSG_CHECKING([for user])
 AC_ARG_WITH(user,
         [  --with-user=privoxy          Set user under which privoxy will run],
         [
@@ -525,6 +538,7 @@ AC_ARG_WITH(user,
                   if test $ID = no ; then
                     AC_MSG_ERROR(There is no 'id' program on this system)
                   else
+                    AC_MSG_RESULT($with_user)
                     $ID $with_user 2>/dev/null >/dev/null
                     if test $? -eq 0 ; then
                       USER=$with_user;
@@ -540,30 +554,27 @@ AC_ARG_WITH(user,
           if test $ID = no ; then
             AC_MSG_ERROR(There is no 'id' programm on this system)
           else
-            $ID privoxy >/dev/null
-            if test $? -eq 0 ; then
-              USER=privoxy;
-            else
-              AC_MSG_WARN(There is no user 'privoxy' on this system)
-              USER=$with_user
-            fi
+            AC_MSG_RESULT(none specified)
+            USER=$with_user
           fi
         ]
 )
 AC_SUBST(USER)
 
+AC_MSG_CHECKING([for group])
 AC_ARG_WITH(group,
         [  --with-group=privoxy         Set group for privoxy],
-        [
+        [ 
                 if test "x$withval" != "xyes"; then
                   if test $BGROUPS = no ; then
                     AC_MSG_ERROR(There is no 'groups' program on this system)
                   else
+                    AC_MSG_RESULT($with_group)
                     $BGROUPS $USER >/dev/null
                     if test $? -eq 0 ; then
                     # FIXME: this fails if valid group, but not first group
                     # listed.
-                      if test "$with_group" != "`$BGROUPS $USER 2>/dev/null |$AWK '{print $3}'`" ; then
+                      if test "$with_group" != "`$BGROUPS $USER | sed 's/.*: //' 2>/dev/null |$AWK '{print $1}'`" ; then
                         AC_MSG_ERROR(The given value '$withval' does not match group entry)
                       else
                         GROUP=$with_group;
@@ -580,16 +591,8 @@ AC_ARG_WITH(group,
           if test $BGROUPS = no ; then
             AC_MSG_ERROR(There is no 'groups' programm on this system)
           else
-            $BGROUPS $USER >/dev/null
-            if test $? -eq 0 ; then
-              if test "$with_group" != "`$BGROUPS $USER 2>/dev/null |$AWK '{print $3}'`" -a "$with_group" != "" ; then
-                AC_MSG_ERROR('$USER' isn't a member of '$with_group' group)
-              else
-                GROUP=$with_group;
-              fi
-            else
-              AC_MSG_ERROR(There is no group entry for user '$USER')
-            fi
+            AC_MSG_RESULT(none specified)
+            GROUP=$with_group;
           fi
         ]
 )
