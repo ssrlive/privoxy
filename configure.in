@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.45 2002/03/24 14:19:55 swa Exp $
+dnl $Id: configure.in,v 1.46 2002/03/24 18:55:06 jongfoster Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.46  2002/03/24 18:55:06  jongfoster
+dnl Making Docbook work under Windows
+dnl
 dnl Revision 1.45  2002/03/24 14:19:55  swa
 dnl set rpm package release in configure.in. nowhere else.
 dnl
@@ -289,7 +292,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.45 $)
+AC_REVISION($Revision: 1.46 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -324,7 +327,7 @@ dnl =================================================================
 VERSION_MAJOR=2
 VERSION_MINOR=9
 VERSION_POINT=13
-VERSION_RPM_PACKAGE=1
+VERSION_RPM_PACKAGE=3
 CODE_STATUS="beta"
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
