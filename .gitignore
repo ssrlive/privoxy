@@ -37,6 +37,7 @@ config.cache
 config.h
 config.h.in
 config.log
+config.new
 config.status
 jarfile
 logfile
