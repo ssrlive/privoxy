@@ -35,6 +35,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.logrotate,v $
+#     Revision 1.5  2001/11/05 21:31:51  steudten
+#     Change switch mode from weekly to size 1M
+#
 #     Revision 1.4  2001/06/28 13:30:22  sarantis
 #     add missingok for the jarfile entry
 #
@@ -56,10 +59,16 @@
 /var/log/junkbuster/logfile {
    compress
    size 1M
+   postrotate
+        /sbin/service junkbuster restart 2> /dev/null || true
+   endscript
 }
 
 /var/log/junkbuster/jarfile {
-  missingok
-  compress
-  size 1M
+   missingok
+   compress
+   size 1M
+   postrotate
+        /sbin/service junkbuster restart 2> /dev/null || true
+   endscript
 }
