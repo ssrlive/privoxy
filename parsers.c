@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.46 2002/01/17 21:03:47 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.47 2002/02/20 23:15:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.46 2002/01/17 21:03:47 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.47  2002/02/20 23:15:13  jongfoster
+ *    Parsing functions now handle out-of-memory gracefully by returning
+ *    an error code.
+ *
  *    Revision 1.46  2002/01/17 21:03:47  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -438,19 +442,19 @@ const add_header_func_ptr add_server_headers[] = {
  *                file, the results are not portable.
  *
  *********************************************************************/
-int flush_socket(int fd, struct client_state *csp)
+size_t flush_socket(int fd, struct client_state *csp)
 {
    struct iob *iob = csp->iob;
-   int n = iob->eod - iob->cur;
+   size_t len = iob->eod - iob->cur;
 
-   if (n <= 0)
+   if (len <= 0)
    {
       return(0);
    }
 
-   n = write_socket(fd, iob->cur, n);
+   len = write_socket(fd, iob->cur, len);
    iob->eod = iob->cur = iob->buf;
-   return(n);
+   return(len);
 
 }
 
@@ -469,10 +473,10 @@ int flush_socket(int fd, struct client_state *csp)
  * Returns     :  Number of bytes in the content buffer.
  *
  *********************************************************************/
-int add_to_iob(struct client_state *csp, char *buf, int n)
+size_t add_to_iob(struct client_state *csp, char *buf, size_t n)
 {
    struct iob *iob = csp->iob;
-   int have, need;
+   size_t have, need;
    char *p;
 
    have = iob->eod - iob->cur;
@@ -486,8 +490,7 @@ int add_to_iob(struct client_state *csp, char *buf, int n)
 
    if ((p = (char *)malloc(need + 1)) == NULL)
    {
-      log_error(LOG_LEVEL_ERROR, "malloc() iob failed: %E");
-      return(-1);
+      log_error(LOG_LEVEL_FATAL, "malloc() iob failed: %E");
    }
 
    if (have)

@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.12 2001/10/25 03:40:48 david__schmidt Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.13 2001/11/13 00:16:40 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,10 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.12 2001/10/25 03:40:48 david_
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.13  2001/11/13 00:16:40  jongfoster
+ *    Replacing references to malloc.h with the standard stdlib.h
+ *    (See ANSI or K&R 2nd Ed)
+ *
  *    Revision 1.12  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -133,59 +137,60 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
  *********************************************************************/
 void filter_popups(char *buff, struct client_state *csp)
 {
-   char *popup = NULL;
-   char *close = NULL;
+   char *start_p = NULL;
+   char *close_p = NULL;
    char *p     = NULL;
 
-   while ((popup = strstr( buff, "window.open(" )) != NULL)
+   /*
+    * replace the window.open( with a harmless JavaScript replacement
+    * (notice the two single quotes)
+    */
+   while ((start_p = strstr(buff, "window.open(")) != NULL)
    {
-      if ( popup )
+      if (start_p)
       {
-         /*
-          * replace the window.open( with a harmless JavaScript replacement (notice the two single quotes)
-          * Guy's idea (thanks)
-          */
-         strncpy(popup, "1;''.concat(", 12);
+         strncpy(start_p, "1;''.concat(", 12);
          log_error(LOG_LEVEL_POPUPS, "Blocked popup window open");
          csp->flags |= CSP_FLAG_MODIFIED;
       }
    }
 
-   while ((popup = strstr( buff, ".resizeTo(" )) != NULL)
+   /*
+    * replace the .resizeTo( with a harmless JavaScript replacement
+    */
+   while ((start_p = strstr(buff, ".resizeTo(")) != NULL)
    {
-      if ( popup )
+      if (start_p)
       {
-         /*
-          * replace the .resizeTo( with a harmless JavaScript replacement
-          * Guy's idea (thanks)
-          */
-         strncpy(popup, ".scrollTo(", 10);
+         strncpy(start_p, ".scrollTo(", 10);
          log_error(LOG_LEVEL_POPUPS, "Blocked popup window resize");
          csp->flags |= CSP_FLAG_MODIFIED;
       }
    }
 
-   /* Filter onUnload and onExit */
-   popup=strstr( buff, "<body");
-   if (!popup) popup=strstr( buff, "<BODY");
-   if (!popup) popup=strstr( buff, "<Body");
-   if (!popup) popup=strstr( buff, "<BOdy");
-   if (popup)
+   /* 
+    * Filter onUnload and onExit
+    */
+   start_p = strstr(buff, "<body");
+   if (!start_p) start_p = strstr(buff, "<BODY");
+   if (!start_p) start_p = strstr(buff, "<Body");
+   if (!start_p) start_p = strstr(buff, "<BOdy");
+   if (start_p)
    {
-      close=strchr(popup,'>');
-      if (close)
+      close_p = strchr(start_p, '>');
+      if (close_p)
       {
-         /* we are now between <body and the ending > FIXME: No, we're anywhere! --oes */
-         p=strstr(popup, "onUnload");
+         /* we are now between <body and the ending > */
+         p = strstr(start_p, "onUnload");
          if (p)
          {
-            strncpy(p,"_nU_",4);
+            strncpy(p, "_nU_", 4);
             csp->flags |= CSP_FLAG_MODIFIED;
          }
-         p=strstr(popup, "onExit");
+         p = strstr(start_p, "onExit");
          if (p)
          {
-            strncpy(p,"_nE_",4);
+            strncpy(p, "_nE_", 4);
             csp->flags |= CSP_FLAG_MODIFIED;
          }
       }

@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.3 2001/11/13 00:16:40 jongfoster Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.4 2002/01/22 23:28:07 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -33,6 +33,11 @@ const char encode_rcs[] = "$Id: encode.c,v 1.3 2001/11/13 00:16:40 jongfoster Ex
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.4  2002/01/22 23:28:07  jongfoster
+ *    Adding convenience function html_encode_and_free_original()
+ *    Making all functions accept NULL paramaters - in this case, they
+ *    simply return NULL.  This allows error-checking to be deferred.
+ *
  *    Revision 1.3  2001/11/13 00:16:40  jongfoster
  *    Replacing references to malloc.h with the standard stdlib.h
  *    (See ANSI or K&R 2nd Ed)
@@ -354,7 +359,7 @@ char * url_encode(const char *s)
  * Returns     :  The integer value, or -1 for non-hex characters.
  *
  *********************************************************************/
-static int xdtoi(char d)
+static int xdtoi(const int d)
 {
    if ((d >= '0') && (d <= '9'))
    {
@@ -392,10 +397,10 @@ static int xtoi(const char *s)
 {
    int d1, d2;
 
-   d1 = xdtoi(*s++);
+   d1 = xdtoi(*s);
    if(d1 >= 0)
    {
-      d2 = xdtoi(*s);
+      d2 = xdtoi(*(s+1));
       if(d2 >= 0)
       {
          return (d1 << 4) + d2;

@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.31 2002/03/05 04:52:42 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.32 2002/03/06 23:02:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.31 2002/03/05 04:52:42 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.32  2002/03/06 23:02:57  jongfoster
+ *    Removing tabs
+ *
  *    Revision 1.31  2002/03/05 04:52:42  oes
  *    Deleted non-errlog debugging code
  *
@@ -217,7 +220,7 @@ const char miscutil_h_rcs[] = MISCUTIL_H_VERSION;
  * Returns     :  Pointer to newly malloc'd memory chunk.
  *
  *********************************************************************/
-void *zalloc(int size)
+void *zalloc(size_t size)
 {
    void * ret;
 
@@ -500,10 +503,10 @@ char *chomp(char *string)
  *********************************************************************/
 char *strsav(char *old, const char *text_to_append)
 {
-   int old_len, new_len = 0;
+   size_t old_len, new_len = 0;
    char *p;
 
-   if (( text_to_append == NULL) || (*text_to_append == '\0'))
+   if ((text_to_append == NULL) || (*text_to_append == '\0'))
    {
       return(old);
    }
@@ -512,7 +515,7 @@ char *strsav(char *old, const char *text_to_append)
    {
       if ((p = strdup(text_to_append)) == NULL)
       {
-         log_error(LOG_LEVEL_FATAL, "strdup() failed!", new_len);
+         log_error(LOG_LEVEL_FATAL, "strdup() failed!");
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
       return p;
@@ -794,25 +797,25 @@ int simplematch(char *pattern, char *text)
  *
  * Parameters  :
  *          1  :  string = string to be duplicated
- *          2  :  n = number of bytes to duplicate
+ *          2  :  len = number of bytes to duplicate
  *
  * Returns     :  pointer to copy, or NULL if failiure
  *
  *********************************************************************/
-char *bindup(const char *string, int n)
+char *bindup(const char *string, size_t len)
 {
-   char *dup;
+   char *duplicate;
 
-   if (NULL == (dup = (char *)malloc(n)))
+   if (NULL == (duplicate = (char *)malloc(len)))
    {
       return NULL;
    }
    else
    {
-     memcpy(dup, string, n);
+     memcpy(duplicate, string, len);
    }
 
-   return dup;
+   return duplicate;
 
 }
 
