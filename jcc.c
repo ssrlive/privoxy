@@ -1,7 +1,7 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.1.1.1 2001/05/15 13:58:56 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/jcc.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and 
  *                the main connection-handling function.
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.1 2001/05/13 21:57:06 administrator Exp $
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:56  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -158,6 +161,12 @@ static const char SHEADER[] =
    "HTTP/1.0 502 Invalid header received from server\n\n";
 
 #if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+
+/*
+ * Hint: You can encode your own GIFs like that:
+ * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
+ */
+
 static const char BLANKGIF[] =
    "HTTP/1.0 200 OK\r\n"
    "Pragma: no-cache\r\n"
@@ -267,7 +276,7 @@ static void chat(struct client_state *csp)
  		if(strstr(req, FORCE_PREFIX))
       {
  		   strclean(req, FORCE_PREFIX);
- 		   /* if DEBUG(FRC) fprintf(logfp, "%s: Enforcing request \"%s\".\n", prog, req); */
+ 		   log_error(LOG_LEVEL_FRC, "Enforcing request \"%s\".\n", req);
  		   csp->force = 1;
  		} 
       else
