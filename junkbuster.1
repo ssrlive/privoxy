@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.11 (beta) Date: 2002/02/24"
+.TH JUNKBUSTER 1 "v2.9.11 (beta) Date: 2002/03/06"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -12,9 +12,9 @@ Proxy
 \s-2(TM)\s+2
 .SH SYNOPSIS
 \fBjunkbuster\fP
-[--help] [--version] [--no-daemon] [--pidfile \fIpidfile\fP] 
+[--help] [--version] [--no-daemon] [--pidfile \fIPID_FILE\fP] [--user USER] 
 \fI\&[config_file]\fP (Unix)
-.br
+.TP
 \fBjunkbstr.exe\fP
 \fI\&[config_file]\fP
 (Windows)
@@ -33,13 +33,13 @@ Print a short usage info and exit.
 Don't become a daemon, i.e. don't fork and become process group
 leader, don't detach from controlling tty.
 .TP
-\fB --pidfile\fP \fIpidfile\fP (unix only)
+\fB --pidfile\fP \fIPID_FILE\fP (unix only)
 On startup, write the process ID to \fIpidfile\fP. Delete the
 \fIpidfile\fP on exit. Failiure to create or delete the
 \fIpidfile\fP is non-fatal. If no \fB--pidfile\fP option
 is given, no PID file will be used.
 .TP
-\fB --user\fP \fIuser\fP (unix only)
+\fB --user\fP \fIUSER\fP (unix only)
 After (optionally) writing the PID file, assume the user ID
 of \fIuser\fP. Exit if the privileges are not sufficient to
 do so.
