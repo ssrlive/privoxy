@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.30 2001/09/19 17:55:49 oes Exp $
+# $Id: Makefile.in,v 1.31 2001/09/23 10:13:48 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.31  2001/09/23 10:13:48  swa
+# upload process established. run make webserver and
+# the documentation is moved to the webserver. documents
+# are now linked correctly.
+#
 # Revision 1.30  2001/09/19 17:55:49  oes
 # Fixed CFLAGS
 #
@@ -287,7 +292,7 @@ junkbstr.txt: config
 			-e 's!#Win32-only: !!' \
 	< $< > $@
 
-sactions.txt: actionslist
+sactions.txt: actionsfile
 strust.txt: trust
 sregexp.txt: re_filterfile
 
