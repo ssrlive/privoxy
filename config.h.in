@@ -156,6 +156,14 @@
  *********************************************************************/
 
 
+/* Define to empty if the keyword does not work.  */
+#undef const
+
+/* Define to `unsigned' if <sys/types.h> doesn't define.  */
+#undef size_t
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
 
 /*
  * Version number - Major (X._._)
@@ -215,13 +223,6 @@
  * Allows the use of jar files to capture cookies.
  */
 #undef FEATURE_COOKIE_JAR
-
-/*
- * If a stream is compressed via gzip, then it cannot be filtered through
- * the PCRE regexps.  (Commonly happens with Netscape browsers).
- * This forces it to be uncompressed.
- */
-#undef FEATURE_DENY_GZIP
 
 /*
  * Locally redirect remote script-redirect URLs
@@ -302,11 +303,6 @@
 #undef FEATURE_TRUST
 
 /*
- * Defined on Solaris only.  Makes the system libraries thread safe.
- */
-#undef _REENTRANT
-
-/*
  * Defined on Solaris only.  Without this, many important functions are not
  * defined in the system headers.
  */
@@ -319,66 +315,29 @@
  */
 #undef __MT__
 
-
-/* Define if you have the `bcopy' function. */
-#undef HAVE_BCOPY
-
-/* Define if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
-
-/* Define if you have the `memmove' function. */
-#undef HAVE_MEMMOVE
-
-/* Define if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
-
-/* Define if you have the <stdint.h> header file. */
-#undef HAVE_STDINT_H
-
-/* Define if you have the <stdlib.h> header file. */
-#undef HAVE_STDLIB_H
-
-/* Define if you have the `strerror' function. */
-#undef HAVE_STRERROR
-
-/* Define if you have the <strings.h> header file. */
-#undef HAVE_STRINGS_H
-
-/* Define if you have the <string.h> header file. */
-#undef HAVE_STRING_H
-
-/* Define if you have the <sys/stat.h> header file. */
-#undef HAVE_SYS_STAT_H
-
-/* Define if you have the <sys/types.h> header file. */
-#undef HAVE_SYS_TYPES_H
-
-/* Define if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
-
-/* The size of a `char *', as computed by sizeof. */
+/* The number of bytes in a char *.  */
 #undef SIZEOF_CHAR_P
 
-/* The size of a `int', as computed by sizeof. */
+/* The number of bytes in a int.  */
 #undef SIZEOF_INT
 
-/* The size of a `long', as computed by sizeof. */
+/* The number of bytes in a long.  */
 #undef SIZEOF_LONG
 
-/* The size of a `long long', as computed by sizeof. */
+/* The number of bytes in a long long.  */
 #undef SIZEOF_LONG_LONG
 
-/* The size of a `size_t', as computed by sizeof. */
+/* The number of bytes in a size_t.  */
 #undef SIZEOF_SIZE_T
 
-/* Define if you have the ANSI C header files. */
-#undef STDC_HEADERS
+/* Define if you have the bcopy function.  */
+#undef HAVE_BCOPY
 
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
+/* Define if you have the memmove function.  */
+#undef HAVE_MEMMOVE
 
-/* Define to `unsigned' if <sys/types.h> does not define. */
-#undef size_t
+/* Define if you have the strerror function.  */
+#undef HAVE_STRERROR
 
 /*
  * Defined always.
