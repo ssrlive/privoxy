@@ -88,17 +88,17 @@ HREF="#CONTACT-SUPPORT"
 ><DT
 ><A
 HREF="#CONTACT-BUGS"
->Report bugs</A
+>Report Bugs</A
 ></DT
 ><DT
 ><A
 HREF="#CONTACT-FEATURE"
->Request new features</A
+>Request New Features</A
 ></DT
 ><DT
 ><A
 HREF="#CONTACT-ADS"
->Report ads or other filter problems</A
+>Report Ads or Other Actions-Related Problems</A
 ></DT
 ><DT
 ><A
@@ -109,17 +109,17 @@ HREF="#CONTACT-OTHER"
 ></DD
 ><DT
 ><A
-HREF="#AEN101"
+HREF="#AEN109"
 >License</A
 ></DT
 ><DT
 ><A
-HREF="#AEN121"
+HREF="#AEN129"
 >History</A
 ></DT
 ><DT
 ><A
-HREF="#AEN132"
+HREF="#AEN147"
 ></A
 ></DT
 ></DL
@@ -334,8 +334,13 @@ NAME="SUPPORT"
 >Support and Service via Sourceforge</A
 ></H1
 ><P
-> We value your feedback. However, to provide you with the best support, please
- note the following sections.</P
+> We value your feedback. In fact, we rely on it to improve
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and its configuration.
+ However, please note the following hints, so we can 
+ provide you with the best support:</P
 ><DIV
 CLASS="SECT2"
 ><HR><H2
@@ -345,17 +350,25 @@ NAME="CONTACT-SUPPORT"
 >Get Support</A
 ></H2
 ><P
->   <P
-CLASS="LITERALLAYOUT"
->To&nbsp;get&nbsp;support,&nbsp;use&nbsp;the&nbsp;Sourceforge&nbsp;Support&nbsp;Forum:<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<A
+> For casual users, our support forum at
+ <A
+HREF="http://sourceforge.net/"
+TARGET="_top"
+>SourceForge</A
+>
+ is probably best suited:
+ <A
 HREF="http://sourceforge.net/tracker/?group_id=11118&atid=211118"
 TARGET="_top"
 >http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118</A
 ></P
->
-  </P
+><P
+> All users are of course welcome to discuss their issues on the <A
+HREF="http://lists.sourceforge.net/lists/listinfo/ijbswa-users"
+TARGET="_top"
+>users
+ mailing list</A
+>, where the developers also hang around.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -363,37 +376,61 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONTACT-BUGS"
->Report bugs</A
+>Report Bugs</A
 ></H2
 ><P
->   <P
-CLASS="LITERALLAYOUT"
->To&nbsp;submit&nbsp;bugs,&nbsp;use&nbsp;the&nbsp;Sourceforge&nbsp;Bug&nbsp;Forum:<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<A
+> Please report all bugs <I
+CLASS="EMPHASIS"
+>only</I
+> through our
+ bug tracker: 
+ <A
 HREF="http://sourceforge.net/tracker/?group_id=11118&atid=111118"
 TARGET="_top"
 >http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</A
->.&nbsp;</P
->
- </P
+>. </P
 ><P
->   Make sure that the bug has not already been submitted.  Please try to
-   verify that it is a <SPAN
+>  Before doing so, please make sure that the bug has not already been submitted
+  and observe the aditional hints at the top of the <A
+HREF="http://sourceforge.net/tracker/?func=add&group_id=11118&atid=111118"
+TARGET="_top"
+>submit
+  form</A
+>.</P
+><P
+> 
+  Please try to verify that it is a <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> bug, and not a
-   browser or site bug first. If you are using your own custom configuration,
-   please try the stock configs to see if the problem is a configuration
-   related bug.  And if not using the latest development snapshot, please try
-   the latest one. Or even better, CVS sources. Please be sure to include the
-   <SPAN
+> bug,
+  and not a browser or site bug first. If unsure,
+  try <A
+HREF="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
+TARGET="_top"
+>toggling
+  off</A
+> <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> version, platform, browser, any
-   pertinent log data, any other relevant details (please be specific) and,
-   if possible, some way to reproduce the bug.
-  </P
+>, and see if the problem persists.
+  The <A
+HREF="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT"
+TARGET="_top"
+>appendix
+  of the user manual</A
+> also has helpful information 
+  on action debugging. If you are using your own custom configuration, please try
+  the stock configs to see if the problem is configuration related.</P
+><P
+>  If not using the latest version, chances are that the bug has been found
+  and fixed in the meantime. We would appreciate if you could take the time
+  to <A
+HREF="http://www.privoxy.org/user-manual/installation.html"
+TARGET="_top"
+>upgrade
+  to the latest version</A
+> (or  even the latest CVS snapshot) and verify
+  your bug, but this is not required for reporting.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -401,20 +438,16 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONTACT-FEATURE"
->Request new features</A
+>Request New Features</A
 ></H2
 ><P
->   <P
-CLASS="LITERALLAYOUT"
->To&nbsp;submit&nbsp;ideas&nbsp;on&nbsp;new&nbsp;features,&nbsp;use&nbsp;the&nbsp;Sourceforge&nbsp;feature&nbsp;request&nbsp;forum:<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<A
-HREF="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse"
+> You are welcome to submit ideas on new features or other proposals
+ for improvement through our feature request tracker at
+ <A
+HREF="http://sourceforge.net/tracker/?atid=361118&group_id=11118"
 TARGET="_top"
->http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse</A
+>http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118</A
 >.</P
->
-  </P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -422,20 +455,22 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONTACT-ADS"
->Report ads or other filter problems</A
+>Report Ads or Other Actions-Related Problems</A
 ></H2
 ><P
->You can also send feedback on websites that Privoxy has problems with. Please bookmark
-the following link: <A
+> Please send feedback on ads that slipped through, innocent images that were blocked,
+ and any other problems relating to the <TT
+CLASS="FILENAME"
+>default.action</TT
+> file through
+ our actions feedback mechanism located at
+ <A
 HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
 TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"Privoxy - Submit Filter Feedback"</SPAN
-></A
->. Once you surf to a page with problems, use the
-bookmark to send us feedback. We will look into the issue as soon as possible.
-  </P
+>http://www.privoxy.org/actions/</A
+>.
+ On this page, you will also find a bookmark which will take you back there from
+ any troubled site and even pre-fill the form!</P
 ><P
 > New, improved <TT
 CLASS="FILENAME"
@@ -446,7 +481,11 @@ HREF="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce"
 TARGET="_top"
 >ijbswa-announce</A
 >
- list.</P
+ list and available from our <A
+HREF="http://sf.net/projects/ijbswa/"
+TARGET="_top"
+>project page</A
+>.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -457,22 +496,18 @@ NAME="CONTACT-OTHER"
 >Other</A
 ></H2
 ><P
->   <P
-CLASS="LITERALLAYOUT"
->For&nbsp;any&nbsp;other&nbsp;issues,&nbsp;feel&nbsp;free&nbsp;to&nbsp;use&nbsp;the&nbsp;mailing&nbsp;lists:<br>
-&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<A
+>For any other issues, feel free to use the mailing lists. Technically interested users
+and people who wish to contribute to the project are also welcome on the developers list!
+You can find an overview of all <SPAN
+CLASS="APPLICATION"
+>Prixoxy</SPAN
+>-related mailing lists,
+including list archives, at:
+<A
 HREF="http://sourceforge.net/mail/?group_id=11118"
 TARGET="_top"
 >http://sourceforge.net/mail/?group_id=11118</A
 >.</P
->
- </P
-><P
->  Anyone interested in actively participating in development and related
-  discussions can also join the appropriate mailing list. Archives are
-  available, too. See the page on Sourceforge.
- </P
 ></DIV
 ></DIV
 ><DIV
@@ -480,7 +515,7 @@ CLASS="SECT1"
 ><HR><H1
 CLASS="SECT1"
 ><A
-NAME="AEN101"
+NAME="AEN109"
 >License</A
 ></H1
 ><P
@@ -557,61 +592,100 @@ CLASS="SECT1"
 ><HR><H1
 CLASS="SECT1"
 ><A
-NAME="AEN121"
+NAME="AEN129"
 >History</A
 ></H1
 ><P
-> <SPAN
+> In the beginning, there was the
+ <A
+HREF="http://www.junkbusters.com/ijb.html"
+TARGET="_top"
+><SPAN
 CLASS="APPLICATION"
->Privoxy</SPAN
-> is evolved, and derived from, 
- <SPAN
-CLASS="APPLICATION"
->the Internet Junkbuster</SPAN
->, with many 
- improvments and enhancements over the original.</P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> was originally written by Anonymous
- Coders and <A
-HREF="http://www.junkbusters.com"
+>Internet Junkbuster</SPAN
+></A
+>, 
+ by Anonymous Coders and <A
+HREF="http://www.junkbusters.com/"
 TARGET="_top"
 >Junkbusters
  Corporation</A
->, and was released as free open-source software under the
- GNU GPL. <A
+>. It saved many users a lot of pain in the early days of
+ web advertising and user tracking.</P
+><P
+> But the web, its protocols and standards, and with it, the techniques for
+ forcing  users to consume ads, give up autonomy over their browsing, and
+ for spying on them, kept evolving. Unfortunately, the <SPAN
+CLASS="APPLICATION"
+>Internet
+ Junkbuster</SPAN
+> did not. Version 2.0.2, published in 1998, was 
+ (and is) the last official
+ <A
+HREF="http://www.junkbusters.com/ijbdist.html#release"
+TARGET="_top"
+>release</A
+>
+ available from <A
+HREF="http://www.junkbusters.com"
+TARGET="_top"
+>Junkbusters Corporation</A
+>.
+ Fortunately, it had been released under the GNU
+ <A
+HREF="http://www.gnu.org/licenses/gpl.html"
+TARGET="_top"
+> GPL</A
+>, which allowed further
+ development by others.</P
+><P
+> So Stefan Waldherr started maintaining an
+ <A
 HREF="http://www.waldherr.org/junkbuster/"
 TARGET="_top"
->Stefan
- Waldherr</A
-> made many improvements, and started the <A
-HREF="http://sourceforge.net/projects/ijbswa/"
+>improved version of the
+ software</A
+>, to which eventually a number of people contributed patches.
+ It could already replace banners with a transparent image, and had a first
+ version of pop-up killing, but it was still very closely based on the
+ original, with all its limitations, such as the lack of HTTP/1.1 support,
+ flexible per-site configuration, or content modification. The last release
+ from this effort was version 2.0.2-10, published in 2000.</P
+><P
+> Then, some
+ <A
+HREF="http://www.privoxy.org/user-manual/copyright.html#AUTHORS"
 TARGET="_top"
->SourceForge project
- Privoxy</A
-> to rekindle development. There are now several active
- developers contributing.  The last stable release of
- <SPAN
+>developers</A
+>
+ picked up the thread, and started turning the software inside out, upside down,
+ and then reassembled it, adding many
+ <A
+HREF="http://www.privoxy.org/user-manual/introduction.html#FEATURES"
+TARGET="_top"
+>new
+ features</A
+> along the way.</P
+><P
+> The result of this is <SPAN
 CLASS="APPLICATION"
->Junkbuster</SPAN
-> was v2.0.2, which has now
- grown whiskers ;-).</P
+>Privoxy</SPAN
+>, whose first
+ stable release, 3.0, is due in May 2002.</P
 ></DIV
 ><DIV
 CLASS="SECT1"
 ><HR><H1
 CLASS="SECT1"
 ><A
-NAME="AEN132"
+NAME="AEN147"
 ></A
 ></H1
 ><P
 ><DIV
 CLASS="INFORMALTABLE"
 ><A
-NAME="AEN135"
+NAME="AEN150"
 ></A
 ><P
 ></P

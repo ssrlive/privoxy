@@ -4,7 +4,8 @@
 >Appendix</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -702,7 +703,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3218"
+NAME="AEN3346"
 >14.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -751,7 +752,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN3233"
+NAME="AEN3361"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -784,7 +785,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN3241"
+NAME="AEN3369"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -804,7 +805,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN3246"
+NAME="AEN3374"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -824,7 +825,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN3251"
+NAME="AEN3379"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -844,7 +845,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN3256"
+NAME="AEN3384"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -868,7 +869,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN3262"
+NAME="AEN3390"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -885,7 +886,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN3266"
+NAME="AEN3394"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -899,7 +900,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN3269"
+NAME="AEN3397"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1363,19 +1364,44 @@ WIDTH="100%"
 CLASS="SCREEN"
 > Matches for http://google.com:
 
---- File standard ---
-(no matches in this file)
+ In file: default.action <SPAN
+CLASS="GUIBUTTON"
+>[ View ]</SPAN
+> <SPAN
+CLASS="GUIBUTTON"
+>[ Edit ]</SPAN
+>
 
---- File default ---
-
-{ -add-header -block +deanimate-gifs{last} -downgrade-http-version +fast-redirects 
- -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
- +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
- +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
- +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
- -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only -crunch-outgoing-cookies 
- -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+{-add-header 
+ -block 
+ -crunch-outgoing-cookies 
+ -crunch-incoming-cookies 
+ +deanimate-gifs{last} 
+ -downgrade-http-version 
+ +fast-redirects 
+ -filter{popups} 
+ -filter{fun} 
+ -filter{shockwave-flash} 
+ -filter{crude-parental} 
+ +filter{html-annoyances} 
+ +filter{js-annoyances} 
+ +filter{content-cookies} 
+ +filter{webbugs} 
+ +filter{refresh-tags} 
+ +filter{nimda} 
+ +filter{banners-by-size} 
+ +hide-forwarded-for-headers 
+ +hide-from-header{block} 
+ +hide-referer{forge} 
+ -hide-user-agent 
+ -handle-as-image 
+ -kill-popups 
+ -limit-connect 
+ +prevent-compression 
+ -send-vanilla-wafer 
+ -send-wafer 
+ +session-cookies-only 
+ +set-image-blocker{pattern} }
 /
 
  { -session-cookies-only }
@@ -1384,7 +1410,13 @@ CLASS="SCREEN"
  { -fast-redirects }
  .google.com
 
---- File user ---
+In file: user.action <SPAN
+CLASS="GUIBUTTON"
+>[ View ]</SPAN
+> <SPAN
+CLASS="GUIBUTTON"
+>[ Edit ]</SPAN
+>
 (no matches in this file)  </PRE
 ></TD
 ></TR
@@ -1506,14 +1538,37 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >&#13; Final results:
- -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects 
- -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
- +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
- +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
- +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
- -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression -session-cookies-only -crunch-outgoing-cookies 
- -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer</PRE
+ 
+ -add-header 
+ -block 
+ -crunch-outgoing-cookies 
+ -crunch-incoming-cookies 
+ +deanimate-gifs{last} 
+ -downgrade-http-version 
+ -fast-redirects 
+ -filter{popups} 
+ -filter{fun} 
+ -filter{shockwave-flash} 
+ -filter{crude-parental} 
+ +filter{html-annoyances} 
+ +filter{js-annoyances} 
+ +filter{content-cookies} 
+ +filter{webbugs} 
+ +filter{refresh-tags} 
+ +filter{nimda} 
+ +filter{banners-by-size} 
+ +hide-forwarded-for-headers 
+ +hide-from-header{block} 
+ +hide-referer{forge} 
+ -hide-user-agent 
+ -handle-as-image 
+ -kill-popups 
+ -limit-connect 
+ +prevent-compression 
+ -send-vanilla-wafer 
+ -send-wafer
+ -session-cookies-only 
+ +set-image-blocker{pattern} </PRE
 ></TD
 ></TR
 ></TABLE
@@ -1621,13 +1676,40 @@ WIDTH="100%"
 CLASS="SCREEN"
 >&#13; Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
 
- { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects 
-   +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups} 
-   +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
-   +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
-   +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
-   +prevent-compression +session-cookies-only -crunch-incoming-cookies 
-   -crunch-outgoing-cookies +kill-popups -send-vanilla-wafer -send-wafer }
+ In file: default.action <SPAN
+CLASS="GUIBUTTON"
+>[ View ]</SPAN
+> <SPAN
+CLASS="GUIBUTTON"
+>[ Edit ]</SPAN
+>
+
+ {-add-header 
+  -block 
+  -crunch-incoming-cookies 
+  -crunch-outgoing-cookies 
+  +deanimate-gifs 
+  -downgrade-http-version 
+  +fast-redirects 
+  +filter{html-annoyances} 
+  +filter{js-annoyances} 
+  +filter{kill-popups} 
+  +filter{webbugs} 
+  +filter{nimda} 
+  +filter{banners-by-size} 
+  +filter{hal} 
+  +filter{fun} 
+  +hide-forwarded-for-headers 
+  +hide-from-header{block} 
+  +hide-referer{forge} 
+  -hide-user-agent 
+  -handle-as-image 
+  +kill-popups 
+  +prevent-compression 
+  -send-vanilla-wafer 
+  -send-wafer 
+  +session-cookies-only 
+  +set-image-blocker{blank} }
    /
 
  { +block +handle-as-image }

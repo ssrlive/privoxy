@@ -4,7 +4,8 @@
 >Quickstart to Using Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -235,6 +236,473 @@ HREF="contact.html"
 ></LI
 ></UL
 ></P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="QUICKSTART-AD-BLOCKING"
+>4.1. Quickstart to Ad Blocking</A
+></H2
+><P
+> Ad blocking is but one of <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+ array of features. Many of these features are for the technically minded advanced 
+ user. But, ad and banner blocking is surely common ground for everybody.</P
+><P
+> 
+ This section will provide a quick summary of ad blocking so 
+ you can get up to speed quickly without having to read the more extensive
+ information provided below, though this is highly recommeneded.</P
+><P
+> First a bit of a warning ... blocking ads is much like blocking SPAM: the
+ more aggressive you are about it, the more likely you are to block 
+ things that were not intended. So there is a trade off here. If you want
+ extreme ad free browsing, be prepared to deal with more
+ <SPAN
+CLASS="QUOTE"
+>"problem"</SPAN
+> sites, and to spend more time adjusting the
+ configuration to solve these unintended consequences. In short, there is 
+ not an easy way to eliminate <I
+CLASS="EMPHASIS"
+>all</I
+> ads. Either take 
+ the easy way and settle for <I
+CLASS="EMPHASIS"
+>most</I
+> ads blocked with the
+ default configuration, or jump in and tweak it for your personal surfing
+ habits and preferences.</P
+><P
+> Secondly, a brief explanation of <SPAN
+CLASS="APPLICATION"
+>Privoxy's </SPAN
+>
+ <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+>. <SPAN
+CLASS="QUOTE"
+>"Actions"</SPAN
+> in this context, are 
+ the directives we use to tell <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to perform
+ some task relating to HTTP transactions (i.e. web browsing). We tell
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to take some <SPAN
+CLASS="QUOTE"
+>"action"</SPAN
+>. Each
+ action has a unique name and function. While there are many potential
+ <SPAN
+CLASS="APPLICATION"
+>actions</SPAN
+> in <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+ arsenal, only a few are used for ad blocking. <A
+HREF="actions-file.html#ACTIONS"
+>Actions</A
+>, and <A
+HREF="actions-file.html"
+>action
+ configuration files</A
+>, are explained in depth below.</P
+><P
+> Actions are specified in <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> configuration,
+ followed by one or more URLs to which the action should apply. URLs 
+ can actually be URL type <A
+HREF="actions-file.html#AF-PATTERNS"
+>patterns</A
+> that use
+ wildcards so they can apply potentially to a range of similar URLs.</P
+><P
+> When you connect to a website, the full path of the URL will either match one 
+ of the <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> as defined in
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> configuration, or not. If so, then
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will perform the action accordingly. If
+ not, then nothing special happens. Futhermore, web pages may contain
+ embedded, secondary URLs that your web browser will display as it parses the
+ original page's HTML content. An ad image for instance, is just a URL
+ embedded in the page somewhere. The image itself may be on the same server,
+ or a server somewhere else on the Internet. Complex web pages will have many
+ such embedded URLs.</P
+><P
+> The actions we need to know about for ad blocking are:  <A
+HREF="actions-file.html#BLOCK"
+>block</A
+>, <A
+HREF="actions-file.html#HANDLE-AS-IMAGE"
+>handle-as-image</A
+>, and <A
+HREF="actions-file.html#SET-IMAGE-BLOCKER"
+>set-image-blocker</A
+>:</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>   <A
+HREF="actions-file.html#BLOCK"
+><I
+CLASS="EMPHASIS"
+>block</I
+></A
+> - this action stops
+   any contact between your browser and any URL patterns that match this
+   action's configuration. It can be used for blocking ads, but also anything
+   that is determined to be unwanted. By itself, it simply stops any
+   communication with the remote server. If this is the only action that 
+   matches for this particular URL, then <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will 
+   display its own BLOCKED page to let you now what has happened.
+  </P
+></LI
+><LI
+><P
+>   <A
+HREF="actions-file.html#HANDLE-AS-IMAGE"
+><I
+CLASS="EMPHASIS"
+>handle-as-image</I
+></A
+> - 
+   forces <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to treat this URL as if it were 
+   an image. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> knows about common image 
+   types (e.g. GIF), but there are many situations where this does not apply.
+   So we'll force it. This is particularly important for ad blocking, since 
+   once we can treat it as an image, we can make more intelligent decisisions 
+   on how to handle it. There are some limitations to this though. For
+   instance, you can't just force an image substituion for an entire HTML page 
+   in most situations.
+  </P
+></LI
+><LI
+><P
+>   <A
+HREF="actions-file.html#SET-IMAGE-BLOCKER"
+><I
+CLASS="EMPHASIS"
+>set-image-blocker</I
+></A
+> -
+   tells <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> what to display in place of 
+   an ad image that has hit a block rule. For this to come into play, 
+   the URL must match a block action somewhere in the configuration.
+   <I
+CLASS="EMPHASIS"
+>And</I
+>, it must also either be of a known image type, or
+   match an <A
+HREF="actions-file.html#HANDLE-AS-IMAGE"
+><I
+CLASS="EMPHASIS"
+>handle-as-image</I
+></A
+>
+   action.
+  </P
+><P
+>   The configuration options on what to display instead of the ad are:
+  </P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>       <I
+CLASS="EMPHASIS"
+>pattern</I
+> - a checkboard pattern, so that an ad 
+    replacement is obvious. This is the default.
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>       <I
+CLASS="EMPHASIS"
+>blank</I
+> - A very small empty GIF image is displayed.
+    This is the so-called <SPAN
+CLASS="QUOTE"
+>"invisible"</SPAN
+> configuration option.
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>       <I
+CLASS="EMPHASIS"
+>http://&#60;URL&#62;</I
+> - A redirect to any URL of the
+    user's choosing (advanced usage).
+   </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></LI
+></UL
+></P
+><P
+> The quickest way to adjust any of these settings is with your browser through
+ the special <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> editor  at <A
+HREF="http://config.privoxy.org/show-status"
+TARGET="_top"
+>http://config.privoxy.org/show-status</A
+>
+ (shortcut: <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/show-status</A
+>). This 
+ is an internal page, and does not require Internet access. Select the
+ appropriate <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> file, and click
+ <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+>"</SPAN
+>. It is best to put personal or
+ local preferences in <TT
+CLASS="FILENAME"
+>user.action</TT
+> since this is not
+ meant to be overwritten during upgrades, and will over-ride the settings in
+ other files. Here you can insert new <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+>, and URLs for ad
+ blocking or other purposes, and make other adjustments to the configuration.
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will detect these changes automatically.</P
+><P
+> A quick and simple step by step example:</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>     Right click on the ad image to be blocked, then select 
+     <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIMENUITEM"
+>Copy Link Location</SPAN
+>"</SPAN
+> from the
+     pop-up menu. 
+   </P
+></LI
+><LI
+><P
+>    Set your browser to 
+    <A
+HREF="http://config.privoxy.org/show-status"
+TARGET="_top"
+>http://config.privoxy.org/show-status</A
+>
+   </P
+></LI
+><LI
+><P
+>    Find <TT
+CLASS="FILENAME"
+>user.action</TT
+> in the top section, and click 
+    on <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+>"</SPAN
+>:
+   </P
+><P
+>  <DIV
+CLASS="FIGURE"
+><A
+NAME="AEN349"
+></A
+><P
+><B
+>Figure 1. Actions Files in Use</B
+></P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="../images/files-in-use.jpg"
+ALT="Screenshot of Files in Use"
+></IMG
+></P
+></DIV
+></DIV
+>
+ </P
+></LI
+><LI
+><P
+>   You should have an Actions section labeled <I
+CLASS="EMPHASIS"
+>+block</I
+>. 
+   If not, click the <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+>"</SPAN
+> button just
+   under the word <SPAN
+CLASS="QUOTE"
+>"Actions"</SPAN
+>. This will bring up a list of all
+   actions. Find <I
+CLASS="EMPHASIS"
+>block</I
+> near the top, and click in the
+   <SPAN
+CLASS="QUOTE"
+>"Enabled"</SPAN
+> column, then
+   <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Submit</SPAN
+>"</SPAN
+> just below the list.
+  </P
+></LI
+><LI
+><P
+>   Now, in the <I
+CLASS="EMPHASIS"
+>+block</I
+> actions section, click the
+   <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Add</SPAN
+>"</SPAN
+> button, and paste the URL the
+   browser got from <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIMENUITEM"
+>Copy Link
+   Location</SPAN
+>"</SPAN
+>. Remove the <TT
+CLASS="LITERAL"
+>http://</TT
+> at
+   the beginning of the URL. Then, click
+   <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>Submit</SPAN
+>"</SPAN
+>.
+  </P
+></LI
+><LI
+><P
+>   Now go back to the original page, and press <B
+CLASS="KEYCAP"
+>SHIFT-Reload</B
+>
+   (or flush all browser caches). The image should be gone now.
+  </P
+></LI
+></UL
+></P
+><P
+> This is a very crude and simple example. There might be good reasons to use a 
+ wildcard pattern match to include potentially similar images from the same
+ site. For a more extensive explanation of <SPAN
+CLASS="QUOTE"
+>"patterns"</SPAN
+>, and 
+ the entire actions concept, see <A
+HREF="actions-file.html"
+>the Actions
+ section</A
+>.</P
+><P
+> For advanced users who want to hand edit their config files, you might want
+ to now go to the <A
+HREF="actions-file.html#ACT-EXAMPLES"
+>Actions Files Tutorial</A
+>.</P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
