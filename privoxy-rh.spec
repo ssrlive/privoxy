@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.20 2002/04/08 20:27:45 swa Exp $
+# $Id: privoxy-rh.spec,v 1.21 2002/04/09 02:52:26 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -35,7 +35,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 2.9.14
+Version: 2.9.13
 Release: 4
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -47,7 +47,7 @@ URL: http://www.privoxy.org/
 Obsoletes: junkbuster-raw junkbuster-blank junkbuster
 # Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 Prereq: shadow-utils, chkconfig, initscripts, sh-utils
-BuildRequires: perl gzip sed docbook-utils libtool autoconf docbook-style-dsssl docbook-dtd31-sgml
+BuildRequires: perl gzip sed libtool autoconf 
 Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 %description 
@@ -72,7 +72,8 @@ autoheader
 autoconf
 %configure
 make 
-make dok
+# Docs are in CVS and tarball now.
+#%%make dok
 
 ## Explicitily stripping is not recomended.
 ## This is handled altomaticaly by RPM, and can couse troubles if
@@ -264,6 +265,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Apr 09 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-4
+- Removed 'make dok'. Docs are all maintained in CVS (and tarball) now.
+
 * Mon Apr 08 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-4
 - Add templates/cgi-style.css, faq.txt, p_web.css, LICENSE
@@ -554,6 +559,11 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.21  2002/04/09 02:52:26  hal9
+# - Add templates/cgi-style.css, faq.txt, p_web.css, LICENSE
+# - Remove templates/blocked-compact.
+# - Add more docbook stuff to Buildrequires.
+#
 # Revision 1.20  2002/04/08 20:27:45  swa
 # fixed JB spelling
 #
