@@ -3,112 +3,114 @@ Junkbuster Developer Manual
 
    By: Junkbuster Developers
    
-   $Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $
+   $Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $
    
    The developer manual gives the users information on how to help the
    developer team. It provides guidance on coding, testing, documentation
-   and other issues. The Internet Junkbuster is an application that
-   provides privacy and security to the user of the world wide web.
+   and other issues. Internet Junkbuster is a web proxy with advanced
+   filtering capabilities for protecting privacy, filtering web page
+   content, managing cookies, controlling access, and removing ads,
+   banners, pop-ups and other obnoxious Internet Junk. Junkbuster has a
+   very flexible configuration and can be customized to suit individual
+   needs and tastes. Internet Junkbuster has application for both
+   stand-alone systems and multi-user networks.
    
    You can find the latest version of the user manual at
    [1]http://ijbswa.sourceforge.net/developer-manual/. Please see the
    Contact section in the user-manual if you want to contact the
    developers.
-   
-   Feel free to send a note to the developers at
-   <[2]ijbswa-developers@lists.sourceforge.net>.
      _________________________________________________________________
    
    Table of Contents
-   1. [3]Introduction
-   2. [4]Quickstart to Junkbuster Development
-   3. [5]Documentation Guidelines
-   4. [6]Coding Guidelines
+   1. [2]Introduction
+   2. [3]Quickstart to Junkbuster Development
+   3. [4]Documentation Guidelines
+   4. [5]Coding Guidelines
           
-        4.1. [7]Introduction
-        4.2. [8]Using Comments
+        4.1. [6]Introduction
+        4.2. [7]Using Comments
                 
-              4.2.1. [9]Comment, Comment, Comment
-              4.2.2. [10]Use blocks for comments
-              4.2.3. [11]Keep Comments on their own line
-              4.2.4. [12]Comment each logical step
-              4.2.5. [13]Comment All Functions Thoroughly
-              4.2.6. [14]Comment at the end of braces if the content is
+              4.2.1. [8]Comment, Comment, Comment
+              4.2.2. [9]Use blocks for comments
+              4.2.3. [10]Keep Comments on their own line
+              4.2.4. [11]Comment each logical step
+              4.2.5. [12]Comment All Functions Thoroughly
+              4.2.6. [13]Comment at the end of braces if the content is
                       more than one screen length
                       
-        4.3. [15]Naming Conventions
+        4.3. [14]Naming Conventions
                 
-              4.3.1. [16]Variable Names
-              4.3.2. [17]Function Names
-              4.3.3. [18]Header file prototypes
-              4.3.4. [19]Enumerations, and #defines
-              4.3.5. [20]Constants
+              4.3.1. [15]Variable Names
+              4.3.2. [16]Function Names
+              4.3.3. [17]Header file prototypes
+              4.3.4. [18]Enumerations, and #defines
+              4.3.5. [19]Constants
                       
-        4.4. [21]Using Space
+        4.4. [20]Using Space
                 
-              4.4.1. [22]Put braces on a line by themselves.
-              4.4.2. [23]ALL control statements should have a block
-              4.4.3. [24]Do not belabor/blow-up boolean expressions
-              4.4.4. [25]Use white space freely because it is free
-              4.4.5. [26]Don't use white space around structure operators
-              4.4.6. [27]Make the last brace of a function stand out
-              4.4.7. [28]Use 3 character indentions
+              4.4.1. [21]Put braces on a line by themselves.
+              4.4.2. [22]ALL control statements should have a block
+              4.4.3. [23]Do not belabor/blow-up boolean expressions
+              4.4.4. [24]Use white space freely because it is free
+              4.4.5. [25]Don't use white space around structure operators
+              4.4.6. [26]Make the last brace of a function stand out
+              4.4.7. [27]Use 3 character indentions
                       
-        4.5. [29]Initializing
+        4.5. [28]Initializing
                 
-              4.5.1. [30]Initialize all variables
+              4.5.1. [29]Initialize all variables
                       
-        4.6. [31]Functions
+        4.6. [30]Functions
                 
-              4.6.1. [32]Name functions that return a boolean as a
+              4.6.1. [31]Name functions that return a boolean as a
                       question.
                       
-              4.6.2. [33]Always specify a return type for a function.
-              4.6.3. [34]Minimize function calls when iterating by using
+              4.6.2. [32]Always specify a return type for a function.
+              4.6.3. [33]Minimize function calls when iterating by using
                       variables
                       
-              4.6.4. [35]Pass and Return by Const Reference
-              4.6.5. [36]Pass and Return by Value
-              4.6.6. [37]Names of include files
-              4.6.7. [38]Provide multiple inclusion protection
-              4.6.8. [39]Use `extern "C"` when appropriate
-              4.6.9. [40]Where Possible, Use Forward Struct Declaration
+              4.6.4. [34]Pass and Return by Const Reference
+              4.6.5. [35]Pass and Return by Value
+              4.6.6. [36]Names of include files
+              4.6.7. [37]Provide multiple inclusion protection
+              4.6.8. [38]Use `extern "C"` when appropriate
+              4.6.9. [39]Where Possible, Use Forward Struct Declaration
                       Instead of Includes
                       
-        4.7. [41]General Coding Practices
+        4.7. [40]General Coding Practices
                 
-              4.7.1. [42]Turn on warnings
-              4.7.2. [43]Provide a default case for all switch statements
-              4.7.3. [44]Try to avoid falling through cases in a switch
+              4.7.1. [41]Turn on warnings
+              4.7.2. [42]Provide a default case for all switch statements
+              4.7.3. [43]Try to avoid falling through cases in a switch
                       statement.
                       
-              4.7.4. [45]Use 'long' or 'short' Instead of 'int'
-              4.7.5. [46]Don't mix size_t and other types
-              4.7.6. [47]Declare each variable and struct on its own
+              4.7.4. [44]Use 'long' or 'short' Instead of 'int'
+              4.7.5. [45]Don't mix size_t and other types
+              4.7.6. [46]Declare each variable and struct on its own
                       line.
                       
-              4.7.7. [48]Use malloc/zalloc sparingly
-              4.7.8. [49]The Programmer Who Uses 'malloc' is Responsible
+              4.7.7. [47]Use malloc/zalloc sparingly
+              4.7.8. [48]The Programmer Who Uses 'malloc' is Responsible
                       for Ensuring 'free'
                       
-              4.7.9. [50]Add loaders to the `file_list' structure and in
+              4.7.9. [49]Add loaders to the `file_list' structure and in
                       order
                       
-              4.7.10. [51]"Uncertain" new code and/or changes to exitinst
+              4.7.10. [50]"Uncertain" new code and/or changes to exitinst
                       code, use FIXME
                       
-        4.8. [52]Addendum: Template for files and function comment
+        4.8. [51]Addendum: Template for files and function comment
                 blocks:
                 
-   5. [53]Version Control Guidelines
-   6. [54]Testing Guidelines
+   5. [52]Version Control Guidelines
+   6. [53]Testing Guidelines
           
-        6.1. [55]Testplan for releases
-        6.2. [56]Test reports
+        6.1. [54]Testplan for releases
+        6.2. [55]Test reports
                 
-   7. [57]Contact the developers
-   8. [58]Copyright and History
-   9. [59]See also
+   7. [56]Contact the developers
+   8. [57]Copyright and History
+   9. [58]See also
           
 1. Introduction
 
@@ -1027,8 +1029,8 @@ static void unload_re_filterfile( void *f ) { ... }
 4.8. Addendum: Template for files and function comment blocks:
 
    Example for file comments:
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:
-06 jongfoster Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:
+27 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1085,8 +1087,8 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
    Example for file header comments:
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:0
-6 jongfoster Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:2
+7 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1208,7 +1210,7 @@ int FUNCTION_NAME( void *param1, const char *x )
    
 6.2. Test reports
 
-   Please submit test reports only with the [60]test form at sourceforge.
+   Please submit test reports only with the [59]test form at sourceforge.
    Three simple steps:
    
      * Select category: the distribution you test on.
@@ -1238,62 +1240,61 @@ int FUNCTION_NAME( void *param1, const char *x )
 References
 
    1. http://ijbswa.sourceforge.net/developer-manual/
-   2. mailto:ijbswa-developers@lists.sourceforge.net
-   3. file://localhost/home/swa/sf/current/doc/source/tmp.html#INTRODUCTION
-   4. file://localhost/home/swa/sf/current/doc/source/tmp.html#QUICKSTART
-   5. file://localhost/home/swa/sf/current/doc/source/tmp.html#DOCUMENTATION
-   6. file://localhost/home/swa/sf/current/doc/source/tmp.html#CODING
-   7. file://localhost/home/swa/sf/current/doc/source/tmp.html#S1
-   8. file://localhost/home/swa/sf/current/doc/source/tmp.html#S2
-   9. file://localhost/home/swa/sf/current/doc/source/tmp.html#S3
-  10. file://localhost/home/swa/sf/current/doc/source/tmp.html#S4
-  11. file://localhost/home/swa/sf/current/doc/source/tmp.html#S5
-  12. file://localhost/home/swa/sf/current/doc/source/tmp.html#S6
-  13. file://localhost/home/swa/sf/current/doc/source/tmp.html#S7
-  14. file://localhost/home/swa/sf/current/doc/source/tmp.html#S8
-  15. file://localhost/home/swa/sf/current/doc/source/tmp.html#S9
-  16. file://localhost/home/swa/sf/current/doc/source/tmp.html#S10
-  17. file://localhost/home/swa/sf/current/doc/source/tmp.html#S11
-  18. file://localhost/home/swa/sf/current/doc/source/tmp.html#S12
-  19. file://localhost/home/swa/sf/current/doc/source/tmp.html#S13
-  20. file://localhost/home/swa/sf/current/doc/source/tmp.html#S14
-  21. file://localhost/home/swa/sf/current/doc/source/tmp.html#S15
-  22. file://localhost/home/swa/sf/current/doc/source/tmp.html#S16
-  23. file://localhost/home/swa/sf/current/doc/source/tmp.html#S17
-  24. file://localhost/home/swa/sf/current/doc/source/tmp.html#S18
-  25. file://localhost/home/swa/sf/current/doc/source/tmp.html#S19
-  26. file://localhost/home/swa/sf/current/doc/source/tmp.html#S20
-  27. file://localhost/home/swa/sf/current/doc/source/tmp.html#S21
-  28. file://localhost/home/swa/sf/current/doc/source/tmp.html#S22
-  29. file://localhost/home/swa/sf/current/doc/source/tmp.html#S23
-  30. file://localhost/home/swa/sf/current/doc/source/tmp.html#S24
-  31. file://localhost/home/swa/sf/current/doc/source/tmp.html#S25
-  32. file://localhost/home/swa/sf/current/doc/source/tmp.html#S26
-  33. file://localhost/home/swa/sf/current/doc/source/tmp.html#S27
-  34. file://localhost/home/swa/sf/current/doc/source/tmp.html#S28
-  35. file://localhost/home/swa/sf/current/doc/source/tmp.html#S29
-  36. file://localhost/home/swa/sf/current/doc/source/tmp.html#S30
-  37. file://localhost/home/swa/sf/current/doc/source/tmp.html#S31
-  38. file://localhost/home/swa/sf/current/doc/source/tmp.html#S32
-  39. file://localhost/home/swa/sf/current/doc/source/tmp.html#S33
-  40. file://localhost/home/swa/sf/current/doc/source/tmp.html#S34
-  41. file://localhost/home/swa/sf/current/doc/source/tmp.html#S35
-  42. file://localhost/home/swa/sf/current/doc/source/tmp.html#S36
-  43. file://localhost/home/swa/sf/current/doc/source/tmp.html#S37
-  44. file://localhost/home/swa/sf/current/doc/source/tmp.html#S38
-  45. file://localhost/home/swa/sf/current/doc/source/tmp.html#S39
-  46. file://localhost/home/swa/sf/current/doc/source/tmp.html#S40
-  47. file://localhost/home/swa/sf/current/doc/source/tmp.html#S41
-  48. file://localhost/home/swa/sf/current/doc/source/tmp.html#S42
-  49. file://localhost/home/swa/sf/current/doc/source/tmp.html#S43
-  50. file://localhost/home/swa/sf/current/doc/source/tmp.html#S44
-  51. file://localhost/home/swa/sf/current/doc/source/tmp.html#S45
-  52. file://localhost/home/swa/sf/current/doc/source/tmp.html#S46
-  53. file://localhost/home/swa/sf/current/doc/source/tmp.html#CVS
-  54. file://localhost/home/swa/sf/current/doc/source/tmp.html#TESTING
-  55. file://localhost/home/swa/sf/current/doc/source/tmp.html#TESTING-PLAN
-  56. file://localhost/home/swa/sf/current/doc/source/tmp.html#TESTING-REPORT
-  57. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONTACT
-  58. file://localhost/home/swa/sf/current/doc/source/tmp.html#COPYRIGHT
-  59. file://localhost/home/swa/sf/current/doc/source/tmp.html#SEEALSO
-  60. http://sourceforge.net/tracker/?func=add&group_id=11118&atid=395005
+   2. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INTRODUCTION
+   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUICKSTART
+   4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#DOCUMENTATION
+   5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CODING
+   6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S1
+   7. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S2
+   8. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S3
+   9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S4
+  10. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S5
+  11. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S6
+  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S7
+  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S8
+  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S9
+  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S10
+  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S11
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S12
+  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S13
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S14
+  20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S15
+  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S16
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S17
+  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S18
+  24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S19
+  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S20
+  26. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S21
+  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S22
+  28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S23
+  29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S24
+  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S25
+  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S26
+  32. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S27
+  33. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S28
+  34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S29
+  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S30
+  36. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S31
+  37. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S32
+  38. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S33
+  39. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S34
+  40. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S35
+  41. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S36
+  42. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S37
+  43. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S38
+  44. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S39
+  45. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S40
+  46. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S41
+  47. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S42
+  48. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S43
+  49. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S44
+  50. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S45
+  51. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#S46
+  52. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CVS
+  53. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#TESTING
+  54. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#TESTING-PLAN
+  55. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#TESTING-REPORT
+  56. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONTACT
+  57. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
+  58. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
+  59. http://sourceforge.net/tracker/?func=add&group_id=11118&atid=395005

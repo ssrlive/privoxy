@@ -3,32 +3,37 @@ Junkbuster Frequently Asked Questions
 
    By: Junkbuster Developers
    
-   $Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $
+   $Id: faq.sgml,v 1.12 2002/03/11 20:13:21 swa Exp $
    
    The FAQ document gives users and developers alike answers to
-   frequently asked questions about the Internet Junkbuster. The Internet
-   Junkbuster is an application that provides privacy and security to the
-   user of the world wide web.
+   frequently asked questions about the Internet Junkbuster. Internet
+   Junkbuster is a web proxy with advanced filtering capabilities for
+   protecting privacy, filtering web page content, managing cookies,
+   controlling access, and removing ads, banners, pop-ups and other
+   obnoxious Internet Junk. Junkbuster has a very flexible configuration
+   and can be customized to suit individual needs and tastes. Internet
+   Junkbuster has application for both stand-alone systems and multi-user
+   networks.
    
    You can find the latest version of the document at
    [1]http://ijbswa.sourceforge.net/faq/. Please see the Contact section
    in the user-manual if you want to contact the developers.
-   
-   Feel free to send a note to the developers at
-   <[2]ijbswa-developers@lists.sourceforge.net>.
      _________________________________________________________________
    
    Table of Contents
-   1. [3]Introduction
-   2. [4]Frequently Asked Questions
+   1. [2]Introduction
+   2. [3]Frequently Asked Questions
           
-        2.1. [5]Installation
-        2.2. [6]Configuration
+        2.1. [4]Installation
+        2.2. [5]Configuration
                 
-              2.2.1. [7]How can I make my Yahoo account work?
-              2.2.2. [8]How can I make my Hotmail account work?
-              2.2.3. [9]How can I make my GMX account work?
-              2.2.4. [10]Why can I change the configuration with a
+              2.2.1. [6]How can I make my Yahoo account work?
+              2.2.2. [7]How can I make my Hotmail account work?
+              2.2.3. [8]How can I make my GMX account work?
+              2.2.4. [9]What are the differences between
+                      ijb-intermediate.action, ijb-basic.action, etc.?
+                      
+              2.2.5. [10]Why can I change the configuration with a
                       browser? Does that not raise security issues?
                       
         2.3. [11]Misc
@@ -45,11 +50,11 @@ Junkbuster Frequently Asked Questions
               2.3.6. [17]Do you still maintain the blocklists?
               2.3.7. [18]How can I submit new ads?
               2.3.8. [19]How can I hide my IP address?
-              2.3.9. [20]What is the imagefile (simage.ini, etc.) for?
                       
-   3. [21]Contact the developers
-   4. [22]Copyright and History
-   5. [23]See also
+   3. [20]Known Issues
+   4. [21]Contact the developers
+   5. [22]Copyright and History
+   6. [23]See also
           
 1. Introduction
 
@@ -80,7 +85,33 @@ Junkbuster Frequently Asked Questions
    Fillme.
      _________________________________________________________________
    
-2.2.4. Why can I change the configuration with a browser? Does that not
+2.2.4. What are the differences between ijb-intermediate.action,
+ijb-basic.action, etc.?
+
+   Configuring the Internet Junkbuster is not easy. To help you get
+   started, we provide you with three different default configurations.
+   The following table shows you, which features are enabled in each
+   configuration.
+   
+   Table 1. Default Configurations
+   Feature ijb.action ijb-basic.action ijb-intermediate.action
+   ijb-advanced.action
+   ad-filtering ? x x x
+   blank image ? x x x
+   de-animate GIFs ? x x x
+   referer forging ? x x x
+   jon's +no-cookies-keep (i.e. session cookies only) ? x x x
+   no-popup windows ?   x x
+   fast redirects ?   x x
+   hide-referrer ?   x x
+   hide-useragent ?   x x
+   content-modification ?     x
+   feature-x ?
+   feature-y ?
+   feature-z ?
+     _________________________________________________________________
+   
+2.2.5. Why can I change the configuration with a browser? Does that not
 raise security issues?
 
    What I don't understand, is how I can browser edit the config file as
@@ -162,7 +193,7 @@ IJB. What's wrong?
    developers, RPM gurus or documentation makers. Simply get an account
    on sourceforge.net and mail your id to the developer mailing list.
    Once we have added you to the team, you'll have write access to the
-   CVS repository, and we'll find a suitable task for you together.
+   CVS repository, and together we'll find a suitable task for you.
      _________________________________________________________________
    
 2.3.6. Do you still maintain the blocklists?
@@ -181,54 +212,69 @@ IJB. What's wrong?
    
 2.3.8. How can I hide my IP address?
 
-   You cannot hide your IP address with Junkbuster.
+   You cannot hide your IP address with Junkbuster or any other software,
+   since the server needs to know your IP address to send the answer to
+   you.
+   
+   Fortunately there are many publicly usable anonymous proxies out
+   there, which solve the problem by providing a further level of
+   indirection between you and the web server, shared by many people and
+   thus letting your requests "drown" in white noise of unrelated
+   requests as far as user tracking is concerned.
+   
+   Most of them will, however, log your IP address and make it available
+   to the authorities in case you abuse that anonymity for criminal
+   purposes. In fact you can't even rule out that some of them only exist
+   to *collect* information on (those suspicious) people with a more than
+   average preference for privacy.
+   
+   You can find a list of anonymous public proxies at [24]multiproxy.org
+   and many more through Google.
      _________________________________________________________________
    
-2.3.9. What is the imagefile (simage.ini, etc.) for?
+3. Known Issues
 
-   Anytime the Junkbuster determines (with the help of the blocklist)
-   that a URL contains an advertisement, it has to decide whether this
-   advertisement is an image or not. The Junkbuster uses the imagefile
-   for that purpose.
+   Fillme.
      _________________________________________________________________
    
-3. Contact the developers
+4. Contact the developers
 
    Please see the user manual for information on how to contact the
    developers.
      _________________________________________________________________
    
-4. Copyright and History
+5. Copyright and History
 
    Please see the user manual for information on Copyright and History.
      _________________________________________________________________
    
-5. See also
+6. See also
 
    Please see the user manual for information on references.
 
 References
 
    1. http://ijbswa.sourceforge.net/faq/
-   2. mailto:ijbswa-developers@lists.sourceforge.net
-   3. file://localhost/home/swa/sf/current/doc/source/tmp.html#INTRODUCTION
-   4. file://localhost/home/swa/sf/current/doc/source/tmp.html#QUESTIONS
-   5. file://localhost/home/swa/sf/current/doc/source/tmp.html#INSTALLATION
-   6. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONFIGURATION
-   7. file://localhost/home/swa/sf/current/doc/source/tmp.html#YAHOO
-   8. file://localhost/home/swa/sf/current/doc/source/tmp.html#HOTMAIL
-   9. file://localhost/home/swa/sf/current/doc/source/tmp.html#GMX
-  10. file://localhost/home/swa/sf/current/doc/source/tmp.html#BROWSECONFIG
-  11. file://localhost/home/swa/sf/current/doc/source/tmp.html#MISC
-  12. file://localhost/home/swa/sf/current/doc/source/tmp.html#LOADINGTIMES
-  13. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONFIGURL
-  14. file://localhost/home/swa/sf/current/doc/source/tmp.html#BADFILEDESC
-  15. file://localhost/home/swa/sf/current/doc/source/tmp.html#PROXY-CHAINING
-  16. file://localhost/home/swa/sf/current/doc/source/tmp.html#JOINTEAM
-  17. file://localhost/home/swa/sf/current/doc/source/tmp.html#BLOCKLIST
-  18. file://localhost/home/swa/sf/current/doc/source/tmp.html#NEWADS
-  19. file://localhost/home/swa/sf/current/doc/source/tmp.html#IP
-  20. file://localhost/home/swa/sf/current/doc/source/tmp.html#IMAGE
-  21. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONTACT
-  22. file://localhost/home/swa/sf/current/doc/source/tmp.html#COPYRIGHT
-  23. file://localhost/home/swa/sf/current/doc/source/tmp.html#SEEALSO
+   2. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INTRODUCTION
+   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUESTIONS
+   4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION
+   5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURATION
+   6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#YAHOO
+   7. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#HOTMAIL
+   8. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#GMX
+   9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGFILES
+  10. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BROWSECONFIG
+  11. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#MISC
+  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LOADINGTIMES
+  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURL
+  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BADFILEDESC
+  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#PROXY-CHAINING
+  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#JOINTEAM
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BLOCKLIST
+  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWADS
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#IP
+  20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#KNOWNISSUES
+  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONTACT
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
+  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
+  24. http://www.multiproxy.org/anon_list.htm
