@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.4  2001/07/13 13:52:12  oes
+ *     - Formatting
+ *     - Introduced new action ACTION_DEANIMATE
+ *
  *    Revision 1.3  2001/06/07 23:03:56  jongfoster
  *    Added standard comment at top of file.
  *
@@ -48,7 +52,7 @@
 
 DEFINE_ACTION_MULTI ("add-header",      ACTION_MULTI_ADD_HEADER)
 DEFINE_ACTION_BOOL  ("block",           ACTION_BLOCK)
-DEFINE_ACTION_BOOL  ("deanimate-gifs",  ACTION_DEANIMATE)
+DEFINE_ACTION_STRING("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
 DEFINE_ACTION_BOOL  ("fast-redirects",  ACTION_FAST_REDIRECTS)
 DEFINE_ACTION_BOOL  ("filter",          ACTION_FILTER)
 DEFINE_ACTION_BOOL  ("hide-forwarded",  ACTION_HIDE_FORWARDED)
