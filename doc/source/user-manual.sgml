@@ -288,10 +288,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/suse/SRPMS/junkbuster-2.9.9-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.9-1.src.rpm
 </para>
 
 <para>
@@ -300,7 +300,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
  </screen>
 </para>
 
@@ -1405,7 +1405,7 @@ configuration section below. HB.)
  <literal>
   <MSGText> 
    <literallayout>
- <emphasis>forward_socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</emphasis>
+ <emphasis>forward-socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</emphasis>
  <emphasis>forward    my_company.com  .</emphasis>
    </literallayout>
   </MSGText> 
@@ -1420,7 +1420,7 @@ configuration section below. HB.)
  <literal>
   <MSGText> 
    <literallayout>
-  <emphasis>forward_socks4a   .*  .  firewall.my_company.com:1080</emphasis>
+  <emphasis>forward-socks4a   .*  .  firewall.my_company.com:1080</emphasis>
    </literallayout>
   </MSGText> 
  </literal>
