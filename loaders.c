@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.13 2001/05/31 21:28:49 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.14 2001/06/01 03:27:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.13 2001/05/31 21:28:49 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.14  2001/06/01 03:27:04  oes
+ *    Fixed line continuation problem
+ *
  *    Revision 1.13  2001/05/31 21:28:49  jongfoster
  *    Removed all permissionsfile code - it's now called the actions
  *    file, and (almost) all the code is in actions.c
@@ -170,11 +173,6 @@ const char loaders_h_rcs[] = LOADERS_H_VERSION;
  * Currently active files.
  * These are also entered in the main linked list of files.
  */
-static struct file_list *current_forwardfile    = NULL;
-
-#ifdef ACL_FILES
-static struct file_list *current_aclfile        = NULL;
-#endif /* def ACL_FILES */
 
 #ifdef TRUST_FILES
 static struct file_list *current_trustfile      = NULL;
@@ -237,18 +235,6 @@ void sweep(void)
          {
             ncsp->actions_list->active = 1;
          }
-
-         if (ncsp->flist)     /* forward files */
-         {
-            ncsp->flist->active = 1;
-         }
-
-#ifdef ACL_FILES
-         if (ncsp->alist)     /* acl files */
-         {
-            ncsp->alist->active = 1;
-         }
-#endif /* def ACL_FILES */
 
 #ifdef PCRS
          if (ncsp->rlist)     /* perl re files */
@@ -470,120 +456,6 @@ void free_url(struct url_spec *url)
 }
 
 
-#ifdef ACL_FILES
-/*********************************************************************
- *
- * Function    :  unload_aclfile
- *
- * Description :  Unloads an aclfile.
- *
- * Parameters  :
- *          1  :  f = the data structure associated with the aclfile.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_aclfile(void *f)
-{
-   struct access_control_list *b = (struct access_control_list *)f;
-   if (b == NULL) return;
-
-   unload_aclfile(b->next);
-
-   freez(b);
-
-}
-#endif /* def ACL_FILES */
-
-
-#ifdef TRUST_FILES
-/*********************************************************************
- *
- * Function    :  unload_trustfile
- *
- * Description :  Unloads a trustfile.
- *
- * Parameters  :
- *          1  :  f = the data structure associated with the trustfile.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_trustfile(void *f)
-{
-   struct block_spec *b = (struct block_spec *)f;
-   if (b == NULL) return;
-
-   unload_trustfile(b->next);
-
-   free_url(b->url);
-
-   freez(b);
-
-}
-#endif /* def TRUST_FILES */
-
-
-/*********************************************************************
- *
- * Function    :  unload_forwardfile
- *
- * Description :  Unloads a forwardfile.
- *
- * Parameters  :
- *          1  :  f = the data structure associated with the forwardfile.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_forwardfile(void *f)
-{
-   struct forward_spec *b = (struct forward_spec *)f;
-   if (b == NULL) return;
-
-   unload_forwardfile(b->next);
-
-   free_url(b->url);
-
-   freez(b->gw->gateway_host);
-   freez(b->gw->forward_host);
-
-   freez(b);
-
-}
-
-
-#ifdef PCRS
-/*********************************************************************
- *
- * Function    :  unload_re_filterfile
- *
- * Description :  Unload the re_filter list.
- *
- * Parameters  :
- *          1  :  f = the data structure associated with the filterfile.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_re_filterfile(void *f)
-{
-   pcrs_job *joblist;
-   struct re_filterfile_spec *b = (struct re_filterfile_spec *)f;
-
-   if (b == NULL) return;
-
-   destroy_list(b->patterns);
-
-   joblist = b->joblist;
-   while ( NULL != (joblist = pcrs_free_job(joblist)) ) {}
-
-   freez(b);
-
-}
-#endif /* def PCRS */
-
-
 /*********************************************************************
  *
  * Function    :  check_file_changed
@@ -774,145 +646,33 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 }
 
 
-#ifdef ACL_FILES
+#ifdef TRUST_FILES
 /*********************************************************************
  *
- * Function    :  load_aclfile
+ * Function    :  unload_trustfile
  *
- * Description :  Read and parse an aclfile and add to files list.
+ * Description :  Unloads a trustfile.
  *
  * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  f = the data structure associated with the trustfile.
  *
- * Returns     :  0 => Ok, everything else is an error.
+ * Returns     :  N/A
  *
  *********************************************************************/
-int load_aclfile(struct client_state *csp)
+static void unload_trustfile(void *f)
 {
-   FILE *fp;
-   char buf[BUFSIZ], *v[3], *p;
-   int i;
-   struct access_control_list *a, *bl;
-   struct file_list *fs;
+   struct block_spec *b = (struct block_spec *)f;
+   if (b == NULL) return;
 
-   if (!check_file_changed(current_aclfile, csp->config->aclfile, &fs))
-   {
-      /* No need to load */
-      if (csp)
-      {
-         csp->alist = current_aclfile;
-      }
-      return(0);
-   }
-   if (!fs)
-   {
-      goto load_aclfile_error;
-   }
+   unload_trustfile(b->next);
 
-   fs->f = bl = (struct access_control_list *)zalloc(sizeof(*bl));
-   if (bl == NULL)
-   {
-      freez(fs->filename);
-      freez(fs);
-      goto load_aclfile_error;
-   }
+   free_url(b->url);
 
-   fp = fopen(csp->config->aclfile, "r");
-
-   if (fp == NULL)
-   {
-      goto load_aclfile_error;
-   }
-
-   while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
-   {
-      i = ssplit(buf, " \t", v, SZ(v), 1, 1);
-
-      /* allocate a new node */
-      a = (struct access_control_list *) zalloc(sizeof(*a));
-
-      if (a == NULL)
-      {
-         fclose(fp);
-         freez(fs->f);
-         freez(fs->filename);
-         freez(fs);
-         goto load_aclfile_error;
-      }
-
-      /* add it to the list */
-      a->next  = bl->next;
-      bl->next = a;
-
-      switch (i)
-      {
-         case 3:
-            if (acl_addr(v[2], a->dst) < 0)
-            {
-               goto load_aclfile_error;
-            }
-            /* no break */
-
-         case 2:
-            if (acl_addr(v[1], a->src) < 0)
-            {
-               goto load_aclfile_error;
-            }
-
-            p = v[0];
-            if (strcmpic(p, "permit") == 0)
-            {
-               a->action = ACL_PERMIT;
-               break;
-            }
-
-            if (strcmpic(p, "deny") == 0)
-            {
-               a->action = ACL_DENY;
-               break;
-            }
-            /* no break */
-
-         default:
-            goto load_aclfile_error;
-      }
-   }
-
-   fclose(fp);
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   if (current_aclfile)
-   {
-      current_aclfile->unloader = unload_aclfile;
-   }
-
-   fs->next = files->next;
-   files->next = fs;
-   current_aclfile = fs;
-
-   if (csp)
-   {
-      csp->alist = fs;
-   }
-
-   return(0);
-
-load_aclfile_error:
-   log_error(LOG_LEVEL_FATAL, "can't load access control list %s: %E",
-             csp->config->aclfile);
-   return(-1);
+   freez(b);
 
 }
-#endif /* def ACL_FILES */
 
 
-#ifdef TRUST_FILES
 /*********************************************************************
  *
  * Function    :  load_trustfile
@@ -1057,195 +817,35 @@ load_trustfile_error:
 #endif /* def TRUST_FILES */
 
 
+#ifdef PCRS
 /*********************************************************************
  *
- * Function    :  load_forwardfile
+ * Function    :  unload_re_filterfile
  *
- * Description :  Read and parse a forwardfile and add to files list.
+ * Description :  Unload the re_filter list.
  *
  * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  f = the data structure associated with the filterfile.
  *
- * Returns     :  0 => Ok, everything else is an error.
+ * Returns     :  N/A
  *
  *********************************************************************/
-int load_forwardfile(struct client_state *csp)
+static void unload_re_filterfile(void *f)
 {
-   FILE *fp;
+   pcrs_job *joblist;
+   struct re_filterfile_spec *b = (struct re_filterfile_spec *)f;
 
-   struct forward_spec *b, *bl;
-   char buf[BUFSIZ];
-   char *p, *tmp;
-   char *vec[4];
-   int n;
-   struct file_list *fs;
-   const struct gateway *gw;
+   if (b == NULL) return;
 
-   if (!check_file_changed(current_forwardfile, csp->config->forwardfile, &fs))
-   {
-      /* No need to load */
-      if (csp)
-      {
-         csp->flist = current_forwardfile;
-      }
-      return(0);
-   }
-   if (!fs)
-   {
-      goto load_forwardfile_error;
-   }
+   destroy_list(b->patterns);
 
-   fs->f = bl = (struct forward_spec  *)zalloc(sizeof(*bl));
+   joblist = b->joblist;
+   while ( NULL != (joblist = pcrs_free_job(joblist)) ) {}
 
-   if ((fs == NULL) || (bl == NULL))
-   {
-      goto load_forwardfile_error;
-   }
-
-   if ((fp = fopen(csp->config->forwardfile, "r")) == NULL)
-   {
-      goto load_forwardfile_error;
-   }
-
-   tmp = NULL;
-
-   while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
-   {
-      freez(tmp);
-
-      tmp = strdup(buf);
-
-      n = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
-
-      if (n != 4)
-      {
-         log_error(LOG_LEVEL_ERROR, "error in forwardfile: %s", buf);
-         continue;
-      }
-
-      strcpy(buf, vec[0]);
-
-      /* skip lines containing only ~ */
-      if (*buf == '\0')
-      {
-         continue;
-      }
-
-      /* allocate a new node */
-      if (((b = zalloc(sizeof(*b))) == NULL)
-      )
-      {
-         fclose(fp);
-         goto load_forwardfile_error;
-      }
-
-      /* add it to the list */
-      b->next  = bl->next;
-      bl->next = b;
-
-      /* Save the URL pattern */
-      if (create_url_spec(b->url, buf))
-      {
-         fclose(fp);
-         goto load_forwardfile_error;
-      }
-
-      /* now parse the gateway specs */
-
-      p = vec[2];
-
-      for (gw = gateways; gw->name; gw++)
-      {
-         if (strcmp(gw->name, p) == 0)
-         {
-            break;
-         }
-      }
-
-      if (gw->name == NULL)
-      {
-         goto load_forwardfile_error;
-      }
-
-      /* save this as the gateway type */
-      *b->gw = *gw;
-
-      /* now parse the gateway host[:port] spec */
-      p = vec[3];
-
-      if (strcmp(p, ".") != 0)
-      {
-         b->gw->gateway_host = strdup(p);
-
-         if ((p = strchr(b->gw->gateway_host, ':')))
-         {
-            *p++ = '\0';
-            b->gw->gateway_port = atoi(p);
-         }
-
-         if (b->gw->gateway_port <= 0)
-         {
-            goto load_forwardfile_error;
-         }
-      }
-
-      /* now parse the forwarding spec */
-      p = vec[1];
-
-      if (strcmp(p, ".") != 0)
-      {
-         b->gw->forward_host = strdup(p);
-
-         if ((p = strchr(b->gw->forward_host, ':')))
-         {
-            *p++ = '\0';
-            b->gw->forward_port = atoi(p);
-         }
-
-         if (b->gw->forward_port <= 0)
-         {
-            b->gw->forward_port = 8000;
-         }
-      }
-   }
-
-   freez(tmp);
-
-   fclose(fp);
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   /* the old one is now obsolete */
-   if (current_forwardfile)
-   {
-      current_forwardfile->unloader = unload_forwardfile;
-   }
-
-   fs->next    = files->next;
-   files->next = fs;
-   current_forwardfile = fs;
-
-   if (csp)
-   {
-      csp->flist = fs;
-   }
-
-   return(0);
-
-load_forwardfile_error:
-   log_error(LOG_LEVEL_FATAL, "can't load forwardfile '%s': %E",
-             csp->config->forwardfile);
-   return(-1);
+   freez(b);
 
 }
 
-
-#ifdef PCRS
 /*********************************************************************
  *
  * Function    :  load_re_filterfile
