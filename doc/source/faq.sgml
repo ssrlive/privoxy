@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.3 2001/09/23 10:13:48 swa Exp $
+ $Id: faq.sgml,v 1.4 2002/02/24 14:34:24 jongfoster Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.3 2001/09/23 10:13:48 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.4 2002/02/24 14:34:24 jongfoster Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -50,7 +50,8 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="introduction"><title>Introduction</title>
-<para>To be filled.
+<para>
+   Fillme.
 </para>
 </sect1>
 
@@ -62,7 +63,7 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 <sect2 id="installation"><title>Installation</title>
  <para>
-  To be done later.
+   Fillme.
  </para>
 </sect2>
 
@@ -72,17 +73,19 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 <sect3 id="yahoo"><title>How can I make my Yahoo account work?</title>
  <para>
-  <comment>Blank para tag to quiet jade processing errors</comment>
+   Fillme.
  </para>
 </sect3>
 
 <sect3 id="hotmail"> <title>How can I make my Hotmail account work?</title>
   <para>
+   Fillme.
   </para>
 </sect3>
 
 <sect3 id="gmx"> <title>How can I make my GMX account work?</title>
  <para>
+   Fillme.
  </para>
 </sect3>
 
@@ -91,6 +94,45 @@ Please see the Contact section in the user-manual if you want to contact the dev
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2 id="misc"><title>Misc</title>
+
+<sect3 id="badfiledesc"><title>I get the message 'Bad File Descriptor', why?</title>
+<para>
+   Fillme.
+</para>
+</sect3>
+
+<sect3 id="proxy-chaining"><title>How do I chain Junkbuster with other proxies
+(e.g. squid)?</title>
+<para>
+   Fillme.
+</para>
+</sect3>
+
+<sect3 id="jointeam"><title>I would like to help you, what do I do?</title>
+<para>
+   Well, helping the team is always a good idea. We welcome new developers,
+   RPM gurus or documentation makers. Simply get an account on sourceforge.net
+   and mail your id to the developer mailing list. Once we have added you to
+   the team, you'll have write access to the CVS repository, and we'll find a
+   suitable task for you together.
+</para>
+</sect3>
+
+<sect3 id="blocklist"><title>Do you still maintain the blocklists?</title>
+<para>
+    No. The format of the blocklists has changed significantly in the versions
+    2.9.x. Once we have released the new version, there will again be
+    blocklists that you can update automatically.
+</para>
+</sect3>
+
+<sect3 id="newads"><title>How can I submit new ads?</title>
+<para>
+    As of now, please discontinue to submit new ad blocking infos. Once we
+    have released the new version, there will again be a form on the website,
+    which you can use to contribute new ads.
+</para>
+</sect3>
 
 <sect3 id="ip"><title>How can I hide my IP address?</title>
 <para>
@@ -102,7 +144,7 @@ Please see the Contact section in the user-manual if you want to contact the dev
 <para>
  Anytime the Junkbuster determines (with the help of the blocklist) that a URL
  contains an advertisement, it has to decide whether this advertisement is an
- image or not. The Junkbuster uses the imagefile for that purpose..
+ image or not. The Junkbuster uses the imagefile for that purpose.
 </para>
 </sect3>
 
@@ -153,6 +195,10 @@ Please see the Contact section in the user-manual if you want to contact the dev
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.4  2002/02/24 14:34:24  jongfoster
+Formatting changes.  Now changing the doctype to DocBook XML 4.1
+will work - no other changes are needed.
+
 Revision 1.3  2001/09/23 10:13:48  swa
 upload process established. run make webserver and
 the documentation is moved to the webserver. documents

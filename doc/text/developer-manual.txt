@@ -3,7 +3,7 @@ Junkbuster Developer Manual
 
    By: Junkbuster Developers
    
-   $Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $
+   $Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $
    
    The developer manual gives the users information on how to help the
    developer team. It provides guidance on coding, testing, documentation
@@ -199,8 +199,8 @@ if ( 1 == X )
 
 
 short DoSomethingVeryImportant(
-   short firstParam,   /* represents something */
-   short nextParam     /* represents something else */ )
+   short firstparam,   /* represents something */
+   short nextparam     /* represents something else */ )
 {
    ...code here...
 
@@ -962,8 +962,8 @@ static void unload_re_filterfile( void *f ) { ... }
 4.8. Addendum: Template for files and function comment blocks:
 
    Example for file comments:
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:
-51 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:
+06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1020,8 +1020,8 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
    Example for file header comments:
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:5
-1 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:0
+6 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1092,7 +1092,7 @@ extern const char FILENAME_h_rcs[];
  *
  * Description :  (Fill me in with a good description!)
  *
- * Parameters  :
+ * parameters  :
  *          1  :  param1 = pointer to an important thing
  *          2  :  x      = pointer to something else
  *

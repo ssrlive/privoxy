@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.10 2001/10/31 19:27:27 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.11 2001/12/02 10:29:26 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.11  2001/12/02 10:29:26  swa
+# New version made these changes necessary.
+#
 # Revision 1.10  2001/10/31 19:27:27  swa
 # consistent description. new name for suse since
 # we had troubles with rpms of identical names
@@ -76,7 +79,7 @@ Group:        Networking/Utilities
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
-Version: 2.9.10
+Version: 2.9.11
 Release: 1
 Summary:      The Internet Junkbuster
 Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
