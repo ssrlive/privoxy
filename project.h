@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.3 2001/05/20 01:21:20 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.4 2001/05/22 18:46:04 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,50 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.4  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.3  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -117,6 +161,9 @@ extern "C" {
 
 /* Need this for struct gateway */
 struct client_state;
+
+/* Need this for struct client_state */
+struct configuration_spec;
 
 
 struct http_request
@@ -200,6 +247,8 @@ struct list
 
 struct client_state
 {
+   struct configuration_spec * config;
+
    int  permissions;
    
    int  cfd;
@@ -414,6 +463,98 @@ struct access_control_list
    struct access_control_list *next;
 };
 #endif /* def ACL_FILES */
+
+/* Maximum number of loaders (permissions, block, forward, acl...) */
+#define NLOADERS 8
+
+/*
+ * Data loaded from the configuration file.
+ *
+ * (Anomaly: toggle is still handled through a global, not this structure)
+ */
+struct configuration_spec
+{
+   int debug;
+   int multi_threaded;
+
+#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+   int tinygif;
+   const char *tinygifurl;
+#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+
+   const char *logfile;
+
+   const char *blockfile;
+   const char *permissions_file;
+   const char *forwardfile;
+
+#ifdef ACL_FILES
+   const char *aclfile;
+#endif /* def ACL_FILES */
+
+#ifdef USE_IMAGE_LIST
+   const char *imagefile;
+#endif /* def USE_IMAGE_LIST */
+
+#ifdef PCRS
+   const char *re_filterfile;
+#endif /* def PCRS */
+
+   /*
+    * Permissions to use for URLs not in the permissions list.
+    */
+   int default_permissions;
+
+#ifdef JAR_FILES
+   const char * jarfile;
+   FILE * jar;
+#endif /* def JAR_FILES */
+
+   const char *referrer;
+   const char *uagent;
+   const char *from;
+
+   int add_forwarded;
+
+   struct list wafer_list[1];
+   struct list xtra_list[1];
+
+   /*
+    * Port and IP to bind to.
+    * Defaults to HADDR_DEFAULT:HADDR_PORT == 127.0.0.1:8000
+    */
+   const char *haddr;
+   int         hport;
+
+#ifndef SPLIT_PROXY_ARGS
+   const char *suppress_message;
+#endif /* ndef SPLIT_PROXY_ARGS */
+
+#ifndef SPLIT_PROXY_ARGS
+   /* suppress listing sblock and simage */
+   int suppress_blocklists;
+#endif /* ndef SPLIT_PROXY_ARGS */
+
+#ifdef FAST_REDIRECTS
+   int fast_redirects;
+#endif /* def FAST_REDIRECTS */
+
+#ifdef TRUST_FILES
+   const char * trustfile;
+
+   struct list trust_info[1];
+   struct url_spec *trust_list[64];
+#endif /* def TRUST_FILES */
+
+   struct proxy_args proxy_args[1];
+
+   struct file_list *config_file_list;
+
+   int (*loaders[NLOADERS])(struct client_state *);
+
+   int need_bind; /* bool, nonzero if we need to bind() to the new port */
+};
+
 
 #define SZ(X)  (sizeof(X) / sizeof(*X))
 

@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.5 2001/05/22 18:54:49 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.6 2001/05/25 22:32:56 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.5 2001/05/22 18:54:49 oes Exp $
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.6  2001/05/25 22:32:56  jongfoster
+ *    CRLF->LF
+ *
  *    Revision 1.5  2001/05/22 18:54:49  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -111,6 +114,7 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.5 2001/05/22 18:54:49 oes Exp $
 #include <malloc.h>
 #include <errno.h>
 
+#include "project.h"
 #include "showargs.h"
 #include "jcc.h"
 #include "encode.h"
@@ -197,7 +201,7 @@ char *strsav(char *old, const char *text_to_append)
  * Returns     :  N/A
  *
  *********************************************************************/
-void savearg(char *c, char *o)
+void savearg(char *c, char *o, struct configuration_spec * config)
 {
    char buf[BUFSIZ];
 
@@ -233,7 +237,7 @@ void savearg(char *c, char *o)
 
    strcat(buf, "<br>\n");
 
-   proxy_args->invocation = strsav(proxy_args->invocation, buf);
+   config->proxy_args->invocation = strsav(config->proxy_args->invocation, buf);
 
 }
 
@@ -251,18 +255,20 @@ void savearg(char *c, char *o)
  * Returns     :  N/A
  *
  *********************************************************************/
-void init_proxy_args(int argc, const char *argv[])
+void init_proxy_args(int argc, const char *argv[], struct configuration_spec * config)
 {
    const struct gateway *g;
+   char * b;
    int i;
 
-   freez(proxy_args->header);
-   freez(proxy_args->invocation);
-   freez(proxy_args->gateways);
-   freez(proxy_args->trailer);
+   freez(config->proxy_args->header);
+   freez(config->proxy_args->invocation);
+   freez(config->proxy_args->gateways);
+   freez(config->proxy_args->trailer);
    
 
-   proxy_args->header = strsav(proxy_args->header,
+   b = NULL;
+   b = strsav(b,
       "HTTP/1.0 200 OK\n"
       "Server: IJ/" VERSION "\n"
       "Content-type: text/html\n\n"
@@ -282,35 +288,38 @@ void init_proxy_args(int argc, const char *argv[])
       "<p>\n"
    );
 
-   proxy_args->header = strsav(proxy_args->header,
+   b = strsav(b,
       "<h2>The program was invoked as follows</h2>\n");
 
    for (i=0; i < argc; i++)
    {
-      proxy_args->header = strsav(proxy_args->header, argv[i]);
-      proxy_args->header = strsav(proxy_args->header, " ");
+      b = strsav(b, argv[i]);
+      b = strsav(b, " ");
    }
-   proxy_args->header = strsav(proxy_args->header, "<br>\n");
+   b = strsav(b, "<br>\n");
 
+   config->proxy_args->header = b;
 
-   proxy_args->invocation = strsav(
-      proxy_args->invocation,
+   config->proxy_args->invocation = strsav(
+      config->proxy_args->invocation,
       "<br>\n"
       "and the following options were set in the configuration file"
       "<br><br>\n"
    );
 
+   b = NULL;
 
-   proxy_args->gateways = strsav(proxy_args->gateways,
+   b = strsav(b,
       "<h2>It supports the following gateway protocols:</h2>\n");
 
    for (g = gateways; g->name; g++)
    {
-      proxy_args->gateways = strsav(proxy_args->gateways, g->name);
-      proxy_args->gateways = strsav(proxy_args->gateways, " ");
+      b = strsav(b, g->name);
+      b = strsav(b, " ");
    }
-   proxy_args->gateways = strsav(proxy_args->gateways, "<br>\n");
+   b = strsav(b, "<br>\n");
 
+   config->proxy_args->gateways = b;
 }
 
 
@@ -325,7 +334,7 @@ void init_proxy_args(int argc, const char *argv[])
  * Returns     :  N/A
  *
  *********************************************************************/
-void end_proxy_args(void)
+void end_proxy_args(struct configuration_spec * config)
 {
    char *b = NULL;
    char buf[BUFSIZ];
@@ -525,7 +534,7 @@ void end_proxy_args(void)
       "</body></html>\n"
    );
 
-   proxy_args->trailer = b;
+   config->proxy_args->trailer = b;
 
 }
 

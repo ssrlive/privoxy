@@ -1,9 +1,9 @@
 #ifndef _W32LOG_H
 #define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.1.1.1 2001/05/15 13:59:07 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/w32log.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
  *
  * Purpose     :  Functions for creating and destroying the log window,
  *                ouputting strings, processing messages and so on.
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:07  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -70,6 +73,27 @@ extern char g_szFontFaceName[255];
 
 /* Size of font to use */
 extern int g_nFontSize;
+
+
+/* FIXME: this is a kludge */
+
+extern const char * g_blockfile;
+extern const char * g_permissions_file;
+extern const char * g_forwardfile;
+#ifdef ACL_FILES
+extern const char * g_aclfile;
+#endif /* def ACL_FILES */
+#ifdef USE_IMAGE_LIST
+extern const char * g_imagefile;
+#endif /* def USE_IMAGE_LIST */
+#ifdef PCRS
+extern const char * g_re_filterfile;
+#endif
+#ifdef TRUST_FILES
+extern const char * g_trustfile;
+#endif /* def TRUST_FILES */
+
+/* FIXME: end kludge */
 
 
 extern int LogPutString(const char *pszText);

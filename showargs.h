@@ -1,9 +1,9 @@
 #ifndef _SHOWARGS_H
 #define _SHOWARGS_H
-#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.1.1.1 2001/05/15 13:59:03 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/showargs.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/showargs.h,v $
  *
  * Purpose     :  Contains various utility routines needed to 
  *                generate the show-proxy-args page.
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: showargs.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:03  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -44,10 +47,10 @@ extern "C" {
 #endif
 
 extern char *strsav(char *old, const char *text_to_append);
-extern void savearg(char *c, char *o);
+extern void savearg(char *c, char *o, struct configuration_spec * config);
 
-extern void init_proxy_args(int argc, const char *argv[]);
-extern void end_proxy_args(void);
+extern void init_proxy_args(int argc, const char *argv[], struct configuration_spec * config);
+extern void end_proxy_args(struct configuration_spec * config);
 
 /* Revision control strings from this header and associated .c file */
 extern const char showargs_rcs[];

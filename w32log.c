@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.3 2001/05/20 15:07:54 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.4 2001/05/22 18:56:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.3 2001/05/20 15:07:54 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.4  2001/05/22 18:56:28  oes
+ *    CRLF -> LF
+ *
  *    Revision 1.3  2001/05/20 15:07:54  jongfoster
  *    File is now ignored if _WIN_CONSOLE is defined.
  *
@@ -145,6 +148,27 @@ char g_szFontFaceName[255] = DEFAULT_LOG_FONT_NAME;
 
 /* Size of font to use */
 int g_nFontSize = DEFAULT_LOG_FONT_SIZE;
+
+
+/* FIXME: this is a kludge */
+
+const char * g_blockfile = NULL;
+const char * g_permissions_file = NULL;
+const char * g_forwardfile = NULL;
+#ifdef ACL_FILES
+const char * g_aclfile = NULL;
+#endif /* def ACL_FILES */
+#ifdef USE_IMAGE_LIST
+const char * g_imagefile = NULL;
+#endif /* def USE_IMAGE_LIST */
+#ifdef PCRS
+const char * g_re_filterfile = NULL;
+#endif
+#ifdef TRUST_FILES
+const char * g_trustfile = NULL;
+#endif /* def TRUST_FILES */
+
+/* FIXME: end kludge */
 
 
 #ifdef REGEX
@@ -1041,57 +1065,43 @@ void OnLogCommand(int nCommand)
          break;
 #endif
 
-      case ID_RELOAD_CONFIG:
-         configret = 0;
-         load_config( 1 );
-
-         if ( configret )
-         {
-            log_error(LOG_LEVEL_ERROR, "load_config encountered a problem!  You should probably restart IJB.");
-         }
-         else
-         {
-            log_error(LOG_LEVEL_INFO, "Configuration has been reloaded.");
-         }
-         break;
-
       case ID_TOOLS_EDITJUNKBUSTER:
          EditFile(configfile);
          break;
 
       case ID_TOOLS_EDITBLOCKERS:
-         EditFile(blockfile);
+         EditFile(g_blockfile);
          break;
 
       case ID_TOOLS_EDITPERMISSIONS:
-         EditFile(permissions_file);
+         EditFile(g_permissions_file);
          break;
 
       case ID_TOOLS_EDITFORWARD:
-         EditFile(forwardfile);
+         EditFile(g_forwardfile);
          break;
 
 #ifdef ACL_FILES
       case ID_TOOLS_EDITACLS:
-         EditFile(aclfile);
+         EditFile(g_aclfile);
          break;
 #endif /* def ACL_FILES */
 
 #ifdef USE_IMAGE_LIST
       case ID_TOOLS_EDITIMAGE:
-         EditFile(imagefile);
+         EditFile(g_imagefile);
          break;
 #endif /* def USE_IMAGE_LIST */
 
 #ifdef PCRS
       case ID_TOOLS_EDITPERLRE:
-         EditFile(re_filterfile);
+         EditFile(g_re_filterfile);
          break;
 #endif
 
 #ifdef TRUST_FILES
       case ID_TOOLS_EDITTRUST:
-         EditFile(trustfile);
+         EditFile(g_trustfile);
          break;
 #endif /* def TRUST_FILES */
 
@@ -1143,20 +1153,20 @@ void OnLogCommand(int nCommand)
 void OnLogInitMenu(HMENU hmenu)
 {
    /* Only enable editors if there is a file to edit */
-   EnableMenuItem(hmenu, ID_TOOLS_EDITPERMISSIONS, MF_BYCOMMAND | (permissions_file ? MF_ENABLED : MF_GRAYED));
-   EnableMenuItem(hmenu, ID_TOOLS_EDITBLOCKERS, MF_BYCOMMAND | (blockfile ? MF_ENABLED : MF_GRAYED));
-   EnableMenuItem(hmenu, ID_TOOLS_EDITFORWARD, MF_BYCOMMAND | (forwardfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITPERMISSIONS, MF_BYCOMMAND | (g_permissions_file ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITBLOCKERS, MF_BYCOMMAND | (g_blockfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITFORWARD, MF_BYCOMMAND | (g_forwardfile ? MF_ENABLED : MF_GRAYED));
 #ifdef ACL_FILES
-   EnableMenuItem(hmenu, ID_TOOLS_EDITACLS, MF_BYCOMMAND | (aclfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITACLS, MF_BYCOMMAND | (g_aclfile ? MF_ENABLED : MF_GRAYED));
 #endif /* def ACL_FILES */
 #ifdef USE_IMAGE_LIST
-   EnableMenuItem(hmenu, ID_TOOLS_EDITIMAGE, MF_BYCOMMAND | (imagefile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITIMAGE, MF_BYCOMMAND | (g_imagefile ? MF_ENABLED : MF_GRAYED));
 #endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
-   EnableMenuItem(hmenu, ID_TOOLS_EDITPERLRE, MF_BYCOMMAND | (re_filterfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITPERLRE, MF_BYCOMMAND | (g_re_filterfile ? MF_ENABLED : MF_GRAYED));
 #endif
 #ifdef TRUST_FILES
-   EnableMenuItem(hmenu, ID_TOOLS_EDITTRUST, MF_BYCOMMAND | (trustfile ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITTRUST, MF_BYCOMMAND | (g_trustfile ? MF_ENABLED : MF_GRAYED));
 #endif /* def TRUST_FILES */
 
    /* Check/uncheck options */

@@ -4,7 +4,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/config.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: config.h,v $
+ *    Revision 1.4  2001/05/25 22:17:28  jongfoster
+ *    Resurrecting these files which are required for the MS Visual C++
+ *    build only.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -124,6 +128,11 @@
  * Bypass filtering for 1 page only
  */
 #define FORCE_LOAD 1
+
+/*
+ * Locally redirect remote script-redirect URLs
+ */
+#define FAST_REDIRECTS 1
 
 /*
  * Split the show-proxy-args page into a page for each config file.

@@ -1,6 +1,6 @@
 #ifndef _W32RES_H
 #define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,19 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.2  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -86,7 +99,6 @@
 #ifdef TOGGLE
 #define ID_TOGGLE_IJB                     4012
 #endif
-#define ID_RELOAD_CONFIG                  4013
 
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITJUNKBUSTER           5000

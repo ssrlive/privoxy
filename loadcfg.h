@@ -1,6 +1,6 @@
 #ifndef _LOADCFG_H
 #define _LOADCFG_H
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.3 2001/05/20 01:21:20 jongfoster Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.4 2001/05/22 18:46:04 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -37,6 +37,50 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.4  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.3  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -77,79 +121,7 @@ extern "C" {
 extern int g_bToggleIJB;
 #endif
 
-extern int debug;
-extern int multi_threaded;
-
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
-extern int tinygif;
-extern const char *tinygifurl;
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
-
-extern const char *logfile;
-
 extern const char *configfile;
-
-#ifdef ACL_FILES
-extern const char *aclfile;
-#endif /* def ACL_FILES */
-
-extern const char *blockfile;
-extern const char *permissions_file;
-extern const char *forwardfile;
-
-#ifdef USE_IMAGE_LIST
-extern const char *imagefile;
-#endif /* def USE_IMAGE_LIST */
-
-#ifdef TRUST_FILES
-extern const char *trustfile;
-#endif /* def TRUST_FILES */
-
-#ifdef PCRS
-extern const char *re_filterfile;
-#endif /* def PCRS */
-
-#ifdef FAST_REDIRECTS
-extern int fast_redirects;
-#endif /* def FAST_REDIRECTS */
-
-extern int default_permissions;
-
-#ifdef JAR_FILES
-extern const char *jarfile;
-extern FILE *jar;
-#endif /* def JAR_FILES */
-
-extern const char *referrer;
-extern const char *uagent;
-extern const char *from;
-
-#ifndef SPLIT_PROXY_ARGS
-extern const char *suppress_message;
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-extern int suppress_vanilla_wafer;
-extern int add_forwarded;
-
-extern struct list wafer_list[];
-extern struct list xtra_list[];
-
-#ifdef TRUST_FILES
-extern struct list trust_info[];
-extern struct url_spec *trust_list[];
-#endif /* def TRUST_FILES */
-
-extern const char *haddr;
-extern int   hport;
-
-#ifndef SPLIT_PROXY_ARGS
-extern int suppress_blocklists;  /* suppress listing sblock and simage */
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-extern struct proxy_args proxy_args[1];
-
-extern int configret; /* FIXME: This is obsolete, always 0. */
-extern int config_changed;
 
 
 /* The load_config function is now going to call:
@@ -161,7 +133,7 @@ extern int Argc;
 extern const char **Argv;
 
 
-extern void load_config( int );
+extern struct configuration_spec * load_config(void);
 
 
 /* Revision control strings from this header and associated .c file */

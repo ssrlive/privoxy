@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.7 2001/05/25 22:34:30 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.8 2001/05/25 22:43:18 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.7 2001/05/25 22:34:30 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.8  2001/05/25 22:43:18  jongfoster
+ *    Fixing minor memory leak and buffer overflow.
+ *
  *    Revision 1.7  2001/05/25 22:34:30  jongfoster
  *    Hard tabs->Spaces
  *
@@ -428,7 +431,7 @@ static void chat(struct client_state *csp)
          IS_TRUSTED_URL
          (p = block_url(http, csp))
 #ifdef FAST_REDIRECTS
-         || (fast_redirects && (p = redirect_url(http, csp))) 
+         || (csp->config->fast_redirects && (p = redirect_url(http, csp))) 
 #endif /* def FAST_REDIRECTS */
       ))
    {
@@ -440,25 +443,26 @@ static void chat(struct client_state *csp)
 
 #if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
       /* Block as image?  */
-      if ( (tinygif > 0) && block_imageurl(http, csp) )
+      if ( (csp->config->tinygif > 0) && block_imageurl(http, csp) )
       {
          /* Send "blocked" image */
          log_error(LOG_LEVEL_GPC, "%s%s image crunch!",
                    http->hostport, http->path);
 
-         if ((tinygif == 2) || strstr(http->path, "ijb-send-banner"))
+         if ((csp->config->tinygif == 2) || strstr(http->path, "ijb-send-banner"))
          {
             write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
          }
-         else if (tinygif == 1)
+         else if (csp->config->tinygif == 1)
          {
             write_socket(csp->cfd, BLANKGIF, sizeof(BLANKGIF)-1);
          }
-         else if ((tinygif == 3) && (tinygifurl))
+         else if ((csp->config->tinygif == 3) && (csp->config->tinygifurl))
          {
             freez(p);
-            p = (char *)malloc(sizeof(HTTP_REDIRECT_TEMPLATE) + strlen(tinygifurl));
-            sprintf(p, HTTP_REDIRECT_TEMPLATE, tinygifurl);
+            p = (char *)malloc(sizeof(HTTP_REDIRECT_TEMPLATE) 
+              + strlen(csp->config->tinygifurl));
+            sprintf(p, HTTP_REDIRECT_TEMPLATE, csp->config->tinygifurl);
             write_socket(csp->cfd, p, strlen(p));
          }
          else
@@ -970,21 +974,7 @@ int main(int argc, const char *argv[])
       configfile = argv[1];
    }
 
-   remove_all_loaders();
-   memset( proxy_args, 0, sizeof( proxy_args ) );
    files->next = NULL;
-
-   load_config( 0 );
-
-   /*
-    * Since load_config acts as a signal handler too, it returns
-    * its status in configret.  Check it for an error in loading.
-    */
-   if ( 0 != configret )
-   {
-      /* load config failed!  Exit with error. */
-      return( 1 );
-   }
 
 #ifdef _WIN32
    InitWin32();
@@ -994,7 +984,6 @@ int main(int argc, const char *argv[])
 #ifndef _WIN32
    signal(SIGPIPE, SIG_IGN);
    signal(SIGCHLD, SIG_IGN);
-   signal(SIGHUP, load_config);
 
 #else /* ifdef _WIN32 */
 # ifdef _WIN_CONSOLE
@@ -1030,23 +1019,28 @@ static void listen_loop(void)
 {
    struct client_state *csp = NULL;
    int bfd;
+   struct configuration_spec * config;
+
+   config = load_config();
 
    log_error(LOG_LEVEL_CONNECT, "bind (%s, %d)",
-             haddr ? haddr : "INADDR_ANY", hport);
+             config->haddr ? config->haddr : "INADDR_ANY", config->hport);
 
-   bfd = bind_port(haddr, hport);
-   config_changed = 0;
+   bfd = bind_port(config->haddr, config->hport);
 
    if (bfd < 0)
    {
       log_error(LOG_LEVEL_FATAL, "can't bind %s:%d: %E "
          "- There may be another junkbuster or some other "
          "proxy running on port %d", 
-         (NULL != haddr) ? haddr : "INADDR_ANY", hport, hport
+         (NULL != config->haddr) ? config->haddr : "INADDR_ANY", 
+         config->hport, config->hport
       );
       /* shouldn't get here */
       return;
    }
+
+   config->need_bind = 0;
 
 
    while (FOREVER)
@@ -1070,7 +1064,9 @@ static void listen_loop(void)
       csp->active = 1;
       csp->sfd    = -1;
 
-      if ( config_changed )
+      csp->config = config = load_config();
+
+      if ( config->need_bind )
       {
          /*
           * Since we were listening to the "old port", we will not see
@@ -1084,13 +1080,26 @@ static void listen_loop(void)
           * request.  This should not be a so common of an operation
           * that this will hurt people's feelings.
           */
+
          close_socket(bfd);
 
          log_error(LOG_LEVEL_CONNECT, "bind (%s, %d)",
-                   haddr ? haddr : "INADDR_ANY", hport);
-         bfd = bind_port(haddr, hport);
+                   config->haddr ? config->haddr : "INADDR_ANY", config->hport);
+         bfd = bind_port(config->haddr, config->hport);
 
-         config_changed = 0;
+         if (bfd < 0)
+         {
+            log_error(LOG_LEVEL_FATAL, "can't bind %s:%d: %E "
+               "- There may be another junkbuster or some other "
+               "proxy running on port %d", 
+               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", 
+               config->hport, config->hport
+            );
+            /* shouldn't get here */
+            return;
+         }
+
+         config->need_bind = 0;
       }
 
       log_error(LOG_LEVEL_CONNECT, "accept connection ... ");
@@ -1127,7 +1136,7 @@ static void listen_loop(void)
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
 
-      if (multi_threaded)
+      if (config->multi_threaded)
       {
          int child_id;
 

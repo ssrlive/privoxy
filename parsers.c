@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.4 2001/05/22 18:46:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,50 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.3 2001/05/20 01:21:20 jongfoster 
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.4  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.3  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -782,18 +826,18 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
 
    csp->referrer = strdup(s);
 
-   if (referrer == NULL)
+   if (csp->config->referrer == NULL)
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
-   if (*referrer == '.')
+   if (*csp->config->referrer == '.')
    {
       return(strdup(s));
    }
 
-   if (*referrer == '@')
+   if (*csp->config->referrer == '@')
    {
       if (csp->permissions & PERMIT_COOKIE_READ)
       {
@@ -811,7 +855,7 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
     * to fool stupid checks for in-site links
     */
 
-   if (*referrer == '§' || *referrer == 'L')
+   if (*csp->config->referrer == '§' || *csp->config->referrer == 'L')
    {
       if (csp->permissions & PERMIT_COOKIE_READ)
       {
@@ -831,7 +875,7 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
    log_error(LOG_LEVEL_HEADER, "modified");
 
    s = strsav( NULL, "Referer: " );
-   s = strsav( s, referrer );
+   s = strsav( s, csp->config->referrer );
    return(s);
 
 }
@@ -865,18 +909,18 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
    }
 #endif /* def DETECT_MSIE_IMAGES */
 
-   if (uagent == NULL)
+   if (csp->config->uagent == NULL)
    {
       log_error(LOG_LEVEL_HEADER, "default");
       return(strdup(DEFAULT_USER_AGENT));
    }
 
-   if (*uagent == '.')
+   if (*csp->config->uagent == '.')
    {
       return(strdup(s));
    }
 
-   if (*uagent == '@')
+   if (*csp->config->uagent == '@')
    {
       if (csp->permissions & PERMIT_COOKIE_READ)
       {
@@ -892,7 +936,7 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
    log_error(LOG_LEVEL_HEADER, "modified");
 
    s = strsav( NULL, "User-Agent: " );
-   s = strsav( s, uagent );
+   s = strsav( s, csp->config->uagent );
    return(s);
 
 }
@@ -914,18 +958,18 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (uagent == NULL)
+   if (csp->config->uagent == NULL)
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
-   if (*uagent == '.')
+   if (*csp->config->uagent == '.')
    {
       return(strdup(s));
    }
 
-   if (*uagent == '@')
+   if (*csp->config->uagent == '@')
    {
       if (csp->permissions & PERMIT_COOKIE_READ)
       {
@@ -963,13 +1007,13 @@ char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
 char *client_from(const struct parsers *v, char *s, struct client_state *csp)
 {
    /* if not set, zap it */
-   if (from == NULL)
+   if (csp->config->from == NULL)
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
-   if (*from == '.')
+   if (*csp->config->from == '.')
    {
       return(strdup(s));
    }
@@ -977,7 +1021,7 @@ char *client_from(const struct parsers *v, char *s, struct client_state *csp)
    log_error(LOG_LEVEL_HEADER, " modified");
 
    s = strsav( NULL, "From: " );
-   s = strsav( s, from );
+   s = strsav( s, csp->config->from );
    return(s);
 
 }
@@ -1036,7 +1080,7 @@ char *client_send_cookie(const struct parsers *v, char *s, struct client_state *
  *********************************************************************/
 char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (add_forwarded)
+   if (csp->config->add_forwarded)
    {
       csp->x_forwarded = strdup(s);
    }
@@ -1121,7 +1165,7 @@ void client_cookie_adder(struct client_state *csp)
       tmp = strsav(tmp, l->str);
    }
 
-   for (l = wafer_list->next;  l ; l = l->next)
+   for (l = csp->config->wafer_list->next;  l ; l = l->next)
    {
       if (tmp)
       {
@@ -1166,7 +1210,7 @@ void client_xtra_adder(struct client_state *csp)
 {
    struct list *l;
 
-   for (l = xtra_list->next; l ; l = l->next)
+   for (l = csp->config->xtra_list->next; l ; l = l->next)
    {
       log_error(LOG_LEVEL_HEADER, "addh: %s", l->str);
       enlist(csp->headers, l->str);
@@ -1191,7 +1235,10 @@ void client_x_forwarded_adder(struct client_state *csp)
 {
    char *p = NULL;
 
-   if (add_forwarded == 0) return;
+   if (csp->config->add_forwarded == 0)
+   {
+      return;
+   }
 
    if (csp->x_forwarded)
    {
@@ -1230,9 +1277,9 @@ void client_x_forwarded_adder(struct client_state *csp)
 char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp)
 {
 #ifdef JAR_FILES
-   if (jar)
+   if (csp->config->jar)
    {
-      fprintf(jar, "%s\t%s\n", csp->http->host, (s + v->len + 1));
+      fprintf(csp->config->jar, "%s\t%s\n", csp->http->host, (s + v->len + 1));
    }
 #endif /* def JAR_FILES */
 
