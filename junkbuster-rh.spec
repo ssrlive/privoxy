@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.19 2001/10/15 03:23:59 hal9 Exp $
+# $Id: junkbuster-rh.spec,v 1.20 2001/10/24 15:45:49 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.20  2001/10/24 15:45:49  hal9
+# To keep Thomas happy (aka correcting my  mistakes)
+#
 # Revision 1.19  2001/10/15 03:23:59  hal9
 # Nits.
 #
@@ -100,10 +103,13 @@ BuildRequires: perl
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
-The Internet Junkbuster stops your browser from displaying the
-advertisement images that pervade many commercial web pages.  Since
-your browser has to download fewer images, surfing the web should be
-faster. 
+Internet Junkbuster is a web proxy with advanced filtering
+capabilities for protecting privacy, filtering web page content,
+managing cookies, controlling access, and removing ads, banners,
+pop-ups and other obnoxious Internet Junk. Junkbuster has a very
+flexible configuration and can be customized to suit individual needs
+and tastes. Internet Junkbuster has application for both stand-alone
+systems and multi-user networks.
 
 %define ijbconf %{_sysconfdir}/junkbuster
 
