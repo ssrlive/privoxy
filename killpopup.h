@@ -1,6 +1,6 @@
 #ifndef KILLPOPUP_H_INCLUDED
 #define KILLPOPUP_H_INCLUDED
-#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.4 2001/07/30 22:08:36 jongfoster Exp $"
+#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.5 2001/07/31 14:44:22 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: killpopup.h,v $
+ *    Revision 1.5  2001/07/31 14:44:22  oes
+ *    Deleted unused size parameter from filter_popups()
+ *
  *    Revision 1.4  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -72,7 +75,7 @@ extern "C" {
 
 #ifdef FEATURE_KILL_POPUPS
 
-extern void filter_popups(char *buff);
+extern void filter_popups(char *buff, struct client_state *csp);
 
 #endif /* def FEATURE_KILL_POPUPS */
 
