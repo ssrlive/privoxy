@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.56 2002/04/03 22:28:03 gliptak Exp $
+# $Id: GNUmakefile.in,v 1.57 2002/04/04 00:36:36 gliptak Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -527,7 +527,13 @@ dok-man: doc/source/ldpOK.dsl
           $(MAKE) groff2html; \
 	fi
 
-dok: dok-devel dok-user dok-faq dok-man
+readme: doc/source/ldpOK.dsl
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks readme.sgml > tmp.html &&\
+     lynx -dump tmp.html > ../../README && rm -rf tmp.html 
+     # kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
+
+dok: dok-devel dok-user dok-faq dok-man readme
 ## kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -557,6 +563,8 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+## readme
+	$(MAKE) redhat-readme
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
@@ -569,6 +577,13 @@ man2html:
      else \
           $(MAKE) groff2html; \
 	fi
+
+## Make README
+redhat-readme: doc/source/ldpOK.dsl
+	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html && $(WDUMP) \
+          tmp.html > ../../README && rm -rf tmp.html
+     # kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
 
 #############################################################################
 #
@@ -699,6 +714,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.57  2002/04/04 00:36:36  gliptak
+# always use pcre for matching
+#
 # Revision 1.56  2002/04/03 22:28:03  gliptak
 # Removed references to gnu_regex
 #
