@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.12 2002/03/03 09:18:03 joergs Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.13 2002/03/04 02:07:59 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.12 2002/03/03 09:18:03 joergs Exp
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.13  2002/03/04 02:07:59  david__schmidt
+ *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
+ *
  *    Revision 1.12  2002/03/03 09:18:03  joergs
  *    Made jumbjuster work on AmigaOS again.
  *
@@ -1740,7 +1743,9 @@ static jb_err get_file_name_param(struct client_state *csp,
 {
    const char *param;
    const char *s;
+#if 0 /* Patch to make 3.0.0 work properly. */
    char *name;
+#endif /* 0 - Patch to make 3.0.0 work properly. */
    char *fullpath;
    char ch;
    int len;
@@ -1784,6 +1789,13 @@ static jb_err get_file_name_param(struct client_state *csp,
       }
    }
 
+   /*
+    * FIXME Following is a hack to make 3.0.0 work properly.
+    * Change "#if 0" --> "#if 1" below when we have modular action
+    * files.
+    *    -- Jon
+    */
+#if 0 /* Patch to make 3.0.0 work properly. */
    /* Append extension */
    name = malloc(len + strlen(suffix) + 1);
    if (name == NULL)
@@ -1796,6 +1808,16 @@ static jb_err get_file_name_param(struct client_state *csp,
    /* Prepend path */
    fullpath = make_path(csp->config->confdir, name);
    free(name);
+#else /* 1 - Patch to make 3.0.0 work properly. */
+   if ((csp->actions_list == NULL)
+    || (csp->actions_list->filename == NULL))
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   fullpath = ( (csp->actions_list && csp->actions_list->filename)
+             ? strdup(csp->actions_list->filename) : NULL);
+#endif /* 1 - Patch to make 3.0.0 work properly. */
    if (fullpath == NULL)
    {
       return JB_ERR_MEMORY;

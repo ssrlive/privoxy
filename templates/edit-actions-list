@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.8  2002/03/03 10:29:12  swa
+#    point users to the right feedback forms,
+#    not necessarily the developer list.
+#
 #    Revision 1.7  2002/01/23 00:26:45  jongfoster
 #    Reducing length of URLs
 #    Where encoded and unencoded versions of a string existed, removing
@@ -92,7 +96,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
-<title>JunkBuster: Edit actions file - @f@.action</title>
+<title>JunkBuster: Edit actions file</title>
 
 <style type="text/css">
 body {
@@ -241,7 +245,7 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <table cellpadding="20" cellspacing="10" border="0" width="100%">
   <tr>
     <td class="light">
-      <h2>Editing Actions File - @f@.action</h2>
+      <h2>Editing Actions File</h2>
       <p><a class="cmd" href="edit-actions-section-add?f=@f@&amp;v=@v@&amp;s=0">Insert new section at top</a></p>
     </td>
   </tr>
