@@ -3,15 +3,15 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "14 May 2002" "Privoxy 2.9.15 beta" ""
+.TH "PRIVOXY" "1" "05 September 2002" "Privoxy 3.1.1 alpha" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
 
-\fBprivoxy\fR [\fB--help\fR]  [\fB--version\fR]  [\fB--no-daemon\fR]  [\fB--pidfile \fIpidfile\fB\fR]  [\fB--user \fIuser[.group]\fB\fR]  [\fB\fIconfigfile\fB\fR] \fB(UNIX)\fR
+\fBprivoxy\fR [\fB--help\fR ] [\fB--version\fR ] [\fB--no-daemon\fR ] [\fB--pidfile \fIpidfile\fB\fR ] [\fB--user \fIuser[.group]\fB\fR ] [\fB\fIconfigfile\fB\fR ]\fB (UNIX)\fR
 
 
-\fBprivoxy.exe\fR [\fB\fIconfigfile\fB\fR] \fB(Windows)\fR
+\fBprivoxy.exe\fR [\fB\fIconfigfile\fB\fR ]\fB (Windows)\fR
 
 .SH "OPTIONS"
 .PP
@@ -75,7 +75,8 @@ For Internet Explorer, go through: \fBTools\fR;
 \fBLAN Settings\fR. 
 .PP
 The Secure (SSL) Proxy should also be set to the same values, otherwise
-https: URLs will not be proxied. 
+https: URLs will not be proxied. Note: \fBPrivoxy\fR can only
+proxy HTTP and HTTPS traffic. Do not try it with FTP or other protocols.
 .PP
 For other browsers, check the documentation.
 .SH "CONFIGURATION"
@@ -92,16 +93,18 @@ these files are in the same directory as the \fBPrivoxy\fR
 executable.
 .PP
 The name and number of configuration files has changed from previous
-versions, and is subject to change as development progresses. In fact, the
-configuration itself is changed  and  much more sophisticated. See the
-user-manual for a
-complete explanation of all configuration options and general usage.
+versions, and is subject to change as development
+progresses. In fact, the configuration itself is changed  and  much more
+sophisticated. See the user-manual for a complete
+explanation of all configuration options and general usage, and notes for 
+upgrading from \fBJunkbuster\fR and earlier \fBPrivoxy\fR
+versions.
 .PP
 The actions list (ad blocks, etc) can also be configured with your
 web browser at http://config.privoxy.org/.
 \fBPrivoxy's\fR configuration parameters  can also  be viewed at
 the same page. In addition, \fBPrivoxy\fR can be toggled on/off.
-This is an internal page.
+This is an internal page, and does not require Internet access.
 .SH "SAMPLE CONFIGURATION"
 .PP
 A brief example of what a simple \fIdefault.action\fR
@@ -225,10 +228,10 @@ config file changes by \fBSIGHUP\fR -- it will detect them
 automatically. 
 .SH "NOTES"
 .PP
-This is a beta version of \fBPrivoxy\fR. Not 
+This is a alpha version of \fBPrivoxy\fR. Not 
 all features are well tested.
 .PP
-Please see the \fIuser-manual\fR on how to contact the
+Please see the \fIUser Manual\fR on how to contact the
 developers for feature requests, reporting problems, and other questions.
 .SH "SEE ALSO"
 .PP
@@ -237,26 +240,42 @@ users:
 .PP
 
 http://www.privoxy.org/, 
-The \fBPrivoxy\fR Home page. 
+the \fBPrivoxy\fR Home page. 
 
-http://sourceforge.net/projects/ijbswa, 
+http://www.privoxy.org/faq/, 
+the \fBPrivoxy\fR FAQ. 
+
+http://sourceforge.net/projects/ijbswa/, 
 the Project Page for \fBPrivoxy\fR on 
-Sourceforge.
+SourceForge.
 
-http://p.p/, access
-\fBPrivoxy\fR from your browser. Alternately, 
-http://config.privoxy.org
-may work in some situations where the first does not.
+http://config.privoxy.org/,
+the web-based user interface. \fBPrivoxy\fR must be
+running for this to work. Shortcut: http://p.p/
 
-http://p.p/ to submit ``misses'' to the developers. 
+http://www.privoxy.org/actions/, to submit ``misses'' to the developers. 
 
-http://www.junkbusters.com/ht/en/cookies.html
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/contrib/, cool
+and fun ideas from \fBPrivoxy\fR users.
 
-http://www.waldherr.org/junkbuster/
+http://www.junkbusters.com/ht/en/cookies.html,
+an explanation how cookies are used to track web users.
 
-http://privacy.net/analyze/
+http://www.junkbusters.com/ijb.html,
+the original Internet Junkbuster.
 
-http://www.squid-cache.org/
+http://www.waldherr.org/junkbuster/,
+Stefan Waldherr's version of Junkbuster, from which \fBPrivoxy\fR was
+derived.
+
+http://privacy.net/analyze/, a useful site
+to check what information about you is leaked while you browse the web.
+
+http://www.squid-cache.org/, a very popular
+caching proxy, which is often used together with \fBPrivoxy\fR.
+
+http://www.privoxy.org/developer-manual/, 
+the \fBPrivoxy\fR developer manual. 
 .SH "DEVELOPMENT TEAM"
 
 .nf
@@ -266,13 +285,17 @@ http://www.squid-cache.org/
  Thomas Steudten
  Rodney Stromlund
  Rodrigo Barbosa (RPM specfiles)
+ Moritz Barsnick
  Hal Burgiss (docs)
+ Karsten Hopp (Red Hat)
  Alexander Lazic
  Gábor Lipták
  Guy
  Haroon Rafique
+ Roland Rosenfeld (Debian)
+ Georg Sauthoff (Gentoo)
  David Schmidt (OS/2, Mac OSX ports)
- Joerg Strohmayer
+ Joerg Strohmayer (Amiga)
  Sarantis Paskalis
 .fi
 .SH "COPYRIGHT AND LICENSE"
