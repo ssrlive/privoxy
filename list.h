@@ -1,6 +1,6 @@
 #ifndef _LIST_H
 #define _LIST_H
-#define LIST_H_VERSION "$Id: list.h,v 1.2 2001/06/01 18:49:17 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.3 2001/06/03 11:03:48 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.3  2001/06/03 11:03:48  oes
+ *    introduced functions for new list type "map": map(), lookup(),
+ *    free_map(), and extended enlist_unique
+ *
  *    Revision 1.2  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
  *    worth the extra complexity.
@@ -68,16 +72,18 @@ extern "C" {
 
 extern void enlist(struct list *h, const char *s);
 extern void enlist_unique(struct list *header, const char *str, int n);
+extern void enlist_unique_header(struct list *header, const char *name, const char *value);
 extern void enlist_first(struct list *header, const char *str);
+
 extern int   list_remove_item(struct list *header, const char *str);
 
 extern void  list_append_list_unique(struct list *dest, const struct list *src);
 extern void  list_append_list_unique(struct list *dest, const struct list *src);
 extern int   list_remove_list(struct list *header, const struct list *to_remove);
+
 extern void  list_duplicate(struct list *dest, const struct list *src);
 
 extern void  destroy_list(struct list *h);
-
 extern char *list_to_text(struct list *h);
 
 extern struct map* map(struct map* map, char *name, int nc, char *value, int vc);
