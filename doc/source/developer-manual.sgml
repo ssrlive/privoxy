@@ -3,6 +3,10 @@
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
+<!entity history SYSTEM "history.sgml">
+<!entity seealso SYSTEM "seealso.sgml">
+<!entity contacting SYSTEM "contacting.sgml">
+<!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
 <!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
@@ -17,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $
+ $Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -31,7 +35,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1320,7 +1324,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1380,7 +1384,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2055,28 +2059,34 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="contact"><title>Contact the developers</title>
-    <para>
-     Please see the contact page in the <ulink
-     url="../user-manual/contact.html">user-manual</ulink> for details.
-    </para>
+<!-- Include contacting.sgml  -->
+ &contacting;
+<!-- end contacting -->
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="copyright"><title>Copyright and History</title>
-    <para>
-     Please see the <ulink
-     url="../user-manual/copyright.html#HISTORY">user-manual</ulink> for
-     information on Copyright and History.
-  </para>
+
+<sect2><title>Copyright</title>
+<!-- Include copyright.sgml -->
+ &copyright;
+<!-- end -->
+</sect2>
+
+<sect2><title>History</title>
+<!-- Include history.sgml -->
+ &history;
+<!-- end -->
+</sect2>
+
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="seealso"><title>See also</title>
-    <para>
-      Please see the <ulink
-      url="../user-manual/seealso.html">user-manual</ulink> for others
-      references.
-    </para>
+<!-- Include seealso.sgml -->
+ &seealso;
+<!-- end  -->
+
   </sect1>
 
   <!--
@@ -2100,6 +2110,13 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.21  2002/04/04 06:48:37  hal9
+  Structural changes to allow for conditional inclusion/exclusion of content
+  based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And
+  definition of internal entities, e.g. 'entity p-version "2.9.13"' that will
+  eventually be set by Makefile.
+  More boilerplate text for use across multiple docs.
+
   Revision 1.20  2002/04/04 03:28:27  david__schmidt
   Add Mac OSX section
 

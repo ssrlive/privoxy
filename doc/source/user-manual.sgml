@@ -6,6 +6,8 @@
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity buildsource SYSTEM "buildsource.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
+<!entity history SYSTEM "history.sgml">
+<!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
 <!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
@@ -22,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.65 2002/04/03 19:52:07 swa Exp $
+ $Id: user-manual.sgml,v 1.66 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -37,7 +39,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.65 2002/04/03 19:52:07 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.66 2002/04/04 06:48:37 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -60,15 +62,14 @@
 
  <para>
   The user manual gives users information on how to install, configure and use
-  <application>Privoxy</application>. <application>Privoxy</application> is a
-  web proxy with advanced filtering capabilities for protecting privacy,
-  filtering web page content, managing cookies, controlling access, and
-  removing ads, banners, pop-ups and other obnoxious Internet
-  Junk. <application>Privoxy</application> has a very flexible configuration
-  and can be customized to suit individual needs and
-  tastes. <application>Privoxy</application> has application for both
-  stand-alone systems and multi-user networks.
- </para>
+  <application>Privoxy</application>.
+  </para>
+
+<!--
+ Include privoxy.sgml boilerplate:
+-->
+ &p-intro;
+
  <para>
   You can find the latest version of the user manual at  <ulink
   url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
@@ -85,10 +86,6 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="introduction"><title>Introduction</title>
-
-<!-- Include privoxy.sgml boilerplate: -->
- &p-intro;
-<!-- end boilerplate -->
 
 <para>
  This documentation is included with the current &p-status; version of
@@ -3174,42 +3171,10 @@ Requests</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="copyright"><title>Copyright and History</title>
 
-<sect2>
-<title>License</title>
-<para>
- <application>Privoxy</application> is free software; you can
- redistribute it and/or modify it under the terms of the GNU General Public
-<!-- 
- <informalfigure float="0">
-    <mediaobject>
-       <imageobject>
-          <imagedata fileref="gnu.jpg" format="jpg">
-       </imageobject>
-       <textobject>
-          <phrase>GNU's Pet GNU</phrase>
-       </textobject>
-    </mediaobject>
- </informalfigure>
---> 
- License as published by the Free Software Foundation; either version 2 of the
- License, or (at your option) any later version.
-</para>
-
-<para>
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- details, which is available from the Free Software Foundation,
- Inc, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-</para>
-
-<para>
- You should have received a copy of the <ulink
- url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</ulink>
- along with this program; if not, write to the Free Software Foundation, Inc.,
- 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
-</para>
-
+<sect2><title>Copyright</title>
+<!-- Include copyright.sgml: -->
+ &copyright;
+<!-- end copyright -->
 </sect2>
 
 <!--  ~  End section  ~  -->
@@ -3217,41 +3182,18 @@ Requests</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2 id="history">
-<title>History</title>
-<para>
- <application>Privoxy</application> is evolved, and derived from, 
- <application>the Internet Junkbuster</application>, with many 
- improvments and enhancements over the original.
-</para>
-
-<para>
- <application>Junkbuster</application> was originally written by Anonymous
- Coders and <ulink
- url="http://www.junkbusters.com">Junkbuster's
- Corporation</ulink>, and was released as free open-source software under the
- GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
- Waldherr</ulink> made many improvements, and started the <ulink
- url="http://sourceforge.net/projects/ijbswa/">SourceForge project
- Privoxy</ulink> to rekindle development. There are now several active
- developers contributing.  The last stable release of
- <application>Junkbuster</application> was v2.0.2, which has now
- grown whiskers ;-).
-</para>
-
+<sect2 id="history"><title>History</title>
+<!-- Include history.sgml: -->
+ &history;
+<!-- end history -->
 </sect2>
-
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See Also</title>
-
 <!-- Include seealso.sgml: -->
-
  &seealso;
-
-<!-- end boilerplate -->
-
+<!-- end seealso -->
 </sect1>
 
 
@@ -3987,6 +3929,13 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.66  2002/04/04 06:48:37  hal9
+ Structural changes to allow for conditional inclusion/exclusion of content
+ based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And
+ definition of internal entities, e.g. 'entity p-version "2.9.13"' that will
+ eventually be set by Makefile.
+ More boilerplate text for use across multiple docs.
+
  Revision 1.65  2002/04/03 19:52:07  swa
  enhance squid section due to user suggestion
 

@@ -1,0 +1,36 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/seealso.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: seealso.sgml,v 1.1 2002/04/02 01:48:33 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+-->
+
+<para>
+ <application>Privoxy</application> is evolved, and derived from, 
+ <application>the Internet Junkbuster</application>, with many 
+ improvments and enhancements over the original.
+</para>
+
+<para>
+ <application>Junkbuster</application> was originally written by Anonymous
+ Coders and <ulink
+ url="http://www.junkbusters.com">Junkbuster's
+ Corporation</ulink>, and was released as free open-source software under the
+ GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
+ Waldherr</ulink> made many improvements, and started the <ulink
+ url="http://sourceforge.net/projects/ijbswa/">SourceForge project
+ Privoxy</ulink> to rekindle development. There are now several active
+ developers contributing.  The last stable release of
+ <application>Junkbuster</application> was v2.0.2, which has now
+ grown whiskers ;-).
+</para>
+
+
