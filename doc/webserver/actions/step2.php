@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step2.php,v 1.11 2002/04/07 15:00:20 oes Exp $
+  $Id: step2.php,v 1.12 2002/04/08 17:04:05 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.12  2002/04/08 17:04:05  oes
+  Adapt to unified stylesheet
+
   Revision 1.11  2002/04/07 15:00:20  oes
   Descand into framesets to harvest all image URLs
 
@@ -71,6 +74,7 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
   <link rel="stylesheet" type="text/css" href="../privoxy.css">
   <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
