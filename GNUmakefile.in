@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.132 2002/10/24 22:24:58 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.133 2002/10/28 02:12:22 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1053,11 +1053,11 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 
 	# config files and dir, and maybe old install backups
 	-if [ -d $(CONF_DEST) ]; then \
-		$(ECHO) Saving $(PROGRAM) config files ;\
+		$(ECHO) Saving $(PROGRAM) config files to /tmp/$(PROGRAM)-save ;\
 		$(MKDIR) /tmp/$(PROGRAM)-save ;\
 		cd $(CONF_DEST) ;\
 		for i in $(CONFIGS); do \
-			[ -f $$i ] && $(CP) -v $$i /tmp/$(PROGRAM)-save ;\
+			[ -f $$i ] && $(CP) $$i /tmp/$(PROGRAM)-save ;\
 		done ;\
 	fi
 	$(ECHO) Removing $(PROGRAM) config files
@@ -1133,6 +1133,15 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.133  2002/10/28 02:12:22  hal9
+# Make install/uninstall:
+# - More cleanup of variables
+# - Make the minimum requirement for root install, an available non-root GROUP.
+#   If a privoxy user exists (and no other USER is specified), then the files
+#   that require write access are installed as group owned by privoxy. FIXME:
+#   There has to be a cleaner way to do this.
+# - Uninstall now saves configuration files to /tmp.
+#
 # Revision 1.132  2002/10/24 22:24:58  hal9
 # Make install: Minor clean up for variable handling.
 #
