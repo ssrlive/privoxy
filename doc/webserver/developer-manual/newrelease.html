@@ -4,8 +4,7 @@
 >Releasing a new version</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy Developer Manual"
 HREF="index.html"><LINK
@@ -93,6 +92,9 @@ CLASS="FILENAME"
 >gmake</TT
 > (GNU's version of make), autoconf, cvs, ???.
     </P
+><P
+>        Replace X, Y and Z with the actual version number (X = major, Y = minor, Z = point):
+    </P
 ><DIV
 CLASS="SECT2"
 ><H2
@@ -106,7 +108,7 @@ NAME="BEFORERELEASE"
 CLASS="EMPHASIS"
 >must be done by one of the
        developers</I
-> prior to each new release:
+> prior to each new release.
      </P
 ><P
 >      <P
@@ -128,16 +130,20 @@ CLASS="QUOTE"
 CLASS="FILENAME"
 >configure.in</TT
 > in
-         CVS. Also, the RPM release number in
+         CVS. Also, inrease or reset the RPM release number in
          <TT
 CLASS="FILENAME"
 >configure.in</TT
->. Do NOT touch version information
-         after export from CVS. <I
+> as appropriate. Do <I
+CLASS="EMPHASIS"
+>NOT</I
+>
+         touch version information after export from CVS.
+         <I
 CLASS="EMPHASIS"
 >All packages</I
-> will use the
-         version and release data from <TT
+> will use the version and release data
+         from <TT
 CLASS="FILENAME"
 >configure.in</TT
 >.
@@ -182,9 +188,8 @@ CLASS="QUOTE"
 CLASS="COMMAND"
 >cvs tag v_X_Y_Z</B
 >"</SPAN
-> (where X = major, Y
-        = minor, Z = point). Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work)
-        etc.
+>.
+        Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </P
 ></LI
 ><LI
@@ -316,9 +321,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -406,8 +411,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd ..
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
@@ -554,9 +558,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -636,9 +640,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -688,9 +692,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -740,8 +744,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd ..
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
@@ -869,8 +872,7 @@ CLASS="PROGRAMLISTING"
 >
 	</P
 ><P
->	Choose the right operating system. If you have downloaded Privoxy
-	before,
+>	Choose the right operating system.
 	</P
 ><P
 >	<TABLE
@@ -881,9 +883,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -891,12 +893,7 @@ CLASS="PROGRAMLISTING"
 >
 	</P
 ><P
->	If not, please <A
-HREF="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE"
-TARGET="_top"
->checkout
-	Privoxy via CVS first</A
->. Run:
+>	Run:
 	</P
 ><P
 >	<TABLE
@@ -952,7 +949,7 @@ NAME="NEWRELEASE-TARBALL"
 >8.10. Tarball</A
 ></H2
 ><P
->	Ensure that you have the latest code version. Hence run:
+>	Ensure that you have the right code version. Hence run:
 	</P
 ><P
 >	<TABLE
@@ -963,9 +960,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -984,8 +981,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  make clobber
-  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
 	</PRE
 ></TD
 ></TR
@@ -1054,9 +1050,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -1106,9 +1102,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
@@ -1178,9 +1174,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+>  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</PRE
 ></TD
 ></TR
