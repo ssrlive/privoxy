@@ -15,6 +15,7 @@
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
+<!entity % p-config "IGNORE">
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 ]>
 <!--
@@ -24,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.84 2002/04/18 21:17:13 hal9 Exp $
+ $Id: user-manual.sgml,v 1.85 2002/04/18 21:23:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.84 2002/04/18 21:17:13 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.85 2002/04/18 21:23:23 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -111,8 +112,8 @@
  stable v3.0 is <quote>soon</quote> ;-)]]>.
 </para>
 
-<![%p-not-stable;[
 <!-- include only in non-stable versions -->
+<![%p-not-stable;[
 <para>
  Since this is a &p-status; version, not all new features are well tested. This
  documentation may be slightly out of sync as a result (especially with 
@@ -299,8 +300,8 @@
 </para>
 <para>
  A <quote>filter file</quote> (typically <filename>default.filter</filename>)
- is new with <application>Privoxy 2.9.x</application>, and provides some
- of the new  sophistication (explained below). <filename>config</filename> is 
+ is new as of <application>Privoxy 2.9.x</application>, and provides some
+ of the new sophistication (explained below). <filename>config</filename> is 
  much the same as before.
 </para>
 <para>
@@ -308,9 +309,8 @@
  files, and possibly adapt any personal rules from your older files.
  When porting personal rules over from the old <filename>blockfile</filename>
  to the new actions file, please note that even the pattern syntax has
- changed.
- If upgrading from 2.9.x development versions, it is still recommended 
- to use the new configuration files.
+ changed. If upgrading from 2.9.x development versions, it is still
+ recommended to use the new configuration files.
 </para>
 <para>
  A quick list of things to be aware of before upgrading: 
@@ -389,7 +389,7 @@
  After doing this, flush your browser's disk and memory caches to force a
  re-reading of all pages and to get rid of any ads that may be cached. You 
  are now ready to start enjoying the benefits of using
- <application>Privoxy</application>.
+ <application>Privoxy</application>!
 </para>
 
 
@@ -405,6 +405,10 @@
  # /usr/sbin/privoxy /etc/privoxy/config
  
  </screen>
+</para>
+
+<para>
+ See <link linkend="cmdoptions">below</link> for other command line options.
 </para>
 
 <para>
@@ -519,7 +523,7 @@
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="cmdoptions">
 <title>Command Line Options</title>
 <para>
  <application>Privoxy</application> may be invoked with the following
@@ -534,7 +538,7 @@
     <emphasis>--version</emphasis>
   </para>
   <para>
-     Print version info and exit, Unix only.
+     Print version info and exit. Unix only.
   </para>
  </listitem> 
  <listitem>
@@ -542,7 +546,7 @@
     <emphasis>--help</emphasis>
   </para>
   <para>
-   Print a short usage info and exit, Unix only.
+   Print short usage info and exit. Unix only.
   </para>
  </listitem> 
  <listitem>
@@ -551,7 +555,7 @@
   </para>
   <para>
    Don't become a daemon, i.e. don't fork and become process group
-   leader, don't detach from controlling tty. Unix only.
+   leader, and don't detach from controlling tty. Unix only.
   </para>
  </listitem> 
  <listitem>
@@ -586,7 +590,8 @@
     <application>Privoxy</application> will look for a file named 
     <quote>config</quote> in the current directory (except on Win32 
     where it will look for <quote>config.txt</quote> instead). Specify 
-    full path to avoid confusion.
+    full path to avoid confusion. If no config file is found, 
+    <application>Privoxy</application> will fail to start.
   </para>
  </listitem> 
 
@@ -655,9 +660,9 @@ Please choose from the following options:
  it as a test to see whether it is <application>Privoxy</application> 
  causing the problem or not. <application>Privoxy</application> continues 
  to run as a proxy in this case, but all filtering is disabled. There
- is even a toggle Bookmarklet offered, so that you can toggle
- <application>Privoxy</application> with one click from your browser.
-
+ is even a toggle <link linkend="bookmarklets">Bookmarklet</link> offered, so
+ that you can toggle <application>Privoxy</application> with one click from
+ your browser.
 </para>
 
 </sect2>
@@ -701,7 +706,7 @@ Please choose from the following options:
    <para>
     <filename>default.action</filename> (the actions file) is used to define
     which of a set of various <quote>actions</quote> relating to images, banners, 
-    pop-ups, access restrictions, banners and cookies are to be applied where.
+    pop-ups, access restrictions, banners and cookies are to be applied, and where.
     There is a web based editor for this file that can be accessed at <ulink
     url="http://config.privoxy.org/edit-actions/">http://config.privoxy.org/edit-actions/</ulink>
     (Shortcut: <ulink url="http://p.p/edit-actions/">http://p.p/edit-actions/</ulink>).
@@ -734,7 +739,8 @@ Please choose from the following options:
 
 <para>
  <filename>default.action</filename> and <filename>default.filter</filename> 
- can use Perl style regular expressions for maximum flexibility.
+ can use Perl style <link linkend="regex">regular expressions</link> for
+ maximum flexibility. 
 </para>
 
 <para>
@@ -2153,9 +2159,6 @@ Please choose from the following options:
 
 <sect3>
 <title>Windows GUI Options</title>
-<!--
-Removed references to Win32. HB 09/23/01
--->
 <para>
  <application>Privoxy</application> has a number of options specific to the
  Windows GUI interface:
@@ -2347,6 +2350,13 @@ Removed references to Win32. HB 09/23/01
  accepted only during the current browser session (i.e. not written to disk),
  content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
  See below for a complete list of available actions.
+</para>
+
+<para>
+ An actions file typically has sections. At the top, <quote>aliases</quote> are 
+ defined (discussed below), then the default set of rules which will apply 
+ universally to all sites and pages. And then below that is generally a lengthy 
+ set of exceptions to the defined universal policies.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -2602,16 +2612,16 @@ Removed references to Win32. HB 09/23/01
 <!--  ~  End section  ~  -->
 
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="actions">
 <title>Actions</title>
 <para>
  Actions are enabled if preceded with a <quote>+</quote>, and disabled if 
  preceded with a <quote>-</quote>. Actions are invoked by enclosing the 
  action name in curly braces (e.g. {+some_action}), followed by a list of 
- URLs to which the action applies. There are three classes of actions:
+ URLs (or patterns that match URLs) to which the action applies. There are
+ three classes of actions: 
 </para>
 
 <para>
@@ -2619,8 +2629,9 @@ Removed references to Win32. HB 09/23/01
 
  <listitem>
   <para>  
-   Boolean (e.g. <quote>+/-block</quote>):
-  </para>
+   Boolean, i.e the action can only be <quote>on</quote> or
+   <quote>off</quote>. Examples: 
+ </para>
   <para>
    <literal>
     <msgtext> 
@@ -2636,14 +2647,16 @@ Removed references to Win32. HB 09/23/01
 
  <listitem>
   <para>  
-   parameterized (e.g. <quote>+/-hide-user-agent</quote>):
+   Parameterized, e.g. <quote>+/-hide-user-agent{ Mozilla 1.0 }</quote>, 
+   where some value is required in order to enable this type of action.
+   Examples:
   </para>
   <para>
    <literal>
     <msgtext> 
      <literallayout>
   <emphasis>{+name{param}}</emphasis>  # enable action and set parameter to <quote>param</quote>
-  <emphasis>{-name}</emphasis>         # disable action
+  <emphasis>{-name}</emphasis>         # disable action (<quote>parameter</quote>) can be omitted
      </literallayout>
     </msgtext> 
    </literal>
@@ -2652,15 +2665,18 @@ Removed references to Win32. HB 09/23/01
  
  <listitem>
   <para>  
-   Multi-value (e.g. <quote>{+/-add-header{Name: value}}</quote>, <quote>{+/-wafer{name=value}}</quote>):
+  <!-- oes, or someone, check this. Re-worded 04/20/02 HB. -->
+   Multi-value, e.g. <quote>{+/-add-header{Name: value}}</quote> ot
+   <quote>{+/-wafer{name=value}}</quote>), where some value needs to be defined
+   in addition to simply enabling the actino. Examples:
   </para>
   <para>
    <literal>
     <msgtext> 
      <literallayout>
-  <emphasis>{+name{param}}</emphasis>   # enable action and add parameter <quote>param</quote>
-  <emphasis>{-name{param}}</emphasis>   # remove the parameter <quote>param</quote>
-  <emphasis>{-name}</emphasis>          # disable this action totally
+  <emphasis>{+name{param=value}}</emphasis>   # enable action and set <quote>param</quote> to <quote>value</quote>
+  <emphasis>{-name{param=value}}</emphasis>   # remove the parameter <quote>param</quote> completely
+  <emphasis>{-name}</emphasis>                # disable this action totally and remove <application>param</application> too
      </literallayout>
     </msgtext> 
    </literal>
@@ -2686,560 +2702,1296 @@ Removed references to Win32. HB 09/23/01
  specified.
 </para>
 
+<!-- start actions listing -->
 <para>
  The list of valid <application>Privoxy</application> <quote>actions</quote> are:
 </para>
 
-<para>
- <itemizedlist>
- 
- <listitem>
-  <para>  
-   Add the specified HTTP header, which is not checked for validity.
-   You may specify this many times to specify many different headers:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+add-header{Name: value}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- 
- <listitem>
-  <para>  
-   Block this URL totally. In a default installation, a <quote>blocked</quote>
-   URL will result in bright red banner that says <quote>BLOCKED</quote>, 
-   with a reason why it is being blocked, and an option to see it anyway.
-   The page displayed for this is the <quote>blocked</quote> template 
-   file.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+block</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- 
- <listitem>
-  <para>  
-   De-animate all animated GIF images, i.e. reduce them to their last frame.
-   This will also shrink the images considerably (in bytes, not pixels!). If
-   the option <quote>first</quote> is given, the first frame of the animation
-   is used as the replacement. If <quote>last</quote> is given, the last frame
-   of the animation is used instead, which probably makes more sense for most
-   banner animations, but also has the risk of not showing the entire last
-   frame (if it is only a delta to an earlier frame).
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+deanimate-gifs{last}</emphasis>
-  <emphasis>+deanimate-gifs{first}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>
-   <quote>+downgrade</quote> will downgrade HTTP/1.1 client requests to
-   HTTP/1.0 and downgrade the responses as well. Use this action for servers
-   that use HTTP/1.1 protocol features that
-   <application>Privoxy</application> doesn't handle well yet. HTTP/1.1 
-   is only partially implemented. Default is not to downgrade requests.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+downgrade</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>  
-   Many sites, like yahoo.com, don't just link to other sites. Instead, they
-   will link to some script on their own server, giving the destination as a
-   parameter, which will then redirect you to the final target. URLs resulting
-   from this scheme typically look like:
-   <emphasis>http://some.place/some_script?http://some.where-else</emphasis>.
-  </para>
-  <para>
-   Sometimes, there are even multiple consecutive redirects encoded in the
-   URL. These redirections via scripts make your web browsing more traceable,
-   since the server from which you follow such a link can see where you go to.
-   Apart from that, valuable bandwidth and time is wasted, while your browser
-   ask the server for one redirect after the other. Plus, it feeds the
-   advertisers.
-  </para>
-  <para>
-   The <quote>+fast-redirects</quote> option enables interception of these
-   types of requests by <application>Privoxy</application>, who will cut off
-   all but the last valid URL in the request and send a local redirect back to
-   your browser without contacting the intermediate site(s).
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+fast-redirects</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
 
- <listitem>
-  <para>  
-   Apply the filters in the <literal>section_header</literal> 
-   section of the <filename>default.filter</filename> file to the site(s).
-   <filename>default.filter</filename> sections are grouped according to like
-   functionality. <application>Filters</application> can be used to 
-   re-write any of the raw page content. This is a potentially a 
-   very powerful feature!
-  </para> 
-   
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
- <emphasis>+filter{section_header}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
-
-  <para>   
-   Filter sections that are pre-defined in the supplied
-   <filename>default.filter</filename> include:
-  </para>
-
- <blockquote>
-  <simplelist>
-   <member>
-     <emphasis>html-annoyances</emphasis>:  Get rid of particularly annoying HTML abuse.
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>js-annoyances</emphasis>:    Get rid of particularly annoying JavaScript abuse
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>content-cookies</emphasis>:   Kill cookies that come in the HTML or JS content 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>popups</emphasis>:         Kill all popups in JS and HTML
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>frameset-borders</emphasis>: Give frames a border and make them resizable 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>webbugs</emphasis>:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>refresh-tags</emphasis>:     Kill automatic refresh tags (for dial-on-demand setups) 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>fun</emphasis>:              Text replacements  for subversive browsing fun!
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>nimda</emphasis>:            Remove Nimda (virus) code.
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-     <emphasis>banners-by-size</emphasis>:  Kill banners by size (<emphasis>very</emphasis> efficient!)
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>shockwave-flash</emphasis>:   Kill embedded Shockwave Flash objects
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <emphasis>crude-parental</emphasis>:   Kill all web pages that contain the words "sex" or "warez"
-   </member>
-  </simplelist>
- </blockquote>
+<!-- ********************************************************** -->
+<!-- Please note the below defined actions use id's that are    -->
+<!-- probably linked from other places, so please don't change. -->
+<!--                                                            -->
+<!-- ********************************************************** -->
 
 
- <para>
-  Note: Filtering requires buffering the page content, which may appear to slow down
-  page rendering since nothing is displayed until all content has passed 
-  the filters. (It does not really take longer, but seems that way since 
-  the page is not incrementally displayed.) This effect will be more noticeable
-  on slower connections.
-</para>
+<!--   ~~~~~       New section      ~~~~~     -->
 
- </listitem>
+<sect4 id="add-header">
+<title><emphasis>+add-header{Name: value}</emphasis></title>
 
- <listitem>
-  <para>  
-   Block any existing X-Forwarded-for header, and do not add a new one:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-forwarded</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Send a user defined HTTP header to the web server.
+   </para>
+  </listitem>
+ </varlistentry>
 
- <listitem>
-  <para>  
-   If the browser sends a <quote>From:</quote> header containing your e-mail
-   address, this either completely removes the header (<quote>block</quote>), or
-   changes it to the specified e-mail address.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-from{block}</emphasis>
-  <emphasis>+hide-from{spam@sittingduck.xqq}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    Any value is possible. Validity of the defined HTTP headers is not checked.
+   </para>
+  </listitem>
+ </varlistentry>
  
- <listitem>
-  <para>  
-   Don't send the <quote>Referer:</quote> (sic) header to the web site.  You
-   can block it, forge a URL to the same server as the request (which is
-   preferred because some sites will not send images otherwise) or set it to a
-   constant, user defined string of your choice.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-referer{block}</emphasis>
-  <emphasis>+hide-referer{forge}</emphasis>
-  <emphasis>+hide-referer{http://nowhere.com}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   Alternative spelling of <quote>+hide-referer</quote>.  It has the same
-   parameters, and can be freely mixed with, <quote>+hide-referer</quote>.
-   (<quote>referrer</quote> is the correct English spelling, however the HTTP
-   specification has a bug - it requires it to be spelled <quote>referer</quote>.) 
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-referrer{...}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+add-header{X-User-Tracking: sucks}}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
 
- <listitem>
-  <para>  
-   Change the <quote>User-Agent:</quote> header so web servers can't tell your
-   browser type.  Warning! This breaks many web sites.  Specify the
-   user-agent value you want. Example, pretend to be using Netscape on
-   Linux:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- <!-- 
-  <para>
-   Or to identify yourself explicitly as a  <application>Privoxy</application> user:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-user-agent{Privoxy/1.0}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
-   (Don't change the version number from 1.0 - after all, why tell them?)
-  <para>
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+hide-user-agent{browser-type}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
--->
- </listitem>
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action may be specified multiple times, in order to define multiple 
+    headers. This is rarely needed for the typical user. If you don't know what 
+    <quote>HTTP headers</quote> are, you definitely don't need to worry about this 
+    one.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
- <listitem>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="block">
+<title><emphasis>+block</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Used to block a URL from reaching your browser. The URL may be 
+    anything, but is typically used to block ads or other obnoxious 
+    content.    
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>N/A</para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+block}</emphasis>
+     <emphasis>.example.com</emphasis>
+     <emphasis>.ads.r.us</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    <application>Privoxy</application> will display its 
+    special <quote>BLOCKED</quote> page if a URL matches one of the 
+    blocked patterns. If there is sufficient space, a large red 
+    banner will appear with a friendly message about why the page 
+    was blocked, and a way to go there anyway. If there is insufficient 
+    space a smaller blocked page will appear without the red banner.
+    One exception is if the URL matches both <quote>+block</quote> 
+    and <quote>+image</quote>, then it can be handled by 
+    <quote>+image-blocker</quote> (see below).
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="deanimate-gifs">
+<title><emphasis>+deanimate-gifs</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    To stop those annoying, distracting animated GIF images.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    <quote>last</quote> or <quote>first</quote>
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+      <emphasis>{+deanimate-gifs{last}}</emphasis>
+      <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    De-animate all animated GIF images, i.e. reduce them to their last frame.
+    This will also shrink the images considerably (in bytes, not pixels!). If
+    the option <quote>first</quote> is given, the first frame of the animation
+    is used as the replacement. If <quote>last</quote> is given, the last
+    frame of the animation is used instead, which probably makes more sense for
+    most banner animations, but also has the risk of not showing the entire
+    last frame (if it is only a delta to an earlier frame).
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="downgrade">
+<title><emphasis>+downgrade</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    <quote>+downgrade</quote> will downgrade HTTP/1.1 client requests to
+    HTTP/1.0 and downgrade the responses as well.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+downgrade}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Use this action for servers that use HTTP/1.1 protocol features that
+    <application>Privoxy</application> doesn't handle well yet. HTTP/1.1 is
+    only partially implemented. Default is not to downgrade requests. This is
+    an infrequently needed action, and is used to help with problem sites only.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="fast-redirects">
+<title><emphasis>+fast-redirects</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    The <quote>+fast-redirects</quote> action enables interception of 
+    <quote>redirect</quote> requests from one server to another, which 
+    are used to track users.<application>Privoxy</application> can cut off
+    all but the last valid URL in redirect request and send a local redirect
+    back to your browser without contacting the intermediate site(s).
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+fast-redirects}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>  
+    Many sites, like yahoo.com, don't just link to other sites. Instead, they
+    will link to some script on their own server, giving the destination as a
+    parameter, which will then redirect you to the final target. URLs
+    resulting from this scheme typically look like:
+    <emphasis>http://some.place/some_script?http://some.where-else</emphasis>.
+  </para>
+   <para>
+    Sometimes, there are even multiple consecutive redirects encoded in the
+    URL. These redirections via scripts make your web browsing more traceable,
+    since the server from which you follow such a link can see where you go
+    to. Apart from that, valuable bandwidth and time is wasted, while your
+    browser ask the server for one redirect after the other. Plus, it feeds
+    the advertisers.
+   </para>
+   <para>
+    This is a normally on feature, and often requires exceptions for sites that
+    are sensitive to defeating this mechanism.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="filter">
+<title><emphasis>+filter</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Apply page filtering as defined by named sections of the
+    <filename>default.filter</filename> file to the specified site(s). 
+    <quote>Filtering</quote> can be any modification of the raw 
+    page content, including re-writing or deletion.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    <quote>+filter</quote> must include the name of one of the section identifiers
+    from <filename>default.filter</filename> (or whatever
+    <emphasis>filterfile</emphasis> is specified in <filename>config</filename>).
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage (from the current <filename>default.filter</filename>):</term>
+  <listitem>
+   <simplelist>
+   <member>
+    <emphasis>+filter{html-annoyances}</emphasis>:  Get rid of particularly annoying HTML abuse.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{js-annoyances}</emphasis>:    Get rid of particularly annoying JavaScript abuse
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{content-cookies}</emphasis>:   Kill cookies that come in the HTML or JS content 
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{popups}</emphasis>:         Kill all popups in JS and HTML
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{frameset-borders}</emphasis>: Give frames a border and make them resizable 
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{webbugs}</emphasis>:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{refresh-tags}</emphasis>:     Kill automatic refresh tags (for dial-on-demand setups) 
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{fun}</emphasis>:              Text replacements  for subversive browsing fun!
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{nimda}</emphasis>:            Remove Nimda (virus) code.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{banners-by-size}</emphasis>:  Kill banners by size (<emphasis>very</emphasis> efficient!)
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{shockwave-flash}</emphasis>:   Kill embedded Shockwave Flash objects
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>+filter{crude-parental}</emphasis>:   Kill all web pages that contain the words "sex" or "warez"
+   </member>
+  </simplelist>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This is potentially a very powerful feature! And requires a knowledge 
+    of regular expressions if you want to <quote>roll your own</quote>.
+   </para>
+   <para>
+    Filtering requires buffering the page content, which may appear to
+    slow down page rendering since nothing is displayed until all content has
+    passed the filters. (It does not really take longer, but seems that way
+    since the page is not incrementally displayed.) This effect will be more
+    noticeable on slower connections.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="hide-forwarded">
+<title><emphasis>+hide-forwarded</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Block any existing X-Forwarded-for HTTP header, and do not add a new one.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+hide-forwarded}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    It is fairly safe to leave this on. It does not seem to break many sites.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="hide-from">
+<title><emphasis>+hide-from</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    To block the browser from sending your email address in a <quote>From:</quote>
+    header.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    Keyword: <quote>block</quote>, or any user defined value.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+hide-from{block}}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The keyword <quote>block</quote> will completely remove the header.
+    Alternately, you can specify any value you prefer to send to the web
+    server.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="hide-referer">
+<title><emphasis>+hide-referer</emphasis></title>
+<anchor id="hide-referrer">
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+     Don't send the <quote>Referer:</quote> (sic) HTTP header to the web site.
+     Or, alternately send a forged header instead.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+     Prevent the header from being sent with the keyword, <quote>block</quote>.
+     Or, <quote>forge</quote> a URL to one from the same server as the request.
+     Or, set to user defined value of your choice.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+hide-referer{forge}}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    <quote>forge</quote> is the preferred option here, since some servers will
+    not send images back otherwise.
+   </para>
   <para>  
-   Treat this URL as an image.  This only matters if it's also <quote>+block</quote>ed,
-   in which case a <quote>blocked</quote> image can be sent rather than a HTML page.
-   See <quote>+image-blocker{}</quote> below for the control over what is actually sent.
-   If you want <emphasis>invisible</emphasis> ads, they should be defined as 
-   <emphasis>images</emphasis> and <emphasis>blocked</emphasis>. And also, 
-   <quote>image-blocker</quote>  should be set to <quote>blank</quote>. Note you 
-   cannot treat HTML pages as images in most cases. For instance, frames 
-   require an HTML page to display. So a frame that is an ad, cannot be 
-   treated as an image. Forcing an <quote>image</quote> in this 
-   situation just will not work.
+   <quote>+hide-referrer</quote> is an alternate spelling of
+   <quote>+hide-referer</quote>. It has the exact same parameters, and can be freely
+   mixed with, <quote>+hide-referer</quote>. (<quote>referrer</quote> is the
+   correct English spelling, however the HTTP specification has a bug - it
+   requires it to be spelled as <quote>referer</quote>.) 
   </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+image</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="hide-user-agent">
+<title><emphasis>+hide-user-agent</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    To change the <quote>User-Agent:</quote> header so web servers can't tell
+    your browser type. Who's business is it anyway?
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    Any user defined string.
+   </para>
+  </listitem>
+ </varlistentry>
  
- <listitem>
-  <para> Decides what to do with URLs that end up tagged with <quote>{+block
-  +image}</quote>, e.g an advertisement. There are four options.
-  <quote>-image-blocker</quote> will send a HTML <quote>blocked</quote> page,
-  usually resulting in a <quote>broken image</quote> icon.
-<!--   <quote>+image-blocker{logo}</quote> will send a -->
-<!--   <application>Privoxy</application> logo -->
-<!--   image. -->
-<quote>+image-blocker{blank}</quote> will send a 1x1 transparent GIF
-image. And finally, <quote>+image-blocker{http://xyz.com}</quote> will send a
-HTTP temporary redirect to the specified image. This has the advantage of the
-icon being being cached by the browser, which will speed up the display.
-<quote>+image-blocker{pattern}</quote> will send a checkerboard type pattern:
-<!-- , -->
-<!-- which scales better than the logo (which can get blocky if the browser -->
-<!-- enlarges it too much). -->
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-<!--   <emphasis>+image-blocker{logo}</emphasis> -->
-  <emphasis>+image-blocker{blank}</emphasis>
-  <emphasis>+image-blocker{pattern}</emphasis>
-  <emphasis>+image-blocker{http://p.p/send-banner}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}}</emphasis>
+     <emphasis>.msn.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+     Warning! This breaks many web sites that depend on this in order 
+     to determine how the target browser will respond to various 
+     requests. Use with caution.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="image">
+<title><emphasis>+image</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    To define what <application>Privoxy</application> should treat 
+    automatically as an image.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
  
- <listitem>
-   <para> 
-   By default (i.e. in the absence of a <quote>+limit-connect</quote>
-   action), <application>Privoxy</application> will only allow CONNECT
-   requests to port 443, which is the standard port for https as a 
-   precaution.
-  </para>
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+image}</emphasis>
+     <emphasis>/.*\.(gif|jpg|jpeg|png|bmp|ico)</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This only has meaning if the URL (or pattern) also is
+    <quote>+block</quote>ed, in which case a <quote>blocked</quote> image can
+    be sent rather than a HTML page. (See <quote>+image-blocker{}</quote> below
+    for the control over what is actually sent.)    
+   </para>
+   <para>
+    There is little reason to change the default definition for this.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="image-blocker">
+<title><emphasis>+image-blocker</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Decide what to do with URLs that end up tagged with both <quote>{+block}</quote>
+    and <quote>{+image}</quote>, e.g an advertisement.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    There are four available options: <quote>-image-blocker</quote> will send a HTML
+    <quote>blocked</quote> page, usually resulting in a <quote>broken
+    image</quote> icon. <quote>+image-blocker{blank}</quote> will send a 1x1
+    transparent GIF image. <quote>+image-blocker{pattern}</quote> will send a
+    checkerboard type pattern (the default). And finally,
+    <quote>+image-blocker{http://xyz.com}</quote> will send a HTTP temporary
+    redirect to the specified image. This has the advantage of the icon being
+    being cached by the browser, which will speed up the display.
+   </para>
+  </listitem>
+ </varlistentry>
  
-  <para>
-   The CONNECT methods exists in HTTP to allow access to secure websites
-   (https:// URLs) through proxies. It works very simply: the proxy
-   connects to the server on the specified port, and then short-circuits
-   its connections to the client <emphasis>and</emphasis> to the remote proxy.
-   This can be a big security hole, since CONNECT-enabled proxies can
-   be abused as TCP relays very easily.
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+image-blocker{blank}}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If you want <emphasis>invisible</emphasis> ads, they need to be both
+    defined as <emphasis>images</emphasis> and <emphasis>blocked</emphasis>.
+    And then, <quote>image-blocker</quote> should be set to
+    <quote>blank</quote> for invisibility. Note you cannot treat HTML pages as
+    images in most cases. For instance, frames require an HTML page to display.
+    So a frame that is an ad, cannot be treated as an image. Forcing an
+    <quote>image</quote> in this situation just will not work.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="limit-connect">
+<title><emphasis>+limit-connect</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    By default, <application>Privoxy</application> only allows HTTP CONNECT
+    requests to port 443 (the standard, secure HTTPS port). Use 
+    <quote>+limit-connect</quote> to disable this altogether, or to allow 
+    more ports.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    Any valid port number, or port number range.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usages:</term>
+  <listitem>
+   <!-- I had trouble getting the spacing to look right in my browser -->
+   <!-- I probably have the wrong font setup, bollocks. -->
+    <literallayout>
+     <emphasis>+limit-connect{443}</emphasis>                      # This is the default and need not be specified.
+     <emphasis>+limit-connect{80,443}</emphasis>                 # Ports 80 and 443 are OK.
+     <emphasis>+limit-connect{-3, 7, 20-100, 500-}</emphasis> # Port less than 3, 7, 20 to 100 and above 500 are OK.
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The CONNECT methods exists in HTTP to allow access to secure websites
+    (https:// URLs) through proxies. It works very simply: the proxy connects
+    to the server on the specified port, and then short-circuits its
+    connections to the client <emphasis>and</emphasis> to the remote proxy.
+    This can be a big security hole, since CONNECT-enabled proxies can be
+    abused as TCP relays very easily.
   </para>
-  
   <para> 
    If you want to allow CONNECT for more ports than this, or want to forbid
    CONNECT altogether, you can specify a comma separated list of ports and
    port ranges (the latter using dashes, with the minimum defaulting to 0 and
-   max to 65K):
+   max to 65K).
   </para>
+  <para>
+   If you don't know what any of this means, there probably is no reason to 
+   change this one.
+  </para>
+  </listitem>
+ </varlistentry>
 
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+limit-connect{443}                 # This is the default and need no be specified.</emphasis>
-  <emphasis>+limit-connect{80,443}              # Ports 80 and 443 are OK.</emphasis>
-  <emphasis>+limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100</emphasis>
-  <emphasis>                                    #and above 500 are OK.</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
+</variablelist>
+</sect4>
 
- </listitem> 
- 
- <listitem>
-  <para>
-   <quote>+no-compression</quote> prevents the website from compressing the
-   data. Some websites do this, which can be a problem for
-   <application>Privoxy</application>, since <quote>+filter</quote>,
-   <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work on
-   compressed data. This will slow down connections to those websites,
-   though. Default is <quote>no-compression</quote> is turned on.
-  </para>
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="no-compression">
+<title><emphasis>+no-compression</emphasis></title>
 
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+nocompression</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>  
-   If the website sets cookies, <quote>no-cookies-keep</quote> will make sure
-   they are erased when you exit and restart your web browser. This makes
-   profiling cookies useless, but won't break sites which require cookies so
-   that you can log in for transactions. Default: on.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+no-cookies-keep</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   Prevent the website from reading cookies:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+no-cookies-read</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   Prevent the website from setting cookies:
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+no-cookies-set</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   Filter the website through a built-in filter to disable those obnoxious 
-   JavaScript pop-up windows via window.open(), etc. The two alternative
-   spellings are equivalent.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+no-popup</emphasis>
-  <emphasis>+no-popups</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   This action only applies if you are using a <filename>jarfile</filename>
-   for saving cookies. It sends a cookie to every site stating that you do not
-   accept any copyright on cookies sent to you, and asking them not to track
-   you.  Of course, this is a (relatively) unique header they could use to
-   track you.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+vanilla-wafer</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
- 
- <listitem>
-  <para>  
-   This allows you to add an arbitrary cookie. It can be specified multiple
-   times in order to add as many cookies as you like.
-  </para>
-  <para>
-   <literal>
-    <msgtext> 
-     <literallayout>
-  <emphasis>+wafer{name=value}</emphasis>
-     </literallayout>
-    </msgtext> 
-   </literal>
-  </para>
- </listitem>
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
 
- </itemizedlist>
-</para>
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Prevent the specified websites from compressing HTTP data.
+   </para>
+  </listitem>
+ </varlistentry>
 
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+no-compression}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Some websites do this, which can be a problem for
+    <application>Privoxy</application>, since <quote>+filter</quote>,
+    <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work
+    on compressed data. This will slow down connections to those websites,
+    though. Default typically is to turn <quote>no-compression</quote> on.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="no-cookies-keep">
+<title><emphasis>+no-cookies-keep</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Allow cookies for the current browser session only.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+no-cookies-keep}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If websites set cookies, <quote>no-cookies-keep</quote> will make sure
+    they are erased when you exit and restart your web browser. This makes
+    profiling cookies useless, but won't break sites which require cookies so
+    that you can log in for transactions. This is generally turned on for all 
+    sites. Sometimes referred to as <quote>session cookies</quote>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="no-cookies-read">
+<title><emphasis>+no-cookies-read</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Explicitly prevent the web server from reading any cookies on your 
+    system.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+no-cookies-read}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Often used in conjunction with <quote>+no-cookies-set</quote> to 
+    disable persistant cookies completely.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="no-cookies-set">
+<title><emphasis>+no-cookies-set</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Explicitly block the web server from sending cookies to your 
+    system.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+no-cookies-set}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Often used in conjunction with <quote>+no-cookies-read</quote> to 
+    disable persistant cookies completely.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="no-popup">
+<title><emphasis>+no-popup</emphasis></title>
+<anchor id="no-popups">
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Stop those annoying JavaScript pop-up windows! 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+no-popup}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    <quote>+no-popup</quote> uses a built in filter to disable pop-ups
+    that use the <literal>window.open()</literal> function, etc.
+   </para>
+   <para>
+    An alternate spelling is <quote>+no-popups</quote>, which is 
+    interchangeable.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="vanilla-wafer">
+<title><emphasis>+vanilla-wafer</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    Sends a cookie for every site stating that you do not accept any copyright
+    on cookies sent to you, and asking them not to track you.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+vanilla-wafer}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action only applies if you are using a <filename>jarfile</filename>
+    for saving cookies. Of course, this is a (relatively) unique header and 
+    could be used to track you.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="wafer">
+<title><emphasis>+wafer</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Typical uses:</term>
+  <listitem>
+   <para>
+    This allows you to send an arbitrary, user definable cookie.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Possible values:</term>
+  <listitem>
+   <para>
+    User specified cookie name and corresponding value.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <literallayout>
+     <emphasis>{+wafer{name=value}}</emphasis>
+     <emphasis>.example.com</emphasis>
+    </literallayout>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This can be specified multiple times in order to add as many cookies as you
+    like.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect4>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect4 id="act-examples" renderas="sect3">
+<title>Actions Examples</title>
 <para>
- The meaning of any of the above is reversed by preceding the action with a 
- <quote>-</quote>, in place of the <quote>+</quote>.
+ Note that the meaning of any of the above examples is reversed by preceding
+ the action with a <quote>-</quote>, in place of the <quote>+</quote>. Also, 
+ that some actions are turned on in the default section of the actions file, 
+ and require little to no additional configuration. These are just <quote>on</quote>.
+ Some actions that are turned on the default section do typically require
+ exceptions to be listed in the lower sections of actions file.
 </para>
 
 <para>
@@ -3257,10 +4009,12 @@ icon being being cached by the browser, which will speed up the display.
  # Turn off all persistent cookies
  { +no-cookies-read }
  { +no-cookies-set }
+ 
  # Allow cookies for this browser session ONLY
  { +no-cookies-keep }
 
  # Exceptions to the above, sites that benefit from persistent cookies
+ # that saved from one browser session to the next.
  { -no-cookies-read }
  { -no-cookies-set }
  { -no-cookies-keep }
@@ -3324,9 +4078,9 @@ icon being being cached by the browser, which will speed up the display.
 
 <para>
  Now some URLs that we want <quote>blocked</quote> (normally generates 
- the <quote>blocked</quote> banner). Many of these use regular expressions
- that will expand to match multiple URLs:
-</para>
+ the <quote>blocked</quote> banner). Many of these use 
+ <link linkend="regex">regular expressions</link> that will expand to match
+ multiple URLs: </para>
 
 <para>
  <literal>
@@ -3390,6 +4144,7 @@ icon being being cached by the browser, which will speed up the display.
  for all sites. See the <link linkend="ACTIONSANAT">Appendix</link>
  for a brief example on troubleshooting actions.
 </para>
+</sect4>
 
 </sect3>
 
@@ -3455,14 +4210,14 @@ icon being being cached by the browser, which will speed up the display.
  .windowsupdate.microsoft.com
  .nytimes.com
 
- # Shopping sites - still want to block ads.
+ # Shopping sites - but we still want to block ads.
  {shop}
  .quietpc.com
  .worldpay.com   # for quietpc.com
  .jungle.com
  .scan.co.uk
 
- # These shops require pop-ups
+ # These shops require pop-ups also 
  {shop -no-popups}
  .dabs.com
  .overclockers.co.uk
@@ -3774,14 +4529,18 @@ Requests</title>
   <emphasis>\</emphasis> - The <quote>escape</quote> character denotes that
   the following character should be taken literally. This is used where one of the 
   special characters (e.g. <quote>.</quote>) needs to be taken literally and
-  not as a special meta-character.
+  not as a special meta-character. Example: <quote>example\.com</quote>, makes 
+  sure the period is recognized only as a period (and not expanded to its 
+  metacharacter meaning of any single character).
  </member>
 </simplelist></para>
 
 <para><simplelist>
  <member>
   <emphasis>[]</emphasis> - Characters enclosed in brackets will be matched if
-  any of the enclosed characters are encountered.
+  any of the enclosed characters are encountered. For instance, <quote>[0-9]</quote>
+  matches any numeric digit (zero through nine). As an example, we can combine 
+  this with <quote>+</quote> to match any digit one of more times: <quote>[0-9]+</quote>.
  </member>
 </simplelist></para>
 
@@ -3796,7 +4555,10 @@ Requests</title>
  <member>
   <emphasis>|</emphasis> - The <quote>bar</quote> character works like an
   <quote>or</quote> conditional statement. A match is successful if the
-  sub-expression on either side of <quote>|</quote> matches.
+  sub-expression on either side of <quote>|</quote> matches. As an example:
+  <quote>/(this|that) example/</quote> uses grouping and the bar character 
+  and would match either <quote>this example</quote> or <quote>that
+  example</quote>, and nothing else.
  </member>
 </simplelist></para>
 
@@ -3804,7 +4566,7 @@ Requests</title>
  <member>
   <emphasis>s/string1/string2/g</emphasis> - This is used to rewrite strings of text. 
   <quote>string1</quote> is replaced by <quote>string2</quote> in this
-  example.
+  example. There must of course be a match on <quote>string1</quote> first.
  </member>
 </simplelist></para>
 
@@ -4053,7 +4815,7 @@ Requests</title>
 </para>
 
 <para>
- These may be bookmarked for quick reference.
+ These may be bookmarked for quick reference. See next.
 
 </para>
 
@@ -4139,11 +4901,22 @@ Requests</title>
  is causing us a problem inadvertently. It can be a little daunting to look at
  the actions and filters files themselves, since they tend to be filled with
  <quote>regular expressions</quote> whose consequences are not always 
- so obvious. <application>Privoxy</application> provides the 
+ so obvious. 
+</para>
+
+<para>
+ One quick test to see if <application>Privoxy</application> is causing a problem 
+ or not, is to disable it temporarily. This should be the first troubleshooting 
+ step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
+ and easy way to do this.
+</para>
+
+<para>
+ <application>Privoxy</application> also provides the 
  <ulink url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>
  page that can show us very specifically how <application>actions</application>
  are being applied to any given URL. This is a big help for troubleshooting.
- </para>
+</para>
 
 <para>
  First, enter one URL (or partial URL) at the prompt, and then
@@ -4426,6 +5199,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.85  2002/04/18 21:23:23  hal9
+ Fix ugly typo (mine).
+
  Revision 1.84  2002/04/18 21:17:13  hal9
  Spell Redhat correctly (ie Red Hat). A few minor grammar corrections.
 
