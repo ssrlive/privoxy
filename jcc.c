@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.49 2001/10/23 21:41:35 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.50 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.49 2001/10/23 21:41:35 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.50  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.49  2001/10/23 21:41:35  jongfoster
  *    Added call to initialize the (statically-allocated of course)
  *    "out of memory" CGI response.
@@ -735,12 +741,9 @@ static void chat(struct client_state *csp)
       enlist(csp->headers, p);
       freez(p);
    }
-
-   /* We have a request. */
-
    /*
-    * Now, check to see if we need to intercept it, i.e.
-    * If
+    * We have a request. Now, check to see if we need to
+    * intercept it, i.e. If ..
     */
 
    if (
