@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.30 2002/03/04 17:58:01 oes Exp $
+dnl $Id: configure.in,v 1.31 2002/03/05 13:43:28 morcego Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.31  2002/03/05 13:43:28  morcego
+dnl Checking for text browser, so redhat-dok can work.
+dnl
 dnl Revision 1.30  2002/03/04 17:58:01  oes
 dnl Deleted _DEBUG and PID_FILE_PATH
 dnl
@@ -237,7 +240,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.30 $)
+AC_REVISION($Revision: 1.31 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -381,6 +384,7 @@ else
 fi
 AC_SUBST(WIN_ONLY)
 
+dnl Checking which text html browser we have avaliable
 if test $target_type = unix; then
 	AC_CHECK_PROGS(WDUMP,w3m lynx links,false)
 	if test "$WDUMP" = false; then
@@ -388,6 +392,16 @@ if test $target_type = unix; then
 	fi
 fi
 AC_SUBST(WDUMP)
+
+dnl If we use rpm, we need to check where %_topdir is
+AC_CHECK_PROGS(RPMBIN,rpm,false)
+if test $RPMBIN != false; then
+		RPM_BASE=`rpm --eval "%{_topdir}"`
+		if test "$RPM_BASE" = ""; then
+			RPM_BASE=/usr/src/redhat
+		fi
+fi
+AC_SUBST(RPM_BASE)
 
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
 old_CFLAGS_nospecial=$CFLAGS

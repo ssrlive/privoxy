@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.6 2002/03/05 13:10:51 morcego Exp $
+# $Id: GNUmakefile.in,v 1.7 2002/03/05 13:43:28 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.7  2002/03/05 13:43:28  morcego
+# Checking for text browser, so redhat-dok can work.
+#
 # Revision 1.6  2002/03/05 13:10:51  morcego
 # Changes to implement redhat-dok (Hal Burgiss)
 # Changes to make it work on other distros and out-of-the-shelf configurations
@@ -271,7 +274,7 @@ DOSFILTER  = perl -p -e 's/\n/\r\n/'
 #############################################################################
 
 TAR_ARCH = /tmp/ijbswa-$(RPM_VERSION).tar.gz
-RPM_BASE = /usr/src/redhat
+RPM_BASE = @RPM_BASE@
 
 #############################################################################
 # Filenames and libraries
