@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.5.2.1 2002/08/05 17:46:13 oes Exp $
+# $Id: Makefile,v 1.6 2002/09/05 14:35:17 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile,v $
+# Revision 1.6  2002/09/05 14:35:17  oes
+# Change make to gmake to fix auto-build on Solaris
+#
 # Revision 1.5  2002/04/11 12:51:34  oes
 # Bugfix
 #
@@ -60,7 +63,12 @@ error:
 	    echo -n "*** Shall I do this for you now? (y/n) "; \
 	    read answer; \
 	    if [ $$answer = "y" ]; then \
-	       autoheader && autoconf && ./configure && gmake; \
+	       autoheader && autoconf && ./configure || exit 1; \
+		  	if which gmake >/dev/null 2>/dev/null ; then \
+			   gmake ;\
+			else \
+			   make ;\
+			fi ;\
 	    fi; \
 	 fi
 
