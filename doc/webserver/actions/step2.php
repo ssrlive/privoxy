@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step2.php,v 1.1 2002/03/30 03:20:30 oes Exp $
+  $Id: step2.php,v 1.4 2002/04/01 19:13:47 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.4  2002/04/01 19:13:47  oes
+  Extended, fixed bugs, beefed up design, made IE-safe
+
   Revision 1.1  2002/03/30 03:20:30  oes
   Added Feedback mechanism for actions file
 
@@ -159,7 +162,8 @@ $ch = curl_init ($referrer_url);
 
 curl_setopt ($ch, CURLOPT_HEADER, 0);
 curl_setopt ($ch, CURLOPT_FAILONERROR, 1);
-curl_setopt ($ch, CURLOPT_TIMEOUT, 15);
+curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt ($ch, CURLOPT_TIMEOUT, 20);            
 
 ob_start();
 $success = curl_exec ($ch);
