@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.9 2001/05/27 22:17:04 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.10 2001/05/29 09:50:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,29 @@ const char filters_rcs[] = "$Id: filters.c,v 1.9 2001/05/27 22:17:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.10  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.9  2001/05/27 22:17:04  oes
  *
  *    - re_process_buffer no longer writes the modified buffer
@@ -197,11 +220,11 @@ static const char CBLOCK[] =
        "<center><h1>"
        BANNER
        "</h1></center>\n"
-      "<p align=center>Your request for <b>%s%s</b><br>\n"
-      "was blocked."
+      "<p align=center>Your request for <b>%s%s</b>\n"
+      "was blocked.<br><a href=\"http://i.j.b/show-url-info?url=%s%s\">See why</a>"
 #ifdef FORCE_LOAD
-       "  <a href=\"http://%s" FORCE_PREFIX "%s\">"
-       "Go there anyway.</a>"
+       " or <a href=\"http://%s" FORCE_PREFIX "%s\">"
+       "go there anyway.</a>"
 #endif /* def FORCE_LOAD */
       "</p>\n"
       "</body>\n"
@@ -389,6 +412,7 @@ char *block_url(struct http_request *http, struct client_state *csp)
 {
    char *p;
    int n;
+   int factor = 2;
 
    if ((csp->permissions & PERMIT_BLOCK) == 0)
    {
@@ -396,20 +420,21 @@ char *block_url(struct http_request *http, struct client_state *csp)
    }
    else
    {
-      n  = strlen(CBLOCK);
-      n += strlen(http->hostport);
-      n += strlen(http->path);
 #ifdef FORCE_LOAD
-      n += strlen(http->hostport);
-      n += strlen(http->path);
+      factor++;
 #endif /* def FORCE_LOAD */
+
+      n  = strlen(CBLOCK);
+      n += factor * strlen(http->hostport);
+      n += factor * strlen(http->path);
 
       p = (char *)malloc(n);
 
 #ifdef FORCE_LOAD
-      sprintf(p, CBLOCK, http->hostport, http->path, http->hostport, http->path);
+      sprintf(p, CBLOCK, http->hostport, http->path, http->hostport, http->path,
+              http->hostport, http->path);
 #else
-      sprintf(p, CBLOCK, http->hostport, http->path);
+      sprintf(p, CBLOCK, http->hostport, http->path, http->hostport, http->path);
 #endif /* def FORCE_LOAD */
 
       return(p);
@@ -1390,7 +1415,7 @@ static const char C_URL_INFO_FORM[] =
    BANNER
    "</h1></center>\n"
    "<form method=\"GET\" action=\"http://i.j.b/show-url-info\">\n"
-   "<p>Please enter a URL, without the leading &quot;http:&quot;:</p>"
+   "<p>Please enter a URL, without the leading &quot;http://&quot;:</p>"
    "<p><input type=\"text\" name=\"url\" size=\"80\">"
    "<input type=\"submit\" value=\"Info\"></p>\n"
    "</form>\n"
