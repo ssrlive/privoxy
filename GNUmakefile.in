@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.94 2002/04/27 08:23:29 swa Exp $
+# $Id: GNUmakefile.in,v 1.95 2002/04/27 15:37:25 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -306,7 +306,7 @@ check-release:
 # Create Conectiva specfile from RedHat specfile
 #############################################################################
 conectiva-spec:
-	rm -f privoxy-cl.spec
+	$(RM) privoxy-cl.spec
 	chmod a+x genclspec.sh
 	./genclspec.sh
 
@@ -374,24 +374,24 @@ suse-upload: check-release
 
 # handle with care. use with root.
 suse-clean:
-	rpm -e junkbuster-suse || true
-	rm -rf /etc/junkbuster
-	rm -rf /etc/rc.d/junkbuster*
-	rm -rf /var/run/junkbuster.pid 
-	rm -rf /var/log/junkbuster
-	rm -f /etc/init.d/junkbuster
-	rm -f /usr/sbin/junkbuster
-	rm -f /usr/sbin/rcjunkbuster
-	rm -f /usr/share/man/man1/junkbuster.1.gz
-	rpm -e privoxy-suse || true
-	rm -rf /etc/privoxy
-	rm -rf /etc/rc.d/privoxy*
-	rm -rf /var/run/privoxy.pid 
-	rm -rf /var/log/privoxy
-	rm -f /etc/init.d/privoxy
-	rm -f /usr/sbin/privoxy
-	rm -f /usr/sbin/rcprivoxy
-	rm -f /usr/share/man/man1/privoxy.1.gz
+	$(RPM) -e junkbuster-suse || true
+	$(RM) -r /etc/junkbuster
+	$(RM) -r /etc/rc.d/junkbuster*
+	$(RM) -r /var/run/junkbuster.pid 
+	$(RM) -r /var/log/junkbuster
+	$(RM) /etc/init.d/junkbuster
+	$(RM) /usr/sbin/junkbuster
+	$(RM) /usr/sbin/rcjunkbuster
+	$(RM) /usr/share/man/man1/junkbuster.1.gz
+	$(RPM) -e privoxy-suse || true
+	$(RM) -r /etc/privoxy
+	$(RM) -r /etc/rc.d/privoxy*
+	$(RM) -r /var/run/privoxy.pid 
+	$(RM) -r /var/log/privoxy
+	$(RM) /etc/init.d/privoxy
+	$(RM) /usr/sbin/privoxy
+	$(RM) /usr/sbin/rcprivoxy
+	$(RM) /usr/share/man/man1/privoxy.1.gz
 
 #############################################################################
 # generic distribution
@@ -549,31 +549,31 @@ groff2html:
 
 # developer manual
 dok-devel: doc/source/ldpOK.dsl
-	rm -f doc/webserver/developer-manual/*.html
-	rm -rf doc/source/developer-manual
+	$(RM) doc/webserver/developer-manual/*.html
+	$(RM) -r doc/source/developer-manual
 	mkdir -p doc/text doc/source/developer-manual
 	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml && cd .. && cp developer-manual/*.html ../webserver/developer-manual/
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && $(RM) -r tmp.html developer-manual
 
 # user manual
 dok-user: doc/source/ldpOK.dsl
-	rm -f doc/webserver/user-manual/*.html
-	rm -rf doc/source/user-manual/
+	$(RM) doc/webserver/user-manual/*.html
+	$(RM) -r doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
 	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/
-	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
 # faq
 dok-faq: doc/source/ldpOK.dsl
-	rm -f doc/webserver/faq/*.html
-	rm -rf doc/source/faq
+	$(RM) doc/webserver/faq/*.html
+	$(RM) -r doc/source/faq
 	mkdir -p doc/text doc/source/faq
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && cp faq/*.html ../webserver/faq/
-	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && $(RM) -r tmp.html faq
 
 # man page
 dok-man: doc/source/ldpOK.dsl
-	rm -f doc/man/* doc/webserver/man-page/*.html
+	$(RM) doc/man/* doc/webserver/man-page/*.html
 ifneq ($(MAN2HTML),false)
 	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
 	man ./privoxy.1 | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
@@ -585,7 +585,7 @@ endif
 # readme page
 dok-readme: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
-	$(WDUMP) tmp.html > ../../README && rm -rf tmp.html
+	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
 # webserver files
 dok-webserver: doc/source/ldpOK.dsl
@@ -593,20 +593,22 @@ dok-webserver: doc/source/ldpOK.dsl
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/'\
-     doc/webserver/index.html && rm -f doc/source/webserver/*.bak
+     doc/webserver/index.html && $(RM) doc/source/webserver/*.bak
 
 # Main documentation target.
 dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
-# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+# kludge to force recreation on next run. Rodrigo? -swa
+# I see no need for it, but no problem either. Let it stay. -morcego
+	@$(RM) doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
 
 #
 # an alternative to the above dok. disabled man page creation for the moment
 #
 redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver dok-authors
-# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+# kludge to force recreation on next run. Rodrigo? -swa
+# I see no need for it, but no problem either. Let it stay. -morcego
+	@$(RM) doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
 
 # For those with man2html ala RH7's.
@@ -617,7 +619,7 @@ ifneq ($(MAN2HTML),false)
 	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
 	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
 # Get rid of spurious  from conversion. (How to do this with perl?)
-	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && rm -f tmp.*
+	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
 else
 	$(MAKE) groff2html
 endif
@@ -625,16 +627,16 @@ endif
 ## Make README
 redhat-readme: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html && $(WDUMP) \
-	  tmp.html > ../../README && rm -rf tmp.html
+	  tmp.html > ../../README && $(RM) -r tmp.html
 	# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+	@$(RM) doc/source/ldpOK.dsl
 
 ## Make AUTHORS file
 dok-authors: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
-	  tmp.html > ../../AUTHORS && rm -f tmp.html
+	  tmp.html > ../../AUTHORS && $(RM) tmp.html
 	# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+	@$(RM) doc/source/ldpOK.dsl
 
 # make a man page, and then (lousy) HTML version.
 # Requires docbook2man (short perl script), see comments 
@@ -650,7 +652,7 @@ man: doc/source/ldpOK.dsl
 	mv -f doc/source/man/privoxy.1 privoxy.1
 	$(MAKE) man2html
      # kludge to force recreation on next run. Rodgrigo?
-	@rm -fr doc/source/ldpOK.dsl doc/source/man
+	@$(RM) -r doc/source/ldpOK.dsl doc/source/man
 
 # Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
 # exceptions accordingly. This needs to go before any doc building (doh).
@@ -659,31 +661,31 @@ dok-release:
 	@$(PERL) -pi.bak -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
      s/<!entity +p-status.*>/<!entity p-status "$(CODE_STATUS)">/' \
      doc/source/*sgml doc/source/*/*sgml
-	rm -fr doc/source/*bak doc/source/*/*bak
+	$(RM) -r doc/source/*bak doc/source/*/*bak
 ifeq ($(CODE_STATUS),stable)
 	@$(ECHO) Setting docs to stable $(VERSION)
 	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
      doc/source/*sgml doc/source/*/*sgml
-	rm -fr doc/source/*bak doc/source/*/*bak
+	$(RM) -r doc/source/*bak doc/source/*/*bak
 else
 	@$(ECHO) Setting docs to not stable $(VERSION)
 	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
      doc/source/*sgml doc/source/*/*sgml
-	rm -fr doc/source/*bak doc/source/*/*bak
+	$(RM) -r doc/source/*bak doc/source/*/*bak
 endif
 
 dok-pdf: doc/source/ldpOK.dsl dok-release 
-	rm -f doc/pdf/*.pdf
+	$(RM) doc/pdf/*.pdf
 	cp -f doc/source/*.sgml doc/pdf
 	cp -f doc/source/*.dsl doc/pdf
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
-	rm -f doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
+	$(RM) doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
 	# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+	@$(RM) doc/source/ldpOK.dsl
 
 # the layout and style with db2pdf sucks, here is an alternative
 dok-pdf2: doc/source/ldpOK.dsl dok-release 
@@ -693,7 +695,7 @@ dok-pdf2: doc/source/ldpOK.dsl dok-release
 	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
 # one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
 	# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+	@$(RM) doc/source/ldpOK.dsl
 
 #############################################################################
 #
@@ -842,6 +844,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.95  2002/04/27 15:37:25  swa
+# replacing directory in document creation process
+# no longer necessary.
+#
 # Revision 1.94  2002/04/27 08:23:29  swa
 # pdf process reviewed and cleaned up
 #
