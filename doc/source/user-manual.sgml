@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.45 2002/03/09 17:43:53 swa Exp $
+ $Id: user-manual.sgml,v 1.46 2002/03/10 00:51:08 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.45 2002/03/09 17:43:53 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.46 2002/03/10 00:51:08 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -40,18 +40,23 @@ Hal Burgiss <hal@foobox.net>
 
 <abstract>
  <para>
-  The user manual gives users information on how to install, configure
-  and use <application>Internet Junkbuster</application>.
-  <application>Internet Junkbuster</application> is an application that
-  provides privacy and security to users of the World Wide Web.
+  The user manual gives users information on how to install, configure and use
+  <application>Internet Junkbuster</application>. <application>Internet
+  Junkbuster</application> is a web proxy with advanced filtering capabilities
+  for protecting privacy, filtering web page content, managing cookies,
+  controlling access, and removing ads, banners, pop-ups and other obnoxious
+  Internet Junk. Junkbuster has a very flexible configuration and can be
+  customized to suit individual needs and tastes. <application>Internet
+  Junkbuster</application> has application for both stand-alone systems and
+  multi-user networks.
  </para>
  <para>
 You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
  </para>
 
- <para>
-  Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>.
- </para>
+<!--   <para> -->
+<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
+<!--   </para> -->
 </abstract>
 
 </artheader>
@@ -3597,6 +3602,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.46  2002/03/10 00:51:08  hal9
+ Added section on JB internal pages in Appendix.
+
  Revision 1.45  2002/03/09 17:43:53  swa
  more distros
 

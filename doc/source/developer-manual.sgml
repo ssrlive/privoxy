@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $
+ $Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
   <artheader>
     <title>Junkbuster Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -32,10 +32,15 @@
 
     <abstract>
       <para>
-    The developer manual gives the users information on how to help the developer
+The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other
-issues. The Internet Junkbuster is an application
-that provides privacy and security to the user of the world wide web.
+issues. <application>Internet Junkbuster</application> is a web proxy with
+advanced filtering capabilities for protecting privacy, filtering web page
+content, managing cookies, controlling access, and removing ads, banners,
+pop-ups and other obnoxious Internet Junk. Junkbuster has a very flexible
+configuration and can be customized to suit individual needs and
+tastes. <application>Internet Junkbuster</application> has application for
+both stand-alone systems and multi-user networks.
  </para>
       <para>
 You can find the latest version of the user manual at <ulink
@@ -43,9 +48,10 @@ url="http://ijbswa.sourceforge.net/developer-manual/">http://ijbswa.sourceforge.
 Please see the Contact section in the user-manual if you want to contact the developers.
  </para>
 
-      <para>
-  Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>.
- </para>
+<!--        <para> -->
+<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
+<!--   </para> -->
+
     </abstract>
   </artheader>
 
@@ -1213,7 +1219,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1273,7 +1279,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.6 2002/02/24 14:25:06 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1470,6 +1476,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.6  2002/02/24 14:25:06  jongfoster
+  Formatting changes.  Now changing the doctype to DocBook XML 4.1
+  will work - no other changes are needed.
+
   Revision 1.5  2001/10/31 18:16:51  swa
   documentation added: howto generate docs in text and html
   format, howto move stuff to the webserver.

@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.8 2002/03/09 15:55:48 swa Exp $
+ $Id: faq.sgml,v 1.9 2002/03/10 23:34:04 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.8 2002/03/09 15:55:48 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.9 2002/03/10 23:34:04 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -32,18 +32,24 @@
 
 <abstract>
  <para>
-    The FAQ document gives users and developers alike answers to frequently
-asked questions about the Internet Junkbuster. The Internet Junkbuster is an application
-that provides privacy and security to the user of the world wide web.
+The FAQ document gives users and developers alike answers to frequently asked
+questions about the Internet Junkbuster. <application>Internet
+Junkbuster</application> is a web proxy with advanced filtering capabilities
+for protecting privacy, filtering web page content, managing cookies,
+controlling access, and removing ads, banners, pop-ups and other obnoxious
+Internet Junk. Junkbuster has a very flexible configuration and can be
+customized to suit individual needs and tastes. <application>Internet
+Junkbuster</application> has application for both stand-alone systems and
+multi-user networks.
  </para>
  <para>
 You can find the latest version of the document at <ulink url="http://ijbswa.sourceforge.net/faq/">http://ijbswa.sourceforge.net/faq/</ulink>.
 Please see the Contact section in the user-manual if you want to contact the developers.
  </para>
 
- <para>
-  Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>.
- </para>
+<!--   <para> -->
+<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
+<!--   </para> -->
 </abstract>
 </artheader>
 
@@ -439,6 +445,9 @@ more through Google.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.9  2002/03/10 23:34:04  swa
+more info on not hiding ip address
+
 Revision 1.8  2002/03/09 15:55:48  swa
 added default config section
 
