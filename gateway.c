@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.8 2001/09/13 20:10:12 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.9 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,12 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.8 2001/09/13 20:10:12 jongfoster 
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.9  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.8  2001/09/13 20:10:12  jongfoster
  *    Fixing missing #include under Windows
  *
@@ -214,12 +220,12 @@ static int socks4_connect(const struct forward_spec * fwd,
                           struct client_state *csp)
 {
    int web_server_addr;
-   unsigned char cbuf[BUFFER_SIZE];
-   unsigned char sbuf[BUFFER_SIZE];
+   char cbuf[BUFFER_SIZE];
+   char sbuf[BUFFER_SIZE];
    struct socks_op    *c = (struct socks_op    *)cbuf;
    struct socks_reply *s = (struct socks_reply *)sbuf;
    int n;
-   int csiz;
+   size_t csiz;
    int sfd;
    int err = 0;
    char *errstr;
@@ -252,6 +258,11 @@ static int socks4_connect(const struct forward_spec * fwd,
    {
       case SOCKS_4:
          web_server_addr = htonl(resolve_hostname_to_ip(target_host));
+         if (web_server_addr == INADDR_NONE)
+         {
+            log_error(LOG_LEVEL_CONNECT, "socks4_connect: could not resolve target host %s", target_host);
+            return(-1);
+         }
          break;
       case SOCKS_4A:
          web_server_addr = 0x00000001;
@@ -261,7 +272,7 @@ static int socks4_connect(const struct forward_spec * fwd,
             errno = EINVAL;
             return(-1);
          }
-         strcpy(((char *)cbuf) + csiz, target_host);
+         strcpy(cbuf + csiz, target_host);
          csiz = n;
          break;
       default:
@@ -323,7 +334,7 @@ static int socks4_connect(const struct forward_spec * fwd,
          errno = EACCES;
          break;
       default:
-         errstr = (char *) cbuf;
+         errstr = cbuf;
          errno = ENOENT;
          sprintf(errstr,
                  "SOCKS request rejected for reason code %d\n", s->cd);
