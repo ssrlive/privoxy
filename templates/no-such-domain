@@ -47,16 +47,12 @@
 #    The URL of the SourceForge ijbswa project, who maintains this
 #    software.
 #
-#  host-html:
-#    The host part of the request that lead to this problem, HTML-encoded
+#  host:
+#    The host part of the request that lead to this problem
 #  hostport:
 #    The host and port part of the request that lead to this problem
-#  hostport-html:
-#    The host and port part of the request that lead to this problem, HTML-encoded
 #  path:
 #    The path part of the request that lead to this problem
-#  path-html:
-#    The path part of the request that lead to this problem, HTML-encoded
 #  proxy-info-url:
 #    The URL to local online Junkbuster documentation, if define in the
 #    'config' file
@@ -121,8 +117,8 @@
       <td bgcolor=#eeeeee colspan=2>
         <h2>No such domain</h2>
           <blockquote>
-            <p>Your request for <b>http://@hostport-html@@path-html@</b> could not be fulfilled, because
-              the domain name <b>@host-html@</b> could not be resolved.</p>
+            <p>Your request for <b>http://@hostport@@path@</b> could not be fulfilled, because
+              the domain name <b>@host@</b> could not be resolved.</p>
             <p>This is often a temporary failiure, so you might just
               <a href="http://@hostport@@path@">try again</a>.</p>
           </blockquote>

@@ -49,12 +49,8 @@
 #
 #  hostport:
 #    The host and port part of the request that lead to this problem
-#  hostport-html:
-#    The host and port part of the request that lead to this problem, HTML-encoded
 #  path:
 #    The path part of the request that lead to this problem
-#  path-html:
-#    The path part of the request that lead to this problem, HTML-encoded
 #
 #
 # CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:

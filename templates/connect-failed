@@ -51,12 +51,8 @@
 #    The IP address of the host that could not be reached
 #  hostport:
 #    The host and port part of the request that lead to this problem
-#  hostport-html:
-#    The host and port part of the request that lead to this problem, HTML-encoded
 #  path:
 #    The path part of the request that lead to this problem
-#  path-html:
-#    The path part of the request that lead to this problem, HTML-encoded
 #
 #
 # CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
@@ -119,8 +115,8 @@
       <td bgcolor=#eeeeee colspan=2>
         <h2>Connect failed</h2>
           <blockquote>
-            <p>Your request for <b>http://@hostport-html@@path-html@</b> could not be fulfilled, because the connection
-              to <b>@host-html@</b> (@host-ip@) could not be established.</p>
+            <p>Your request for <b>http://@hostport@@path@</b> could not be fulfilled, because the connection
+              to <b>@host@</b> (@host-ip@) could not be established.</p>
             <p>This is often a temporary failiure, so you might just
               <a href="http://@hostport@@path@">try again</a>.</p>
           </blockquote>

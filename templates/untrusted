@@ -49,16 +49,10 @@
 #
 #  hostport:
 #    The host and port part of the request that lead to this problem
-#  hostport-html:
-#    The host and port part of the request that lead to this problem, HTML-encoded
 #  path:
 #    The path part of the request that lead to this problem
-#  path-html:
-#    The path part of the request that lead to this problem, HTML-encoded
 #  referrer:
 #    The referrer of the request that lead to this problem
-#  referrer-html:
-#    The referrer of the request that lead to this problem, HTML-encoded
 #  trusted-referrers:
 #    An HTML-formatted list of referrers that are marked as trusted in
 #    the trustfile
@@ -135,9 +129,9 @@
       <td bgcolor=#eeeeee colspan=2>
         <h2>Request for untrusted URL</h2>
         <blockquote>
-          <p>Your request for <b>@hostport-html@@path-html@</b> was blocked,
+          <p>Your request for <b>@hostport@@path@</b> was blocked,
             because neither the request URL itself, nor its referrer
-            (<a href="@referrer@">@referrer-html@</a>) were trusted.
+            (<a href="@referrer@">@referrer@</a>) were trusted.
           </p>
 <!-- @if-force-support-start -->
           <p>(You can <a href="http://@hostport@@force-prefix@@path@">go there anyway</a>.)</p>

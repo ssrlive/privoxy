@@ -69,8 +69,6 @@
 #    following symbols are available:
 #    url:
 #      The given URL
-#    url-html:
-#      The given URL, HTML-encoded
 #    default:
 #      The system default for actions
 #    matches:
