@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.9 2002/01/17 20:56:22 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.10 2002/01/23 00:22:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,38 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.9 2002/01/17 20:56:22 jongfoster 
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.10  2002/01/23 00:22:59  jongfoster
+ *    Adding new function cgi_edit_actions_section_swap(), to reorder
+ *    the actions file.
+ *
+ *    Adding get_url_spec_param() to get a validated URL pattern.
+ *
+ *    Moving edit_read_line() out of this file and into loaders.c.
+ *
+ *    Adding missing html_encode() to many CGI functions.
+ *
+ *    Moving the functions that #include actionlist.h to the end of the file,
+ *    because the Visual C++ 97 debugger gets extremely confused if you try
+ *    to debug any code that comes after them in the file.
+ *
+ *    Major optimizations in cgi_edit_actions_list() to reduce the size of
+ *    the generated HTML (down 40% from 550k to 304k), with major side-effects
+ *    throughout the editor and templates.  In particular, the length of the
+ *    URLs throughout the editor has been drastically reduced, by cutting
+ *    paramater names down to 1 character and CGI names down to 3-4
+ *    characters, by removing all non-essential CGI paramaters even at the
+ *    expense of having to re-read the actions file for the most trivial
+ *    page, and by using relative rather than absolute URLs.  This means
+ *    that this (typical example):
+ *
+ *    <a href="http://ijbswa.sourceforge.net/config/edit-actions-url-form?
+ *    filename=ijb&amp;ver=1011487572&amp;section=12&amp;pattern=13
+ *    &amp;oldval=www.oesterhelt.org%2Fdeanimate-demo">
+ *
+ *    is now this:
+ *
+ *    <a href="eau?f=ijb&amp;v=1011487572&amp;p=13">
+ *
  *    Revision 1.9  2002/01/17 20:56:22  jongfoster
  *    Replacing hard references to the URL of the config interface
  *    with #defines from project.h
@@ -287,10 +319,11 @@ static jb_err actions_from_radio(const struct map * parameters,
 static jb_err map_copy_parameter_html(struct map *out,
                                       const struct map *in,
                                       const char *name);
+#if 0 /* unused function */
 static jb_err map_copy_parameter_url(struct map *out,
                                      const struct map *in,
                                      const char *name);
-
+#endif /* unused function */
 
 /*********************************************************************
  *
@@ -340,6 +373,7 @@ static jb_err map_copy_parameter_html(struct map *out,
 }
 
 
+#if 0 /* unused function */
 /*********************************************************************
  *
  * Function    :  map_copy_parameter_html
@@ -386,7 +420,7 @@ static jb_err map_copy_parameter_url(struct map *out,
       return JB_ERR_OK;
    }
 }
-
+#endif /* 0 - unused function */
 
 /*********************************************************************
  *

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.10 2002/01/17 21:10:37 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.11 2002/01/23 00:01:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.10 2002/01/17 21:10:37 jongfo
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.11  2002/01/23 00:01:04  jongfoster
+ *    Adding cgi_transparent_gif() for http://i.j.b/t
+ *    Adding missing html_encode() to many CGI functions.
+ *    Adding urlmatch.[ch] to http://i.j.b/show-version
+ *
  *    Revision 1.10  2002/01/17 21:10:37  jongfoster
  *    Changes to cgi_show_url_info to use new matching code from urlmatch.c.
  *    Also fixing a problem in the same function with improperly quoted URLs
@@ -674,7 +679,6 @@ jb_err cgi_show_url_info(struct client_state *csp,
                          const struct map *parameters)
 {
    char *url_param;
-   char *host = NULL;
    struct map *exports;
 
    assert(csp);
