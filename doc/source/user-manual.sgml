@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.89 2002/04/23 21:05:28 oes Exp $
+ $Id: user-manual.sgml,v 1.90 2002/04/23 21:41:25 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.89 2002/04/23 21:05:28 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.90 2002/04/23 21:41:25 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -2867,6 +2867,12 @@ Please choose from the following options:
     and <quote>+image</quote>, then it can be handled by 
     <quote>+image-blocker</quote> (see below).
    </para>
+   <para>
+    The <quote>+filter</quote> action can also perform some of the 
+    same functionality as <quote>+block</quote>, but by virtue of very 
+    different programming techniques, and is typically used for different 
+    reasons.
+   </para>
   </listitem>
  </varlistentry>
 
@@ -3084,7 +3090,7 @@ Please choose from the following options:
     Apply page filtering as defined by named sections of the
     <filename>default.filter</filename> file to the specified site(s). 
     <quote>Filtering</quote> can be any modification of the raw 
-    page content, including re-writing or deletion.
+    page content, including re-writing or deletion of content.
    </para>
   </listitem>
  </varlistentry>
@@ -3172,6 +3178,7 @@ Please choose from the following options:
    <para>
     This is potentially a very powerful feature! And requires a knowledge 
     of regular expressions if you want to <quote>roll your own</quote>.
+    Filtering operates on a line by line basis.
    </para>
    <para>
     Filtering requires buffering the page content, which may appear to
@@ -3179,6 +3186,12 @@ Please choose from the following options:
     passed the filters. (It does not really take longer, but seems that way
     since the page is not incrementally displayed.) This effect will be more
     noticeable on slower connections.
+   </para>
+   <para>
+    Filtering can achieve some of the effects as the <quote>+block</quote> 
+    action, i.e. it can be used to block ads and banners. In the overall 
+    scheme of things, filtering is one of the last things <quote>Privoxy</quote> 
+    does with a web page. So other actions are applied first.
    </para>
   </listitem>
  </varlistentry>
@@ -4928,6 +4941,85 @@ Requests</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="chain">
+<title>Chain of Events</title>
+<para>
+ Let's take a quick look at the basic sequence of events when a web page is 
+ requested by your browser and <application>Privoxy</application> is on duty:
+</para>
+
+<para>
+ <itemizedlist>
+ <listitem>
+  <para>
+   First, the web browser requests a page, and this request is intercepted by 
+  <application>Privoxy</application> immediately.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <application>Privoxy</application> traps any request for internal CGI 
+  pages (e.g http://p.p/) and relays these back to the browser.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   If the URL matches a <quote>+block</quote> pattern, then it is blocked 
+   and the banner displayed.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   Untrusted URLs are blocked. If URLs are being added to the
+   <filename>trust</filename> file, then that is done.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <quote>+fast-redirect</quote> is processed, stripping unwanted parts 
+   of the request web page URL.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   At this point, <application>Privoxy</application> relays the request to the
+   web server, and requests the page (assuming nothing up to this point has
+   prevented getting us from this far).
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   The first few hundred bytes are read from the web server and 
+   <quote>+kill-popups</quote> is processed, if enabled.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   If <quote>+filter</quote> applies, the rest of the page is read into
+   memory and then the filters are processed. Filters are applied in the order they
+   are specified in the <filename>default.filter</filename> file.  The entire
+   page, which is now filtered, is then sent by
+   <application>Privoxy</application> to your browser.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   As the browser receives the filtered page content, it will read and request any
+   embedded URLs on the page, e.g. an ad image. As the browser requests these
+   secondary URLs from whatever server they may be on,
+   <application>Privoxy</application> handles these same as above, and the process
+   is repeated for each such URL. Note that a fancy web page may have many, many
+   such URLs for graphics, frames, etc.
+  </para>
+ </listitem> 
+ 
+ </itemizedlist>
+</para>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="actionsanat">
 <title>Anatomy of an Action</title>
 
@@ -4961,14 +5053,16 @@ Requests</title>
  First, enter one URL (or partial URL) at the prompt, and then
  <application>Privoxy</application> will tell us 
  how the current configuration will handle it. This will not
- help with filtering effects from the <filename>default.filter</filename> file! It
- also will not tell you about any other URLs that may be embedded within the
- URL you are testing (i.e. a web page). For instance, images such as ads are expressed as URLs
- within the raw page source of HTML pages. So you will only get info for the
- actual URL that is pasted into the prompt area -- not any sub-URLs. If you
- want to know about embedded URLs like ads, you will have to dig those out of
- the HTML source. Use your browser's <quote>View Page Source</quote> option
- for this. Or right click on the ad, and grab the URL.
+ help with filtering effects (i.e. the <quote>+filter</quote> action) from the
+ <filename>default.filter</filename> file since this is handled very differently 
+ and not so easy to trap! It also will not tell you about any other URLs that
+ may be embedded within the URL you are testing (i.e. a web page). For
+ instance, images such as ads are expressed as URLs within the raw page source
+ of HTML pages. So you will only get info for the actual URL that is pasted
+ into the prompt area -- not any sub-URLs. If you want to know about embedded
+ URLs like ads, you will have to dig those out of the HTML source. Use your
+ browser's <quote>View Page Source</quote> option for this. Or right click on
+ the ad, and grab the URL.
 </para>
 
 <para>
@@ -5238,6 +5332,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.90  2002/04/23 21:41:25  hal9
+ Linuxconf is deprecated on RH, substitute chkconfig.
+
  Revision 1.89  2002/04/23 21:05:28  oes
  Added hint for startup on Red Hat
 
