@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.23 2001/12/02 00:20:41 hal9 Exp $
+ $Id: user-manual.sgml,v 1.24 2001/12/02 01:13:42 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.23 2001/12/02 00:20:41 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.24 2001/12/02 01:13:42 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -183,7 +183,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <para>
  <screen>
  tar xzvf ijb_source_* [.tgz or .tar.gz]
- cd ijb_source_2.9.9_alpha
+ cd ijb_source_2.9.10_beta
  </screen>
 </para>
 
@@ -246,10 +246,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.9-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.10-1.src.rpm
 </para>
 
 <para>
@@ -258,7 +258,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
  </screen>
 </para>
 
@@ -290,10 +290,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.9-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.10-1.src.rpm
 </para>
 
 <para>
@@ -302,7 +302,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
  </screen>
 </para>
 
@@ -382,7 +382,7 @@ configuration section below. HB.)
 </para>
 
 <para>
- For FreeBSD (and other *BSDs?), the build will need <command>gmake</command> 
+ For FreeBSD (and other *BSDs?), the build will require <command>gmake</command> 
  instead of the included <command>make</command>. <command>gmake</command> is
  available from <ulink url="http://www.gnu.org">http://www.gnu.org</ulink>.
  The rest should be the same as above for Linux/Unix.
@@ -407,9 +407,9 @@ configuration section below. HB.)
 </para>
 
 <para>
- The installed defaults provide a reasonable starting point. For the
- time being, there are only three default configuration files (this will
- change in time):
+ The installed defaults provide a reasonable starting point, though possibly
+ aggressive by some standards. For the time being, there are only three
+ default configuration files (this will change in time):
 </para>
 
 <para>
@@ -431,7 +431,9 @@ configuration section below. HB.)
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
     url="http://i.j.b">http://i.j.b</ulink>. This is the easiest method of
-    configuring actions. (Still under active development.)
+    configuring actions. (Still under active development. Other actions 
+    files are included as well with differing levels of filtering 
+    and blocking, e.g. <filename>ijb-basic.action</filename>.)
    </para>
   </listitem> 
 
@@ -1738,7 +1740,9 @@ Removed references to Win32. HB 09/23/01
  handled. Images can be anything you want, including ads, banners, or just
  some obnoxious image that you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. 
- not written to disk). 
+ not written to disk). Changes to <filename>ijb.action</filename> should 
+ be immediately visible to <application>Junkbuster</application> without 
+ the need to restart.
 </para>
 
 <para>
@@ -3203,6 +3207,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.24  2001/12/02 01:13:42  hal9
+ Fix typo.
+
  Revision 1.23  2001/12/02 00:20:41  hal9
  Updates for recent changes.
 
