@@ -57,22 +57,15 @@ Junkbuster Developer Manual
    
 3. Documentation Guidelines
 
-   All docs should be ...
+   All docs are in SGML format and located in the doc/source directory.
    
-     * in a format that is widely used. I propose HTML.
-     * we either
-          + generate man pages from the documentation (let's _NOT_ write
-            them manually), or
-          + we have a man page that points to the documentation (I
-            propose this option)
-     * have a consistent layout
-     * have a link to the latest version of the document (i.e. point to a
-       URL at sf)
-     * be consistent with the redirect script (i.e. the junkbuster
-       program points via the redirect URL at sf to valid end-points in
-       the document)
-     * started from scratch but recycle parts from the original
-       junkbuster documents
+   How do you update the webserver (i.e. the pages on sourceforge)?
+   
+    1. Run make dok (which uses the documents in doc/source to update all
+       text files in doc/text and to update all web documents in
+       doc/webserver.
+    2. Run make webserver which copies all files from doc/webserver to
+       the sourceforge webserver via scp.
      _________________________________________________________________
    
 4. Coding Guidelines
