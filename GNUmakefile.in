@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.7 2002/03/05 13:43:28 morcego Exp $
+# $Id: GNUmakefile.in,v 1.8 2002/03/05 14:07:42 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.8  2002/03/05 14:07:42  morcego
+# configure now detects rpm topdir, and change GNUmakefile acordingly
+#    (based on sugestion by Sarantis Paskalis)
+#
 # Revision 1.7  2002/03/05 13:43:28  morcego
 # Checking for text browser, so redhat-dok can work.
 #
@@ -258,7 +262,9 @@ TAR        = tar
 MAKE       = make
 LN         = ln
 WDUMP      = @WDUMP@ -dump
-DB         = jade -t sgml -ihtml -D.. -d ldp.dsl\#html
+JADEBIN    = @JADEBIN@
+DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
+DKPREFIX   = @DKPREFIX@
 
 # Program to do LF->CRLF
 #
@@ -504,22 +510,22 @@ tarball-dist:
 # converts doc/source/*.sgml into html, text and man pages
 #
 #############################################################################
-dok:
+dok: doc/source/ldpOK.dsl
 	mkdir -p doc/text doc/man
 #  user manual
 	rm -rf doc/webserver/user-manual
-	cd doc/source && db2html -s ldp.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && db2html -s ldp.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+	cd doc/source && db2html -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
+	cd doc/source && db2html -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
 ##  developer manual
 	rm -rf doc/webserver/developer-manual
-	cd doc/source && db2html -s ldp.dsl developer-manual.sgml && mv developer-manual ../webserver
-	cd doc/source && db2html -s ldp.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+	cd doc/source && db2html -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
+	cd doc/source && db2html -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
 ##  faq
 	rm -rf doc/webserver/faq
-	cd doc/source && db2html -s ldp.dsl faq.sgml && mv faq ../webserver
-	cd doc/source && db2html -s ldp.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	cd doc/source && db2html -s ldpOK.dsl faq.sgml && mv faq ../webserver
+	cd doc/source && db2html -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
-redhat-dok:
+redhat-dok: doc/source/ldpOK.dsl
 	mkdir -p doc/text doc/man doc/source/user-manual \
           doc/source/developer-manual doc/source/faq
 ##  user manual
@@ -541,6 +547,13 @@ redhat-dok:
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+
+doc/source/ldpOK.dsl:
+	if [ "$(DKPREFIX)" != "none" ]; then \
+		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
+	else \
+		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
+	fi
 
 #############################################################################
 #

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.31 2002/03/05 13:43:28 morcego Exp $
+dnl $Id: configure.in,v 1.32 2002/03/05 14:07:43 morcego Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.32  2002/03/05 14:07:43  morcego
+dnl configure now detects rpm topdir, and change GNUmakefile acordingly
+dnl    (based on sugestion by Sarantis Paskalis)
+dnl
 dnl Revision 1.31  2002/03/05 13:43:28  morcego
 dnl Checking for text browser, so redhat-dok can work.
 dnl
@@ -240,7 +244,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.31 $)
+AC_REVISION($Revision: 1.32 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -402,6 +406,15 @@ if test $RPMBIN != false; then
 		fi
 fi
 AC_SUBST(RPM_BASE)
+
+dnl Check for jade, so we can build the documentation
+AC_CHECK_PROGS(JADEBIN,jade openjade,false)
+AC_SUBST(JADEBIN)
+
+dnl Checking for the docbook.dsl stylesheet file
+DKPREFIX=none
+AC_CHECK_FILE(/usr/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl,DKPREFIX=/usr/share/sgml/docbook/dsssl-stylesheets,AC_CHECK_FILE(/usr/share/sgml/docbkdsl/html/docbook.dsl,/usr/share/sgml/docbkdsl))
+AC_SUBST(DKPREFIX)
 
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
 old_CFLAGS_nospecial=$CFLAGS
