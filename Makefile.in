@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.36 2001/10/31 19:26:13 swa Exp $
+# $Id: Makefile.in,v 1.37 2001/11/01 00:52:04 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.37  2001/11/01 00:52:04  hal9
+# Redhat-upload stuff per Stefan.
+#
 # Revision 1.36  2001/10/31 19:26:13  swa
 # automate process of uploading new releases
 # to sf.
@@ -186,7 +189,7 @@ RPM_PACKAGEV  = 1
 # Directories for "make install"
 #############################################################################
 
-DEST        = /etc/junkbuster
+DEST        = @sysconfdir@/junkbuster
 SBIN_DEST   = @sbindir@
 MAN_DEST    = @mandir@
 
@@ -203,7 +206,19 @@ INSTALL    = cp -f
 LD         = @CC@
 RM         = rm -f
 STRIP_PROG = strip
+SED	   = sed
+CAT        = cat
+RPM        = rpm
+MV	   = mv
+TAR        = tar
+MAKE       = make
 
+#############################################################################
+# Setup for make distribution rh and suse for now 
+#############################################################################
+
+TAR_ARCH = /tmp/ijbswa-$(RPM_VERSION).tar.gz
+RPM_BASE = /usr/src/redhat
 
 #############################################################################
 # Filenames and libraries
@@ -316,31 +331,44 @@ sregexp.txt: re_filterfile
 
 
 #############################################################################
-# redhat distribution
+# redhat distribution alpha and x86
 #############################################################################
 
 redhat-dist:
-	@make clobber
-# verify that i'm root needs to be done
-	rm -f ../ijbswa.tar.gz
-# verify all version strings, FLAGS, etc. in the spec file
-	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && mv -f abc junkbuster-rh.spec
-	tar --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
-# verify all files in their correct location needs to be done
-	cd .. && rpm -ta ijbswa.tar.gz
+	@for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
+		if [ ! -w $(RPM_BASE)/$$dir ]; then \
+			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
+			exit; \
+		fi; \
+	done ; \
+	$(MAKE) clobber; \
+	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH); \
+	$(CAT) junkbuster-rh.spec | \
+		$(SED) 's/^Version:.*/Version: $(RPM_VERSION)/g;s/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && \
+		$(MV) -f abc junkbuster-rh.spec; \
+	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf $(TAR_ARCH) . ; \
+	$(RPM) -ta  $(TAR_ARCH); \
+	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH)
 
 #
 # anonymously ncftps the rpms to sourceforge
 #
 redhat-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/redhat/SRPMS/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/redhat/RPMS/i386/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+# better should use `arch` here instead of ix86 to support other platforms too
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
      # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+
+#############################################################################
+# sun solaris  distribution
+#############################################################################
+solaris-dist:
+	@$(ECHO) coming soon. 
 
 #############################################################################
 # suse distribution (need to be root to build)
@@ -365,7 +393,8 @@ suse-dist:
 #
 suse-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/SRPMS/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/RPMS/i386/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
+# better should use `arch` here instead of ix86 to support other platforms too
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/RPMS/*/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
