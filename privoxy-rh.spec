@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.33 2002/05/25 02:08:23 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.34 2002/05/25 22:09:58 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -242,7 +242,7 @@ fi
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
+%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/privoxy-index.html
 %doc doc/webserver/images
 %doc doc/webserver/man-page
 
@@ -312,6 +312,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon May 27 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-1
+- Index.html is now privoxy-index.html.
+
 * Fri May 24 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
 - Add another template and alphabetize these for easier tracking.
@@ -659,6 +663,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.34  2002/05/25 22:09:58  hal9
+# Add html man page to keep index.html from breaking (untested).
+#
 # Revision 1.33  2002/05/25 02:08:23  hal9
 # Add doc/images directory.
 # Redhat: alphabetized list of templates (and I think added one in the process)
