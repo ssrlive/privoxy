@@ -1,6 +1,6 @@
 #ifndef _W32LOG_H
 #define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.3 2001/05/29 09:50:24 jongfoster Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.4 2001/05/31 21:37:11 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.4  2001/05/31 21:37:11  jongfoster
+ *    GUI changes to rename "permissions file" to "actions file".
+ *
  *    Revision 1.3  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -108,10 +111,6 @@ extern int g_nFontSize;
 /* FIXME: this is a kludge */
 
 extern const char * g_actions_file;
-extern const char * g_forwardfile;
-#ifdef ACL_FILES
-extern const char * g_aclfile;
-#endif /* def ACL_FILES */
 #ifdef PCRS
 extern const char * g_re_filterfile;
 #endif
