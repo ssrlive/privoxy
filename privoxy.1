@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "10 April 2002" "Privoxy 2.9.14 beta" ""
+.TH "PRIVOXY" "1" "11 April 2002" "Privoxy 2.9.14 beta" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -29,10 +29,10 @@ Don't  become  a daemon, i.e. don't fork and become process group
 leader, don't detach from controlling tty, and do all logging there.
 .TP
 \fB--pidfile \fIpidfile\fB\fR
-After (optionally) writing the PID file, assume the user  ID  of  user
-and the GID of group, or, if the optional group was not given, the
-default group  of user.  Exit if the privileges are not sufficient to
-do so.
+On startup, write the process ID to \fIpidfile\fR.
+Delete the \fIpidfile\fR on exit.
+Failiure to create or delete the \fIpidfile\fR
+is non-fatal. If no \fB--pidfile\fR option is given, no PID file will be used.
 .TP
 \fB--user \fIuser[.group]\fB\fR
 After (optionally) writing the PID file, assume the user ID of
