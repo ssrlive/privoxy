@@ -14,128 +14,127 @@ developers.
 -------------------------------------------------------------------------------
 
 Table of Contents
- 
 1. Introduction
-3. Quickstart to Privoxy Development
-4. The CVS Repository
    
-    4.1. Access to CVS
-    4.2. CVS Commit Guideline
-    4.3. Discussing Changes First
+    1.1. Quickstart to Privoxy Development
    
-5. Documentation Guidelines
+2. The CVS Repository
    
-    5.1. Quickstart to Docbook and SGML
-    5.2. Privoxy Documentation Style
-    5.3. Privoxy Custom Entities
+    2.1. Access to CVS
+    2.2. CVS Commit Guideline
+    2.3. Discussing Changes First
    
-6. Coding Guidelines
+3. Documentation Guidelines
    
-    6.1. Introduction
-    6.2. Using Comments
+    3.1. Quickstart to Docbook and SGML
+    3.2. Privoxy Documentation Style
+    3.3. Privoxy Custom Entities
+   
+4. Coding Guidelines
+   
+    4.1. Introduction
+    4.2. Using Comments
        
-        6.2.1. Comment, Comment, Comment
-        6.2.2. Use blocks for comments
-        6.2.3. Keep Comments on their own line
-        6.2.4. Comment each logical step
-        6.2.5. Comment All Functions Thoroughly
-        6.2.6. Comment at the end of braces if the content is more than one
+        4.2.1. Comment, Comment, Comment
+        4.2.2. Use blocks for comments
+        4.2.3. Keep Comments on their own line
+        4.2.4. Comment each logical step
+        4.2.5. Comment All Functions Thoroughly
+        4.2.6. Comment at the end of braces if the content is more than one
             screen length
        
-    6.3. Naming Conventions
+    4.3. Naming Conventions
        
-        6.3.1. Variable Names
-        6.3.2. Function Names
-        6.3.3. Header file prototypes
-        6.3.4. Enumerations, and #defines
-        6.3.5. Constants
+        4.3.1. Variable Names
+        4.3.2. Function Names
+        4.3.3. Header file prototypes
+        4.3.4. Enumerations, and #defines
+        4.3.5. Constants
        
-    6.4. Using Space
+    4.4. Using Space
        
-        6.4.1. Put braces on a line by themselves.
-        6.4.2. ALL control statements should have a block
-        6.4.3. Do not belabor/blow-up boolean expressions
-        6.4.4. Use white space freely because it is free
-        6.4.5. Don't use white space around structure operators
-        6.4.6. Make the last brace of a function stand out
-        6.4.7. Use 3 character indentions
+        4.4.1. Put braces on a line by themselves.
+        4.4.2. ALL control statements should have a block
+        4.4.3. Do not belabor/blow-up boolean expressions
+        4.4.4. Use white space freely because it is free
+        4.4.5. Don't use white space around structure operators
+        4.4.6. Make the last brace of a function stand out
+        4.4.7. Use 3 character indentions
        
-    6.5. Initializing
+    4.5. Initializing
        
-        6.5.1. Initialize all variables
+        4.5.1. Initialize all variables
        
-    6.6. Functions
+    4.6. Functions
        
-        6.6.1. Name functions that return a boolean as a question.
-        6.6.2. Always specify a return type for a function.
-        6.6.3. Minimize function calls when iterating by using variables
-        6.6.4. Pass and Return by Const Reference
-        6.6.5. Pass and Return by Value
-        6.6.6. Names of include files
-        6.6.7. Provide multiple inclusion protection
-        6.6.8. Use `extern "C"` when appropriate
-        6.6.9. Where Possible, Use Forward Struct Declaration Instead of
+        4.6.1. Name functions that return a boolean as a question.
+        4.6.2. Always specify a return type for a function.
+        4.6.3. Minimize function calls when iterating by using variables
+        4.6.4. Pass and Return by Const Reference
+        4.6.5. Pass and Return by Value
+        4.6.6. Names of include files
+        4.6.7. Provide multiple inclusion protection
+        4.6.8. Use `extern "C"` when appropriate
+        4.6.9. Where Possible, Use Forward Struct Declaration Instead of
             Includes
        
-    6.7. General Coding Practices
+    4.7. General Coding Practices
        
-        6.7.1. Turn on warnings
-        6.7.2. Provide a default case for all switch statements
-        6.7.3. Try to avoid falling through cases in a switch statement.
-        6.7.4. Use 'long' or 'short' Instead of 'int'
-        6.7.5. Don't mix size_t and other types
-        6.7.6. Declare each variable and struct on its own line.
-        6.7.7. Use malloc/zalloc sparingly
-        6.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
+        4.7.1. Turn on warnings
+        4.7.2. Provide a default case for all switch statements
+        4.7.3. Try to avoid falling through cases in a switch statement.
+        4.7.4. Use 'long' or 'short' Instead of 'int'
+        4.7.5. Don't mix size_t and other types
+        4.7.6. Declare each variable and struct on its own line.
+        4.7.7. Use malloc/zalloc sparingly
+        4.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring
             'free'
-        6.7.9. Add loaders to the `file_list' structure and in order
-        6.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
+        4.7.9. Add loaders to the `file_list' structure and in order
+        4.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
        
-    6.8. Addendum: Template for files and function comment blocks:
+    4.8. Addendum: Template for files and function comment blocks:
    
-7. Testing Guidelines
+5. Testing Guidelines
    
-    7.1. Testplan for releases
-    7.2. Test reports
+    5.1. Testplan for releases
+    5.2. Test reports
    
-8. Releasing a New Version
+6. Releasing a New Version
    
-    8.1. Version numbers
-    8.2. Before the Release: Freeze
-    8.3. Building and Releasing the Packages
+    6.1. Version numbers
+    6.2. Before the Release: Freeze
+    6.3. Building and Releasing the Packages
        
-        8.3.1. Source Tarball
-        8.3.2. SuSE or Red Hat RPM
-        8.3.3. OS/2
-        8.3.4. Solaris
-        8.3.5. Windows
-        8.3.6. Debian
-        8.3.7. Mac OSX
-        8.3.8. FreeBSD
-        8.3.9. HP-UX 11
-        8.3.10. Amiga OS
-        8.3.11. AIX
+        6.3.1. Source Tarball
+        6.3.2. SuSE or Red Hat RPM
+        6.3.3. OS/2
+        6.3.4. Solaris
+        6.3.5. Windows
+        6.3.6. Debian
+        6.3.7. Mac OSX
+        6.3.8. FreeBSD
+        6.3.9. HP-UX 11
+        6.3.10. Amiga OS
+        6.3.11. AIX
        
-    8.4. Uploading and Releasing Your Package
-    8.5. After the Release
+    6.4. Uploading and Releasing Your Package
+    6.5. After the Release
    
-9. Update the Webserver
-10. Contacting the developers, Bug Reporting and Feature Requests
+7. Update the Webserver
+8. Contacting the developers, Bug Reporting and Feature Requests
    
-    10.1. Get Support
-    10.2. Report bugs
-    10.3. Request new features
-    10.4. Report ads or other filter problems
-    10.5. Other
+    8.1. Get Support
+    8.2. Report bugs
+    8.3. Request new features
+    8.4. Report ads or other filter problems
+    8.5. Other
    
-11. Copyright and History
+9. Copyright and History
    
-    11.1. Copyright
-    11.2. History
+    9.1. Copyright
+    9.2. History
    
-12. See also
-
--------------------------------------------------------------------------------
+10. See also
 
 1. Introduction
 
@@ -150,7 +149,7 @@ porting, are all important jobs as well.
 
 -------------------------------------------------------------------------------
 
-3. Quickstart to Privoxy Development
+1.1. Quickstart to Privoxy Development
 
 You'll need an account on Sourceforge to support our development. Mail your ID
 to the list and wait until a project manager has added you.
@@ -160,7 +159,7 @@ the extensive comments in the source code.
 
 -------------------------------------------------------------------------------
 
-4. The CVS Repository
+2. The CVS Repository
 
 If you intend to help us with programming, documentation or packaging you will
 need write access to our holy grail, the CVS repository. Please read this
@@ -168,7 +167,7 @@ chapter completely before accessing via CVS.
 
 -------------------------------------------------------------------------------
 
-4.1. Access to CVS
+2.1. Access to CVS
 
 The project's CVS repository is hosted on SourceForge. Please refer to the
 chapters 6 and 7 in SF's site documentation for the technical access details
@@ -178,7 +177,7 @@ tree module is called current.
 
 -------------------------------------------------------------------------------
 
-4.2. CVS Commit Guideline
+2.2. CVS Commit Guideline
 
 The source tree is the heart of every software project. Every effort must be
 made to ensure that it is readable, compilable and consistent at all times. We
@@ -206,7 +205,7 @@ guidelines:
    
 -------------------------------------------------------------------------------
 
-4.3. Discussing Changes First
+2.3. Discussing Changes First
 
 We don't have a too formal policy on this, just use common sense. Hints: If it
 is..
@@ -227,7 +226,7 @@ to the patches tracker instead.
 
 -------------------------------------------------------------------------------
 
-5. Documentation Guidelines
+3. Documentation Guidelines
 
 All formal documents are maintained in Docbook SGML and located in the doc/
 source/* directory. You will need Docbook, the Docbook DTD's and the Docbook
@@ -270,7 +269,7 @@ been updated (this is done just prior to a new release).
 
 -------------------------------------------------------------------------------
 
-5.1. Quickstart to Docbook and SGML
+3.1. Quickstart to Docbook and SGML
 
 If you are not familiar with SGML, it is a markup language similar to HTML.
 Actually, not a mark up language per se, but a language used to define markup
@@ -297,18 +296,17 @@ sufficient for our purposes.
 
 Some common elements that you likely will use:
 
-, paragraph delimiter. Most text needs to be within paragraph elements (there  
-are some exceptions).                                                          
-, the stylesheets make this italics.                                           
-, files and directories.                                                       
-, command examples.                                                            
-, like                                                                         
-, more or less.                                                                
-, list with bullets.                                                           
-, member of the above.                                                         
-, screen output, implies .                                                     
-, like HTML tag.                                                               
-, for, doh, quoting text.                                                      
+<para></para>, paragraph delimiter. Most text needs to be within paragraph     
+elements (there are some exceptions).                                          
+<emphasis></emphasis>, the stylesheets make this italics.                      
+<filename></filename>, files and directories.                                  
+<command></command>, command examples.                                         
+<literallayout></literallayout>, like <pre>, more or less.                     
+<itemizedlist></itemizedlist>, list with bullets.                              
+<listitem></listitem>, member of the above.                                    
+<screen></screen>, screen output, implies <literallayout>.                     
+<ulink url="example.com"></ulink>, like HTML <a> tag.                          
+<quote></quote>, for, doh, quoting text.                                       
 
 Look at any of the existing docs for examples of all these and more.
 
@@ -317,7 +315,7 @@ useful.
 
 -------------------------------------------------------------------------------
 
-5.2. Privoxy Documentation Style
+3.2. Privoxy Documentation Style
 
 It will be easier if everyone follows a similar writing style. This just makes
 it easier to read what someone else has written if it is all done in a similar
@@ -388,7 +386,7 @@ Here it is:
    
 -------------------------------------------------------------------------------
 
-5.3. Privoxy Custom Entities
+3.3. Privoxy Custom Entities
 
 Privoxy documentation is using a number of customized "entities" to facilitate
 documentation maintenance.
@@ -430,9 +428,9 @@ Read the source!
 
 -------------------------------------------------------------------------------
 
-6. Coding Guidelines
+4. Coding Guidelines
 
-6.1. Introduction
+4.1. Introduction
 
 This set of standards is designed to make our lives easier. It is developed
 with the simple goal of helping us keep the "new and improved Privoxy"
@@ -445,9 +443,9 @@ changes/improvements and in general feel good about ourselves. ;->
 
 -------------------------------------------------------------------------------
 
-6.2. Using Comments
+4.2. Using Comments
 
-6.2.1. Comment, Comment, Comment
+4.2.1. Comment, Comment, Comment
 
 Explanation:
 
@@ -482,7 +480,7 @@ is actually being done.
 
 -------------------------------------------------------------------------------
 
-6.2.2. Use blocks for comments
+4.2.2. Use blocks for comments
 
 Explanation:
 
@@ -522,7 +520,7 @@ line as the code.
 
 -------------------------------------------------------------------------------
 
-6.2.3. Keep Comments on their own line
+4.2.3. Keep Comments on their own line
 
 Explanation:
 
@@ -572,7 +570,7 @@ short DoSomethingVeryImportant(
 
 -------------------------------------------------------------------------------
 
-6.2.4. Comment each logical step
+4.2.4. Comment each logical step
 
 Explanation:
 
@@ -587,7 +585,7 @@ these are usually major logic containers.
 
 -------------------------------------------------------------------------------
 
-6.2.5. Comment All Functions Thoroughly
+4.2.5. Comment All Functions Thoroughly
 
 Explanation:
 
@@ -604,7 +602,7 @@ document.
 
 -------------------------------------------------------------------------------
 
-6.2.6. Comment at the end of braces if the content is more than one screen
+4.2.6. Comment at the end of braces if the content is more than one screen
 length
 
 Explanation:
@@ -637,9 +635,9 @@ if ( 1 == X )
 
 -------------------------------------------------------------------------------
 
-6.3. Naming Conventions
+4.3. Naming Conventions
 
-6.3.1. Variable Names
+4.3.1. Variable Names
 
 Explanation:
 
@@ -659,7 +657,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
 
 -------------------------------------------------------------------------------
 
-6.3.2. Function Names
+4.3.2. Function Names
 
 Explanation:
 
@@ -680,7 +678,7 @@ int loadSomeFile( struct client_state *csp )
 
 -------------------------------------------------------------------------------
 
-6.3.3. Header file prototypes
+4.3.3. Header file prototypes
 
 Explanation:
 
@@ -700,7 +698,7 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-6.3.4. Enumerations, and #defines
+4.3.4. Enumerations, and #defines
 
 Explanation:
 
@@ -727,7 +725,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-6.3.5. Constants
+4.3.5. Constants
 
 Explanation:
 
@@ -753,9 +751,9 @@ Instead of:
 
 -------------------------------------------------------------------------------
 
-6.4. Using Space
+4.4. Using Space
 
-6.4.1. Put braces on a line by themselves.
+4.4.1. Put braces on a line by themselves.
 
 Explanation:
 
@@ -798,7 +796,7 @@ while ( more lines are read )
 
 -------------------------------------------------------------------------------
 
-6.4.2. ALL control statements should have a block
+4.4.2. ALL control statements should have a block
 
 Explanation:
 
@@ -828,7 +826,7 @@ above also applies.
 
 -------------------------------------------------------------------------------
 
-6.4.3. Do not belabor/blow-up boolean expressions
+4.4.3. Do not belabor/blow-up boolean expressions
 
 Example:
 
@@ -844,7 +842,7 @@ knowledge of C/C++. (Hope I do not offend by that last comment ... 8-)
 
 -------------------------------------------------------------------------------
 
-6.4.4. Use white space freely because it is free
+4.4.4. Use white space freely because it is free
 
 Explanation:
 
@@ -864,7 +862,7 @@ firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
 
 -------------------------------------------------------------------------------
 
-6.4.5. Don't use white space around structure operators
+4.4.5. Don't use white space around structure operators
 
 Explanation:
 
@@ -885,7 +883,7 @@ Instead of: aStruct -> aMember; aStruct . aMember; FunctionName ();
 
 -------------------------------------------------------------------------------
 
-6.4.6. Make the last brace of a function stand out
+4.4.6. Make the last brace of a function stand out
 
 Example:
 
@@ -916,7 +914,7 @@ of function comments.
 
 -------------------------------------------------------------------------------
 
-6.4.7. Use 3 character indentions
+4.4.7. Use 3 character indentions
 
 Explanation:
 
@@ -949,9 +947,9 @@ int function1( ... )
 
 -------------------------------------------------------------------------------
 
-6.5. Initializing
+4.5. Initializing
 
-6.5.1. Initialize all variables
+4.5.1. Initialize all variables
 
 Explanation:
 
@@ -974,9 +972,9 @@ Status: developer-discretion if and only if the variable is assigned a value
 
 -------------------------------------------------------------------------------
 
-6.6. Functions
+4.6. Functions
 
-6.6.1. Name functions that return a boolean as a question.
+4.6.1. Name functions that return a boolean as a question.
 
 Explanation:
 
@@ -991,7 +989,7 @@ IsWebPageBlank();
 
 -------------------------------------------------------------------------------
 
-6.6.2. Always specify a return type for a function.
+4.6.2. Always specify a return type for a function.
 
 Explanation:
 
@@ -1001,7 +999,7 @@ type if the function does not need to return anything.
 
 -------------------------------------------------------------------------------
 
-6.6.3. Minimize function calls when iterating by using variables
+4.6.3. Minimize function calls when iterating by using variables
 
 Explanation:
 
@@ -1041,7 +1039,7 @@ loop.
 
 -------------------------------------------------------------------------------
 
-6.6.4. Pass and Return by Const Reference
+4.6.4. Pass and Return by Const Reference
 
 Explanation:
 
@@ -1058,7 +1056,7 @@ should too.
 
 -------------------------------------------------------------------------------
 
-6.6.5. Pass and Return by Value
+4.6.5. Pass and Return by Value
 
 Explanation:
 
@@ -1071,7 +1069,7 @@ would not work. So, to be consistent, we should declare all prototypes with
 
 -------------------------------------------------------------------------------
 
-6.6.6. Names of include files
+4.6.6. Names of include files
 
 Explanation:
 
@@ -1083,20 +1081,20 @@ other header files.
 
 Example:
 
-#include      /* This is not a local include */                                
+#include <iostream.h>     /* This is not a local include */                    
 #include "config.h"       /* This IS a local include */                        
 
 Exception:
 
 /* This is not a local include, but requires a path element. */                
-#include                                                                       
+#include <sys/fileName.h>                                                      
 
 Note: Please! do not add "-I." to the Makefile without a _very_ good reason.
 This duplicates the #include "file.h" behavior.
 
 -------------------------------------------------------------------------------
 
-6.6.7. Provide multiple inclusion protection
+4.6.7. Provide multiple inclusion protection
 
 Explanation:
 
@@ -1115,7 +1113,7 @@ Example:
 
 -------------------------------------------------------------------------------
 
-6.6.8. Use `extern "C"` when appropriate
+4.6.8. Use `extern "C"` when appropriate
 
 Explanation:
 
@@ -1138,7 +1136,7 @@ extern "C"
 
 -------------------------------------------------------------------------------
 
-6.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
+4.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
 
 Explanation:
 
@@ -1161,9 +1159,9 @@ Status: Use with discretion.
 
 -------------------------------------------------------------------------------
 
-6.7. General Coding Practices
+4.7. General Coding Practices
 
-6.7.1. Turn on warnings
+4.7.1. Turn on warnings
 
 Explanation
 
@@ -1173,7 +1171,7 @@ possible.
 
 -------------------------------------------------------------------------------
 
-6.7.2. Provide a default case for all switch statements
+4.7.2. Provide a default case for all switch statements
 
 Explanation:
 
@@ -1213,7 +1211,7 @@ Status: Programmer discretion is advised.
 
 -------------------------------------------------------------------------------
 
-6.7.3. Try to avoid falling through cases in a switch statement.
+4.7.3. Try to avoid falling through cases in a switch statement.
 
 Explanation:
 
@@ -1232,7 +1230,7 @@ fall through and reason why you felt it was necessary.
 
 -------------------------------------------------------------------------------
 
-6.7.4. Use 'long' or 'short' Instead of 'int'
+4.7.4. Use 'long' or 'short' Instead of 'int'
 
 Explanation:
 
@@ -1246,7 +1244,7 @@ forget the exact typedefs now). Should we add these to IJB now that we have a
 
 -------------------------------------------------------------------------------
 
-6.7.5. Don't mix size_t and other types
+4.7.5. Don't mix size_t and other types
 
 Explanation:
 
@@ -1258,7 +1256,7 @@ can.
 
 -------------------------------------------------------------------------------
 
-6.7.6. Declare each variable and struct on its own line.
+4.7.6. Declare each variable and struct on its own line.
 
 Explanation:
 
@@ -1287,7 +1285,7 @@ Status: developer-discretion.
 
 -------------------------------------------------------------------------------
 
-6.7.7. Use malloc/zalloc sparingly
+4.7.7. Use malloc/zalloc sparingly
 
 Explanation:
 
@@ -1304,7 +1302,7 @@ list, then it should definitely be allocated via `malloc'.
 
 -------------------------------------------------------------------------------
 
-6.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
+4.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
 
 Explanation:
 
@@ -1330,7 +1328,7 @@ and freeing data structures (complex or nested).
 
 -------------------------------------------------------------------------------
 
-6.7.9. Add loaders to the `file_list' structure and in order
+4.7.9. Add loaders to the `file_list' structure and in order
 
 Explanation:
 
@@ -1343,7 +1341,7 @@ KILLPOPUPs, it is clear that it should come first.
 
 -------------------------------------------------------------------------------
 
-6.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
+4.7.10. "Uncertain" new code and/or changes to existing code, use FIXME
 
 Explanation:
 
@@ -1368,7 +1366,7 @@ from the project).
 
 -------------------------------------------------------------------------------
 
-6.8. Addendum: Template for files and function comment blocks:
+4.8. Addendum: Template for files and function comment blocks:
 
 Example for file comments:
 
@@ -1520,13 +1518,13 @@ create a "self-documenting" web page.
 
 -------------------------------------------------------------------------------
 
-7. Testing Guidelines
+5. Testing Guidelines
 
 To be filled.
 
 -------------------------------------------------------------------------------
 
-7.1. Testplan for releases
+5.1. Testplan for releases
 
 Explain release numbers. major, minor. developer releases. etc.
 
@@ -1555,7 +1553,7 @@ Explain release numbers. major, minor. developer releases. etc.
    
 -------------------------------------------------------------------------------
 
-7.2. Test reports
+5.2. Test reports
 
 Please submit test reports only with the test form at sourceforge. Three simple
 steps:
@@ -1571,7 +1569,7 @@ Do not mail to the mailinglist (we cannot keep track on issues there).
 
 -------------------------------------------------------------------------------
 
-8. Releasing a New Version
+6. Releasing a New Version
 
 When we release versions of Privoxy, our work leaves our cozy secret lab and
 has to work in the cold RealWorld[tm]. Once it is released, there is no way to
@@ -1586,7 +1584,7 @@ scp, ssh (ssh), gmake (GNU's version of make), autoconf, cvs.
 
 -------------------------------------------------------------------------------
 
-8.1. Version numbers
+6.1. Version numbers
 
 First you need to determine which version number the release will have. Privoxy
 version numbers consist of three numbers, separated by dots, like in X.Y.Z,
@@ -1622,7 +1620,7 @@ where:
    
 -------------------------------------------------------------------------------
 
-8.2. Before the Release: Freeze
+6.2. Before the Release: Freeze
 
 The following must be done by one of the developers prior to each new release.
 
@@ -1663,7 +1661,7 @@ The following must be done by one of the developers prior to each new release.
    
 -------------------------------------------------------------------------------
 
-8.3. Building and Releasing the Packages
+6.3. Building and Releasing the Packages
 
 Now the individual packages can be built and released. Note that for GPL
 reasons the first package to be released is always the source tarball.
@@ -1686,7 +1684,7 @@ platform dependent binary packages below.
 
 -------------------------------------------------------------------------------
 
-8.3.1. Source Tarball
+6.3.1. Source Tarball
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1707,7 +1705,7 @@ change log field, use the relevant section of the ChangeLog file.
 
 -------------------------------------------------------------------------------
 
-8.3.2. SuSE or Red Hat RPM
+6.3.2. SuSE or Red Hat RPM
 
 In following text, replace dist with either "rh" for Red Hat or "suse" for
 SuSE.
@@ -1742,7 +1740,7 @@ notes and change log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.3. OS/2
+6.3.3. OS/2
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the OS/2
@@ -1777,7 +1775,7 @@ tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.4. Solaris
+6.3.4. Solaris
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1801,7 +1799,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.5. Windows
+6.3.5. Windows
 
 You should ensure you have the latest version of Cygwin (from http://
 www.cygwin.com/). Run the following commands from within a Cygwin bash shell.
@@ -1824,7 +1822,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.6. Debian
+6.3.6. Debian
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then, run:
@@ -1836,7 +1834,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.3.7. Mac OSX
+6.3.7. Mac OSX
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Mac OSX
@@ -1866,7 +1864,7 @@ the release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.8. FreeBSD
+6.3.8. FreeBSD
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1890,7 +1888,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3.9. HP-UX 11
+6.3.9. HP-UX 11
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1902,7 +1900,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.3.10. Amiga OS
+6.3.10. Amiga OS
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1914,7 +1912,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.3.11. AIX
+6.3.11. AIX
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1938,7 +1936,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.4. Uploading and Releasing Your Package
+6.4. Uploading and Releasing Your Package
 
 After the package is ready, it is time to upload it to SourceForge, and go
 through the release steps. The upload is done via FTP:
@@ -1969,7 +1967,7 @@ essentially the same steps, but select Edit Release, instead of Add Release.
 
 -------------------------------------------------------------------------------
 
-8.5. After the Release
+6.5. After the Release
 
 When all (or: most of the) packages have been uploaded and made available, send
 an email to the announce mailing list, Subject: "Version X.Y.Z available for
@@ -1978,7 +1976,7 @@ change log.
 
 -------------------------------------------------------------------------------
 
-9. Update the Webserver
+7. Update the Webserver
 
 When updating the webserver, please follow these steps to make sure that no
 broken links, incosistent contents or permission problems will occur:
@@ -2009,14 +2007,14 @@ avoid permission problems.
 
 -------------------------------------------------------------------------------
 
-10. Contacting the developers, Bug Reporting and Feature Requests
+8. Contacting the developers, Bug Reporting and Feature Requests
 
 We value your feedback. However, to provide you with the best support, please
 note the following sections.
 
 -------------------------------------------------------------------------------
 
-10.1. Get Support
+8.1. Get Support
 
 To get support, use the Sourceforge Support Forum:
 
@@ -2024,7 +2022,7 @@ To get support, use the Sourceforge Support Forum:
 
 -------------------------------------------------------------------------------
 
-10.2. Report bugs
+8.2. Report bugs
 
 To submit bugs, use the Sourceforge Bug Forum:
 
@@ -2041,7 +2039,7 @@ reproduce the bug.
 
 -------------------------------------------------------------------------------
 
-10.3. Request new features
+8.3. Request new features
 
 To submit ideas on new features, use the Sourceforge feature request forum:
 
@@ -2049,7 +2047,7 @@ To submit ideas on new features, use the Sourceforge feature request forum:
 
 -------------------------------------------------------------------------------
 
-10.4. Report ads or other filter problems
+8.4. Report ads or other filter problems
 
 You can also send feedback on websites that Privoxy has problems with. Please
 bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
@@ -2061,7 +2059,7 @@ your feedback. These will be announced on the ijbswa-announce list.
 
 -------------------------------------------------------------------------------
 
-10.5. Other
+8.5. Other
 
 For any other issues, feel free to use the mailing lists:
  
@@ -2073,9 +2071,9 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-11. Copyright and History
+9. Copyright and History
 
-11.1. Copyright
+9.1. Copyright
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -2094,7 +2092,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-11.2. History
+9.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
@@ -2108,7 +2106,7 @@ grown whiskers ;-).
 
 -------------------------------------------------------------------------------
 
-12. See also
+10. See also
 
 Other references and sites of interest to Privoxy users:
 

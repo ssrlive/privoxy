@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -91,18 +91,9 @@
     </abstract>
   </artheader>
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="intro" label=""><title></title>
-<!-- dummy section to force TOC on page by itself -->
-<!-- DO NOT REMOVE! please ;) -->
-<para> </para>
-</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 label="1" id="introduction"><title>Introduction</title>
+  <sect1 id="introduction"><title>Introduction</title>
 <!--
 
  I don't like seeing blank space :) So added *something* here.
@@ -121,10 +112,9 @@
      One does not have to be a programmer to contribute. Packaging, testing,
      and porting, are all important jobs as well.
     </para>
-  </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
+  <sect2 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>
       You'll need an account on <ulink
       url="http://sourceforge.net/">Sourceforge</ulink> to support our
@@ -136,6 +126,7 @@
       For the time being (read, this section is under construction), please
       refer to the extensive comments in the source code.
     </para>
+   </sect2>
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -1720,7 +1711,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1780,7 +1771,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2682,6 +2673,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.39  2002/05/02 15:08:25  oes
+  Added explanation about version numbers and RPM package revisions
+
   Revision 1.38  2002/04/29 02:20:31  hal9
   Add info on steps for uploading and the release process on SF.
 
