@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.3 2001/06/07 17:28:10 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.4 2001/06/08 20:54:18 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.4  2001/06/08 20:54:18  swa
+# type with status file. remove forward et. al from file list.
+#
 # Revision 1.3  2001/06/07 17:28:10  swa
 # cosmetics
 #
@@ -49,27 +52,23 @@ Version: 2.9
 Release: 4
 Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 Copyright: GPL
-BuildRoot: /tmp/junkbuster-rpmbuild
+BuildRoot: %{_tmppath}/%{name}-root
 Group: Networking/Utilities
 URL: %PACKAGE_URL
 Packager: Stefan Waldherr <stefan@waldherr.org>
 Distribution: defineme
 Obsoletes: junkbuster-raw junkbuster-blank
-Prereq: chkconfig
-
-Conflicts: junkbuster-raw junkbuster
+Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
+Conflicts: junkbuster-raw junkbuster-blank
 
 #
 # -----------------------------------------------------------------------------
 #
 %description
-The Internet Junkbuster (TM) blocks unwanted banner ads and protects
-your privacy from cookies and other threats. It's free under the GPL
-(no warranty), runs under *NIX and works with almost any browser. You
-need to clear you browser's cache and specify the proxy-server,
-described in /usr/doc/junkbuster.  This is a modified version which
-returns a blank GIF for blocked images by default.  But you can
-configure this via /etc/junkbuster/config.
+The Internet Junkbuster stops your browser from displaying the
+advertisement images that pervade many commercial web pages.  Since
+your browser has to download fewer images, surfing the web should be
+faster.
 
 #
 # -----------------------------------------------------------------------------
@@ -87,7 +86,6 @@ configure this via /etc/junkbuster/config.
 # -----------------------------------------------------------------------------
 #
 %build
-
 #export DISTNAME='\"%PACKAGE_NAME-%PACKAGE_VERSION-%PACKAGE_RELEASE\"'
 #export DISTURL='\"%PACKAGE_URL\"'
 #make MORE_CFLAGS="$RPM_OPT_FLAGS"' -D_DISTNAME="$(DISTNAME)" -D_DISTURL="$(DISTURL)"'
@@ -101,35 +99,25 @@ strip junkbuster
 # -----------------------------------------------------------------------------
 #
 %pre
-if [ -f /etc/rc.d/init.d/junkbuster.init ]; then
-        /etc/rc.d/init.d/junkbuster.init stop
-fi
-if [ -f /etc/rc.d/init.d/junkbuster ]; then
-        /etc/rc.d/init.d/junkbuster stop
-fi
-rm -f /usr/local/bin/junkbuster
-rm -f /usr/local/man/man1/junkbuster.1
-
-if test -d /var/log/junkbuster
-then
-	mv -f /var/log/junkbuster /var/log/junkbuster.rpmorig
-fi
+/usr/sbin/useradd -d /etc/junkbuster -u 73 -r junkbust > /dev/null 2>&1 || /bin/true
 
 #
 # -----------------------------------------------------------------------------
 #
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,man/man8},etc/{junkbuster,junkbuster/templates,logrotate.d,cron.weekly,cron.monthly,rc.d/{init.d,rc{0,1,2,3,5,6}.d}}}
+mkdir -p $RPM_BUILD_ROOT/var/log/junkbuster \
+	$RPM_BUILD_ROOT%{_sbindir} \
+	$RPM_BUILD_ROOT%{_mandir}/man8 \
+	$RPM_BUILD_ROOT/etc/{junkbuster,junkbuster/templates,logrotate.d,cron.weekly,cron.monthly,rc.d/init.d}
 install -s -m 744 junkbuster $RPM_BUILD_ROOT/usr/sbin/junkbuster
-cp -f junkbuster.1 $RPM_BUILD_ROOT/usr/man/man8/junkbuster.8
+cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
 cp -f permissionsfile $RPM_BUILD_ROOT/etc/junkbuster/permissionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT/etc/junkbuster/re_filterfile
 # cp -f blocklist $RPM_BUILD_ROOT/etc/junkbuster/blocklist
 # cp -f imagelist $RPM_BUILD_ROOT/etc/junkbuster/imagelist
 # cp -f cookiefile $RPM_BUILD_ROOT/etc/junkbuster/cookiefile
 #cp -f aclfile $RPM_BUILD_ROOT/etc/junkbuster/aclfile
-
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
 cat config | \
@@ -142,56 +130,38 @@ cat config | \
 #    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
     $RPM_BUILD_ROOT/etc/junkbuster/config
-
 #cp -f forward $RPM_BUILD_ROOT/etc/junkbuster/forward
 cp -f trust $RPM_BUILD_ROOT/etc/junkbuster/trust
 # cp -f popup $RPM_BUILD_ROOT/etc/junkbuster/popup
 cp -f templates/default $RPM_BUILD_ROOT/etc/junkbuster/templates/
 cp -f templates/show-status  $RPM_BUILD_ROOT/etc/junkbuster/templates/
 cp -f templates/show-status-file  $RPM_BUILD_ROOT/etc/junkbuster/templates/
-
 cp -f junkbuster.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/junkbuster
-
 install -m 755 junkbuster.init $RPM_BUILD_ROOT/etc/rc.d/init.d/junkbuster
 install -m 744 -d $RPM_BUILD_ROOT/var/log/junkbuster
-
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc0.d/K09junkbuster
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc1.d/K09junkbuster
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc2.d/K09junkbuster
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc3.d/S84junkbuster
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc5.d/S84junkbuster
-ln -sf ../init.d/junkbuster $RPM_BUILD_ROOT/etc/rc.d/rc6.d/K09junkbuster
-
 
 #
 # -----------------------------------------------------------------------------
 #
 %preun
-if [ -f /etc/rc.d/init.d/junkbuster.init ]; then
-        /etc/rc.d/init.d/junkbuster.init stop
+if [ "$1" = "0" ]; then
+	/sbin/service junkbuster stop > /dev/null 2>&1
+	/sbin/chkconfig --del junkbuster
 fi
-if [ -f /etc/rc.d/init.d/junkbuster ]; then
-        /etc/rc.d/init.d/junkbuster stop
+
+#
+# -----------------------------------------------------------------------------
+#
+%postun
+if [ "$1" -ge "1" ]; then
+	/sbin/service junkbuster condrestart > /dev/null 2>&1
 fi
 
 #
 # -----------------------------------------------------------------------------
 #
 %post
-cat << EOT >&2
-
-Now you'll need to start junkbuster with 
-
-	/etc/rc.d/init.d/junkbuster start
-
-or simply reboot; It will be started automatically at boot time. 
-Don't forget to add the proxy stuff in Netscape.
-
-EOT
-
-# check configuration of start/stop/ scripts
-# /sbin/chkconfig --add junkbuster
-
+/sbin/chkconfig --add junkbuster
 
 #
 # -----------------------------------------------------------------------------
@@ -206,18 +176,20 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 # %doc ijbfaq.html ijbman.html README README.TOO gpl.html 
 %doc junkbuster.weekly junkbuster.monthly
-%attr (-,nobody,nobody) /var/log/junkbuster
-%config /etc/junkbuster/*
+%dir /etc/junkbuster
+%config /etc/junkbuster/config
+%config /etc/junkbuster/permissionsfile
+%config /etc/junkbuster/re_filterfile
+%config /etc/junkbuster/trust
+%dir /etc/junkbuster/templates
+%config /etc/junkbuster/templates/default
+%config /etc/junkbuster/templates/show-status
+%config /etc/junkbuster/templates/show-status-file
+%attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
 %config /etc/logrotate.d/junkbuster
-%attr (-,nobody,nobody) /usr/sbin/junkbuster
-/usr/man/man8/junkbuster.8
+%attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
+%{_mandir}/*/*
 %config /etc/rc.d/init.d/junkbuster
-%config(missingok) /etc/rc.d/rc0.d/K09junkbuster
-%config(missingok) /etc/rc.d/rc1.d/K09junkbuster
-%config(missingok) /etc/rc.d/rc2.d/K09junkbuster
-%config(missingok) /etc/rc.d/rc3.d/S84junkbuster
-%config(missingok) /etc/rc.d/rc5.d/S84junkbuster
-%config(missingok) /etc/rc.d/rc6.d/K09junkbuster
 
 #
 # -----------------------------------------------------------------------------
