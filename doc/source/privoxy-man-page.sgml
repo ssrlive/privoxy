@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.12 2002/05/10 01:48:20 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 1.13 2002/05/15 00:12:07 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -215,17 +215,20 @@
 </para>
 <para>
  The name and number of configuration files has changed from previous
- versions, and is subject to change as development progresses. In fact, the
- configuration itself is changed  and  much more sophisticated. See the
- <ulink url="http://www.privoxy.org/user-manual/">user-manual</ulink> for a
- complete explanation of all configuration options and general usage.
+ versions<![%p-not-stable;[, and is subject to change as development
+ progresses]]>. In fact, the configuration itself is changed  and  much more
+ sophisticated. See the <ulink
+ url="http://www.privoxy.org/user-manual/">user-manual</ulink> for a complete
+ explanation of all configuration options and general usage, and notes for 
+ upgrading from <command>Junkbuster</command> and earlier <command>Privoxy</command>
+ versions.
 </para>
 <para>
  The actions list (ad blocks, etc) can also be configured with your
  web browser at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>.
  <command>Privoxy's</command> configuration parameters  can also  be viewed at
  the same page. In addition, <command>Privoxy</command> can be toggled on/off.
- This is an internal page.
+ This is an internal page, and does not require Internet access.
 </para>
 </refsect1>
 
@@ -383,7 +386,7 @@
  all features are well tested.
 </para>]]>
 <para>
- Please see the <citetitle>user-manual</citetitle> on how to contact the
+ Please see the <citetitle>User Manual</citetitle> on how to contact the
  developers for feature requests, reporting problems, and other questions.
 </para>
 
