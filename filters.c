@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.8 2001/05/26 17:13:28 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.9 2001/05/27 22:17:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,19 @@ const char filters_rcs[] = "$Id: filters.c,v 1.8 2001/05/26 17:13:28 jongfoster 
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.9  2001/05/27 22:17:04  oes
+ *
+ *    - re_process_buffer no longer writes the modified buffer
+ *      to the client, which was very ugly. It now returns the
+ *      buffer, which it is then written by chat.
+ *
+ *    - content_length now adjusts the Content-Length: header
+ *      for modified documents rather than crunch()ing it.
+ *      (Length info in csp->content_length, which is 0 for
+ *      unmodified documents)
+ *
+ *    - For this to work, sed() is called twice when filtering.
+ *
  *    Revision 1.8  2001/05/26 17:13:28  jongfoster
  *    Filled in a function comment.
  *
@@ -148,6 +161,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.8 2001/05/26 17:13:28 jongfoster 
 #include "jbsockets.h"
 #include "errlog.h"
 #include "jbsockets.h"
+#include "miscutil.h"
 
 #ifdef _WIN32
 #include "win32.h"
@@ -184,12 +198,12 @@ static const char CBLOCK[] =
        BANNER
        "</h1></center>\n"
       "<p align=center>Your request for <b>%s%s</b><br>\n"
-      "was blocked because it matches the following pattern "
-      "in the blockfile: <b>%s</b>\n</p>"
+      "was blocked."
 #ifdef FORCE_LOAD
-       "<p align=center><a href=\"http://%s" FORCE_PREFIX
-        "%s\">Go there anyway.</a></p>"
+       "  <a href=\"http://%s" FORCE_PREFIX "%s\">"
+       "Go there anyway.</a>"
 #endif /* def FORCE_LOAD */
+      "</p>\n"
       "</body>\n"
       "</html>\n";
 
@@ -210,7 +224,7 @@ static const char CTRUST[] =
        "</head>\n"
        WHITEBG
        "<center>"
-       "<a href=http://internet.junkbuster.com/ij-untrusted-url?%s+%s+%s>"
+       "<a href=http://i.j.b/ij-untrusted-url?%s+%s+%s>"
        BANNER
        "</a>"
        "</center>"
@@ -373,71 +387,37 @@ int acl_addr(char *aspec, struct access_control_addr *aca)
  *********************************************************************/
 char *block_url(struct http_request *http, struct client_state *csp)
 {
-   struct file_list *fl;
-   struct block_spec *b;
-   struct url_spec url[1];
    char *p;
    int n;
 
-   if (((fl = csp->blist) == NULL) || ((b = fl->f) == NULL))
+   if ((csp->permissions & PERMIT_BLOCK) == 0)
    {
       return(NULL);
    }
-
-   *url = dsplit(http->host);
-
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(NULL);
-
-   for (b = b->next; b ; b = b->next)
+   else
    {
-      if ((b->url->port == 0) || (b->url->port == http->port))
-      {
-         if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
-         {
-            if ((b->url->path == NULL) ||
-#ifdef REGEX
-               (regexec(b->url->preg, http->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(b->url->path, http->path, b->url->pathlen) == 0)
-#endif
-            )
-            {
-               freez(url->dbuf);
-               freez(url->dvec);
-
-               if (b->reject == 0) return(NULL);
-
-               n  = strlen(CBLOCK);
-               n += strlen(http->hostport);
-               n += strlen(http->path);
-               n += strlen(b->url->spec);
+      n  = strlen(CBLOCK);
+      n += strlen(http->hostport);
+      n += strlen(http->path);
 #ifdef FORCE_LOAD
-               n += strlen(http->hostport);
-               n += strlen(http->path);
+      n += strlen(http->hostport);
+      n += strlen(http->path);
 #endif /* def FORCE_LOAD */
 
-               p = (char *)malloc(n);
+      p = (char *)malloc(n);
 
 #ifdef FORCE_LOAD
-               sprintf(p, CBLOCK, http->hostport, http->path, b->url->spec, http->hostport, http->path);
+      sprintf(p, CBLOCK, http->hostport, http->path, http->hostport, http->path);
 #else
-               sprintf(p, CBLOCK, http->hostport, http->path, b->url->spec);
+      sprintf(p, CBLOCK, http->hostport, http->path);
 #endif /* def FORCE_LOAD */
 
-               return(p);
-            }
-         }
-      }
+      return(p);
    }
-   freez(url->dbuf);
-   freez(url->dvec);
-   return(NULL);
-
 }
 
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
 /*********************************************************************
  *
  * Function    :  block_imageurl
@@ -470,81 +450,9 @@ int block_imageurl(struct http_request *http, struct client_state *csp)
    }
 #endif
 
-#if defined(USE_IMAGE_LIST)
-   return block_imageurl_using_imagelist(http, csp);
-#else
-   /* Don't know - assume HTML */
-   return 0;
-#endif
+   return ((csp->permissions & PERMIT_IMAGE) != 0);
 }
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
-
-
-#ifdef USE_IMAGE_LIST
-/*********************************************************************
- *
- * Function    :  block_imageurl
- *
- * Description :  Test if a URL is in the imagelist.
- *
- * Parameters  :
- *          1  :  http = URL to check.
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  True (nonzero) if URL is in image list, false (0)
- *                otherwise
- *
- *********************************************************************/
-int block_imageurl_using_imagelist(struct http_request *http, struct client_state *csp)
-{
-   struct file_list *fl;
-   struct block_spec *b;
-   struct url_spec url[1];
-
-   if (((fl = csp->ilist) == NULL) || ((b  = fl->f) == NULL))
-   {
-      return(0);
-   }
-
-   *url = dsplit(http->host);
-
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(0);
-
-   for (b = b->next; b ; b = b->next)
-   {
-
-      if ((b->url->port == 0) || (b->url->port == http->port))
-      {
-         /* port matches, check domain */
-         if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
-         {
-            /* domain matches, check path */
-            if ((b->url->path == NULL) ||
-#ifdef REGEX
-               (regexec(b->url->preg, http->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(b->url->path, http->path, b->url->pathlen) == 0)
-#endif
-            )
-            {
-               /* Matches */
-               freez(url->dbuf);
-               freez(url->dvec);
-
-               if (b->reject == 0) return(0);
-
-               return(1);
-            }
-         }
-      }
-   }
-   freez(url->dbuf);
-   freez(url->dvec);
-   return(0);
-
-}
-#endif /* def USE_IMAGE_LIST */
+#endif /* def IMAGE_BLOCKING */
 
 
 #ifdef PCRS
@@ -576,13 +484,13 @@ char *re_process_buffer(struct client_state *csp)
    /* Sanity first ;-) */
    if (size <= 0)
    {
-      return;
+      return(strdup(""));
    }
 
    if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
    {
       log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
-      return;
+      return(strdup(""));
    }
 
    joblist = b->joblist;
@@ -821,6 +729,26 @@ trust_url_not_trusted:
 #endif /* def TRUST_FILES */
 
 
+static const char C_HOME_PAGE[] =
+   "HTTP/1.0 200 OK\n"
+   "Pragma: no-cache\n"
+   "Expires: Thu Jul 31, 1997 07:42:22 pm GMT\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: Information</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</h1></center>\n"
+   "<p><a href=\"" HOME_PAGE_URL "\">JunkBuster web site</a></p>\n"
+   "<p><a href=\"http://i.j.b/show-proxy-arg\">Proxy configuration</a></p>\n"
+   "<p><a href=\"http://i.j.b/show-url-info\">Look up a URL</a></p>\n"
+   "</body>\n"
+   "</html>\n";
+
+
 /*********************************************************************
  *
  * Function    :  intercept_url
@@ -836,33 +764,71 @@ trust_url_not_trusted:
  *          1  :  http = http_request request, check `basename's of blocklist
  *          2  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  NULL for no recognized URLs, or an HTML description page.
+ * Returns     :  1 if it intercepts & handles the request.
  *
  *********************************************************************/
-char *intercept_url(struct http_request *http, struct client_state *csp)
+int intercept_url(struct http_request *http, struct client_state *csp)
 {
-   char *basename;
+   char *basename = NULL;
    const struct interceptors *v;
 
-   basename = strrchr(http->path, '/');
-
-   if (basename == NULL) return(NULL);
-
-   basename ++; /* first char past the last slash */
-
-   if (*basename)
+   if (0 == strcmpic(http->host,"i.j.b"))
    {
-      for (v = intercept_patterns; v->str; v++)
+      /*
+       * Catch http://i.j.b/...
+       */
+      basename = http->path;
+   }
+   else if ( ( (0 == strcmpic(http->host,"ijbswa.sourceforge.net"))
+            || (0 == strcmpic(http->host,"ijbswa.sf.net")) )
+            && (0 == strncmpic(http->path,"/config", 7))
+            && ((http->path[7] == '/') || (http->path[7] == '\0')))
+   {
+      /*
+       * Catch http://ijbswa.sourceforge.net/config/...
+       * and   http://ijbswa.sf.net/config/...
+       */
+      basename = http->path + 7;
+   }
+
+   if (!basename)
+   {
+      /* Don't want to intercept */
+      return(0);
+   }
+
+   /* We have intercepted it. */
+
+   /* remove any leading slash */
+   if (*basename == '/')
+   {
+      basename++;
+   }
+
+   log_error(LOG_LEVEL_GPC, "%s%s intercepted!", http->hostport, http->path);
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", 
+                            csp->ip_addr_str, http->cmd); 
+
+   for (v = intercept_patterns; v->str; v++)
+   {
+      if (strncmp(basename, v->str, v->len) == 0)
       {
-         if (strncmp(basename, v->str, v->len) == 0)
+         char * p = ((v->interceptor)(http, csp));
+
+         if (p != NULL)
          {
-            return((v->interceptor)(http, csp));
+            /* Send HTML redirection result */
+            write_socket(csp->cfd, p, strlen(p));
+
+            freez(p);
          }
+         return(1);
       }
    }
 
-   return(NULL);
+   write_socket(csp->cfd, C_HOME_PAGE, strlen(C_HOME_PAGE));
 
+   return(1);
 }
 
 #ifdef FAST_REDIRECTS
@@ -929,10 +895,11 @@ int url_permissions(struct http_request *http, struct client_state *csp)
    struct file_list *fl;
    struct permissions_spec *b;
    struct url_spec url[1];
+   int permissions = csp->config->default_permissions;
 
    if (((fl = csp->permissions_list) == NULL) || ((b = fl->f) == NULL))
    {
-      return(csp->config->default_permissions);
+      return(permissions);
    }
 
    *url = dsplit(http->host);
@@ -940,7 +907,7 @@ int url_permissions(struct http_request *http, struct client_state *csp)
    /* if splitting the domain fails, punt */
    if (url->dbuf == NULL)
    {
-      return(csp->config->default_permissions);
+      return(permissions);
    }
 
    for (b = b->next; NULL != b; b = b->next)
@@ -957,9 +924,8 @@ int url_permissions(struct http_request *http, struct client_state *csp)
 #endif
             )
             {
-               freez(url->dbuf);
-               freez(url->dvec);
-               return(b->permissions);
+               permissions &= b->mask;
+               permissions |= b->add;
             }
          }
       }
@@ -967,7 +933,7 @@ int url_permissions(struct http_request *http, struct client_state *csp)
 
    freez(url->dbuf);
    freez(url->dvec);
-   return(csp->config->default_permissions);
+   return(permissions);
 
 }
 
@@ -1175,13 +1141,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    }
    switch (which_file)
    {
-   case 'b':
-      if (csp->blist)
-      {
-         filename = csp->blist->filename;
-         file_description = "Block List";
-      }
-      break;
    case 'p':
       if (csp->permissions_list)
       {
@@ -1206,16 +1165,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       }
       break;
 #endif /* def ACL_FILES */
-
-#ifdef USE_IMAGE_LIST
-   case 'i':
-      if (csp->ilist)
-      {
-         filename = csp->ilist->filename;
-         file_description = "Image List";
-      }
-      break;
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef PCRS
    case 'r':
@@ -1311,25 +1260,18 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    }
 #endif /* def SPLIT_PROXY_ARGS */
    
-   s = strsav(s, csp->config->proxy_args->header);
-   s = strsav(s, csp->config->proxy_args->invocation);
+   s = strsav(s, csp->config->proxy_args_header);
+   s = strsav(s, csp->config->proxy_args_invocation);
 #ifdef STATISTICS
    s = add_stats(s);
 #endif /* def STATISTICS */
-   s = strsav(s, csp->config->proxy_args->gateways);
+   s = strsav(s, csp->config->proxy_args_gateways);
 
 #ifdef SPLIT_PROXY_ARGS
    s = strsav(s, 
       "<h2>The following files are in use:</h2>\n"
       "<p>(Click a filename to view it)</p>\n"
       "<ul>\n");
-
-   if (csp->blist)
-   {
-      s = strsav(s, "<li>Block List: <a href=\"show-proxy-args?block\"><code>");
-      s = strsav(s, csp->blist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
 
    if (csp->permissions_list)
    {
@@ -1354,15 +1296,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    }
 #endif /* def ACL_FILES */
 
-#ifdef USE_IMAGE_LIST
-   if (csp->ilist)
-   {
-      s = strsav(s, "<li>Image List: <a href=\"show-proxy-args?image\"><code>");
-      s = strsav(s, csp->ilist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-#endif /* def USE_IMAGE_LIST */
-
 #ifdef PCRS
    if (csp->rlist)
    {
@@ -1384,11 +1317,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    s = strsav(s, "</ul>");
 
 #else /* ifndef SPLIT_PROXY_ARGS */
-   if (csp->blist)
-   {
-      s = strsav(s, csp->blist->proxy_args);
-   }
-
    if (csp->clist)
    {
       s = strsav(s, csp->clist->proxy_args);
@@ -1406,13 +1334,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    }
 #endif /* def ACL_FILES */
 
-#ifdef USE_IMAGE_LIST
-   if (csp->ilist)
-   {
-      s = strsav(s, csp->ilist->proxy_args);
-   }
-#endif /* def USE_IMAGE_LIST */
-
 #ifdef PCRS
    if (csp->rlist)
    {
@@ -1429,10 +1350,228 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
 
 #endif /* ndef SPLIT_PROXY_ARGS */
 
-   s = strsav(s, csp->config->proxy_args->trailer);
+   s = strsav(s, csp->config->proxy_args_trailer);
 
    return(s);
 
+}
+
+
+static const char C_URL_INFO_HEADER[] =
+   "HTTP/1.0 200 OK\n"
+   "Pragma: no-cache\n"
+   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: URL Info</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</h1></center>\n"
+   "<p>Information for: <a href=\"http://%s\">http://%s</a></p>\n";
+static const char C_URL_INFO_FOOTER[] =
+   "\n</p>\n"
+   "</body>\n"
+   "</html>\n";
+
+static const char C_URL_INFO_FORM[] =
+   "HTTP/1.0 200 OK\n"
+   "Pragma: no-cache\n"
+   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: URL Info</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</h1></center>\n"
+   "<form method=\"GET\" action=\"http://i.j.b/show-url-info\">\n"
+   "<p>Please enter a URL, without the leading &quot;http:&quot;:</p>"
+   "<p><input type=\"text\" name=\"url\" size=\"80\">"
+   "<input type=\"submit\" value=\"Info\"></p>\n"
+   "</form>\n"
+   "</body>\n"
+   "</html>\n";
+
+
+/*********************************************************************
+ *
+ * Function    :  permissions_to_text
+ *
+ * Description :  Converts a permissionsfil entry from numeric form
+ *                ("mask" and "add") to text.
+ *
+ * Parameters  :
+ *          1  :  mask = As from struct permissions_spec
+ *          2  :  add  = As from struct permissions_spec
+ *
+ * Returns     :  A string.  Caller must free it.
+ *
+ *********************************************************************/
+char * permissions_to_text(unsigned mask, unsigned add)
+{
+   char * result = strdup("");
+
+   /* sanity - prevents "-feature +feature" */
+   mask |= add;
+
+#define PERMISSION_TO_TEXT(__bit, __name)   \
+   if (!(mask & __bit))                     \
+   {                                        \
+      result = strsav(result, " -" __name); \
+   }                                        \
+   else if (add & __bit)                    \
+   {                                        \
+      result = strsav(result, " +" __name); \
+   }
+
+   PERMISSION_TO_TEXT(PERMIT_COOKIE_SET, "cookies-set");
+   PERMISSION_TO_TEXT(PERMIT_COOKIE_READ, "cookies-read");
+   PERMISSION_TO_TEXT(PERMIT_RE_FILTER, "filter");
+   PERMISSION_TO_TEXT(PERMIT_POPUPS, "popup");
+   PERMISSION_TO_TEXT(PERMIT_REFERER, "referer");
+   PERMISSION_TO_TEXT(PERMIT_FAST_REDIRECTS, "fast-redirects");
+   PERMISSION_TO_TEXT(PERMIT_BLOCK, "block");
+   PERMISSION_TO_TEXT(PERMIT_IMAGE, "image");
+
+   return result;
+}
+
+
+ /*********************************************************************
+ *
+ * Function    :  ijb_show_url_info
+ *
+ * Description :  (please fill me in)
+ *
+ * Parameters  :
+ *          1  :  http = http_request request for crunched URL
+ *          2  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  ???FIXME
+ *
+ *********************************************************************/
+char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
+{
+   char * query_string = strchr(http->path, '?');
+   char * host = NULL;
+   
+   if (query_string != NULL)
+   {
+      query_string = url_decode(query_string + 1);
+      if (strncmpic(query_string, "url=", 4) == 0)
+      {
+         host = strdup(query_string + 4);
+      }
+      freez(query_string);
+   }
+   if (host != NULL)
+   {
+      char * result;
+      char * path;
+      char * s;
+      int port = 80;
+      struct file_list *fl;
+      struct permissions_spec *b;
+      struct url_spec url[1];
+      int permissions = csp->config->default_permissions;
+
+      result = (char *)malloc(sizeof(C_URL_INFO_HEADER) + 2 * strlen(host));
+      sprintf(result, C_URL_INFO_HEADER, host, host);
+
+      s = permissions_to_text(permissions, permissions);
+      result = strsav(result, "<h3>Defaults:</h3>\n<p><b>{");
+      result = strsav(result, s);
+      result = strsav(result, " }</b></p>\n<h3>Patterns affecting the URL:</h3>\n<p>\n");
+      freez(s);
+
+      s = strchr(host, '/');
+      if (s != NULL)
+      {
+         path = strdup(s);
+         *s = '\0';
+      }
+      else
+      {
+         path = strdup("");
+      }
+      s = strchr(host, ':');
+      if (s != NULL)
+      {
+         *s++ = '\0';
+         port = atoi(s);
+      }
+
+      if (((fl = csp->permissions_list) == NULL) || ((b = fl->f) == NULL))
+      {
+         freez(host);
+         freez(path);
+         result = strsav(result, C_URL_INFO_FOOTER);
+         return result;
+      }
+
+      *url = dsplit(host);
+
+      /* if splitting the domain fails, punt */
+      if (url->dbuf == NULL)
+      {
+         freez(host);
+         freez(path);
+         result = strsav(result, C_URL_INFO_FOOTER);
+         return result;
+      }
+
+      for (b = b->next; NULL != b; b = b->next)
+      {
+         if ((b->url->port == 0) || (b->url->port == port))
+         {
+            if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
+            {
+               if ((b->url->path == NULL) ||
+#ifdef REGEX
+                  (regexec(b->url->preg, path, 0, NULL, 0) == 0)
+#else
+                  (strncmp(b->url->path, path, b->url->pathlen) == 0)
+#endif
+               )
+               {
+                  s = permissions_to_text(b->mask, b->add);
+                  result = strsav(result, "<b>{");
+                  result = strsav(result, s);
+                  result = strsav(result, " }</b><br>\n<code>");
+                  result = strsav(result, b->url->spec);
+                  result = strsav(result, "</code><br>\n<br>\n");
+                  freez(s);
+                  permissions &= b->mask;
+                  permissions |= b->add;
+               }
+            }
+         }
+      }
+
+      freez(url->dbuf);
+      freez(url->dvec);
+
+      freez(host);
+      freez(path);
+
+      s = permissions_to_text(permissions, permissions);
+      result = strsav(result, "</p>\n<h2>Final Results:</h2>\n<p><b>{");
+      result = strsav(result, s);
+      result = strsav(result, " }</b><br>\n<br>\n");
+      freez(s);
+
+      result = strsav(result, C_URL_INFO_FOOTER);
+      return result;
+   }
+   else
+   {
+      return strdup(C_URL_INFO_FORM);
+   }
 }
 
 
@@ -1440,22 +1579,21 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
  *
  * Function    :  ijb_send_banner
  *
- * Description :  This "crunch"es "http:/any.thing/ijb-send-banner and
- *                thus triggers sending the image in jcc.c:chat.
- *                For the unlikely case, that the imagefile/MSIE
- *                mechanism is not used, or tinygif = 0, a page
- *                describing the reson of the interception is generated.
+ * Description :  This "crunch"es "http://i.j.b/ijb-send-banner and
+ *                sends the image.
  *
  * Parameters  :
  *          1  :  http = http_request request for crunched URL
  *          2  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  A string that contains why this was intercepted.
+ * Returns     :  NULL, indicating that it has already sent the data.
  *
  *********************************************************************/
 char *ijb_send_banner(struct http_request *http, struct client_state *csp)
 {
-   return(strdup(CNOBANNER));
+   write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
+   
+   return(NULL);
 }
 
 #ifdef TRUST_FILES

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.11 2001/05/26 17:27:53 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.12 2001/05/27 22:17:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,19 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.11 2001/05/26 17:27:53 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.12  2001/05/27 22:17:04  oes
+ *
+ *    - re_process_buffer no longer writes the modified buffer
+ *      to the client, which was very ugly. It now returns the
+ *      buffer, which it is then written by chat.
+ *
+ *    - content_length now adjusts the Content-Length: header
+ *      for modified documents rather than crunch()ing it.
+ *      (Length info in csp->content_length, which is 0 for
+ *      unmodified documents)
+ *
+ *    - For this to work, sed() is called twice when filtering.
+ *
  *    Revision 1.11  2001/05/26 17:27:53  jongfoster
  *    Added support for CLF and fixed LOG_LEVEL_LOG.
  *    Also did CRLF->LF fix of my previous patch.
@@ -239,21 +252,23 @@ static int32 server_thread(void *data);
  *********************************************************************/
 static void chat(struct client_state *csp)
 {
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if TOGGLE, then we want the if to test "csp->toggled_on", else we don't */
+/*
+ * This next lines are a little ugly, but they simplifies the if statements below.
+ * Basically if TOGGLE, then we want the if to test "csp->toggled_on", else we don't
+ * And if FORCE_LOAD, then we want the if to test "csp->toggled_on", else we don't
+ */
 #ifdef TOGGLE
-#   define IS_TOGGLED_ON csp->toggled_on &&
+#   define IS_TOGGLED_ON_AND (csp->toggled_on) &&
 #else /* ifndef TOGGLE */
-#   define IS_TOGGLED_ON
+#   define IS_TOGGLED_ON_AND
 #endif /* ndef TOGGLE */
+#ifdef FORCE_LOAD
+#   define IS_NOT_FORCED_AND (!csp->force) && 
+#else /* ifndef TOGGLE */
+#   define IS_NOT_FORCED_AND
+#endif /* def FORCE_LOAD */
 
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if TRUST_FILES, then we want the if to call "trust_url", else we don't */
-#ifdef TRUST_FILES
-#   define IS_TRUSTED_URL (p = trust_url(http, csp)) ||
-#else /* ifndef TRUST_FILES */
-#   define IS_TRUSTED_URL
-#endif /* ndef TRUST_FILES */
+#define IS_ENABLED_AND IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
    char buf[BUFSIZ], *hdr, *p, *req;
    char *err = NULL;
@@ -392,15 +407,13 @@ static void chat(struct client_state *csp)
    if (!csp->toggled_on)
    {
       /* Most compatible set of permissions */
-      csp->permissions = PERMIT_COOKIE_SET | PERMIT_COOKIE_READ | PERMIT_POPUPS;
+      csp->permissions = PERMIT_MOST_COMPATIBLE;
    }
    else
+#endif /* ndef TOGGLE */
    {
       csp->permissions = url_permissions(http, csp);
    }
-#else /* ifndef TOGGLE */
-   csp->permissions = url_permissions(http, csp);
-#endif /* ndef TOGGLE */
 
 #ifdef KILLPOPUPS
    block_popups               = ((csp->permissions & PERMIT_POPUPS) == 0);
@@ -443,18 +456,52 @@ static void chat(struct client_state *csp)
     * we're toggled off or in force mode. 
     */
  
-   if (IS_TOGGLED_ON
-#ifdef FORCE_LOAD
-       (!csp->force) && 
-#endif /* def FORCE_LOAD */
-       ( (p = intercept_url(http, csp)) ||
-         IS_TRUSTED_URL
-         (p = block_url(http, csp))
-#ifdef FAST_REDIRECTS
-         || (csp->config->fast_redirects && (p = redirect_url(http, csp))) 
-#endif /* def FAST_REDIRECTS */
-      ))
+   if (intercept_url(http, csp))
    {
+      /*
+       * The interceptor will write out the data.
+       * We don't need to do anything else
+       */
+
+#ifdef STATISTICS
+      csp->rejected = 1;
+#endif /* def STATISTICS */
+
+      freez(hdr);
+      return;
+   }
+
+#ifdef FAST_REDIRECTS
+   else if (IS_ENABLED_AND
+            ((csp->permissions & PERMIT_FAST_REDIRECTS) != 0) && 
+            (p = redirect_url(http, csp))) 
+   {
+      /* This must be blocked as HTML */
+#ifdef STATISTICS
+      csp->rejected = 1;
+#endif /* def STATISTICS */
+
+      log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
+
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", 
+                               csp->ip_addr_str, http->cmd); 
+
+      /* Send HTML redirection result */
+      write_socket(csp->cfd, p, strlen(p));
+
+      freez(p);
+      freez(hdr);
+      return;
+   }
+#endif /* def FAST_REDIRECTS */
+
+   else if (IS_ENABLED_AND (
+#ifdef TRUST_FILES
+         (p = trust_url(http, csp)) ||
+#endif /* def TRUST_FILES */
+         (p = block_url(http, csp)) ))
+   {
+      /* Block as HTML or image */
 #ifdef STATISTICS
       csp->rejected = 1;
 #endif /* def STATISTICS */
@@ -464,7 +511,7 @@ static void chat(struct client_state *csp)
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 1", 
                                csp->ip_addr_str, http->cmd); 
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
       /* Block as image?  */
       if ( (csp->config->tinygif > 0) && block_imageurl(http, csp) )
       {
@@ -472,13 +519,13 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_GPC, "%s%s image crunch!",
                    http->hostport, http->path);
 
-         if ((csp->config->tinygif == 2) || strstr(http->path, "ijb-send-banner"))
-         {
-            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
-         }
-         else if (csp->config->tinygif == 1)
+         if (csp->config->tinygif == 1)
          {
             write_socket(csp->cfd, BLANKGIF, sizeof(BLANKGIF)-1);
+         }
+         else if (csp->config->tinygif == 2)
+         {
+            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
          }
          else if ((csp->config->tinygif == 3) && (csp->config->tinygifurl))
          {
@@ -490,11 +537,12 @@ static void chat(struct client_state *csp)
          }
          else
          {
+            /* Should never happen */
             write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
          }
       }
       else
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
       /* Block as HTML */
       {
          /* Send HTML "blocked" message, interception, or redirection result */

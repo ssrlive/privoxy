@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.5 2001/05/23 10:39:05 oes Exp $
+# $Id: config,v 1.6 2001/05/26 17:25:14 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -62,29 +62,13 @@
 #  absolute path name can be used to avoid problems.
 
 #
-#  The blockfile contains regular expressions, one per line, of URLs
-#  to be blocked by Junkbuster.
-#
-#  Default: Don't block anything.
-#
-blockfile   ./blocklist
-
-#
-#  The imagefile contains regular expressions, one per line, of URLs
-#  to be blocked as images by Junkbuster, regardless of whether they
-#  look like image URLs or not.
-#
-#  Default: Block all URLs as HTML requests.
-#
-imagefile   ./imagelist 
-
-#
 #  The permissions file contains patterns to specify the
-#  cookie and filtering rules to apply to each site.
+#  filtering rules to apply to each site.
 #
 #  Default: Cookies to and from all destinations are filtered.
 #           Popups are disabled for all sites.
 #           All sites are filtered if re_filterfile specified.
+#           No sites are blocked.  Nothing is an image.
 #
 permissionsfile ./permissionsfile
 
@@ -105,8 +89,7 @@ re_filterfile   ./re_filterfile
 #  Junkbuster (e.g., it's not blocking an ad you think it should
 #  block) but in most cases you probably will never look at it.
 #
-#  If you do not use 'log-buffer-size'/'log-max-lines' (see below)
-#  your logfile will grow indefinitely, and you will probably want to
+#  Your logfile will grow indefinitely, and you will probably want to
 #  periodically remove it.  On Unix systems, you can do this with a
 #  cron job (see 'man cron').
 #
@@ -292,18 +275,22 @@ user-agent    .
 #  Junkbuster has the ability to mask the Referer header.  Referer
 #  headers can be used to track users as they browse around the web,
 #  and many consider them invasive.  Junkbuster provides several
-#  options for dealing with referer headers:
+#  options for dealing with referer headers.
+#
+#  Note that the setting of this value can be overridden on a
+#  site-by-site basis in the permissionsfile, in order to send
+#  the unmodified Referer header to sites which require it.
+#  This option controls what to do for sites without that
+#  permission.
 #
 #       VALUE       EFFECT
 #       =====       ======
 #       default     Kill the referrer-header from the client.
-#       .           Pass the referrer unchanged.
-#       @           Pass the referrer if the server is in the cookie file,
-#                   kill the referrer otherwise.
-#       L           Pass the referrer if the server is in the cookie file,
-#                   send a forged referrer that points to the
+#       @           Kill the referrer-header from the client.
+#       .           Always pass the referrer unchanged.
+#       L           Send a forged referrer that points to the
 #                   root-directory URL of the current request otherwise.
-#       'text'      Always send <text> as the referrer.
+#       'text'      Send <text> as the referrer.
 #
 #  L is probably preferable to @, because it will break fewer Web
 #  sites while still concealing your browsing path.
@@ -343,7 +330,7 @@ referer     L
 #
 #  As an example of the last option:
 #
-#    tinygif 3 http://no.where/ijb-send-banner.gif
+#    tinygif 3 http://i.j.b/ijb-send-banner.gif
 #
 #  Will replace every blocked image with an image built into junkbuster.
 #
@@ -357,30 +344,6 @@ referer     L
 #
 tinygif   2
 
-#
-#  Many sites, like yahoo.com, don't just link to other sites.
-#  Instead, they will link to some script on their own server,
-#  giving the destination as a parameter, which will then redirect
-#  you to the final target. 
-#
-#  URLs resulting from this scheme typically look like:
-#  http://some.place/some_script?http://some.where-else
-#
-#  Sometimes, there are even multiple consecutive redirects encoded
-#  in the URL. These redirections via scripts make your web browing
-#  more traceable, since the server from which you follow such a link
-#  can see where you go to. Apart from that, valuable bandwidth and
-#  time is wasted, while your browser aks the server for one redirect
-#  after the other. Plus, it feeds the advertisers.
-#
-#  The fast-redirects option enables interception of these requests
-#  by junkbuster, who will cut off all but the last valid URL in the
-#  request and send a local redirect back to your browser without
-#  contacting the remote site.
-#
-#  Default: Don't intercept script-redirect URLs
-#
-fast-redirects 
 
 #
 #  The debug option sets the level of debugging information to log in
@@ -432,28 +395,27 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #single-threaded
 
 #
-#    'toggle' controls whether Junkbuster can temporarily be toggled on
-#    and off.
+#    'toggle' allows you to temporarily disable all Junkbuster's 
+#    filtering.  Just set "toggle 0".
 #    
 #    The Windows version of Junkbuster puts an icon in the system
-#    tray.  If you right-click on that icon (or select the 'Options'
-#    menu), one choice is "Enable".  Clicking on enable toggles
-#    Junkbuster on and off.  This is useful if you want to temporarily
-#    disable Junkbuster, e.g., to access a site that requires cookies
-#    which you normally have blocked.
+#    tray, which allows you to change this option without having
+#    to edit this file.  If you right-click on that icon (or select
+#    the 'Options' menu), one choice is "Enable".  Clicking on enable
+#    toggles Junkbuster on and off.  This is useful if you want to
+#    temporarily disable Junkbuster, e.g., to access a site that
+#    requires cookies which you normally have blocked.
 #
-#    Unix versions of Junkbuster are toggled on and off by sending a
-#    SIGHUP to Junkbuster.
-#
-#    'toggle 1' means permit toggling of Junkbuster, 'toggle 0' means
-#    don't.
+#    'toggle 1' means Junkbuster runs normally, 'toggle 0' means
+#    that Junkbuster becomes a non-anonymizing non-blocking
+#    proxy.
 #
 #  Default: 1
 #
 toggle 1
 
 #
-#  5. WINDOWS GUI OTPIONS
+#  5. WINDOWS GUI OPTIONS
 #
 #  Junkbuster has a number of options specific to the Windows GUI
 #  interface:
@@ -509,8 +471,8 @@ toggle 1
 
 #    show-on-task-bar        {1 or 0}
 #
-#    Controls whether or not Junkbuster will appear on the Task bar
-#    when minimized.
+#    Controls whether or not Junkbuster will appear as a button on the Task
+#    bar when minimized.
 #
 #Win32-only: show-on-task-bar        0
 

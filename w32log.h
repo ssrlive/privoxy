@@ -1,6 +1,6 @@
 #ifndef _W32LOG_H
 #define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.1.1.1 2001/05/15 13:59:07 oes Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.2 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,13 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.2  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:07  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -77,15 +84,11 @@ extern int g_nFontSize;
 
 /* FIXME: this is a kludge */
 
-extern const char * g_blockfile;
 extern const char * g_permissions_file;
 extern const char * g_forwardfile;
 #ifdef ACL_FILES
 extern const char * g_aclfile;
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-extern const char * g_imagefile;
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
 extern const char * g_re_filterfile;
 #endif

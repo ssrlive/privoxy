@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.3 2001/05/25 11:03:55 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.4 2001/05/25 14:12:40 oes Exp $";
 
 /*********************************************************************
  *
@@ -43,6 +43,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.3 2001/05/25 11:03:55 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.4  2001/05/25 14:12:40  oes
+ *    Fixed bug: Empty substitutes now detected
+ *
  *    Revision 1.3  2001/05/25 11:03:55  oes
  *    Added sanity check for NULL jobs to pcrs_exec_substitution
  *
@@ -176,7 +179,8 @@ int my_strsep(char *token, char **text, char delimiter, char quote_char)
  *********************************************************************/
 int pcrs_compile_perl_options(char *optstring, int *globalflag)
 {
-   int i, rc = 0;
+   size_t i;
+   int rc = 0;
    *globalflag = 0;
    for (i=0; i < strlen(optstring); i++)
    {

@@ -3,7 +3,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.in,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/acconfig.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -37,9 +37,58 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h.in,v $
- *    Revision 1.1  2001/05/15 13:58:49  oes
- *    Initial revision
+ *    $Log: acconfig.h,v $
+ *    Revision 1.3  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *
+ *    Revision 1.2  2001/05/22 17:43:35  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Many minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
+ *    Revision 1.1.1.1  2001/05/15 13:58:45  oes
+ *    Initial import of version 2.9.3 source tree
  *
  *
  *********************************************************************/
@@ -133,8 +182,10 @@
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
- * other image-detection methods (i.e. USE_IMAGE_LIST) for other
+ * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
+ *
+ * You must also define IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -162,13 +213,12 @@
 #undef DETECT_MSIE_IMAGES
 
 /*
- * Use image list to detect images.
- * If you do not define this then everything is treated as HTML.
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
  *
- * Whatever the setting of this value, DETECT_MSIE_IMAGES will 
- * override it for people using Internet Explorer.
+ * Note that this is required if you want to use DETECT_MSIE_IMAGES.
  */
-#undef USE_IMAGE_LIST
+#undef IMAGE_BLOCKING
 
 /*
  * Allows the use of ACL files to control access to the proxy by IP address.

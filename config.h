@@ -39,6 +39,13 @@
  *
  * Revisions   :
  *    $Log: config.h,v $
+ *    Revision 1.5  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.4  2001/05/25 22:17:28  jongfoster
  *    Resurrecting these files which are required for the MS Visual C++
  *    build only.
@@ -151,8 +158,10 @@
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
- * other image-detection methods (i.e. USE_IMAGE_LIST) for other
+ * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
+ *
+ * You must also define IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -180,13 +189,12 @@
 #define DETECT_MSIE_IMAGES 1
 
 /*
- * Use image list to detect images.
- * If you do not define this then everything is treated as HTML.
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
  *
- * Whatever the setting of this value, DETECT_MSIE_IMAGES will 
- * override it for people using Internet Explorer.
+ * Note that this is required if you want to use DETECT_MSIE_IMAGES.
  */
-#define USE_IMAGE_LIST 1
+#define IMAGE_BLOCKING 1
 
 /*
  * Allows the use of ACL files to control access to the proxy by IP address.

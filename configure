@@ -38,8 +38,8 @@ ac_help="$ac_help
   --disable-ie-images     Don't auto-detect whether a request from MS Internet
                           Explorer is for an image or HTML."
 ac_help="$ac_help
-  --disable-image-list    Don't try to figure out whether a request is for an
-                          image or HTML using the imagelist - assume HTML."
+  --disable-image-blocking  Don't try to figure out whether a request is 
+                            for an image or HTML - assume HTML."
 ac_help="$ac_help
   --disable-acl-files     Prevents the use of ACL files to control access to
                           the proxy by IP address."
@@ -1540,18 +1540,18 @@ EOF
 fi
 
 
-# Check whether --enable-image-list or --disable-image-list was given.
-if test "${enable_image_list+set}" = set; then
-  enableval="$enable_image_list"
+# Check whether --enable-image-blocking or --disable-image-blocking was given.
+if test "${enable_image_blocking+set}" = set; then
+  enableval="$enable_image_blocking"
   if test $enableval = yes; then
   cat >> confdefs.h <<\EOF
-#define USE_IMAGE_LIST 1
+#define IMAGE_BLOCKING 1
 EOF
 
 fi
 else
   cat >> confdefs.h <<\EOF
-#define USE_IMAGE_LIST 1
+#define IMAGE_BLOCKING 1
 EOF
 
 fi

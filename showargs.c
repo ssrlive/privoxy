@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.6 2001/05/25 22:32:56 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.7 2001/05/26 00:28:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,13 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.6 2001/05/25 22:32:56 jongfoste
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.7  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.6  2001/05/25 22:32:56  jongfoster
  *    CRLF->LF
  *
@@ -237,7 +244,7 @@ void savearg(char *c, char *o, struct configuration_spec * config)
 
    strcat(buf, "<br>\n");
 
-   config->proxy_args->invocation = strsav(config->proxy_args->invocation, buf);
+   config->proxy_args_invocation = strsav(config->proxy_args_invocation, buf);
 
 }
 
@@ -261,10 +268,10 @@ void init_proxy_args(int argc, const char *argv[], struct configuration_spec * c
    char * b;
    int i;
 
-   freez(config->proxy_args->header);
-   freez(config->proxy_args->invocation);
-   freez(config->proxy_args->gateways);
-   freez(config->proxy_args->trailer);
+   freez(config->proxy_args_header);
+   freez(config->proxy_args_invocation);
+   freez(config->proxy_args_gateways);
+   freez(config->proxy_args_trailer);
    
 
    b = NULL;
@@ -298,10 +305,10 @@ void init_proxy_args(int argc, const char *argv[], struct configuration_spec * c
    }
    b = strsav(b, "<br>\n");
 
-   config->proxy_args->header = b;
+   config->proxy_args_header = b;
 
-   config->proxy_args->invocation = strsav(
-      config->proxy_args->invocation,
+   config->proxy_args_invocation = strsav(
+      config->proxy_args_invocation,
       "<br>\n"
       "and the following options were set in the configuration file"
       "<br><br>\n"
@@ -319,7 +326,7 @@ void init_proxy_args(int argc, const char *argv[], struct configuration_spec * c
    }
    b = strsav(b, "<br>\n");
 
-   config->proxy_args->gateways = b;
+   config->proxy_args_gateways = b;
 }
 
 
@@ -490,11 +497,11 @@ void end_proxy_args(struct configuration_spec * config)
    b = strsav(b, "  <li><code>#undef <b>DETECT_MSIE_IMAGES</b></code> - Disables detecting image requests automatically for MSIE.</li>\n");
 #endif /* ndef DETECT_MSIE_IMAGES */
 
-#ifdef USE_IMAGE_LIST
-   b = strsav(b, "  <li><code>#define <b>USE_IMAGE_LIST</b></code> - Enables using image list to detect images.</li>\n");
-#else /* ifndef USE_IMAGE_LIST */
-   b = strsav(b, "  <li><code>#undef <b>USE_IMAGE_LIST</b></code> - Disables using image list to detect images.</li>\n");
-#endif /* ndef USE_IMAGE_LIST */
+#ifdef IMAGE_BLOCKING
+   b = strsav(b, "  <li><code>#define <b>IMAGE_BLOCKING</b></code> - Enables sending \"blocked\" images instead of HTML.</li>\n");
+#else /* ifndef IMAGE_BLOCKING */
+   b = strsav(b, "  <li><code>#undef <b>IMAGE_BLOCKING</b></code> - Disables sending \"blocked\" images instead of HTML.</li>\n");
+#endif /* ndef IMAGE_BLOCKING */
 
 #ifdef ACL_FILES
    b = strsav(b, "  <li><code>#define <b>ACL_FILES</b></code> - Enables the use of ACL files to control access to the proxy by IP address.</li>\n");
@@ -534,7 +541,7 @@ void end_proxy_args(struct configuration_spec * config)
       "</body></html>\n"
    );
 
-   config->proxy_args->trailer = b;
+   config->proxy_args_trailer = b;
 
 }
 

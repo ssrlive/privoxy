@@ -1,6 +1,6 @@
 #ifndef _LOADERS_H
 #define _LOADERS_H
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.3 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,13 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.3  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -69,7 +76,6 @@ extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);
 
-extern int load_blockfile(struct client_state *csp);
 extern int load_permissions_file(struct client_state *csp);
 extern int load_forwardfile(struct client_state *csp);
   
@@ -77,10 +83,6 @@ extern int load_forwardfile(struct client_state *csp);
 extern int load_aclfile(struct client_state *csp);
 #endif /* def ACL_FILES */
 
-#ifdef USE_IMAGE_LIST
-extern int load_imagefile(struct client_state *csp);
-#endif /* def USE_IMAGE_LIST */
- 
 #ifdef TRUST_FILES
 extern int load_trustfile(struct client_state *csp);
 #endif /* def TRUST_FILES */

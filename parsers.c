@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.8 2001/05/27 22:17:04 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.9 2001/05/28 17:26:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.8 2001/05/27 22:17:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.9  2001/05/28 17:26:33  jongfoster
+ *    Fixing segfault if last header was crunched.
+ *    Fixing Windows build (snprintf() is _snprintf() under Win32, but we
+ *    can use the cross-platform sprintf() instead.)
+ *
  *    Revision 1.8  2001/05/27 22:17:04  oes
  *
  *    - re_process_buffer no longer writes the modified buffer
@@ -202,6 +207,7 @@ const struct interceptors intercept_patterns[] = {
 #ifdef TRUST_FILES
    { "ij-untrusted-url",   15, ij_untrusted_url },
 #endif /* def TRUST_FILES */
+   { "show-url-info",      13, ijb_show_url_info },
    { NULL, 0, NULL }
 };
 
@@ -859,53 +865,54 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
    strclean(s, FORCE_PREFIX);
 #endif /* def FORCE_LOAD */
 
+#ifdef TRUST_FILES
    csp->referrer = strdup(s);
+#endif /* def TRUST_FILES */
 
-   if (csp->config->referrer == NULL)
+   /*
+    * Check permissionsfile.  If we have allowed this site to get the
+    * referer, then send it and we're done.
+    */
+   if (csp->permissions & PERMIT_REFERER)
+   {
+      return(strdup(s));
+   }
+
+   /*
+    * Check configfile.  Are we blocking referer?
+    */
+   if ( (csp->config->referrer == NULL) 
+     || (*csp->config->referrer == '@') )
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
+   /*
+    * Check configfile.  Are we always sending referer?
+    */
    if (*csp->config->referrer == '.')
    {
       return(strdup(s));
-   }
-
-   if (*csp->config->referrer == '@')
-   {
-      if (csp->permissions & PERMIT_COOKIE_READ)
-      {
-         return(strdup(s));
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "crunch!");
-         return(NULL);
-      }
    }
 
    /*
     * New option § or L: Forge a referer as http://[hostname:port of REQUEST]/
     * to fool stupid checks for in-site links
     */
-
    if (*csp->config->referrer == '§' || *csp->config->referrer == 'L')
    {
-      if (csp->permissions & PERMIT_COOKIE_READ)
-      {
-         return(strdup(s));
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "crunch+forge!");
-         s = strsav(NULL, "Referer: ");
-         s = strsav(s, "http://");
-         s = strsav(s, csp->http->hostport);
-         s = strsav(s, "/");
-         return(s);
-      }
+      log_error(LOG_LEVEL_HEADER, "crunch+forge!");
+      s = strsav(NULL, "Referer: ");
+      s = strsav(s, "http://");
+      s = strsav(s, csp->http->hostport);
+      s = strsav(s, "/");
+      return(s);
    }
+
+   /*
+    * We have a specific (fixed) referer we want to send.
+    */
 
    log_error(LOG_LEVEL_HEADER, "modified");
 
@@ -957,7 +964,7 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
 
    if (*csp->config->uagent == '@')
    {
-      if (csp->permissions & PERMIT_COOKIE_READ)
+      if (csp->permissions & PERMIT_USER_AGENT)
       {
          return(strdup(s));
       }
@@ -1006,7 +1013,7 @@ char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
 
    if (*csp->config->uagent == '@')
    {
-      if (csp->permissions & PERMIT_COOKIE_READ)
+      if (csp->permissions & PERMIT_USER_AGENT)
       {
          return(strdup(s));
       }

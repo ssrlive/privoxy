@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.6  2001/05/26 14:15:18  jongfoster
+ *    Cosmetic fix: // -> block comment
+ *
  *    Revision 1.5  2001/05/26 13:24:31  jongfoster
  *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
  *    This #define cannot be set from ./configure - there's no point, it
@@ -128,15 +131,11 @@ BEGIN
         BEGIN
             MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
             MENUITEM                                SEPARATOR
-            MENUITEM "&Blockers...",                ID_TOOLS_EDITBLOCKERS
             MENUITEM "&Permissions...",             ID_TOOLS_EDITPERMISSIONS
             MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
 #ifdef ACL_FILES
             MENUITEM "&Access Control Lists...",    ID_TOOLS_EDITACLS
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-            MENUITEM "&Images...",                  ID_TOOLS_EDITIMAGE
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
             MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
 #endif /* def PCRS */
@@ -179,15 +178,11 @@ BEGIN
 #endif
         MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
         MENUITEM                                SEPARATOR
-        MENUITEM "&Blockers...",                ID_TOOLS_EDITBLOCKERS
         MENUITEM "&Permissions...",             ID_TOOLS_EDITPERMISSIONS
         MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
 #ifdef ACL_FILES
             MENUITEM "&Access Control Lists...",ID_TOOLS_EDITACLS
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-            MENUITEM "&Images...",              ID_TOOLS_EDITIMAGE
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
             MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
 #endif /* def PCRS */

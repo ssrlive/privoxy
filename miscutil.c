@@ -1,7 +1,7 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.1.1.1 2001/05/15 13:59:00 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/miscutil.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
  *
  * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
  *                strncmpic, and MinGW32 strdup functions.  These are
@@ -35,6 +35,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.1 2001/05/13 21:57:06 administr
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:00  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -196,7 +199,7 @@ char *safe_strerror(int err)
  * Returns     :  0 if s1==s2, Negative if s1<s2, Positive if s1>s2
  *
  *********************************************************************/
-int strcmpic(char *s1, char *s2)
+int strcmpic(const char *s1, const char *s2)
 {
    while (*s1 && *s2)
    {
@@ -225,7 +228,7 @@ int strcmpic(char *s1, char *s2)
  * Returns     :  0 if s1==s2, Negative if s1<s2, Positive if s1>s2
  *
  *********************************************************************/
-int strncmpic(char *s1, char *s2, size_t n)
+int strncmpic(const char *s1, const char *s2, size_t n)
 {
    if (n <= 0) return(0);
 

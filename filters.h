@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.4 2001/05/26 15:26:15 jongfoster Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.5 2001/05/27 22:17:04 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,19 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.5  2001/05/27 22:17:04  oes
+ *
+ *    - re_process_buffer no longer writes the modified buffer
+ *      to the client, which was very ugly. It now returns the
+ *      buffer, which it is then written by chat.
+ *
+ *    - content_length now adjusts the Content-Length: header
+ *      for modified documents rather than crunch()ing it.
+ *      (Length info in csp->content_length, which is 0 for
+ *      unmodified documents)
+ *
+ *    - For this to work, sed() is called twice when filtering.
+ *
  *    Revision 1.4  2001/05/26 15:26:15  jongfoster
  *    ACL feature now provides more security by immediately dropping
  *    connections from untrusted hosts.
@@ -123,16 +136,12 @@ extern char *block_url(struct http_request *http, struct client_state *csp);
 #ifdef TRUST_FILES
 extern char *trust_url(struct http_request *http, struct client_state *csp);
 #endif /* def TRUST_FILES */
-extern char *intercept_url(struct http_request *http, struct client_state *csp);
+extern int intercept_url(struct http_request *http, struct client_state *csp);
 extern char *redirect_url(struct http_request *http, struct client_state *csp);
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
 extern int block_imageurl(struct http_request *http, struct client_state *csp);
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
-
-#ifdef USE_IMAGE_LIST
-extern int block_imageurl_using_imagelist(struct http_request *http, struct client_state *csp);
-#endif /* def USE_IMAGE_LIST */
+#endif /* def IMAGE_BLOCKING */
 
 extern int url_permissions(struct http_request *http, struct client_state *csp);
 extern const struct gateway *forward_url(struct http_request *http, struct client_state *csp);
@@ -146,6 +155,8 @@ extern char *ijb_send_banner(struct http_request *http, struct client_state *csp
 #ifdef TRUST_FILES
 extern char *ij_untrusted_url(struct http_request *http, struct client_state *csp);
 #endif /* def TRUST_FILES */
+
+char *ijb_show_url_info(struct http_request *http, struct client_state *csp);
 
 #ifdef STATISTICS
 extern char *add_stats(char *s);

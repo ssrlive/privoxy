@@ -1,6 +1,6 @@
 #ifndef _W32RES_H
 #define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.3 2001/05/26 00:28:36 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.4 2001/05/26 01:26:34 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,11 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.4  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *
  *    Revision 1.3  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -119,24 +124,19 @@
 
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITJUNKBUSTER           5000
-#define ID_TOOLS_EDITBLOCKERS             5001
-#define ID_TOOLS_EDITPERMISSIONS          5002
-#define ID_TOOLS_EDITFORWARD              5003
+#define ID_TOOLS_EDITPERMISSIONS          5001
+#define ID_TOOLS_EDITFORWARD              5002
 
 #ifdef ACL_FILES
-#define ID_TOOLS_EDITACLS                 5005
+#define ID_TOOLS_EDITACLS                 5003
 #endif /* def ACL_FILES */
 
-#ifdef USE_IMAGE_LIST
-#define ID_TOOLS_EDITIMAGE                5006
-#endif /* def USE_IMAGE_LIST */
-
 #ifdef PCRS
-#define ID_TOOLS_EDITPERLRE               5008
+#define ID_TOOLS_EDITPERLRE               5004
 #endif /* def PCRS */
 
 #ifdef TRUST_FILES
-#define ID_TOOLS_EDITTRUST                5004
+#define ID_TOOLS_EDITTRUST                5005
 #endif /* def TRUST_FILES */
 
 /*

@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.6 2001/05/26 00:31:30 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.7 2001/05/26 01:26:34 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,11 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.6 2001/05/26 00:31:30 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.7  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *
  *    Revision 1.6  2001/05/26 00:31:30  jongfoster
  *    Fixing compiler warning about comparing signed/unsigned.
  *
@@ -162,15 +167,11 @@ int g_nFontSize = DEFAULT_LOG_FONT_SIZE;
 
 /* FIXME: this is a kludge */
 
-const char * g_blockfile = NULL;
 const char * g_permissions_file = NULL;
 const char * g_forwardfile = NULL;
 #ifdef ACL_FILES
 const char * g_aclfile = NULL;
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-const char * g_imagefile = NULL;
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
 const char * g_re_filterfile = NULL;
 #endif
@@ -1083,10 +1084,6 @@ void OnLogCommand(int nCommand)
          EditFile(configfile);
          break;
 
-      case ID_TOOLS_EDITBLOCKERS:
-         EditFile(g_blockfile);
-         break;
-
       case ID_TOOLS_EDITPERMISSIONS:
          EditFile(g_permissions_file);
          break;
@@ -1100,12 +1097,6 @@ void OnLogCommand(int nCommand)
          EditFile(g_aclfile);
          break;
 #endif /* def ACL_FILES */
-
-#ifdef USE_IMAGE_LIST
-      case ID_TOOLS_EDITIMAGE:
-         EditFile(g_imagefile);
-         break;
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef PCRS
       case ID_TOOLS_EDITPERLRE:
@@ -1170,14 +1161,10 @@ void OnLogInitMenu(HMENU hmenu)
 {
    /* Only enable editors if there is a file to edit */
    EnableMenuItem(hmenu, ID_TOOLS_EDITPERMISSIONS, MF_BYCOMMAND | (g_permissions_file ? MF_ENABLED : MF_GRAYED));
-   EnableMenuItem(hmenu, ID_TOOLS_EDITBLOCKERS, MF_BYCOMMAND | (g_blockfile ? MF_ENABLED : MF_GRAYED));
    EnableMenuItem(hmenu, ID_TOOLS_EDITFORWARD, MF_BYCOMMAND | (g_forwardfile ? MF_ENABLED : MF_GRAYED));
 #ifdef ACL_FILES
    EnableMenuItem(hmenu, ID_TOOLS_EDITACLS, MF_BYCOMMAND | (g_aclfile ? MF_ENABLED : MF_GRAYED));
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-   EnableMenuItem(hmenu, ID_TOOLS_EDITIMAGE, MF_BYCOMMAND | (g_imagefile ? MF_ENABLED : MF_GRAYED));
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
    EnableMenuItem(hmenu, ID_TOOLS_EDITPERLRE, MF_BYCOMMAND | (g_re_filterfile ? MF_ENABLED : MF_GRAYED));
 #endif

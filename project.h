@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.5 2001/05/26 00:28:36 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.6 2001/05/27 22:17:04 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,19 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.6  2001/05/27 22:17:04  oes
+ *
+ *    - re_process_buffer no longer writes the modified buffer
+ *      to the client, which was very ugly. It now returns the
+ *      buffer, which it is then written by chat.
+ *
+ *    - content_length now adjusts the Content-Length: header
+ *      for modified documents rather than crunch()ing it.
+ *      (Length info in csp->content_length, which is 0 for
+ *      unmodified documents)
+ *
+ *    - For this to work, sed() is called twice when filtering.
+ *
  *    Revision 1.5  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -201,15 +214,16 @@ struct gateway
 };
 
 
-struct proxy_args
+/* Generic linked list of strings */
+struct list
 {
-   char *header;
-   char *invocation;
-   char *gateways;
-   char *trailer;
+   char *str;
+   struct list *last;
+   struct list *next;
 };
 
 
+/* An I/O buffer */
 struct iob
 {
    char *buf;
@@ -217,13 +231,6 @@ struct iob
    char *eod;
 };
 
-
-struct list
-{
-   char *str;
-   struct list *last;
-   struct list *next;
-};
 
 #define IOB_PEEK(CSP) ((CSP->iob->cur > CSP->iob->eod) ? (CSP->iob->eod - CSP->iob->cur) : 0)
 #define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
@@ -254,12 +261,20 @@ struct list
 
 struct client_state
 {
+   /* The proxy's configuration */
    struct configuration_spec * config;
 
+
+   /* The permissions that the current URL has */
    int  permissions;
-   
+
+
+   /* socket to talk to client (web browser) */
    int  cfd;
+
+   /* socket to talk to server (web server or proxy) */
    int  sfd;
+
 
 #ifdef STATISTICS
    /* 1 if this URL was rejected, 0 otherwise. Allows actual stats inc to 
@@ -276,9 +291,17 @@ struct client_state
    int   toggled_on;
 #endif /* def TOGGLE */
 
+   /*
+    * Client PC's IP address, as reported by the accept()_ function.
+    * Both as string and number
+    */
    char *ip_addr_str;
    long  ip_addr_long;
+
+#ifdef TRUST_FILES
+   /* The referer in this request, if one was specified. */
    char *referrer;
+#endif /* def TRUST_FILES */
 
 #if defined(DETECT_MSIE_IMAGES)
    /* Types the client will accept.
@@ -287,23 +310,33 @@ struct client_state
    int accept_types;
 #endif /* defined(DETECT_MSIE_IMAGES) */
 
-   const struct gateway *gw;
+   /* The URL that was requested */
    struct http_request http[1];
 
+   /* An I/O buffer used for buffering data read from the client */
    struct iob iob[1];
 
+   /* List of all headers for this request */
    struct list headers[1];
+
+   /* List of all cookies for this request */
    struct list cookie_list[1];
+
 #if defined(PCRS) || defined(KILLPOPUPS)
+   /* Nonzero if this has a text MIME type */
    int is_text;
 #endif /* defined(PCRS) || defined(KILLPOPUPS) */
 
+   /* The "X-Forwarded-For:" header sent by the client */
    char   *x_forwarded;
 
+   /*
+    * Nonzero if this client is processing data.
+    * Set to zero when the thread associated with this structure dies.
+    */
    int active;
 
    /* files associated with this client */
-   struct file_list *blist;   /* blockfile */
    struct file_list *flist;   /* forwardfile */
    struct file_list *permissions_list;
 
@@ -311,10 +344,6 @@ struct client_state
 #ifdef ACL_FILES
    struct file_list *alist;   /* aclfile */
 #endif /* def ACL_FILES */
-
-#ifdef USE_IMAGE_LIST
-   struct file_list *ilist;   /* imagefile */
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef PCRS
      struct file_list *rlist;   /* Perl re_filterfile */
@@ -345,8 +374,7 @@ struct interceptors
 };
 
 
-/* this allows the proxy to permit/block access to any host and/or path */
-
+/* A URL pattern */
 struct url_spec
 {
    char  *spec;
@@ -407,30 +435,44 @@ struct file_list
 };
 
 
+#ifdef TRUST_FILES
 struct block_spec
 {
    struct url_spec url[1];
    int    reject;
    struct block_spec *next;
 };
+#endif /* def TRUST_FILES */
 
 
-#define PERMIT_COOKIE_SET    0x0001
-#define PERMIT_COOKIE_READ   0x0002
-#define PERMIT_RE_FILTER     0x0004
-#define PERMIT_POPUPS        0x0008
+#define PERMIT_COOKIE_SET      0x0001U
+#define PERMIT_COOKIE_READ     0x0002U
+#define PERMIT_RE_FILTER       0x0004U
+#define PERMIT_POPUPS          0x0008U
+#define PERMIT_REFERER         0x0010U /* sic - follow HTTP, not English */
+#define PERMIT_FAST_REDIRECTS  0x0020U
+#define PERMIT_BLOCK           0x0040U
+#define PERMIT_IMAGE           0x0080U
+
+#define PERMIT_USER_AGENT      PERMIT_COOKIE_SET /* FIXME  Alias this for now */
+
+#define PERMIT_MASK_ALL        (~0U)
+
+#define PERMIT_MOST_COMPATIBLE (PERMIT_COOKIE_SET | PERMIT_COOKIE_READ | \
+   PERMIT_REFERER | PERMIT_POPUPS | PERMIT_USER_AGENT)
 
 struct permissions_spec
 {
-   struct url_spec           url[1];
-   int                       permissions;
+   struct url_spec url[1];
+   unsigned mask;   /* a bit set to "0" = remove permission */
+   unsigned add;    /* a bit set to "1" = add permission */
    struct permissions_spec * next;
 };
+
 
 struct forward_spec
 {
    struct url_spec url[1];
-   int   reject;
    struct gateway gw[1];
    struct forward_spec *next;
 };
@@ -467,6 +509,7 @@ struct access_control_list
 };
 #endif /* def ACL_FILES */
 
+
 /* Maximum number of loaders (permissions, block, forward, acl...) */
 #define NLOADERS 8
 
@@ -480,24 +523,19 @@ struct configuration_spec
    int debug;
    int multi_threaded;
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
    int tinygif;
    const char *tinygifurl;
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
 
    const char *logfile;
 
-   const char *blockfile;
    const char *permissions_file;
    const char *forwardfile;
 
 #ifdef ACL_FILES
    const char *aclfile;
 #endif /* def ACL_FILES */
-
-#ifdef USE_IMAGE_LIST
-   const char *imagefile;
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef PCRS
    const char *re_filterfile;
@@ -534,13 +572,9 @@ struct configuration_spec
 #endif /* ndef SPLIT_PROXY_ARGS */
 
 #ifndef SPLIT_PROXY_ARGS
-   /* suppress listing sblock and simage */
+   /* suppress listing config files */
    int suppress_blocklists;
 #endif /* ndef SPLIT_PROXY_ARGS */
-
-#ifdef FAST_REDIRECTS
-   int fast_redirects;
-#endif /* def FAST_REDIRECTS */
 
 #ifdef TRUST_FILES
    const char * trustfile;
@@ -549,13 +583,20 @@ struct configuration_spec
    struct url_spec *trust_list[64];
 #endif /* def TRUST_FILES */
 
-   struct proxy_args proxy_args[1];
+   /* Various strings for show-proxy-args */
+   char *proxy_args_header;
+   char *proxy_args_invocation;
+   char *proxy_args_gateways;
+   char *proxy_args_trailer;
 
+   /* the configuration file object. */
    struct file_list *config_file_list;
 
+   /* List of loaders */
    int (*loaders[NLOADERS])(struct client_state *);
 
-   int need_bind; /* bool, nonzero if we need to bind() to the new port */
+   /* bool, nonzero if we need to bind() to the new port */
+   int need_bind;
 };
 
 
@@ -628,7 +669,7 @@ static const char CHEADER[] =
 static const char SHEADER[] =
    "HTTP/1.0 502 Invalid header received from server\n\n";
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
 
 /*
  * Hint: You can encode your own GIFs like that:
@@ -660,9 +701,9 @@ static const char JBGIF[] =
    "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
    "\037Q\000\000;";
 
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
 
-#if defined(FAST_REDIRECTS) || defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#if defined(FAST_REDIRECTS) || defined(IMAGE_BLOCKING)
 
 static const char HTTP_REDIRECT_TEMPLATE[] =
       "HTTP/1.0 302 Local Redirect from Junkbuster\r\n" 
@@ -671,7 +712,7 @@ static const char HTTP_REDIRECT_TEMPLATE[] =
       "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
       "Location: %s\r\n";
 
-#endif /*  defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /*  defined(FAST_REDIRECTS) || defined(IMAGE_BLOCKING) */
 
 #ifdef __cplusplus
 } /* extern "C" */

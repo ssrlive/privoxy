@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.5 2001/05/25 22:34:30 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.6 2001/05/26 00:28:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,13 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.5 2001/05/25 22:34:30 jongfoster 
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.6  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.5  2001/05/25 22:34:30  jongfoster
  *    Hard tabs->Spaces
  *
@@ -266,9 +273,9 @@ void unload_configfile (void * data)
       config->jar = NULL;
    }
 #endif /* def JAR_FILES */
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
    freez((char *)config->tinygifurl);
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
 
    freez((char *)config->from);
    freez((char *)config->haddr);
@@ -276,17 +283,12 @@ void unload_configfile (void * data)
    freez((char *)config->referrer);
    freez((char *)config->logfile);
 
-   freez((char *)config->blockfile);
    freez((char *)config->permissions_file);
    freez((char *)config->forwardfile);
 
 #ifdef ACL_FILES
    freez((char *)config->aclfile);
 #endif /* def ACL_FILES */
-
-#ifdef USE_IMAGE_LIST
-   freez((char *)config->imagefile);
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef JAR_FILES
    freez((char *)config->jarfile);
@@ -372,7 +374,7 @@ struct configuration_spec * load_config(void)
     */
 
    config->multi_threaded    = 1;
-   config->default_permissions = PERMIT_RE_FILTER;
+   config->default_permissions = PERMIT_RE_FILTER | PERMIT_FAST_REDIRECTS;
    config->hport             = HADDR_PORT;
 
    if ((configfp = fopen(configfile, "r")) == NULL)
@@ -444,7 +446,7 @@ struct configuration_spec * load_config(void)
             config->debug |= atoi(arg);
             continue;
 
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+#ifdef IMAGE_BLOCKING
          case hash_tinygif :
             freez((char *)config->tinygifurl);
             config->tinygif = atoi(arg);
@@ -477,7 +479,7 @@ struct configuration_spec * load_config(void)
                log_error(LOG_LEVEL_ERROR, "tinygif setting invalid.");
             }
             continue;
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
 
          case hash_add_forwarded_header :
             config->add_forwarded = 1;
@@ -508,18 +510,6 @@ struct configuration_spec * load_config(void)
             freez((char *)config->logfile);
             config->logfile = strdup(arg);
             continue;
-
-         case hash_blockfile :
-            freez((char *)config->blockfile);
-            config->blockfile = strdup(arg);
-            continue;
-
-#ifdef USE_IMAGE_LIST
-         case hash_imagefile :
-            freez((char *)config->imagefile);
-            config->imagefile = strdup(arg);
-            continue;
-#endif /* def USE_IMAGE_LIST */
 
 #ifdef JAR_FILES
          case hash_jarfile :
@@ -571,13 +561,6 @@ struct configuration_spec * load_config(void)
             freez((char *)config->from);
             config->from = strdup(arg);
             continue;
-
-#ifdef FAST_REDIRECTS
-         case hash_fast_redirects :
-               config->fast_redirects = 1;
-               continue;
-#endif /* def FAST_REDIRECTS */
-
 #ifdef _WIN_CONSOLE
          case hash_hide_console :
             hideConsole = 1;
@@ -646,9 +629,9 @@ struct configuration_spec * load_config(void)
 
          /* Warnings about unsupported features */
 
-#ifndef USE_IMAGE_LIST
+         case hash_blockfile :
          case hash_imagefile :
-#endif /* ndef USE_IMAGE_LIST */
+         case hash_fast_redirects :
 #ifndef PCRS
          case hash_re_filterfile :
 #endif /* ndef PCRS */
@@ -669,18 +652,15 @@ struct configuration_spec * load_config(void)
 #ifndef _WIN_CONSOLE
          case hash_hide_console :
 #endif /* ndef _WIN_CONSOLE */
-#if !defined(DETECT_MSIE_IMAGES) && !defined(USE_IMAGE_LIST)
+#ifndef IMAGE_BLOCKING
          case hash_tinygif :
-#endif /* !defined(DETECT_MSIE_IMAGES) && !defined(USE_IMAGE_LIST) */
+#endif /* def IMAGE_BLOCKING */
 #ifndef JAR_FILES
          case hash_jarfile :
 #endif /* ndef JAR_FILES */
 #ifndef ACL_FILES
          case hash_aclfile :
 #endif /* ndef ACL_FILES */
-#ifndef FAST_REDIRECTS
-         case hash_fast_redirects :
-#endif /* ndef FAST_REDIRECTS */
 #ifdef SPLIT_PROXY_ARGS
          case hash_suppress_blocklists :
 #endif /* def SPLIT_PROXY_ARGS */
@@ -699,7 +679,7 @@ struct configuration_spec * load_config(void)
             if (p != NULL)
             {
                sprintf( p, "<br>\nWARNING: unrecognized directive : %s<br><br>\n", buf );
-               config->proxy_args->invocation = strsav( config->proxy_args->invocation, p );
+               config->proxy_args_invocation = strsav( config->proxy_args_invocation, p );
                freez( p );
             }
             continue;
@@ -714,18 +694,6 @@ struct configuration_spec * load_config(void)
    {
       add_loader(load_permissions_file, config);
    }
-
-   if (config->blockfile)
-   {
-      add_loader(load_blockfile, config);
-   }
-
-#ifdef USE_IMAGE_LIST
-   if (config->imagefile)
-   {
-      add_loader(load_imagefile, config);
-   }
-#endif /* def USE_IMAGE_LIST */
 
    if (config->forwardfile)
    {
@@ -835,15 +803,11 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_blockfile        = config->blockfile;
    g_permissions_file = config->permissions_file;
    g_forwardfile      = config->forwardfile;
 #ifdef ACL_FILES
    g_aclfile          = config->aclfile;
 #endif /* def ACL_FILES */
-#ifdef USE_IMAGE_LIST
-   g_imagefile        = config->imagefile;
-#endif /* def USE_IMAGE_LIST */
 #ifdef PCRS
    g_re_filterfile    = config->re_filterfile;
 #endif

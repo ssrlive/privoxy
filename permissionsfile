@@ -1,108 +1,1175 @@
 # Sample permissions file for the Internet Junkbuster 2.9.4
 #
 # For information, see http://ijbswa.sourceforge.net/
+
+# Valid permissions are:
 #
-# Empty lines and lines beginning with a # are ignored.
 #
-# Each line has the following format:
-# [flags][domain][:port][/path]
+# +block
+#    Block this URL
 #
-# There should be no spaces between the components.
+# +image
+#    Treat this URL as an image.  This only matters if it's also blocked, in
+#    which case a "blocked" image rather than a HTML page will be sent.
 #
-# The domain, port, and path parts make up the pattern used
-# to match URLs.  The port part must be a number and must
-# match exactly.  The domain part is matched by comparing
-# each sub-domain (between the dots) from right to left.
-# e.g.:
-#  - The pattern "com" matches "anything.com"
-#  - The pattern "yahoo.com" would match "mail.yahoo.com",
-#    "login.yahoo.com", "www.yahoo.com", or "yahoo.com".
-# "*" characters are allowed immediately before a dot or at
-# the end of the domain, and match anything.  e.g.:
-#  - "microsoft.*" matches "microsoft.com" and "microsoft.net",
-#    (and "www.microsoft.com", "office.microsoft.com", etc)
-#    but not "microsoft.xyz.com" or "microsoft.co.uk".
-# - "ad*.*.*.*" matches "ad.doubleclick.co.uk"
-# - "*.*click.*.*" is invalid ("*" is not followed by ".")
+# +cookies-read
+#    Allow the website to read cookies
 #
-# The path part is a prefix match (if JunkBuster was compiled
-# without REGEX), or a POSIX regular expression (if JunkBuster
-# was compiled with REXEX but not PCRE), or a PERL (PCRE)
-# regular expression (if JunkBuster was compiled with the
-# default options).  "^" is automatically prepended to the RE
-# before the "/".
+# +cookies-set
+#    Allow the website to set cookies
 #
-# Flags are:
+# +filter
+#    Filter the website through the re_filterfile
 #
-# (no flags) Allow cookies and popups, don't re_filter.  (compatibility mode)
-#       >    Do not allow cookies to be set by the website.
-#       <    Do not allow cookies to be read by the website.
-#       <>   Block all cookies.
-#       %    Enable re_filterfile processing for this site
-#       ^    Block popups from this site.
-#       ~    Same as all of <>%^
+# +popup
+# +popups
+#    Allow the website to use window.open()
 #
-# Multiple flags may be specified.
+# +referer
+# +referrer
+#    Send the "Referer:" (sic) header to the web site
 #
-# If a web page's URL matches the specified pattern, then the
-# flags specified for that site are used.  If it matches more
-# than one pattern, then the first match (searching top-to-bottom
-# in this file) is used.
+# +fast-redirects
+#
+#    Many sites, like yahoo.com, don't just link to other sites.
+#    Instead, they will link to some script on their own server,
+#    giving the destination as a parameter, which will then redirect
+#    you to the final target. 
+#
+#    URLs resulting from this scheme typically look like:
+#    http://some.place/some_script?http://some.where-else
+#
+#    Sometimes, there are even multiple consecutive redirects encoded
+#    in the URL. These redirections via scripts make your web browing
+#    more traceable, since the server from which you follow such a link
+#    can see where you go to. Apart from that, valuable bandwidth and
+#    time is wasted, while your browser aks the server for one redirect
+#    after the other. Plus, it feeds the advertisers.
+#
+#    The fast-redirects option enables interception of these requests
+#    by junkbuster, who will cut off all but the last valid URL in the
+#    request and send a local redirect back to your browser without
+#    contacting the remote site.
+#
+#
+# All of these permissions also have a "-permission" setting to turn
+# them off - e.g. "-block" allows you to unblock a previously blocked site.
+#
+
+
+#############################################################################
+# Aliases
+#############################################################################
+{{alias}}
+#############################################################################
+#
+# You can define a short form for a list of permissions - e.g., instead
+# of "+cookies-set +cookies-read -filter -fast-redirects", you can
+# just write "shop".  This is called an alias.
+#
+# Currently, an alias can contain any character except space, tab, or '='.
+# But please use only 'a'-'z', '0'-'9', '+', and '-'.
+#
+# Alias names are not case sensitive.
+#
+# Aliases beginning with '+' or '-' may be used for system permission names 
+# in future releases - so try to avoid alias names like this.  (e.g. 
+# "+cookies" below is not a good name)
+#
+# Aliases must be defined before they are used.
 # 
-# If a URL does not match any of the patterns in this file,
-# then the default settings are used.  The default can be set
-# by a line in this file which contains flags but no pattern.
-# If this is not specified, then the default is ~
-#
-#
-# EXAMPLES:
-#
-# To permit an entire site to set cookies, simply include its domain name:
-# really-trustyworthy-people.org
-#
-# You can allow cookies out, but stop them coming in:
-# >%^send-user-cookies.com
-#
-# dabs.com requires cookies and popups:
-# %dabs.com
-#
-# Windows Update is fragile, so allow everything:
-# windowsupdate.microsoft.com
-#
-#
-#%^>tvguide.com
-#%^>wired.com/news/
-#%^americanexpress.com
-#%^cnn.com
-#%^www.nytimes.com
-#%^amazon.de
-#%^amazon.co.uk
-#%^slashdot.org
-#%^www.palmgear.com
-#%^onelist.com
-#%^freshmeat.net
++cookies    = +cookies-set +cookies-read
+-cookies    = -cookies-set -cookies-read
+fragile     = -block +cookies -filter -fast-redirects +referer +popups
+shop        = +cookies -filter -fast-redirects
++imageblock = +block +image
+
+#For people who don't like to type too much:  ;-)
+c0 = -cookies
+c1 = +cookies
+c2 = +cookies-set -cookies-read
+c3 = -cookies-set +cookies-read
+#... etc.  Customize to your heart's content.
+
+#############################################################################
+# Defaults
+#############################################################################
+{-block -image -cookies +filter +fast-redirects -referer -popups}
+/ # Match all URLs
+
+#############################################################################
+# Not yet implemented
+#############################################################################
+#{{filter}}
+#s/Microsoft/MicroSuck/ig
+
+#############################################################################
+# Permissions list
+#############################################################################
 
 # Sites that need cookies
-%^javasoft.com
-%^sun.com
-%^msdn.microsoft.com
-%^sourceforge.net
-%^yahoo.com
+{+cookies}
+javasoft.com
+sun.com
+yahoo.com
+msdn.microsoft.com
+
+# Alternative way of saying the same thing
+{+cookies-set +cookies-read}
+sourceforge.net
+sf.net
 
 # These sites are very complex and require
 # minimal interference.
+{fragile}
 office.microsoft.com
 windowsupdate.microsoft.com
 
-# Shopping
-dabs.com
-overclockers.co.uk
+# Shopping sites - still want to block ads.
+{shop}
+quietpc.com
 worldpay.com   # for quietpc.com
 jungle.com
 scan.co.uk
 
-# Explicitly set default to ~
-~
+# These shops require pop-ups
+{shop +popups}
+dabs.com
+overclockers.co.uk
+
+#############################################################################
+# Imagelist:
+#############################################################################
+{+image}
+#############################################################################
+/.*\.gif
+/.*\.jpe?g
+
+#############################################################################
+{+imageblock}
+#############################################################################
+adforce.imgis.com
+ad.preferences.com/image.*
+ads.web.aol.com
+focalink.com
+ad-adex3.flycast.com
+ad.doubleclick.net
+connect.247media.ads.link4ads.com
+ln.doubleclick.net
+mojofarm.mediaplex.com/ad/
+www.carbuyer.com/cgi-carbuyer/getimage.cgi
+
+#############################################################################
+# Blocklist:
+#############################################################################
+{+block}
+#############################################################################
+/*.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
+/*.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
+/*.*/(ng)?adclient\.cgi
+/*.*/(plain|live|rotate)[-_.]?ads?/
+
+/*.*/(sponsor)s?[0-9]?/
+###/*.*/(sponsor|banner)s?[0-9]?/
+###/*.*/.*banner([-_]?[a-z0-9]+)?\.(gif|jpg)
+
+/*.*/_?(plain|live)?ads?(-banners)?/
+/*.*/abanners/
+/*.*/ad(sdna_image|gifs?)/
+/*.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+/*.*/adbanners/
+/*.*/adserver
+/*.*/adstream\.cgi
+/*.*/adv((er)?ts?|ertis(ing|ements?))?/
+/*.*/anzei(gen)?/?
+/*.*/ban[-_]cgi/
+/*.*/banner_?ads/
+/*.*/banner_?anzeigen
+/*.*/bannerimage/
+/*.*/banners?/
+/*.*/banners?\.cgi/
+/*.*/cgi-bin/centralad/getimage
+/*.*/images/addver\.gif
+/*.*/images/advert\.gif
+/*.*/images/marketing/.*\.(gif|jpe?g)
+/*.*/place-ads
+/*.*/popupads/
+/*.*/promobar.*
+/*.*/publicite/
+/*.*/randomads/.*\.(gif|jpe?g)
+/*.*/reklama/.*\.(gif|jpe?g)
+/*.*/reklame/.*\.(gif|jpe?g)
+/*.*/reklaam/.*\.(gif|jpe?g)
+/*.*/siteads/
+/*.*/sponsor.*\.gif
+/*.*/sponsors?[0-9]?/
+/*.*/ucbandeimg/
+/*.*/werb\..*
+/*.*/werbebanner/
+/*.*/werbung/.*\.(gif|jpe?g)
+/.*/adv\.	# www.telegraaf.nl
+/.*/advert[0-9]+\.jpg
+/.*bann\.gif
+/Media/Images/Adds/
+/_banner/
+/ad_images/
+/adgenius/
+/adimages/
+/*.*/ads/
+/*.*/ads\\
+/viewad/
+/adserve/
+/adverts/
+/annonser?/
+/bando/
+/bannerad/
+/bannerfarm/
+/bin/getimage.cgi/...\?AD
+/bin/nph-oma.count/ct/default.shtml
+/bin/nph-oma.count/ix/default.html
+/cgi-bin/getimage.cgi/....\?GROUP=
+/cgi-bin/nph-load
+/cgi-bin/webad.dll/ad
+/cwmail/acc\.gif
+/cwmail/amzn-bm1\.gif
+/db_area/banrgifs/
+/gif/teasere/
+/grafikk/annonse/
+/graphics/defaultAd/
+/grf/annonif
+/htmlad/
+/image\.ng/AdType
+/image\.ng/transactionID
+/images/.*/.*_anim\.gif # alvin brattli
+/ip_img/.*\.(gif|jpe?g)
+/marketpl*/
+/minibanners/
+/netscapeworld/nw-ad/
+/promotions/houseads/
+/rotads/ 
+/rotateads/
+/rotations/ 
+/torget/jobline/.*\.gif
+/viewad/
+/werbung/
+/worldnet/ad\.cgi
+/zhp/auktion/img/
+/cgi-bin/nph-adclick.exe/
+/*.*/Image/BannerAdvertising/
+/*.*/ad-bin/
+/*.*/adlib/server\.cgi
+/*.*/gsa_bs/gsa_bs.cmdl
+/autoads/
+/anz/pics/
+
+# for our finnish friends, by Kai Puolamaki <Kai.Puolamaki@iki.fi>
+/*.*/mainos/*.*/.*\.gif
+/*.*/mainos/*.*/.*\.jpe?g
+
+# more from a finnish friend Petri Haapio <pha@iki.fi>
+cgi.tietovalta.fi
+keltaisetsivut.fi/web/img/\.*gif
+haku.net/pics/pana\.*gif
+www.fi/guvat/\.*gif
+/*.*/(.*[-_.].*)?maino(kset|nta|s).*(/|\.(gif|html?|jpe?g|png))
+/*.*/(ilm(oitus)?|kampanja)(hallinta|kuvat?)(/|\.(gif|html?|jpe?g|png))
+
+# and even more from a finnish friend Hannu Napari <Hannu.Napari@hut.fi>
+194.251.243.50/cgi-bin/banner
+
+www.dime.net/ad
+www.iltalehti.fi/ad
+www.iltalehti.fi/ilmkuvat
+www.mtv3.fi/mainoskuvat
+
+# <jwz@jwz.org>
+/*.*/adfinity
+/*.*/[?]adserv
+/*.*/bizgrphx/
+/*.*/smallad2\.gif
+/*.*/ana2ad\.gif
+/*.*/adimg/
+/*.*/.*counter\.pl
+/*.*/spin_html/
+/*.*/images/topics/topicgimp\.gif
+discovery.com/.*banner_id
+/*.*/.*bannr\.gif
+cruel.com/images/
+idrink.com/frm_bottom.htm
+/*.*/.*pb_ihtml\.gif
+/*.*/ph-ad.*\.focalink\.com
+/cgi-bin/adjuggler
+
+/we_ba/ # hausfrauenseite.de *bwhahahaaaaa*
+
+# ms sucks !
+/.*(ms)?backoff(ice)?.*\.(gif|jpe?g)
+/.*(/ie4|/ie3|msie|sqlbans|powrbybo|activex|backoffice|explorer|netnow|getpoint|ntbutton|hmlink).*\.(gif|jpe?g)
+/.*activex.*(gif|jpe?g)
+/.*explorer?.(gif|jpe?g)
+/.*freeie\.(gif|jpe?g)
+/.*/ie_?(buttonlogo|static?|anim.*)?\.(gif|jpe?g)
+/.*ie_sm\.(gif|jpe?g)
+/.*msie(30)?\.(gif|jpe?g)
+/.*msnlogo\.(gif|jpe?g)
+/.*office97_ad1\.(gif|jpe?g)
+/.*pbbobansm\.(gif|jpe?g)
+/.*powrbybo\.(gif|jpe?g)
+/.*sqlbans\.(gif|jpe?g)
+/.*exc_ms\.gif
+/.*ie4get_animated\.gif
+/.*ie4_animated\.gif
+/.*n_iemap\.gif
+/.*ieget\.gif
+/.*logo_msnhm_*
+/.*mcsp2\.gif
+/.*msn2\.gif
+/.*add_active\.gif
+/.*n_msnmap\.gif
+/.*Ad00\.gif
+/.*s_msn\.gif
+/.*addchannel\.gif
+/.*adddesktop\.gif
+/.*/ns4\.gif
+/.*/v3sban\.gif
+/.*/?FPCreated\.gif
+/.*/opera35\.gif
+/.*/opera13\.gif
+/.*/opera_b\.gif
+/.*/ie_horiz\.gif
+/.*/ie_logo\.gif
+
+# ... and even more!
+/.*/favicon\.ico
+
+# generally useless information and promo stuff (commented out)
+#/*.*/(counter|getpcbutton|BuiltByNOF|netscape|hotmail|vcr(rated)?|rsaci(rated)?|freeloader|cache_now(_anim)?|apache_pb|now_(anim_)?button|ie_?(buttonlogo|static?|.*ani.*)?)\.(gif|jpe?g)
+
+/*.*/images/na/us/brand/
+/*.*/advantage\.(gif|jpg)
+/*.*/advanbar\.(gif|jpg)
+/*.*/advanbtn\.(gif|jpg)
+/*.*/biznetsmall\.(gif|jpg)
+/*.*/utopiad\.(gif|jpg)
+/*.*/epipo\.(gif|jpg)
+/*.*/amazon([a-zA-Z0-9]+)\.(gif|jpg)
+/*.*/bnlogo.(gif|jpg)
+/*.*/buynow([a-zA-Z0-9]+)\.(gif|jpg)
+
+/p/d/publicid
+
+
+# for the dutch folks by a dutch friend gertjan@west.nl
+/*.*/Advertenties/
+/.*./Adverteerders/
+netdirect.nl/nd_servlet/___
+
+# --------------------------------------------------------------------------
+#
+# specific servers
+#
+# --------------------------------------------------------------------------
+
+# the next two lines work 
+12.16.1.10/web_GIF
+12.16.1.10/~web_ani
+193.158.37.3/cgi-bin/impact
+193.210.156.114
+193.98.1.160/img
+194.221.183.222/mailsentlu
+194.221.183.223
+194.221.183.224
+194.221.183.225
+194.221.183.226
+194.221.183.227
+194.231.79.38
+195.124.124.56
+195.27.70.69
+195.30.94.21
+195.63.104.222//inbox
+195.63.104.222//log	# www.weltbild.de
+195.63.104.222//meld
+195.63.104.222//menu
+195.63.104.222/folderlu
+195.63.104.222/folderru
+195.63.104.222/inbox
+195.63.104.222/loginlu
+195.63.104.222/loginmu
+195.63.104.222/loginru
+195.63.104.222/logoutlu
+195.63.104.222/logoutmu
+195.63.104.222/logoutru
+195.63.104.61//inbox
+195.63.104.61//log	# www.weltbild.de
+195.63.104.61//meld
+195.63.104.61//menu
+195.63.104.61/inbox
+195.63.104.61/loginlu
+195.63.104.61/loginmu
+195.63.104.61/loginru
+195.63.104.61/logoutlu
+195.63.104.61/logoutmu
+195.63.104.61/logoutru
+199.78.52.10
+1st-fuss.com
+204.253.46.71:1977
+204.94.67.40/wc/
+205.153.208.93
+205.216.163.62
+205.217.103.58:1977
+206.165.5.162/images/gcanim\.gif
+206.221.254.181:80
+206.50.219.33
+207.137.96.35
+207.159.129.131/abacus
+207.159.135.72
+207.82.250.9
+207.87.15.234
+207.87.27.10/tool/includes/gifs/
+208.156.39.142
+208.156.39.144
+208.156.60.230
+208.156.60.234
+208.156.60.235
+209.1.112.252/adgraph/
+209.1.135.142:1971
+209.1.135.144:1971
+209.132.97.164/IMG/
+209.185.222.45
+209.185.222.60
+209.185.253.199
+209.207.224.220/servfu.pl 
+209.207.224.222/servfu.pl
+209.239.37.214/cgi-pilotfaq/getimage\.cgi
+209.297.224.220
+209.75.21.6
+209.85.89.183/cgi-bin/cycle\?host
+212.63.155.122/(banner|concret|softwareclub)
+216.15.157.34
+216.27.61.150
+216.49.10.236/web1000/
+247media.com
+62.144.115.12/dk/
+ICDirect.com/cgi-bin
+Shannon.Austria.Eu.net/\.cgi/
+WebSiteSponsor.de
+207.181.220.145
+213.165.64.42
+
+#
+# generic hosts (probably most effective)
+#
+ad*.*.*
+ad*.*.*.*
+*.ads.*.*
+banner*.*.*
+banner*.*.*.*
+
+*.admaximize.com
+*.imgis.com
+/*.*/*preferences.com*
+1ad.prolinks.de
+adwisdom.com
+akamaitech.net/.*/Banners/
+altavista.telia.com/av/pix/sponsors/
+amazon.com/g/associates/logos/
+annonce.insite.dk
+asinglesplace.com/asplink\.gif
+athand.com/rotation
+automatiseringgids.nl/gfx/advertenties/
+#avenuea.com/Banners/
+avenuea.com/view/
+badservant.guj.de
+befriends.net/personals/matchmaking\.jpg
+bizad.nikkeibp.co.jp
+bs.gsanet.com/gsa_bs/
+cash-for-clicks.de
+cda.at/customer/
+cgicounter.puretec.de/cgi-bin/
+ciec.org/images/countdown\.gif
+classic.adlink.de/cgi-bin/accipiter/adserver.exe
+click..wisewire.com
+clickhere.egroups.com/img/
+imagine-inc.com
+commonwealth.riddler.com/Commonwealth/bin/statdeploy\?[0-9]+
+customad.cnn.com
+dagbladet.no/ann-gif
+deja.com/jump/
+digits.com/wc/
+dino.mainz.ibm.de
+dn.adzerver.com/image.ad
+ds.austriaonline.at
+emap.admedia.net
+etrade.com/promo/
+eur.yimg.com/a/
+eur.a1.yimg.com/eur.yimg.com/a/
+us.a1.yimg.com/us.yimg.com/a/
+eurosponsor.de
+fastcounter.linkexchange.com
+flycast.com
+focalink.com/SmartBanner
+freepage.de/cgi-bin/feets/freepage_ext/.*/rw_banner
+freespace.virgin.net/andy.drake
+futurecard.com/images/
+gaia.occ.com/click.*
+globaltrack.com
+globaltrak.net
+go.com/cimages\?SEEK_
+gp.dejanews.com/gtplacer
+gtp.dejanews.com/gtplacer
+deja.com/gifs/onsale/
+hitbox.com 
+home.miningco.com/event.ng/.*AdID
+hurra.de
+hyperbanner.net
+icount.com/.*count
+image*.narrative.com/news/.*\.(gif|jpe?g)
+image.click2net.com
+image.linkexchange.com
+images.nytimes.com
+images.yahoo.com/adv/
+images.yahoo.com/promotions/
+imageserv.adtech.de
+img.web.de
+impartner.de/cgi-bin
+informer2.comdirect.de:6004/cd/banner2
+infoseek.go.com/cimages
+ins.at/asp/images/
+kaufwas.com/cgi-bin/zentralbanner\.cgi
+leader.linkexchange.com
+link4ads.com
+link4link.com
+linktrader.com/cgi-bin/
+logiclink.nl/cgi-bin/
+lucky.theonion.com/cgi-bin/oniondirectin\.cgi
+lucky.theonion.com/cgi-bin/onionimp\.cgi
+lucky.theonion.com/cgi-bin/onionimpin\.cgi
+m.doubleclick.net
+mailorderbrides.com/mlbrd2\.gif
+media.priceline.com
+mediaplex.com
+members.sexroulette.com
+messenger.netscape.com
+miningco.com/zadz/
+# movielink became moviefone
+moviefone.com/.*banner
+moviefone.com/.*newbutton
+moviefone.com/.*ad\.gif
+moviefone.com/.*mmail
+moviefone.com/.*poster\.gif
+moviefone.com/.*btyb
+moviefone.com/.*h_guy
+moviefone.com/.*h_showtick
+moviefone.com/.*h_aML
+moviefone.com/.*/m_
+moviefone.com/.*/icon_
+moviefone.com/.*/NF_.*back
+moviefone.com/.*/h_.*gif
+moviefone.com/media/imagelinks
+moviefone.com/media/imagelinks/MF.(ad|sponsor)
+moviefone.com/media/art
+mqgraphics.mapquest.com/graphics/Advertisements/
+netgravity.*
+newads.cmpnet.com
+news.com/cgi-bin/acc_clickthru
+ngadcenter.net
+ngserve.pcworld.com/adgifs/
+nol.at:81
+nrsite.com
+nytsyn.com/gifs
+offers.egroups.com
+pagecount.com
+ph-ad.*\.focalink.com
+preferences.com
+promotions.yahoo.com/
+pub.nomade.fr
+qsound.com/tracker/tracker.exe
+resource-marketing.com/tb/
+revenue.infi.net
+rtl.de/homepage/wb/images/
+schnellsuche.de/images/*
+shout-ads.com/cgibin/shout.php3
+sjmercury.com/advert/
+smartclicks.com/.*/smart(img|banner|host|bar|site)
+smh.com.au/adproof/
+spinbox1.filez.com
+static.wired.com/advertising/
+swiftad.com
+sysdoc.pair.com/cgi-sys/cgiwrap/sysdoc/sponsor\.gif
+t-online.de/home/040255162-001/*
+taz.de/taz/anz/
+tcsads.tcs.co.at
+teleauskunft.de/commercial/
+thecounter.com/id
+tm.intervu.net
+tvguide.com/rbitmaps/
+ubl.com/graphics/
+ubl.com/images/
+ultra.multimania.com
+ultra1.socomm.net
+uproar.com
+us.yimg.com/a/
+us.yimg.com/promotions/
+valueclick.com
+valueclick.net
+victory.cnn.com
+videoserver.kpix.com
+washingtonpost.com/wp-adv/
+webconnect.net/cgi-bin/webconnect.dll
+webcounter.goweb.de
+webserv.vnunet.com/ip_img/.*ban
+werbung.pro-sieben.de/cgi-bin
+whatis.com/cgi-bin/getimage.exe/
+www..bigyellow.com/......mat.*
+www.adclub.net
+www.addme.com/link8\.gif
+www.aftonbladet.se/annons
+www.americanpassage.com/
+www.angelfire.com/in/twistriot/images/wish4\.gif
+www.bizlink.ru/cgi-bin/irads\.cgi
+www.blacklightmedia.com/adlemur
+www.bluesnews.com/flameq\.gif
+www.bluesnews.com/images/ad[0-9]+\.gif
+www.bluesnews.com/images/gcanim3\.gif
+www.bluesnews.com/images/throbber2\.gif
+www.bluesnews.com/miscimages/fragbutton\.gif
+www.businessweek.com/sponsors/
+www.canoe.ca/AdsCanoe/
+www.cdnow.com/MN/client.banners
+www.clickagents.com
+www.clickthrough.ca
+www.clicmoi.com/cgi-bin/pub\.exe
+www.dailycal.org/graphics/adbanner-ab\.gif
+www.detelefoongids.com/pic/[0-9]*
+www.dhd.de/CGI/werbepic
+www.dsf.de/cgi-bin/site_newiac.adpos
+www.firsttarget.com/cgi-bin/klicklog.cgi
+www.forbes.com/forbes/gifs/ads
+www.forbes.com/tool/includes/gifs/
+www.fxweb.holowww.com/.*\.cgi
+www.geocities.com/TimesSquare/Zone/5267/
+www.goto.com/images-promoters/
+www.handelsblatt.de/hbad
+www.hotlinks.de/cgi-bin/barimage\.cgi
+www.infoseek.com/cimages
+www.infoworld.com/pageone/gif
+www.isys.net/customer/images
+www.javaworld.com/javaworld/jw-ad
+www.kron.com/place-ads/
+www.leo.org/leoclick/
+www.linkexchange.ru/cgi-bin/erle\.cgi
+www.linkstation.de/cgi-bin/zeige
+www.linux.org/graphic/miniature/
+www.linux.org/graphic/square/
+www.linux.org/graphic/standard/
+www.luncha.se/annonsering
+www.mediashower.com
+www.ml.org/gfx/spon/icom/
+www.ml.org/gfx/spon/wmv
+www.musicblvd.com/mb2/graphics/netgravity/
+nedstat.nl/cgi-bin/
+www.news.com/Midas/Images/
+www.newscientist.com/houseads
+www.nextcard.com/affiliates/
+www.nikkeibp.asiabiztech.com/image/NAIS4\.gif
+www.nordlys.no/imaker/.*/.*/.*/.....\.gif	# alvin brattli
+www.nordlys.no/imaker/.*/.*/.*/..003		# alvin brattli
+www.oanda.com/server/banner
+omdispatch.co.uk
+www.oneandonlynetwork.com
+www.page2page.de/cgi-bin/
+www.prnet.de/.*/bannerschnippel/.*\.(gif|jpe?g)
+www.promptsoftware.com/marketing/
+#www.reklama.ru/cgi-bin/banners/
+www.riddler.com/sponsors/
+www.rle.ru/cgi-bin/erle\.cgi
+www.rock.com/images/affiliates/search_black\.gif
+www.rtl.de/search/.*kunde
+#www.search.com/Banners
+www.sfgate.com/place-ads/
+www.shareware.com/midas/images/borders-btn\.gif
+#www.sjmercury.com/products/marcom/banners/
+www.smartclicks.com:81
+www.sol.dk/graphics/portalmenu
+www.sponsornetz.de/jump/show.exe
+www.sponsorpool.net
+www.sunworld.com/sunworldonline/icons/adinfo.sm\.gif
+www.swwwap.com/cgi-bin/
+www.taz.de/~taz/anz/
+www.telecom.at/icons/.*film\.(gif|jpe?g)
+www.theonion.com/bin/
+www.topsponsor.de/cgi-bin/show.exe
+www.ugo.net
+www.ugu.com/images/EJ\.gif
+www.warzone.com/pics/banner/
+www.warzone.com/wzfb/ads.cgi
+www.webpeep.com
+www.websitepromote.com/partner/img/
+www.winjey.com/onlinewerbung/*\.gif
+www.wishing.com/webaudit
+www.www-pool.de/cgi-bin/banner-pool
+www2.blol.com/agrJRU\.gif
+www3.exn.net:80
+yahoo.com/CategoryID=0
+yahoo.de/adv/images
+
+#swa
+www.bannerland.de/click.exe
+*.cyberclick.net
+*.eu-adcenter.net/
+www.web-stat.com
+www.slate.com/snav/
+www.slate.com/redirect/
+www.slate.com/articleimages/
+usads.imdb.com
+www.forbes.com/tool/images/frontend/
+www.zserver.com
+www.spinbox.com
+pathfinder.com/shopping/marketplace/images/
+/*.*/adbanner*
+/*.*/adgraphic*
+static.wired.com/images
+perso.estat.com/cgi-bin/perso/
+dinoadserver1.roka.net
+fooladclient*.fool.com
+affiliate.aol.com/static/
+cybereps.com:8000
+iadnet.com
+orientserve.com
+wvolante.com
+findcommerce.com
+smartage.com
+
+# www.sunday-times.co.uk
+www.sunday-times.co.uk/standing/newsint/ticker
+
+# Für Germany.Net-User: Germany.Net (fast) banner- u. grafikfrei!
+germany.net/gebu-frei\.gif
+germany.net/bilder/menue/leiste\.gif
+germany.net/bilder/gn_logos/*
+germany.net/bilder/90x90/*
+germany.net/banner-homepage/*
+germany.net/downloadshop/*
+germany.net/bilder/action/promopoly/germanynet/basisdienste/hilfe/*
+
+# Block as much of GeoCities as possible
+# All geocities-owned images
+www.geocities.com/images
+www.geocities.com/MemberBanners/live/
+pic.geocities.com/images
+# And the popup (it still pops up, but does not eat up precious bandwidth)
+#www.geocities.com/ad_container/pop.html # already fixed by other regexp
+
+# from corion@informatik.uni-frankfurt.de
+sam.songline.com/@
+img.getstats.com/
+#ads.xmonitor.net/xadengine.cgi # fixed by above regexp
+# Also block the japanese geocities popups
+www.geocities.co.jp/images
+# Also block the come.to, surf.to etc. popups
+v3.come.to/pop.asp
+
+# Also block the xoom stuff.
+xb.xoom.com
+home.talkcity.com/homepopup.html.*
+
+# Max Maischein <max.maischein@econsult.de> again ...
+# Halflife.net uses WON banners
+# Banners from Freeserve
+#banner.freeservers.com/cgi-bin/fs_adbar # fixed by above regexp
+# And those nasty va-popups !
+/.*/?va_banner.html
+# And an all-around hit against advert*.jpg
+/.*/advert[0-9]+\.jpg
+# And yet another Internet Explorer gif ...
+/.*/ie_horiz\.gif
+# Some uninteresting buttons I think...
+mircx.com/images/buttons/
+services.mircx.com/.*\.gif
+# Ooops - UserFriendly (Iambe) has a banner that gets eaten ...
+~www.userfriendly.org/images/banners/banner_dp_heart\.gif
+# Easyspace - yet another "free disk space" provider with <yuck> banner popups
+www.easyspace.com/(fpub)?banner.html
+www.easyspace.com/100\.gif
+# Some russian banner exchanges
+banner.ricor.ru/cgi-bin/banner.pl
+#www.bizlink.ru/cgi-bin/irads.cgi # already fixed by other regexp
+stx9.sextracker.com/stx/send/
+# And even more of geocities :
+www.geocities.com/pictures/
+# Gaah - www.angelfire.com - another webspace provider with popups
+angelfire.com/sys/download.html
+# Gamasutra.com uses this ad provider
+sally.songline.com/@
+
+# Eule.de (search engine)
+# maybe images.eule.de as a whole...
+www.eule.de/cgi-bin/
+images.eule.de/comdirect\.gif 
+images.eule.de/wp\.gif
+aladin.de/125_1\.gif
+images.eule.de/neu/books\.gif
+
+# --------------------------------------------------------------------------
+#
+# some images
+#
+# --------------------------------------------------------------------------
+
+# some images on cnn's website just suck!
+/.*cnnstore\.gif
+/.*book.search\.gif
+/.*cnnpostopinionhome.\.gif
+/.*custom_feature\.gif
+/.*explore.anim.*gif
+/.*infoseek\.gif
+/.*pathnet.warner\.gif
+/.*images/cnnfn_infoseek\.gif
+/.*images/pathfinder_btn2\.gif
+/.*img/gen/fosz_front_em_abc\.gif
+/.*img/promos/bnsearch\.gif
+/.*navbars/nav_partner_logos\.gif
+/BarnesandNoble/images/bn.recommend.box.*
+/digitaljam/images/digital_ban\.gif
+/hotstories/companies/images/companies_banner\.gif
+/markets/images/markets_banner\.gif
+/ows-img/bnoble\.gif
+/ows-img/nb_Infoseek\.gif
+cnn.com/images/custom/totale\.gif
+cnn.com/images/lotd/custom.wheels\.gif
+cnn.com/images/.*/by/main.12\.gif
+cnn.com/images/.*/find115\.gif
+cnn.com/.*/free.email.120\.gif
+cnnfn.com/images/left_banner\.gif
+focus.de/A/AF/AFL/
+www.cnn.com/images/.*/bn/books\.gif
+www.cnn.com/images/.*/pointcast\.gif
+www.cnn.com/images/.*/fusa\.gif
+cnn.com/images/.*/start120\.gif
+images.cnn.com/SHOP/
+/.*by/main\.gif
+/.*gutter117\.gif
+/.*barnes_logo\.gif
+# the / indicates the beginning of the path (and no longer the FQDN)
+/.*nbclogo\.gif
+/.*microdell\.gif
+/.*secureit\.gif
+
+g.deja.com/gifs/(q|us)west_120x120\.gif
+
+#
+/gif/buttons/banner_.*
+/gif/buttons/cd_shop_.*
+/gif/cd_shop/cd_shop_ani_.*
+
+#altavista
+/av/gifs/av_map\.gif
+/av/gifs/av_logo\.gif
+/av/gifs/new/ns\.gif
+altavista.com/i/valsdc3\.gif
+jump.altavista.com/gn_sf
+
+# tucows
+tucows.*.*/images/locallogo\.gif
+#tucows.dsuper.net/images/locallogo\.gif
+
+#
+mt_freshmeat\.jpg
+
+# simpliemu.hypermart.net/frames.html
+go2net.com/mgic/adpopup
+go2net.com/metaspy/images/exposed\.gif
+go2net.com/metaspy/images/ms_un\.gif
+
+#
+www.cebu-usa.com/cwbanim1\.gif
+www.cebu-usa.com/Connection\.jpg
+www.cebu-usa.com/phonead\.gif
+www.cebu-usa.com/ban3\.jpg
+www.cebu-usa.com/tlban\.gif
+www.cebu-usa.com/apwlogo1\.gif
+www.cebu-usa.com/rose\.gif
+
+# fnet
+www.fnet.de/img/geldboerselogo\.jpg
+
+# hirsch@mathcs.emory.edu
+/images/getareal2\.gif
+
+www.assalom.com/aziza/logos/cniaffil\.gif
+www.assalom.com/aziza/logos/4starrl1\.gif
+www.phantomstar.com/images/media/m1\.gif
+
+#
+wahlstreet.de/MediaW\$/tsponline\.gif
+wahlstreet.de/MediaW\$/dzii156x60\.gif
+wahlstreet.de/MediaW\$/etban156x60_2_opt2\.gif
+
+# linuxtoday.com
+/pics/gotlx1\.gif
+/pics/getareal1\.gif
+/pics/amzn-b5\.gif
+/ltbs/cgi-bin/click.cgi
+linuxtoday.com/ltbs/pics/
+
+# Geocities popups
+/ad[-_]container/
+/include/watermark/v2/
+
+# Reinier Bikker <R.P.Bikker@phys.uu.nl>
+# Banner.xxLINK.nl/
+
+# Mark Lutz <luma@nikocity.de>
+/.*/*werb.*\.(gif|jpe?g) # hope that's not to restrictive
+
+#Free Yellow thing at bottom of pages (HereticPC)
+www.freeyellow.com/images/powerlink5a\.gif
+www.freeyellow.com/images/powerlink5b\.gif
+www.freeyellow.com/images/powerlink5c\.gif
+www.freeyellow.com/images/powerlink5d\.gif
+www.freeyellow.com/images/powerlink5e\.gif
+
+#HereticPC
+www.eads.com/images/refbutton\.gif
+www.fortunecity.com/console2/newnav/*
+www.goldetc.net/search\.gif
+www.cris.com/~Lzrdking/carpix/cars3-le\.gif
+www.justfreestuff.com/scott\.gif
+www.cyberthrill.com/entrance\.gif
+secure.pec.net/images/pec69ani\.gif
+www.new-direction.com/avviva\.gif
+internetmarketingcenter\.gif
+www.new-direction.com/wp-linkexchange-loop\.gif
+www.new-direction.com/windough\.gif
+www.digitalwork.com/universal_images/affiliate/dw_le_3\.gif
+service.bfast.com/bfast/click/*
+www.new-direction.com/magiclearning\.gif
+www.new-direction.com/mailloop\.gif
+
+www.free-banners.com/images/hitslogo\.gif
+rob.simplenet.com/dyndns/fortune5\.gif
+nasdaq-amex.com/images/bn_ticker\.gif
+
+#
+# navilor@hotmail.com
+#
+#
+# wayne@staff.msen.com
+#
+a*.*.*.yimg.com/([0-9]*|\/)*us.yimg.com/*
+ad.doubleclick.net
+www.dnps.com/ads
+www.realtop50.com/cgi-bin/ad
+
+
+#
+www.yacht.de/images/(my_ani|eissingani|chartertrans|fum|schnupper|fysshop|garmin)\.gif
+www.sponsorweb.de/web-sponsor/nt-bin/show.exe
+
+#
+# Club-internet pops up a complain if you refuse cookie (still pops up...)
+perso.club-internet.fr/html/Popup/popup_frame_nocookie.html
+perso.club-internet.fr/pagesperso/popup_nocookie.html
+
+gmx.net/images/newsbanner/
+cash4banner.de
+
+quicken.lexware.de/images/us7-468x60.gif
+/img/special/chatpromo\.gif
+www.travelocity.com/images/promos/
+
+# wonder that that does...
+p01.com/1x1.dyn
+
+/*.*/phpAds/viewbanner.php
+/*.*/phpAds/phpads.php
+
+www.linux-magazin.de/banner    
+comtrack.comclick.com
+click-fr.com
+iac-online.de/filler
+
+media.interadnet.com
+stat.www.fi/cgi-bin
+/cgi/banners.cgi
+ads-digi.sol.no
+fp.buy.com
+disneystoreaffiliates.com
+
+powerwork.mobile.de/cgi-bin/getimage\.cgi
+
+
+
+####################################################
+# Jon's addition:
+#
+# The Register ads - oh, and all images in Register stories (sigh).
+www.theregister.co.uk/media/
+
+
+# Dilbert:
+www.dilbert.com/comics/dilbert/images/.*_140x800.*\.gif
+
+# stattrack.com
+# Uses URL: http://www.stattrack.com/cgi-bin/stats/image.cgi
+/cgi-bin/stats/
+# And loads JavaScript from http://www.stattrack.com/stats/code
+www.stattrack.com/stats/
+
+#Now they're Yahoo GeoCities, their junk is in a different place.
+##geo.yahoo.com/serv
+##visit.geocities.com/visit.gif
+*.*.*.yimg.com/*/www.geocities.com/js_source
+#http://us.toto.geo.yahoo.com/toto?s=76001086
+##*.toto.geo.yahoo.com
+*.*.geo.yahoo.com
+*.geo.yahoo.com
+geo.yahoo.com
+visit.geocities.com
+*.*.*.yimg.com/.*/www.geocities.com/
+
+#http://counter16.bravenet.com/counter.php
+counter*.*.*
+
+#http://stat.cybermonitor.com/7emezone_p?1707_USdvd
+stat*.*.*
+
+#http://members.tripod.com/adm/popup/.....
+members.tripod.com/adm/popup/
+
+#This is the worst ad idea ever!
+#count.exitexchange.com/exit/1100661
+#count.exitexchange.com/clients/navbar.html
+#(used in http://skyhivisuals.tripod.com/malfunctions_.htm)
+exitexchange.com
+
+#SourceForge ads.
+sfads.osdn.com
+
+#This site traps the browser
+webhideout.com
+
+
+#Lindsay.Marshall@newcastle.ac.uk suggested these, to kill Opera adverts:
+
+www.qksrv.net
+mirror.qkimg.net
+
+#############################################################################
+{-block}
+#############################################################################
+
+cpan.valueclick.com
+
+#Why were these in the Waldherr blockfile?
+#www.hitbox.com
+#a*.*.*.yimg.com/([0-9]|\/)*us.yimg.com/i/*
+
+# some regexps are simply too aggressive ...
+#
+# equalizer to /*.*(.*[-_.])?ads?[0-9]?(/|[-_.].*|.(gif|jpe?g)) 
+# or other regexps
+#
+#
+adamwhone.co.uk
+adsl.tin.it
+stsci.edu
+tgs.com
+sun.com
+povray.org
+admin.*.*
+admin.*.*.*
+ad.siemens.de             # SIEMENS Automation & Drives
+add-url.altavista.com
+adis.on.ca
+address*.*.*
+address*.*.*.*
+add*.*.*
+add*.*.*.*
+adu*.*.*
+adu*.*.*.*
+advice.*.*
+advice.*.*.*
+
+# univ. don't advertise, do they :-)
+*.*.edu
+*.*.*.edu
+www.ugu.com/sui/ugu/adv
+adfa.edu.au
+adsl*.*.*
+
+clubs.yahoo.com/clubs
+edit.my.yahoo.com/config/show_identity
+www.ix.de/newsticker/data/ad
+www.heise.de/newsticker/data/ad
+www.careernet.de/anzeige
+www.careernet.de/bewerber/stellenanzeigen
+www.baumgartner.de/stellenmarkt/anzeigen
+www.dspartner.de/Anzeigen
+www.aws-jobs.de/Anzeigen
+www.jobware.de/.*/anzeigen/
+www.jobworld.de/bilder/
+www.cnn.com/TECH/computing/.*/internet.ads/
+www.financial.de/shop/
+gnn.de/.*\.html
+www.auktionen.de
+
+194.221.152.2/phptelefontmp
+harvard.edu/images/banner/
+
+adswww.harvard.edu
+www.dhd.de/CGI/anzeigen/
+
+ads.web.de/web/
+img.web.de/web/img/
+
+www.segel.de/menu/bilder/anzeigen\.gif
+www.corel.com/graphics/banners/
+www.software.ibm.com/ad/
+www.omg.org/docs/ad/
+
+sperrmuell.de/scripts/anzeigen
+www.freenet.de/index.html
+www.01019freenet.de/index.html
+www.freenet.de/freenet/
+www.01019freenet.de/freenet/
+webfactory.de/anzeigen.php
+www.cdmag.com
+www.internatif.org/bortzmeyer/debian/sponsor/
+hp.com
+
+www.software.hosting.ibm.com/ad/
+www.ibm.com/software/ad/
+brickshelf.com
+
+www.debian.org/Pics/banner-blue\.gif
+www.linux.de/pics/Nachrichten_banner\.gif
+www.werbekurier.de
+
+finder.shopping.yahoo.com/shop/
+national.com/pf
+mozilla.org
+eidos.de
+e-sheep.com
+punkassgear.com
+mozilla.org
+mozillazine.org
+adbusters.org
+annoy.com
+consumer-direct.com
+www.iez-auktion.de
+ibm.com
+sgi.com
+
+# my banking stuff => no ads. last regexp for fast access :-)
+comdirekt.de
+comdirect.de
+teledata.de
+
+
+# Jon's addition: MSDN
+
+msdn.microsoft.com
 
 
 # End of file

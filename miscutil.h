@@ -1,9 +1,9 @@
 #ifndef _MISCUTIL_H
 #define _MISCUTIL_H
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.1.1.1 2001/05/15 13:59:00 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/miscutil.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
  *
  * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
  *                strncmpic, and MinGW32 strdup functions.  These are
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:00  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -51,8 +54,8 @@ extern unsigned long hash_string(const char* s);
 
 extern char *safe_strerror(int err);
 
-extern int strcmpic(char *s1, char *s2);
-extern int strncmpic(char *s1, char *s2, size_t n);
+extern int strcmpic(const char *s1, const char *s2);
+extern int strncmpic(const char *s1, const char *s2, size_t n);
 
 #ifdef __MINGW32__
 extern char *strdup(const char *s);

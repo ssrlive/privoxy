@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.3  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *
  *    Revision 1.2  2001/05/22 17:43:35  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -168,8 +173,10 @@
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
- * other image-detection methods (i.e. USE_IMAGE_LIST) for other
+ * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
+ *
+ * You must also define IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -197,13 +204,12 @@
 #undef DETECT_MSIE_IMAGES
 
 /*
- * Use image list to detect images.
- * If you do not define this then everything is treated as HTML.
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
  *
- * Whatever the setting of this value, DETECT_MSIE_IMAGES will 
- * override it for people using Internet Explorer.
+ * Note that this is required if you want to use DETECT_MSIE_IMAGES.
  */
-#undef USE_IMAGE_LIST
+#undef IMAGE_BLOCKING
 
 /*
  * Allows the use of ACL files to control access to the proxy by IP address.
