@@ -11,7 +11,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -25,7 +25,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1312,7 +1312,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1372,7 +1372,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1702,20 +1702,20 @@ at sourceforge. Three simple steps:
 	Edit the os2build.cmd file to set the final executable filename.
 	For example, 
  	<programlisting>
-  installExeName='privoxyos2_setup_2.9.13_beta.exe'
+  installExeName='privoxyos2_setup_X.Y.Z.exe'
 	</programlisting>
  	Next, edit the <filename>IJB.wis</filename> file so the release number matches
  	in the <filename>PACKAGEID</filename> section:
  	<programlisting>
-  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\2\9\13"
+  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
 	</programlisting>
 	You're now ready to build.  Run:
- 	<programlisting>
+	<programlisting>
   os2build
 	</programlisting>
 	And in the <filename>./files</filename> directory you will have the WarpIN-installable executable.
- 	Upload this to <filename>uploads.sourceforge.net/incoming<filename>, create a release for it, and
-  	you're done.
+	Upload this anonymously to <filename>uploads.sourceforge.net/incoming</filename>,
+	create a release for it, and you're done.
 	</para>
     </sect2>
 
@@ -1815,47 +1815,40 @@ at sourceforge. Three simple steps:
 
     <sect2 id="newrelease-macosx"><title>Mac OSX</title>
       <para>
-	Login to Sourceforge's compilefarm via ssh
-	</para>
-	<para>
-	<programlisting>
-  ssh cf.sourceforge.net
-	</programlisting>
-	</para>
-	<para>
-	Choose the right operating system. If you have downloaded Privoxy
-	before,
+	Ensure that you have the latest code version. Hence run:
 	</para>
 	<para>
 	<programlisting>
   cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd ..
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
 	</programlisting>
 	</para>
 	<para>
-	If not, please <ulink
-	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
-	Privoxy via CVS first</ulink>. Run:
-	</para>
-	<para>
+	From the osxsetup directory, run:
 	<programlisting>
- autoheader && autoconf && ./configure
+  build
 	</programlisting>
 	</para>
 	<para>
-	Then run:
+	This will run <filename>autoheader</filename>, <filename>autoconf</filename> and
+	<filename>configure</filename> as well as <filename>make</filename>.
+	Finally, it will copy over the necessary files to the ./osxsetup/files directory
+	for further processing by <filename>PackageMaker</filename>.
 	</para>
 	<para>
+	Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the package
+	name to match the release, and hit the "Create package" button.
+	If you specify ./Privoxy.pkg as the output package name, you can then create
+	the distributable zip file with the command:
 	<programlisting>
-  make macosx-dist
+zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	macosx-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly.
+	You can then upload <filename>privoxyosx_setup_x.y.z.zip</filename> anonymously to 
+	<filename>uploads.sourceforge.net/incoming</filename>,
+	create a release for it, and you're done.
 	</para>
     </sect2>
 
@@ -2097,6 +2090,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.19  2002/04/03 15:09:42  david__schmidt
+  Add OS/2 build section
+
   Revision 1.18  2002/04/03 03:51:48  hal9
   Touch ups.
 
