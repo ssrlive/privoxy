@@ -1,0 +1,67 @@
+#
+# This is /etc/junkbuster/cookefile which was put here by a junkbuster rpm
+#
+# Last modified on Sun Jan 31 22:36:03 1999 (CEST)
+#
+# --------------------------------------------------------------------------
+#
+# Newest version is always available from 
+#
+#          http://www.waldherr.org/cookiefile
+#
+# Read http://www.waldherr.org/junkbuster/update.shtml on how to keep
+# this file up-to-date.
+#
+# For more detail, see http://www.junkbusters.com/ht/en/ijbfaq.html#cookies
+#
+# Empty lines and lines beginning with a # are ignored.
+# To permit an entire site to set cookies, simply include its domain name:
+# really-trustyworthy-people.org
+#
+# You can allow cookies out, but stop them coming in:
+# >send-user-cookies.com
+#
+#>egroups.com
+#>tvguide.com
+#>wired.com/news/
+#americanexpress.com
+#cnn.com
+#www.nytimes.com
+#yahoo.com
+#amazon.de
+#amazon.co.uk
+#slashdot.org
+#www.palmgear.com
+#onelist.com
+#freshmeat.net
+
+# Sites that need cookies
+javasoft.com
+sun.com
+msdn.microsoft.com
+sourceforge.net
+yahoo.com
+anonymizer.com
+
+# Experimenting
+ashleycars.co.uk
+
+# Shopping
+dabs.com
+overclockers.co.uk
+worldpay.com   # for quietpc.com
+jungle.com
+scan.co.uk
+
+#Shopping: Micro Warehouse's site
+#inmac.co.uk
+#technomatic.co.uk
+
+# This is stupid.  Without these two entries, the link from McAfee's website
+# to their online UK shop gives a 500 server error.
+#mcafee.com
+#mcafeestoreuk.beyond.com
+
+
+
+

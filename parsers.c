@@ -1,0 +1,1298 @@
+const char parsers_rcs[] = "$Id: parsers.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+/*********************************************************************
+ *
+ * File        :  $Source: /home/administrator/cvs/ijb/parsers.c,v $
+ *
+ * Purpose     :  Declares functions to parse/crunch headers and pages.
+ *                Functions declared include:
+ *                   `add_to_iob', `client_cookie_adder', `client_from',
+ *                   `client_referrer', `client_send_cookie', `client_ua',
+ *                   `client_uagent', `client_x_forwarded',
+ *                   `client_x_forwarded_adder', `client_xtra_adder',
+ *                   `content_type', `crumble', `destroy_list', `enlist',
+ *                   `flush_socket', `free_http_request', `get_header',
+ *                   `list_to_text', `match', `parse_http_request', `sed',
+ *                   and `server_set_cookie'.
+ *
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *
+ *                Based on the Internet Junkbuster originally written
+ *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                This program is free software; you can redistribute it 
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Revisions   :
+ *    $Log: parsers.c,v $
+ *
+ *********************************************************************/
+
+
+#include "config.h"
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
+#include "project.h"
+#include "parsers.h"
+#include "encode.h"
+#include "filters.h"
+#include "loaders.h"
+#include "showargs.h"
+#include "jcc.h"
+#include "ssplit.h"
+#include "errlog.h"
+#include "jbsockets.h"
+#include "miscutil.h"
+
+const char parsers_h_rcs[] = PARSERS_H_VERSION;
+
+/* Fix a problem with Solaris.  There should be no effect on other
+ * platforms.
+ * Solaris's isspace() is a macro which uses it's argument directly
+ * as an array index.  Therefore we need to make sure that high-bit
+ * characters generate +ve values, and ideally we also want to make
+ * the argument match the declared parameter type of "int".
+ * 
+ * Why did they write a character function that can't take a simple 
+ * "char" argument?  Doh!
+ */
+#define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
+#define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
+
+
+const struct parsers client_patterns[] = {
+   { "referer:",                 8,    client_referrer },
+   { "user-agent:",              11,   client_uagent },
+   { "ua-",                      3,    client_ua },
+   { "from:",                    5,    client_from },
+   { "cookie:",                  7,    client_send_cookie },
+   { "x-forwarded-for:",         16,   client_x_forwarded },
+   { "proxy-connection:",        17,   crumble },
+#ifdef DENY_GZIP
+   { "Accept-Encoding: gzip",    21,   crumble },
+#endif /* def DENY_GZIP */
+#if defined(DETECT_MSIE_IMAGES)
+   { "Accept:",                   7,   client_accept },
+#endif /* defined(DETECT_MSIE_IMAGES) */
+#ifdef FORCE_LOAD
+   { "Host:",                     5,   client_host },
+#endif /* def FORCE_LOAD */
+/* { "if-modified-since:",       18,   crumble }, */
+   { NULL,                       0,    NULL }
+};
+
+const struct interceptors intercept_patterns[] = {
+   { "show-proxy-args",    14, show_proxy_args },
+#ifdef TRUST_FILES
+   { "ij-untrusted-url",   14, ij_untrusted_url },
+#endif /* def TRUST_FILES */
+   { NULL, 0, NULL }
+};
+
+const struct parsers server_patterns[] = {
+   { "set-cookie:",        11, server_set_cookie },
+   { "connection:",        11, crumble },
+#ifdef PCRS
+   { "Content-Type:",      13, content_type },
+   { "Content-Length:",    15, crumble },
+#endif /* def PCRS */
+   { NULL, 0, NULL }
+};
+
+
+void (* const add_client_headers[])(struct client_state *) = {
+   client_cookie_adder,
+   client_x_forwarded_adder,
+   client_xtra_adder,
+   NULL
+};
+
+
+void (* const add_server_headers[])(struct client_state *) = {
+   NULL
+};
+
+
+/*********************************************************************
+ *
+ * Function    :  match
+ *
+ * Description :  Do a `strncmpic' on every pattern in pats.
+ *
+ * Parameters  :
+ *          1  :  buf = a string to match to a list of patterns
+ *          2  :  pats = list of strings to compare against buf.
+ *
+ * Returns     :  Return the matching "struct parsers *",
+ *                or NULL if no pattern matches.
+ *
+ *********************************************************************/
+static const struct parsers *match(char *buf, const struct parsers *pats)
+{
+   const struct parsers *v;
+
+   if (buf == NULL)
+   {
+      /* hit me */
+      log_error(LOG_LEVEL_ERROR, "NULL parameter to match()");
+      return(NULL);
+   }
+
+   for (v = pats; v->str ; v++)
+   {
+      if (strncmpic(buf, v->str, v->len) == 0)
+      {
+         return(v);
+      }
+   }
+   return(NULL);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  flush_socket
+ *
+ * Description :  Write any pending "buffered" content.
+ *
+ * Parameters  :
+ *          1  :  fd = file descriptor of the socket to read
+ *          2  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  On success, the number of bytes written are returned (zero
+ *                indicates nothing was written).  On error, -1 is returned,
+ *                and errno is set appropriately.  If count is zero and the
+ *                file descriptor refers to a regular file, 0 will be
+ *                returned without causing any other effect.  For a special
+ *                file, the results are not portable.
+ *
+ *********************************************************************/
+int flush_socket(int fd, struct client_state *csp)
+{
+   struct iob *iob = csp->iob;
+   int n = iob->eod - iob->cur;
+
+   if (n <= 0)
+   {
+      return(0);
+   }
+
+   n = write_socket(fd, iob->cur, n);
+   iob->eod = iob->cur = iob->buf;
+   return(n);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  add_to_iob
+ *
+ * Description :  Add content to the buffered page.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  buf = holds the content to be added to the page
+ *          3  :  n = number of bytes to be added
+ *
+ * Returns     :  Number of bytes in the content buffer.
+ *
+ *********************************************************************/
+int add_to_iob(struct client_state *csp, char *buf, int n)
+{
+   struct iob *iob = csp->iob;
+   int have, need;
+   char *p;
+
+   have = iob->eod - iob->cur;
+
+   if (n <= 0)
+   {
+      return(have);
+   }
+
+   need = have + n;
+
+   if ((p = (char *)malloc(need + 1)) == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR, "malloc() iob failed: %E");
+      return(-1);
+   }
+
+   if (have)
+   {
+      /* there is something in the buffer - save it */
+      memcpy(p, iob->cur, have);
+
+      /* replace the buffer with the new space */
+      freez(iob->buf);
+      iob->buf = p;
+
+      /* point to the end of the data */
+      p += have;
+   }
+   else
+   {
+      /* the buffer is empty, free it and reinitialize */
+      freez(iob->buf);
+      iob->buf = p;
+   }
+
+   /* copy the new data into the iob buffer */
+   memcpy(p, buf, n);
+
+   /* point to the end of the data */
+   p += n;
+
+   /* null terminate == cheap insurance */
+   *p = '\0';
+
+   /* set the pointers to the new values */
+   iob->cur = iob->buf;
+   iob->eod = p;
+
+   return(need);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_header
+ *
+ * Description :  This (odd) routine will parse the csp->iob
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Any one of the following:
+ *
+ * 1) a pointer to a dynamically allocated string that contains a header line
+ * 2) NULL  indicating that the end of the header was reached
+ * 3) ""    indicating that the end of the iob was reached before finding
+ *          a complete header line.
+ *
+ *********************************************************************/
+char *get_header(struct client_state *csp)
+{
+   struct iob *iob;
+   char *p, *q, *ret;
+   iob = csp->iob;
+
+   if ((iob->cur == NULL)
+      || ((p = strchr(iob->cur, '\n')) == NULL))
+   {
+      return(""); /* couldn't find a complete header */
+   }
+
+   *p = '\0';
+
+   ret = strdup(iob->cur);
+
+   iob->cur = p+1;
+
+   if ((q = strchr(ret, '\r'))) *q = '\0';
+
+   /* is this a blank linke (i.e. the end of the header) ? */
+   if (*ret == '\0')
+   {
+      freez(ret);
+      return(NULL);
+   }
+
+   return(ret);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  enlist
+ *
+ * Description :  Append a string into a specified string list.
+ *
+ * Parameters  :
+ *          1  :  h = pointer to list 'dummy' header
+ *          2  :  s = string to add to the list
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void enlist(struct list *h, const char *s)
+{
+   struct list *n = (struct list *)malloc(sizeof(*n));
+   struct list *l;
+
+   if (n)
+   {
+      n->str  = strdup(s);
+      n->next = NULL;
+
+      if ((l = h->last))
+      {
+         l->next = n;
+      }
+      else
+      {
+         h->next = n;
+      }
+
+      h->last = n;
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  destroy_list
+ *
+ * Description :  Destroy a string list (opposite of enlist)
+ *
+ * Parameters  :
+ *          1  :  h = pointer to list 'dummy' header
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void destroy_list(struct list *h)
+{
+   struct list *p, *n;
+
+   for (p = h->next; p ; p = n)
+   {
+      n = p->next;
+      freez(p->str);
+      freez(p);
+   }
+
+   memset(h, '\0', sizeof(*h));
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  list_to_text
+ *
+ * Description :  "Flaten" a string list into 1 long \r\n delimited string.
+ *
+ * Parameters  :
+ *          1  :  h = pointer to list 'dummy' header
+ *
+ * Returns     :  NULL on malloc error, else new long string.
+ *
+ *********************************************************************/
+static char *list_to_text(struct list *h)
+{
+   struct list *p;
+   char *ret = NULL;
+   char *s;
+   int size;
+
+   size = 0;
+
+   for (p = h->next; p ; p = p->next)
+   {
+      if (p->str)
+      {
+         size += strlen(p->str) + 2;
+      }
+   }
+
+   if ((ret = (char *)malloc(size + 1)) == NULL)
+   {
+      return(NULL);
+   }
+
+   ret[size] = '\0';
+
+   s = ret;
+
+   for (p = h->next; p ; p = p->next)
+   {
+      if (p->str)
+      {
+         strcpy(s, p->str);
+         s += strlen(s);
+         *s++ = '\r'; *s++ = '\n';
+      }
+   }
+
+   return(ret);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  sed
+ *
+ * Description :  add, delete or modify lines in the HTTP header streams.
+ *                On entry, it receives a linked list of headers space
+ *                that was allocated dynamically (both the list nodes
+ *                and the header contents).
+ *
+ *                As a side effect it frees the space used by the original
+ *                header lines.
+ *
+ * Parameters  :
+ *          1  :  pats = list of patterns to match against headers
+ *          2  :  more_headers = list of functions to add more
+ *                headers (client or server)
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Single pointer to a fully formed header.
+ *
+ *********************************************************************/
+char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp)
+{
+   struct list *p;
+   const struct parsers *v;
+   char *hdr;
+   void (* const *f)();
+
+   for (p = csp->headers->next; p ; p = p->next)
+   {
+      log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
+
+      if ((v = match(p->str, pats)))
+      {
+         hdr = v->parser(v, p->str, csp);
+         freez(p->str);
+         p->str = hdr;
+      }
+
+   }
+
+   /* place any additional headers on the csp->headers list */
+   for (f = more_headers; *f ; f++)
+   {
+      (*f)(csp);
+   }
+
+   /* add the blank line at the end of the header */
+   enlist(csp->headers, "");
+
+   hdr = list_to_text(csp->headers);
+
+   return(hdr);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  free_http_request
+ *
+ * Description :  Freez a http_request structure
+ *
+ * Parameters  :
+ *          1  :  http = points to a http_request structure to free
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void free_http_request(struct http_request *http)
+{
+   freez(http->cmd);
+   freez(http->gpc);
+   freez(http->host);
+   freez(http->hostport);
+   freez(http->path);
+   freez(http->ver);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  parse_http_request
+ *
+ * Description :  Parse out the host and port from the URL.  Find the
+ *                hostname & path, port (if ':'), and/or password (if '@')
+ *
+ * Parameters  :
+ *          1  :  req = URL (or is it URI?) to break down
+ *          2  :  http = pointer to the http structure to hold elements
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void parse_http_request(char *req, struct http_request *http, struct client_state *csp)
+{
+   char *buf, *v[10], *url, *p;
+   int n;
+
+   memset(http, '\0', sizeof(*http));
+
+   http->cmd = strdup(req);
+
+   buf = strdup(req);
+
+   n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
+
+   if (n == 3)
+   {
+      /* this could be a CONNECT request */
+      if (strcmpic(v[0], "connect") == 0)
+      {
+         http->ssl      = 1;
+         http->gpc      = strdup(v[0]);
+         http->hostport = strdup(v[1]);
+         http->ver      = strdup(v[2]);
+      }
+
+#ifdef WEBDAV
+
+/* This next line is a little ugly, but it simplifies the if statement below. */
+/* Basically if using webDAV, we want the OR condition to use these too.      */
+
+/*
+ * by haroon
+ * These are the headers as defined in RFC2518 to add webDAV support
+ */
+
+#define OR_WEBDAV || \
+         (0 == strcmpic(v[0], "propfind")) || \
+         (0 == strcmpic(v[0], "proppatch")) || \
+         (0 == strcmpic(v[0], "move")) || \
+         (0 == strcmpic(v[0], "copy")) || \
+         (0 == strcmpic(v[0], "mkcol")) || \
+         (0 == strcmpic(v[0], "lock")) || \
+         (0 == strcmpic(v[0], "unlock"))
+
+#else /* No webDAV support is enabled.  Provide an empty OR_WEBDAV macro. */
+
+#define OR_WEBDAV
+
+#endif
+
+      /* or it could be a GET or a POST (possibly webDAV too) */
+      if ((strcmpic(v[0], "get")  == 0) ||
+          (strcmpic(v[0], "head") == 0) OR_WEBDAV ||
+          (strcmpic(v[0], "post") == 0))
+      {
+         http->ssl      = 0;
+         http->gpc      = strdup(v[0]);
+         url            = v[1];
+         http->ver      = strdup(v[2]);
+
+         if (strncmpic(url, "http://",  7) == 0)
+         {
+            url += 7;
+         }
+         else if (strncmpic(url, "https://", 8) == 0)
+         {
+            url += 8;
+         }
+         else
+         {
+            url = NULL;
+         }
+
+         if (url && (p = strchr(url, '/')))
+         {
+            http->path = strdup(p);
+            *p = '\0';
+            http->hostport = strdup(url);
+         }
+      }
+   }
+
+   freez(buf);
+
+
+   if (http->hostport == NULL)
+   {
+      free_http_request(http);
+      return;
+   }
+
+   buf = strdup(http->hostport);
+
+
+   /* check if url contains password */
+   n = ssplit(buf, "@", v, SZ(v), 1, 1);
+   if (n == 2)
+   {
+      char * newbuf = NULL;
+      newbuf = strdup(v[1]);
+      freez(buf);
+      buf = newbuf;
+   }
+
+   n = ssplit(buf, ":", v, SZ(v), 1, 1);
+
+   if (n == 1)
+   {
+      http->host = strdup(v[0]);
+      http->port = 80;
+   }
+
+   if (n == 2)
+   {
+      http->host = strdup(v[0]);
+      http->port = atoi(v[1]);
+   }
+
+   freez(buf);
+
+   if (http->host == NULL)
+   {
+      free_http_request(http);
+   }
+
+   if (http->path == NULL)
+   {
+      http->path = strdup("");
+   }
+
+}
+
+
+/* here begins the family of parser functions that reformat header lines */
+
+
+/*********************************************************************
+ *
+ * Function    :  crumble
+ *
+ * Description :  This is called if a header matches a pattern to "crunch"
+ *
+ * Parameters  :
+ *          1  :  v = Pointer to parsers structure, which basically holds
+ *                headers (client or server) that we want to "crunch"
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Always NULL.
+ *
+ *********************************************************************/
+char *crumble(const struct parsers *v, char *s, struct client_state *csp)
+{
+   log_error(LOG_LEVEL_HEADER, "crunch!");
+   return(NULL);
+
+}
+
+
+#ifdef PCRS
+
+/*********************************************************************
+ *
+ * Function    :  content_type
+ *
+ * Description :  Is this a text/* or javascript MIME Type?
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header string we are "considering"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ *
+ *********************************************************************/
+char *content_type(const struct parsers *v, char *s, struct client_state *csp)
+{
+   if (strstr (s, " text/") || strstr (s, "application/x-javascript"))
+      csp->is_text = 1;
+   else
+      csp->is_text = 0;
+
+   return(strdup(s));
+
+}
+
+#endif /* def PCRS */
+
+
+/*********************************************************************
+ *
+ * Function    :  client_referrer
+ *
+ * Description :  Handle the "referer" config setting properly.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  NULL if crunched, or a malloc'ed string with the original
+ *                or modified header
+ *
+ *********************************************************************/
+char *client_referrer(const struct parsers *v, char *s, struct client_state *csp)
+{
+#ifdef FORCE_LOAD
+   /* Since the referrer can include the prefix even
+    * even if the request itself is non-forced, we must
+    * clean it unconditionally 
+    */
+   strclean(s, FORCE_PREFIX);
+#endif /* def FORCE_LOAD */
+
+   csp->referrer = strdup(s);
+
+   if (referrer == NULL)
+   {
+      log_error(LOG_LEVEL_HEADER, "crunch!");
+      return(NULL);
+   }
+
+   if (*referrer == '.')
+   {
+      return(strdup(s));
+   }
+
+   if (*referrer == '@')
+   {
+      if (csp->send_user_cookie)
+      {
+         return(strdup(s));
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "crunch!");
+         return(NULL);
+      }
+   }
+
+   /*
+    * New option §: Forge a referer as http://[hostname:port of REQUEST]/
+    * to fool stupid checks for in-site links
+    */
+
+   if (*referrer == '§')
+   {
+      if (csp->send_user_cookie)
+      {
+         return(strdup(s));
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "crunch+forge!");
+         s = strsav(NULL, "Referer: ");
+         s = strsav(s, "http://");
+         s = strsav(s, csp->http->hostport);
+         s = strsav(s, "/");
+         return(s);
+      }
+   }
+
+   log_error(LOG_LEVEL_HEADER, "modified");
+
+   s = strsav( NULL, "Referer: " );
+   s = strsav( s, referrer );
+   return(s);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_uagent
+ *
+ * Description :  Handle the "user-agent" config setting properly.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  A malloc'ed pointer to the default agent, or
+ *                a malloc'ed string pointer to this header (ie. pass thru).
+ *
+ *********************************************************************/
+char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
+{
+#ifdef DETECT_MSIE_IMAGES
+   if (strstr (s, "MSIE "))
+   {
+      /* This is Microsoft Internet Explorer.
+       * Enable auto-detect.
+       */
+      csp->accept_types |= ACCEPT_TYPE_IS_MSIE;
+   }
+#endif /* def DETECT_MSIE_IMAGES */
+
+   if (uagent == NULL)
+   {
+      log_error(LOG_LEVEL_HEADER, "default");
+      return(strdup(DEFAULT_USER_AGENT));
+   }
+
+   if (*uagent == '.')
+   {
+      return(strdup(s));
+   }
+
+   if (*uagent == '@')
+   {
+      if (csp->send_user_cookie)
+      {
+         return(strdup(s));
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "default");
+         return(strdup(DEFAULT_USER_AGENT));
+      }
+   }
+
+   log_error(LOG_LEVEL_HEADER, "modified");
+
+   s = strsav( NULL, "User-Agent: " );
+   s = strsav( s, uagent );
+   return(s);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_ua
+ *
+ * Description :  Handle "ua-" headers properly.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  NULL if crunched, or a malloc'ed string to original header
+ *
+ *********************************************************************/
+char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
+{
+   if (uagent == NULL)
+   {
+      log_error(LOG_LEVEL_HEADER, "crunch!");
+      return(NULL);
+   }
+
+   if (*uagent == '.')
+   {
+      return(strdup(s));
+   }
+
+   if (*uagent == '@')
+   {
+      if (csp->send_user_cookie)
+      {
+         return(strdup(s));
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "crunch!");
+         return(NULL);
+      }
+   }
+
+   log_error(LOG_LEVEL_HEADER, "crunch!");
+   return(NULL);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_from
+ *
+ * Description :  Handle the "from" config setting properly.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  NULL if crunched, or a malloc'ed string to
+ *                modified/original header.
+ *
+ *********************************************************************/
+char *client_from(const struct parsers *v, char *s, struct client_state *csp)
+{
+   /* if not set, zap it */
+   if (from == NULL)
+   {
+      log_error(LOG_LEVEL_HEADER, "crunch!");
+      return(NULL);
+   }
+
+   if (*from == '.')
+   {
+      return(strdup(s));
+   }
+
+   log_error(LOG_LEVEL_HEADER, " modified");
+
+   s = strsav( NULL, "From: " );
+   s = strsav( s, from );
+   return(s);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_send_cookie
+ *
+ * Description :  Handle the "cookie" header properly.  Called from `sed'.
+ *                If cookie is accepted, add it to the cookie_list,
+ *                else we crunch it.  Mmmmmmmmmmm ... cookie ......
+ *
+ * Parameters  :
+ *          1  :  v = pattern of cookie `sed' found matching
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Always NULL.
+ *
+ *********************************************************************/
+char *client_send_cookie(const struct parsers *v, char *s, struct client_state *csp)
+{
+   if (csp->send_user_cookie)
+   {
+      enlist(csp->cookie_list, s + v->len + 1);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_HEADER, " crunch!");
+   }
+
+   /*
+    * Always return NULL here.  The cookie header
+    * will be sent at the end of the header.
+    */
+   return(NULL);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_x_forwarded
+ *
+ * Description :  Handle the "x-forwarded-for" config setting properly,
+ *                also used in the add_client_headers list.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to "crunch"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Always NULL.
+ *
+ *********************************************************************/
+char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *csp)
+{
+   if (add_forwarded)
+   {
+      csp->x_forwarded = strdup(s);
+   }
+
+   /*
+    * Always return NULL, since this information
+    * will be sent at the end of the header.
+    */
+
+   return(NULL);
+
+}
+
+#if defined(DETECT_MSIE_IMAGES)
+/*********************************************************************
+ *
+ * Function    :  client_accept
+ *
+ * Description :  Detect whether the client wants HTML or an image.
+ *                Clients do not always make this information available
+ *                in a sane way.  Always passes the header through
+ *                the proxy unchanged.
+ *
+ * Parameters  :
+ *          1  :  v = Ignored.
+ *          2  :  s = Header string.  Null terminated.
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Duplicate of argument s.
+ *
+ *********************************************************************/
+char *client_accept(const struct parsers *v, char *s, struct client_state *csp)
+{
+#ifdef DETECT_MSIE_IMAGES
+   if (strstr (s, "image/gif"))
+   {
+      /* Client will accept HTML.  If this seems counterintuitive,
+       * blame Microsoft. 
+       */
+      csp->accept_types |= ACCEPT_TYPE_MSIE_HTML;
+   }
+   else
+   {
+      csp->accept_types |= ACCEPT_TYPE_MSIE_IMAGE;
+   }
+#endif /* def DETECT_MSIE_IMAGES */
+
+   return(strdup(s));
+
+}
+#endif /* defined(DETECT_MSIE_IMAGES) */
+
+
+
+/* the following functions add headers directly to the header list */
+
+
+/*********************************************************************
+ *
+ * Function    :  client_cookie_adder
+ *
+ * Description :  Used in the add_client_headers list.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void client_cookie_adder(struct client_state *csp)
+{
+   struct list *l;
+   char *tmp = NULL;
+   char *e;
+
+   for (l = csp->cookie_list->next; l ; l = l->next)
+   {
+      if (tmp)
+      {
+         tmp = strsav(tmp, "; ");
+      }
+      tmp = strsav(tmp, l->str);
+   }
+
+   for (l = wafer_list->next;  l ; l = l->next)
+   {
+      if (tmp)
+      {
+         tmp = strsav(tmp, "; ");
+      }
+
+      if ((e = cookie_encode(l->str)))
+      {
+         tmp = strsav(tmp, e);
+         freez(e);
+      }
+   }
+
+   if (tmp)
+   {
+      char *ret;
+
+      ret = strdup("Cookie: ");
+      ret = strsav(ret, tmp);
+      log_error(LOG_LEVEL_HEADER, "addh: %s", ret);
+      enlist(csp->headers, ret);
+      freez(tmp);
+      freez(ret);
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_xtra_adder
+ *
+ * Description :  Used in the add_client_headers list.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void client_xtra_adder(struct client_state *csp)
+{
+   struct list *l;
+
+   for (l = xtra_list->next; l ; l = l->next)
+   {
+      log_error(LOG_LEVEL_HEADER, "addh: %s", l->str);
+      enlist(csp->headers, l->str);
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_x_forwarded_adder
+ *
+ * Description :  Used in the add_client_headers list.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void client_x_forwarded_adder(struct client_state *csp)
+{
+   char *p = NULL;
+
+   if (add_forwarded == 0) return;
+
+   if (csp->x_forwarded)
+   {
+      p = strsav(p, csp->x_forwarded);
+      p = strsav(p, ", ");
+      p = strsav(p, csp->ip_addr_str);
+   }
+   else
+   {
+      p = strsav(p, "X-Forwarded-For: ");
+      p = strsav(p, csp->ip_addr_str);
+   }
+
+   log_error(LOG_LEVEL_HEADER, "addh: %s", p);
+   enlist(csp->headers, p);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  server_set_cookie
+ *
+ * Description :  Handle the server "cookie" header properly.
+ *                Log cookie to the jar file.  Then "crunch" it,
+ *                or accept it.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = parser pattern that matched this header
+ *          2  :  s = header that matched this pattern
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  `crumble' or a newly malloc'ed string.
+ *
+ *********************************************************************/
+char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp)
+{
+#ifdef JAR_FILES
+   if (jar)
+   {
+      fprintf(jar, "%s\t%s\n", csp->http->host, (s + v->len + 1));
+   }
+#endif /* def JAR_FILES */
+
+   if (csp->accept_server_cookie == 0)
+   {
+      return(crumble(v, s, csp));
+   }
+
+   return(strdup(s));
+
+}
+
+
+#ifdef FORCE_LOAD
+/*********************************************************************
+ *
+ * Function    :  client_host
+ *
+ * Description :  Clean the FORCE_PREFIX out of the 'host' http
+ *                header, if we use force
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header (from sed) to clean
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  A malloc'ed pointer to the cleaned host header 
+ *
+ *********************************************************************/
+char *client_host(const struct parsers *v, char *s, struct client_state *csp)
+{
+   char *cleanhost = strdup(s);
+ 
+   if(csp->force)
+      strclean(cleanhost, FORCE_PREFIX);
+ 
+   return(cleanhost);
+}
+#endif /* def FORCE_LOAD */
+ 
+ 
+#ifdef FORCE_LOAD 
+/*********************************************************************
+ *
+ * Function    :  strclean
+ *
+ * Description :  In-Situ-Eliminate all occurances of substring in 
+ *                string
+ *
+ * Parameters  :
+ *          1  :  string = string to clean
+ *          2  :  substring = substring to eliminate
+ *
+ * Returns     :  Number of eliminations
+ *
+ *********************************************************************/
+int strclean(const char *string, const char *substring)
+{
+   int hits = 0, len = strlen(substring);
+   char *pos, *p;
+
+   while((pos = strstr(string, substring)))
+   {
+      p = pos + len;
+      do
+      {
+         *(p - len) = *p; 
+      }
+      while (*p++ != '\0');
+
+      hits++;
+   }
+
+   return(hits);
+}
+#endif /* def FORCE_LOAD */
+
+
+/*
+  Local Variables:
+  tab-width: 3
+  end:
+*/

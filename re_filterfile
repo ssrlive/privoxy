@@ -1,0 +1,62 @@
+# Filterfile for the Regular Substitution Module
+#
+# Syntax: One Perl-Style substitution per line.
+# For Details see the perlre, perlop and pcre manpages.
+# Note that you are free to choose the delimter as you
+# see fit.
+#
+
+# Kill OnUnload popups. Yummy.
+# check it out on http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
+#
+s/(<body .*?)onunload(.*?>)/$1never$2/i
+
+# Kill refresh tags. I like to refresh myself. Manually.
+# check it out on http://www.airport-cgn.de/ and go to the arrivals page.
+#
+s/<meta[^>]*http-equiv[^>]*refresh[^>]*>/<!--no refresh for me-->/i
+s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!--no page enter for me-->/i
+
+# If I allow popups, I want them to be rezizable and have a location and status bar:
+# check it out on http://www.airport-cgn.de/ and go to the arrivals page.
+#
+s/resizable="?(no|0)"?/resizable=1/ig
+s/noresize/yesresize/ig
+s/location="?(no|0)"?/location=1/ig
+s/status="?(no|0)"?/status=1/ig
+s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
+s/menubar="?(no|0)"?/menubar=1/ig
+#s/framespacing="?(no|0)"?//ig
+#s/margin(height|width)=[0-9]*//gi
+
+# Remove frameborder=0 and border=0 from framesets
+s/(<frameset[ -z]+)(frame)?border="?(no|0)"?/$1/ig
+
+# The status bar is for displaying link targets, not pointless buzzwords.
+# Again, check it out on http://www.airport-cgn.de/
+#
+s/status='.*?';*//ig
+
+# Kill *all* popups a la popup.c. (But for *all* sites, so I wouldn't do that.)
+#
+# JavaScript: s/window\.open\(/who_wants_this_to.open(/ig
+# HTML      : s/target="?_blank"?/target_who/g
+
+# Fun stuff:
+#
+s/microsoft(?!.com)/<b>MicroSuck<\/b>/ig
+
+# Crude parental filtering?  (Use along with a suitable blocklist).
+# Shows how to deny access to whole page based on a keyword.
+#
+# (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
+# (Note #2: Is 'sex' a rude word?!)
+#
+#s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
+#s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
+
+# http://www.farscapezone.com/wwwboard/messages/1451.html
+s/(\w+) was tired/<b>$1 needed more coffee<\/b>/ig
+
+# I'm sure you'll find more uses.
+# Please send your cool additions to junkbuster-users@yahoogroups.com

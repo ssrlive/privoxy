@@ -1,0 +1,149 @@
+#!/bin/sh
+#
+# $Id: junkbuster.init,v 1.2 2001/04/30 02:36:54 rodney Exp $
+#
+# This is file is either 
+#
+#         /etc/rc.d/init.d/junkbuster 
+#
+# or
+#
+#         /sbin/init.d/junkbuster
+#
+# and was put here by the junkbuster rpm
+#
+# junkbuster  This shell script takes care of starting and stopping
+#             junkbuster.
+#
+# This works only correctly if the user `nobody' is allowed
+# to be in the directory where this file is called 
+# (for example: /root is NOT ok)
+# ---------------------------------------------------------------------------
+# Force /bin/sh as shell (padraic@renaghan.com).
+# Augmented with help by Sterling <wolffe@sempai.org>
+# Hints from mjohnson11@uswest.net
+# Hints from rochedav@primenet.com
+# ---------------------------------------------------------------------------
+# These lines are needed so Redhat's config tools will "see" this script:
+# chkconfig: 35 84 09
+# description: Blocks annoying ads from the internet, along with cookies \
+#              and a few other privacy features.      
+# processname: junkbuster
+# config: /etc/junkbuster/config
+
+
+# ---------------------------------------------------------------------------
+#
+# SuSE only
+#
+# ---------------------------------------------------------------------------
+if [ -f /etc/rc.config ]; then
+
+# Author: Daniel Bischof <daniel@suse.de>, 1999
+# Adjustment: Axel Braun <doc.b@gmx.de>, 17.08.2000 
+. /etc/rc.config
+#base=${0##*/}
+#link=${base#*[SK][0-9][0-9]}
+#test $link = $base && START_IJB=yes
+#test "$START_IJB" = "yes" || exit 0
+return=$rc_done
+case "$1" in
+    start)
+        echo -n "Starting The Internet Junkbuster"
+        su - nobody -c 'nohup /usr/sbin/junkbuster /etc/junkbuster/config < /dev/null > /dev/null &'         
+        sleep 1
+        echo -e "$return"
+        ;;
+    stop)
+        echo -n "Shutting down The Internet Junkbuster"
+        killproc -TERM /usr/sbin/junkbuster || return=$rc_failed
+        echo -e "$return"
+        ;;
+    restart|reload)
+        echo -n "Reload The Internet Junkbuster"
+        killproc -HUP /usr/sbin/junkbuster || return=$rc_failed
+        echo -e "$return"
+        ;;
+    status)
+        checkproc /usr/sbin/junkbuster && echo OK || echo No process
+        ;;
+    *)
+        echo "Usage: $0 {start|restart|status|stop}"
+        exit 1
+esac
+test "$return" = "$rc_done" || exit 1
+exit 0
+
+else
+# ---------------------------------------------------------------------------
+#
+# RedHat only
+#
+# ---------------------------------------------------------------------------
+
+# Source function library.
+if [ -f /etc/rc.d/init.d/functions ]; then
+. /etc/rc.d/init.d/functions
+fi
+
+if [ -f /etc/sysconfig/network ]; then
+. /etc/sysconfig/network
+fi
+
+#  Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+[ -f /etc/junkbuster/config ] || exit 0
+
+[ -f /usr/sbin/junkbuster ] || exit 0
+
+RETVAL=0
+
+# See how we were called.
+case "$1" in
+
+   start)
+           # abort if already started
+      pid=`pidofproc junkbuster`
+      [ -n "$pid" ] && ps h $pid >/dev/null 2>&1 && \
+      echo -n "Already started: " && status junkbuster && \
+      exit 0
+
+      # Start daemon.
+      echo -n "Starting junkbuster:" && RETVAL=1
+      ulimit -c 0
+                su - nobody -s /bin/sh -c '/usr/sbin/junkbuster /etc/junkbuster/config' &
+      sleep 1
+      pid=`pidofproc junkbuster`
+      [ -n "$pid" ] && ps h $pid >/dev/null 2>&1 && RETVAL=0 && echo_success && touch /var/lock/subsys/junkbuster
+      [ $RETVAL -eq 1 ] && echo_failure
+      echo
+      ;;
+
+   stop)
+      # Stop daemon.
+      echo -n "Shutting down junkbuster:"
+                killproc junkbuster
+      RETVAL=$?
+      [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/junkbuster
+      echo
+      ;;
+
+   status)
+      status junkbuster
+      RETVAL=$?
+      ;;
+
+   restart|reload)
+                $0 stop && $0 start
+      ;;
+
+   *)
+      echo "Usage: junkbuster {start|stop|status|restart|reload}"
+      exit 1
+esac
+
+exit $RETVAL
+
+fi
+

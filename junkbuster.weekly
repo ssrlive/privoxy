@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# $Id: junkbuster.weekly,v 1.1 2001/04/16 21:10:38 rodney Exp $
+
+# Revised: Mon Dec 06 10:46:08 PST 1999 by Jon Hamkins
+# Hints by Ulrik Haugen <qha@lysator.liu.se>
+# Hints by mirjamv@theochem.kun.nl
+
+set -e
+
+# blocklist
+wget -q --output-document=/etc/junkbuster/blocklist.new \
+     http://www.waldherr.org/blocklist
+
+mv -f /etc/junkbuster/blocklist.new /etc/junkbuster/blocklist
+
+if [ -f /etc/junkbuster/blocklist.local ] ; then
+   cat /etc/junkbuster/blocklist.local >> /etc/junkbuster/blocklist
+fi
+
+chmod 644 /etc/junkbuster/blocklist

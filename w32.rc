@@ -1,0 +1,267 @@
+/*********************************************************************
+ *
+ * File        :  $Source:  $
+ *
+ * Purpose     :  Windows GUI resource script.
+ *
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *
+ *                Based on the Internet Junkbuster originally written
+ *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                This program is free software; you can redistribute it 
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Revisions   :
+ *    $Log:$
+ *
+ *********************************************************************/
+
+#include <windows.h>
+#include "config.h"
+#include "w32res.h"
+
+#ifdef __MINGW32__
+#include "cygwin.h"
+#endif
+
+/****************************************************************************
+ *  Language-neutral resources
+ ****************************************************************************/
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+/* LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL */
+#pragma code_page(1252)
+#endif /* _WIN32 */
+
+/*
+ * Icons
+ *
+ * Icon with lowest ID value placed first to ensure application icon
+ * remains consistent on all systems.
+ */
+IDI_JUNKBUSTER          ICON    DISCARDABLE     "icons/junkbust.ico"
+IDI_JUNKBUSTER1         ICON    DISCARDABLE     "icons/ico00001.ico"
+IDI_JUNKBUSTER2         ICON    DISCARDABLE     "icons/ico00002.ico"
+IDI_JUNKBUSTER3         ICON    DISCARDABLE     "icons/ico00003.ico"
+IDI_JUNKBUSTER4         ICON    DISCARDABLE     "icons/ico00004.ico"
+IDI_JUNKBUSTER5         ICON    DISCARDABLE     "icons/ico00005.ico"
+IDI_JUNKBUSTER6         ICON    DISCARDABLE     "icons/ico00006.ico"
+IDI_JUNKBUSTER7         ICON    DISCARDABLE     "icons/ico00007.ico"
+IDI_JUNKBUSTER8         ICON    DISCARDABLE     "icons/ico00008.ico"
+IDI_IDLE                ICON    DISCARDABLE     "icons/idle.ico"
+
+#endif /* Neutral resources */
+
+
+/****************************************************************************
+ *  English (U.S.) resources
+ ****************************************************************************/
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+/* LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US */
+#pragma code_page(1252)
+#endif //_WIN32
+
+/*
+ * Menus
+ */
+
+IDR_TRAYMENU MENU DISCARDABLE
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "E&xit JunkBuster",   ID_FILE_EXIT
+        MENUITEM                       SEPARATOR
+        POPUP "&Options"
+        BEGIN
+            MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
+            MENUITEM                                SEPARATOR
+            MENUITEM "&Blockers...",                ID_TOOLS_EDITBLOCKERS
+            MENUITEM "&Cookies...",                 ID_TOOLS_EDITCOOKIES
+            MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
+#ifdef ACL_FILES
+            MENUITEM "&Access Control Lists...",    ID_TOOLS_EDITACLS
+#endif /* def ACL_FILES */
+#ifdef USE_IMAGE_LIST
+            MENUITEM "&Images...",                  ID_TOOLS_EDITIMAGE
+#endif /* def USE_IMAGE_LIST */
+#ifdef KILLPOPUPS
+            MENUITEM "&Popups...",                  ID_TOOLS_EDITPOPUPS
+#endif /* def KILLPOPUPS */
+#ifdef PCRS
+            MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
+#endif /* def PCRS */
+#ifdef TRUST_FILES
+            MENUITEM "&Trust...",                   ID_TOOLS_EDITTRUST
+#endif /* def TRUST_FILES */
+        END
+        MENUITEM                              SEPARATOR
+#ifdef TOGGLE
+        MENUITEM "&Enable",                   ID_TOGGLE_IJB, CHECKED
+#endif
+        MENUITEM "&Reload config",            ID_RELOAD_CONFIG
+        MENUITEM "Show &JunkBuster Window",   ID_SHOWWINDOW
+    END
+END
+
+IDR_LOGVIEW MENU DISCARDABLE
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       ID_FILE_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "Copy",                        ID_EDIT_COPY
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Clear Log",                  ID_VIEW_CLEARLOG
+        MENUITEM                                SEPARATOR
+        MENUITEM "&Log Messages",               ID_VIEW_LOGMESSAGES, CHECKED
+        MENUITEM "Message &Highlighting",       ID_VIEW_MESSAGEHIGHLIGHTING, CHECKED
+        MENUITEM "Limit &Buffer Size",          ID_VIEW_LIMITBUFFERSIZE, CHECKED
+        MENUITEM "&Activity Animation",         ID_VIEW_ACTIVITYANIMATION, CHECKED
+    END
+    POPUP "&Options"
+    BEGIN
+#ifdef TOGGLE
+        MENUITEM "&Enable",                     ID_TOGGLE_IJB, CHECKED
+        MENUITEM "&Reload config",              ID_RELOAD_CONFIG
+        MENUITEM                                SEPARATOR
+#endif
+        MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
+        MENUITEM                                SEPARATOR
+        MENUITEM "&Blockers...",                ID_TOOLS_EDITBLOCKERS
+        MENUITEM "&Cookies...",                 ID_TOOLS_EDITCOOKIES
+        MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
+#ifdef ACL_FILES
+            MENUITEM "&Access Control Lists...",ID_TOOLS_EDITACLS
+#endif /* def ACL_FILES */
+#ifdef USE_IMAGE_LIST
+            MENUITEM "&Images...",              ID_TOOLS_EDITIMAGE
+#endif /* def USE_IMAGE_LIST */
+#ifdef KILLPOPUPS
+            MENUITEM "&Popups...",              ID_TOOLS_EDITPOPUPS
+#endif /* def KILLPOPUPS */
+#ifdef PCRS
+            MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
+#endif /* def PCRS */
+#ifdef TRUST_FILES
+            MENUITEM "&Trust...",               ID_TOOLS_EDITTRUST
+#endif /* def TRUST_FILES */
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "Junkbuster &FAQ",             ID_HELP_FAQ
+        MENUITEM "Junkbuster &Manual",          ID_HELP_MANUAL
+        MENUITEM "GNU &General Public Licence", ID_HELP_GPL
+        MENUITEM                                SEPARATOR
+        MENUITEM "Junkbuster Status...",        ID_HELP_STATUS
+        MENUITEM                                SEPARATOR
+        MENUITEM "About Junkbuster...",         ID_HELP_ABOUTJUNKBUSTER
+    END
+END
+
+IDR_POPUP_SELECTION MENU DISCARDABLE
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Copy",                       ID_EDIT_COPY
+    END
+END
+
+
+/*
+ * Accelerators
+ */
+
+IDR_ACCELERATOR ACCELERATORS DISCARDABLE
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+END
+
+/*
+ * Icons
+ *
+ * Icon with lowest ID value placed first to ensure application icon
+ * remains consistent on all systems.
+ */
+IDI_DENYRULE            ICON    DISCARDABLE     "icons/denyrule.ico"
+IDI_ALLOWRULE           ICON    DISCARDABLE     "icons/icon1.ico"
+
+/*
+ * Dialog
+ */
+
+IDD_RULES DIALOG DISCARDABLE  0, 0, 239, 225
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Blockers"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "New Rule",IDC_STATIC,5,5,230,55
+    LTEXT           "For:",IDC_STATIC,10,15,13,8
+    EDITTEXT        IDC_NEW,10,25,220,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_ACTION,10,40,75,37,CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&reate!",IDC_CREATE,90,40,50,14
+    GROUPBOX        "Rules",IDC_STATIC,5,65,230,135
+    CONTROL         "List1",IDC_RULES,"SysListView32",LVS_REPORT |
+                    LVS_SHOWSELALWAYS | LVS_EDITLABELS | WS_BORDER |
+                    WS_TABSTOP,10,75,220,100
+    PUSHBUTTON      "Move &Up",IDC_MOVEUP,10,180,50,14,WS_DISABLED
+    PUSHBUTTON      "Move &Down",IDC_MOVEDOWN,65,180,50,14,WS_DISABLED
+    PUSHBUTTON      "&Delete",IDC_DELETE,120,180,50,14,WS_DISABLED
+    PUSHBUTTON      "&Save",IDC_SAVE,130,205,50,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,185,205,50,14
+END
+
+
+/*
+ * DESIGNINFO
+ */
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE
+BEGIN
+    IDD_RULES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 232
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 218
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/*
+ * String Table
+ */
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_NEW_BLOCKER         "Create rule for ""%s""..."
+END
+
+#endif /* English (U.S.) resources */

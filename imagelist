@@ -1,0 +1,34 @@
+#
+# This is /etc/junkbuster/imagelist which was put here by a junkbuster rpm
+#
+# Last modified on Fri Oct  1 22:42:21 1999 (CEST)
+#
+# --------------------------------------------------------------------------
+#
+# Newest version is always available from 
+#
+#          http://www.waldherr.org/imagelist
+#
+# Read http://www.waldherr.org/junkbuster/update.shtml on how to keep
+# this file up-to-date.
+#
+# Comments: Stefan Waldherr <stefan@waldherr.org>
+#
+# Note that the regexp is split into domain and path, hence the `/' as the 
+# beginning of a path.
+#
+
+# generic, most powerful regepxs, path contains `.gif', `.jpeg' or `.jpg'
+/.*\.gif
+/.*\.jpe?g
+
+adforce.imgis.com
+ad.preferences.com/image.*
+ads.web.aol.com
+focalink.com
+ad-adex3.flycast.com
+ad.doubleclick.net
+connect.247media.ads.link4ads.com
+ln.doubleclick.net
+mojofarm.mediaplex.com/ad/
+www.carbuyer.com/cgi-carbuyer/getimage.cgi

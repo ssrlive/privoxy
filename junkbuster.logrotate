@@ -1,0 +1,22 @@
+#
+# Logrotate file for Junkbuster RPM
+#
+# $Id: junkbuster.logrotate,v 1.1 2001/04/30 03:17:00 rodney Exp $
+
+# Fixed problems of 
+#  filename.1 -> filename.1.2 -> filename.1.3
+#  filename.1.2.2, filename.1.2.3, filename.1.3.2, filename.1.3.3
+#  filename.1.2.2.2, filename.1.2.2.3  ...
+# by explicitly listing each logfile in the directory instead of `*'.
+#
+
+/var/log/junkbuster/junkbuster {
+   compress
+        weekly
+}
+
+
+#/var/log/junkbuster/jarfile {
+#  compress
+#        weekly
+#}

@@ -1,0 +1,920 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<!-- Copyright 1996-8 Junkbusters Corporation -->
+<!-- This work comes with NO WARRANTY -->
+<!-- It may be redistributed and modified under the GNU GPL-->
+<!-- See the body of http://www.junkbusters.com/ht/en/gpl.html for details-->
+<!-- Junkbusters is a registered trade mark of Junkbusters Corporation -->
+<!-- Generated 1998/10/31 03:58:25 UTC -->
+<meta name="Generator" content="Junkbusters Ebira $Revision: 1.1 $ $Date: 2001/04/16 21:10:38 $">
+<!-- Document  ID: $Revision: 1.1 $ $Date: 2001/04/16 21:10:38 $ -->
+<title>
+Internet Junkbuster Technical Information
+</title>
+<base href="http://www.junkbusters.com/ht/en/ijbman.html">
+<meta name="description" content="The manual page for the Internet Junkbuster, free software to removes banner ads, cookies, and other stuff you don't want from your web browser.">
+<meta name="keywords" content="stop, junk, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out ">
+<link rel="next" href="cookies.html">
+<link rel="previous" href="ijbfaq.html">
+<link rel="contents" href="toc.html">
+</head>
+<body bgcolor="#f8f8f0" link="#000078" alink="#ff0022" vlink="#787878">
+<center>
+<h1><a name="top_of_page">Internet J<small>UNK<i><font color=red>BUSTER</font></i></small> Technical Information
+</a></h1>
+</center>
+<font face="arial, helvetica">
+<p align="center">
+<a href="#description">Options</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="#show">Checking Options</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="#install">Installation</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="#copyright">Copyright</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="ijbfaq.html#top_of_page">(FAQ)</a>
+</p>
+</font><br>
+<center>
+<h2><a name="man"><font face="arial, helvetica">
+Manual Page
+</font></a>
+</h2>
+</center>
+<br>A copy of this page
+in standard
+<big><kbd>man</kbd></big>
+macro format
+is included in the
+<a href="ijbfaq.html#tar">tar archive</a>.
+
+<h3><a name="name" href="/cgi-bin/gp?pg=ijbman&pr=name"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Name
+</h3>
+<p>
+<b><kbd>junkbuster</kbd></b>
+- The
+Internet Junkbuster
+Proxy
+<a href="legal.html#marks"><small><sup>TM</sup></small></a>
+</p>
+
+<h3><a name="synopsis" href="/cgi-bin/gp?pg=ijbman&pr=synopsis"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Synopsis
+</h3>
+<p>
+<b><kbd>junkbuster</kbd></b>
+<i>configfile</i>
+(Version 2.0 onwards)
+<br>
+<b><kbd>junkbstr.exe</kbd></b>
+<i>configfile</i>
+(Windows)
+<br>
+<b><kbd>junkbuster</kbd></b>
+<a href="#o_a">[-a]</a>
+<a href="#o_y">[-y]</a>
+<a href="#o_s">[-s]</a>
+<a href="#o_c">[-c]</a>
+<a href="#o_v">[-v]</a>
+<br>
+<a href="#o_u">[-u user_agent]</a>
+<a href="#o_r">[-r referer]</a>
+<a href="#o_t">[-t from]</a>
+<br>
+<a href="#o_b">[-b blockfile]</a>
+<a href="#o_j">[-j jarfile]</a>
+<a href="#o_l">[-l logfile]</a>
+<br>
+<a href="#o_w">[-w NAME=VALUE]</a>
+<a href="#o_x">[-x Header_text]</a>
+<br>
+<a href="#o_h">[-h [bind_host_address][:bind_port]]</a>
+<br>
+<a href="#o_f">[-f forward_host[:port]]</a>
+<a href="#o_d">[-d N]</a>
+<br>
+<a href="#o_g">[-g gw_protocol[:[gw_host][:gw_port]]]</a>
+<br>
+(Version 1.4 and earlier)
+</p>
+
+<h3><a name="description" href="/cgi-bin/gp?pg=ijbman&pr=description"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Description
+</h3>
+<p>
+<b><kbd>junkbuster</kbd></b>
+is an instrumentable proxy that filters the 
+<small>HTTP</small>
+stream between
+web servers and browsers.
+Its main purpose is to enhance privacy.
+<p>
+<a name="dual">Versions before 2.0 used command-line options;</a>
+Versions from 2.0 onward use a configuration file.
+The following descriptions of the options first give the older
+command-line usage, then the new configfile line.
+<p>
+<a name="won">In Versions 2.0.1 upwards on Windows,</a>
+a start-up message is printed and the configuration is read from the file
+<big><kbd>junkbstr.ini</kbd></big>
+if it exists and no argument was given.
+<p>
+<a name="reread">All files except the configfile</a>
+are checked for changes before each page is fetched,
+so they may edited without restarting the proxy.
+<h4>Options
+</h4>
+<dl><p><dt><i><a name="o_b">-b blockfile</a></i><br><a name="blockfile"><tt>blockfile</tt>&#160;&#160;<i>blockfile</i></a><dd>
+<a href="ijbfaq.html#blocking">Block</a>
+requests to
+<small>URL</small>s
+matching any pattern given in the lines of the
+<i>blockfile</i>.
+The
+<b><kbd>junkbuster</kbd></b>
+instead returns status 202, indicating that the request has been accepted
+(though not completed),
+and a
+<a href="ijbfaq.html#show">message identifying itself</a>
+(though the browser may
+display only a broken image icon).
+(Versions before 2.0 returned an error 403 (Forbidden).)
+The syntax of a pattern is
+<big><kbd>[domain][:port][/path]</kbd></big>
+(the
+<big><kbd>http://</kbd></big>
+or
+<big><kbd>https://</kbd></big>
+protocol part is omitted).
+To decide if a pattern matches a target, the domains are compared first,
+then the paths. 
+<p>
+<a name="compare">To compare the domains,</a>
+the pattern domain and the target
+domain specified in the
+<small>URL</small>
+are each broken into their components.
+(Components are separated by the
+<big><kbd>.</kbd></big>
+(period) character.)
+Next each of the target components
+is compared with the corresponding pattern component: last with last,
+next-to-last with next-to-last, and so on.
+(This is called
+<i><dfn>right-anchored</dfn></i>
+matching.)
+If all of the pattern components find their match in the target,
+then the domains are considered a match.
+Case is irrelevant when comparing domain components.
+<p>
+<a name="substring">A successfully</a>
+matching pattern can be an anchored substring of a target, but
+not vice versa.
+Thus if a pattern doesn't specify a domain,
+it matches all domains.
+<a name="wildcard">Furthermore, when comparing two components,</a>
+the components must either match in their entirety or up to a wildcard
+<big><kbd>* </kbd></big>
+(star character) in the pattern.  The wildcard feature
+implements only a "prefix" match capability ("abc*" vs. "abcdefg"),
+not suffix matching ("*efg" vs. "abcdefg") or
+infix matching ("abc*efg" vs. "abcdefg").
+The feature is restricted to the domain component;
+it is unrelated to the optional
+regular expression
+feature in the path
+<a href="ijbman.html#regex">(described below).</a>
+<p>
+<a name="numeric">If a numeric port</a>
+is specified in the pattern domain, then the target port must
+match as well.  The default port in a target is port 80.
+<p>
+<a name="onward">If the domain and port match,</a>
+then the target
+<small>URL</small>
+path is checked for
+a match against the path in the pattern.
+Paths are compared with a simple case-sensitive
+left-anchored substring comparison.
+Once again, the pattern can be an
+anchored substring of the target, but not vice versa.
+A path of
+<big><kbd>/</kbd></big>
+(slash) would match all paths.  Wildcards are not considered in
+path comparisons.
+<p>
+<a name="example">For example, the target</a>
+<small>URL</small>
+<br>
+&#160;&#160;&#160;<big><kbd>the.yellow-brick-road.com/TinMan/has_no_brain</kbd></big>
+<br>
+would be matched (and blocked) by the following patterns
+<br>
+&#160;&#160;&#160;<big><kbd>yellow-brick-road.com</kbd></big>
+<br>
+and
+<br>
+&#160;&#160;&#160;<big><kbd>Yellow*.COM</kbd></big>
+<br>
+and
+<br>
+&#160;&#160;&#160;<big><kbd>/TinM</kbd></big>
+<br>
+but not
+<br>
+&#160;&#160;&#160;<big><kbd>follow.the.yellow-brick-road.com</kbd></big>
+<br>
+or
+<br>
+&#160;&#160;&#160;<big><kbd>/tinman</kbd></big>
+<br>
+<p>
+<a name="comments">Comments in a blockfile start with a</a>
+<big><kbd>#</kbd></big>
+(hash) character and end at a new line.
+Blank lines are also ignored.
+<p>
+<a name="except">Lines beginning with a</a>
+<big><kbd>~</kbd></big>
+(tilde) character are taken to be
+<a href="ijbfaq.html#exceptions">exceptions:</a>
+a
+<small>URL</small>
+blocked by previous patterns that matches the rest of
+the line is let through. (The last match wins.)
+<p>
+<a name="regex">Patterns</a>
+may contain
+<small>POSIX</small>
+<a href="ijbfaq.html#regex">regular expressions</a>
+provided the
+<b><kbd>junkbuster</kbd></b>
+was compiled with this option
+(the default in Version 2.0 on).
+The idiom
+<big><kbd>/*.*/ad</kbd></big>
+can then be used
+to match any
+<small>URL</small>
+containing
+<big><kbd>/ad</kbd></big>
+(such as
+<big><kbd>http://nomatterwhere.com/images/advert/g3487.gif</kbd></big>
+for example).
+These expressions
+<a href="ijbman.html#substring">don't work</a>
+in the domain part.
+<p>
+<a name="rereads">In version 1.3 and later</a>
+the blockfile and cookiefile are checked for changes before each request.
+<p><dt><i><a name="o_w">-w NAME=VALUE</a></i><br><a name="wafer"><tt>wafer</tt>&#160;&#160;<i>NAME=VALUE</i></a><dd>
+Specifies a pair to be sent as a cookie with every request
+<a href="ijbfaq.html#wafers">to the server.</a>
+(Such boring cookies are called
+<i>wafers</i>.)
+This option may be called more than once to generate multiple wafers.
+The original
+Netscape specification
+prohibited
+semi-colons, commas and white space;
+these characters will be
+<small>URL</small>-encoded
+if used in wafers.
+<!-- Aside: genuine cookies are not encoded -->
+<!-- Aside: we could use quoted string as specified in the new RFC -->
+The Path and Domain attributes are not currently supported.
+<p><dt><i><a name="o_c">-c cookiefile</a></i><br><a name="cookiefile"><tt>cookiefile</tt>&#160;&#160;<i>cookiefile</i></a><dd>
+Enforce the cookie management policy specified in the
+<i>cookiefile.</i>
+<a name="java">If this option is not used all cookies are silently crunched,</a>
+so that users who never want cookies aren't bothered by browsers
+asking whether each cookie should be accepted.
+However, cookies can
+<a href="ijbfaq.html#breakthrough">still get through</a>
+via
+<a href="links.html#javascript">JavaScript</a>
+and
+<small>SSL</small>,
+so alerts should be left on.
+<p>
+<a name="dropping">In Version 1.2 and later</a>
+this option must be followed by a
+<a href="ijbfaq.html#crumble">filename</a>
+containing instructions on which sites are allowed to
+receive and set cookies.
+<a name="drop">By default cookies are dropped in both the browser's request</a>
+and the server's response, unless the
+<small>URL</small>
+requested matches an entry in the
+<i>cookiefile</i>.
+The matching algorithm is the same as for the blockfile.
+A leading
+<big><kbd>&gt;</kbd></big>
+character allows
+<a href="ijbfaq.html#directional">server-bound</a>
+cookies only;
+a
+<big><kbd>&lt;</kbd></big>
+allows only browser-bound cookies;
+a
+<big><kbd>~</kbd></big>
+character stops cookies in
+<a href="ijbfaq.html#crumble">both directions.</a>
+Thus a cookiefile containing a single line with the two characters
+<big><kbd>&gt;*</kbd></big>
+will pass on all cookies to servers but not give any new ones to the browser.
+<p><dt><i><a name="o_j">-j jarfile</a></i><br><a name="jarfile"><tt>jarfile</tt>&#160;&#160;<i>jarfile</i></a><dd>
+All Set-cookie attempts by the server are
+<a href="ijbfaq.html#jar">logged</a>
+to
+<i>jarfile</i>.
+If no wafer is specified,
+one containing a
+<a href="ijbfaq.html#notice">canned notice</a>
+(the 
+<i>vanilla wafer</i>)
+is added as an alert to the server
+unless the
+<a href="ijbman.html#suppress-vanilla-wafer">suppress-vanilla-wafer</a>
+<!-- Aside: (no vanilla~wafer) -->
+option is invoked.
+<p><dt><i><a name="o_v">-v</a></i><br><a name="suppress-vanilla-wafer"><tt>suppress-vanilla-wafer</tt></a><dd>
+Suppress the vanilla wafer.
+<p><dt><i><a name="o_t">-t from</a></i><br><a name="from"><tt>from</tt>&#160;&#160;<i>from</i></a><dd>
+If the browser
+<a href="ijbfaq.html#from">discloses an email address</a>
+in the
+<big><kbd>FROM</kbd></big>
+header (most don't),
+replace it with
+<i>from.</i>
+If
+<i>from</i>
+is set to
+<b>.</b>
+(the period character)
+the
+<big><kbd>FROM</kbd></big>
+is passed to the server unchanged.
+The default is to delete the
+<big><kbd>FROM</kbd></big>
+header.
+<p><dt><i><a name="o_r">-r referer</a></i><br><a name="referer"><tt>referer</tt>&#160;&#160;<i>referer</i></a><dd>
+Whenever the browser discloses the
+<small>URL</small>
+that
+<a href="ijbfaq.html#referer">led to</a>
+the current request,
+replace it with
+<i>referer.</i>
+If
+<i>referer</i>
+is set to
+<b>.</b>
+(period)
+the 
+<small>URL</small>
+is passed to the server unchanged.
+In 
+Version <a href="ijbdist.html#c4">1.4</a>
+and later, if referer is set to 
+<b>@</b>
+(at) the
+<small>URL</small>
+is sent in cases where the cookiefile
+specifies that a cookie would be sent.
+(No way to send bogus referers selectively is provided.)
+The default is to delete Referer.
+<p>
+<a name="referrer">Version 2.0 also accepts the spelling</a>
+<big><kbd>referrer</kbd></big>,
+which most dictionaries consider correct.
+<p><dt><i><a name="o_u">-u user-agent</a></i><br><a name="user-agent"><tt>user-agent</tt>&#160;&#160;<i>user-agent</i></a><dd>
+Information disclosed by the browser
+<a href="ijbfaq.html#agent">about itself</a>
+is replaced with the value
+<i>user-agent.</i>
+If
+<i>user-agent</i>
+is set to
+<b>.</b>
+(period)
+the
+<big><kbd>User-Agent</kbd></big>
+header is passed to the server unchanged,
+along with any
+<big><kbd>UA</kbd></big>
+headers produced by
+<small>MS-IE</small>
+(which would otherwise be deleted).
+In 
+Version <a href="ijbdist.html#c4">1.4</a>
+and later, if
+<i>user-agent</i>
+is set to
+<b>@</b>
+(at) these headers are sent unchanged in cases where the cookiefile
+specifies that a cookie would be sent,
+otherwise only default
+<big><kbd>User-Agent</kbd></big>
+header is sent.
+That default
+is Mozilla/3.0 (Netscape)
+with an unremarkable
+<a href="ijbfaq.html#infer">Macintosh</a>
+configuration.
+If used with a browser less advanced than Mozilla/3.0 or IE-3, the default
+may encourage pages containing extensions that confuse the browser.
+<!-- Aside: Some servers use extensions to everyone anyway.  But in that case it's probably ignoring cookies anyway.  Some servers attempt to send cookies only to browsers identifying themselves as Mozilla. -->
+<p><dt><i><a name="o_h">-h [host][:port]</a></i><br><a name="listen-address"><tt>listen-address</tt>&#160;&#160;<i>[host][:port]</i></a><dd>
+If
+<i>host</i>
+is specified,
+bind the
+<b><kbd>junkbuster</kbd></b>
+to that
+<small>IP</small>
+address.
+If a
+<i>port</i>
+is specified, use it.
+The default
+port
+is 8000;
+the default host is
+<big><kbd>localhost</kbd></big>.
+Before Version 2.0.2,
+the default was to bind to all 
+<small>IP</small>
+addresses
+(<big><kbd>INADDR_ANY</kbd></big>);
+but this has been restricted to
+<big><kbd>localhost</kbd></big>
+to avoid unintended security breaches.
+(To open the proxy to all, use the line
+<br>
+&#160;&#160;&#160;<big><kbd>listen-address :8000</kbd></big>
+<br>
+in the configuration file.)
+<p><dt><i><a name="o_f">-f forward_host[:port]</a></i><br><a name="forwardfile"><tt>forwardfile</tt>&#160;&#160;<i>forwardfile</i></a><dd>
+Version 1.X required all
+<small>HTTP</small>
+requests from the client to be forwarded to the same destination.
+Version 2.0 takes its routing specification from a
+<i>forwardfile</i>,
+allowing selection of the proxy (a.k.a. forwarding host) and gateway
+according to the
+<small>URL</small>.
+Here is a typical line.
+<br>
+<pre>
+*         lpwa.com:8000      .      .
+</pre>
+<p>
+<a name="lines">Each line contains four fields:</a>
+<big><kbd>target</kbd></big>,
+<big><kbd>forward_to</kbd></big>,
+<big><kbd>via_gateway_type</kbd></big>
+and
+<big><kbd>gateway</kbd></big>.
+As usual, the
+<a href="ijbman.html#compare">last</a>
+<big><kbd>target</kbd></big>
+domain that matches the requested
+<small>URL</small>
+wins,
+and the
+<big><kbd>*</kbd></big>
+character alone matches any domain.
+The target domain need not be a fully qualified
+hostname; it can be a general domain such as
+<big><kbd>com</kbd></big>
+or
+<big><kbd>co.uk</kbd></big>
+or even just a port number.
+<a name="nose">For example, because</a>
+<a href="http://lpwa.com">LPWA</a>
+does not handle
+<a href="ijbfaq.html#encrypt">SSL</a>,
+the line above will typically be followed by a line such as
+<br>
+<pre>
+:443  .      .      .
+</pre>
+to allow SSL transactions to proceed directly.
+The cautious would also
+add an entry in their blockfile to stop transactions
+to port 443 for all but specified trusted sites.
+<p>
+<a name="forward">If the winning</a>
+<big><kbd>forward_to</kbd></big>
+field is
+<big><kbd>.</kbd></big>
+(the dot character) the proxy connects 
+directly to the server given in the
+<small>URL</small>,
+otherwise it forwards to the host and port number specified.
+The default port is 8000.
+The
+<big><kbd>via_gateway_type</kbd></big>
+and
+<big><kbd>gateway</kbd></big>
+fields also use a dot to indicate no gateway protocol.
+The gateway protocols are explained
+<a href="ijbman.html#o_g">below</a>.
+<p>
+<a name="old">The example line above in a forwardfile alone</a>
+would send everything through port 8000 at
+<big><kbd>lpwa.com</kbd></big>
+with no gateway protocol,
+and is equivalent to the old
+<big><kbd>-f lpwa.com:8000</kbd></big>
+with no
+<big><kbd>-g</kbd></big>
+option.
+For more information see the example file provided with the distribution.
+<p>
+<a name="loop">Configure with care: no loop detection is performed.</a>
+When setting up chains of proxies that might loop back, try adding
+<a href="ijbman.html#squid">Squid.</a>
+<p><dt><i><a name="o_g">-g gw_protocol[:[gw_host][:gw_port]]</a></i><dd>
+Use
+<i>gw_protocol</i>
+as the gateway protocol.
+This option was introduced in Version 1.4,
+but was folded into the
+<a href="ijbman.html#forwardfile">forwardfile</a>
+option in Version 2.0.
+The default is to use no gateway protocol;
+this may be explicitly specified as
+<big><kbd>direct</kbd></big>
+on the command line
+or the dot character in the forwardfile.
+The
+<big><kbd>SOCKS4</kbd></big>
+protocol may be specified as
+<big><kbd>socks</kbd></big>
+or
+<big><kbd>socks4</kbd></big>.
+The
+<big><kbd>SOCKS4A</kbd></big>
+protocol is specified as
+<big><kbd>socks4a</kbd></big>.
+The
+<big><kbd>SOCKS5</kbd></big>
+protocol is not currently supported.
+The default
+<small>SOCKS</small>
+<i>gw_port</i>
+is 1080.
+<p>
+<a name="configure">The user's browser should</a>
+<em>not</em>
+be
+<a href="ijbfaq.html#socks">configured</a>
+to use
+<big><kbd>SOCKS</kbd></big>;
+the proxy conducts the negotiations, not the browser.
+<p>
+<a name="identify">The user identification capabilities of</a>
+<big><kbd>SOCKS4</kbd></big>
+are deliberately not used;
+the user is always identified to the
+<big><kbd>SOCKS</kbd></big>
+server as
+<big><kbd>userid=anonymous</kbd></big>.
+If the server's policy is to reject requests from
+<big><kbd>anonymous</kbd></big>,
+the proxy will not work.
+Use a
+<a href="ijbman.html#o_d">debug</a>
+value of 3
+to see the status returned by the server.
+<p><dt><i><a name="o_d">-d N</a></i><br><a name="debug"><tt>debug</tt>&#160;&#160;<i>N</i></a><dd>
+Set debug mode.
+The most common value is 1,
+to
+<a href="ijbfaq.html#pinpoint">pinpoint</a>
+offensive
+<small>URL</small>s,
+so they can be added to the blockfile.
+The value of
+<b>N</b>
+is a bitwise
+logical-<small>OR</small>
+of the following values:
+<br>
+1 =  URLs (show each URL requested by the browser);<br>
+2 =  Connections (show each connection to or from the proxy);<br>
+4 =  I/O (log I/O errors);<br>
+8 =  Headers (as each header is scanned, show the header and what is done to it);<br>
+16 =  Log everything (including debugging traces and the contents of the pages).<br>
+<a name="or">Multiple</a>
+<big><kbd>debug</kbd></big>
+lines are permitted; they are logical OR-ed together.
+<p>
+<a name="single">Because most browsers send several requests in parallel</a>
+the debugging output may appear intermingled, so the
+<a href="ijbman.html#single-threaded">single-threaded</a>
+option is recommended when using
+<a href="ijbman.html#debug">debug</a>
+with
+<b>N</b>
+greater than 1.
+<!-- Aside: Yes, it's clumsy, but it's easy to parse. -->
+<p><dt><i><a name="o_y">-y</a></i><br><a name="add-forwarded-header"><tt>add-forwarded-header</tt></a><dd>
+Add 
+<big><kbd>X-Forwarded-For</kbd></big>
+headers to the server-bound 
+<small>HTTP</small>
+stream
+indicating the client 
+<small>IP</small>
+address
+<a href="ijbfaq.html#detect">to the server,</a>
+in the new style of
+<a href="ijbman.html#squid">Squid 1.1.4.</a>
+If you want the traditional
+<big><kbd>HTTP_FORWARDED</kbd></big>
+response header, add it manually with the
+<a href="ijbman.html#o_x">-x</a>
+option.
+<!-- Aside: Not a default, since the end-client usually doesn't wish to be identified, but may be helpful in debugging chains. -->
+<p><dt><i><a name="o_x">-x HeaderText</a></i><br><a name="add-header"><tt>add-header</tt>&#160;&#160;<i>HeaderText</i></a><dd>
+Add the
+<i>HeaderText</i>
+verbatim to requests to the server.
+Typical uses include
+adding old-style forwarding notices such as
+<big><kbd>Forwarded: by http://pro-privacy-isp.net</kbd></big>
+and reinstating the
+<big><kbd>Proxy-Connection: Keep-Alive</kbd></big>
+header
+(which the
+<b><kbd>junkbuster</kbd></b>
+deletes so as
+<a href="ijbfaq.html#detect">not</a>
+to reveal its existence).
+No checking is done for correctness or plausibility,
+so it can be used to throw any old trash into the server-bound 
+<small>HTTP</small>
+stream.
+Please don't litter.
+<!-- Aside: this represents "more than enough rope" -->
+<p><dt><i><a name="o_s">-s</a></i><br><a name="single-threaded"><tt>single-threaded</tt></a><dd>
+Doesn't
+<big><kbd>fork()</kbd></big>
+a separate process
+(or create a separate thread)
+to handle each connection.
+Useful when debugging to keep the process single threaded.
+<p><dt><i><a name="o_l">-l logfile</a></i><br><a name="logfile"><tt>logfile</tt>&#160;&#160;<i>logfile</i></a><dd>
+Write all debugging data into
+<i>logfile.</i>
+The default
+<i>logfile</i>
+is the standard output.
+<p><dt><br><a name="aclfile"><tt>aclfile</tt>&#160;&#160;<i>aclfile</i></a><dd>
+Unless this option is used, the proxy talks to anyone who can connect to it,
+and everyone who can has equal permissions on where they can go.
+An access file allows restrictions to be placed on these two policies,
+by distinguishing some
+<i><dfn>source</dfn></i>
+<small>IP</small>
+addresses and/or
+some
+<i><dfn>destination</dfn></i>
+addresses.
+(If a
+<a href="ijbman.html#forwardfile">forwarder or a gateway</a>
+is being used, its address is considered the destination address,
+not the ultimate
+<small>IP</small>
+address of the
+<small>URL</small>
+requested.)
+<p>
+<a name="permit">Each line of the access file begins with</a>
+either the word
+<big><kbd>permit</kbd></big>
+or
+<big><kbd>deny</kbd></big>
+followed by source and (optionally) destination addresses 
+to be matched against those of the
+<small>HTTP</small>
+request.
+The last matching line specifies the result: if it was a
+<big><kbd>deny</kbd></big>
+line or if no line matched,
+the request will be refused.
+<p>
+<a name="various">A source or destination</a>
+can be specified as a single numeric
+<small>IP</small>
+address,
+or with a hostname, provided that the host's name
+can be resolved to a numeric address: this cannot be used to block all
+<big><kbd>.mil </kbd></big>
+domains for example,
+because there is no single address associated with that domain name.
+Either form may be followed by a slash and an integer
+<big><kbd>N</kbd></big>,
+specifying a subnet mask of
+<big><kbd>N</kbd></big>
+bits.
+For example,
+<big><kbd>permit 207.153.200.72/24</kbd></big>
+matches the entire Class-C subnet from
+207.153.200.0
+through 207.153.200.255.
+(A netmask of 255.255.255.0 corresponds to 24 bits of
+ones in the netmask, as with
+<big><kbd>*_MASKLEN=24</kbd></big>.)
+A value of 16 would be used for a Class-B subnet.
+A value of zero for
+<big><kbd>N</kbd></big>
+in the subnet mask length will cause any address to match;
+this can be used to express a default rule.
+For more information see the example file provided with the distribution.
+<p>
+<a name="false">If you like these access controls</a>
+you should probably have
+<a href="ijbfaq.html#firewall">firewall</a>;
+they are not intended to replace one.
+<p><dt><br><a name="trustfile"><tt>trustfile</tt>&#160;&#160;<i>trustfile</i></a><dd>
+This feature is experimental, has not been fully documented and is
+very subject to change.
+The goal is for parents to be able to choose a page or site whose
+links they regard suitable for their
+<a href="ijbfaq.html#children">young children</a>
+and for the proxy to allow access only to sites mentioned there.
+To do this the proxy examines the
+<a href="ijbman.html#o_r">referer</a>
+variable on each page request to check they resulted from
+a click on the ``trusted referer'' site: if so the referred site
+is added to a list of trusted sites, so that the child can
+then move around that site.
+There are several uncertainties in this scheme that experience may be
+able to iron out; check back in the months ahead.
+<p><dt><br><a name="trust_info_url"><tt>trust_info_url</tt>&#160;&#160;<i>trust_info_url</i></a><dd>
+When access is denied due to lack of a trusted referer, this
+<small>URL</small>
+is displayed with a message pointing the user to it for further information.
+<p><dt><br><a name="hide-console"><tt>hide-console</tt></a><dd>
+In the Windows version only, instructs the program
+to disconnect from and hide the command console after starting.
+<p><dt><i><a name="o_a">-a</a></i><dd>
+(Obsolete) Accept the server's
+<big><kbd>Set-cookie</kbd></big>
+headers, passing them through to the browser.
+<a name="obsolete">This option was removed in Version 1.2</a>
+and replaced by an improvement to the
+<a href="ijbman.html#o_c">-c</a>
+option.
+</dl>
+</p>
+
+<h3><a name="install" href="/cgi-bin/gp?pg=ijbman&pr=install"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Installation and Use
+</h3>
+<p>
+Browsers must be told where to find the
+<b><kbd>junkbuster</kbd></b>
+(e.g.
+<big><kbd>localhost</kbd></big>
+port 8000).
+To set the 
+<small>HTTP</small>
+proxy in Netscape 3.0,
+go through:
+<b><font face="arial, helvetica">
+Options</font></b>;
+<b><font face="arial, helvetica">
+Network Preferences</font></b>;
+<b><font face="arial, helvetica">
+Proxies</font></b>;
+<b><font face="arial, helvetica">
+Manual Proxy Configuration</font></b>;
+<b><font face="arial, helvetica">
+View</font></b>.
+See the
+<a href="ijbfaq.html"><small>FAQ</small></a>
+for other browsers.
+The
+<a href="ijbfaq.html#security">Security Proxy</a>
+should also be set to the same values,
+otherwise
+<big><kbd>shttp:</kbd></big>
+<small>URL</small>s
+won't work.
+<p>
+<a name="limitations">Note the limitations</a>
+explained in the
+<a href="ijbfaq.html"><small>FAQ</small></a>.
+</p>
+
+<h3><a name="show" href="/cgi-bin/gp?pg=ijbman&pr=show"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Checking Options
+</h3>
+<p>
+To allow users to
+<a href="ijbfaq.html#show">check</a>
+that a
+<b><kbd>junkbuster</kbd></b>
+is running and how it is configured,
+it intercepts requests for any
+<small>URL</small>
+ending in
+<big><kbd>/show-proxy-args</kbd></big>
+and blocks it,
+returning instead returns information on its
+version number and
+current configuration
+including the contents of its blockfile.
+To get an explicit warning that no
+<b><kbd>junkbuster</kbd></b>
+intervened if the proxy was not configured,
+it's best to point it to a
+<small>URL</small>
+that does this, such as
+<a href="http://internet.junkbuster.com/cgi-bin/show-proxy-args">http://internet.junkbuster.com/cgi-bin/show-proxy-args</a>
+on Junkbusters's website.
+</p>
+
+<h3><a name="also" href="/cgi-bin/gp?pg=ijbman&pr=also"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+See Also
+</h3>
+<p>
+<a href="ijbfaq.html">http://www.junkbusters.com/ht/en/ijbfaq.html</a>
+<br>
+<a href="cookies.html">http://www.junkbusters.com/ht/en/cookies.html</a>
+<br>
+<a href="http://internet.junkbuster.com/cgi-bin/show-proxy-args">http://internet.junkbuster.com/cgi-bin/show-proxy-args</a>
+<br>
+<a name ="kristol" href="http://www.cis.ohio-state.edu/htbin/rfc/rfc2109.html">http://www.cis.ohio-state.edu/htbin/rfc/rfc2109.html</a>
+<br>
+<a name ="squid" href="http://squid.nlanr.net/Squid/">http://squid.nlanr.net/Squid/</a>
+<br>
+<a href="http://www-math.uni-paderborn.de/~axel/">http://www-math.uni-paderborn.de/~axel/</a>
+</p>
+
+<h3><a name="copyright" href="/cgi-bin/gp?pg=ijbman&pr=copyright"><img border=0 width=14 height=14 src="/images/fb.gif" alt="&lt;Feedback&gt"></a>&#160;
+Copyright and GPL
+</h3>
+<p>
+Written and copyright by the Anonymous Coders and Junkbusters Corporation
+and made available under the
+<a href="gpl.html">GNU General Public License (GPL).</a>
+This software comes with
+<a href="gpl.html#nowarr">NO WARRANTY.</a>
+Internet Junkbuster
+Proxy
+is a
+<a href="legal.html#marks">trademark</a>
+of Junkbusters Corporation.
+</p>
+<p align="center"><a href="#top_of_page"><img border=0 width=250 height=15 src="/images/top.gif" alt="--- Back to Top of Page ---"></a></p>
+<font face="arial, helvetica">
+<a rel="begin" href="index.html">Home</a> <font color="#ff0000">
+<b> &#183; </b></font>
+<a rel="next" href="cookies.html">Next</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="lopt.html">Site Map</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="legal.html">Legal</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="junkdata.html">Privacy</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="cookies.html">Cookies</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="ijb.html">Banner Ads</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="telemarketing.html">Telemarketing</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="junkmail.html">Mail</a>
+<font color="#ff0000">
+<b> &#183; </b></font><a href="junkemail.html">Spam</a>
+
+</font><form action="/cgi-bin/search" method="GET">
+<input type="text" name="q" size=60 maxlength=120 value="">
+<input type="submit" value="Search"></form>
+<small>
+<small>
+<p>
+<a href="legal.html#copy">Copyright</a> &#169; 1996-8 Junkbusters
+<a href="legal.html#marks">&#174;</a> Corporation.
+Copying and distribution permitted under
+the <a href="gpl.html"><small>GNU</small></a>
+General Public License.
+</small>
+<tt>
+1998/10/31
+http://www.junkbusters.com/ht/en/ijbman.html
+</tt>
+<address><kbd>webmaster&#64;junkbusters.com</kbd></address>
+</small>
+</body>
+</html>

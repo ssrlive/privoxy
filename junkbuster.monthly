@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# $Id: junkbuster.monthly,v 1.1 2001/04/16 21:10:38 rodney Exp $
+#
+# bug fixed, which downloaded all three files to the file blocklist
+#
+# Revised: Mon Dec 06 10:46:08 PST 1999 by Jon Hamkins
+# Hints by Ulrik Haugen <qha@lysator.liu.se>
+# Hints by mirjamv@theochem.kun.nl
+#
+set -e
+
+# blocklist
+wget -q --output-document=/etc/junkbuster/blocklist.new \
+     http://www.waldherr.org/blocklist
+
+mv -f /etc/junkbuster/blocklist.new /etc/junkbuster/blocklist
+
+if [ -f /etc/junkbuster/blocklist.local ] ; then
+   cat /etc/junkbuster/blocklist.local >> /etc/junkbuster/blocklist
+fi
+chmod 644 /etc/junkbuster/blocklist
+
+# cookiefile
+wget -q --output-document=/etc/junkbuster/cookiefile.new \
+     http://www.waldherr.org/cookiefile
+
+mv -f /etc/junkbuster/cookiefile.new /etc/junkbuster/cookiefile
+
+if [ -f /etc/junkbuster/cookiefile.local ] ; then
+   cat /etc/junkbuster/cookiefile.local >> /etc/junkbuster/cookiefile
+fi
+chmod 644 /etc/junkbuster/cookiefile
+
+# imagelist
+wget -q --output-document=/etc/junkbuster/imagelist.new \
+     http://www.waldherr.org/imagelist
+
+mv -f /etc/junkbuster/imagelist.new /etc/junkbuster/imagelist
+
+if [ -f /etc/junkbuster/imagelist.local ] ; then
+   cat /etc/junkbuster/imagelist.local >> /etc/junkbuster/imagelist
+fi
+chmod 644 /etc/junkbuster/imagelist

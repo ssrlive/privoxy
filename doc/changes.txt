@@ -1,0 +1,991 @@
+This file contains details of the changes made to JunkBuster, in
+chronological order.  Scroll down to the bottom for the newest 
+additions!
+
+
+*****************************************************************************
+* Copied from old README                                                    *
+*****************************************************************************
+
+README for the Internet Junkbuster Proxy (TM) Copyright 1997-8 Junkbusters Corp.
+
+   Id: README,v 1.1 2001/04/16 21:10:38 rodney Exp 
+
+   This program is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the
+   Free Software Foundation; either version 2 of the License,
+   or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+   See the GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+The version of the code with this makefile is Version 2.0.2.
+No CHANGES file is included here; for a history of previous versions see
+   http://www.junkbusters.com/ht/en/ijbdist.html#previous
+This version tightens security over 2.0.1; some multi-user sites will need
+to change the listen-address in the configuration file (see previous URL).
+
+For installation on Windows see http://www.junkbusters.com/ht/en/ijbwin.html
+An executable is provided so you don't need nmake or a C compiler.
+
+For UNIX and other systems see the FAQ. If you just want to test it with its
+defaults of simply stopping cookies and private info, all you need to do now
+on most Unix systems is type make, run junkbuster & and configure your browser.
+
+This directory should contain the following files.  The .html files are also
+in http://www.junkbusters.com/ht/en/ and http://internet.junkbuster.com
+You are welcome to publish copies of the .html files on your local web server,
+according to the GNU General Public License.
+
+gpl.html GNU General Public Licence
+junkbstr.exe   Executable (binary) for Windows 95/NT
+Makefile A very bland Makefile; Most versions of Unix except HP & Suns
+      compile without change. Windows requires the changes indicated.
+ijbman.html Manual for the Internet Junkbuster, HTML format
+junkbuster.1   Manual for the Internet Junkbuster, man macro format:
+         man ./junkbuster.1 # or nroff -man junkbuster.1 | more
+ijbfaq.html FAQ: Frequently Asked Questions on the Internet Junkbuster
+      Includes installation instructions
+junkbstr.ini   Sample configuration file with almost all options commented out
+sblock.ini  Sample blockfile (which doesn't really block much, see FAQ)
+scookie.ini Sample cookiefile (permits little; you decide who to trust)
+saclfile.ini   Sample access control file (block access to everyone)
+sforward.ini   Sample forwardfile (does no fowarding, no gateways, so SOCKS)
+strust.ini  Sample trustfile (has no trusted sites and blocks nothing)
+conn.c, bind.c, encode.c, loaders.c, parsers.c, ssplit.c   Various utilities
+socks4.c Code for SOCKS4 and SOCKS4A gateways
+jcc.c    The main program
+jcc.h    #included declarations etc
+gnu_regex.c, gnu_regex.h:  Regular expression code from the FSF, not us.
+win32.c     A few lines of code specific to the Windows version (95 & NT)
+acl.c    Access controls (new in version 2.0) - doesn't replace firewalls
+filters.c   Strings for the presentation of messages to user
+
+If you find that the Internet Junkbuster improves the quality of your life
+online, we hope you'll visit http://www.junkbusters.com to see how our free
+services can help you bust other kinds of junk out of your life:
+junk mail, spam, telemarketing, and invasions of your private data.
+And please tell your friends about this free product, and help them set it up.
+
+If your company finds this software useful in protecting its confidential
+information and making its people happier and more productive, please consider
+purchasing one of our our commercial support packages:
+   http://www.junkbusters.com/ht/en/ijbfaq.html#commercial
+
+We don't advertise, so please tell others in your community about us.
+
+Junkbusters Corp.    http://www.junkbusters.com
+
+
+*****************************************************************************
+* Copied from old README.too                                                *
+*****************************************************************************
+
+Id: README.TOO,v 1.1 2001/04/16 21:10:38 rodney Exp
+
+This is the README.TOO file for Stefan's version of the Internet
+Junkbuster (from http://www.waldherr.org/junkbuster/).
+
+
+
+Installation:
+-------------
+Install the RPM with the usual command `rpm -Uvh foobar.rpm'. Since we
+run the Junkbuster as user `nobody', cd to a directory where `nobody'
+has read access (in particular NOT /root) and issue (as root)
+
+   /etc/rc.d/init.d/junkbuster start
+
+This will be done automagically for you any time you boot your machine.
+
+
+
+Configuration:
+--------------
+To let Junkbuster take `care' of the ads, you have to setup your
+browser to use the Junkbuster.
+
+  Short instructions for the advanced user:
+
+   Configure Netscape to use 127.0.0.1 on port 8000 as 
+        a proxy server.
+
+  Detailed instructions for the beginner:
+
+        Remove Internet Explorer and install Netscape. No `real' 
+        user would ever use MSIE. Though the Junkbuster works 
+        with IE as well. Read 
+        http://www.junkbusters.com/ht/en/ijbfaq.html#browser
+
+Check to see if the Junkbuster works correctly by surfing to
+
+   http://127.0.0.1/show-proxy-args
+
+or any other place and add the text `/show-proxy-args' to the URL.
+Ok? Then enjoy your ad-free surfing.
+
+
+
+Mailinglists:
+-------------
+In case you are interested in the Junkbuster, there are two
+mailinglists (junkbuster-users and junkbuster-announce). Instructions
+on how to subscribe and unsubscribe are at
+
+   http://www.waldherr.org/junkbuster/
+
+Bugs:
+-----
+Please fill out
+
+   http://sourceforge.net/bugs/?func=addbug&group_id=11118
+
+Patches:
+--------
+Please fill out
+
+   http://sourceforge.net/patch/?func=addpatch&group_id=11118
+
+Need Help?
+----------
+Please fill out
+
+   http://sourceforge.net/support/?func=addsupport&group_id=11118
+
+
+Comments:
+---------
+I would greatly appreciate feedback for this program. Send comments to
+Stefan Waldherr <stefan@waldherr.org> (in either German or English). I
+prefer plain text. If you happen to see an ad which got thru the filter
+PLEASE use the `contribute' form at http://www.waldherr.org/junkbuster/.
+
+Have fun,
+Stefan.
+
+
+*****************************************************************************
+* Copied from old README.win                                                *
+*****************************************************************************
+
+$Id: README.WIN,v 1.1 2001/04/16 21:10:38 rodney Exp $
+
+This is the README.WIN file for the Windows version of the Internet
+Junkbuster (from http://www.waldherr.org/junkbuster/).
+
+Installation:
+-------------
+Congrats, since you are reading this file, you have already unzipped
+the archive correctly.
+
+Start the Junkbuster with `junkbstr' (i.e., click on the icon in the
+ijb subdirectory). If you want to start Junkbuster automatically,
+make a link to the program in the `Autostart' folder.
+
+
+
+Configuration:
+--------------
+To let Junkbuster take `care' of the ads, you have to setup your
+browser to use the Junkbuster.
+
+  Short instructions for the advanced user:
+
+   Configure Netscape to use 127.0.0.1 on port 8000 as 
+        a proxy server.
+
+  Detailed instructions for the beginner:
+
+        Remove Internet Explorer and install Netscape. No `real' 
+        user would ever use MSIE. Though the Junkbuster works 
+        with IE as well. Read 
+        http://www.junkbusters.com/ht/en/ijbfaq.html#browser
+
+Check to see if the Junkbuster works correctly by surfing to
+
+   http://127.0.0.1/show-proxy-args
+
+or any other place and add the text `/show-proxy-args' to the URL.
+Ok? Then enjoy your ad-free surfing.
+
+
+
+Mailinglists:
+-------------
+In case you are interested in the Junkbuster, there are two
+mailinglists (junkbuster-users and junkbuster-announce). Instructions
+on how to subscribe and unsubscribe are at
+
+   http://www.waldherr.org/junkbuster/
+
+Bugs:
+-----
+Please fill out
+
+   http://sourceforge.net/bugs/?func=addbug&group_id=11118
+
+Patches:
+--------
+Please fill out
+
+   http://sourceforge.net/patch/?func=addpatch&group_id=11118
+
+Need Help?
+----------
+Please fill out
+
+   http://sourceforge.net/support/?func=addsupport&group_id=11118
+
+Comments:
+---------
+I would greatly appreciate feedback for this program. Send comments to
+Stefan Waldherr <stefan@waldherr.org> (in either German or English). I
+prefer plain text. If you happen to see an ad which got thru the filter
+PLEASE use the `contribute' form at http://www.waldherr.org/junkbuster/.
+
+Have fun,
+Stefan.
+
+
+*****************************************************************************
+* Copied from old README.re_filter                                          *
+*****************************************************************************
+
+DISCLAIMER:
+   This is pre-alpha code. Using it in any other way
+   than just reading it is a high risk activity and
+   the author disclaims all liability for any damage.
+
+   See the GNU General Public License at
+   http://www.gnu.org/copyleft/gpl.html for details.
+
+
+Dear alpha-Tester,
+
+Thank you for trying out the experimental re_filter feature of
+Junkbuster. As this is still a very early pre-release version,
+and I'm neither much of an autoconf or make wizard, building
+the patched junkbuster involves some manual work, that is 
+described below. Please also see the Request for Thoughts section,
+as the whole point of this pre-release ist to collect ideas for
+improvement and bug reports.
+
+
+INSTALLATION:
+
+  - Get and install pcre from
+    ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+    Version 3.1 or any later one will do. I recommend 3.4.
+    It *should* install on Win32 as well, but I haven't tried
+    that. Don't forget to run ldconfig afterwards.
+
+  - Now you have two options:
+
+    A) Install pcrs as a shared library:
+       pcrs.c and pcrs.h are included in the (patched) ijb subdirectory.
+       1.) patch Makefile < Makefile.re_shared.diff  
+       2.) gcc -Wall -fPIC -c pcrs.c  
+       3.) gcc -shared -Wl,-soname,libpcrs.so.1 -o libpcrs.so.1.0.1 pcrs.o -lc -lpcre
+       If this worked OK,
+       4.) copy libpcrs.so.1.0.1 to /usr/local/lib
+       5.) ln -s /usr/local/lib/libpcrs.1.0.1 /usr/local/lib/libpcrs.so
+       6.) ldconfig (Or whatever the equivalent on your platform might be)
+       7.) cp pcrs.h /usr/local/include
+
+    OR
+
+    B) Incorporate pcrs into the junkbuster (much easier):
+       Smile and relax. You're done.
+
+  - Edit the provided re_filterfile to suit your needs and place it
+    with the rest of junkbusters configfiles.
+
+  - Now junkbuster should build with a simple 'make'.
+    Note: Setting debug = REF in jcc.c will enable debugging
+    for the re_filter.
+
+  - Include a line "re_filterfile <wherever>" in your junkbuster
+    config file, pointing at the re_filterfile
+
+  - (Optional:) Include a line "re_filter_all" in the config
+    file. This will set the Policy to filter content from all sites.
+    Default is to filter only from sites that you wouldn't send a
+    cookie either. 
+
+  - Fire up junkbuster.
+
+HOW IT WORKS:
+
+    Nah, not tonight anymore ;-)
+
+REQUEST FOR THOUGHTS:
+
+  - The main decision is whether to filter on-the-fly or to buffer
+    up the whole document and then run the filter on it. I've built
+    both versions and currently prefer buffering.
+
+    The advantage of on-the-fly-filtering is obviously that the
+    document begins to display before it's fully loaded. The big
+    disadvantage is that with arbitraty content altering in place,
+    you don't know the size that the document will have after
+    altering when the Content-Length Header is to be sent. Only
+    option is to chew it altogether.
+
+    Apart from preserving the ability to generate a valid Content-Length
+    header (which the patch currently does not yet do), buffering up
+    the document has some advantages from the filtering point of view:
+
+     - Reliability. Patterns in the document cannot be ripped apart
+       and are reliably found. (If you look at the document fragment-wise
+       while it's being transmitted, you miss any pattern that spans
+       a fragment border) This is especially bad for patterns that do
+       serious HTML reformatting, as fragments are typically in the order
+       of 1500 bytes each.
+
+     - Flexibility: The re_filter gives you the choice whether you want
+       to replace only the pattern's first occurance or replace it globally.
+       This becomes meningless with fragments. (Solution possible, though.)
+
+    As the filter only processes objects of MIME type text/*, which are typically
+    rather small compared to binary multimedia (sic) type data, I don't think
+    that the disadvantage of delayed display of the first bytes is really grave.
+
+    What do you think?
+
+  - Is the choice between a radical (filter all) and semi-smart (filter only when
+    also crunching cookies) flexible enough? Should I really introduce yet another
+    configfile for specifying the domains to filter content from? Would anyone use
+    that?
+
+  - Should I use pcre as a shared library and work out a nice installation
+    automagic, or should the relevant functions be incorporated in re_filter.c?
+
+  - Even if yes, do we really want an extension that relies on an external library
+    like pcre?
+
+  - Any bugs, stupid parts in the code ?
+
+  - Cool suggestions for the re_filterfile? (PLEASE!)
+
+  - Should character set translation along the lines of Perl's 'tr' operator
+    be included?
+
+  - Is the whole feature just pathetic?
+
+FEEDBACK:
+
+    A whole lot of work has gone into this feature (the pcrs code was also
+    just written for this) and I'd really like to know if and how you like
+    it. Since I'm more of a perl than C programmer (and after doing so much
+    string manipulation in C I'm once again glad abaout that!), I'm sure there
+    is much to improve. Please send any suggestions/observations/hellos to
+    oes@paradis.rhein.de. I would also be very glad about any assistance for
+    a autoconf/make procedure for prcs.
+
+Well, have fun!
+--Andreas
+
+
+*****************************************************************************
+* Copied from old README.cygwin                                             *
+*****************************************************************************
+
+Id: README.cygwin,v 1.2 2001/04/29 23:16:29 rodney Exp
+
+
+What I did:  I saw too many "personalities" in IJB; so I
+ran the code through a couple of regexp's and then let XEmacs
+reformat the whole shebang!  The results is a uniform
+looking code base; aka. as if 1 person created the whole
+project.
+
+Why I did it:  (1) it is easier to maintain  (2) easier for
+a new person to make changes/additions  (3) it *looks* more
+professional  (4) IMHO, it is easier to read (this is very
+much a personal preference).
+
+What I propose: A IJB standards list be included in the
+distro and all source/patch checkins be checked for
+compliance.  We don't need to be an arse on this point, but
+submitters should make a valiant attempt to support the
+standards.
+
+Note: do not even try to diff my code with another code
+base, you will be overwhelmed.  After all, the regexps did a
+good bit of changing and XEmacs reformatter did a great deal
+more.
+
+One more note: these changes include conditional compilation for
+un?x (namely Linux), cygwin (un?x like compile for WIN32), and
+mingw32 (WIN32 like compilation w/o VC++).  Right now, all seems
+fully functional except cygwin.  The cygwin compile will work,
+but includes code to make it single threaded.  I need to debug
+the fork issues, but that will have to come later.
+
+
+Specific changes to expect:
+
+
+1: I've majorly reworked the Makefiles.  The existing Makefile was
+too *spaghetti* for me!  For one, I eliminated the "-I." from the
+include path (ugly).  Use #include "" for local directory files
+and #include <> for path found files (that's basic even to c).
+
+
+2: In accordance with #1, I changed #include "windows.h" to
+#include <windows.h> and #include <gnu_regex.h> to #include
+"gnu_regex.h".
+
+
+3: As part of my standards suggestions (to come later in this
+file), I added a standard comment block to every function.  There
+were too many functions with *no* comment and about 20 different
+styles to those that did.  This is an example of the block I used:
+/*********************************************************************
+ *
+ * Function    :  block_acl
+ *
+ * Description :  Block this request?
+ *                Decide yes or no based on ACL file.
+ *
+ * Parameters  :
+ *          1  :  src = Address the browser/user agent is requesting.
+ *          2  :  dst = The proxy or gateway address this is going to.
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     : 0 = FALSE (don't block) and 1 = TRUE (do block)
+ *
+ *********************************************************************/
+
+
+4: Some files prototyped like this:
+      void
+      func(param1)
+      int param1;
+      {
+      }
+and other like this:
+      void func(int param1)
+      {
+      }
+I made all look like the second.
+
+
+5: Made:
+      if(  to be  if (
+      while(  to be  while (
+      switch(  to be switch (
+      etc ...
+The former looks too much like a function call.
+
+
+6: Put braces on their own line and aligned under the
+reserved word:
+      if () {
+      } else {
+      }
+to be:
+      if ()
+      {
+      }
+      else
+      {
+      }
+The same for while, do, etc...
+
+
+7: Casted malloc in several places, e.g.:
+      p = malloc(n);
+to be:
+      p = (char *)malloc(n);
+This eliminates compiler warnings.
+
+
+8: Applied the Perl regexp patch and made it fully conditionally
+compiled (-DPCRS=TRUE).
+
+
+9: It *appears* that if MINGW32 sees a "main" function, it will
+try to link it and start with main (ala console mode).  Since I
+need MINGW32 to find WinMain instead, I conditionally changed
+"main" to "_main" (for MINGW32 only!).
+
+
+10: Changed popup.c to be killpopup.c.  This was necessary to
+clean up the Makefile.  Since there was an ini type file called
+"popup" and "popup.c", make got confused on target names.  No
+other ini file has a .c file with the same name, so I hope this
+isn't a big deal.  Plus, it fits its config variable
+(kill_all_popups) much better.
+
+
+11: Added:
+  /*
+    Local Variables:
+    tab-width: 3
+    end:
+  */
+to all .c and .h files.  I use 3 character tabs and this will make
+the files display correctly in Emacs editors.  This is just my
+default setting.  Perhaps I will filter all files via "expand
+-t3", so not to pi$$ everyone off.  Vi is capable of using 3
+character tabs, as I am sure VC++ would be.
+
+
+12: Several places included regexp code with out "#ifdef REGEX"
+which broke the ability to compile w/o regexp's.  I fixed the code
+and can compile w/o regexp (which I don't normally do, but now I
+*can*).
+
+
+13: In WinMain, changed:
+      pszLastTok = strchr(pszLastTok, ' ');
+to be:
+      pszLastTok = strchr(pszLastTok+1, ' ');
+The former causes an infinite loop with 2 or more parameters.
+
+
+14: Added my own strdup for Cygwin, see jcc.c for why.
+
+
+15: Added defines in the Makefile and this to jcc.h:
+      #define VERSION VERSION_MAJOR "." VERSION_MINOR "." VERSION_POINT
+This makes "update the numbers also in jcc.h manually" unnecessary
+(see your Makefile for this quote).
+
+
+16: Split the "inifiles" target in Makefile into separate targets,
+this way each file can be regenerated individually according to
+the same implicit rule.
+
+
+17: With the Makefile restructure, I can only provide for
+Cygwin/gcc.  Hopefully this is a bit cleaner and others can add
+their compilers w/o re-spaghetting the file.  I have provided
+several makefiles as examples only, I do not intend for the
+project to start maintaining multiple Makefiles.  Perhaps some of
+the platform specific Makefile code could be split out into
+separate files and we could use the "include" directive to read in
+the correct one.
+
+Better than this, let's get a configure.in guru on the project and
+dynamically create the Makefiles!
+
+
+18: In an effort to get this to market (you knew this was coming
+eh?), I am going to put the standards suggestions in another file
+and ship this one as is.  But then, you can probably guess most of
+the standards by the changes you see.
+
+
+19: Added a really quick and dirty "install" target to the
+Makefile.  This needs to be cleaned up and proper directories put
+in for each platform.
+
+
+-- release 1 (obsoleted) --
+
+
+20: Incorporated the TOGGLE and webDAV support patches into my
+Cygwin patch.  I added conditional compilation to both features.
+I changed "extern BOOL g_bToggleIJB;" to be of type "int".  This
+makes jcc.h independent of "windows.h".  The inclusion of such
+should not (and is not) necessary for compilation on all
+platforms.  Besides, BOOL is really only a char or an int anyway!
+
+
+21: Added a new ini!  I modified the usual un?x type config file
+to M$ type ini file for a Perl regexp compile.  This was necessary
+to call EditFile on the Perl regexp config file.  The new ini
+filename is "sregexp.ini" (naturally).  I then added menu items to
+edit the popup.ini and sregexp.ini files.
+
+
+22: I made "dot h" files for all the "dot c" files.  I used this
+command to do the *dirty* work:
+    grep -e "^[A-z]" *.c | sed -e "/=/d" -e "/^[^(]*$/d" \
+         -e "/^extern/d" -e "/^static/d" -e "/;$/d"
+
+And I made each "dot h" file be immune to multiple inclusion via
+conditional compilation.  Ie. the "jcc.h" file will only include
+itself if _JCC_H is undefined.
+
+After this was done, I compiled the project source by source and
+let the compiler tell me what each file was dependent on.  Once I
+got all the objects to compile, I included the new dependencies in
+the Makefiles.
+
+BTW, I intend to get the Makefile to be generated by a configure
+script.  Whether this is a GNU "configure.in" type file or a shell
+script, I do not know.  All I do know is that this is a must for a
+"Go/No go" type decision.  We cannot proceed with the philosophy
+"leave it up to the user to get it to work".
+
+
+23: I broke out the code to load the config file from main.  I put
+this code into a function called load_config.  I made this routine
+be called from a signal "HUP".  This means we can restart
+junkbusters from the command line or from the daemon script via
+"restart" without actually killing it and restarting it.  This is
+common behavior to un?x daemons (see inetd for example).  I fixed
+the junkbusters.init script to take advantage of this.  I intend
+to make a M$ menu complement to this as soon as I can.
+
+
+24: BTW, if you have not already noticed by my postings and/or
+code, I have added patches and made them all conditionally
+compiled.  Ie. #ifdef TOGGLE, #ifdef WEBDAV, #ifdef PCRS, etc...
+I think that all extensions to IJB should be submitted in this
+way.  Not only can you compile IJB to be as "tight" as you want,
+it also gives the user a "smorgasbord" of options to
+choose from.  This is quite common in the free software world (you
+need look no farther than emacs to see this) and provides maximum
+flexibility.
+
+
+25: As promised, I obsoleted the "ijbw32.ini" file.  I was a bit
+confused by the "close-behaviour=1" entry.  It seems to me that it
+duplicated the "close-button-minimizes=1" entry.  And (by looking
+at the code) it was unused.  Anyway, I eliminated the "ijbw32.ini"
+file and assimilated the settings into the config file.  Bye Bye
+"ijbw32.ini", hello "config" (aka. don't unnecessarily duplicate
+files and/or data types).
+
+
+26: Eliminated re_filter.c.  This only defined
+(un)load_re_filterfile and re_process_buffer.  I moved
+(un)load_re_filterfile to loaders.c and re_process_buffer to
+filters.c. I also modified the Makefiles to reflect this.  In the
+doing, I modified the loader and unloader to use the "files"
+variable and moved joblist to "re_filterfile_spec" struct.  I
+added "plist" to the client_state so that all Perl regexp code
+could find the latest parsing of the re_filterfile ini.
+
+This is in keeping with the IJB data structures philosophies.
+
+
+27: Eliminated acl.c.  This (as pcre) only defined
+(un)load_aclfile and block_acl.  I moved (un)load_aclfile to
+loaders.c and block_acl to filters.c.  I also modified the
+Makefiles to reflect this.
+
+
+28: Since I created "dot h" files for all the "dot c" files, I
+eliminated all the "extern ...variable;" and all the "extern
+...function;" statements that I could find in the "dot c" files.
+Instead, I included the proper "dot h" files to do this for us.
+
+
+29: Corrected the "install" Makefile target for un?x.  I will do
+the same for WIN32 targets.
+
+
+30: Note on the "TOGGLE" patch: since I made IJB fully restartable
+via a NOHUP signal; I thought the TOGGLE patch should apply to
+both un?x and WIN32.  Thus, I eliminated the WIN32 dependencies in
+that patch and added "toggle" to the config file.  Now everything
+works fine for either platform.  Still to come is a restart menu
+command in WIN32 (See: note 23).
+
+
+31: Just a possible programmer note, we REALLY need a generic
+linked list module.  Since text lists, client states, filter
+files, etc... implement list creation and destruction over and
+over; I suggest a generic list that can handle *any* type of list
+(ala template classes in C++).  If this module included an
+iterator (of sorts), we could eliminate the myriad of "for ( top=x;
+NULL != x->next; x=x->next )" type statements that are all over
+IJB.
+
+After all, this was taught in the basic "Intro to Data Types"
+class (for all you CS majors).
+
+
+32: Renamed all of the .INI files to be .TXT files.  I did this
+because the .INI files were NOT *really* ini files; which
+potentially be confusing.  I used the .TXT extension to make sure
+that EditFile still worked.
+
+
+33: Removed the "initialed comments", such as "/* swa */".  This
+leads to less readable code (because it becomes fragmented) and
+retains the "multiple personality" syndrome.  Comments such as
+this can always be figured out from the versioning system.  Also,
+these comments really should be pooled in one place : the README
+files.
+
+
+34: Perhaps we should break with the current versioning tactic of 
+a "tail version" and start fresh.  Perhaps a new major version
+release is in order?  Version = 3.0.0?
+
+
+35: Added a "Accept-Encoding: gzip" cruncher.  If a stream is
+compressed via gzip (Netscape specific I think), then it cannot
+be modified with Perl regexps.  So I added this as an option in
+the Makefiles.
+
+
+36: As promised in one of my postings, I have make a
+configure-esk script to generate the Makefiles.  I would still
+like to have a full blown configure.in compatible system, but this 
+will do in the meantime.  Note: this configure script covers
+linux, cygwin, and mingw32.  At this point I do not have VC++ to
+test any of my changes.  But the configure script should be
+flexible enough to handle this platform.
+
+
+--
+
+Please give any feedback to the ijb egroups and, if you feel you
+need quicker contact, CC me at IwantToKeepAnon@yahoo.com
+
+Let me say once more, this has a *lot* of changes and may (aka
+WILL) break a lot of existing patches.  But I hope the "idea" will
+catch on.  Perhaps this could be made the baseline code base and
+other patches added and standardized later.
+
+*****************************************************************************
+* Date:        7 May 2001                                                   *
+* Version:     ??                                                           *
+* Description: Changes for MS Visual C++                                    *
+* Author:      Jon Foster <jon@jon-foster.co.uk>                            *
+*****************************************************************************
+(Based on Stromlund's version 0.20)
+
+I have made several changes to make this compile under VC++ 97, and add new
+features.
+
+Code changes:
+
+1) If you disable IJB (using the TOGGLE patch) it now turns PCRS off.
+2) "Missing function prototype" warnings have been corrected by adding
+   appropriate #include statements
+3) The _DIST_URL define removed and hardcoded.  There are hardcoded URLs all 
+   over the place that need fixing - one more doesn't matter.  We do really 
+   need to come up with a long-term solution though.  (Suggestion: Host a 
+   redirector on the SourceForge web space.  e.g 
+   "http://ijbswa.sourceforge.net/redirect.php?ver=2.0.2-10&target=faq",
+   "http://ijbswa.sourceforge.net/redirect.php?ver=2.0.2-10&target=download",
+   etc.  This allows us to move the pages around easily, and the SourceForge
+   space can be maintained by anyone who's interested, it's not tied to a 
+   particular individual.  This is similar to the approach taken by 
+   Microsoft and Netscape in their browsers.)
+4) New file ijbconfig.h is #included everywhere.  This provides me with a
+   place to define VERSION, PCRS, etc.  You can still define VERSION_xxx
+   on the command line, but the other defines are in the header file.
+   There were just too many #defines - so many that the VC++ 97 IDE 
+   broke when I tried to define them on the command line.  We probably 
+   should fix the configure script so that it modifies this file.
+5) Deleted empty file afxres.h - we needed to use the VC++ system header 
+   file of that name.  However, it's easier to just delete it and put 
+   the relevent #defines in w32res.h.
+6) New #define: NO_PROGRAM_NAME_DISPLAY uses "IJB" as the program name in 
+   the log file instead of "H:\Documents and Settings\Administrator\My 
+   Documents\Prog\VC\ijb2\Release\junkbuter.exe" or similar.  The reason 
+   for this should be obvious!
+7) New #define: STATISTICS enables the statistics feature
+8) Statistics is thread-safe, I think.  However, loading up the
+   statistics page now counts as a blocked request.
+9) New, shorter message if a setting in the config file is recognised 
+   but unsupported by the current build.  It doesn't have "WARNING:" in
+   front of it either.  We may want to actually take this message out 
+   and have it just silently ignore these entries.
+10) New feature: #define SPLIT_PROXY_ARGS and the show-proxy-settings 
+    page will split each file out to a seperate page.  This is 
+    because the files are quite big, and having to do 1 extra click to 
+    get to them is no problem.  This #define also disables the 
+    suppress_blocklists feature (because I believe the original intent 
+    of suppress_blocklists was similar?).  It also saves memory by 
+    reading the config files to generate the HTML on the fly, rather 
+    than storing prepared HTML constantly in memory.
+11) Marked global constants with "const" attribute.  This has a 
+    knock-on effect on pointers in function prototypes, so these have
+    also been marked const where needed.
+12) Rewrote encode.c to have tables pre-initialized, so it can be 
+    marked constant.  Also split into 3 distinct functions so that
+    the tables (which are realy an implementation detail) are not
+    visible outside that file.
+13) Changes to how files are reloaded when you reload the config 
+    file.  Previous method didn't free memory (or if you uncommented 
+    the free() calls, it was not thread-safe.)  It is now handled 
+    automatically - files are reloaded whenever the filename to 
+    read changes, or the file's timestamp changes.  The code in
+    loaders.c which handles this test has been moved to a single
+    utility function.
+14) killpopup changes:
+     * Only compiled if you #define KILLPOPUPS
+     * Call to filter_popups() moved from read_socket() to chat().
+     * Writing 1 past end of buffer bug fixed.
+     * It was scanning the whole buffer even if only partially filled.
+     * Moved load/unload to loaders.c and changed file handling to 
+       follow standard.
+15) Auto-detect whether we want an image or HTML implemented for 
+    Microsoft IE.  :-)
+    There doesn't seem to be a way to tell with the latest build 
+    of Mozilla. :-(
+16) Image file code conditionally compiled.
+17) Provided option (SPLIT_PROXY_ARGS) to split the show-proxy-args
+    page into a main page, and then a page for each config file.  
+    This option will also save memory by loading the files when 
+    required for display, rather than saving them in memory when
+    they are initially loaded.
+18) Force page loading ("noijb.") patch applied.  #define FORCE_LOAD
+
+
+Packaging changes:
+
+1) PCRE 3.4 (less it's test and demo programs) is now included in the 
+   pcre directory.  It will be statically linked with Junkbuster.  (On 
+   win32, DLLs cause a lot of hassle - with a library this small it isn't 
+   worth it.  I don't know if it would be better to dynamically link under
+   UNIX?)
+2) junkbustr.dsp and junkbustr.dsw VC++97 project and workspace files are
+   included.
+3) win32build/junkbustr.exe Win32 binary is included.  It should not require
+   any DLLs.  It was compiled with all features supported.
+4) All README.xyz files put together in this file.
+5) Unused files (acl.c, pthread.c, ...) deleted.
+6) My block & cookie files used (based on the Waldherr ones).
+
+Known bug: The Adobe Acrobat 4 plug-in fails when I try to view PDF files in
+MSIE.  Workaround: disable "web browser integration" in the Adobe Acrobat 
+settings.
+
+*****************************************************************************
+* Date:        14 May 2001 (early morning)                                  *
+* Version:     Reported as 2.9.0                                            *
+* Description: Various updates                                              *
+* Author:      Jon Foster <jon@jon-foster.co.uk>                            *
+*****************************************************************************
+
+1)  Now use PCRE, not GNU REGEX.  I have not yet had chance to check the
+    syntax of the block/image/cookie file to ensure that they match what
+    is expected - however they seem to work.
+2)  Replaced "configure" script with one generated by "autoconf".  Also 
+    use a header "config.h" (was ijbconfig.h in my previous release) for 
+    the #defines.  "config.h" is now generated with "autoheader" from 
+    "acconfig.h" and "configure.in".  (Note that to install you do not
+    need autoconf or autoheader - just run "./configure".)
+    To see command-line options, run "./configure --help".
+    This is my first ever autoconf script, so it has some rough edges
+    (how PCRE is handled is the roughest).
+3)  Error logging code replaced with new module errlog.c, based on the
+    one from JunkBusterMT (but with the threading code removed).
+4)  Most of Rodney's 0.21 and 0.21A patches applied. (Marked *).  I did not
+    apply all of these, since I had already independently done conditional
+    popup file, conditional image file, and integration of popup code.
+5*) ACL, Jar and trust files conditionally compiled.
+6*) New source file headers.
+7*) Various cosmetic changes.  (But I have not consistently ordered the 
+    config files - I think that's worthwhile, but it's 1am and I want to
+    get this released!)
+8*) RCS tags on .h files.
+9)  RCS tags are const char[] rather than const char *.  (Saves 4 bytes
+    per tag ;-)
+10) VC++ project files renamed to vc_junkbuster.*.
+11) show-proxy-args now shows status of all conditionals, not just REGEX
+12) Various functions moved around.  Most notably all the system-specific
+    sockets code which was spread between jcc.c, bind.c, and connect.c,
+    has been moved to "jbsockets.c".  The non-system-specific code from
+    connect.c and socks4.c has been movet to "gateway.c".  Also, the
+    config file loader and the global variables it writes to have been
+    moved to "loadcfg.c".  (Maybe this should go into loaders.c?)
+    And candidate for the "worst filename ever" award is "miscutil.c",
+    which contains, well, miscellaneous utility functions like zalloc.
+    (Suggestions for a better name for this file are welcome!)
+13) Loaders now use a common function to read a line and skip comments,
+    and this function also stores the proxy_args.
+14) Added ./junkbuster --help     (Not for Win32 GUI)
+15) Added ./junkbuster --version  (Not for Win32 GUI)
+16) Win32 resources are now all marked as "U.S. English", rather than
+    being a mix of "U.S. English", "U.K. English" and "Irish English".
+17) Version number changes to 2.9.0
+
+Known bugs:
+- See (1) above about blockfiles.
+- Sending SIGHUP (under Red Hat Linux 7.1) causes a crash.  v0.21A hangs
+  after a SIGHUP.  This needs investigating, but pthreads support will 
+  almost certainly help here, so it may not be worth investigating
+  immediately.
+- Compiling with shared system pcre and pcreposix libraries is supported
+  via a switch to configure, but completely untested.
+
+Please note that there are now 2^14 == 16384 combinations of conditional 
+defines, and 4 major compilers (VC, Linux, mingw32, cygwin) for a total 
+of 65536 different builds.  We cannot possibly test all of them!  My 
+standard build is "everything on", and I've tested that on each compiler,
+along with a few variants.  You may uncover new bugs (probably compiler 
+errors) if you use an exotic combination of switches.
+
+*****************************************************************************
+* Date:        14 May 2001                                                  *
+* Version:     2.9.1                                                        *
+* Description: Various updates                                              *
+* Author:      Andreas S. Oesterhelt <oes@oesterhelt.org>                   *
+*****************************************************************************
+(From his e-mail:)
+
+ - in parsers.c, fixed two #ifdef FORCE to #ifdef FORCE_LOAD
+   (BTW: I think FORCE is precise enough, since loading remote
+   data is the whole purpose of a proxy..)
+ - Set the FORCE_PREFIX (back) to 'IJB-FORCE-LOAD-'. While 'noijb.'
+   is more elegant and looks like a hostname in the URL, it doesn't
+   make clear to the inexperienced user that the proxy is bypassed. It
+   also has a higher name collision risk.
+ - Filled in the function header templates for my functions in
+   parsers.c (again). They obviously got lost in our current
+   patch war ;-)
+ - Cut the credit for the §-referrer-option from the config file,
+   that Stefan had placed there.
+ - Improved the re_filterfile 
+
+*****************************************************************************
+* Date:        14 May 2001                                                  *
+* Version:     2.9.2                                                        *
+* Description: FORCE patch (again!)                                         *
+* Author:      Andreas S. Oesterhelt <oes@oesterhelt.org>                   *
+*****************************************************************************
+(These notes written by Jon)
+
+- Andreas applied the latest version of the FORCE patch.
+
+*****************************************************************************
+* Date:        14 May 2001 (late afternoon)                                 *
+* Version:     2.9.3                                                        *
+* Description: Various updates                                              *
+* Author:      Jon Foster <jon@jon-foster.co.uk>                            *
+*****************************************************************************
+
+1) Incorporated updates from current CVS tree, including:
+   - Amiga support (completely untested by me - I don't have an Amiga)
+   - "tinygif 3" support (redirects blocked images to a specified URL, so
+     the browser doesn't have to load and cache many copies of the same
+     image).
+   - one case where there were both local and global "referrer" variables
+     (yuck!) clarified by renaming the local one to "refer".
+   - Fixed some places where close() was used instead of close_socket().
+   Thanks to Jörg Strohmayer (joergs at users.sourceforge.net) for these.
+2) Temporary hack to get FORCE_LOAD to work with IE.  I just lowercased the
+   FORCE_LOAD_PREFIX.  Needs fixing properly.
+3) Most URLs hardcoded into JunkBuster were changed to go through a script
+   e.g. http://ijbswa.sourceforge.net/redirect.php?v=2.9.3&to=faq
+   The only other URLs left are the GNU GPL:
+     http://www.fsf.org/copyleft/gpl.html
+   and the home page:
+     http://ijbswa.sourceforge.net/
+   ... and various URLs which will be intercepted by JunkBuster anyway.
+   TODO: Still need to do something with the URLs in JunkBuster Corp's 
+   copyright/trademark notice on the bottom of the show-proxy-args page.
+4) PCRE or GNU Regex is now a #define option.
+
+*****************************************************************************
+* End of file                                                               *
+*****************************************************************************
+
