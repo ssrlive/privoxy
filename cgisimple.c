@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.9 2001/11/30 23:09:15 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.10 2002/01/17 21:10:37 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.9 2001/11/30 23:09:15 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.10  2002/01/17 21:10:37  jongfoster
+ *    Changes to cgi_show_url_info to use new matching code from urlmatch.c.
+ *    Also fixing a problem in the same function with improperly quoted URLs
+ *    in output HTML, and adding code to handle https:// URLs correctly.
+ *
  *    Revision 1.9  2001/11/30 23:09:15  jongfoster
  *    Now reports on FEATURE_CGI_EDIT_ACTIONS
  *    Removing FEATURE_DENY_GZIP from template
@@ -136,7 +141,6 @@ jb_err cgi_default(struct client_state *csp,
                    struct http_response *rsp,
                    const struct map *parameters)
 {
-   char *p;
    char *tmp;
    struct map *exports;
 
@@ -152,15 +156,9 @@ jb_err cgi_default(struct client_state *csp,
    /* If there were other parameters, export a dump as "cgi-parameters" */
    if (parameters->first)
    {
-      if (NULL == (p = dump_map(parameters)))
-      {
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
       tmp = strdup("<p>What made you think this cgi takes parameters?\n"
                    "Anyway, here they are, in case you're interested:</p>\n");
-      string_append(&tmp, p);
-      free(p);
+      string_join(&tmp, dump_map(parameters));
       if (tmp == NULL)
       {
          free_map(exports);
@@ -276,18 +274,19 @@ jb_err cgi_show_request(struct client_state *csp,
     * be sending to the server if this wasn't a CGI call
     */
 
-   if (map(exports, "client-request", 1, csp->iob->buf, 1))
+   if (map(exports, "client-request", 1, html_encode(csp->iob->buf), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
    }
 
-   if (map(exports, "processed-request", 1, sed(client_patterns, add_client_headers, csp), 0))
+   if (map(exports, "processed-request", 1, html_encode_and_free_original(
+      sed(client_patterns, add_client_headers, csp)), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
    }
-   
+
    return template_fill_for_cgi(csp, "show-request", exports, rsp);
 }
 
@@ -325,6 +324,47 @@ jb_err cgi_send_banner(struct client_state *csp,
       rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
       rsp->content_length = image_blank_gif_length;
    }   
+
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if (enlist(rsp->headers, "Content-Type: image/gif"))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->is_static = 1;
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_transparent_gif
+ *
+ * Description :  CGI function that sends a 1x1 transparent GIF.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_transparent_gif(struct client_state *csp,
+                           struct http_response *rsp,
+                           const struct map *parameters)
+{
+   rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
+   rsp->content_length = image_blank_gif_length;
 
    if (rsp->body == NULL)
    {
@@ -419,7 +459,6 @@ jb_err cgi_show_status(struct client_state *csp,
 
    FILE * fp;
    char buf[BUFFER_SIZE];
-   char * p;
    const char * filename = NULL;
    char * file_description = NULL;
 #ifdef FEATURE_STATISTICS
@@ -491,13 +530,8 @@ jb_err cgi_show_status(struct client_state *csp,
          s = strdup("");
          while ((s != NULL) && fgets(buf, sizeof(buf), fp))
          {
-            p = html_encode(buf);
-            if (p)
-            {
-               string_append(&s, p);
-               freez(p);
-               string_append(&s, "<br>");
-            }
+            string_join  (&s, html_encode(buf));
+            string_append(&s, "<br>");
          }
          fclose(fp);
 
@@ -511,16 +545,16 @@ jb_err cgi_show_status(struct client_state *csp,
       return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
    }
 
-   if (map(exports, "redirect-url", 1, REDIRECT_URL, 1))
+   if (map(exports, "redirect-url", 1, html_encode(REDIRECT_URL), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
    }
    
    s = strdup("");
-   for (i=0; i < Argc; i++)
+   for (i = 0; (s != NULL) && (i < Argc); i++)
    {
-      string_append(&s, Argv[i]);
+      string_join  (&s, html_encode(Argv[i]));
       string_append(&s, " ");
    }
    if (map(exports, "invocation", 1, s, 0))
@@ -573,7 +607,7 @@ jb_err cgi_show_status(struct client_state *csp,
 
    if (csp->actions_list)
    {
-      if (!err) err = map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
+      if (!err) err = map(exports, "actions-filename", 1, html_encode(csp->actions_list->filename), 0);
    }
    else
    {
@@ -582,7 +616,7 @@ jb_err cgi_show_status(struct client_state *csp,
 
    if (csp->rlist)
    {
-      if (!err) err = map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
+      if (!err) err = map(exports, "re-filter-filename", 1, html_encode(csp->rlist->filename), 0);
    }
    else
    {
@@ -592,7 +626,7 @@ jb_err cgi_show_status(struct client_state *csp,
 #ifdef FEATURE_TRUST
    if (csp->tlist)
    {
-      if (!err) err = map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
+      if (!err) err = map(exports, "trust-filename", 1, html_encode(csp->tlist->filename), 0);
    }
    else
    {
@@ -746,7 +780,8 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       init_current_action(action);
 
-      if (map(exports, "default", 1, current_action_to_text(action), 0))
+      if (map(exports, "default", 1, html_encode_and_free_original(
+         current_action_to_text(action)), 0))
       {
          free_current_action(action);
          free(url_param);
@@ -814,27 +849,25 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       matches = strdup("");
 
-      for (b = b->next; NULL != b; b = b->next)
+      for (b = b->next; (b != NULL) && (matches != NULL); b = b->next)
       {
          if (url_match(b->url, url_to_query))
          {
-            s = actions_to_text(b->action);
-            if (s == NULL)
+            string_append(&matches, "<b>{");
+            string_join  (&matches, html_encode_and_free_original(
+                                    actions_to_text(b->action)));
+            string_append(&matches, " }</b><br>\n<code>");
+            string_join  (&matches, html_encode(b->url->spec));
+            string_append(&matches, "</code><br>\n<br>\n");
+
+            if (merge_current_action(action, b->action))
             {
+               freez(matches);
                free_http_request(url_to_query);
-               free(url_param);
                free_current_action(action);
                free_map(exports);
                return JB_ERR_MEMORY;
             }
-            string_append(&matches, "<b>{");
-            string_append(&matches, s);
-            string_append(&matches, " }</b><br>\n<code>");
-            string_append(&matches, b->url->spec);
-            string_append(&matches, "</code><br>\n<br>\n");
-            free(s);
-
-            merge_current_action(action, b->action); /* FIXME: Add error checking */
             hits++;
          }
       }
@@ -860,7 +893,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      s = current_action_to_text(action);
+      s = html_encode_and_free_original(current_action_to_text(action));
 
       free_current_action(action);
 
@@ -1122,6 +1155,8 @@ static char *show_rcs(void)
    SHOW_RCS(project_h_rcs)
    SHOW_RCS(ssplit_h_rcs)
    SHOW_RCS(ssplit_rcs)
+   SHOW_RCS(urlmatch_h_rcs)
+   SHOW_RCS(urlmatch_rcs)
 #ifdef _WIN32
 #ifndef _WIN_CONSOLE
    SHOW_RCS(w32log_h_rcs)
