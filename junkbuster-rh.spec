@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.5 2001/06/09 09:14:11 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.6 2001/06/11 11:28:25 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.6  2001/06/11 11:28:25  sarantis
+# Further optimizations and adaptations in the spec file.
+#
 # Revision 1.5  2001/06/09 09:14:11  swa
 # shamelessly adapted RPM stuff from the newest rpm that
 # RedHat provided for the JB.
@@ -115,7 +118,7 @@ cat config | \
     $RPM_BUILD_ROOT/etc/junkbuster/config
 
 %post
-if {[ "$1" = "1" ]; then
+if [ "$1" = "1" ]; then
         /sbin/chkconfig --add junkbuster
 fi
 
