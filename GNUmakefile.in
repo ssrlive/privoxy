@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.37 2002/03/27 15:30:26 swa Exp $
+# $Id: GNUmakefile.in,v 1.38 2002/03/27 16:02:30 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -76,6 +76,7 @@ DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
+G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
 
 # Program to do LF->CRLF
@@ -472,14 +473,18 @@ dok: doc/source/ldpOK.dsl man2html-swa
 	rm -rf doc/webserver/faq
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	# kludge to force recreation on next run. Rodgrigo?
+	rm -f doc/source/ldpOK.dsl
 
 man2html-swa:
+	mkdir -p doc/webserver/man-page
 	if [ "$(MAN2HTML)" != "false" ]; then \
-		mkdir -p doc/webserver/man-page; \
 		$(ECHO) "<html><head><title>Privoxy|Doc/Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html; \
 		man ./privoxy.1 | $(MAN2HTML) -bare \
 		 >> doc/webserver/man-page/privoxy-man-page.html; \
 		$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html; \
+     else \
+          $(MAKE) groff2html; \
 	fi
 
 redhat-dok: doc/source/ldpOK.dsl man2html
@@ -504,6 +509,9 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	# kludge to force recreation on next run. Rodgrigo?
+	rm -f doc/source/ldpOK.dsl
+
 
 doc/source/ldpOK.dsl:
 	if [ "$(DKPREFIX)" != "none" ]; then \
@@ -512,10 +520,20 @@ doc/source/ldpOK.dsl:
 		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
 	fi
 
+# for those with good man2html output. RH7.x seems to work well.
 man2html:
+	mkdir -p doc/webserver/man-page
 	if [ "$(MAN2HTML)" != "false" ]; then \
 		$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > doc/webserver/man-page/privoxy-man-page.html; \
+           perl -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' doc/webserver/man-page/privoxy-man-page.html; \
+     else \
+          $(MAKE) groff2html; \
 	fi
+
+# Default, except for Redhat. Create html man page.
+groff2html:
+	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
+
 
 #############################################################################
 #
@@ -632,6 +650,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.38  2002/03/27 16:02:30  swa
+# have a generic target
+#
 # Revision 1.37  2002/03/27 15:30:26  swa
 # have a consistent appearance
 #
