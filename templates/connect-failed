@@ -85,7 +85,7 @@
       <td bgcolor=#ff0000>
         <p><font size=+5 color=#ffffff><b>503</b></font></p>
       </td>
-      <td bgcolor=#dddddd>
+      <td bgcolor=#dddddd width=100%>
         <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
           <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
       </td>
