@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.74 2002/09/03 17:31:33 oes Exp $
+dnl $Id: configure.in,v 1.75 2002/09/04 12:19:33 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.75  2002/09/04 12:19:33  oes
+dnl Resurrected acconfig.h and removed double quotes from AC_DEFINE params to enable build on older systems
+dnl
 dnl Revision 1.74  2002/09/03 17:31:33  oes
 dnl Added workaround for very strange behaviour of AC_PROG_CC, which sets CFLAGS to -g -O2 if empty
 dnl
@@ -397,7 +400,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.74 $)
+AC_REVISION($Revision: 1.75 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
@@ -900,10 +903,27 @@ dnl =================================================================
 dnl Note: Some systems may have the library but not the system header
 dnl       file, so we must check for both.
 dnl       Also check for correct version
-AC_CHECK_LIB(pcre, pcre_compile, [AC_CHECK_HEADER(pcre.h, [AC_EGREP_HEADER(pcre_fullinfo, pcre.h, [have_pcre=yes], [AC_MSG_WARN([[pcre old version installed]]); have_pcre=no])], [have_pcre=no])], [have_pcre=no])
-AC_CHECK_LIB(pcreposix, regcomp, [AC_CHECK_HEADER(pcreposix.h, [AC_EGREP_HEADER(pcreposix_regerror, pcreposix.h, [AC_MSG_WARN([[pcreposix old version installed]]); have_pcreposix=no], [have_pcreposix=yes])], [have_pcreposix=no])], [have_pcreposix=no], -lpcre)
-AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no])
+AC_CHECK_LIB(pcre, pcre_compile, [
+   AC_CHECK_HEADER(pcre.h, [
+      AC_EGREP_HEADER(pcre_fullinfo, pcre.h, [have_pcre=yes], [AC_MSG_WARN([[pcre old version installed]]); have_pcre=no])
+   ], [
+      AC_CHECK_HEADER(pcre/pcre.h, [
+         AC_EGREP_HEADER(pcre_fullinfo, pcre/pcre.h, [have_pcre=yes]; [AC_DEFINE(PCRE_H_IN_SUBDIR)], [AC_MSG_WARN([[pcre old version installed]]); have_pcre=no])
+      ], [have_pcre=no])
+   ])
+], [have_pcre=no])
+ 
+AC_CHECK_LIB(pcreposix, regcomp, [
+   AC_CHECK_HEADER(pcreposix.h, [
+      AC_EGREP_HEADER(pcreposix_regerror, pcreposix.h, [AC_MSG_WARN([[pcreposix old version installed]]); have_pcreposix=no], [have_pcreposix=yes])
+   ], [
+      AC_CHECK_HEADER(pcre/pcreposix.h, [
+         AC_EGREP_HEADER(pcreposix_regerror, pcre/pcreposix.h, [AC_MSG_WARN([[pcreposix old version installed]]); have_pcreposix=no], [have_pcreposix=yes]; [AC_DEFINE(PCREPOSIX_H_IN_SUBDIR)])
+      ], [have_pcreposix=no])
+   ])
+], [have_pcreposix=no], -lpcre) 
 
+AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no], -lpcre)
 
 dnl =================================================================
 dnl Always defined
