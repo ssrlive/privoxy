@@ -1,9 +1,9 @@
 #ifndef _JCC_H
 #define _JCC_H
-#define JCC_H_VERSION "$Id: jcc.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.1.1.1 2001/05/15 13:58:56 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/jcc.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and 
  *                the main connection-handling function.
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:56  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -65,10 +68,6 @@ extern int urls_rejected;
 extern struct client_state clients[];
 
 extern struct file_list    files[];
-
-/* Global constants */
-
-extern const char DEFAULT_USER_AGENT[];
 
 
 /* Functions */

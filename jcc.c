@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.13 2001/05/29 09:50:24 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.14 2001/05/29 20:14:01 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.13 2001/05/29 09:50:24 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.14  2001/05/29 20:14:01  joergs
+ *    AmigaOS bugfix: PCRS needs a lot of stack, stacksize for child threads
+ *    increased.
+ *
  *    Revision 1.13  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -210,6 +214,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.13 2001/05/29 09:50:24 jongfoster Exp $";
 #endif
 
 #include "project.h"
+#include "list.h"
 #include "jcc.h"
 #include "filters.h"
 #include "loaders.h"
@@ -220,11 +225,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.13 2001/05/29 09:50:24 jongfoster Exp $";
 #include "errlog.h"
 #include "jbsockets.h"
 #include "gateway.h"
+#include "actions.h"
 
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
-
-const char DEFAULT_USER_AGENT[] ="User-Agent: Mozilla (X11; I; Linux 2.0.32 i586)";
 
 struct client_state  clients[1];
 struct file_list     files[1];
@@ -250,6 +254,17 @@ static int32 server_thread(void *data);
 #ifdef _WIN32
 #define sleep(N)  Sleep(((N) * 1000))
 #endif
+
+
+/* The vanilla wafer. */
+static const char VANILLA_WAFER[] =
+   "NOTICE=TO_WHOM_IT_MAY_CONCERN_"
+   "Do_not_send_me_any_copyrighted_information_other_than_the_"
+   "document_that_I_am_requesting_or_any_of_its_necessary_components._"
+   "In_particular_do_not_send_me_any_cookies_that_"
+   "are_subject_to_a_claim_of_copyright_by_anybody._"
+   "Take_notice_that_I_refuse_to_be_bound_by_any_license_condition_"
+   "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 
 /*********************************************************************
@@ -429,21 +444,35 @@ static void chat(struct client_state *csp)
 #ifdef TOGGLE
    if (!csp->toggled_on)
    {
-      /* Most compatible set of permissions */
-      csp->permissions = PERMIT_MOST_COMPATIBLE;
+      /* Most compatible set of actions (i.e. none) */
+      init_current_action(csp->action);
    }
    else
 #endif /* ndef TOGGLE */
    {
-      csp->permissions = url_permissions(http, csp);
+      url_actions(http, csp);
    }
 
+#ifdef JAR_FILES
+   /*
+    * If we're logging cookies in a cookie jar, and the user has not
+    * supplied any wafers, and the user has not told us to suppress the
+    * vanilla wafer, then send the vanilla wafer.
+    */
+   if ((csp->config->jarfile != NULL)
+       && (csp->action->multi[ACTION_MULTI_WAFER]->next == NULL)
+       && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
+   {
+      enlist_share(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
+   }
+#endif /* def JAR_FILES */
+
 #ifdef KILLPOPUPS
-   block_popups               = ((csp->permissions & PERMIT_POPUPS) == 0);
+   block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
 #endif /* def KILLPOPUPS */
 #ifdef PCRS
    pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
-                                ((csp->permissions & PERMIT_RE_FILTER) != 0);
+                                ((csp->action->flags & ACTION_FILTER) != 0);
 #endif /* def PCRS */
 
 
@@ -496,7 +525,7 @@ static void chat(struct client_state *csp)
 
 #ifdef FAST_REDIRECTS
    else if (IS_ENABLED_AND
-            ((csp->permissions & PERMIT_FAST_REDIRECTS) != 0) && 
+            ((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) && 
             (p = redirect_url(http, csp))) 
    {
       /* This must be blocked as HTML */
