@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.12  2002/03/12 01:42:50  oes
+#    Introduced modular filters
+#
 #    Revision 1.11  2002/03/08 18:19:14  jongfoster
 #    Adding +image-blocker{pattern} option to edit interface
 #
@@ -141,6 +144,7 @@ body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
 td.action    { font-weight: bold;
                font-style: italic;
                white-space: nowrap       }
+td.subaction { font-style: italic        }
 th           { font-weight: bold;        }
 # This is the key to the color names below:
 # bg=background, en="Enable", dis="Disable", noc="No Change", hdr=header
@@ -218,18 +222,6 @@ function show_deanimate_opts(tf)
         target = document.getElementById("deanimate_opts");
     } else if (document.all) {
         target = document.deanimate_opts;
-    } else {
-        return;
-    }
-    target.style.display = (tf ? "" : "none");
-}
-
-function show_filter_opts(tf)
-{
-    if (document.getElementById) {
-        target = document.getElementById("filter_opts");
-    } else if (document.all) {
-        target = document.filter_opts;
     } else {
         return;
     }
@@ -327,37 +319,6 @@ function show_wafer_opts(tf)
       </td>
     </tr>
 
-<!-- @if-unstable-start -->
-# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
-    <tr>
-      <td style="background-color: #ffdddd" >
-        <p><b>Please note that this <span style="color: #ff0000">@code-status@</span> release
-          of the proxy software is not intended for production systems!
-          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
-        </p>
-
- 	<p>
-<h2>Support and Service via Sourceforge</h2>
-<p>
-We value your feedback. However, to provide you with the best support,
-please note:
-<ul>
-  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
-  help.</li>
-  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
-      forum</a>. Make sure that the bug has not yet been submitted.</li>
-  <li>Submit feature requests only thru our <a
-      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
-</ul>
-</p>
-<p>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
-</p>
-      </td>
-    </tr>
-<!-- if-unstable-end@ -->
-
     <tr>
       <td class="light">
         <h2>Edit Actions
@@ -369,18 +330,15 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
     </tr>
   </table>
 
-  <table border="0" width="100%" cellspacing="0" class="wide">
+  <table border="0" width="100%" cellspacing="2" class="wide">
     <tr class="hdr" align="left">
-      <th>Action
-      </th>
-      <th>Description</th>
       <th class="enh" align="center">Enable</th>
       <th class="dish" align="center">Disable</th>
       <th class="noch" align="center">No Change</th>
+      <th>Action</th>
+      <th>Description</th>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+add-header</td>
-      <td>Adds HTTP headers.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="add_header" id="add_header_y" value="Y" @add-header-y@
         onclick="show_add_header_opts(true)"></td>
@@ -390,16 +348,19 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="add_header" value="X" @add-header-x@
         onclick="show_add_header_opts(false)"></td>
+      <td class="action">+add-header</td>
+      <td>Adds HTTP headers.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="add_header_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4">Editing the settings for this option, or turning
+      <td>Editing the settings for this option, or turning
         it on if it was off, is not yet supported using this web-based
         editor.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+block</td>
-      <td>Block the request</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="block" value="Y" @block-y@
         ></td>
@@ -409,10 +370,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="block" value="X" @block-x@
         ></td>
+      <td class="action">+block</td>
+      <td>Block the request</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+deanimate-gifs</td>
-      <td>Replace animated GIFs with their (first/last) frame.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="deanimate_gifs" id="deanimate_gifs_y" value="Y" @deanimate-gifs-y@
         onclick="show_deanimate_opts(true)"></td>
@@ -422,10 +383,15 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="deanimate_gifs" value="X" @deanimate-gifs-x@
         onclick="show_deanimate_opts(false)"></td>
+      <td class="action">+deanimate-gifs</td>
+      <td>Replace animated GIFs with their (first/last) frame.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="deanimate_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4">Use the <input type="radio" name="deanimate_gifs_mode"
+      <td>Use the <input type="radio" name="deanimate_gifs_mode"
         value="first" id="deanimate_first" @deanimate-gifs-param-first@><label
         for="deanimate_first">first frame</label>&nbsp;&nbsp; <input
         type="radio" name="deanimate_gifs_mode" value="last" 
@@ -433,8 +399,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
         for="deanimate_last">last frame</label></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+fast-redirects</td>
-      <td>Bypass some tracking URLs.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="fast_redirects" value="Y" @fast-redirects-y@
         ></td>
@@ -444,40 +408,39 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="fast_redirects" value="X" @fast-redirects-x@
         ></td>
+      <td class="action">+fast-redirects</td>
+      <td>Bypass some tracking URLs.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+downgrade</td>
-      <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
-        what you're doing!</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="downgrade" value="Y" @downgrade-y@></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
         name="downgrade" value="N" @downgrade-n@></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="downgrade" value="X" @downgrade-x@></td>
+      <td class="action">+downgrade</td>
+      <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
+        what you're doing!</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
+      <td class="en2">&nbsp;</td>
+      <td class="dis2">&nbsp;</td>
+      <td class="noc2">&nbsp;</td>
       <td class="action">+filter</td>
-      <td>Filter the website through one or more regular expression filters.</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
-        name="filter" id="filter_y" value="Y" @filter-y@
-        onclick="show_filter_opts(true)"></td>
+      <td>Filter the website through regular expression filters.
+        You can enable or disable the filters individually.</td>
+    </tr>
+
+    <tr class="bg2" align="left" valign="top">
+      <td class="en2">&nbsp;</td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="filter" id="filter_n" value="N" @filter-n@
-        onclick="show_filter_opts(false)"></td>
+        name="filter_all" id="filter_all_n" value="N" @filter-all-n@ ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="filter" id="filter_x" value="X" @filter-x@
-        onclick="show_filter_opts(false)"></td>
+        name="filter_all" id="filter_all_x" value="X" @filter-all-x@ ></td>
+      <td class="subaction" colspan="2">&nbsp;&nbsp;All filters applied by previous rules</td>
     </tr>
-    <tr class="bg2" align="left" valign="top" id="filter_opts">
-      <td>&nbsp;</td>
-      <td colspan="4">Editing the settings for this option, or turning
-        it on if it was off, is not yet supported using this web-based
-        editor.</td>
-    </tr>
+@filter-params@
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+hide-forwarded</td>
-      <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded" value="Y" @hide-forwarded-y@
         ></td>
@@ -487,11 +450,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded" value="X" @hide-forwarded-x@
         ></td>
+      <td class="action">+hide-forwarded</td>
+      <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+hide-from</td>
-      <td>Stop old web browsers from sending the user's e-mail address with
-        every request.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="hide_from" id="hide_from_y" value="Y" @hide-from-y@
         onclick="show_hide_from_opts(true)"></td>
@@ -501,10 +463,16 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="hide_from" value="X" @hide-from-x@
         onclick="show_hide_from_opts(false)"></td>
+      <td class="action">+hide-from</td>
+      <td>Stop old web browsers from sending the user's e-mail address with
+        every request.</td>
     </tr>
     <tr class="bg2" align="left" valign="top" id="hide_from_opts">
+      <td class="en2">&nbsp;</td>
+      <td class="dis2">&nbsp;</td>
+      <td class="noc2">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="hide_from_mode" value="block"
+      <td><input type="radio" name="hide_from_mode" value="block"
         onclick="hide_from_param_disable(true);"
         @hide-from-param-block@ id="from_mode_block"><label
         for="from_mode_block">Remove completely</label><br>
@@ -516,9 +484,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
         size="40" value="@hide-from-param@"></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+hide-referer</td>
-      <td>Helps prevent tracking by not sending the URL of the previous web
-        page.&nbsp;</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_referer" id="hide_referer_y" value="Y" @hide-referer-y@
         onclick="show_hide_referer_opts(true)"></td>
@@ -529,10 +494,16 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
         name="hide_referer" id="hide_referer_x" value="X" @hide-referer-x@
         onclick="show_hide_referer_opts(false)"
         ></td>
+      <td class="action">+hide-referer</td>
+      <td>Helps prevent tracking by not sending the URL of the previous web
+        page.&nbsp;</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="hide_referer_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="hide_referer_mode" value="block"
+      <td><input type="radio" name="hide_referer_mode" value="block"
         onclick="hide_referer_param_disable(true)"
         @hide-referer-param-block@ id="referer_mode_block"><label
         for="referer_mode_block">Remove completely</label> (breaks images
@@ -551,9 +522,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
         value="@hide-referer-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+hide-user-agent</td>
-      <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
-        sites).</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" id="hide_user_agent_y" value="Y" @hide-user-agent-y@
         onclick="show_user_agent_opts(true)"></td>
@@ -563,17 +531,20 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" value="X" @hide-user-agent-x@
         onclick="show_user_agent_opts(false)"></td>
+      <td class="action">+hide-user-agent</td>
+      <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
+        sites).</td>
     </tr>
     <tr class="bg2" align="left" valign="top" id="user_agent_opts">
+      <td class="en2">&nbsp;</td>
+      <td class="dis2">&nbsp;</td>
+      <td class="noc2">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4">User Agent string to send:<br>
+      <td>User Agent string to send:<br>
         <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+image</td>
-      <td>Request is for an image (only useful in conjunction with the <i><b>+block</b></i>
-        and <i><b>+image-blocker</b></i> options).</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="image" value="Y" @image-y@
         ></td>
@@ -583,11 +554,11 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="image" value="X" @image-x@
         ></td>
+      <td class="action">+image</td>
+      <td>Request is for an image (only useful in conjunction with the <i><b>+block</b></i>
+        and <i><b>+image-blocker</b></i> options).</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+image-blocker</td>
-      <td>Specifies how to block images.&nbsp; Disable to always send a HTML
-        &quot;blocked&quot; page.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="image_blocker" id="image_blocker_y" value="Y" @image-blocker-y@
         onclick="show_image_blocker_opts(true)"></td>
@@ -597,10 +568,16 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="image_blocker" value="X" @image-blocker-x@
         onclick="show_image_blocker_opts(false)"></td>
+      <td class="action">+image-blocker</td>
+      <td>Specifies how to block images.&nbsp; Disable to always send a HTML
+        &quot;blocked&quot; page.</td>
     </tr>
     <tr class="bg2" align="left" valign="top" id="image_blocker_opts">
+      <td class="en2">&nbsp;</td>
+      <td class="dis2">&nbsp;</td>
+      <td class="noc2">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="image_blocker_mode"
+      <td><input type="radio" name="image_blocker_mode"
         onclick="image_blocker_param_disable(true)"
         value="pattern" id="image_blocker_mode_pattern"
         @image-blocker-param-pattern@><label
@@ -625,10 +602,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
         size="40" value="@image-blocker-param@"></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+limit-connect</td>
-      <td>Specify which ports are allowed for SSL (HTTP CONNECT) access.
-        Note that this allows arbitrary tunnelling, so opening all
-        ports would be a security hole.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="limit_connect" id="limit_connect_y" value="Y" @limit-connect-y@
         onclick="show_limit_connect_opts(true)"></td>
@@ -638,19 +611,21 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="limit_connect" value="X" @limit-connect-x@
         onclick="show_limit_connect_opts(false)"></td>
+      <td class="action">+limit-connect</td>
+      <td>Specify which ports are allowed for SSL (HTTP CONNECT) access.
+        Note that this allows arbitrary tunnelling, so opening all
+        ports would be a security hole.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="limit_connect_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4">Legal SSL ports (comma separated, ranges allowed):<br>
+      <td>Legal SSL ports (comma separated, ranges allowed):<br>
         <input type="text" name="limit_connect_mode" size="40"
         value="@limit-connect-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+no-compression</td>
-      <td>Disables compression.  Compressed web pages are faster to
-        download, but cannot be filtered with +filter or +no-popups.
-        This setting only affects the few web sites which support
-        compression.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="no_compression" value="Y" @no-compression-y@
         ></td>
@@ -660,15 +635,13 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_compression" value="X" @no-compression-x@
         ></td>
+      <td class="action">+no-compression</td>
+      <td>Disables compression.  Compressed web pages are faster to
+        download, but cannot be filtered with +filter or +no-popups.
+        This setting only affects the few web sites which support
+        compression.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+no-cookies-keep</td>
-      <td>Any cookies set by the website are changed to temporary
-        ("per-session") ones, which only last until you close your web
-        browser.  This will allow you to use sites that require cookies, but
-        sites will not be able to track you across sessions.  For this to
-        be useful, you should disable <b><i>no-cookies-read</i></b> and
-        <b><i>no-cookies-set</i></b>.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="no_cookies_keep" value="Y" @no-cookies-keep-y@
         ></td>
@@ -678,10 +651,15 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="no_cookies_keep" value="X" @no-cookies-keep-x@
         ></td>
+      <td class="action">+no-cookies-keep</td>
+      <td>Any cookies set by the website are changed to temporary
+        ("per-session") ones, which only last until you close your web
+        browser.  This will allow you to use sites that require cookies, but
+        sites will not be able to track you across sessions.  For this to
+        be useful, you should disable <b><i>no-cookies-read</i></b> and
+        <b><i>no-cookies-set</i></b>.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+no-cookies-read</td>
-      <td>Prevent the website from reading cookies.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="no_cookies_read" value="Y" @no-cookies-read-y@
         ></td>
@@ -691,10 +669,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_cookies_read" value="X" @no-cookies-read-x@
         ></td>
+      <td class="action">+no-cookies-read</td>
+      <td>Prevent the website from reading cookies.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+no-cookies-set</td>
-      <td>Prevent the website from setting cookies.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="Y" @no-cookies-set-y@
         ></td>
@@ -704,11 +682,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="X" @no-cookies-set-x@
         ></td>
+      <td class="action">+no-cookies-set</td>
+      <td>Prevent the website from setting cookies.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+no-popups</td>
-      <td>Filter the website through a built-in filter to disable JavaScript
-        pop-up windows.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="no_popups" value="Y" @no-popups-y@
         ></td>
@@ -718,10 +695,11 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_popups" value="X" @no-popups-x@
         ></td>
+      <td class="action">+no-popups</td>
+      <td>Filter the website through a built-in filter to disable JavaScript
+        pop-up windows.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+vanilla-wafer</td>
-      <td>If you use a jarfile, automatically adds a special wafer.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="Y" @vanilla-wafer-y@
         ></td>
@@ -731,10 +709,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="X" @vanilla-wafer-x@
         ></td>
+      <td class="action">+vanilla-wafer</td>
+      <td>If you use a jarfile, automatically adds a special wafer.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+wafer</td>
-      <td>Adds user-specified cookies.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_y" value="Y" @wafer-y@
         onclick="show_wafer_opts(true)"></td>
@@ -744,10 +722,15 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_x" value="X" @wafer-x@
         onclick="show_wafer_opts(false)"></td>
+      <td class="action">+wafer</td>
+      <td>Adds user-specified cookies.</td>
     </tr>
     <tr class="bg2" align="left" valign="top" id="wafer_opts">
+      <td class="en2">&nbsp;</td>
+      <td class="dis2">&nbsp;</td>
+      <td class="noc2">&nbsp;</td>
       <td>&nbsp;</td>
-      <td colspan="4">Editing the settings for this option, or turning
+      <td>Editing the settings for this option, or turning
         it on if it was off, is not yet supported using this web-based
         editor.</td>
     </tr>
@@ -804,6 +787,37 @@ if (document.getElementById) {
         <ul>@menu@</ul>
       </td>
     </tr>
+
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
+    <tr>
+      <td style="background-color: #ffdddd" >
+        <p><b>Please note that this <span style="color: #ff0000">@code-status@</span> release
+          of the proxy software is not intended for production systems!
+          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+        </p>
+
+ 	<p>
+<h2>Support and Service via Sourceforge</h2>
+<p>
+We value your feedback. However, to provide you with the best support,
+please note:
+<ul>
+  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
+  help.</li>
+  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+      forum</a>. Make sure that the bug has not yet been submitted.</li>
+  <li>Submit feature requests only thru our <a
+      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
+</ul>
+</p>
+<p>
+For any other issues, feel free to use the <a
+href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
+</p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
 
 <!-- @if-have-help-info-start -->
     <tr>

@@ -1,0 +1,6 @@
+<tr class="bg2" align="left" valign="top">
+  <td class="en2" align="center" valign="middle"><input type="radio" name="filter_r@index@" value="Y" @this-filter-y@></td>
+  <td class="dis2" align="center" valign="middle"><input type="radio" name="filter_r@index@" value="N" @this-filter-n@></td>
+  <td class="noc2" align="center" valign="middle"><input type="radio" name="filter_r@index@" value="X" @this-filter-x@></td>
+  <td class="subaction" colspan="2">&nbsp;&nbsp;@name@<input type="hidden" name="filter_n@index@" value="@name@"></td>
+</tr>
