@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.42 2002/03/07 18:16:55 swa Exp $
+ $Id: user-manual.sgml,v 1.43 2002/03/08 00:47:32 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.42 2002/03/07 18:16:55 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.43 2002/03/08 00:47:32 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -447,7 +447,74 @@ configuration section below. HB.)
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="configuration"><title>Invoking and Configuring JunkBuster</title>
+<sect1 id="configuration"><title>JunkBuster Configuration</title>
+ <para>
+  All <application>JunkBuster</application> configuration is kept 
+  in text files. These files can be edited with a text editor.
+  Many important aspects of <application>JunkBuster</application> can 
+  also be controlled easily with a web browser.
+
+ </para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>Controlling Junkbuster with Your Web Browser</title>
+<para>
+ <application>JunkBuster</application> can be reached by the special 
+ URL <ulink url="http://i.j.b/">http://i.j.b/</ulink> (or alternately
+ <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>, 
+ which is an internal page. You will see the following section:
+
+</para>
+
+<para>
+ <screen>
+
+Please choose from the following options:
+
+    * Show information about the current configuration
+    * Show the source code version numbers
+    * Show the client's request headers.
+    * Show which actions apply to a URL and why
+    * Toggle JunkBuster on or off
+    * Edit the actions list
+
+ </screen>
+</para>
+
+<para>
+ This should be self-explanatory. Note the last item is an editor for the
+ <quote>actions list</quote>, which is where much of the ad, banner, cookie,
+ and URL blocking magic is configured as well as other advanced features of
+ <application>Junkbuster</application>. This is an easy way to adjust various
+ aspects of <application>Junkbuster</application> configuration. The actions
+ file, and other configuration files, are explained in detail below. 
+ <application>Junkbuster</application> will automatically detect any changes 
+ to these files.
+</para>
+
+<para>
+ <quote>Toggle JunkBuster On or Off</quote> is handy for sites that might 
+ have problems with your current actions and filters, or just to test if 
+ a site misbehaves, whether it is <application>JunkBuster</application> 
+ causing the problem or not. <application>Junkbuster</application> continues 
+ to run as a proxy in this case, but all filtering is disabled.
+
+</para>
+
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>Configuration Files Overview</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
  <filename>/etc/junkbuster/</filename> by default. For MS Windows, OS/2, and
@@ -480,8 +547,7 @@ configuration section below. HB.)
     <quote>actions</quote> relating to images, banners, pop-ups, access
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
-    url="http://i.j.b">http://i.j.b</ulink>. This is the easiest method of
-    configuring actions. (Other actions 
+    url="http://i.j.b">http://i.j.b</ulink>. (Other actions 
     files are included as well with differing levels of filtering 
     and blocking, e.g. <filename>ijb-basic.action</filename>.)
    </para>
@@ -514,88 +580,7 @@ configuration section below. HB.)
  Also, what constitutes a <quote>default</quote> setting, may change, so 
  please check all your configuration files on important issues.
 </para>
-
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-
-<sect2>
-<title>Command Line Options</title>
-<para>
- <application>JunkBuster</application> may be invoked with the following
- command-line options:
-</para>
-
-<para>
- <itemizedlist>
-
- <listitem>
-  <para>
-    <emphasis>--version</emphasis>
-  </para>
-  <para>
-     Print version info and exit, Unix only.
-  </para>
- </listitem> 
- <listitem>
-  <para>
-    <emphasis>--help</emphasis>
-  </para>
-  <para>
-   Print a short usage info and exit, Unix only.
-  </para>
- </listitem> 
- <listitem>
-  <para>
-   <emphasis>--no-daemon</emphasis>
-  </para>
-  <para>
-   Don't become a daemon, i.e. don't fork and become process group
-   leader, don't detach from controlling tty. Unix only.
-  </para>
- </listitem> 
- <listitem>
-  <para>
-   <emphasis>--pidfile FILE</emphasis>
-  
-  </para>
-  <para>
-   On startup, write the process ID to <emphasis>FILE</emphasis>. Delete the
-   <emphasis>FILE</emphasis> on exit. Failiure to create or delete the
-   <emphasis>FILE</emphasis> is non-fatal. If no <emphasis>FILE</emphasis>
-   option is given, no PID file will be used. Unix only.
-  </para>
- </listitem> 
- <listitem>
-  <para>
-   <emphasis>--user USER</emphasis>
-  
-  </para>
-  <para>
-   After (optionally) writing the PID file, assume the user  ID  of
-   <emphasis>USER</emphasis>.  Exit if the privileges are not sufficient to do
-   so. Unix only.
-  </para>
- </listitem> 
- <listitem>
-  <para>
-    <emphasis>configfile</emphasis>
-  </para>
-  <para>
-    If no <emphasis>configfile</emphasis> is included on the command line, 
-    <application>JunkBuster</application> will look for a file named 
-    <quote>config</quote> in the current directory (except on Win32 
-    where it will look for <quote>config.txt</quote> instead). Specify 
-    full path to avoid confusion.
-  </para>
- </listitem> 
-
- </itemizedlist>
-</para>
-
 </sect2>
-
-<!--  ~  End section  ~  -->
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -2874,7 +2859,7 @@ Removed references to Win32. HB 09/23/01
 <para>
  When <application>Junkbuster</application> displays one of its internal 
  pages, such as a 404 Not Found error page, it uses the appropriate template.
- On Linux, BSD, and Unix, these are locate in
+ On Linux, BSD, and Unix, these are located in
  <filename>/etc/junkbuster/templates</filename> by default. These may be
  customized, if desired.
 
@@ -2891,8 +2876,8 @@ Removed references to Win32. HB 09/23/01
 <sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
 <para>
  Install package, then run and enjoy! <application>JunkBuster</application> 
- accepts only one command line option -- the configuration file to be 
- used. Example Unix startup command:
+ is typically started by specifying the main configuration file to be 
+ used on the command line. Example Unix startup command:
 </para>
 
 <para>
@@ -2998,10 +2983,94 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  the developers (see below). 
 </para>
 
-</sect1>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>Command Line Options</title>
+<para>
+ <application>JunkBuster</application> may be invoked with the following
+ command-line options:
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+    <emphasis>--version</emphasis>
+  </para>
+  <para>
+     Print version info and exit, Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+    <emphasis>--help</emphasis>
+  </para>
+  <para>
+   Print a short usage info and exit, Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <emphasis>--no-daemon</emphasis>
+  </para>
+  <para>
+   Don't become a daemon, i.e. don't fork and become process group
+   leader, don't detach from controlling tty. Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <emphasis>--pidfile FILE</emphasis>
+  
+  </para>
+  <para>
+   On startup, write the process ID to <emphasis>FILE</emphasis>. Delete the
+   <emphasis>FILE</emphasis> on exit. Failiure to create or delete the
+   <emphasis>FILE</emphasis> is non-fatal. If no <emphasis>FILE</emphasis>
+   option is given, no PID file will be used. Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <emphasis>--user USER[.GROUP]</emphasis>
+  
+  </para>
+  <para>
+   After (optionally) writing the PID file, assume the user  ID  of
+   <emphasis>USER</emphasis>, and if included the GID of GROUP.  Exit if the
+   privileges are not sufficient to do so. Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+    <emphasis>configfile</emphasis>
+  </para>
+  <para>
+    If no <emphasis>configfile</emphasis> is included on the command line, 
+    <application>JunkBuster</application> will look for a file named 
+    <quote>config</quote> in the current directory (except on Win32 
+    where it will look for <quote>config.txt</quote> instead). Specify 
+    full path to avoid confusion.
+  </para>
+ </listitem> 
+
+ </itemizedlist>
+</para>
+
+</sect2>
+
+</sect1>
+
+<!--  ~  End section  ~  -->
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
 <sect1 id="contact"><title>Contacting the Developers, Bug Reporting and Feature
 Requests</title>
 <para>
@@ -3394,6 +3463,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.43  2002/03/08 00:47:32  hal9
+ Added imageblock{pattern}.
+
  Revision 1.42  2002/03/07 18:16:55  swa
  looks better
 
