@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:37:55 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.41 2001/11/13 00:14:07 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -6,10 +6,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:37:55 oes Exp $"
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
- *                   `block_url', `url_actions', `domaincmp', `dsplit',
+ *                   `block_url', `url_actions', `domain_split',
  *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `pcrs_filter_respose',
- *                   `show_proxy_args', 'ijb_send_banner', and `trust_url'
+ *                   'ijb_send_banner', and `trust_url'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
@@ -38,6 +38,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:37:55 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.41  2001/11/13 00:14:07  jongfoster
+ *    Fixing stupid bug now I've figured out what || means.
+ *    (It always returns 0 or 1, not one of it's paramaters.)
+ *
  *    Revision 1.40  2001/10/26 17:37:55  oes
  *    - Re-enabled Netscape 200/404 bug workaround in block_url():
  *      - Removed OS/2 special case
@@ -358,6 +362,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:37:55 oes Exp $"
 #include "cgi.h"
 #include "list.h"
 #include "deanimate.h"
+#include "urlmatch.h"
 
 #ifdef _WIN32
 #include "win32.h"
@@ -737,10 +742,8 @@ struct http_response *block_url(struct client_state *csp)
       err = map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
 
-      if (!err) err = map(exports, "hostport", 1, csp->http->hostport, 1);
-      if (!err) err = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-      if (!err) err = map(exports, "path", 1, csp->http->path, 1);
-      if (!err) err = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+      if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
+      if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
 
       if (err)
       {
@@ -1039,145 +1042,94 @@ int is_untrusted_url(struct client_state *csp)
 {
    struct file_list *fl;
    struct block_spec *b;
-   struct url_spec url[1], **tl, *t;
+   struct url_spec **trusted_url;
    struct http_request rhttp[1];
    char *p, *h;
+   jb_err err;
 
    /*
     * If we don't have a trustlist, we trust everybody
     */
    if (((fl = csp->tlist) == NULL) || ((b  = fl->f) == NULL))
    {
-      return(0);
+      return 0;
    }
 
+   memset(rhttp, '\0', sizeof(*rhttp));
 
    /*
     * Do we trust the request URL itself?
     */
-   *url = dsplit(csp->http->host);
-
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(0);
-
-   memset(rhttp, '\0', sizeof(*rhttp));
-
    for (b = b->next; b ; b = b->next)
    {
-      if ((b->url->port == 0) || (b->url->port == csp->http->port))
+      if (url_match(b->url, csp->http))
       {
-         if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
-         {
-            if ((b->url->path == NULL) ||
-#ifdef REGEX
-               (regexec(b->url->preg, csp->http->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(b->url->path, csp->http->path, b->url->pathlen) == 0)
-#endif
-            )
-            {
-               freez(url->dbuf);
-               freez(url->dvec);
-
-               if (b->reject == 0) return(0);
-
-               return(1);
-            }
-         }
+         return b->reject;
       }
    }
-
-   freez(url->dbuf);
-   freez(url->dvec);
 
    if (NULL == (h = get_header_value(csp->headers, "Referer:")))
    {
       /* no referrer was supplied */
-      return(1);
+      return 1;
    }
-
-   /* forge a URL from the referrer so we can use
-    * convert_url() to parse it into its components.
-    */
-
-   p = NULL;
-   p = strsav(p, "GET ");
-   p = strsav(p, h);
-   p = strsav(p, " HTTP/1.0");
-
-   parse_http_request(p, rhttp, csp);
-   freez(p);
-
-   if (rhttp->cmd == NULL)
-   {
-      return(1);
-   }
-
 
    /*
     * If not, do we maybe trust its referrer?
     */
-   *url = dsplit(rhttp->host);
 
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(1);
 
-   for (tl = csp->config->trust_list; (t = *tl) ; tl++)
+   /*
+    * Parse the URL from the referrer
+    */
+
+   err = parse_http_url(h, rhttp, csp);
+   if (err)
    {
-      if ((t->port == 0) || (t->port == rhttp->port))
+      return 1;
+   }
+
+   for (trusted_url = csp->config->trust_list; *trusted_url != NULL; trusted_url++)
+   {
+      if (url_match(*trusted_url, rhttp))
       {
-         if ((t->domain[0] == '\0') || domaincmp(t, url) == 0)
+         /* if the URL's referrer is from a trusted referrer, then
+          * add the target spec to the trustfile as an unblocked
+          * domain and return NULL (which means it's OK).
+          */
+
+         FILE *fp;
+
+         if ((fp = fopen(csp->config->trustfile, "a")))
          {
-            if ((t->path == NULL) ||
-#ifdef REGEX
-               (regexec(t->preg, rhttp->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(t->path, rhttp->path, t->pathlen) == 0)
-#endif
-            )
+            h = NULL;
+
+            h = strsav(h, "~");
+            h = strsav(h, csp->http->hostport);
+
+            p = csp->http->path;
+            if ((*p++ == '/')
+            && (*p++ == '~'))
             {
-               /* if the URL's referrer is from a trusted referrer, then
-                * add the target spec to the trustfile as an unblocked
-                * domain and return NULL (which means it's OK).
+               /* since this path points into a user's home space
+                * be sure to include this spec in the trustfile.
                 */
-
-               FILE *fp;
-
-               freez(url->dbuf);
-               freez(url->dvec);
-
-               if ((fp = fopen(csp->config->trustfile, "a")))
+               if ((p = strchr(p, '/')))
                {
-                  h = NULL;
-
-                  h = strsav(h, "~");
-                  h = strsav(h, csp->http->hostport);
-
-                  p = csp->http->path;
-                  if ((*p++ == '/')
-                  && (*p++ == '~'))
-                  {
-                  /* since this path points into a user's home space
-                   * be sure to include this spec in the trustfile.
-                   */
-                     if ((p = strchr(p, '/')))
-                     {
-                        *p = '\0';
-                        h = strsav(h, csp->http->path); /* FIXME: p?! */
-                        h = strsav(h, "/");
-                     }
-                  }
-
-                  fprintf(fp, "%s\n", h);
-                  freez(h);
-                  fclose(fp);
+                  *p = '\0'; /* FIXME: writing to csp->http->path is a bad idea */
+                  h = strsav(h, csp->http->path);
+                  h = strsav(h, "/");
                }
-               return(0);
             }
+
+            fprintf(fp, "%s\n", h);
+            freez(h);
+            fclose(fp);
          }
+         return 0;
       }
    }
-   return(1);
+   return 1;
 }
 #endif /* def FEATURE_COOKIE_JAR */
 
@@ -1450,44 +1402,19 @@ void apply_url_actions(struct current_action_spec *action,
                        struct http_request *http,
                        struct url_actions *b)
 {
-   struct url_spec url[1];
-
    if (b == NULL)
    {
       /* Should never happen */
       return;
    }
 
-   *url = dsplit(http->host);
-
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL)
-   {
-      return;
-   }
-
    for (b = b->next; NULL != b; b = b->next)
    {
-      if ((b->url->port == 0) || (b->url->port == http->port))
+      if (url_match(b->url, http))
       {
-         if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
-         {
-            if ((b->url->path == NULL) ||
-#ifdef REGEX
-               (regexec(b->url->preg, http->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(b->url->path, http->path, b->url->pathlen) == 0)
-#endif
-            )
-            {
-               merge_current_action(action, b->action);
-            }
-         }
+         merge_current_action(action, b->action);
       }
    }
-
-   freez(url->dbuf);
-   freez(url->dvec);
 }
 
 
@@ -1509,251 +1436,22 @@ const struct forward_spec * forward_url(struct http_request *http,
 {
    static const struct forward_spec fwd_default[1] = { FORWARD_SPEC_INITIALIZER };
    struct forward_spec *fwd = csp->config->forward;
-   struct url_spec url[1];
 
    if (fwd == NULL)
    {
-      return(fwd_default);
-   }
-
-   *url = dsplit(http->host);
-
-   /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL)
-   {
-      return(fwd_default);
+      return fwd_default;
    }
 
    while (fwd != NULL)
    {
-      if ((fwd->url->port == 0) || (fwd->url->port == http->port))
+      if (url_match(fwd->url, http))
       {
-         if ((fwd->url->domain[0] == '\0') || (domaincmp(fwd->url, url) == 0))
-         {
-            if ((fwd->url->path == NULL) ||
-#ifdef REGEX
-               (regexec(fwd->url->preg, http->path, 0, NULL, 0) == 0)
-#else
-               (strncmp(fwd->url->path, http->path, fwd->url->pathlen) == 0)
-#endif
-            )
-            {
-               freez(url->dbuf);
-               freez(url->dvec);
-               return(fwd);
-            }
-         }
+         return fwd;
       }
       fwd = fwd->next;
    }
 
-   freez(url->dbuf);
-   freez(url->dvec);
-   return(fwd_default);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  dsplit
- *
- * Description :  Takes a domain and returns a pointer to a url_spec
- *                structure populated with dbuf, dcnt and dvec.  The
- *                other fields in the structure that is returned are zero.
- *
- * Parameters  :
- *          1  :  domain = a URL address
- *
- * Returns     :  url_spec structure populated with dbuf, dcnt and dvec.
- *                On error, the dbuf field will be set to NULL.  (As
- *                will all the others, but you don't need to check
- *                them).
- *
- * FIXME: Returning a structure is horribly inefficient, please can
- *        this structure take a (struct url_spec * dest)
- *        pointer instead?
- *
- *********************************************************************/
-struct url_spec dsplit(char *domain)
-{
-   struct url_spec ret[1];
-   char *v[BUFFER_SIZE];
-   int size;
-   char *p;
-
-   memset(ret, '\0', sizeof(*ret));
-
-   if (domain[strlen(domain) - 1] == '.')
-   {
-      ret->unanchored |= ANCHOR_RIGHT;
-   }
-
-   if (domain[0] == '.')
-   {
-      ret->unanchored |= ANCHOR_LEFT;
-   }
-
-   ret->dbuf = strdup(domain);
-   if (NULL == ret->dbuf)
-   {
-      return *ret;
-   }
-
-   /* map to lower case */
-   for (p = ret->dbuf; *p ; p++)
-   {
-      *p = tolower((int)(unsigned char)*p);
-   }
-
-   /* split the domain name into components */
-   ret->dcnt = ssplit(ret->dbuf, ".", v, SZ(v), 1, 1);
-
-   if (ret->dcnt < 0)
-   {
-      free(ret->dbuf);
-      memset(ret, '\0', sizeof(ret));
-      return *ret;
-   }
-   else if (ret->dcnt == 0)
-   {
-      return *ret;
-   }
-
-   /* save a copy of the pointers in dvec */
-   size = ret->dcnt * sizeof(*ret->dvec);
-
-   ret->dvec = (char **)malloc(size);
-   if (NULL == ret->dvec)
-   {
-      free(ret->dbuf);
-      memset(ret, '\0', sizeof(ret));
-      return *ret;
-   }
-
-   memcpy(ret->dvec, v, size);
-
-   return *ret;
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  simple_domaincmp
- *
- * Description :  Domain-wise Compare fqdn's.  The comparison is
- *                both left- and right-anchored.  The individual
- *                domain names are compared with simplematch().
- *                This is only used by domaincmp.
- *
- * Parameters  :
- *          1  :  pv = array of patterns to compare
- *          2  :  fv = array of domain components to compare
- *          3  :  len = length of the arrays (both arrays are the
- *                      same length - if they weren't, it couldn't
- *                      possibly be a match).
- *
- * Returns     :  0 => domains are equivalent, else no match.
- *
- *********************************************************************/
-static int simple_domaincmp(char **pv, char **fv, int len)
-{
-   int n;
-
-   for (n = 0; n < len; n++)
-   {
-      if (simplematch(pv[n], fv[n]))
-      {
-         return 1;
-      }
-   }
-
-   return 0;
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  domaincmp
- *
- * Description :  Domain-wise Compare fqdn's. Governed by the bimap in
- *                pattern->unachored, the comparison is un-, left-,
- *                right-anchored, or both.
- *                The individual domain names are compared with
- *                simplematch().
- *
- * Parameters  :
- *          1  :  pattern = a domain that may contain a '*' as a wildcard.
- *          2  :  fqdn = domain name against which the patterns are compared.
- *
- * Returns     :  0 => domains are equivalent, else no match.
- *
- *********************************************************************/
-int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
-{
-   char **pv, **fv;  /* vectors  */
-   int    plen, flen;
-   int unanchored = pattern->unanchored & (ANCHOR_RIGHT | ANCHOR_LEFT);
-
-   plen = pattern->dcnt;
-   flen = fqdn->dcnt;
-
-   if (flen < plen)
-   {
-      /* fqdn is too short to match this pattern */
-      return 1;
-   }
-
-   pv   = pattern->dvec;
-   fv   = fqdn->dvec;
-
-   if (unanchored == ANCHOR_LEFT)
-   {
-      /*
-       * Right anchored.
-       *
-       * Convert this into a fully anchored pattern with
-       * the fqdn and pattern the same length
-       */
-      fv += (flen - plen); /* flen - plen >= 0 due to check above */
-      return simple_domaincmp(pv, fv, plen);
-   }
-   else if (unanchored == 0)
-   {
-      /* Fully anchored, check length */
-      if (flen != plen)
-      {
-         return 1;
-      }
-      return simple_domaincmp(pv, fv, plen);
-   }
-   else if (unanchored == ANCHOR_RIGHT)
-   {
-      /* Left anchored, ignore all extra in fqdn */
-      return simple_domaincmp(pv, fv, plen);
-   }
-   else
-   {
-      /* Unanchored */
-      int n;
-      int maxn = flen - plen;
-      for (n = 0; n <= maxn; n++)
-      {
-         if (!simple_domaincmp(pv, fv, plen))
-         {
-            return 0;
-         }
-         /*
-          * Doesn't match from start of fqdn
-          * Try skipping first part of fqdn
-          */
-         fv++;
-      }
-      return 1;
-   }
-
+   return fwd_default;
 }
 
 
