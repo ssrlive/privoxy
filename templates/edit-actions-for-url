@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.23  2002/04/26 12:57:02  oes
+#    Actions renamed, alphabetically sorted, comments fixed, and names linked to help
+#
 #    Revision 1.22  2002/04/10 13:32:53  oes
 #    Made templates modular
 #
@@ -448,7 +451,7 @@ function show_wafer_opts(tf)
         name="downgrade" value="N" @downgrade-n@></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="downgrade" value="X" @downgrade-x@></td>
-      <td class="action"><a href="@user-manual@@helplink@DOWNGRADE_HTTP_VERSION">downgrade-http-version</td>
+      <td class="action"><a href="@user-manual@@helplink@DOWNGRADE-HTTP-VERSION">downgrade-http-version</td>
       <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
         what you're doing!</td>
     </tr>
@@ -520,7 +523,7 @@ function show_wafer_opts(tf)
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="hide_from" value="X" @hide-from-x@
         onclick="show_hide_from_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@HIDE-FORM-HEADER">hide-from-header</a></td>
+      <td class="action"><a href="@user-manual@@helplink@HIDE-FROM-HEADER">hide-from-header</a></td>
       <td>Stop old web browsers from sending the user's e-mail address with
         every request.</td>
     </tr>
@@ -733,7 +736,7 @@ function show_wafer_opts(tf)
         browser.  This will allow you to use sites that require cookies, but
         sites will not be able to track you across sessions.  For this to
         be useful, you should disable 
-        <a href="@user-manual@@helplink@PREVENT-REDAING-COOKIES"><b>prevent-reading-cookies</b></a> and
+        <a href="@user-manual@@helplink@PREVENT-READING-COOKIES"><b>prevent-reading-cookies</b></a> and
         <a href="@user-manual@@helplink@PREVENT-SETTING-COOKIES"><b>prevent-setting-cookies</b></a>.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
