@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.14 2002/04/11 17:57:40 oes Exp $
+# $Id: privoxy-suse.spec,v 1.15 2002/04/16 18:49:07 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -34,13 +34,13 @@ Vendor:       http://www.privoxy.org
 Name:         privoxy-suse
 Distribution: defineme
 Version: 2.9.14
-Release: 1
+Release: 2
 # Needs makefile change: Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}-%{status}-src.tar.gz
 Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}.tar.gz
 # not sure if this works
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Packager:     Stefan Waldherr <stefan@waldherr.org>
-Copyright:    GPL
+License:    GPL
 Group:        Networking/Utilities
 URL:          http://www.privoxy.org/
 Autoreqprov:  on
@@ -211,6 +211,13 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-suse-2.9.14-2
+- Bumping release to reflect the new value on configure.in
+- Taking the oportunity to change the header Copyright to License. The
+  Copyright headers is deprecated, and after all, GPL is a license, not a
+  Copyright
+
 * Mon Apr 08 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-4
 - Add LICENSE.gz, p_web.css, and index.html. Add autoconf
@@ -296,6 +303,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.15  2002/04/16 18:49:07  oes
+# Build with static built-in pcre
+#
 # Revision 1.14  2002/04/11 17:57:40  oes
 # Fixed(?) Conflicts: Provides: Obsoletes:
 #

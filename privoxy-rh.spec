@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.25 2002/04/17 01:59:12 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.26 2002/04/22 16:24:36 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -30,13 +30,15 @@
 %define veryoldname junkbust
 %define oldname junkbuster
 %define privoxyconf %{_sysconfdir}/%{name}
+%define privoxy_uid 73
+%define privoxy_gid 73
 
 Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.14
-Release: 1
+Release: 2
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: http://www.privoxy.org
@@ -143,14 +145,14 @@ done
 # Doing it by brute force. Much cleaner (no more Mr. Nice Guy) -- morcego
 
 # Change the group name. Remove anything left behind.
-groupmod -g 73 -n %{name} %{oldname} > /dev/null 2>&1 ||:
-groupmod -g 73 -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
+groupmod -g %{privoxy_gid} -n %{name} %{oldname} > /dev/null 2>&1 ||:
+groupmod -g %{privoxy_gid} -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
 groupdel %{oldname} > /dev/null 2>&1 ||:
 groupdel %{veryoldname} > /dev/null 2>&1 ||:
 
 # Same for username
-usermod -u 73 -g 73 -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
-usermod -u 73 -g 73 -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
+usermod -u %{privoxy_uid} -g %{privoxy_gid} -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
+usermod -u %{privoxy_uid} -g %{privoxy_gid} -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
 userdel %{oldname} > /dev/null 2>&1 ||:
 userdel %{veryoldname} > /dev/null 2>&1 ||:
 
@@ -158,12 +160,12 @@ userdel %{veryoldname} > /dev/null 2>&1 ||:
 /bin/grep -E '^%{name}:' /etc/group > /dev/null 2>&1
 if [ $? -eq 1 ]; then
 	# Looks like it does not exist. Create it
-	groupadd -g 73 %{name} > /dev/null 2>&1
+	groupadd -g %{privoxy_gid} %{name} > /dev/null 2>&1
 else
-	/bin/grep -E '^%{name}:[^:]*:73:' /etc/group > /dev/null 2>&1
+	/bin/grep -E '^%{name}:[^:]*:%{privoxy_gid}:' /etc/group > /dev/null 2>&1
 	if [ $? -eq 1 ]; then
 		# The group exists, but does not have the correct gid
-		groupmod -g 73 %{name} > /dev/null 2>&1
+		groupmod -g %{privoxy_gid} %{name} > /dev/null 2>&1
 	fi
 fi
 
@@ -171,19 +173,19 @@ fi
 # exist
 id %{name} > /dev/null 2>&1
 if [ $? -eq 1 ]; then
-	/usr/sbin/useradd -u 73 -g 73 -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
+	/usr/sbin/useradd -u %{privoxy_uid} -g %{privoxy_gid} -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
 fi
 
 # Double check that the group has the correct uid
 P_UID=`id -u %{name} 2>/dev/null`
-if [ $P_UID -ne 73 ]; then
-	/usr/sbin/usermod -u 73 %{name}
+if [ $P_UID -ne %{privoxy_uid} ]; then
+	/usr/sbin/usermod -u %{privoxy_uid} %{name}
 fi
 
 # The same for the gid
 P_GID=`id -g %{name} 2>/dev/null`
-if [ $P_GID -ne 73 ]; then
-	/usr/sbin/usermod -g 73 %{name}
+if [ $P_GID -ne %{privoxy_gid} ]; then
+	/usr/sbin/usermod -g %{privoxy_gid} %{name}
 fi
 
 %post
@@ -297,6 +299,11 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.14-2
+- Using macros to define uid and gid values
+- Bumping release
+
 * Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.14-1
 - Changes to fixate the uid and gid values as (both) 73. This is a 
@@ -609,6 +616,15 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.26  2002/04/22 16:24:36  morcego
+# - Changes to fixate the uid and gid values as (both) 73. This is a
+#   value we hope to standarize for all distributions. RedHat already
+#   uses it, and Conectiva should start as soon as I find where the heck
+#   I left my cluebat :-)
+# - Only remove the user and group on uninstall if this is not redhat, once
+#   redhat likes to have the values allocated even if the package is not
+#   installed
+#
 # Revision 1.25  2002/04/17 01:59:12  hal9
 # Add --disable-dynamic-pcre.
 #
