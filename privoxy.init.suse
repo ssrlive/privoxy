@@ -1,13 +1,13 @@
 #! /bin/sh
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init.suse,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init.suse,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
-#                 junkbuster.
+#                 privoxy.
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 IJBSWA team.  http://ijbswa.sourceforge.net
+#                 PRIVOXY team.  http://ijbswa.sourceforge.net
 # 
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and
@@ -32,7 +32,10 @@
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # 
 #  Revisions   :
-#     $Log: junkbuster.init.suse,v $
+#     $Log: privoxy.init.suse,v $
+#     Revision 1.1  2002/03/24 11:23:44  swa
+#     name change
+#
 #     Revision 1.7  2002/03/11 11:44:46  oes
 #     Working in suggestions by Thorsten Kukuk <kukuk@suse.de>
 #
@@ -58,12 +61,12 @@
 # 
 # ********************************************************************/
 ### BEGIN INIT INFO
-# Provides:       junkbuster ijb
+# Provides:       privoxy
 # Required-Start: $network $syslog $remote_fs
 # Required-Stop:
 # Default-Start:  3 5
 # Default-Stop:   0 1 2 6
-# Description:    Starts the Internet Junkbuster
+# Description:    Starts Privoxy
 ### END INIT INFO
 
 . /etc/rc.config
@@ -71,22 +74,22 @@ rc_reset
 
 case "$1" in
     start)
-        echo -n "Starting The Internet Junkbuster"
-        if [ ! -f /var/run/junkbuster.pid ] || ! kill -0 `cat /var/run/junkbuster.pid` 2> /dev/null; then
-           /usr/sbin/junkbuster --user junkbuster.junkbuster --pidfile /var/run/junkbuster.pid /etc/junkbuster/config 2> /dev/null
+        echo -n "Starting Privoxy"
+        if [ ! -f /var/run/privoxy.pid ] || ! kill -0 `cat /var/run/privoxy.pid` 2> /dev/null; then
+           /usr/sbin/privoxy --user privoxy.privoxy --pidfile /var/run/privoxy.pid /etc/privoxy/config 2> /dev/null
         else     
            false 
         fi
 	rc_status -v
         ;;
     stop)
-        echo -n "Shutting down The Internet Junkbuster"
-        killproc -TERM /usr/sbin/junkbuster && rm -f /var/run/junkbuster.pid
+        echo -n "Shutting down Privoxy"
+        killproc -TERM /usr/sbin/privoxy && rm -f /var/run/privoxy.pid
 	rc_status -v
         ;;
     reload)
-        echo -n "Reloading The Internet Junkbuster"
-        kill -HUP `cat /var/run/junkbuster.pid`
+        echo -n "Reloading Privoxy"
+        kill -HUP `cat /var/run/privoxy.pid`
         rc_status -v
         ;;
     try-restart)
@@ -99,8 +102,8 @@ case "$1" in
         rc_status
         ;;           
     status)
-	echo -n "Checking for The Internet Junkbuster"
-        checkproc /usr/sbin/junkbuster
+	echo -n "Checking for Privoxy"
+        checkproc /usr/sbin/privoxy
 	rc_status -v
         ;;
     *)

@@ -1,7 +1,7 @@
-# $Id: junkbusterng-rh.spec,v 1.1 2002/03/22 20:53:03 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.1 2002/03/24 11:23:44 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# IJBSWA team.  http://ijbswa.sourceforge.net
+# PRIVOXY team.  http://ijbswa.sourceforge.net
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -28,14 +28,14 @@
 
 # Defines should happen in the begining of the file
 %define oldname junkbuster
-%define jbngconf %{_sysconfdir}/%{oldname}
+%define privoxyconf %{_sysconfdir}/%{oldname}
 
-Summary: JunkbusterNG (The Internet Junkbuster NextGeneration)
+Summary: Privoxy - privacy enhancing proxy
 Vendor: http://ijbswa.sourceforge.net
-Name: junkbusterng
+Name: privoxy
 Version: 2.9.13
 Release: 1
-Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
+Source0: http://www.waldherr.org/%{name}/privoxy-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
@@ -46,14 +46,20 @@ Prereq: shadow-utils, chkconfig, initscripts, sh-utils
 BuildRequires: perl gzip sed docbook-utils libtool
 Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
-%description
-JunkbusterNG is a web proxy with advanced filtering
-capabilities for protecting privacy, filtering web page content,
-managing cookies, controlling access, and removing ads, banners,
-pop-ups and other obnoxious Internet Junk. JunkbusterNG has a very
-flexible configuration and can be customized to suit individual needs
-and tastes. JunkbusterNG has application for both stand-alone
-systems and multi-user networks.
+%description 
+Privoxy is a web proxy with advanced filtering capabilities for
+protecting privacy, filtering web page content, managing cookies,
+controlling access, and removing ads, banners, pop-ups and other
+obnoxious Internet junk. Privoxy has a very flexible configuration and
+can be customized to suit individual needs and tastes. Internet
+Privoxy has application for both stand-alone systems and multi-user
+networks.
+
+Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+was originally written by JunkBusters Corporation, and was released as
+free open-source software under the GNU GPL. Stefan Waldherr made many
+improvements, and started the SourceForge project to continue
+development. Several other developers are now contributing.
 
 %prep
 %setup -q -c
@@ -73,7 +79,7 @@ make redhat-dok
 mkdir -p %{buildroot}%{_sbindir} \
          %{buildroot}%{_mandir}/man8 \
          %{buildroot}%{_localstatedir}/log/%{name} \
-         %{buildroot}%{jbngconf}/templates \
+         %{buildroot}%{privoxyconf}/templates \
          %{buildroot}%{_sysconfdir}/logrotate.d \
          %{buildroot}%{_sysconfdir}/rc.d/init.d 
 
@@ -88,11 +94,13 @@ install -s -m 744 jbng %{buildroot}%{_sbindir}/jbng
 ## We need to change the man section internaly on the manpage
 ## -- morcego (sugestion by Hal Burgiss)
 #cp -f %{name}.1 %{buildroot}%{_mandir}/man8/%{name}.8
-sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
-cp -f *.action %{buildroot}%{jbngconf}/
-cp -f re_filterfile %{buildroot}%{jbngconf}/re_filterfile
-cp -f trust %{buildroot}%{jbngconf}/trust
-cp -f templates/*  %{buildroot}%{jbngconf}/templates/
+
+# do we need this???
+#sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
+cp -f *.action %{buildroot}%{privoxyconf}/
+cp -f re_filterfile %{buildroot}%{privoxyconf}/re_filterfile
+cp -f trust %{buildroot}%{privoxyconf}/trust
+cp -f templates/*  %{buildroot}%{privoxyconf}/templates/
 cp -f %{oldname}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{oldname}
 install -m 755 %{name}.init %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}
 install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
@@ -102,7 +110,7 @@ install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
 ## Changing the sed paramter delimiter to @, so we don't have to
 ## escape the slashes
 cat config | \
-    sed 's@^confdir.*@confdir %{jbngconf}@g' | \
+    sed 's@^confdir.*@confdir %{privoxyconf}@g' | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/%{name}\/permissionsfile/g' | \
 #    sed 's/^re_filterfile.*/re_filterfile \/etc\/%{name}\/re_filterfile/g' | \
 #    sed 's/^logfile.*/logfile \%{_localstatedir}\/log\/%{name}\/logfile/g' | \
@@ -110,27 +118,27 @@ cat config | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' > \
-    %{buildroot}%{jbngconf}/config
+    %{buildroot}%{privoxyconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' ijb.action >\
-    %{buildroot}%{jbngconf}/ijb.action
+    %{buildroot}%{privoxyconf}/ijb.action
 
 ## Macros are expanded even on commentaries. So, we have to use %%
 ## -- morcego
 #%%makeinstall
 
 %pre
-# We check to see if the user junkbuster exists.
+# We check to see if the user privoxy exists.
 # If it does, we do nothing
 # If we don't, we check to see if the user junkbust exist and, in case it
 # does, we change it do junkbuster. If it also does not exist, we create the
-# junkbuster user -- morcego
-id junkbuster > /dev/null 2>&1 
+# privoxy user -- morcego
+id privoxy > /dev/null 2>&1 
 if [ $? -eq 1 ]; then
-	id junkbust > /dev/null 2>&1 
+	id privoxy > /dev/null 2>&1 
 	if [ $? -eq 0 ]; then
-		/usr/sbin/usermod -l junkbuster -d %{_sysconfdir}/%{name} -s "" junkbust  > /dev/null 2>&1
+		/usr/sbin/usermod -l privoxy -d %{_sysconfdir}/%{name} -s "" privoxy  > /dev/null 2>&1
 	else
-		/usr/sbin/useradd -d %{_sysconfdir}/%{name} -r -s "" junkbuster > /dev/null 2>&1 
+		/usr/sbin/useradd -d %{_sysconfdir}/%{name} -r -s "" privoxy > /dev/null 2>&1 
 	fi
 fi
 
@@ -162,8 +170,8 @@ fi
 #if [ "$1" -ge "1" ]; then
 #	/sbin/service %{name} condrestart > /dev/null 2>&1
 #fi
-# dont forget to remove user and group junkbuster
-id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
+# dont forget to remove user and group privoxy
+id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -177,48 +185,48 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 %doc doc/webserver/ijb_docs.css
 #%doc %{name}.weekly %{name}.monthly AUTHORS
 
-%dir %{jbngconf}
-%dir %{jbngconf}/templates
-%attr(0744,junkbuster,junkbuster) %dir %{_localstatedir}/log/%{name}
+%dir %{privoxyconf}
+%dir %{privoxyconf}/templates
+%attr(0744,privoxy,privoxy) %dir %{_localstatedir}/log/%{name}
 
-%attr(0744,junkbuster,junkbuster)%{_sbindir}/jbng
+%attr(0744,privoxy,privoxy)%{_sbindir}/jbng
 
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
-%config %{jbngconf}/config
-%config %{jbngconf}/ijb-advanced.action
-%config %{jbngconf}/ijb-basic.action
-%config %{jbngconf}/ijb-intermediate.action
-%config %{jbngconf}/ijb.action
-%config %{jbngconf}/re_filterfile
-%config %{jbngconf}/trust
+%config %{privoxyconf}/config
+%config %{privoxyconf}/ijb-advanced.action
+%config %{privoxyconf}/ijb-basic.action
+%config %{privoxyconf}/ijb-intermediate.action
+%config %{privoxyconf}/ijb.action
+%config %{privoxyconf}/re_filterfile
+%config %{privoxyconf}/trust
 
-%config %{jbngconf}/templates/blocked
-%config %{jbngconf}/templates/blocked-compact
-%config %{jbngconf}/templates/cgi-error-404
-%config %{jbngconf}/templates/cgi-error-bad-param
-%config %{jbngconf}/templates/cgi-error-disabled
-%config %{jbngconf}/templates/cgi-error-file
-%config %{jbngconf}/templates/cgi-error-modified
-%config %{jbngconf}/templates/cgi-error-parse
-%config %{jbngconf}/templates/connect-failed
-%config %{jbngconf}/templates/default
-%config %{jbngconf}/templates/edit-actions-add-url-form
-%config %{jbngconf}/templates/edit-actions-for-url
-%config %{jbngconf}/templates/edit-actions-list
-%config %{jbngconf}/templates/edit-actions-list-section
-%config %{jbngconf}/templates/edit-actions-list-url
-%config %{jbngconf}/templates/edit-actions-remove-url-form
-%config %{jbngconf}/templates/edit-actions-url-form
-%config %{jbngconf}/templates/no-such-domain
-%config %{jbngconf}/templates/show-request
-%config %{jbngconf}/templates/show-status
-%config %{jbngconf}/templates/show-status-file
-%config %{jbngconf}/templates/show-url-info
-%config %{jbngconf}/templates/show-version
-%config %{jbngconf}/templates/toggle
-%config %{jbngconf}/templates/toggle-mini
-%config %{jbngconf}/templates/untrusted
+%config %{privoxyconf}/templates/blocked
+%config %{privoxyconf}/templates/blocked-compact
+%config %{privoxyconf}/templates/cgi-error-404
+%config %{privoxyconf}/templates/cgi-error-bad-param
+%config %{privoxyconf}/templates/cgi-error-disabled
+%config %{privoxyconf}/templates/cgi-error-file
+%config %{privoxyconf}/templates/cgi-error-modified
+%config %{privoxyconf}/templates/cgi-error-parse
+%config %{privoxyconf}/templates/connect-failed
+%config %{privoxyconf}/templates/default
+%config %{privoxyconf}/templates/edit-actions-add-url-form
+%config %{privoxyconf}/templates/edit-actions-for-url
+%config %{privoxyconf}/templates/edit-actions-list
+%config %{privoxyconf}/templates/edit-actions-list-section
+%config %{privoxyconf}/templates/edit-actions-list-url
+%config %{privoxyconf}/templates/edit-actions-remove-url-form
+%config %{privoxyconf}/templates/edit-actions-url-form
+%config %{privoxyconf}/templates/no-such-domain
+%config %{privoxyconf}/templates/show-request
+%config %{privoxyconf}/templates/show-status
+%config %{privoxyconf}/templates/show-status-file
+%config %{privoxyconf}/templates/show-url-info
+%config %{privoxyconf}/templates/show-version
+%config %{privoxyconf}/templates/toggle
+%config %{privoxyconf}/templates/toggle-mini
+%config %{privoxyconf}/templates/untrusted
 
 %config %{_sysconfdir}/logrotate.d/%{oldname}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
@@ -471,7 +479,10 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 	junkbuster.init was modified. It now starts junkbuster with an
 	additional "-r @" flag.
 
-# $Log: junkbusterng-rh.spec,v $
+# $Log: privoxy-rh.spec,v $
+# Revision 1.1  2002/03/24 11:23:44  swa
+# name change
+#
 # Revision 1.1  2002/03/22 20:53:03  morcego
 # - Ongoing process to change name to JunkbusterNG
 # - configure/configure.in: no change needed

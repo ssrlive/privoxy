@@ -1,7 +1,7 @@
-# $Id: junkbuster-suse.spec,v 1.21 2002/03/21 16:04:33 hal9 Exp $
+# $Id: privoxy-suse.spec,v 1.1 2002/03/24 11:23:44 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# IJBSWA team.  http://ijbswa.sourceforge.net
+# PRIVOXY team.  http://ijbswa.sourceforge.net
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -27,37 +27,44 @@
 #
 
 # do not set to %{name}
-%define ijbconf %{_sysconfdir}/junkbuster
+%define ijbconf %{_sysconfdir}/privoxy
 
-Summary:      The Internet Junkbuster
+Summary:      Privoxy - privacy enhancing proxy
 Vendor:       http://ijbswa.sourceforge.net
-Name:         junkbuster-suse
+Name:         privoxy-suse
 Distribution: defineme
 Version: 2.9.11
 Release: 3
-Source: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
+Source: http://www.waldherr.org/%{name}/privoxy-%{version}.tar.gz
 # not sure if this works
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Packager:     Stefan Waldherr <stefan@waldherr.org>
 Copyright:    GPL
 Group:        Networking/Utilities
-URL: http://ijbswa.sourceforge.net/
-Provides:     ijb
-Obsoletes:    ijb
+URL:          http://ijbswa.sourceforge.net/
+Provides:     privoxy
+Obsoletes:    privoxy
 Autoreqprov:  on
 BuildRequires: perl gzip docbktls libtool
+Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 #
 # -----------------------------------------------------------------------------
 #
 %description
-Internet Junkbuster is a web proxy with advanced filtering
-capabilities for protecting privacy, filtering web page content,
-managing cookies, controlling access, and removing ads, banners,
-pop-ups and other obnoxious Internet Junk. Junkbuster has a very
-flexible configuration and can be customized to suit individual needs
-and tastes. Internet Junkbuster has application for both stand-alone
-systems and multi-user networks.
+Privoxy is a web proxy with advanced filtering capabilities for
+protecting privacy, filtering web page content, managing cookies,
+controlling access, and removing ads, banners, pop-ups and other
+obnoxious Internet junk. Privoxy has a very flexible configuration and
+can be customized to suit individual needs and tastes. Internet
+Privoxy has application for both stand-alone systems and multi-user
+networks.
+
+Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+was originally written by JunkBusters Corporation, and was released as
+free open-source software under the GNU GPL. Stefan Waldherr made many
+improvements, and started the SourceForge project to continue
+development. Several other developers are now contributing.
 
 Authors:
 --------
@@ -84,7 +91,7 @@ make dok
 ## Explicitily stripping is not recomended.
 ## This is handled altomaticaly by RPM, and can couse troubles if
 ## anyone wants to build an unstriped version - morcego
-#strip junkbuster
+#strip privoxy
 
 #
 # -----------------------------------------------------------------------------
@@ -93,53 +100,53 @@ make dok
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_mandir}/man8 \
-         ${RPM_BUILD_ROOT}/var/log/junkbuster \
+         ${RPM_BUILD_ROOT}/var/log/privoxy \
          ${RPM_BUILD_ROOT}%{ijbconf}/templates \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/init.d
-gzip README AUTHORS ChangeLog junkbuster.1 || /bin/true
-install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
-cp -f junkbuster.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8.gz
+gzip README AUTHORS ChangeLog privoxy.1 || /bin/true
+install -s -m 744 privoxy $RPM_BUILD_ROOT%{_sbindir}/privoxy
+cp -f privoxy.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/privoxy.8.gz
 cp -f *.action $RPM_BUILD_ROOT%{ijbconf}/
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
 cp -f templates/*  $RPM_BUILD_ROOT%{ijbconf}/templates/
-cp -f junkbuster.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/junkbuster
-install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT%{_sysconfdir}/init.d/junkbuster
-install -m 711 -d $RPM_BUILD_ROOT/var/log/junkbuster
-ln -sf /etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
+cp -f privoxy.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/privoxy
+install -m 755 privoxy.init.suse $RPM_BUILD_ROOT%{_sysconfdir}/init.d/privoxy
+install -m 711 -d $RPM_BUILD_ROOT/var/log/privoxy
+ln -sf /etc/init.d/privoxy $RPM_BUILD_ROOT/usr/sbin/rcprivoxy
 
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
 cat config | \
-    sed 's/^confdir.*/confdir \/etc\/junkbuster/g' | \
-#    sed 's/^permissionsfile.*/permissionsfile \/etc\/junkbuster\/permissionsfile/g' | \
-#    sed 's/^re_filterfile.*/re_filterfile \/etc\/junkbuster\/re_filterfile/g' | \
-#    sed 's/^logfile.*/logfile \/var\/log\/junkbuster\/logfile/g' | \
-#    sed 's/^jarfile.*/jarfile \/var\/log\/junkbuster\/jarfile/g' | \
-#    sed 's/^forward.*/forward \/etc\/junkbuster\/forward/g' | \
-#    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
-    sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
+    sed 's/^confdir.*/confdir \/etc\/privoxy/g' | \
+#    sed 's/^permissionsfile.*/permissionsfile \/etc\/privoxy\/permissionsfile/g' | \
+#    sed 's/^re_filterfile.*/re_filterfile \/etc\/privoxy\/re_filterfile/g' | \
+#    sed 's/^logfile.*/logfile \/var\/log\/privoxy\/logfile/g' | \
+#    sed 's/^jarfile.*/jarfile \/var\/log\/privoxy\/jarfile/g' | \
+#    sed 's/^forward.*/forward \/etc\/privoxy\/forward/g' | \
+#    sed 's/^aclfile.*/aclfile \/etc\/privoxy\/aclfile/g' > \
+    sed 's/^logdir.*/logdir \/var\/log\/privoxy/g' > \
     $RPM_BUILD_ROOT%{ijbconf}/config
 
 #
 # -----------------------------------------------------------------------------
 #
 %pre
-# We check to see if the user junkbuster exists.
+# We check to see if the user privoxy exists.
 # If it does, we do nothing
 # If we don't, we check to see if the user junkbust exist and, in case it
-# does, we change it do junkbuster. If it also does not exist, we create the
-# junkbuster user -- morcego
-id junkbuster > /dev/null 2>&1 
+# does, we change it do privoxy. If it also does not exist, we create the
+# privoxy user -- morcego
+id privoxy > /dev/null 2>&1 
 if [ $? -eq 1 ]; then
 	id junkbust > /dev/null 2>&1 
 	if [ $? -eq 0 ]; then
-		/usr/sbin/usermod -l junkbuster -d %{_sysconfdir}/junkbuster -s "" junkbust  > /dev/null 2>&1
+		/usr/sbin/usermod -l privoxy -d %{_sysconfdir}/privoxy -s "" junkbust  > /dev/null 2>&1
 	else
 # -r does not work on suse.
-		/usr/sbin/groupadd junkbuster
-		/usr/sbin/useradd -d %{_sysconfdir}/junkbuster -g junkbuster -s "" junkbuster > /dev/null 2>&1 
+		/usr/sbin/groupadd privoxy
+		/usr/sbin/useradd -d %{_sysconfdir}/privoxy -g privoxy -s "" privoxy > /dev/null 2>&1 
 	fi
 fi
 
@@ -147,19 +154,19 @@ fi
 # -----------------------------------------------------------------------------
 #
 %post
-[ -f /var/log/junkbuster/junkbuster ] &&\
- mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || /bin/true
-chown -R junkbuster:junkbuster /var/log/junkbuster 2>/dev/null
-chown -R junkbuster:junkbuster /etc/junkbuster 2>/dev/null
+[ -f /var/log/privoxy/privoxy ] &&\
+ mv -f /var/log/privoxy/privoxy /var/log/privoxy/logfile || /bin/true
+chown -R privoxy:privoxy /var/log/privoxy 2>/dev/null
+chown -R privoxy:privoxy /etc/privoxy 2>/dev/null
 # not available on suse
 #if [ "$1" = "1" ]; then
-#     /sbin/chkconfig --add junkbuster
-#	/sbin/service junkbuster condrestart > /dev/null 2>&1
+#     /sbin/chkconfig --add privoxy
+#	/sbin/service privoxy condrestart > /dev/null 2>&1
 #fi
 # 01/09/02 HB, getting rid of any user=junkbust
 # Changed by morcego to use the id command.
 id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
-sbin/insserv etc/init.d/junkbuster
+sbin/insserv etc/init.d/privoxy
 
 #
 # -----------------------------------------------------------------------------
@@ -167,7 +174,7 @@ sbin/insserv etc/init.d/junkbuster
 %preun
 # need to stop the service on suse. swa.
 #if [ "$1" = "0" ]; then
-#	/sbin/service junkbuster stop > /dev/null 2>&1 ||:
+#	/sbin/service privoxy stop > /dev/null 2>&1 ||:
 #fi
 
 #
@@ -175,8 +182,8 @@ sbin/insserv etc/init.d/junkbuster
 #
 %postun
 sbin/insserv etc/init.d/
-# dont forget to remove user and group junkbuster
-id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
+# dont forget to remove user and group privoxy
+id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 
 #
 # -----------------------------------------------------------------------------
@@ -193,15 +200,15 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 %doc doc/webserver/developer-manual doc/webserver/user-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/ijb_docs.css
-#%doc junkbuster.weekly junkbuster.monthly AUTHORS
+#%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
-%attr(0744,junkbuster,junkbuster) %dir /var/log/junkbuster
-%config %{_sysconfdir}/logrotate.d/junkbuster
-%attr(0755,root,root)/usr/sbin/junkbuster
+%attr(0744,privoxy,privoxy) %dir /var/log/privoxy
+%config %{_sysconfdir}/logrotate.d/privoxy
+%attr(0755,root,root)/usr/sbin/privoxy
 %{_mandir}/man8/*
-%config %{_sysconfdir}/init.d/junkbuster
-/usr/sbin/rcjunkbuster
+%config %{_sysconfdir}/init.d/privoxy
+/usr/sbin/rcprivoxy
 
 #
 # -----------------------------------------------------------------------------
@@ -275,7 +282,10 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 * Mon Mar 01 1999 - daniel@suse.de
 - new package: version 2.0
 
-# $Log: junkbuster-suse.spec,v $
+# $Log: privoxy-suse.spec,v $
+# Revision 1.1  2002/03/24 11:23:44  swa
+# name change
+#
 # Revision 1.21  2002/03/21 16:04:33  hal9
 # added ijb_docs.css to %%doc
 #

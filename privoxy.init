@@ -1,13 +1,13 @@
 #!/bin/sh
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/junkbusterng.init,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
-#                 junkbuster.
+#                 privoxy.
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 IJBSWA team.  http://ijbswa.sourceforge.net
+#                 PRIVOXY team.  http://ijbswa.sourceforge.net
 # 
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and
@@ -32,7 +32,10 @@
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # 
 #  Revisions   :
-#     $Log: junkbusterng.init,v $
+#     $Log: privoxy.init,v $
+#     Revision 1.1  2002/03/24 11:23:44  swa
+#     name change
+#
 #     Revision 1.1  2002/03/22 20:53:03  morcego
 #     - Ongoing process to change name to JunkbusterNG
 #     - configure/configure.in: no change needed
@@ -133,13 +136,13 @@
 # 
 # ********************************************************************/
 
-# This is file /etc/rc.d/init.d/junkbuster and was put here 
-# by the junkbuster rpm
+# This is file /etc/rc.d/init.d/privoxy and was put here 
+# by the privoxy rpm
 #
 # chkconfig: 235 84 09
 #
 # description: This shell script takes care of starting and stopping \
-#              junkbuster.
+#              privoxy.
 #
 
 
@@ -151,11 +154,11 @@
 #  Check that networking is up.
 [ ${NETWORKING} = "no" ] && exit 0
 
-JB_OPRG="junkbuster"
+JB_OPRG="privoxy"
 JB_PRG="jbng"
 JB_BIN="/usr/sbin/$JB_PRG"
 JB_CONF="/etc/$JB_OPRG/config"
-JB_USER="junkbuster"
+JB_USER="privoxy"
 JB_PID=/var/run/$JB_PRG.pid
 JB_LOCK=/var/lock/subsys/$JB_PRG
 JB="$JB_BIN --user $JB_USER.$JB_USER --pidfile $JB_PID $JB_CONF"
