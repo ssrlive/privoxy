@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.7 2001/05/26 00:28:36 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.8 2001/05/26 00:55:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.7 2001/05/26 00:28:36 jongfoster 
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.8  2001/05/26 00:55:20  jongfoster
+ *    Removing duplicated code.  load_forwardfile() now uses create_url_spec()
+ *
  *    Revision 1.7  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -988,7 +991,7 @@ int load_aclfile(struct client_state *csp)
    return(0);
 
 load_aclfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load access control list %s: %E",
+   log_error(LOG_LEVEL_FATAL, "can't load access control list %s: %E",
              csp->config->aclfile);
    return(-1);
 
@@ -1111,7 +1114,7 @@ int load_blockfile(struct client_state *csp)
    return(0);
 
 load_blockfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load blockfile '%s': %E", csp->config->blockfile);
+   log_error(LOG_LEVEL_FATAL, "can't load blockfile '%s': %E", csp->config->blockfile);
    return(-1);
 
 }
@@ -1233,7 +1236,7 @@ int load_imagefile(struct client_state *csp)
    return(0);
 
 load_imagefile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load imagefile '%s': %E", csp->config->imagefile);
+   log_error(LOG_LEVEL_FATAL, "can't load imagefile '%s': %E", csp->config->imagefile);
    return(-1);
 
 }
@@ -1431,7 +1434,7 @@ int load_permissions_file(struct client_state *csp)
    return(0);
 
 load_permissions_error:
-   log_error(LOG_LEVEL_ERROR, "can't load permissions file '%s': %E",
+   log_error(LOG_LEVEL_FATAL, "can't load permissions file '%s': %E",
              csp->config->permissions_file);
    return(-1);
 
@@ -1575,7 +1578,7 @@ int load_trustfile(struct client_state *csp)
    return(0);
 
 load_trustfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load trustfile '%s': %E",
+   log_error(LOG_LEVEL_FATAL, "can't load trustfile '%s': %E",
              csp->config->trustfile);
    return(-1);
 
@@ -1778,7 +1781,7 @@ int load_forwardfile(struct client_state *csp)
    return(0);
 
 load_forwardfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load forwardfile '%s': %E",
+   log_error(LOG_LEVEL_FATAL, "can't load forwardfile '%s': %E",
              csp->config->forwardfile);
    return(-1);
 
@@ -1884,7 +1887,7 @@ int load_re_filterfile(struct client_state *csp)
    return( 0 );
 
 load_re_filterfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load re_filterfile '%s': %E", 
+   log_error(LOG_LEVEL_FATAL, "can't load re_filterfile '%s': %E", 
              csp->config->re_filterfile);
    return(-1);
 
