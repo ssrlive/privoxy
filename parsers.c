@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.28 2001/09/22 16:32:28 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.29 2001/09/24 21:09:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.28 2001/09/22 16:32:28 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.29  2001/09/24 21:09:24  jongfoster
+ *    Fixing 2 memory leaks that Guy spotted, where the paramater to
+ *    enlist() was not being free()d.
+ *
  *    Revision 1.28  2001/09/22 16:32:28  jongfoster
  *    Removing unused #includes.
  *
@@ -302,6 +306,7 @@ const struct parsers client_patterns[] = {
 
 
 const struct parsers server_patterns[] = {
+   { "HTTP/1.1 ",           9, server_http11 },
    { "set-cookie:",        11, server_set_cookie },
    { "connection:",        11, crumble },
    { "Content-Type:",      13, content_type },
@@ -618,10 +623,25 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
        || (0 == strcmpic(v[0], "unlock"))
        )
       {
-         http->ssl      = 0;
-         http->gpc      = strdup(v[0]);
-         url            = v[1];
-         http->ver      = strdup(v[2]);
+         http->ssl    = 0;
+         http->gpc    = strdup(v[0]);
+         url          = v[1];
+         /* since we don't support HTTP/1.1 we must not send it */
+         if (!strcmpic(v[2], "HTTP/1.1"))
+         {
+            http->ver = strdup("HTTP/1.0");
+            /* change cmd too (forwaring) */
+            freez(http->cmd);
+            http->cmd = strsav(http->cmd, http->gpc);
+            http->cmd = strsav(http->cmd, " ");
+            http->cmd = strsav(http->cmd, url);
+            http->cmd = strsav(http->cmd, " ");
+            http->cmd = strsav(http->cmd, http->ver);
+         }
+         else
+         {
+            http->ver = strdup(v[2]);
+         }
 
 	 save_url = url;
          if (strncmpic(url, "http://",  7) == 0)
@@ -1291,6 +1311,32 @@ void client_x_forwarded_adder(struct client_state *csp)
 void connection_close_adder(struct client_state *csp)
 {
    enlist(csp->headers, "Connection: close");
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  server_http11
+ *
+ * Description :  Rewrite HTTP/1.1 answers to HTTP/1.0 until we add
+ *                HTTP/1.1 support. Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  v = parser pattern that matched this header
+ *          2  :  s = header that matched this pattern
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  "HTTP/1.0" answer.
+ *
+ *********************************************************************/
+char *server_http11(const struct parsers *v, const char *s, struct client_state *csp)
+{
+   char *ret;
+
+   ret = strdup(s);
+   ret[7] = '0'; /* "HTTP/1.1 ..." -> "HTTP/1.0 ..." */
+
+   return ret;
 }
 
 

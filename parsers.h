@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.11 2001/07/31 14:46:53 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.12 2001/09/13 23:05:50 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.12  2001/09/13 23:05:50  jongfoster
+ *    Changing the string paramater to the header parsers a "const".
+ *
  *    Revision 1.11  2001/07/31 14:46:53  oes
  *    Added prototype for connection_close_adder
  *
@@ -133,6 +136,7 @@ extern void connection_close_adder(struct client_state *csp);
 extern void client_x_forwarded_adder(struct client_state *csp);
 
 extern char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_http11(const struct parsers *v, const char *s, struct client_state *csp);
 
 extern char *content_type(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *content_length(const struct parsers *v, const char *s, struct client_state *csp);
