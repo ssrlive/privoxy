@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $
+ $Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1401,14 +1401,14 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 -->
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
+  <sect1 label="6" id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
 <!-- Include contacting.sgml  -->
  &contacting;
 <!-- end contacting -->
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="copyright"><title>Copyright and History</title>
+  <sect1 label="7" id="copyright"><title>Copyright and History</title>
 
 <sect2><title>Copyright</title>
 <!-- Include copyright.sgml -->
@@ -1462,6 +1462,11 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.52  2002/04/29 03:08:43  hal9
+-Added new Q/A on new actions file set up (pointer to u-m)
+-Fixed a few broken links and converted old actions as a result of
+ recent changes.
+
 Revision 1.51  2002/04/26 17:24:31  swa
 bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
 
