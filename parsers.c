@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.1.1.1 2001/05/15 13:59:01 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.2 2001/05/17 23:02:36 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.1.1.1 2001/05/15 13:59:01 oes Exp
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.2  2001/05/17 23:02:36  oes
+ *     - Made referrer option accept 'L' as a substitute for '§'
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:01  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -120,10 +123,10 @@ const struct interceptors intercept_patterns[] = {
 const struct parsers server_patterns[] = {
    { "set-cookie:",        11, server_set_cookie },
    { "connection:",        11, crumble },
-#ifdef PCRS
+#if defined(PCRS) || defined(KILLPOPUPS)
    { "Content-Type:",      13, content_type },
    { "Content-Length:",    15, crumble },
-#endif /* def PCRS */
+#endif /* defined(PCRS) || defined(KILLPOPUPS) */
    { NULL, 0, NULL }
 };
 
@@ -707,7 +710,7 @@ char *crumble(const struct parsers *v, char *s, struct client_state *csp)
 }
 
 
-#ifdef PCRS
+#if defined(PCRS) || defined(KILLPOPUPS)
 
 /*********************************************************************
  *
@@ -734,7 +737,7 @@ char *content_type(const struct parsers *v, char *s, struct client_state *csp)
 
 }
 
-#endif /* def PCRS */
+#endif /* defined(PCRS) || defined(KILLPOPUPS) */
 
 
 /*********************************************************************
@@ -778,7 +781,7 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
 
    if (*referrer == '@')
    {
-      if (csp->send_user_cookie)
+      if (csp->permissions & PERMIT_COOKIE_READ)
       {
          return(strdup(s));
       }
@@ -796,7 +799,7 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
 
    if (*referrer == '§' || *referrer == 'L')
    {
-      if (csp->send_user_cookie)
+      if (csp->permissions & PERMIT_COOKIE_READ)
       {
          return(strdup(s));
       }
@@ -861,7 +864,7 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
 
    if (*uagent == '@')
    {
-      if (csp->send_user_cookie)
+      if (csp->permissions & PERMIT_COOKIE_READ)
       {
          return(strdup(s));
       }
@@ -910,7 +913,7 @@ char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
 
    if (*uagent == '@')
    {
-      if (csp->send_user_cookie)
+      if (csp->permissions & PERMIT_COOKIE_READ)
       {
          return(strdup(s));
       }
@@ -984,7 +987,7 @@ char *client_from(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_send_cookie(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (csp->send_user_cookie)
+   if (csp->permissions & PERMIT_COOKIE_READ)
    {
       enlist(csp->cookie_list, s + v->len + 1);
    }
@@ -1219,7 +1222,7 @@ char *server_set_cookie(const struct parsers *v, char *s, struct client_state *c
    }
 #endif /* def JAR_FILES */
 
-   if (csp->accept_server_cookie == 0)
+   if (!(csp->permissions & PERMIT_COOKIE_SET))
    {
       return(crumble(v, s, csp));
    }

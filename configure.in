@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.2 2001/05/13 22:04:51 administrator Exp $
+dnl $Id: configure.in,v 1.1.1.1 2001/05/15 13:58:50 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,13 +28,16 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.1.1.1  2001/05/15 13:58:50  oes
+dnl Initial import of version 2.9.3 source tree
+dnl
 dnl 
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=3
+VERSION_POINT=4
 
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)

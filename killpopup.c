@@ -1,7 +1,7 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.1.1.1 2001/05/15 13:58:58 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/killpopup.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
  *
  * Purpose     :  Handles the filtering of popups.
  *
@@ -32,6 +32,9 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.1 2001/05/13 21:57:06 adminis
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:58  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -61,8 +64,6 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
 
 /* Change these for debug output.  *lots*. */
 /*#define POPUP_VERBOSE 1*/
-/* CHANGED - added the below and shifted the more spammy stuff into it ;-) */
-#undef POPUP_VERY_VERBOSE
 #undef POPUP_VERBOSE
 
 
@@ -71,102 +72,24 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
  * Function    :  filter_popups
  *
  * Description :  Filter the block of data that's been read from the server.
- *                IF NECESSARY.
+ *                Caller is responsible for checking permissons list
+ *                to determine if this function should be called.
  *
  * Parameters  :
- *          1  :  csp = Client state
- *          2  :  host_name = hostname of originating web page to
- *                look up on blocklist
- *          3  :  buff = Buffer to scan and modify.  Null terminated.
- *          4  :  size = Buffer size, excluding null terminator.
+ *          1  :  buff = Buffer to scan and modify.  Null terminated.
+ *          2  :  size = Buffer size, excluding null terminator.
  *
  * Returns     :  void
  *
  *********************************************************************/
-void filter_popups(struct client_state *csp, char *host_name, char *buff, int size)
+void filter_popups(char *buff, int size)
 {
-   struct popup_settings * data;
-   struct popup_blocklist * cur;
-   int i;
-   int found = 0;
    char *popup = NULL;
    char *close = NULL;
    char *p     = NULL;
    char *q     = NULL; /* by BREITENB NEW! */
 
-   if ( (!csp->plist) || ((data = csp->plist->f) == NULL) )
-   {
-      /* Disabled. */
-      return;
-   }
-
-   /* If the hostname is on our list for blocking then mark it
-    * as a host to   block from.  (This may be later changed if the
-    * host is also on the list-to-allow list).
-    */
-
-   for (i=0; (i < 50) && (i < size); i++)   /* avoid scanning binary data! */
-   {
-      if ((unsigned int)(buff[i])>127)
-      {
-#ifdef  POPUP_VERBOSE
-         fprintf(logfp, "I'm not scanning binary stuff! (%i)\n",buff[i]);
-#endif
-         return;
-      }
-   }
-
-
-   for (cur = data->blocked ; cur ; cur = cur->next)
-   {
-      if ( host_name != 0 )
-      {
-         if ( strcmp( cur->host_name, host_name ) == 0 )
-         {
-#ifdef  POPUP_VERBOSE
-            fprintf(logfp, "Blocking %s\n", host_name );
-#endif
-            found = 1;
-         }
-      }
-   }
-
-   /* Force match if we're supposed to nuke _all_ popups, globally. */
-   if ( kill_all_popups != 0 )
-   {
-#ifdef POPUP_VERBOSE
-      fprintf(logfp, "Indescriminatly nuking popups..\n" );
-#endif
-      found = 1;
-   }
-   /* an exception-from blocking should still be an exception! by BREITENB NEW! */
-
-
-   /*    Now, if its allowed adjust the filtering, so it _doesn't_ happen. */
-   for (cur = data->allowed ; cur ; cur = cur->next)
-   {
-      if ( host_name != 0 )
-      {
-         if ( strcmp( cur->host_name, host_name ) == 0 )
-         {
-#ifdef POPUP_VERBOSE
-            fprintf(logfp, "Reversing block decision for %s\n", host_name );
-#endif
-            found = 0;
-         }
-      }
-   }
-
-   if ( found == 0)
-   {
-#ifdef POPUP_VERBOSE
-      fprintf(logfp, "Allowing %s\n", host_name );
-#endif
-      return;
-   }
-
    while ((popup = strstr( buff, "window.open(" )) != NULL)
-      /* if ( popup  )  by BREITENB filter ALL popups! NEW! */
    {
 #ifdef POPUP_VERBOSE
       fprintf(logfp, "Found start of window open" );
@@ -217,8 +140,8 @@ void filter_popups(struct client_state *csp, char *host_name, char *buff, int si
    if (!popup) popup=strstr( buff, "<BOdy");
    if (popup)
    {
-      q=strchr(popup,'>');
-      if (q)
+      close=strchr(popup,'>');
+      if (close)
       {
          /* we are now between <body and the ending > */
          p=strstr(popup, "onUnload");

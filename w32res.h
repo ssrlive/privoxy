@@ -1,9 +1,9 @@
 #ifndef _W32RES_H
 #define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/w32res.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
  *
  * Purpose     :  Identifiers for Windows GUI resources.
  *
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -88,7 +91,7 @@
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITJUNKBUSTER           5000
 #define ID_TOOLS_EDITBLOCKERS             5001
-#define ID_TOOLS_EDITCOOKIES              5002
+#define ID_TOOLS_EDITPERMISSIONS          5002
 #define ID_TOOLS_EDITFORWARD              5003
 
 #ifdef ACL_FILES
@@ -98,10 +101,6 @@
 #ifdef USE_IMAGE_LIST
 #define ID_TOOLS_EDITIMAGE                5006
 #endif /* def USE_IMAGE_LIST */
-
-#ifdef KILLPOPUPS
-#define ID_TOOLS_EDITPOPUPS               5007
-#endif /* def KILLPOPUPS */
 
 #ifdef PCRS
 #define ID_TOOLS_EDITPERLRE               5008

@@ -1,0 +1,108 @@
+# Sample permissions file for the Internet Junkbuster 2.9.4
+#
+# For information, see http://ijbswa.sourceforge.net/
+#
+# Empty lines and lines beginning with a # are ignored.
+#
+# Each line has the following format:
+# [flags][domain][:port][/path]
+#
+# There should be no spaces between the components.
+#
+# The domain, port, and path parts make up the pattern used
+# to match URLs.  The port part must be a number and must
+# match exactly.  The domain part is matched by comparing
+# each sub-domain (between the dots) from right to left.
+# e.g.:
+#  - The pattern "com" matches "anything.com"
+#  - The pattern "yahoo.com" would match "mail.yahoo.com",
+#    "login.yahoo.com", "www.yahoo.com", or "yahoo.com".
+# "*" characters are allowed immediately before a dot or at
+# the end of the domain, and match anything.  e.g.:
+#  - "microsoft.*" matches "microsoft.com" and "microsoft.net",
+#    (and "www.microsoft.com", "office.microsoft.com", etc)
+#    but not "microsoft.xyz.com" or "microsoft.co.uk".
+# - "ad*.*.*.*" matches "ad.doubleclick.co.uk"
+# - "*.*click.*.*" is invalid ("*" is not followed by ".")
+#
+# The path part is a prefix match (if JunkBuster was compiled
+# without REGEX), or a POSIX regular expression (if JunkBuster
+# was compiled with REXEX but not PCRE), or a PERL (PCRE)
+# regular expression (if JunkBuster was compiled with the
+# default options).  "^" is automatically prepended to the RE
+# before the "/".
+#
+# Flags are:
+#       >    Allow cookies to be read by the website, but not set.
+#       <    Allow cookies to be set by the website, but not read.
+#       <>   Block all cookies.
+#       %    Enable re_filterfile processing for this site
+#       ^    Block popups from this site.
+#       ~    Same as all of <>%^
+# (no flags) Allow cookies and popups, don't re_filter.
+#
+# Multiple flags (up to 4) may be specified.
+#
+# If a web page's URL matches the specified pattern, then the
+# flags specified for that site are used.  If it matches more
+# than one pattern, then the first match (searching top-to-bottom
+# in this file) is used.
+# 
+# If a URL does not match any of the patterns in this file,
+# then the default settings are used.  The default can be set
+# by a line in this file which contains flags but no pattern.
+# If this is not specified, then the default is ~
+#
+#
+# EXAMPLES:
+#
+# To permit an entire site to set cookies, simply include its domain name:
+# really-trustyworthy-people.org
+#
+# You can allow cookies out, but stop them coming in:
+# >%^send-user-cookies.com
+#
+# dabs.com requires cookies and popups:
+# %dabs.com
+#
+# Windows Update is fragile, so allow everything:
+# windowsupdate.microsoft.com
+#
+#
+#%^>tvguide.com
+#%^>wired.com/news/
+#%^americanexpress.com
+#%^cnn.com
+#%^www.nytimes.com
+#%^amazon.de
+#%^amazon.co.uk
+#%^slashdot.org
+#%^www.palmgear.com
+#%^onelist.com
+#%^freshmeat.net
+
+# Sites that need cookies
+%^javasoft.com
+%^sun.com
+%^msdn.microsoft.com
+%^sourceforge.net
+%^yahoo.com
+
+# These sites are very complex and require
+# minimal interference.
+office.microsoft.com
+windowsupdate.microsoft.com
+
+# Shopping
+dabs.com
+overclockers.co.uk
+worldpay.com   # for quietpc.com
+jungle.com
+scan.co.uk
+
+# Explicitly set default to ~
+~
+
+
+# End of file
+

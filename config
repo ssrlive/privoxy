@@ -1,15 +1,15 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.2 2001/04/30 03:05:11 rodney Exp $
+# $Id: config,v 1.2 2001/05/17 22:37:46 oes Exp $
 #
 
 #  Table of Contents
 #
-#	1. INTRODUCTION
+#       1. INTRODUCTION
 #       2. FORMAT OF THE CONFIGURATION FILE
 #       3. OTHER CONFIGURATION FILES
-#	4. GENERAL OPTIONS
+#       4. GENERAL OPTIONS
 #       5. WINDOWS GUI OPTIONS
 #
 #  1. INTRODUCTION
@@ -63,7 +63,7 @@
 #
 #  Default: Don't block anything.
 #
-blockfile	./blocklist
+blockfile   ./blocklist
 
 #
 #  The imagefile contains regular expressions, one per line, of URLs
@@ -72,15 +72,17 @@ blockfile	./blocklist
 #
 #  Default: Block all URLs as HTML requests.
 #
-imagefile	./imagelist 
+imagefile   ./imagelist 
 
 #
-#  The popfile contains regular expressions, one per line, of sites
-#  where Junkbuster should disable Javascript popups.
+#  The permissions file contains patterns to specify the
+#  cookie and filtering rules to apply to each site.
 #
-#  Default: No popup filtering.
+#  Default: Cookies to and from all destinations are filtered.
+#           Popups are disabled for all sites.
+#           All sites are filtered if re_filterfile specified.
 #
-popupfile	./popup
+permissionsfile ./permissionsfile
 
 #
 #  The re_filterfile contains content modification rules.  These rules
@@ -91,18 +93,7 @@ popupfile	./popup
 #
 #  Default: No content modification.
 #
-re_filterfile	./re_filterfile
-
-#
-#  The cookiefile defines how Junkbuster should treat cookies: filter
-#  them out; permit them; permit them only one-way from your browser
-#  to the site, etc.  You can set this on a site-by-site basis, so
-#  that you can, for example, use cookies at sites you trust while
-#  filtering them out everywhere else.
-#
-#  Default: Cookies to and from all destinations are filtered.
-#
-cookiefile	./cookiefile
+re_filterfile   ./re_filterfile
 
 #
 #  The logfile is where all logging and error messages are written.
@@ -122,7 +113,7 @@ cookiefile	./cookiefile
 #
 #  Default: Log to the standard error channel, not to a file
 #
-logfile		./junkbuster.log
+logfile      ./junkbuster.log
 
 #
 #  The jarfile defines where Junkbuster stores the cookies it
@@ -131,7 +122,7 @@ logfile		./junkbuster.log
 #
 #  Default: Don't store intercepted cookies
 #
-#jarfile	./jarfile	
+#jarfile     ./jarfile
 
 #
 #  The forwardfile defines domain-specific forwarding of HTTP
@@ -142,7 +133,7 @@ logfile		./junkbuster.log
 #
 #  Default: Make all connections directly.
 #
-forwardfile	./forward
+forwardfile   ./forward
 
 #
 #  Generally, Junkbuster is used as a personal proxy.  The default
@@ -160,7 +151,7 @@ forwardfile	./forward
 #  Default: No access control. Everybody that can reach junkbuster
 #           will be served.
 #
-#aclfile	./aclfile
+#aclfile   ./aclfile
 
 #
 #  4. OPTIONS
@@ -168,15 +159,6 @@ forwardfile	./forward
 #  This part of the configuration file contains options that control
 #  how Junkbuster operates.
 #
-
-#
-#  If 're_filter_all' is set, (commented in) Junkbuster will attempt
-#  content modification (see 're_filterfile' above) on all requests.
-#
-#  Default: Content modification takes only place if no cookie would
-#           be sent to the server.
-#
-#re_filter_all
 
 #
 #  If 'add-forwarded-header' is set, an "X-Forwarded-For:"
@@ -310,8 +292,8 @@ user-agent    .
 #
 #       VALUE       EFFECT
 #       =====       ======
-#	default     Kill the referrer-header from the client.
-#	.           Pass the referrer unchanged.
+#       default     Kill the referrer-header from the client.
+#       .           Pass the referrer unchanged.
 #       @           Pass the referrer if the server is in the cookie file,
 #                   kill the referrer otherwise.
 #       L           Pass the referrer if the server is in the cookie file,
@@ -324,7 +306,7 @@ user-agent    .
 #
 #  Default: see above
 #
-referer		L
+referer     L
 
 #
 #  Some browsers provide a "From:" header that gives Web sites your
@@ -340,7 +322,7 @@ referer		L
 #
 #  Default: see above
 #
-from		spam-me-senseless@sittingduck.xqq
+#from   spam-me-senseless@sittingduck.xqq
 
 #
 #  The 'tinygif' option lets you change how Junkbuster treats blocked
@@ -350,10 +332,10 @@ from		spam-me-senseless@sittingduck.xqq
 #
 #     VALUE       EFFECT
 #     =====       ======
-#	0	  Send HTML
-#	1	  Send a GIF of one transparent pixel
-#	2	  Send a GIF with the word "JUNKBUSTER"
-#       3 <url>   Send a redirect to the image indicated by the <url>
+#     0           Send HTML
+#     1           Send a GIF of one transparent pixel
+#     2           Send a GIF with the word "JUNKBUSTER"
+#     3 <url>     Send a redirect to the image indicated by the <url>
 #
 #  As an example of the last option:
 #
@@ -369,7 +351,7 @@ from		spam-me-senseless@sittingduck.xqq
 #
 #  Default: 0, i.e. send HTML
 #
-tinygif		2
+tinygif   2
 
 #
 #  The debug option sets the level of debugging information to log in
@@ -393,7 +375,7 @@ tinygif		2
 #
 #  Default: 0, i.e. log nothing but errors and infos
 #
-debug 		  1
+debug   1
 
 #
 #  Junkbuster normally uses "multi-threading", a software technique
@@ -455,13 +437,13 @@ toggle 1
 #    Warning: Setting this to 0 will result in the buffer to grow
 #             infinitely and eat up all your memory!
 #
-#Win32-only: log-buffer-size		1
+#Win32-only: log-buffer-size   1
 
-#    log-max-lines	{number of lines, e.g., '200'}
+#    log-max-lines   {number of lines, e.g., '200'}
 #
 #    Maximum number of lines held in the log buffer. See above.
 #
-#Win32-only: log-max-lines		200
+#Win32-only: log-max-lines   200
 
 #    log-highlight-messages  {1 or 0}
 #

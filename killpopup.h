@@ -1,9 +1,9 @@
 #ifndef _KILLPOPUP_H
 #define _KILLPOPUP_H
-#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.1.1.1 2001/05/15 13:58:58 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/killpopup.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/killpopup.h,v $
  *
  * Purpose     :  Handles the filtering of popups.
  *
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: killpopup.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:58  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -42,7 +45,7 @@
 
 #ifdef KILLPOPUPS
 
-extern void filter_popups(struct client_state *csp, char *host_name, char *buff, int size);
+extern void filter_popups(char *buff, int size);
 
 #endif /* def KILLPOPUPS */
 

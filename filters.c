@@ -1,12 +1,12 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.1.1.1 2001/05/15 13:58:52 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/filters.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
- *                   `block_url', `cookie_url', `domaincmp', `dsplit',
+ *                   `block_url', `url_permissions', `domaincmp', `dsplit',
  *                   `filter_popups', `forward_url',
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
  *                   `show_proxy_args', and `trust_url'
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.1 2001/05/13 21:57:06 administrat
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:52  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -494,7 +497,10 @@ void re_process_buffer(struct client_state *csp)
    struct re_filterfile_spec *b;
 
    /* Sanity first ;-) */
-   if (size <= 0) return;
+   if (size <= 0)
+   {
+      return;
+   }
 
    if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
    {
@@ -505,7 +511,7 @@ void re_process_buffer(struct client_state *csp)
    joblist = b->joblist;
 
 
-   log_error(LOG_LEVEL_REF, "re_filtering %s%s (size %d) ...",
+   log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) ...",
               csp->http->hostport, csp->http->path, size);
 
    /* Apply all jobs from the joblist */
@@ -516,7 +522,7 @@ void re_process_buffer(struct client_state *csp)
       old=new;
    }
 
-   log_error(LOG_LEVEL_REF, " produced %d hits (new size %d).", hits, size);
+   log_error(LOG_LEVEL_RE_FILTER, " produced %d hits (new size %d).", hits, size);
 
    if (write_socket(csp->cfd, old, size) != size)
    {
@@ -789,32 +795,36 @@ char *intercept_url(struct http_request *http, struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  cookie_url
+ * Function    :  url_permissions
  *
- * Description :  Accept this cookie, or no?  See "cookiefile" setting.
+ * Description :  Gets the permissions for this URL.
  *
  * Parameters  :
  *          1  :  http = http_request request for blocked URLs
  *          2  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  NULL => accept, cookie_spec pointer to crunch.
+ * Returns     :  permissions bitmask specifiying what this URL can do.
+ *                If not on list, will be default_permissions.
  *
  *********************************************************************/
-struct cookie_spec *cookie_url(struct http_request *http, struct client_state *csp)
+int url_permissions(struct http_request *http, struct client_state *csp)
 {
    struct file_list *fl;
-   struct cookie_spec *b;
+   struct permissions_spec *b;
    struct url_spec url[1];
 
-   if (((fl = csp->clist) == NULL) || ((b = fl->f) == NULL))
+   if (((fl = csp->permissions_list) == NULL) || ((b = fl->f) == NULL))
    {
-      return(NULL);
+      return(default_permissions);
    }
 
    *url = dsplit(http->host);
 
    /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(NULL);
+   if (url->dbuf == NULL)
+   {
+      return(default_permissions);
+   }
 
    for (b = b->next; NULL != b; b = b->next)
    {
@@ -832,7 +842,7 @@ struct cookie_spec *cookie_url(struct http_request *http, struct client_state *c
             {
                freez(url->dbuf);
                freez(url->dvec);
-               return(b);
+               return(b->permissions);
             }
          }
       }
@@ -840,7 +850,7 @@ struct cookie_spec *cookie_url(struct http_request *http, struct client_state *c
 
    freez(url->dbuf);
    freez(url->dvec);
-   return(NULL);
+   return(default_permissions);
 
 }
 
@@ -1055,11 +1065,11 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
          file_description = "Block List";
       }
       break;
-   case 'c':
-      if (csp->clist)
+   case 'p':
+      if (csp->permissions_list)
       {
-         filename = csp->clist->filename;
-         file_description = "Cookie List";
+         filename = csp->permissions_list->filename;
+         file_description = "Permissions List";
       }
       break;
    case 'f':
@@ -1089,16 +1099,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       }
       break;
 #endif /* def USE_IMAGE_LIST */
-
-#ifdef KILLPOPUPS
-   case 'p':
-      if (csp->plist)
-      {
-         filename = csp->plist->filename;
-         file_description = "Popup list";
-      }
-      break;
-#endif /* def KILLPOPUPS */
 
 #ifdef PCRS
    case 'r':
@@ -1222,10 +1222,10 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       s = strsav(s, "</code></a></li>\n");
    }
 
-   if (csp->clist)
+   if (csp->permissions_list)
    {
-      s = strsav(s, "<li>Cookie List: <a href=\"show-proxy-args?cookie\"><code>");
-      s = strsav(s, csp->clist->filename);
+      s = strsav(s, "<li>Permissions List: <a href=\"show-proxy-args?permit\"><code>");
+      s = strsav(s, csp->permissions_list->filename);
       s = strsav(s, "</code></a></li>\n");
    }
 
@@ -1253,15 +1253,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       s = strsav(s, "</code></a></li>\n");
    }
 #endif /* def USE_IMAGE_LIST */
-
-#ifdef KILLPOPUPS
-   if (csp->plist)
-   {
-      s = strsav(s, "<li>Popup List: <a href=\"show-proxy-args?popup\"><code>");
-      s = strsav(s, csp->plist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-#endif /* def KILLPOPUPS */
 
 #ifdef PCRS
    if (csp->rlist)
@@ -1312,13 +1303,6 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       s = strsav(s, csp->ilist->proxy_args);
    }
 #endif /* def USE_IMAGE_LIST */
-
-#ifdef KILLPOPUPS
-   if (csp->plist)
-   {
-      s = strsav(s, csp->plist->proxy_args);
-   }
-#endif /* def KILLPOPUPS */
 
 #ifdef PCRS
    if (csp->rlist)

@@ -4,7 +4,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/acconfig.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -38,7 +38,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: acconfig.h,v $
+ *    $Log: config.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:49  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -65,12 +68,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 3
+#define VERSION_POINT 4
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.3"
+#define VERSION "2.9.4"
 
 /*
  * Regular expression matching for URLs.  (Highly recommended).  If this is 

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.1.1.1 2001/05/15 13:58:56 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.2 2001/05/17 22:34:44 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.1.1.1 2001/05/15 13:58:56 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.2  2001/05/17 22:34:44  oes
+ *     - Added hint on GIF char array generation to jcc.c
+ *     - Cleaned CRLF's from the sources and related files
+ *     - Repaired logging for REF and FRC
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:56  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -229,16 +234,37 @@ static const char FWGIF[] =
  *********************************************************************/
 static void chat(struct client_state *csp)
 {
+/* This next line is a little ugly, but it simplifies the if statement below. */
+/* Basically if TOGGLE, then we want the if to test "csp->toggled_on", else we don't */
+#ifdef TOGGLE
+#   define IS_TOGGLED_ON csp->toggled_on &&
+#else /* ifndef TOGGLE */
+#   define IS_TOGGLED_ON
+#endif /* ndef TOGGLE */
+
+/* This next line is a little ugly, but it simplifies the if statement below. */
+/* Basically if TRUST_FILES, then we want the if to call "trust_url", else we don't */
+#ifdef TRUST_FILES
+#   define IS_TRUSTED_URL (p = trust_url(http, csp)) ||
+#else /* ifndef TRUST_FILES */
+#   define IS_TRUSTED_URL
+#endif /* ndef TRUST_FILES */
+
+   
    char buf[BUFSIZ], *hdr, *p, *req;
    char *err = NULL;
    char *eno;
    fd_set rfds;
    int n, maxfd, server_body, ms_iis5_hack = 0;
-   struct cookie_spec *cs;
    const struct gateway *gw;
    struct http_request *http;
+#ifdef KILLPOPUPS
+   int block_popups;         /* bool, 1==will block popups */
+   int block_popups_now = 0; /* bool, 1==currently blocking popups */
+#endif /* def KILLPOPUPS */
 #ifdef PCRS
-   int filtering = 0;
+   int pcrs_filter;   /* bool, 1==will filter through pcrs */
+   int filtering = 0; /* bool, 1==currently filtering through pcrs */
 #endif /* def PCRS */
 
    http = csp->http;
@@ -276,7 +302,7 @@ static void chat(struct client_state *csp)
  		if(strstr(req, FORCE_PREFIX))
       {
  		   strclean(req, FORCE_PREFIX);
- 		   log_error(LOG_LEVEL_FRC, "Enforcing request \"%s\".\n", req);
+ 		   log_error(LOG_LEVEL_FORCE, "Enforcing request \"%s\".\n", req);
  		   csp->force = 1;
  		} 
       else
@@ -301,8 +327,8 @@ static void chat(struct client_state *csp)
 
    if ((gw = forward_url(http, csp)) == NULL)
    {
-      log_error(LOG_LEVEL_ERROR, "gateway spec is NULL!?!?  This can't happen!");
-      abort();
+      log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
    /* build the http request to send to the server
@@ -353,29 +379,28 @@ static void chat(struct client_state *csp)
 
    /* decide what we're to do with cookies */
 
-#if defined(TOGGLE)
-   /*
-    * by haroon - most of credit to srt19170
-    * if toggled_on flag is false IJB is disabled, pass cookies thru
-    */
+#ifdef TOGGLE
    if (!csp->toggled_on)
    {
-      csp->accept_server_cookie  = 1;
-      csp->send_user_cookie      = 1;
+      /* Most compatible set of permissions */
+      csp->permissions = PERMIT_COOKIE_SET | PERMIT_COOKIE_READ | PERMIT_POPUPS;
    }
    else
-#endif
+   {
+      csp->permissions = url_permissions(http, csp);
+   }
+#else /* ifndef TOGGLE */
+   csp->permissions = url_permissions(http, csp);
+#endif /* ndef TOGGLE */
 
-   if ((cs = cookie_url(http, csp)))
-   {
-      csp->accept_server_cookie  = cs->accept_server_cookie;
-      csp->send_user_cookie      = cs->send_user_cookie;
-   }
-   else
-   {
-      csp->accept_server_cookie  = 0;
-      csp->send_user_cookie      = 0;
-   }
+#ifdef KILLPOPUPS
+   block_popups               = ((csp->permissions & PERMIT_POPUPS) == 0);
+#endif /* def KILLPOPUPS */
+#ifdef PCRS
+   pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
+                                ((csp->permissions & PERMIT_RE_FILTER) != 0);
+#endif /* def PCRS */
+
 
    /* grab the rest of the client's headers */
 
@@ -405,37 +430,12 @@ static void chat(struct client_state *csp)
 
    destroy_list(csp->headers);
 
-#ifdef TOGGLE
+
    /*
     * by haroon - most of credit to srt19170
     * if toggled_on flag is true then IJB is enabled, do the usual
     * otherwise avoid crunching
     */
-
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if TOGGLE, then we want the if to test "csp->toggled_on", else we don't */
-#define IS_TOGGLED_ON csp->toggled_on &&
-
-#else /* ifndef TOGGLE */
-
-/* We don't have TOGGLE, so we don't care about toggling. */
-#define IS_TOGGLED_ON
-
-#endif /* ndef TOGGLE */
-
-
-#ifdef TRUST_FILES
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if TRUST_FILES, then we want the if to call "trust_url", else we don't */
-#define IS_TRUSTED_URL (p = trust_url(http, csp)) ||
-
-#else /* ifndef TRUST_FILES */
-
-/* We don't have TRUST_FILES, so we don't care about trusted URL's. */
-#define IS_TRUSTED_URL
-
-#endif /* ndef TRUST_FILES */
-
 
  	/* Check the request against all rules, unless
  	 * we're disabled or in force mode. 
@@ -648,11 +648,9 @@ static void chat(struct client_state *csp)
 
 #ifdef KILLPOPUPS
          /* Filter the popups on this read. */
-         if ( IS_TOGGLED_ON
-              ( kill_all_popups ||
-              ( ( http->host != NULL ) && ( popupfile != NULL ) ) ) )
+         if (block_popups_now)
          {
-            filter_popups(csp, http->host, buf, n);
+            filter_popups(buf, n);
          }
 #endif /* def KILLPOPUPS */
 
@@ -787,14 +785,24 @@ static void chat(struct client_state *csp)
              * may be in the buffer)
              */
 
-#ifdef PCRS
-            /* Decide if we want to re_filter this. */
+#ifdef KILLPOPUPS
+            /* Start blocking popups if appropriate. */
 
-            if (IS_TOGGLED_ON     /* Only filter if toggle is "on" */
-                csp->is_text  &&  /* It's a text / * MIME-Type */
-                re_filterfile &&  /* There are expressions to be used */
+            if (csp->is_text  &&  /* It's a text / * MIME-Type */
                 !http->ssl    &&  /* We talk plaintext */
-                (re_filter_all || !csp->send_user_cookie)) /* Policy allows */
+                block_popups)
+            {
+               block_popups_now = 1;
+            }
+
+#endif /* def KILLPOPUPS */
+
+#ifdef PCRS
+            /* Start re_filtering this if appropriate. */
+
+            if (csp->is_text  &&  /* It's a text / * MIME-Type */
+                !http->ssl    &&  /* We talk plaintext */
+                pcrs_filter)      /* Policy allows */
             {
                filtering = 1;
             }
@@ -1114,8 +1122,8 @@ static void listen_loop(void)
 
       if (run_loader(csp))
       {
-         log_error(LOG_LEVEL_ERROR, "a loader failed - must exit");
-         return;
+         log_error(LOG_LEVEL_FATAL, "a loader failed - must exit");
+         /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
 
       if (multi_threaded)

@@ -1,9 +1,9 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.1.1.1 2001/05/15 13:59:01 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/parsers.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:01  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -84,9 +87,9 @@ extern void client_xtra_adder(struct client_state *csp);
 extern void client_x_forwarded_adder(struct client_state *csp);
 extern char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp);
 
-#ifdef PCRS
+#if defined(PCRS) || defined(KILLPOPUPS)
 extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
-#endif /* def PCRS */
+#endif /* defined(PCRS) || defined(KILLPOPUPS) */
 
 #ifdef FORCE_LOAD
 char *client_host(const struct parsers *v, char *s, struct client_state *csp);

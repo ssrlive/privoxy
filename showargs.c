@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.1.1.1 2001/05/15 13:59:03 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.1.1.1 2001/05/15 13:59:03 oes E
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.2  2001/05/17 23:01:01  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:03  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -100,16 +103,16 @@ char *strsav(char *old, const char *text_to_append)
    {
       if ((p = realloc(old, new_len)) == NULL)
       {
-         log_error(LOG_LEVEL_ERROR, "realloc(%d) bytes for proxy_args failed!", new_len);
-         exit(1);
+         log_error(LOG_LEVEL_FATAL, "realloc(%d) bytes for proxy_args failed!", new_len);
+         /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
    }
    else
    {
       if ((p = (char *)malloc(new_len)) == NULL)
       {
-         log_error(LOG_LEVEL_ERROR, "malloc(%d) bytes for proxy_args failed!", new_len);
-         exit(1);
+         log_error(LOG_LEVEL_FATAL, "malloc(%d) bytes for proxy_args failed!", new_len);
+         /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
    }
 

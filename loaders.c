@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.1.1.1 2001/05/15 13:58:59 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.1.1.1 2001/05/15 13:58:59 oes Exp
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.2  2001/05/17 23:01:01  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:59  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -94,7 +97,7 @@ static int (*loaders[NLOADERS])(struct client_state *);
  * These are also entered in the main linked list of files.
  */
 static struct file_list *current_blockfile      = NULL;
-static struct file_list *current_cookiefile     = NULL;
+static struct file_list *current_permissions_file  = NULL;
 static struct file_list *current_forwardfile    = NULL;
 
 #ifdef ACL_FILES
@@ -105,10 +108,6 @@ static struct file_list *current_aclfile        = NULL;
 static struct file_list *current_imagefile      = NULL;
 #endif /* def USE_IMAGE_LIST */
 
-#ifdef KILLPOPUPS
-static struct file_list * current_popupfile     = NULL;
-#endif /* def KILLPOPUPS */
-
 #ifdef TRUST_FILES
 static struct file_list *current_trustfile      = NULL;
 #endif /* def TRUST_FILES */
@@ -116,6 +115,9 @@ static struct file_list *current_trustfile      = NULL;
 #ifdef PCRS
 static struct file_list *current_re_filterfile  = NULL;
 #endif /* def PCRS */
+
+
+static int create_url_spec(struct url_spec * url, char * buf);
 
 
 /*********************************************************************
@@ -164,12 +166,11 @@ void sweep(void)
             ncsp->blist->active = 1;
          }
 
-         if (ncsp->clist)     /* cookie files */
+         if (ncsp->permissions_list)     /* permissions files */
          {
-            ncsp->clist->active = 1;
+            ncsp->permissions_list->active = 1;
          }
 
-         /* FIXME: These were left out of the "10" release.  Should they be here? */
          if (ncsp->flist)     /* forward files */
          {
             ncsp->flist->active = 1;
@@ -188,13 +189,6 @@ void sweep(void)
             ncsp->ilist->active = 1;
          }
 #endif /* def USE_IMAGE_LIST */
-
-#ifdef KILLPOPUPS
-         if (ncsp->plist)     /* killpopup files */
-         {
-            ncsp->plist->active = 1;
-         }
-#endif /* def KILLPOPUPS */
 
 #ifdef PCRS
          if (ncsp->rlist)     /* perl re files */
@@ -257,6 +251,125 @@ void sweep(void)
       }
    }
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  create_url_spec
+ *
+ * Description :  Creates a "url_spec" structure from a string.
+ *                When finished, free with unload_url().
+ *
+ * Parameters  :
+ *          1  :  url = Target url_spec to be filled in.  Must be
+ *                      zeroed out before the call (e.g. using zalloc).
+ *          2  :  buf = Source pattern, null terminated.  NOTE: The
+ *                      contents of this buffer are destroyed by this
+ *                      function.  If this function succeeds, the
+ *                      buffer is copied to url->spec.  If this
+ *                      function fails, the contents of the buffer
+ *                      are lost forever.
+ *
+ * Returns     :  0 => Ok, everything else is an error.
+ *
+ *********************************************************************/
+static int create_url_spec(struct url_spec * url, char * buf)
+{
+   char *p;
+   struct url_spec tmp_url[1];
+
+   /* paranoia - should never happen. */
+   if ((url == NULL) || (buf == NULL))
+   {
+      return 1;
+   }
+
+   /* save a copy of the orignal specification */
+   if ((url->spec = strdup(buf)) == NULL)
+   {
+      return 1;
+   }
+
+   if ((p = strchr(buf, '/')))
+   {
+      if (NULL == (url->path = strdup(p)))
+      {
+         freez(url->spec);
+         return 1;
+      }
+      url->pathlen = strlen(url->path);
+      *p = '\0';
+   }
+   else
+   {
+      url->path    = NULL;
+      url->pathlen = 0;
+   }
+#ifdef REGEX
+   if (url->path)
+   {
+      int errcode;
+      char rebuf[BUFSIZ];
+
+      if (NULL == (url->preg = zalloc(sizeof(*url->preg))))
+      {
+         freez(url->spec);
+         freez(url->path);
+         return 1;
+      }
+
+      sprintf(rebuf, "^(%s)", url->path);
+
+      errcode = regcomp(url->preg, rebuf,
+            (REG_EXTENDED|REG_NOSUB|REG_ICASE));
+      if (errcode)
+      {
+         size_t errlen =
+            regerror(errcode,
+               url->preg, buf, sizeof(buf));
+
+         buf[errlen] = '\0';
+
+         log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
+                 url->spec, buf);
+
+         freez(url->spec);
+         freez(url->path);
+         freez(url->preg);
+
+         return 1;
+      }
+   }
+#endif
+   if ((p = strchr(buf, ':')) == NULL)
+   {
+      url->port = 0;
+   }
+   else
+   {
+      *p++ = '\0';
+      url->port = atoi(p);
+   }
+
+   if ((url->domain = strdup(buf)) == NULL)
+   {
+      freez(url->spec);
+      freez(url->path);
+#ifdef REGEX
+      freez(url->preg);
+#endif /* def REGEX */
+      return 1;
+   }
+
+   /* split domain into components */
+
+   *tmp_url = dsplit(url->domain);
+   url->dbuf = tmp_url->dbuf;
+   url->dcnt = tmp_url->dcnt;
+   url->dvec = tmp_url->dvec;
+
+   return 0; /* OK */
 }
 
 
@@ -374,26 +487,28 @@ static void unload_imagefile(void *f)
 
 /*********************************************************************
  *
- * Function    :  unload_cookiefile
+ * Function    :  unload_permissions_file
  *
- * Description :  Unloads a cookiefile.
+ * Description :  Unloads a permissions file.
  *
  * Parameters  :
- *          1  :  f = the data structure associated with the cookiefile.
+ *          1  :  file_data = the data structure associated with the
+ *                            permissions file.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-static void unload_cookiefile(void *f)
+static void unload_permissions_file(void *file_data)
 {
-   struct cookie_spec *b = (struct cookie_spec *)f;
-   if (b == NULL) return;
-
-   unload_cookiefile(b->next);
-
-   unload_url(b->url);
-
-   freez(b);
+   struct permissions_spec * next;
+   struct permissions_spec * cur = (struct permissions_spec *)file_data;
+   while (cur != NULL)
+   {
+      next = cur->next;
+      unload_url(cur->url);
+      freez(cur);
+      cur = next;
+   }
 
 }
 
@@ -486,51 +601,6 @@ static void unload_re_filterfile(void *f)
 #endif /* def PCRS */
 
 
-#ifdef KILLPOPUPS
-/*********************************************************************
- *
- * Function    :  unload_popupfile
- *
- * Description :  Free the lists of blocked, and allowed popup sites.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void unload_popupfile(void * b)
-{
-   struct popup_settings * data = (struct popup_settings *) b;
-   struct popup_blocklist * cur = NULL;
-   struct popup_blocklist * temp= NULL;
-
-   /* Free the blocked list. */
-   cur = data->blocked;
-   while (cur != NULL)
-   {
-      temp = cur->next;
-      freez (cur->host_name);
-      free  (cur);
-      cur  = temp;
-   }
-   data->blocked = NULL;
-
-   /* Free the allowed list. */
-   cur = data->allowed;
-   while (cur != NULL)
-   {
-      temp = cur->next;
-      freez (cur->host_name);
-      free  (cur);
-      cur  = temp;
-   }
-   data->allowed = NULL;
-
-}
-#endif /* def KILLPOPUPS */
-
-
 /*********************************************************************
  *
  * Function    :  check_file_changed
@@ -552,7 +622,7 @@ static void unload_popupfile(void * b)
  *                           heap, with the filename and lastmodified
  *                           fields filled, standard header giving file
  *                           name in proxy_args, and all others zeroed.
- *                           (proxy_args is only filled in if
+ *                           (proxy_args is only filled in if !defined
  *                           SPLIT_PROXY_ARGS and !suppress_blocklists).
  *
  * Returns     :  If file unchanged: 0 (and sets newfl == NULL)
@@ -692,8 +762,8 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
          p = linebuf + strlen(linebuf) - 1;
 
          /*
-          * Note: the (p >= retval) below is paranoia, it's not really needed.
-          * When p == retval then ijb_isspace(*p) will be false and we'll drop
+          * Note: the (p >= linebuf) below is paranoia, it's not really needed.
+          * When p == linebuf then ijb_isspace(*p) will be false and we'll drop
           * out of the loop.
           */
          while ((p >= linebuf) && ijb_isspace(*p))
@@ -871,9 +941,8 @@ int load_blockfile(struct client_state *csp)
 
    struct block_spec *b, *bl;
    char  buf[BUFSIZ], *p, *q;
-   int port, reject;
+   int reject;
    struct file_list *fs;
-   struct url_spec url[1];
 
    if (!check_file_changed(current_blockfile, blockfile, &fs))
    {
@@ -922,11 +991,7 @@ int load_blockfile(struct client_state *csp)
       }
 
       /* allocate a new node */
-      if (((b = zalloc(sizeof(*b))) == NULL)
-#ifdef REGEX
-          || ((b->url->preg = zalloc(sizeof(*b->url->preg))) == NULL)
-#endif
-      )
+      if ((b = zalloc(sizeof(*b))) == NULL)
       {
          fclose(fp);
          goto load_blockfile_error;
@@ -936,79 +1001,14 @@ int load_blockfile(struct client_state *csp)
       b->next  = bl->next;
       bl->next = b;
 
-      /* save a copy of the orignal specification */
-      if ((b->url->spec = strdup(buf)) == NULL)
-      {
-         fclose(fp);
-         goto load_blockfile_error;
-      }
-
       b->reject = reject;
 
-      if ((p = strchr(buf, '/')))
-      {
-         b->url->path    = strdup(p);
-         b->url->pathlen = strlen(b->url->path);
-         *p = '\0';
-      }
-      else
-      {
-         b->url->path    = NULL;
-         b->url->pathlen = 0;
-      }
-#ifdef REGEX
-      if (b->url->path)
-      {
-         int errcode;
-         char rebuf[BUFSIZ];
-
-         sprintf(rebuf, "^(%s)", b->url->path);
-
-         errcode = regcomp(b->url->preg, rebuf,
-               (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-
-         if (errcode)
-         {
-            size_t errlen =
-               regerror(errcode,
-                  b->url->preg, buf, sizeof(buf));
-
-            buf[errlen] = '\0';
-
-            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s\n",
-                    b->url->spec, buf);
-            fclose(fp);
-            goto load_blockfile_error;
-         }
-      }
-      else
-      {
-         freez(b->url->preg);
-      }
-#endif
-      if ((p = strchr(buf, ':')) == NULL)
-      {
-         port = 0;
-      }
-      else
-      {
-         *p++ = '\0';
-         port = atoi(p);
-      }
-
-      b->url->port = port;
-
-      if ((b->url->domain = strdup(buf)) == NULL)
+      /* Save the URL pattern */
+      if (create_url_spec(b->url, buf))
       {
          fclose(fp);
          goto load_blockfile_error;
       }
-
-      /* split domain into components */
-      *url = dsplit(b->url->domain);
-      b->url->dbuf = url->dbuf;
-      b->url->dcnt = url->dcnt;
-      b->url->dvec = url->dvec;
    }
 
    fclose(fp);
@@ -1063,9 +1063,8 @@ int load_imagefile(struct client_state *csp)
 
    struct block_spec *b, *bl;
    char  buf[BUFSIZ], *p, *q;
-   int port, reject;
+   int reject;
    struct file_list *fs;
-   struct url_spec url[1];
 
    if (!check_file_changed(current_imagefile, imagefile, &fs))
    {
@@ -1114,11 +1113,7 @@ int load_imagefile(struct client_state *csp)
       }
 
       /* allocate a new node */
-      if (((b = zalloc(sizeof(*b))) == NULL)
-#ifdef REGEX
-      || ((b->url->preg = zalloc(sizeof(*b->url->preg))) == NULL)
-#endif
-      )
+      if ((b = zalloc(sizeof(*b))) == NULL)
       {
          fclose(fp);
          goto load_imagefile_error;
@@ -1128,84 +1123,15 @@ int load_imagefile(struct client_state *csp)
       b->next  = bl->next;
       bl->next = b;
 
-      /* save a copy of the orignal specification */
-      if ((b->url->spec = strdup(buf)) == NULL)
-      {
-         fclose(fp);
-         goto load_imagefile_error;
-      }
-
       b->reject = reject;
 
-      if ((p = strchr(buf, '/')))
-      {
-         b->url->path    = strdup(p);
-         b->url->pathlen = strlen(b->url->path);
-         *p = '\0';
-      }
-      else
-      {
-         b->url->path    = NULL;
-         b->url->pathlen = 0;
-      }
-#ifdef REGEX
-      if (b->url->path)
-      {
-         int errcode;
-         char rebuf[BUFSIZ];
-
-         sprintf(rebuf, "^(%s)", b->url->path);
-
-         errcode = regcomp(b->url->preg, rebuf,
-               (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-
-         if (errcode)
-         {
-            size_t errlen =
-               regerror(errcode,
-                  b->url->preg, buf, sizeof(buf));
-
-            buf[errlen] = '\0';
-
-            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-                    b->url->spec, buf);
-            fclose(fp);
-            goto load_imagefile_error;
-         }
-      }
-      else
-      {
-         freez(b->url->preg);
-      }
-#endif
-      if ((p = strchr(buf, ':')) == NULL)
-      {
-         port = 0;
-      }
-      else
-      {
-         *p++ = '\0';
-         port = atoi(p);
-      }
-
-      b->url->port = port;
-
-      if ((b->url->domain = strdup(buf)) == NULL)
+      /* Save the URL pattern */
+      if (create_url_spec(b->url, buf))
       {
          fclose(fp);
          goto load_imagefile_error;
       }
-
-      /* split domain into components */
-      *url = dsplit(b->url->domain);
-      b->url->dbuf = url->dbuf;
-      b->url->dcnt = url->dcnt;
-      b->url->dvec = url->dvec;
    }
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-#endif /* ndef SPLIT_PROXY_ARGS */
 
    fclose(fp);
 
@@ -1243,9 +1169,10 @@ load_imagefile_error:
 
 /*********************************************************************
  *
- * Function    :  load_cookiefile
+ * Function    :  load_permissions_file
  *
- * Description :  Read and parse a cookiefile and add to files list.
+ * Description :  Read and parse a permissions file and add to files
+ *                list.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1253,69 +1180,112 @@ load_imagefile_error:
  * Returns     :  0 => Ok, everything else is an error.
  *
  *********************************************************************/
-int load_cookiefile(struct client_state *csp)
+int load_permissions_file(struct client_state *csp)
 {
    FILE *fp;
 
-   struct cookie_spec *b, *bl;
+   struct permissions_spec *b, *bl;
    char  buf[BUFSIZ], *p, *q;
-   int port, user_cookie, server_cookie;
+   int permissions;
    struct file_list *fs;
-   struct url_spec url[1];
+   int i;
 
-   if (!check_file_changed(current_cookiefile, cookiefile, &fs))
+   if (!check_file_changed(current_permissions_file, permissions_file, &fs))
    {
       /* No need to load */
       if (csp)
       {
-         csp->clist = current_cookiefile;
+         csp->permissions_list = current_permissions_file;
       }
       return(0);
    }
    if (!fs)
    {
-      goto load_cookie_error;
+      goto load_permissions_error;
    }
 
-   fs->f = bl = (struct cookie_spec   *)zalloc(sizeof(*bl));
+   fs->f = bl = (struct permissions_spec *)zalloc(sizeof(*bl));
    if (bl == NULL)
    {
-      goto load_cookie_error;
+      goto load_permissions_error;
    }
 
-   if ((fp = fopen(cookiefile, "r")) == NULL)
+   if ((fp = fopen(permissions_file, "r")) == NULL)
    {
-      goto load_cookie_error;
+      goto load_permissions_error;
    }
+
+
+   /*
+    * default_permissions is set in this file.
+    *
+    * Reset it to default first.
+    */
+   default_permissions = PERMIT_RE_FILTER;
 
    while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
    {
       p = buf;
 
-      switch ((int)*p)
+      permissions = PERMIT_COOKIE_SET | PERMIT_COOKIE_READ | PERMIT_POPUPS;
+
+      /*
+       * FIXME: for() loop is a kludge.  Want to loop around until we
+       * find a non-control character.  Assume there will be at most 4
+       * characters.
+       */
+      for (i = 0; i < 4; i++)
       {
-         case '>':
-            server_cookie = 0;
-            user_cookie   = 1;
-            p++;
-            break;
+         switch ((int)*p)
+         {
+            case '>':
+               /*
+                * Allow cookies to be read by the server, but do
+                * not allow them to be set.
+                */
+               permissions = (permissions & ~PERMIT_COOKIE_SET);
+               p++;
+               break;
 
-         case '<':
-            server_cookie = 1;
-            user_cookie   = 0;
-            p++;
-            break;
+            case '<':
+               /*
+                * Allow server to set cookies but do not let the
+                * server read them.
+                */
+               permissions = (permissions & ~PERMIT_COOKIE_READ);
+               p++;
+               break;
 
-         case '~':
-            server_cookie = 0;
-            user_cookie   = 0;
-            p++;
-            break;
+            case '^':
+               /*
+                * Block popups
+                */
+               permissions = (permissions & ~PERMIT_POPUPS);
+               p++;
+               break;
 
-         default:
-            server_cookie = 1;
-            user_cookie   = 1;
-            break;
+            case '%':
+               /*
+                * Permit filtering using PCRS
+                */
+               permissions = (permissions | PERMIT_RE_FILTER);
+               p++;
+               break;
+
+            case '~':
+               /*
+                * All of the above (maximum filtering).
+                */
+               permissions = PERMIT_RE_FILTER;
+               p++;
+               break;
+
+            default:
+               /*
+                * FIXME: Should break out of the loop here.
+                */
+               break;
+         }
       }
 
       /*
@@ -1323,106 +1293,42 @@ int load_cookiefile(struct client_state *csp)
        * front of the pattern
        */
       q = buf;
-      if (p > q) while ((*q++ = *p++))
+      if (p > q)
       {
-         /* nop */
+         while ((*q++ = *p++) != '\0')
+         {
+            /* nop */
+         }
       }
 
-      /* skip lines containing only "special" chars */
+      /* a lines containing only "special" chars sets default */
       if (*buf == '\0')
       {
+         default_permissions = permissions;
          continue;
       }
 
       /* allocate a new node */
       if (((b = zalloc(sizeof(*b))) == NULL)
-#ifdef REGEX
-      || ((b->url->preg = zalloc(sizeof(*b->url->preg))) == NULL)
-#endif
       )
       {
          fclose(fp);
-         goto load_cookie_error;
+         goto load_permissions_error;
       }
 
       /* add it to the list */
       b->next  = bl->next;
       bl->next = b;
 
-      /* save a copy of the orignal specification */
-      if ((b->url->spec = strdup(buf)) == NULL)
+      /* Save flags */
+      b->permissions = permissions;
+
+      /* Save the URL pattern */
+      if (create_url_spec(b->url, buf))
       {
          fclose(fp);
-         goto load_cookie_error;
+         goto load_permissions_error;
       }
-
-      b->send_user_cookie     = user_cookie;
-      b->accept_server_cookie = server_cookie;
-
-      if ((p = strchr(buf, '/')))
-      {
-         b->url->path    = strdup(p);
-         b->url->pathlen = strlen(b->url->path);
-         *p = '\0';
-      }
-      else
-      {
-         b->url->path    = NULL;
-         b->url->pathlen = 0;
-      }
-#ifdef REGEX
-      if (b->url->path)
-      {
-         int errcode;
-         char rebuf[BUFSIZ];
-
-         sprintf(rebuf, "^(%s)", b->url->path);
-
-         errcode = regcomp(b->url->preg, rebuf,
-               (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-         if (errcode)
-         {
-            size_t errlen =
-               regerror(errcode,
-                  b->url->preg, buf, sizeof(buf));
-
-            buf[errlen] = '\0';
-
-            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-                    b->url->spec, buf);
-            fclose(fp);
-            goto load_cookie_error;
-         }
-      }
-      else
-      {
-         freez(b->url->preg);
-      }
-#endif
-      if ((p = strchr(buf, ':')) == NULL)
-      {
-         port = 0;
-      }
-      else
-      {
-         *p++ = '\0';
-         port = atoi(p);
-      }
-
-      b->url->port = port;
-
-      if ((b->url->domain = strdup(buf)) == NULL)
-      {
-         fclose(fp);
-         goto load_cookie_error;
-      }
-
-      /* split domain into components */
-
-      *url = dsplit(b->url->domain);
-      b->url->dbuf = url->dbuf;
-      b->url->dcnt = url->dcnt;
-      b->url->dvec = url->dvec;
    }
 
    fclose(fp);
@@ -1435,24 +1341,24 @@ int load_cookiefile(struct client_state *csp)
 #endif /* ndef SPLIT_PROXY_ARGS */
 
    /* the old one is now obsolete */
-   if (current_cookiefile)
+   if (current_permissions_file)
    {
-      current_cookiefile->unloader = unload_cookiefile;
+      current_permissions_file->unloader = unload_permissions_file;
    }
 
    fs->next    = files->next;
    files->next = fs;
-   current_cookiefile = fs;
+   current_permissions_file = fs;
 
    if (csp)
    {
-      csp->clist = fs;
+      csp->permissions_list = fs;
    }
 
    return(0);
 
-load_cookie_error:
-   log_error(LOG_LEVEL_ERROR, "can't load cookiefile '%s': %E", cookiefile);
+load_permissions_error:
+   log_error(LOG_LEVEL_ERROR, "can't load permissions file '%s': %E", permissions_file);
    return(-1);
 
 }
@@ -1479,9 +1385,8 @@ int load_trustfile(struct client_state *csp)
    struct url_spec **tl;
 
    char  buf[BUFSIZ], *p, *q;
-   int port, reject, trusted;
+   int reject, trusted;
    struct file_list *fs;
-   struct url_spec url[1];
 
    if (!check_file_changed(current_trustfile, trustfile, &fs))
    {
@@ -1539,11 +1444,7 @@ int load_trustfile(struct client_state *csp)
       }
 
       /* allocate a new node */
-      if (((b = zalloc(sizeof(*b))) == NULL)
-#ifdef REGEX
-      || ((b->url->preg = zalloc(sizeof(*b->url->preg))) == NULL)
-#endif
-      )
+      if ((b = zalloc(sizeof(*b))) == NULL)
       {
          fclose(fp);
          goto load_trustfile_error;
@@ -1553,79 +1454,14 @@ int load_trustfile(struct client_state *csp)
       b->next  = bl->next;
       bl->next = b;
 
-      /* save a copy of the orignal specification */
-      if ((b->url->spec = strdup(buf)) == NULL)
-      {
-         fclose(fp);
-         goto load_trustfile_error;
-      }
-
       b->reject = reject;
 
-      if ((p = strchr(buf, '/')))
-      {
-         b->url->path    = strdup(p);
-         b->url->pathlen = strlen(b->url->path);
-         *p = '\0';
-      }
-      else
-      {
-         b->url->path    = NULL;
-         b->url->pathlen = 0;
-      }
-#ifdef REGEX
-      if (b->url->path)
-      {
-         int errcode;
-         char rebuf[BUFSIZ];
-
-         sprintf(rebuf, "^(%s)", b->url->path);
-
-         errcode = regcomp(b->url->preg, rebuf,
-               (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-
-         if (errcode)
-         {
-            size_t errlen =
-               regerror(errcode,
-                  b->url->preg, buf, sizeof(buf));
-
-            buf[errlen] = '\0';
-
-            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-                    b->url->spec, buf);
-            fclose(fp);
-            goto load_trustfile_error;
-         }
-      }
-      else
-      {
-         freez(b->url->preg);
-      }
-#endif
-      if ((p = strchr(buf, ':')) == NULL)
-      {
-         port = 0;
-      }
-      else
-      {
-         *p++ = '\0';
-         port = atoi(p);
-      }
-
-      b->url->port = port;
-
-      if ((b->url->domain = strdup(buf)) == NULL)
+      /* Save the URL pattern */
+      if (create_url_spec(b->url, buf))
       {
          fclose(fp);
          goto load_trustfile_error;
       }
-
-      /* split domain into components */
-      *url = dsplit(b->url->domain);
-      b->url->dbuf = url->dbuf;
-      b->url->dcnt = url->dcnt;
-      b->url->dvec = url->dvec;
 
       /*
        * save a pointer to URL's spec in the list of trusted URL's, too
@@ -1966,9 +1802,6 @@ int load_re_filterfile(struct client_state *csp)
    int error;
    pcrs_job *dummy;
 
-#ifndef SPLIT_PROXY_ARGS
-   char *p;
-#endif /* ndef SPLIT_PROXY_ARGS */
    if (!check_file_changed(current_re_filterfile, re_filterfile, &fs))
    {
       /* No need to load */
@@ -2003,7 +1836,7 @@ int load_re_filterfile(struct client_state *csp)
       /* We have a meaningful line -> make it a job */
       if ((dummy = pcrs_make_job(buf, &error)) == NULL)
       {
-         log_error(LOG_LEVEL_REF, 
+         log_error(LOG_LEVEL_RE_FILTER, 
                "Adding re_filter job %s failed with error %d.", buf, error);
          continue;
       }
@@ -2011,7 +1844,7 @@ int load_re_filterfile(struct client_state *csp)
       {
          dummy->next = bl->joblist;
          bl->joblist = dummy;
-         log_error(LOG_LEVEL_REF, "Adding re_filter job %s succeeded.", buf);
+         log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s succeeded.", buf);
       }
    }
 
@@ -2047,127 +1880,6 @@ load_re_filterfile_error:
 
 }
 #endif /* def PCRS */
-
-
-#ifdef KILLPOPUPS
-/*********************************************************************
- *
- * Function    :  load_popupfile
- *
- * Description :  Load, and parse the popup blocklist.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  0 => success, else there was an error.
- *
- *********************************************************************/
-int load_popupfile(struct client_state *csp)
-{
-   FILE *fp;
-   char  buf[BUFSIZ], *p, *q;
-   struct popup_blocklist *entry = NULL;
-   struct popup_settings * data;
-   struct file_list *fs;
-   p = buf;
-   q = buf;
-
-   if (!check_file_changed(current_popupfile, popupfile, &fs))
-   {
-      /* No need to load */
-      if (csp)
-      {
-         csp->plist = current_popupfile;
-      }
-      return(0);
-   }
-   if (!fs)
-   {
-      goto load_popupfile_error;
-   }
-
-   fs->f = data = (struct popup_settings  *)zalloc(sizeof(*data));
-   if (data == NULL)
-   {
-      goto load_popupfile_error;
-   }
-
-   if ((fp = fopen(popupfile, "r")) == NULL)
-   {
-      goto load_popupfile_error;
-   }
-
-   while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
-   {
-      entry = (struct popup_blocklist*)zalloc(sizeof(struct popup_blocklist));
-      if (!entry)
-      {
-         fclose( fp );
-         goto load_popupfile_error;
-      }
-
-      /* Handle allowed hosts. */
-      if ( *buf == '~' )
-      {
-         /* Rememeber: skip the tilde */
-         entry->host_name = strdup( buf + 1 );
-         if (!entry->host_name)
-         {
-            fclose( fp );
-            goto load_popupfile_error;
-         }
-
-         entry->next = data->allowed;
-         data->allowed = entry;
-      }
-      else
-      {
-         /* Blocked host */
-         entry->host_name = strdup( buf );
-         if (!entry->host_name)
-         {
-            fclose( fp );
-            goto load_popupfile_error;
-         }
-
-         entry->next = data->blocked;
-         data->blocked = entry;
-      }
-   }
-
-   fclose( fp );
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   /* the old one is now obsolete */
-   if ( NULL != current_popupfile )
-   {
-      current_popupfile->unloader = unload_popupfile;
-   }
-
-   fs->next    = files->next;
-   files->next = fs;
-   current_popupfile = fs;
-
-   if (csp)
-   {
-      csp->plist = fs;
-   }
-
-   return( 0 );
-
-load_popupfile_error:
-   log_error(LOG_LEVEL_ERROR, "can't load popupfile '%s': %E", popupfile);
-   return(-1);
-
-}
-#endif /* def KILLPOPUPS */
-
 
 
 /*********************************************************************

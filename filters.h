@@ -1,14 +1,14 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.1.1.1 2001/05/15 13:58:52 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/filters.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
- *                   `block_url', `cookie_url', `domaincmp', `dsplit',
+ *                   `block_url', `url_permissions', `domaincmp', `dsplit',
  *                   `filter_popups', `forward_url'
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
  *                   `show_proxy_args', and `trust_url'
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:52  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -69,7 +72,7 @@ extern int block_imageurl(struct http_request *http, struct client_state *csp);
 extern int block_imageurl_using_imagelist(struct http_request *http, struct client_state *csp);
 #endif /* def USE_IMAGE_LIST */
 
-extern struct cookie_spec *cookie_url(struct http_request *http, struct client_state *csp);
+extern int url_permissions(struct http_request *http, struct client_state *csp);
 extern const struct gateway *forward_url(struct http_request *http, struct client_state *csp);
 
 extern struct url_spec dsplit(char *domain);
