@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.16 2002/01/17 21:01:02 jongfoster Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.17 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.17  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.16  2002/01/17 21:01:02  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -246,6 +249,13 @@ extern const struct forward_spec *forward_url(struct http_request *http, struct 
 extern char *pcrs_filter_response(struct client_state *csp);
 extern char *gif_deanimate_response(struct client_state *csp);
 extern int remove_chunked_transfer_coding(char *buffer, const size_t size);
+
+/*
+ * Solaris fix:
+ */
+#ifndef INADDR_NONE
+#define INADDR_NONE -1
+#endif     
 
 /* 
  * Revision control strings from this header and associated .c file

@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.4 2002/03/09 20:03:52 jongfoster Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.5 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.5  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.4  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -91,7 +94,16 @@ extern jb_socket forwarded_connect(const struct forward_spec * fwd,
                                    struct http_request *http, 
                                    struct client_state *csp);
 
-/* Revision control strings from this header and associated .c file */
+/*
+ * Solaris fix
+ */
+#ifndef INADDR_NONE
+#define INADDR_NONE -1
+#endif
+
+/*
+ * Revision control strings from this header and associated .c file
+ */
 extern const char gateway_rcs[];
 extern const char gateway_h_rcs[];
 
