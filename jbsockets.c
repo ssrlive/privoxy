@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.3 2001/05/25 21:57:54 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.2 2001/05/17 23:01:01 oes Exp
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.3  2001/05/25 21:57:54  jongfoster
+ *    Now gives a warning under Windows if you try to bind
+ *    it to a port that's already in use.
+ *
  *    Revision 1.2  2001/05/17 23:01:01  oes
  *     - Cleaned CRLF's from the sources and related files
  *
@@ -230,7 +234,10 @@ int connect_to(char *host, int portnum, struct client_state *csp)
  *********************************************************************/
 int write_socket(int fd, const char *buf, int len)
 {
-   if (len <= 0) return(0);
+   if (len <= 0)
+   {
+      return(0);
+   }
 
    /* if (DEBUG(LOG)) fwrite(buf, n, 1, logfp); */
 
