@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.57 2002/04/04 00:36:36 gliptak Exp $
+# $Id: GNUmakefile.in,v 1.58 2002/04/04 06:32:58 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -436,27 +436,34 @@ win-dist:
 #############################################################################
 # Tarball distribution. Only source files. No binaries.
 #############################################################################
-tarball-dist: clean clobber
+
+MISC_FILES = install-sh config.sub configure.in GNUmakefile.in config.h.in config.guess privoxy*
+
+tarball-dist:
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add source files
-	for foo in `find . -name ".*\.c"`; do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	for foo in `find . -name "*.c"`; do \
+		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add header files
-	for foo in `find . -name ".*\.h"`; do \
+	for foo in `find . -name "*.h"`; do \
+		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done; 
+# add config files
+	for foo in $(CONFIG_FILES); do \
 		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add misc files
-	for foo in configure.in GNUMakefile.in ; do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	for foo in $(MISC_FILES); do \
+		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done;
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
-	$(GZIP_PROG) ../privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
+	$(GZIP_PROG) ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Tarball distribution created.
 
 
@@ -714,6 +721,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.58  2002/04/04 06:32:58  hal9
+# New dok targets for make readme.
+#
 # Revision 1.57  2002/04/04 00:36:36  gliptak
 # always use pcre for matching
 #
