@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-for-url,v $
+# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-for-url,v $
 #
 # Purpose     :  Template used to edit the actions associated with a
 #                particular section in an actions file.
@@ -32,6 +32,15 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.29.2.3  2002/08/23 02:22:53  hal9
+#    Fix a perl brain fart with <li> in comments.
+#
+#    Revision 1.29.2.1  2002/08/02 12:51:42  oes
+#    Added top submit button; Consistency with docs: Change default name for action from hide-referer to hide-referrer
+#
+#    Revision 1.29  2002/05/21 19:10:57  oes
+#    Fixed JavaScript error
+#
 #    Revision 1.28  2002/05/14 21:36:38  oes
 #     - Renamed prevent-(setting/reading)-cookies to
 #       crunch-(incoming/outgoing)-cookies
@@ -174,10 +183,10 @@
 # hide-from-param-block
 # hide-from-param-custom
 # hide-from-param
-# hide-referer-param-forge
-# hide-referer-param-block
-# hide-referer-param-custom
-# hide-referer-param
+# hide-referrer-param-forge
+# hide-referrer-param-block
+# hide-referrer-param-custom
+# hide-referrer-param
 # hide-user-agent-param
 # image-blocker-param-pattern
 # image-blocker-param-blank
@@ -241,12 +250,12 @@ function hide_from_header_param_disable(tf)
     }
 }
 
-function hide_referer_param_disable(tf)
+function hide_referrer_param_disable(tf)
 {
     if (document.getElementById) {
-        document.getElementById("hide_referer_param").disabled = tf;
+        document.getElementById("hide_referrer_param").disabled = tf;
     } else if (document.all) {
-        document.myform.hide_referer_param.disabled = tf;
+        document.myform.hide_referrer_param.disabled = tf;
     }
 }
 
@@ -295,12 +304,12 @@ function show_hide_from_header_opts(tf)
     target.style.display = (tf ? "" : "none");
 }
 
-function show_hide_referer_opts(tf)
+function show_hide_referrer_opts(tf)
 {
     if (document.getElementById) {
-        target = document.getElementById("hide_referer_opts");
+        target = document.getElementById("hide_referrer_opts");
     } else if (document.all) {
-        target = document.hide_referer_opts;
+        target = document.hide_referrer_opts;
     } else {
         return;
     }
@@ -390,6 +399,12 @@ function show_send_wafer_opts(tf)
           <input type="hidden" name="v" value="@v@">
           <input type="hidden" name="s" value="@s@">
         </h2>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="green" align="center">
+        <p><input type="submit" value="Submit" name="Submit"></p>
       </td>
     </tr>
 
@@ -586,41 +601,41 @@ function show_send_wafer_opts(tf)
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="hide_referer" id="hide_referer_y" value="Y" @hide-referer-y@
-        onclick="show_hide_referer_opts(true)"></td>
+        name="hide_referrer" id="hide_referrer_y" value="Y" @hide-referrer-y@
+        onclick="show_hide_referrer_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="hide_referer" id="hide_referer_n" value="N" @hide-referer-n@
-        onclick="show_hide_referer_opts(false)"></td>
+        name="hide_referrer" id="hide_referrer_n" value="N" @hide-referrer-n@
+        onclick="show_hide_referrer_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="hide_referer" id="hide_referer_x" value="X" @hide-referer-x@
-        onclick="show_hide_referer_opts(false)"
+        name="hide_referrer" id="hide_referrer_x" value="X" @hide-referrer-x@
+        onclick="show_hide_referrer_opts(false)"
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-REFERRER">hide-referrer</a></td>
       <td>Helps prevent tracking by not sending the URL of the previous web
         page.&nbsp;</td>
     </tr>
-    <tr class="bg1" align="left" valign="top" id="hide_referer_opts">
+    <tr class="bg1" align="left" valign="top" id="hide_referrer_opts">
       <td class="en1">&nbsp;</td>
       <td class="dis1">&nbsp;</td>
       <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td><input type="radio" name="hide_referer_mode" value="block"
-        onclick="hide_referer_param_disable(true)"
-        @hide-referer-param-block@ id="hide_referer_mode_block"><label
-        for="hide_referer_mode_block">Remove completely</label> (breaks images
+      <td><input type="radio" name="hide_referrer_mode" value="block"
+        onclick="hide_referrer_param_disable(true)"
+        @hide-referrer-param-block@ id="hide_referrer_mode_block"><label
+        for="hide_referrer_mode_block">Remove completely</label> (breaks images
         on some free web hosts).<br>
-        <input type="radio" name="hide_referer_mode" value="forge"
-        onclick="hide_referer_param_disable(true)"
-        @hide-referer-param-forge@ id="hide_referer_mode_forge"><label
-        for="hide_referer_mode_forge">Fake as the root directory of the
+        <input type="radio" name="hide_referrer_mode" value="forge"
+        onclick="hide_referrer_param_disable(true)"
+        @hide-referrer-param-forge@ id="hide_referrer_mode_forge"><label
+        for="hide_referrer_mode_forge">Fake as the root directory of the
         site</label> (fools checks for in-site links.)<br>
-        <input type="radio" name="hide_referer_mode" value="CUSTOM"
-        onclick="hide_referer_param_disable(false)"
-        @hide-referer-param-custom@ id="hide_referer_mode_set"><label
-        for="hide_referer_mode_set">Fake as this web address:</label><br>
-        <input type="text" name="hide_referer_param" 
-        id="hide_referer_param" size="40"
-        value="@hide-referer-param@"></td>
+        <input type="radio" name="hide_referrer_mode" value="CUSTOM"
+        onclick="hide_referrer_param_disable(false)"
+        @hide-referrer-param-custom@ id="hide_referrer_mode_set"><label
+        for="hide_referrer_mode_set">Fake as this web address:</label><br>
+        <input type="text" name="hide_referrer_param" 
+        id="hide_referrer_param" size="40"
+        value="@hide-referrer-param@"></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -804,7 +819,7 @@ function show_send_wafer_opts(tf)
     <tr>
       <td class="box">
         <h2>More Privoxy:</h2>
-        <ul>@menu@</ul>
+        <ul>@menu@<li><a href="@user-manual@">Documentation</a></li></ul>
       </td>
     </tr>
 
@@ -842,13 +857,13 @@ function show_send_wafer_opts(tf)
 if (document.getElementById) {
     // alert("Netscape 6 or IE5");
     document.getElementById("hide_from_header_param").disabled = !(document.getElementById("hide_from_header_mode_set").checked);
-    document.getElementById("hide_referer_param").disabled = !(document.getElementById("hide_referer_mode_set").checked);
+    document.getElementById("hide_referrer_param").disabled = !(document.getElementById("hide_referrer_mode_set").checked);
     document.getElementById("set_image_blocker_param").disabled = !(document.getElementById("set_image_blocker_mode_set").checked);
 
     show_add_header_opts    (document.getElementById("add_header_y").checked);
     show_deanimate_opts     (document.getElementById("deanimate_gifs_y").checked);
     show_hide_from_header_opts(document.getElementById("hide_from_header_y").checked);
-    show_hide_referer_opts  (document.getElementById("hide_referer_y").checked);
+    show_hide_referrer_opts (document.getElementById("hide_referrer_y").checked);
     show_user_agent_opts    (document.getElementById("hide_user_agent_y").checked);
     show_set_image_blocker_opts (document.getElementById("set_image_blocker_y").checked);
     show_limit_connect_opts (document.getElementById("limit_connect_y").checked);
@@ -856,13 +871,13 @@ if (document.getElementById) {
 } else if (document.all) {
     // alert("IE4");
     document.myform.hide_from_header_param.disabled = !(document.myform.hide_from_header_mode_set.checked);
-    document.myform.hide_referer_param.disabled = !(document.myform.hide_referer_mode_set.checked);
+    document.myform.hide_referrer_param.disabled = !(document.myform.hide_referrer_mode_set.checked);
     document.myform.set_image_blocker_param.disabled = !(document.myform.set_image_blocker_mode_set.checked);
 
     show_add_header_opts    (document.myform.add_header_y.checked);
     show_deanimate_opts     (document.myform.deanimate_gifs_y.checked);
     show_hide_from_header_opts (document.myform.hide_from_header_y.checked);
-    show_hide_referer_opts  (document.myform.hide_referer_y.checked);
+    show_hide_referrer_opts (document.myform.hide_referrer_y.checked);
     show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
     show_set_image_blocker_opts (document.myform.set_image_blocker_y.checked);
     show_limit_connect_opts (document.myform.limit_connect_y.checked);
