@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.37 2002/03/27 14:32:43 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.38 2002/03/31 17:18:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.37 2002/03/27 14:32:43 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.38  2002/03/31 17:18:59  jongfoster
+ *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
+ *
  *    Revision 1.37  2002/03/27 14:32:43  david__schmidt
  *    More compiler warning message maintenance
  *
@@ -443,41 +446,41 @@ void log_error(int loglevel, char *fmt, ...)
    switch (loglevel)
    {
       case LOG_LEVEL_ERROR:
-         outc = sprintf(outbuf, "Privoxy(%ld) Error: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Error: ", this_thread);
          break;
       case LOG_LEVEL_FATAL:
-         outc = sprintf(outbuf, "Privoxy(%ld) Fatal error: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Fatal error: ", this_thread);
          break;
       case LOG_LEVEL_GPC:
-         outc = sprintf(outbuf, "Privoxy(%ld) Request: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Request: ", this_thread);
          break;
       case LOG_LEVEL_CONNECT:
-         outc = sprintf(outbuf, "Privoxy(%ld) Connect: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Connect: ", this_thread);
          break;
       case LOG_LEVEL_LOG:
-         outc = sprintf(outbuf, "Privoxy(%ld) Writing: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Writing: ", this_thread);
          break;
       case LOG_LEVEL_HEADER:
-         outc = sprintf(outbuf, "Privoxy(%ld) Header: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Header: ", this_thread);
          break;
       case LOG_LEVEL_INFO:
-         outc = sprintf(outbuf, "Privoxy(%ld) Info: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Info: ", this_thread);
          break;
       case LOG_LEVEL_RE_FILTER:
-         outc = sprintf(outbuf, "Privoxy(%ld) Re-Filter: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Re-Filter: ", this_thread);
          break;
 #ifdef FEATURE_FORCE_LOAD
       case LOG_LEVEL_FORCE:
-         outc = sprintf(outbuf, "Privoxy(%ld) Force: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Force: ", this_thread);
          break;
 #endif /* def FEATURE_FORCE_LOAD */
 #ifdef FEATURE_FAST_REDIRECTS
       case LOG_LEVEL_REDIRECTS:
-         outc = sprintf(outbuf, "Privoxy(%ld) Redirect: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Redirect: ", this_thread);
          break;
 #endif /* def FEATURE_FAST_REDIRECTS */
       case LOG_LEVEL_DEANIMATE:
-         outc = sprintf(outbuf, "Privoxy(%ld) Gif-Deanimate: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Gif-Deanimate: ", this_thread);
          break;
       case LOG_LEVEL_CLF:
          outbuf = outbuf_save;
@@ -486,14 +489,14 @@ void log_error(int loglevel, char *fmt, ...)
          break;
 #ifdef FEATURE_KILL_POPUPS
       case LOG_LEVEL_POPUPS:
-         outc = sprintf(outbuf, "Privoxy(%ld) Kill-Popups: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) Kill-Popups: ", this_thread);
          break;
 #endif /* def FEATURE_KILL_POPUPS */
       case LOG_LEVEL_CGI:
-         outc = sprintf(outbuf, "Privoxy(%ld) CGI: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%05ld) CGI: ", this_thread);
          break;
       default:
-         outc = sprintf(outbuf, "Privoxy(%ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
+         outc = sprintf(outbuf, "Privoxy(%05ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
    }
    
