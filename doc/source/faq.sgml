@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.21 2002/03/24 11:01:06 swa Exp $
+ $Id: faq.sgml,v 1.22 2002/03/24 11:51:00 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.21 2002/03/24 11:01:06 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.22 2002/03/24 11:51:00 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -279,6 +279,31 @@ warranty? Registration?</title>
   in every respect!
 
  </para>
+</sect3>
+
+<sect3 id="jointeam"><title>I would like to help you, what do I do?</title>
+
+<sect4 id="jointeam-money"><title>Money Money Money</title>
+<para>
+ We, of course, welcome donations and use the money for domain registering,
+ regular world-wide get-togethers (hahaha). Anyway, we'll soon describe the
+ process how to donate money to the team.
+</para>
+</sect4>
+
+<sect4 id="jointeam-work"><title>You want to work with us?</title>
+<para>
+   Well, helping the team is always a good idea. We welcome new developers,
+   RPM gurus or documentation makers. Simply get an account on sourceforge.net
+   and mail your id to the developer mailing list. Then read the
+   section Quickstart in the developers manual.
+</para>
+<para>
+Once we have added you to the team, you'll have write access to the CVS
+repository, and together we'll find a suitable task for you.
+</para>
+</sect4>
+
 </sect3>
 
 </sect2>
@@ -825,16 +850,6 @@ FIXME: commented out until we have data. HB 03/18/02.
 </sect3>
 -->
 
-<sect3 id="jointeam"><title>I would like to help you, what do I do?</title>
-<para>
-   Well, helping the team is always a good idea. We welcome new developers,
-   RPM gurus or documentation makers. Simply get an account on sourceforge.net
-   and mail your id to the developer mailing list. Once we have added you to
-   the team, you'll have write access to the CVS repository, and together
-   we'll find a suitable task for you.
-</para>
-</sect3>
-
 <sect3 id="blocklist"><title>Do you still maintain the blocklists?</title>
 <para>
     No. The format of the blocklists has changed significantly in the versions
@@ -1212,6 +1227,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.22  2002/03/24 11:51:00  swa
+name change. changed filenames.
+
 Revision 1.21  2002/03/24 11:01:06  swa
 name change
 

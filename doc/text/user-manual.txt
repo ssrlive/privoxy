@@ -1,18 +1,18 @@
 
-Junkbuster User Manual
+Privoxy User Manual
 
-   By: Junkbuster Developers
+   By: Privoxy Developers
    
-   $Id: user-manual.sgml,v 1.49 2002/03/21 17:01:05 hal9 Exp $
+   $Id: user-manual.sgml,v 1.53 2002/03/24 11:51:00 swa Exp $
    
    The user manual gives users information on how to install, configure
-   and use Internet Junkbuster. Internet Junkbuster is a web proxy with
-   advanced filtering capabilities for protecting privacy, filtering web
-   page content, managing cookies, controlling access, and removing ads,
-   banners, pop-ups and other obnoxious Internet Junk. Junkbuster has a
-   very flexible configuration and can be customized to suit individual
-   needs and tastes. Internet Junkbuster has application for both
-   stand-alone systems and multi-user networks.
+   and use Privoxy. Privoxy is a web proxy with advanced filtering
+   capabilities for protecting privacy, filtering web page content,
+   managing cookies, controlling access, and removing ads, banners,
+   pop-ups and other obnoxious Internet Junk. Privoxy has a very flexible
+   configuration and can be customized to suit individual needs and
+   tastes. Privoxy has application for both stand-alone systems and
+   multi-user networks.
    
    You can find the latest version of the user manual at
    [1]http://ijbswa.sourceforge.net/user-manual/.
@@ -32,9 +32,9 @@ Junkbuster User Manual
         2.5. [9]Windows
         2.6. [10]Other
                 
-   3. [11]JunkBuster Configuration
+   3. [11]Privoxy Configuration
           
-        3.1. [12]Controlling Junkbuster with Your Web Browser
+        3.1. [12]Controlling Privoxy with Your Web Browser
         3.2. [13]Configuration Files Overview
         3.3. [14]The Main Configuration File
                 
@@ -53,7 +53,7 @@ Junkbuster User Manual
         3.5. [24]The Filter File
         3.6. [25]Templates
                 
-   4. [26]Quickstart to Using Junkbuster
+   4. [26]Quickstart to Using Privoxy
           
         4.1. [27]Command Line Options
                 
@@ -78,26 +78,26 @@ Junkbuster User Manual
               28
               29
                       
-        8.2. [35]JunkBuster's Internal Pages
+        8.2. [35]Privoxy's Internal Pages
         8.3. [36]Anatomy of an Action
                 
 1. Introduction
 
-   Internet Junkbuster is a web proxy with advanced filtering
-   capabilities for protecting privacy, filtering and modifying web page
-   content, managing cookies, controlling access, and removing ads,
-   banners, pop-ups and other obnoxious Internet Junk. Junkbuster has a
-   very flexible configuration and can be customized to suit individual
-   needs and tastes. Internet Junkbuster has application for both
-   stand-alone systems and multi-user networks.
+   Privoxy is a web proxy with advanced filtering capabilities for
+   protecting privacy, filtering and modifying web page content, managing
+   cookies, controlling access, and removing ads, banners, pop-ups and
+   other obnoxious Internet Junk. Privoxy has a very flexible
+   configuration and can be customized to suit individual needs and
+   tastes. Privoxy has application for both stand-alone systems and
+   multi-user networks.
    
    This documentation is included with the current BETA version of
-   Internet Junkbuster and is mostly complete at this point. The most up
-   to date reference for the time being is still the comments in the
-   source files and in the individual configuration files. Development of
-   version 3.0 is currently nearing completion, and includes many
-   significant changes and enhancements over earlier versions. The target
-   release date for stable v3.0 is "soon" ;-)
+   Privoxy and is mostly complete at this point. The most up to date
+   reference for the time being is still the comments in the source files
+   and in the individual configuration files. Development of version 3.0
+   is currently nearing completion, and includes many significant changes
+   and enhancements over earlier versions. The target release date for
+   stable v3.0 is "soon" ;-)
    
    Since this is a BETA version, not all new features are well tested.
    This documentation may be slightly out of sync as a result (especially
@@ -106,9 +106,9 @@ Junkbuster User Manual
    
 1.1. New Features
 
-   In addition to Junkbuster's traditional features of ad and banner
-   blocking and cookie management, this is a list of new features
-   currently under development:
+   In addition to Internet Junkbuster's traditional feature of ad and
+   banner blocking and cookie management, Privoxy provides new features,
+   some of them currently under development:
    
      * Integrated browser based configuration and control utility
        ([37]http://i.j.b). Browser-based tracing of rule and filter
@@ -135,11 +135,11 @@ Junkbuster User Manual
    
 2. Installation
 
-   Junkbuster is available as raw source code, or pre-compiled binaries.
-   See the [38]Junkbuster Home Page for binaries and current release
-   info. Junkbuster is also available via [39]CVS. This is the
-   recommended approach at this time. But please be aware that CVS is
-   constantly changing, and it may break in mysterious ways.
+   Privoxy is available as raw source code, or pre-compiled binaries. See
+   the [38]Privoxy Home Page for binaries and current release info.
+   Privoxy is also available via [39]CVS. This is the recommended
+   approach at this time. But please be aware that CVS is constantly
+   changing, and it may break in mysterious ways.
      _________________________________________________________________
    
 2.1. Source
@@ -183,16 +183,16 @@ rrent
    This will create both binary and src RPMs in the usual places.
    Example:
    
-      /usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+      /usr/src/redhat/RPMS/i686/privoxy-2.9.11-1.i686.rpm
    
-      /usr/src/redhat/SRPMS/junkbuster-2.9.11-1.src.rpm
+      /usr/src/redhat/SRPMS/privoxy-2.9.11-1.src.rpm
    
    To install, of course:
    
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/privoxy-2.9.11-1.i686.rpm
 
-   This will place the Junkbuster configuration files in
-   /etc/junkbuster/, and log files in /var/log/junkbuster/.
+   This will place the Privoxy configuration files in /etc/privoxy/, and
+   log files in /var/log/privoxy/.
      _________________________________________________________________
    
 2.3. SuSE
@@ -207,30 +207,30 @@ rrent
    This will create both binary and src RPMs in the usual places.
    Example:
    
-      /usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+      /usr/src/packages/RPMS/i686/privoxy-2.9.11-1.i686.rpm
    
-      /usr/src/packages/SRPMS/junkbuster-2.9.11-1.src.rpm
+      /usr/src/packages/SRPMS/privoxy-2.9.11-1.src.rpm
    
    To install, of course:
    
- rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/privoxy-2.9.11-1.i686.rpm
 
-   This will place the Junkbuster configuration files in
-   /etc/junkbuster/, and log files in /var/log/junkbuster/.
+   This will place the Privoxy configuration files in /etc/privoxy/, and
+   log files in /var/log/privoxy/.
      _________________________________________________________________
    
 2.4. OS/2
 
-   Junkbuster is packaged in a WarpIN self- installing archive. The
+   Privoxy is packaged in a WarpIN self- installing archive. The
    self-installing program will be named depending on the release
    version, something like: ijbos2_setup_1.2.3.exe. In order to install
    it, simply run this executable or double-click on its icon and follow
-   the WarpIN installation panels. A shadow of the Junkbuster executable
+   the WarpIN installation panels. A shadow of the Privoxy executable
    will be placed in your startup folder so it will start automatically
    whenever OS/2 starts.
    
-   The directory you choose to install Junkbuster into will contain all
-   of the configuration files.
+   The directory you choose to install Privoxy into will contain all of
+   the configuration files.
    
    If you would like to build binary images on OS/2 yourself, you will
    need a few Unix-like tools: autoconf, autoheader and sh. These tools
@@ -277,16 +277,16 @@ setup
    The rest should be the same as above for Linux/Unix.
      _________________________________________________________________
    
-3. JunkBuster Configuration
+3. Privoxy Configuration
 
-   All JunkBuster configuration is kept in text files. These files can be
-   edited with a text editor. Many important aspects of JunkBuster can
-   also be controlled easily with a web browser.
+   All Privoxy configuration is kept in text files. These files can be
+   edited with a text editor. Many important aspects of Privoxy can also
+   be controlled easily with a web browser.
      _________________________________________________________________
    
-3.1. Controlling Junkbuster with Your Web Browser
+3.1. Controlling Privoxy with Your Web Browser
 
-   JunkBuster can be reached by the special URL [41]http://i.j.b/ (or
+   Privoxy can be reached by the special URL [41]http://i.j.b/ (or
    alternately [42]http://ijbswa.sourceforge.net/config/), which is an
    internal page. You will see the following section:
    
@@ -296,32 +296,32 @@ Please choose from the following options:
     * Show the source code version numbers
     * Show the client's request headers.
     * Show which actions apply to a URL and why
-    * Toggle JunkBuster on or off
+    * Toggle Privoxy on or off
     * Edit the actions list
 
 
    This should be self-explanatory. Note the last item is an editor for
    the "actions list", which is where much of the ad, banner, cookie, and
    URL blocking magic is configured as well as other advanced features of
-   Junkbuster. This is an easy way to adjust various aspects of
-   Junkbuster configuration. The actions file, and other configuration
-   files, are explained in detail below. Junkbuster will automatically
-   detect any changes to these files.
+   Privoxy. This is an easy way to adjust various aspects of Privoxy
+   configuration. The actions file, and other configuration files, are
+   explained in detail below. Privoxy will automatically detect any
+   changes to these files.
    
-   "Toggle JunkBuster On or Off" is handy for sites that might have
-   problems with your current actions and filters, or just to test if a
-   site misbehaves, whether it is JunkBuster causing the problem or not.
-   Junkbuster continues to run as a proxy in this case, but all filtering
-   is disabled.
+   "Toggle Privoxy On or Off" is handy for sites that might have problems
+   with your current actions and filters, or just to test if a site
+   misbehaves, whether it is Privoxy causing the problem or not. Privoxy
+   continues to run as a proxy in this case, but all filtering is
+   disabled.
      _________________________________________________________________
    
 3.2. Configuration Files Overview
 
    For Unix, *BSD and Linux, all configuration files are located in
-   /etc/junkbuster/ by default. For MS Windows, OS/2, and AmigaOS these
-   are all in the same directory as the Junkbuster executable. The name
-   and number of configuration files has changed from previous versions,
-   and is subject to change as development progresses.
+   /etc/privoxy/ by default. For MS Windows, OS/2, and AmigaOS these are
+   all in the same directory as the Privoxy executable. The name and
+   number of configuration files has changed from previous versions, and
+   is subject to change as development progresses.
    
    The installed defaults provide a reasonable starting point, though
    possibly aggressive by some standards. For the time being, there are
@@ -329,21 +329,21 @@ Please choose from the following options:
    
      * The main configuration file is named config on Linux, Unix, BSD,
        OS/2, and AmigaOS and config.txt on Windows.
-     * The ijb.action file is used to define various "actions" relating
-       to images, banners, pop-ups, access restrictions, banners and
-       cookies. There is a CGI based editor for this file that can be
+     * The default.action file is used to define various "actions"
+       relating to images, banners, pop-ups, access restrictions, banners
+       and cookies. There is a CGI based editor for this file that can be
        accessed via [43]http://i.j.b. (Other actions files are included
        as well with differing levels of filtering and blocking, e.g.
        ijb-basic.action.)
-     * The re_filterfile file can be used to re-write the raw page
+     * The default.filter file can be used to re-write the raw page
        content, including viewable text as well as embedded HTML and
        JavaScript, and whatever else lurks on any given web page.
        
-   ijb.action and re_filterfile can use Perl style regular expressions
-   for maximum flexibility. All files use the "#" character to denote a
-   comment. Such lines are not processed by Junkbuster. After making any
-   changes, there is no need to restart Junkbuster in order for the
-   changes to take effect. Junkbuster should detect such changes
+   default.action and default.filter can use Perl style regular
+   expressions for maximum flexibility. All files use the "#" character
+   to denote a comment. Such lines are not processed by Privoxy. After
+   making any changes, there is no need to restart Privoxy in order for
+   the changes to take effect. Privoxy should detect such changes
    automatically.
    
    While under development, the configuration content is subject to
@@ -370,27 +370,27 @@ Please choose from the following options:
    Thus, by placing a "#" at the start of an existing configuration line,
    you can make it a comment and it will be treated as if it weren't
    there. This is called "commenting out" an option and can be useful to
-   turn off features: If you comment out the "logfile" line, junkbuster
-   will not log to a file at all. Watch for the "default:" section in
-   each explanation to see what happens if the option is left unset (or
+   turn off features: If you comment out the "logfile" line, Privoxy will
+   not log to a file at all. Watch for the "default:" section in each
+   explanation to see what happens if the option is left unset (or
    commented out).
    
    Long lines can be continued on the next line by using a "\" as the
    very last character.
    
-   There are various aspects of Junkbuster behavior that can be tuned.
+   There are various aspects of Privoxy behavior that can be tuned.
      _________________________________________________________________
    
 3.3.1. Defining Other Configuration Files
 
-   Junkbuster can use a number of other files to tell it what ads to
-   block, what cookies to accept, etc. This section of the configuration
-   file tells Junkbuster where to find all those other files.
+   Privoxy can use a number of other files to tell it what ads to block,
+   what cookies to accept, etc. This section of the configuration file
+   tells Privoxy where to find all those other files.
    
-   On Windows and AmigaOS, Junkbuster looks for these files in the same
-   directory as the executable. On Unix and OS/2, Junkbuster looks for
-   these files in the current working directory. In either case, an
-   absolute path name can be used to avoid problems.
+   On Windows and AmigaOS, Privoxy looks for these files in the same
+   directory as the executable. On Unix and OS/2, Privoxy looks for these
+   files in the current working directory. In either case, an absolute
+   path name can be used to avoid problems.
    
    When development goes modular and multi-user, the blocker, filter, and
    per-user config will be stored in subdirectories of "confdir". For
@@ -399,29 +399,29 @@ Please choose from the following options:
    
    The location of the configuration files:
    
-     confdir /etc/junkbuster       # No trailing /, please.
+     confdir /etc/privoxy       # No trailing /, please.
    
    The directory where all logging (i.e. logfile and jarfile) takes
    place. No trailing "/", please:
    
-     logdir /var/log/junkbuster
+     logdir /var/log/privoxy
    
    Note that all file specifications below are relative to the above two
    directories!
    
-   The "ijb.action" file contains patterns to specify the actions to
+   The "default.action" file contains patterns to specify the actions to
    apply to requests for each site. Default: Cookies to and from all
    destinations are kept only during the current browser session (i.e.
    they are not saved to disk). Pop-ups are disabled for all sites. All
-   sites are filtered through selected sections of "re_filterfile". No
-   sites are blocked. The JunkBuster logo is displayed for filtered ads
-   and other images. The syntax of this file is explained in detail
+   sites are filtered through selected sections of "default.filter". No
+   sites are blocked. The Privoxy logo is displayed for filtered ads and
+   other images. The syntax of this file is explained in detail
    [44]below. Other "actions" files are included, and you are free to use
    any of them. They have varying degrees of aggressiveness.
    
-     actionsfile ijb.action
+     actionsfile default.action
    
-   The "re_filterfile" file contains content modification rules that use
+   The "default.filter" file contains content modification rules that use
    "regular expressions". These rules permit powerful changes on the
    content of Web pages, e.g., you could disable your favorite JavaScript
    annoyances, re-write the actual displayed text, or just have some fun
@@ -434,41 +434,41 @@ Please choose from the following options:
    that way since the page is not incrementally displayed.) This effect
    will be more noticeable on slower connections.
    
-     re_filterfile re_filterfile
+     filterfile default.filter
    
    The logfile is where all logging and error messages are written. The
-   logfile can be useful for tracking down a problem with Junkbuster
-   (e.g., it's not blocking an ad you think it should block) but in most
-   cases you probably will never look at it.
+   logfile can be useful for tracking down a problem with Privoxy (e.g.,
+   it's not blocking an ad you think it should block) but in most cases
+   you probably will never look at it.
    
    Your logfile will grow indefinitely, and you will probably want to
    periodically remove it. On Unix systems, you can do this with a cron
    job (see "man cron"). For Redhat, a logrotate script has been
    included.
    
-   On SuSE Linux systems, you can place a line like
-   "/var/log/junkbuster.* +1024k 644 nobody.nogroup" in /etc/logfiles,
-   with the effect that cron.daily will automatically archive, gzip, and
-   empty the log, when it exceeds 1M size.
+   On SuSE Linux systems, you can place a line like "/var/log/privoxy.*
+   +1024k 644 nobody.nogroup" in /etc/logfiles, with the effect that
+   cron.daily will automatically archive, gzip, and empty the log, when
+   it exceeds 1M size.
    
    Default: Log to the a file named logfile. Comment out to disable
    logging.
    
      logfile logfile
    
-   The "jarfile" defines where Junkbuster stores the cookies it
-   intercepts. Note that if you use a "jarfile", it may grow quite large.
-   Default: Don't store intercepted cookies.
+   The "jarfile" defines where Privoxy stores the cookies it intercepts.
+   Note that if you use a "jarfile", it may grow quite large. Default:
+   Don't store intercepted cookies.
    
      #jarfile jarfile
    
-   If you specify a "trustfile", Junkbuster will only allow access to
-   sites that are named in the trustfile. You can also mark sites as
-   trusted referrers, with the effect that access to untrusted sites will
-   be granted, if a link from a trusted referrer was used. The link
-   target will then be added to the "trustfile". This is a very
-   restrictive feature that typical users most probably want to leave
-   disabled. Default: Disabled, don't use the trust mechanism.
+   If you specify a "trustfile", Privoxy will only allow access to sites
+   that are named in the trustfile. You can also mark sites as trusted
+   referrers, with the effect that access to untrusted sites will be
+   granted, if a link from a trusted referrer was used. The link target
+   will then be added to the "trustfile". This is a very restrictive
+   feature that typical users most probably want to leave disabled.
+   Default: Disabled, don't use the trust mechanism.
    
      #trustfile trust
    
@@ -485,7 +485,7 @@ Please choose from the following options:
 3.3.2. Other Configuration Options
 
    This part of the configuration file contains options that control how
-   Junkbuster operates.
+   Privoxy operates.
    
    "Admin-address" should be set to the email address of the proxy
    administrator. It is used in many of the proxy-generated pages.
@@ -494,15 +494,15 @@ Please choose from the following options:
      #admin-address fill@me.in.please
    
    "Proxy-info-url" can be set to a URL that contains more info about
-   this Junkbuster installation, it's configuration and policies. It is
-   used in many of the proxy-generated pages and its use is highly
-   recommended in multi-user installations, since your users will want to
-   know why certain content is blocked or modified. Default: Don't show a
-   link to on-line documentation.
+   this Privoxy installation, it's configuration and policies. It is used
+   in many of the proxy-generated pages and its use is highly recommended
+   in multi-user installations, since your users will want to know why
+   certain content is blocked or modified. Default: Don't show a link to
+   on-line documentation.
    
      proxy-info-url http://www.your-site.com/proxy.html
    
-   "Listen-address" specifies the address and port where Junkbuster will
+   "Listen-address" specifies the address and port where Privoxy will
    listen for connections from your Web browser. The default is to listen
    on the localhost port 8118, and this is suitable for most users. (In
    your web browser, under proxy configuration, list the proxy server as
@@ -512,12 +512,12 @@ Please choose from the following options:
    want to serve requests from other machines (e.g. on your local
    network) as well, you will need to override the default. The syntax is
    "listen-address [<ip-address>]:<port>". If you leave out the IP
-   address, junkbuster will bind to all interfaces (addresses) on your
+   address, Privoxy will bind to all interfaces (addresses) on your
    machine and may become reachable from the Internet. In that case,
    consider using access control lists (acl's) (see "aclfile" above), or
    a firewall.
    
-   For example, suppose you are running Junkbuster on a machine which has
+   For example, suppose you are running Privoxy on a machine which has
    the address 192.168.0.1 on your local private network (192.168.0.0)
    and has another outside connection with a different address. You want
    it to serve requests from inside only:
@@ -555,7 +555,7 @@ Please choose from the following options:
    It is highly recommended that you enable ERROR reporting (debug 8192),
    at least until v3.0 is released.
    
-   The reporting of FATAL errors (i.e. ones which crash JunkBuster) is
+   The reporting of FATAL errors (i.e. ones which crash Privoxy) is
    always on and cannot be disabled.
    
    If you want to use CLF (Common Log Format), you should set "debug 512"
@@ -571,34 +571,33 @@ Please choose from the following options:
      debug 4096 # Info
      debug 8192 # Errors - *we highly recommended enabling this*
    
-   Junkbuster normally uses "multi-threading", a software technique that
+   Privoxy normally uses "multi-threading", a software technique that
    permits it to handle many different requests simultaneously. In some
    cases you may wish to disable this -- particularly if you're trying to
-   debug a problem. The "single-threaded" option forces Junkbuster to
-   handle requests sequentially. Default: Multi-threaded mode.
+   debug a problem. The "single-threaded" option forces Privoxy to handle
+   requests sequentially. Default: Multi-threaded mode.
    
      #single-threaded
    
-   "toggle" allows you to temporarily disable all Junkbuster's filtering.
+   "toggle" allows you to temporarily disable all Privoxy's filtering.
    Just set "toggle 0".
    
-   The Windows version of Junkbuster puts an icon in the system tray,
-   which also allows you to change this option. If you right-click on
-   that icon (or select the "Options" menu), one choice is "Enable".
-   Clicking on enable toggles Junkbuster on and off. This is useful if
-   you want to temporarily disable Junkbuster, e.g., to access a site
-   that requires cookies which you would otherwise have blocked. This can
-   also be toggled via a web browser at the Junkbuster internal address
-   of [45]http://i.j.b on any platform.
+   The Windows version of Privoxy puts an icon in the system tray, which
+   also allows you to change this option. If you right-click on that icon
+   (or select the "Options" menu), one choice is "Enable". Clicking on
+   enable toggles Privoxy on and off. This is useful if you want to
+   temporarily disable Privoxy, e.g., to access a site that requires
+   cookies which you would otherwise have blocked. This can also be
+   toggled via a web browser at the Privoxy internal address of
+   [45]http://i.j.b on any platform.
    
-   "toggle 1" means Junkbuster runs normally, "toggle 0" means that
-   Junkbuster becomes a non-anonymizing non-blocking proxy. Default: 1
-   (on).
+   "toggle 1" means Privoxy runs normally, "toggle 0" means that Privoxy
+   becomes a non-anonymizing non-blocking proxy. Default: 1 (on).
    
      toggle 1
    
    For content filtering, i.e. the "+filter" and "+deanimate-gif"
-   actions, it is necessary that Junkbuster buffers the entire document
+   actions, it is necessary that Privoxy buffers the entire document
    body. This can be potentially dangerous, since a server could just
    keep sending data indefinitely and wait for your RAM to exhaust. With
    nasty consequences.
@@ -612,10 +611,10 @@ Please choose from the following options:
    
      buffer-limit 4069
    
-   To enable the web-based ijb.action file editor set enable-edit-actions
-   to 1, or 0 to disable. Note that you must have compiled JunkBuster
-   with support for this feature, otherwise this option has no effect.
-   This internal page can be reached at [46]http://i.j.b.
+   To enable the web-based default.action file editor set
+   enable-edit-actions to 1, or 0 to disable. Note that you must have
+   compiled Privoxy with support for this feature, otherwise this option
+   has no effect. This internal page can be reached at [46]http://i.j.b.
    
    Security note: If this is enabled, anyone who can use the proxy can
    edit the actions file, and their changes will affect all users. For
@@ -623,9 +622,9 @@ Please choose from the following options:
    
      enable-edit-actions 1
    
-   Allow JunkBuster to be toggled on and off remotely, using your web
+   Allow Privoxy to be toggled on and off remotely, using your web
    browser. Set "enable-remote-toggle"to 1 to enable, and 0 to disable.
-   Note that you must have compiled JunkBuster with support for this
+   Note that you must have compiled Privoxy with support for this
    feature, otherwise this option has no effect.
    
    Security note: If this is enabled, anyone who can use the proxy can
@@ -671,11 +670,11 @@ Please choose from the following options:
    
    The field separator (FS) is whitespace (space or tab).
    
-   IMPORTANT NOTE: If the junkbuster is using a forwarder (see below) or
-   a gateway for a particular destination URL, the DST_ADDR that is
+   IMPORTANT NOTE: If Privoxy is using a forwarder (see below) or a
+   gateway for a particular destination URL, the DST_ADDR that is
    examined is the address of the forwarder or the gateway and NOT the
    address of the ultimate target. This is necessary because it may be
-   impossible for the local Junkbuster to determine the address of the
+   impossible for the local Privoxy to determine the address of the
    ultimate target (that's often what gateways are used for).
    
    Here are a few examples to show how the ACL features work:
@@ -686,13 +685,13 @@ Please choose from the following options:
      permit-access localhost
    
    A silly example to illustrate permitting any host on the class-C
-   subnet with Junkbuster to go anywhere:
+   subnet with Privoxy to go anywhere:
    
-     permit-access www.junkbusters.com/24
+     permit-access www.privoxy.com/24
    
    Except deny one particular IP address from using it at all:
    
-     deny-access ident.junkbusters.com
+     deny-access ident.privoxy.com
    
    You can also specify an explicit network address and subnet mask.
    Explicit addresses do not have to be resolved to be used.
@@ -711,11 +710,11 @@ Please choose from the following options:
    to allow all *.org domains. Every IP address listed must resolve
    fully.
    
-   An ISP may want to provide a Junkbuster that is accessible by "the
-   world" and yet restrict use of some of their private content to hosts
-   on its internal network (i.e. its own subscribers). Say, for instance
-   the ISP owns the Class-B IP address block 123.124.0.0 (a 16 bit
-   netmask). This is how they could do it:
+   An ISP may want to provide a Privoxy that is accessible by "the world"
+   and yet restrict use of some of their private content to hosts on its
+   internal network (i.e. its own subscribers). Say, for instance the ISP
+   owns the Class-B IP address block 123.124.0.0 (a 16 bit netmask). This
+   is how they could do it:
    
     permit-access 0.0.0.0/0 0.0.0.0/0   # other clients can go anywhere
                                           # with the following exceptions
@@ -746,9 +745,9 @@ Please choose from the following options:
    requests via multiple gateways allowing transparent access to multiple
    networks without having to modify browser configurations.
    
-   Also specified here are SOCKS proxies. Junkbuster SOCKS 4 and SOCKS
-   4A. The difference is that SOCKS 4A will resolve the target hostname
-   using DNS on the SOCKS server, not our local DNS client.
+   Also specified here are SOCKS proxies. Privoxy SOCKS 4 and SOCKS 4A.
+   The difference is that SOCKS 4A will resolve the target hostname using
+   DNS on the SOCKS server, not our local DNS client.
    
    The syntax of each line is:
    
@@ -822,13 +821,13 @@ Please choose from the following options:
    This is a bit tricky, but here's an example:
    
    host-a has a PPP connection to isp-a.com. And host-b has a PPP
-   connection to isp-b.com. host-a can run a Junkbuster proxy with
+   connection to isp-b.com. host-a can run a Privoxy proxy with
    forwarding like this:
    
     forward .* .
     forward isp-b.com host-b:8118
    
-   host-b can run a Junkbuster proxy with forwarding like this:
+   host-b can run a Privoxy proxy with forwarding like this:
    
     forward .* .
     forward isp-a.com host-a:8118
@@ -849,36 +848,35 @@ Please choose from the following options:
     forward localhost.localdomain .  # Loopback address
     forward www.ukc.mirror.ac.uk .  # Specific host
    
-   If you intend to chain Junkbuster and squid locally, then chain as
-   browser -> squid -> junkbuster is the recommended way.
+   If you intend to chain Privoxy and squid locally, then chain as
+   browser -> squid -> privoxy is the recommended way.
    
    Your squid configuration could then look like this:
    
-     # Define junkbuster as parent cache
+     # Define Privoxy as parent cache
    
      cache_peer 127.0.0.1 parent 8118 0 no-query
    
      # Define ACL for protocol FTP
      acl FTP proto FTP
-     # Do not forward ACL FTP to junkbuster
+     # Do not forward ACL FTP to privoxy
      always_direct allow FTP
-     # Do not forward ACL CONNECT (https) to junkbuster
+     # Do not forward ACL CONNECT (https) to privoxy
      always_direct allow CONNECT
-     # Forward the rest to junkbuster
+     # Forward the rest to privoxy
      never_direct allow all
      _________________________________________________________________
    
 3.3.5. Windows GUI Options
 
-   Junkbuster has a number of options specific to the Windows GUI
-   interface:
+   Privoxy has a number of options specific to the Windows GUI interface:
    
-   If "activity-animation" is set to 1, the Junkbuster icon will animate
-   when "Junkbuster" is active. To turn off, set to 0.
+   If "activity-animation" is set to 1, the Privoxy icon will animate
+   when "Privoxy" is active. To turn off, set to 0.
    
      activity-animation 1
    
-   If "log-messages" is set to 1, Junkbuster will log messages to the
+   If "log-messages" is set to 1, Privoxy will log messages to the
    console window:
    
      log-messages 1
@@ -897,7 +895,7 @@ Please choose from the following options:
    
      log-max-lines 200
    
-   If "log-highlight-messages" is set to 1, Junkbuster will highlight
+   If "log-highlight-messages" is set to 1, Privoxy will highlight
    portions of the log messages with a bold-faced font:
    
      log-highlight-messages 1
@@ -910,34 +908,34 @@ Please choose from the following options:
    
      log-font-size 8
    
-   "show-on-task-bar" controls whether or not Junkbuster will appear as a
+   "show-on-task-bar" controls whether or not Privoxy will appear as a
    button on the Task bar when minimized:
    
      show-on-task-bar 0
    
    If "close-button-minimizes" is set to 1, the Windows close button will
-   minimize Junkbuster instead of closing the program (close with the
-   exit option on the File menu).
+   minimize Privoxy instead of closing the program (close with the exit
+   option on the File menu).
    
      close-button-minimizes 1
    
    The "hide-console" option is specific to the MS-Win console version of
-   JunkBuster. If this option is used, Junkbuster will disconnect from
-   and hide the command console.
+   Privoxy. If this option is used, Privoxy will disconnect from and hide
+   the command console.
    
      #hide-console
      _________________________________________________________________
    
 3.4. The Actions File
 
-   The "ijb.action" file (formerly actionsfile) is used to define what
-   actions Junkbuster takes, and thus determines how images, cookies and
-   various other aspects of HTTP content and transactions are handled.
-   Images can be anything you want, including ads, banners, or just some
-   obnoxious URL that you would rather not see. Cookies can be accepted
-   or rejected, or accepted only during the current browser session (i.e.
-   not written to disk). Changes to ijb.action should be immediately
-   visible to Junkbuster without the need to restart.
+   The "default.action" file (formerly actionsfile) is used to define
+   what actions Privoxy takes, and thus determines how images, cookies
+   and various other aspects of HTTP content and transactions are
+   handled. Images can be anything you want, including ads, banners, or
+   just some obnoxious URL that you would rather not see. Cookies can be
+   accepted or rejected, or accepted only during the current browser
+   session (i.e. not written to disk). Changes to default.action should
+   be immediately visible to Privoxy without the need to restart.
    
    The easiest way to edit "actions" file is with a browser by loading
    [48]http://i.j.b/, and then select "Edit Actions List". A text editor
@@ -950,7 +948,7 @@ Please choose from the following options:
    
    There are four types of lines in this file: comments (begin with a "#"
    character), actions, aliases and patterns, all of which are explained
-   below, as well as the configuration file syntax that Junkbuster
+   below, as well as the configuration file syntax that Privoxy
    understands.
      _________________________________________________________________
    
@@ -1000,9 +998,9 @@ Please choose from the following options:
    "www4.example.com", "wwwd.example.com", "wwwz.example.com", etc., but
    not "wwww.example.com".
    
-   If Junkbuster was compiled with "pcre" support (default), Perl
-   compatible regular expressions can be used. See the pcre/docs/
-   directory or "man perlre" (also available on
+   If Privoxy was compiled with "pcre" support (default), Perl compatible
+   regular expressions can be used. See the pcre/docs/ directory or "man
+   perlre" (also available on
    [50]http://www.perldoc.com/perl5.6/pod/perlre.html) for details. A
    brief discussion of regular expressions is in the [51]Appendix. For
    instance:
@@ -1045,15 +1043,15 @@ Please choose from the following options:
          {-name}          # disable this action totally
        
    If nothing is specified in this file, no "actions" are taken. So in
-   this case JunkBuster would just be a normal, non-blocking,
+   this case Privoxy would just be a normal, non-blocking,
    non-anonymizing proxy. You must specifically enable the privacy and
-   blocking features you need (although the provided default ijb.action
-   file will give a good starting point).
+   blocking features you need (although the provided default
+   default.action file will give a good starting point).
    
    Later defined actions always over-ride earlier ones. For multi-valued
    actions, the actions are applied in the order they are specified.
    
-   The list of valid Junkbuster "actions" are:
+   The list of valid Privoxy "actions" are:
    
      * Add the specified HTTP header, which is not checked for validity.
        You may specify this many times to specify many different headers:
@@ -1077,7 +1075,7 @@ Please choose from the following options:
        
      * "+downgrade" will downgrade HTTP/1.1 client requests to HTTP/1.0
        and downgrade the responses as well. Use this action for servers
-       that use HTTP/1.1 protocol features that Junkbuster doesn't handle
+       that use HTTP/1.1 protocol features that Privoxy doesn't handle
        well yet. HTTP/1.1 is only partially implemented. Default is not
        to downgrade requests.
          +downgrade
@@ -1094,18 +1092,18 @@ Please choose from the following options:
        time is wasted, while your browser ask the server for one redirect
        after the other. Plus, it feeds the advertisers.
        The "+fast-redirects" option enables interception of these
-       requests by Junkbuster, who will cut off all but the last valid
-       URL in the request and send a local redirect back to your browser
+       requests by Privoxy, who will cut off all but the last valid URL
+       in the request and send a local redirect back to your browser
        without contacting the remote site.
          +fast-redirects
        
      * Apply the filters in the section_header section of the
-       re_filterfile file to the site(s). Re_filterfile sections are
+       default.filter file to the site(s). default.filter sections are
        grouped according to like functionality.
         +filter{section_header}
        
-       Filter sections that are pre-defined in the supplied re_filterfile
-       include:
+       Filter sections that are pre-defined in the supplied
+       default.filter include:
        
    html-annoyances: Get rid of particularly annoying HTML abuse.
    
@@ -1170,8 +1168,8 @@ Please choose from the following options:
        +image}", e.g an advertizement. There are five options.
        "-image-blocker" will send a HTML "blocked" page, usually
        resulting in a "broken image" icon. "+image-blocker{logo}" will
-       send a "JunkBuster" logo image. "+image-blocker{blank}" will send
-       a 1x1 transparent GIF image. And finally,
+       send a Privoxy logo image. "+image-blocker{blank}" will send a 1x1
+       transparent GIF image. And finally,
        "+image-blocker{http://xyz.com}" will send a HTTP temporary
        redirect to the specified image. This has the advantage of the
        icon being being cached by the browser, which will speed up the
@@ -1184,8 +1182,8 @@ Please choose from the following options:
          +image-blocker{http://i.j.b/send-banner}
        
      * By default (i.e. in the absence of a "+limit-connect" action),
-       Junkbuster will only allow CONNECT requests to port 443, which is
-       the standard port for https as a precaution.
+       Privoxy will only allow CONNECT requests to port 443, which is the
+       standard port for https as a precaution.
        The CONNECT methods exists in HTTP to allow access to secure
        websites (https:// URLs) through proxies. It works very simply:
        the proxy connects to the server on the specified port, and then
@@ -1204,8 +1202,8 @@ Please choose from the following options:
           #and above 500 are OK.
        
      * "+no-compression" prevents the website from compressing the data.
-       Some websites do this, which can be a problem for Junkbuster,
-       since "+filter", "+no-popup" and "+gif-deanimate" will not work on
+       Some websites do this, which can be a problem for Privoxy, since
+       "+filter", "+no-popup" and "+gif-deanimate" will not work on
        compressed data. This will slow down connections to those
        websites, though. Default is "nocompression" is turned on.
          +nocompression
@@ -1347,12 +1345,12 @@ Please choose from the following options:
    
 3.4.3. Aliases
 
-   Custom "actions", known to Junkbuster as "aliases", can be defined by
+   Custom "actions", known to Privoxy as "aliases", can be defined by
    combining other "actions". These can in turn be invoked just like the
    built-in "actions". Currently, an alias can contain any character
    except space, tab, "=", "{" or "}". But please use only "a"- "z",
    "0"-"9", "+", and "-". Alias names are not case sensitive, and must be
-   defined before anything else in the ijb.actionfile ! And there can
+   defined before anything else in the default.actionfile ! And there can
    only be one set of "aliases" defined.
    
    Now let's define a few aliases:
@@ -1397,7 +1395,7 @@ Please choose from the following options:
    Any web page can be dynamically modified with the filter file. This
    modification can be removal, or re-writing, of any web page content,
    including tags and non-visible content. The default filter file is
-   re_filterfile, located in the config directory.
+   default.filter, located in the config directory.
    
    The included example file is divided into sections. Each section
    begins with the FILTER keyword, followed by the identifier for that
@@ -1406,7 +1404,7 @@ Please choose from the following options:
    
    This file uses regular expressions to alter or remove any string in
    the target page. The expressions can only operate on one line at a
-   time. Some examples from the included default re_filterfile:
+   time. Some examples from the included default default.filter:
    
    Stop web pages from displaying annoying messages in the status bar by
    deleting such references:
@@ -1448,33 +1446,33 @@ Please choose from the following options:
    
 3.6. Templates
 
-   When Junkbuster displays one of its internal pages, such as a 404 Not
+   When Privoxy displays one of its internal pages, such as a 404 Not
    Found error page, it uses the appropriate template. On Linux, BSD, and
-   Unix, these are located in /etc/junkbuster/templates by default. These
+   Unix, these are located in /etc/privoxy/templates by default. These
    may be customized, if desired.
      _________________________________________________________________
    
-4. Quickstart to Using Junkbuster
+4. Quickstart to Using Privoxy
 
-   Install package, then run and enjoy! JunkBuster is typically started
-   by specifying the main configuration file to be used on the command
-   line. Example Unix startup command:
+   Install package, then run and enjoy! Privoxy is typically started by
+   specifying the main configuration file to be used on the command line.
+   Example Unix startup command:
    
 
- # /usr/sbin/junkbuster /etc/junkbuster/config
+ # /usr/sbin/privoxy /etc/privoxy/config
 
 
    An init script is provided for SuSE and Redhat.
    
-   For for SuSE: /etc/rc.d/junkbuster start
+   For for SuSE: /etc/rc.d/privoxy start
    
-   For RedHat: /etc/rc.d/init.d/junkbuster start
+   For RedHat: /etc/rc.d/init.d/privoxy start
    
-   If no configuration file is specified on the command line, Junkbuster
+   If no configuration file is specified on the command line, Privoxy
    will look for a file named config in the current directory. Except on
    Win32 where it will try config.txt. If no file is specified on the
-   command line and no default configuration file can be found,
-   Junkbuster will fail to start.
+   command line and no default configuration file can be found, Privoxy
+   will fail to start.
    
    Be sure your browser is set to use the proxy which is by default at
    localhost, port 8118. With Netscape (and Mozilla), this can be set
@@ -1486,41 +1484,41 @@ Please choose from the following options:
    The included default configuration files should give a reasonable
    starting point, though may be somewhat aggressive in blocking junk.
    You will probably want to keep an eye out for sites that require
-   persistent cookies, and add these to ijb.action as needed. By default,
-   most of these will be accepted only during the current browser
-   session, until you add them to the configuration. If you want the
-   browser to handle this instead, you will need to edit ijb.action and
-   disable this feature. If you use more than one browser, it would make
-   more sense to let Junkbuster handle this. In which case, the
-   browser(s) should be set to accept all cookies.
+   persistent cookies, and add these to default.action as needed. By
+   default, most of these will be accepted only during the current
+   browser session, until you add them to the configuration. If you want
+   the browser to handle this instead, you will need to edit
+   default.action and disable this feature. If you use more than one
+   browser, it would make more sense to let Privoxy handle this. In which
+   case, the browser(s) should be set to accept all cookies.
    
    If a particular site shows problems loading properly, try adding it to
-   the {fragile} section of ijb.action. This will turn off most actions
-   for this site.
+   the {fragile} section of default.action. This will turn off most
+   actions for this site.
    
-   Junkbuster is HTTP/1.1 compliant, but not all 1.1 features are as yet
+   Privoxy is HTTP/1.1 compliant, but not all 1.1 features are as yet
    implemented. If browsers that support HTTP/1.1 (like Mozilla or recent
    versions of I.E.) experience problems, you might try to force HTTP/1.0
    compatibility. For Mozilla, look under Edit -> Preferences -> Debug ->
-   Networking. Or set the "+downgrade" config option in ijb.action.
+   Networking. Or set the "+downgrade" config option in default.action.
    
-   After running Junkbuster for a while, you can start to fine tune the
+   After running Privoxy for a while, you can start to fine tune the
    configuration to suit your personal, or site, preferences and
    requirements. There are many, many aspects that can be customized.
-   "Actions" (as specified in ijb.action) can be adjusted by pointing
+   "Actions" (as specified in default.action) can be adjusted by pointing
    your browser to [53]http://i.j.b/, and then follow the link to "edit
    the actions list". (This is an internal page and does not require
    Internet access.)
    
-   In fact, various aspects of Junkbuster configuration can be viewed
-   from this page, including current configuration parameters, source
-   code version numbers, the browser's request headers, and "actions"
-   that apply to a given URL. In addition to the ijb.action file editor
-   mentioned above, Junkbuster can also be turned "on" and "off" from
-   this page.
+   In fact, various aspects of Privoxy configuration can be viewed from
+   this page, including current configuration parameters, source code
+   version numbers, the browser's request headers, and "actions" that
+   apply to a given URL. In addition to the default.action file editor
+   mentioned above, Privoxy can also be turned "on" and "off" from this
+   page.
    
-   If you encounter problems, please verify it is a Junkbuster bug, by
-   disabling Junkbuster, and then trying the same page. Also, try another
+   If you encounter problems, please verify it is a Privoxy bug, by
+   disabling Privoxy, and then trying the same page. Also, try another
    browser if possible to eliminate browser or site problems. Before
    reporting it as a bug, see if there is not a configuration option that
    is enabled that is causing the page not to load. You can then add an
@@ -1530,7 +1528,7 @@ Please choose from the following options:
    
 4.1. Command Line Options
 
-   JunkBuster may be invoked with the following command-line options:
+   Privoxy may be invoked with the following command-line options:
    
      * --version
        Print version info and exit, Unix only.
@@ -1548,7 +1546,7 @@ Please choose from the following options:
        USER, and if included the GID of GROUP. Exit if the privileges are
        not sufficient to do so. Unix only.
      * configfile
-       If no configfile is included on the command line, JunkBuster will
+       If no configfile is included on the command line, Privoxy will
        look for a file named "config" in the current directory (except on
        Win32 where it will look for "config.txt" instead). Specify full
        path to avoid confusion.
@@ -1562,11 +1560,11 @@ Please choose from the following options:
      * Use the [54]Sourceforge support forum to get help.
      * Submit bugs only thru our [55]Sourceforge bug forum. Make sure
        that the bug has not already been submitted. Please try to verify
-       that it is a Junkbuster bug, and not a browser or site bug first.
-       If you are using your own custom configuration, please try the
-       stock configs to see if the problem is a configuration related
-       bug. And if not using the latest development snapshot, please try
-       the latest one. Or even better, CVS sources.
+       that it is a Privoxy bug, and not a browser or site bug first. If
+       you are using your own custom configuration, please try the stock
+       configs to see if the problem is a configuration related bug. And
+       if not using the latest development snapshot, please try the
+       latest one. Or even better, CVS sources.
      * Submit feature requests only thru our [56]Sourceforge feature
        request forum.
        
@@ -1581,10 +1579,10 @@ Please choose from the following options:
 
 6.1. License
 
-   Internet Junkbuster is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+   Privoxy is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the
+   Free Software Foundation; either version 2 of the License, or (at your
+   option) any later version.
    
    This program is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1599,9 +1597,10 @@ Please choose from the following options:
    Junkbuster was originally written by Anonymous Coders and
    [60]Junkbuster's Corporation, and was released as free open-source
    software under the GNU GPL. [61]Stefan Waldherr made many
-   improvements, and started the [62]SourceForge project to rekindle
-   development. There are now several active developers contributing. The
-   last stable release was v2.0.2, which has now grown whiskers ;-).
+   improvements, and started the [62]SourceForge project Privoxy to
+   rekindle development. There are now several active developers
+   contributing. The last stable release was v2.0.2, which has now grown
+   whiskers ;-).
      _________________________________________________________________
    
 7. See also
@@ -1625,7 +1624,7 @@ Please choose from the following options:
 
 8.1. Regular Expressions
 
-   Junkbuster can use "regular expressions" in various config files.
+   Privoxy can use "regular expressions" in various config files.
    Assuming support for "pcre" (Perl Compatible Regular Expressions) is
    compiled in, which is the default. Such configuration directives do
    not require regular expressions, but they can be used to increase
@@ -1688,9 +1687,9 @@ Please choose from the following options:
    "string1" is replaced by "string2" in this example.
    
    These are just some of the ones you are likely to use when matching
-   URLs with Junkbuster, and is a long way from a definitive list. This
-   is enough to get us started with a few simple examples which may be
-   more illuminating:
+   URLs with Privoxy, and is a long way from a definitive list. This is
+   enough to get us started with a few simple examples which may be more
+   illuminating:
    
    /.*/banners/.* - A simple example that uses the common combination of
    "." and "*" to denote any character, zero or more times. In other
@@ -1761,29 +1760,29 @@ Please choose from the following options:
    break it ;-).
    
    We are barely scratching the surface of regular expressions here so
-   that you can understand the default Junkbuster configuration files,
-   and maybe use this knowledge to customize your own installation. There
-   is much, much more that can be done with regular expressions. Now that
+   that you can understand the default Privoxy configuration files, and
+   maybe use this knowledge to customize your own installation. There is
+   much, much more that can be done with regular expressions. Now that
    you know enough to get started, you can learn more on your own :/
    
    More reading on Perl Compatible Regular expressions:
    [70]http://www.perldoc.com/perl5.6/pod/perlre.html
      _________________________________________________________________
    
-8.2. JunkBuster's Internal Pages
+8.2. Privoxy's Internal Pages
 
-   Since JunkBuster proxies each requested web page, it is easy for
-   JunkBuster to trap certain URLs. In this way, we can talk directly to
-   JunkBuster, and see how it is configured, see how our rules are being
-   applied, change these rules and other configuration options, and even
-   turn JunkBuster's filtering off, all with a web browser.
+   Since Privoxy proxies each requested web page, it is easy for Privoxy
+   to trap certain URLs. In this way, we can talk directly to Privoxy,
+   and see how it is configured, see how our rules are being applied,
+   change these rules and other configuration options, and even turn
+   Privoxy's filtering off, all with a web browser.
    
    The URLs listed below are the special ones that allow direct access to
-   JunkBuster. Of course, JunkBuster must be running to access these. If
-   not, you will get a friendly error message. Internet access is not
+   Privoxy. Of course, Privoxy must be running to access these. If not,
+   you will get a friendly error message. Internet access is not
    necessary either.
    
-     * Junkbuster main page:
+     * Privoxy main page:
        
      [71]http://ijbswa.sourceforge.net/config/
        Alternately, this may be reached at [72]http://i.j.b/, but this
@@ -1801,7 +1800,7 @@ Please choose from the following options:
      * Show which actions apply to a URL and why:
        
      [76]http://ijbswa.sourceforge.net/config/show-url-info
-     * Toggle JunkBuster on or off:
+     * Toggle Privoxy on or off:
        
      [77]http://ijbswa.sourceforge.net/config/toggle
        Short cuts. Turn off, then on:
@@ -1818,26 +1817,29 @@ Please choose from the following options:
    
 8.3. Anatomy of an Action
 
-   The way Junkbuster applies "actions" to any given URL can be complex,
-   and not always so easy to understand what is happening. And sometimes
-   we need to be able to see just what Junkbuster is doing. Especially,
-   if something Junkbuster is doing is causing us a problem
-   inadvertantly. It can be a little daunting to look at the actions
-   files themselves, since they tend to be filled with "regular
-   expressions" whose consequences are not always so obvious.
+   The way Privoxy applies "actions" to any given URL can be complex, and
+   not always so easy to understand what is happening. And sometimes we
+   need to be able to see just what Privoxy is doing. Especially, if
+   something Privoxy is doing is causing us a problem inadvertantly. It
+   can be a little daunting to look at the actions files themselves,
+   since they tend to be filled with "regular expressions" whose
+   consequences are not always so obvious. Privoxy provides the
+   [81]http://ijbswa.sourceforge.net/config/show-url-info page that can
+   show us very specifically how actions are being applied to any given
+   URL. This is a big help for troubleshooting.
    
-   First, you enter one URL (or partial URL), and this page will tell you
-   how the currently configured Junkbuster "actions" are being applied to
-   that specific URL. This will not help with filtering effects from the
-   re_filterfile! It also will not tell you about any other URLs that may
-   be embedded within the URL you are testing. For instance, images such
-   as ads are expressed as URLs within the raw page source of HTML pages.
-   So you will only get info for the actual URL that is pasted into the
-   prompt area -- not any sub-URLs. If you want to know about embedded
-   URLs like ads, you will have to dig those out of the HTML source. Use
-   your browser's "View Page Source" option for this.
+   First, enter one URL (or partial URL) at the prompt, and then Privoxy
+   will tell us how current configuration will handle it. This will not
+   help with filtering effects from the default.filter! It also will not
+   tell you about any other URLs that may be embedded within the URL you
+   are testing. For instance, images such as ads are expressed as URLs
+   within the raw page source of HTML pages. So you will only get info
+   for the actual URL that is pasted into the prompt area -- not any
+   sub-URLs. If you want to know about embedded URLs like ads, you will
+   have to dig those out of the HTML source. Use your browser's "View
+   Page Source" option for this.
    
-   Let's look at an example, [81]google.com, one section at a time:
+   Let's look at an example, [82]google.com, one section at a time:
    
  System default actions:
 
@@ -1848,7 +1850,7 @@ Please choose from the following options:
 
 
    This is the top section, and only tells us of the compiled in
-   defaults. This is basically what Junkbuster would do if there were not
+   defaults. This is basically what Privoxy would do if there were not
    any "actions" defined, i.e. it does nothing. Every action is disabled.
    This is not particularly informative for our purposes here. OK, next
    section:
@@ -1891,7 +1893,7 @@ Please choose from the following options:
    file, and "google.com" is referenced in these sections.
    
    And now we pull it altogether in the bottom section and summarize how
-   Junkbuster is appying all its "actions" to "google.com":
+   Privoxy is appying all its "actions" to "google.com":
    
  Final results:
 
@@ -1964,7 +1966,7 @@ References
    Visible links
    1. http://ijbswa.sourceforge.net/user-manual/
    2. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INTRODUCTION
-   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN27
+   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN28
    4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION
    5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-SOURCE
    6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-RH
@@ -1973,30 +1975,30 @@ References
    9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-WIN
   10. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-OTHER
   11. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURATION
-  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN144
-  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN161
-  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN192
-  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN225
-  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN317
-  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN454
-  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN542
-  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN651
+  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN147
+  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN165
+  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN196
+  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN229
+  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN322
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN459
+  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN547
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN656
   20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSFILE
-  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN749
-  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN823
-  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1143
+  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN754
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN828
+  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1148
   24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#FILTERFILE
-  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1202
+  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1207
   26. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUICKSTART
-  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1257
+  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1263
   28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONTACT
   29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
-  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1316
-  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1322
+  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1322
+  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1328
   32. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
   33. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#APPENDIX
   34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#REGEX
-  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1506
+  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1512
   36. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSANAT
   37. http://i.j.b/
   38. http://sourceforge.net/projects/ijbswa/
@@ -2042,15 +2044,16 @@ References
   78. http://ijbswa.sourceforge.net/config/toggle?set=disable
   79. http://ijbswa.sourceforge.net/config/toggle?set=enable
   80. http://ijbswa.sourceforge.net/config/edit-actions
-  81. http://google.com/
+  81. http://ijbswa.sourceforge.net/config/show-url-info
+  82. http://google.com/
 
    Hidden links:
-  82. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1378
-  83. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1386
-  84. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1389
-  85. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1392
-  86. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1395
-  87. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1400
-  88. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1403
-  89. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1406
+  83. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1384
+  84. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1392
+  85. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1395
+  86. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1398
+  87. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1401
+  88. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1406
+  89. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1409
   90. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1412
+  91. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1418

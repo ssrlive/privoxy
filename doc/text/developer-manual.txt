@@ -1,19 +1,19 @@
 
-Junkbuster Developer Manual
+Privoxy Developer Manual
 
-   By: Junkbuster Developers
+   By: Privoxy Developers
    
-   $Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:27 swa Exp $
+   $Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $
    
    The developer manual gives the users information on how to help the
    developer team. It provides guidance on coding, testing, documentation
-   and other issues. Internet Junkbuster is a web proxy with advanced
-   filtering capabilities for protecting privacy, filtering web page
-   content, managing cookies, controlling access, and removing ads,
-   banners, pop-ups and other obnoxious Internet Junk. Junkbuster has a
-   very flexible configuration and can be customized to suit individual
-   needs and tastes. Internet Junkbuster has application for both
-   stand-alone systems and multi-user networks.
+   and other issues. Privoxy is a web proxy with advanced filtering
+   capabilities for protecting privacy, filtering web page content,
+   managing cookies, controlling access, and removing ads, banners,
+   pop-ups and other obnoxious Internet Junk. Privoxy has a very flexible
+   configuration and can be customized to suit individual needs and
+   tastes. Privoxy has application for both stand-alone systems and
+   multi-user networks.
    
    You can find the latest version of the user manual at
    [1]http://ijbswa.sourceforge.net/developer-manual/. Please see the
@@ -23,7 +23,7 @@ Junkbuster Developer Manual
    
    Table of Contents
    1. [2]Introduction
-   2. [3]Quickstart to Junkbuster Development
+   2. [3]Quickstart to Privoxy Development
    3. [4]Documentation Guidelines
    4. [5]Coding Guidelines
           
@@ -117,9 +117,19 @@ Junkbuster Developer Manual
    To be filled.
      _________________________________________________________________
    
-2. Quickstart to Junkbuster Development
+2. Quickstart to Privoxy Development
 
-   To be filled.
+   You'll need an account on Sourceforge to support our development. Mail
+   you ID to the list and wait until a project manager has added you. For
+   the time beeing (read, this section is under construction), please
+   note the following guidelines for changing stuff in the code. If it is
+   
+    1. A bugfix / clean-up / cosmetic thing: shoot
+    2. A new feature that can be turned off: shoot
+    3. A clear improvement w/o side effects on other parts of the code:
+       shoot
+    4. A matter of taste: ask the list
+    5. A major redesign of some part of the code: ask the list
      _________________________________________________________________
    
 3. Documentation Guidelines
@@ -141,7 +151,7 @@ Junkbuster Developer Manual
 
    This set of standards is designed to make our lives easier. It is
    developed with the simple goal of helping us keep the "new and
-   improved Junkbusters" consistent and reliable. Thus making maintenance
+   improved Privoxy" consistent and reliable. Thus making maintenance
    easier and increasing chances of success of the project.
    
    And that of course comes back to us as individuals. If we can increase
@@ -347,7 +357,7 @@ if ( 1 == X )
    start an identifier with an underscore. (ANSI C reserves these for use
    by the compiler and system headers.) Do not use identifiers which are
    reserved in ANSI C++. (E.g. template, class, true, false, ...). This
-   is in case we ever decide to port JunkBuster to C++.
+   is in case we ever decide to port Privoxy to C++.
    
    Example:
 int ms_iis5_hack = 0;
@@ -365,7 +375,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
    start an identifier with an underscore. (ANSI C reserves these for use
    by the compiler and system headers.) Do not use identifiers which are
    reserved in ANSI C++. (E.g. template, class, true, false, ...). This
-   is in case we ever decide to port JunkBuster to C++.
+   is in case we ever decide to port Privoxy to C++.
    
    Example:
 int load_some_file( struct client_state *csp )
@@ -725,7 +735,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
    extern int strcmp( char *s1, char *s2 );
    
    I could then not use it to compare argv's in main: int main( int argc,
-   const char *argv[] ) { strcmp( argv[0], "junkbusters" ); }
+   const char *argv[] ) { strcmp( argv[0], "privoxy" ); }
    
    Both these pointers are *const*! If the c runtime library maintainers
    do it, we should too.
@@ -1029,8 +1039,8 @@ static void unload_re_filterfile( void *f ) { ... }
 4.8. Addendum: Template for files and function comment blocks:
 
    Example for file comments:
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:
-27 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:
+05 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1038,7 +1048,7 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                PRIVOXY team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1087,8 +1097,8 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
    Example for file header comments:
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.7 2002/03/11 13:13:2
-7 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:0
+5 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1096,7 +1106,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                PRIVOXY team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1195,16 +1205,16 @@ int FUNCTION_NAME( void *param1, const char *x )
     1. Remove any existing rpm with rpm -e
     2. Remove any file that was left over. This includes (but is not
        limited to)
-          + /var/log/junkbuster
-          + /etc/junkbuster
-          + /usr/sbin/junkbuster
-          + /etc/init.d/junkbuster
-          + /usr/doc/junkbuster*
+          + /var/log/privoxy
+          + /etc/privoxy
+          + /usr/sbin/privoxy
+          + /etc/init.d/privoxy
+          + /usr/doc/privoxy*
     3. Install the rpm. Any error messages?
-    4. start,stop,status junkbuster with the specific script (e.g.
-       /etc/rc.d/init/junkbuster stop). Reboot your machine. Does
-       autostart work?
-    5. Start browsing. Does the junkbuster work? Logfile written?
+    4. start,stop,status Privoxy with the specific script (e.g.
+       /etc/rc.d/init/privoxy stop). Reboot your machine. Does autostart
+       work?
+    5. Start browsing. Does Privoxy work? Logfile written?
     6. Remove the rpm. Any error messages? All files removed?
      _________________________________________________________________
    
@@ -1214,8 +1224,7 @@ int FUNCTION_NAME( void *param1, const char *x )
    Three simple steps:
    
      * Select category: the distribution you test on.
-     * Select group: the version of Junkbuster that we are about to
-       release.
+     * Select group: the version of Privoxy that we are about to release.
      * Fill the Summary and Detailed Description with something
        intelligent (keep it short and precise).
        
