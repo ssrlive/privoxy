@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.43 2002/03/16 20:28:34 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.44 2002/03/16 21:51:00 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.43 2002/03/16 20:28:34 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.44  2002/03/16 21:51:00  jongfoster
+ *    Fixing free(NULL).
+ *
  *    Revision 1.43  2002/03/16 20:28:34  oes
  *    Added descriptions to the filters so users will know what they select in the cgi editor
  *
@@ -948,16 +951,44 @@ char *read_config_line(char *buf, size_t buflen, FILE *fp, unsigned long *linenu
  *********************************************************************/
 static void unload_trustfile(void *f)
 {
-   struct block_spec *b = (struct block_spec *)f;
-   if (b == NULL) return;
+   struct block_spec *cur = (struct block_spec *)f;
+   struct block_spec *next;
 
-   unload_trustfile(b->next); /* Stack is cheap, isn't it? */
+   while (cur != NULL)
+   {
+      next = cur->next;
 
-   free_url_spec(b->url);
+      free_url_spec(cur->url);
+      free(cur);
 
-   freez(b);
+      cur = next;
+   }
 
 }
+
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+/*********************************************************************
+ *
+ * Function    :  unload_current_trust_file
+ *
+ * Description :  Unloads current trust file - reset to state at
+ *                beginning of program.
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void unload_current_trust_file(void)
+{
+   if (current_trustfile)
+   {
+      current_trustfile->unloader = unload_trustfile;
+      current_trustfile = NULL;
+   }
+}
+#endif /* FEATURE_GRACEFUL_TERMINATION */
 
 
 /*********************************************************************
@@ -1131,6 +1162,30 @@ static void unload_re_filterfile(void *f)
 
    return;
 }
+
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+/*********************************************************************
+ *
+ * Function    :  unload_current_re_filterfile
+ *
+ * Description :  Unloads current re_filter file - reset to state at
+ *                beginning of program.
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void unload_current_re_filterfile(void)
+{
+   if (current_re_filterfile)
+   {
+      current_re_filterfile->unloader = unload_re_filterfile;
+      current_re_filterfile = NULL;
+   }
+}
+#endif
 
 
 /*********************************************************************

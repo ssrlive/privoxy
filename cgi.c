@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.48 2002/03/08 17:47:07 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.49 2002/03/13 00:27:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.48 2002/03/08 17:47:07 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.49  2002/03/13 00:27:04  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.48  2002/03/08 17:47:07  jongfoster
  *    Adding comments
  *
@@ -330,6 +333,11 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "",
          cgi_default,
          "Junkbuster main page" },
+#ifdef FEATURE_GRACEFUL_TERMINATION
+   { "die", 
+         cgi_die,  
+         "<b>Shut down</b> - <font color=red size='+1'>Do not deploy this build in a production environment, this is a one click Denial Of Service attack!!!</font>" }, 
+#endif
    { "show-status", 
          cgi_show_status,  
          "Show information about the current configuration" }, 

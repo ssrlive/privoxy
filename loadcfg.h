@@ -1,6 +1,6 @@
 #ifndef LOADCFG_H_INCLUDED
 #define LOADCFG_H_INCLUDED
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.7 2001/07/30 22:08:36 jongfoster Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.8 2001/12/30 14:07:32 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -37,6 +37,14 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.8  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.7  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -150,6 +158,9 @@ extern short int MustReload;
 
 extern struct configuration_spec * load_config(void);
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
+void unload_current_config_file(void);
+#endif
 
 /* Revision control strings from this header and associated .c file */
 extern const char loadcfg_rcs[];

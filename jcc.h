@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.8 2002/03/04 18:19:49 oes Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.9 2002/03/07 03:52:44 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.9  2002/03/07 03:52:44  oes
+ *    Set logging to tty for --no-daemon mode
+ *
  *    Revision 1.8  2002/03/04 18:19:49  oes
  *    Added extern const char *pidfile
  *
@@ -97,6 +100,10 @@ extern struct file_list    files[];
 extern const char *pidfile;
 #endif
 extern int no_daemon;
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+extern int g_terminate;
+#endif
 
 /* Functions */
 

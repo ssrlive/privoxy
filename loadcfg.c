@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.35 2002/03/07 03:52:44 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.36 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.35 2002/03/07 03:52:44 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.36  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.35  2002/03/07 03:52:44  oes
  *    Set logging to tty for --no-daemon mode
  *
@@ -453,6 +456,30 @@ void unload_configfile (void * data)
    freez(config->re_filterfile);
 
 }
+
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+/*********************************************************************
+ *
+ * Function    :  unload_current_config_file
+ *
+ * Description :  Unloads current config file - reset to state at
+ *                beginning of program.
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void unload_current_config_file(void)
+{
+   if (current_configfile)
+   {
+      current_configfile->unloader = unload_configfile;
+      current_configfile = NULL;
+   }
+}
+#endif
 
 
 /*********************************************************************

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.17 2002/03/08 16:43:18 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.18 2002/03/12 01:44:49 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.17 2002/03/08 16:43:18 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.18  2002/03/12 01:44:49  oes
+ *    Changed default for "blocked" image from jb logo to checkboard pattern
+ *
  *    Revision 1.17  2002/03/08 16:43:18  oes
  *    Added choice beween GIF and PNG built-in images
  *
@@ -251,6 +254,48 @@ jb_err cgi_error_404(struct client_state *csp,
 
    return template_fill_for_cgi(csp, "cgi-error-404", exports, rsp);
 }
+
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+/*********************************************************************
+ *
+ * Function    :  cgi_die
+ *
+ * Description :  CGI function to shut down JunkBuster.
+ *                NOTE: Turning this on in a production build
+ *                would be a BAD idea.  An EXTREMELY BAD idea.
+ *                In short, don't do it.
+ *               
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_die (struct client_state *csp,
+                struct http_response *rsp,
+                const struct map *parameters)
+{
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   /* quit */
+   g_terminate = 1;
+
+   /*
+    * I don't really care what gets sent back to the browser.
+    * Take the easy option - "out of memory" page.
+    */
+
+   return JB_ERR_MEMORY;
+}
+#endif /* def FEATURE_GRACEFUL_TERMINATION */
 
 
 /*********************************************************************

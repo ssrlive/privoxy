@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.81 2002/03/12 01:42:50 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.82 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.81 2002/03/12 01:42:50 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.82  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.81  2002/03/12 01:42:50  oes
  *    Introduced modular filters
  *
@@ -583,6 +586,9 @@ int urls_read     = 0;     /* total nr of urls read inc rejected */
 int urls_rejected = 0;     /* total nr of urls rejected */
 #endif /* def FEATURE_STATISTICS */
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
+int g_terminate = 0;
+#endif
 
 static void listen_loop(void);
 static void chat(struct client_state *csp);
@@ -1974,7 +1980,11 @@ static void listen_loop(void)
 
    bfd = bind_port_helper(config);
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
+   while (!g_terminate)
+#else
    for (;;)
+#endif
    {
 #if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
       while (waitpid(-1, NULL, WNOHANG) > 0)
@@ -2202,7 +2212,45 @@ static void listen_loop(void)
          serve(csp);
       }
    }
-   /* NOTREACHED */
+
+   /* NOTREACHED unless FEATURE_GRACEFUL_TERMINATION is defined */
+
+   /* Clean up.  Aim: free all memory (no leaks) */
+#ifdef FEATURE_GRACEFUL_TERMINATION
+
+   log_error(LOG_LEVEL_ERROR, "Graceful termination requested");
+
+   unload_current_config_file();
+   unload_current_actions_file();
+   unload_current_re_filterfile();
+#ifdef FEATURE_TRUST
+   unload_current_trust_file();
+#endif
+
+   if (config->multi_threaded)
+   {
+      int i = 60;
+      do
+      {
+         sleep(1);
+         sweep();
+      } while ((clients->next != NULL) && (--i > 0));
+
+      if (i <= 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "Graceful termination failed - still some live clients after 1 minute wait.");
+      }
+   }
+   sweep();
+   sweep();
+
+#if defined(_WIN32) && !defined(_WIN_CONSOLE)
+   /* Cleanup - remove taskbar icon etc. */
+   TermLogWindow();
+#endif
+
+   exit(0);
+#endif /* FEATURE_GRACEFUL_TERMINATION */
 
 }
 

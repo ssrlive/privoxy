@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.15 2002/01/22 23:46:18 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.16 2002/03/07 03:46:17 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.16  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.15  2002/01/22 23:46:18  jongfoster
  *    Moving edit_read_line() and simple_read_line() to loaders.c, and
  *    extending them to support reading MS-DOS, Mac and UNIX style files
@@ -193,6 +196,12 @@ extern int load_re_filterfile(struct client_state *csp);
 extern int load_trustfile(struct client_state *csp);
 #endif /* def FEATURE_TRUST */
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
+#ifdef FEATURE_TRUST
+void unload_current_trust_file(void);
+#endif
+void unload_current_re_filterfile(void);
+#endif /* FEATURE_GRACEFUL_TERMINATION */
 
 
 extern void add_loader(int (*loader)(struct client_state *), 

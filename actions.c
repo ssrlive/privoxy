@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.22 2002/01/21 00:27:02 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.23 2002/03/07 03:46:16 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.22 2002/01/21 00:27:02 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.23  2002/03/07 03:46:16  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.22  2002/01/21 00:27:02  jongfoster
  *    Allowing free_action(NULL).
  *    Moving the functions that #include actionlist.h to the end of the file,
@@ -804,6 +807,33 @@ void free_current_action (struct current_action_spec *src)
 }
 
 
+static struct file_list *current_actions_file  = NULL;
+
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+/*********************************************************************
+ *
+ * Function    :  unload_current_actions_file
+ *
+ * Description :  Unloads current actions file - reset to state at
+ *                beginning of program.
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void unload_current_actions_file(void)
+{
+   if (current_actions_file)
+   {
+      current_actions_file->unloader = unload_actions_file;
+      current_actions_file = NULL;
+   }
+}
+#endif /* FEATURE_GRACEFUL_TERMINATION */
+
+
 /*********************************************************************
  *
  * Function    :  unload_actions_file
@@ -874,7 +904,6 @@ void free_alias_list(struct action_alias *alias_list)
  *********************************************************************/
 int load_actions_file(struct client_state *csp)
 {
-   static struct file_list *current_actions_file  = NULL;
 
    /*
     * Parser mode.

@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.5 2001/10/14 21:58:22 jongfoster Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.6 2001/10/23 21:30:30 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.6  2001/10/23 21:30:30  jongfoster
+ *    Adding error-checking to selected functions.
+ *
  *    Revision 1.5  2001/10/14 21:58:22  jongfoster
  *    Adding support for the CGI-based editor:
  *    - Exported get_actions()
@@ -112,6 +115,9 @@ extern jb_err get_action_token(char **line, char **name, char **value);
 extern void unload_actions_file(void *file_data);
 extern int load_actions_file(struct client_state *csp);
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
+void unload_current_actions_file(void);
+#endif
 
 
 /* Revision control strings from this header and associated .c file */
