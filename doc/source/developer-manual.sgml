@@ -3,6 +3,12 @@
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
+<!entity p-version "2.9.13">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
+<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
+<!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/developer-manual.sgml,v $
@@ -11,7 +17,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $
+ $Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -25,7 +31,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -50,10 +56,12 @@
  team. It provides guidance on coding, testing, documentation and other
  issues. 
  </para>
-<!--
- Include privoxy.sgml:
--->
-&p-intro;
+
+<!-- Include privoxy.sgml boilerplate text: -->
+
+ &p-intro;
+
+<!-- end boilerplate -->
 
 <para>
  You can find the latest version of the this manual at <ulink
@@ -1312,7 +1320,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1372,7 +1380,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.19 2002/04/03 15:09:42 david__schmidt Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.20 2002/04/04 03:28:27 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1713,9 +1721,11 @@ at sourceforge. Three simple steps:
 	<programlisting>
   os2build
 	</programlisting>
-	And in the <filename>./files</filename> directory you will have the WarpIN-installable executable.
-	Upload this anonymously to <filename>uploads.sourceforge.net/incoming</filename>,
-	create a release for it, and you're done.
+     And in the <filename>./files</filename> directory you will have the
+     WarpIN-installable executable. 
+     Upload this anonymously to
+     <filename>uploads.sourceforge.net/incoming</filename>, create a release
+     for it, and you're done.
 	</para>
     </sect2>
 
@@ -2090,6 +2100,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.20  2002/04/04 03:28:27  david__schmidt
+  Add Mac OSX section
+
   Revision 1.19  2002/04/03 15:09:42  david__schmidt
   Add OS/2 build section
 

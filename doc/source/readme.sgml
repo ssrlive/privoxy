@@ -1,16 +1,23 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity % dummy "INCLUDE"> 
 <!entity supported SYSTEM "supported.sgml">
-<!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
-<!entity seealso SYSTEM "seealso.sgml">
+<!entity contacting SYSTEM "contacting.sgml">
+<!entity buildsource SYSTEM "buildsource.sgml">
+<!entity p-version "2.9.13">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release -->
+<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release   -->
+<!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
+<!entity % p-doc "IGNORE">         <!-- and never a text doc             -->
+<!entity % p-readme "INCLUDE">     <!-- all your README belong to us     -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.0 2002/04/03 03:53:43 hal9 Exp $
+ $Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,11 +27,30 @@
  Junkbusters Corporation.  http://www.junkbusters.com
 
  ===================================================================
- READ: Document note: This file generates the README in the top level 
+ READ: Document Note: This file generates the README in the top level 
  source directory. It is generated as only a plain text file. The 
  current markup is not suitable for other formats. Build from 
  Makefile with 'make readme'.
  ===================================================================
+
+ READ:
+
+ ======================================================================
+ NOTE: The left margin spacing is *important* when using 'literallayout'
+ WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
+ the para tag forces a linebreak. Tags need to be carefully placed as a result.
+ ======================================================================
+
+ For stable releases, change 
+ 
+  entity % p-not-stable "INCLUDE" 
+ 
+ to 
+ 
+  entity % not-stable "IGNORE" 
+  
+ in the DTD at the top. This will toggle various text 'off'. BOTH
+ MUST be toggled in this case.
 
 -->
 
@@ -47,7 +73,7 @@
 
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/README,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
  *
  * Purpose     :  README file to give a short intro.
  *
@@ -83,16 +109,16 @@
 </para>
 
 <para>
- This README is included with the development version of Privoxy, which will
- eventually become Privoxy v3.0 (and soon we hope!). See
- http://www.privoxy.org/. The current code level is BETA, and seems stable to
- us :)
+ <!-- include some conditional text -->
+ This README is included with <![%p-not-stable;[ the development version of]]>
+ Privoxy &p-version;<![%p-not-stable;[, which will eventually become Privoxy v3.0 (and soon we
+ hope!)]]>. See http://www.privoxy.org/ for more information. The current code
+ level is &p-status;<![%p-not-stable;[, and seems stable to us :)]]>.
 </para>
 
-<!--
- Include privoxy.sgml
--->
+<!-- Include privoxy.sgml boilerplate: -->
 &p-intro;
+<!-- end boilerplate -->
 
 <para>
  <LiteralLayout>
@@ -110,7 +136,7 @@
  the new package will delete any previously installed 'Junkbuster' packages.
 </para>
 <para>
- IMPORTANT! READ! Configuration Change as of 3 Apr 2002: The default listening
+ IMPORTANT! READ! Configuration Change as of 17 Mar 2002: The default listening
  port is now 8118 due to conflicts with port 8000 assignment. You will need to
  change your browser if upgrading!!! And maybe firewall, etc.
 </para>
@@ -121,43 +147,10 @@
  INSTALL
 --------</LiteralLayout>
 </para>
-<para>
- For tarball, first unpack:
-</para>
 
-<programlisting>
- tar xzvf privoxy-2.9.13-beta-src.tar.gz
- cd privoxy-2.9.13-beta
-</programlisting>
-
-<programlisting>
- autoheader
- autoconf
- ./configure	(--help to see options)
- gmake        	(the make from gnu) 
- su 
- make -n install	(to see where all the files will go)
- make install		(to really install)
-</programlisting>
-
-<para>
- Redhat and SuSE src and binary RPMs can be built with 'make redhat-dist' or
- 'make suse-dist' (run ./configure first) from unpacked sources. BSD will
- (probably?) require gmake (from http://gnu.org). See the user-manual for OS/2
- build instructions.
-</para>
-<para>
- Privoxy is also available via anonymous CVS:
-</para>
-
-<programlisting>
- cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
- cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
-</programlisting>
-<para>
- This will create a directory named 'current'. Then, 'cd current', and then
- build as above.
-</para>
+<!-- include buildsource.sgml boilerplate: -->
+ &buildsource;
+<!-- end boilderplate -->
 
 <para>
  <LiteralLayout>
@@ -210,25 +203,31 @@ See the man page or user-manual for a brief explanation of each option.
  The default.action file can be configured via the web interface accessed via
  http://p.p/, as well other options.
 </para>
+<![%p-not-stable;[
 <para>
  All configuration files are subject to unannounced changes during the
  development process.
 </para>
+]]>
 
 <para>
  <LiteralLayout>
 
  DOCUMENTATION
 --------------</LiteralLayout>
- There is a growing amount of documentation in the 'doc' subdirectory, but it
- is not completed at this point. In particular, see the user-manual there, the
- faq, and developers should look at developer-manual.
+ There should be documentation in the 'doc' subdirectory<![%p-not-stable;[, but it
+ is not completed at this point]]>. In particular, see the user-manual there,
+ the faq, and those interested in Privoxy development, should look at
+ developer-manual. 
 </para>
 <para>
+ <![%p-not-stable;[
  The most up to date source of information on the current development version,
  may still be either comments in the source code, or the included
- configuration files, which are all well commented. These are 'config',
- '*.action', and 'default.filter' in the toplevel source directory.
+ configuration files. ]]>The source and configuration files are all well
+ commented. The main configuration files are: 'config', 'default.action', and
+ 'default.filter'<![%p-not-stable;[ in the toplevel source directory]]>. There
+ are several *.action files included, with varying levels of aggressiveness.
 </para>
 
 <para>
@@ -242,56 +241,10 @@ See the man page or user-manual for a brief explanation of each option.
 --------------------------------------------------------------</LiteralLayout>
 </para>
 
-<para>
-We value your feedback. However, to provide you with the best support,
-please note:
-</para>
-<para>
- <LiteralLayout>
- * Use the support forum to get help:
-   http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118
-  </LiteralLayout>
-</para>
-<Para>
- <LiteralLayout>
- * Submit bugs only thru our bug forum:
-   http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118 
- </LiteralLayout>
-</Para>
-<para>
-   Make sure that the bug has not already been submitted. Please try
-   to verify that it is a Privoxy bug, and not a browser or site
-   bug first. If you are using your own custom configuration, please
-   try the stock configs to see if the problem is a configuration
-   related bug. And if not using the latest development snapshot,
-   please try the latest one. Or even better, CVS sources. Please 
-   be sure to include the Privoxy/Junkbuster version, platform, 
-   browser, any pertinent log data, any other relevant details 
-   (please be specific) and, if possible, some way to reproduce the 
-   bug.
-</para>
-<para>
- <LiteralLayout>
- * Submit feature requests only thru our feature request forum:
-   http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse
- </LiteralLayout>
-</para>
+<!-- Include contacting.sgml boilerplate: -->
+ &contacting;
+<!-- end boilerplate -->
 
-<para>
- <LiteralLayout>
- For any other issues, feel free to use the mailing lists:
- http://sourceforge.net/mail/?group_id=11118 
- </LiteralLayout>
-</para>
-
-<para>   
- <LiteralLayout>
- Anyone interested in actively participating in development and related
- discussions can join the appropriate mailing list here:
- http://sourceforge.net/mail/?group_id=11118. Archives are available here
- too.
- </LiteralLayout>
-</para>
 <para>
  <LiteralLayout>
  -------------------------------------------------------------------------
@@ -299,7 +252,7 @@ please note:
  </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.0 2002/03/31 02:03:36 hal9 Exp $
+ $Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
 </para>
 
 </article>

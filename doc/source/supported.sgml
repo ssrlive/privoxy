@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: supported.sgml,v 1.0 2002/04/01 16:24:49 hal9 Exp $
+ $Id: supported.sgml,v 1.2 2002/04/02 00:56:06 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,14 +11,20 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
+
 -->
 <para>
  At present, <application>Privoxy</application> is known to run on Win32, Mac
- OSX, OS/2, AmigaOS, Linux, and many flavors of Unix. There are releases 
- for these available for download at 
- <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">http://sourceforge.net/project/showfiles.php?group_id=11118</ulink>.
+ OSX, OS/2, AmigaOS, Linux, and many flavors of Unix. There are source 
+ and binary releases for these available for download at 
+ <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">http://sourceforge.net/project/showfiles.php?group_id=11118</ulink>.
 </para>
+
+<![%p-supp-userman;[
 <para>
  But any operating system that runs TCP/IP, can conceivably take advantage of
  <application>Privoxy</application> in a networked situation where
@@ -31,4 +37,4 @@
  Source code is freely available, so porting to other operating systems, 
  is always a possibility.
 </para>
-
+]]>

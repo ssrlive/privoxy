@@ -4,6 +4,13 @@
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
+<!entity p-version "2.9.13">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
+<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
+<!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
+<!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
@@ -12,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.39 2002/04/03 03:53:03 hal9 Exp $
+ $Id: faq.sgml,v 1.40 2002/04/03 04:22:03 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -43,7 +50,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.39 2002/04/03 03:53:03 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.40 2002/04/03 04:22:03 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1380,6 +1387,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.40  2002/04/03 04:22:03  hal9
+Fixed several typos.
+
 Revision 1.39  2002/04/03 03:53:03  hal9
 Revert some changes, and then make some news, to layout, and appearance.
 

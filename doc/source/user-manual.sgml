@@ -4,6 +4,16 @@
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
+<!entity buildsource SYSTEM "buildsource.sgml">
+<!entity contacting SYSTEM "contacting.sgml">
+<!entity p-version "2.9.13">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
+<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
+<!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
+<!entity % p-readme "IGNORE">
+<!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -12,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.64 2002/04/03 03:53:43 hal9 Exp $
+ $Id: user-manual.sgml,v 1.65 2002/04/03 19:52:07 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,21 +30,14 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
--->
 
-<!--
-Sat 03/02/02 04:53:47 PM
-
-This should be ready for BETA release.
-
-Hal Burgiss <hal@foobox.net>
 -->
 
 <article id="index">
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.64 2002/04/03 03:53:43 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.65 2002/04/03 19:52:07 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -67,8 +70,9 @@ Hal Burgiss <hal@foobox.net>
   stand-alone systems and multi-user networks.
  </para>
  <para>
-You can find the latest version of the user manual at  <ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
- </para>
+  You can find the latest version of the user manual at  <ulink
+  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
+  </para>
 
 <!--   <para> -->
 <!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
@@ -81,13 +85,13 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="introduction"><title>Introduction</title>
-<!--
- Include privoxy.sgml boilerplate:
--->
-&p-intro;
+
+<!-- Include privoxy.sgml boilerplate: -->
+ &p-intro;
+<!-- end boilerplate -->
 
 <para>
- This documentation is included with the current BETA version of
+ This documentation is included with the current &p-status; version of
  <application>Privoxy</application> and is mostly complete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
@@ -96,13 +100,15 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
  stable v3.0 is <quote>soon</quote> ;-)
 </para>
 
+<![%p-not-stable;[
+<!-- include only in non-stable versions -->
 <para>
- Since this is a BETA version, not all new features are well tested. This
+ Since this is a &p-status; version, not all new features are well tested. This
  documentation may be slightly out of sync as a result (especially with 
  CVS sources). And there <emphasis>may be</emphasis> bugs, though hopefully
  not many! 
 </para>
-
+]]>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2>
@@ -110,15 +116,13 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 <para>
  In addition to <application>Internet Junkbuster's</application> traditional
  feature of ad and banner blocking and cookie management,
- <application>Privoxy</application> provides new features, some of them
- currently under development:
+ <application>Privoxy</application> provides new features<![%p-not-stable;[,
+ some of them currently under development]]>:
 </para>
 
-<!--
- Include newfeatures.sgml here:
--->
-
-&newfeatures;
+<!-- Include newfeatures.sgml boilerplate here: -->
+ &newfeatures;
+<!-- end boilerplate -->
 
 </sect2>
 
@@ -130,72 +134,38 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="installation"><title>Installation</title>
 <para>
- <application>Privoxy</application> is available as raw source code, or
- pre-compiled binaries. See the <ulink
- url="http://sourceforge.net/projects/ijbswa/">Privoxy Home Page</ulink>
- for binaries and current release info. <application>Privoxy</application>
- is also available via <ulink
+ <application>Privoxy</application> is available as raw source code (tarball 
+ or via CVS), or pre-compiled binaries for various platforms. See the <ulink
+ url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink> for
+ the most up to date release information.
+ <application>Privoxy</application> is also available via <ulink
  url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
- This is the recommended approach at this time. But please be aware that CVS 
- is constantly changing, and it may break in mysterious ways.
+ <![%p-not-stable;[This is the recommended approach at this time.]]> But
+ please be aware that CVS is constantly changing, and it may break in
+ mysterious ways.
 </para>
+
+<!-- Include supported.sgml boilerplate -->
+ &supported;
+<!-- end boilerplate -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-source"><title>Source</title>
-<para>
- For gzipped tar archives, unpack the source:
-</para>
 
-<para>
- <screen>
- tar xzvf privoxy-2.9.13-beta-src* [.tgz or .tar.gz]
- cd privoxy-2.9.13-beta
- </screen>
-</para>
 
-<para>
- For retrieving the current CVS sources, you'll need the CVS 
- package installed first. To download CVS source:
-</para>
-
-<para>
- <screen>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
-  cd current
- </screen>
-</para>
-
-<para>
- This will create a directory named <filename>current/</filename>, which will 
- contain the source tree.
-</para>
-
-<para>
- Then, in either case, to build from tarball/CVS source:
-</para>
-
-<para>
- <screen>
- ./configure      (--help to see options)
- make             (the make from gnu, gmake for *BSD) 
- su 
- make -n install  (to see where all the files will go)
- make install     (to really install)
- </screen>
-</para>
+<!-- include buildsource.sgml boilerplate: -->
+ &buildsource;
+<!-- end boilerplate -->
 
 <para>
  For Redhat and SuSE Linux RPM packages, see below.
 </para>
 
-</sect2>
-
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-rh"><title>Red Hat</title>
+<sect3 id="installation-rh"><title>Red Hat</title>
 <para>
- To build Redhat RPM packages, install source as above. Then:
+ To build Redhat RPM packages from source, install source as above. Then:
 </para>
 
 <para>
@@ -212,10 +182,10 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/privoxy-2.9.11-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/privoxy-&p-version;-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/privoxy-2.9.11-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/privoxy-&p-version;-1.src.rpm
 </para>
 
 <para>
@@ -224,20 +194,23 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 
 <para>
  <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/privoxy-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/privoxy-&p-version;-1.i686.rpm
  </screen>
 </para>
 
 <para>
  This will place the <application>Privoxy</application> configuration 
  files in <filename>/etc/privoxy/</filename>, and log files in 
- <filename>/var/log/privoxy/</filename>.
+ <filename>/var/log/privoxy/</filename>. Run 
+ <command>ckconfig privoxy on</command> to have
+ <application>Privoxy</application> start automatically during init.
+
 </para>
 
-</sect2>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-suse"><title>SuSE</title>
+<sect3 id="installation-suse"><title>SuSE</title>
 <para>
  To build SuSE RPM packages, install source as above. Then:
 </para>
@@ -256,10 +229,10 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/privoxy-2.9.11-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/privoxy-&p-version;-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/privoxy-2.9.11-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/privoxy-&p-version;-1.src.rpm
 </para>
 
 <para>
@@ -268,21 +241,21 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 
 <para>
  <screen>
- rpm -Uvv /usr/src/packages/RPMS/i686/privoxy-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/privoxy-&p-version;-1.i686.rpm
  </screen>
 </para>
 
 <para>
  This will place the <application>Privoxy</application> configuration 
  files in <filename>/etc/privoxy/</filename>, and log files in 
- <filename>/var/log/privoxy/</filename>.
+ <filename>/var/log/privoxy/</filename>. 
 </para>
 
-</sect2>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-os2"><title>OS/2</title>
+<sect3 id="installation-os2"><title>OS/2</title>
 
 <!--
 Thanx David Schmidt!
@@ -292,7 +265,7 @@ Thanx David Schmidt!
  <application>Privoxy</application> is packaged in a WarpIN self-
  installing archive.  The self-installing program will be named depending
  on the release version, something like:
- <filename>privoxyos2_setup_1.2.3.exe</filename>.  In order to install it, simply
+ <filename>privoxyos2_setup_&p-version;.exe</filename>.  In order to install it, simply
  run this executable or double-click on its icon and follow the WarpIN
  installation panels.  A shadow of the <application>Privoxy</application>
  executable will be placed in your startup folder so it will start 
@@ -338,18 +311,18 @@ Thanx David Schmidt!
  You will see this sequence laid out in <filename>os2build.cmd</filename>.
 </para>
 
-</sect2>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-win"><title>Windows</title>
+<sect3 id="installation-win"><title>Windows</title>
 <para>Click-click. (I need help on this. Not a clue here. Also for 
 configuration section below. HB.)
 </para>
-</sect2>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-other"><title>Other</title>
+<sect3 id="installation-other"><title>Other</title>
 <para>
  Some quick notes on other Operating Systems.
 </para>
@@ -361,6 +334,7 @@ configuration section below. HB.)
  The rest should be the same as above for Linux/Unix.
 </para>
 
+</sect3>
 </sect2>
 
 </sect1>
@@ -3187,50 +3161,12 @@ icon being being cached by the browser, which will speed up the display.
 
 <sect1 id="contact"><title>Contacting the Developers, Bug Reporting and Feature
 Requests</title>
-<para>
-We value your feedback. However, to provide you with the best support,
-please note:
 
- <itemizedlist>
+<!-- Include contacting.sgml boilerplate: -->
 
-  <listitem><para>Use the <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">Sourceforge support forum</ulink> to get
-  help.</para></listitem>
- 
-  <listitem><para>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">Sourceforge bug
-      forum</ulink>. 
-  </para>
-  <para>
-   Make sure that the bug has not already been submitted.  Please try to
-   verify that it is a <application>Privoxy</application> bug, and not a
-   browser or site bug first. If you are using your own custom configuration,
-   please try the stock configs to see if the problem is a configuration
-   related bug.  And if not using the latest development snapshot, please try
-   the latest one. Or even better, CVS sources. Please be sure to include the
-   <application>Privoxy</application>/<application>Junkbuster</application>
-   version, platform, browser, any pertinent log data, any other relevant
-   details (please be specific) and, if possible, some way to reproduce the
-   bug.
-  </para>
- </listitem>
- 
-  <listitem><para>Submit feature requests only thru our <ulink
-      url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse">Sourceforge feature request forum</ulink>.</para></listitem>
+ &contacting;
 
-
- </itemizedlist>
-
-</para>
-
-<para>
-For any other issues, feel free to use the <ulink url="http://sourceforge.net/mail/?group_id=11118">mailing lists</ulink>.
-</para>
-
-<para>
- Anyone interested in actively participating in development and related 
- discussions can join the appropriate mailing list  
- <ulink url="http://sourceforge.net/mail/?group_id=11118">here</ulink>.
- Archives are available here too.
-</para>
+<!-- end boilerplate -->
 
 </sect1>
 
@@ -3258,7 +3194,6 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  License as published by the Free Software Foundation; either version 2 of the
  License, or (at your option) any later version.
 </para>
-
 
 <para>
  This program is distributed in the hope that it will be useful, but WITHOUT
@@ -3310,10 +3245,12 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See Also</title>
-<!--
- Include seealso.sgml:
--->
-&seealso;
+
+<!-- Include seealso.sgml: -->
+
+ &seealso;
+
+<!-- end boilerplate -->
 
 </sect1>
 
@@ -4050,6 +3987,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.65  2002/04/03 19:52:07  swa
+ enhance squid section due to user suggestion
+
  Revision 1.64  2002/04/03 03:53:43  hal9
  A few minor bug fixes, and touch ups. Ready for review.
 
