@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.2 2001/06/04 18:31:58 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.3 2001/06/07 17:28:10 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.3  2001/06/07 17:28:10  swa
+# cosmetics
+#
 # Revision 1.2  2001/06/04 18:31:58  swa
 # files are now prefixed with either `confdir' or `logdir'.
 # `make redhat-dist' replaces both entries confdir and logdir
@@ -46,7 +49,7 @@ Version: 2.9
 Release: 4
 Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 Copyright: GPL
-BuildRoot: /tmp/junkbuster
+BuildRoot: /tmp/junkbuster-rpmbuild
 Group: Networking/Utilities
 URL: %PACKAGE_URL
 Packager: Stefan Waldherr <stefan@waldherr.org>
@@ -125,7 +128,7 @@ cp -f re_filterfile $RPM_BUILD_ROOT/etc/junkbuster/re_filterfile
 # cp -f blocklist $RPM_BUILD_ROOT/etc/junkbuster/blocklist
 # cp -f imagelist $RPM_BUILD_ROOT/etc/junkbuster/imagelist
 # cp -f cookiefile $RPM_BUILD_ROOT/etc/junkbuster/cookiefile
-cp -f aclfile $RPM_BUILD_ROOT/etc/junkbuster/aclfile
+#cp -f aclfile $RPM_BUILD_ROOT/etc/junkbuster/aclfile
 
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
@@ -140,12 +143,12 @@ cat config | \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
     $RPM_BUILD_ROOT/etc/junkbuster/config
 
-cp -f forward $RPM_BUILD_ROOT/etc/junkbuster/forward
+#cp -f forward $RPM_BUILD_ROOT/etc/junkbuster/forward
 cp -f trust $RPM_BUILD_ROOT/etc/junkbuster/trust
 # cp -f popup $RPM_BUILD_ROOT/etc/junkbuster/popup
 cp -f templates/default $RPM_BUILD_ROOT/etc/junkbuster/templates/
 cp -f templates/show-status  $RPM_BUILD_ROOT/etc/junkbuster/templates/
-cp -f templates/show-status  $RPM_BUILD_ROOT/etc/junkbuster/templates/
+cp -f templates/show-status-file  $RPM_BUILD_ROOT/etc/junkbuster/templates/
 
 cp -f junkbuster.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/junkbuster
 
