@@ -1,9 +1,9 @@
 #ifndef WIN32_H_INCLUDED
 #define WIN32_H_INCLUDED
-#define WIN32_H_VERSION "$Id: win32.h,v 1.5 2002/03/26 22:57:10 jongfoster Exp $"
+#define WIN32_H_VERSION "$Id: win32.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/win32.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/win32.h,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
@@ -33,6 +33,9 @@
  *
  * Revisions   :
  *    $Log: win32.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.5  2002/03/26 22:57:10  jongfoster
  *    Web server name should begin www.
  *
@@ -65,11 +68,15 @@ extern const char win32_blurb[];
 extern void InitWin32(void);
 
 #ifdef _WIN_CONSOLE
+
 extern int hideConsole;
-#endif /*def _WIN_CONSOLE */
+
+#else  /* ndef _WIN_CONSOLE */
 
 extern HINSTANCE g_hInstance;
 extern int g_nCmdShow;
+
+#endif  /* ndef _WIN_CONSOLE */
 
 extern int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
