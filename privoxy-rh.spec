@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.30 2002/04/26 15:51:05 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.31 2002/05/03 17:14:35 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -292,6 +292,7 @@ fi
 %config %{privoxyconf}/templates/mod-local-help
 %config %{privoxyconf}/templates/show-url-info
 %config %{privoxyconf}/templates/edit-actions-for-url
+%config %{privoxyconf}/templates/edit-actions-list-button
 
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
@@ -306,6 +307,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Wed May 15 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-1
+- Add templates/edit-actions-list-button
+
 * Fri May 03 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-1
 - Version bump
@@ -644,6 +649,12 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.31  2002/05/03 17:14:35  morcego
+# *.spec: Version bump to 2.9.15
+# -rh.spec: noreplace for %%{privoxyconf}/config
+#           Will interrupt the build if versions from configure.in and
+# 		specfile do not match
+#
 # Revision 1.30  2002/04/26 15:51:05  morcego
 # Changing Vendor value to Privoxy.Org
 #
