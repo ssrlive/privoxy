@@ -28,7 +28,7 @@
 
 # Defines should happen in the begining of the file
 %define oldname junkbuster
-%define privoxyconf %{_sysconfdir}/%{oldname}
+%define privoxyconf %{_sysconfdir}/%{name}
 
 Summary: Privoxy - privacy enhancing proxy
 Vendor: http://ijbswa.sourceforge.net
@@ -162,7 +162,7 @@ id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
 
 %preun
 /sbin/service %{oldname} stop > /dev/null 2>&1 ||:
-/sbin/chkconfig --del %{oldname} ||;
+/sbin/chkconfig --del %{oldname} ||:
 
 if [ "$1" = "0" ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1 ||:
@@ -247,7 +247,8 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 + junkbusterng-2.9.13-1
 - Fixed build problems re: name conflicts with man page and logrotate.
 - Commented out rc?d/* configs for time being, which are causing a build 
-- failure.
+- failure. /etc/junkbuster is now /etc/privoxy. Stefan did other name 
+- changes. Fixed typo ';' should be ':'.
 
 * Fri Mar 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + junkbusterng-2.9.13-1
