@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.17 2001/09/12 23:44:55 david__schmidt Exp $
+dnl $Id: configure.in,v 1.18 2001/09/13 13:10:24 steudten Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.18  2001/09/13 13:10:24  steudten
+dnl
+dnl PreWork for Debug Interface.
+dnl Add new option "--with-debug" to enable debugging (flags aso.)
+dnl
 dnl Revision 1.17  2001/09/12 23:44:55  david__schmidt
 dnl Mac OSX (Darwin) support added.
 dnl
@@ -181,7 +186,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.17 $)
+AC_REVISION($Revision: 1.18 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -193,7 +198,7 @@ dnl =================================================================
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=8
+VERSION_POINT=9
 CODE_STATUS="\"alpha\""
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
@@ -472,14 +477,6 @@ AC_ARG_ENABLE(toggle,
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_TOGGLE)
 fi],AC_DEFINE(FEATURE_TOGGLE))
-
-AC_ARG_ENABLE(gzip,
-[  --disable-gzip          Block gzip'ed transfer of documents.  Note that
-                          this is required if you want content modification
-                          even with gzip-supporting servers.],
-[if test $enableval = "no"; then
-  AC_DEFINE(FEATURE_DENY_GZIP)
-fi])
 
 AC_ARG_ENABLE(force,
 [  --disable-force         Don't allow blockfile to be bypassed],
