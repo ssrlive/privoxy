@@ -1,3 +1,9 @@
+privoxy (2.9.14-beta-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 13 Apr 2002 18:05:26 +0200
+
 privoxy (2.9.13-beta-2) unstable; urgency=low
 
   * Create HTML and ASCII versions of the documentation using docbook now.
