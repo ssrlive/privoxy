@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.27 2002/05/03 04:18:49 morcego Exp $
+#  $Id: default.action,v 1.28 2002/05/14 21:29:19 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -544,4 +544,9 @@ www.ugu.com/sui/ugu/adv
 www.globalintersec.com/adv
 # We all want weather forecast to work
 banners.wunderground.com/banner/gizmotemp/
+
+{+downgrade-http-version}
+linuxdailynews.net
+.linuxandmain.com
+.ofb.biz
 
