@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.33 2001/07/29 19:32:00 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.34 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.33 2001/07/29 19:32:00 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.34  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.33  2001/07/29 19:32:00  jongfoster
  *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
  *
@@ -854,7 +860,7 @@ static void chat(struct client_state *csp)
          /* Filter the popups on this read. */
          if (block_popups_now)
          {
-            filter_popups(buf, n);
+            filter_popups(buf);
          }
 #endif /* def FEATURE_KILL_POPUPS */
 
@@ -1028,7 +1034,7 @@ static void chat(struct client_state *csp)
                 * Filter the part of the body that came in the same read
                 * as the last headers:
                 */
-               filter_popups(csp->iob->cur, csp->iob->eod - csp->iob->cur);
+               filter_popups(csp->iob->cur);
             }
 
 #endif /* def FEATURE_KILL_POPUPS */
