@@ -10,7 +10,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.14 2002/04/08 20:47:24 swa Exp $
+#  $Id: default.action,v 1.18 2002/04/16 13:34:51 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -230,13 +230,15 @@
 #
 #     html-annoyances:  Get rid of particularly annoying HTML abuse
 #     js-annoyances:    Get rid of particularly annoying JavaScript abuse
-#     no-poups:         Kill all popups in JS and HTML
+#     content-cookies:  Kill cookies that come in the HTML or JS content
+#     poups:            Kill all popups in JS and HTML
 #     frameset-borders: Give frames a border
 #     webbugs:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
-#     no-refresh:       Automatic refresh sucks on auto-dialup lines
+#     refresh-tags:     Kill automatic refresh tags (for dial-on-demand setups)
 #     fun:              Text replacements  for subversive browsing fun!
-#     nimda:            Remove (virus) Nimda code.
-#     banners-by-size:  Kill banners by size
+#     nimda:            Remove Nimda (virus) code.
+#     banners-by-size:  Kill banners by size (very efficient!)
+#     shockwave-flash:  Kill embedded Shockwave Flash objects
 #     crude-parental:   Kill all web pages that contain the words "sex" or "warez"
 #
 #
@@ -400,7 +402,7 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}
 +filter{html-annoyances} \
 +filter{content-cookies} \
 +filter{js-annoyances} \
-+filter{no-popups} \
++filter{popups} \
 +filter{webbugs} \
 +filter{nimda} \
 +filter{banners-by-size} \
@@ -449,7 +451,7 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}
 #############################################################################
 # These shops require pop-ups
 #############################################################################
-{shop -no-popups -filter{no-poups}}
+{shop -no-popups -filter{poups}}
 .dabs.com
 .overclockers.co.uk
 

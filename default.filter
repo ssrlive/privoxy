@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.8 2002/04/10 17:07:21 oes Exp $
+#  $Id: default.filter,v 1.9 2002/04/11 07:36:35 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -124,10 +124,10 @@ s|<meta\s+http-equiv=['"]?set-cookie['"]?\s+content=[^>].*>|<!--no cookies here 
 
 ##################################################################################
 #
-# no-popups: Kill all popups in JS and HTML
+# popups: Kill all popups in JS and HTML
 #
 #################################################################################
-FILTER: no-popups Kill all popups in JS and HTML
+FILTER: popups Kill all popups in JS and HTML
 
 s/window\.open\s*\(/concat(/ig               # JavaScript
 s/([ =;])open\s*\(/$1concat(/ig              # JavaScript alternative
@@ -161,10 +161,10 @@ s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D
 
 #################################################################################
 #
-# no-refresh: Kill automatic refresh tags (for dial-on-demand setups)
+# refresh-tags: Kill automatic refresh tags (for dial-on-demand setups)
 #
 #################################################################################
-FILTER: no-refresh Kill automatic refresh tags (for dial-on-demand setups)
+FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups)
 
 s/<meta\s+http-equiv=['"]?refresh['"]?\s+content=['"]?[0-9]*;\s+url=([^>]*)['"]?>/<link rev="x-refresh" href=$1>/iU   
 s/<meta\s+http-equiv=['"]?page-enter['"]?\s+content=[^>].*>/<!--no page enter for me-->/iU 
@@ -179,7 +179,7 @@ FILTER: fun Text replacements for subversive browsing fun!
 
 s/microsoft(?!.com)/MicroSuck/ig
 
-# Buzzword Bingo (example for extended syntax)
+# Buzzword Bingo (example for extended regex syntax)
 #
 s* industry[ -]leading \
 |  cutting[ -]edge \
@@ -239,10 +239,10 @@ s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src="http://c
 
 #################################################################################
 #
-# noflash: Kill embedded Shockwave Flash objects
+# shockwave-flash: Kill embedded Shockwave Flash objects
 #
 #################################################################################
-FILTER: noflash Kill embedded Shockwave Flash objects
+FILTER: shockwave-flash Kill embedded Shockwave Flash objects
 
 s|<embed [^>]*application/x-shockwave-flash.*</embed>|<!-- Squished Shockwave Flash Embed -->|sigU
 
@@ -267,6 +267,9 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.9  2002/04/11 07:36:35  oes
+#     Generalized js-popup filter
+#
 #     Revision 1.8  2002/04/10 17:07:21  oes
 #     Fixed potentially desctructive jobs, added noflash filter
 #
