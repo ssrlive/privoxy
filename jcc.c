@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.12 2001/05/27 22:17:04 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.13 2001/05/29 09:50:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,29 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.12 2001/05/27 22:17:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.13  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.12  2001/05/27 22:17:04  oes
  *
  *    - re_process_buffer no longer writes the modified buffer
@@ -1036,7 +1059,7 @@ int main(int argc, const char *argv[])
 {
    configfile =
 #ifdef AMIGA
-   "AmiTCP:db/junkbuster.config"
+   "AmiTCP:db/junkbuster/config"
 #elif !defined(_WIN32)
    "config"
 #else
@@ -1061,10 +1084,6 @@ int main(int argc, const char *argv[])
    }
 #endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
-#ifdef AMIGA
-   InitAmiga();
-#endif
-
    Argc = argc;
    Argv = argv;
 
@@ -1075,7 +1094,9 @@ int main(int argc, const char *argv[])
 
    files->next = NULL;
 
-#ifdef _WIN32
+#ifdef AMIGA
+   InitAmiga();
+#elif defined(_WIN32)
    InitWin32();
 #endif
 
@@ -1284,7 +1305,7 @@ static void listen_loop(void)
             NP_Output, Output(),
             NP_CloseOutput, FALSE,
             NP_Name, (ULONG)"junkbuster child",
-            NP_StackSize, 20*1024,
+            NP_StackSize, 200*1024,
             TAG_DONE)))
          {
             childs++;
