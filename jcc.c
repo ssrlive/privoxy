@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.61 2002/01/17 21:01:52 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.62 2002/02/20 23:17:23 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.61 2002/01/17 21:01:52 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.62  2002/02/20 23:17:23  jongfoster
+ *    Detecting some out-of memory conditions and exiting with a log message.
+ *
  *    Revision 1.61  2002/01/17 21:01:52  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.12 2002/01/23 01:03:32 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.13 2002/02/21 00:10:37 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.12 2002/01/23 01:03:32 jongfo
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.13  2002/02/21 00:10:37  jongfoster
+ *    Adding send-banner?type=auto option
+ *
  *    Revision 1.12  2002/01/23 01:03:32  jongfoster
  *    Fixing gcc [CygWin] compiler warnings
  *
