@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.61 2002/04/10 18:14:45 morcego Exp $
+dnl $Id: configure.in,v 1.62 2002/04/11 10:09:20 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.62  2002/04/11 10:09:20  oes
+dnl Version 2.9.14
+dnl
 dnl Revision 1.61  2002/04/10 18:14:45  morcego
 dnl - (privoxy-rh.spec only) Relisting template files on the %%files section
 dnl - (configure.in, privoxy-rh.spec) Bumped package release to 5
@@ -341,7 +344,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.61 $)
+AC_REVISION($Revision: 1.62 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -803,6 +806,10 @@ AC_CHECK_FUNC(localtime_r, [
 dnl =================================================================
 dnl Solaris specific
 dnl FIXME: Not tested on Solaris yet...
+dnl ISFIXED: Have tested it on Solaris, but there are other ways to
+dnl 	make these checks generic, e.g.:
+dnl AC_CHECK_FUNC(getsockopt, , AC_CHECK_LIB(socket, getsockopt))
+dnl	(Moritz Barsnick <moritz@barsnick.net>)
 dnl =================================================================
 
 
@@ -824,6 +831,17 @@ case "$host" in
 esac
 
 AC_SUBST(SOCKET_LIB)
+
+dnl =================================================================
+dnl Solaris problem, and others perhaps (socklen_t is undefined)
+dnl =================================================================
+
+AC_MSG_CHECKING([for socklen_t])
+AC_EGREP_HEADER(socklen_t, sys/socket.h, AC_MSG_RESULT([yes]),
+	AC_MSG_RESULT([no])
+	AC_DEFINE(socklen_t,int,
+		[ Define to 'int' if <sys/socket.h> doesn't have it. ]))
+
 
 dnl =================================================================
 dnl OS/2 specific
