@@ -30,8 +30,8 @@ case "$1" in
             adduser --system --home /etc/privoxy --ingroup nogroup \
                     --disabled-password privoxy >/dev/null
         fi
-        chown -R privoxy.adm /var/log/privoxy
-        chmod 750 /var/log/privoxy
+        chown -R privoxy.adm /var/log/privoxy /etc/privoxy
+        chmod 750 /var/log/privoxy /etc/privoxy
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
