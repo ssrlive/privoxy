@@ -1,7 +1,7 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.9 2002/03/31 17:19:00 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/win32.c,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.9 2002/03/31 17:19:00 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.9  2002/03/31 17:19:00  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -93,6 +96,10 @@ const char win32_rcs[] = "$Id: win32.c,v 1.9 2002/03/31 17:19:00 jongfoster Exp 
 
 const char win32_h_rcs[] = WIN32_H_VERSION;
 
+/**
+ * A short introductory text about Privoxy.  Used for the "About" box
+ * or the console startup message.
+ */
 const char win32_blurb[] =
 "Privoxy version " VERSION " for Windows\n"
 "Copyright (C) 2000-2002 by members of the Privoxy Team\n"
@@ -105,18 +112,38 @@ const char win32_blurb[] =
 "        " HOME_PAGE_URL "\n"
 "\n";
 
+
 #ifdef _WIN_CONSOLE
 
+
+/**
+ * Hide the console.  If set, the program will disconnect from the 
+ * console and run in the background.  This allows the command-prompt
+ * window to close.
+ */
 int hideConsole     = 0;
 
-#else
 
+#else /* ndef _WIN_CONSOLE */
+
+
+/**
+ * The application instance handle.
+ */
 HINSTANCE g_hInstance;
+
+
+/**
+ * The command to show the window that was specified at startup.
+ */
 int g_nCmdShow;
+
 
 static void  __cdecl UserInterfaceThread(void *);
 
-#endif
+
+#endif /* ndef _WIN_CONSOLE */
+
 
 
 /*********************************************************************

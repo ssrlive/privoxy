@@ -1,7 +1,7 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.25 2002/04/04 00:36:36 gliptak Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/w32log.c,v $
  *
  * Purpose     :  Functions for creating and destroying the log window,
  *                ouputting strings, processing messages and so on.
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.25 2002/04/04 00:36:36 gliptak Exp 
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.25  2002/04/04 00:36:36  gliptak
  *    always use pcre for matching
  *
@@ -221,55 +224,64 @@ const char w32log_h_rcs[] = W32LOG_H_VERSION;
  * configurable through the UI.
  */
 
-/* Indicates whether task bar shows activity animation */
+/** Indicates whether task bar shows activity animation */
 BOOL g_bShowActivityAnimation = 1;
 
-/* Indicates if the log window appears on the task bar */
+/** Indicates if the log window appears on the task bar */
 BOOL g_bShowOnTaskBar = 0;
 
-/* Indicates whether closing the log window really just hides it */
+/** Indicates whether closing the log window really just hides it */
 BOOL g_bCloseHidesWindow = 1;
 
-/* Indicates if messages are logged at all */
+/** Indicates if messages are logged at all */
 BOOL g_bLogMessages = 1;
 
-/* Indicates whether log messages are highlighted */
+/** Indicates whether log messages are highlighted */
 BOOL g_bHighlightMessages = 1;
 
-/* Indicates if buffer is limited in size */
+/** Indicates if buffer is limited in size */
 BOOL g_bLimitBufferSize = 1;
 
-/* Maximum number of lines allowed in buffer when limited */
+/** Maximum number of lines allowed in buffer when limited */
 int g_nMaxBufferLines = DEFAULT_MAX_BUFFER_LINES;
 
-/* Font to use */
+/** Font to use */
 char g_szFontFaceName[255] = DEFAULT_LOG_FONT_NAME;
 
-/* Size of font to use */
+/** Size of font to use */
 int g_nFontSize = DEFAULT_LOG_FONT_SIZE;
 
 
 /* FIXME: this is a kludge */
 
+/** Actions file name. */
 const char * g_actions_file = NULL;
+
+/** Filter file name. */
 const char * g_re_filterfile = NULL;
+
 #ifdef FEATURE_TRUST
+
+/** Trust file name. */
 const char * g_trustfile = NULL;
+
 #endif /* def FEATURE_TRUST */
 
 /* FIXME: end kludge */
 
-/* Regular expression for detected URLs */
+
+/** Regular expression for detected URLs */
 #define RE_URL "http:[^ \n\r]*"
 
-/*
- * Regular expressions that are used to perform highlight in the log window
+
+/**
+ * Regular expressions that are used to perform highlight in the log window.
  */
 static struct _Pattern
 {
-   const char *str;
-   int style;
-   regex_t buffer;
+   const char *str;  /**< The pattern to match. */
+   int style;        /**< How to highlight it - one of the STYLE_xxx constants. */
+   regex_t buffer;   /**< The compiled pattern to use for matching. Generated from str. */
 } patterns_to_highlight[] =
 {
    /* url headers */
@@ -308,21 +320,48 @@ static struct _Pattern
 /*
  * Public variables
  */
+
+/**
+ * Window handle for the log window.
+ */
 HWND g_hwndLogFrame;
+
 
 /*
  * Private variables
  */
+
+/** Critical section used to serialize output to the log window. */
 static CRITICAL_SECTION g_criticalsection;
+
+/** The window handle of the tray icon window. */
 static HWND g_hwndTray;
+
+/** The window handle of the log window. */
 static HWND g_hwndLogBox;
+
+/** The default window procedure for the rich edit control.  Set when we
+    subclass this window. */
 static WNDPROC g_fnLogBox;
+
+/** The icons for the activity animation. */
 static HICON g_hiconAnim[ANIM_FRAMES];
+
+/** The icon to use when idle. */
 static HICON g_hiconIdle;
+
+/** The main application icon. */
 static HICON g_hiconApp;
+
+/** The index of the current animation frame. */
 static int g_nAnimFrame;
+
+/** If a timer to call LogClipBuffer() has been started. */
 static BOOL g_bClipPending = FALSE;
+
+/** The version of the rich edit control we're using. */
 static int g_nRichEditVersion = 0;
+
 
 /*
  * Private functions
@@ -722,6 +761,7 @@ void LogShowActivity(void)
  * Function    :  LogClipBuffer
  *
  * Description :  Prunes old lines from the log.
+ *                This is called occasionally, from a timer callback.
  *
  * Parameters  :  None
  *

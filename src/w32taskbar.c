@@ -1,7 +1,7 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.7 2002/03/31 17:19:00 jongfoster Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/w32taskbar.c,v $
  *
  * Purpose     :  Functions for creating, setting and destroying the
  *                workspace tray icon
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.7 2002/03/31 17:19:00 jongf
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.7  2002/03/31 17:19:00  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -74,9 +77,19 @@ const char w32taskbar_h_rcs[] = W32TASKBAR_H_VERSION;
 
 #ifndef _WIN_CONSOLE /* entire file */
 
+/**
+ * Our custom message ID.
+ */
 #define WM_TRAYMSG WM_USER+1
 
+/**
+ * The menu handle for the tray icon's pop-up menu.
+ */
 static HMENU g_hmenuTray;
+
+/**
+ * The invisible window responsible for processing tray messages.
+ */
 static HWND g_hwndTrayX;
 
 static LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
