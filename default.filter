@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.12 2002/09/05 14:55:38 oes Exp $
+#  $Id: default.filter,v 1.13 2002/09/11 16:04:20 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -356,10 +356,49 @@ s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><
 s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
 
 
+#################################################################################
+#
+# demoronizer: Correct Microsoft's abuse of standardized character sets, which 
+#              leave the browser to (mis)-interpret unknown characters, with 
+#              sometimes bizarre results on non-MS platforms.
+#
+# credit: ripped from the demoroniser.pl script by: 
+#         John Walker -- January 1998, http://www.fourmilab.ch/webtools/demoroniser
+#
+#################################################################################
+FILTER: demoronizer fixing MS's non-standard use of std charsets.
+
+s/(&\#[0-2]\d\d)\s/$1; /g
+# per Robert Lynch: http://slate.msn.com//?id=2067547, just a guess.
+# Must come before x94 below.
+s/\xE2\x80\x94/ -- /g
+s/\x82/,/g
+#s-\x83-<em>f</em>-g
+s/\x84/,,/g
+s/\x85/.../g
+#s/\x88/^/g
+#s-\x89- °/°°-g
+s/\x8B/</g
+s/\x8C/Oe/g
+s/\x91/`/g
+s/\x92/'/g
+s/(\x93|\x94)/"/g
+# Bullet type character.
+s/\x95/&middot;/g
+s/\x96/-/g
+s/\x97/--/g
+#s-\x98-<sup>~</sup>-g
+#s-\x99-<sup>TM</sup>-g
+# per Robert Lynch.
+s/\x9B/>/g                  # 155
+
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.13  2002/09/11 16:04:20  oes
+#     Preserve original quoting style in <img> tags wherever possible. Fixes Bug #605956
+#
 #     Revision 1.12  2002/09/05 14:55:38  oes
 #     Synced with the stable branch:
 #         Revision 1.11.2.6  2002/08/23 14:12:26  oes
