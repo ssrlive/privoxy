@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.75 2002/04/08 22:14:59 oes Exp $
+# $Id: GNUmakefile.in,v 1.76 2002/04/08 22:43:41 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -123,7 +123,10 @@ CONFIG_FILES = config trust \
 		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"`
 
 DOC_FILES = AUTHORS LICENSE README ChangeLog \
-		`find doc/text/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` privoxy.1
+		`find doc/text/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` \
+		`find doc/webserver/ -name "*.html"` \
+		`find doc/webserver/ -name "*.css"` \
+                privoxy.1
 
 #############################################################################
 # Filenames and libraries
@@ -293,7 +296,7 @@ redhat-dist: rpm-stuff
 	exit 1;\
 	fi
 
-	$(TAR) --exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
+	$(TAR) ---exclude ".cvsignore" -exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -323,7 +326,7 @@ suse-dist: rpm-stuff
 	exit 1;\
 	fi
 
-	$(TAR) --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -754,7 +757,9 @@ clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -name TAGS -o -name tags` 
 
 tidy:
-	$(RM) `find . -name "*~" -o -name "#*#"`
+	$(RM) `find . -name "*~"`
+#	$(RM) `find . -name "#*#"` # what is this for??
+	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
 	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar
@@ -795,6 +800,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.76  2002/04/08 22:43:41  oes
+# Fix: Include dotfiles in fixing webserver permissions
+#
 # Revision 1.75  2002/04/08 22:14:59  oes
 # Silencing tar warnings in the web* targets
 #
