@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.25 2002/04/08 20:50:25 swa Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.26 2002/04/10 13:38:35 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.26  2002/04/10 13:38:35  oes
+ *    load_template signature changed
+ *
  *    Revision 1.25  2002/04/08 20:50:25  swa
  *    fixed JB spelling
  *
@@ -190,6 +193,16 @@ extern jb_err cgi_error_no_template(struct client_state *csp,
 extern jb_err cgi_error_bad_param(struct client_state *csp,
                                   struct http_response *rsp);
 
+extern jb_err get_number_param(struct client_state *csp,
+                               const struct map *parameters,
+                               char *name,
+                               unsigned *pvalue);
+extern jb_err get_string_param(const struct map *parameters,
+                               const char *param_name,
+                               const char **pparam);
+extern char   get_char_param(const struct map *parameters,
+                             const char *param_name);
+
 /*
  * Text generators
  */
@@ -198,7 +211,7 @@ extern char *make_menu(const char *self);
 extern char *dump_map(const struct map *the_map);
 
 /*
- * Ad replacement images.
+ * Ad replacement images
  */
 extern const char image_pattern_data[];
 extern const size_t  image_pattern_length;
