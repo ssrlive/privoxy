@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.60 2002/03/24 15:52:17 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.61 2002/03/26 22:29:55 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.61  2002/03/26 22:29:55  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.60  2002/03/24 15:52:17  jongfoster
  *    Changing CGI URL prefixes for new name
  *
@@ -1067,7 +1070,7 @@ struct configuration_spec
 
 
 /* Hardwired URLs */
-#define HOME_PAGE_URL       "http://ijbswa.sourceforge.net"
+#define HOME_PAGE_URL       "http://www.privoxy.org"
 #define REDIRECT_URL        HOME_PAGE_URL "/redirect.php?v=" VERSION "&to="
 
 /*
