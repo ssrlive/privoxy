@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.76 2002/09/05 14:52:17 oes Exp $
+dnl $Id: configure.in,v 1.77 2002/09/06 13:23:03 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.77  2002/09/06 13:23:03  oes
+dnl Removed non-functional test for gcc support for -pthread
+dnl
 dnl Revision 1.76  2002/09/05 14:52:17  oes
 dnl Synced in some changes fromm the stable branch:
 dnl Fixed detection/inclusion of pcre.h, which is in a pcre subdir on RH
@@ -404,7 +407,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.76 $)
+AC_REVISION($Revision: 1.77 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
@@ -442,6 +445,7 @@ AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_POINT)
 AC_SUBST(CODE_STATUS)
+AC_SUBST(SYSCONFDIR)
 
 dnl
 AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR},
@@ -1157,7 +1161,7 @@ dnl Checking for the docbook.dsl stylesheet file
 dnl It is still not portable (directory slash)
 dnl   ^ Why not?  All systems use / don't they?
 dnl   Windows certainly can.  Is this a Mac or
-dnl   Amiga issue?  -- Jon
+dnl   Amiga issue?  -- Jon  /dsssl/docbook/html/docbook.dsl
 DKPREFIXCOPY=$DKPREFIX
 DKPREFIX=false
 for i in $DKPREFIXCOPY /usr/share/sgml/docbook/stylesheet/dsssl/modular \
@@ -1167,7 +1171,7 @@ for i in $DKPREFIXCOPY /usr/share/sgml/docbook/stylesheet/dsssl/modular \
         if test -f $i/html/docbook.dsl; then
                 echo "yes"
                 DKPREFIX=$i
-                break
+                break 
         else
                 echo "no"
         fi
@@ -1253,3 +1257,14 @@ AC_SUBST(SPECIAL_CFLAGS)
 AC_SUBST(PTHREAD_LIB)
 
 AC_OUTPUT(GNUmakefile doc/source/ldp.dsl doc/source/GNUmakefile)
+
+dnl hb:
+echo $prefix
+echo $exec_prefix
+echo $bindir
+echo $sbindir
+echo $sysconfdir
+echo $datadir
+echo $mandir
+echo $localstatedir
+echo host: $host
