@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.6 2002/03/26 22:29:55 swa Exp $
+# $Id: privoxy-suse.spec,v 1.7 2002/03/27 00:49:39 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -199,7 +199,7 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc doc/webserver/developer-manual doc/webserver/user-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/ijb_docs.css
+%doc doc/webserver/p_doc.css
 #%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
@@ -214,6 +214,10 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Wed Mar 27 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-3
+- Doc css has changed names.
+
 * Tue Mar 25 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-3
 - Minor fix to description.
@@ -290,6 +294,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.7  2002/03/27 00:49:39  hal9
+# Minor fix to description.
+#
 # Revision 1.6  2002/03/26 22:29:55  swa
 # we have a new homepage!
 #
