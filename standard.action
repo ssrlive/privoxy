@@ -1,0 +1,138 @@
+######################################################################
+# 
+#  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
+# 
+#  $Id: default.action,v 1.20 2002/04/21 05:50:10 swa Exp $
+#
+#  Purpose     :  Provide prefedined sets of actions, see
+#                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
+#
+#  Copyright   :  Written by and Copyright
+#                 Privoxy team. http://www.privoxy.org/
+#
+######################################################################
+
+######################################################################
+#
+# CAUTION: MODYFING THIS FILE IS *NOT* RECOMMENDED for the average
+#          user.
+#
+#          If you want to customize Privoxy to suit your needs, 
+#          you can alter the default section in default.action and/or
+#          add your personal exceptions and additions in user.action
+#
+######################################################################
+
+################
+#
+# Cautions settings -- safe for all sites
+#
+{ \
+-add-header \
+-block \
+-deanimate-gifs \
+-downgrade-http-version \
+-fast-redirects \
++filter{html-annoyances} \
++filter{js-annoyances} \
+-filter{content-cookies} \
+-filter{popups} \
++filter{webbugs} \
+-filter{refresh-tags} \
+-filter{fun} \
++filter{nimda} \
++filter{banners-by-size} \
+-filter{shockwave-flash} \
+-filter{crude-prental} \
++hide-forwarded-for-headers \
++hide-from-header{block} \
+-hide-referrer \
+-hide-user-agent \
+-handle-as-image \
++set-image-blocker{pattern} \
+-limit-connect \
++prevent-compression \
+-session-cookies-only \
+-prevent-reading-cookies \
+-prevent-setting-cookies \
+-kill-popups \
+-send-vanilla-wafer \
+-send-wafer \
+}
+standard.Cautious
+
+################
+#
+# Medium settings -- safe for most sites
+#
+{ \
+-add-header \
+-block \
++deanimate-gifs{last} \
+-downgrade-http-version \
+-fast-redirects \
++filter{html-annoyances} \
++filter{js-annoyances} \
++filter{content-cookies} \
+-filter{popups} \
++filter{webbugs} \
++filter{refresh-tags} \
+-filter{fun} \
++filter{nimda} \
++filter{banners-by-size} \
+-filter{shockwave-flash} \
+-filter{crude-prental} \
++hide-forwarded-for-headers \
++hide-from-header{block} \
++hide-referrer{forge} \
+-hide-user-agent \
+-handle-as-image \
++set-image-blocker{pattern} \
+-limit-connect \
++prevent-compression \
++session-cookies-only \
+-prevent-reading-cookies \
+-prevent-setting-cookies \
+-kill-popups \
+-send-vanilla-wafer \
+-send-wafer \
+}
+standard.Medium
+
+################
+#
+# Advanced settings -- fun but risky
+#
+{ \
++add-header{X-User-Tracking: sucks} \
+-block \
++deanimate-gifs{last} \
+-downgrade-http-version \
++fast-redirects \
++filter{html-annoyances} \
++filter{js-annoyances} \
++filter{content-cookies} \
++filter{popups} \
++filter{webbugs} \
++filter{refresh-tags} \
++filter{fun} \
++filter{nimda} \
++filter{banners-by-size} \
+-filter{shockwave-flash} \
+-filter{crude-prental} \
++hide-forwarded-for-headers \
++hide-from-header{block} \
++hide-referrer{forge} \
+-hide-user-agent \
+-handle-as-image \
++set-image-blocker{pattern} \
+-limit-connect \
++prevent-compression \
++session-cookies-only \
+-prevent-reading-cookies \
+-prevent-setting-cookies \
+-kill-popups \
+-send-vanilla-wafer \
+-send-wafer \
+}
+standard.Advanced
