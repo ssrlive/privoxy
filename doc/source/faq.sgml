@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.10 2002/03/11 13:13:27 swa Exp $
+ $Id: faq.sgml,v 1.11 2002/03/11 18:42:27 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.10 2002/03/11 13:13:27 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.11 2002/03/11 18:42:27 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -96,7 +96,7 @@ Please see the Contact section in the user-manual if you want to contact the dev
 </sect3>
 
 <sect3 id="configfiles"> <title>What are the differences between
-ijb-intermediate.action, ijb-basci.action, etc.?</title>
+ijb-intermediate.action, ijb-basic.action, etc.?</title>
  <para>
 Configuring the Internet Junkbuster is not easy. To help you get started, we
 provide you with three different default configurations. The following table
@@ -452,6 +452,9 @@ more through Google.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.11  2002/03/11 18:42:27  swa
+new section
+
 Revision 1.10  2002/03/11 13:13:27  swa
 correct feedback channels
 
