@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.92 2002/04/27 04:53:40 morcego Exp $
+# $Id: GNUmakefile.in,v 1.93 2002/04/27 04:55:53 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -675,10 +675,12 @@ endif
 dok-pdf: doc/source/ldpOK.dsl dok-release 
 	cp doc/source/*.sgml doc/pdf
 	cp doc/source/*.dsl doc/pdf
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
 	rm -f doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
+	# kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
 
 # the layout and style with db2pdf sucks, here is an alternative
 dok-pdf2: doc/source/ldpOK.dsl dok-release 
@@ -687,6 +689,8 @@ dok-pdf2: doc/source/ldpOK.dsl dok-release
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
 	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
 # one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
+	# kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
 
 #############################################################################
 #
@@ -796,7 +800,8 @@ tidy:
 	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
-	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar privoxy-cl.spec
+	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldpOK.dsl
+
 #
 # FIXME: What is all this? 
 #
@@ -834,6 +839,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.93  2002/04/27 04:55:53  morcego
+# privoxy-cl.spec now gets removed by clobber target
+#
 # Revision 1.92  2002/04/27 04:53:40  morcego
 # Adding --exclude "PACKAGERS" to every tar command that applies (not for
 #   webserver target)
