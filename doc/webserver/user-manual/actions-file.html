@@ -84,37 +84,66 @@ CLASS="APPLICATION"
  are three such files included with <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->, 
- with slightly different purposes. <TT
-CLASS="FILENAME"
->default.action</TT
-> sets
- the default policies. <TT
+> (as of 
+ version 2.9.15), with differing purposes:
+ </P
+><P
+>  <P
+></P
+><UL
+><LI
+><P
+>      <TT
 CLASS="FILENAME"
 >standard.action</TT
-> is used by 
- <SPAN
+> - is used by the web based editor, 
+      to set various pre-defined sets of rules for the default actions section
+      in <TT
+CLASS="FILENAME"
+>default.action</TT
+>. These have increasing levels of
+      aggressiveness. It is not recommend to edit this file.
+    </P
+></LI
+><LI
+><P
+>     <TT
+CLASS="FILENAME"
+>default.action</TT
+> - is the primary action file 
+     that sets the initial values for all actions. It is intended to 
+     provide a base level of functionality for
+     <SPAN
 CLASS="APPLICATION"
->Privoxy</SPAN
-> and the web based editor to set 
- pre-defined values (and normally should not be edited). Local exceptions 
- are best done in <TT
+>Privoxy's</SPAN
+> array of features. So it is 
+     a set of broad rules that should work reasonably well for users everywhere.
+     This is the file that the developers are keeping updated, and making 
+     available to users.
+    </P
+></LI
+><LI
+><P
+>     <TT
 CLASS="FILENAME"
 >user.action</TT
->. The content of these 
+> - is intended to be for local site 
+     preferences and exceptions. As an example, if your ISP or your bank
+     has specific requirements, and need special handling, this kind of 
+     thing should go here. This file will not be upgraded.
+    </P
+></LI
+></UL
+>
+ </P
+><P
+> The list of actions files to be used are defined in the main configuration 
+ file, and are processed in the order they are defined. The content of these
  can all be viewed and edited from <A
 HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >http://config.privoxy.org/show-status</A
->.
- </P
-><P
-> 
- Anything you want can be blocked, including ads, banners, or just some obnoxious
- URL that you would rather not see is done here. Cookies can be accepted or rejected, or
- accepted only during the current browser session (i.e. not written to disk),
- content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
- See below for a complete list of available actions.</P
+>.</P
 ><P
 > An actions file typically has sections. Near the top, <SPAN
 CLASS="QUOTE"
@@ -127,12 +156,19 @@ TARGET="_top"
 >), then the default set of rules
  which will apply universally to all sites and pages. And then below that,
  exceptions to the defined universal policies. </P
+><P
+> 
+ Actions can be used to block anything you want, including ads, banners, or
+ just some obnoxious URL that you would rather not see. Cookies can be accepted
+ or rejected, or accepted only during the current browser session (i.e. not
+ written to disk), content can be modified, JavaScripts tamed, user-tracking
+ fooled, and much more. See below for a complete list of actions.</P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1299"
+NAME="AEN1309"
 >9.1. Finding the Right Mix</A
 ></H2
 ><P
@@ -166,7 +202,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1306"
+NAME="AEN1316"
 >9.2. How to Edit</A
 ></H2
 ><P
@@ -188,7 +224,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1312"
+NAME="AEN1322"
 >9.3. How Actions are Applied to URLs</A
 ></H2
 ><P
@@ -245,7 +281,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1326"
+NAME="AEN1336"
 >9.4. Patterns</A
 ></H2
 ><P
@@ -352,7 +388,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1366"
+NAME="AEN1376"
 >9.4.1. The Domain Pattern</A
 ></H3
 ><P
@@ -526,7 +562,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1428"
+NAME="AEN1438"
 >9.4.2. The Path Pattern</A
 ></H3
 ><P
@@ -2803,7 +2839,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2196"
+NAME="AEN2206"
 >9.5.21. Summary</A
 ></H3
 ><P
@@ -3281,6 +3317,7 @@ TARGET="_top"
 >&nbsp;}<br>
 &nbsp;www.my-isp-example.com/logo[0-9].gif<br>
 <br>
+<br>
 #&nbsp;Say&nbsp;the&nbsp;site&nbsp;where&nbsp;you&nbsp;do&nbsp;your&nbsp;homebanking&nbsp;needs&nbsp;to&nbsp;open<br>
 #&nbsp;popup&nbsp;windows,&nbsp;but&nbsp;you&nbsp;have&nbsp;chosen&nbsp;to&nbsp;kill&nbsp;popups&nbsp;by<br>
 #&nbsp;default.&nbsp;This&nbsp;will&nbsp;allow&nbsp;it&nbsp;for&nbsp;your-example-bank.com:<br>
@@ -3295,6 +3332,7 @@ TARGET="_top"
 >-kill-popups</A
 >&nbsp;}<br>
 &nbsp;.my-example-bank.com<br>
+<br>
 <br>
 #&nbsp;This&nbsp;site&nbsp;is&nbsp;delicate,&nbsp;and&nbsp;requires&nbsp;kid-glove&nbsp;<br>
 #&nbsp;treatment.<br>

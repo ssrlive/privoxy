@@ -78,7 +78,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN372"
+NAME="AEN388"
 >4.1. How much does <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -116,24 +116,20 @@ NAME="LOADINGTIMES"
 delays in page requests compared to the old Junkbuster. What's wrong?</A
 ></H3
 ><P
->Using the default filtering configuration, I noticed considerable delays in
-page requests compared to the old Junkbuster. Loading pages with large contents
-seemed to take forever, then suddenly delivering all the content at once.
+>The entire page content must be loaded into memory in order for the filtering 
+mechanism to work, and nothing is sent to the browser during this time. The
+loading time does not really change in real numbers, but the feeling is
+different, because most browsers are able to start rendering incomplete
+content, giving the user a feeling of "it works". 
  </P
 ><P
->The whole content must be loaded in order to filter, and nothing is is
-sent to the browser during this time. The loading time does not really
-change in real numbers, but the feeling is different, because most
-browsers are able to start rendering incomplete content, giving the
-user a feeling of "it works". 
- </P
-><P
->To modify the content of a page (i.e. make frames resizeable again, etc.) and
-not just replace ads, <SPAN
+> To modify the content of a page (i.e. make frames resizeable again, etc.) and
+ not just replace ads, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> needs to download the
-entire page first, do its content magic and then send the page to the browser.</P
+> needs to download
+ the entire page first, do its content magic and then send the page to the
+ browser.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -284,7 +280,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN424"
+NAME="AEN439"
 >4.7. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -330,7 +326,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN435"
+NAME="AEN450"
 >4.8. Might some things break because header information is
 being altered?</A
 ></H3
@@ -376,7 +372,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN445"
+NAME="AEN460"
 >4.9. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -407,7 +403,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN453"
+NAME="AEN468"
 >4.10. What about as a firewall? Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -426,7 +422,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN458"
+NAME="AEN473"
 >4.11. The <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -462,7 +458,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN467"
+NAME="AEN482"
 >4.12. I have large empty spaces now where ads used to be. 
 Why?</A
 ></H3
@@ -478,7 +474,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN470"
+NAME="AEN485"
 >4.13. How can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -508,7 +504,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN477"
+NAME="AEN492"
 >4.14. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN

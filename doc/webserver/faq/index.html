@@ -49,7 +49,7 @@ CLASS="ORGNAME"
 ></DIV
 ><P
 CLASS="PUBDATE"
->$Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $<BR></P
+>$Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -322,27 +322,36 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.4. <A
-HREF="configuration.html#AEN255"
+HREF="configuration.html#AEN252"
 >How are actions files configured? What is the easiest
 way to do this?</A
 ></DT
 ><DT
 >3.5. <A
+HREF="configuration.html#AEN260"
+>There are several different <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> files. What are
+the differences?</A
+></DT
+><DT
+>3.6. <A
 HREF="configuration.html#BROWSECONFIG"
 >Why can I change the configuration with a
 browser? Does that not raise security issues?</A
 ></DT
 ><DT
->3.6. <A
-HREF="configuration.html#AEN278"
+>3.7. <A
+HREF="configuration.html#AEN286"
 >What is <SPAN
 CLASS="QUOTE"
 >"default.filter"</SPAN
 >?</A
 ></DT
 ><DT
->3.7. <A
-HREF="configuration.html#AEN290"
+>3.8. <A
+HREF="configuration.html#AEN299"
 >How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -350,18 +359,18 @@ CLASS="APPLICATION"
  LAN?</A
 ></DT
 ><DT
->3.8. <A
-HREF="configuration.html#AEN302"
+>3.9. <A
+HREF="configuration.html#AEN311"
 >Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></DT
 ><DT
->3.9. <A
-HREF="configuration.html#AEN317"
+>3.10. <A
+HREF="configuration.html#AEN330"
 >Why would anybody want to see a checkerboard pattern?</A
 ></DT
 ><DT
->3.10. <A
-HREF="configuration.html#AEN322"
+>3.11. <A
+HREF="configuration.html#AEN335"
 >I see large red banners on some pages that say 
 <SPAN
 CLASS="QUOTE"
@@ -369,16 +378,15 @@ CLASS="QUOTE"
 >. Why and how do I get rid of this?</A
 ></DT
 ><DT
->3.11. <A
+>3.12. <A
 HREF="configuration.html#ALLISEEISRED"
 >I cannot see all of the <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
-> page banner. All I
-see is a bright red square.</A
+> page banner. Help.</A
 ></DT
 ><DT
->3.12. <A
+>3.13. <A
 HREF="configuration.html#SRVANY"
 >Can <SPAN
 CLASS="APPLICATION"
@@ -387,7 +395,7 @@ CLASS="APPLICATION"
 on Win2K/NT?</A
 ></DT
 ><DT
->3.13. <A
+>3.14. <A
 HREF="configuration.html#OTHERPROXY"
 >How can I make <SPAN
 CLASS="APPLICATION"
@@ -409,7 +417,7 @@ HREF="misc.html"
 ><DL
 ><DT
 >4.1. <A
-HREF="misc.html#AEN372"
+HREF="misc.html#AEN388"
 >How much does <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -444,7 +452,7 @@ HREF="misc.html#IP"
 ></DT
 ><DT
 >4.7. <A
-HREF="misc.html#AEN424"
+HREF="misc.html#AEN439"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -452,13 +460,13 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >4.8. <A
-HREF="misc.html#AEN435"
+HREF="misc.html#AEN450"
 >Might some things break because header information is
 being altered?</A
 ></DT
 ><DT
 >4.9. <A
-HREF="misc.html#AEN445"
+HREF="misc.html#AEN460"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -470,7 +478,7 @@ speed up web browsing?</A
 ></DT
 ><DT
 >4.10. <A
-HREF="misc.html#AEN453"
+HREF="misc.html#AEN468"
 >What about as a firewall? Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -478,7 +486,7 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >4.11. <A
-HREF="misc.html#AEN458"
+HREF="misc.html#AEN473"
 >The <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -487,13 +495,13 @@ and ugly looking. Can't a better font be used?</A
 ></DT
 ><DT
 >4.12. <A
-HREF="misc.html#AEN467"
+HREF="misc.html#AEN482"
 >I have large empty spaces now where ads used to be. 
 Why?</A
 ></DT
 ><DT
 >4.13. <A
-HREF="misc.html#AEN470"
+HREF="misc.html#AEN485"
 >How can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -501,7 +509,7 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >4.14. <A
-HREF="misc.html#AEN477"
+HREF="misc.html#AEN492"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -539,7 +547,7 @@ HREF="trouble.html"
 ><DL
 ><DT
 >5.1. <A
-HREF="trouble.html#AEN536"
+HREF="trouble.html#AEN551"
 >I just upgraded and am getting <SPAN
 CLASS="QUOTE"
 >"connection refused"</SPAN
@@ -548,23 +556,18 @@ with every web page?</A
 ></DT
 ><DT
 >5.2. <A
-HREF="trouble.html#AEN549"
+HREF="trouble.html#AEN564"
 >I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></DT
 ><DT
 >5.3. <A
-HREF="trouble.html#AEN555"
+HREF="trouble.html#AEN570"
 >One of my favorite sites does not work with <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >.
 What can I do?</A
-></DT
-><DT
->5.4. <A
-HREF="trouble.html#AEN578"
->What time is it?</A
 ></DT
 ></DL
 ></DD
@@ -611,12 +614,12 @@ HREF="copyright.html"
 ><DL
 ><DT
 >8.1. <A
-HREF="copyright.html#AEN618"
+HREF="copyright.html#AEN631"
 >Copyright</A
 ></DT
 ><DT
 >8.2. <A
-HREF="copyright.html#AEN625"
+HREF="copyright.html#AEN638"
 >History</A
 ></DT
 ></DL

@@ -1080,8 +1080,110 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
+NAME="RELEASING"
+>8.3. Uploading and Releasing Your Package</A
+></H2
+><P
+>      After the package is ready, it is time to upload it 
+      to SourceForge, and go through the release steps. The upload 
+      is done via FTP:
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+>          Upload to: <A
+HREF="ftp://upload.sourceforge.net/incoming"
+TARGET="_top"
+>ftp://upload.sourceforge.net/incoming</A
+>
+        </P
+></LI
+><LI
+><P
+>         user: <TT
+CLASS="LITERAL"
+>anonymous</TT
+>
+       </P
+></LI
+><LI
+><P
+>         password: <TT
+CLASS="LITERAL"
+>ijbswa-developers@lists.sourceforge.net</TT
+>
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>     Once this done go to <A
+HREF="http://sourceforge.net/project/admin/editpackages.php?group_id=11118"
+TARGET="_top"
+>http://sourceforge.net/project/admin/editpackages.php?group_id=11118</A
+>, 
+     making sure you are logged in. Find your target platform in the 
+     second column, and click <TT
+CLASS="LITERAL"
+>Add Release</TT
+>. You will 
+     then need to create a new release for your package, using the format 
+     of <TT
+CLASS="LITERAL"
+>$VERSION ($CODE_STATUS)</TT
+>, e.g. <I
+CLASS="EMPHASIS"
+>2.9.14
+     (beta)</I
+>.
+    </P
+><P
+>     Now just follow the prompts. Be sure to add any appropriate Release
+     notes. You should see your freshly uploaded packages in 
+     <SPAN
+CLASS="QUOTE"
+>"Step 2. Add Files To This Release"</SPAN
+>. Check the 
+     appropriate box(es). Remember at each step to hit the 
+     <SPAN
+CLASS="QUOTE"
+>"Refresh/Submit"</SPAN
+> buttons! You should now see your 
+     file(s) listed in Step 3. Fill out the forms with the appropriate 
+     information for your platform, being sure to hit <SPAN
+CLASS="QUOTE"
+>"Update"</SPAN
+>
+     for each file. If anyone is monitoring your platform, check the 
+     <SPAN
+CLASS="QUOTE"
+>"email"</SPAN
+> box at the very bottom to notify them of 
+     the new package. This should do it!
+    </P
+><P
+>     If you have made errors, or need to make changes, you can go through 
+     essentially the same steps, but select <TT
+CLASS="LITERAL"
+>Edit Release</TT
+>, 
+     instead of <TT
+CLASS="LITERAL"
+>Add Release</TT
+>.
+    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
 NAME="AFTERRELEASE"
->8.3. After the Release</A
+>8.4. After the Release</A
 ></H2
 ><P
 >      When all (or: most of the) packages have been uploaded and made available,

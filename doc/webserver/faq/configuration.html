@@ -121,7 +121,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > might take, are configured. 
  Typically, you would define a set of default actions that apply 
- to all URLs, then add exceptions to these defaults.</P
+ to all URLs, then add exceptions to these defaults where needed.</P
 ><P
 > Actions can be defined on a per site basis, or for groups of sites. Actions
  can also be grouped together and then applied to one or more sites. There
@@ -135,17 +135,6 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"actions"</SPAN
 > file.&#13;</P
-><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> comes with several default
- <SPAN
-CLASS="APPLICATION"
->actions</SPAN
-> files, with varying degrees 
- of filtering and blocking, as starting points for your own 
- configuration (see below).</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -165,7 +154,7 @@ CLASS="QUOTE"
 ><P
 > These are all explained in the 
  <A
-HREF="../user-manual/configuration.html#ACTIONS-FILE"
+HREF="../user-manual/actions-file.html"
 TARGET="_top"
 >user-manual</A
 >.
@@ -176,7 +165,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN255"
+NAME="AEN252"
 >3.4. How are actions files configured? What is the easiest
 way to do this?</A
 ></H3
@@ -194,14 +183,14 @@ TARGET="_top"
  "<A
 HREF="http://config.privoxy.org"
 TARGET="_top"
->Edit the actions list</A
+>View &#38; change the current configuration</A
 >"
  from the selection list. You can also do this by editing the appropriate 
  file with a text editor.</P
 ><P
 > Please see the 
  <A
-HREF="../user-manual/configuration.html#ACTIONS-FILE"
+HREF="../user-manual/actions-file.html"
 TARGET="_top"
 >user-manual</A
 > for a
@@ -213,8 +202,53 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="AEN260"
+>3.5. There are several different <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> files. What are
+the differences?</A
+></H3
+><P
+> As of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> v2.9.15, three actions files 
+ are being included, to be used for 
+ different purposes. These are 
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+>, <TT
+CLASS="FILENAME"
+>standard.action</TT
+>, 
+ and <TT
+CLASS="FILENAME"
+>user.action</TT
+>. Please see 
+ <A
+HREF="../user-manual/actions-file.html"
+TARGET="_top"
+>the User Manual</A
+> 
+ for an explanation of each.</P
+><P
+> Earlier versions included three different versions
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+> files. The new scheme allows for 
+ greater flexibility of local configuration, and for browser based 
+ configuration.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="BROWSECONFIG"
->3.5. Why can I change the configuration with a
+>3.6. Why can I change the configuration with a
 browser? Does that not raise security issues?</A
 ></H3
 ><P
@@ -272,8 +306,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN278"
->3.6. What is <SPAN
+NAME="AEN286"
+>3.7. What is <SPAN
 CLASS="QUOTE"
 >"default.filter"</SPAN
 >?</A
@@ -282,7 +316,11 @@ CLASS="QUOTE"
 > The <SPAN
 CLASS="QUOTE"
 >"default.filter"</SPAN
-> file is used to <SPAN
+> file is where <SPAN
+CLASS="QUOTE"
+>"filters"</SPAN
+>
+ are defined, which are used to <SPAN
 CLASS="QUOTE"
 >"filter"</SPAN
 > any
@@ -309,16 +347,17 @@ CLASS="FILENAME"
  but you can disable/enable various sections of the included default 
  file with the <SPAN
 CLASS="QUOTE"
->"Actions List Editor"</SPAN
-> from your browser.</P
+>"View &#38; change the current configuration"</SPAN
+> from
+ your browser. </P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN290"
->3.7. How can I set up <SPAN
+NAME="AEN299"
+>3.8. How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to act as a proxy for my 
@@ -370,39 +409,57 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN302"
->3.8. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
+NAME="AEN311"
+>3.9. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></H3
 ><P
 > This is a configuration option for images that
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is stopping. You have the choice   of a checkerboard
- pattern, a transparent 1x1 GIF image (aka <SPAN
+> is stopping. You have the choice of a
+ checkerboard pattern, a transparent 1x1 GIF image (aka <SPAN
 CLASS="QUOTE"
 >"blank"</SPAN
->), or a custom
- URL of your choice. Note that to fit this category, the URL must match both 
- the <SPAN
+>),
+ or a custom URL of your choice. Note that to fit this category, the URL must
+ match both the <A
+HREF="../user-manual/actions-file.html#HANDLE-AS-IMAGE"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"+image"</SPAN
-> and <SPAN
+>"+handle-as-image"</SPAN
+></A
+>
+ <I
+CLASS="EMPHASIS"
+>and</I
+> 
+ <A
+HREF="../user-manual/actions-file.html#BLOCK"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
+></A
 > actions.</P
 ><P
-> If you want to see nothing, then change the <SPAN
+> If you want to see nothing, then change the 
+ <A
+HREF="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"+image-blocker"</SPAN
-> 
+>"+set-image-blocker"</SPAN
+></A
+>
  action to <SPAN
 CLASS="QUOTE"
 >"+image-blocker{blank}"</SPAN
 >. This can be done from the 
  <SPAN
 CLASS="QUOTE"
->"Edit Actions List"</SPAN
+>"View &#38; change the current configuration"</SPAN
 > selection at <A
 HREF="http://p.p/"
 TARGET="_top"
@@ -418,7 +475,7 @@ CLASS="QUOTE"
 >
  banner, can be moved to the <SPAN
 CLASS="QUOTE"
->"+image-blocker"</SPAN
+>"+set-image-blocker"</SPAN
 > section for the
  same reason, but there are some limits and risks to this (see below).</P
 ></DIV
@@ -427,8 +484,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN317"
->3.9. Why would anybody want to see a checkerboard pattern?</A
+NAME="AEN330"
+>3.10. Why would anybody want to see a checkerboard pattern?</A
 ></H3
 ><P
 > This can be helpful for troubleshooting problems. It might also be good 
@@ -448,8 +505,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN322"
->3.10. I see large red banners on some pages that say 
+NAME="AEN335"
+>3.11. I see large red banners on some pages that say 
 <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
@@ -460,42 +517,52 @@ CLASS="QUOTE"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
-> block actions (+block). It is meant
- to be a warning so that you know something has been blocked and an easy way
- for you to see why. These are handled differently than what has been defined
- explicitly as <SPAN
+> block actions 
+ (<A
+HREF="../user-manual/actions-file.html#BLOCK"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+></A
+>).
+ It is meant to be a warning so that you know something has been blocked and
+ an easy way for you to see why. These are handled differently than what has
+ been defined explicitly as <SPAN
 CLASS="QUOTE"
 >"images"</SPAN
-> (e.g. ad banners). Depending on the 
- URL itself, it is sometimes hard for <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to 
- really know whether there is indeed an ad image there or not. And there are
- limitations as to what <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> can do to 
+> (e.g. ads that are GIF image
+ files). Depending on the URL itself, it is sometimes hard for
  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to really know whether there is indeed an
+ ad image there or not. And there are limitations as to what
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can do to <SPAN
 CLASS="QUOTE"
 >"fool"</SPAN
-> the browser.</P
+> the
+ browser.</P
 ><P
 > For instance, if the ad is in a frame, then it is embedded in the separate
  HTML page used for the frame. In this case, you cannot just substitute an
- aribitray image (like we would for a <SPAN
+ aribitrary image (like we would for a <SPAN
 CLASS="QUOTE"
 >"blank"</SPAN
 > image), for an HTML
  page. The browser is expecting an HTML page, and that is what it must have
- for frames. So this situation can be a little trickier to deal with, and 
+ for frames. Such situations can be a little trickier to deal with, and 
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will use the <SPAN
+> may show the <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
-> page.</P
+> page,
+ despite your best efforts.</P
 ><P
 > If you want these to be treated as if they were images, so that they can be
  made invisible, you can try moving the offending URL from the
@@ -552,7 +619,7 @@ CLASS="APPLICATION"
 > is blocking the frame, and 
  diable this. Then let the <SPAN
 CLASS="QUOTE"
->"+image-blocker"</SPAN
+>"+set-image-blocker"</SPAN
 > action 
  handle the ad that is embedded in the frame's HTML page. </P
 ></DIV
@@ -562,23 +629,27 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ALLISEEISRED"
->3.11. I cannot see all of the <SPAN
+>3.12. I cannot see all of the <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
-> page banner. All I
-see is a bright red square.</A
+> page banner. Help.</A
 ></H3
 ><P
-> There is not enough space to fit the entire page. Try right clicking on the
- visible, red portion, and select <SPAN
+> There is not enough available space to fit the entire Blocked page. Try right
+ clicking on the visible portion, and select <SPAN
 CLASS="QUOTE"
 >"Show Frame"</SPAN
->, or equivalent.
- This will usually allow you to see the entire Privoxy <SPAN
+>,
+ or equivalent. This will usually allow you to see the entire Privoxy
+ <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
->
- page, and from there you can see just what is being blocked, and why.</P
+> page, and from there you can see just what is being
+ blocked, and why.</P
+><P
+> As of Privoxy 2.9.14, the Blocked banner page is re-sizeable, and tries
+ to adjust to the allotted space. There may be occassions where there 
+ just isn't enough room to display much of anything useful though. &#13;</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -586,7 +657,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="SRVANY"
->3.12. Can <SPAN
+>3.13. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a service 
@@ -618,7 +689,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="OTHERPROXY"
->3.13. How can I make <SPAN
+>3.14. How can I make <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > work with other 
@@ -629,7 +700,7 @@ CLASS="APPLICATION"
 ></H3
 ><P
 > This can be done. See the <A
-HREF="../user-manual/configuration.html#FORWARDING"
+HREF="../user-manual/config.html#FORWARDING"
 TARGET="_top"
 >user manual</A
 >, 
