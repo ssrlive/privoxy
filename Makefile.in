@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.27 2001/09/13 13:11:37 steudten Exp $
+# $Id: Makefile.in,v 1.28 2001/09/13 15:19:08 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.28  2001/09/13 15:19:08  swa
+# we want text files as well.
+#
 # Revision 1.27  2001/09/13 13:11:37  steudten
 #
 # Replace DEBUG_CFLAGS with OTHER_CFLAGS
@@ -167,7 +170,6 @@ ECHO       = echo
 GZIP_PROG  = gzip
 INSTALL    = cp -f
 LD         = @CC@
-OBJEXT     = @OBJEXT@
 RM         = rm -f
 STRIP_PROG = strip
 
@@ -176,26 +178,26 @@ STRIP_PROG = strip
 # Filenames and libraries
 #############################################################################
 
-C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
-         jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
-         parsers.c showargs.c ssplit.c cgi.c deanimate.c
-         
-C_OBJS = $(C_SRC:.c=.$(OBJEXT))
+C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
+         errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
+         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c
+
+C_OBJS = $(C_SRC:.c=.@OBJEXT@)
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
 
 W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
 W32_FILES = @WIN_ONLY@w32.res
-W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.$(OBJEXT)) $(W32_FILES)
+W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.@OBJEXT@) $(W32_FILES)
 W32_HDRS  = @WIN_ONLY@w32log.h w32taskbar.h win32.h w32res.h
 W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
 W32_INIS  = @WIN_ONLY@junkbstr.txt sactions.txt strust.txt sregexp.txt
 
 PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
-PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.$(OBJEXT))
+PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.@OBJEXT@)
 PCRS_HDRS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.h)
 
 PCRE_SRC     = @STATIC_PCRE_ONLY@pcre/get.c pcre/maketables.c pcre/study.c pcre/pcre.c
-PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.$(OBJEXT))
+PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.@OBJEXT@)
 PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h pcre/pcre.h
 
 # No REGEX (Either because dynamically linked pcreposix, or no regex at all):
@@ -205,7 +207,7 @@ REGEX_SRC    =
 # PCRE REGEX:
 @PCRE_REGEX_ONLY@@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
 
-REGEX_OBJS   = $(REGEX_SRC:.c=.$(OBJEXT))
+REGEX_OBJS   = $(REGEX_SRC:.c=.@OBJEXT@)
 REGEX_HDRS   = $(REGEX_SRC:.c=.h)
 
 # Dependencies introduced by #include "project.h".
@@ -337,7 +339,7 @@ tarball-dist:
 	@make clean
 	make $(PROGRAM) 
 #	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.$(OBJEXT) && tar --exclude "ijb/CVS" -cvzf ../ijb-distribution-$(VERSION).tar.gz ijb/
+	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../ijb-distribution-$(VERSION).tar.gz ijb/
 	chmod a+r ../../ijb-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
 
@@ -369,22 +371,23 @@ dok:
 #############################################################################
 
 actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
+cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) cgiedit.h cgisimple.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+cgiedit.@OBJEXT@:   cgiedit.c   cgiedit.h   config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
 encode.@OBJEXT@:    encode.c    encode.h    config.h
 errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
-filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h showargs.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
+filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
 gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
 jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
-jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h cgi.h
+jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h cgi.h
 killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
 list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
-loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h
+loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
 loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
 miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
-parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h showargs.h ssplit.h
-showargs.@OBJEXT@:  showargs.c  showargs.h  config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h
+parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
-cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
