@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.17 2001/11/16 00:46:31 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.18 2001/11/30 23:37:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,10 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.17 2001/11/16 00:46:31 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.18  2001/11/30 23:37:24  jongfoster
+ *    Renaming the Win32 config file to config.txt - this is almost the
+ *    same as the corresponding UNIX name "config"
+ *
  *    Revision 1.17  2001/11/16 00:46:31  jongfoster
  *    Fixing compiler warnings
  *
@@ -1124,7 +1128,7 @@ void OnLogCommand(int nCommand)
          break;
 
       case ID_HELP_STATUS:
-         ShellExecute(g_hwndLogFrame, "open", HOME_PAGE_URL "/config/show-status", NULL, NULL, SW_SHOWNORMAL);
+         ShellExecute(g_hwndLogFrame, "open", CGI_PREFIX "show-status", NULL, NULL, SW_SHOWNORMAL);
          break;
 
       case ID_HELP_ABOUTJUNKBUSTER:
