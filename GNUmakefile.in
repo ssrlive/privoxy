@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.101 2002/05/15 12:28:46 oes Exp $
+# $Id: GNUmakefile.in,v 1.102 2002/05/16 01:20:17 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -571,13 +571,13 @@ else
 endif
 
 # readme page
-dok-readme: 
+dok-readme:
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
 # webserver files
 dok-webserver: 
-	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
+	cd doc/source/webserver && $(DB)-notoc -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
@@ -839,6 +839,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.102  2002/05/16 01:20:17  hal9
+# make announce target added.
+#
 # Revision 1.101  2002/05/15 12:28:46  oes
 # Trying to keep Hal happy :)
 #
