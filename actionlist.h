@@ -39,12 +39,16 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.3  2001/06/07 23:03:56  jongfoster
+ *    Added standard comment at top of file.
+ *
  *
  *********************************************************************/
 
 
-DEFINE_ACTION_MULTI ("add-header",                              ACTION_MULTI_ADD_HEADER)
+DEFINE_ACTION_MULTI ("add-header",      ACTION_MULTI_ADD_HEADER)
 DEFINE_ACTION_BOOL  ("block",           ACTION_BLOCK)
+DEFINE_ACTION_BOOL  ("deanimate-gifs",  ACTION_DEANIMATE)
 DEFINE_ACTION_BOOL  ("fast-redirects",  ACTION_FAST_REDIRECTS)
 DEFINE_ACTION_BOOL  ("filter",          ACTION_FILTER)
 DEFINE_ACTION_BOOL  ("hide-forwarded",  ACTION_HIDE_FORWARDED)
@@ -57,7 +61,7 @@ DEFINE_ACTION_BOOL  ("no-cookies-read", ACTION_NO_COOKIE_READ)
 DEFINE_ACTION_BOOL  ("no-cookies-set",  ACTION_NO_COOKIE_SET)
 DEFINE_ACTION_BOOL  ("no-popups",       ACTION_NO_POPUPS)
 DEFINE_ACTION_BOOL  ("vanilla-wafer",   ACTION_VANILLA_WAFER)
-DEFINE_ACTION_MULTI ("wafer",                                   ACTION_MULTI_WAFER)
+DEFINE_ACTION_MULTI ("wafer",           ACTION_MULTI_WAFER)
 #if DEFINE_ACTION_ALIAS
 DEFINE_ACTION_BOOL  ("no-popup",        ACTION_NO_POPUPS)
 DEFINE_ACTION_STRING("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
