@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/actionlist.h,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/actionlist.h,v $
  *
  * Purpose     :  Master list of supported actions.
  *                Not really a header, since it generates code.
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.17  2002/05/14 21:25:55  oes
  *    Renamed prevent-(setting/reading)-cookies to crunch-(incoming/outgoing)-cookies
  *
@@ -118,10 +121,10 @@ DEFINE_ACTION_BOOL       ("hide-forwarded-for-headers", ACTION_HIDE_FORWARDED)
 DEFINE_ACTION_STRING     ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM)
 DEFINE_CGI_PARAM_RADIO   ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "block", 1)
 DEFINE_CGI_PARAM_CUSTOM  ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "spam_me_senseless@sittingduck.xyz")
-DEFINE_ACTION_STRING     ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
-DEFINE_CGI_PARAM_RADIO   ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "forge", 1)
-DEFINE_CGI_PARAM_RADIO   ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
-DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
+DEFINE_ACTION_STRING     ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_CGI_PARAM_RADIO   ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "forge", 1)
+DEFINE_CGI_PARAM_RADIO   ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
+DEFINE_CGI_PARAM_CUSTOM  ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
 DEFINE_ACTION_STRING     ("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
 DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy/3.0 (Anonymous)")
 DEFINE_ACTION_BOOL       ("kill-popups",                ACTION_NO_POPUPS)
@@ -143,7 +146,7 @@ DEFINE_CGI_PARAM_CUSTOM  ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   
  * Alternative spellings
  */
 DEFINE_ACTION_BOOL       ("kill-popup",      ACTION_NO_POPUPS)
-DEFINE_ACTION_STRING     ("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_ACTION_STRING     ("hide-referer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
 DEFINE_ACTION_BOOL       ("prevent-keeping-cookies", ACTION_NO_COOKIE_KEEP)
 
 /* 
