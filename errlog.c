@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.12 2001/06/09 10:55:28 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.13 2001/07/13 13:58:58 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.12 2001/06/09 10:55:28 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.13  2001/07/13 13:58:58  oes
+ *     - Added case for LOG_LEVEL_DEANIMATE
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.12  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -338,6 +342,11 @@ void log_error(int loglevel, char *fmt, ...)
          outc = 0;
          outbuf[0] = '\0';
          break;
+#ifdef KILLPOPUPS
+      case LOG_LEVEL_POPUPS:
+         outc = sprintf(outbuf, "IJB(%d) Kill-Popups: ", this_thread);
+         break;
+#endif /* def KILLPOPUPS */
       default:
          outc = sprintf(outbuf, "IJB(%d) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
