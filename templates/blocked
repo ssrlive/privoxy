@@ -121,8 +121,8 @@
       <td bgcolor=#eeeeee colspan=2>
         <h2>Request for blocked URL</h2>
         <blockquote>
-          <p>Your request for <b>@hostport-html@@path-html@</b> was blocked.
-            <br><a href="@default-cgi@/show-url-info?url=@hostport@@path@">See why</a>
+          <p>Your request for <b>@hostport@@path@</b> was blocked.
+            <br><a href="@default-cgi@show-url-info?url=@hostport@@path@">See why</a>
     <!-- @if-force-support-start -->
             or <a href="http://@hostport@@force-prefix@@path@">go there anyway</a>.
 <!-- if-force-support-end@ -->
