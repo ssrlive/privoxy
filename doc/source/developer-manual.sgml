@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -157,28 +157,27 @@ following guidelines for changing stuff in the code. If it is
   <para>
     All formal documents are maintained in docbook SGML and located in the
     <computeroutput>doc/source/*</computeroutput> directory. You will need
-    <ulink url="http://www.docbook.org">docbook</ulink> and the docbook
-    stylesheets (or comparable alternatives), and either
-    <application>jade</application> or <application>openjade</application>
-    (recommended) installed in order to build docs from source. Currently
-    there is <ulink
+    <ulink url="http://www.docbook.org">Docbook</ulink>, the Docbook 
+    DTD's and the Docbook modular stylesheets (or comparable alternatives),
+    and either <application>jade</application> or
+    <application>openjade</application> (recommended) installed in order to
+    build docs from source. Currently there is <ulink
     url="../user-manual/index.html"><citetitle>user-manual</citetitle></ulink>,
-    <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and,
-    of course this, the <citetitle>developer-manual</citetitle> in this
-    format. The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle> 
-    <citetitle>privoxy.1</citetitle> (man page)
-    files are also now maintained 
-    as SGML. The finished files are all in the top-level source 
-    directory are generated files! Also, <filename>index.html</filename>, 
-    the <application>Privoxy</application> home page, is maintained 
-    as sgml. <emphasis>DO NOT edit these
-    directly</emphasis>. Edit the SGML source, or contact someone 
-    involved in the documentation (at present Stefan and Hal).
+    <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and, of
+    course this, the <citetitle>developer-manual</citetitle> in this format.
+    The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle>
+    <citetitle>privoxy.1</citetitle> (man page) files are also now maintained
+    as Docbook SGML. The finished files are all in the top-level source
+    directory are generated files! Also, <filename>index.html</filename>, the
+    <application>Privoxy</application> home page, is maintained as SGML.
+    <emphasis>DO NOT edit these directly</emphasis>. Edit the SGML source, or
+    contact someone involved in the documentation (at present Stefan and
+    Hal).
     </para> 
     <para>
-     Other, less formal documents (e.g. LICENSE, INSTALL) are maintained as
-     plain text files in the toplevel source directory. At least for the 
-     time being.
+     Other, less formal documents (e.g. <filename>LICENSE</filename>,
+     <filename>INSTALL</filename>) are maintained as plain text files in the
+     toplevel source directory. At least for the time being.
     </para>
     <para>
      Packagers are encouraged to include this documentation. For those without
@@ -191,7 +190,7 @@ following guidelines for changing stuff in the code. If it is
      <computeroutput>make dok</computeroutput>, or alternately
      <computeroutput>make redhat-dok</computeroutput>. If you have problems,
      try both. The build process uses the document SGML sources in
-     <computeroutput>doc/source/*</computeroutput> to update all text files in
+     <computeroutput>doc/source/*/*</computeroutput> to update all text files in
      <computeroutput>doc/text/</computeroutput> and to update all HTML
      documents in <computeroutput>doc/webserver/</computeroutput>.
     </para>
@@ -222,24 +221,25 @@ following guidelines for changing stuff in the code. If it is
 <title>Quickstart to Docbook and SGML</title>
 <para>
  If you are not familiar with SGML, it is a markup language similar to HTML. 
- In fact, HTML is an SGML application. Both use <quote>tags</quote>
- to format text and other content. SGML tags are much more varied, 
- and flexible, but do much of the same kinds of things. The tags, 
- or <quote>elements</quote>, are definable in SGML. There is no 
- set <quote>standards</quote>. Since we are using
- <application>Docbook</application>, our tags are those that are 
- defined by <application>Docbook</application>. Much of how the 
- finish document is rendered is determined by the <quote>stylesheets</quote>.
- The stylesheets determine how each tag gets translated to HTML, or 
- other formats.
+ Actually, not a mark up language per se, but a language used to define 
+ markup languages. In fact, HTML is an SGML application. Both will use
+ <quote>tags</quote> to format text and other content. SGML tags can be much
+ more varied, and flexible, but do much of the same kinds of things. The tags,
+ or <quote>elements</quote>, are definable in SGML. There is no set
+ <quote>standards</quote>. Since we are using
+ <application>Docbook</application>, our tags are those that are defined by 
+ <application>Docbook</application>. Much of how the finish document is
+ rendered is determined by the <quote>stylesheets</quote>.
+ The stylesheets determine how each tag gets translated to HTML, or other
+ formats.
 </para>
 
 <para>
- Tags in SGML need to be always <quote>closed</quote>. If not, you 
- will likely generate errors. Example: 
- <literal>&lt;title&gt;My Title&lt;/title&gt;</literal>. They are 
- also case-insensitive, but we strongly suggest using all lower 
- case. This keeps compatibility with [Docbook] <application>XML</application>.
+ Tags in Docbook SGML need to be always <quote>closed</quote>. If not, you
+ will likely generate errors. Example: <literal>&lt;title&gt;My
+ Title&lt;/title&gt;</literal>. They are also case-insensitive, but we
+ strongly suggest using all lower case. This keeps compatibility with
+ [Docbook] <application>XML</application>.
 </para>
 
 <para>
@@ -263,10 +263,10 @@ following guidelines for changing stuff in the code. If it is
 <simplelist>
  <member>
   <emphasis>&lt;para&gt;&lt;/para&gt;</emphasis>, paragraph delimiter. Most 
-  text needs to be within paragraph elements.
+  text needs to be within paragraph elements (there are some exceptions).
  </member>
  <member>
-  <emphasis>&lt;emphasis&gt;&lt;/emphasis&gt;</emphasis>, stylesheets make this
+  <emphasis>&lt;emphasis&gt;&lt;/emphasis&gt;</emphasis>, the stylesheets make this
  italics.
  </member>
   <member>
@@ -325,8 +325,8 @@ following guidelines for changing stuff in the code. If it is
     </listitem> 
     <listitem>
      <para>
-       Tags delimiting a <emphasis>block</emphasis> of text should be on their
-       own line. Like:
+       Tags delimiting a <emphasis>block</emphasis> of text (even small
+       blocks) should be on their own line. Like:
        <literallayout>
  &lt;para&gt;
   Some text goes here.
@@ -340,8 +340,9 @@ following guidelines for changing stuff in the code. If it is
    </listitem> 
    <listitem>
     <para>
-      Tags should be nested and step indented like (except in-line tags):
-       <literallayout>
+      Tags should be nested and step indented for block text like: (except
+      in-line tags) 
+     <literallayout>
  &lt;para&gt;
   &lt;itemizedlist&gt;
    &lt;para&gt;
@@ -439,8 +440,8 @@ following guidelines for changing stuff in the code. If it is
   <literal>p-version</literal> entity that contains the current 
   <application>Privoxy</application> version string. You are strongly 
   encouraged to use these where possible. Some of these obviously 
-  require re-setting with each release. A sampling of custom entities are
-  listed below. See any of the main docs for examples.
+  require re-setting with each release (done by the Makefile). A sampling of
+  custom entities are listed below. See any of the main docs for examples.
  </para>
 
  <para>
@@ -1627,7 +1628,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1687,7 +1688,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2413,6 +2414,10 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.26  2002/04/07 23:50:08  hal9
+  Documentation changes to reflect HTML docs now in CVS, and new generated files
+  list.
+
   Revision 1.25  2002/04/06 05:07:28  hal9
   -Add privoxy-man-page.sgml, for man page.
   -Add authors.sgml for AUTHORS (and p-authors.sgml)
