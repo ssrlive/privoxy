@@ -300,7 +300,7 @@
 /*
  * Use POSIX threads instead of native threads.
  */
-#define FEATURE_PTHREAD 1
+/* #undef FEATURE_PTHREAD */
 
 /* Define if you have the bcopy function.  */
 #define HAVE_BCOPY 1

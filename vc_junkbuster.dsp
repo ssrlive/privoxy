@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=vc_junkbuster - Win32 Release
+CFG=vc_junkbuster - Win32 Debug with Win32 threads
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,17 @@ CFG=vc_junkbuster - Win32 Release
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vc_junkbuster.mak" CFG="vc_junkbuster - Win32 Release"
+!MESSAGE NMAKE /f "vc_junkbuster.mak"\
+ CFG="vc_junkbuster - Win32 Debug with Win32 threads"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "vc_junkbuster - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "vc_junkbuster - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vc_junkbuster - Win32 Release with Win32 threads" (based on\
+ "Win32 (x86) Application")
+!MESSAGE "vc_junkbuster - Win32 Debug with Win32 threads" (based on\
+ "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -52,7 +57,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:windows /machine:I386
 
 !ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
 
@@ -78,6 +83,60 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib  pthreadVC.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Release with Win32 threads"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "vc_junkb"
+# PROP BASE Intermediate_Dir "vc_junkb"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "vc_release_winthr"
+# PROP Intermediate_Dir "vc_release_winthr"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "pcre" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "STATIC" /FR /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "pcre" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "STATIC" /FR /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x809 /d "NDEBUG"
+# ADD RSC /l 0x809 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib /nologo /subsystem:windows /machine:I386
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug with Win32 threads"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "vc_junk0"
+# PROP BASE Intermediate_Dir "vc_junk0"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "vc_debug_winthr"
+# PROP Intermediate_Dir "vc_debug_winthr"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /O2 /I "pcre" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "STATIC" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /O2 /I "pcre" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "STATIC" /YX /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x809 /d "_DEBUG"
+# ADD RSC /l 0x809 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib  pthreadVC.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
 !ENDIF 
@@ -86,6 +145,8 @@ LINK32=link.exe
 
 # Name "vc_junkbuster - Win32 Release"
 # Name "vc_junkbuster - Win32 Debug"
+# Name "vc_junkbuster - Win32 Release with Win32 threads"
+# Name "vc_junkbuster - Win32 Debug with Win32 threads"
 # Begin Group "JunkBuster"
 
 # PROP Default_Filter ""
@@ -201,39 +262,6 @@ SOURCE=.\showargs.h
 # Begin Group "Win32"
 
 # PROP Default_Filter ""
-# Begin Group "File Copy"
-
-# PROP Default_Filter ".win"
-# Begin Source File
-
-SOURCE=.\config.h.win
-
-!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
-
-# Begin Custom Build - Copying config.h.win
-InputDir=.
-InputPath=.\config.h.win
-
-"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" "$(InputDir)\config.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
-
-# Begin Custom Build - Copying config.h.win
-InputDir=.
-InputPath=.\config.h.win
-
-"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" "$(InputDir)\config.h"
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# End Group
 # Begin Source File
 
 SOURCE=.\cygwin.h
@@ -337,7 +365,27 @@ SOURCE=.\w32.rc
 # Begin Source File
 
 SOURCE=.\pcre\chartables.c
+
+!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Release with Win32 threads"
+
+# PROP BASE Exclude_From_Build 1
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug with Win32 threads"
+
+# PROP BASE Exclude_From_Build 1
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
