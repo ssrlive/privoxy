@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.1 2002/03/24 11:23:44 swa Exp $
+# $Id: privoxy-rh.spec,v 1.2 2002/03/24 11:40:14 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -98,7 +98,7 @@ install -s -m 744 jbng %{buildroot}%{_sbindir}/jbng
 # do we need this???
 #sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
 cp -f *.action %{buildroot}%{privoxyconf}/
-cp -f re_filterfile %{buildroot}%{privoxyconf}/re_filterfile
+cp -f default.filter %{buildroot}%{privoxyconf}/default.filter
 cp -f trust %{buildroot}%{privoxyconf}/trust
 cp -f templates/*  %{buildroot}%{privoxyconf}/templates/
 cp -f %{oldname}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{oldname}
@@ -112,15 +112,15 @@ install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
 cat config | \
     sed 's@^confdir.*@confdir %{privoxyconf}@g' | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/%{name}\/permissionsfile/g' | \
-#    sed 's/^re_filterfile.*/re_filterfile \/etc\/%{name}\/re_filterfile/g' | \
+#    sed 's/^filterfile.*/default.filter \/etc\/%{name}\/default.filter/g' | \
 #    sed 's/^logfile.*/logfile \%{_localstatedir}\/log\/%{name}\/logfile/g' | \
 #    sed 's/^jarfile.*/jarfile \%{_localstatedir}\/log\/%{name}\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' > \
     %{buildroot}%{privoxyconf}/config
-perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' ijb.action >\
-    %{buildroot}%{privoxyconf}/ijb.action
+perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
+    %{buildroot}%{privoxyconf}/default.action
 
 ## Macros are expanded even on commentaries. So, we have to use %%
 ## -- morcego
@@ -194,11 +194,11 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
 %config %{privoxyconf}/config
-%config %{privoxyconf}/ijb-advanced.action
-%config %{privoxyconf}/ijb-basic.action
-%config %{privoxyconf}/ijb-intermediate.action
-%config %{privoxyconf}/ijb.action
-%config %{privoxyconf}/re_filterfile
+%config %{privoxyconf}/advanced.action
+%config %{privoxyconf}/basic.action
+%config %{privoxyconf}/intermediate.action
+%config %{privoxyconf}/default.action
+%config %{privoxyconf}/default.filter
 %config %{privoxyconf}/trust
 
 %config %{privoxyconf}/templates/blocked
@@ -480,6 +480,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.2  2002/03/24 11:40:14  swa
+# name change
+#
 # Revision 1.1  2002/03/24 11:23:44  swa
 # name change
 #

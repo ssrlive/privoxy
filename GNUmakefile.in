@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.20 2002/03/24 11:39:17 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.21 2002/03/24 12:43:57 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -39,7 +39,7 @@ CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 # will automatically be postfixed with -$(RPM_PACKAGEV) in the SPECfile
 RPM_VERSION   = $(VERSION)
-RPM_PACKAGEV  = 3
+RPM_PACKAGEV  = 1
 
 
 #############################################################################
@@ -55,7 +55,7 @@ MAN_DEST    = @mandir@
 # Build tools
 #############################################################################
 
-PROGRAM    = jbng@EXEEXT@
+PROGRAM    = privoxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
@@ -89,7 +89,7 @@ DOSFILTER  = perl -p -e 's/\n/\r\n/'
 # Setup for make distribution rh and suse for now 
 #############################################################################
 
-TAR_ARCH = /tmp/Privoxy-$(RPM_VERSION).tar.gz
+TAR_ARCH = /tmp/privoxy-$(RPM_VERSION).tar.gz
 RPM_BASE = @RPM_BASE@
 
 #############################################################################
@@ -342,8 +342,8 @@ tarball-dist:
 	@make clean
 	make $(PROGRAM) 
 #	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../Privoxy-distribution-$(VERSION).tar.gz ijb/
-	chmod a+r ../../Privoxy-distribution-$(VERSION).tar.gz
+	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../privoxy-distribution-$(VERSION).tar.gz ijb/
+	chmod a+r ../../privoxy-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
 
 #############################################################################
@@ -489,9 +489,9 @@ tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 
 tarball-src: clobber
-	$(LN) -s current ../Privoxy-$(VERSION)-$(CODE_STATUS)
-	$(TAR) -C.. -cvhzf Privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz Privoxy-$(VERSION)-$(CODE_STATUS)
-	$(RM) ../Privoxy-$(VERSION)-$(CODE_STATUS)
+	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
+	$(TAR) -C.. -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
+	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
 
 install: all
 	#
@@ -518,6 +518,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.21  2002/03/24 12:43:57  swa
+# name change
+#
 # Revision 1.20  2002/03/24 11:39:17  jongfoster
 # Renaming config files
 #

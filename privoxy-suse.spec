@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.2 2002/03/24 11:40:14 swa Exp $
+# $Id: privoxy-suse.spec,v 1.3 2002/03/24 12:44:31 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -108,7 +108,7 @@ gzip README AUTHORS ChangeLog privoxy.1 || /bin/true
 install -s -m 744 privoxy $RPM_BUILD_ROOT%{_sbindir}/privoxy
 cp -f privoxy.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/privoxy.8.gz
 cp -f *.action $RPM_BUILD_ROOT%{ijbconf}/
-cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
+cp -f default.filter $RPM_BUILD_ROOT%{ijbconf}/default.filter
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
 cp -f templates/*  $RPM_BUILD_ROOT%{ijbconf}/templates/
 cp -f privoxy.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/privoxy
@@ -121,7 +121,7 @@ ln -sf /etc/init.d/privoxy $RPM_BUILD_ROOT/usr/sbin/rcprivoxy
 cat config | \
     sed 's/^confdir.*/confdir \/etc\/privoxy/g' | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/privoxy\/permissionsfile/g' | \
-#    sed 's/^re_filterfile.*/re_filterfile \/etc\/privoxy\/re_filterfile/g' | \
+#    sed 's/^filterfile.*/default.filter \/etc\/privoxy\/default.filter/g' | \
 #    sed 's/^logfile.*/logfile \/var\/log\/privoxy\/logfile/g' | \
 #    sed 's/^jarfile.*/jarfile \/var\/log\/privoxy\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/privoxy\/forward/g' | \
@@ -283,6 +283,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.3  2002/03/24 12:44:31  swa
+# new version string
+#
 # Revision 1.2  2002/03/24 11:40:14  swa
 # name change
 #
