@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/contacting.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa//current/doc/source/contacting.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.13 2002/05/10 01:48:19 hal9 Exp $
+ $Id: contacting.sgml,v 1.14 2002/05/17 13:32:12 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -67,7 +67,8 @@
   and not a browser or site bug first. If unsure,
   try <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&amp;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">toggling
   off</ulink> <application>Privoxy</application>, and see if the problem persists.
-  The <link linkend="actionsanat">appendix</link> also has helpful information 
+  The <ulink url="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
+  of the user manual</ulink> also has helpful information 
   on action debugging. If you are using your own custom configuration, please try
   the stock configs to see if the problem is configuration related.
 </para>
@@ -75,9 +76,9 @@
 <para>
   If not using the latest version, chances are that the bug has been found
   and fixed in the meantime. We would appreciate if you could take the time
-  to <link linkend="installation">upgrade to the latest version</link> (or
-  even the latest CVS snapshot) and verify your bug, but this is not required
-  for reporting.
+  to <ulink url="http://www.privoxy.org/user-manual/installation.html">upgrade
+  to the latest version</ulink> (or  even the latest CVS snapshot) and verify
+  your bug, but this is not required for reporting.
 </para>
 </sect2>
 
