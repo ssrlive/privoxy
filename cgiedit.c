@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.16 2002/03/07 03:46:17 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.17 2002/03/16 14:26:42 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.16 2002/03/07 03:46:17 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.17  2002/03/16 14:26:42  jongfoster
+ *    First version of modular filters support - READ ONLY!
+ *    Fixing a double-free bug in the out-of-memory handling in map_radio().
+ *
  *    Revision 1.16  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *
@@ -2926,6 +2930,8 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    unsigned line_number;
    char * target;
    jb_err err;
+   int index;
+   char ch;
 
    if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
    {
@@ -2963,6 +2969,70 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    }
 
    err = actions_from_radio(parameters, cur_line->data.action);
+   if(err)
+   {
+      /* Out of memory */
+      edit_free_file(file);
+      return err;
+   }
+
+   ch = ijb_toupper((int)lookup(parameters, "filter_all")[0]);
+   if (ch == 'N')
+   {
+      list_remove_all(cur_line->data.action->multi_add[ACTION_MULTI_FILTER]);
+      list_remove_all(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER]);
+      cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 1;
+   }
+   else if (ch == 'X')
+   {
+      cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 0;
+   }
+
+   for (index = 0; ; index++)
+   {
+      char key_value[30];
+      char key_name[30];
+      const char *name;
+      char value;
+
+      /* Generate the keys */
+      snprintf(key_value, sizeof(key_value), "filter_r%x", index);
+      key_value[sizeof(key_value) - 1] = '\0';
+      snprintf(key_name, sizeof(key_name), "filter_n%x", index);
+      key_name[sizeof(key_name) - 1] = '\0';
+
+      name = lookup(parameters, key_name);
+
+      if (*name == '\0')
+      {
+         /* End of list */
+         break;
+      }
+
+
+      value = ijb_toupper((int)lookup(parameters, key_value)[0]);
+      if (value == 'Y')
+      {
+         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
+         if (!err) err = enlist(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
+         list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+      }
+      else if (value == 'N')
+      {
+         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
+         if (!cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER])
+         {
+            list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+            if (!err) err = enlist(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+         }
+      }
+      else if (value == 'X')
+      {
+         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
+         list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+      }
+   }
+
    if(err)
    {
       /* Out of memory */
