@@ -1,9 +1,9 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.12 2002/03/26 22:29:55 swa Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.h,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and 
  *                the main connection-handling function.
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.12  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -117,6 +120,13 @@ extern int no_daemon;
 #ifdef FEATURE_GRACEFUL_TERMINATION
 extern int g_terminate;
 #endif
+
+#ifdef OSX_DARWIN
+extern pthread_mutex_t gmtime_mutex;
+extern pthread_mutex_t localtime_mutex;
+extern pthread_mutex_t gethostbyaddr_mutex;
+extern pthread_mutex_t gethostbyname_mutex;
+#endif /* def OSX_DARWIN */
 
 /* Functions */
 

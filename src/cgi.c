@@ -1,7 +1,7 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 2.2 2002/09/04 15:17:28 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 2.3 2002/11/12 16:19:18 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/cgi.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 2.2 2002/09/04 15:17:28 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 2.3  2002/11/12 16:19:18  oes
+ *    Fix: g_bToggleIJB was used outside #ifdef FEATURE_TOGGLE
+ *
  *    Revision 2.2  2002/09/04 15:17:28  oes
  *    Synced with the stable branch:
  *        Revision 1.70.2.1  2002/08/05 11:17:46  oes
@@ -426,6 +429,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 2.2 2002/09/04 15:17:28 oes Exp $";
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
 #include "loadcfg.h"
 /* loadcfg.h is for g_bToggleIJB only */
+#ifdef FEATURE_PTHREAD
+#include <pthread.h>
+#include "jcc.h"
+/* jcc.h is for mutex semaphore globals only */
+#endif /* def FEATURE_PTHREAD */
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
@@ -1442,6 +1450,15 @@ void get_http_time(int time_offset, char *buf)
 
    struct tm *t;
    time_t current_time;
+#if defined(HAVE_GMTIME_R) && !defined(OSX_DARWIN)
+   /*
+    * Declare dummy up here (instead of inside get/set gmt block) so it
+    * doesn't go out of scope before it's potentially used in snprintf later.
+    * Wrapping declaration inside HAVE_GMTIME_R keeps the compiler quiet when
+    * !defined HAVE_GMTIME_R.
+    */
+   struct tm dummy; 
+#endif
 
    assert(buf);
 
@@ -1451,8 +1468,11 @@ void get_http_time(int time_offset, char *buf)
 
    /* get and save the gmt */
    {
-#ifdef HAVE_GMTIME_R
-      struct tm dummy;
+#ifdef OSX_DARWIN
+      pthread_mutex_lock(&gmtime_mutex);
+      t = gmtime(&current_time);
+      pthread_mutex_unlock(&gmtime_mutex);
+#elif HAVE_GMTIME_R
       t = gmtime_r(&current_time, &dummy);
 #else
       t = gmtime(&current_time);

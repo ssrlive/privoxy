@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 2.5 2003/01/26 20:24:26 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 2.6 2003/06/24 12:24:24 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 2.5 2003/01/26 20:24:26 david__schmidt Exp 
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 2.6  2003/06/24 12:24:24  oes
+ *    Added a line plus Fix-me as a reminder to fix broken force handling in trunk. Thanks to lionel for the hint
+ *
  *    Revision 2.5  2003/01/26 20:24:26  david__schmidt
  *    Updated activity console instrumentation locations
  *
@@ -674,8 +677,18 @@ static int32 server_thread(void *data);
 #define sleep(N)  DosSleep(((N) * 100))
 #endif
 
+#ifdef OSX_DARWIN
+/*
+ * Hit OSX over the head with a hammer.  Protect all *_r functions.
+ */
+pthread_mutex_t gmtime_mutex;
+pthread_mutex_t localtime_mutex;
+pthread_mutex_t gethostbyaddr_mutex;
+pthread_mutex_t gethostbyname_mutex;
+#endif /* def OSX_DARWIN */
+
 #if defined(unix) || defined(__EMX__)
-const char *basedir;
+const char *basedir = NULL;
 const char *pidfile = NULL;
 int received_hup_signal = 0;
 #endif /* defined unix */
@@ -1126,6 +1139,16 @@ int main(int argc, const char *argv[])
 #elif defined(_WIN32)
    InitWin32();
 #endif
+
+#ifdef OSX_DARWIN
+   /*
+    * Prepare global mutex semaphores
+    */
+   pthread_mutex_init(&gmtime_mutex,0);
+   pthread_mutex_init(&localtime_mutex,0);
+   pthread_mutex_init(&gethostbyaddr_mutex,0);
+   pthread_mutex_init(&gethostbyname_mutex,0);
+#endif /* def OSX_DARWIN */
 
    /*
     * Unix signal handling

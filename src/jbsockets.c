@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 2.1 2002/12/30 19:56:16 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/jbsockets.c,v $
@@ -35,6 +35,13 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 2.0 2002/06/04 14:34:21 jongfos
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 2.1  2002/12/30 19:56:16  david__schmidt
+ *    End of initial drop of statistics console infrastructure.  Data stream
+ *    is transmitted on the stats port every interval, provided the data has
+ *    changed since the last transmission.  More work probably needs to be
+ *    done with regard to multiplatform threading; I stole the thread spawning
+ *    code from jcc.c, but haven't been able to test it everywhere.
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -232,6 +239,12 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 2.0 2002/06/04 14:34:21 jongfos
 #endif
 
 #endif
+
+#ifdef OSX_DARWIN
+#include <pthread.h>
+#include "jcc.h"
+/* jcc.h is for mutex semaphores only */
+#endif /* def OSX_DARWIN */
 
 #include "project.h"
 #include "jbsockets.h"
@@ -593,11 +606,11 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 #ifndef _WIN32
    /*
     * This is not needed for Win32 - in fact, it stops
-    * duplicate instances of Junkbuster from being caught.
+    * duplicate instances of Privoxy from being caught.
     *
     * On UNIX, we assume the user is sensible enough not
     * to start Junkbuster multiple times on the same IP.
-    * Without this, stopping and restarting Junkbuster
+    * Without this, stopping and restarting Privoxy
     * from a script fails.
     * Note: SO_REUSEADDR is meant to only take over
     * sockets which are *not* in listen state in Linux,
@@ -720,6 +733,11 @@ int accept_connection(struct client_state * csp, jb_socket fd)
       {
          host = NULL;
       }
+#elif defined(OSX_DARWIN)
+      pthread_mutex_lock(&gethostbyaddr_mutex);
+      host = gethostbyaddr((const char *)&server.sin_addr, 
+                           sizeof(server.sin_addr), AF_INET);
+      pthread_mutex_unlock(&gethostbyaddr_mutex);
 #else
       host = gethostbyaddr((const char *)&server.sin_addr, 
                            sizeof(server.sin_addr), AF_INET);
@@ -794,10 +812,20 @@ unsigned long resolve_hostname_to_ip(const char *host)
       {
          hostp = NULL;
       }
+#elif OSX_DARWIN
+      pthread_mutex_lock(&gethostbyname_mutex);
+      hostp = gethostbyname(host);
+      pthread_mutex_unlock(&gethostbyname_mutex);
 #else
       hostp = gethostbyname(host);
 #endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
-      if (hostp == NULL)
+      /*
+       * On Mac OSX, if a domain exists but doesn't have a type A
+       * record associated with it, the h_addr member of the struct
+       * hostent returned by gethostbyname is NULL, even if h_length
+       * is 4. Therefore the second test below.
+       */
+      if (hostp == NULL || hostp->h_addr == NULL)
       {
          errno = EINVAL;
          log_error(LOG_LEVEL_ERROR, "could not resolve hostname %s", host);

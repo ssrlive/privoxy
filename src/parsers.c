@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 2.3 2002/12/28 03:58:19 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 2.4 2003/01/26 20:24:26 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 2.3 2002/12/28 03:58:19 david__schm
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 2.4  2003/01/26 20:24:26  david__schmidt
+ *    Updated activity console instrumentation locations
+ *
  *    Revision 2.3  2002/12/28 03:58:19  david__schmidt
  *    Initial drop of dashboard instrumentation - enabled with
  *    --enable-activity-console
@@ -415,6 +418,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 2.3 2002/12/28 03:58:19 david__schm
 #include <unistd.h>
 #endif
 
+#ifdef OSX_DARWIN
+#include <pthread.h>
+#include "jcc.h"
+/* jcc.h is for mutex semapores only */
+#endif /* def OSX_DARWIN */
 #include "project.h"
 #include "list.h"
 #include "parsers.h"
@@ -1694,6 +1702,10 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
       time (&now); 
 #ifdef HAVE_LOCALTIME_R
       tm_now = *localtime_r(&now, &tm_now);
+#elif OSX_DARWIN
+      pthread_mutex_lock(&localtime_mutex);
+      tm_now = *localtime (&now); 
+      pthread_mutex_unlock(&localtime_mutex);
 #else
       tm_now = *localtime (&now); 
 #endif
