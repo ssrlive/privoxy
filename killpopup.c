@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.6 2001/07/19 19:11:35 haroon Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.7 2001/07/20 19:29:25 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,12 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.6 2001/07/19 19:11:35 haroon 
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.7  2001/07/20 19:29:25  haroon
+ *    - In v1.5 forgot to add that I implemented LOG_LEVEL_POPUPS in errlog.c,
+ *      errlog.h and killpopup.c. In that case, it is superfluous to have define for
+ *      POPUP_VERBOSE, so I removed the defines and logging is now done
+ *      via log_error(LOG_LEVEL_POPUPS, ....)
+ *
  *    Revision 1.6  2001/07/19 19:11:35  haroon
  *    - Implemented Guy's idea of replacing window.open( with 1;''.concat(
  *    - Implemented Guy's idea of replacing .resizeTo( with .scrollTo(
@@ -87,7 +93,7 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.6 2001/07/19 19:11:35 haroon 
 
 const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
 
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
 
 /*********************************************************************
  *
@@ -163,7 +169,7 @@ void filter_popups(char *buff, int size)
 
 }
 
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
 /*
   Local Variables:

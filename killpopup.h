@@ -1,6 +1,6 @@
 #ifndef KILLPOPUP_H_INCLUDED
 #define KILLPOPUP_H_INCLUDED
-#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
+#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.3 2001/07/29 18:59:21 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.h,v $
@@ -34,6 +34,10 @@
  *
  * Revisions   :
  *    $Log: killpopup.h,v $
+ *    Revision 1.3  2001/07/29 18:59:21  jongfoster
+ *    - Changing #define _KILLPOPUP_H to KILLPOPUP_H_INCLUDED
+ *    - Adding extern "C" {}
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -60,11 +64,11 @@
 extern "C" {
 #endif
 
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
 
 extern void filter_popups(char *buff, int size);
 
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
 /* Revision control strings from this header and associated .c file */
 extern const char killpopup_rcs[];

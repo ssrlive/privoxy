@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.11 2001/07/13 14:00:18 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.12 2001/07/29 19:01:11 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.12  2001/07/29 19:01:11  jongfoster
+ *    Changed _FILENAME_H to FILENAME_H_INCLUDED.
+ *    Added forward declarations for needed structures.
+ *
  *    Revision 1.11  2001/07/13 14:00:18  oes
  *     - Introduced gif_deanimate_response
  *     - Renamed re_process_buffer to pcrs_filter_response
@@ -184,29 +188,29 @@ struct url_spec;
 /*
  * ACL checking
  */
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
 extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
 extern int acl_addr(char *aspec, struct access_control_addr *aca);
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
 /*
  * Interceptors
  */
 extern struct http_response *block_url(struct client_state *csp);
 extern struct http_response *redirect_url(struct client_state *csp);
-#ifdef TRUST_FILES
+#ifdef FEATURE_COOKIE_JAR
 extern struct http_response *trust_url(struct client_state *csp);
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
 /*
  * Request inspectors
  */
-#ifdef TRUST_FILES
+#ifdef FEATURE_COOKIE_JAR
 extern int is_untrusted_url(struct client_state *csp);
-#endif /* def TRUST_FILES */
-#ifdef IMAGE_BLOCKING
+#endif /* def FEATURE_COOKIE_JAR */
+#ifdef FEATURE_IMAGE_BLOCKING
 extern int is_imageurl(struct client_state *csp);
-#endif /* def IMAGE_BLOCKING */
+#endif /* def FEATURE_IMAGE_BLOCKING */
 
 /*
  * Determining applicable actions

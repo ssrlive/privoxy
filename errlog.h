@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.7 2001/07/19 19:02:53 haroon Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.8 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.8  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.7  2001/07/19 19:02:53  haroon
  *    Added define for LOG_LEVEL_POPUPS
  *
@@ -116,19 +120,19 @@ extern "C" {
 #define LOG_LEVEL_IO         0x0004
 #define LOG_LEVEL_HEADER     0x0008
 #define LOG_LEVEL_LOG        0x0010
-#ifdef FORCE_LOAD
+#ifdef FEATURE_FORCE_LOAD
 #define LOG_LEVEL_FORCE      0x0020
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 #define LOG_LEVEL_RE_FILTER  0x0040
-#ifdef FAST_REDIRECTS
+#ifdef FEATURE_FAST_REDIRECTS
 #define LOG_LEVEL_REDIRECTS  0x0080
-#endif /* def FAST_REDIRECTS */
+#endif /* def FEATURE_FAST_REDIRECTS */
 #define LOG_LEVEL_DEANIMATE  0x0100
 
 #define LOG_LEVEL_CLF        0x0200 /* Common Log File format */
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
 #define LOG_LEVEL_POPUPS	0x0400 /* Kill Popups */
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000

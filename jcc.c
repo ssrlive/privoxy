@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.32 2001/07/29 18:47:05 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.33 2001/07/29 19:32:00 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.32 2001/07/29 18:47:05 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.33  2001/07/29 19:32:00  jongfoster
+ *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
+ *
  *    Revision 1.32  2001/07/29 18:47:05  jongfoster
  *    Adding missing #include "loadcfg.h"
  *
@@ -331,10 +334,10 @@ const char project_h_rcs[] = PROJECT_H_VERSION;
 struct client_state  clients[1];
 struct file_list     files[1];
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
 int urls_read     = 0;     /* total nr of urls read inc rejected */
 int urls_rejected = 0;     /* total nr of urls rejected */
-#endif /* def STATISTICS */
+#endif /* def FEATURE_STATISTICS */
 
 
 static void listen_loop(void);
@@ -389,20 +392,21 @@ static const char VANILLA_WAFER[] =
 static void chat(struct client_state *csp)
 {
 /*
- * This next lines are a little ugly, but they simplifies the if statements below.
- * Basically if TOGGLE, then we want the if to test "csp->toggled_on", else we don't
- * And if FORCE_LOAD, then we want the if to test "csp->toggled_on", else we don't
+ * This next lines are a little ugly, but they simplifies the if statements
+ * below.  Basically if TOGGLE, then we want the if to test "csp->toggled_on",
+ * else we don't.  And if FEATURE_FORCE_LOAD, then we want the if to test
+ * "csp->toggled_on", else we don't
  */
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
 #   define IS_TOGGLED_ON_AND (csp->toggled_on) &&
-#else /* ifndef TOGGLE */
+#else /* ifndef FEATURE_TOGGLE */
 #   define IS_TOGGLED_ON_AND
-#endif /* ndef TOGGLE */
-#ifdef FORCE_LOAD
+#endif /* ndef FEATURE_TOGGLE */
+#ifdef FEATURE_FORCE_LOAD
 #   define IS_NOT_FORCED_AND (!csp->force) && 
-#else /* ifndef FORCE_LOAD */
+#else /* ifndef FEATURE_FORCE_LOAD */
 #   define IS_NOT_FORCED_AND
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 
 #define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
@@ -415,10 +419,10 @@ static void chat(struct client_state *csp)
    int byte_count = 0;
    const struct forward_spec * fwd;
    struct http_request *http;
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
    int block_popups;         /* bool, 1==will block popups */
    int block_popups_now = 0; /* bool, 1==currently blocking popups */
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
    int pcrs_filter;        /* bool, 1==will filter through pcrs */
    int gif_deanimate;      /* bool, 1==will deanimate gifs */
@@ -456,7 +460,7 @@ static void chat(struct client_state *csp)
          continue;   /* more to come! */
       }
  
-#ifdef FORCE_LOAD
+#ifdef FEATURE_FORCE_LOAD
       /* If this request contains the FORCE_PREFIX,
        * better get rid of it now and set the force flag --oes
        */
@@ -471,7 +475,7 @@ static void chat(struct client_state *csp)
       {
          csp->force = 0;
       }
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
   
       parse_http_request(req, http, csp);
       freez(req);
@@ -544,19 +548,19 @@ static void chat(struct client_state *csp)
 
    /* decide what we're to do with cookies */
 
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
    if (!csp->toggled_on)
    {
       /* Most compatible set of actions (i.e. none) */
       init_current_action(csp->action);
    }
    else
-#endif /* ndef TOGGLE */
+#endif /* ndef FEATURE_TOGGLE */
    {
       url_actions(http, csp);
    }
 
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
    /*
     * If we're logging cookies in a cookie jar, and the user has not
     * supplied any wafers, and the user has not told us to suppress the
@@ -568,11 +572,11 @@ static void chat(struct client_state *csp)
    {
       enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
    }
-#endif /* def JAR_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
    pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
                                 ((csp->action->flags & ACTION_FILTER) != 0);
@@ -622,15 +626,15 @@ static void chat(struct client_state *csp)
    	    ( NULL != (rsp = block_url(csp)))
 
           /* ..or untrusted */
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
           || ( NULL != (rsp = trust_url(csp)))
-#endif 
+#endif /* def FEATURE_TRUST */
 
           /* ..or a fast redirect kicked in */
-#ifdef FAST_REDIRECTS
+#ifdef FEATURE_FAST_REDIRECTS
           || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) && 
    		     (NULL != (rsp = redirect_url(csp))))
-#endif /* def FAST_REDIRECTS */
+#endif /* def FEATURE_FAST_REDIRECTS */
    		 ))
    	)
    {
@@ -641,10 +645,10 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
       }
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
       /* Count as a rejected request */
       csp->rejected = 1;
-#endif /* def STATISTICS */
+#endif /* def FEATURE_STATISTICS */
 
       /* Log (FIXME: All intercept reasons apprear as "crunch" with Status 200) */
       log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
@@ -846,13 +850,13 @@ static void chat(struct client_state *csp)
           */
          buf[n] = '\0';
 
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
          /* Filter the popups on this read. */
          if (block_popups_now)
          {
             filter_popups(buf, n);
          }
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
          /* Normally, this would indicate that we've read
           * as much as the server has sent us and we can
@@ -1012,7 +1016,7 @@ static void chat(struct client_state *csp)
              * may be in the buffer)
              */
 
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
             /* Start blocking popups if appropriate. */
 
             if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
@@ -1027,7 +1031,7 @@ static void chat(struct client_state *csp)
                filter_popups(csp->iob->cur, csp->iob->eod - csp->iob->cur);
             }
 
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
 
             /* Buffer and pcrs filter this if appropriate. */
 
@@ -1360,10 +1364,10 @@ static void listen_loop(void)
          log_error(LOG_LEVEL_CONNECT, "OK");
       }
 
-#if defined(TOGGLE)
+#ifdef FEATURE_TOGGLE
       /* by haroon - most of credit to srt19170 */
       csp->toggled_on = g_bToggleIJB;
-#endif
+#endif /* def FEATURE_TOGGLE */
 
       if (run_loader(csp))
       {
@@ -1371,7 +1375,7 @@ static void listen_loop(void)
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
 
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
       if (block_acl(NULL,csp))
       {
          log_error(LOG_LEVEL_CONNECT, "Connection dropped due to ACL");
@@ -1379,7 +1383,7 @@ static void listen_loop(void)
          freez(csp);
          continue;
       }
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
       /* add it to the list of clients */
       csp->next = clients->next;

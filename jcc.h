@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.4 2001/07/29 18:58:15 jongfoster Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.5 2001/07/29 19:32:00 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.5  2001/07/29 19:32:00  jongfoster
+ *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
+ *
  *    Revision 1.4  2001/07/29 18:58:15  jongfoster
  *    Removing nested #includes, adding forward declarations for needed
  *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
@@ -65,10 +68,10 @@ struct file_list;
 
 /* Global variables */
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
 extern int urls_read;
 extern int urls_rejected;
-#endif /*def STATISTICS*/
+#endif /*def FEATURE_STATISTICS*/
 
 extern struct client_state clients[];
 

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.14 2001/07/18 13:47:59 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.15 2001/07/29 17:40:43 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.14 2001/07/18 13:47:59 oes Ex
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.15  2001/07/29 17:40:43  jongfoster
+ *    Fixed compiler warning by adding a cast
+ *
  *    Revision 1.14  2001/07/18 13:47:59  oes
  *    Eliminated dirty hack for getsockbyname()
  *
@@ -152,9 +155,9 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    int   flags;
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
 
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
    struct access_control_addr dst[1];
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
    memset((char *)&inaddr, 0, sizeof inaddr);
 
@@ -164,7 +167,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
       return(-1);
    }
 
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
    dst->addr = ntohl(addr);
    dst->port = portnum;
 
@@ -173,7 +176,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
       errno = EPERM;
       return(-1);
    }
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
    inaddr.sin_addr.s_addr = addr;
    inaddr.sin_family      = AF_INET;

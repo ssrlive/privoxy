@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.7 2001/07/13 14:01:54 oes Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.8 2001/07/29 18:58:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.8  2001/07/29 18:58:15  jongfoster
+ *    Removing nested #includes, adding forward declarations for needed
+ *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
+ *
  *    Revision 1.7  2001/07/13 14:01:54  oes
  *    Removed all #ifdef PCRS
  *
@@ -117,9 +121,9 @@ extern int check_file_changed(const struct file_list * current,
 extern int load_actions_file(struct client_state *csp);
 extern int load_re_filterfile(struct client_state *csp);
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
 extern int load_trustfile(struct client_state *csp);
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 
 

@@ -1,6 +1,6 @@
 #ifndef W32RES_H_INCLUDED
 #define W32RES_H_INCLUDED
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.8 2001/07/13 14:04:59 oes Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.9 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,10 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.9  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.8  2001/07/13 14:04:59  oes
  *    Removed all #ifdef PCRS
  *
@@ -97,21 +101,11 @@
  *
  *********************************************************************/
 
-#ifdef WIN_GUI_EDIT
-#define IDS_NEW_BLOCKER                   1
-
-#define ID_NEW_BLOCKER                    100
-#endif /* def WIN_GUI_EDIT */
-
 #define IDR_TRAYMENU                      101
 #define IDI_IDLE                          102
 #define IDR_LOGVIEW                       103
 #define IDR_ACCELERATOR                   104
 #define IDR_POPUP_SELECTION               105
-
-#ifdef WIN_GUI_EDIT
-#define IDD_RULES                         106
-#endif /* def WIN_GUI_EDIT */
 
 
 #define IDI_JUNKBUSTER                    200
@@ -123,20 +117,6 @@
 #define IDI_JUNKBUSTER6                   206
 #define IDI_JUNKBUSTER7                   207
 #define IDI_JUNKBUSTER8                   208
-
-#ifdef WIN_GUI_EDIT
-#define IDI_DENYRULE                      209
-#define IDI_ALLOWRULE                     210
-
-#define IDC_NEW                           300
-#define IDC_ACTION                        301
-#define IDC_RULES                         302
-#define IDC_CREATE                        303
-#define IDC_MOVEUP                        304
-#define IDC_MOVEDOWN                      305
-#define IDC_DELETE                        306
-#define IDC_SAVE                          307
-#endif /* def WIN_GUI_EDIT */
 
 #define ID_SHOWWINDOW                     4000
 #define ID_HELP_ABOUTJUNKBUSTER           4001
@@ -150,18 +130,18 @@
 #define ID_HELP_MANUAL                    4009
 #define ID_HELP_GPL                       4010
 #define ID_HELP_STATUS                    4011
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
 #define ID_TOGGLE_IJB                     4012
-#endif
+#endif /* def FEATURE_TOGGLE */
 
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITJUNKBUSTER           5000
 #define ID_TOOLS_EDITACTIONS              5001
 #define ID_TOOLS_EDITPERLRE               5002
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
 #define ID_TOOLS_EDITTRUST                5003
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 /*
  * The following symbols are declared in <afxres.h> in VC++.

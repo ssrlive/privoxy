@@ -1,6 +1,6 @@
 #ifndef LOADCFG_H_INCLUDED
 #define LOADCFG_H_INCLUDED
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.5 2001/05/26 00:28:36 jongfoster Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.6 2001/07/29 18:58:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.6  2001/07/29 18:58:15  jongfoster
+ *    Removing nested #includes, adding forward declarations for needed
+ *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
+ *
  *    Revision 1.5  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -120,10 +124,10 @@ struct configuration_spec;
 
 /* Global variables */
 
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
 /* indicates if ijb is enabled */
 extern int g_bToggleIJB;
-#endif
+#endif /* def FEATURE_TOGGLE */
 
 extern const char *configfile;
 

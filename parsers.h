@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.8 2001/07/13 14:01:54 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.9 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.9  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.8  2001/07/13 14:01:54  oes
  *    Removed all #ifdef PCRS
  *
@@ -121,14 +125,14 @@ extern char *server_set_cookie(const struct parsers *v, char *s, struct client_s
 extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
 extern char *content_length(const struct parsers *v, char *s, struct client_state *csp);
 
-#ifdef FORCE_LOAD
+#ifdef FEATURE_FORCE_LOAD
 char *client_host(const struct parsers *v, char *s, struct client_state *csp);
 int strclean(const char *string, const char *substring);
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 
-#if defined(DETECT_MSIE_IMAGES)
+#if defined(FEATURE_IMAGE_DETECT_MSIE)
 extern char *client_accept(const struct parsers *v, char *s, struct client_state *csp);
-#endif /* defined(DETECT_MSIE_IMAGES) */
+#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
 
 /* Revision control strings from this header and associated .c file */
 extern const char parsers_rcs[];

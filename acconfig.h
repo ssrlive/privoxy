@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.9  2001/07/29 19:08:52  jongfoster
+ *    Changing _CONFIG_H to CONFIG_H_INCLUDED.
+ *    Also added protection against using a MinGW32 or CygWin version of
+ *    config.h from within MS Visual C++
+ *
  *    Revision 1.8  2001/07/29 17:09:17  jongfoster
  *    Major changes to build system in order to fix these bugs:
  *    - pthreads under Linux was broken - changed -lpthread to -pthread
@@ -163,7 +168,7 @@
 #undef VERSION
 
 /*
- * Status of the code: alpha, beta or stable
+ * Status of the code: "alpha", "beta" or "stable".
  */
 #undef CODE_STATUS
 
@@ -192,57 +197,46 @@
 #undef STATIC_PCRS
 
 /*
- * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
- * non-anonymizing proxy.  This is useful if you're trying to access a
- * blocked or broken site - just change the setting in the config file
- * and send a SIGHUP (UN*X), or use the handy "Disable" menu option (Windows
- * GUI).
+ * Allows the use of an ACL to control access to the proxy by IP address.
  */
-#undef TOGGLE
+#undef FEATURE_ACL
 
 /*
- * If a stream is compressed via gzip (Netscape specific I think), then
- * it cannot be modified with Perl regexps.  This forces it to be 
- * uncompressed.
+ * Allows the use of jar files to capture cookies.
  */
-#undef DENY_GZIP
+#undef FEATURE_COOKIE_JAR
 
 /*
- * Enables statistics function.
+ * If a stream is compressed via gzip, then it cannot be filtered through
+ * the PCRE regexps.  (Commonly happens with Netscape browsers).
+ * This forces it to be uncompressed.
  */
-#undef STATISTICS
-
-/*
- * Bypass filtering for 1 page only
- */
-#undef FORCE_LOAD
+#undef FEATURE_DENY_GZIP
 
 /*
  * Locally redirect remote script-redirect URLs
  */
-#undef FAST_REDIRECTS
+#undef FEATURE_FAST_REDIRECTS
 
 /*
- * Split the show-proxy-args page into a page for each config file.
+ * Bypass filtering for 1 page only
  */
-#undef SPLIT_PROXY_ARGS
+#undef FEATURE_FORCE_LOAD
 
 /*
- * Kills JavaScript popups - window.open, onunload, etc.
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
+ *
+ * Note that this is required if you want to use FEATURE_IMAGE_DETECT_MSIE.
  */
-#undef KILLPOPUPS
-
-/*
- * Support for webDAV - e.g. so Microsoft Outlook can access HotMail e-mail
- */
-#undef WEBDAV
+#undef FEATURE_IMAGE_BLOCKING
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
  * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
  *
- * You must also define IMAGE_BLOCKING to use this feature.
+ * You must also define FEATURE_IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -267,42 +261,35 @@
  * These limitations are due to IE making inconsistent choices
  * about which "Accept:" header to send.
  */
-#undef DETECT_MSIE_IMAGES
+#undef FEATURE_IMAGE_DETECT_MSIE
 
 /*
- * Allow blocking using images as well as HTML.
- * If you do not define this then everything is blocked as HTML.
- *
- * Note that this is required if you want to use DETECT_MSIE_IMAGES.
+ * Kills JavaScript popups - window.open, onunload, etc.
  */
-#undef IMAGE_BLOCKING
-
-/*
- * Allows the use of ACL files to control access to the proxy by IP address.
- */
-#undef ACL_FILES
-
-/*
- * Allows the use of trust files.
- */
-#undef TRUST_FILES
-
-/*
- * Allows the use of jar files to capture cookies.
- */
-#undef JAR_FILES
-
-/*
- * Define this to use the Windows GUI for editing the blocklist.
- * FIXME: This feature is only partially implemented and does not work
- * FIXME: This #define can never be set by ./configure.
- */
-#undef WIN_GUI_EDIT
+#undef FEATURE_KILL_POPUPS
 
 /*
  * Use POSIX threads instead of native threads.
  */
 #undef FEATURE_PTHREAD
+
+/*
+ * Enables statistics function.
+ */
+#undef FEATURE_STATISTICS
+
+/*
+ * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
+ * non-anonymizing proxy.  This is useful if you're trying to access a
+ * blocked or broken site - just change the setting in the config file,
+ * or use the handy "Disable" menu option in the Windows GUI.
+ */
+#undef FEATURE_TOGGLE
+
+/*
+ * Allows the use of trust files.
+ */
+#undef FEATURE_TRUST
 
 /*
  * Defined on Solaris only.  Makes the system libraries thread safe.

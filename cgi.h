@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.6 2001/06/29 21:45:41 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.7 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,10 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.7  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.6  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -105,9 +109,9 @@ extern char *fill_template(struct client_state *csp, const char *template, struc
 extern char *make_menu(const char *self);
 extern char *dump_map(struct map *map);
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
 extern struct map *add_stats(struct map *exports);
-#endif /* def STATISTICS */
+#endif /* def FEATURE_STATISTICS */
 
 
 /*

@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.18 2001/07/13 14:02:46 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.19 2001/07/25 17:21:54 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.18 2001/07/13 14:02:46 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.19  2001/07/25 17:21:54  oes
+ *    client_uagent now saves copy of User-Agent: header value
+ *
  *    Revision 1.18  2001/07/13 14:02:46  oes
  *     - Included fix to repair broken HTTP requests that
  *       don't contain a path, not even '/'.
@@ -248,15 +251,15 @@ const struct parsers client_patterns[] = {
    { "cookie:",                  7,    client_send_cookie },
    { "x-forwarded-for:",         16,   client_x_forwarded },
    { "proxy-connection:",        17,   crumble },
-#ifdef DENY_GZIP
+#ifdef FEATURE_DENY_GZIP
    { "Accept-Encoding: gzip",    21,   crumble },
-#endif /* def DENY_GZIP */
-#if defined(DETECT_MSIE_IMAGES)
+#endif /* def FEATURE_DENY_GZIP */
+#if defined(FEATURE_IMAGE_DETECT_MSIE)
    { "Accept:",                   7,   client_accept },
-#endif /* defined(DETECT_MSIE_IMAGES) */
-#ifdef FORCE_LOAD
+#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
+#ifdef FEATURE_FORCE_LOAD
    { "Host:",                     5,   client_host },
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 /* { "if-modified-since:",       18,   crumble }, */
    { NULL,                       0,    NULL }
 };
@@ -571,35 +574,19 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
          http->ver      = strdup(v[2]);
       }
 
-#ifdef WEBDAV
-
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if using webDAV, we want the OR condition to use these too.      */
-
-/*
- * by haroon
- * These are the headers as defined in RFC2518 to add webDAV support
- */
-
-#define OR_WEBDAV || \
-         (0 == strcmpic(v[0], "propfind")) || \
-         (0 == strcmpic(v[0], "proppatch")) || \
-         (0 == strcmpic(v[0], "move")) || \
-         (0 == strcmpic(v[0], "copy")) || \
-         (0 == strcmpic(v[0], "mkcol")) || \
-         (0 == strcmpic(v[0], "lock")) || \
-         (0 == strcmpic(v[0], "unlock"))
-
-#else /* No webDAV support is enabled.  Provide an empty OR_WEBDAV macro. */
-
-#define OR_WEBDAV
-
-#endif
-
       /* or it could be a GET or a POST (possibly webDAV too) */
-      if ((strcmpic(v[0], "get")  == 0) ||
-          (strcmpic(v[0], "head") == 0) OR_WEBDAV ||
-          (strcmpic(v[0], "post") == 0))
+      if ((0 == strcmpic(v[0], "get"))
+       || (0 == strcmpic(v[0], "head"))
+       || (0 == strcmpic(v[0], "post"))
+       /* These are the headers as defined in RFC2518 to add webDAV support: */
+       || (0 == strcmpic(v[0], "propfind"))
+       || (0 == strcmpic(v[0], "proppatch"))
+       || (0 == strcmpic(v[0], "move"))
+       || (0 == strcmpic(v[0], "copy"))
+       || (0 == strcmpic(v[0], "mkcol"))
+       || (0 == strcmpic(v[0], "lock"))
+       || (0 == strcmpic(v[0], "unlock"))
+       )
       {
          http->ssl      = 0;
          http->gpc      = strdup(v[0]);
@@ -803,17 +790,17 @@ char *content_length(const struct parsers *v, char *s, struct client_state *csp)
 char *client_referrer(const struct parsers *v, char *s, struct client_state *csp)
 {
    const char * newval;
-#ifdef FORCE_LOAD
+#ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
     * even if the request itself is non-forced, we must
     * clean it unconditionally 
     */
    strclean(s, FORCE_PREFIX);
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
    csp->referrer = strdup(s);
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
    /*
     * Are we sending referer?
@@ -912,7 +899,7 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
       csp->http->user_agent = strdup(s + 12);
    }
 
-#ifdef DETECT_MSIE_IMAGES
+#ifdef FEATURE_IMAGE_DETECT_MSIE
    if (strstr (s, "MSIE "))
    {
       /* This is Microsoft Internet Explorer.
@@ -920,7 +907,7 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
        */
       csp->accept_types |= ACCEPT_TYPE_IS_MSIE;
    }
-#endif /* def DETECT_MSIE_IMAGES */
+#endif /* def FEATURE_IMAGE_DETECT_MSIE */
 
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
    {
@@ -1083,7 +1070,7 @@ char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *
 
 }
 
-#if defined(DETECT_MSIE_IMAGES)
+#if defined(FEATURE_IMAGE_DETECT_MSIE)
 /*********************************************************************
  *
  * Function    :  client_accept
@@ -1103,7 +1090,7 @@ char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *
  *********************************************************************/
 char *client_accept(const struct parsers *v, char *s, struct client_state *csp)
 {
-#ifdef DETECT_MSIE_IMAGES
+#ifdef FEATURE_IMAGE_DETECT_MSIE
    if (strstr (s, "image/gif"))
    {
       /* Client will accept HTML.  If this seems counterintuitive,
@@ -1115,12 +1102,12 @@ char *client_accept(const struct parsers *v, char *s, struct client_state *csp)
    {
       csp->accept_types |= ACCEPT_TYPE_MSIE_IMAGE;
    }
-#endif /* def DETECT_MSIE_IMAGES */
+#endif /* def FEATURE_IMAGE_DETECT_MSIE */
 
    return(strdup(s));
 
 }
-#endif /* defined(DETECT_MSIE_IMAGES) */
+#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
 
 
 
@@ -1265,12 +1252,12 @@ void client_x_forwarded_adder(struct client_state *csp)
  *********************************************************************/
 char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp)
 {
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
    if (csp->config->jar)
    {
       fprintf(csp->config->jar, "%s\t%s\n", csp->http->host, (s + v->len + 1));
    }
-#endif /* def JAR_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
    if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
@@ -1282,7 +1269,7 @@ char *server_set_cookie(const struct parsers *v, char *s, struct client_state *c
 }
 
 
-#ifdef FORCE_LOAD
+#ifdef FEATURE_FORCE_LOAD
 /*********************************************************************
  *
  * Function    :  client_host
@@ -1307,10 +1294,10 @@ char *client_host(const struct parsers *v, char *s, struct client_state *csp)
  
    return(cleanhost);
 }
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
  
  
-#ifdef FORCE_LOAD 
+#ifdef FEATURE_FORCE_LOAD 
 /*********************************************************************
  *
  * Function    :  strclean
@@ -1344,7 +1331,7 @@ int strclean(const char *string, const char *substring)
 
    return(hits);
 }
-#endif /* def FORCE_LOAD */
+#endif /* def FEATURE_FORCE_LOAD */
 
 
 /*

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.18 2001/07/13 14:01:14 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.19 2001/07/15 17:45:16 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.18 2001/07/13 14:01:14 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.19  2001/07/15 17:45:16  jongfoster
+ *    Removing some unused #includes
+ *
  *    Revision 1.18  2001/07/13 14:01:14  oes
  *     - Removed all #ifdef PCRS
  *     - Removed vim-settings
@@ -245,10 +248,10 @@ const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
 /* by haroon - indicates if ijb is enabled */
 int g_bToggleIJB        = 1;   /* JunkBusters is enabled by default. */
-#endif
+#endif /* def FEATURE_TOGGLE */
 
 /* The filename of the configfile */
 const char *configfile  = NULL;
@@ -325,7 +328,7 @@ void unload_configfile (void * data)
 {
    struct configuration_spec * config = (struct configuration_spec *)data;
    struct forward_spec *cur_fwd = config->forward;
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
    struct access_control_list *cur_acl = config->acl;
 
    while (cur_acl != NULL)
@@ -335,7 +338,7 @@ void unload_configfile (void * data)
       cur_acl = next_acl;
    }
    config->acl = NULL;
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
    while (cur_fwd != NULL)
    {
@@ -349,13 +352,13 @@ void unload_configfile (void * data)
    }
    config->forward = NULL;
    
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
    if ( NULL != config->jar )
    {
       fclose( config->jar );
       config->jar = NULL;
    }
-#endif /* def JAR_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
    freez((char *)config->confdir);
    freez((char *)config->logdir);
@@ -368,13 +371,9 @@ void unload_configfile (void * data)
    freez((char *)config->proxy_info_url);
    freez((char *)config->proxy_args);
 
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
    freez((char *)config->jarfile);
-#endif /* def JAR_FILES */
-
-#ifndef SPLIT_PROXY_ARGS
-   freez((char *)config->suppress_message);
-#endif /* ndef SPLIT_PROXY_ARGS */
+#endif /* def FEATURE_COOKIE_JAR */
 
    freez((char *)config->re_filterfile);
 
@@ -416,9 +415,9 @@ struct configuration_spec * load_config(void)
 
    log_error(LOG_LEVEL_INFO, "loading configuration file '%s':", configfile);
 
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
    g_bToggleIJB      = 1;
-#endif
+#endif /* def FEATURE_TOGGLE */
 
    fs->f = config = (struct configuration_spec *)zalloc(sizeof(*config));
 
@@ -460,9 +459,9 @@ struct configuration_spec * load_config(void)
       char cmd[BUFFER_SIZE];
       char arg[BUFFER_SIZE];
       char tmp[BUFFER_SIZE];
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
       struct access_control_list *cur_acl;
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
       struct forward_spec *cur_fwd;
       int vec_count;
       char *vec[3];
@@ -544,7 +543,7 @@ struct configuration_spec * load_config(void)
 /****************************************************************************
  * deny-access source-ip[/significant-bits] [dest-ip[/significant-bits]]
  ****************************************************************************/
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
          case hash_deny_access:
             vec_count = ssplit(arg, " \t", vec, SZ(vec), 1, 1);
 
@@ -614,7 +613,7 @@ struct configuration_spec * load_config(void)
             config->acl = cur_acl;
 
             continue;
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
 /****************************************************************************
  * forward url-pattern (.|http-proxy-host[:port])
@@ -842,12 +841,12 @@ struct configuration_spec * load_config(void)
  * jarfile jar-file-name
  * In logdir by default
  ****************************************************************************/
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
          case hash_jarfile :
             freez((char *)config->jarfile);
             config->jarfile = make_path(config->logdir, arg);
             continue;
-#endif /* def JAR_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
 /****************************************************************************
  * listen-address [ip][:port]
@@ -877,7 +876,7 @@ struct configuration_spec * load_config(void)
 /****************************************************************************
  * permit-access source-ip[/significant-bits] [dest-ip[/significant-bits]]
  ****************************************************************************/
-#ifdef ACL_FILES
+#ifdef FEATURE_ACL
          case hash_permit_access:
             vec_count = ssplit(arg, " \t", vec, SZ(vec), 1, 1);
 
@@ -949,7 +948,7 @@ struct configuration_spec * load_config(void)
             config->acl = cur_acl;
 
             continue;
-#endif /* def ACL_FILES */
+#endif /* def FEATURE_ACL */
 
 /****************************************************************************
  * proxy-info-url url
@@ -976,52 +975,33 @@ struct configuration_spec * load_config(void)
             continue;
 
 /****************************************************************************
- * FIXME: Document this FIXME2: Shouldn't we throw this out? --oes
- ****************************************************************************/
-#ifndef SPLIT_PROXY_ARGS
-         case hash_suppress_blocklists :
-            if (arg[0] != '\0')
-            {
-               config->suppress_message = strdup(arg);
-            }
-            else
-            {
-               /* There will be NO reference in proxy-args. */
-               config->suppress_message = NULL;
-            }
-
-            config->suppress_blocklists = 1;
-            continue;
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-/****************************************************************************
  * toggle (0|1)
  ****************************************************************************/
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
          case hash_toggle :
             g_bToggleIJB = atoi(arg);
             continue;
-#endif /* def TOGGLE */
+#endif /* def FEATURE_TOGGLE */
 
 /****************************************************************************
  * trust-info-url url
  ****************************************************************************/
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
          case hash_trust_info_url :
             enlist(config->trust_info, arg);
             continue;
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 /****************************************************************************
  * trustfile filename
  * (In confdir by default.)
  ****************************************************************************/
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
          case hash_trustfile :
             freez((char *)config->trustfile);
             config->trustfile = make_path(config->confdir, arg);
             continue;
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 
 /****************************************************************************
@@ -1112,25 +1092,22 @@ struct configuration_spec * load_config(void)
 /****************************************************************************/
 /* Warnings about unsupported features                                      */
 /****************************************************************************/
-#ifndef ACL_FILES
+#ifndef FEATURE_ACL
          case hash_deny_access:
-#endif /* ndef ACL_FILES */
-#ifndef JAR_FILES
+#endif /* ndef FEATURE_ACL */
+#ifndef FEATURE_COOKIE_JAR
          case hash_jarfile :
-#endif /* ndef JAR_FILES */
-#ifndef ACL_FILES
+#endif /* ndef FEATURE_COOKIE_JAR */
+#ifndef FEATURE_ACL
          case hash_permit_access:
-#endif /* ndef ACL_FILES */
-#ifdef SPLIT_PROXY_ARGS
-         case hash_suppress_blocklists :
-#endif /* def SPLIT_PROXY_ARGS */
-#ifndef TOGGLE
+#endif /* ndef FEATURE_ACL */
+#ifndef FEATURE_TOGGLE
          case hash_toggle :
-#endif /* ndef TOGGLE */
-#ifndef TRUST_FILES
+#endif /* ndef FEATURE_TOGGLE */
+#ifndef FEATURE_TRUST
          case hash_trustfile :
          case hash_trust_info_url :
-#endif /* ndef TRUST_FILES */
+#endif /* ndef FEATURE_TRUST */
 
 #ifndef _WIN_CONSOLE
          case hash_hide_console :
@@ -1184,14 +1161,14 @@ struct configuration_spec * load_config(void)
       add_loader(load_re_filterfile, config);
    }
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
    if (config->trustfile)
    {
       add_loader(load_trustfile, config);
    }
-#endif
+#endif /* def FEATURE_TRUST */
 
-#ifdef JAR_FILES
+#ifdef FEATURE_COOKIE_JAR
    if ( NULL != config->jarfile )
    {
       if ( NULL == (config->jar = fopen(config->jarfile, "a")) )
@@ -1201,7 +1178,7 @@ struct configuration_spec * load_config(void)
       }
       setbuf(config->jar, NULL);
    }
-#endif /* def JAR_FILES */
+#endif /* def FEATURE_COOKIE_JAR */
 
    if ( NULL == config->haddr )
    {
@@ -1247,22 +1224,15 @@ struct configuration_spec * load_config(void)
    }
    freez(fake_csp);
 
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
    g_actions_file     = config->actions_file;
    g_re_filterfile    = config->re_filterfile;
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
    g_trustfile        = config->trustfile;
-#endif
+#endif /* def FEATURE_TRUST */
    
 
 #endif /* defined(_WIN32) && !defined (_WIN_CONSOLE) */

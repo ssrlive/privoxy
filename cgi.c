@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.11 2001/07/18 17:24:37 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.12 2001/07/29 18:47:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.11 2001/07/18 17:24:37 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.12  2001/07/29 18:47:05  jongfoster
+ *    Adding missing #include "loadcfg.h"
+ *
  *    Revision 1.11  2001/07/18 17:24:37  oes
  *    Changed to conform to new pcrs interface
  *
@@ -402,7 +405,6 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    int i;
    struct map *exports = default_exports(csp, "show-status");
 
-#ifdef SPLIT_PROXY_ARGS
    FILE * fp;
    char buf[BUFFER_SIZE];
    char * p;
@@ -429,7 +431,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
       }
       break;
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
    case 't':
       if (csp->tlist)
       {
@@ -437,7 +439,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
          file_description = "Trust List";
       }
       break;
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
    }
 
    if (NULL != filename)
@@ -470,8 +472,6 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 
    }
 
-#endif /* def SPLIT_PROXY_ARGS */
-
    exports = map(exports, "redirect-url", 1, REDIRECT_URL, 1);
    
    s = NULL;
@@ -488,13 +488,11 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    s =   show_defines();
    exports = map(exports, "defines", 1, s, 0); 
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
    exports = add_stats(exports);
-#else
+#else /* ndef FEATURE_STATISTICS */
    exports = map_block_killer(exports, "statistics");
-#endif /* ndef STATISTICS */
-
-#ifdef SPLIT_PROXY_ARGS
+#endif /* ndef FEATURE_STATISTICS */
 
    exports = map_block_killer(exports, "no-split-args");
 
@@ -516,7 +514,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
       exports = map(exports, "re-filter-filename", 1, "None specified", 1);
    }
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
    if (csp->tlist)
    {
       exports = map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
@@ -527,29 +525,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    }
 #else
    exports = map_block_killer(exports, "trust-support");
-#endif /* ndef TRUST_FILES */
-
-#else /* ifndef SPLIT_PROXY_ARGS */
-   exports = map_block_killer(exports, "split-args");
-
-   if (csp->clist)
-   {
-      map(exports, "clist", 1, csp->clist->proxy_args , 1);
-   }
-
-   if (csp->rlist)
-   {
-      map(exports, "rlist", 1, csp->rlist->proxy_args , 1);
-   }
-
-#ifdef TRUST_FILES
-    if (csp->tlist)
-   {
-      map(exports, "tlist", 1, csp->tlist->proxy_args , 1);
-   }
-#endif /* def TRUST_FILES */
-
-#endif /* ndef SPLIT_PROXY_ARGS */
+#endif /* ndef FEATURE_TRUST */
 
    rsp->body = fill_template(csp, "show-status", exports);
    free_map(exports);
@@ -1102,7 +1078,7 @@ char *dump_map(struct map *map)
 }
 
 
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
 /*********************************************************************
  *
  * Function    :  add_stats
@@ -1156,7 +1132,7 @@ struct map *add_stats(struct map *exports)
    return(exports);
 
 }
-#endif /* def STATISTICS */
+#endif /* def FEATURE_STATISTICS */
 
 /*
   Local Variables:

@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.7 2001/06/09 10:55:28 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.8 2001/06/29 13:19:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.7 2001/06/09 10:55:28 jongfoster 
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.8  2001/06/29 13:19:52  oes
+ *    Removed logentry from cancelled commit
+ *
  *    Revision 1.7  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -1138,13 +1141,6 @@ int load_actions_file(struct client_state *csp)
       free(alias_list);
       alias_list = next;
    }
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
 
    /* the old one is now obsolete */
    if (current_actions_file)

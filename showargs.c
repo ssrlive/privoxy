@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.19 2001/07/13 14:11:36 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.20 2001/07/18 17:27:22 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.19 2001/07/13 14:11:36 oes Exp 
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.20  2001/07/18 17:27:22  oes
+ *    Adapted to new #defines
+ *
  *    Revision 1.19  2001/07/13 14:11:36  oes
  *     - Included SHOW_RCS for deanimate.*
  *     - Removed all #ifdef PCRS
@@ -311,10 +314,10 @@ char *show_rcs(void)
    SHOW_RCS(jbsockets_rcs)
    SHOW_RCS(jcc_h_rcs)
    SHOW_RCS(jcc_rcs)
-#ifdef KILLPOPUPS
+#ifdef FEATURE_KILL_POPUPS
    SHOW_RCS(killpopup_h_rcs)
    SHOW_RCS(killpopup_rcs)
-#endif /* def KILLPOPUPS */
+#endif /* def FEATURE_KILL_POPUPS */
    SHOW_RCS(list_h_rcs)
    SHOW_RCS(list_rcs)
    SHOW_RCS(loadcfg_h_rcs)
@@ -337,8 +340,6 @@ char *show_rcs(void)
    SHOW_RCS(w32log_h_rcs)
    SHOW_RCS(w32log_rcs)
    SHOW_RCS(w32res_h_rcs)
-   SHOW_RCS(w32rulesdlg_h_rcs)
-   SHOW_RCS(w32rulesdlg_rcs)
    SHOW_RCS(w32taskbar_h_rcs)
    SHOW_RCS(w32taskbar_rcs)
 #endif /* ndef _WIN_CONSOLE */
@@ -397,83 +398,71 @@ char *show_defines(void)
    b = strsav(b, "  <li><code>#undef <b>STATIC_PCRS</b></code> - Using libpcrs rather than static built-in pcrs.</li>\n");
 #endif /* ndef STATIC_PCRS */
 
-#ifdef TOGGLE
-   b = strsav(b, "  <li><code>#define <b>TOGGLE</b></code> - Allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
-#else /* ifndef TOGGLE */
-   b = strsav(b, "  <li><code>#undef <b>TOGGLE</b></code> - Do not allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
-#endif /* ndef TOGGLE */
+#ifdef FEATURE_TOGGLE
+   b = strsav(b, "  <li><code>#define <b>FEATURE_TOGGLE</b></code> - Allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
+#else /* ifndef FEATURE_TOGGLE */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_TOGGLE</b></code> - Do not allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
+#endif /* ndef FEATURE_TOGGLE */
 
-#ifdef FORCE_LOAD
-   b = strsav(b, "  <li><code>#define <b>FORCE_LOAD</b></code> - Enables bypassing filtering for a single page using the prefix \"" FORCE_PREFIX "\".</li>\n");
-#else /* ifndef FORCE_LOAD */
-   b = strsav(b, "  <li><code>#undef <b>FORCE_LOAD</b></code> - Disables bypassing filtering for a single page.</li>\n");
-#endif /* ndef FORCE_LOAD */
+#ifdef FEATURE_FORCE_LOAD
+   b = strsav(b, "  <li><code>#define <b>FEATURE_FORCE_LOAD</b></code> - Enables bypassing filtering for a single page using the prefix \"" FORCE_PREFIX "\".</li>\n");
+#else /* ifndef FEATURE_FORCE_LOAD */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_FORCE_LOAD</b></code> - Disables bypassing filtering for a single page.</li>\n");
+#endif /* ndef FEATURE_FORCE_LOAD */
 
-#ifdef DENY_GZIP
-   b = strsav(b, "  <li><code>#define <b>DENY_GZIP</b></code> - Prevents requests from being compressed - required for PCRS on some sites.</li>\n");
-#else /* ifndef DENY_GZIP */
-   b = strsav(b, "  <li><code>#undef <b>DENY_GZIP</b></code> - Allows requests to be compressed if the browser and server support it.</li>\n");
-#endif /* ndef DENY_GZIP */
+#ifdef FEATURE_DENY_GZIP
+   b = strsav(b, "  <li><code>#define <b>FEATURE_DENY_GZIP</b></code> - Prevents requests from being compressed - required for PCRS on some sites.</li>\n");
+#else /* ifndef FEATURE_DENY_GZIP */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_DENY_GZIP</b></code> - Allows requests to be compressed if the browser and server support it.</li>\n");
+#endif /* ndef FEATURE_DENY_GZIP */
 
-#ifdef STATISTICS
-   b = strsav(b, "  <li><code>#define <b>STATISTICS</b></code> - Enables statistics function.</li>\n");
-#else /* ifndef STATISTICS */
-   b = strsav(b, "  <li><code>#undef <b>STATISTICS</b></code> - Disables statistics function.</li>\n");
-#endif /* ndef STATISTICS */
+#ifdef FEATURE_STATISTICS
+   b = strsav(b, "  <li><code>#define <b>FEATURE_STATISTICS</b></code> - Enables statistics function.</li>\n");
+#else /* ifndef FEATURE_STATISTICS */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_STATISTICS</b></code> - Disables statistics function.</li>\n");
+#endif /* ndef FEATURE_STATISTICS */
 
-#ifdef SPLIT_PROXY_ARGS
-   b = strsav(b, "  <li><code>#define <b>SPLIT_PROXY_ARGS</b></code> - Split this page up by placing the configuration files on separate pages.</li>\n");
-#else /* ifndef SPLIT_PROXY_ARGS */
-   b = strsav(b, "  <li><code>#undef <b>SPLIT_PROXY_ARGS</b></code> - This page contains the text of the configuration files, they are not split onto separate pages.</li>\n");
-#endif /* ndef SPLIT_PROXY_ARGS */
+#ifdef FEATURE_KILL_POPUPS
+   b = strsav(b, "  <li><code>#define <b>FEATURE_KILL_POPUPS</b></code> - Enables killing JavaScript popups.</li>\n");
+#else /* ifndef FEATURE_KILL_POPUPS */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_KILL_POPUPS</b></code> - Disables killing JavaScript popups.</li>\n");
+#endif /* ndef FEATURE_KILL_POPUPS */
 
-#ifdef KILLPOPUPS
-   b = strsav(b, "  <li><code>#define <b>KILLPOPUPS</b></code> - Enables killing JavaScript popups.</li>\n");
-#else /* ifndef KILLPOPUPS */
-   b = strsav(b, "  <li><code>#undef <b>KILLPOPUPS</b></code> - Disables killing JavaScript popups.</li>\n");
-#endif /* ndef KILLPOPUPS */
+#ifdef FEATURE_IMAGE_DETECT_MSIE
+   b = strsav(b, "  <li><code>#define <b>FEATURE_IMAGE_DETECT_MSIE</b></code> - Enables detecting image requests automatically for MSIE.</li>\n");
+#else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_IMAGE_DETECT_MSIE</b></code> - Disables detecting image requests automatically for MSIE.</li>\n");
+#endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
 
-#ifdef WEBDAV
-   b = strsav(b, "  <li><code>#define <b>WEBDAV</b></code> - Enables support for webDAV - e.g. stops Microsoft Outlook from accessing HotMail e-mail.</li>\n");
-#else /* ifndef WEBDAV */
-   b = strsav(b, "  <li><code>#undef <b>WEBDAV</b></code> - Disables support for webDAV - e.g. so Microsoft Outlook can access HotMail e-mail.</li>\n");
-#endif /* ndef WEBDAV */
+#ifdef FEATURE_IMAGE_BLOCKING
+   b = strsav(b, "  <li><code>#define <b>FEATURE_IMAGE_BLOCKING</b></code> - Enables sending \"blocked\" images instead of HTML.</li>\n");
+#else /* ifndef FEATURE_IMAGE_BLOCKING */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_IMAGE_BLOCKING</b></code> - Disables sending \"blocked\" images instead of HTML.</li>\n");
+#endif /* ndef FEATURE_IMAGE_BLOCKING */
 
-#ifdef DETECT_MSIE_IMAGES
-   b = strsav(b, "  <li><code>#define <b>DETECT_MSIE_IMAGES</b></code> - Enables detecting image requests automatically for MSIE.</li>\n");
-#else /* ifndef DETECT_MSIE_IMAGES */
-   b = strsav(b, "  <li><code>#undef <b>DETECT_MSIE_IMAGES</b></code> - Disables detecting image requests automatically for MSIE.</li>\n");
-#endif /* ndef DETECT_MSIE_IMAGES */
+#ifdef FEATURE_ACL
+   b = strsav(b, "  <li><code>#define <b>FEATURE_ACL</b></code> - Enables the use of ACL files to control access to the proxy by IP address.</li>\n");
+#else /* ifndef FEATURE_ACL */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_ACL</b></code> - Disables the use of ACL files to control access to the proxy by IP address.</li>\n");
+#endif /* ndef FEATURE_ACL */
 
-#ifdef IMAGE_BLOCKING
-   b = strsav(b, "  <li><code>#define <b>IMAGE_BLOCKING</b></code> - Enables sending \"blocked\" images instead of HTML.</li>\n");
-#else /* ifndef IMAGE_BLOCKING */
-   b = strsav(b, "  <li><code>#undef <b>IMAGE_BLOCKING</b></code> - Disables sending \"blocked\" images instead of HTML.</li>\n");
-#endif /* ndef IMAGE_BLOCKING */
+#ifdef FEATURE_TRUST
+   b = strsav(b, "  <li><code>#define <b>FEATURE_TRUST</b></code> - Enables the use of trust files.</li>\n");
+#else /* ifndef FEATURE_TRUST */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_TRUST</b></code> - Disables the use of trust files.</li>\n");
+#endif /* ndef FEATURE_TRUST */
 
-#ifdef ACL_FILES
-   b = strsav(b, "  <li><code>#define <b>ACL_FILES</b></code> - Enables the use of ACL files to control access to the proxy by IP address.</li>\n");
-#else /* ifndef ACL_FILES */
-   b = strsav(b, "  <li><code>#undef <b>ACL_FILES</b></code> - Disables the use of ACL files to control access to the proxy by IP address.</li>\n");
-#endif /* ndef ACL_FILES */
+#ifdef FEATURE_COOKIE_JAR
+   b = strsav(b, "  <li><code>#define <b>FEATURE_COOKIE_JAR</b></code> - Enables the use of jar files to capture cookies.</li>\n");
+#else /* ifndef FEATURE_COOKIE_JAR */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_COOKIE_JAR</b></code> - Disables the use of jar files to capture cookies.</li>\n");
+#endif /* ndef FEATURE_COOKIE_JAR */
 
-#ifdef TRUST_FILES
-   b = strsav(b, "  <li><code>#define <b>TRUST_FILES</b></code> - Enables the use of trust files.</li>\n");
-#else /* ifndef TRUST_FILES */
-   b = strsav(b, "  <li><code>#undef <b>TRUST_FILES</b></code> - Disables the use of trust files.</li>\n");
-#endif /* ndef TRUST_FILES */
-
-#ifdef JAR_FILES
-   b = strsav(b, "  <li><code>#define <b>JAR_FILES</b></code> - Enables the use of jar files to capture cookies.</li>\n");
-#else /* ifndef JAR_FILES */
-   b = strsav(b, "  <li><code>#undef <b>JAR_FILES</b></code> - Disables the use of jar files to capture cookies.</li>\n");
-#endif /* ndef JAR_FILES */
-
-#ifdef FAST_REDIRECTS
-   b = strsav(b, "  <li><code>#define <b>FAST_REDIRECTS</b></code> - Enables intercepting remote script redirects.</li>\n");
-#else /* ifndef FAST_REDIRECTS */
-   b = strsav(b, "  <li><code>#undef <b>FAST_REDIRECTS</b></code> - Disables intercepting remote script redirects.</li>\n");
-#endif /* ndef FAST_REDIRECTS */
+#ifdef FEATURE_FAST_REDIRECTS
+   b = strsav(b, "  <li><code>#define <b>FEATURE_FAST_REDIRECTS</b></code> - Enables intercepting remote script redirects.</li>\n");
+#else /* ifndef FEATURE_FAST_REDIRECTS */
+   b = strsav(b, "  <li><code>#undef <b>FEATURE_FAST_REDIRECTS</b></code> - Disables intercepting remote script redirects.</li>\n");
+#endif /* ndef FEATURE_FAST_REDIRECTS */
 
    return b;
 }

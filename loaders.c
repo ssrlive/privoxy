@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.22 2001/07/20 15:16:17 haroon Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.23 2001/07/20 15:51:54 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.22 2001/07/20 15:16:17 haroon Exp
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.23  2001/07/20 15:51:54  oes
+ *    Fixed indentation of prepocessor commands
+ *
  *    Revision 1.22  2001/07/20 15:16:17  haroon
  *    - per Guy's suggestion, added a while loop in sweep() to catch not just
  *      the last inactive CSP but all other consecutive inactive CSPs after that
@@ -199,9 +202,9 @@ const char loaders_h_rcs[] = LOADERS_H_VERSION;
  * These are also entered in the main linked list of files.
  */
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
 static struct file_list *current_trustfile      = NULL;
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 static struct file_list *current_re_filterfile  = NULL;
 
@@ -265,12 +268,12 @@ void sweep(void)
             ncsp->rlist->active = 1;
          }
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
          if (ncsp->tlist)     /* trust files */
          {
             ncsp->tlist->active = 1;
          }
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
       }
       else
@@ -288,9 +291,9 @@ void sweep(void)
             freez(ncsp->my_ip_addr_str);
             freez(ncsp->my_hostname);
    
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
             freez(ncsp->referrer);
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
             freez(ncsp->x_forwarded);
             freez(ncsp->iob->buf);
    
@@ -301,13 +304,13 @@ void sweep(void)
    
             free_current_action(ncsp->action);
    
-#ifdef STATISTICS
+#ifdef FEATURE_STATISTICS
             urls_read++;
             if (ncsp->rejected)
             {
                urls_rejected++;
             }
-#endif /* def STATISTICS */
+#endif /* def FEATURE_STATISTICS */
    
             freez(ncsp);
             
@@ -325,10 +328,6 @@ void sweep(void)
          fl->next = nfl->next;
 
          (nfl->unloader)(nfl->f);
-
-#ifndef SPLIT_PROXY_ARGS
-         freez(nfl->proxy_args);
-#endif /* ndef SPLIT_PROXY_ARGS */
 
          freez(nfl->filename);
 
@@ -511,10 +510,7 @@ void free_url(struct url_spec *url)
  *                           This will be set to NULL, OR a struct
  *                           file_list newly allocated on the
  *                           heap, with the filename and lastmodified
- *                           fields filled, standard header giving file
- *                           name in proxy_args, and all others zeroed.
- *                           (proxy_args is only filled in if !defined
- *                           SPLIT_PROXY_ARGS and !suppress_blocklists).
+ *                           fields filled, and all others zeroed.
  *
  * Returns     :  If file unchanged: 0 (and sets newfl == NULL)
  *                If file changed: 1 and sets newfl != NULL
@@ -561,21 +557,6 @@ int check_file_changed(const struct file_list * current,
       return 1;
    }
 
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      char * p = html_encode(filename);
-      if (p)
-      {
-         fs->proxy_args = strsav(fs->proxy_args, "<h2>The file `");
-         fs->proxy_args = strsav(fs->proxy_args, p);
-         fs->proxy_args = strsav(fs->proxy_args, 
-            "' contains the following patterns</h2>\n");
-         freez(p);
-      }
-      fs->proxy_args = strsav(fs->proxy_args, "<pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
 
    *newfl = fs;
    return 1;
@@ -613,19 +594,6 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 
    while (fgets(linebuf, sizeof(linebuf), fp))
    {
-#ifndef SPLIT_PROXY_ARGS
-      if (fs && !suppress_blocklists)
-      {
-         char *html_line = html_encode(linebuf);
-         if (html_line != NULL)
-         {
-            fs->proxy_args = strsav(fs->proxy_args, html_line);
-            freez(html_line);
-         }
-         fs->proxy_args = strsav(fs->proxy_args, "<br>");
-      }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
       /* Trim off newline */
       if ((p = strpbrk(linebuf, "\r\n")) != NULL)
       {
@@ -687,7 +655,7 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 }
 
 
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
 /*********************************************************************
  *
  * Function    :  unload_trustfile
@@ -825,13 +793,6 @@ int load_trustfile(struct client_state *csp)
 
    fclose(fp);
 
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
    /* the old one is now obsolete */
    if (current_trustfile)
    {
@@ -855,7 +816,7 @@ load_trustfile_error:
    return(-1);
 
 }
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 
 /*********************************************************************
@@ -955,13 +916,6 @@ int load_re_filterfile(struct client_state *csp)
    }
 
    fclose(fp);
-
-#ifndef SPLIT_PROXY_ARGS
-   if (!suppress_blocklists)
-   {
-      fs->proxy_args = strsav(fs->proxy_args, "</pre>");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
 
    /* the old one is now obsolete */
    if ( NULL != current_re_filterfile )

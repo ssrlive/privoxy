@@ -1,6 +1,6 @@
 #ifndef W32LOG_H_INCLUDED
 #define W32LOG_H_INCLUDED
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.6 2001/07/13 14:04:59 oes Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.7 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,10 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.7  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.6  2001/07/13 14:04:59  oes
  *    Removed all #ifdef PCRS
  *
@@ -118,9 +122,9 @@ extern int g_nFontSize;
 
 extern const char * g_actions_file;
 extern const char * g_re_filterfile;
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
 extern const char * g_trustfile;
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
 
 /* FIXME: end kludge */
 
