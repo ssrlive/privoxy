@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.107 2002/05/27 23:26:33 mal0rd Exp $
+# $Id: GNUmakefile.in,v 1.108 2002/05/28 03:56:08 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -80,12 +80,15 @@ LN         = ln
 WDUMP      = @WDUMP@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
+# Note: Please make sure that -d ldp.dsl\#html stays the last option to
+#       $(JADEBIN), because for some targets "-notoc" will be appended
+#       to it (--> "ldp.dsl\#html-notoc"). 
 DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
 PERL       = perl
-DOC_DIR	 = doc/source
+DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 
 
@@ -883,6 +886,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.108  2002/05/28 03:56:08  hal9
+# make dok-index target for privoxy-index.html. Fix *bak dead soldiers in
+# doc/webserver.
+#
 # Revision 1.107  2002/05/27 23:26:33  mal0rd
 # Made doc-generation configuration automatic.
 # References to DB2HTML were removed, not used.
