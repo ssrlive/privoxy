@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.12 2001/06/01 18:49:17 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.14 2001/06/03 11:03:48 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,64 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.14  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.13  2001/06/01 20:05:36  jongfoster
+ *    Support for +image-blocker{}: added ACTION_IMAGE_BLOCKER
+ *    constant, and removed csp->tinygif.
+ *
  *    Revision 1.12  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
  *    worth the extra complexity.
@@ -228,6 +286,29 @@ struct client_state;
 /* Need this for struct client_state */
 struct configuration_spec;
 
+/* Generic linked list of strings */
+struct list /* FIXME: Why not separate entries and header? */
+{
+   char *       str;  /* valid in an entry */
+   struct list *last; /* valid in header */
+   struct list *next;
+};
+
+struct map
+{
+  char *name;
+  char *value;
+  struct map *next;
+};
+
+
+/* Generic linked list of strings */
+struct list_share /* FIXME: Why not separate entries and header? */
+{
+   const char *       str;  /* valid in an entry */
+   struct list_share *last; /* valid in header */
+   struct list_share *next;
+};
 
 struct http_request
 {
@@ -241,6 +322,16 @@ struct http_request
    int   ssl;
 };
 
+/* CGI or blocker generated response */
+struct http_response
+{
+  char *status;             /* HTTP status */
+  struct list headers[1]; /* List of header lines */
+  int content_length;     /* Length of body, REQUIRED if binary body*/
+  char *head;             /* Formatted http response head */
+  char *body;             /* HTTP document body */
+};
+  
 struct gateway
 {
    /* generic attributes */
@@ -254,15 +345,6 @@ struct gateway
 
    char *forward_host;
    int   forward_port;
-};
-
-
-/* Generic linked list of strings */
-struct list /* FIXME: Why not separate entries and header? */
-{
-   char *       str;  /* valid in an entry */
-   struct list *last; /* valid in header */
-   struct list *next;
 };
 
 
@@ -286,6 +368,7 @@ struct url_spec
 
 #define ANCHOR_LEFT  1
 #define ANCHOR_RIGHT 2
+
 
 
 /* An I/O buffer */
@@ -503,14 +586,13 @@ struct parsers
    char *(*parser)(const struct parsers *, char *, struct client_state *);
 };
 
-
-struct interceptors
+struct cgi_dispatcher
 {
-   char *str;
-   char  len;
-   char *(*interceptor)(struct http_request *http, struct client_state *csp);
+   char *name;
+   int   name_length;
+   int   (*handler)(struct client_state *csp, struct http_response *rsp, struct map *parameters);
+   char *description;
 };
-
 
 struct file_list
 {
@@ -576,7 +658,6 @@ struct forward_spec
 struct re_filterfile_spec
 {
    struct list patterns[1];
-   /* See README.re_filter */
    pcrs_job *joblist;
 };
 #endif /* def PCRS */
@@ -619,6 +700,7 @@ struct configuration_spec
 
    const char *logfile;
 
+   const char *confdir;
    const char *actions_file;
    const char *forwardfile;
 
@@ -685,54 +767,11 @@ struct configuration_spec
 #define FORCE_PREFIX "/IJB-FORCE-LOAD"
 #endif /* def FORCE_LOAD */
 
-#define HOME_PAGE_URL  "http://ijbswa.sourceforge.net/"
+/* Shouldn't end with '/' */
+#define HOME_PAGE_URL  "http://ijbswa.sourceforge.net"
 #define REDIRECT_URL HOME_PAGE_URL "redirect.php?v=" VERSION "&to="
 
-static const char CFAIL[] =
-   "HTTP/1.0 503 Connect failed\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: Connect failed</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</center></h1>"
-   "TCP connection to '%s' failed: %s.\n<br>"
-   "</body>\n"
-   "</html>\n";
-
-static const char CNXDOM[] =
-   "HTTP/1.0 404 Non-existent domain\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: Non-existent domain</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</center></h1>"
-   "No such domain: %s\n"
-   "</body>\n"
-   "</html>\n";
-
-static const char CNOBANNER[] =
-   "HTTP/1.0 200 No Banner\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: No Banner</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</h1>"
-   "You asked for a banner that this proxy can't produce because either configuration does not permit.\n<br>"
-   "or the URL didn't end with .gif\n"
-   "</center></body>\n"
-   "</html>\n";
+#define CGI_PREFIX_HOST "i.j.b"
 
 static const char CSUCCEED[] =
    "HTTP/1.0 200 Connection established\n"
