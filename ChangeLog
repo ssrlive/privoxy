@@ -9,6 +9,9 @@ reflected throughout (file locations, etc).
 - ijb.action is now default.action. re_filterfile is now 
 default.filter.
 - http://i.j.b/ is now http://p.p/
+- The 'logo' option for replacing ad iamges is removed now. 'Pattern' 
+(checkerboard) is now the default.
+
 
 *** Version 2.9.12 Beta *** 
 
@@ -22,7 +25,7 @@ per site basis. Some new goodies there too.
 - +filter now takes arguments to match FILTER sections in re_filterfile
 for even more flexibility. 
 - Added a new image blocker option: +image-blocker{pattern}, which 
-displays a checkboard patthern and scales better than the logo.
+displays a checkerboard patthern and scales better than the logo.
 - PNG images will be used in place of GIF for JB built-in images
 if configured with --enable-no-gif.
 - Clean up compiler warnings (mostly).
