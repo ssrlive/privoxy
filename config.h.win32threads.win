@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.8  2001/10/23 21:24:09  jongfoster
+ *    Support for FEATURE_CGI_EDIT_ACTIONS
+ *
  *    Revision 1.7  2001/10/07 15:33:14  oes
  *    Removed FEATURE_DENY_GZIP
  *    Bumped up version number
@@ -175,12 +178,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 9
+#define VERSION_POINT 10
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.9"
+#define VERSION "2.9.10"
 
 /*
  * Status of the code: alpha, beta or stable
