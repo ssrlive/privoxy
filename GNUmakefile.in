@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.108 2002/05/28 03:56:08 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.109 2002/05/28 09:16:15 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -46,14 +46,22 @@ RPM_VERSION   = $(VERSION)
 
 
 #############################################################################
+# Source directories
+#############################################################################
+DIR_PRIVOXY_ROOT     := .
+DIR_PRIVOXY_SRC      := $(DIR_PRIVOXY_ROOT)/src
+DIR_PRIVOXY_SRC_PCRE := $(DIR_PRIVOXY_ROOT)/pcre
+DIR_PRIVOXY_OBJ      := $(DIR_PRIVOXY_ROOT)/obj
+
+#############################################################################
 # Directories for "make install"
 #############################################################################
 
-DEST        = @prefix@
-CONFDEST    = @prefix@@sysconfdir@
-SBIN_DEST   = @prefix@@sbindir@
-MAN_DEST    = @prefix@@mandir@
-DOK_WEB_USEM=doc/webserver/user-manual
+DEST         = @prefix@
+CONFDEST     = @prefix@@sysconfdir@
+SBIN_DEST    = @prefix@@sbindir@
+MAN_DEST     = @prefix@@mandir@
+DOK_WEB_USEM = doc/webserver/user-manual
 
 #############################################################################
 # Build tools
@@ -63,7 +71,6 @@ PROGRAM    = privoxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
-#INSTALL    = cp -f
 INSTALL    = @INSTALL@
 INSTALL_P  = -m 0750 -g @GROUP@ -o @USER@ -b
 INSTALL_T  = -m 0640 -g @GROUP@ -o @USER@ -b
@@ -134,38 +141,54 @@ DOC_FILES = AUTHORS LICENSE README ChangeLog \
 # Filenames and libraries
 #############################################################################
 
-C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
-         errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
-         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
-         urlmatch.c
+C_SRC  =          \
+  $(DIR_PRIVOXY_SRC)/actions.c   \
+  $(DIR_PRIVOXY_SRC)/cgi.c       \
+  $(DIR_PRIVOXY_SRC)/cgiedit.c   \
+  $(DIR_PRIVOXY_SRC)/cgisimple.c \
+  $(DIR_PRIVOXY_SRC)/deanimate.c \
+  $(DIR_PRIVOXY_SRC)/encode.c    \
+  $(DIR_PRIVOXY_SRC)/errlog.c    \
+  $(DIR_PRIVOXY_SRC)/filters.c   \
+  $(DIR_PRIVOXY_SRC)/gateway.c   \
+  $(DIR_PRIVOXY_SRC)/jbsockets.c \
+  $(DIR_PRIVOXY_SRC)/jcc.c       \
+  $(DIR_PRIVOXY_SRC)/killpopup.c \
+  $(DIR_PRIVOXY_SRC)/list.c      \
+  $(DIR_PRIVOXY_SRC)/loadcfg.c   \
+  $(DIR_PRIVOXY_SRC)/loaders.c   \
+  $(DIR_PRIVOXY_SRC)/miscutil.c  \
+  $(DIR_PRIVOXY_SRC)/parsers.c   \
+  $(DIR_PRIVOXY_SRC)/ssplit.c    \
+  $(DIR_PRIVOXY_SRC)/urlmatch.c
 
-C_OBJS = $(C_SRC:.c=.@OBJEXT@)
+C_OBJS = $(C_SRC:$(DIR_PRIVOXY_SRC)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
 
-W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
-W32_FILES = @WIN_ONLY@w32.res
-W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.@OBJEXT@) $(W32_FILES)
-W32_HDRS  = @WIN_ONLY@w32log.h w32taskbar.h win32.h w32res.h
+W32_SRC   = @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.c $(DIR_PRIVOXY_SRC)/w32taskbar.c $(DIR_PRIVOXY_SRC)/win32.c
+W32_FILES = @WIN_ONLY@$(DIR_PRIVOXY_OBJ)/w32res.res
+W32_OBJS  = @WIN_ONLY@$(W32_SRC:$(DIR_PRIVOXY_SRC)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@) $(W32_FILES)
+W32_HDRS  = @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.h $(DIR_PRIVOXY_SRC)/w32taskbar.h $(DIR_PRIVOXY_SRC)/win32.h $(DIR_PRIVOXY_SRC)/w32res.h
 W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
 W32_INIS  = @WIN_ONLY@config.txt trust.txt
 
-PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
-PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.@OBJEXT@)
+PCRS_SRC     = @STATIC_PCRS_ONLY@$(DIR_PRIVOXY_SRC)/pcrs.c
+PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:$(DIR_PRIVOXY_SRC)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
 PCRS_HDRS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.h)
 
-PCRE_SRC     = @STATIC_PCRE_ONLY@pcre/get.c pcre/maketables.c pcre/study.c pcre/pcre.c
-PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.@OBJEXT@)
-PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h pcre/pcre.h
+PCRE_SRC     = @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/get.c $(DIR_PRIVOXY_SRC_PCRE)/maketables.c $(DIR_PRIVOXY_SRC_PCRE)/study.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.c
+PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:$(DIR_PRIVOXY_SRC_PCRE)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
+PCRE_HDRS    = @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/chartables.c $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
 
 # No REGEX (maybe because dynamically linked pcreposix):
 REGEX_SRC    =
-@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
+@STATIC_PCRE_ONLY@REGEX_SRC = $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.c
 
-REGEX_OBJS   = $(REGEX_SRC:.c=.@OBJEXT@)
+REGEX_OBJS   = $(REGEX_SRC:$(DIR_PRIVOXY_SRC_PCRE)/%.c=%.@OBJEXT@)
 REGEX_HDRS   = $(REGEX_SRC:.c=.h)
 
 # Dependencies introduced by #include "project.h".
-PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcre.h
+PROJECT_H_DEPS = $(DIR_PRIVOXY_SRC)/project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/pcre.h
 
 # Socket libraries for platforms that need them explicitly defined
 SOCKET_LIB   = @SOCKET_LIB@
@@ -217,11 +240,16 @@ debian-upload ensure-wdump ensure-jadebin ensure-dkprefix
 
 
 #############################################################################
-# Define this explicitly because Solaris is broken!
+# Compile command
 #############################################################################
-%.o: %.c
+$(DIR_PRIVOXY_OBJ)/%.o: $(DIR_PRIVOXY_SRC)/%.c $(DIR_PRIVOXY_OBJ)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
+$(DIR_PRIVOXY_OBJ)/%.o: $(DIR_PRIVOXY_SRC_PCRE)/%.c $(DIR_PRIVOXY_OBJ)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+$(DIR_PRIVOXY_OBJ):
+	mkdir obj
 
 #############################################################################
 # Win32 config files
@@ -503,7 +531,10 @@ freebsd-clean: gen-clean
 # Windows distribution
 #############################################################################
 win-dist:
-	$(ECHO) Not implemented.
+	@$(ECHO) RTFM.  You shouldn't run configure before making
+	@$(ECHO) the Windows release, so you need to start again from
+	@$(ECHO) a clean CVS export.
+	@false
 
 
 #############################################################################
@@ -771,61 +802,70 @@ web-actions: tidy
 # Source file dependencies
 #############################################################################
 
-actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
-cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) cgiedit.h cgisimple.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-cgiedit.@OBJEXT@:   cgiedit.c   cgiedit.h   config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
-encode.@OBJEXT@:    encode.c    encode.h    config.h
-errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
-filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
-gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
-jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
-jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h cgi.h
-killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
-list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
-loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
-loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
-miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
-parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
-ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
-urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
-
-# GNU regex
-gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
+$(DIR_PRIVOXY_OBJ)/actions.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/actions.c   $(DIR_PRIVOXY_SRC)/actions.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/list.h    $(DIR_PRIVOXY_SRC)/loaders.h   $(DIR_PRIVOXY_SRC)/miscutil.h  $(DIR_PRIVOXY_SRC)/actionlist.h
+$(DIR_PRIVOXY_OBJ)/cgi.@OBJEXT@:       $(DIR_PRIVOXY_SRC)/cgi.c       $(DIR_PRIVOXY_SRC)/cgi.h       $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/cgiedit.h $(DIR_PRIVOXY_SRC)/cgisimple.h $(DIR_PRIVOXY_SRC)/list.h    $(DIR_PRIVOXY_SRC)/pcrs.h      $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/ssplit.h     $(DIR_PRIVOXY_SRC)/jcc.h      $(DIR_PRIVOXY_SRC)/filters.h  $(DIR_PRIVOXY_SRC)/actions.h $(DIR_PRIVOXY_SRC)/errlog.h    $(DIR_PRIVOXY_SRC)/miscutil.h
+$(DIR_PRIVOXY_OBJ)/cgiedit.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/cgiedit.c   $(DIR_PRIVOXY_SRC)/cgiedit.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/cgi.h     $(DIR_PRIVOXY_SRC)/list.h      $(DIR_PRIVOXY_SRC)/pcrs.h    $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/ssplit.h    $(DIR_PRIVOXY_SRC)/jcc.h        $(DIR_PRIVOXY_SRC)/filters.h  $(DIR_PRIVOXY_SRC)/actions.h  $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/miscutil.h
+$(DIR_PRIVOXY_OBJ)/cgisimple.@OBJEXT@: $(DIR_PRIVOXY_SRC)/cgisimple.c $(DIR_PRIVOXY_SRC)/cgisimple.h $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/cgi.h     $(DIR_PRIVOXY_SRC)/list.h      $(DIR_PRIVOXY_SRC)/pcrs.h    $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/ssplit.h    $(DIR_PRIVOXY_SRC)/jcc.h        $(DIR_PRIVOXY_SRC)/filters.h  $(DIR_PRIVOXY_SRC)/actions.h  $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/miscutil.h
+$(DIR_PRIVOXY_OBJ)/deanimate.@OBJEXT@: $(DIR_PRIVOXY_SRC)/deanimate.c $(DIR_PRIVOXY_SRC)/deanimate.h $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS)
+$(DIR_PRIVOXY_OBJ)/encode.@OBJEXT@:    $(DIR_PRIVOXY_SRC)/encode.c    $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/config.h
+$(DIR_PRIVOXY_OBJ)/errlog.@OBJEXT@:    $(DIR_PRIVOXY_SRC)/errlog.c    $(DIR_PRIVOXY_SRC)/errlog.h    $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.h
+$(DIR_PRIVOXY_OBJ)/filters.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/filters.c   $(DIR_PRIVOXY_SRC)/filters.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/gateway.h $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/loadcfg.h    $(DIR_PRIVOXY_SRC)/parsers.h  $(DIR_PRIVOXY_SRC)/ssplit.h   $(DIR_PRIVOXY_SRC)/cgi.h     $(DIR_PRIVOXY_SRC)/deanimate.h @WIN_ONLY@$(DIR_PRIVOXY_SRC)/win32.h 
+$(DIR_PRIVOXY_OBJ)/gateway.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/gateway.c   $(DIR_PRIVOXY_SRC)/gateway.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/jcc.h     $(DIR_PRIVOXY_SRC)/loadcfg.h
+$(DIR_PRIVOXY_OBJ)/jbsockets.@OBJEXT@: $(DIR_PRIVOXY_SRC)/jbsockets.c $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/filters.h
+$(DIR_PRIVOXY_OBJ)/jcc.@OBJEXT@:       $(DIR_PRIVOXY_SRC)/jcc.c       $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/filters.h   $(DIR_PRIVOXY_SRC)/gateway.h $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/killpopup.h $(DIR_PRIVOXY_SRC)/loadcfg.h    $(DIR_PRIVOXY_SRC)/loaders.h  $(DIR_PRIVOXY_SRC)/miscutil.h $(DIR_PRIVOXY_SRC)/parsers.h @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.h    $(DIR_PRIVOXY_SRC)/win32.h $(DIR_PRIVOXY_SRC)/cgi.h
+$(DIR_PRIVOXY_OBJ)/killpopup.@OBJEXT@: $(DIR_PRIVOXY_SRC)/killpopup.c $(DIR_PRIVOXY_SRC)/killpopup.h $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/jcc.h     $(DIR_PRIVOXY_SRC)/loadcfg.h
+$(DIR_PRIVOXY_OBJ)/list.@OBJEXT@:      $(DIR_PRIVOXY_SRC)/list.c      $(DIR_PRIVOXY_SRC)/list.h      $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/list.h    $(DIR_PRIVOXY_SRC)/miscutil.h
+$(DIR_PRIVOXY_OBJ)/loadcfg.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/loadcfg.c   $(DIR_PRIVOXY_SRC)/loadcfg.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/filters.h   $(DIR_PRIVOXY_SRC)/gateway.h $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/killpopup.h  $(DIR_PRIVOXY_SRC)/loaders.h  $(DIR_PRIVOXY_SRC)/miscutil.h $(DIR_PRIVOXY_SRC)/parsers.h @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.h    $(DIR_PRIVOXY_SRC)/win32.h
+$(DIR_PRIVOXY_OBJ)/loaders.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/loaders.c   $(DIR_PRIVOXY_SRC)/loaders.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/filters.h $(DIR_PRIVOXY_SRC)/gateway.h   $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/loadcfg.h    $(DIR_PRIVOXY_SRC)/miscutil.h $(DIR_PRIVOXY_SRC)/parsers.h  $(DIR_PRIVOXY_SRC)/ssplit.h
+$(DIR_PRIVOXY_OBJ)/miscutil.@OBJEXT@:  $(DIR_PRIVOXY_SRC)/miscutil.c  $(DIR_PRIVOXY_SRC)/miscutil.h  $(DIR_PRIVOXY_SRC)/config.h
+$(DIR_PRIVOXY_OBJ)/parsers.@OBJEXT@:   $(DIR_PRIVOXY_SRC)/parsers.c   $(DIR_PRIVOXY_SRC)/parsers.h   $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/encode.h    $(DIR_PRIVOXY_SRC)/filters.h $(DIR_PRIVOXY_SRC)/jbsockets.h $(DIR_PRIVOXY_SRC)/jcc.h       $(DIR_PRIVOXY_SRC)/loadcfg.h    $(DIR_PRIVOXY_SRC)/loaders.h  $(DIR_PRIVOXY_SRC)/miscutil.h $(DIR_PRIVOXY_SRC)/ssplit.h
+$(DIR_PRIVOXY_OBJ)/ssplit.@OBJEXT@:    $(DIR_PRIVOXY_SRC)/ssplit.c    $(DIR_PRIVOXY_SRC)/ssplit.h    $(DIR_PRIVOXY_SRC)/config.h                   $(DIR_PRIVOXY_SRC)/miscutil.h
+$(DIR_PRIVOXY_OBJ)/urlmatch.@OBJEXT@:  $(DIR_PRIVOXY_SRC)/urlmatch.c  $(DIR_PRIVOXY_SRC)/urlmatch.h  $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/miscutil.h  $(DIR_PRIVOXY_SRC)/ssplit.h
 
 # PCRS
-pcrs.@OBJEXT@: pcrs.c pcre/pcre.h pcrs.h
+$(DIR_PRIVOXY_OBJ)/pcrs.@OBJEXT@: $(DIR_PRIVOXY_SRC)/pcrs.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC)/pcrs.h
 
 # PCRE
-pcre/get.@OBJEXT@:        pcre/get.c        pcre/config.h pcre/internal.h pcre/pcre.h
-pcre/maketables.@OBJEXT@: pcre/maketables.c pcre/config.h pcre/internal.h pcre/pcre.h
-pcre/pcre.@OBJEXT@:       pcre/pcre.c       pcre/config.h pcre/internal.h pcre/pcre.h pcre/chartables.c 
-pcre/pcreposix.@OBJEXT@:  pcre/pcreposix.c  pcre/config.h pcre/internal.h pcre/pcre.h pcre/pcreposix.h
-pcre/study.@OBJEXT@:      pcre/study.c      pcre/config.h pcre/internal.h pcre/pcre.h
+$(DIR_PRIVOXY_OBJ)/get.@OBJEXT@:        $(DIR_PRIVOXY_SRC_PCRE)/get.c        $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
+$(DIR_PRIVOXY_OBJ)/maketables.@OBJEXT@: $(DIR_PRIVOXY_SRC_PCRE)/maketables.c $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
+$(DIR_PRIVOXY_OBJ)/pcre.@OBJEXT@:       $(DIR_PRIVOXY_SRC_PCRE)/pcre.c       $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/chartables.c 
+$(DIR_PRIVOXY_OBJ)/pcreposix.@OBJEXT@:  $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.c  $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h
+$(DIR_PRIVOXY_OBJ)/study.@OBJEXT@:      $(DIR_PRIVOXY_SRC_PCRE)/study.c      $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
 
 # An auxiliary program makes the PCRE default character table source
 
-pcre/chartables.c:   pcre/dftables@EXEEXT@
-		pcre/dftables@EXEEXT@ >pcre/chartables.c
+$(DIR_PRIVOXY_SRC_PCRE)/chartables.c:   $(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@
+		$(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@ >$(DIR_PRIVOXY_SRC_PCRE)/chartables.c
 
-pcre/dftables@EXEEXT@:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal.h pcre/config.h
-		$(CC) -o pcre/dftables@EXEEXT@ $(CFLAGS) pcre/dftables.c
+$(DIR_PRIVOXY_OBJ)/dftables@EXEEXT@:       $(DIR_PRIVOXY_SRC_PCRE)/dftables.c $(DIR_PRIVOXY_SRC_PCRE)/maketables.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/config.h
+		$(CC) -o $(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@ $(CFLAGS) $(DIR_PRIVOXY_SRC_PCRE)/dftables.c
 
 # Win32
-w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
-w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
-win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h win32.h
+$(DIR_PRIVOXY_OBJ)/w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
+$(DIR_PRIVOXY_OBJ)/w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
+$(DIR_PRIVOXY_OBJ)/win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h pcrs.h project.h w32log.h win32.h
 
-w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/idle.ico icons/privoxy.ico config.h
+$(DIR_PRIVOXY_OBJ)/w32res.res: $(DIR_PRIVOXY_SRC)/w32res.rc \
+                $(DIR_PRIVOXY_SRC)/w32res.h \
+                $(DIR_PRIVOXY_SRC)/config.h \
+                $(DIR_PRIVOXY_SRC)/icons/ico00001.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00002.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00003.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00004.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00005.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00006.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00007.ico \
+                $(DIR_PRIVOXY_SRC)/icons/ico00008.ico \
+                $(DIR_PRIVOXY_SRC)/icons/idle.ico \
+                $(DIR_PRIVOXY_SRC)/icons/privoxy.ico
 	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
 
 # AmigaOS
-@AMIGAOS_ONLY@OBJS += amiga.o
+@AMIGAOS_ONLY@OBJS += $(DIR_PRIVOXY_OBJ)/amiga.@OBJEXT@
 @AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -m68020 -noixemul -fbaserel -msmall-code
 @AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
 @AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
-@AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
+$(DIR_PRIVOXY_OBJ)/amiga.@OBJEXT@: $(DIR_PRIVOXY_SRC)/amiga.c $(DIR_PRIVOXY_SRC)/amiga.h $(DIR_PRIVOXY_SRC)/config.h
 
 
 $(PROGRAM): $(OBJS) $(W32_FILES)
@@ -886,6 +926,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.109  2002/05/28 09:16:15  oes
+# Added comment for -notoc kludge
+#
 # Revision 1.108  2002/05/28 03:56:08  hal9
 # make dok-index target for privoxy-index.html. Fix *bak dead soldiers in
 # doc/webserver.

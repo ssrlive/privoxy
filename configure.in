@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.69 2002/05/25 18:11:49 jongfoster Exp $
+dnl $Id: configure.in,v 1.70 2002/05/27 23:26:34 mal0rd Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,11 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.70  2002/05/27 23:26:34  mal0rd
+dnl Made doc-generation configuration automatic.
+dnl References to DB2HTML were removed, not used.
+dnl --with-docbook now only needed if in odd path.
+dnl
 dnl Revision 1.69  2002/05/25 18:11:49  jongfoster
 dnl Wahay!!! 3.0.x has branched!
 dnl New development version is 3.1.1 alpha
@@ -374,10 +379,10 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.69 $)
-AC_INIT(jcc.c)
+AC_REVISION($Revision: 1.70 $)
+AC_INIT(src/jcc.c)
 
-if test ! -f config.h.in; then
+if test ! -f src/config.h.in; then
    echo "You need to run autoheader first. "
    echo -n "Shall I do this for you now? (y/n) "
    read answer
@@ -388,7 +393,7 @@ if test ! -f config.h.in; then
   fi
 fi  
 
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([src/config.h])
 AC_CANONICAL_HOST
 
 AC_ARG_WITH(docbook, dnl
