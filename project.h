@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.65 2002/04/04 00:36:36 gliptak Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.66 2002/04/15 19:06:43 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.66  2002/04/15 19:06:43  jongfoster
+ *    Typos
+ *
  *    Revision 1.65  2002/04/04 00:36:36  gliptak
  *    always use pcre for matching
  *
@@ -520,6 +523,11 @@ typedef int jb_err;
 #define BUFFER_SIZE 5000
 
 /*
+ * Max length of CGI parameters (arbitrary limit)
+ */
+#define CGI_PARAM_LEN_MAX 500
+
+/*
  * Buffer size for capturing struct hostent data in the
  * gethostby(name|addr)_r library calls. Since we don't
  * loop over gethostbyname_r, the buffer must be sufficient
@@ -770,6 +778,12 @@ struct url_actions
 #define CSP_FLAG_TOGGLED_ON 0x20 /* Set if we are toggled on (FEATURE_TOGGLE) */
 
 /*
+ * Maximum number of actions files.  This limit is arbitrary - it's just used
+ * to size an array.
+ */
+#define MAX_ACTION_FILES 10
+
+/*
  * The state of a Privoxy processing thread.
  */
 struct client_state
@@ -823,7 +837,7 @@ struct client_state
    char   *x_forwarded;
 
    /* files associated with this client */
-   struct file_list *actions_list;
+   struct file_list *actions_list[MAX_ACTION_FILES];
 
    struct file_list *rlist;   /* pcrs job file */
    size_t content_length;     /* Length after content modification */
@@ -1003,7 +1017,8 @@ struct configuration_spec
 
    const char *confdir;
    const char *logdir;
-   const char *actions_file;
+   const char *actions_file[MAX_ACTION_FILES];
+   const char *actions_file_short[MAX_ACTION_FILES];
 
    /* The administrator's email address */
    char *admin_address;
