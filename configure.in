@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.50 2002/03/27 03:03:45 hal9 Exp $
+dnl $Id: configure.in,v 1.51 2002/03/28 20:43:00 swa Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.51  2002/03/28 20:43:00  swa
+dnl set make correctly
+dnl
 dnl Revision 1.50  2002/03/27 03:03:45  hal9
 dnl Add test for man2html
 dnl
@@ -306,7 +309,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.50 $)
+AC_REVISION($Revision: 1.51 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -485,6 +488,10 @@ else
   fi
 fi
 AC_SUBST(WIN_ONLY)
+
+if test $target_type = i686-pc-linux-gnu; then
+  SPECIAL_CFLAGS="-I pcre/"
+fi
 
 dnl Checking which text html browser we have avaliable
 if test $dodk != no; then
