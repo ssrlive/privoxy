@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.6 2002/03/07 13:16:31 oes Exp $
+ $Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.6 2002/03/07 13:16:31 oes Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -87,6 +87,153 @@ Please see the Contact section in the user-manual if you want to contact the dev
  <para>
    Fillme.
  </para>
+</sect3>
+
+<sect3 id="configfiles"> <title>What are the differences between
+ijb-intermediate.action, ijb-basci.action, etc.?</title>
+ <para>
+Configuring the Internet Junkbuster is not easy. To help you get started, we
+provide you with three different default configurations. The following table
+shows you, which features are enabled in each configuration.
+ </para>
+ <para>
+<table frame=all><title>Default Configurations</title>
+<tgroup cols=5 align=left colsep=1 rowsep=1>
+<colspec colname=c1>
+<colspec colname=c2>
+<colspec colname=c3>
+<colspec colname=c4>
+<colspec colname=c5>
+<thead>
+<row>
+  <entry>Feature</entry>
+  <entry>ijb.action</entry>
+  <entry>ijb-basic.action</entry>
+  <entry>ijb-intermediate.action</entry>
+  <entry>ijb-advanced.action</entry>
+</row>
+</thead>
+
+<!--  <tfoot> -->
+<!--  <row> -->
+<!--    <entry>f1</entry> -->
+<!--    <entry>f2</entry> -->
+<!--    <entry>f3</entry> -->
+<!--    <entry>f4</entry> -->
+<!--    <entry>f5</entry> -->
+<!--  </row> -->
+<!--  </tfoot> -->
+
+<tbody>
+<!-- new row -->
+<row>
+  <entry>ad-filtering</entry>
+  <entry>?</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>blank image</entry>
+  <entry>?</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>de-animate GIFs</entry>
+  <entry>?</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>referer forging</entry>
+  <entry>?</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>jon's +no-cookies-keep (i.e. session cookies only)</entry>
+  <entry>?</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>no-popup windows</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>fast redirects</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>hide-referrer</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>hide-useragent</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry>x</entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>content-modification</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry></entry>
+  <entry>x</entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>feature-x</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry></entry>
+  <entry></entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>feature-y</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry></entry>
+  <entry></entry>
+</row>
+<!-- new row -->
+<row>
+  <entry>feature-z</entry>
+  <entry>?</entry>
+  <entry></entry>
+  <entry></entry>
+  <entry></entry>
+</row>
+<!-- finish -->
+</tbody>
+</tgroup>
+</table>
+</para>
 </sect3>
 
 <sect3 id="browseconfig"> <title>Why can I change the configuration with a
@@ -192,8 +339,8 @@ should really consider upgrading to 2.9.x).
    Well, helping the team is always a good idea. We welcome new developers,
    RPM gurus or documentation makers. Simply get an account on sourceforge.net
    and mail your id to the developer mailing list. Once we have added you to
-   the team, you'll have write access to the CVS repository, and we'll find a
-   suitable task for you together.
+   the team, you'll have write access to the CVS repository, and together
+   we'll find a suitable task for you.
 </para>
 </sect3>
 
@@ -219,13 +366,13 @@ should really consider upgrading to 2.9.x).
 </para>
 </sect3>
 
-<sect3 id="image"><title>What is the imagefile (simage.ini, etc.) for?</title>
-<para>
- Anytime the Junkbuster determines (with the help of the blocklist) that a URL
- contains an advertisement, it has to decide whether this advertisement is an
- image or not. The Junkbuster uses the imagefile for that purpose.
-</para>
-</sect3>
+<!--  <sect3 id="image"><title>What is the imagefile (simage.ini, etc.) for?</title> -->
+<!--  <para> -->
+<!--   Anytime the Junkbuster determines (with the help of the blocklist) that a URL -->
+<!--   contains an advertisement, it has to decide whether this advertisement is an -->
+<!--   image or not. The Junkbuster uses the imagefile for that purpose. -->
+<!--  </para> -->
+<!--  </sect3> -->
 
 </sect2>
 
@@ -274,6 +421,9 @@ should really consider upgrading to 2.9.x).
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.7  2002/03/07 18:16:55  swa
+looks better
+
 Revision 1.6  2002/03/07 13:16:31  oes
 Committing changes by Stefan
 
