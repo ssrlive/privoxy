@@ -1,69 +1,72 @@
 <?php
-// Default Web Page for groups that haven't setup their page yet
-// Please replace this file with your own website
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/index.html,v $
 //
-// $Id: default_page.php,v 1.1 2001/09/23 09:56:08 swa Exp $
+//  Purpose  :  Submit form for ads and such
+//              This file belongs in
+//              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
+//
+//  $Id: index.html,v 1.14 2002/03/27 09:34:26 swa Exp $
+//
+//  Written by and Copyright (C) 2001 the SourceForge
+//  Privoxy team. http://www.privoxy.org/
+//
+//  Based on the Internet Junkbuster originally written
+//  by and Copyright (C) 1997 Anonymous Coders and
+//  Junkbusters Corporation.  http://www.junkbusters.com
+//
+//  This program is free software; you can redistribute it
+//  and/or modify it under the terms of the GNU General
+//  Public License as published by the Free Software
+//  Foundation; either version 2 of the License, or (at
+//  your option) any later version.
+//
+//  This program is distributed in the hope that it will
+//  be useful, but WITHOUT ANY WARRANTY; without even the
+//  implied warranty of MERCHANTABILITY or FITNESS FOR A
+//  PARTICULAR PURPOSE.  See the GNU General Public
+//  License for more details.
+//
+//  The GNU General Public License should be included with
+//  this file.  If not, you can view it at
+//  http://www.gnu.org/copyleft/gpl.html
+//  or write to the Free Software Foundation, Inc., 59
+//  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
 //
 $headers = getallheaders();
 ?>
-<HTML>
-<HEAD>
-<TITLE>SourceForge: Welcome</TITLE>
-<LINK rel="stylesheet" href="http://sourceforge.net/sourceforge.css" type="text/css">
-</HEAD>
+<html>
+  <head>
+    <title>Privoxy|Submit</title>
+    <link rel="stylesheet" type="text/css" href="../p_web.css">
+</head>
 
-<BODY bgcolor=#FFFFFF topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
+<h1>Feedback</h1>
 
-<!-- top strip -->
-<TABLE width="100%" border=0 cellspacing=0 cellpadding=2 bgcolor="737b9c">
-  <TR>
-    <TD><SPAN class=maintitlebar>&nbsp;&nbsp;
-      <A class=maintitlebar href="http://sourceforge.net/"><B>Home</B></A> | 
-      <A class=maintitlebar href="http://sourceforge.net/about.php"><B>About</B></A> | 
-      <A class=maintitlebar href="http://sourceforge.net/partners.php"><B>Partners</B></a> |
-      <A class=maintitlebar href="http://sourceforge.net/contact.php"><B>Contact Us</B></A></SPAN></TD>
-    </TD>
-  </TR>
-</TABLE>
-<!-- end top strip -->
+<p>Bla bla bla</p>
 
-<!-- top title table -->
-<TABLE width="100%" border=0 cellspacing=0 cellpadding=0 bgcolor="" valign="center">
-  <TR valign="top" bgcolor="#eeeef8">
-    <TD>
-      <A href="http://sourceforge.net/"><IMG src="http://sourceforge.net/images/sflogo2-steel.png" vspace="0" border=0 width="143" height="70"></A>
-    </TD>
-    <TD width="99%"><!-- right of logo -->
-      <a href="http://www.valinux.com"><IMG src="http://sourceforge.net/images/valogo3.png" align="right" alt="VA Linux Systems" hspace="5" vspace="0" border=0 width="117" height="70"></A>
-    </TD><!-- right of logo -->
-  </TR>
-  <TR><TD bgcolor="#543a48" colspan=2><IMG src="http://sourceforge.net/images/blank.gif" height=2 vspace=0></TD></TR>
-</TABLE>
-<!-- end top title table -->
+<h2>Advertisements</h2>
 
-<!-- center table -->
-<TABLE width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="#FFFFFF" align="center">
-  <TR>
-    <TD>
-      <CENTER><BR>
-      <H1>Welcome to http://<?php print $headers[Host]; ?>/</H1>
-      <P>We're Sorry but this Project hasn't yet uploaded their personal webpage yet.<BR>
-      Please check back soon for updates or visit <A href="http://sourceforge.net/">SourceForge</A></P><BR>
-      </CENTER>
-    </TD>
-  </TR>
-</TABLE>
-<!-- end center table -->
+<p>You have seen an ad and want to support us making it disappear.
+Great. Please fill out the form below and hit "Submit".</p>
 
-<!-- footer table -->
-<TABLE width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="737b9c">
-  <TR>
-    <TD align="center"><FONT color="#ffffff"><SPAN class="titlebar">
-      All trademarks and copyrights on this page are properties of their respective owners. Forum comments are owned by the poster. The rest is copyright ©1999-2000 VA Linux Systems, Inc.</SPAN></FONT>
-    </TD>
-  </TR>
-</TABLE>
+<p>
+<pre>
+Privoxy Version: prefilled (not changeable)
+Action file: prefilled (not changeable)
+Action file release: prefilled with cvs-id-tag (not changeable)
+The webpage where I observed the ad: prefilled with referrer (changeable)
+????: ????
+[...]
+Remarks: (changeable)
+Submit Button.
 
-<!-- end footer table -->
-</BODY>
-</HTML>
+
+Submit button -> will present a second page, where verification 
+takes place (correct version, latest blocklist, etc.). hence
+the user has to confirm his submission on the second page.
+</pre>
+</p>
+
+</body>
+</html>
