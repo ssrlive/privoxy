@@ -1,6 +1,6 @@
 #ifndef _JCC_H
 #define _JCC_H
-#define JCC_H_VERSION "$Id: jcc.h,v 1.1.1.1 2001/05/15 13:58:56 oes Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.2 2001/05/31 21:24:47 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,12 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.2  2001/05/31 21:24:47  jongfoster
+ *    Changed "permission" to "action" throughout.
+ *    Removed DEFAULT_USER_AGENT - it must now be specified manually.
+ *    Moved vanilla wafer check into chat(), since we must now
+ *    decide whether or not to add it based on the URL.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:56  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -54,11 +60,7 @@
 extern "C" {
 #endif
 
-#define freez(X)  if(X) free(X); X = NULL
-
-
 /* Global variables */
-
 
 #ifdef STATISTICS
 extern int urls_read;
