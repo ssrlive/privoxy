@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.4 2001/07/24 12:47:06 oes Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.5 2001/07/29 18:47:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.4 2001/07/24 12:47:06 oes Exp $";
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.5  2001/07/29 18:47:57  jongfoster
+ *    Adding missing #include project.h
+ *
  *    Revision 1.4  2001/07/24 12:47:06  oes
  *    Applied BeOS support update by Eugenia
  *
@@ -62,6 +65,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.4 2001/07/24 12:47:06 oes Exp $";
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <netinet/in.h>
 #include <errno.h>
 
 #ifdef _WIN32
