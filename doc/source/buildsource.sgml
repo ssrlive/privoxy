@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.1 2002/04/04 06:48:37 hal9 Exp $
+ $Id: buildsource.sgml,v 1.2 2002/04/06 05:07:28 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,13 +28,14 @@
 -->
 
 <para>
- There are several ways to install <application>Privoxy</application>.
+ To build <application>Privoxy</application> from source, 
+ autoheader, autoconf,GNU make (gmake), and, of course, a C 
+ compiler are required.
 </para>
 
 <para>
- To build <application>Privoxy</application> from source, 
- autoconf and GNU make (gmake) are required. Source is available as gzipped
- tar archives. For this, first unpack the source: 
+ When building from a source tarball (either release version or
+ nightly CVS tarball), first unpack the source: 
 </para>
 
 <para>
@@ -44,11 +45,10 @@
  </screen>
 </para>
 
-
 <para>
- For retrieving the current CVS sources, you'll need the CVS 
- package installed first. Note CVS source is development quality, 
- and may not be stable, or well tested. To download CVS source:
+ For retrieving the current CVS sources, you'll need CVS installed.
+ Note that sources from CVS are development quality, and may not be
+ stable, or well tested. To download CVS source:
 </para>
 
 <para>
@@ -72,12 +72,27 @@
  <screen>
  autoheader
  autoconf
- ./configure      (--help to see options)
- make             (the make from gnu, gmake for *BSD) 
+ ./configure      # (--help to see options)
+ make             # (the make from gnu, gmake for *BSD) 
  su 
- make -n install  (to see where all the files will go)
- make install     (to really install)
+ make -n install  # (to see where all the files will go)
+ make install     # (to really install)
  </screen>
+</para>
+
+<para>
+  If you have gnu make, you can have the first four steps 
+  automatically done for you by just typing
+</para>
+
+<para>
+ <screen>
+  make
+ </screen>
+</para>
+
+<para>
+  in the freshly downloaded or unpacked source directory.
 </para>
 
 <para>
