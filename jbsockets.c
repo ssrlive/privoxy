@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.31 2002/03/29 03:33:13 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.32 2002/03/31 17:18:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.31 2002/03/29 03:33:13 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.32  2002/03/31 17:18:59  jongfoster
+ *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
+ *
  *    Revision 1.31  2002/03/29 03:33:13  david__schmidt
  *    Fix Mac OSX compiler warnings
  *
@@ -632,7 +635,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    /* Wierdness - fix a warning. */
    int c_length, s_length;
 #else
-   size_t c_length, s_length;
+   socklen_t c_length, s_length;
 #endif
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
