@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 1.4 2002/04/15 23:39:04 oes Exp $
+ $Id: newfeatures.sgml,v 1.5 2002/04/18 01:05:12 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -30,9 +30,10 @@
 
  <listitem>
   <para>
-   Integrated browser based configuration and control utility (<ulink
-   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
-   and filter effects. Remote toggling.
+   Integrated browser based configuration and control utility at <ulink
+   url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+   (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>). Browser-based
+   tracing of rule and filter effects. Remote toggling.
   </para>
  </listitem> 
 <!--
