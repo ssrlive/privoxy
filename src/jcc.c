@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 2.5 2003/01/26 20:24:26 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 2.4 2002/12/28 03:58:19 david__schmidt Exp 
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 2.5  2003/01/26 20:24:26  david__schmidt
+ *    Updated activity console instrumentation locations
+ *
  *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
  *    Initial drop of dashboard instrumentation - enabled with
  *    --enable-activity-console
@@ -2171,11 +2174,13 @@ static jb_err process_client_headers( struct client_state *csp, struct http_requ
       /* If this request contains the FORCE_PREFIX,
        * better get rid of it now and set the force flag --oes
        * Changed to use the http structure rather than the req field --jaa
+       * FIXME: This isn't enough -- there is the path and referrer etc! *
        */
 
       if (strstr(http->url, FORCE_PREFIX))
       {
          strclean(http->url, FORCE_PREFIX);
+         strclean(http->path, FORCE_PREFIX);
          log_error(LOG_LEVEL_FORCE, "Enforcing request \"%s\".\n", http->url);
          csp->flags |= CSP_FLAG_FORCED;
       }
