@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.18 2002/04/08 17:03:29 oes Exp $
+  $Id: index.php,v 1.19 2002/04/09 13:06:29 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.19  2002/04/09 13:06:29  oes
+  Resize and jump to the right on load
+
   Revision 1.18  2002/04/08 17:03:29  oes
    - Fixed problem with spaces in URLs
    - Adapt to unified stylesheet
@@ -100,19 +103,6 @@
   <link rel="stylesheet" type="text/css" href="../privoxy.css">
   <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
-  <script language="javascript" type="text/javascript">
-  <!--
-   //
-   // Try to expand to the whole screen height
-   //
-   function maximizeVertically()
-   {
-      window.moveTo(screen.width - 600, 0);
-      window.resizeTo(600, Math.floor(screen.height * 0.9));  
-   }
-  //-->
-  </script>
-
 <?php
 
 /*
@@ -144,7 +134,7 @@ function error_abort($title, $message)
 
    echo ("  <title>Privoxy: $title</title>
            </head>
-           <body onload=\"maximizeVertically();\">
+           <body>
             <div class=\"title\">
              <h1>
               <a href=\"http://www.privoxy.org/\">Privoxy</a>: $title
@@ -177,9 +167,6 @@ if (!isset($url))
 {
    $url = "http://www.example.com/";
 }
-/*
- * Kludge: We should properly escape query strings
- */
 else
 {
    $url = strtr($url, " ", "+");
@@ -212,7 +199,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   <title>Privoxy Action List Feedback - Step 1 of 2</title>
  </head>
 
- <body onload="maximizeVertically();">
+ <body>
   <div class="title">
     <h1>
       <a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 1 of 2
