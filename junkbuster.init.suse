@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init.suse,v $
+#     Revision 1.3  2002/03/05 05:28:05  oes
+#     Added pidfile creation
+#
 #     Revision 1.2  2001/09/10 16:25:46  swa
 #     jb did not start. none of the arguments worked. fixed.
 #
@@ -44,39 +47,56 @@
 # ********************************************************************/
 ### BEGIN INIT INFO
 # Provides:       junkbuster ijb
-# Required-Start: $network syslog
+# Required-Start: $network $syslog $remote_fs
 # Required-Stop:
 # Default-Start:  3 5
-# Default-Stop:
+# Default-Stop:   0 1 2 6
 # Description:    Starts the Internet Junkbuster
 ### END INIT INFO
+
 . /etc/rc.config
-base=\${0##*/}
-link=\${base#*[SK][0-9][0-9]}
-#test \$link = \$base && START_IJB=yes
-#test "\$START_IJB" = "yes" || exit 0
-return=$rc_done
+rc_reset  
+
 case "$1" in
     start)
         echo -n "Starting The Internet Junkbuster"
-        su - nobody -c 'nohup /usr/sbin/junkbuster --pidfile /var/run/junkbuster.pid /etc/junkbuster/config < /dev/null > /dev/null &'
-        sleep 1
-        echo -e "$return"
+        if [ ! -f /var/run/junkbuster.pid ] || ! kill -0 `cat /var/run/junkbuster.pid` 2> /dev/null; then
+           /usr/sbin/junkbuster --user nobody --pidfile /var/run/junkbuster.pid /etc/junkbuster/config 2> /dev/null
+
+# SuSE: Ist der else-Teil nötig?
+
+        else     
+           false 
+        fi
+	rc_status -v
         ;;
     stop)
         echo -n "Shutting down The Internet Junkbuster"
-        killproc -TERM /usr/sbin/junkbuster || return=$rc_failed
-        echo -e "$return"
+        killproc -TERM /usr/sbin/junkbuster && rm -f /var/run/junkbuster.pid
+	rc_status -v
         ;;
-    restart|reload)
-        $0 stop && $0 start || return=$rc_failed
+    reload)
+        echo -n "Reloading The Internet Junkbuster"
+        kill -HUP `cat /var/run/junkbuster.pid`
+        rc_status -v
+        ;;
+    restart)
+        $0 stop && $0 start
+	rc_status
         ;;
     status)
-        checkproc /usr/sbin/junkbuster && echo OK || echo No process
+	echo -n "Checking for The Internet Junkbuster"
+        checkproc /usr/sbin/junkbuster
+	rc_status -v
         ;;
     *)
-        echo "Usage: $0 {start|restart|status|stop}"
+        echo "Usage: $0 {start|restart|reload|status|stop}"
         exit 1
 esac
-test "$return" = "$rc_done" || exit 1
-exit 0
+
+# SuSE: Kann das so ersetzt werden?
+
+#test "$return" = "$rc_done" || exit 1
+#exit 0
+
+rc_exit 
