@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.2 2002/09/04 01:55:44 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -48,7 +48,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.2 2002/09/04 01:55:44 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $</pubdate>
 
 <!--
 
@@ -93,8 +93,9 @@ Hal.
 <!-- end boilerplate -->
 
 <para>
+ <![%p-stable;[
  Please note that this document is constantly evolving. This copy represents
- the state at the release of version &p-version;.
+ the state at the release of version &p-version;. ]]>
  You can find the latest version of the this manual at <ulink
  url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
  Please see <link linkend="contact">the Contact section</link> 
@@ -1843,7 +1844,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.2 2002/09/04 01:55:44 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1903,7 +1904,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.2 2002/09/04 01:55:44 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2997,6 +2998,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.3  2002/09/05 02:27:59  hal9
+  Mention tested stable branch fixes in main trunk, as alternate to posting
+  patches.
+
   Revision 2.2  2002/09/04 01:55:44  hal9
   Migrating developer manual, and related sgml files from 3.0. Add additional
   commentary on cvs, versioning, stable branches, and how to handle stable
