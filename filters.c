@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.23 2001/07/23 13:40:12 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.24 2001/07/25 17:22:51 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.23 2001/07/23 13:40:12 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.24  2001/07/25 17:22:51  oes
+ *    Added workaround for Netscape bug that prevents display of page when loading a component fails.
+ *
  *    Revision 1.23  2001/07/23 13:40:12  oes
  *    Fixed bug that caused document body to be dropped when pcrs joblist was empty.
  *
@@ -515,7 +518,10 @@ struct http_response *block_url(struct client_state *csp)
        * JavaScript or style sheet fails. So make it appear
        * as if it succeeded.
        */
-      if (csp->http->user_agent && !strncmpic(csp->http->user_agent, "mozilla", 7))
+      if (csp->http->user_agent
+          && !strncmpic(csp->http->user_agent, "mozilla", 7)
+          && !strstr(csp->http->user_agent, "compatible")
+          && !strstr(csp->http->user_agent, "Opera"))
       {
          rsp->status = strdup("200 Request for blocked URL"); 
       }
