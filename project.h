@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.40 2001/10/26 17:40:47 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.41 2001/10/28 19:12:06 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.41  2001/10/28 19:12:06  jongfoster
+ *    Adding ijb_toupper()
+ *
  *    Revision 1.40  2001/10/26 17:40:47  oes
  *    Moved ijb_isspace and ijb_tolower to project.h
  *    Removed http->user_agent, csp->referrer and csp->accept_types
@@ -355,6 +358,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifdef _DEBUG
+extern int ldebug;
+#define DBG(a,b)        { if ( ldebug >= a ) { printf b ; }}
+#else
+#define DBG(a,b)
+#endif /* _DEBUG */
+
 
 
 /*
