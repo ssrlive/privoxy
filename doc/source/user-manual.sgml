@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.80 2002/04/18 10:45:19 oes Exp $
+ $Id: user-manual.sgml,v 1.81 2002/04/18 11:50:24 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.80 2002/04/18 10:45:19 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.81 2002/04/18 11:50:24 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -145,12 +145,14 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="installation"><title>Installation</title>
+
 <para>
  <application>Privoxy</application> is available both in convenient pre-compiled
  packages for a wide range of operating systems, and as raw source code.
  For most users, we recommend using the packages, which can be downloaded from our
  <ulink url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink>.
 </para>
+
 <para>
  If you like to live on the bleeding edge and are not afraid of using
  possibly unstable development versions, you can check out the up-to-the-minute
@@ -166,13 +168,22 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-packages"><title>Binary Packages</title>
+
 <para>
- Binary packages can be downloaded from our <ulink
- url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink>.
+ Note: If you have a previous <application>Junkbuster</application> or
+ <application>Privoxy</application> installation on your system, you
+ will either need to remove it, or that might be done by the setup 
+ procedure. (See below for your platform).
 </para>
 
 <para>
- How to install them depends on your operating system:
+ In any case <emphasis>be sure to backup your old configuration
+ if it is valuable to you.</emphasis> In that case, also see the
+ <link linkend="upgradersnote">note to upgraders</link>.
+</para>
+
+<para>
+ How to install the binary packages depends on your operating system:
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -222,9 +233,7 @@
  First, make sure that no previous installations of
  <application>Junkbuster</application> and / or 
  <application>Privoxy</application> are left on your
- system. Be sure to backup your configuration if it
- is valuable to you. (In that case, also see the
- <link linkend="upgradersnote">note to upgraders</link>.)
+ system.
 </para>
 
 <para>
@@ -4416,6 +4425,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.81  2002/04/18 11:50:24  oes
+ Extended Install section - needs fixing by packagers
+
  Revision 1.80  2002/04/18 10:45:19  oes
  Moved text to buildsource.sgml, renamed some filters, details
 
