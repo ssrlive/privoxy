@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $
+$Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy.
@@ -108,7 +108,7 @@ Table of Contents
             through. How?
         1.5.3. One of my favorite sites does not work with Privoxy. What can I
             do?
-        1.5.4. Where and how do I submit bug reports? Feature Requests? Etc?
+        1.5.4. Where can I get help? Report bugs? Feature Requests? Etc?
         1.5.5. What time is it?
        
 2. Copyright and History
@@ -188,6 +188,8 @@ where most of the per site configuration is now.
   * User-customizable HTML templates (e.g. 404 error page).
    
   * Improved cookie management features (e.g. session based cookies).
+   
+  * Improved signal handling, and a true daemon mode (Unix).
    
   * Builds from source on most UNIX-like systems. Packages available for: Linux
     (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11
@@ -643,8 +645,8 @@ consider upgrading to 2.9.x).
 1.4.4. Do you still maintain the blocklists?
 
 No. The format of the blocklists has changed significantly in the versions
-2.9.x. Once we have released the new version, there will again be blocklists
-that you can update automatically.
+2.9.x. Once we have released the new stable version, v3.0, there will again be
+blocklists that you can update automatically.
 
 -------------------------------------------------------------------------------
 
@@ -835,7 +837,8 @@ show-url-info and see if any actions match your new rule.
 
 First verify that it is indeed a Privoxy problem, by disabling Privoxy
 filtering and blocking. Go to http://p.p/ and click on "Toggle Privoxy On or
-Off", then disable it. Now try that page again.
+Off", then disable it. Now try that page again. It's probably a good idea to
+flush the browser cache as well.
 
 If still a problem, go to "Show which actions apply to a URL and why" from 
 http://p.p/ and paste the full URL of the page in question into the prompt. See
@@ -852,7 +855,7 @@ same thing by editing the appropriate "actions" file.
 
 -------------------------------------------------------------------------------
 
-1.5.4. Where and how do I submit bug reports? Feature Requests? Etc?
+1.5.4. Where can I get help? Report bugs? Feature Requests? Etc?
 
 Feedback is encouraged, whether good, bad or ugly. Please see the contact page
 in the user-manual for details. 
