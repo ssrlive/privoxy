@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $
+ $Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -232,6 +232,12 @@ from the old <application>Junkbuster?</application></title>
  <listitem>
   <para>
    Improved cookie management features (e.g. session based cookies).
+  </para>
+</listitem> 
+
+ <listitem>
+  <para>
+   Improved signal handling, and a true daemon mode (Unix).
   </para>
 </listitem> 
 
@@ -1035,8 +1041,8 @@ FIXME: commented out until we have data. HB 03/18/02.
 <sect3 id="blocklist"><title>Do you still maintain the blocklists?</title>
 <para>
     No. The format of the blocklists has changed significantly in the versions
-    2.9.x. Once we have released the new version, there will again be
-    blocklists that you can update automatically.
+    2.9.x. Once we have released the new stable version, v3.0, there will
+    again be blocklists that you can update automatically.
 </para>
 </sect3>
 
@@ -1313,7 +1319,7 @@ What can I do?</title>
  by disabling <application>Privoxy</application> filtering and blocking. 
  Go to <ulink url="http://p.p/">http://p.p/</ulink> and click on 
  <quote>Toggle Privoxy On or Off</quote>, then disable it. Now try that 
- page again.
+ page again. It's probably a good idea to flush the browser cache as well.
 </para>
 
 <para>
@@ -1341,7 +1347,7 @@ What can I do?</title>
 </sect3>
 
 <sect3 id="bugs">
-<title>Where and how do I submit bug reports? Feature Requests? Etc?</title>
+<title>Where can I get help? Report bugs? Feature Requests? Etc?</title>
 <para>
  Feedback is encouraged, whether good, bad or ugly. Please see the contact
  page in the <ulink url="../user-manual/contact.html">user-manual</ulink> for
@@ -1426,6 +1432,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.33  2002/03/29 01:31:48  hal9
+Several new Q/A's and other touch ups.
+
 Revision 1.32  2002/03/27 00:57:03  hal9
 Touch ups for name change.
 
