@@ -1,7 +1,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: $
+ * $Id: cgi-style.css,v 1.4 2002/04/09 11:55:20 oes Exp $
  */
 
 /*
@@ -49,10 +49,11 @@ div.wrapbox  { border: solid black 1px;                            margin: 20px;
 
 
 /*
- * Bold definitions in <dl>s, Grey BG for Table headings
+ * Bold definitions in <dl>s, grey BG for table headings, transparent (no-bordered) table
  */
 dt { font-weight: bold; }
 th { background-color: #dddddd; }
+table.transparent { border-style: none}
 
 /*
  * Special purpose paragraphs: Small for page footers,
