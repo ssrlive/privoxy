@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.9 2001/05/26 17:12:07 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.10 2001/05/29 09:50:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,29 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.9 2001/05/26 17:12:07 jongfoster 
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.10  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.9  2001/05/26 17:12:07  jongfoster
  *    Fatal errors loading configuration files now give better error messages.
  *
@@ -737,61 +760,26 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
          }
       }
       
-      /* Trim leading whitespace */
-      p = linebuf;
-      while (*p && ijb_isspace(*p))
+      /* Remove leading and trailing whitespace */
+      chomp(linebuf);
+
+      if (*linebuf)
       {
-         p++;
-      }
-
-      if (*p)
-      {
-         /* There is something other than whitespace on the line. */
-
-         /* Move the data to the start of buf */
-         if (p != linebuf)
+         strncat(buf, linebuf, buflen - strlen(buf));
+         if (contflag)
          {
-            /* strcpy that can cope with overlap. */
-            q = linebuf;
-            while ((*q++ = *p++) != '\0')
-            {
-               /* Do nothing */
-            }
+            contflag = 0;
+            continue;
          }
-
-         /* Trim trailing whitespace */
-         p = linebuf + strlen(linebuf) - 1;
-
-         /*
-          * Note: the (p >= linebuf) below is paranoia, it's not really needed.
-          * When p == linebuf then ijb_isspace(*p) will be false and we'll drop
-          * out of the loop.
-          */
-         while ((p >= linebuf) && ijb_isspace(*p))
+         else
          {
-            p--;
-         }
-         p[1] = '\0';
-
-         /* More paranoia.  This if statement is always true. */
-         if (*linebuf)
-         {
-            strncat(buf, linebuf, buflen - strlen(buf));
-            if (contflag)
-            {
-               contflag = 0;
-               continue;
-            }
-            else
-            {
-               return buf;
-            }
+            return buf;
          }
       }
    }
-
    /* EOF */
    return NULL;
+
 }
 
 
@@ -1056,19 +1044,8 @@ int load_permissions_file(struct client_state *csp)
             }
 
             /* Trim leading and trailing whitespace. */
-            while ((*end == ' ') || (*end == '\t'))
-            {
-               /*
-                * don't need to worry about going off front of string
-                * because we know there's a '{' there.
-                */
-               end--;
-            }
             end[1] = '\0';
-            while ((*start == ' ') || (*start == '\t'))
-            {
-               start++;
-            }
+            chomp(start);
 
             if (*start == '\0')
             {
@@ -1116,20 +1093,8 @@ int load_permissions_file(struct client_state *csp)
                return 1; /* never get here */
             }
 
-            /* Trim leading and trailing whitespace. */
-            while ((*end == ' ') || (*end == '\t'))
-            {
-               /*
-                * don't need to worry about going off front of string
-                * because we know there's a '{' there.
-                */
-               end--;
-            }
             end[1] = '\0';
-            while ((*start == ' ') || (*start == '\t'))
-            {
-               start++;
-            }
+            chomp(start);
 
             if (*start == '\0')
             {
