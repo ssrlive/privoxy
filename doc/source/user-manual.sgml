@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.112 2002/05/15 03:57:14 hal9 Exp $
+ $Id: user-manual.sgml,v 1.113 2002/05/15 21:07:25 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.112 2002/05/15 03:57:14 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.113 2002/05/15 21:07:25 oes Exp $</pubdate>
 
 <!--
 
@@ -341,13 +341,13 @@ automatically start Privoxy in the boot process.
  and <application>Privoxy</application> configurations will need to be
  ported. The functionalities of the old <filename>blockfile</filename>,
  <filename>cookiefile</filename> and <filename>imagelist</filename> 
- are now combined into the <ulink url="actions-file.html"><quote>actions
- files</quote></ulink>.  
+ are now combined into the <link linkend="actions-file"><quote>actions
+ files</quote></link>.  
  <filename>default.action</filename>, is the main actions file. Local
  exceptions should best be put into <filename>user.action</filename>.
 </para>
 <para>
- A <ulink url="filter-file.html"><quote>filter file</quote></ulink> (typically
+ A <link linkend="filter-file"><quote>filter file</quote></link> (typically
  <filename>default.filter</filename>) is new as of <application>Privoxy
  2.9.x</application>, and provides some of the new sophistication (explained
  below). <filename>config</filename> is much the same as before.
@@ -391,10 +391,10 @@ automatically start Privoxy in the boot process.
  </listitem> 
  <listitem>
   <para>
-   The primary configuration file for cookie management, ad and banner 
+   The primary configuration files for cookie management, ad and banner 
    blocking, and many other aspects of <application>Privoxy</application>
-   configuration is in the <ulink url="actions-file.html">actions
-   files</ulink>. It is strongly recommended to become familiar with the new
+   configuration are the <link linkend="actions-file">actions
+   files</link>. It is strongly recommended to become familiar with the new
    actions concept below, before modifying these files. Locally defined rules 
    should go into <filename>user.action</filename>.
   </para>
@@ -419,34 +419,44 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-   If upgrading, please back up any configuration files. See 
-   the <link linkend="upgradersnote">Note to Upgraders</link> Section.
-  </para>
+   If upgrading, from versions before 2.9.16, please back up any configuration
+   files. See the <link linkend="upgradersnote">Note to Upgraders</link> Section.
+ </para>
 </listitem> 
+
  <listitem>
   <para>
-  Install <application>Privoxy</application>. See the <link
-  linkend="installation">Installation Section</link> for platform specific
-  information. 
+   Install <application>Privoxy</application>. See the <link
+   linkend="installation">Installation Section</link> for platform specific
+   information. 
  </para>
  </listitem>  
 
  <listitem>
   <para>
-  Start <application>Privoxy</application>, if the installation program has
-  not done this already. See the section <link linkend="startup">Starting
-  <application>Privoxy</application></link>.
+   Advanced users and those who want to offer <application>Privoxy</application>
+   service to more than just their local machine should check the <link
+   linkend="config">main config file</link>, especially the <link
+   linkend="access-control">security-relevant</link> options.
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>
+   Start <application>Privoxy</application>, if the installation program has
+   not done this already. See the section <link linkend="startup">Starting
+   <application>Privoxy</application></link>.
   </para>
  </listitem>  
 
  <listitem>
   <para>
-  Set your browser to use <application>Privoxy</application> as HTTP and HTTPS
-  proxy by setting the proxy configuration for address of
-  <literal>127.0.0.1</literal> and port <literal>8118</literal>.
-  (<application>Junkbuster</application> and earlier versions of
-  <application>Privoxy</application> used port 8000.) See the section <link
-  linkend="startup">Starting <application>Privoxy</application></link>.
+   Set your browser to use <application>Privoxy</application> as HTTP and HTTPS
+   proxy by setting the proxy configuration for address of
+   <literal>127.0.0.1</literal> and port <literal>8118</literal>.
+   (<application>Junkbuster</application> and earlier versions of
+   <application>Privoxy</application> used port 8000.) See the section <link
+   linkend="startup">Starting <application>Privoxy</application></link>.
   </para>
  </listitem>  
 
@@ -458,19 +468,20 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-  Enjoy surfing with enhanced comfort and privacy.  You may want to customize the
-  <link linkend="actions-file"><filename>user.action</filename></link> file to
-  personalize your new browsing experience. See the <link
-  linkend="configuration">Configuration section</link> for more configuration
-  options, and how to further customize your installation.
+   Enjoy surfing with enhanced comfort and privacy.
   </para>
  </listitem> 
  
  <listitem>
   <para>
-   If you experience problems with sites that <quote>misbehave</quote>, see
-   the <link linkend="actionsanat">Anatomy of an Action</link> section in the
-   Appendix.
+    If you experience ads that slipped through, innocent images that are
+    blocked, or otherwise feel the need to fine-tune <application>Privoxy's</application>
+    behaviour, take a look at the <link linkend="actions-file">actions files</link>.
+    As a quick start, you might find the <link linkend="act-examples">richly
+    commented examples</link> helpful. You can also view and edit the actions
+    files through the <ulink url="http://config.privoxy.org">web-based
+    user interface</ulink>. The Appendix <quote><link linkend="actionsanat">Anatomy of
+    an Action</link></quote> has hints how to debug actions that <quote>misbehave</quote>.
   </para>
  </listitem> 
  
@@ -481,7 +492,6 @@ automatically start Privoxy in the boot process.
    help. 
   </para>
  </listitem> 
-
  </itemizedlist>
 </para>
 
@@ -6511,6 +6521,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.113  2002/05/15 21:07:25  oes
+ Extended and further commented the example actions files
+
  Revision 1.112  2002/05/15 03:57:14  hal9
  Spell check. A few minor edits here and there for better syntax and
  clarification.
