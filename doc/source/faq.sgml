@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.34 2002/03/29 04:35:56 hal9 Exp $
+ $Id: faq.sgml,v 1.35 2002/03/30 04:14:19 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.34 2002/03/29 04:35:56 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.35 2002/03/30 04:14:19 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -33,7 +33,7 @@
 <abstract>
  <para>
  This FAQ gives users and developers alike answers to frequently asked
- questions about <application>Privoxy</application>. 
+ questions about <ulink url="http://www.privoxy.org">Privoxy</ulink>. 
  </para>
  <para>
  <application>Privoxy</application> is a web proxy with advanced filtering
@@ -531,12 +531,13 @@ All the ads are there. What's wrong?</title>
 
 <sect3 id="newconfig"><title>Can I use my old config files?</title>
  <para>
-   There are major changes to <application>Junkbuster</application> 
-   configuration from version 2.0.x to 2.9.x and later. The older files will
-   not work at all. If this is the case, you will need to re-enter your old
-   data into the new configuration structure. This is probably also a good 
-   recommendation even if upgrading from 2.9.x to 3.x since there were 
-   many minor changes along the way.
+   There are major changes to <application>Junkbuster</application>, 
+   <application>Privoxy</application>, configuration from version 2.0.x to
+   2.9.x and later. Most of the older files will not work at all. This is 
+   especially true of <filename>blocklist</filename>. If this is the case, you
+   will need to re-enter your old data into the new configuration structure.
+   This is probably also a good recommendation even if upgrading from 2.9.x to
+   3.x since there were many minor changes along the way.
  </para>
 </sect3>
 
@@ -898,20 +899,45 @@ Note that normally only local users can connect to <application>Privoxy</applica
  for you to see why. These are handled differently than what has been defined
  explicitly as <quote>images</quote> (e.g. ad banners). Depending on the 
  URL itself, it is sometimes hard for <application>Privoxy</application> to 
- really know whether it is indeed an ad image or not.
+ really know whether it is indeed an ad image or not. And there are
+ limitations as to what <application>Privoxy</application> can do to 
+ <quote>fool</quote> the browser.
 </para>
 
 <para>
- If you want them to be treated as if they were images, so that they can be
- made invisible, then move the offending URL from the <quote>+block</quote>
- section to the <quote>+imageblock</quote> section of your actions file. Just
- be forewarned, if make any URL is made <quote>invisible</quote>, you may not
- have any inkling that something has been removed from that page.
+ For instance, if the ad is in a frame, then it is embedded in the separate
+ HTML page used for the frame. In this case, you cannot just substitute an
+ aribitray image (like we would for a <quote>blank</quote> image), for an HTML
+ page. The browser is expecting an HTML page, and that is what it must have
+ for frames. So this situation can be a little trickier to deal with, and 
+ <application>Privoxy</application> will use the <quote>Blocked</quote> page.
+</para>
+
+<para>
+ If you want these to be treated as if they were images, so that they can be
+ made invisible, you can try moving the offending URL from the
+ <quote>+block</quote> section to the <quote>+imageblock</quote> section of
+ your actions file. Just be forewarned, if any URL is made
+ <quote>invisible</quote>, you may not have any inkling that something has
+ been removed from that page. If this approach does not work, then you are
+ probably dealing with a frame (or <quote>ilayer</quote>), and the only thing
+ that can go there is an HTML page of some sort.
 </para>
 <para>
- Alternately, you could modify the <quote><filename>block</filename></quote>
- HTML template that is used by <application>Privoxy</application> to display
- this, and make it something more to your liking.
+ To deal with this situation, you could modify the
+ <quote><filename>block</filename></quote> HTML template that is used by
+ <application>Privoxy</application> to display this, and make it something
+ more to your liking. Currently, there is no configuration option for this.
+ You will have to modify, or create your own page, and use this to replace
+ <filename>templates/blocked</filename>, which is what
+ <application>Privoxy</application> uses to display the <quote>Blocked</quote>
+ page.
+</para>
+<para>
+ Another way to deal with this is find why and where
+ <application>Privoxy</application> is blocking the frame, and 
+ diable this. Then let the <quote>+image-blocker</quote> action 
+ handle the ad that is embedded in the frame's HTML page. 
 </para>
 
 </sect3>
@@ -1436,6 +1462,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.35  2002/03/30 04:14:19  hal9
+Fix privoxy.org/config links.
+
 Revision 1.34  2002/03/29 04:35:56  hal9
 Touch ups.
 
