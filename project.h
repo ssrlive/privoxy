@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.9 2001/05/31 17:32:31 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.10 2001/05/31 21:33:53 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.10  2001/05/31 21:33:53  jongfoster
+ *    Changes for new actions file, replacing permissionsfile
+ *    and parts of the config file.  Also added support for
+ *    list_shared.
+ *
  *    Revision 1.9  2001/05/31 17:32:31  oes
  *
  *     - Enhanced domain part globbing with infix and prefix asterisk
@@ -267,11 +272,11 @@ struct list_share /* FIXME: Why not separate entries and header? */
 struct url_spec
 {
    char  *spec;
-   char  *domain;
+   char  *domain;        /* fqdn */
    char  *dbuf;
-   char **dvec;
-   int    dcnt;
-   int    unanchored;
+   char **dvec;          /* Domain ptr vector */
+   int    dcnt;          /* How many domains in fqdn? */
+   int    unanchored;    /* bitmap 0: left, 1: right */
 
    char *path;
    int   pathlen;
@@ -280,6 +285,9 @@ struct url_spec
    regex_t *preg;
 #endif
 };
+
+#define ANCHOR_LEFT  1
+#define ANCHOR_RIGHT 2
 
 
 /* An I/O buffer */
