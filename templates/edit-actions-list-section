@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-list-section,v $
+# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-list-section,v $
 #
 # Purpose     :  Template which forms part of edit-actions-list
 # 
@@ -31,6 +31,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-section,v $
+#    Revision 1.13  2002/05/12 15:45:33  jongfoster
+#    Applying [Patch 552094] New templates for edit-actions-list
+#    This cleans up the templates by:
+#    - Removing the (confusing) alternating color scheme.
+#    - Making everything left-justified.
+#
 #    Revision 1.12  2002/04/26 12:58:11  oes
 #    Central "button" link style in cgi-style.css
 #
@@ -84,13 +90,14 @@
 # edit-actions page is ~300k.  Before it was optimized, it was ~550k.
 #
 #############################################################################
-<tr><td class="container">
+
+<tr><td class="container"><a name="l@s@"></a>
 <table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
 <tr class="actions"><td class="header">Actions</td></tr>
-<tr class="actions"><td class="indentbuttons"><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td></tr>
+<tr class="actions"><td class="indentbuttons"><a href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td></tr>
 <tr class="actions"><td class="action">@actions@</td></tr>
 <tr class="url"><td class="header">URL patterns</td></tr>
-<tr class="url"><td class="indentbuttons"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@">Add</a></td></tr>
+<tr class="url"><td class="indentbuttons"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@" onclick="return a_p(@s@);">Add</a></td></tr>
 @urls@
 <tr class="adv"><td class="header">Advanced</td></tr>
 <tr class="adv"><td class="indentbuttons">
