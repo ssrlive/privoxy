@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.2 2001/07/13 13:46:20 oes Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.3 2001/07/15 13:57:50 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -9,8 +9,8 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.2 2001/07/13 13:46:20 oes Exp
  *                buf_copy,  buf_getbyte, gif_skip_data_block, and
  *                gif_extract_image
  *
- * Copyright   :  Written by and Copyright (C) 2001 Andreas S. Oesterhelt
- *                for the SourceForge IJBSWA team. http://ijbswa.sourceforge.net
+ * Copyright   :  Written by and Copyright (C) 2001 by the the SourceForge
+ *                IJBSWA team.  http://ijbswa.sourceforge.net
  *
  *                Based on the GIF file format specification (see
  *                http://tronche.com/computer-graphics/gif/gif89a.html)
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.2 2001/07/13 13:46:20 oes Exp
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.3  2001/07/15 13:57:50  jongfoster
+ *    Adding #includes string.h and miscutil.h
+ *
  *    Revision 1.2  2001/07/13 13:46:20  oes
  *    Introduced GIF deanimation feature
  *
@@ -83,6 +86,48 @@ void buf_free(struct binbuffer *buf)
 
 /*********************************************************************
  * 
+ * Function    :  buf_extend
+ *
+ * Description :  Ensure that a given binbuffer can hold a given amount
+ *                of bytes, by reallocating its buffer if necessary.
+ *                Allocate new mem in chunks of 1000 bytes, so we don't
+ *                have to realloc() too often.
+ *
+ * Parameters  :
+ *          1  :  buf = Pointer to the binbuffer
+ *          2  :  length = Desired minimum size
+ *                
+ *
+ * Returns     :  0 on success, 1 on failiure.
+ *
+ *********************************************************************/
+int buf_extend(struct binbuffer *buf, int length)
+{
+   char *newbuf;
+
+   if (buf->offset + length > buf->size)
+   {
+      buf->size = buf->size + length + 1000 - (buf->size + length) % 1000;
+      newbuf = (char *)realloc(buf->buffer, buf->size);
+
+      if (newbuf == NULL)
+      {
+         freez(buf->buffer);
+         return 1;
+      }
+      else
+      {
+         buf->buffer = newbuf;
+         return 0;
+      }
+   }
+   return 0;
+
+}
+
+
+/*********************************************************************
+ * 
  * Function    :  buf_copy
  *
  * Description :  Safely copies a given amount of bytes from one
@@ -99,7 +144,6 @@ void buf_free(struct binbuffer *buf)
  *********************************************************************/
 int buf_copy(struct binbuffer *src, struct binbuffer *dst, int length)
 {
-   char *p;
 
    /*
     * Sanity check: Can't copy more data than we have
@@ -110,20 +154,11 @@ int buf_copy(struct binbuffer *src, struct binbuffer *dst, int length)
    }
 
    /*
-    * If dst can't hold the new data, get mem first. (In chunks
-    * of 1000 bytes, so we don't have to realloc() too often)
+    * Ensure that dst can hold the new data
     */
-   if (dst->offset + length > dst->size)
+   if (buf_extend(dst, length)) 
    {
-      dst->size = dst->size + length + 1000 - (dst->size + length) % 1000;
-      p = dst->buffer;
-      dst->buffer = (char *)realloc(dst->buffer, dst->size);
-
-      if (dst->buffer == NULL)
-      {
-         free(p);
-         return 1;
-      }
+      return 1;
    }
 
    /*
@@ -173,7 +208,7 @@ unsigned char buf_getbyte(struct binbuffer *src, int offset)
  *
  * Description :  Safely advances the offset of a given struct binbuffer
  *                that contains a GIF image and whose offset is
- *                positioned at the start of a data block behind
+ *                positioned at the start of a data block, behind
  *                that block.
  *
  * Parameters  :
@@ -258,7 +293,7 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
    /*
     * Trim and rewind the dst buffer
     */
-   dst->buffer = (char *)realloc(dst->buffer, dst->offset);
+   if (NULL == (dst->buffer = (char *)realloc(dst->buffer, dst->offset))) return 1;
    dst->size = dst->offset;
    dst->offset = 0;
 
@@ -280,11 +315,13 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
  * Parameters  :
  *          1  :  src = Pointer to the source binbuffer
  *          2  :  dst = Pointer to the destination binbuffer
+ *          3  :  get_first_image = Flag: If set, get the first image
+ *                                        If unset (default), get the last
  *
  * Returns     :  0 on success, or 1 on failiure
  *
  *********************************************************************/
-int gif_deanimate(struct binbuffer *src, struct binbuffer *dst)
+int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_image)
 {
    unsigned char c;
    struct binbuffer *image;
@@ -299,9 +336,8 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst)
    /*
     * Check & copy GIF header 
     */
-   if (strncmp(src->buffer, "GIF89a", 6)) 
+   if (strncmp(src->buffer, "GIF89a", 6) && strncmp(src->buffer, "GIF87a", 6)) 
    {
-      fprintf(stderr, "This is not a GIF98a!\n");
       return 1;
    }
    else
@@ -343,22 +379,15 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst)
           *  End-of-GIF Marker: Append current image and return
           */
       case 0x3b:
-         if (buf_copy(image, dst, image->size) || buf_copy(src, dst, 1))
-         {
-            goto failed;
-         }
-         buf_free(image);
-         return(0);
+         goto write;
 
          /* 
-          * Image block: Extract to current image buffer
+          * Image block: Extract to current image buffer.
           */
       case 0x2c:
          image->offset = 0;
-         if (gif_extract_image(src, image))
-         {
-            goto failed;
-         }
+         if (gif_extract_image(src, image)) goto failed;
+         if (get_first_image) goto write;
          continue;
 
          /*
@@ -375,6 +404,7 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst)
             image->offset = 0;
             if (buf_copy(src, image, 8) || buf_getbyte(src, 0) != 0x2c) goto failed;
             if (gif_extract_image(src, image)) goto failed;
+            if (get_first_image) goto write;
             continue;
 
             /*
@@ -424,6 +454,17 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst)
 failed:
    buf_free(image);
    return 1;
+
+   /*
+    * Append the current image to dst and return
+    */
+
+write:
+   if (buf_copy(image, dst, image->size)) goto failed;
+   if (buf_extend(dst, 1)) goto failed;
+   *(dst->buffer + dst->offset++) = 0x3b;
+   buf_free(image);
+   return 0;
 
 }
 
