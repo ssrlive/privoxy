@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.30 2001/10/02 15:30:57 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.31 2001/10/10 10:56:39 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.30 2001/10/02 15:30:57 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.31  2001/10/10 10:56:39  oes
+ *    Failiure to load template now fatal. Before, the user got a hard-to-understand assertion failure from cgi.c
+ *
  *    Revision 1.30  2001/10/02 15:30:57  oes
  *    Introduced show-request cgi
  *
@@ -234,47 +237,55 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.30 2001/10/02 15:30:57 oes Exp $";
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
-const struct cgi_dispatcher cgi_dispatcher[] = {
-   { "robots.txt", 
-         10, cgi_robots_txt,  
-         "HIDE Sends a robots.txt file to tell robots to go away." }, 
-   { "show-status", 
-         11, cgi_show_status,  
-         "Show information about the current configuration" }, 
-   { "show-url-info",
-         13, cgi_show_url_info, 
-         "Show which actions apply to a URL and why"  },
-   { "show-version", 
-         12, cgi_show_version,  
-         "Show the source code version numbers" }, 
-   { "send-banner",
-         11, cgi_send_banner, 
-         "HIDE Send the transparent or \"Junkbuster\" gif" },
-#ifdef FEATURE_CGI_EDIT_ACTIONS
-   { "edit-actions-list",
-         17, cgi_edit_actions_list, 
-         "Edit the actions list" },
-   { "edit-actions-submit",
-         19, cgi_edit_actions_submit, 
-         "HIDE Change the actions for (a) specified URL(s)" },
-   { "edit-actions",
-         12, cgi_edit_actions, 
-         "HIDE Edit the actions for (a) specified URL(s)" },
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
-   { "show-request", 
-         12, cgi_show_request,  
-         "Show the client's request headers." }, 
+static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "",
-         0, cgi_default,
+         cgi_default,
          "Junkbuster main page" },
-   { NULL, 0, NULL, NULL }
+   { "show-status", 
+         cgi_show_status,  
+         "Show information about the current configuration" }, 
+   { "show-version", 
+         cgi_show_version,  
+         "Show the source code version numbers" }, 
+   { "show-request", 
+         cgi_show_request,  
+         "Show the client's request headers." }, 
+   { "show-url-info",
+         cgi_show_url_info, 
+         "Show which actions apply to a URL and why"  },
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+   { "edit-actions",
+         cgi_edit_actions, 
+         "Edit the actions list" },
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
+
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+   { "edit-actions-for-url",
+         cgi_edit_actions_for_url, 
+         NULL /* Edit the actions for (a) specified URL(s) */ },
+   { "edit-actions-list",
+         cgi_edit_actions_list, 
+         NULL /* Edit the actions list */ },
+   { "edit-actions-submit",
+         cgi_edit_actions_submit, 
+         NULL /* Change the actions for (a) specified URL(s) */ },
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
+   { "robots.txt", 
+         cgi_robots_txt,  
+         NULL /* Sends a robots.txt file to tell robots to go away. */ }, 
+   { "send-banner",
+         cgi_send_banner, 
+         NULL /* Send the transparent or \"Junkbuster\" gif */ },
+   { NULL, /* NULL Indicates end of list and default page */
+         cgi_error_404,
+         NULL /* Unknown CGI page */ }
 };
 
 
 /*
  * Some images
  *
- * Hint: You can encode your own GIFs like that:
+ * Hint: You can encode your own GIFs like this:
  * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
  */
 
@@ -299,16 +310,18 @@ const char image_blank_gif_data[] =
 const int image_blank_gif_length = sizeof(image_blank_gif_data) - 1;
 
 
+static struct http_response *dispatch_known_cgi(struct client_state * csp,
+                                                const char * path);
+
+
 /*********************************************************************
  * 
  * Function    :  dispatch_cgi
  *
  * Description :  Checks if a request URL has either the magical hostname
- *                i.j.b or matches HOME_PAGE_URL/config/. If so, it parses
- *                the (rest of the) path as a cgi name plus query string,
- *                prepares a map that maps CGI parameter names to their values,
- *                initializes the http_response struct, and calls the 
- *                relevant CGI handler function.
+ *                i.j.b or matches HOME_PAGE_URL/config/. If so, it passes
+ *                the (rest of the) path onto dispatch_known_cgi, which
+ *                calls the relevant CGI handler function.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -318,31 +331,40 @@ const int image_blank_gif_length = sizeof(image_blank_gif_data) - 1;
  *********************************************************************/
 struct http_response *dispatch_cgi(struct client_state *csp)
 {
-   char *argstring = NULL;
-   const struct cgi_dispatcher *d;
-   struct map *param_list;
-   struct http_response *rsp;
+   const char *host = csp->http->host;
+   const char *path = csp->http->path;
 
    /*
     * Should we intercept ?
     */
 
    /* Either the host matches CGI_PREFIX_HOST ..*/
-   if (0 == strcmpic(csp->http->host, CGI_PREFIX_HOST))
+   if (   (0 == strcmpic(host, CGI_PREFIX_HOST))
+       && (path[0] == '/') )
    {
-      /* ..then the path will all be for us */
-      argstring = csp->http->path;
+      /* ..then the path will all be for us.  Remove leading '/' */
+      path++;
    }
-   /* Or it's the host part HOME_PAGE_URL, and the path /config ? */
-   else if (   (0 == strcmpic(csp->http->host, HOME_PAGE_URL + 7 ))
-            && (0 == strncmpic(csp->http->path,"/config", 7))
-            && ((csp->http->path[7] == '/') || (csp->http->path[7] == '\0')))
+   /* Or it's the host part HOME_PAGE_URL, and the path /config/ */
+   else if (   (0 == strcmpic(host, HOME_PAGE_URL + 7 ))
+            && (0 == strncmpic(path,"/config", 7)) )
    {
-      /* then it's everything following "/config" */
-      argstring = csp->http->path + 7;
+      /* take everything following "/config" */
+      path += 7;
+      if (*path == '/')
+      {
+         /* skip the forward slash after "/config" */
+         path++;
+      }
+      else if (*path != '\0')
+      {
+         /* wierdness: URL is /configXXX, where XXX is some string */
+         return NULL;
+      }
    }
    else
    {
+      /* Not a CGI */
       return NULL;
    }
 
@@ -350,17 +372,74 @@ struct http_response *dispatch_cgi(struct client_state *csp)
     * This is a CGI call.
     */
 
-   /* Get mem for response or fail*/
-   if (NULL == (rsp = alloc_http_response()))
+   return dispatch_cgi_2(csp, path);
+}
+
+
+/*********************************************************************
+ * 
+ * Function    :  dispatch_known_cgi
+ *
+ * Description :  Processes a CGI once dispatch_cgi has determined that
+ *                it matches one of the magic prefixes. Parses the path
+ *                as a cgi name plus query string, prepares a map that
+ *                maps CGI parameter names to their values, initializes
+ *                the http_response struct, and calls the relevant CGI
+ *                handler function.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  path = Path of CGI, with the CGI prefix removed.
+ *                       Should not have a leading "/".
+ *
+ * Returns     :  http_response, or NULL on handler failure or out of
+ *                memory.
+ *
+ *********************************************************************/
+static struct http_response *dispatch_known_cgi(struct client_state * csp,
+                                                const char * path)
+{
+   const struct cgi_dispatcher *d;
+   struct map *param_list;
+   struct http_response *rsp;
+   char *query_args_start;
+   char *path_copy;
+   int result;
+
+   if (NULL == (path_copy = strdup(path)))
    {
       return NULL;
    }
 
-
-   /* Remove leading slash */
-   if (*argstring == '/')
+   query_args_start = path_copy;
+   while (*query_args_start && *query_args_start != '?')
    {
-      argstring++;
+      query_args_start++;
+   }
+   if (*query_args_start == '?')
+   {
+      *query_args_start++ = '\0';
+   }
+
+   if (NULL == (param_list = parse_cgi_parameters(query_args_start)))
+   {
+      free(path_copy);
+      return(NULL);
+   }
+
+
+   /*
+    * At this point:
+    * path_copy        = CGI call name
+    * param_list       = CGI params, as map
+    */
+
+   /* Get mem for response or fail*/
+   if (NULL == (rsp = alloc_http_response()))
+   {
+      free(path_copy);
+      free_map(param_list);
+      return NULL;
    }
 
    log_error(LOG_LEVEL_GPC, "%s%s cgi call", csp->http->hostport, csp->http->path);
@@ -368,33 +447,26 @@ struct http_response *dispatch_cgi(struct client_state *csp)
                             csp->ip_addr_str, csp->http->cmd); 
 
    /* Find and start the right CGI function*/
-   for (d = cgi_dispatcher; d->handler; d++)
+   for (d = cgi_dispatchers; FOREVER; d++)
    {
-      if (strncmp(argstring, d->name, d->name_length) == 0)
+      if ((d->name == NULL) || (strcmp(path_copy, d->name) == 0))
       {
-         if (NULL == (param_list = 
-             parse_cgi_parameters(argstring + d->name_length)))
-         {
-            free_map(param_list);
-            free_http_response(rsp);
-            return(NULL);
-         }
-         if ((d->handler)(csp, rsp, param_list))
-         {
-            free_map(param_list);
-            free_http_response(rsp);
-            return(NULL);
-         }
-
+         result = (d->handler)(csp, rsp, param_list);
+         free(path_copy);
          free_map(param_list);
-         return(finish_http_response(rsp));
+         if (result)
+         {
+            /* Error in handler */
+            free_http_response(rsp);
+            return(NULL);
+         }
+         else
+         {
+            /* It worked */
+            return(finish_http_response(rsp));
+         }
       }
    }
-
-   /* Can't get here, since cgi_default will match all requests */
-   free_http_response(rsp);
-   return(NULL);
-
 }
 
 
@@ -406,14 +478,14 @@ struct http_response *dispatch_cgi(struct client_state *csp)
  *                pairs and store them in a struct map list.
  *
  * Parameters  :
- *          1  :  string = string to be parsed 
+ *          1  :  string = string to be parsed.  Will be trashed.
  *
  * Returns     :  pointer to param list, or NULL if out of memory.
  *
  *********************************************************************/
-struct map *parse_cgi_parameters(char *argstring)
+static struct map *parse_cgi_parameters(char *argstring)
 {
-   char *tmp, *p;
+   char *p;
    char *vector[BUFFER_SIZE];
    int pairs, i;
    struct map *cgi_params;
@@ -423,17 +495,7 @@ struct map *parse_cgi_parameters(char *argstring)
       return NULL;
    }
 
-   if(*argstring == '?')
-   {
-      argstring++;
-   }
-   if (NULL == (tmp = strdup(argstring)))
-   {
-      free_map(cgi_params);
-      return NULL;
-   }
-
-   pairs = ssplit(tmp, "&", vector, SZ(vector), 1, 1);
+   pairs = ssplit(argstring, "&", vector, SZ(vector), 1, 1);
 
    for (i = 0; i < pairs; i++)
    {
@@ -444,7 +506,6 @@ struct map *parse_cgi_parameters(char *argstring)
       }
    }
 
-   free(tmp);
    return(cgi_params);
 
 }
@@ -985,9 +1046,9 @@ char *make_menu(const char *self)
    }
 
    /* List available unhidden CGI's and export as "other-cgis" */
-   for (d = cgi_dispatcher; d->handler; d++)
+   for (d = cgi_dispatchers; d->name; d++)
    {
-      if (strncmp(d->description, "HIDE", 4) && strcmp(d->name, self))
+      if (d->description && strcmp(d->name, self))
       {
          snprintf(buf, BUFFER_SIZE, "<li><a href=%s/config/%s>%s</a></li>\n",
    	       HOME_PAGE_URL, d->name, d->description);
