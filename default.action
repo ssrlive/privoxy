@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.8 2002/03/30 03:41:02 oes Exp $
+#  $Id: default.action,v 1.9 2002/03/30 04:15:21 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -19,15 +19,17 @@
 #  
 #  * Use the support forum to get help:
 #    http://sourceforge.net/tracker/?group_id=11118&atid=211118
-#  * Submit bugs only thru our bug forum:
+#  * Submit feedback for this actions file only through our
+#    actions file feedback script: http://www.privoxy.org/actions
+#  * Submit bugs only through our bug forum:
 #    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
 #    Make sure that the bug has not already been submitted. Please try
-#    to verify that it is a Junkbuster bug, and not a browser or site
+#    to verify that it is a Privoxy bug, and not a browser or site
 #    bug first. If you are using your own custom configuration, please
 #    try the stock configs to see if the problem is a configuration
 #    related bug. And if not using the latest development snapshot,
 #    please try the latest one. Or even better, CVS sources.
-#  * Submit feature requests only thru our feature request forum:
+#  * Submit feature requests only through our feature request forum:
 #    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
 #      
 # For any other issues, feel free to use the mailing lists:
@@ -375,7 +377,7 @@ shop        = -filter -no-cookies -no-cookies-keep
 # Your favourite blend of filters:
 #
 myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
-              +filter{webbugs} +filter{nimda} +filter{banners-by-size}
+              +filter{webbugs} +filter{nimda} +filter{banners-by-size} #+filter{fun}
 
 #... etc.  Customize to your heart's content.
 
@@ -390,7 +392,6 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}
 +fast-redirects \
 myfilters \
 +no-compression \
-+no-cookies-keep \
 +hide-forwarded \
 +hide-from{block} \
 +hide-referer{forge} \
