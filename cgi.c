@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.17 2001/08/05 15:57:38 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.18 2001/08/05 16:06:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,13 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.17 2001/08/05 15:57:38 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.18  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.17  2001/08/05 15:57:38  oes
  *    Adapted finish_http_response to new list_to_text
  *
@@ -189,6 +196,34 @@ const struct cgi_dispatcher cgi_dispatcher[] = {
          "Junkbuster main page" },
    { NULL, 0, NULL, NULL }
 };
+
+
+/*
+ * Some images
+ *
+ * Hint: You can encode your own GIFs like that:
+ * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
+ */
+
+const char image_junkbuster_gif_data[] =
+   "GIF89aD\000\013\000\360\000\000\000\000\000\377\377\377!"
+   "\371\004\001\000\000\001\000,\000\000\000\000D\000\013\000"
+   "\000\002a\214\217\251\313\355\277\000\200G&K\025\316hC\037"
+   "\200\234\230Y\2309\235S\230\266\206\372J\253<\3131\253\271"
+   "\270\215\342\254\013\203\371\202\264\334P\207\332\020o\266"
+   "N\215I\332=\211\312\3513\266:\026AK)\364\370\365aobr\305"
+   "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
+   "\037Q\000\000;";
+
+const int image_junkbuster_gif_length = sizeof(image_junkbuster_gif_data) - 1;
+
+
+const char image_blank_gif_data[] =
+   "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
+   "\000!\371\004\001\000\000\000\000,\000\000\000\000\001"
+   "\000\001\000\000\002\002D\001\000;";
+
+const int image_blank_gif_length = sizeof(image_blank_gif_data) - 1;
 
 
 /*********************************************************************
@@ -391,13 +426,13 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
 {
    if(strcmp(lookup(parameters, "type"), "trans"))
    {
-      rsp->body = bindup(JBGIF, sizeof(JBGIF) - 1);
-      rsp->content_length = sizeof(JBGIF) - 1;
+      rsp->body = bindup(image_junkbuster_gif_data, image_junkbuster_gif_length);
+      rsp->content_length = image_junkbuster_gif_length;
    }
    else
    {
-      rsp->body = bindup(BLANKGIF, sizeof(BLANKGIF) - 1);
-      rsp->content_length = sizeof(BLANKGIF) - 1;
+      rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
+      rsp->content_length = image_blank_gif_length;
    }   
 
    enlist(rsp->headers, "Content-Type: image/gif");

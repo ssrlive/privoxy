@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.10 2001/08/01 21:19:22 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.11 2001/08/05 16:06:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,13 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.11  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.10  2001/08/01 21:19:22  jongfoster
  *    Moving file version information to a separate CGI page.
  *
@@ -128,26 +135,13 @@ extern char *dump_map(const struct map *map);
 extern struct map *add_stats(struct map *exports);
 #endif /* def FEATURE_STATISTICS */
 
-
 /*
- * Hint: You can encode your own GIFs like that:
- * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
+ * Some images.
  */
-
-static const char JBGIF[] =
-   "GIF89aD\000\013\000\360\000\000\000\000\000\377\377\377!"
-   "\371\004\001\000\000\001\000,\000\000\000\000D\000\013\000"
-   "\000\002a\214\217\251\313\355\277\000\200G&K\025\316hC\037"
-   "\200\234\230Y\2309\235S\230\266\206\372J\253<\3131\253\271"
-   "\270\215\342\254\013\203\371\202\264\334P\207\332\020o\266"
-   "N\215I\332=\211\312\3513\266:\026AK)\364\370\365aobr\305"
-   "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
-   "\037Q\000\000;";
-
-static const char BLANKGIF[] =
-   "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
-   "\000!\371\004\001\000\000\000\000,\000\000\000\000\001"
-   "\000\001\000\000\002\002D\001\000;";
+extern const char image_junkbuster_gif_data[];
+extern const int  image_junkbuster_gif_length;
+extern const char image_blank_gif_data[];
+extern const int  image_blank_gif_length;
 
 
 /* Revision control strings from this header and associated .c file */
