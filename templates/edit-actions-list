@@ -31,6 +31,15 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.22  2002/05/12 15:45:33  jongfoster
+#    Applying [Patch 552094] New templates for edit-actions-list
+#    This cleans up the templates by:
+#    - Removing the (confusing) alternating color scheme.
+#    - Making everything left-justified.
+#
+#    Revision 1.21  2002/05/03 22:58:15  jongfoster
+#    Fixing link target in all URLs section
+#
 #    Revision 1.20  2002/04/26 12:57:18  oes
 #     - Central "button" link style in cgi-style.css
 #     - Help links now dynamic
