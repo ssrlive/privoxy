@@ -88,13 +88,13 @@
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
       <td bgcolor=#ffdddd>
-        <p><b>Please note that this is a <font color=red>@code-status@</font> release,
-          of the proxy software, not intended for production systems!
+        <p><b>Please note that this <font color=red>@code-status@</font> release
+          of the proxy software is not intended for production systems!
           <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
         </p>
 
         <p>Feel free to <a href=mailto:ijbswa-developers@lists.sourceforge.net>mail the developers</a>
-          with any problems you might have
+          with any problems you encounter.
         </p>
       </td>
     </tr>
