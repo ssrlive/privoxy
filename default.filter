@@ -2,16 +2,12 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.6 2002/04/03 19:49:52 swa Exp $
+#  $Id: default.filter,v 1.7 2002/04/09 18:34:51 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
 #  Copyright   :  Written by and Copyright
 #                 Privoxy team. http://www.privoxy.org/
-#
-#                 Based on the Internet Junkbuster originally written
-#                 by and Copyright (C) 1997 Anonymous Coders and
-#                 Junkbusters Corporation.  http://www.junkbusters.com
 #
 # We value your feedback. However, to provide you with the best support,
 # please note:
@@ -103,7 +99,7 @@ s|(<script.*)document\.referrer(.*</script>)|$1"Not Your Business!"$2|Usg
 
 # The status bar is for displaying link targets, not pointless blahblah
 #
-s/status='.*?';*//ig
+s/window.status\s*=\s*['"].*?['"]/dUmMy=1/ig
 
 # Kill OnUnload popups. Yummy. Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
 #
@@ -133,21 +129,25 @@ s|<meta\s+http-equiv=['"]?set-cookie['"]?\s+content=[^>].*>|<!--no cookies here 
 #################################################################################
 FILTER: no-popups Kill all popups in JS and HTML
 
-s/window\.open\(/1;''\.concat\(/ig           # JavaScript
-s/target=['"]?_blank['"]?/target_crunched/ig # HTML
-s/target=['"]?_new['"]?/target_crunched/ig   # HTML
+s/window\.open\(/concat(/ig                  # JavaScript
+s/([ =;])open\(/$1concat(/ig                 # JavaScript
+s/target=['"]?(_blank|_new)['"]?/notarget/ig # HTML
+
 
 #################################################################################
 #
-# frameset-borders: Give frames a border and make them resizable
+# frameset-borders: Give frames a border, make them resizable and scrollable
 #
 #################################################################################
 FILTER: frameset-borders Give frames a border and make them resizable
 
 s/(<frameset [^>]+)framespacing=['"]?(no|0)['"]?(.*>)/$1$3/igU
-s/(<frameset [^>]+)frameborder=['"]?(no|0)['"]?(.*>)/$1$3/igU
-s/(<frame [^>]+)border=['"]?(no|0)['"]?(.*>)/$1$3/igU
-s/(<frame [^>]+)resizable=['"]?(no|0|false)['"]?(.*>)/$1$3/igU 
+s/(<frameset [^>]+)(frame)?border=['"]?(no|0)['"]?(.*>)/$1$4/igU
+
+s/(<frame [^>]+)frameborder=['"]?(no|0)['"]?(.*>)/$1$3/igU
+s/(<frame [^>]+)noresize(.*>)/$1$2/igU
+s/(<frame [^>]+)resizable=['"]?(no)['"]?(.*>)/$1$3/igU 
+s/(<frame [^>]+)scrolling=['"]?(no)['"]?(.*>)/$1$3/igU
 
 #################################################################################
 #
@@ -202,7 +202,6 @@ FILTER: nimda Remove Nimda (virus) code
 
 s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><font size="7"> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
 
-
 #################################################################################
 #
 # banners-by-size: Kill banners by size
@@ -240,6 +239,16 @@ s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src="http://c
 
 #################################################################################
 #
+# noflash: Kill embedded Shockwave Flash objects
+#
+#################################################################################
+FILTER: noflash Kill embedded Shockwave Flash objects
+
+s|<embed [^>]*application/x-shockwave-flash.*</embed>|<!-- Squished Shockwave Flash Embed -->|sigU
+
+
+#################################################################################
+#
 # crude-parental: Crude parental filtering?  (Use along with a suitable blocklist).
 #                 Shows how to deny access to whole page based on a keyword.
 #
@@ -258,6 +267,9 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.7  2002/04/09 18:34:51  oes
+#     Fixed HTML syntax in replacements
+#
 #     Revision 1.6  2002/04/03 19:49:52  swa
 #     name change
 #
