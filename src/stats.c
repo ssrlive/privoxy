@@ -1,4 +1,4 @@
-const char stats_rcs[] = "$Id: stats.c,v 2.3 2002/12/30 19:56:16 david__schmidt Exp $";
+const char stats_rcs[] = "$Id: stats.c,v 2.4 2003/01/06 02:03:13 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/stats.c,v $
@@ -33,6 +33,9 @@ const char stats_rcs[] = "$Id: stats.c,v 2.3 2002/12/30 19:56:16 david__schmidt 
  *
  * Revisions   :
  *    $Log: stats.c,v $
+ *    Revision 2.4  2003/01/06 02:03:13  david__schmidt
+ *    Update stats protocol now that the console is actually running
+ *
  *
  *********************************************************************/
 
@@ -40,6 +43,7 @@ const char stats_rcs[] = "$Id: stats.c,v 2.3 2002/12/30 19:56:16 david__schmidt 
 #include <string.h>
 #ifdef unix
 #include <sys/signal.h>
+#include <unistd.h>
 #include <pthread.h>
 #endif
 #include "project.h"
@@ -157,7 +161,7 @@ void init_stats_config(struct configuration_spec * config)
   /* I don't think the IPC will really work in a fork()'d environment,
    * so proceed with caution.  FIXME.
    */
-#error FIXME - stats won't work without pthreads!
+#error FIXME - stats will not work without pthreads!
   child_id = fork();
 
   if (child_id == 0)   /* child */
