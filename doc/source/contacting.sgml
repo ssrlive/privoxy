@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.7 2002/04/10 04:06:57 hal9 Exp $
+ $Id: contacting.sgml,v 1.8 2002/04/12 10:20:58 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -36,7 +36,7 @@
  <itemizedlist>
 
   <listitem>
-   <literallayout>
+   <literallayout class="normal">
 Use the Sourceforge Support Forum to get help:
    
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118</ulink>
@@ -44,7 +44,7 @@ Use the Sourceforge Support Forum to get help:
   </listitem>
  
   <listitem>
-   <literallayout>
+   <literallayout class="normal">
 Submit bugs only through our Sourceforge Bug Forum:
  
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</ulink>. 
@@ -64,7 +64,7 @@ Submit bugs only through our Sourceforge Bug Forum:
  </listitem>
  
   <listitem>
-   <literallayout>
+   <literallayout class="normal">
 Submit feature requests only through our Sourceforge feature request forum:
  
     <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse"></ulink>.
@@ -73,7 +73,7 @@ Submit feature requests only through our Sourceforge feature request forum:
 
 
   <listitem>
-   <literallayout>
+   <literallayout class="normal">
 You can also send feedback on websites that Privoxy has problems with. Please bookmark
 the following link: <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>Privoxy - Submit Filter Feedback</quote></ulink>. Once you surf to a page with problems, use the
 bookmark to send us feedback. We will look into the issue as soon as possible.
@@ -82,7 +82,7 @@ bookmark to send us feedback. We will look into the issue as soon as possible.
 
 
  <listitem>
-   <literallayout>
+   <literallayout class="normal">
 For any other issues, feel free to use the mailing lists:
  
     <ulink url="http://sourceforge.net/mail/?group_id=11118">http://sourceforge.net/mail/?group_id=11118</ulink>.

@@ -1,5 +1,5 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
-<!entity % dummy "INCLUDE"> 
+<!entity % dummy "IGNORE"> 
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.48 2002/04/10 18:45:15 swa Exp $
+ $Id: faq.sgml,v 1.49 2002/04/12 10:10:18 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.48 2002/04/10 18:45:15 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.49 2002/04/12 10:10:18 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -85,6 +85,16 @@
  questions about <ulink url="http://www.privoxy.org">Privoxy</ulink> 
  <![%p-stable;[ v.&p-version]]>.
  </para>
+
+<![%p-text;[ 
+
+<para>
+
+ Test of text doc only.
+
+</para>
+
+]]>
 
 <!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
@@ -499,7 +509,7 @@ All the ads are there. What's wrong?</title>
 some of these <quote>actions</quote>.</title>
 <para>
  These are all explained in the 
- <ulink url="../user-manual/configuration.html#ACTIONSFILE">user-manual</ulink>.
+ <ulink url="../user-manual/configuration.html#ACTIONS-FILE">user-manual</ulink>.
  Please refer to that.
 </para>
 </sect2>
@@ -521,7 +531,7 @@ way to do this?</title>
 <para>
  Please see the 
  <ulink
- url="../user-manual/configuration.html#ACTIONSFILE">user-manual</ulink> for a
+ url="../user-manual/configuration.html#ACTIONS-FILE">user-manual</ulink> for a
  detailed explanation of these and other configuration files, and their
  various options and syntax.
 </para>
@@ -1020,7 +1030,7 @@ FIXME: commented out until we have data. HB 03/18/02.
  Beginning with <application>Privoxy v2.9.14</application>, missed ads and 
  banners and other actions file problems, can be submitted by accessing
  <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
- from <ulink url="http://p.p/">http://p.p/</ulink>
+ from <ulink url="http://p.p/">http://p.p/</ulink>.
 </para>
 
 <para>
@@ -1443,6 +1453,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.49  2002/04/12 10:10:18  swa
+version update
+
 Revision 1.48  2002/04/10 18:45:15  swa
 generated
 

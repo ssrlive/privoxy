@@ -1,5 +1,5 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-<!entity % dummy "INCLUDE"> 
+<!entity % dummy "IGNORE"> 
 <!entity supported SYSTEM "supported.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.8 2002/04/12 10:09:50 swa Exp $
+ $Id: readme.sgml,v 1.9 2002/04/24 04:04:12 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -195,13 +195,14 @@
 -------------- </LiteralLayout>
 </para>
 <para>
- See: 'config', 'default.action', 'standard.action', 'user.action', and
- 'default.filter'. 'user.action' is for personal configuration. These are all
- well commented. Most of the magic is in '*.action' files. On Unix-like
- systems, these files are installed in /etc/privoxy.  On Windows, then
- wherever the executable itself is installed. There are many significant
- changes and advances since Junkbuster v2.0.x. The user-manual has a run down
- of configuration options, and examples: http://www.privoxy.org/user-manual/.
+ See: 'config', 'default.action', 'user.action', and 'default.filter'.
+ 'user.action' is for personal configuration. These are all well commented.
+ Most of the magic is in '*.action' files. 'user.action' should be 
+ used for any actions customizations. On Unix-like systems, these files
+ are installed in /etc/privoxy.  On Windows, then wherever the executable
+ itself is installed. There are many significant changes and advances since
+ Junkbuster v2.0.x. The user-manual has a run down of configuration options,
+ and examples: http://www.privoxy.org/user-manual/.
 </para>
 <para>
  Be sure to set your browser(s) for HTTP/HTTPS Proxy at &lt;IP&gt;:&lt;Port&gt;, or
@@ -260,7 +261,7 @@
  </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.8 2002/04/12 10:09:50 swa Exp $
+ $Id: readme.sgml,v 1.9 2002/04/24 04:04:12 hal9 Exp $
 </para>
 
 </article>

@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.4 2002/04/18 10:20:53 oes Exp $
+ $Id: buildsource.sgml,v 1.5 2002/04/18 12:11:50 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -83,7 +83,7 @@
 
 <para>
   If you have gnu make, you can have the first four steps 
-  automatically done for you by just typing
+  automatically done for you by just typing:
 </para>
 
 <para>
@@ -103,6 +103,7 @@
  url="../developer-manual/newrelease.html">developer manual</ulink>.
 </para>
 
+<!-- print for README only -->
  <![%p-readme;[
  <para>
   For binary RPM installation, and other platforms, see the user-manual 
