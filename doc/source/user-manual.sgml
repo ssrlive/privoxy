@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.74 2002/04/11 00:54:38 hal9 Exp $
+ $Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -36,9 +36,7 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation.
  ========================================================================
 
 -->
@@ -47,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.74 2002/04/11 00:54:38 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -70,13 +68,13 @@
 
  <para>
   The user manual gives users information on how to install, configure and use
-  <application>Privoxy</application>.
+  <ulink
+  url="http://www.privoxy.org/"><application>Privoxy</application></ulink>.
   </para>
 
-<!--
- Include privoxy.sgml boilerplate:
--->
+<!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
+<!-- end privoxy.sgml -->
 
  <para>
   You can find the latest version of the user manual at  <ulink
@@ -125,19 +123,19 @@
 ]]>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="newfeatures">
 <title>New Features</title>
 <para>
  In addition to <application>Internet Junkbuster's</application> traditional
  feature of ad and banner blocking and cookie management,
  <application>Privoxy</application> provides new features<![%p-not-stable;[,
  some of them currently under development]]>:
+<anchor id="testing"/>
 </para>
 
 <!-- Include newfeatures.sgml boilerplate here: -->
  &newfeatures;
 <!-- end boilerplate -->
-
 </sect2>
 
 </sect1>
@@ -325,11 +323,93 @@ configuration section below. HB.)
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="quickstart"><title>Quickstart to Using <application>Privoxy</application></title>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="upgradersnote">
+<title>Note to Upgraders</title>
+<para>
+ There are very significant changes from older versions of 
+ <application>Junkbuster</application> to the current
+ <application>Privoxy</application>. Configuration is substantially 
+ changed. <application>Junkbuster 2.0.x</application> and earlier 
+ configuration files will not migrate. The functionality of the old
+ <filename>blockfile</filename>, <filename>cookiefile</filename> and
+ <filename>imagelist</filename>, are now combined into the
+ <quote><filename>actions file</filename></quote>
+ (<filename>default.action</filename> for most installations).
+</para>
+<para>
+ A <quote><filename>filterfile</filename></quote> (typically
+ <filename>default.filter</filename>) is new with
+ <application>Privoxy 2.9.x</application>, and provides some of the new
+ sophisticaton (explained below). <filename>config</filename> is 
+ much the same.
+</para>
+<para>
+ If upgrading from a 2.0.x version, you will have to use the new config 
+ files, and possibly adapt any personal rules from your older files.
+ If upgrading from 2.9.x development versions, it is still recommended 
+ to use the new configuration files.
+</para>
+<para>
+ A quick list of things to be aware of before upgrading: 
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+   The default listening port is now 8118 due to a conflict with another 
+   service (NAS).
+  </para>
+ </listitem>  
+ <listitem>
+  <para>  
+    Some installers may remove earlier versions completely. Save any 
+    important configuration files!
+  </para>
+ </listitem>
+ <listitem>
+  <para>
+   <application>Privoxy</application> is reachable with a web browser 
+   at the special URL: <ulink url="http://p.p/">http://p.p/</ulink>. Many
+   aspects of configuration can be done here, including temporarily disabling
+   <application>Privoxy</application>. Alternately, 
+   <ulink url="http://config.privoxy.org/">http://config.privoxy.org</ulink>
+   may work in some rare cases where the former does not.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   The primary configuration file for cookie management, ad and banner 
+   blocking, and many other aspects of <application>Privoxy</application>
+   configuration is <filename>default.action</filename>.
+  </para>
+ </listitem> 
+  <listitem>
+  <para>
+<!-- I think it is best to keep this somewhat vague, in case  -->
+<!-- the situation changes under our feet. -->   
+   Some installers may not automatically start
+   <application>Privoxy</application> after installation.
+  </para>
+ </listitem> 
+
+ </itemizedlist>
+</para>
+
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="startup">
+<title>Starting <application>Privoxy</application></title>
 <para>
  Before launching <application>Privoxy</application> for the first time, you 
  will want to configure your browser(s) to use <application>Privoxy</application>
  as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
- and port 8118 (earlier versions used port 800). This is the one required 
+ and port 8118 (earlier versions used port 8000). This is the one required 
  configuration that must be done! 
 </para>
  
@@ -390,23 +470,23 @@ configuration section below. HB.)
 
 <para>
  The included default configuration files should give a reasonable starting
- point, though may be somewhat aggressive in blocking junk. Most of the 
- per site configuration is done in the <quote>actions</quote> files. These 
- are where various cookie actions are defined, ad and banner blocking, 
- and other aspects of <application>Privoxy</application> configuration. There 
- are several such files included, with varying levels of aggressiveness. 
+ point. Most of the per site configuration is done in the
+ <quote>actions</quote> files. These are where various cookie actions are
+ defined, ad and banner blocking, and other aspects of
+ <application>Privoxy</application> configuration. There are several such
+ files included, with varying levels of aggressiveness. 
 </para>
 
 <para>
  You will probably want to keep an eye out for sites that require persistent
  cookies, and add these to <filename>default.action</filename> as needed. By
  default, most of these will be accepted only during the current browser
- session, until you add them to the configuration. If you want the browser to
- handle this instead, you will need to edit
- <filename>default.action</filename> and disable this feature. If you use more
- than one browser, it would make more sense to let
- <application>Privoxy</application> handle this. In which case, the browser(s)
- should be set to accept all cookies.
+ session (aka <quote>session cookies</quote>), until you add them to the
+ configuration. If you want the browser to handle this instead, you will need
+ to edit <filename>default.action</filename> and disable this feature. If you
+ use more than one browser, it would make more sense to let
+ <application>Privoxy</application> handle this. In which case, the
+ browser(s) should be set to accept all cookies.
 </para>
 
 <para>
@@ -455,9 +535,10 @@ configuration section below. HB.)
  to the developers (see below). 
 </para>
 
+</sect2>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
-
 <sect2>
 <title>Command Line Options</title>
 <para>
@@ -567,9 +648,10 @@ configuration section below. HB.)
 
 Please choose from the following options:
 
+    * Privoxy main page
     * Show information about the current configuration
     * Show the source code version numbers
-    * Show the client's request headers.
+    * Show the request headers.
     * Show which actions apply to a URL and why
     * Toggle Privoxy on or off
     * Edit the actions list
@@ -585,7 +667,10 @@ Please choose from the following options:
  aspects of <application>Privoxy</application> configuration. The actions
  file, and other configuration files, are explained in detail below. 
  <application>Privoxy</application> will automatically detect any changes 
- to these files.
+ to these files. Note: one or two requests to the proxy might required to
+ <quote>wake up</quote> <application>Privoxy</application>, 
+ and force a re-reading of the configuration. It is not necessarily 
+ instantaneous.
 </para>
 
 <para>
@@ -1207,7 +1292,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>buffer-limit    4069</emphasis>
+  <emphasis>buffer-limit    4096</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -3951,6 +4036,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.75  2002/04/12 02:08:48  david__schmidt
+ Remove OS/2 building info... it is already in the developer-manual
+
  Revision 1.74  2002/04/11 00:54:38  hal9
  Add small section on submitting actions.
 
