@@ -236,8 +236,8 @@ there are only three default configuration files (this will change in time):
    
   * The actionsfile file is used to define various actions relating to images,
     banners, pop-ups, banners and cookies. There is a CGI based editor for this
-    file that can be accessed via http://ijbswa.sourceforge.net/config/. (Still
-    under active development.)
+    file that can be accessed via http://i.j.b./. (Still under active
+    development.)
    
   * The re_filterfile file can be used to rewrite the raw page content,
     including text as well as embedded HTML and JavaScript.
@@ -510,7 +510,7 @@ increasing the "buffer-limit" Kbytes each, unless you have enabled
 To enable the web-based actionsfile editor set enable-edit-actions to 1, or 0
 to disable. Note that you must have compiled JunkBuster with support for this
 feature, otherwise this option has no effect. This internal page can be reached
-at http://ijbswa.sourceforge.net/config/.
+at http://i.j.b./.
 
 Security note: If this is enabled, anyone who can use the proxy can edit the
 actions file, and their changes will affect all users. For shared proxies, you
@@ -1378,9 +1378,9 @@ Debug -> Networking. Or set the "+downgrade" config option in actionsfile.
 After running Junkbuster for a while, you can start to fine tune the
 configuration to suit your personal, or site, preferences and requirements.
 There are many, many aspects that can be customized. "Actions" (from
-actionsfile) can be adjusted by pointing your browser to http://
-ijbswa.sourceforge.net/config/, and then follow the link to "edit the actions
-list". (This is an internal page and does not require Internet access.)
+actionsfile) can be adjusted by pointing your browser to http://i.j.b./, and
+then follow the link to "edit the actions list". (This is an internal page and
+does not require Internet access.)
 
 In fact, various aspects of Junkbuster configuration can be viewed from this
 page, including current configuration parameters, source code version numbers,
@@ -1445,7 +1445,7 @@ See also
 
   http://ijbswa.sourceforge.net/
 
-  http://ijbswa.sourceforge.net/config/
+  http://i.j.b./
 
   http://www.junkbusters.com/ht/en/cookies.html
 

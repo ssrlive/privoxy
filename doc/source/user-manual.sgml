@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.16 2001/10/21 17:19:21 swa Exp $
+ $Id: user-manual.sgml,v 1.17 2001/10/24 17:10:55 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.16 2001/10/21 17:19:21 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.17 2001/10/24 17:10:55 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -422,7 +422,7 @@ configuration section below. HB.)
     The <filename>actionsfile</filename> file is used  to define various 
     actions relating to images, banners, pop-ups, banners and cookies.
     There is a CGI based editor for this file that can be accessed 
-    via <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>.
+    via <ulink url="http://i.j.b./">http://i.j.b./</ulink>.
     (Still under active development.)
    </para>
   </listitem> 
@@ -968,7 +968,7 @@ configuration section below. HB.)
  that you must have compiled <application>JunkBuster</application> with
  support for this feature, otherwise this option has no effect. This 
  internal page can be reached at <ulink
- url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>.
+ url="http://i.j.b./">http://i.j.b./</ulink>.
  </para>
 
 <para>
@@ -2735,7 +2735,7 @@ Removed references to Win32. HB 09/23/01
  preferences and requirements. There are many, many aspects that can 
  be customized. <quote>Actions</quote> (from <filename>actionsfile</filename>) 
  can be adjusted by pointing your browser to 
- <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>, 
+ <ulink url="http://i.j.b./">http://i.j.b./</ulink>, 
  and then follow the link to <quote>edit the actions list</quote>. 
  (This is an internal page and does not require Internet access.)
 </para>
@@ -2856,7 +2856,7 @@ communication (bugs, feature requests, etc.)
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>
+   &nbsp; <ulink url="http://i.j.b./">http://i.j.b./</ulink>
   </member>
  </simplelist>
  <simplelist>
@@ -3142,6 +3142,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.17  2001/10/24 17:10:55  hal9
+ Catching up with Jon's recent work, and a few other things.
+
  Revision 1.16  2001/10/21 17:19:21  swa
  wrong url in documentation
 
