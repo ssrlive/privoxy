@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.29 2001/10/23 21:38:53 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.30 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,12 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.29 2001/10/23 21:38:53 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.30  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.29  2001/10/23 21:38:53  jongfoster
  *    Adding error-checking to create_url_spec()
  *
@@ -208,16 +214,6 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.29 2001/10/23 21:38:53 jongfoster
 
 const char loaders_h_rcs[] = LOADERS_H_VERSION;
 
-/* Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- * Solaris's isspace() is a macro which uses it's argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- */
-#define ijb_isspace(__X) isspace((int)(unsigned char)(__X))
-
-
 /*
  * Currently active files.
  * These are also entered in the main linked list of files.
@@ -311,10 +307,6 @@ void sweep(void)
             freez(ncsp->ip_addr_str);
             freez(ncsp->my_ip_addr_str);
             freez(ncsp->my_hostname);
-
-#ifdef FEATURE_TRUST
-            freez(ncsp->referrer);
-#endif /* def FEATURE_TRUST */
             freez(ncsp->x_forwarded);
             freez(ncsp->iob->buf);
 
