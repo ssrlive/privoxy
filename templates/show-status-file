@@ -109,7 +109,7 @@
 
     <tr>
       <td class="box">
-        <h2>Contents of @file-description@ (@filepath@)</h2>
+        <h2>Contents of @file-description@ @filepath@</h2>
         <pre>@contents@</pre>
       </td>
     </tr>
