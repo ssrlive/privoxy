@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.67 2002/04/24 02:12:43 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.68 2002/04/26 12:56:00 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.68  2002/04/26 12:56:00  oes
+ *    Killed REDIRECT_URL, added USER_MANUAL_URL and HELP_LINK_PREFIX
+ *
  *    Revision 1.67  2002/04/24 02:12:43  oes
  *     - Jon's multiple AF patch:
  *       - Make csp->actions_list an array
@@ -658,9 +661,10 @@ struct url_spec
 /* An I/O buffer */
 struct iob
 {
-   char *buf;
-   char *cur;
-   char *eod;
+   char *buf;    /* Start of buffer        */
+   char *cur;    /* Start of relevant data */
+   char *eod;    /* End of relevant data   */
+   size_t size;  /* Size as malloc()ed     */
 };
 
 
