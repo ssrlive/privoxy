@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.27 2001/08/05 16:06:20 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.28 2001/09/13 23:05:50 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.28  2001/09/13 23:05:50  jongfoster
+ *    Changing the string paramater to the header parsers a "const".
+ *
  *    Revision 1.27  2001/08/05 16:06:20  jongfoster
  *    Modifiying "struct map" so that there are now separate header and
  *    "map_entry" structures.  This means that functions which modify a
@@ -375,6 +378,11 @@ struct url_spec
    regex_t *preg;      /* Regex for matching path part                      */
 #endif
 };
+#ifdef REGEX
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, 0, 0, 0, NULL, 0, NULL }
+#else /* ifndef REGEX */
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, 0, 0, 0, NULL, 0 }
+#endif /* ndef REGEX */
 
 /* Constants for host part matching in URLs */
 #define ANCHOR_LEFT  1
@@ -689,6 +697,8 @@ struct forward_spec
    /* For the linked list */
    struct forward_spec *next;
 };
+#define FORWARD_SPEC_INITIALIZER { URL_SPEC_INITIALIZER, 0, NULL, 0, NULL, 0, NULL }
+
 
 struct re_filterfile_spec
 {
