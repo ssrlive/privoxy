@@ -38,6 +38,13 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.8  2001/07/29 17:09:17  jongfoster
+ *    Major changes to build system in order to fix these bugs:
+ *    - pthreads under Linux was broken - changed -lpthread to -pthread
+ *    - Compiling in MinGW32 mode under CygWin now correctly detects
+ *      which shared libraries are available
+ *    - Solaris support (?) (Not tested under Solaris yet)
+ *
  *    Revision 1.7  2001/07/25 22:53:59  jongfoster
  *    Will #error if pthreads is enabled under BeOs
  *
@@ -299,6 +306,24 @@
  */
 #undef FEATURE_PTHREAD
 
+/*
+ * Defined on Solaris only.  Makes the system libraries thread safe.
+ */
+#undef _REENTRANT
+
+/*
+ * Defined on Solaris only.  Without this, many important functions are not
+ * defined in the system headers.
+ */
+#undef __EXTENSIONS__
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with MultiThreading?)
+ */
+#undef __MT__
+
 /* Define if you have the bcopy function.  */
 #undef HAVE_BCOPY
 
@@ -307,6 +332,15 @@
 
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with ANSI Standard C?)
+ */
+#ifndef __STDC__
+#define __STDC__ 1
+#endif /* ndef __STDC__ */
 
 /*
  * Need to set up this define only for the Pthreads library for
