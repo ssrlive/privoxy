@@ -1,7 +1,7 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1 2001/05/13 21:57:07 administrator Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/w32taskbar.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
  *
  * Purpose     :  Functions for creating, setting and destroying the
  *                workspace tray icon
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1 2001/05/13 21:57:07 admin
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -47,6 +50,8 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.1 2001/05/13 21:57:07 admin
 #include "w32log.h"
 
 const char w32taskbar_h_rcs[] = W32TASKBAR_H_VERSION;
+
+#ifndef _WIN_CONSOLE /* entire file */
 
 #define WM_TRAYMSG WM_USER+1
 
@@ -254,6 +259,8 @@ LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 }
 
+
+#endif /* ndef _WIN_CONSOLE - entire file */
 
 /*
   Local Variables:
