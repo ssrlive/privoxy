@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.63 2002/04/04 21:06:22 swa Exp $
+# $Id: GNUmakefile.in,v 1.64 2002/04/04 22:14:51 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -591,6 +591,24 @@ redhat-readme: doc/source/ldpOK.dsl
      # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
+#### WIP targets HB ##################
+## Make AUTHORS file
+authors: doc/source/ldpOK.dsl
+	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
+          tmp.html > ../../AUTHORS && rm -f tmp.html
+     # kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
+
+# make a man page, and then (lousy) HTML version.
+man: doc/source/ldpOK.dsl
+	mkdir -p doc/source/man
+	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
+	perl -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	cd doc/source/man && $(DB) ../privoxy-man-page.sgml &&\
+     mv -f index.html privoxy-man-page.html
+     # kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
+
 #############################################################################
 #
 # Webserver
@@ -732,6 +750,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.64  2002/04/04 22:14:51  oes
+# No longer rely on find honoring -iname
+#
 # Revision 1.63  2002/04/04 21:06:22  swa
 # cosmetics.
 #
