@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.72 2002/04/08 13:42:11 oes Exp $
+# $Id: GNUmakefile.in,v 1.73 2002/04/08 14:03:24 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -574,7 +574,9 @@ dok-webserver: doc/source/ldpOK.dsl
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/'\
      doc/webserver/index.html
 
-dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
+# Removed dok-man 04/08/02, hal. Added authors and dok-release. And
+# dok-webserver!
+dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver authors
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -582,7 +584,7 @@ dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
 #
 # an alternative to the above dok. disabled man page creation for the moment
 #
-redhat-dok: dok-devel dok-user dok-faq redhat-readme dok-webserver
+redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver authors
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -607,7 +609,6 @@ redhat-readme: doc/source/ldpOK.dsl
 	# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
-#### WIP targets HB ##################
 ## Make AUTHORS file
 authors: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
@@ -616,18 +617,24 @@ authors: doc/source/ldpOK.dsl
 	@rm -f doc/source/ldpOK.dsl
 
 # make a man page, and then (lousy) HTML version.
+# Requires docbook2man (short perl script), see CVS
+# http://sources.redhat.com/docbook-tools/. Also requires openjade and SGMLSpm
+# perl module. This target is not invoked from other dok targets. It is 
+# built separately due to dependencies on perl scripts.
 man: doc/source/ldpOK.dsl
 	mkdir -p doc/source/man
 	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
-	$(PERL) -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	perl -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
 	cd doc/source/man && $(DB) ../privoxy-man-page.sgml &&\
 	mv -f index.html privoxy-man-page.html
-	# kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+     # This html is not used. See make man2html.
+	mv -f doc/source/man/privoxy.1 privoxy.1
+	$(MAKE) man2html
+     # kludge to force recreation on next run. Rodgrigo?
+	@rm -fr doc/source/ldpOK.dsl doc/source/man
 
-# Set doc entities for VERSION and CODE_STATUS. Toggle content 
-# exceptions accordingly. When 'make dok' gets stable, this 
-# needs to go before any doc building (doh).
+# Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
+# exceptions accordingly. This needs to go before any doc building (doh).
 make dok-release:
 	@$(ECHO) Setting doc version and status to $(VERSION), $(CODE_STATUS)
 	@$(PERL) -pi -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
@@ -788,6 +795,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.73  2002/04/08 14:03:24  oes
+# oes for al: Fix install target
+#
 # Revision 1.72  2002/04/08 13:42:11  oes
 # Added safety check to *-dist targets; fixed permissions for feedback logfile
 #
