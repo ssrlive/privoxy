@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.19 2001/10/14 22:02:57 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.20 2001/10/22 15:33:56 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,13 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.19 2001/10/14 22:02:57 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.20  2001/10/22 15:33:56  david__schmidt
+ *    Special-cased OS/2 out of the Netscape-abort-on-404-in-js problem in
+ *    filters.c.  Added a FIXME in front of the offending code.  I'll gladly
+ *    put in a better/more robust fix for all parties if one is presented...
+ *    It seems that just returning 200 instead of 404 would pretty much fix
+ *    it for everyone, but I don't know all the history of the problem.
+ *
  *    Revision 1.19  2001/10/14 22:02:57  jongfoster
  *    New function string_append() which is like strsav(), but running
  *    out of memory isn't automatically FATAL.
@@ -136,10 +143,6 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.19 2001/10/14 22:02:57 jongfost
 #include <ctype.h>
 #include <assert.h>
 
-/*
- * FIXME: Only need project.h for BUFFER_SIZE.  It would be nice
- * to remove this dependency.
- */
 #include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
@@ -455,6 +458,26 @@ char *strsav(char *old, const char *text_to_append)
  *                This is similar to strsav(), but running out of
  *                memory isn't catastrophic.
  *
+ *                Programming style:
+ *
+ *                The following style provides sufficient error
+ *                checking for this routine, with minimal clutter
+ *                in the source code.  It is recommended if you
+ *                have many calls to this function:
+ *
+ *                char * s = strdup(...); // don't check for error
+ *                string_append(&s, ...);  // don't check for error
+ *                string_append(&s, ...);  // don't check for error
+ *                string_append(&s, ...);  // don't check for error
+ *                if (NULL == s) { ... handle error ... }
+ *
+ *                OR, equivalently:
+ *
+ *                char * s = strdup(...); // don't check for error
+ *                string_append(&s, ...);  // don't check for error
+ *                string_append(&s, ...);  // don't check for error
+ *                if (string_append(&s, ...)) {... handle error ...}
+ *
  * Parameters  :
  *          1  :  target_string = Pointer to old text that is to be
  *                extended.  *target_string will be free()d by this
@@ -466,13 +489,15 @@ char *strsav(char *old, const char *text_to_append)
  *          2  :  text_to_append = Text to be appended to old.
  *                Must not be NULL.
  *
- * Returns     :  On success, returns 0 and sets *target_string to
- *                newly malloc'ed appended string.  Caller must free().
- *                On out-of-memory, returns nonzero (and free()s
- *                *target_string and sets it to NULL).
+ * Returns     :  JB_ERR_OK on success, and sets *target_string
+ *                   to newly malloc'ed appended string.  Caller
+ *                   must free(*target_string).
+ *                JB_ERR_MEMORY on out-of-memory.  (And free()s
+ *                   *target_string and sets it to NULL).
+ *                JB_ERR_MEMORY if *target_string is NULL.
  *
  *********************************************************************/
-int string_append(char **target_string, const char *text_to_append)
+jb_err string_append(char **target_string, const char *text_to_append)
 {
    size_t old_len;
    char *new_string;
@@ -482,12 +507,12 @@ int string_append(char **target_string, const char *text_to_append)
 
    if (*target_string == NULL)
    {
-      return(1);
+      return JB_ERR_MEMORY;
    }
 
    if (*text_to_append == '\0')
    {
-      return(0);
+      return JB_ERR_OK;
    }
 
    old_len = strlen(*target_string);
@@ -498,13 +523,13 @@ int string_append(char **target_string, const char *text_to_append)
       free(*target_string);
 
       *target_string = NULL;
-      return(1);
+      return JB_ERR_MEMORY;
    }
 
    strcpy(new_string + old_len, text_to_append);
 
    *target_string = new_string;
-   return(0);
+   return JB_ERR_OK;
 }
 
 
@@ -716,9 +741,15 @@ char * make_path(const char * dir, const char * file)
       char * path = malloc(strlen(dir) + strlen(file) + 2);
       strcpy(path, dir);
 #ifdef _WIN32
-      strcat(path, "\\");
+      if(path[strlen(path)-1] != '\\')
+      {
+         strcat(path, "\\");
+      }
 #else /* ifndef _WIN32 */
-      if(path[strlen(path)-1] != '/') strcat(path, "/");
+      if(path[strlen(path)-1] != '/')
+      {
+         strcat(path, "/");
+      }
 #endif /* ifndef _WIN32 */
       strcat(path, file);
 
