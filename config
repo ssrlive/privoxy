@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.16 2001/06/29 21:45:41 oes Exp $
+# $Id: config,v 1.17 2001/07/13 13:53:39 oes Exp $
 #
 
 #  Table of Contents
@@ -245,7 +245,7 @@ proxy-info-url http://www.your-site.com/proxy.html
 #  The reporting of FATAL errors (i.e. ones which crash 
 #  JunkBuster) is always on and cannot be disabled.
 #
-#  If you want to use CLF, you should set "debug 256" ONLY,
+#  If you want to use CLF, you should set "debug 512" ONLY,
 #  do not enable anything else.
 #
 #  Multiple "debug" directives, are OK - they're logical-OR'd
