@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.26 2001/09/22 14:05:22 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.27 2001/09/22 16:36:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.26 2001/09/22 14:05:22 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.27  2001/09/22 16:36:59  jongfoster
+ *    Removing unused parameter fs from read_config_line()
+ *
  *    Revision 1.26  2001/09/22 14:05:22  jongfoster
  *    Bugfix: Multiple escaped "#" characters in a configuration
  *    file are now permitted.
@@ -258,7 +261,7 @@ void sweep(void)
 
    for (csp = clients; csp && (ncsp = csp->next) ; csp = csp->next)
    {
-      if (ncsp->active)
+      if (ncsp->flags & CSP_FLAG_ACTIVE)
       {
          /* mark this client's files as active */
 
@@ -294,7 +297,7 @@ void sweep(void)
        * follow it
        */
       {
-         while( !ncsp->active )
+         while (!(ncsp->flags & CSP_FLAG_ACTIVE))
          {
             csp->next = ncsp->next;
    
@@ -314,10 +317,10 @@ void sweep(void)
             destroy_list(ncsp->cookie_list);
    
             free_current_action(ncsp->action);
-   
+
 #ifdef FEATURE_STATISTICS
             urls_read++;
-            if (ncsp->rejected)
+            if (ncsp->flags & CSP_FLAG_REJECTED)
             {
                urls_rejected++;
             }
