@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.13 2001/09/06 14:05:59 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.14 2001/09/09 21:41:57 oes Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.13 2001/09/06 14:05:59 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.14  2001/09/09 21:41:57  oes
+ *    Fixing yet another silly bug
+ *
  *    Revision 1.13  2001/09/06 14:05:59  oes
  *    Fixed silly bug
  *
@@ -344,9 +347,9 @@ pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialfl
             r->block_length[l] = k - r->block_offset[l];
 
             /* Numerical backreferences */
-            if (isdigit(replacement[i + 1]))
+            if (isdigit((int) replacement[i + 1]))
             {
-               while (i < length && isdigit(replacement[++i]))
+               while (i < length && isdigit((int) replacement[++i]))
                {
                   r->backref[l] = r->backref[l] * 10 + replacement[i] - 48;
                }
