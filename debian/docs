@@ -1,14 +1,10 @@
-LICENSE
 README
 AUTHORS
-doc/pdf/*.pdf
 doc/text/faq.txt
 doc/text/user-manual.txt
 doc/text/developer-manual.txt
 doc/webserver/faq
 doc/webserver/user-manual
-doc/webserver/man-page
 doc/webserver/developer-manual
 doc/webserver/images
 doc/webserver/p_doc.css
-doc/webserver/privoxy-index.html
