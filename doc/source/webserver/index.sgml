@@ -13,13 +13,13 @@
 <!entity % p-readme "IGNORE">
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/webserver/index.sgml,v $
 
  Purpose     :  Index file of the project's homepage
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $
+ $Id: index.sgml,v 1.1 2002/04/07 08:10:48 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -138,12 +138,12 @@ page</ulink> on Sourceforge
 <itemizedlist>
 	<listitem>
 	<literallayout>
-	<ulink url="user-manual/">User manual</ulink>
+	<ulink url="user-manual/index.html">User manual</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
 	<literallayout>
-	<ulink url="faq/">Frequently Asked Questions</ulink>
+	<ulink url="faq/index.html">Frequently Asked Questions</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
@@ -153,7 +153,7 @@ page</ulink> on Sourceforge
 	</listitem>
 	<listitem>
 	<literallayout>
-	<ulink url="developer-manual/">Developer Manual</ulink>
+	<ulink url="developer-manual/index.html">Developer Manual</ulink>
 	</literallayout>
 	</listitem>
  </itemizedlist>
@@ -202,7 +202,14 @@ page</ulink> on Sourceforge
  or write to the Free Software Foundation, Inc., 59
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- $Log$
+ $Log: index.sgml,v $
+ Revision 1.1  2002/04/07 08:10:48  swa
+ create some of the webserver docs
+ automatically (in particular if
+ those docs recycle other documentation
+ fragments). Now committed webserver's
+ index file.
+
 
  -->
 
