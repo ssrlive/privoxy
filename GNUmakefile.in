@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.93 2002/04/27 04:55:53 morcego Exp $
+# $Id: GNUmakefile.in,v 1.94 2002/04/27 08:23:29 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -533,13 +533,15 @@ tarball-clean:
 #
 #############################################################################
 
+# now works for swa
 # our style file
 doc/source/ldpOK.dsl:
-	if [ "$(DKPREFIX)" != "none" ]; then \
-		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
-	else \
-		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
-	fi
+#	if [ "$(DKPREFIX)" != "none" ]; then \
+#		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
+#	else \
+#		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
+#	fi
+	cp doc/source/ldp.dsl doc/source/ldpOK.dsl;
 
 # Otherwise we get plain groff conversion.
 groff2html:
@@ -673,8 +675,9 @@ else
 endif
 
 dok-pdf: doc/source/ldpOK.dsl dok-release 
-	cp doc/source/*.sgml doc/pdf
-	cp doc/source/*.dsl doc/pdf
+	rm -f doc/pdf/*.pdf
+	cp -f doc/source/*.sgml doc/pdf
+	cp -f doc/source/*.dsl doc/pdf
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
@@ -839,6 +842,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.94  2002/04/27 08:23:29  swa
+# pdf process reviewed and cleaned up
+#
 # Revision 1.93  2002/04/27 04:55:53  morcego
 # privoxy-cl.spec now gets removed by clobber target
 #
