@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.53 2002/05/03 01:34:52 hal9 Exp $
+ $Id: faq.sgml,v 1.54 2002/05/03 05:06:44 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -54,15 +54,6 @@
  ========================================================================
 
 
- ********************************************************************
- READ!!!
-
- Document NOTE: To force the Table of Contents onto its own page, 
- there is an empty sect1 at the top of the document. This skews 
- the numbering of other sect1's, which need to be hand labeled to 
- ensure proper rendering.
- *********************************************************************
-
 -->
 
 
@@ -70,7 +61,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.53 2002/05/03 01:34:52 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.54 2002/05/03 05:06:44 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -112,16 +103,10 @@
 </abstract>
 </artheader>
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="intro" label=""><title></title>
-<!-- dummy section to force TOC on page by itself -->
-<!-- DO NOT REMOVE! please ;) -->
-<para> </para>
-</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 label="1" id="general"><title>General Information</title>
+<sect1 id="general"><title>General Information</title>
 
 <sect2 renderas="sect3" id="newjb"><title>What is this new version of <application>Privoxy</application>?</title>
  <para>
@@ -348,7 +333,7 @@ warranty? Registration?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1  label="2" id="installation"><title>Installation</title>
+<sect1  id="installation"><title>Installation</title>
 
 <sect2 renderas="sect3" id="whichbrowsers">
 <title>Which browsers are supported by <application>Privoxy</application>?</title>
@@ -461,7 +446,7 @@ All the ads are there. What's wrong?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1  label="3" id="configuration"><title>Configuration</title>
+<sect1 id="configuration"><title>Configuration</title>
 
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
@@ -984,7 +969,7 @@ proxies like <application>Squid</application>?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1  label="4"id="misc"><title>Miscellaneous</title>
+<sect1 id="misc"><title>Miscellaneous</title>
 
 <sect2 renderas="sect3">
 <title id="slowsme">How much does <application>Privoxy</application> slow my browsing down? This 
@@ -1320,7 +1305,7 @@ and related issues?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 label="5" id="trouble">
+<sect1 id="trouble">
 <title>Troubleshooting</title>
 
 <sect2 renderas="sect3">
@@ -1421,14 +1406,14 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 -->
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 label="6" id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
+  <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
 <!-- Include contacting.sgml  -->
  &contacting;
 <!-- end contacting -->
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 label="7" id="copyright"><title>Copyright and History</title>
+  <sect1 id="copyright"><title>Copyright and History</title>
 
 <sect2><title>Copyright</title>
 <!-- Include copyright.sgml -->
@@ -1482,6 +1467,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.54  2002/05/03 05:06:44  hal9
+Add brief Q/A on transparent proxies.
+
 Revision 1.53  2002/05/03 01:34:52  hal9
 Fix section numbering for new sections (due to TOC kludge).
 
