@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.68 2002/05/12 21:36:29 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.69 2002/05/14 21:28:40 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.68 2002/05/12 21:36:29 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.69  2002/05/14 21:28:40  oes
+ *     - Fixed add_help_link to link to the (now split) actions
+ *       part of the config chapter
+ *     - Renamed helplink export to actions-help-prefix
+ *
  *    Revision 1.68  2002/05/12 21:36:29  jongfoster
  *    Correcting function comments
  *
@@ -735,6 +740,12 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
          {
             err = cgi_error_bad_param(csp, rsp);
          }
+         if (err && (err != JB_ERR_MEMORY))
+         {
+            /* Unexpected error! Shouldn't get here */
+            log_error(LOG_LEVEL_ERROR, "Unexpected CGI error %d in top-level handler.  Please file a bug report!", err);
+            err = cgi_error_unknown(csp, rsp, err);
+         }
          if (!err)
          {
             /* It worked */
@@ -1130,7 +1141,7 @@ struct http_response *cgi_error_memory(void)
  *
  * Function    :  cgi_error_no_template
  *
- * Description :  Almost-CGI function that is called if a templae
+ * Description :  Almost-CGI function that is called if a template
  *                cannot be loaded.  Note this is not a true CGI,
  *                it takes a template name rather than a map of 
  *                parameters.
@@ -1192,6 +1203,83 @@ jb_err cgi_error_no_template(struct client_state *csp,
    }
    strcpy(rsp->body, body_prefix);
    strcat(rsp->body, template_name);
+   strcat(rsp->body, body_suffix);
+
+   rsp->status = strdup(status);
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_unknown
+ *
+ * Description :  Almost-CGI function that is called if an unexpected
+ *                error occurs in the top-level CGI dispatcher.
+ *                In this context, "unexpected" means "anything other
+ *                than JB_ERR_MEMORY or JB_ERR_CGI_PARAMS" - CGIs are
+ *                expected to handle all other errors internally,
+ *                since they can give more relavent error messages
+ *                that way.
+ *
+ *                Note this is not a true CGI, it takes an error
+ *                code rather than a map of parameters.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  error_to_report = Error code to report.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_error_unknown(struct client_state *csp,
+                         struct http_response *rsp,
+                         jb_err error_to_report)
+{
+   static const char status[] =
+      "500 Internal Privoxy Error";
+   static const char body_prefix[] =
+      "<html>\r\n"
+      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
+      "<body>\r\n"
+      "<h1>500 Internal Privoxy Error</h1>\r\n"
+      "<p>Privoxy encountered an error while processing your request:</p>\r\n"
+      "<p><b>Unexpected internal error: ";
+   static const char body_suffix[] =
+      "</b></p>\r\n"
+      "<p>Please "
+      "<a href=\"http://sourceforge.net/tracker/?group_id=11118&atid=111118\">"
+      "file a bug report</a>.</p>\r\n"
+      "</body>\r\n"
+      "</html>\r\n";
+   char errnumbuf[30];
+   assert(csp);
+   assert(rsp);
+
+   /* Reset rsp, if needed */
+   freez(rsp->status);
+   freez(rsp->head);
+   freez(rsp->body);
+   rsp->content_length = 0;
+   rsp->head_length = 0;
+   rsp->is_static = 0;
+
+   sprintf(errnumbuf, "%d", error_to_report);
+
+   rsp->body = malloc(strlen(body_prefix) + strlen(errnumbuf) + strlen(body_suffix) + 1);
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+   strcpy(rsp->body, body_prefix);
+   strcat(rsp->body, errnumbuf);
    strcat(rsp->body, body_suffix);
 
    rsp->status = strdup(status);

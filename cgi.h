@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.27 2002/04/24 02:16:51 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.28 2002/04/26 12:54:03 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.28  2002/04/26 12:54:03  oes
+ *    New function add_help_link
+ *
  *    Revision 1.27  2002/04/24 02:16:51  oes
  *    Moved get_char_param, get_string_param and get_number_param here from cgiedit.c
  *
@@ -195,6 +198,9 @@ extern jb_err cgi_error_no_template(struct client_state *csp,
                                     const char *template_name);
 extern jb_err cgi_error_bad_param(struct client_state *csp,
                                   struct http_response *rsp);
+jb_err cgi_error_unknown(struct client_state *csp,
+                         struct http_response *rsp,
+                         jb_err error_to_report);
 
 extern jb_err get_number_param(struct client_state *csp,
                                const struct map *parameters,
