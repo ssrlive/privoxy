@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.38 2001/11/13 00:31:21 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.39 2001/11/16 00:48:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.38 2001/11/13 00:31:21 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.39  2001/11/16 00:48:13  jongfoster
+ *    Fixing a compiler warning
+ *
  *    Revision 1.38  2001/11/13 00:31:21  jongfoster
  *    - Adding new CGIs for use by non-JavaScript browsers:
  *        edit-actions-url-form
@@ -886,7 +889,14 @@ void get_http_time(int time_offset, char *buf)
    current_time += time_offset;
 
    /* get and save the gmt */
-   t = gmtime(&current_time);
+   {
+#ifdef HAVE_GMTIME_R
+      struct tm dummy;
+      t = gmtime_r(&current_time, &dummy);
+#else
+      t = gmtime(&current_time);
+#endif
+   }
 
    /* Format: "Sun, 06 Nov 1994 08:49:37 GMT" */
    snprintf(buf, 30,
