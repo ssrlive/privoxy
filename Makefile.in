@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.18 2001/07/29 17:09:17 jongfoster Exp $
+# $Id: Makefile.in,v 1.19 2001/07/30 22:14:03 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.19  2001/07/30 22:14:03  jongfoster
+# Removing obsolete w32rulesdlg.c and w32rulesdlg.h
+#
 # Revision 1.18  2001/07/29 17:09:17  jongfoster
 # Major changes to build system in order to fix these bugs:
 # - pthreads under Linux was broken - changed -lpthread to -pthread
@@ -343,12 +346,11 @@ pcre/dftables:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal
 		$(CC) -o pcre/dftables $(CFLAGS) pcre/dftables.c
 
 # Win32
-w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32rulesdlg.h w32taskbar.h win32.h
-w32rulesdlg.@OBJEXT@: w32rulesdlg.c config.h w32rulesdlg.h win32.h
+w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
 w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
 win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h win32.h
 
-w32.res: w32.rc w32res.h icons/denyrule.ico icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/icon1.ico icons/idle.ico icons/junkbust.ico config.h
+w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/idle.ico icons/junkbust.ico config.h
 	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
 
 ## AmigaOS, GCC 2.95.1 (or lower, 2.95.3 does NOT work!)
