@@ -138,10 +138,16 @@
 # +block
 #    Block this URL
 #
-# +deanimate-gifs
+# +deanimate-gifs{last}
+# +deanimate-gifs{first}
 #    Deanimate all animated GIF images, i.e. reduce them to their last
 #    frame. This will also shrink the images considerably. (In bytes,
-#    not pixels!)
+#    not pixels!) 
+#    If the option "first" is given, the first frame of the animation
+#    is used as the replacement. If "last" is given, the last frame of
+#    the animation is used instead, which propably makes more sense for
+#    most banner animations, but also has the risk of not showing the
+#    entire last frame (if it is only a delta to an earlier frame).
 #
 # +fast-redirects
 #    Many sites, like yahoo.com, don't just link to other sites.
@@ -651,7 +657,7 @@ www.mtv3.fi/mainoskuvat
 # generic hosts (probably most effective)
 #
 ad*.
-#.*ads.
+.*ads.
 banner.
 
 .admaximize.com
@@ -1201,7 +1207,7 @@ members.tripod.com/adm/popup/
 .exitexchange.com
 
 #SourceForge ads.
-#sfads.osdn.com
+sfads.osdn.com
 
 #This site traps the browser
 .webhideout.com
@@ -1362,7 +1368,7 @@ www.nexgo.de/.*/bg_banner.jpg
 # New GIF deanimation feature. Just try http://www.oesterhelt.org/deanimate-demo
 # with and without it.
 #
-{+deanimate-gifs}
+{+deanimate-gifs{last}}
 www.oesterhelt.org/deanimate-demo
 
 # End of file
