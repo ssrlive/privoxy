@@ -1,9 +1,10 @@
-/* config.h.win - Microsoft Visual C++ version of config.h  */
+/* config.h.  Generated automatically by configure.  */
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
 #ifndef _CONFIG_H
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.in,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -37,20 +38,23 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h.win,v $
- *    Revision 1.3  2001/06/29 21:56:40  oes
- *    Version -> 2.9.5
+ *    $Log: config.h.in,v $
+ *    Revision 1.6  2001/07/15 17:54:29  jongfoster
+ *    Renaming #define STATIC to STATIC_PCRE
+ *    Adding new #define FEATURE_PTHREAD that will be used to enable
+ *    POSIX threads support.
  *
- *    Revision 1.2  2001/06/29 13:26:27  oes
- *    Introduced #define CODE_STATUS
+ *    Revision 1.5  2001/07/13 13:48:37  oes
+ *     - (Fix:) Copied CODE_STATUS #define from config.h.in
+ *     - split REGEX #define into REGEX_GNU and REGEX_PCRE
+ *       and removed PCRE.
+ *       (REGEX = REGEX_GNU || REGEX_PCRE per project.h)
+ *     - Moved STATIC (for pcre) here from Makefile.in
+ *     - Introduced STATIC_PCRS #define to allow for dynaimc linking with
+ *       libpcrs
+ *     - Removed PCRS #define, since pcrs is now needed for CGI anyway
  *
- *    Revision 1.1  2001/06/01 17:56:07  jongfoster
- *    Removing generated files config.h and pcre/chartables.c
- *    Now use a custom build step to copy config.h.win to config.h
- *    New VC++ project pcre/vc_dftables.dsp will generate pcre/chartables.c
- *    Also adding the new files list.[ch], actions.[ch] to the console build.
- *
- *    Revision 1.6  2001/05/29 09:50:24  jongfoster
+ *    Revision 1.4  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
  *    are (mostly) done.
@@ -73,31 +77,56 @@
  *      if it had been intercepted then it then it would have replaced
  *      it with an image.)
  *
- *    Revision 1.5  2001/05/26 00:28:36  jongfoster
- *    Automatic reloading of config file.
- *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
- *    Most of the global variables have been moved to a new
- *    struct configuration_spec, accessed through csp->config->globalname
- *    Most of the globals remaining are used by the Win32 GUI.
+ *    Revision 1.3  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
  *
- *    Revision 1.4  2001/05/25 22:17:28  jongfoster
- *    Resurrecting these files which are required for the MS Visual C++
- *    build only.
+ *    Revision 1.2  2001/05/22 17:43:35  oes
  *
- *    Revision 1.2  2001/05/20 01:21:20  jongfoster
- *    Version 2.9.4 checkin.
- *    - Merged popupfile and cookiefile, and added control over PCRS
- *      filtering, in new "permissionsfile".
- *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
- *      file error you now get a message box (in the Win32 GUI) rather
- *      than the program exiting with no explanation.
- *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
- *      skipping.
- *    - Removed tabs from "config"
- *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
- *    - Bumped up version number.
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
  *
- *    Revision 1.1.1.1  2001/05/15 13:58:49  oes
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Many minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
+ *    Revision 1.1.1.1  2001/05/15 13:58:45  oes
  *    Initial import of version 2.9.3 source tree
  *
  *
@@ -126,12 +155,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 5
+#define VERSION_POINT 6
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.5"
+#define VERSION "2.9.6"
 
 /*
  * Status of the code: alpha, beta or stable
@@ -139,8 +168,8 @@
 #define CODE_STATUS "alpha"
 
 /*
- * Regular expression matching for URLs.  (Highly recommended).  If none of these 
- * is defined then you can ony use prefix matching.
+ * Regular expression matching for URLs.  (Highly recommended).
+ * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
 /* #undef REGEX_GNU */
@@ -152,7 +181,7 @@
  * libpcre and user preferences). The name is ugly, but pcre needs it.
  * Don't bother to change this here! Use configure instead.
  */
-#define STATIC 1
+#define STATIC_PCRE 1
 
 /* 
  * Should pcrs be statically built in instead of linkling with libpcrs?
@@ -170,11 +199,6 @@
  * GUI).
  */
 #define TOGGLE 1
-
-/*
- * Enables arbitrary content modification regexps
- */
-#define PCRS 1
 
 /*
  * If a stream is compressed via gzip (Netscape specific I think), then
@@ -269,9 +293,9 @@
 #define JAR_FILES 1
 
 /*
- * Use PCRE rather than GNU Regex
+ * Use POSIX threads instead of native threads.
  */
-#define PCRE 1
+/* #undef FEATURE_PTHREAD */
 
 /* Define if you have the bcopy function.  */
 #define HAVE_BCOPY 1
@@ -281,5 +305,13 @@
 
 /* Define if you have the strerror function.  */
 #define HAVE_STRERROR 1
+
+/*
+ * Need to set up this define only for the Pthreads library for
+ * Win32, available from http://sources.redhat.com/pthreads-win32/
+ */
+#if defined(FEATURE_PTHREAD) && defined(_WIN32)
+#define __CLEANUP_C
+#endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
 
 #endif /* _CONFIG_H */
