@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.3 2001/05/29 08:54:25 jongfoster Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.4 2001/11/13 00:16:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -6,7 +6,7 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.3 2001/05/29 08:54:25 jongfoster Ex
  * Purpose     :  A function to split a string at specified deliminters.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -32,6 +32,10 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.3 2001/05/29 08:54:25 jongfoster Ex
  *
  * Revisions   :
  *    $Log: ssplit.c,v $
+ *    Revision 1.4  2001/11/13 00:16:38  jongfoster
+ *    Replacing references to malloc.h with the standard stdlib.h
+ *    (See ANSI or K&R 2nd Ed)
+ *
  *    Revision 1.3  2001/05/29 08:54:25  jongfoster
  *    Rewrote the innards of ssplit() to be easier to understand,
  *    faster, and to use less memory.  Didn't change the interface

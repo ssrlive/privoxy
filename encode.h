@@ -1,6 +1,6 @@
 #ifndef ENCODE_H_INCLUDED
 #define ENCODE_H_INCLUDED
-#define ENCODE_H_VERSION "$Id: encode.h,v 1.2 2001/07/29 18:43:08 jongfoster Exp $"
+#define ENCODE_H_VERSION "$Id: encode.h,v 1.3 2002/01/22 23:28:07 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.h,v $
@@ -9,7 +9,7 @@
  *                encode cookies and HTML text.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,11 @@
  *
  * Revisions   :
  *    $Log: encode.h,v $
+ *    Revision 1.3  2002/01/22 23:28:07  jongfoster
+ *    Adding convenience function html_encode_and_free_original()
+ *    Making all functions accept NULL paramaters - in this case, they
+ *    simply return NULL.  This allows error-checking to be deferred.
+ *
  *    Revision 1.2  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.

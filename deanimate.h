@@ -1,6 +1,6 @@
 #ifndef DEANIMATE_H_INCLUDED
 #define DEANIMATE_H_INCLUDED
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.5 2002/03/07 03:46:17 oes Exp $"
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.6 2002/03/08 17:46:04 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
@@ -11,7 +11,7 @@
  *                
  *
  * Copyright   :  Written by and Copyright (C) 2001 Andreas S. Oesterhelt
- *                for the SourceForge IJBSWA team. http://ijbswa.sourceforge.net
+ *                for the SourceForge Privoxy team. http://ijbswa.sourceforge.net
  *
  *                Based on ideas from the Image::DeAnim Perl module by
  *                Ken MacFarlane, <ksm+cpan@universal.dca.net>
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 1.6  2002/03/08 17:46:04  jongfoster
+ *    Fixing int/size_t warnings
+ *
  *    Revision 1.5  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *

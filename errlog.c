@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.32 2002/03/07 03:46:17 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.33 2002/03/13 00:27:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -7,7 +7,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.32 2002/03/07 03:46:17 oes Exp $";
  *                printf-like fashion.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.32 2002/03/07 03:46:17 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.33  2002/03/13 00:27:04  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.32  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.20 2002/03/16 20:28:34 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.21 2002/03/22 18:02:48 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -16,7 +16,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.20 2002/03/16 20:28:34 oes Exp $"
  *                Stick to the short names in this file for consistency.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.20 2002/03/16 20:28:34 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.21  2002/03/22 18:02:48  jongfoster
+ *    Fixing remote toggle
+ *
  *    Revision 1.20  2002/03/16 20:28:34  oes
  *    Added descriptions to the filters so users will know what they select in the cgi editor
  *

@@ -13,7 +13,7 @@
  *                    DEFINE_ACTION_ALIAS
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.11  2002/03/12 01:42:49  oes
+ *    Introduced modular filters
+ *
  *    Revision 1.10  2002/03/08 18:19:14  jongfoster
  *    Adding +image-blocker{pattern} option to edit interface
  *

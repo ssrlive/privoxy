@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.44 2002/03/16 21:51:00 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.45 2002/03/16 23:54:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -9,7 +9,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.44 2002/03/16 21:51:00 jongfoster
  *                unload files that are no longer in use.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -35,6 +35,13 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.44 2002/03/16 21:51:00 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.45  2002/03/16 23:54:06  jongfoster
+ *    Adding graceful termination feature, to help look for memory leaks.
+ *    If you enable this (which, by design, has to be done by hand
+ *    editing config.h) and then go to http://i.j.b/die, then the program
+ *    will exit cleanly after the *next* request.  It should free all the
+ *    memory that was used.
+ *
  *    Revision 1.44  2002/03/16 21:51:00  jongfoster
  *    Fixing free(NULL).
  *

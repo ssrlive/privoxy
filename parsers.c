@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.50 2002/03/12 01:45:35 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.51 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -14,7 +14,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.50 2002/03/12 01:45:35 oes Exp $"
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.50 2002/03/12 01:45:35 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.51  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.50  2002/03/12 01:45:35  oes
  *    More verbose logging
  *

@@ -1,6 +1,6 @@
 #ifndef CYGWIN_H_INCLUDED
 #define CYGWIN_H_INCLUDED
-#define CYGWIN_H_VERSION "$Id: cygwin.h,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $"
+#define CYGWIN_H_VERSION "$Id: cygwin.h,v 1.2 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cygwin.h,v $
@@ -10,7 +10,7 @@
  *                latest SDK too?  Shudder, I think not.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: cygwin.h,v $
+ *    Revision 1.2  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
  *    Initial import of version 2.9.3 source tree
  *

@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h JGF $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.1 2002/01/17 20:53:46 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -9,7 +9,7 @@
  *                patterns.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,23 @@
  *
  * Revisions   :
  *    $Log: urlmatch.h,v $
+ *    Revision 1.1  2002/01/17 20:53:46  jongfoster
+ *    Moving all our URL and URL pattern parsing code to the same file - it
+ *    was scattered around in filters.c, loaders.c and parsers.c.
+ *
+ *    Providing a single, simple url_match(pattern,url) function - rather than
+ *    the 3-line match routine which was repeated all over the place.
+ *
+ *    Renaming free_url to free_url_spec, since it frees a struct url_spec.
+ *
+ *    Providing parse_http_url() so that URLs can be parsed without faking a
+ *    HTTP request line for parse_http_request() or repeating the parsing
+ *    code (both of which were techniques that were actually in use).
+ *
+ *    Standardizing that struct http_request is used to represent a URL, and
+ *    struct url_spec is used to represent a URL pattern.  (Before, URLs were
+ *    represented as seperate variables and a partially-filled-in url_spec).
+ *
  *
  *********************************************************************/
 

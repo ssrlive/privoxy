@@ -1,6 +1,6 @@
 #ifndef CGIEDIT_H_INCLUDED
 #define CGIEDIT_H_INCLUDED
-#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.4 2001/11/13 00:28:51 jongfoster Exp $"
+#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.5 2002/01/22 23:24:48 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.h,v $
@@ -11,7 +11,7 @@
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: cgiedit.h,v $
+ *    Revision 1.5  2002/01/22 23:24:48  jongfoster
+ *    Adding edit-actions-section-swap
+ *
  *    Revision 1.4  2001/11/13 00:28:51  jongfoster
  *    Adding new CGIs for use by non-JavaScript browsers:
  *      edit-actions-url-form

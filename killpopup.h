@@ -1,6 +1,6 @@
 #ifndef KILLPOPUP_H_INCLUDED
 #define KILLPOPUP_H_INCLUDED
-#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.5 2001/07/31 14:44:22 oes Exp $"
+#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.6 2001/10/07 15:42:41 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Handles the filtering of popups.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -34,6 +34,10 @@
  *
  * Revisions   :
  *    $Log: killpopup.h,v $
+ *    Revision 1.6  2001/10/07 15:42:41  oes
+ *    filter_popups now gets a csp pointer so it can raise the new
+ *      CSP_FLAG_MODIFIED flag.
+ *
  *    Revision 1.5  2001/07/31 14:44:22  oes
  *    Deleted unused size parameter from filter_popups()
  *

@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.56 2002/03/13 20:27:30 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.57 2002/03/16 20:28:34 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                (though it does declare some macros).
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.57  2002/03/16 20:28:34  oes
+ *    Added descriptions to the filters so users will know what they select in the cgi editor
+ *
  *    Revision 1.56  2002/03/13 20:27:30  oes
  *    Fixing bug with CT_TABOO
  *

@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.20 2002/03/04 17:53:22 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.21 2002/03/07 03:48:38 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -12,7 +12,7 @@
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -38,6 +38,12 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.21  2002/03/07 03:48:38  oes
+ *     - Changed built-in images from GIF to PNG
+ *       (with regard to Unisys patent issue)
+ *     - Added a 4x4 pattern PNG which is less intrusive
+ *       than the logo but also clearly marks the deleted banners
+ *
  *    Revision 1.20  2002/03/04 17:53:22  oes
  *    Fixed compiled warning
  *

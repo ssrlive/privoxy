@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.49 2002/03/13 00:27:04 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.50 2002/03/16 23:54:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -12,7 +12,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.49 2002/03/13 00:27:04 jongfoster Exp $";
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -38,6 +38,13 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.49 2002/03/13 00:27:04 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.50  2002/03/16 23:54:06  jongfoster
+ *    Adding graceful termination feature, to help look for memory leaks.
+ *    If you enable this (which, by design, has to be done by hand
+ *    editing config.h) and then go to http://i.j.b/die, then the program
+ *    will exit cleanly after the *next* request.  It should free all the
+ *    memory that was used.
+ *
  *    Revision 1.49  2002/03/13 00:27:04  jongfoster
  *    Killing warnings
  *
@@ -332,7 +339,7 @@ const char cgi_h_rcs[] = CGI_H_VERSION;
 static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "",
          cgi_default,
-         "Junkbuster main page" },
+         "Privoxy main page" },
 #ifdef FEATURE_GRACEFUL_TERMINATION
    { "die", 
          cgi_die,  

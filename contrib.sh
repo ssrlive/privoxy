@@ -162,7 +162,7 @@ exit 0
 #addr_clean.pl:
 #addr_clean.pl:##	*********************************************************************
 #addr_clean.pl:##	*
-#addr_clean.pl:##	* File			:	$Source: addr_clean.pl,v $
+#addr_clean.pl:##	* File			:	$Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #addr_clean.pl:##	*
 #addr_clean.pl:##	* Purpose		:	Cleans addresses out of ./test_list and replaces
 #addr_clean.pl:##	*						them with "english" replacements.
@@ -284,16 +284,16 @@ exit 0
 #addr_clean.pl:}
 
 
-#gen_list.c:const char gen_list_rcs[] = "$Id: gen_list.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#gen_list.c:const char gen_list_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #gen_list.c:/*********************************************************************
 #gen_list.c: *
-#gen_list.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#gen_list.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #gen_list.c: *
 #gen_list.c: * Purpose     :  To create some functions to do generic doubly linked
 #gen_list.c: *						list management.
 #gen_list.c: *
 #gen_list.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#gen_list.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#gen_list.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #gen_list.c: *
 #gen_list.c: *                This program is free software; you can redistribute it
 #gen_list.c: *                and/or modify it under the terms of the GNU General
@@ -317,7 +317,15 @@ exit 0
 #gen_list.c: *						and edit IJB, correctly.
 #gen_list.c: *
 #gen_list.c: * Revisions   :
-#gen_list.c: *    $Log: gen_list.c,v $
+#gen_list.c: *    $Log: contrib.sh,v $
+#gen_list.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#gen_list.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#gen_list.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#gen_list.c: *    contrib directory and I cannot upload a tarball ... it gets
+#gen_list.c: *    corrupted).  This script will expand all files needed to create the
+#gen_list.c: *    linked list modules and an example program.  Please see the README.
+#gen_list.c: *    Feed back is welcomed.  Enjoy.
+#gen_list.c: *
 #gen_list.c: *
 #gen_list.c: *********************************************************************/
 #gen_list.c:
@@ -1366,16 +1374,16 @@ exit 0
 
 #gen_list.h:#ifndef GEN_LIST_H_INCLUDED
 #gen_list.h:#define GEN_LIST_H_INCLUDED
-#gen_list.h:#define GEN_LIST_H_VERSION "$Id: gen_list.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#gen_list.h:#define GEN_LIST_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #gen_list.h:/*********************************************************************
 #gen_list.h: *
-#gen_list.h: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.h,v $
+#gen_list.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #gen_list.h: *
 #gen_list.h: * Purpose     :  To create some functions to do generic doubly linked
 #gen_list.h: *						list management.
 #gen_list.h: *
 #gen_list.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#gen_list.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#gen_list.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #gen_list.h: *
 #gen_list.h: *                This program is free software; you can redistribute it
 #gen_list.h: *                and/or modify it under the terms of the GNU General
@@ -1399,7 +1407,15 @@ exit 0
 #gen_list.h: *						and edit IJB, correctly.
 #gen_list.h: *
 #gen_list.h: * Revisions   :
-#gen_list.h: *    $Log: gen_list.h,v $
+#gen_list.h: *    $Log: contrib.sh,v $
+#gen_list.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#gen_list.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#gen_list.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#gen_list.h: *    contrib directory and I cannot upload a tarball ... it gets
+#gen_list.h: *    corrupted).  This script will expand all files needed to create the
+#gen_list.h: *    linked list modules and an example program.  Please see the README.
+#gen_list.h: *    Feed back is welcomed.  Enjoy.
+#gen_list.h: *
 #gen_list.h: *
 #gen_list.h: *********************************************************************/
 #gen_list.h:
@@ -1500,10 +1516,10 @@ exit 0
 #gen_list.h:*/
 
 
-#isa.c:const char isa_rcs[] = "$Id: isa.c,v 1.1 2001/11/30 21:55:51 rodney Exp $";
+#isa.c:const char isa_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #isa.c:/*********************************************************************
 #isa.c: *
-#isa.c: * File        :  $Source: /home/rodney/devl/ijb_beta/contrib/isa.c,v $
+#isa.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #isa.c: *
 #isa.c: * Purpose     :  Pronounced "is a".  To create "english" translations
 #isa.c: *						for all linked "classes".
@@ -1512,7 +1528,7 @@ exit 0
 #isa.c: *								per project.
 #isa.c: *
 #isa.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#isa.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#isa.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #isa.c: *
 #isa.c: *                This program is free software; you can redistribute it
 #isa.c: *                and/or modify it under the terms of the GNU General
@@ -1536,7 +1552,15 @@ exit 0
 #isa.c: *						and edit IJB, correctly.
 #isa.c: *
 #isa.c: * Revisions   :
-#isa.c: *    $Log: isa.c,v $
+#isa.c: *    $Log: contrib.sh,v $
+#isa.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#isa.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#isa.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#isa.c: *    contrib directory and I cannot upload a tarball ... it gets
+#isa.c: *    corrupted).  This script will expand all files needed to create the
+#isa.c: *    linked list modules and an example program.  Please see the README.
+#isa.c: *    Feed back is welcomed.  Enjoy.
+#isa.c: *
 #isa.c: *    Revision 1.1  2001/11/30 21:55:51  rodney
 #isa.c: *    Initial revision
 #isa.c: *
@@ -1570,10 +1594,10 @@ exit 0
 
 #isa.h:#ifndef ISA_H_INCLUDED
 #isa.h:#define ISA_H_INCLUDED
-#isa.h:#define ISA_H_VERSION "$Id: isa.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#isa.h:#define ISA_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #isa.h:/*********************************************************************
 #isa.h: *
-#isa.h: * File        :  $Source: /cvsroot/ijbswa/current/isa.h,v $
+#isa.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #isa.h: *
 #isa.h: * Purpose     :  Pronounced "is a".  To create "english" translations
 #isa.h: *						for all linked "classes".
@@ -1582,7 +1606,7 @@ exit 0
 #isa.h: *								per project.
 #isa.h: *
 #isa.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#isa.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#isa.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #isa.h: *
 #isa.h: *                This program is free software; you can redistribute it
 #isa.h: *                and/or modify it under the terms of the GNU General
@@ -1606,7 +1630,15 @@ exit 0
 #isa.h: *						and edit IJB, correctly.
 #isa.h: *
 #isa.h: * Revisions   :
-#isa.h: *    $Log: isa.h,v $
+#isa.h: *    $Log: contrib.sh,v $
+#isa.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#isa.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#isa.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#isa.h: *    contrib directory and I cannot upload a tarball ... it gets
+#isa.h: *    corrupted).  This script will expand all files needed to create the
+#isa.h: *    linked list modules and an example program.  Please see the README.
+#isa.h: *    Feed back is welcomed.  Enjoy.
+#isa.h: *
 #isa.h: *
 #isa.h: *********************************************************************/
 #isa.h:
@@ -1645,15 +1677,15 @@ exit 0
 #isa.h:*/
 
 
-#main.c:const char main_rcs[] = "$Id: main.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#main.c:const char main_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #main.c:/*********************************************************************
 #main.c: *
-#main.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#main.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #main.c: *
 #main.c: * Purpose     :  To test "generic list" creation and manipulation.
 #main.c: *
 #main.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#main.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#main.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #main.c: *
 #main.c: *                This program is free software; you can redistribute it
 #main.c: *                and/or modify it under the terms of the GNU General
@@ -1684,7 +1716,15 @@ exit 0
 #main.c: *						"0x" style addresses with more human readable ones.
 #main.c: *
 #main.c: * Revisions   :
-#main.c: *    $Log: main.c,v $
+#main.c: *    $Log: contrib.sh,v $
+#main.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#main.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#main.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#main.c: *    contrib directory and I cannot upload a tarball ... it gets
+#main.c: *    corrupted).  This script will expand all files needed to create the
+#main.c: *    linked list modules and an example program.  Please see the README.
+#main.c: *    Feed back is welcomed.  Enjoy.
+#main.c: *
 #main.c: *
 #main.c: *********************************************************************/
 #main.c:
@@ -2022,10 +2062,10 @@ exit 0
 #main.c:*/
 
 
-#malloc_police.c:const char malloc_police_rcs[] = "$Id: malloc_police.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#malloc_police.c:const char malloc_police_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #malloc_police.c:/*********************************************************************
 #malloc_police.c: *
-#malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #malloc_police.c: *
 #malloc_police.c: * Purpose     :  This module uses the rec_malloc_police to build a
 #malloc_police.c: *						list of allocated and freed memory.  When the
@@ -2034,7 +2074,7 @@ exit 0
 #malloc_police.c: *						be most helpful to developers and debugers.
 #malloc_police.c: *
 #malloc_police.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#malloc_police.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#malloc_police.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #malloc_police.c: *
 #malloc_police.c: *                This program is free software; you can redistribute it
 #malloc_police.c: *                and/or modify it under the terms of the GNU General
@@ -2058,7 +2098,15 @@ exit 0
 #malloc_police.c: *						and edit IJB, correctly.
 #malloc_police.c: *
 #malloc_police.c: * Revisions   :
-#malloc_police.c: *    $Log: malloc_police.c,v $
+#malloc_police.c: *    $Log: contrib.sh,v $
+#malloc_police.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#malloc_police.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#malloc_police.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#malloc_police.c: *    contrib directory and I cannot upload a tarball ... it gets
+#malloc_police.c: *    corrupted).  This script will expand all files needed to create the
+#malloc_police.c: *    linked list modules and an example program.  Please see the README.
+#malloc_police.c: *    Feed back is welcomed.  Enjoy.
+#malloc_police.c: *
 #malloc_police.c: *
 #malloc_police.c: *********************************************************************/
 #malloc_police.c:
@@ -2342,10 +2390,10 @@ exit 0
 
 #malloc_police.h:#ifndef MALLOC_POLICE_H_INCLUDED
 #malloc_police.h:#define MALLOC_POLICE_H_INCLUDED
-#malloc_police.h:#define MALLOC_POLICE_H_VERSION "$Id: malloc_police.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#malloc_police.h:#define MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #malloc_police.h:/*********************************************************************
 #malloc_police.h: *
-#malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_char.h,v $
+#malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #malloc_police.h: *
 #malloc_police.h: * Purpose     :  This module uses the rec_malloc_police to build a
 #malloc_police.h: *						list of allocated and freed memory.  When the
@@ -2354,7 +2402,7 @@ exit 0
 #malloc_police.h: *						be most helpful to developers and debugers.
 #malloc_police.h: *
 #malloc_police.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#malloc_police.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#malloc_police.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #malloc_police.h: *
 #malloc_police.h: *                This program is free software; you can redistribute it
 #malloc_police.h: *                and/or modify it under the terms of the GNU General
@@ -2378,7 +2426,15 @@ exit 0
 #malloc_police.h: *						and edit IJB, correctly.
 #malloc_police.h: *
 #malloc_police.h: * Revisions   :
-#malloc_police.h: *    $Log: malloc_police.h,v $
+#malloc_police.h: *    $Log: contrib.sh,v $
+#malloc_police.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#malloc_police.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#malloc_police.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#malloc_police.h: *    contrib directory and I cannot upload a tarball ... it gets
+#malloc_police.h: *    corrupted).  This script will expand all files needed to create the
+#malloc_police.h: *    linked list modules and an example program.  Please see the README.
+#malloc_police.h: *    Feed back is welcomed.  Enjoy.
+#malloc_police.h: *
 #malloc_police.h: *
 #malloc_police.h: *********************************************************************/
 #malloc_police.h:
@@ -2410,15 +2466,15 @@ exit 0
 #malloc_police.h:*/
 
 
-#rec_char.c:const char rec_char_rcs[] = "$Id: rec_char.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#rec_char.c:const char rec_char_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #rec_char.c:/*********************************************************************
 #rec_char.c: *
-#rec_char.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#rec_char.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_char.c: *
 #rec_char.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_char.c: *
 #rec_char.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_char.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_char.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_char.c: *
 #rec_char.c: *                This program is free software; you can redistribute it
 #rec_char.c: *                and/or modify it under the terms of the GNU General
@@ -2442,7 +2498,15 @@ exit 0
 #rec_char.c: *						and edit IJB, correctly.
 #rec_char.c: *
 #rec_char.c: * Revisions   :
-#rec_char.c: *    $Log: rec_char.c,v $
+#rec_char.c: *    $Log: contrib.sh,v $
+#rec_char.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_char.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_char.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_char.c: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_char.c: *    corrupted).  This script will expand all files needed to create the
+#rec_char.c: *    linked list modules and an example program.  Please see the README.
+#rec_char.c: *    Feed back is welcomed.  Enjoy.
+#rec_char.c: *
 #rec_char.c: *
 #rec_char.c: *********************************************************************/
 #rec_char.c:
@@ -2602,15 +2666,15 @@ exit 0
 
 #rec_char.h:#ifndef REC_CHAR_H_INCLUDED
 #rec_char.h:#define REC_CHAR_H_INCLUDED
-#rec_char.h:#define REC_CHAR_H_VERSION "$Id: rec_char.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#rec_char.h:#define REC_CHAR_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #rec_char.h:/*********************************************************************
 #rec_char.h: *
-#rec_char.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_char.h,v $
+#rec_char.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_char.h: *
 #rec_char.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_char.h: *
 #rec_char.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_char.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_char.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_char.h: *
 #rec_char.h: *                This program is free software; you can redistribute it
 #rec_char.h: *                and/or modify it under the terms of the GNU General
@@ -2634,7 +2698,15 @@ exit 0
 #rec_char.h: *						and edit IJB, correctly.
 #rec_char.h: *
 #rec_char.h: * Revisions   :
-#rec_char.h: *    $Log: rec_char.h,v $
+#rec_char.h: *    $Log: contrib.sh,v $
+#rec_char.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_char.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_char.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_char.h: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_char.h: *    corrupted).  This script will expand all files needed to create the
+#rec_char.h: *    linked list modules and an example program.  Please see the README.
+#rec_char.h: *    Feed back is welcomed.  Enjoy.
+#rec_char.h: *
 #rec_char.h: *
 #rec_char.h: *********************************************************************/
 #rec_char.h:
@@ -2674,15 +2746,15 @@ exit 0
 #rec_char.h:*/
 
 
-#rec_charptr.c:const char rec_charptr_rcs[] = "$Id: rec_charptr.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#rec_charptr.c:const char rec_charptr_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #rec_charptr.c:/*********************************************************************
 #rec_charptr.c: *
-#rec_charptr.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#rec_charptr.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_charptr.c: *
 #rec_charptr.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_charptr.c: *
 #rec_charptr.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_charptr.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_charptr.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_charptr.c: *
 #rec_charptr.c: *                This program is free software; you can redistribute it
 #rec_charptr.c: *                and/or modify it under the terms of the GNU General
@@ -2706,7 +2778,15 @@ exit 0
 #rec_charptr.c: *						and edit IJB, correctly.
 #rec_charptr.c: *
 #rec_charptr.c: * Revisions   :
-#rec_charptr.c: *    $Log: rec_charptr.c,v $
+#rec_charptr.c: *    $Log: contrib.sh,v $
+#rec_charptr.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_charptr.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_charptr.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_charptr.c: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_charptr.c: *    corrupted).  This script will expand all files needed to create the
+#rec_charptr.c: *    linked list modules and an example program.  Please see the README.
+#rec_charptr.c: *    Feed back is welcomed.  Enjoy.
+#rec_charptr.c: *
 #rec_charptr.c: *
 #rec_charptr.c: *********************************************************************/
 #rec_charptr.c:
@@ -2878,15 +2958,15 @@ exit 0
 
 #rec_charptr.h:#ifndef REC_CHARPTR_H_INCLUDED
 #rec_charptr.h:#define REC_CHARPTR_H_INCLUDED
-#rec_charptr.h:#define REC_CHARPTR_H_VERSION "$Id: rec_charptr.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#rec_charptr.h:#define REC_CHARPTR_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #rec_charptr.h:/*********************************************************************
 #rec_charptr.h: *
-#rec_charptr.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_char.h,v $
+#rec_charptr.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_charptr.h: *
 #rec_charptr.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_charptr.h: *
 #rec_charptr.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_charptr.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_charptr.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_charptr.h: *
 #rec_charptr.h: *                This program is free software; you can redistribute it
 #rec_charptr.h: *                and/or modify it under the terms of the GNU General
@@ -2910,7 +2990,15 @@ exit 0
 #rec_charptr.h: *						and edit IJB, correctly.
 #rec_charptr.h: *
 #rec_charptr.h: * Revisions   :
-#rec_charptr.h: *    $Log: rec_charptr.h,v $
+#rec_charptr.h: *    $Log: contrib.sh,v $
+#rec_charptr.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_charptr.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_charptr.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_charptr.h: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_charptr.h: *    corrupted).  This script will expand all files needed to create the
+#rec_charptr.h: *    linked list modules and an example program.  Please see the README.
+#rec_charptr.h: *    Feed back is welcomed.  Enjoy.
+#rec_charptr.h: *
 #rec_charptr.h: *
 #rec_charptr.h: *********************************************************************/
 #rec_charptr.h:
@@ -2950,15 +3038,15 @@ exit 0
 #rec_charptr.h:*/
 
 
-#rec_double.c:const char rec_double_rcs[] = "$Id: rec_double.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#rec_double.c:const char rec_double_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #rec_double.c:/*********************************************************************
 #rec_double.c: *
-#rec_double.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#rec_double.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_double.c: *
 #rec_double.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_double.c: *
 #rec_double.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_double.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_double.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_double.c: *
 #rec_double.c: *                This program is free software; you can redistribute it
 #rec_double.c: *                and/or modify it under the terms of the GNU General
@@ -2982,7 +3070,15 @@ exit 0
 #rec_double.c: *						and edit IJB, correctly.
 #rec_double.c: *
 #rec_double.c: * Revisions   :
-#rec_double.c: *    $Log: rec_double.c,v $
+#rec_double.c: *    $Log: contrib.sh,v $
+#rec_double.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_double.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_double.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_double.c: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_double.c: *    corrupted).  This script will expand all files needed to create the
+#rec_double.c: *    linked list modules and an example program.  Please see the README.
+#rec_double.c: *    Feed back is welcomed.  Enjoy.
+#rec_double.c: *
 #rec_double.c: *
 #rec_double.c: *********************************************************************/
 #rec_double.c:
@@ -3142,15 +3238,15 @@ exit 0
 
 #rec_double.h:#ifndef REC_DOUBLE_H_INCLUDED
 #rec_double.h:#define REC_DOUBLE_H_INCLUDED
-#rec_double.h:#define REC_DOUBLE_H_VERSION "$Id: rec_double.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#rec_double.h:#define REC_DOUBLE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #rec_double.h:/*********************************************************************
 #rec_double.h: *
-#rec_double.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_double.h,v $
+#rec_double.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_double.h: *
 #rec_double.h: * Purpose     :  gen_A "derived class" of gen_list_rec.
 #rec_double.h: *
 #rec_double.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_double.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_double.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_double.h: *
 #rec_double.h: *                This program is free software; you can redistribute it
 #rec_double.h: *                and/or modify it under the terms of the GNU General
@@ -3174,7 +3270,15 @@ exit 0
 #rec_double.h: *						and edit IJB, correctly.
 #rec_double.h: *
 #rec_double.h: * Revisions   :
-#rec_double.h: *    $Log: rec_double.h,v $
+#rec_double.h: *    $Log: contrib.sh,v $
+#rec_double.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_double.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_double.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_double.h: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_double.h: *    corrupted).  This script will expand all files needed to create the
+#rec_double.h: *    linked list modules and an example program.  Please see the README.
+#rec_double.h: *    Feed back is welcomed.  Enjoy.
+#rec_double.h: *
 #rec_double.h: *
 #rec_double.h: *********************************************************************/
 #rec_double.h:
@@ -3214,15 +3318,15 @@ exit 0
 #rec_double.h:*/
 
 
-#rec_long.c:const char rec_long_rcs[] = "$Id: rec_long.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#rec_long.c:const char rec_long_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #rec_long.c:/*********************************************************************
 #rec_long.c: *
-#rec_long.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#rec_long.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_long.c: *
 #rec_long.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_long.c: *
 #rec_long.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_long.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_long.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_long.c: *
 #rec_long.c: *                This program is free software; you can redistribute it
 #rec_long.c: *                and/or modify it under the terms of the GNU General
@@ -3246,7 +3350,15 @@ exit 0
 #rec_long.c: *						and edit IJB, correctly.
 #rec_long.c: *
 #rec_long.c: * Revisions   :
-#rec_long.c: *    $Log: rec_long.c,v $
+#rec_long.c: *    $Log: contrib.sh,v $
+#rec_long.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_long.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_long.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_long.c: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_long.c: *    corrupted).  This script will expand all files needed to create the
+#rec_long.c: *    linked list modules and an example program.  Please see the README.
+#rec_long.c: *    Feed back is welcomed.  Enjoy.
+#rec_long.c: *
 #rec_long.c: *
 #rec_long.c: *********************************************************************/
 #rec_long.c:
@@ -3406,15 +3518,15 @@ exit 0
 
 #rec_long.h:#ifndef REC_LONG_H_INCLUDED
 #rec_long.h:#define REC_LONG_H_INCLUDED
-#rec_long.h:#define REC_LONG_H_VERSION "$Id: rec_long.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#rec_long.h:#define REC_LONG_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #rec_long.h:/*********************************************************************
 #rec_long.h: *
-#rec_long.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_long.h,v $
+#rec_long.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_long.h: *
 #rec_long.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_long.h: *
 #rec_long.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_long.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_long.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_long.h: *
 #rec_long.h: *                This program is free software; you can redistribute it
 #rec_long.h: *                and/or modify it under the terms of the GNU General
@@ -3438,7 +3550,15 @@ exit 0
 #rec_long.h: *						and edit IJB, correctly.
 #rec_long.h: *
 #rec_long.h: * Revisions   :
-#rec_long.h: *    $Log: rec_long.h,v $
+#rec_long.h: *    $Log: contrib.sh,v $
+#rec_long.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_long.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_long.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_long.h: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_long.h: *    corrupted).  This script will expand all files needed to create the
+#rec_long.h: *    linked list modules and an example program.  Please see the README.
+#rec_long.h: *    Feed back is welcomed.  Enjoy.
+#rec_long.h: *
 #rec_long.h: *
 #rec_long.h: *********************************************************************/
 #rec_long.h:
@@ -3478,10 +3598,10 @@ exit 0
 #rec_long.h:*/
 
 
-#rec_malloc_police.c:const char rec_malloc_police_rcs[] = "$Id: rec_malloc_police.c,v 1.1 2001/10/25 03:40:48 rodney.stromlund Exp $";
+#rec_malloc_police.c:const char rec_malloc_police_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
 #rec_malloc_police.c:/*********************************************************************
 #rec_malloc_police.c: *
-#rec_malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/gen_list.c,v $
+#rec_malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_malloc_police.c: *						This class helps to build a list of allocated and
@@ -3491,7 +3611,7 @@ exit 0
 #rec_malloc_police.c: *						and debugers.
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_malloc_police.c: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_malloc_police.c: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_malloc_police.c: *
 #rec_malloc_police.c: *                This program is free software; you can redistribute it
 #rec_malloc_police.c: *                and/or modify it under the terms of the GNU General
@@ -3515,7 +3635,15 @@ exit 0
 #rec_malloc_police.c: *						and edit IJB, correctly.
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * Revisions   :
-#rec_malloc_police.c: *    $Log: rec_malloc_police.c,v $
+#rec_malloc_police.c: *    $Log: contrib.sh,v $
+#rec_malloc_police.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_malloc_police.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_malloc_police.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_malloc_police.c: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_malloc_police.c: *    corrupted).  This script will expand all files needed to create the
+#rec_malloc_police.c: *    linked list modules and an example program.  Please see the README.
+#rec_malloc_police.c: *    Feed back is welcomed.  Enjoy.
+#rec_malloc_police.c: *
 #rec_malloc_police.c: *
 #rec_malloc_police.c: *********************************************************************/
 #rec_malloc_police.c:
@@ -3734,10 +3862,10 @@ exit 0
 
 #rec_malloc_police.h:#ifndef REC_MALLOC_POLICE_H_INCLUDED
 #rec_malloc_police.h:#define REC_MALLOC_POLICE_H_INCLUDED
-#rec_malloc_police.h:#define REC_MALLOC_POLICE_H_VERSION "$Id: rec_malloc_police.h,v 1.1 2001/07/29 18:50:04 rodney.stromlund Exp $"
+#rec_malloc_police.h:#define REC_MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
 #rec_malloc_police.h:/*********************************************************************
 #rec_malloc_police.h: *
-#rec_malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/rec_char.h,v $
+#rec_malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_malloc_police.h: *						This class helps to build a list of allocated and
@@ -3747,7 +3875,7 @@ exit 0
 #rec_malloc_police.h: *						and debugers.
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_malloc_police.h: *                IJBSWA team.  http://ijbswa.sourceforge.net
+#rec_malloc_police.h: *                Privoxy team.  http://ijbswa.sourceforge.net
 #rec_malloc_police.h: *
 #rec_malloc_police.h: *                This program is free software; you can redistribute it
 #rec_malloc_police.h: *                and/or modify it under the terms of the GNU General
@@ -3771,7 +3899,15 @@ exit 0
 #rec_malloc_police.h: *						and edit IJB, correctly.
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * Revisions   :
-#rec_malloc_police.h: *    $Log: rec_malloc_police.h,v $
+#rec_malloc_police.h: *    $Log: contrib.sh,v $
+#rec_malloc_police.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
+#rec_malloc_police.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
+#rec_malloc_police.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
+#rec_malloc_police.h: *    contrib directory and I cannot upload a tarball ... it gets
+#rec_malloc_police.h: *    corrupted).  This script will expand all files needed to create the
+#rec_malloc_police.h: *    linked list modules and an example program.  Please see the README.
+#rec_malloc_police.h: *    Feed back is welcomed.  Enjoy.
+#rec_malloc_police.h: *
 #rec_malloc_police.h: *
 #rec_malloc_police.h: *********************************************************************/
 #rec_malloc_police.h:

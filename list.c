@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.12 2001/10/25 03:40:48 david__schmidt Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.13 2002/03/07 03:46:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -8,7 +8,7 @@ const char list_rcs[] = "$Id: list.c,v 1.12 2001/10/25 03:40:48 david__schmidt E
  *                   `destroy_list', `enlist' and `list_to_text'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.12 2001/10/25 03:40:48 david__schmidt E
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.13  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.12  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,

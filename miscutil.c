@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.32 2002/03/06 23:02:57 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.33 2002/03/07 03:46:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -10,7 +10,7 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.32 2002/03/06 23:02:57 jongfost
  *                but don't really fit in any other file.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.32 2002/03/06 23:02:57 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.33  2002/03/07 03:46:53  oes
+ *    Fixed compiler warnings etc
+ *
  *    Revision 1.32  2002/03/06 23:02:57  jongfoster
  *    Removing tabs
  *

@@ -1,7 +1,7 @@
-# $Id: Makefile.in,v 1.40 2001/12/01 00:24:11 jongfoster Exp $
+# $Id: Makefile,v 1.1 2001/12/01 11:24:29 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# IJBSWA team.  http://ijbswa.sourceforge.net
+# Privoxy team.  http://ijbswa.sourceforge.net
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -25,7 +25,10 @@
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# $Log: Makefile.in,v $
+# $Log: Makefile,v $
+# Revision 1.1  2001/12/01 11:24:29  jongfoster
+# Will display a warning if non-GNU make is used
+#
 #
 
 #############################################################################

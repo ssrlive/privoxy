@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.15 2001/10/10 16:44:16 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.16 2002/01/17 21:01:02 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -13,7 +13,7 @@
  *                   `show_proxy_args', and `trust_url'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.16  2002/01/17 21:01:02  jongfoster
+ *    Moving all our URL and URL pattern parsing code to urlmatch.c.
+ *
  *    Revision 1.15  2001/10/10 16:44:16  oes
  *    Added match_portlist function
  *

@@ -1,16 +1,16 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.18 2002/03/12 01:44:49 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.19 2002/03/16 23:54:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
  *
- * Purpose     :  Simple CGIs to get information about JunkBuster's
+ * Purpose     :  Simple CGIs to get information about Privoxy's
  *                status.
  *                
  *                Functions declared include:
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,13 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.18 2002/03/12 01:44:49 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.19  2002/03/16 23:54:06  jongfoster
+ *    Adding graceful termination feature, to help look for memory leaks.
+ *    If you enable this (which, by design, has to be done by hand
+ *    editing config.h) and then go to http://i.j.b/die, then the program
+ *    will exit cleanly after the *next* request.  It should free all the
+ *    memory that was used.
+ *
  *    Revision 1.18  2002/03/12 01:44:49  oes
  *    Changed default for "blocked" image from jb logo to checkboard pattern
  *
@@ -1036,7 +1043,7 @@ jb_err cgi_robots_txt(struct client_state *csp,
    jb_err err;
 
    rsp->body = strdup(
-      "# This is the Internet Junkbuster control interface.\n"
+      "# This is the Privoxy control interface.\n"
       "# It isn't very useful to index it, and you're likely to break stuff.\n"
       "# So go away!\n"
       "\n"

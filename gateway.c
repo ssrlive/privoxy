@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.12 2002/03/09 20:03:52 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.13 2002/03/13 00:29:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -8,7 +8,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.12 2002/03/09 20:03:52 jongfoster
  *                proxy).
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.12 2002/03/09 20:03:52 jongfoster
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.13  2002/03/13 00:29:59  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.12  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.26 2002/03/11 22:07:02 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.27 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -9,7 +9,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.26 2002/03/11 22:07:02 david_
  *                on many platforms.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.26 2002/03/11 22:07:02 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.27  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.26  2002/03/11 22:07:02  david__schmidt
  *    OS/2 port maintenance:
  *    - Fixed EMX build - it had decayed a little

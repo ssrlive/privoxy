@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.10 2001/09/13 20:08:06 jongfoster Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.11 2002/03/06 23:02:57 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -9,7 +9,7 @@
  *                printf-like fashion.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.11  2002/03/06 23:02:57  jongfoster
+ *    Removing tabs
+ *
  *    Revision 1.10  2001/09/13 20:08:06  jongfoster
  *    Adding support for LOG_LEVEL_CGI
  *

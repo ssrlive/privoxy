@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.5 2002/03/03 09:18:03 joergs Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.6 2002/03/09 20:03:52 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -6,7 +6,7 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.5 2002/03/03 09:18:03 joergs Exp $";
  * Purpose     :  Amiga-specific declarations.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                This program is free software; you can redistribute it 
  *                and/or modify it under the terms of the GNU General
@@ -28,6 +28,30 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.5 2002/03/03 09:18:03 joergs Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.6  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.5  2002/03/03 09:18:03  joergs
  *    Made jumbjuster work on AmigaOS again.
  *

@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.4 2002/03/07 03:46:17 oes Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.5 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -7,7 +7,7 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.4 2002/03/07 03:46:17 oes Exp $
  *                patterns.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.4 2002/03/07 03:46:17 oes Exp $
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.5  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.4  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.48 2002/03/13 20:25:34 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.49 2002/03/16 20:29:14 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -12,7 +12,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.48 2002/03/13 20:25:34 oes Exp $"
  *                   'ijb_send_banner', and `trust_url'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.48 2002/03/13 20:25:34 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.49  2002/03/16 20:29:14  oes
+ *    Cosmetics
+ *
  *    Revision 1.48  2002/03/13 20:25:34  oes
  *    Better logging for content filters
  *

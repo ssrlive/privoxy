@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.37 2002/03/16 23:54:06 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.38 2002/03/24 13:05:48 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -9,7 +9,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.37 2002/03/16 23:54:06 jongfoster
  *                variables it writes to.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.37 2002/03/16 23:54:06 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.38  2002/03/24 13:05:48  jongfoster
+ *    Renaming re_filterfile to filterfile
+ *
  *    Revision 1.37  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

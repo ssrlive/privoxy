@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.13 2001/11/13 00:16:40 jongfoster Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.14 2002/03/07 03:46:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -6,7 +6,7 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.13 2001/11/13 00:16:40 jongfo
  * Purpose     :  Handles the filtering of popups.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -32,6 +32,9 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.13 2001/11/13 00:16:40 jongfo
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.14  2002/03/07 03:46:53  oes
+ *    Fixed compiler warnings etc
+ *
  *    Revision 1.13  2001/11/13 00:16:40  jongfoster
  *    Replacing references to malloc.h with the standard stdlib.h
  *    (See ANSI or K&R 2nd Ed)

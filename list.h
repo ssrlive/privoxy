@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.9 2001/10/23 21:21:03 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.10 2002/03/07 03:46:17 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -10,7 +10,7 @@
  *                   `destroy_list', `enlist' and `list_to_text'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.10  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.9  2001/10/23 21:21:03  jongfoster
  *    New error handling - error codes are now jb_errs, not ints.
  *    Changed the way map() handles out-of-memory, to dramatically

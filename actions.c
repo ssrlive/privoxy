@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.23 2002/03/07 03:46:16 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.24 2002/03/16 23:54:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -7,7 +7,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.23 2002/03/07 03:46:16 oes Exp $"
  *                Functions declared include: FIXME
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -33,6 +33,13 @@ const char actions_rcs[] = "$Id: actions.c,v 1.23 2002/03/07 03:46:16 oes Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.24  2002/03/16 23:54:06  jongfoster
+ *    Adding graceful termination feature, to help look for memory leaks.
+ *    If you enable this (which, by design, has to be done by hand
+ *    editing config.h) and then go to http://i.j.b/die, then the program
+ *    will exit cleanly after the *next* request.  It should free all the
+ *    memory that was used.
+ *
  *    Revision 1.23  2002/03/07 03:46:16  oes
  *    Fixed compiler warnings
  *

@@ -11,7 +11,7 @@
  *                getting ludicrously long with feature defines.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.18  2002/03/08 16:40:28  oes
+ *    Added FEATURE_NO_GIFS
+ *
  *    Revision 1.17  2002/03/04 17:52:44  oes
  *    Deleted PID_FILE_PATH
  *
