@@ -67,8 +67,8 @@ For tarball, first unpack:
  tar xzvf ijb-2.9.11-beta-src.tar.gz
  cd ijb-2.9.11-beta
 
- autoheader   [suggested for CVS source]
- autoconf     [suggested for CVS source]
+ autoheader
+ autoconf
  ./configure	(--help to see options)
  gmake        	(the make from gnu) 
  su 
@@ -168,4 +168,4 @@ here too.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.17 2002/03/24 11:18:23 swa Exp $
+$Id: README,v 1.18 2002/03/24 15:46:20 swa Exp $

@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.25 2002/03/24 14:31:08 swa Exp $
+# $Id: GNUmakefile.in,v 1.26 2002/03/24 15:36:02 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -483,7 +483,8 @@ clean:
 	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
 
 clobber: clean
-	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz
+	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log
+privoxy.log config.cache *~ *.tar.gz configure
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
@@ -518,6 +519,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.26  2002/03/24 15:36:02  swa
+# did not build.
+#
 # Revision 1.25  2002/03/24 14:31:08  swa
 # remove more crappy files. set RPM
 # release version correctly.
