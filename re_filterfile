@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.11  2001/09/21 12:34:00  joergs
+#     Added filter to replace "Nimda" code by a warning.
+#
 #     Revision 1.10  2001/07/20 11:04:26  oes
 #     Added Rodneys javascript cookie filter
 #
@@ -102,7 +105,7 @@ s/(<frameset[^>]+?)frameborder=['"]?(no|0)['"]?/$1/ig
 
 # ********************************************************************/
 #
-# The status bar is for displaying link targets, not pointless buzzwords.
+# The status bar is for displaying link targets, not pointless descriptions.
 # Again, check it out on http://www.airport-cgn.de/
 #
 # ********************************************************************/
@@ -114,7 +117,7 @@ s/status='.*?';*//ig
 #
 # ********************************************************************/
 
-#s|document.cookie|c\?\?kie_what\?|sig
+s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
 
 # ********************************************************************/
 #
@@ -183,4 +186,3 @@ s/(\w+) was tired/<b>$1 needed more coffee<\/b>/ig
 #
 # ********************************************************************/
 s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><hr><font size=7><b>Internet J</b></font><b><font size=6>UNK</font><font size=5 color="red"><i>BUSTER</i></font></b><font size=7> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
-
