@@ -1,0 +1,109 @@
+/*********************************************************************
+ *
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.in,v $
+ *
+ * Purpose     :  README file to give a short intro.
+ *
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *
+ *                Based on the Internet Junkbuster originally written
+ *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                This program is free software; you can redistribute it 
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *********************************************************************/
+
+
+This README is included with the development version of Junkbuster,
+which will eventually become Junkbuster v3.0. See
+http://ijbswa.sourceforge.net.
+
+Internet Junkbuster is a web proxy with advanced filtering
+capabilities for protecting privacy and removing ads, banners, pop-ups
+and other obnoxious Internet Junk.
+
+ INSTALL
+--------
+
+For tarball, first unpack:
+
+ tar zxvf ijb_source_*
+ cd ijb_source_2.9.8_alpha
+
+ ./configure
+ make
+ su
+ make install
+
+Redhat and SuSE src and binary RPMs can be built with 'make
+redhat-dist' or 'make suse-dist'.
+
+Junkbuster is also availabe via anonymous CVS:
+
+ cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+ cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co
+current
+
+This will create a directory named 'current'. Then, 'cd current', and then
+build as above.
+
+ RUN
+----
+
+ junkbuster /etc/junkbuster/config &
+
+Or for RPMS: /etc/rc.d/init.d/junkbuster start
+
+CONFIGURATION
+-------------
+
+See: 'config', 'actionsfile', and 're_filterfile'. There are many changes and
+advances since v2.0.x. Be sure to set your browsers for HTTP Proxy at
+localhost:8000.
+
+DOCUMENTATION
+-------------
+
+The best source of information on the current development version, is
+either comments in the source code, or the included configuration
+files, which are all well commented. These are 'config',
+'actionsfile', and 're_filterfile' in the toplevel source directory.
+
+There is a growing amount of new documentation in the 'doc'
+subdirectory, but it is sparse at this point. In particular, see the
+developer-manual and user-manual there.
+
+Some legacy documentation is also included only to give an idea of
+what Junkbuster can do under doc/obsolete/*. Much has changed since
+these docs were written, so beware.
+
+BUGS
+----
+
+Use the form at
+http://sourceforge.net/tracker/index.php?group_id=11118&atid=111118 to
+report bugs. Please read the exising bug reports before submitting
+anything new.
+
+-------------------------------------------------------------------------
+ijbswa-developers@lists.sourceforge.net
+
+$Id$
