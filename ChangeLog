@@ -1,13 +1,16 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Current CVS *** 
+*** Version 2.9.15 (current CVS) *** 
 
+- Impose buffer limits while reading client and server headers.
+- Better memory and CPU optimization.
+- Add Conectiva Linux package.
 - Actions files are changed to: default.action, standard.action, and 
   user.action. user.action is for personal/local configuration.
-- Major overhaul of the CGI editor.
+- Major overhaul of the CGI editor (ongoing).
 - Multiple actions files can now be specified in config.
-
+- The usual many small and miscellaneous fixes.
 
 *** Version 2.9.14 Beta *** 
 
