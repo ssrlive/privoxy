@@ -6,10 +6,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.49 2002/03/21 17:01:05 hal9 Exp $
+ $Id: user-manual.sgml,v 1.50 2002/03/23 05:06:21 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
- IJBSWA team.  http://ijbswa.sourceforge.net
+ Foobar team.  http://ijbswa.sourceforge.net
 
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
@@ -26,14 +26,14 @@ Hal Burgiss <hal@foobox.net>
 
 <article id="index">
 <artheader>
-<title>Junkbuster User Manual</title>
+<title>Foobar User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.49 2002/03/21 17:01:05 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.50 2002/03/23 05:06:21 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
   <affiliation>
-   <orgname>By: Junkbuster Developers</orgname>
+   <orgname>By: Foobar Developers</orgname>
    </affiliation>
  </author>
 </authorgroup>
@@ -41,14 +41,14 @@ Hal Burgiss <hal@foobox.net>
 <abstract>
  <para>
   The user manual gives users information on how to install, configure and use
-  <application>Internet Junkbuster</application>. <application>Internet
-  Junkbuster</application> is a web proxy with advanced filtering capabilities
-  for protecting privacy, filtering web page content, managing cookies,
-  controlling access, and removing ads, banners, pop-ups and other obnoxious
-  Internet Junk. Junkbuster has a very flexible configuration and can be
-  customized to suit individual needs and tastes. <application>Internet
-  Junkbuster</application> has application for both stand-alone systems and
-  multi-user networks.
+  <application>Foobar</application>. <application>Foobar</application> is a
+  web proxy with advanced filtering capabilities for protecting privacy,
+  filtering web page content, managing cookies, controlling access, and
+  removing ads, banners, pop-ups and other obnoxious Internet
+  Junk. <application>Foobar</application> has a very flexible configuration
+  and can be customized to suit individual needs and
+  tastes. <application>Foobar</application> has application for both
+  stand-alone systems and multi-user networks.
  </para>
  <para>
 You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
@@ -66,19 +66,18 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <sect1 id="introduction"><title>Introduction</title>
 <para>
- <application>Internet Junkbuster</application> is a web proxy with advanced
+ <application>Foobar</application> is a web proxy with advanced
  filtering capabilities for protecting privacy, filtering and modifying web
  page content, managing cookies, controlling access, and removing ads,
  banners, pop-ups and other obnoxious Internet Junk.
- <application>Junkbuster</application> has a very flexible configuration and
- can be customized to suit individual needs and tastes. <application>Internet
- Junkbuster</application> has application for both stand-alone systems and
+ <application>Foobar</application> has a very flexible configuration and
+ can be customized to suit individual needs and tastes. <application>Foobar</application> has application for both stand-alone systems and
  multi-user networks.
 </para>
 
 <para>
  This documentation is included with the current BETA version of
- <application>Internet Junkbuster</application> and is mostly complete at this
+ <application>Foobar</application> and is mostly complete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
  of version 3.0 is currently nearing completion, and includes many significant
@@ -98,9 +97,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <sect2>
 <title>New Features</title>
 <para>
- In addition to <application>Junkbuster's</application> traditional features
- of ad and banner blocking and cookie management, this is a list of new
- features currently under development:
+ In addition to <application>Internet Junkbuster's</application> traditional
+ feature of ad and banner blocking and cookie management,
+ <application>Foobar</application> provides new features, some of them
+ currently under development:
 </para>
 
 <!--
@@ -216,10 +216,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="installation"><title>Installation</title>
 <para>
- <application>Junkbuster</application> is available as raw source code, or
+ <application>Foobar</application> is available as raw source code, or
  pre-compiled binaries. See the <ulink
- url="http://sourceforge.net/projects/ijbswa/">Junkbuster Home Page</ulink>
- for binaries and current release info. <application>Junkbuster</application>
+ url="http://sourceforge.net/projects/ijbswa/">Foobar Home Page</ulink>
+ for binaries and current release info. <application>Foobar</application>
  is also available via <ulink
  url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
  This is the recommended approach at this time. But please be aware that CVS 
@@ -298,10 +298,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/foobar-2.9.11-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.11-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/foobar-2.9.11-1.src.rpm
 </para>
 
 <para>
@@ -310,14 +310,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/foobar-2.9.11-1.i686.rpm
  </screen>
 </para>
 
 <para>
- This will place the <application>Junkbuster</application> configuration 
- files in <filename>/etc/junkbuster/</filename>, and log files in 
- <filename>/var/log/junkbuster/</filename>.
+ This will place the <application>Foobar</application> configuration 
+ files in <filename>/etc/foobar/</filename>, and log files in 
+ <filename>/var/log/foobar/</filename>.
 </para>
 
 </sect2>
@@ -342,10 +342,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/foobar-2.9.11-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.11-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/foobar-2.9.11-1.src.rpm
 </para>
 
 <para>
@@ -354,14 +354,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/foobar-2.9.11-1.i686.rpm
  </screen>
 </para>
 
 <para>
- This will place the <application>Junkbuster</application> configuration 
- files in <filename>/etc/junkbuster/</filename>, and log files in 
- <filename>/var/log/junkbuster/</filename>.
+ This will place the <application>Foobar</application> configuration 
+ files in <filename>/etc/foobar/</filename>, and log files in 
+ <filename>/var/log/foobar/</filename>.
 </para>
 
 </sect2>
@@ -375,18 +375,18 @@ Thanx David Schmidt!
 -->
 
 <para>
- <application>Junkbuster</application> is packaged in a WarpIN self-
+ <application>Foobar</application> is packaged in a WarpIN self-
  installing archive.  The self-installing program will be named depending
  on the release version, something like:
  <filename>ijbos2_setup_1.2.3.exe</filename>.  In order to install it, simply
  run this executable or double-click on its icon and follow the WarpIN
- installation panels.  A shadow of the <application>Junkbuster</application>
+ installation panels.  A shadow of the <application>Foobar</application>
  executable will be placed in your startup folder so it will start 
  automatically whenever OS/2 starts.
 </para>
 
 <para>
- The directory you choose to install <application>Junkbuster</application>
+ The directory you choose to install <application>Foobar</application>
  into will contain all of the configuration files.
 </para>
 
@@ -455,11 +455,11 @@ configuration section below. HB.)
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="configuration"><title>JunkBuster Configuration</title>
+<sect1 id="configuration"><title><application>Foobar</application> Configuration</title>
  <para>
-  All <application>JunkBuster</application> configuration is kept 
+  All <application>Foobar</application> configuration is kept 
   in text files. These files can be edited with a text editor.
-  Many important aspects of <application>JunkBuster</application> can 
+  Many important aspects of <application>Foobar</application> can 
   also be controlled easily with a web browser.
 
  </para>
@@ -468,9 +468,9 @@ configuration section below. HB.)
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2>
-<title>Controlling Junkbuster with Your Web Browser</title>
+<title>Controlling <application>Foobar</application> with Your Web Browser</title>
 <para>
- <application>JunkBuster</application> can be reached by the special 
+ <application>Foobar</application> can be reached by the special 
  URL <ulink url="http://i.j.b/">http://i.j.b/</ulink> (or alternately
  <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>), 
  which is an internal page. You will see the following section:
@@ -486,7 +486,7 @@ Please choose from the following options:
     * Show the source code version numbers
     * Show the client's request headers.
     * Show which actions apply to a URL and why
-    * Toggle JunkBuster on or off
+    * Toggle Foobar on or off
     * Edit the actions list
 
  </screen>
@@ -496,18 +496,18 @@ Please choose from the following options:
  This should be self-explanatory. Note the last item is an editor for the
  <quote>actions list</quote>, which is where much of the ad, banner, cookie,
  and URL blocking magic is configured as well as other advanced features of
- <application>Junkbuster</application>. This is an easy way to adjust various
- aspects of <application>Junkbuster</application> configuration. The actions
+ <application>Foobar</application>. This is an easy way to adjust various
+ aspects of <application>Foobar</application> configuration. The actions
  file, and other configuration files, are explained in detail below. 
- <application>Junkbuster</application> will automatically detect any changes 
+ <application>Foobar</application> will automatically detect any changes 
  to these files.
 </para>
 
 <para>
- <quote>Toggle JunkBuster On or Off</quote> is handy for sites that might 
+ <quote>Toggle Foobar On or Off</quote> is handy for sites that might 
  have problems with your current actions and filters, or just to test if 
- a site misbehaves, whether it is <application>JunkBuster</application> 
- causing the problem or not. <application>Junkbuster</application> continues 
+ a site misbehaves, whether it is <application>Foobar</application> 
+ causing the problem or not. <application>Foobar</application> continues 
  to run as a proxy in this case, but all filtering is disabled.
 
 </para>
@@ -525,9 +525,9 @@ Please choose from the following options:
 <title>Configuration Files Overview</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
- <filename>/etc/junkbuster/</filename> by default. For MS Windows, OS/2, and
+ <filename>/etc/foobar/</filename> by default. For MS Windows, OS/2, and
  AmigaOS these are all in the same directory as the 
- <application>Junkbuster</application> executable. The name and number of
+ <application>Foobar</application> executable. The name and number of
  configuration files has changed from previous versions, and is subject to
  change as development progresses.
 </para>
@@ -576,10 +576,10 @@ Please choose from the following options:
  <filename>ijb.action</filename> and <filename>re_filterfile</filename> 
  can use Perl style regular expressions for maximum flexibility. All files use
  the <quote><literal>#</literal></quote> character to denote a comment. Such
- lines are not processed by <application>Junkbuster</application>. After
+ lines are not processed by <application>Foobar</application>. After
  making any changes, there is no need to restart
- <application>Junkbuster</application> in order for the changes to take
- effect. <application>Junkbuster</application> should detect such changes 
+ <application>Foobar</application> in order for the changes to take
+ effect. <application>Foobar</application> should detect such changes 
  automatically.
 </para>
 
@@ -631,7 +631,7 @@ Please choose from the following options:
  existing configuration line, you can make it a comment and it will be treated
  as if it weren't there. This is called <quote>commenting out</quote> an
  option and can be useful to turn off features: If you comment out the
- <quote>logfile</quote> line, <application>junkbuster</application> will not
+ <quote>logfile</quote> line, <application>Foobar</application> will not
  log to a file at all. Watch for the <quote>default:</quote> section in each
  explanation to see what happens if the option is left unset (or commented
  out). 
@@ -643,7 +643,7 @@ Please choose from the following options:
 </para>
 
 <para>
- There are various aspects of <application>Junkbuster</application> behavior 
+ There are various aspects of <application>Foobar</application> behavior 
  that can be tuned.
 </para>
 
@@ -654,17 +654,17 @@ Please choose from the following options:
 <title>Defining Other Configuration Files</title>
 
 <para>
- <application>Junkbuster</application> can use a number of other files to tell it
+ <application>Foobar</application> can use a number of other files to tell it
  what ads to block, what cookies to accept, etc.  This section of the
- configuration file tells <application>Junkbuster</application> where to find
+ configuration file tells <application>Foobar</application> where to find
  all those other files. 
 </para>
 
 <para>
  On <application>Windows</application> and <application>AmigaOS</application>,
- <application>Junkbuster</application> looks for these files in the same
+ <application>Foobar</application> looks for these files in the same
  directory as the executable.  On Unix and  OS/2,
- <application>Junkbuster</application> looks for these files in the current
+ <application>Foobar</application> looks for these files in the current
  working directory. In either case, an absolute path name can be used to
  avoid problems.
 </para>
@@ -684,7 +684,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>confdir  /etc/junkbuster</emphasis>       # No trailing /, please.
+  <emphasis>confdir  /etc/foobar</emphasis>       # No trailing /, please.
    </literallayout>
   </msgtext> 
  </literal>
@@ -700,7 +700,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>logdir  /var/log/junkbuster</emphasis>
+  <emphasis>logdir  /var/log/foobar</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -712,16 +712,16 @@ Please choose from the following options:
 </para>
 
 <para>
- The <quote>ijb.action</quote> file contains patterns to specify the actions to
- apply to requests for each site. Default: Cookies to and from all
- destinations are kept only during the current browser session (i.e. they 
- are not saved to disk). Pop-ups are disabled for all sites. All sites are
+ The <quote>ijb.action</quote> file contains patterns to specify the actions
+ to apply to requests for each site. Default: Cookies to and from all
+ destinations are kept only during the current browser session (i.e. they are
+ not saved to disk). Pop-ups are disabled for all sites. All sites are
  filtered through selected sections of <quote>re_filterfile</quote>. No sites
- are blocked. The JunkBuster logo is displayed for filtered ads and other
- images. The syntax of this file is explained in detail <link
- linkend="actionsfile">below</link>. Other <quote>actions</quote> files 
- are included, and you are free to use any of them. They have varying 
- degrees of aggressiveness.
+ are blocked. The <application>Foobar</application> logo is displayed for
+ filtered ads and other images. The syntax of this file is explained in detail
+ <link linkend="actionsfile">below</link>. Other <quote>actions</quote> files
+ are included, and you are free to use any of them. They have varying degrees
+ of aggressiveness.
 </para>
 
 <para>
@@ -766,7 +766,7 @@ Please choose from the following options:
 <para>
  The logfile is where all logging and error messages are written. The logfile
  can be useful for tracking down a problem with
- <application>Junkbuster</application> (e.g., it's not blocking an ad you
+ <application>Foobar</application> (e.g., it's not blocking an ad you
  think it should block) but in most cases you probably will never look at it.
 </para>
 
@@ -778,7 +778,7 @@ Please choose from the following options:
 </para>
 
 <para>
- On SuSE Linux systems, you can place a line like <quote>/var/log/junkbuster.*
+ On SuSE Linux systems, you can place a line like <quote>/var/log/foobar.*
  +1024k 644 nobody.nogroup</quote> in <filename>/etc/logfiles</filename>, with
  the effect that cron.daily will automatically archive, gzip, and empty the
  log, when it exceeds 1M size.
@@ -801,7 +801,7 @@ Please choose from the following options:
 
 <para>
  The <quote>jarfile</quote> defines where
- <application>Junkbuster</application> stores the cookies it intercepts.  Note
+ <application>Foobar</application> stores the cookies it intercepts.  Note
  that if you use a <quote>jarfile</quote>, it may grow quite large. Default:
  Don't store intercepted cookies.
 </para>
@@ -818,7 +818,7 @@ Please choose from the following options:
 
 <para>
  If you specify a <quote>trustfile</quote>,
- <application>Junkbuster</application> will only allow access to sites that
+ <application>Foobar</application> will only allow access to sites that
  are named in the trustfile. You can also mark sites as trusted referrers,
  with the effect that access to untrusted sites will be granted, if a link
  from a trusted referrer was used. The link target will then be added to the
@@ -869,7 +869,7 @@ Please choose from the following options:
 
 <para>
  This part of the configuration file contains options that control how
- <application>Junkbuster</application> operates.
+ <application>Foobar</application> operates.
 </para>
 
 <para>
@@ -890,7 +890,7 @@ Please choose from the following options:
 
 <para>
  <quote>Proxy-info-url</quote> can be set to a URL that contains more info
- about this <application>Junkbuster</application> installation, it's
+ about this <application>Foobar</application> installation, it's
  configuration and policies. It is used in many of the proxy-generated pages
  and its use is highly recommended in multi-user installations, since your
  users will want to know why certain content is blocked or modified. Default:
@@ -909,7 +909,7 @@ Please choose from the following options:
 
 <para>
  <quote>Listen-address</quote> specifies the address and port where
- <application>Junkbuster</application> will listen for connections from your
+ <application>Foobar</application> will listen for connections from your
  Web browser.  The default is to listen on the localhost port 8118, and
  this is suitable for most users.  (In your web browser, under proxy
  configuration, list the proxy server as <quote>localhost</quote> and the
@@ -921,14 +921,14 @@ Please choose from the following options:
  serve requests from other machines (e.g. on your local network) as well, you
  will need to override the default. The syntax is 
  <quote>listen-address [&lt;ip-address&gt;]:&lt;port&gt;</quote>. If you leave
- out the IP address, <application>junkbuster</application> will bind to all
+ out the IP address, <application>foobar</application> will bind to all
  interfaces (addresses) on your machine and may become reachable from the
  Internet. In that case, consider using access control lists (acl's) (see
  <quote>aclfile</quote> above), or a firewall.
 </para>
 
 <para>
- For example, suppose you are running <application>Junkbuster</application> on
+ For example, suppose you are running <application>Foobar</application> on
  a machine which has the address 192.168.0.1 on your local private network
  (192.168.0.0) and has another outside connection with a different address.
  You want it to serve requests from inside only:
@@ -1001,7 +1001,7 @@ Please choose from the following options:
 
 <para>
  The reporting of FATAL errors (i.e. ones which crash 
- <application>JunkBuster</application>) is always on and cannot be disabled.
+ <application>Foobar</application>) is always on and cannot be disabled.
 </para>
 
 <para>
@@ -1041,12 +1041,12 @@ Please choose from the following options:
 </para>
 
 <para>
- <application>Junkbuster</application> normally uses
+ <application>Foobar</application> normally uses
  <quote>multi-threading</quote>, a software technique that permits it to
  handle many different requests simultaneously. In some cases you may wish to
  disable this -- particularly if you're trying to debug a problem.  The
  <quote>single-threaded</quote> option forces
- <application>Junkbuster</application> to handle requests sequentially.
+ <application>Foobar</application> to handle requests sequentially.
  Default: Multi-threaded mode.
 </para>
 
@@ -1062,27 +1062,27 @@ Please choose from the following options:
 
 <para>
  <quote>toggle</quote> allows you to temporarily disable all
- <application>Junkbuster's</application>  filtering. Just set <quote>toggle
+ <application>Foobar's</application>  filtering. Just set <quote>toggle
  0</quote>.
 </para>
 
 <para>
- The Windows version of <application>Junkbuster</application> puts an icon in
+ The Windows version of <application>Foobar</application> puts an icon in
  the system tray, which also allows you to change this option.  If you
  right-click on that icon (or select the <quote>Options</quote> menu), one
  choice is <quote>Enable</quote>. Clicking on enable toggles
- <application>Junkbuster</application> on and off. This is useful if you want
- to temporarily disable <application>Junkbuster</application>, e.g., to access
+ <application>Foobar</application> on and off. This is useful if you want
+ to temporarily disable <application>Foobar</application>, e.g., to access
  a site that requires cookies which you would otherwise have blocked. This can also
- be toggled via a web browser at the <application>Junkbuster</application>
+ be toggled via a web browser at the <application>Foobar</application>
  internal address of <ulink url="http://i.j.b">http://i.j.b</ulink> on 
  any platform.
 </para>
 
 <para>
- <quote>toggle 1</quote> means <application>Junkbuster</application> runs
+ <quote>toggle 1</quote> means <application>Foobar</application> runs
  normally, <quote>toggle 0</quote> means that
- <application>Junkbuster</application> becomes a non-anonymizing non-blocking
+ <application>Foobar</application> becomes a non-anonymizing non-blocking
  proxy. Default: 1 (on). 
 </para>
 
@@ -1099,7 +1099,7 @@ Please choose from the following options:
 <para>
  For content filtering, i.e. the <quote>+filter</quote> and
  <quote>+deanimate-gif</quote> actions, it is necessary that 
- <application>Junkbuster</application> buffers the entire document body.
+ <application>Foobar</application> buffers the entire document body.
  This can be potentially dangerous, since a server could just keep sending
  data indefinitely and wait for your RAM to exhaust. With nasty consequences.
 </para>
@@ -1127,7 +1127,7 @@ Please choose from the following options:
 <para>
  To enable the web-based <filename>ijb.action</filename> file editor set
  <application>enable-edit-actions</application> to 1, or 0 to disable.  Note
- that you must have compiled <application>JunkBuster</application> with
+ that you must have compiled <application>Foobar</application> with
  support for this feature, otherwise this option has no effect. This 
  internal page can be reached at <ulink
  url="http://i.j.b">http://i.j.b</ulink>.
@@ -1150,10 +1150,10 @@ Please choose from the following options:
 </para>
 
 <para>
- Allow <application>JunkBuster</application> to be toggled on and off
+ Allow <application>Foobar</application> to be toggled on and off
  remotely, using your web browser.  Set <quote>enable-remote-toggle</quote>to
  1 to enable, and 0 to disable.  Note that you must have compiled 
- <application>JunkBuster</application> with support for this feature,
+ <application>Foobar</application> with support for this feature,
  otherwise this option has no effect.
 </para>
 
@@ -1258,12 +1258,12 @@ Please choose from the following options:
 </para>
 
 <para>
- IMPORTANT NOTE: If the <application>junkbuster</application> is using a
+ IMPORTANT NOTE: If <application>Foobar</application> is using a
  forwarder (see below) or a gateway for a particular destination URL, the
  <literal>DST_ADDR</literal> that is examined is the address of the forwarder
  or the gateway and <emphasis>NOT</emphasis> the address of the ultimate
  target. This is necessary because it may be impossible for the local
- <application>Junkbuster</application> to determine the address of the
+ <application>Foobar</application> to determine the address of the
  ultimate target (that's often what gateways are used for).
 </para>
 
@@ -1288,14 +1288,14 @@ Please choose from the following options:
 
 <para>
  A silly example to illustrate permitting any host on the class-C subnet with
- <application>Junkbuster</application> to go anywhere:
+ <application>Foobar</application> to go anywhere:
 </para>
 
 <para>
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>permit-access    www.junkbusters.com/24</emphasis>
+  <emphasis>permit-access    www.foobar.com/24</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1309,7 +1309,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>deny-access      ident.junkbusters.com</emphasis>
+  <emphasis>deny-access      ident.foobar.com</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1363,7 +1363,7 @@ Please choose from the following options:
 </para>
 
 <para>
- An ISP may want to provide a <application>Junkbuster</application> that is
+ An ISP may want to provide a <application>Foobar</application> that is
  accessible by <quote>the world</quote> and yet restrict use of some of their
  private content to hosts on its internal network (i.e. its own subscribers).
  Say, for instance the ISP owns the Class-B IP address block 123.124.0.0 (a 16
@@ -1421,7 +1421,7 @@ Please choose from the following options:
 </para>
 
 <para>
- Also specified here are SOCKS proxies. <application>Junkbuster</application>
+ Also specified here are SOCKS proxies. <application>Foobar</application>
  SOCKS 4 and SOCKS 4A. The difference is that SOCKS 4A will resolve the target
  hostname using DNS on the SOCKS server, not our local DNS client.
 </para>
@@ -1594,7 +1594,7 @@ Please choose from the following options:
 
 <para>
  host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
- isp-b.com. host-a can run a <application>Junkbuster</application> proxy with
+ isp-b.com. host-a can run a <application>Foobar</application> proxy with
  forwarding like this: 
 </para>
 
@@ -1610,7 +1610,7 @@ Please choose from the following options:
 </para>
 
 <para>
- host-b can run a <application>Junkbuster</application> proxy with forwarding
+ host-b can run a <application>Foobar</application> proxy with forwarding
  like this: 
 </para>
 
@@ -1654,9 +1654,9 @@ Please choose from the following options:
 </para>
 
 <para>
- If you intend to chain <application>Junkbuster</application> and 
+ If you intend to chain <application>Foobar</application> and 
  <application>squid</application> locally, then chain as 
- <literal>browser -> squid -> junkbuster</literal> is the recommended way. 
+ <literal>browser -> squid -> foobar</literal> is the recommended way. 
 </para>
 
 <para>
@@ -1667,7 +1667,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  # Define junkbuster as parent cache 
+  # Define Foobar as parent cache 
  <!-- per feedback from user...
   cache_peer 127.0.0.1 8118 parent 0 no-query 
  --> 
@@ -1676,13 +1676,13 @@ Please choose from the following options:
   # Define ACL for protocol FTP 
   acl FTP proto FTP 
 
-  # Do not forward ACL FTP to junkbuster 
+  # Do not forward ACL FTP to foobar
   always_direct allow FTP 
 
-  # Do not forward ACL CONNECT (https) to junkbuster 
+  # Do not forward ACL CONNECT (https) to foobar
   always_direct allow CONNECT 
 
-  # Forward the rest to junkbuster 
+  # Forward the rest to foobar
   never_direct allow all 
    </literallayout>
   </msgtext> 
@@ -1702,14 +1702,14 @@ Please choose from the following options:
 Removed references to Win32. HB 09/23/01
 -->
 <para>
- <application>Junkbuster</application> has a number of options specific to the
+ <application>Foobar</application> has a number of options specific to the
  Windows GUI interface:
 </para>
 
 <para>
  If <quote>activity-animation</quote> is set to 1, the
- <application>Junkbuster</application> icon will animate when
- <quote>Junkbuster</quote> is active. To turn off, set to 0.
+ <application>Foobar</application> icon will animate when
+ <quote>Foobar</quote> is active. To turn off, set to 0.
 </para>
 
 <para>
@@ -1724,7 +1724,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  If <quote>log-messages</quote> is set to 1,
- <application>Junkbuster</application> will log messages to the console
+ <application>Foobar</application> will log messages to the console
  window:
 </para>
 
@@ -1776,7 +1776,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  If <quote>log-highlight-messages</quote> is set to 1,
- <application>Junkbuster</application> will highlight portions of the log
+ <application>Foobar</application> will highlight portions of the log
  messages with a bold-faced font:
 </para>
 
@@ -1820,7 +1820,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>  
  <quote>show-on-task-bar</quote> controls whether or not
- <application>Junkbuster</application> will appear as a button on the Task bar
+ <application>Foobar</application> will appear as a button on the Task bar
  when minimized:
 </para>
 
@@ -1836,7 +1836,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  If <quote>close-button-minimizes</quote> is set to 1, the Windows close
- button will minimize <application>Junkbuster</application> instead of closing
+ button will minimize <application>Foobar</application> instead of closing
  the program (close with the exit option on the File menu).
 </para>
 
@@ -1852,8 +1852,8 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The <quote>hide-console</quote> option is specific to the MS-Win console
- version of <application>JunkBuster</application>. If this option is used,
- <application>Junkbuster</application> will disconnect from and hide  the
+ version of <application>Foobar</application>. If this option is used,
+ <application>Foobar</application> will disconnect from and hide  the
  command console.
 </para>
 
@@ -1880,13 +1880,13 @@ Removed references to Win32. HB 09/23/01
 <para>
  The <quote>ijb.action</quote> file (formerly
  <filename>actionsfile</filename>) is used to define what actions
- <application>Junkbuster</application> takes, and thus determines how images,
+ <application>Foobar</application> takes, and thus determines how images,
  cookies and various other aspects of HTTP content and transactions are
  handled. Images can be anything you want, including ads, banners, or just
  some obnoxious URL that you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. 
  not written to disk). Changes to <filename>ijb.action</filename> should 
- be immediately visible to <application>Junkbuster</application> without 
+ be immediately visible to <application>Foobar</application> without 
  the need to restart.
 </para>
 
@@ -1909,7 +1909,7 @@ Removed references to Win32. HB 09/23/01
  There are four types of lines in this file: comments (begin with a 
  <quote>#</quote> character), actions, aliases and patterns, all of which are
  explained below, as well as the configuration file syntax that 
- <application>Junkbuster</application> understands.
+ <application>Foobar</application> understands.
 
 </para>
 
@@ -1994,7 +1994,7 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- If <application>Junkbuster</application> was compiled with
+ If <application>Foobar</application> was compiled with
  <quote>pcre</quote> support (default), Perl compatible regular expressions
  can be used. See the <filename>pcre/docs/</filename> directory or <quote>man
  perlre</quote> (also available on  <ulink
@@ -2102,7 +2102,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  If nothing is specified in this file, no <quote>actions</quote> are taken.
- So in this case <application>JunkBuster</application> would just be a
+ So in this case <application>Foobar</application> would just be a
  normal, non-blocking, non-anonymizing proxy. You must specifically
  enable the privacy and blocking features you need (although the 
  provided default <filename>ijb.action</filename> file will 
@@ -2115,7 +2115,7 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- The list of valid <application>Junkbuster</application> <quote>actions</quote> are:
+ The list of valid <application>Foobar</application> <quote>actions</quote> are:
 </para>
 
 <para>
@@ -2183,7 +2183,7 @@ Removed references to Win32. HB 09/23/01
    <quote>+downgrade</quote> will downgrade HTTP/1.1 client requests to
    HTTP/1.0 and downgrade the responses as well. Use this action for servers
    that use HTTP/1.1 protocol features that
-   <application>Junkbuster</application> doesn't handle well yet. HTTP/1.1 
+   <application>Foobar</application> doesn't handle well yet. HTTP/1.1 
    is only partially implemented. Default is not to downgrade requests.
   </para>
   <para>
@@ -2215,7 +2215,7 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    The <quote>+fast-redirects</quote> option enables interception of these
-   requests by <application>Junkbuster</application>, who will cut off all but
+   requests by <application>Foobar</application>, who will cut off all but
    the last valid URL in the request and send a local redirect back to your
    browser without contacting the remote site.
   </para>
@@ -2397,13 +2397,13 @@ Removed references to Win32. HB 09/23/01
   </para>
  <!-- 
   <para>
-   Or to identify yourself explicitly as a <quote>Junkbuster</quote> user:
+   Or to identify yourself explicitly as a  <application>Foobar</application> user:
   </para>
   <para>
    <literal>
     <msgtext> 
      <literallayout>
-  <emphasis>+hide-user-agent{JunkBuster/1.0}</emphasis>
+  <emphasis>+hide-user-agent{Foobar/1.0}</emphasis>
      </literallayout>
     </msgtext> 
    </literal>
@@ -2444,20 +2444,19 @@ Removed references to Win32. HB 09/23/01
  </listitem>
  
  <listitem>
-  <para>  
-   Decides what to do with URLs that end up tagged with <quote>{+block
-   +image}</quote>, e.g an advertizement. There are five options.
-   <quote>-image-blocker</quote> will send a HTML <quote>blocked</quote> page,
-   usually resulting in a <quote>broken image</quote> icon.
-   <quote>+image-blocker{logo}</quote> will send a <quote>JunkBuster</quote>
-   logo image. <quote>+image-blocker{blank}</quote> will send a 1x1
-   transparent GIF image. And finally,
-   <quote>+image-blocker{http://xyz.com}</quote> will send a HTTP temporary
-   redirect to the specified image. This has the advantage of the icon being
-   being cached by the browser, which will speed up the display.
-   <quote>+image-blocker{pattern}</quote> will send a checkboard type pattern,
-   which scales better than the logo (which can get blocky if the browser 
-   enlarges it too much).
+  <para> Decides what to do with URLs that end up tagged with <quote>{+block
+  +image}</quote>, e.g an advertizement. There are five options.
+  <quote>-image-blocker</quote> will send a HTML <quote>blocked</quote> page,
+  usually resulting in a <quote>broken image</quote> icon.
+  <quote>+image-blocker{logo}</quote> will send a
+  <application>Foobar</application> logo
+  image. <quote>+image-blocker{blank}</quote> will send a 1x1 transparent GIF
+  image. And finally, <quote>+image-blocker{http://xyz.com}</quote> will send
+  a HTTP temporary redirect to the specified image. This has the advantage of
+  the icon being being cached by the browser, which will speed up the display.
+  <quote>+image-blocker{pattern}</quote> will send a checkboard type pattern,
+  which scales better than the logo (which can get blocky if the browser
+  enlarges it too much).
   </para>
   <para>
    <literal>
@@ -2476,7 +2475,7 @@ Removed references to Win32. HB 09/23/01
  <listitem>
    <para> 
    By default (i.e. in the absence of a <quote>+limit-connect</quote>
-   action), <application>Junkbuster</application> will only allow CONNECT
+   action), <application>Foobar</application> will only allow CONNECT
    requests to port 443, which is the standard port for https as a 
    precaution.
   </para>
@@ -2516,7 +2515,7 @@ Removed references to Win32. HB 09/23/01
   <para>
    <quote>+no-compression</quote> prevents the website from compressing the
    data. Some websites do this, which can be a problem for
-   <application>Junkbuster</application>, since <quote>+filter</quote>,
+   <application>Foobar</application>, since <quote>+filter</quote>,
    <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work on
    compressed data. This will slow down connections to those websites,
    though. Default is <quote>nocompression</quote> is turned on.
@@ -2801,7 +2800,7 @@ Removed references to Win32. HB 09/23/01
 <sect3>
 <title>Aliases</title>
 <para>
- Custom <quote>actions</quote>, known to <application>Junkbuster</application>
+ Custom <quote>actions</quote>, known to <application>Foobar</application>
  as <quote>aliases</quote>, can be defined by combining other <quote>actions</quote>.
  These can in turn be invoked just like the built-in <quote>actions</quote>.
  Currently, an alias can contain any character except space, tab, <quote>=</quote>,
@@ -2983,10 +2982,10 @@ Removed references to Win32. HB 09/23/01
 <sect2>
 <title>Templates</title>
 <para>
- When <application>Junkbuster</application> displays one of its internal 
+ When <application>Foobar</application> displays one of its internal 
  pages, such as a 404 Not Found error page, it uses the appropriate template.
  On Linux, BSD, and Unix, these are located in
- <filename>/etc/junkbuster/templates</filename> by default. These may be
+ <filename>/etc/foobar/templates</filename> by default. These may be
  customized, if desired.
 
 </para>
@@ -2999,9 +2998,9 @@ Removed references to Win32. HB 09/23/01
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
+<sect1 id="quickstart"><title>Quickstart to Using <application>Foobar</application></title>
 <para>
- Install package, then run and enjoy! <application>JunkBuster</application> 
+ Install package, then run and enjoy! <application>Foobar</application> 
  is typically started by specifying the main configuration file to be 
  used on the command line. Example Unix startup command:
 </para>
@@ -3009,7 +3008,7 @@ Removed references to Win32. HB 09/23/01
 <para>
  <screen>
  
- # /usr/sbin/junkbuster /etc/junkbuster/config
+ # /usr/sbin/foobar /etc/foobar/config
  
  </screen>
 </para>
@@ -3019,21 +3018,21 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
-For for SuSE: /etc/rc.d/junkbuster start
+For for SuSE: /etc/rc.d/foobar start
 </para>
 
 <para>
-For RedHat: /etc/rc.d/init.d/junkbuster start
+For RedHat: /etc/rc.d/init.d/foobar start
 </para>
 
 
 <para>
  If no configuration file is specified on the command line,
- <application>Junkbuster</application> will look for a file named
+ <application>Foobar</application> will look for a file named
  <filename>config</filename> in the current directory. Except on Win32 where
  it will try <filename>config.txt</filename>. If no file is specified on the
  command line and no default configuration file can be found, 
- <application>Junkbuster</application> will fail to start.
+ <application>Foobar</application> will fail to start.
 </para>
 
 <para>
@@ -3056,7 +3055,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  the configuration. If you want the browser to handle this instead, you will
  need to edit <filename>ijb.action</filename> and disable this feature. If you
  use more than one browser, it would make more sense to let
- <application>Junkbuster</application> handle this. In which case, the
+ <application>Foobar</application> handle this. In which case, the
  browser(s) should be set to accept all cookies.
 </para>
 
@@ -3068,7 +3067,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 </para>
 
 <para>
- <application>Junkbuster</application> is HTTP/1.1 compliant,  but not all 1.1
+ <application>Foobar</application> is HTTP/1.1 compliant,  but not all 1.1
  features are as yet implemented. If browsers that support HTTP/1.1 (like
  <application>Mozilla</application> or recent versions of I.E.) experience
  problems, you might try to force HTTP/1.0 compatibility. For Mozilla, look
@@ -3078,7 +3077,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 </para>
 
 <para>
- After running <application>Junkbuster</application> for a while, you can 
+ After running <application>Foobar</application> for a while, you can 
  start to fine tune the configuration to suit your personal, or site, 
  preferences and requirements. There are many, many aspects that can 
  be customized. <quote>Actions</quote> (as specified in <filename>ijb.action</filename>) 
@@ -3089,19 +3088,19 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 </para>
 
 <para>
- In fact, various aspects of <application>Junkbuster</application>
+ In fact, various aspects of <application>Foobar</application>
  configuration can be viewed from this page, including 
  current configuration parameters, source code version numbers, 
  the browser's request headers, and <quote>actions</quote> that apply 
  to a given URL. In addition to the <filename>ijb.action</filename> file 
- editor mentioned above, <application>Junkbuster</application> can also 
+ editor mentioned above, <application>Foobar</application> can also 
  be turned <quote>on</quote> and <quote>off</quote> from this page.
 </para>
 
 <para>
  If you encounter problems, please verify it is a
- <application>Junkbuster</application> bug, by disabling
- <application>Junkbuster</application>, and then trying the same page. 
+ <application>Foobar</application> bug, by disabling
+ <application>Foobar</application>, and then trying the same page. 
  Also, try another browser if possible to eliminate browser or site 
  problems. Before reporting it as a bug, see if there is not a configuration 
  option that is enabled that is causing the page not to load. You can 
@@ -3116,7 +3115,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <sect2>
 <title>Command Line Options</title>
 <para>
- <application>JunkBuster</application> may be invoked with the following
+ <application>Foobar</application> may be invoked with the following
  command-line options:
 </para>
 
@@ -3177,7 +3176,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
   </para>
   <para>
     If no <emphasis>configfile</emphasis> is included on the command line, 
-    <application>JunkBuster</application> will look for a file named 
+    <application>Foobar</application> will look for a file named 
     <quote>config</quote> in the current directory (except on Win32 
     where it will look for <quote>config.txt</quote> instead). Specify 
     full path to avoid confusion.
@@ -3211,7 +3210,7 @@ please note:
   <listitem><para>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">Sourceforge bug
       forum</ulink>. 
 Make sure that the bug has not already been submitted.  Please try to
-verify that it is a <application>Junkbuster</application> bug, and not
+verify that it is a <application>Foobar</application> bug, and not
 a browser or site bug first. If you are using your own custom configuration,
 please try the stock configs to see if the problem is a configuration
 related bug.  And if not using the latest development snapshot, please
@@ -3247,7 +3246,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <sect2>
 <title>License</title>
 <para>
- <application>Internet Junkbuster</application> is free software; you can
+ <application>Foobar</application> is free software; you can
  redistribute it and/or modify it under the terms of the GNU General Public
  License as published by the Free Software Foundation; either version 2 of the
  License, or (at your option) any later version.
@@ -3272,15 +3271,16 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <sect2>
 <title>History</title>
 <para>
- <application>Junkbuster</application> was originally written by Anonymous 
+ <application>Junkbuster</application> was originally written by Anonymous
  Coders and <ulink
  url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbuster's
  Corporation</ulink>, and was released as free open-source software under the
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
- url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
- rekindle development. There are now several active developers contributing.
- The last stable release was v2.0.2, which has now grown whiskers ;-).
+ url="http://sourceforge.net/projects/ijbswa/">SourceForge project
+ Foobar</ulink> to rekindle development. There are now several active
+ developers contributing.  The last stable release was v2.0.2, which has now
+ grown whiskers ;-).
 </para>
 
 </sect2>
@@ -3340,7 +3340,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <sect2 id="regex">
 <title>Regular Expressions</title>
 <para>
- <application>Junkbuster</application> can use <quote>regular expressions</quote> 
+ <application>Foobar</application> can use <quote>regular expressions</quote> 
  in various config files. Assuming support for <quote>pcre</quote> (Perl
  Compatible Regular Expressions) is compiled in, which is the default. Such
  configuration directives do not require regular expressions, but they can be
@@ -3453,7 +3453,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  These are just some of the ones you are likely to use when matching URLs with 
- <application>Junkbuster</application>, and is a long way from a definitive
+ <application>Foobar</application>, and is a long way from a definitive
  list. This is enough to get us started with a few simple examples which may
  be more illuminating:
 </para>
@@ -3552,7 +3552,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  We are barely scratching the surface of regular expressions here so that you
- can understand the default <application>Junkbuster</application>
+ can understand the default <application>Foobar</application>
  configuration files, and maybe use this knowledge to customize your own
  installation. There is much, much more that can be done with regular
  expressions. Now that you know enough to get started, you can learn more on
@@ -3571,24 +3571,24 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2>
-<title>JunkBuster's Internal Pages</title>
+<title><application>Foobar</application>'s Internal Pages</title>
 
 <para>
- Since <application>JunkBuster</application> proxies each requested 
- web page, it is easy for <application>JunkBuster</application> to 
+ Since <application>Foobar</application> proxies each requested 
+ web page, it is easy for <application>Foobar</application> to 
  trap certain URLs. In this way, we can talk directly to
- <application>JunkBuster</application>, and see how it is 
+ <application>Foobar</application>, and see how it is 
  configured, see how our rules are being applied, change these 
  rules and other configuration options, and even turn
- <application>JunkBuster's</application> filtering off, all with 
+ <application>Foobar's</application> filtering off, all with 
  a web browser.
 
 </para>
 
 <para>
  The URLs listed below are the special ones that allow direct access 
- to <application>JunkBuster</application>. Of course,
- <application>JunkBuster</application> must be running to access these. If 
+ to <application>Foobar</application>. Of course,
+ <application>Foobar</application> must be running to access these. If 
  not, you will get a friendly error message. Internet access is not 
  necessary either.
 </para>
@@ -3598,7 +3598,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
  <listitem>
   <para>  
-   Junkbuster main page: 
+   Foobar main page: 
   </para>
   <blockquote>
    <para> 
@@ -3658,7 +3658,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  
  <listitem>
   <para>  
-   Toggle JunkBuster on or off:
+   Toggle Foobar on or off:
   </para>
    <blockquote>
    <para> 
@@ -3707,15 +3707,15 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <title>Anatomy of an Action</title>
 
 <para>
- The way <application>Junkbuster</application> applies <quote>actions</quote>
+ The way <application>Foobar</application> applies <quote>actions</quote>
  to any given URL can be complex, and not always so easy to understand what 
  is happening. And sometimes we need to be able to <emphasis>see</emphasis>
- just what <application>Junkbuster</application> is doing. Especially, 
- if something <application>Junkbuster</application> is doing is causing 
+ just what <application>Foobar</application> is doing. Especially, 
+ if something <application>Foobar</application> is doing is causing 
  us a problem inadvertantly. It can be a little daunting to look at 
  the actions files themselves, since they tend to be filled with 
  <quote>regular expressions</quote> whose consequences are not always 
- so obvious. <application>Junkbuster</application> provides the 
+ so obvious. <application>Foobar</application> provides the 
  <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
  page that can show us very specifically how <application>actions</application>
  are being applied to any given URL. This is a big help for troubleshooting.
@@ -3723,7 +3723,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  First, enter one URL (or partial URL) at the prompt, and then
- <application>Junkbuster</application> will tell us 
+ <application>Foobar</application> will tell us 
  how current configuration will handle it. This will not
  help with filtering effects from the <filename>re_filterfile</filename>! It
  also will not tell you about any other URLs that may be embedded within the
@@ -3754,7 +3754,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  This is the top section, and only tells us of the compiled in defaults. This 
- is basically what <application>Junkbuster</application> would do if there 
+ is basically what <application>Foobar</application> would do if there 
  were not any <quote>actions</quote> defined, i.e. it does nothing. Every action 
  is disabled. This is not particularly informative for our purposes here. OK,
  next section:
@@ -3811,7 +3811,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  And now we pull it altogether in the bottom section and summarize how
- <application>Junkbuster</application> is appying all its <quote>actions</quote> 
+ <application>Foobar</application> is appying all its <quote>actions</quote> 
  to <quote>google.com</quote>:
 
 </para>
@@ -3943,6 +3943,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.50  2002/03/23 05:06:21  hal9
+ Touch up.
+
  Revision 1.49  2002/03/21 17:01:05  hal9
  New section in Appendix.
 
