@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.11 2001/06/07 23:08:12 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.12 2001/07/13 14:04:59 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.11 2001/06/07 23:08:12 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.12  2001/07/13 14:04:59  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.11  2001/06/07 23:08:12  jongfoster
  *    Forward and ACL edit options removed.
  *
@@ -940,6 +943,8 @@ void ShowLogWindow(BOOL bShow)
  * Function    :  EditFile
  *
  * Description :  Opens the specified setting file for editing.
+ * FIXME: What if the file has no associated application. Check for return values
+*        from ShellExecute??
  *
  * Parameters  :
  *          1  :  filename = filename from the config (aka junkbstr.txt) file.
