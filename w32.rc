@@ -31,6 +31,10 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.9  2001/06/07 23:08:54  jongfoster
+ *    Forward and ACL edit options removed.
+ *    Config edit option renamed from "&Junkbuster" to "&Configuration".
+ *
  *    Revision 1.8  2001/05/31 21:37:11  jongfoster
  *    GUI changes to rename "permissions file" to "actions file".
  *
@@ -158,9 +162,7 @@ BEGIN
             MENUITEM "&Configuration...",           ID_TOOLS_EDITJUNKBUSTER
             MENUITEM                                SEPARATOR
             MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-#ifdef PCRS
             MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
-#endif /* def PCRS */
 #ifdef TRUST_FILES
             MENUITEM "&Trust...",                   ID_TOOLS_EDITTRUST
 #endif /* def TRUST_FILES */
@@ -201,9 +203,7 @@ BEGIN
         MENUITEM "&Configuration...",           ID_TOOLS_EDITJUNKBUSTER
         MENUITEM                                SEPARATOR
         MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-#ifdef PCRS
             MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
-#endif /* def PCRS */
 #ifdef TRUST_FILES
             MENUITEM "&Trust...",               ID_TOOLS_EDITTRUST
 #endif /* def TRUST_FILES */
