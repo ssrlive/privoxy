@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.18 2001/09/21 23:02:02 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.19 2001/10/25 03:40:47 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,12 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.18 2001/09/21 23:02:02 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.19  2001/10/25 03:40:47  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.18  2001/09/21 23:02:02  david__schmidt
  *    Cleaning up 2 compiler warnings on OS/2.
  *
@@ -409,7 +415,11 @@ int bind_port(const char *hostnam, int portnum)
 {
    struct sockaddr_in inaddr;
    int fd;
+#if 0
+#ifndef _WIN32
    int one = 1;
+#endif /* ndef _WIN32 */
+#endif
 
    memset((char *)&inaddr, '\0', sizeof inaddr);
 
@@ -436,6 +446,7 @@ int bind_port(const char *hostnam, int portnum)
       return(-1);
    }
 
+#if 0
 #ifndef _WIN32
    /*
     * FIXME: This is not needed for Win32 - in fact, it stops
@@ -445,6 +456,7 @@ int bind_port(const char *hostnam, int portnum)
     */
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
+#endif
 
    if (bind (fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
    {
