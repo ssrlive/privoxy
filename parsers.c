@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.10 2001/05/29 09:50:24 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.11 2001/05/29 20:11:19 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.10 2001/05/29 09:50:24 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.11  2001/05/29 20:11:19  joergs
+ *    '/* inside comment' warning removed.
+ *
  *    Revision 1.10  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
