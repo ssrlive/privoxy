@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.11 2002/04/09 03:12:37 hal9 Exp $
+# $Id: privoxy-suse.spec,v 1.12 2002/04/09 13:29:43 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -33,8 +33,8 @@ Summary:      Privoxy - privacy enhancing proxy
 Vendor:       http://www.privoxy.org
 Name:         privoxy-suse
 Distribution: defineme
-Version: 2.9.13
-Release: 3
+Version: 2.9.14
+Release: 1
 Source: http://www.waldherr.org/%{name}/privoxy-%{version}.tar.gz
 # not sure if this works
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -59,11 +59,7 @@ obnoxious Internet junk. Privoxy has a very flexible configuration and
 can be customized to suit individual needs and tastes. Privoxy has 
 application for both stand-alone systems and multi-user networks.
 
-Privoxy is based on the code of the Internet Junkbuster. Junkbuster
-was originally written by Junkbusters Corporation, and was released as
-free open-source software under the GNU GPL. Stefan Waldherr made many
-improvements, and started the SourceForge project to continue
-development. Several other developers are now contributing.
+Privoxy is based on the  Internet Junkbuster.
 
 Authors:
 --------
@@ -301,6 +297,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.12  2002/04/09 13:29:43  swa
+# build suse and gen-dist with html docs. do not generate docs while building rpm
+#
 # Revision 1.11  2002/04/09 03:12:37  hal9
 # Add LICENSE, p_web.css and index.html. Add autoconf to buildrequires.
 #
