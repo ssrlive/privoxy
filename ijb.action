@@ -3,8 +3,35 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.7 2002/03/08 18:01:48 morcego Exp $
+# $Id: ijb.action,v 1.8 2002/03/12 01:42:50 oes Exp $
 #
+#  Purpose     :  Default actions file, see
+#                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
+# 
+# We value your feedback. However, to provide you with the best support,
+# please note:
+#  
+#  * Use the support forum to get help:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+#  * Submit bugs only thru our bug forum:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+#    Make sure that the bug has not already been submitted. Please try
+#    to verify that it is a Junkbuster bug, and not a browser or site
+#    bug first. If you are using your own custom configuration, please
+#    try the stock configs to see if the problem is a configuration
+#    related bug. And if not using the latest development snapshot,
+#    please try the latest one. Or even better, CVS sources.
+#  * Submit feature requests only thru our feature request forum:
+#    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+#      
+# For any other issues, feel free to use the mailing lists:
+# http://sourceforge.net/mail/?group_id=11118
+#    
+# Anyone interested in actively participating in development and related
+# discussions can join the appropriate mailing list here:
+# http://sourceforge.net/mail/?group_id=11118. Archives are available
+# here too.
+# 
 #############################################################################
 # Syntax
 #############################################################################

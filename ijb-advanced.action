@@ -1,23 +1,36 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/README,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/ijb-advanced.action,v $
 # 
-#  $Id: README,v 1.9 2001/12/01 21:52:34 hal9 Exp $
+#  $Id: ijb-advanced.action,v 1.1 2001/12/02 15:26:49 swa Exp $
 #
-#  Purpose     :  Most agressive actions file, it provides
-#                 - ad filtering
-#                 -
-#                 -
-#                 -
+#  Purpose     :  Most agressive actions file, see
+#                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
 # 
-#  To report bugs, please use the forms at
-#
-#              http://sourceforge.net/projects/ijbswa/
-#
-#  For feedback, please use the developer mailing list at
-#
-#              ijbswa-developers@lists.sourceforge.net
-#
+# We value your feedback. However, to provide you with the best support,
+# please note:
+#  
+#  * Use the support forum to get help:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+#  * Submit bugs only thru our bug forum:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+#    Make sure that the bug has not already been submitted. Please try
+#    to verify that it is a Junkbuster bug, and not a browser or site
+#    bug first. If you are using your own custom configuration, please
+#    try the stock configs to see if the problem is a configuration
+#    related bug. And if not using the latest development snapshot,
+#    please try the latest one. Or even better, CVS sources.
+#  * Submit feature requests only thru our feature request forum:
+#    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+#      
+# For any other issues, feel free to use the mailing lists:
+# http://sourceforge.net/mail/?group_id=11118
+#    
+# Anyone interested in actively participating in development and related
+# discussions can join the appropriate mailing list here:
+# http://sourceforge.net/mail/?group_id=11118. Archives are available
+# here too.
+# 
 ######################################################################
 
 ######################################################################
