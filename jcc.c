@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.15 2001/05/31 21:24:47 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.16 2001/06/01 18:49:17 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.15 2001/05/31 21:24:47 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.16  2001/06/01 18:49:17  jongfoster
+ *    Replaced "list_share" with "list" - the tiny memory gain was not
+ *    worth the extra complexity.
+ *
  *    Revision 1.15  2001/05/31 21:24:47  jongfoster
  *    Changed "permission" to "action" throughout.
  *    Removed DEFAULT_USER_AGENT - it must now be specified manually.
@@ -571,39 +575,36 @@ static void chat(struct client_state *csp)
 
 #ifdef IMAGE_BLOCKING
       /* Block as image?  */
-      if ( (csp->config->tinygif > 0) && block_imageurl(http, csp) )
+      if ( ((csp->action->flags & ACTION_IMAGE_BLOCKER) != 0)
+        && block_imageurl(http, csp) )
       {
          /* Send "blocked" image */
-         log_error(LOG_LEVEL_GPC, "%s%s image crunch!",
-                   http->hostport, http->path);
+         const char * blocker = csp->action->string[ACTION_STRING_IMAGE_BLOCKER];
 
-         if (csp->config->tinygif == 1)
+         log_error(LOG_LEVEL_GPC, "%s%s image crunch! --> %s",
+            http->hostport, http->path, (blocker ? blocker : "logo"));
+
+         if ((blocker == NULL) || (0 == strcmpic(blocker, "logo")))
+         {
+            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
+         }
+         else if (0 == strcmpic(blocker, "blank"))
          {
             write_socket(csp->cfd, BLANKGIF, sizeof(BLANKGIF)-1);
          }
-         else if (csp->config->tinygif == 2)
-         {
-            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
-         }
-         else if ((csp->config->tinygif == 3) && (csp->config->tinygifurl))
-         {
-            freez(p);
-            p = (char *)malloc(sizeof(HTTP_REDIRECT_TEMPLATE) 
-              + strlen(csp->config->tinygifurl));
-            sprintf(p, HTTP_REDIRECT_TEMPLATE, csp->config->tinygifurl);
-            write_socket(csp->cfd, p, strlen(p));
-         }
          else
          {
-            /* Should never happen */
-            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
+            freez(p);
+            p = (char *)malloc(sizeof(HTTP_REDIRECT_TEMPLATE) + strlen(blocker));
+            sprintf(p, HTTP_REDIRECT_TEMPLATE, blocker);
+            write_socket(csp->cfd, p, strlen(p));
          }
       }
       else
 #endif /* def IMAGE_BLOCKING */
       /* Block as HTML */
       {
-         /* Send HTML "blocked" message, interception, or redirection result */
+         /* Send HTML "blocked" message */
          write_socket(csp->cfd, p, strlen(p));
       }
 
