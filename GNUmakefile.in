@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.89 2002/04/26 17:20:54 swa Exp $
+# $Id: GNUmakefile.in,v 1.90 2002/04/26 17:46:53 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -208,7 +208,7 @@ all: $(PROGRAM)
 #############################################################################
 .PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
-install
+install conectiva-spec conectiva-dist conectiva-upload
 
 
 #############################################################################
@@ -280,15 +280,6 @@ rpm-stuff: dist-check clean clobber
 		fi; \
 	done; \
 
-#############################################################################
-# redhat distribution alpha and x86
-#############################################################################
-redhat-dist: rpm-stuff
-
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
 check-release:
 	@if [ "$(RPM_PACKAGEV)" = "" ]; then \
 		echo ; \
@@ -296,12 +287,49 @@ check-release:
 		echo "	No value given for RPM_PACKAGEV. Please use:"; \
 		echo "	make dist-upload RPM_PACKAGEV=release"; \
 		echo "	where \"release\" is the release number you want to and"; \
-		echo "	where \"dist\" is the name of the distro \(redhat or suse\)"; \
+		echo "	where \"dist\" is the name of the distro (redhat or suse)"; \
 		echo ; \
 		echo "	Ex: make redhat-upload RPM_PACKAGEV=1"; \
+		echo ""; \
+		echo "ATTENTION: If your distribution use a specific tag on the"; \
+		echo "           release field (like \"cl\" for Conectiva, and"; \
+		echo "           \"mdk\" for Mandrake), DO NOT put it on the value"; \
+		echo "           given to RPM_PACKAGEV. It will be added automaticaly."; \
+		echo "           Do it like you would do for a redhat package,"; \
+		echo "           (i.e. just the number)."; \
 		echo ; \
 		exit 1; \
 	fi
+
+
+#############################################################################
+# Create Conectiva specfile from RedHat specfile
+#############################################################################
+conectiva-spec:
+	rm -f privoxy-cl.spec
+	chmod a+x genclspec.sh
+	./genclspec.sh
+
+#############################################################################
+# Conectiva distribution for x86
+#############################################################################
+conectiva-dist: rpm-stuff conectiva-spec
+
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-rh.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+
+conectiva-upload: check-release
+	make redhat-upload RPM_PACKAGEV=$(RPM_PACKAGEV)cl
+
+#############################################################################
+# redhat distribution alpha and x86
+#############################################################################
+redhat-dist: rpm-stuff
+
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
 # anonymously ncftps the rpms to sourceforge
 redhat-upload: check-release
@@ -329,7 +357,7 @@ suse-dist: rpm-stuff
 	exit 1;\
 	fi
 
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -806,6 +834,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.90  2002/04/26 17:46:53  swa
+# be consistent
+#
 # Revision 1.89  2002/04/26 17:20:54  swa
 # just produce single html files to proces them later with Destiller or somesuch. looks prettier.
 #
