@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.6 2001/05/26 17:25:14 jongfoster Exp $
+# $Id: config,v 1.7 2001/05/29 09:50:24 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -148,64 +148,6 @@ forwardfile   ./forward
 #
 
 #
-#  If 'add-forwarded-header' is set, an "X-Forwarded-For:"
-#  specification will be added to each request header.  Generally,
-#  this is not needed and will reduce your privacy, as the server
-#  will not only see which proxy the request came through, but also
-#  which machine behind that proxy the request originally came from.
-#
-#  Default: Don't add the "X-Forwarded-For:" header.
-#
-#add-forwarded-header
-
-#
-#  Junkbuster can add "wafers", i.e. fake cookies, to each request
-#  header it sends out.
-#  These wafers can be seen by Web site operators in their log files,
-#  so it's a way for you to communicate (very indirectly!) with
-#  them. Junkbuster will add as many wafers as you like to each
-#  request, just list them all here.  Here's an example:
-#
-#     wafer    NOTE=Like most people, I want my browsing to be anonymous.
-#     wafer    WARNING=Please do not attempt to track me.
-#
-#  Wafers make each request larger and will have a (small) impact on
-#  your browsing speed, so you probably don't want to do this unless
-#  you have a particular need.
-#
-#  Default: Don't add a wafer
-#
-#wafer NOTE=Add your wafer here...
-
-#
-# There's also a pre-defined wafer containing a privacy message,
-# called the vanilla wafer, which is sent by default. Setting
-# suppress-vanilla-wafer suppresses this. You guessed that, didn't you?
-#
-# Default: Send the vanilla wafer
-#
-suppress-vanilla-wafer
-
-#
-#  In fact, Junkbuster can add anything at all to the request headers.
-#  You can specify the headers to add with the add-header option.  For
-#  example: 
-#
-#     add-header  Forwarded: by http://stay-out-of-my-backyard.net
-#
-#  Generally, random headers will simply be ignored by the Web site,
-#  so there's little use in adding them.  However, there are some
-#  cases where you might want to add a header, e.g., if you're
-#  forwarding Junkbuster requests to another proxy you might want to
-#  add:
-#
-#     add-header    Proxy-Connection: Keep-Alive
-# 
-#  to every request.
-#
-#add-header My-Header: Whatever you'd like...
-
-#
 #  Listen-address specifies the address and port where Junkbuster will
 #  listen for connections from your Web browser.  The default is to
 #  listen on the local host on port 8000, and this is suitable for
@@ -240,80 +182,6 @@ suppress-vanilla-wafer
 #  Default:  listen-address    localhost:8000 
 #            listen-address    127.0.0.1:8000
 #
-
-#
-#  When your Web browser makes a request from a Web site, it informs
-#  the Web site what sort of browser it is, e.g., "Internet Explorer
-#  V2.0" or some such.  In theory, Web sites can use this information
-#  to tailor themselves for your browser.
-#
-#  The 'user-agent' option controls whether Junkbuster will conceal
-#  your browser type or not.  If user-agent is set to . (period) the
-#  User-Agent header is passed to the server unchanged, along with any
-#  UA headers produced by MS-IE (which would otherwise be deleted). If
-#  user-agent is set to @ (at) these headers are sent unchanged in
-#  cases where the cookiefile specifies that a cookie would be sent,
-#  otherwise only a default User-Agent header is sent. That default is
-#  Mozilla/3.0 (Netscape) with an unremarkable Linux configuration. 
-#  If left unset, the default header is always sent.
-#
-#  Note that if you choose to mislead Web sites about your browser
-#  type, you may get Web pages that confuse your browser or display
-#  incorrectly.  In most cases, it's probably fine to send your real
-#  browser type.
-#
-#  Default: Always send the (forged) default user agent header
-#
-user-agent    .
-
-#
-#  When your Web browser requests a page from a Web site, it also
-#  informs the Web site where it came from, i.e., when you click
-#  through to a new web page, your browser tells the new web site the
-#  URL of the old web page.  This is called the "Referer" header.
-#
-#  Junkbuster has the ability to mask the Referer header.  Referer
-#  headers can be used to track users as they browse around the web,
-#  and many consider them invasive.  Junkbuster provides several
-#  options for dealing with referer headers.
-#
-#  Note that the setting of this value can be overridden on a
-#  site-by-site basis in the permissionsfile, in order to send
-#  the unmodified Referer header to sites which require it.
-#  This option controls what to do for sites without that
-#  permission.
-#
-#       VALUE       EFFECT
-#       =====       ======
-#       default     Kill the referrer-header from the client.
-#       @           Kill the referrer-header from the client.
-#       .           Always pass the referrer unchanged.
-#       L           Send a forged referrer that points to the
-#                   root-directory URL of the current request otherwise.
-#       'text'      Send <text> as the referrer.
-#
-#  L is probably preferable to @, because it will break fewer Web
-#  sites while still concealing your browsing path.
-#
-#  Default: see above
-#
-referer     L
-
-#
-#  Some browsers provide a "From:" header that gives Web sites your
-#  email address.  The only real effect of this is to make you a
-#  target for unsolicited email (spam).  There are three options
-#  what to do with the "From:" header if it is present:
-# 
-#       VALUE       EFFECT
-#       =====       ======
-#       default     Kill every "From:" header
-#       .           Pass the "From:" header unchanged
-#       'text'      replace the email address in the "From:" header with 'text'
-#
-#  Default: see above
-#
-#from   spam-me-senseless@sittingduck.xqq
 
 #
 #  The 'tinygif' option lets you change how Junkbuster treats blocked
