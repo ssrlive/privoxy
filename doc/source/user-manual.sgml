@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $
+ $Id: user-manual.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $</pubdate>
 
 <!--
 
@@ -4115,7 +4115,6 @@ www.ugu.com/sui/ugu/adv</screen>
 </sect3>
 
 <sect3><title>user.action</title>
-
 <para>
  So far we are painting with a broad brush by setting general policies,
  which would be a reasonable starting point for many people. Now, 
@@ -4152,14 +4151,31 @@ www.ugu.com/sui/ugu/adv</screen>
 
 <para>
  <screen>
+# Aliases are local to the file they are defined in.
 # (Re-)define aliases for this file:
 #
 {{alias}}
+# 
+# These aliases just save typing later, and the alias names should 
+# be self explanatory.
+#
++crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
-mercy-for-cookies   = -crunch-all-cookies -session-cookies-only
+ allow-all-cookies  = -crunch-all-cookies -session-cookies-only
+ allow-popups       = -filter{popups} -kill-popups
++block-as-image     = +block +handle-as-image
+-block-as-image     = -block
+
+# These aliases define combinations of actions that are useful for
+# certain types of sites:
+#
 fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
-shop        = mercy-for-cookies -filter{popups} -kill-popups
-allow-ads   = -block -filter{banners-by-size} # (see below)</screen>
+shop        = -crunch-all-cookies allow-popups
+
+# Allow ads for selected useful free sites:
+#
+allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}</screen>
+
  
 </para>
 
@@ -4167,14 +4183,14 @@ allow-ads   = -block -filter{banners-by-size} # (see below)</screen>
  Say you have accounts on some sites that you visit regularly, and
  you don't want to have to log in manually each time. So you'd like
  to allow persistent cookies for these sites. The
- <literal>mercy-for-cookies</literal> alias defined above does exactly
- that, i.e. it disables crunching of cookies in any direction, and
- processing of cookies to make them temporary.
+ <literal>allow-all-cookies</literal> alias defined above does exactly
+ that, i.e. it disables crunching of cookies in any direction, and the 
+ processing of cookies to make them only temporary.
 </para>
 
 <para>
  <screen>
-{ mercy-for-cookies }
+{ allow-all-cookies }
 sunsolve.sun.com
 slashdot.org
 .yahoo.com
@@ -4194,34 +4210,76 @@ slashdot.org
 </para>
 
 <para>
- While browsing the web with <application>Privoxy</application> you
- noticed some ads that sneaked through, but you were too lazy to
- report them through our fine and easy <link linkend="contact">feedback</link>
- system, so you have added them here:
+ Some hosts and some file types you may not want to filter.
+ <application>Privoxy</application> makes no distinctions between regular web
+ pages and downloads done via your web browser if it is an html or text type
+ document.
+</para>
+
+<para>
+ <screen>
+{ -<link linkend="FILTER">filter</link> }
+localhost
+apache_server.mylan
+
+# A list of common file extensions that are likely to indicate raw text, and best
+# if unfiltered.
+/(.*/)?.*\.(pl|(s|p)?h|c(c|xx|pp)?|tcl|am|init?|cfg?|conf(ig)?|txt|rc|bat)$
+
+# Documentation should not need filtering (at least on some sites).
+.tldp.org</screen>
+</para>
+
+<para>
+ Example of a simple <link linkend="BLOCK">block</link> action. Say you've
+ seen an ad on your favourite page on example.com that you want to get rid of.
+ You have right-clicked the image, selected <quote>copy image location</quote>
+ and pasted the URL below while removing the leading http://, into a 
+ <literal>{ +block }</literal> section. Note that <literal>{ +handle-as-image
+ }</literal> need not be specified, since all URLs ending in
+ <literal>.gif</literal> will be tagged as images by the general rules as set
+ in default.action anyway:
 </para>
 
 <para>
  <screen>
 { +<link linkend="BLOCK">block</link> }
-www.a-popular-site.com/some/unobvious/path
-another.popular.site.net/more/junk/here/</screen>
+www.example.com/nasty-ads/sponsor.gif
+another.popular.site.net/more/junk/here/
+
+#  Here we found one that is not in <application>Privoxy's</application> default blocked list:
+.adfactory.net</screen>
 </para>
 
 <para>
- Note that, assuming the banners in the above example have regular image
- extensions (most do),
- <literal>+<link linkend="HANDLE-AS-IMAGE">handle-as-image</link></literal>
- need not be specified, since all URLs ending in these extensions will
- already have been tagged as images in the relevant section of 
- <filename>default.action</filename> by now.
+ To force URLs that tend to have ad images, but it is difficult for
+ <application>Privoxy</application> to know this since the ultimate returned
+ object is obscured for one reason or another, we can try to force these to be
+ treated as images (and thus avoid <application>Privoxy's</application>
+ <quote>BLOCKED</quote> banner page). Note that if what is returned by the
+ server turns out NOT to be an image, then your browser typically will display
+ a broken icon image. Use cautiously.
 </para>
 
 <para>
- Then you noticed that the default configuration breaks Forbes Magazine,
+ <screen>
+{ +block-as-image }
+# A shockwave ad, very annoying.
+.trip.com/.*\.swf
+.doubleclick.net
+/Realmedia/ads/
+adremote.</screen>
+</para>
+
+<para>
+ Now you noticed that the default configuration breaks Forbes Magazine,
  but you were too lazy to find out which action is the culprit, and you
  were again too lazy to give <link linkend="contact">feedback</link>, so
  you just used the <literal>fragile</literal> alias on the site, and
- -- whoa! -- it worked:
+ -- <emphasis>whoa!</emphasis> -- it worked. The <literal>fragile</literal>
+ aliases disables those actions that are most likely to break a site. Also,
+ good for testing purposes to see if it is <application>Privoxy</application>
+ that is causing the problem or not.
 </para>
 
 <para>
@@ -4252,7 +4310,7 @@ another.popular.site.net/more/junk/here/</screen>
 </para>
 
 <para>
- Finally, you might think about how your favourite free websites are
+ You might also worry about how your favourite free websites are
  funded, and find that they rely on displaying banner advertisements
  to survive. So you might want to specifically allow banners for those
  sites that you feel provide value to you:
@@ -4268,10 +4326,27 @@ another.popular.site.net/more/junk/here/</screen>
 
 <para>
  Note that <literal>allow-ads</literal> has been aliased to 
- <literal>-<link linkend="block">block</link></literal>
- <literal>-<link linkend="filter-banners-by-size">filter{banners-by-size}</link></literal>
- above.
+ <literal>-<link linkend="block">block</link></literal>, 
+ <literal>-<link linkend="filter-banners-by-size">filter{banners-by-size}</link></literal>, and 
+ <literal>-<link linkend="filter-banners-by-link">filter{banners-by-link}</link></literal> above.
 </para>
+
+<para>
+ <filename>user.action</filename> is generally the best place to define
+ exceptions and additions to the default policies of
+ <filename>default.action</filename>. Some actions are safe to have their
+ default policies set here though. So let's set a default policy to have a
+ <quote>blank</quote> image as opposed to the checkerboard pattern for
+ <emphasis>ALL</emphasis> sites. <quote>/</quote> of course matches all URL
+ paths and patterns:
+</para>
+
+<para>
+<screen>
+{ +<link linkend="set-image-blocker">set-image-blocker{blank}</link> }
+/ # ALL sites</screen>
+</para>
+
 </sect3>
 </sect2>
 
@@ -5689,6 +5764,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.7  2002/10/12 01:14:42  hal9
+ Updates for demoronizer filter, Radical profile, and the srvany.exe/icon
+ win32 fix.
+
  Revision 2.6  2002/10/10 04:10:38  hal9
  s/Advanced/Radical/ for standard.action change.
 
