@@ -12,7 +12,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.38 2002/04/02 03:49:10 hal9 Exp $
+ $Id: faq.sgml,v 1.39 2002/04/03 03:53:03 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -43,7 +43,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.38 2002/04/02 03:49:10 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.39 2002/04/03 03:53:03 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -132,7 +132,7 @@
  <quote><emphasis>Privacy Enhancing Proxy</emphasis></quote>.
 </para>
 <para>
- There are possible legal complications from the continued use of the 
+ There are potential legal complications from the continued use of the 
  <application>Junkbuster</application> name, which is a trademark of 
  <ulink url="http://junkbusters.com">Junkbusters Corporation</ulink>.
  (There are, however, no objections from Junkbusters Corporation to the 
@@ -141,7 +141,7 @@
 </para>
 
 <para>
- The developers also believed that there so many changes from the original 
+ The developers also believed that there are so many changes from the original 
  code, that it was time to make a clean break from the past and make 
  a name in their own right, especially now with the pending release of 
  version 3.0.
@@ -247,7 +247,7 @@ This does not sound very scientific.</title>
  <application>Privoxy</application> configuration is very flexible, and
  includes tools to help identify these types of situations so they can be
  addressed as needed, allowing you to customize your installation.
- (<link linkend="badsite">See the appendix below</link>.)
+ (<link linkend="badsite">See the Troubleshooting section below</link>.)
 </para>
 
 </sect2>
@@ -443,8 +443,8 @@ All the ads are there. What's wrong?</title>
 
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
-   There are major changes to <application>Junkbuster</application>, 
-   <application>Privoxy</application>, configuration from version 2.0.x to
+   There are major changes to <application>Junkbuster</application>/ 
+   <application>Privoxy</application> configuration from version 2.0.x to
    2.9.x and later. Most of the older files will not work at all. This is 
    especially true of <filename>blocklist</filename>. If this is the case, you
    will need to re-enter your old data into the new configuration structure.
@@ -483,7 +483,7 @@ All the ads are there. What's wrong?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="actionss">
-<title>The <quote>actions</quote>concept confuses me. Please list 
+<title>The <quote>actions</quote> concept confuses me. Please list 
 some of these <quote>actions</quote>.</title>
 <para>
  These are all explained in the 
@@ -689,24 +689,25 @@ following table shows you, which features are enabled in each configuration.
 browser? Does that not raise security issues?</title>
  <para>
 What I don't understand, is how I can browser edit the config file as a
-regular user, while the whole /etc/privoxy hierarchy belongs to the user
-"privoxy", with only 644 perms.
+regular user, while the whole <filename>/etc/privoxy</filename> hierarchy
+belongs to the user <quote>privoxy</quote>, with only 644 permissions.
  </para>
  <para>
 When you use the browser-based editor, <application>Privoxy</application>
 itself is writing to the config files.  Because
-<application>Privoxy</application> is running as the user "privoxy", it can
+<application>Privoxy</application> is running as the user <quote>privoxy</quote>, it can
 update the config files.
  </para>
  <para>
-If you don't like this, setting "enable-edit-actions 0" in the config file
-will disable the browser-based editor.  If you're that paranoid, you should
-also consider setting "enable-remote-toggle 0" to prevent browser-based
-enabling/disabling of <application>Privoxy</application>.
+If you don't like this, setting <quote>enable-edit-actions 0</quote> in the
+config file will disable the browser-based editor.  If you're that paranoid,
+you should also consider setting <quote>enable-remote-toggle 0</quote> to prevent
+browser-based enabling/disabling of <application>Privoxy</application>.
  </para>
  <para>
-Note that normally only local users can connect to <application>Privoxy</application>, so this is not
-(normally) a security problem.
+Note that normally only local users can connect to
+<application>Privoxy</application>, so this is not (normally) a security
+problem.
  </para>
 </sect2>
 
@@ -1379,6 +1380,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.39  2002/04/03 03:53:03  hal9
+Revert some changes, and then make some news, to layout, and appearance.
+
 Revision 1.38  2002/04/02 03:49:10  hal9
 Major changes to doc structure and layout. Sections are not automatically
 numbered now. TOC is on page by itself.
