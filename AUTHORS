@@ -15,10 +15,13 @@ Current Project Contributors:
  Rodrigo Barbosa (RPM specfiles)
  Moritz Barsnick
  Hal Burgiss (docs)
+ Mattes Dolak
  Karsten Hopp (Red Hat)
  Alexander Lazic
+ Daniel Leite
  Gábor Lipták
- Guy
+ Guy Laroche
+ Andrew Lock (Win32)
  Haroon Rafique
  Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
@@ -34,21 +37,24 @@ Based in part on code originally developed by:
 Thanks to the many people who have tested Privoxy, reported bugs, or made
 suggestions. These include (in alphabetical order):
 
+ Johny Agotnes 
  Ken Arromdee
  Devin Bayer
  Reiner Buehl
  Andrew J. Caines
  Clifford Caoile
  Michael T. Davis
+ Brian Dessent
  Peter E
  Aaron Hamid
  Magnus Holmgren
- Daniel Leite
+ Don Libes  
  Paul Lieverse
  David Mediavilla 
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
+ Oliver Stoeneberg
  Darren Wiebe
  Jamie Zawinski
 

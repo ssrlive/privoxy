@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa//current/doc/source/p-authors.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-authors.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.5 2002/11/13 01:38:16 hal9 Exp $
+ $Id: p-authors.sgml,v 2.6 2002/11/16 15:37:03 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -54,6 +54,7 @@
  Daniel Leite
  Gábor Lipták
  Guy Laroche
+ Andrew Lock (Win32)
  Haroon Rafique
  Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
