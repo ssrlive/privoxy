@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.27 2002/04/24 02:10:31 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.28 2002/04/26 12:53:15 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,14 @@ const char actions_rcs[] = "$Id: actions.c,v 1.27 2002/04/24 02:10:31 oes Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.28  2002/04/26 12:53:15  oes
+ *     - CGI AF editor now writes action lines split into
+ *       single lines with line continuation
+ *     - actions_to_html now embeds each action name in
+ *       link to chapter
+ *     - current_action_to_text is now called current_action_to_html
+ *       and acts like actions_to_html
+ *
  *    Revision 1.27  2002/04/24 02:10:31  oes
  *     - Jon's patch for multiple AFs:
  *       - split load_actions_file, add load_one_actions_file
@@ -1468,7 +1476,6 @@ char * actions_to_html(struct action_spec *action,
    unsigned mask = action->mask;
    unsigned add  = action->add;
    char * result = strdup("");
-   char * enc_str;
    struct list_entry * lst;
 
    /* sanity - prevents "-feature +feature" */
@@ -1498,25 +1505,14 @@ char * actions_to_html(struct action_spec *action,
       string_append(&result, "\n<br>+");             \
       string_join(&result, add_help_link(__name, csp->config)); \
       string_append(&result, "{");                   \
-      if (NULL == result)                            \
-      {                                              \
-         return NULL;                                \
-      }                                              \
-      enc_str = html_encode(action->string[__index]);\
-      if (NULL == enc_str)                           \
-      {                                              \
-         free(result);                               \
-         return NULL;                                \
-      }                                              \
-      string_append(&result, enc_str);               \
-      free(enc_str);                                 \
+      string_join(&result, html_encode(action->string[__index])); \
       string_append(&result, "}");                   \
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)          \
    if (action->multi_remove_all[__index])             \
    {                                                  \
-      string_append(&result, "\n<br>-");       \
+      string_append(&result, "\n<br>-");              \
       string_join(&result, add_help_link(__name, csp->config)); \
    }                                                  \
    else                                               \
@@ -1527,18 +1523,7 @@ char * actions_to_html(struct action_spec *action,
          string_append(&result, "\n<br>-");           \
          string_join(&result, add_help_link(__name, csp->config)); \
          string_append(&result, "{");                 \
-         if (NULL == result)                          \
-         {                                            \
-            return NULL;                              \
-         }                                            \
-         enc_str = html_encode(lst->str);             \
-         if (NULL == enc_str)                         \
-         {                                            \
-            free(result);                             \
-            return NULL;                              \
-         }                                            \
-         string_append(&result, enc_str);             \
-         free(enc_str);                               \
+         string_join(&result, html_encode(lst->str)); \
          string_append(&result, "}");                 \
          lst = lst->next;                             \
       }                                               \
@@ -1549,18 +1534,7 @@ char * actions_to_html(struct action_spec *action,
       string_append(&result, "\n<br>+");              \
       string_join(&result, add_help_link(__name, csp->config)); \
       string_append(&result, "{");                    \
-      if (NULL == result)                             \
-      {                                               \
-         return NULL;                                 \
-      }                                               \
-      enc_str = html_encode(lst->str);                \
-      if (NULL == enc_str)                            \
-      {                                               \
-         free(result);                                \
-         return NULL;                                 \
-      }                                               \
-      string_append(&result, enc_str);                \
-      free(enc_str);                                  \
+      string_join(&result, html_encode(lst->str));    \
       string_append(&result, "}");                    \
       lst = lst->next;                                \
    }
@@ -1607,7 +1581,6 @@ char *current_action_to_html(struct current_action_spec *action,
 {
    unsigned long flags  = action->flags;
    char * result = strdup("");
-   char * enc_str;
    struct list_entry * lst;
 
 #define DEFINE_ACTION_BOOL(__name, __bit)  \
@@ -1628,43 +1601,30 @@ char *current_action_to_html(struct current_action_spec *action,
       string_append(&result, "\n<br>+");               \
       string_join(&result, add_help_link(__name, csp->config)); \
       string_append(&result, "{");                     \
-      enc_str = html_encode(action->string[__index]);  \
-      if (NULL == enc_str)                             \
-      {                                                \
-         free(result);                                 \
-         return NULL;                                  \
-      }                                                \
-      string_append(&result, enc_str);                 \
-      free(enc_str);                                   \
+      string_join(&result, html_encode(action->string[__index])); \
       string_append(&result, "}");                     \
    }                                                   \
    else                                                \
    {                                                   \
-      string_append(&result, "\n<br>-" __name);        \
+      string_append(&result, "\n<br>-");               \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)           \
    lst = action->multi[__index]->first;                \
    if (lst == NULL)                                    \
    {                                                   \
-      string_append(&result, "\n<br> -");              \
+      string_append(&result, "\n<br>-");              \
       string_join(&result, add_help_link(__name, csp->config)); \
    }                                                   \
    else                                                \
    {                                                   \
       while (lst)                                      \
       {                                                \
-         string_append(&result, "\n<br> +");           \
+         string_append(&result, "\n<br>+");            \
          string_join(&result, add_help_link(__name, csp->config)); \
          string_append(&result, "{");                  \
-         enc_str = html_encode(lst->str);              \
-         if (NULL == enc_str)                          \
-         {                                             \
-            free(result);                              \
-            return NULL;                               \
-         }                                             \
-         string_append(&result, enc_str);              \
-         free(enc_str);                                \
+         string_join(&result, html_encode(lst->str));  \
          string_append(&result, "}");                  \
          lst = lst->next;                              \
       }                                                \
