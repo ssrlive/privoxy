@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.1.1.1 2001/05/15 13:59:00 oes Exp $
+# $Id: Makefile.in,v 1.2 2001/05/17 22:23:23 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.2  2001/05/17 22:23:23  oes
+#  - Added auto-generation of CRLFs for Win32 config files
+#  - Added comment-prefix to all Win32-only options in the config file
+#    and provided auto stripping of this prefix for the Win32 platform by make
+#
 # Revision 1.1.1.1  2001/05/15 13:59:00  oes
 # Initial import of version 2.9.3 source tree
 #
@@ -255,6 +260,15 @@ win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pc
 w32.res: w32.rc w32res.h icons/denyrule.ico icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/icon1.ico icons/idle.ico icons/junkbust.ico config.h
 	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
 
+## AmigaOS, GCC 2.95.1 (or lower, 2.95.3 does NOT work!)
+#ifeq ($(shell $(CC) $(CFLAGS) -dumpmachine), m68k-amigaos)
+#OBJS += amiga.o
+#CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -Wall -m68020 -Os -noixemul -fbaserel -msmall-code
+#LDFLAGS += -m68020 -noixemul -fbaserel
+#LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
+#amiga.o: amiga.c amiga.h config.h
+#endif
+#
 
 $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
