@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.4 2001/10/07 15:35:13 oes Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.5 2002/03/03 09:18:03 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.4 2001/10/07 15:35:13 oes Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.5  2002/03/03 09:18:03  joergs
+ *    Made jumbjuster work on AmigaOS again.
+ *
  *    Revision 1.4  2001/10/07 15:35:13  oes
  *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
  *
@@ -76,7 +79,7 @@ __saveds ULONG server_thread(void)
    {
       SetErrnoPtr(&(UserData.eno),sizeof(int));
       local_csp->cfd=ObtainSocket(local_csp->cfd, AF_INET, SOCK_STREAM, 0);
-      if(-1!=local_csp->cfd)
+      if(JB_INVALID_SOCKET!=local_csp->cfd)
       {
          Signal(main_task,SIGF_SINGLE);
          serve((struct client_state *) local_csp);

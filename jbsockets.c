@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.23 2002/03/05 00:36:01 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.24 2002/03/07 03:51:36 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.23 2002/03/05 00:36:01 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.24  2002/03/07 03:51:36  oes
+ *     - Improved handling of failed DNS lookups
+ *     - Fixed compiler warnings etc
+ *
  *    Revision 1.23  2002/03/05 00:36:01  jongfoster
  *    Fixing bug 514988 - unable to restart JunkBuster
  *
@@ -182,13 +186,15 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *                      Not modified, only used for source IP and ACL.
  *
- * Returns     :  -1 => failure, else it is the socket file descriptor.
+ * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket
+ *                file descriptor.
  *
  *********************************************************************/
-int connect_to(const char *host, int portnum, struct client_state *csp)
+jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 {
    struct sockaddr_in inaddr;
-   int   fd, addr;
+   jb_socket fd;
+   int addr;
    fd_set wfds;
    struct timeval tv[1];
 #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
@@ -204,7 +210,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    if ((addr = resolve_hostname_to_ip(host)) == INADDR_NONE)
    {
       csp->http->host_ip_addr_str = strdup("unknown");
-      return(-1);
+      return(JB_INVALID_SOCKET);
    }
 
 #ifdef FEATURE_ACL
@@ -218,7 +224,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
 #else
       errno = EPERM;
 #endif
-      return(-1);
+      return(JB_INVALID_SOCKET);
    }
 #endif /* def FEATURE_ACL */
 
@@ -239,9 +245,13 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    }
 #endif /* ndef _WIN32 */
 
+#ifdef _WIN32
+   if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) == JB_INVALID_SOCKET)
+#else
    if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) < 0)
+#endif
    {
-      return(-1);
+      return(JB_INVALID_SOCKET);
    }
 
 #ifdef TCP_NODELAY
@@ -259,7 +269,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    }
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
 
-   while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == -1)
+   while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == JB_INVALID_SOCKET)
    {
 #ifdef _WIN32
       if (errno == WSAEINPROGRESS)
@@ -279,7 +289,7 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
 #endif /* __OS2__ */
       {
          close_socket(fd);
-         return(-1);
+         return(JB_INVALID_SOCKET);
       }
    }
 
@@ -298,10 +308,11 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    tv->tv_sec  = 30;
    tv->tv_usec = 0;
 
-   if (select(fd + 1, NULL, &wfds, NULL, tv) <= 0)
+   /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
+   if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
    {
       close_socket(fd);
-      return(-1);
+      return(JB_INVALID_SOCKET);
    }
    return(fd);
 
@@ -319,22 +330,26 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
  *          2  :  buf = pointer to data to be written.
  *          3  :  len = length of data to be written to the socket "fd".
  *
- * Returns     :  Win32 & Unix: If no error occurs, returns the total number of
- *                bytes sent, which can be less than the number
- *                indicated by len. Otherwise, returns (-1).
+ * Returns     :  0 on success (entire buffer sent).
+ *                nonzero on error.
  *
  *********************************************************************/
-size_t write_socket(int fd, const char *buf, size_t len)
+int write_socket(jb_socket fd, const char *buf, int len)
 {
-   if (len <= 0)
+   if (len == 0)
    {
-      return(0);
+      return 0;
+   }
+
+   if (len < 0)
+   {
+      return 1;
    }
 
    log_error(LOG_LEVEL_LOG, "%N", len, buf);
 
 #if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
-   return(send(fd, buf, len, 0));
+   return (send(fd, buf, len, 0) != len);
 #elif defined(__OS2__)
    /*
     * Break the data up into SOCKET_SEND_MAX chunks for sending...
@@ -351,13 +366,13 @@ size_t write_socket(int fd, const char *buf, size_t len)
             send_len = SOCKET_SEND_MAX;
          send_rc = send(fd,(char*)buf + i, send_len, 0);
          if (send_rc == -1)
-            return(0);
+            return 1;
          i = i + send_len;
-   }
-   return len;
+      }
+      return 0;
    }
 #else
-   return(write(fd, buf, len));
+   return (write(fd, buf, len) != len);
 #endif
 
 }
@@ -381,14 +396,14 @@ size_t write_socket(int fd, const char *buf, size_t len)
  *                smaller than the number of bytes requested; this may hap-
  *                pen for example because fewer bytes are actually available
  *                right now (maybe because we were close to end-of-file, or
- *                because we are reading from a pipe, or from a terminal),
- *                or because read() was interrupted by a signal.  On error,
+ *                because we are reading from a pipe, or from a terminal,
+ *                or because read() was interrupted by a signal).  On error,
  *                -1 is returned, and errno is set appropriately.  In this
  *                case it is left unspecified whether the file position (if
  *                any) changes.
  *
  *********************************************************************/
-size_t read_socket(int fd, char *buf, size_t len)
+int read_socket(jb_socket fd, char *buf, int len)
 {
    if (len <= 0)
    {
@@ -415,7 +430,7 @@ size_t read_socket(int fd, char *buf, size_t len)
  * Returns     :  void
  *
  *********************************************************************/
-void close_socket(int fd)
+void close_socket(jb_socket fd)
 {
 #if defined(_WIN32) || defined(__BEOS__)
    closesocket(fd);
@@ -440,20 +455,22 @@ void close_socket(int fd)
  * Parameters  :
  *          1  :  hostnam = TCP/IP address to bind/listen to
  *          2  :  portnum = port to listen on
+ *          3  :  pfd = pointer used to return file descriptor.
  *
- * Returns     :  if success, return file descriptor
+ * Returns     :  if success, returns 0 and sets *pfd.
  *                if failure, returns -3 if address is in use,
  *                                    -2 if address unresolvable,
  *                                    -1 otherwise
- *
  *********************************************************************/
-int bind_port(const char *hostnam, int portnum)
+int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 {
    struct sockaddr_in inaddr;
-   int fd;
+   jb_socket fd;
 #ifndef _WIN32
    int one = 1;
 #endif /* ndef _WIN32 */
+
+   *pfd = JB_INVALID_SOCKET;
 
    memset((char *)&inaddr, '\0', sizeof inaddr);
 
@@ -480,7 +497,11 @@ int bind_port(const char *hostnam, int portnum)
 
    fd = socket(AF_INET, SOCK_STREAM, 0);
 
+#ifdef _WIN32
+   if (fd == JB_INVALID_SOCKET)
+#else
    if (fd < 0)
+#endif
    {
       return(-1);
    }
@@ -526,7 +547,8 @@ int bind_port(const char *hostnam, int portnum)
       }
    }
 
-   return fd;
+   *pfd = fd;
+   return 0;
 
 }
 
@@ -547,11 +569,11 @@ int bind_port(const char *hostnam, int portnum)
  *                On an error it returns 0 (FALSE).
  *
  *********************************************************************/
-int accept_connection(struct client_state * csp, int fd)
+int accept_connection(struct client_state * csp, jb_socket fd)
 {
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
-   int afd;
+   jb_socket afd;
    size_t c_length, s_length;
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
@@ -565,15 +587,22 @@ int accept_connection(struct client_state * csp, int fd)
 
    c_length = s_length = sizeof(client);
 
+#ifdef _WIN32
+   afd = accept (fd, (struct sockaddr *) &client, &c_length);
+   if (afd == JB_INVALID_SOCKET)
+   {
+      return 0;
+   }
+#else
    do
    {
       afd = accept (fd, (struct sockaddr *) &client, &c_length);
    } while (afd < 1 && errno == EINTR);
-
    if (afd < 0)
    {
       return 0;
    }
+#endif
 
    /* 
     * Determine the IP-Adress that the client used to reach us

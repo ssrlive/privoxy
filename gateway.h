@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.2 2001/06/07 23:12:14 jongfoster Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.3 2001/07/29 18:58:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.3  2001/07/29 18:58:15  jongfoster
+ *    Removing nested #includes, adding forward declarations for needed
+ *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
+ *
  *    Revision 1.2  2001/06/07 23:12:14  jongfoster
  *    Removing gateways[] list - no longer used.
  *    Replacing function pointer in struct gateway with a directly
@@ -59,9 +63,9 @@ struct forward_spec;
 struct http_request;
 struct client_state;
 
-extern int forwarded_connect(const struct forward_spec * fwd, 
-                             struct http_request *http, 
-                             struct client_state *csp);
+extern jb_socket forwarded_connect(const struct forward_spec * fwd, 
+                                   struct http_request *http, 
+                                   struct client_state *csp);
 
 /* Revision control strings from this header and associated .c file */
 extern const char gateway_rcs[];

@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.20 2002/02/20 23:15:13 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.21 2002/03/07 03:46:17 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.21  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.20  2002/02/20 23:15:13  jongfoster
  *    Parsing functions now handle out-of-memory gracefully by returning
  *    an error code.
@@ -142,7 +145,7 @@ extern const struct parsers server_patterns[];
 extern const add_header_func_ptr add_client_headers[];
 extern const add_header_func_ptr add_server_headers[];
 
-extern size_t flush_socket(int fd, struct client_state *csp);
+extern int flush_socket(jb_socket fd, struct client_state *csp);
 extern size_t add_to_iob(struct client_state *csp, char *buf, size_t n);
 extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);

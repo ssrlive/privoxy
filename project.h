@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.52 2002/03/07 03:46:17 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.53 2002/03/08 16:48:55 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.53  2002/03/08 16:48:55  oes
+ *    Added FEATURE_NO_GIFS and BUILTIN_IMAGE_MIMETYPE
+ *
  *    Revision 1.52  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *
@@ -401,9 +404,30 @@
 #include "amiga.h"
 #endif /* def AMIGA */
 
+#ifdef _WIN32
+/*
+ * I don't want to have to #include all this just for the declaration
+ * of SOCKET.  However, it looks like we have to...
+ */
+#include <windows.h>
+#endif
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * The type used by sockets.  On UNIX it's an int.  Microsoft decided to
+ * make it an unsigned.
+ */
+#ifdef _WIN32
+typedef SOCKET jb_socket;
+#define JB_INVALID_SOCKET INVALID_SOCKET
+#else /* ndef _WIN32 */
+typedef int jb_socket;
+#define JB_INVALID_SOCKET (-1)
+#endif /* ndef _WIN32 */
 
 
 /*
@@ -712,10 +736,10 @@ struct client_state
    struct current_action_spec  action[1];
 
    /* socket to talk to client (web browser) */
-   int  cfd;
+   jb_socket cfd;
 
    /* socket to talk to server (web server or proxy) */
-   int  sfd;
+   jb_socket sfd;
 
    /* Multi-purpose flag container, see CSP_FLAG_* above */
    unsigned short int flags;

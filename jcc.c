@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.77 2002/03/07 03:52:06 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.78 2002/03/08 21:35:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.77 2002/03/07 03:52:06 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.78  2002/03/08 21:35:04  oes
+ *    Added optional group supplement to --user option. Will now use default group of user if no group given
+ *
  *    Revision 1.77  2002/03/07 03:52:06  oes
  *     - Fixed compiler warnings etc
  *     - Improved handling of failed DNS lookups
@@ -675,14 +678,18 @@ static void chat(struct client_state *csp)
 #define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
    char buf[BUFFER_SIZE];
-   char *hdr, *p, *req;
+   char *hdr;
+   char *p;
+   char *req;
    fd_set rfds;
-   int n, maxfd, server_body;
+   int n;
+   jb_socket maxfd;
+   int server_body;
    int ms_iis5_hack = 0;
    int byte_count = 0;
    const struct forward_spec * fwd;
    struct http_request *http;
-   size_t len; /* for buffer sizes */
+   int len; /* for buffer sizes */
 #ifdef FEATURE_KILL_POPUPS
    int block_popups;         /* bool, 1==will block popups */
    int block_popups_now = 0; /* bool, 1==currently blocking popups */
@@ -967,8 +974,8 @@ static void chat(struct client_state *csp)
       )
    {
       /* Write the answer to the client */
-      if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-           || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+      if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+       || write_socket(csp->cfd, rsp->body, rsp->content_length))
       {
          log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
       }
@@ -1003,7 +1010,7 @@ static void chat(struct client_state *csp)
 
    csp->sfd = forwarded_connect(fwd, http, csp);
 
-   if (csp->sfd < 0)
+   if (csp->sfd == JB_INVALID_SOCKET)
    {
       log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
                 http->hostport);
@@ -1027,8 +1034,8 @@ static void chat(struct client_state *csp)
       /* Write the answer to the client */
       if(rsp)
       {
-         if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-          || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+         if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+          || write_socket(csp->cfd, rsp->body, rsp->content_length))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
          }
@@ -1055,10 +1062,8 @@ static void chat(struct client_state *csp)
        * (along with anything else that may be in the buffer)
        */
 
-      len = strlen(hdr);
-
-      if ((write_socket(csp->sfd, hdr, len) != len)
-          || (flush_socket(csp->sfd, csp   ) <  0))
+      if (write_socket(csp->sfd, hdr, strlen(hdr))
+       || (flush_socket(csp->sfd, csp) <  0))
       {
          log_error(LOG_LEVEL_CONNECT, "write header to: %s failed: %E",
                     http->hostport);
@@ -1070,8 +1075,8 @@ static void chat(struct client_state *csp)
 
          if(rsp)
          {
-            if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-             || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+            if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+             || write_socket(csp->cfd, rsp->body, rsp->content_length))
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
             }
@@ -1092,7 +1097,7 @@ static void chat(struct client_state *csp)
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 2\n",
                 csp->ip_addr_str, http->ocmd);
 
-      if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1) < 0)
+      if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
       {
          freez(hdr);
          return;
@@ -1139,7 +1144,7 @@ static void chat(struct client_state *csp)
             break; /* "game over, man" */
          }
 
-         if (write_socket(csp->sfd, buf, len) != len)
+         if (write_socket(csp->sfd, buf, len))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
             return;
@@ -1170,8 +1175,8 @@ static void chat(struct client_state *csp)
 
             if(rsp)
             {
-               if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-                || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+                || write_socket(csp->cfd, rsp->body, rsp->content_length))
                {
                   log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
                }
@@ -1241,10 +1246,8 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
                   }
 
-                  len = strlen(hdr);
-
-                  if ((write_socket(csp->cfd, hdr, len) != len)
-                      || (write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length) != (int)csp->content_length))
+                  if (write_socket(csp->cfd, hdr, strlen(hdr))
+                   || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))
                   {
                      log_error(LOG_LEVEL_ERROR, "write modified content to client failed: %E");
                      return;
@@ -1304,8 +1307,8 @@ static void chat(struct client_state *csp)
                   len = strlen(hdr);
                   byte_count += len;
 
-                  if (((write_socket(csp->cfd, hdr, len) != len)
-                       || (len = flush_socket(csp->cfd, csp) < 0)))
+                  if (write_socket(csp->cfd, hdr, len)
+                   || (len = flush_socket(csp->cfd, csp) < 0))
                   {
                      log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
@@ -1323,7 +1326,7 @@ static void chat(struct client_state *csp)
             }
             else
             {
-               if (write_socket(csp->cfd, buf, len) != len)
+               if (write_socket(csp->cfd, buf, len))
                {
                   log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                   return;
@@ -1395,13 +1398,6 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
             }
 
-            len = strlen(hdr);
-
-            /* write the server's (modified) header to
-             * the client (along with anything else that
-             * may be in the buffer)
-             */
-
 #ifdef FEATURE_KILL_POPUPS
             /* Start blocking popups if appropriate. */
 
@@ -1437,24 +1433,33 @@ static void chat(struct client_state *csp)
                content_filter = gif_deanimate_response;
             }
 
-
             /*
              * Only write if we're not buffering for content modification
              */
-            if (!content_filter && ((write_socket(csp->cfd, hdr, len) != len)
-                || (len = flush_socket(csp->cfd, csp) < 0)))
+            if (!content_filter)
             {
-               log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
-
-               /* the write failed, so don't bother
-                * mentioning it to the client...
-                * it probably can't hear us anyway.
+               /* write the server's (modified) header to
+                * the client (along with anything else that
+                * may be in the buffer)
                 */
-               freez(hdr);
-               return;
-            }
 
-            if(!content_filter) byte_count += len;
+               len = strlen(hdr);
+
+               if (write_socket(csp->cfd, hdr, len)
+                || (len = flush_socket(csp->cfd, csp) < 0))
+               {
+                  log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
+
+                  /* the write failed, so don't bother
+                   * mentioning it to the client...
+                   * it probably can't hear us anyway.
+                   */
+                  freez(hdr);
+                  return;
+               }
+
+               byte_count += len;
+            }
 
             /* we're finished with the server's header */
 
@@ -1504,7 +1509,7 @@ static void serve(struct client_state *csp)
    chat(csp);
    close_socket(csp->cfd);
 
-   if (csp->sfd >= 0)
+   if (csp->sfd != JB_INVALID_SOCKET)
    {
       close_socket(csp->sfd);
    }
@@ -1850,9 +1855,10 @@ int main(int argc, const char *argv[])
  * Returns     :  Port that was opened.
  *
  *********************************************************************/
-static int bind_port_helper(struct configuration_spec * config)
+static jb_socket bind_port_helper(struct configuration_spec * config)
 {
-   int bfd;
+   int result;
+   jb_socket bfd;
 
    if ( (config->haddr != NULL)
      && (config->haddr[0] == '1')
@@ -1874,11 +1880,11 @@ static int bind_port_helper(struct configuration_spec * config)
                 config->hport, config->haddr);
    }
 
-   bfd = bind_port(config->haddr, config->hport);
+   result = bind_port(config->haddr, config->hport, &bfd);
 
-   if (bfd < 0)
+   if (result < 0)
    {
-      switch(bfd)
+      switch(result)
       {
          case -3 :
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: "
@@ -1898,7 +1904,7 @@ static int bind_port_helper(struct configuration_spec * config)
       }
 
       /* shouldn't get here */
-      return -1;
+      return JB_INVALID_SOCKET;
    }
 
    config->need_bind = 0;
@@ -1921,7 +1927,7 @@ static int bind_port_helper(struct configuration_spec * config)
 static void listen_loop(void)
 {
    struct client_state *csp = NULL;
-   int bfd;
+   jb_socket bfd;
    struct configuration_spec * config;
 
    config = load_config();
@@ -1960,7 +1966,7 @@ static void listen_loop(void)
       }
 
       csp->flags |= CSP_FLAG_ACTIVE;
-      csp->sfd    = -1;
+      csp->sfd    = JB_INVALID_SOCKET;
 
       csp->config = config = load_config();
 

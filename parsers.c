@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.47 2002/02/20 23:15:13 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.48 2002/03/07 03:46:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.47 2002/02/20 23:15:13 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.48  2002/03/07 03:46:53  oes
+ *    Fixed compiler warnings etc
+ *
  *    Revision 1.47  2002/02/20 23:15:13  jongfoster
  *    Parsing functions now handle out-of-memory gracefully by returning
  *    an error code.
@@ -442,17 +445,20 @@ const add_header_func_ptr add_server_headers[] = {
  *                file, the results are not portable.
  *
  *********************************************************************/
-size_t flush_socket(int fd, struct client_state *csp)
+int flush_socket(jb_socket fd, struct client_state *csp)
 {
    struct iob *iob = csp->iob;
-   size_t len = iob->eod - iob->cur;
+   int len = iob->eod - iob->cur;
 
    if (len <= 0)
    {
       return(0);
    }
 
-   len = write_socket(fd, iob->cur, len);
+   if (write_socket(fd, iob->cur, len))
+   {
+      return(-1);
+   }
    iob->eod = iob->cur = iob->buf;
    return(len);
 
