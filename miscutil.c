@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.29 2002/03/04 02:08:02 david__schmidt Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.30 2002/03/04 18:27:42 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,12 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.29 2002/03/04 02:08:02 david__s
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.30  2002/03/04 18:27:42  oes
+ *    - Deleted deletePidFile
+ *    - Made write_pid_file use the --pidfile option value
+ *      (or no PID file, if the option was absent)
+ *    - Played styleguide police
+ *
  *    Revision 1.29  2002/03/04 02:08:02  david__schmidt
  *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
  *
@@ -889,7 +895,6 @@ char * make_path(const char * dir, const char * file)
 	      strcpy(path, basedir);
 	      strcat(path, "/");
 	      strcat(path, dir);
-	      DBG(1, ("make_path: path: %s\n",path) );
       }
       else
       {

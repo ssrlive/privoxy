@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.68 2002/03/04 20:17:32 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.69 2002/03/04 23:50:00 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.68 2002/03/04 20:17:32 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.69  2002/03/04 23:50:00  jongfoster
+ *    Splitting off bind_port() call into bind_port_helper(), with
+ *    improved logging.
+ *
  *    Revision 1.68  2002/03/04 20:17:32  oes
  *    Fixed usage info
  *
@@ -1602,15 +1606,13 @@ int main(int argc, const char *argv[])
    {
       char *abs_file;
 
-      DBG(1, ("configfile before '%s'\n",configfile) );
-
       /* make config-filename absolute here */
       if ( !(basedir = getcwd( NULL, 1024 )))
       {
          perror("get working dir failed");
          exit( 1 );
       }
-      DBG(1, ("working dir '%s'\n",basedir) );
+
       if ( !(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 )))
       {
          perror("malloc failed");
@@ -1620,7 +1622,6 @@ int main(int argc, const char *argv[])
       strcat( abs_file, "/" );
       strcat( abs_file, configfile );
       configfile = abs_file;
-      DBG(1, ("configfile after '%s'\n",configfile) );
    }
 #endif /* defined unix */
 
@@ -1749,7 +1750,6 @@ int main(int argc, const char *argv[])
 }
 #endif /* defined unix */
 
-   DBG(1, ("call listen_loop() \n") );
    listen_loop();
 
    /* NOTREACHED */

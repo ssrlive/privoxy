@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.49 2002/03/04 18:28:55 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.50 2002/03/04 19:32:07 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.50  2002/03/04 19:32:07  oes
+ *    Changed default port to 8118
+ *
  *    Revision 1.49  2002/03/04 18:28:55  oes
  *    Deleted PID_FILE_NAME
  *
@@ -395,14 +398,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#ifdef _DEBUG
-extern int ldebug;
-#define DBG(a,b)        { if ( ldebug >= a ) { printf b ; }}
-#else
-#define DBG(a,b)
-#endif /* _DEBUG */
-
 
 
 /*

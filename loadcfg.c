@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.31 2002/03/03 15:07:20 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.32 2002/03/04 18:24:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.31 2002/03/03 15:07:20 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.32  2002/03/04 18:24:53  oes
+ *    Re-enabled output of unknown config directive hash
+ *
  *    Revision 1.31  2002/03/03 15:07:20  oes
  *    Re-enabled automatic config reloading
  *
@@ -466,7 +469,6 @@ struct configuration_spec * load_config(void)
    struct file_list *fs;
    unsigned long linenum = 0;
 
-   DBG(1, ("load_config() entered..\n") );
    if ( !check_file_changed(current_configfile, configfile, &fs))
    {
       /* No need to load */
