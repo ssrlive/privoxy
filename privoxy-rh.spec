@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.19 2002/03/27 22:44:59 sarantis Exp $
+# $Id: privoxy-rh.spec,v 1.20 2002/04/08 20:27:45 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -35,8 +35,8 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 2.9.13
-Release: 3
+Version: 2.9.14
+Release: 4
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: http://www.privoxy.org
@@ -47,7 +47,7 @@ URL: http://www.privoxy.org/
 Obsoletes: junkbuster-raw junkbuster-blank junkbuster
 # Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 Prereq: shadow-utils, chkconfig, initscripts, sh-utils
-BuildRequires: perl gzip sed docbook-utils libtool autoconf
+BuildRequires: perl gzip sed docbook-utils libtool autoconf docbook-style-dsssl docbook-dtd31-sgml
 Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 %description 
@@ -72,7 +72,7 @@ autoheader
 autoconf
 %configure
 make 
-make redhat-dok
+make dok
 
 ## Explicitily stripping is not recomended.
 ## This is handled altomaticaly by RPM, and can couse troubles if
@@ -199,12 +199,12 @@ fi
 
 %files
 %defattr(0644,root,root,0755)
-%doc README AUTHORS ChangeLog
-%doc doc/text/developer-manual.txt doc/text/user-manual.txt
+%doc README AUTHORS ChangeLog LICENSE 
+%doc doc/text/developer-manual.txt doc/text/user-manual.txt doc/text/faq.txt
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/p_doc.css
+%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
 
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
@@ -225,17 +225,18 @@ fi
 %config %{privoxyconf}/trust
 
 %config %{privoxyconf}/templates/blocked
-%config %{privoxyconf}/templates/blocked-compact
 %config %{privoxyconf}/templates/cgi-error-404
 %config %{privoxyconf}/templates/cgi-error-bad-param
 %config %{privoxyconf}/templates/cgi-error-disabled
 %config %{privoxyconf}/templates/cgi-error-file
 %config %{privoxyconf}/templates/cgi-error-modified
 %config %{privoxyconf}/templates/cgi-error-parse
+%config %{privoxyconf}/templates/cgi-style.css
 %config %{privoxyconf}/templates/connect-failed
 %config %{privoxyconf}/templates/default
 %config %{privoxyconf}/templates/edit-actions-add-url-form
 %config %{privoxyconf}/templates/edit-actions-for-url
+%config %{privoxyconf}/templates/edit-actions-for-url-filter
 %config %{privoxyconf}/templates/edit-actions-list
 %config %{privoxyconf}/templates/edit-actions-list-section
 %config %{privoxyconf}/templates/edit-actions-list-url
@@ -250,7 +251,6 @@ fi
 %config %{privoxyconf}/templates/toggle
 %config %{privoxyconf}/templates/toggle-mini
 %config %{privoxyconf}/templates/untrusted
-%config %{privoxyconf}/templates/edit-actions-for-url-filter
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
 %ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
@@ -264,6 +264,12 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon Apr 08 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-4
+- Add templates/cgi-style.css, faq.txt, p_web.css, LICENSE
+- Remove templates/blocked-compact.
+- Add more docbook stuff to Builderquires.
+
 * Thu Mar 28 2002 Sarantis Paskalis <sarantis@cnl.di.uoa.gr>
 + privoxy-2.9.13-3
 - Include correct documentation file.
@@ -548,6 +554,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.20  2002/04/08 20:27:45  swa
+# fixed JB spelling
+#
 # Revision 1.19  2002/03/27 22:44:59  sarantis
 # Include correct documentation file.
 #
