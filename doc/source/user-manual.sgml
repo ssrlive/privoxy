@@ -8,6 +8,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
+<!entity license SYSTEM "license.sgml">
 <!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
@@ -25,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $
+ $Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,10 +45,36 @@
 
 <article id="index">
 <artheader>
+
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $</pubdate>
 
+<copyright>
+  <year>2001</year>
+  <year>2002</year>
+  <holder>Privoxy Developers</holder>
+</copyright>
+
+
+<!--
+
+Note: this should generate a separate page, and a live link to it. 
+But it doesn't for some mysterious reason. Please leave commented
+unless it can be fixed proper. For the time being, the copyright 
+statement will be in copyright.smgl.
+
+Hal.
+
+<legalnotice id="legalnotice"> 
+ <para>
+  text goes here ........
+ </para>
+</legalnotice>
+
+-->
+
+<!--
 <authorgroup>
  <author>
   <affiliation>
@@ -55,7 +82,7 @@
    </affiliation>
  </author>
 </authorgroup>
-
+-->
 <abstract>
 <![%dummy;[
  <para>
@@ -5009,14 +5036,21 @@ Requests</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="copyright"><title>Copyright and History</title>
+<sect1 id="copyright"><title>Copyright, License and History</title>
 
 <sect2><title>Copyright</title>
 <!-- Include copyright.sgml: -->
  &copyright;
 <!-- end copyright -->
 </sect2>
+<!--  ~  End section  ~  -->
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2><title>License</title>
+<!-- Include copyright.sgml: -->
+ &license;
+<!-- end copyright -->
+</sect2>
 <!--  ~  End section  ~  -->
 
 
@@ -5922,6 +5956,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.104  2002/05/04 08:44:45  swa
+ bumped version
+
  Revision 1.103  2002/05/04 00:40:53  hal9
  -Remove the TOC first page kludge. It's fixed proper now in ldp.dsl.in.
  -Some minor additions to Quickstart.

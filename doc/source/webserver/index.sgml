@@ -4,6 +4,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
+<!entity license SYSTEM "license.sgml">
 <!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
@@ -19,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.10 2002/04/26 17:24:31 swa Exp $
+ $Id: index.sgml,v 1.11 2002/05/04 08:44:45 swa Exp $
 
  Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -43,7 +44,7 @@
 
 <artheader>
 
-<title>Privoxy - Homepage</title>
+<!-- copyright is at bottom of page -->
 
 <keywordset>
  <Keyword>stop, junk, privoxy, ad, advertisement, werbung, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out</Keyword>
@@ -77,7 +78,7 @@
 <para>
 <itemizedlist>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	The <ulink url="http://sourceforge.net/projects/ijbswa/">project
 page</ulink> on Sourceforge
 	</literallayout>
@@ -88,17 +89,17 @@ page</ulink> on Sourceforge
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="http://www.waldherr.org/junkbuster/">Stefan Waldherr's site</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbusters Corporation</ulink>
 	</literallayout>
 	</listitem>
 <!-- 	<listitem> -->
-<!-- 	<literallayout> -->
+<!-- 	<literallayout class="normal"> -->
 <!-- 	Take a look at the <ulink url="team/">Privoxy team</ulink> -->
 <!-- 	</literallayout> -->
 <!-- 	</listitem> -->
@@ -111,17 +112,17 @@ page</ulink> on Sourceforge
 <para>
 <itemizedlist>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">Download recent releases</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="user-manual/quickstart.html">Quickstart after installation</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">Browse our CVS repository</ulink>
 	</literallayout>
 	</listitem>
@@ -134,27 +135,27 @@ page</ulink> on Sourceforge
 <para>
 <itemizedlist>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="user-manual/index.html">User manual</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="faq/index.html">Frequently Asked Questions</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="man-page/privoxy-man-page.html">Classic Man Page</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="team/index.html">Pictures of the Privoxy Team</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
-	<literallayout>
+	<literallayout class="normal">
 	<ulink url="developer-manual/index.html">Developer Manual</ulink>
 <!--  	,alternatively as a pdf file: <ulink url="">developer-manual.pdf</ulink>. -->
 	</literallayout>
@@ -171,9 +172,9 @@ page</ulink> on Sourceforge
 </sect1>
 
 <sect1 label="">
-<title>Copyright</title>
+<title>License</title>
 <!-- Include copyright.sgml -->
- &copyright;
+ &license;
 <!-- end -->
 </sect1>
 
@@ -187,8 +188,8 @@ page</ulink> on Sourceforge
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 label="">
-<title></title>
 <!-- dummy section, for spacing -->
+<title></title>
 <para>
 <!-- show the SF logo per AUP -->
 <informaltable frame=none label="" pgwide="1">
@@ -207,6 +208,7 @@ page</ulink> on Sourceforge
 </informaltable>
 </para>
 
+
 <!--
 <informalfigure pgwide="1">
  <ulink url="http://sourceforge.net/">
@@ -214,6 +216,11 @@ page</ulink> on Sourceforge
  </ulink>
 </informalfigure>
 -->
+
+<!-- Formal copyright markup does not work here. HB. -->
+<para>
+  Copyright &copy; 2001, 2002 by Privoxy Developers
+</para>
 
 </sect1>
  
@@ -238,6 +245,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.11  2002/05/04 08:44:45  swa
+ bumped version
+
  Revision 1.10  2002/04/26 17:24:31  swa
  bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
 

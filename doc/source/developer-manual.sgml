@@ -7,6 +7,7 @@
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
+<!entity license SYSTEM "license.sgml">
 <!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
@@ -21,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,8 +45,32 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $</pubdate>
 
+   <copyright>
+    <year>2001</year>
+    <year>2002</year>
+    <holder>Privoxy Developers</holder>
+   </copyright>
+
+<!--
+
+Note: this should generate a separate page, and a live link to it. 
+But it doesn't for some mysterious reason. Please leave commented
+unless it can be fixed proper. For the time being, the copyright 
+statement will be in copyright.smgl.
+
+Hal.
+
+<legalnotice id="legalnotice"> 
+ <para>
+  text goes here ........
+ </para>
+</legalnotice>
+
+-->
+
+<!--
     <authorgroup>
       <author>
         <affiliation>
@@ -53,7 +78,7 @@
         </affiliation>
       </author>
     </authorgroup>
-
+-->
     <abstract>
 <![%dummy;[
  <para>
@@ -1711,7 +1736,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1771,7 +1796,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2627,8 +2652,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 <!-- end contacting -->
   </sect1>
   
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="copyright"><title>Copyright and History</title>
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+<sect1 id="copyright"><title>Copyright, License and History</title>
 
 <sect2><title>Copyright</title>
 <!-- Include copyright.sgml -->
@@ -2636,13 +2662,22 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 <!-- end -->
 </sect2>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2><title>License</title>
+<!-- Include copyright.sgml: -->
+ &license;
+<!-- end copyright -->
+</sect2>
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect2><title>History</title>
 <!-- Include history.sgml -->
  &history;
 <!-- end -->
 </sect2>
 
-  </sect1>
+</sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="seealso"><title>See also</title>
@@ -2673,6 +2708,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.41  2002/05/04 08:44:44  swa
+  bumped version
+
   Revision 1.40  2002/05/04 00:43:43  hal9
   -Remove TOC/first page kludge with proper stylesheet fix.
   -Combined the two very brief sections: Intro and Quickstart.

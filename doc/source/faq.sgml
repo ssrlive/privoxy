@@ -7,6 +7,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
+<!entity license SYSTEM "license.sgml">
 <!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
@@ -22,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.55 2002/05/04 00:41:56 hal9 Exp $
+ $Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -61,8 +62,33 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.55 2002/05/04 00:41:56 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $</pubdate>
 
+
+   <copyright>
+    <year>2001</year>
+    <year>2002</year>
+    <holder>Privoxy Developers</holder>
+   </copyright>
+
+<!--
+
+Note: this should generate a separate page, and a live link to it. 
+But it doesn't for some mysterious reason. Please leave commented
+unless it can be fixed proper. For the time being, the copyright 
+statement will be in copyright.smgl.
+
+Hal.
+
+<legalnotice id="legalnotice"> 
+ <para>
+  text goes here ........
+ </para>
+</legalnotice>
+
+-->
+
+<!--
 <authorgroup>
  <author>
   <affiliation>
@@ -70,7 +96,7 @@
    </affiliation>
  </author>
 </authorgroup>
-
+-->
 <abstract>
 <![%dummy;[
 <para>
@@ -288,8 +314,9 @@ warranty? Registration?</title>
  <para>
   <application>Privoxy</application> is licensed under the GNU General Public
   License (GPL). It is free to use, copy, modify or distribute as you wish
-  under the terms of this license.  Please see the Copyright section for more
-  information on the license and copyright.
+  under the terms of this license.  Please see the <link
+  linkend="copyright">Copyright</link> section for more information on the
+  license and copyright.
 
   </para>
  <para>
@@ -1412,22 +1439,38 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 <!-- end contacting -->
   </sect1>
   
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="copyright"><title>Copyright and History</title>
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="copyright"><title>Copyright, License and History</title>
 
-<sect2><title>Copyright</title>
-<!-- Include copyright.sgml -->
- &copyright;
-<!-- end -->
-</sect2>
+ <sect2><title>Copyright</title>
+ <!-- Include copyright.sgml -->
+  &copyright;
+ <!-- end -->
+  <para>
+   Portions of this document are <quote>borrowed</quote> from the original
+   <application>Junkbuster</application> (tm) FAQ, and modified as 
+   appropriate for <application>Privoxy</application>.
+  </para>
+ </sect2>
 
-<sect2><title>History</title>
-<!-- Include history.sgml -->
- &history;
-<!-- end -->
-</sect2>
+ <!--   ~~~~~       New section      ~~~~~     -->
+ <sect2><title>License</title>
+ <!-- Include copyright.sgml: -->
+  &license;
+ <!-- end copyright -->
+ </sect2>
+ <!--  ~  End section  ~  -->
 
-  </sect1>
+ <!--   ~~~~~       New section      ~~~~~     -->
+ <sect2><title>History</title>
+ <!-- Include history.sgml -->
+  &history;
+ <!-- end -->
+ </sect2>
+
+ </sect1>
+ <!--  ~  End section  ~  -->
+ 
   
 <!--   ~~~~~       New section      ~~~~~     -->
 <!--
@@ -1467,6 +1510,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.56  2002/05/04 08:44:44  swa
+bumped version
+
 Revision 1.55  2002/05/04 00:41:56  hal9
 -Remove TOC/first page kludge in favor of proper handling via dsl file.
 
