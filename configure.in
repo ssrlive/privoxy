@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.51 2002/03/28 20:43:00 swa Exp $
+dnl $Id: configure.in,v 1.52 2002/03/29 19:51:40 gliptak Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.52  2002/03/29 19:51:40  gliptak
+dnl Correcting compile problem with Debian
+dnl
 dnl Revision 1.51  2002/03/28 20:43:00  swa
 dnl set make correctly
 dnl
@@ -309,9 +312,9 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.51 $)
+AC_REVISION($Revision: 1.52 $)
 AC_INIT(jcc.c)
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 
 dodk=auto
@@ -373,12 +376,12 @@ dnl Checks for programs needed to build.
 dnl =================================================================
 AC_PROG_CC
 AC_PROG_CPP
-dnl AC_PROG_CXX
-dnl AC_PROG_INSTALL
-dnl AC_PROG_LN_S
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LN_S
 AC_PROG_MAKE_SET
 dnl RANLIB is for PCRE:
-dnl AC_PROG_RANLIB
+AC_PROG_RANLIB
 
 AC_CHECK_PROG(GDB,gdb,yes,no)
 
@@ -415,6 +418,35 @@ AC_ARG_WITH(debug,
 	]
 )
 
+AC_ARG_WITH(user,
+        [  --with-user=privoxy            Set user under which privoxy run],
+        [
+                if test "x$withval" != "xyes"; then
+                    USER=$with_user;
+                  else
+                   AC_MSG_ERROR(We need a user if you give me this parameter)
+                fi
+        ],
+        [
+          USER=privoxy;
+        ]
+)
+AC_SUBST(USER)
+
+AC_ARG_WITH(group,
+        [  --with-group=privoxy         Set group for privoxy],
+        [
+                if test "x$withval" != "xyes"; then
+                    GROUP=$with_group;
+                  else
+                   AC_MSG_ERROR(We need a group if you give me this parameter)
+                fi
+        ],
+        [
+          GROUP=privoxy;
+        ]
+)
+AC_SUBST(GROUP)
 dnl =================================================================
 dnl additional gcc flags
 dnl =================================================================
@@ -787,8 +819,12 @@ dnl =================================================================
 AC_EXEEXT
 AC_OBJEXT
 AC_HEADER_STDC
+AC_HEADER_DIRENT
 AC_C_CONST
 AC_TYPE_SIZE_T
+AC_TYPE_PID_T
+AC_HEADER_TIME
+AC_STRUCT_TM
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(char *, 4)
 AC_CHECK_SIZEOF(long, 4)
@@ -798,12 +834,21 @@ AC_CHECK_SIZEOF(size_t, 4)
 dnl Checks for header files.
 dnl AC_HEADER_SYS_WAIT
 dnl AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/time.h unistd.h)
+AC_CHECK_HEADERS([OS.h arpa/inet.h errno.h fcntl.h limits.h locale.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h sys/timeb.h sys/wait.h unistd.h])
 
 dnl Checks for library functions.
 dnl AC_TYPE_SIGNAL
 dnl AC_CHECK_FUNC(strstr)
 dnl bcopy and memmove are for PCRE
-AC_CHECK_FUNCS(strerror bcopy memmove)
+AC_CHECK_FUNCS([strerror bcopy memmove])
+AC_PROG_GCC_TRADITIONAL
+dnl uncommenting does not work for swa. suse linux
+dnl AC_FUNC_MALLOC
+AC_FUNC_SETPGRP
+AC_TYPE_SIGNAL
+dnl uncommenting does not work for swa. suse linux
+dnl AC_FUNC_STAT
+AC_CHECK_FUNCS([atexit getcwd gethostbyaddr gethostbyname inet_ntoa localtime_r memchr memmove memset regcomp select setlocale socket strchr strdup strerror strftime strstr strtoul])
 
 
 dnl =================================================================

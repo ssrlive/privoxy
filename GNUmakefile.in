@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.44 2002/03/29 17:42:44 gliptak Exp $
+# $Id: GNUmakefile.in,v 1.45 2002/03/29 19:45:45 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -51,20 +51,25 @@ RPM_PACKAGEV  = @VERSION_RPM_PACKAGE@
 # Directories for "make install"
 #############################################################################
 
-DEST        = @sysconfdir@/privoxy
-SBIN_DEST   = @sbindir@
-MAN_DEST    = @mandir@
+DEST        = @prefix@
+CONFDEST    = @prefix@@sysconfdir@
+SBIN_DEST   = @prefix@@sbindir@
+MAN_DEST    = @prefix@@mandir@
 
 
 #############################################################################
 # Build tools
 #############################################################################
 
-PROGRAM    = privproxy@EXEEXT@
+PROGRAM    = privoxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
-INSTALL    = cp -f
+#INSTALL    = cp -f
+INSTALL    = @INSTALL@
+INSTALL_P  = -m 0750 -g @GROUP@ -o @USER@ -b
+INSTALL_T  = -m 0640 -g @GROUP@ -o @USER@ -b
+INSTALL_D  = -m 0750 -g @GROUP@ -o @USER@ -d
 LD         = @CC@
 RM         = rm -f
 STRIP_PROG = strip
@@ -82,6 +87,10 @@ DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
+
+#User Group paras
+USER       = @USER@
+GROUP	   = @GROUP@
 
 # Program to do LF->CRLF
 #
@@ -631,10 +640,10 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) junkbuster
+	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) junkbuster config.log
 
 clobber: clean
-	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz configure
+	$(RM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz configure
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
@@ -646,15 +655,17 @@ install: all
 	#        to be fixed!
 	#
 	$(STRIP_PROG) $(PROGRAM)
-	$(INSTALL) $(PROGRAM) $(SBIN_DEST)
-	mkdir -p $(DEST)/user-manual
-	mkdir -p $(DEST)/templates
-	cp -r doc/webserver/user-manual $(DEST)
-	cp -r templates $(DEST)
-	$(INSTALL) config default.action default.filter trust $(DEST)
+	$(INSTALL) $(INSTALL_D) $(SBIN_DEST)
+	$(INSTALL) $(INSTALL_D) $(DEST)/user-manual
+	$(INSTALL) $(INSTALL_D) $(DEST)/templates
+	$(INSTALL) $(INSTALL_D) $(CONFDEST)
+	$(INSTALL) $(INSTALL_P) $(PROGRAM) $(SBIN_DEST)
+	if [ -d "doc/webserver/user-manual" ]; then $(INSTALL) $(INSTALL_T) doc/webserver/user-manual $(DEST); fi
+	$(INSTALL) $(INSTALL_T) templates/[a-z]* $(DEST)/templates
+	$(INSTALL) $(INSTALL_T) config default.action default.filter trust $(CONFDEST)
 	# FIXME $(ECHO) privoxy.logrotate privoxy.monthly privoxy.weekly
 	# FIXME: Need new manual! $(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
-	$(INSTALL) privoxy.init /etc/init.d/privoxy
+	$(INSTALL) $(INSTALL_P) privoxy.init /etc/init.d/privoxy
 
 
 #############################################################################
@@ -664,6 +675,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.45  2002/03/29 19:45:45  swa
+# for lazy swa
+#
 # Revision 1.44  2002/03/29 17:42:44  gliptak
 # Correcting for Solaris tar limitations
 #
