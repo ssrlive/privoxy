@@ -5,7 +5,7 @@
  * Purpose     :  README file to give a short intro.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ *                Privoxy team.  http://ijbswa.sourceforge.net
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -31,23 +31,23 @@
  *
  *********************************************************************/
 
-This README is included with the development version of Junkbuster,
-which will eventually become Junkbuster v3.0 (and soon we hope!). See
+This README is included with the development version of Privoxy,
+which will eventually become Privoxy v3.0 (and soon we hope!). See
 http://ijbswa.sourceforge.net.
 
-Internet Junkbuster is a web proxy with advanced filtering
-capabilities for protecting privacy, filtering web page content,
-managing cookies, controlling access, and removing ads, banners,
-pop-ups and other obnoxious Internet Junk. Junkbuster has a very
-flexible configuration and can be customized to suit individual needs
-and tastes. Internet Junkbuster has application for both stand-alone
-systems and multi-user networks.
+Privoxy is a web proxy with advanced filtering capabilities for
+protecting privacy, filtering web page content, managing cookies,
+controlling access, and removing ads, banners, pop-ups and other
+obnoxious Internet junk. Privoxy has a very flexible configuration and
+can be customized to suit individual needs and tastes. Internet
+Privoxy has application for both stand-alone systems and multi-user
+networks.
 
-JunkBuster was originally written by JunkBusters Corporation, and was
-released as free open-source software under the GNU GPL. Stefan
-Waldherr made many improvements, and started the SourceForge project
-to continue development. Several other developers are now
-contributing.
+Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+was originally written by JunkBusters Corporation, and was released as
+free open-source software under the GNU GPL. Stefan Waldherr made many
+improvements, and started the SourceForge project to continue
+development. Several other developers are now contributing.
 
 
  IMPORTANT CHANGE
@@ -80,7 +80,7 @@ redhat-dist' or 'make suse-dist' (run ./configure first) from unpacked
 sources. BSD will (probably?) require gmake (from http://gnu.org). See
 the user-manual for OS/2 build instructions.
 
-Junkbuster is also available via anonymous CVS:
+Privoxy is also available via anonymous CVS:
 
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
@@ -92,11 +92,11 @@ then build as above.
  RUN
 ----
 
-junkbuster [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
+privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
  [--user USER] [config_file]
 
-Or for RedHat: /etc/rc.d/init.d/junkbuster start
-Or for SuSE:   /etc/rc.d/junkbuster start
+Or for RedHat: /etc/rc.d/init.d/privoxy start
+Or for SuSE:   /etc/rc.d/privoxy start
 
 See the man page or user-manual for a brief explanation of each.
 
@@ -106,7 +106,7 @@ See the man page or user-manual for a brief explanation of each.
 
 See: 'config', 'ijb.action', and 're_filterfile'. These are all well
 commented. On Unix-like systems, these files are installed in
-/etc/junkbuster.  On Windows, then wherever the executable itself is
+/etc/privoxy.  On Windows, then wherever the executable itself is
 installed. There are many significant changes and advances since
 v2.0.x. The user-manual has a run down of configuration options, and
 examples: http://ijbswa.sourceforge.net/user-manual/.
@@ -132,7 +132,7 @@ configuration files, which are all well commented. These are 'config',
 'ijb.action', and 're_filterfile' in the toplevel source directory.
 
 Some legacy documentation may also be included only to give an idea of
-what Junkbuster can do under doc/obsolete/*. Much has changed since
+what Privoxy can do under doc/obsolete/*. Much has changed since
 these docs were written, so beware.
 
 Included documentation may vary according to platform and packager.
@@ -149,7 +149,7 @@ please note:
  * Submit bugs only thru our bug forum:
    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
    Make sure that the bug has not already been submitted. Please try
-   to verify that it is a Junkbuster bug, and not a browser or site
+   to verify that it is a Privoxy bug, and not a browser or site
    bug first. If you are using your own custom configuration, please
    try the stock configs to see if the problem is a configuration
    related bug. And if not using the latest development snapshot,
@@ -168,4 +168,4 @@ here too.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.15 2002/03/06 16:31:16 hal9 Exp $
+$Id: README,v 1.16 2002/03/09 14:52:43 swa Exp $

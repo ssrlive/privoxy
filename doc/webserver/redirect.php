@@ -71,7 +71,7 @@ parse_parameters();
 
 
 // Please do NOT delete any of these redirects.  Even if you take them
-// out of JunkBuster, they may be in use by older releases.
+// out of Privoxy, they may be in use by older releases.
 
 // Note 2: Should *not* include #target part in these URLs.
 // (It works with MS IE, but is not valid HTTP.)
