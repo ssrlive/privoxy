@@ -18,13 +18,13 @@
 <!entity  my-copy "&copy;">          <!-- kludge for docbook2man          -->
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa//current/doc/source/faq.sgml,v $
 
  Purpose     :  FAQ
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $
+ $Id: faq.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1550,7 +1550,7 @@ and related issues?</title>
  activated the <quote><literal>fun</literal></quote> filter which
  is clearly labeled <quote>Text replacements for subversive browsing
  fun!</quote> or you have implicitly activated it by choosing the
- <quote>Advanced</quote> profile in the web-based editor.
+ <quote>Radical</quote> profile in the web-based editor.
 </para>
 </sect2>
 
@@ -1881,6 +1881,10 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.7  2002/10/12 01:14:42  hal9
+Updates for demoronizer filter, Radical profile, and the srvany.exe/icon
+win32 fix.
+
 Revision 2.6  2002/10/10 04:10:38  hal9
 s/Advanced/Radical/ for standard.action change.
 
