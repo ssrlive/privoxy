@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.23 2001/10/21 20:25:20 steudten Exp $
+# $Id: config,v 1.24 2001/10/23 21:42:41 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -161,7 +161,7 @@ trust-info-url http://www.your-site.com/what_we_allow.html
 #
 #  Default: fill@me.in.please
 #
-#admin-address fill@me.in.please
+admin-address fill@me.in.please
 
 #
 #  Proxy-info-url can be set to a URL that contains more info about
@@ -172,7 +172,7 @@ trust-info-url http://www.your-site.com/what_we_allow.html
 #
 #  Default: Don't show a link to online documentation
 #
-#proxy-info-url http://www.your-site.com/proxy.html
+proxy-info-url http://www.your-site.com/proxy.html
 
 #
 #  Listen-address specifies the address and port where Junkbuster will
