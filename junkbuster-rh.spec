@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.30 2002/03/04 16:18:03 morcego Exp $
+# $Id: junkbuster-rh.spec,v 1.31 2002/03/04 18:06:09 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.31  2002/03/04 18:06:09  morcego
+# SPECFILE: fixing permissing of the init script (broken by the last change)
+#
 # Revision 1.30  2002/03/04 16:18:03  morcego
 # General cleanup of the rh specfile.
 #
@@ -137,15 +140,16 @@ Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.11
-Release: 3
+Release: 4
 Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
 URL: http://ijbswa.sourceforge.net/
 Obsoletes: junkbuster-raw junkbuster-blank
-Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
-BuildRequires: perl gzip
+# Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
+Prereq: shadow-utils, chkconfig, initscripts
+BuildRequires: perl gzip sed
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
@@ -188,7 +192,11 @@ mkdir -p %{buildroot}%{_sbindir} \
 #gzip README AUTHORS ChangeLog %{name}.1 || /bin/true
 
 install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
-cp -f %{name}.1 %{buildroot}%{_mandir}/man8/%{name}.8
+
+## We need to change the man section internaly on the manpage
+## -- morcego (sugestion by Hal Burgiss)
+#cp -f %{name}.1 %{buildroot}%{_mandir}/man8/%{name}.8
+sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{name}.1 > %{buildroot}%{_mandir}/man8/%{name}.8
 cp -f *.action %{buildroot}%{ijbconf}/
 cp -f re_filterfile %{buildroot}%{ijbconf}/re_filterfile
 cp -f trust %{buildroot}%{ijbconf}/trust
@@ -303,6 +311,11 @@ fi
 %{_mandir}/man8/%{name}.8*
 
 %changelog
+* Tue Mar 05 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ junkbuster-2.9.11-4
+- Changing man section in the manpage from 1 to 8
+- We now require packages, not files, to avoid issues with apt
+
 * Mon Mar 04 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + junkbuster-2.9.11-3
 - Fixing permissions of the init script
@@ -315,7 +328,6 @@ fi
 	- Not using wildchars on %%files section
 	- Doubling the percentage char on changelog and comments, to
 	  avoid rpm expanding them
-
 
 * Sun Mar 03 2002 Hal Burgiss <hal@foobox.net>
 - /bin/false for shell causes init script to fail. Reverting.
