@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.21 2001/10/07 15:36:00 oes Exp $
+# $Id: config,v 1.22 2001/10/19 00:20:03 david__schmidt Exp $
 #
 
 #  Table of Contents
@@ -46,8 +46,6 @@
 #
 #  Long lines can be continued on the next line by using a `\' as
 #  the last character.
-#  
-
 #
 #  3. OTHER CONFIGURATION FILES
 #
@@ -75,10 +73,8 @@ confdir .
 #
 logdir .
 
-#
 #  Note that all file specifications below are relative to 
 #  the above two directories!!!
-#
 
 #  The actions file contains patterns to specify the
 #  actions to apply to requests for each site.
@@ -90,14 +86,13 @@ logdir .
 #
 actionsfile actionsfile
 
-#
 #  The re_filterfile contains content modification rules.  These rules
 #  permit powerful changes on the content of Web pages, e.g., you
 #  could disable your favourite JavaScript annoyances, rewrite the
 #  actual content, or just have some fun replacing "Microsoft"
 #  with "Microsuck" wherever it appears on a Web page.
 #
-#  Default: No content modification.
+#  Default: content modification. (see '+-filter' in actionsfile)
 #
 re_filterfile   re_filterfile
 
@@ -155,15 +150,12 @@ logfile      logfile
 trust-info-url http://www.your-site.com/why_we_block.html
 trust-info-url http://www.your-site.com/what_we_allow.html
 
-
-#
 #  4. OPTIONS
 #
 #  This part of the configuration file contains options that control
 #  how Junkbuster operates.
 #
 
-#
 #  Admin-address should be set to the email address of the proxy
 #  administrator. It is used in many of the proxy-generated pages.
 #
@@ -269,7 +261,7 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #
 #  Default: Multithreaded mode
 #
-single-threaded
+#single-threaded
 
 #
 #    'toggle' allows you to temporarily disable all Junkbuster's 
