@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.36 2001/10/10 16:44:16 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.37 2001/10/22 15:33:56 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 1.36 2001/10/10 16:44:16 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.37  2001/10/22 15:33:56  david__schmidt
+ *    Special-cased OS/2 out of the Netscape-abort-on-404-in-js problem in
+ *    filters.c.  Added a FIXME in front of the offending code.  I'll gladly
+ *    put in a better/more robust fix for all parties if one is presented...
+ *    It seems that just returning 200 instead of 404 would pretty much fix
+ *    it for everyone, but I don't know all the history of the problem.
+ *
  *    Revision 1.36  2001/10/10 16:44:16  oes
  *    Added match_portlist function
  *
@@ -585,7 +592,7 @@ struct http_response *block_url(struct client_state *csp)
     */
    if ((csp->action->flags & ACTION_BLOCK) == 0)
    {
-      return(NULL);
+      return NULL;
    }
 
    /* 
@@ -593,7 +600,7 @@ struct http_response *block_url(struct client_state *csp)
     */
    if (NULL == (rsp = alloc_http_response()))
    {
-      return NULL;
+      return cgi_error_memory();
    }
 
    /*
@@ -611,21 +618,51 @@ struct http_response *block_url(struct client_state *csp)
       if ((p == NULL) || (0 == strcmpic(p, "logo")))
       {
          rsp->body = bindup(image_junkbuster_gif_data, image_junkbuster_gif_length);
+         if (rsp->body == NULL)
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
          rsp->content_length = image_junkbuster_gif_length;
-         enlist_unique_header(rsp->headers, "Content-Type", "image/gif");
+
+         if (enlist_unique_header(rsp->headers, "Content-Type", "image/gif"))
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
       }
 
       else if (0 == strcmpic(p, "blank"))
       {
          rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
+         if (rsp->body == NULL)
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
          rsp->content_length = image_blank_gif_length;
-         enlist_unique_header(rsp->headers, "Content-Type", "image/gif");
+
+         if (enlist_unique_header(rsp->headers, "Content-Type", "image/gif"))
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
       }
 
       else
       {
          rsp->status = strdup("302 Local Redirect from Junkbuster");
-         enlist_unique_header(rsp->headers, "Location", p);
+         if (rsp->status == NULL)
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+
+         if (enlist_unique_header(rsp->headers, "Location", p))
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
       }
    }  
    else
@@ -635,22 +672,9 @@ struct http_response *block_url(struct client_state *csp)
     * Else, generate an HTML "blocked" message:
     */
    {
-      struct map * exports = default_exports(csp, NULL);
-#ifdef FEATURE_FORCE_LOAD
-      map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
-#else /* ifndef FEATURE_FORCE_LOAD */
-      map_block_killer(exports, "force-support");
-#endif /* ndef FEATURE_FORCE_LOAD */
-
-      map(exports, "hostport", 1, csp->http->hostport, 1);
-      map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-      map(exports, "path", 1, csp->http->path, 1);
-      map(exports, "path-html", 1, html_encode(csp->http->path), 0);
-
-      rsp->body = template_load(csp, "blocked");
-      template_fill(&rsp->body, exports);
-      free_map(exports);
-
+      jb_err err;
+      struct map * exports;
+      
       /* FIXME */
 #ifdef __EMX__
       /*
@@ -681,9 +705,46 @@ struct http_response *block_url(struct client_state *csp)
          rsp->status = strdup("404 Request for blocked URL"); 
       }
 #endif /* __EMX__ */
+      if (rsp->status == NULL)
+      {
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
+
+      exports = default_exports(csp, NULL);
+      if (exports == NULL)
+      {
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
+
+#ifdef FEATURE_FORCE_LOAD
+      err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+#else /* ifndef FEATURE_FORCE_LOAD */
+      err = map_block_killer(exports, "force-support");
+#endif /* ndef FEATURE_FORCE_LOAD */
+
+      err = err || map(exports, "hostport", 1, csp->http->hostport, 1);
+      err = err || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+      err = err || map(exports, "path", 1, csp->http->path, 1);
+      err = err || map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+
+      if (err)
+      {
+         free_map(exports);
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
+
+      err = template_fill_for_cgi(csp, "blocked", exports, rsp);
+      if (err)
+      {
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
    }
 
-   return(finish_http_response(rsp));
+   return finish_http_response(rsp);
 
 }
 
@@ -706,8 +767,11 @@ struct http_response *trust_url(struct client_state *csp)
 {
    struct http_response *rsp;
    struct map * exports;
-   char buf[BUFFER_SIZE], *p = NULL;
-   struct url_spec **tl, *t;
+   char buf[BUFFER_SIZE];
+   char *p;
+   struct url_spec **tl;
+   struct url_spec *t;
+   jb_err err;
 
    /*
     * Don't bother to work on trusted URLs
@@ -722,40 +786,59 @@ struct http_response *trust_url(struct client_state *csp)
     */
    if (NULL == (rsp = alloc_http_response()))
    {
-      return NULL;
+      return cgi_error_memory();
    }
 
    exports = default_exports(csp, NULL);
+   if (exports == NULL)
+   {
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
    /* 
     * Export the host, port, and referrer information
     */
-   map(exports, "hostport", 1, csp->http->hostport, 1);
-   map(exports, "path", 1, csp->http->path, 1);
-   map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-   map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+   err = map(exports, "hostport", 1, csp->http->hostport, 1)
+      || map(exports, "path", 1, csp->http->path, 1)
+      || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0)
+      || map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
    if (csp->referrer && strlen(csp->referrer) > 9)
    {
-      map(exports, "referrer", 1, csp->referrer + 9, 1);
-      map(exports, "referrer-html", 1, html_encode(csp->referrer + 9), 0);
+      err = err || map(exports, "referrer", 1, csp->referrer + 9, 1);
+      err = err || map(exports, "referrer-html", 1, html_encode(csp->referrer + 9), 0);
    }
    else
    {
-      map(exports, "referrer", 1, "unknown", 1);
-      map(exports, "referrer-html", 1, "unknown", 1);
+      err = err || map(exports, "referrer", 1, "unknown", 1);
+      err = err || map(exports, "referrer-html", 1, "unknown", 1);
+   }
+
+   if (err)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
    }
 
    /*
     * Export the trust list
     */
+   p = strdup("");
    for (tl = csp->config->trust_list; (t = *tl) ; tl++)
    {
       sprintf(buf, "<li>%s</li>\n", t->spec);
-      p = strsav(p, buf);
+      string_append(&p, buf);
    }
-   map(exports, "trusted-referrers", 1, p, 0);
-   p = NULL;
+   err = map(exports, "trusted-referrers", 1, p, 0);
+
+   if (err)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
    /*
     * Export the trust info, if available
@@ -764,36 +847,53 @@ struct http_response *trust_url(struct client_state *csp)
    {
       struct list_entry *l;
 
+      p = strdup("");
       for (l = csp->config->trust_info->first; l ; l = l->next)
       {
          sprintf(buf, "<li> <a href=%s>%s</a><br>\n",l->str, l->str);
-         p = strsav(p, buf);
+         string_append(&p, buf);
       }
-      map(exports, "trust-info", 1, p, 0);
+      err = map(exports, "trust-info", 1, p, 0);
    }
    else
    {
-      map_block_killer(exports, "have-trust-info");
+      err = map_block_killer(exports, "have-trust-info");
    }
-   
+
+   if (err)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
+
    /*
     * Export the force prefix or the force conditional block killer
     */
 #ifdef FEATURE_FORCE_LOAD
-   map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+   err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
 #else /* ifndef FEATURE_FORCE_LOAD */
-   map_block_killer(exports, "force-support");
+   err = map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
+
+   if (err)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
    /*
     * Build the response
     */
-   rsp->body = template_load(csp, "untrusted");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
+   err = template_fill_for_cgi(csp, "untrusted", exports, rsp);
+   if (err)
+   {
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
-   return(finish_http_response(rsp));
-
+   return finish_http_response(rsp);
 }
 #endif /* def FEATURE_TRUST */
 
@@ -837,17 +937,21 @@ struct http_response *redirect_url(struct client_state *csp)
 
       if (NULL == (rsp = alloc_http_response()))
       {
-         return NULL;
+         return cgi_error_memory();
       }
 
-      rsp->status = strdup("302 Local Redirect from Junkbuster");
-      enlist_unique_header(rsp->headers, "Location", q);
+      if ( enlist_unique_header(rsp->headers, "Location", q)
+        || (NULL == (rsp->status = strdup("302 Local Redirect from Junkbuster"))) )
+      {
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
 
-      return(finish_http_response(rsp));
+      return finish_http_response(rsp);
    }
    else
    {
-      return(NULL);
+      return NULL;
    }
 
 }
@@ -1443,6 +1547,13 @@ const struct forward_spec * forward_url(struct http_request *http,
  *          1  :  domain = a URL address
  *
  * Returns     :  url_spec structure populated with dbuf, dcnt and dvec.
+ *                On error, the dbuf field will be set to NULL.  (As
+ *                will all the others, but you don't need to check
+ *                them).
+ *
+ * FIXME: Returning a structure is horribly inefficient, please can
+ *        this structure take a (struct url_spec * dest) 
+ *        pointer instead?
  *
  *********************************************************************/
 struct url_spec dsplit(char *domain)
@@ -1465,28 +1576,45 @@ struct url_spec dsplit(char *domain)
    }
 
    ret->dbuf = strdup(domain);
+   if (NULL == ret->dbuf)
+   {
+      return *ret;
+   }
 
    /* map to lower case */
-   for (p = ret->dbuf; *p ; p++) *p = tolower(*p);
+   for (p = ret->dbuf; *p ; p++)
+   {
+      *p = tolower((int)(unsigned char)*p);
+   }
 
    /* split the domain name into components */
    ret->dcnt = ssplit(ret->dbuf, ".", v, SZ(v), 1, 1);
 
-   if (ret->dcnt <= 0)
+   if (ret->dcnt < 0)
    {
+      free(ret->dbuf);
       memset(ret, '\0', sizeof(ret));
-      return(*ret);
+      return *ret;
+   }
+   else if (ret->dcnt == 0)
+   {
+      return *ret;
    }
 
    /* save a copy of the pointers in dvec */
    size = ret->dcnt * sizeof(*ret->dvec);
 
-   if ((ret->dvec = (char **)malloc(size)))
+   ret->dvec = (char **)malloc(size);
+   if (NULL == ret->dvec)
    {
-      memcpy(ret->dvec, v, size);
+      free(ret->dbuf);
+      memset(ret, '\0', sizeof(ret));
+      return *ret;
    }
 
-   return(*ret);
+   memcpy(ret->dvec, v, size);
+
+   return *ret;
 
 }
 
