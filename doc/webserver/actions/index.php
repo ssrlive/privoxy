@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.7 2002/04/02 07:21:34 oes Exp $
+  $Id: index.php,v 1.8 2002/04/02 08:45:22 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.8  2002/04/02 08:45:22  oes
+  Made script location indepandant
+
   Revision 1.7  2002/04/02 07:21:34  oes
   Using relative link for step2
 
@@ -123,7 +126,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
  </head>
 
  <body>
-  <div class="title"><a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 1 of 2</div>
+  <div class="title"><a href="http://www.privoxy.org/" target="_blank">Privoxy</a> Action List Feedback - Step 1 of 2</div>
 
   <div class="box">
    <p>
@@ -137,7 +140,8 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   </div>
 
   <div class="box">
-   <form action="step2.php" method="post">
+   <!-- FIXME: This must become action="step2.php" as soon as SF supports curl in PHP -->
+   <form action="http://www.oesterhelt.org/actions/step2.php" method="post">
 
     <table border="0" cellpadding="0" cellspacing="4">
 
