@@ -395,6 +395,22 @@
 </style-specification-body>
 </style-specification>
 
+
+<style-specification id="html-notoc" use="html">
+<style-specification-body> 
+
+;; ===================================================
+;; Vairant without TOC for the Homepage --oes 24/05/02
+;; ===================================================
+
+(define %generate-article-toc% 
+  ;; Should a Table of Contents be produced for Articles?
+  ;; If true, a Table of Contents will be generated for each 'Article'.
+  #f)
+
+</style-specification-body>
+</style-specification>
+
 <external-specification id="docbook" document="docbook.dsl">
 
 </style-sheet>
