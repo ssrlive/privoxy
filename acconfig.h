@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.12  2001/09/13 19:56:37  jongfoster
+ *    Reverting to revision 1.10 - previous checking was majorly broken.
+ *
  *    Revision 1.10  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -211,13 +214,6 @@
  * Allows the use of jar files to capture cookies.
  */
 #undef FEATURE_COOKIE_JAR
-
-/*
- * If a stream is compressed via gzip, then it cannot be filtered through
- * the PCRE regexps.  (Commonly happens with Netscape browsers).
- * This forces it to be uncompressed.
- */
-#undef FEATURE_DENY_GZIP
 
 /*
  * Locally redirect remote script-redirect URLs
