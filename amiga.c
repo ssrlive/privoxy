@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.2 2001/05/23 00:13:58 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.2  2001/05/23 00:13:58  joergs
+ *    AmigaOS support fixed.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:46  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -46,7 +49,7 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $";
 
 const char amiga_h_rcs[] = AMIGA_H_VERSION;
 
-unsigned long __stack = 20*1024;
+unsigned long __stack = 100*1024;
 static char ver[] = "$VER: junkbuster " __AMIGAVERSION__ " (" __AMIGADATE__ ")";
 struct Task *main_task = NULL;
 int childs = 0;
