@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.32 2001/09/16 13:21:27 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.33 2001/09/16 17:05:14 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.32 2001/09/16 13:21:27 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.33  2001/09/16 17:05:14  jongfoster
+ *    Removing unused #include showarg.h
+ *
  *    Revision 1.32  2001/09/16 13:21:27  jongfoster
  *    Changes to use new list functions.
  *
@@ -962,7 +965,7 @@ int is_untrusted_url(struct client_state *csp)
 char *pcrs_filter_response(struct client_state *csp)
 {
    int hits=0;
-   int size = csp->iob->eod - csp->iob->cur;
+   size_t size;
 
    char *old = csp->iob->cur, *new = NULL;
    pcrs_job *job;
@@ -971,10 +974,11 @@ char *pcrs_filter_response(struct client_state *csp)
    struct re_filterfile_spec *b;
 
    /* Sanity first ;-) */
-   if (size <= 0)
+   if (csp->iob->cur >= csp->iob->eod)
    {
       return(NULL);
    }
+   size = csp->iob->eod - csp->iob->cur;
 
    if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
    {
