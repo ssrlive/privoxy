@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.1 2001/09/16 17:08:54 jongfoster Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.2 2001/10/02 15:31:20 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.2  2001/10/02 15:31:20  oes
+ *    Introduced show-request cgi
+ *
  *    Revision 1.1  2001/09/16 17:08:54  jongfoster
  *    Moving simple CGI functions from cgi.c to new file cgisimple.c
  *
@@ -55,6 +58,9 @@ extern "C" {
  * CGI functions
  */
 extern int cgi_default             (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_error_404           (struct client_state *csp,
                                     struct http_response *rsp,
                                     struct map *parameters);
 extern int cgi_robots_txt          (struct client_state *csp,

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.4 2001/10/02 15:31:12 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.5 2001/10/07 15:30:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.4 2001/10/02 15:31:12 oes Exp
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.5  2001/10/07 15:30:41  oes
+ *    Removed FEATURE_DENY_GZIP
+ *
  *    Revision 1.4  2001/10/02 15:31:12  oes
  *    Introduced show-request cgi
  *
@@ -126,6 +129,37 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
    free_map(exports);
    return(0);
 
+}
+
+
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_404
+ *
+ * Description :  CGI function that is called if an unknow action was
+ *                given.
+ *               
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * Returns     :  0
+ *
+ *********************************************************************/
+int cgi_error_404(struct client_state *csp,
+                  struct http_response *rsp,
+                  struct map *parameters)
+{
+   struct map *exports = default_exports(csp, NULL);
+
+   rsp->status = strdup("404 JunkBuster configuration page not found");
+   rsp->body = template_load(csp, "cgi-error-404");
+   template_fill(&rsp->body, exports);
+   free_map(exports);
+   return 0;
 }
 
 
