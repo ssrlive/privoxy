@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.30 2002/03/02 22:00:14 hal9 Exp $
+ $Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.30 2002/03/02 22:00:14 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -448,8 +448,8 @@ configuration section below. HB.)
 <sect1 id="configuration"><title>Junkbuster Configuration</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
- <filename>/etc/junkbuster/</filename> by default. For MS Windows and OS/2,
- these are all in the same directory as the
+ <filename>/etc/junkbuster/</filename> by default. For MS Windows, OS/2, and
+ AmigaOS these are all in the same directory as the 
  <application>Junkbuster</application> executable. The name and number of
  configuration files has changed from previous versions, and is subject to
  change as development progresses.
@@ -467,9 +467,8 @@ configuration section below. HB.)
   <listitem>
    <para>
      The main configuration file is named <filename>config</filename>
-     on Linux, Unix, BSD, and OS/2, and <filename>config.txt</filename> on
-     Windows. On Amiga, it is
-     <filename>AmiTCP:db/junkbuster/config</filename>.
+     on Linux, Unix, BSD, OS/2, and AmigaOS and <filename>config.txt</filename>
+     on Windows.
    </para>
   </listitem> 
 
@@ -582,9 +581,10 @@ configuration section below. HB.)
 </para>
 
 <para>
- On <application>Windows</application>, <application>Junkbuster</application>
- looks for these files in the same directory as the executable.  On Unix and 
- OS/2, <application>Junkbuster</application> looks for these files in the current
+ On <application>Windows</application> and <application>AmigaOS</application>,
+ <application>Junkbuster</application> looks for these files in the same
+ directory as the executable.  On Unix and  OS/2,
+ <application>Junkbuster</application> looks for these files in the current
  working directory. In either case, an absolute path name can be used to
  avoid problems.
 </para>
@@ -2820,10 +2820,9 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <para>
  If no configuration file is specified on the command line,
  <application>Junkbuster</application> will look for a file named
- <filename>config</filename> in the current directory. Except on Amiga where
- it will look for <filename>AmiTCP:db/junkbuster/config</filename> and Win32
- where it will try <filename>config.txt</filename>. If no file is specified 
- on the command line and no default configuration file can be found, 
+ <filename>config</filename> in the current directory. Except on Win32 where
+ it will try <filename>config.txt</filename>. If no file is specified on the
+ command line and no default configuration file can be found, 
  <application>Junkbuster</application> will fail to start.
 </para>
 
@@ -3280,6 +3279,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.31  2002/03/02 22:45:52  david__schmidt
+ Just tweaking
+
  Revision 1.30  2002/03/02 22:00:14  hal9
  Updated 'New Features' list. Ran through spell-checker.
 

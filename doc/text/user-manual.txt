@@ -2,7 +2,7 @@ Junkbuster User Manual
 
 By: Junkbuster Developers
 
-$Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $
+$Id: user-manual.txt,v 1.20 2002/03/03 01:33:50 hal9 Exp $
 
 The user manual gives the users information on how to install and configure
 Internet Junkbuster. Internet Junkbuster is an application that provides
@@ -283,17 +283,17 @@ the same as above for Linux/Unix.
 3. Junkbuster Configuration
 
 For Unix, *BSD and Linux, all configuration files are located in /etc/
-junkbuster/ by default. For MS Windows and OS/2, these are all in the same
-directory as the Junkbuster executable. The name and number of configuration
-files has changed from previous versions, and is subject to change as
-development progresses.
+junkbuster/ by default. For MS Windows, OS/2 and AmigaOS, these are all in the
+same directory as the Junkbuster executable. The name and number of
+configuration files has changed from previous versions, and is subject to
+change as development progresses.
 
 The installed defaults provide a reasonable starting point, though possibly
 aggressive by some standards. For the time being, there are only three default
 configuration files (this will change in time):
 
-  * The main configuration file is named config on Linux, Unix, BSD, and OS/2,
-    and config.txt on Windows. On Amiga, it is AmiTCP:db/junkbuster/config.
+  * The main configuration file is named config on Linux, Unix, BSD, OS/2,
+    and AmigaOS and config.txt on Windows.
    
   * The ijb.action file is used to define various "actions" relating to images,
     banners, pop-ups, access restrictions, banners and cookies. There is a CGI
@@ -353,10 +353,10 @@ Junkbuster can use a number of other files to tell it what ads to block, what
 cookies to accept, etc. This section of the configuration file tells Junkbuster
 where to find all those other files.
 
-On Windows, Junkbuster looks for these files in the same directory as the
-executable. On Unix and OS/2, Junkbuster looks for these files in the current
-working directory. In either case, an absolute path name can be used to avoid
-problems.
+On Windows and AmigaOS, Junkbuster looks for these files in the same directory
+as the executable. On Unix and OS/2, Junkbuster looks for these files in the
+current working directory. In either case, an absolute path name can be used
+to avoid problems.
 
 When development goes modular and multi-user, the blocker, filter, and per-user
 config will be stored in subdirectories of "confdir". For now, only confdir/
@@ -1448,10 +1448,9 @@ For for SuSE: /etc/rc.d/junkbuster start
 For RedHat: /etc/rc.d/init.d/junkbuster start
 
 If no configuration file is specified on the command line, Junkbuster will look
-for a file named config in the current directory. Except on Amiga where it will
-look for AmiTCP:db/junkbuster/config and Win32 where it will try config.txt. If
-no file is specified on the command line and no default configuration file can
-be found, Junkbuster will fail to start.
+for a file named config in the current directory. Except on Win32 where it will
+try config.txt. If no file is specified on the command line and no default
+configuration file can be found, Junkbuster will fail to start.
 
 Be sure your browser is set to use the proxy which is by default at localhost,
 port 8000. With Netscape (and Mozilla), this can be set under Edit ->
