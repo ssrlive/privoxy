@@ -2,7 +2,7 @@ Source: privoxy
 Section: web
 Priority: optional
 Maintainer: Roland Rosenfeld <roland@debian.org>
-Build-Depends: debhelper (>> 3.0.0), autoconf, libpcre3-dev, w3m
+Build-Depends: debhelper (>> 3.0.0), autoconf, libpcre3-dev
 Standards-Version: 3.5.6
 
 Package: privoxy

@@ -28,10 +28,9 @@ configure-stamp:
 
 	autoheader
 	autoconf
-	env CFLAGS=$(CFLAGS) WDUMP=w3m \
+	env CFLAGS=$(CFLAGS) \
 		./configure --prefix=/usr --sysconfdir=/etc \
-		--mandir=/usr/share/man	$(WITHDEBUG) \
-		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
+		--mandir=/usr/share/man	$(WITHDEBUG)
 	touch configure-stamp
 
 build: build-stamp
@@ -112,10 +111,9 @@ binary-arch: build install
 	dh_md5sums
 	dh_builddeb
 
-# Use this target on Debian because we need to make sure configure
-# was run with docbook's correct path (see configure-stamp above)
+# Single step doc building on debian
 debian-dok: configure-stamp
 	$(MAKE) dok
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install configure debian-dok

@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.105 2002/05/25 22:48:19 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.106 2002/05/26 04:55:11 mal0rd Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -81,7 +81,6 @@ WDUMP      = @WDUMP@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
 DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
-DB2HTML    = @DB2HTML@
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
@@ -96,7 +95,7 @@ GROUP	   = @GROUP@
 
 # Program to do LF->CRLF
 #
-# The sed version should be the most portable, but it doesn't for for me,
+# The sed version should be the most portable, but it doesn't work for me,
 # the other two do.  FIXME.
 #   - Jon
 #DOSFILTER  = $(SED) -e $$'s,$$,\r,'
@@ -210,7 +209,8 @@ all: $(PROGRAM)
 #############################################################################
 .PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
-install conectiva-spec conectiva-dist conectiva-upload
+install conectiva-spec conectiva-dist conectiva-upload debian-dist \
+debian-upload ensure-wdump ensure-jadebin ensure-dkprefix
 
 
 #############################################################################
@@ -542,8 +542,33 @@ tarball-clean:
 #
 #############################################################################
 
+# 3 checks to make sure docs will be generated
+ensure-wdump:
+ifeq (@WDUMP@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; one of w3m, links, or lynx must be installed."
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
+ensure-jadebin:
+ifeq (@JADEBIN@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; one of openjade or jade must be installed"
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
+ensure-dkprefix:
+ifeq (@DKPREFIX@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; cannot find docbook-dsssl stylesheets"
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
 # developer manual
-dok-devel: 
+dok-devel: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(RM) doc/webserver/developer-manual/*.html
 	$(RM) -r doc/source/developer-manual
 	mkdir -p doc/text doc/source/developer-manual
@@ -551,7 +576,7 @@ dok-devel:
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && $(RM) -r tmp.html developer-manual
 
 # user manual
-dok-user: 
+dok-user: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(RM) doc/webserver/user-manual/*.html
 	$(RM) -r doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
@@ -559,7 +584,7 @@ dok-user:
 	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
 # faq
-dok-faq: 
+dok-faq: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(RM) doc/webserver/faq/*.html
 	$(RM) -r doc/source/faq
 	mkdir -p doc/text doc/source/faq
@@ -578,12 +603,12 @@ else
 endif
 
 # readme page
-dok-readme:
+dok-readme: ensure-dkprefix ensure-jadebin ensure-wdump
 	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
 # webserver files
-dok-webserver: 
+dok-webserver: ensure-dkprefix ensure-jadebin
 	cd doc/source/webserver && $(DB)-notoc -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
@@ -592,7 +617,7 @@ dok-webserver:
      doc/webserver/index.html && $(RM) doc/source/webserver/*.bak
 
 # Main documentation target.
-dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
+dok: dok-devel dok-release dok-user dok-faq dok-readme dok-webserver dok-authors
 	@$(ECHO) Documentation created.
 
 #
@@ -619,12 +644,12 @@ groff2html:
 	$(G2H_CMD) ./privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
 
 ## Make README
-redhat-readme: 
+redhat-readme: ensure-dkprefix ensure-jadebin ensure-wdump
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../README && $(RM) -r tmp.html
 
 ## Make AUTHORS file
-dok-authors: 
+dok-authors: ensure-dkprefix ensure-jadebin ensure-wdump
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../AUTHORS && $(RM) tmp.html
 
@@ -846,6 +871,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.106  2002/05/26 04:55:11  mal0rd
+# Added debian-dist and debian-upload targets.  Also documented usage.
+#
 # Revision 1.105  2002/05/25 22:48:19  hal9
 # Add -notoc to README build (per oes's dsl magic).
 #
