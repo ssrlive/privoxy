@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.9 2001/06/12 18:15:29 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.10 2001/07/03 09:34:44 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.10  2001/07/03 09:34:44  sarantis
+# bumped up version number.
+#
 # Revision 1.9  2001/06/12 18:15:29  swa
 # the % in front of configure (see tag below) confused
 # the rpm build process on 7.1.
@@ -106,7 +109,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
 
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
 cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
-cp -f permissionsfile $RPM_BUILD_ROOT%{ijbconf}/permissionsfile
+cp -f actionsfile $RPM_BUILD_ROOT%{ijbconf}/actionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
 cp -f templates/default $RPM_BUILD_ROOT%{ijbconf}/templates/
