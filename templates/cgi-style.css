@@ -1,7 +1,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: cgi-style.css,v 1.4 2002/04/09 11:55:20 oes Exp $
+ * $Id: cgi-style.css,v 1.5 2002/04/24 02:14:36 oes Exp $
  */
 
 /*
@@ -63,6 +63,37 @@ table.transparent { border-style: none}
 p.small { font-size: 10px; margin: 0px; }
 p.important { border: solid black 1px; background-color: #ffdddd; font-weight: bold; padding: 2px; }
 p.whiteframed { margin: 5px; padding: 5px; border: solid black 1px; text-align: center; background-color: #eeeeee; }
+
+/*
+ * Links as buttons:
+ */
+
+td.buttons {
+  padding: 2px;
+}
+
+a.cmd, td.buttons a {
+  white-space: nowrap;
+  width: auto;
+  padding: 2px;
+  background-color: #dddddd;
+  color:            #000000;
+  text-decoration: none;
+  border-top:    1px solid #ffffff;
+  border-left:   1px solid #ffffff;
+  border-bottom: 1px solid #000000;
+  border-right:  1px solid #000000;
+}
+a.cmd:hover, td.buttons a:hover {
+  background-color: #eeeeee;
+}
+a.cmd:active, td.buttons a:active {
+  border-top:    1px solid #000000;
+  border-left:   1px solid #000000;
+  border-bottom: 1px solid #ffffff;
+  border-right:  1px solid #ffffff;
+}
+
 
 /*
  * Special red emphasis:

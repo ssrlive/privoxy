@@ -115,34 +115,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
-  <style type="text/css">
-    td.cmd {
-      padding: 2px;
-    }
-    td.cmd a {
-      white-space: nowrap;
-      width: auto;
-      padding: 1px;
-      background-color: #dddddd;
-      color:            #000000;
-      text-decoration: none;
-      border-top:    1px solid #ffffff;
-      border-left:   1px solid #ffffff;
-      border-bottom: 1px solid #000000;
-      border-right:  1px solid #000000;
-    }
-    td.cmd a:hover {
-      background-color: #eeeeee;
-    }
-    td.cmd a:active {
-      border-top:    1px solid #000000;
-      border-left:   1px solid #000000;
-      border-bottom: 1px solid #ffffff;
-      border-right:  1px solid #ffffff;
-    }
-
-      
-  </style>
 </head>
 
 <body>
@@ -183,7 +155,7 @@
              <td>
                @re-filter-filename@
              </td>
-             <td class="cmd">
+             <td class="buttons">
                <!-- @if-have-filterfile-start -->
                <a href="show-status?file=filter">View</a>
                <!-- if-have-filterfile-end@ -->
@@ -196,7 +168,7 @@
             <td>
                @trust-filename@
              </td>
-             <td class="cmd">
+             <td class="buttons">
                <!-- @if-have-trustfile-start -->
                <a href="show-status?file=trust">View</a>
                <!-- if-have-trustfile-end@ -->

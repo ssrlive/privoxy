@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-url,v $
+#    Revision 1.7  2002/03/26 22:29:56  swa
+#    we have a new homepage!
+#
 #    Revision 1.6  2002/03/24 11:01:06  swa
 #    name change
 #
@@ -66,7 +69,7 @@
 #
 #############################################################################
 <tr class="url@url-1-2@" valign="top"><td align="left">&nbsp;</td>
-<td align="center" class="nbr"><a name="l@p@"
+<td align="center" class="buttons"><a name="l@p@"
 href="ear?f=@f@&amp;v=@v@&amp;p=@p@" onclick="return rm_p(@p@,'@url@');">Remove</a>&nbsp;&nbsp;&nbsp;<a
 href="eau?f=@f@&amp;v=@v@&amp;p=@p@">Edit</a>&nbsp;</td>
 <td class="url" align="left">@url-html@</td>
