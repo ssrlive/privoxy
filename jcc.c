@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.28 2001/07/23 13:26:12 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.29 2001/07/24 12:47:06 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.28 2001/07/23 13:26:12 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.29  2001/07/24 12:47:06  oes
+ *    Applied BeOS support update by Eugenia
+ *
  *    Revision 1.28  2001/07/23 13:26:12  oes
  *    Fixed bug in popup-killing for the first read that caused binary garbage to be sent between headers and body
  *
@@ -261,9 +264,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.28 2001/07/23 13:26:12 oes Exp $";
 #include <fcntl.h>
 #include <errno.h>
 
-#if defined(FEATURE_PTHREAD) && !defined(__BEOS__)
+#ifdef FEATURE_PTHREAD
 #include <pthread.h>
-#endif /* def FEATURE_PTHREAD && ndef __BEOS__ */
+#endif /* def FEATURE_PTHREAD */
 
 #ifdef _WIN32
 # ifndef FEATURE_PTHREAD
