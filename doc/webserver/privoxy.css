@@ -15,8 +15,8 @@ h2 { font-size: 120%; margin: 0px; }
 h3 { font-size: 110%; margin: 0px; }
 
 p,pre  { margin-left: 15px; }
-li { margin: 2px 15px; }
-dl { margin: 2px 15px; }
+li { margin: 5px 15px; }
+dl { margin: 5px 15px; }
 
 :link { text-decoration: none; }
 
