@@ -1,4 +1,4 @@
-#  ********************************************************************
+# ********************************************************************
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/re_filterfile,v $
 # 
@@ -6,10 +6,6 @@
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
 #                 IJBSWA team.  http://ijbswa.sourceforge.net
-# 
-#                 Based on the Internet Junkbuster originally written
-#                 by and Copyright (C) 1997 Anonymous Coders and
-#                 Junkbusters Corporation.  http://www.junkbusters.com
 # 
 #                 This program is free software; you can redistribute it
 #                 and/or modify it under the terms of the GNU General
@@ -31,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.7  2001/06/19 14:21:56  oes
+#     Fixed microsuck line
+#
 #     Revision 1.6  2001/06/09 14:01:57  swa
 #     header. cosmetics. default: no messing ala microsuck.
 #
@@ -42,10 +41,15 @@
 # For Details see the perlre, perlop and pcre manpages.
 # Note that you are free to choose the delimter as you see fit.
 #
-# Note: in addidion to the Perl-options egimosx, U is supported
-# and turns the default to ungreedy matching. Add ? to quantifiers
-# to switch back to greedy.
-#
+# Note: In addidion to the Perl options egimosx, the following nonstandard
+# options are supported:
+# 
+# 'U' turns the default to ungreedy matching.  Add ? to quantifiers to
+#     switch back to greedy.
+# 'T' (trivial) prevents parsing for backreferences in the substitute.
+#     Use if you want to include text like '$&' in your substitute without
+#     quoting.
+# 
 
 # ********************************************************************/
 #
@@ -102,31 +106,32 @@ s/status='.*?';*//ig
 #
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
-#
+# Note: Use http://i.j.b/send-banner?type=trans for a transparent 1x1 gif
 # ********************************************************************/
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+# Where is that from?
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
 # ********************************************************************/
 #
 # Squish WebBugs:
 #
 # ********************************************************************/
-s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*>/<!-- Squished WebBug -->/sig
+s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?>/<!-- Squished WebBug -->/sig
 
 # ********************************************************************/
 #
