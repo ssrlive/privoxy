@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.8 2002/10/21 02:46:09 hal9 Exp $
+ $Id: user-manual.sgml,v 2.9 2003/04/11 03:14:53 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.8 2002/10/21 02:46:09 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.9 2003/04/11 03:14:53 hal9 Exp $</pubdate>
 
 <!--
 
@@ -220,10 +220,9 @@ automatically start Privoxy in the boot process.
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-deb"><title>Debian</title>
 <para>
- DEBs can be installed with <literal>dpkg -i
- privoxy_&p-version;-1.deb</literal>, and will use
- <filename>/etc/privoxy</filename> for the location of configuration
- files.
+ DEBs can be installed with <literal>apt-get install privoxy</literal>,
+ and will use <filename>/etc/privoxy</filename> for the location of 
+ configuration files.
 </para>
 </sect3>
 
@@ -5765,6 +5764,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.9  2003/04/11 03:14:53  hal9
+ Add small note about one filter file may be defined.
+
  Revision 2.8  2002/10/21 02:46:09  hal9
  Port changes to user.action examples section from 3.0.
 
