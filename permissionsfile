@@ -1,36 +1,50 @@
-# Sample permissions file for the Internet Junkbuster 2.9.4
+#############################################################################
+# Sample actions file for the Internet Junkbuster 2.9.4
 #
 # For information, see http://ijbswa.sourceforge.net/
-
-# Valid permissions are:
 #
+# $Id$
+#
+#############################################################################
+# Syntax
+#############################################################################
+# This file lists the actions to be applied to a request.
+# There are 3 kinds of action:
+#
+# Boolean (e.g. "block"):
+#   +name  # enable
+#   -name  # disable
+#
+# Parameterized (e.g. "hide-user-agent"):
+#   +name{param}  # enable and set parameter to "param"
+#   -name         # disable
+#
+# Multi-value (e.g. "add-header", "wafer"):
+#   +name{param}  # enable and add parameter "param"
+#   -name{param}  # remove the parameter "param"
+#   -name         # disable totally
+#
+# The default (if you don't specify anything in this file) is not to take
+# any actions - i.e completely disabled, so JunkBuster will just be a
+# normal, non-blocking, non-anonymizing proxy.  You must specifically
+# enable the privacy and blocking features you need (although the 
+# provided default actions file will do that for you).
+#
+# Later actions always override earlier ones.  For multi-valued actions,
+# the actions are applied in the order they are specified.
+#
+#############################################################################
+# Valid actions are:
+#############################################################################
+#
+# +add-header{Name: value}
+#    Adds the specified HTTP header, which is not checked for validity.
+#    You may specify this many times to specify many headers.
 #
 # +block
 #    Block this URL
 #
-# +image
-#    Treat this URL as an image.  This only matters if it's also blocked, in
-#    which case a "blocked" image rather than a HTML page will be sent.
-#
-# +cookies-read
-#    Allow the website to read cookies
-#
-# +cookies-set
-#    Allow the website to set cookies
-#
-# +filter
-#    Filter the website through the re_filterfile
-#
-# +popup
-# +popups
-#    Allow the website to use window.open()
-#
-# +referer
-# +referrer
-#    Send the "Referer:" (sic) header to the web site
-#
 # +fast-redirects
-#
 #    Many sites, like yahoo.com, don't just link to other sites.
 #    Instead, they will link to some script on their own server,
 #    giving the destination as a parameter, which will then redirect
@@ -46,15 +60,77 @@
 #    time is wasted, while your browser aks the server for one redirect
 #    after the other. Plus, it feeds the advertisers.
 #
-#    The fast-redirects option enables interception of these requests
+#    The +fast-redirects option enables interception of these requests
 #    by junkbuster, who will cut off all but the last valid URL in the
 #    request and send a local redirect back to your browser without
 #    contacting the remote site.
 #
+# +filter
+#    Filter the website through the re_filterfile
+#    FIXME: The syntax should be +filter{filename}
 #
-# All of these permissions also have a "-permission" setting to turn
-# them off - e.g. "-block" allows you to unblock a previously blocked site.
+# +hide-forwarded
+#    Block any existing X-Forwarded-for header, and do not add a new one.
 #
+# +hide-from{block}
+# +hide-from{spam@sittingduck.xqq}
+#    If the browser sends a "From:" header containing your e-mail address, 
+#    either completely removes the header ("block"), or change it to the
+#    specified e-mail address.
+#
+# +hide-referer{block}
+# +hide-referer{forge}
+# +hide-referer{http://nowhere.com}
+#    Don't send the "Referer:" (sic) header to the web site.  You can
+#    block it, forge a URL to the same server as the request (which is
+#    preferred because some sites will not send images otherwise) or
+#    set it to a constant string.
+#
+# +hide-referrer{...}
+#    Alternative spelling of +hide-referer.  Has the same parameters,
+#    and can be freely mixed with, "+hide-referer".  ("referrer" is the 
+#    correct English spelling, however the HTTP specification has a 
+#    bug - it requires it to be spelt "referer").
+#
+# +hide-user-agent{browser-type}
+#    Change the "User-Agent:" header so web servers can't tell your
+#    browser type.  (Breaks many web sites).  Specify the user-agent
+#    value you want - e.g., to pretend to be using Netscape on Linux:
+#      +hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}
+#    Or to identify yourself explicitly as a JunkBuster user:
+#      +hide-user-agent{JunkBuster/1.0}
+#    (Don't change the version number from 1.0 - after all, why tell them?)
+#
+# +image
+#    Treat this URL as an image.  This only matters if it's also blocked, in
+#    which case a "blocked" image rather than a HTML page will be sent.
+#    (According to the tinygif setting in the config file).
+#
+# +no-cookies-read
+#    Prevent the website from reading cookies
+#
+# +no-cookies-set
+#    Prevent the website from setting cookies
+#
+# +no-popup
+# +no-popups
+#    Filter the website through a built-in filter to disable
+#    window.open() etc.  The two alternative spellings are
+#    equivalent.
+#
+# +vanilla-wafer
+#    This action only applies if you are using a jarfile.  It sends a
+#    cookie to every site stating that you do not accept any copyright
+#    on cookies sent to you, and asking them not to track you.  Of
+#    course, this is a (relatively) unique header they could use to 
+#    track you.
+#
+# +wafer{name=value}
+#    This allows you to add an arbitrary cookie.  Specify it multiple
+#    times in order to add several cookies.
+#
+#############################################################################
+
 
 
 #############################################################################
@@ -64,58 +140,77 @@
 #############################################################################
 #
 # You can define a short form for a list of permissions - e.g., instead
-# of "+cookies-set +cookies-read -filter -fast-redirects", you can
+# of "-no-cookies-set -no-cookies-read -filter -fast-redirects", you can
 # just write "shop".  This is called an alias.
 #
-# Currently, an alias can contain any character except space, tab, or '='.
+# Currently, an alias can contain any character except space, tab, '=', '{'
+# or '}'.
 # But please use only 'a'-'z', '0'-'9', '+', and '-'.
 #
 # Alias names are not case sensitive.
 #
 # Aliases beginning with '+' or '-' may be used for system permission names 
 # in future releases - so try to avoid alias names like this.  (e.g. 
-# "+cookies" below is not a good name)
+# "+no-cookies" below is not a good name)
 #
 # Aliases must be defined before they are used.
 # 
-+cookies    = +cookies-set +cookies-read
--cookies    = -cookies-set -cookies-read
-fragile     = -block +cookies -filter -fast-redirects +referer +popups
-shop        = +cookies -filter -fast-redirects
+
+# Useful aliases
++no-cookies = +no-cookies-set +no-cookies-read
+-no-cookies = -no-cookies-set -no-cookies-read
+fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
+shop        = -no-cookies -filter -fast-redirects
 +imageblock = +block +image
 
 #For people who don't like to type too much:  ;-)
-c0 = -cookies
-c1 = +cookies
-c2 = +cookies-set -cookies-read
-c3 = -cookies-set +cookies-read
+c0 = +no-cookies
+c1 = -no-cookies
+c2 = -no-cookies-set +no-cookies-read
+c3 = +no-cookies-set -no-cookies-read
 #... etc.  Customize to your heart's content.
 
 #############################################################################
 # Defaults
 #############################################################################
-{-block -image -cookies +filter +fast-redirects -referer -popups}
+#FIXME: Line continuation is broken - can't split a line at whitespace.
+{ -\
+block +\
+fast-redirects +\
+filter +\
+hide-forwarded +\
+hide-from{block} +\
+hide-referer{forge} -\
+hide-user-agent -\
+image +\
+no-cookies-read +\
+no-cookies-set +\
+no-popups +\
+vanilla-wafer \
+}
 / # Match all URLs
 
 #############################################################################
-# Not yet implemented
+# A useful site for testing - shows all headers:
+# http://privacy.net/analyze/
 #############################################################################
-#{{filter}}
-#s/Microsoft/MicroSuck/ig
+{+add-header{X-Privacy: Yes please} +#-add-header{*} +\
+add-header{X-User-Tracking: No thanks!} -filter}
+privacy.net
 
 #############################################################################
 # Permissions list
 #############################################################################
 
 # Sites that need cookies
-{+cookies}
+{-no-cookies}
 javasoft.com
 sun.com
 yahoo.com
 msdn.microsoft.com
 
 # Alternative way of saying the same thing
-{+cookies-set +cookies-read}
+{-no-cookies-set -no-cookies-read}
 sourceforge.net
 sf.net
 
@@ -133,9 +228,17 @@ jungle.com
 scan.co.uk
 
 # These shops require pop-ups
-{shop +popups}
+{shop -no-popups}
 dabs.com
 overclockers.co.uk
+
+# This is a graphical-> text only conversion script
+{-fast-redirects}
+www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+
+# Please don't re_filter code!
+{-filter}
+cvs.sourceforge.net
 
 #############################################################################
 # Imagelist:
@@ -1055,6 +1158,8 @@ sfads.osdn.com
 #This site traps the browser
 webhideout.com
 
+#privacy.net runs ads
+a.consumer.net
 
 #Lindsay.Marshall@newcastle.ac.uk suggested these, to kill Opera adverts:
 
@@ -1125,6 +1230,8 @@ advice.*.*.*
 # univ. don't advertise, do they :-)
 *.*.edu
 *.*.*.edu
+*.*.ac.uk   # English Universities too! - Jon
+*.*.*.ac.uk # English Universities too! - Jon 
 www.ugu.com/sui/ugu/adv
 adfa.edu.au
 adsl*.*.*
@@ -1201,6 +1308,7 @@ teledata.de
 # Jon's addition: MSDN
 
 msdn.microsoft.com
+
 
 #js
 adbusters.com
