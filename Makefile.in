@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.22 2001/09/10 16:31:23 swa Exp $
+# $Id: Makefile.in,v 1.23 2001/09/12 16:28:42 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.23  2001/09/12 16:28:42  swa
+# added "make dok" section to generate html pages from
+# the sgml source documents. note that the we do not want
+# generated stuff in cvs.
+#
 # Revision 1.22  2001/09/10 16:31:23  swa
 # buildroot definition in the specfile fucks up the build
 # process under suse. hence I moved it to the "rpm -ta"
@@ -192,8 +197,8 @@ REGEX_HDRS   = $(REGEX_SRC:.c=.h)
 # Dependencies introduced by #include "project.h".
 PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcre.h
 
-# Only need this on Solaris
-SOCKET_LIB   = @SOLARIS_ONLY@-lsocket -lnsl
+# Socket libraries for platforms that need them explicitly defined
+SOCKET_LIB   = @SOCKET_LIB@
 
 # PThreads library, if needed.
 PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
@@ -379,11 +384,11 @@ pcre/study.@OBJEXT@:      pcre/study.c      pcre/config.h pcre/internal.h pcre/p
 
 # An auxiliary program makes the PCRE default character table source
 
-pcre/chartables.c:   pcre/dftables
-		pcre/dftables >pcre/chartables.c
+pcre/chartables.c:   pcre/dftables@EXEEXT@
+		pcre/dftables@EXEEXT@ >pcre/chartables.c
 
-pcre/dftables:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal.h pcre/config.h
-		$(CC) -o pcre/dftables $(CFLAGS) pcre/dftables.c
+pcre/dftables@EXEEXT@:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal.h pcre/config.h
+		$(CC) -o pcre/dftables@EXEEXT@ $(CFLAGS) pcre/dftables.c
 
 # Win32
 w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
