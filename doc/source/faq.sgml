@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.4 2002/09/26 00:14:42 hal9 Exp $
+ $Id: faq.sgml,v 2.5 2002/09/26 05:57:14 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.4 2002/09/26 00:14:42 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.5 2002/09/26 05:57:14 hal9 Exp $</pubdate>
 
 <!--
 
@@ -625,7 +625,7 @@ the differences?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="configfiles"> <title>What's the difference between the
-<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Advanced</quote> defaults?</title>
+<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Radical</quote> defaults?</title>
  <para>
   Configuring <application>Privoxy</application> is not entirely trivial. To help you get
   started, we provide you with three different default action <quote>packages</quote> in
@@ -646,7 +646,7 @@ the differences?</title>
   <entry>Feature</entry>
   <entry>Cautious</entry>
   <entry>Intermadiate</entry>
-  <entry>Advanced</entry>
+  <entry>Radical</entry>
 </row>
 </thead>
 <!--  <tfoot> -->
@@ -1874,6 +1874,10 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.5  2002/09/26 05:57:14  hal9
+Conditionally exclude 'this doc is evolving' comment in intro for non release
+situations.
+
 Revision 2.4  2002/09/26 00:14:42  hal9
 Small additions for content-cookies/SSL, LAN configuration, and FTP (non)
 support.
