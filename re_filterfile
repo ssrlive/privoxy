@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.15  2001/12/28 23:54:20  steudten
+#     Fix for feature Req #495374: http-equiv problem
+#
 #     Revision 1.14  2001/12/09 18:55:11  david__schmidt
 #     Updated CODE_STATUS to beta, commented out microsuck line in re_filterfile
 #     for 2.9.10 beta
@@ -140,25 +143,27 @@ s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
 #
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
-# Note: Use http://i.j.b/send-banner?type=trans for a transparent 1x1 gif
+# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 gif
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo gif
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=auto  to auto-select.
 # ********************************************************************/
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
 
 # Where is that from?
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
 
 # ********************************************************************/
 #
@@ -191,3 +196,5 @@ s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D
 #
 # ********************************************************************/
 s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><hr><font size=7><b>Internet J</b></font><b><font size=6>UNK</font><font size=5 color="red"><i>BUSTER</i></font></b><font size=7> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
+
+
