@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.17 2001/09/13 20:51:29 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.18 2001/09/20 13:33:43 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.17 2001/09/13 20:51:29 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.18  2001/09/20 13:33:43  steudten
+ *
+ *    change long to int as return value in hash_string(). Remember the wraparound
+ *    for int = long = sizeof(4) - thats maybe not what we want.
+ *
  *    Revision 1.17  2001/09/13 20:51:29  jongfoster
  *    Fixing potential problems with characters >=128 in simplematch()
  *    This was also a compiler warning.
@@ -125,6 +130,7 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.17 2001/09/13 20:51:29 jongfost
 #include <string.h>
 #include <malloc.h>
 #include <ctype.h>
+#include <assert.h>
 
 /*
  * FIXME: Only need project.h for BUFFER_SIZE.  It would be nice
@@ -382,17 +388,20 @@ char *chomp(char *string)
 
 }
 
+
 /*********************************************************************
  *
  * Function    :  strsav
  *
  * Description :  Reallocate "old" and append text to it.  This makes
  *                it easier to append to malloc'd strings.
+ *                Running out of memory is a FATAL error.
  *
  * Parameters  :
  *          1  :  old = Old text that is to be extended.  Will be
- *                free()d by this routine.
+ *                free()d by this routine.  May be NULL.
  *          2  :  text_to_append = Text to be appended to old.
+ *                May be NULL.
  *
  * Returns     :  Pointer to newly malloc'ed appended string.
  *                If there is no text to append, return old.  Caller
@@ -409,37 +418,89 @@ char *strsav(char *old, const char *text_to_append)
       return(old);
    }
 
-   if (NULL != old)
+   if (NULL == old)
    {
-      old_len = strlen(old);
-   }
-   else
-   {
-      old_len = 0;
+      if ((p = strdup(text_to_append)) == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL, "strdup() failed!", new_len);
+         /* Never get here - LOG_LEVEL_FATAL causes program exit */
+      }
+      return p;
    }
 
+   old_len = strlen(old);
    new_len = old_len + strlen(text_to_append) + 1;
 
-   if (old)
+   if ((p = realloc(old, new_len)) == NULL)
    {
-      if ((p = realloc(old, new_len)) == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "realloc(%d) bytes failed!", new_len);
-         /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      }
-   }
-   else
-   {
-      if ((p = (char *)malloc(new_len)) == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "malloc(%d) bytes failed!", new_len);
-         /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      }
+      log_error(LOG_LEVEL_FATAL, "realloc(%d) bytes failed!", new_len);
+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
    strcpy(p + old_len, text_to_append);
    return(p);
+}
 
+
+/*********************************************************************
+ *
+ * Function    :  string_append
+ *
+ * Description :  Reallocate target_string and append text to it.  
+ *                This makes it easier to append to malloc'd strings.
+ *                This is similar to strsav(), but running out of
+ *                memory isn't catastrophic.
+ *
+ * Parameters  :
+ *          1  :  target_string = Pointer to old text that is to be
+ *                extended.  *target_string will be free()d by this
+ *                routine.  target_string must be non-NULL.
+ *                If *target_string is NULL, this routine will
+ *                do nothing and return with an error - this allows
+ *                you to make many calls to this routine and only
+ *                check for errors after the last one.
+ *          2  :  text_to_append = Text to be appended to old.
+ *                Must not be NULL.
+ *
+ * Returns     :  On success, returns 0 and sets *target_string to
+ *                newly malloc'ed appended string.  Caller must free().
+ *                On out-of-memory, returns nonzero (and free()s
+ *                *target_string and sets it to NULL).
+ *
+ *********************************************************************/
+int string_append(char **target_string, const char *text_to_append)
+{
+   size_t old_len;
+   char *new_string;
+
+   assert(target_string);
+   assert(text_to_append);
+
+   if (*target_string == NULL)
+   {
+      return(1);
+   }
+
+   if (*text_to_append == '\0')
+   {
+      return(0);
+   }
+
+   old_len = strlen(*target_string);
+
+   if (NULL == (new_string = realloc(*target_string,
+          strlen(text_to_append) + old_len + 1)))
+   {
+      free(*target_string);
+
+      *target_string = NULL;
+      return(1);
+   }
+
+   strcpy(new_string + old_len, text_to_append);
+
+   *target_string = new_string;
+   return(0);
 }
 
 

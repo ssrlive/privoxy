@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.9 2001/07/29 18:43:08 jongfoster Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.10 2001/09/20 13:34:09 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.10  2001/09/20 13:34:09  steudten
+ *
+ *    change long to int for prototype hash_string()
+ *
  *    Revision 1.9  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.
@@ -108,6 +112,7 @@ extern int strcmpic(const char *s1, const char *s2);
 extern int strncmpic(const char *s1, const char *s2, size_t n);
 
 extern char *strsav(char *old, const char *text_to_append);
+extern int string_append(char **target_string, const char *text_to_append);
 
 extern char *chomp(char *string);
 extern int simplematch(char *pattern, char *text);
