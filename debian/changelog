@@ -1,4 +1,15 @@
-privoxy (3.1.1-alpha-1) unstable; urgency=low
+privoxy (3.1.1-2) unstable; urgency=low
+
+  * Stop creating documentation, it's usually available upstream and can
+    be used as is without depending on docbook and the like.
+  * Added LICENSE, pdfs, privoxy-index and HTMLized man-page from package.
+    The LICENSE is already mentioned in debian/copyright (adding a
+    separate file conflicts with the policy), the man page is available in
+    nroff format and the PDFs are not better than the HTML version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri,  6 Sep 2002 18:37:19 +0200
+
+privoxy (3.1.1-1) unstable; urgency=low
 
   * Removed build dependency on w3m.
   * Removed ./configure argument for docbook, moving the path to the
@@ -7,7 +18,7 @@ privoxy (3.1.1-alpha-1) unstable; urgency=low
 
  -- Devin Bayer <devin@elektrono.com>  Tue, 28 May 2002 21:21:48 -0400
 
-privoxy (3.1.1-alpha-0) unstable; urgency=low
+privoxy (3.1.1-0) unstable; urgency=low
 
   * Added debian-dist and debian-upload targets to the top level makefile.
     debian-dist runs "dpkg-buildpackage -rfakeroot -us -uc" so that
@@ -17,25 +28,76 @@ privoxy (3.1.1-alpha-0) unstable; urgency=low
   
  -- Devin Bayer <devin@elektrono.com>  Sat, 25 May 2002 22:49:30 -0400
 
-privoxy (2.9.15-beta-0) unstable; urgency=low
+privoxy (3.0.0-2) unstable; urgency=low
+
+  * Recompile with libc6 from testing (instead of unstable).
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri,  6 Sep 2002 17:32:35 +0200
+
+privoxy (3.0.0-1) unstable; urgency=low
+
+  * New upstream version (Closes: #158613).
+  * Remove version number from config file, to avoid changing it on every
+    new upstream version.  Sorry, this time you will still be bothered...
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun,  1 Sep 2002 18:58:07 +0200
+
+privoxy (2.9.20-1) unstable; urgency=low
 
   * New upstream version.
-  * Use upstream docbook build mechanism now.
-  * Force usage of w3m -dump to convert HTML to ASCII (build depend on it).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 11 Aug 2002 11:05:01 +0200
+
+privoxy (2.9.18-2) unstable; urgency=low
+
+  * Disable docbook, we use the precompiled docs (Closes: #155989).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 10 Aug 2002 09:36:58 +0200
+
+privoxy (2.9.18-1) unstable; urgency=low
+
+  * New upstream version.
+  * Use start-stop-daemon for starting privoxy to avoid problems on start,
+    when privoxy is already running (Closes: #154882).
+  * Undo broken -Ipcre inclusion in GNUmakefile.in, which causes trouble
+    with using wrong pcreposix.h.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu,  8 Aug 2002 21:01:48 +0200
+
+privoxy (2.9.16-1) unstable; urgency=low
+
+  * New upstream version.
   * Exclude CVS files from dh_installdocs (when compiling from CVS).
   * Add user.action and standard.action to /etc/privoxy.
   * Install images for html version of documentation.
-  * Install p_doc.css in documentation directory.
+  * Do no longer build html and txt versions of documentation using
+    docbook, but use the converted versions which come with the upstream
+    package.
+  * default.action fixed upstream: "downloads" no longer blocked 
+    (Closes: #148290).
+  * default.filter fixed upstream: Made WeBugs job ungreedy (Closes: #149450).
+  * Remove the "beta" from the version number (the final release will be
+    named 3.0, so it's superfluous).
 
- -- Roland Rosenfeld <roland@debian.org>  Sun, 26 May 2002 01:37:33 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 27 Jul 2002 18:55:11 +0200
+
+privoxy (2.9.14-beta-4) unstable; urgency=low
+
+  * Damn, why did I write "i386-linux" into the rules file, when I try to
+    write a work around for hppa?  Fixed now (Closes #148227).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 26 May 2002 22:33:26 +0200
 
 privoxy (2.9.14-beta-3) unstable; urgency=low
 
   * Fix typo ('[' instead of '{') in default.action (Closes: #148122).
   * Disable edit-actions and remote-toggle in config file by default
     (Closes: #148125).
+  * Use --disable-pthread on hppa, to avoid problem with hppa gcc not
+    supporting -pthread option (Closes: #148117).
+  * Install p_doc.css in documentation directory.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 11:53:49 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 26 May 2002 01:40:18 +0200
 
 privoxy (2.9.14-beta-2) unstable; urgency=low
 
