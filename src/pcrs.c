@@ -1,8 +1,8 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 2.1 2002/08/26 11:18:24 sarantis Exp $";
 
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/pcrs.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/pcrs.c,v $
  *
  * Purpose     :  pcrs is a supplement to the pcre library by Philip Hazel
  *                <ph10@cam.ac.uk> and adds Perl-style substitution. That
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 2.1  2002/08/26 11:18:24  sarantis
+ *    Fix typo.
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -132,7 +135,12 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
  *********************************************************************/
 
 
-#include <pcre.h>
+/*
+ * Include project.h just so that the right pcre.h gets
+ * included from there
+ */
+#include "project.h"
+
 #include <string.h>
 #include <ctype.h>
 
