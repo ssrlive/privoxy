@@ -157,14 +157,6 @@ SOURCE=.\actions.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\amiga.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\amiga.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\cgi.c
 # End Source File
 # Begin Source File
