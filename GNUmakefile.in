@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.69 2002/04/07 08:10:47 swa Exp $
+# $Id: GNUmakefile.in,v 1.70 2002/04/07 08:59:40 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -544,6 +544,10 @@ dok-readme: doc/source/ldpOK.dsl
 # webserver files
 dok-webserver: doc/source/ldpOK.dsl
 	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
+	$(PERL) -pi -e 's/..\/p_doc.css/p_web.css/;\
+     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/'\
+     doc/webserver/index.html
 
 dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
 # kludge to force recreation on next run. Rodgrigo?
@@ -603,17 +607,17 @@ make dok-release:
 	@$(ECHO) Setting doc version and status to $(VERSION), $(CODE_STATUS)
 	@$(PERL) -pi -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
      s/<!entity +p-status.*>/<!entity p-status "$(CODE_STATUS)">/' \
-     doc/source/*sgml
+     doc/source/*sgml doc/source/*/*sgml
 ifeq ($(CODE_STATUS),stable)
 	@$(ECHO) Setting docs to stable $(VERSION)
 	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
-     doc/source/*sgml
+     doc/source/*sgml doc/source/*/*sgml
 else
 	@$(ECHO) Setting docs to not stable $(VERSION)
 	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
-     doc/source/*sgml
+     doc/source/*sgml doc/source/*/*sgml
 endif
 
 #############################################################################
@@ -757,6 +761,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.70  2002/04/07 08:59:40  swa
+# generated files. do NOT edit.
+# fixed directory bug in makefile.
+#
 # Revision 1.69  2002/04/07 08:10:47  swa
 # create some of the webserver docs
 # automatically (in particular if
