@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.35 2002/03/26 22:29:55 swa Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.36 2002/04/26 12:55:38 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.35 2002/03/26 22:29:55 swa Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.36  2002/04/26 12:55:38  oes
+ *    New function string_toupper
+ *
  *    Revision 1.35  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -697,7 +700,8 @@ jb_err string_join(char **target_string, char *text_to_append)
  *********************************************************************/
 char *string_toupper(const char *string)
 {
-   char *result, *q, *p;
+   char *result, *p;
+   const char *q;
 
    if (!string || ((result = (char *) zalloc(strlen(string) + 1)) == NULL))
    {
