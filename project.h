@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.70 2002/05/12 16:05:50 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.71 2002/05/12 21:39:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.71  2002/05/12 21:39:36  jongfoster
+ *    - Adding Doxygen-style comments to structures and #defines.
+ *
  *    Revision 1.70  2002/05/12 16:05:50  jongfoster
  *    Fixing ACTION_MASK_ALL to be unsigned long rather than
  *    just unsigned int.  I don't know if anyone is porting
@@ -1366,16 +1369,21 @@ struct configuration_spec
 #endif /* def FEATURE_NO_GIFS */
 
 
-/* Hardwired URLs */
+/* 
+ * Hardwired URLs
+ */
 
-/** URL for the Privoxy home page. No trailing "/". */
-#define HOME_PAGE_URL     "http://www.privoxy.org"
+/** URL for the Privoxy home page. */
+#define HOME_PAGE_URL     "http://www.privoxy.org/"
 
-/** URL for the Privoxy user manual. With a trailing "/". */
+/** URL for the Privoxy user manual. */
 #define USER_MANUAL_URL   HOME_PAGE_URL "/" VERSION "/user-manual/"
 
-/** FIXME: DOCME: Document this. */
-#define HELP_LINK_PREFIX  "configuration.html#"
+/** Prefix for actions help links  (append to USER_MANUAL_URL). */
+#define ACTIONS_HELP_PREFIX "actions-file.html#"
+
+/** Prefix for config option help links (append to USER_MANUAL_URL). */
+#define CONFIG_HELP_PREFIX  "config.html#"
 
 /*
  * The "hosts" to intercept and display CGI pages.
