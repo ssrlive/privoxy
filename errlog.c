@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.38 2002/03/31 17:18:59 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.39 2002/04/03 17:15:27 gliptak Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.38 2002/03/31 17:18:59 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.39  2002/04/03 17:15:27  gliptak
+ *    zero padding thread ids in log
+ *
  *    Revision 1.38  2002/03/31 17:18:59  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -269,6 +272,9 @@ static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
 static void fatal_error(const char * error_message);
 #ifdef _WIN32
 static char *w32_socket_strerr(int errcode, char *tmp_buf);
+#endif
+#ifdef __OS2__
+static char *os2_socket_strerr(int errcode, char *tmp_buf);
 #endif
 
 /*********************************************************************
@@ -642,9 +648,13 @@ void log_error(int loglevel, char *fmt, ...)
             sval = w32_socket_strerr(ival, tempbuf);
 #elif __OS2__
             ival = sock_errno();
-            if (ival == 0)
+            if (ival != 0)
+              sval = os2_socket_strerr(ival, tempbuf);
+            else
+            {
               ival = errno;
-            sval = strerror(ival);
+              sval = strerror(ival);
+            }
 #else /* ifndef _WIN32 */
             ival = errno; 
 #ifdef HAVE_STRERROR
@@ -874,6 +884,82 @@ static char *w32_socket_strerr(int errcode, char *tmp_buf)
    return tmp_buf;
 }
 #endif /* def _WIN32 */
+
+
+#ifdef __OS2__
+/*********************************************************************
+ *
+ * Function    :  os2_socket_strerr
+ *
+ * Description :  Translate the return value from sock_errno()
+ *                into a string.
+ *
+ * Parameters  :
+ *          1  :  errcode = The return value from sock_errno().
+ *          2  :  tmp_buf = A temporary buffer that might be used to
+ *                          store the string.
+ *
+ * Returns     :  String representing the error code.  This may be
+ *                a global string constant or a string stored in
+ *                tmp_buf.
+ *
+ *********************************************************************/
+static char *os2_socket_strerr(int errcode, char *tmp_buf)
+{
+#define TEXT_FOR_ERROR(code,text) \
+   if (errcode == code)           \
+   {                              \
+      return #code " - " text;    \
+   }
+
+   TEXT_FOR_ERROR(SOCEPERM          , "Not owner.")
+   TEXT_FOR_ERROR(SOCESRCH          , "No such process.")
+   TEXT_FOR_ERROR(SOCEINTR          , "Interrupted system call.")
+   TEXT_FOR_ERROR(SOCENXIO          , "No such device or address.")
+   TEXT_FOR_ERROR(SOCEBADF          , "Bad file number.")
+   TEXT_FOR_ERROR(SOCEACCES         , "Permission denied.")
+   TEXT_FOR_ERROR(SOCEFAULT         , "Bad address.")
+   TEXT_FOR_ERROR(SOCEINVAL         , "Invalid argument.")
+   TEXT_FOR_ERROR(SOCEMFILE         , "Too many open files.")
+   TEXT_FOR_ERROR(SOCEPIPE          , "Broken pipe.")
+   TEXT_FOR_ERROR(SOCEWOULDBLOCK    , "Operation would block.")
+   TEXT_FOR_ERROR(SOCEINPROGRESS    , "Operation now in progress.")
+   TEXT_FOR_ERROR(SOCEALREADY       , "Operation already in progress.")
+   TEXT_FOR_ERROR(SOCENOTSOCK       , "Socket operation on non-socket.")
+   TEXT_FOR_ERROR(SOCEDESTADDRREQ   , "Destination address required.")
+   TEXT_FOR_ERROR(SOCEMSGSIZE       , "Message too long.")
+   TEXT_FOR_ERROR(SOCEPROTOTYPE     , "Protocol wrong type for socket.")
+   TEXT_FOR_ERROR(SOCENOPROTOOPT    , "Protocol not available.")
+   TEXT_FOR_ERROR(SOCEPROTONOSUPPORT, "Protocol not supported.")
+   TEXT_FOR_ERROR(SOCESOCKTNOSUPPORT, "Socket type not supported.")
+   TEXT_FOR_ERROR(SOCEOPNOTSUPP     , "Operation not supported.")
+   TEXT_FOR_ERROR(SOCEPFNOSUPPORT   , "Protocol family not supported.")
+   TEXT_FOR_ERROR(SOCEAFNOSUPPORT   , "Address family not supported by protocol family.")
+   TEXT_FOR_ERROR(SOCEADDRINUSE     , "Address already in use.")
+   TEXT_FOR_ERROR(SOCEADDRNOTAVAIL  , "Can't assign requested address.")
+   TEXT_FOR_ERROR(SOCENETDOWN       , "Network is down.")
+   TEXT_FOR_ERROR(SOCENETUNREACH    , "Network is unreachable.")
+   TEXT_FOR_ERROR(SOCENETRESET      , "Network dropped connection on reset.")
+   TEXT_FOR_ERROR(SOCECONNABORTED   , "Software caused connection abort.")
+   TEXT_FOR_ERROR(SOCECONNRESET     , "Connection reset by peer.")
+   TEXT_FOR_ERROR(SOCENOBUFS        , "No buffer space available.")
+   TEXT_FOR_ERROR(SOCEISCONN        , "Socket is already connected.")
+   TEXT_FOR_ERROR(SOCENOTCONN       , "Socket is not connected.")
+   TEXT_FOR_ERROR(SOCESHUTDOWN      , "Can't send after socket shutdown.")
+   TEXT_FOR_ERROR(SOCETOOMANYREFS   , "Too many references: can't splice.")
+   TEXT_FOR_ERROR(SOCETIMEDOUT      , "Operation timed out.")
+   TEXT_FOR_ERROR(SOCECONNREFUSED   , "Connection refused.")
+   TEXT_FOR_ERROR(SOCELOOP          , "Too many levels of symbolic links.")
+   TEXT_FOR_ERROR(SOCENAMETOOLONG   , "File name too long.")
+   TEXT_FOR_ERROR(SOCEHOSTDOWN      , "Host is down.")
+   TEXT_FOR_ERROR(SOCEHOSTUNREACH   , "No route to host.")
+   TEXT_FOR_ERROR(SOCENOTEMPTY      , "Directory not empty.")
+   TEXT_FOR_ERROR(SOCEOS2ERR        , "OS/2 Error.")
+
+   sprintf(tmp_buf, "(error number %d)", errcode);
+   return tmp_buf;
+}
+#endif /* def __OS2__ */
 
 
 /*
