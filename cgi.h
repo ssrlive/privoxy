@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.24 2002/03/26 22:29:54 swa Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.25 2002/04/08 20:50:25 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.25  2002/04/08 20:50:25  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.24  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -172,7 +175,7 @@ extern jb_err map_block_keep   (struct map *exports, const char *name);
 extern jb_err map_conditional  (struct map *exports, const char *name, int choose_first);
 
 extern jb_err template_load(struct client_state *csp, char ** template_ptr, 
-                            const char *templatename);
+                            const char *templatename, int recursive);
 extern jb_err template_fill(char ** template_ptr, const struct map *exports);
 extern jb_err template_fill_for_cgi(struct client_state *csp,
                                     const char *templatename,

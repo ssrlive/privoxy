@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.28 2002/03/27 12:30:29 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.29 2002/04/08 16:59:08 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.28 2002/03/27 12:30:29 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.29  2002/04/08 16:59:08  oes
+ *    Fixed comment
+ *
  *    Revision 1.28  2002/03/27 12:30:29  oes
  *    Deleted unsused variable
  *
@@ -2556,7 +2559,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
    /* Should do all global exports above this point */
 
-   err = template_load(csp, &section_template, "edit-actions-list-section");
+   err = template_load(csp, &section_template, "edit-actions-list-section", 0);
    if (err)
    {
       edit_free_file(file);
@@ -2568,7 +2571,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       return err;
    }
 
-   err = template_load(csp, &url_template, "edit-actions-list-url");
+   err = template_load(csp, &url_template, "edit-actions-list-url", 0);
    if (err)
    {
       free(section_template);
@@ -2942,7 +2945,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       int index = 0;
       char * filter_template;
 
-      err = template_load(csp, &filter_template, "edit-actions-for-url-filter");
+      err = template_load(csp, &filter_template, "edit-actions-for-url-filter", 0);
       if (err)
       {
          edit_free_file(file);

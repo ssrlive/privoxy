@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.27 2002/04/05 15:50:48 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.28 2002/04/07 15:42:12 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.27 2002/04/05 15:50:48 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.28  2002/04/07 15:42:12  jongfoster
+ *    Fixing send-banner?type=auto when the image-blocker is
+ *    a redirect to send-banner
+ *
  *    Revision 1.27  2002/04/05 15:50:48  oes
  *    added send-stylesheet CGI
  *
@@ -556,7 +560,7 @@ jb_err cgi_send_stylesheet(struct client_state *csp,
    assert(csp);
    assert(rsp);
 
-   err = template_load(csp, &rsp->body, "cgi-style.css");
+   err = template_load(csp, &rsp->body, "cgi-style.css", 0);
 
    if (err == JB_ERR_FILE)
    {
