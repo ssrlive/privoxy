@@ -52,3 +52,4 @@ w32.aps
 w32.res
 privoxy
 privoxy.exe
+config.h.in
