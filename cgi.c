@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.40 2002/01/09 14:26:46 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.41 2002/01/17 20:56:22 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.40 2002/01/09 14:26:46 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.41  2002/01/17 20:56:22  jongfoster
+ *    Replacing hard references to the URL of the config interface
+ *    with #defines from project.h
+ *
  *    Revision 1.40  2002/01/09 14:26:46  oes
  *    Added support for thread-safe gmtime_r call.
  *
@@ -315,6 +319,29 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "edit-actions",
          cgi_edit_actions, 
          "Edit the actions list" },
+
+   
+   { "eaa", /* Shortcut for edit-actions-add-url-form */
+         cgi_edit_actions_add_url_form, 
+         NULL },
+   { "eau", /* Shortcut for edit-actions-url-form */
+         cgi_edit_actions_url_form, 
+         NULL },
+   { "ear", /* Shortcut for edit-actions-remove-url-form */
+         cgi_edit_actions_remove_url_form, 
+         NULL },
+   { "eas", /* Shortcut for edit-actions-for-url */
+         cgi_edit_actions_for_url, 
+         NULL },
+   { "easa", /* Shortcut for edit-actions-section-add */
+         cgi_edit_actions_section_add, 
+         NULL },
+   { "easr", /* Shortcut for edit-actions-section-remove */
+         cgi_edit_actions_section_remove, 
+         NULL },
+   { "eass", /* Shortcut for edit-actions-section-swap */
+         cgi_edit_actions_section_swap, 
+         NULL },
    { "edit-actions-for-url",
          cgi_edit_actions_for_url, 
          NULL /* Edit the actions for (a) specified URL(s) */ },
@@ -342,12 +369,15 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "edit-actions-remove-url-form",
          cgi_edit_actions_remove_url_form, 
          NULL /* Form to remove a URL pattern from the actionsfile */ },
-   { "edit-actions-section-remove",
-         cgi_edit_actions_section_remove, 
-         NULL /* Remove a section from the actionsfile */ },
    { "edit-actions-section-add",
          cgi_edit_actions_section_add, 
          NULL /* Remove a section from the actionsfile */ },
+   { "edit-actions-section-remove",
+         cgi_edit_actions_section_remove, 
+         NULL /* Remove a section from the actionsfile */ },
+   { "edit-actions-section-swap",
+         cgi_edit_actions_section_swap, 
+         NULL /* Swap two sections in the actionsfile */ },
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
    { "robots.txt", 
          cgi_robots_txt,  
@@ -355,6 +385,9 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "send-banner",
          cgi_send_banner, 
          NULL /* Send the transparent or \"Junkbuster\" gif */ },
+   { "t",
+         cgi_transparent_gif, 
+         NULL /* Send a transparent gif (short name) */ },
    { NULL, /* NULL Indicates end of list and default page */
          cgi_error_404,
          NULL /* Unknown CGI page */ }
@@ -645,13 +678,11 @@ struct http_response *error_response(struct client_state *csp,
       return cgi_error_memory();
    }
 
-   err = map(exports, "host-html", 1, html_encode(csp->http->host), 0);
-   if (!err) err = map(exports, "hostport", 1, csp->http->hostport, 1);
-   if (!err) err = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-   if (!err) err = map(exports, "path", 1, csp->http->path, 1);
-   if (!err) err = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
-   if (!err) err = map(exports, "error", 1, safe_strerror(sys_err), 0);
-   if (!err) err = map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
+   err = map(exports, "host", 1, html_encode(csp->http->host), 0);
+   if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
+   if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
+   if (!err) err = map(exports, "error", 1, html_encode_and_free_original(safe_strerror(sys_err)), 0);
+   if (!err) err = map(exports, "host-ip", 1, html_encode(csp->http->host_ip_addr_str), 0);
 
    if (err)
    {
@@ -1368,13 +1399,13 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       return NULL;
    }
 
-   err = map(exports, "version", 1, VERSION, 1);
-   if (!err) err = map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1);
-   if (!err) err = map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1);
-   if (!err) err = map(exports, "homepage", 1, HOME_PAGE_URL, 1);
-   if (!err) err = map(exports, "default-cgi", 1, CGI_PREFIX, 1);
-   if (!err) err = map(exports, "menu", 1, make_menu(caller), 0);
-   if (!err) err = map(exports, "code-status", 1, CODE_STATUS, 1);
+   err = map(exports, "version", 1, html_encode(VERSION), 0);
+   if (!err) err = map(exports, "my-ip-address", 1, html_encode(csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown"), 0);
+   if (!err) err = map(exports, "my-hostname",   1, html_encode(csp->my_hostname ? csp->my_hostname : "unknown"), 0);
+   if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
+   if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
+   if (!err) err = map(exports, "menu",          1, make_menu(caller), 0);
+   if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
    if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
 
    snprintf(buf, 20, "%d", csp->config->hport);
@@ -1387,7 +1418,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
 
    if (csp->config->admin_address != NULL)
    {
-      if (!err) err = map(exports, "admin-address", 1, csp->config->admin_address, 1);
+      if (!err) err = map(exports, "admin-address", 1, html_encode(csp->config->admin_address), 0);
       local_help_exists = 1;
    }
    else
@@ -1397,7 +1428,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
 
    if (csp->config->proxy_info_url != NULL)
    {
-      if (!err) err = map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
+      if (!err) err = map(exports, "proxy-info-url", 1, html_encode(csp->config->proxy_info_url), 0);
       local_help_exists = 1;
    }
    else
@@ -1447,6 +1478,44 @@ jb_err map_block_killer(struct map *exports, const char *name)
    assert(strlen(name) < 490);
 
    snprintf(buf, 1000, "if-%s-start.*if-%s-end", name, name);
+   return map(exports, buf, 1, "", 1);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  map_block_keep
+ *
+ * Description :  Convenience function.  Removes the markers used
+ *                by map-block-killer, to save a few bytes.
+ *                i.e. removes "@if-<name>-start@" and "@if-<name>-end@"
+ *
+ * Parameters  :  
+ *          1  :  exports = map to extend
+ *          2  :  name = name of conditional block
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err map_block_keep(struct map *exports, const char *name)
+{
+   jb_err err;
+   char buf[500]; /* Will do, since the names are hardwired */
+
+   assert(exports);
+   assert(name);
+   assert(strlen(name) < 490);
+
+   snprintf(buf, 500, "if-%s-start", name);
+   err = map(exports, buf, 1, "", 1);
+
+   if (err)
+   {
+      return err;
+   }
+
+   snprintf(buf, 500, "if-%s-end", name);
    return map(exports, buf, 1, "", 1);
 }
 
@@ -1510,14 +1579,13 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  *
  * Parameters  :  self = name of CGI to leave out, can be NULL
  *
- * Returns     :  menu string
+ * Returns     :  menu string, or NULL on out-of-memory error.
  *
  *********************************************************************/
 char *make_menu(const char *self)
 {
    const struct cgi_dispatcher *d;
-   char buf[BUFFER_SIZE];
-   char *result = NULL;
+   char *result = strdup("");
 
    if (self == NULL)
    {
@@ -1529,13 +1597,15 @@ char *make_menu(const char *self)
    {
       if (d->description && strcmp(d->name, self))
       {
-         snprintf(buf, BUFFER_SIZE, "<li><a href=\"%s%s\">%s</a></li>\n",
-   	       CGI_PREFIX, d->name, d->description);
-         result = strsav(result, buf);
+         string_append(&result, "<li><a href=\"" CGI_PREFIX);
+         string_append(&result, d->name);
+         string_append(&result, "\">");
+         string_append(&result, d->description);
+         string_append(&result, "</a></li>\n");
       }
    }
-   return(result);
 
+   return result;
 }
 
 
@@ -1553,24 +1623,24 @@ char *make_menu(const char *self)
  *********************************************************************/
 char *dump_map(const struct map *the_map)
 {
-   struct map_entry *cur_entry = the_map->first;
-   char *ret = NULL;
+   struct map_entry *cur_entry;
+   char *ret = strdup("");
 
-   ret = strsav(ret, "<table>\n");
+   string_append(&ret, "<table>\n");
 
-   while (cur_entry)
+   for (cur_entry = the_map->first;
+        (cur_entry != NULL) && (ret != NULL);
+        cur_entry = cur_entry->next)
    {
-      ret = strsav(ret, "<tr><td><b>");
-      ret = strsav(ret, cur_entry->name);
-      ret = strsav(ret, "</b></td><td>");
-      ret = strsav(ret, cur_entry->value);
-      ret = strsav(ret, "</td></tr>\n");
-      cur_entry = cur_entry->next;
+      string_append(&ret, "<tr><td><b>");
+      string_join  (&ret, html_encode(cur_entry->name));
+      string_append(&ret, "</b></td><td>");
+      string_join  (&ret, html_encode(cur_entry->value));
+      string_append(&ret, "</td></tr>\n");
    }
 
-   ret = strsav(ret, "</table>\n");
-   return(ret);
-
+   string_append(&ret, "</table>\n");
+   return ret;
 }
 
 
