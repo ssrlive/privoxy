@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.23 2001/07/20 15:51:54 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.24 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,12 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.23 2001/07/20 15:51:54 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.24  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.23  2001/07/20 15:51:54  oes
  *    Fixed indentation of prepocessor commands
  *
@@ -835,7 +841,10 @@ static void unload_re_filterfile(void *f)
 {
    struct re_filterfile_spec *b = (struct re_filterfile_spec *)f;
 
-   if (b == NULL) return;
+   if (b == NULL)
+   {
+      return;
+   }
 
    destroy_list(b->patterns);
    pcrs_free_joblist(b->joblist);
