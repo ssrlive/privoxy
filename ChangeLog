@@ -6,11 +6,12 @@ ChangeLog for Privoxy
 - Makefile fixes for Solaris, FreeBSD (?)
 - Fix build failure where certain features were disabled.
 - 'blocked-compact' template is removed. Various CGI improvements,
-including a scalable 'blocked' template (?).
+  including an adaptive 'blocked' template.
 - Various tweaks for actions file to get ready for stable 3.0
-- Included a 'Bookmarklet' for reporting actions file problems 
-via web interface at privoxy.org. Accessed via internal CGIs.
+- Included a 'Bookmarklet' and PHP scripts for reporting actions file
+  problems via web interface at privoxy.org. Accessed via internal CGIs.
 - Include cgi-style.css for templates.
+- #include mechansim for common text in templates
 - Various other minor fixes.
 
 *** Version 2.9.13 Beta *** 
