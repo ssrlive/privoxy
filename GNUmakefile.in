@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.3 2002/01/04 14:45:48 oes Exp $
+# $Id: GNUmakefile.in,v 1.3 2002/01/04 15:26:08 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.3  2002/01/04 15:26:08  oes
+# Added tarball-src target
+#
 # Revision 1.2  2001/12/30 14:07:31  steudten
 # - Add signal handling (unix)
 # - Add SIGHUP handler (unix)
@@ -264,7 +267,8 @@ RPM_BASE = /usr/src/redhat
 
 C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
          errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
-         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c
+         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
+         urlmatch.c
 
 C_OBJS = $(C_SRC:.c=.@OBJEXT@)
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
@@ -538,6 +542,7 @@ loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h 
 miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
 parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
+urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h

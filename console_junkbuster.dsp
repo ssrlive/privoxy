@@ -259,6 +259,14 @@ SOURCE=.\parsers.h
 
 SOURCE=.\project.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\urlmatch.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\urlmatch.h
+# End Source File
 # End Group
 # Begin Group "Win32"
 
