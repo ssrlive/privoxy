@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.2 2001/06/07 23:06:09 jongfoster Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.3 2001/07/29 19:01:11 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.3  2001/07/29 19:01:11  jongfoster
+ *    Changed _FILENAME_H to FILENAME_H_INCLUDED.
+ *    Added forward declarations for needed structures.
+ *
  *    Revision 1.2  2001/06/07 23:06:09  jongfoster
  *    The host parameter to connect_to() is now const.
  *
@@ -54,14 +58,14 @@ extern "C" {
 struct client_state;
 
 extern int connect_to(const char *host, int portnum, struct client_state *csp);
-extern int write_socket(int fd, const char *buf, int n);
-extern int read_socket(int fd, char *buf, int n);
+extern size_t write_socket(int fd, const char *buf, size_t n);
+extern size_t read_socket(int fd, char *buf, size_t n);
 extern void close_socket(int fd);
 
 extern int bind_port(const char *hostnam, int portnum);
 extern int accept_connection(struct client_state * csp, int fd);
 
-extern int resolve_hostname_to_ip(const char *host);
+extern unsigned long resolve_hostname_to_ip(const char *host);
 
 /* Revision control strings from this header and associated .c file */
 extern const char jbsockets_rcs[];

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.22 2002/03/04 02:08:02 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.23 2002/03/05 00:36:01 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.22 2002/03/04 02:08:02 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.23  2002/03/05 00:36:01  jongfoster
+ *    Fixing bug 514988 - unable to restart JunkBuster
+ *
  *    Revision 1.22  2002/03/04 02:08:02  david__schmidt
  *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
  *
@@ -198,14 +201,14 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
 
    memset((char *)&inaddr, 0, sizeof inaddr);
 
-   if ((addr = resolve_hostname_to_ip(host)) == -1)
+   if ((addr = resolve_hostname_to_ip(host)) == INADDR_NONE)
    {
       csp->http->host_ip_addr_str = strdup("unknown");
       return(-1);
    }
 
 #ifdef FEATURE_ACL
-   dst->addr = ntohl(addr);
+   dst->addr = ntohl((unsigned long) addr);
    dst->port = portnum;
 
    if (block_acl(dst, csp))
@@ -227,12 +230,12 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
    if (sizeof(inaddr.sin_port) == sizeof(short))
 #endif /* ndef _WIN32 */
    {
-      inaddr.sin_port = htons((short)portnum);
+      inaddr.sin_port = htons((unsigned short) portnum);
    }
 #ifndef _WIN32
    else
    {
-      inaddr.sin_port = htonl(portnum);
+      inaddr.sin_port = htonl((unsigned long)portnum);
    }
 #endif /* ndef _WIN32 */
 
@@ -321,12 +324,8 @@ int connect_to(const char *host, int portnum, struct client_state *csp)
  *                indicated by len. Otherwise, returns (-1).
  *
  *********************************************************************/
-int write_socket(int fd, const char *buf, int len)
+size_t write_socket(int fd, const char *buf, size_t len)
 {
-#ifdef __OS2__
-#define SOCKET_SEND_MAX 65000
-   int write_len = 0, send_len, send_rc = 0, i = 0;
-#endif /* __OS2__ */
    if (len <= 0)
    {
       return(0);
@@ -335,26 +334,30 @@ int write_socket(int fd, const char *buf, int len)
    log_error(LOG_LEVEL_LOG, "%N", len, buf);
 
 #if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
-   return( send(fd, buf, len, 0));
+   return(send(fd, buf, len, 0));
 #elif defined(__OS2__)
    /*
     * Break the data up into SOCKET_SEND_MAX chunks for sending...
     * OS/2 seemed to complain when the chunks were too large.
     */
-   while ((i < len) && (send_rc != -1))
+#define SOCKET_SEND_MAX 65000
    {
-      if ((i + SOCKET_SEND_MAX) > len)
-         send_len = len - i;
-      else
-         send_len = SOCKET_SEND_MAX;
-      send_rc = send(fd,(char*)buf + i, send_len, 0);
-      if (send_rc == -1)
-        return(0);
-      i = i + send_len;
+      int write_len = 0, send_len, send_rc = 0, i = 0;
+      while ((i < len) && (send_rc != -1))
+      {
+         if ((i + SOCKET_SEND_MAX) > len)
+            send_len = len - i;
+         else
+            send_len = SOCKET_SEND_MAX;
+         send_rc = send(fd,(char*)buf + i, send_len, 0);
+         if (send_rc == -1)
+            return(0);
+         i = i + send_len;
    }
    return len;
+   }
 #else
-   return( write(fd, buf, len));
+   return(write(fd, buf, len));
 #endif
 
 }
@@ -385,7 +388,7 @@ int write_socket(int fd, const char *buf, int len)
  *                any) changes.
  *
  *********************************************************************/
-int read_socket(int fd, char *buf, int len)
+size_t read_socket(int fd, char *buf, size_t len)
 {
    if (len <= 0)
    {
@@ -393,9 +396,9 @@ int read_socket(int fd, char *buf, int len)
    }
 
 #if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
-   return( recv(fd, buf, len, 0));
+   return(recv(fd, buf, len, 0));
 #else
-   return( read(fd, buf, len));
+   return(read(fd, buf, len));
 #endif
 }
 
@@ -439,7 +442,9 @@ void close_socket(int fd)
  *          2  :  portnum = port to listen on
  *
  * Returns     :  if success, return file descriptor
- *                if failure, returns -2 if address is in use, otherwise -1
+ *                if failure, returns -3 if address is in use,
+ *                                    -2 if address unresolvable,
+ *                                    -1 otherwise
  *
  *********************************************************************/
 int bind_port(const char *hostnam, int portnum)
@@ -455,16 +460,21 @@ int bind_port(const char *hostnam, int portnum)
    inaddr.sin_family      = AF_INET;
    inaddr.sin_addr.s_addr = resolve_hostname_to_ip(hostnam);
 
+   if (inaddr.sin_addr.s_addr == INADDR_NONE)
+   {
+      return(-2);
+   }
+
 #ifndef _WIN32
    if (sizeof(inaddr.sin_port) == sizeof(short))
 #endif /* ndef _WIN32 */
    {
-      inaddr.sin_port = htons((short)portnum);
+      inaddr.sin_port = htons((unsigned short) portnum);
    }
 #ifndef _WIN32
    else
    {
-      inaddr.sin_port = htonl(portnum);
+      inaddr.sin_port = htonl((unsigned long) portnum);
    }
 #endif /* ndef _WIN32 */
 
@@ -484,6 +494,9 @@ int bind_port(const char *hostnam, int portnum)
     * to start JunkBuster multiple times on the same IP.
     * Without this, stopping and restarting JunkBuster
     * from a script fails.
+    * Note: SO_REUSEADDR is meant to only take over
+    * sockets which are *not* in listen state in Linux,
+    * e.g. sockets in TIME_WAIT. YMMV.
     */
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
@@ -497,7 +510,7 @@ int bind_port(const char *hostnam, int portnum)
       if (errno == EADDRINUSE)
 #endif
       {
-         return(-2);
+         return(-3);
       }
       else
       {
@@ -538,7 +551,8 @@ int accept_connection(struct client_state * csp, int fd)
 {
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
-   int afd, c_length, s_length;
+   int afd;
+   size_t c_length, s_length;
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
 #if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
@@ -621,10 +635,10 @@ int accept_connection(struct client_state * csp, int fd)
  * Parameters  :
  *          1  :  host = hostname to resolve
  *
- * Returns     :  -1 => failure, INADDR_ANY or tcp/ip address if succesful.
+ * Returns     :  INADDR_NONE => failure, INADDR_ANY or tcp/ip address if succesful.
  *
  *********************************************************************/
-int resolve_hostname_to_ip(const char *host)
+unsigned long resolve_hostname_to_ip(const char *host)
 {
    struct sockaddr_in inaddr;
    struct hostent *hostp;
@@ -668,7 +682,8 @@ int resolve_hostname_to_ip(const char *host)
       if (hostp == NULL)
       {
          errno = EINVAL;
-         return(-1);
+         log_error(LOG_LEVEL_ERROR, "could not resolve hostname %s", host);
+         return(INADDR_NONE);
       }
       if (hostp->h_addrtype != AF_INET)
       {
@@ -677,7 +692,8 @@ int resolve_hostname_to_ip(const char *host)
 #else
          errno = EPROTOTYPE;
 #endif 
-         return(-1);
+         log_error(LOG_LEVEL_ERROR, "hostname %s resolves to unknown address type.", host);
+         return(INADDR_NONE);
       }
       memcpy(
          (char *) &inaddr.sin_addr,
