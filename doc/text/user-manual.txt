@@ -59,14 +59,14 @@ Table of Contents
    
     8.1. Configuration and Log File Locations
        
-        8.1.1. confdir
-        8.1.2. logdir
-        8.1.3. actionsfile
-        8.1.4. filterfile
-        8.1.5. logfile
-        8.1.6. jarfile
-        8.1.7. trustfile
-        8.1.8. user-manual
+        8.1.1. user-manual
+        8.1.2. confdir
+        8.1.3. logdir
+        8.1.4. actionsfile
+        8.1.5. filterfile
+        8.1.6. logfile
+        8.1.7. jarfile
+        8.1.8. trustfile
        
     8.2. Local Set-up Documentation
        
@@ -519,11 +519,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ??  View & change the current configuration                            
-        ??  View the source code version numbers                               
-        ??  View the request headers.                                          
-        ??  Look up which actions apply to a URL and why                       
-        ??  Toggle Privoxy on or off                                           
+        ?  View & change the current configuration                             
+        ?  View the source code version numbers                                
+        ?  View the request headers.                                           
+        ?  Look up which actions apply to a URL and why                        
+        ?  Toggle Privoxy on or off                                            
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -627,9 +627,50 @@ Privoxy can (and normally does) use a number of other files for additional
 configuration, help and logging. This section of the configuration file tells
 Privoxy where to find those other files.
 
+The user running Privoxy, must have read permission for all configuration
+files, and write permission to any files that would be modified, such as log
+files.
+
 -------------------------------------------------------------------------------
 
-8.1.1. confdir
+8.1.1. user-manual
+
+Specifies:
+   
+    Location of the Privoxy User Manual.
+   
+Type of value:
+   
+    A fully qualified URI
+   
+Default value:
+   
+    http://www.privoxy.org/user-manual/
+   
+Effect if unset:
+   
+    The default will be used.
+   
+Notes:
+   
+    The User Manual is used for help hints from some of the internal CGI pages.
+    It is normally packaged with the binary distributions, and would make more
+    sense to have this pointed at a locally installed copy.
+   
+    A more useful example (Unix):
+   
+      user-manual  file:///usr/share/doc/privoxy-2.9.14/user-manual/
+   
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |If this option is defined, it must come first! It is needed      |
+    |before the rest of config is read.                               |
+    +-----------------------------------------------------------------+
+
+-------------------------------------------------------------------------------
+
+8.1.2. confdir
 
 Specifies:
    
@@ -659,7 +700,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-8.1.2. logdir
+8.1.3. logdir
 
 Specifies:
    
@@ -684,7 +725,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-8.1.3. actionsfile
+8.1.4. actionsfile
 
 Specifies:
    
@@ -721,7 +762,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-8.1.4. filterfile
+8.1.5. filterfile
 
 Specifies:
    
@@ -750,7 +791,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-8.1.5. logfile
+8.1.6. logfile
 
 Specifies:
    
@@ -786,9 +827,12 @@ Notes:
     644 nobody.nogroup" in /etc/logfiles, with the effect that cron.daily will
     automatically archive, gzip, and empty the log, when it exceeds 1M size.
    
+    Any log files must be writable by whatever user Privoxy is being run as
+    (default on UNIX, user id is "privoxy").
+   
 -------------------------------------------------------------------------------
 
-8.1.6. jarfile
+8.1.7. jarfile
 
 Specifies:
    
@@ -812,7 +856,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-8.1.7. trustfile
+8.1.8. trustfile
 
 Specifies:
    
@@ -844,36 +888,6 @@ Notes:
    
     If you use + operator in the trust file, it may grow considerably over
     time.
-   
--------------------------------------------------------------------------------
-
-8.1.8. user-manual
-
-Specifies:
-   
-    Location of the Privoxy User Manual.
-   
-Type of value:
-   
-    A fully qualified URI
-   
-Default value:
-   
-    http://www.privoxy.org/user-manual/
-   
-Effect if unset:
-   
-    The default will be used.
-   
-Notes:
-   
-    The User Manual is used for help hints from some of the internal CGI pages.
-    It is normally packaged with the binary distributions, and would make more
-    sense to have this pointed at a locally installed copy.
-   
-    A more useful example (Unix):
-   
-      user-manual  file:///usr/share/doc/privoxy-2.9.14/user-manual/
    
 -------------------------------------------------------------------------------
 
@@ -3389,7 +3403,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
-  Final results:                                                                   
+ Final results:                                                                    
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3404,7 +3418,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3430,7 +3444,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
-  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
+ Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3449,7 +3463,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
-  { -block }                                                                   
+ { -block }                                                                    
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3458,7 +3472,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3468,7 +3482,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
-  {shop}                                                                       
+ {shop}                                                                        
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3478,7 +3492,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
-  {-filter}                                                                    
+ {-filter}                                                                     
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site

@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.99 2002/04/28 16:59:05 swa Exp $
+ $Id: user-manual.sgml,v 1.100 2002/04/29 03:05:55 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.99 2002/04/28 16:59:05 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.100 2002/04/29 03:05:55 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -946,6 +946,66 @@ must find a better place for this paragraph
  where to find those other files. 
 </para>
 
+<para>
+ The user running Privoxy, must have read permission for all 
+ configuration files, and write permission to any files that would 
+ be modified, such as log files.
+</para>
+
+<sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Location of the <application>Privoxy</application> User Manual.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>A fully qualified URI</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    The default will be used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The User Manual is used for help hints from some of the internal CGI pages. 
+    It is normally packaged with the binary distributions, and would make more 
+    sense to have this pointed at a locally installed copy.
+   </para>
+   <para>
+    A more useful example (Unix):
+   </para>
+  <para> 
+   &nbsp;&nbsp;<emphasis>user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</emphasis>
+  </para>
+  <warning>
+   <para>
+    If this option is defined, it must come first! It is needed before the rest of 
+    <filename>config</filename> is read.
+   </para>
+  </warning>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
 
 <sect3 renderas="sect4" id="confdir"><title>confdir</title>
 
@@ -1208,6 +1268,10 @@ actionsfile
     the effect that cron.daily will automatically archive, gzip, and empty the
     log, when it exceeds 1M size.
    </para>
+   <para>
+    Any log files must be writable by whatever user <application>Privoxy</application>
+    is being run as (default on UNIX, user id is <quote>privoxy</quote>).
+   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -1304,55 +1368,6 @@ actionsfile
    <para>
     If you use <literal>+</literal> operator in the trust file, it may grow considerably over time.
    </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-<sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    Location of the <application>Privoxy</application> User Manual.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>A fully qualified URI</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para><ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink></para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    The default will be used.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    The User Manual is used for help hints from some of the internal CGI pages. 
-    It is normally packaged with the binary distributions, and would make more 
-    sense to have this pointed at a locally installed copy.
-   </para>
-   <para>
-    A more useful example (Unix):
-   </para>
-  <para> 
-   &nbsp;&nbsp;<emphasis>user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</emphasis>
-  </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -5816,6 +5831,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.100  2002/04/29 03:05:55  hal9
+ Add clarification on differences of new actions files.
+
  Revision 1.99  2002/04/28 16:59:05  swa
  more structure in starting section
 
