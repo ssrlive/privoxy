@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.6 2001/07/31 14:44:51 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.7 2001/08/05 16:06:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,13 @@ const char list_rcs[] = "$Id: list.c,v 1.6 2001/07/31 14:44:51 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.7  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.6  2001/07/31 14:44:51  oes
  *    list_to_text() now appends empty line at end
  *
@@ -94,6 +101,7 @@ const char list_rcs[] = "$Id: list.c,v 1.6 2001/07/31 14:44:51 oes Exp $";
 #include "miscutil.h"
 
 const char list_h_rcs[] = LIST_H_VERSION;
+
 
 /*********************************************************************
  *
@@ -226,8 +234,8 @@ void enlist_unique(struct list *header, const char *str, int n)
  *
  * Parameters  :
  *          1  :  header = pointer to list 'dummy' header
- *          2  :  first = first string to add to the list (maybe NULL)
- *          3  :  second = number of chars to use for uniqueness test
+ *          2  :  name = name of header to be added
+ *          3  :  value = value of header to be added
  *
  * Returns     :  N/A
  *
@@ -534,6 +542,7 @@ void map(struct map *the_map, const char *name, int nc, const char *value, int v
    {
       the_map->last = the_map->first = new_entry;
    }
+
 }
 
 
