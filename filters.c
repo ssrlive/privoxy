@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.20 2001/07/01 17:01:04 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.21 2001/07/13 13:59:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,14 @@ const char filters_rcs[] = "$Id: filters.c,v 1.20 2001/07/01 17:01:04 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.21  2001/07/13 13:59:53  oes
+ *     - Introduced gif_deanimate_response which shares the
+ *       generic content modification interface of pcrs_filter_response
+ *       and acts as a wrapper to deanimate.c:gif_deanimate()
+ *     - Renamed re_process_buffer to pcrs_filter_response
+ *     - pcrs_filter_response now returns NULL on failiure
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.20  2001/07/01 17:01:04  oes
  *    Added comments and missing return statement in is_untrusted_url()
  *
@@ -955,16 +963,16 @@ char *gif_deanimate_response(struct client_state *csp)
    if (  (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
       || (NULL == (out = (struct binbuffer *)zalloc(sizeof *out))) )
    {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (No Mem!)");
+      log_error(LOG_LEVEL_DEANIMATE, "failed! (no mem)");
       return NULL;
    }
 
    in->buffer = csp->iob->cur;
    in->size = size;
 
-   if (gif_deanimate(in, out))
+   if (gif_deanimate(in, out, strncmp("last", csp->action->string[ACTION_STRING_DEANIMATE], 4)))
    {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (size %d)", size);
+      log_error(LOG_LEVEL_DEANIMATE, "failed! (gif parsing)");
       free(in);
       buf_free(out);
       return(NULL);
