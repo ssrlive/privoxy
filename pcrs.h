@@ -5,27 +5,15 @@
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.h,v $
  *
- * Purpose     :  This is the pre-pre-alpha realease of libpcrs. It is only
- *                published at this (ugly) stage of development, because it is
- *                needed for a new feature in JunkBuster.
+ * Purpose     :  Header file for pcrs.c
  *
- *                Apart from the code being quite a mess, no inconsistencies,
- *                memory leaks or functional bugs **should** be present.
- *
- *                While you ROTFL at the code, you could just as well mail me
- *                (oes@paradis.rhein.de) with advice for improvement.
- *
- *                pcrs is a supplement to the brilliant pcre library by Philip
- *                Hazel (ph10@cam.ac.uk) and adds Perl-style substitution. That
- *                is, it mimics Perl's 's' operator.
- *
- *                Currently, there's no documentation besides comments and the
- *                source itself ;-)
- *
- * Copyright   :  Written and copyright 2001 by Sourceforge IJBSWA team.
+ * Copyright   :  see pcrs.c
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.7  2001/08/05 13:13:11  jongfoster
+ *    Making parameters "const" where possible.
+ *
  *    Revision 1.6  2001/07/29 18:52:06  jongfoster
  *    Renaming _PCRS_H, and adding "extern C {}"
  *
@@ -60,7 +48,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.6 2001/07/29 18:52:06 jongfoster Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.8 2001/08/15 15:26:58 oes Exp $"
 
 
 #include <pcre.h>
@@ -77,8 +65,9 @@ extern "C" {
 #define TRUE 1
 
 /* Capacity */
-#define PCRS_MAX_MATCHES 300
-#define PCRS_MAX_SUBMATCHES 33
+#define PCRS_MAX_SUBMATCHES  33     /* Maximum number of capturing subpatterns allowed. FIXME: Should be dynamic */
+#define PCRS_MAX_MATCH_INIT  40     /* Initial amount of matches that can be stored in global searches */
+#define PCRS_MAX_MATCH_GROW  1.5    /* Factor by which storage for matches is extended if exhausted */
 
 /* Error codes */
 #define PCRS_ERR_NOMEM     -10      /* Failed to acquire memory. */
@@ -88,14 +77,16 @@ extern "C" {
 
 /* Flags */
 #define PCRS_GLOBAL          1      /* Job should be applied globally, as with perl's g option */
-#define PCRS_SUCCESS         2      /* Job did previously match */
-#define PCRS_TRIVIAL         4      /* Backreferences in the substitute are ignored */
+#define PCRS_TRIVIAL         2      /* Backreferences in the substitute are ignored */
+#define PCRS_SUCCESS         4      /* Job did previously match */
+
 
 /*
  * Data types:
  */
 
 /* A compiled substitute */
+
 typedef struct PCRS_SUBSTITUTE {
   char *text;                               /* The plaintext part of the substitute, with all backreferences stripped */
   int backrefs;                             /* The number of backreferences */
@@ -105,19 +96,27 @@ typedef struct PCRS_SUBSTITUTE {
   int backref_count[PCRS_MAX_SUBMATCHES];   /* Array with the number of reference to each backref index */
 } pcrs_substitute;
 
+/*
+ * A match, including all captured subpatterns (submatches)
+ * Note: The zeroth is the whole match, the PCRS_MAX_SUBMATCHES + 1st
+ * is the range before the match, the PCRS_MAX_SUBMATCHES + 2nd is the
+ * range after the match.
+ */
+
 typedef struct PCRS_MATCH {
-  /* char *buffer; */
-  int submatches;                           /* Number of submatches. Note: The zeroth is the whole match */
-  int submatch_offset[PCRS_MAX_SUBMATCHES]; /* Offset for each submatch in the subject */
-  int submatch_length[PCRS_MAX_SUBMATCHES]; /* Length of each submatch in the subject */
+  int submatches;                               /* Number of submatches */
+  int submatch_offset[PCRS_MAX_SUBMATCHES + 2]; /* Offset for each submatch in the subject */
+  int submatch_length[PCRS_MAX_SUBMATCHES + 2]; /* Length of each submatch in the subject */
 } pcrs_match;
+
+/* A pcrs job */
 
 typedef struct PCRS_JOB {
   pcre *pattern;                            /* The compiled pcre pattern */
   pcre_extra *hints;                        /* The pcre hints for the pattern */
   int options;                              /* The pcre options (numeric) */
   int flags;                                /* The pcrs and user flags (see "Flags" above) */
-  pcrs_substitute *substitute;              /* The compiles pcrs substitute */
+  pcrs_substitute *substitute;              /* The compiled pcrs substitute */
   struct PCRS_JOB *next;                    /* Pointer for chaining jobs to joblists */
 } pcrs_job;
 
@@ -135,8 +134,8 @@ extern pcrs_job        *pcrs_free_job(pcrs_job *job);
 extern void             pcrs_free_joblist(pcrs_job *joblist);
 
 /* Expert usage */
-extern int              pcrs_compile_perl_options(const char *optstring, int *flags);
-extern pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int *errptr);
+extern int              pcrs_parse_perl_options(const char *optstring, int *flags);
+extern pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int capturecount, int *errptr);
 
 #ifdef __cplusplus
 } /* extern "C" */
