@@ -251,6 +251,11 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
              <td>Allows the +no-popups action, to block JavaScript popups.</td>
           </tr>
           <tr>
+             <td><code>FEATURE_NO_GIFS</code></td>
+             <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
+             <td>Use PNG instead of GIF for the built-in images.</td>
+          </tr>
+          <tr>
              <td><code>FEATURE_PTHREAD</code></td>
              <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
              <td>Use POSIX threads rather than native threads</td>
