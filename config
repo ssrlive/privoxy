@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.12 2001/06/04 10:44:57 swa Exp $
+# $Id: config,v 1.13 2001/06/04 18:31:58 swa Exp $
 #
 
 #  Table of Contents
@@ -129,34 +129,6 @@ logfile      logfile
 #
 #jarfile     jarfile
 
-#
-#  The forwardfile defines domain-specific forwarding of HTTP
-#  requests.  In some cases, you may want Junkbuster to forward your
-#  request to another proxy instead of trying to fetch the request
-#  itself.  In those cases, you can use the forwardfile to indicate
-#  which requests should be forwarded and to where.
-#
-#  Default: Make all connections directly.
-#
-forwardfile   forward
-
-#
-#  Generally, Junkbuster is used as a personal proxy.  The default
-#  behaviour of Junkbuster is to listen on port 8000 on the "loopback"
-#  interface, so that it will only listen to local requests from the
-#  same machine.  Using 'listen-address' (see below) you can serve
-#  requests from other machines as well.
-#
-#  In that case, it is a wise thing to define access control lists
-#  (acls), which state who can connect to your proxy and what service
-#  they will be given. Note that setting the listen-address to an IP
-#  address that is only internally reachable from your local network
-#  might already do the trick.
-#
-#  Default: No access control. Everybody that can reach junkbuster
-#           will be served.
-#
-#aclfile   aclfile
 
 #
 #  4. OPTIONS
@@ -272,8 +244,220 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #
 toggle 1
 
+
+#############################################################################
+# Access Control List
+#############################################################################
 #
+# Access controls are included at the request of some ISPs and systems
+# administrators, and are not usually needed by individual users.
+# Please note the warnings in the FAQ that this proxy is not
+# intended to be a substitute for a firewall or to encourage anyone
+# to defer addressing basic security weaknesses.
+# For details see the documentation
+#
+# If no access settings are specified, the proxy talks to anyone that
+# connects.  If any access settings file are specified, then the proxy
+# talks only to IP addresses permitted somewhere in this file and not
+# denied later in this file.
+#
+# Summary -- if using an ACL:
+#
+#  Client must have permission to receive service
+#  LAST match in ACL wins
+#  Default behavior is to deny service
+#
+# Syntax for an entry in the Access Control List is:
+#
+# ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
+#
+# where the fields are
+#
+# ACTION      = "permit-access" | "deny-access"
+#
+# SRC_ADDR    = client hostname or dotted IP address
+# SRC_MASKLEN = number of bits in the subnet mask for the source
+#
+# DST_ADDR    = server or forwarder hostname or dotted IP address
+# DST_MASKLEN = number of bits in the subnet mask for the target
+#
+# field separator (FS) is whitespace (space or tab)
+#
+# IMPORTANT NOTE
+# ==============
+# If the junkbuster is using a forwarder or a gateway for a particular 
+# destination URL, the DST_ADDRR that is examined is the address of
+# the forwarder or the gateway and NOT the address of the ultimate target.
+# This is necessary because it may be impossible for the local
+# junkbuster to determine the address of the ultimate target
+# (that's often what gateways are used for).
+#
+# Here are a few examples to show how the ACL works:
+#
+# localhost is OK --  no DST_ADDR implies that ALL destination addresses are OK
+# permit-access localhost
+#
+# a silly example to illustrate:
+#
+# permit any host on the class-C subnet with junkbusters to go anywhere
+#
+# permit-access www.junkbusters.com/24
+#
+# except deny one particular IP address from using it at all
+#
+# deny-access      ident.junkbusters.com
+#
+# another example
+#
+# You can specify an explicit network address and subnet mask.
+# Explicit addresses do not have to be resolved to be used.
+#
+# permit-access 207.153.200.0/24
+#
+# a subnet mask of 0 matches anything, so the next line permits everyone.
+#
+# permit-access 0.0.0.0/0
+#
+# Note:  you cannot say
+#
+# permit-access .org
+#
+# to allow all .org domains; every IP-address listed must resolve fully.
+#
+# An ISP may want to provide a junkbuster that is accessible by "the world"
+# and yet restrict use of some of their private content to hosts on its
+# internal network (i.e. its own subscribers).  Say, for instance the
+# ISP owns the Class-B IP address block 123.124.0.0 (a 16 bit netmask).
+# This is how they could do it:
+#
+# permit-access 0.0.0.0/0   0.0.0.0/0   # other clients can go anywhere 
+#                                       # with the following exceptions:
+#
+# deny-access   0.0.0.0/0   123.124.0.0/16 # block all external requests for
+#                                          # sites on the ISP's network
+#
+# permit 0.0.0.0/0   www.my_isp.com # except for the ISP's main web site
+#
+# permit 123.124.0.0/16 0.0.0.0/0   # the ISP's clients can go anywhere
+#
+# Note that some hostnames may be listed with multiple IP addresses;
+# the primary value returned by gethostbyname() is used.
+#
+# Default: Anyone can access the proxy.
+
+
+#############################################################################
+# Forwarding
+#############################################################################
+#
+#
+# This feature allows routing of HTTP requests via multiple proxies.
+# It can be used to better protect privacy and confidentiality when
+# accessing specific domains by routing requests to those domains
+# to a special purpose filtering proxy such as lpwa.com
+#
+# It can also be used in an environment with multiple networks to route
+# requests via multiple gateways allowing transparent access to multiple
+# networks without having to modify browser configurations.
+#
+# Also specified here are SOCKS proxies.  We support SOCKS 4 and SOCKS 4A.
+# The difference is that SOCKS 4A will resolve the target hostname using
+# DNS on the SOCKS server, not our local DNS client.
+#
+# The syntax of each line is
+#
+# forward target_domain[:port] http_proxy_host[:port]
+# forward-socks4  target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]
+# forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]
+#
+# If http_proxy_host is ".", then requests are not forwarded to
+# a HTTP proxy but are made directly to the web servers.
+#
+# Lines are checked in turn, and the last match wins.
+#
+# There is an implicit line equivalent to the following, which specifies that
+# anything not finding a match on the list is to go out without forwarding
+# or gateway protocol; like so:
+#    forward .*	.  # implicit
+#
+# In the following common configuration, everything goes to Lucent's LPWA,
+# except SSL on port 443 (which it doesn't handle)
+#    forward .*    lpwa.com:8000
+#    forward :443 .
+#
+# See the FAQ for instructions on how to automate the login procedure for LPWA.
+# Some users have reported difficulties related to LPWA's use of . as the
+# last element of the domain, and have said that this can be fixed with this:
+#    forward lpwa.  lpwa.com:8000
+# (NOTE: the syntax for specifiying target_domain has changed since the
+# previous paragraph weas written - it will not work now.  More information
+# is welcome.)
+#
+# In this fictitious example, everything goes via an ISP's caching proxy,
+# except requests to that ISP:
+#
+# forward .* caching.myisp.net:8000
+# forward myisp.net .
+#
+# For the @home network, we're told the forwarding configuration is this:
+# forward .* proxy:8080
+# Also, we're told they insist on getting cookies and Javascript, so you need
+# to add home.com to the cookie file. We consider Javascript a security risk;
+# see our page on cookies. Java need not be enabled.
+#
+# In this example direct connections are made to all "internal" domains,
+# but everything else goes through Lucent's LPWA by way of the company's
+# SOCKS gateway to the Internet.
+#
+# forward_socks4 .* lpwa.com:8000 firewall.my_company.com:1080
+# forward my_company.com .
+#
+# This is how you could set up a site that always uses SOCKS but no forwarders
+#
+# forward_socks4a .* . firewall.my_company.com:1080
+#
+# An advanced example for network administrators:
+#
+# If you have links to multiple ISPs that provide various special content to
+# their subscribers, you can configure forwarding to pass requests to the
+# specific host that's connected to that ISP so that everybody can see all
+# of the content on all of the ISPs.
+#
+# This is tricky, but here's a sample:
+# 
+# host-a has a PPP connection to isp-a.com
+# host-b has a PPP connection to isp-b.com
+#
+# host-a can run an Internet Junkbuster proxy with forwarding like this:
+#   forward .* .
+#   forward isp-b.com host-b:8000
+#
+# host-b can run an Internet Junkbuster proxy with forwarding like this:
+#   forward .* .
+#   forward isp-a.com host-a:8000
+#
+# Now, *anyone* on the Internet (including users on host-a and host-b)
+# can set their browser's proxy to *either* host-a or host-b and
+# be able to browse the content on isp-a or isp-b.
+#
+#
+# Here's another practical example, for University of Kent at
+# Canterbury students with a network connection in their room, who
+# need to use the University's Squid web cache.
+#
+#   forward *. ssbcache.ukc.ac.uk:3128 # Use the proxy, except for:
+#   forward .ukc.ac.uk            . # Anything on the same domain as us
+#   forward *                     . # Host with no domain specified
+#   forward 129.12.*.*            . # A dotted IP on our /16 network.
+#   forward 128.*.*.*             . # Loopback address
+#   forward localhost.localdomain . # Loopback address
+#   forward www.ukc.mirror.ac.uk  . # Specific host
+#
+
+
+#############################################################################
 #  5. WINDOWS GUI OPTIONS
+#############################################################################
 #
 #  Junkbuster has a number of options specific to the Windows GUI
 #  interface:
@@ -343,12 +527,17 @@ toggle 1
 #
 #Win32-only: close-button-minimizes  1
 
+
+#
+#  This option is specific to the Win32 console version of JunkBuster:
+#
 #    hide-console
 #
 #    If this option is used, Junkbuster will disconnect from and hide 
 #    the command console.
 #
 #Win32-only: #hide-console
+
 
 # Note: Junkbuster is distributed under the GNU General Public License (GPL)
 #       For details, see http://www.gnu.org/copyleft/gpl.html
