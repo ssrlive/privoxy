@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.67 2002/04/30 12:02:07 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.68 2002/05/12 21:36:29 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.67 2002/04/30 12:02:07 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.68  2002/05/12 21:36:29  jongfoster
+ *    Correcting function comments
+ *
  *    Revision 1.67  2002/04/30 12:02:07  oes
  *    Nit: updated a comment
  *
@@ -1241,9 +1244,12 @@ jb_err cgi_error_bad_param(struct client_state *csp,
  *
  * Description :  Produce a copy of the string given as item,
  *                embedded in an HTML link to its corresponding
- *                section (item name in uppercase) in the configuration
+ *                section (item name in uppercase) in the actions
  *                chapter of the user manual, (whose URL is given in
  *                the config and defaults to our web site).
+ *
+ *                FIXME: I currently only work for actions, and would
+ *                       like to be generalized for other topics.
  *
  * Parameters  :  
  *          1  :  item = item (will NOT be free()d.) 
@@ -1254,7 +1260,7 @@ jb_err cgi_error_bad_param(struct client_state *csp,
  *                out-of-memory
  *
  *********************************************************************/
-char *add_help_link(const char *item, 
+char *add_help_link(const char *item,
                     struct configuration_spec *config)
 {
    char *result;
@@ -1263,7 +1269,7 @@ char *add_help_link(const char *item,
 
    result = strdup("<a href=\"");
    string_append(&result, config->usermanual);
-   string_append(&result, HELP_LINK_PREFIX);
+   string_append(&result, ACTIONS_HELP_PREFIX);
    string_join  (&result, string_toupper(item));
    string_append(&result, "\">");
    string_append(&result, item);
@@ -1825,7 +1831,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "menu",          1, make_menu(caller), 0);
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
    if (!err) err = map(exports, "user-manual",   1, csp->config->usermanual ,1);
-   if (!err) err = map(exports, "helplink",      1, HELP_LINK_PREFIX ,1);
+   if (!err) err = map(exports, "actions-help-prefix", 1, ACTIONS_HELP_PREFIX ,1);
    if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
 
    snprintf(buf, 20, "%d", csp->config->hport);
