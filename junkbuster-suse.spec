@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.13 2002/03/07 18:25:56 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.14 2002/03/07 19:10:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -25,53 +25,9 @@
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# $Log: junkbuster-suse.spec,v $
-# Revision 1.13  2002/03/07 18:25:56  swa
-# synced redhat and suse build process
-#
-# Revision 1.12  2002/03/02 15:50:04  swa
-# 2.9.11 version. more input for docs.
-#
-# Revision 1.11  2001/12/02 10:29:26  swa
-# New version made these changes necessary.
-#
-# Revision 1.10  2001/10/31 19:27:27  swa
-# consistent description. new name for suse since
-# we had troubles with rpms of identical names
-# on the webserver.
-#
-# Revision 1.9  2001/10/26 18:17:23  swa
-# new version string
-#
-# Revision 1.8  2001/09/13 16:22:42  swa
-# man page is legacy. suse rpm now contains html
-# documentation.
-#
-# Revision 1.7  2001/09/10 17:44:22  swa
-# integrate three pieces of documentation.
-#
-# Revision 1.6  2001/09/10 16:29:23  swa
-# binary contained debug info.
-# buildroot definition fucks up the build process under suse.
-# program needs to write in varlogjunkbuster
-# install all templates
-# create varlogjunkbuster
-#
-# Revision 1.5  2001/06/09 09:13:29  swa
-# description shorter
-#
-# Revision 1.4  2001/06/08 20:53:36  swa
-# use buildroot, export init to separate file (better manageability)
-#
-# Revision 1.3  2001/06/07 17:28:10  swa
-# cosmetics
-#
-# Revision 1.2  2001/06/07 17:18:44  swa
-# header fixed
-#
-#
 
-%define ijbconf %{_sysconfdir}/%{name}
+# do not set to %{name}
+%define ijbconf %{_sysconfdir}/junkbuster
 
 Summary:      The Internet Junkbuster
 Vendor:       http://ijbswa.sourceforge.net
@@ -278,3 +234,53 @@ sbin/insserv etc/init.d/
   (http://www.waldherr.org/junkbuster/)
 * Mon Mar 01 1999 - daniel@suse.de
 - new package: version 2.0
+
+# $Log: junkbuster-suse.spec,v $
+# Revision 1.14  2002/03/07 19:10:21  swa
+# builds cleanly. thanks to kukuk@suse.de
+# not yet tested.
+#
+# Revision 1.13  2002/03/07 18:25:56  swa
+# synced redhat and suse build process
+#
+# Revision 1.12  2002/03/02 15:50:04  swa
+# 2.9.11 version. more input for docs.
+#
+# Revision 1.11  2001/12/02 10:29:26  swa
+# New version made these changes necessary.
+#
+# Revision 1.10  2001/10/31 19:27:27  swa
+# consistent description. new name for suse since
+# we had troubles with rpms of identical names
+# on the webserver.
+#
+# Revision 1.9  2001/10/26 18:17:23  swa
+# new version string
+#
+# Revision 1.8  2001/09/13 16:22:42  swa
+# man page is legacy. suse rpm now contains html
+# documentation.
+#
+# Revision 1.7  2001/09/10 17:44:22  swa
+# integrate three pieces of documentation.
+#
+# Revision 1.6  2001/09/10 16:29:23  swa
+# binary contained debug info.
+# buildroot definition fucks up the build process under suse.
+# program needs to write in varlogjunkbuster
+# install all templates
+# create varlogjunkbuster
+#
+# Revision 1.5  2001/06/09 09:13:29  swa
+# description shorter
+#
+# Revision 1.4  2001/06/08 20:53:36  swa
+# use buildroot, export init to separate file (better manageability)
+#
+# Revision 1.3  2001/06/07 17:28:10  swa
+# cosmetics
+#
+# Revision 1.2  2001/06/07 17:18:44  swa
+# header fixed
+#
+#

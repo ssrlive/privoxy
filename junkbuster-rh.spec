@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.34 2002/03/07 00:11:57 morcego Exp $
+# $Id: junkbuster-rh.spec,v 1.36 2002/03/07 05:06:54 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -24,125 +24,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-# $Log: junkbuster-rh.spec,v $
-# Revision 1.34  2002/03/07 00:11:57  morcego
-# Few changes on the %pre and %post sections of the rh specfile to handle
-# usernames more cleanly
-#
-# Revision 1.33  2002/03/05 13:13:57  morcego
-# - Added "make redhat-dok" to the build phase
-# - Added docbook-utils to BuildRequires
-#
-# Revision 1.32  2002/03/05 12:34:24  morcego
-# - Changing section internaly on the manpage from 1 to 8
-# - We now require packages, not files, to avoid issues with apt
-#
-# Revision 1.31  2002/03/04 18:06:09  morcego
-# SPECFILE: fixing permissing of the init script (broken by the last change)
-#
-# Revision 1.30  2002/03/04 16:18:03  morcego
-# General cleanup of the rh specfile.
-#
-# %changelog
-# * Mon Mar 04 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
-# + junkbuster-2.9.11-2
-# - General specfile fixup, using the best recomended practices, including:
-#         - Adding -q to %%setup
-#         - Using macros whereever possible
-#         - Not using wildchars on %%files section
-#         - Doubling the percentage char on changelog and comments, to
-#           avoid rpm expanding them
-#
-# Revision 1.29  2002/03/03 19:21:22  hal9
-# Init script fails if shell is /bin/false.
-#
-# Revision 1.28  2002/01/09 18:34:03  hal9
-# nit.
-#
-# Revision 1.27  2002/01/09 18:32:02  hal9
-# Removed RPM_OPT_FLAGS kludge.
-#
-# Revision 1.26  2002/01/09 18:21:10  hal9
-# A few minor updates.
-#
-# Revision 1.25  2001/12/28 01:45:36  steudten
-# Add paranoia check and BuildReq: gzip
-#
-# Revision 1.24  2001/12/01 21:43:14  hal9
-# Allowed for new ijb.action file.
-#
-# Revision 1.23  2001/11/06 12:09:03  steudten
-# Compress doc files. Install README and AUTHORS at last as document.
-#
-# Revision 1.22  2001/11/05 21:37:34  steudten
-# Fix to include the actual version for name.
-# Let the 'real' packager be included - sorry stefan.
-#
-# Revision 1.21  2001/10/31 19:27:27  swa
-# consistent description. new name for suse since
-# we had troubles with rpms of identical names
-# on the webserver.
-#
-# Revision 1.20  2001/10/24 15:45:49  hal9
-# To keep Thomas happy (aka correcting my  mistakes)
-#
-# Revision 1.19  2001/10/15 03:23:59  hal9
-# Nits.
-#
-# Revision 1.17  2001/10/10 18:59:28  hal9
-# Minor change for init script.
-#
-# Revision 1.16  2001/09/24 20:56:23  hal9
-# Minor changes.
-#
-# Revision 1.13  2001/09/10 17:44:43  swa
-# integrate three pieces of documentation. needs work.
-# will not build cleanly under redhat.
-#
-# Revision 1.12  2001/09/10 16:25:04  swa
-# copy all templates. version updated.
-#
-# Revision 1.11  2001/07/03 11:00:25  sarantis
-# replaced permissionsfile with actionsfile
-#
-# Revision 1.10  2001/07/03 09:34:44  sarantis
-# bumped up version number.
-#
-# Revision 1.9  2001/06/12 18:15:29  swa
-# the %% in front of configure (see tag below) confused
-# the rpm build process on 7.1.
-#
-# Revision 1.8  2001/06/12 17:15:56  swa
-# fixes, because a clean build on rh6.1 was impossible.
-# GZIP confuses make, %% configure confuses rpm, etc.
-#
-# Revision 1.7  2001/06/11 12:17:26  sarantis
-# fix typo in %%post
-#
-# Revision 1.6  2001/06/11 11:28:25  sarantis
-# Further optimizations and adaptations in the spec file.
-#
-# Revision 1.5  2001/06/09 09:14:11  swa
-# shamelessly adapted RPM stuff from the newest rpm that
-# RedHat provided for the JB.
-#
-# Revision 1.4  2001/06/08 20:54:18  swa
-# type with status file. remove forward et. al from file list.
-#
-# Revision 1.3  2001/06/07 17:28:10  swa
-# cosmetics
-#
-# Revision 1.2  2001/06/04 18:31:58  swa
-# files are now prefixed with either `confdir' or `logdir'.
-# `make redhat-dist' replaces both entries confdir and logdir
-# with redhat values
-#
-# Revision 1.1  2001/06/04 10:44:57  swa
-# `make redhatr-dist' now works. Except for the paths
-# in the config file.
-#
-#
 #
 
 # Defines should happen in the begining of the file
@@ -537,3 +418,126 @@ fi
 	seeing one annoying ad.
 	junkbuster.init was modified. It now starts junkbuster with an
 	additional "-r @" flag.
+
+# $Log: junkbuster-rh.spec,v $
+# Revision 1.36  2002/03/07 05:06:54  morcego
+# Fixed %pre scriptlet. And, as a bonus, you can even understand it now. :-)
+#
+# Revision 1.34  2002/03/07 00:11:57  morcego
+# Few changes on the %pre and %post sections of the rh specfile to handle
+# usernames more cleanly
+#
+# Revision 1.33  2002/03/05 13:13:57  morcego
+# - Added "make redhat-dok" to the build phase
+# - Added docbook-utils to BuildRequires
+#
+# Revision 1.32  2002/03/05 12:34:24  morcego
+# - Changing section internaly on the manpage from 1 to 8
+# - We now require packages, not files, to avoid issues with apt
+#
+# Revision 1.31  2002/03/04 18:06:09  morcego
+# SPECFILE: fixing permissing of the init script (broken by the last change)
+#
+# Revision 1.30  2002/03/04 16:18:03  morcego
+# General cleanup of the rh specfile.
+#
+# %changelog
+# * Mon Mar 04 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
+# + junkbuster-2.9.11-2
+# - General specfile fixup, using the best recomended practices, including:
+#         - Adding -q to %%setup
+#         - Using macros whereever possible
+#         - Not using wildchars on %%files section
+#         - Doubling the percentage char on changelog and comments, to
+#           avoid rpm expanding them
+#
+# Revision 1.29  2002/03/03 19:21:22  hal9
+# Init script fails if shell is /bin/false.
+#
+# Revision 1.28  2002/01/09 18:34:03  hal9
+# nit.
+#
+# Revision 1.27  2002/01/09 18:32:02  hal9
+# Removed RPM_OPT_FLAGS kludge.
+#
+# Revision 1.26  2002/01/09 18:21:10  hal9
+# A few minor updates.
+#
+# Revision 1.25  2001/12/28 01:45:36  steudten
+# Add paranoia check and BuildReq: gzip
+#
+# Revision 1.24  2001/12/01 21:43:14  hal9
+# Allowed for new ijb.action file.
+#
+# Revision 1.23  2001/11/06 12:09:03  steudten
+# Compress doc files. Install README and AUTHORS at last as document.
+#
+# Revision 1.22  2001/11/05 21:37:34  steudten
+# Fix to include the actual version for name.
+# Let the 'real' packager be included - sorry stefan.
+#
+# Revision 1.21  2001/10/31 19:27:27  swa
+# consistent description. new name for suse since
+# we had troubles with rpms of identical names
+# on the webserver.
+#
+# Revision 1.20  2001/10/24 15:45:49  hal9
+# To keep Thomas happy (aka correcting my  mistakes)
+#
+# Revision 1.19  2001/10/15 03:23:59  hal9
+# Nits.
+#
+# Revision 1.17  2001/10/10 18:59:28  hal9
+# Minor change for init script.
+#
+# Revision 1.16  2001/09/24 20:56:23  hal9
+# Minor changes.
+#
+# Revision 1.13  2001/09/10 17:44:43  swa
+# integrate three pieces of documentation. needs work.
+# will not build cleanly under redhat.
+#
+# Revision 1.12  2001/09/10 16:25:04  swa
+# copy all templates. version updated.
+#
+# Revision 1.11  2001/07/03 11:00:25  sarantis
+# replaced permissionsfile with actionsfile
+#
+# Revision 1.10  2001/07/03 09:34:44  sarantis
+# bumped up version number.
+#
+# Revision 1.9  2001/06/12 18:15:29  swa
+# the %% in front of configure (see tag below) confused
+# the rpm build process on 7.1.
+#
+# Revision 1.8  2001/06/12 17:15:56  swa
+# fixes, because a clean build on rh6.1 was impossible.
+# GZIP confuses make, %% configure confuses rpm, etc.
+#
+# Revision 1.7  2001/06/11 12:17:26  sarantis
+# fix typo in %%post
+#
+# Revision 1.6  2001/06/11 11:28:25  sarantis
+# Further optimizations and adaptations in the spec file.
+#
+# Revision 1.5  2001/06/09 09:14:11  swa
+# shamelessly adapted RPM stuff from the newest rpm that
+# RedHat provided for the JB.
+#
+# Revision 1.4  2001/06/08 20:54:18  swa
+# type with status file. remove forward et. al from file list.
+#
+# Revision 1.3  2001/06/07 17:28:10  swa
+# cosmetics
+#
+# Revision 1.2  2001/06/04 18:31:58  swa
+# files are now prefixed with either `confdir' or `logdir'.
+# `make redhat-dist' replaces both entries confdir and logdir
+# with redhat values
+#
+# Revision 1.1  2001/06/04 10:44:57  swa
+# `make redhatr-dist' now works. Except for the paths
+# in the config file.
+#
+#
+#
