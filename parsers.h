@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.16 2001/10/07 18:50:16 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.17 2001/10/13 12:47:32 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.17  2001/10/13 12:47:32  joergs
+ *    Removed client_host, added client_host_adder
+ *
  *    Revision 1.16  2001/10/07 18:50:16  oes
  *    Added server_content_encoding, renamed server_transfer_encoding
  *
@@ -131,7 +134,7 @@ extern void (* const add_server_headers[])(struct client_state *);
 extern int flush_socket(int fd, struct client_state *csp);
 extern int add_to_iob(struct client_state *csp, char *buf, int n);
 extern char *get_header(struct client_state *csp);
-
+extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp);
 
 extern void free_http_request(struct http_request *http);
@@ -167,10 +170,6 @@ extern char *server_http(const struct parsers *v, const char *s, struct client_s
 #ifdef FEATURE_FORCE_LOAD
 extern int strclean(const char *string, const char *substring);
 #endif /* def FEATURE_FORCE_LOAD */
-
-#if defined(FEATURE_IMAGE_DETECT_MSIE)
-extern char *client_accept(const struct parsers *v, const char *s, struct client_state *csp);
-#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
 
 /* Revision control strings from this header and associated .c file */
 extern const char parsers_rcs[];
