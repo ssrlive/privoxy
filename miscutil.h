@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.11 2001/10/14 22:02:57 jongfoster Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.12 2001/10/23 21:27:50 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.12  2001/10/23 21:27:50  jongfoster
+ *    Standardising error codes in string_append
+ *    make_path() no longer adds '\\' if the dir already ends in '\\' (this
+ *    is just copying a UNIX-specific fix to the Windows-specific part)
+ *
  *    Revision 1.11  2001/10/14 22:02:57  jongfoster
  *    New function string_append() which is like strsav(), but running
  *    out of memory isn't automatically FATAL.
@@ -130,6 +135,10 @@ extern char *make_path(const char * dir, const char * file);
 #ifdef __MINGW32__
 extern char *strdup(const char *s);
 #endif /* def __MINGW32__ */
+
+#ifdef __OS2__
+extern int snprintf(char *, size_t, const char *, /*args*/ ...);
+#endif /* def __OS2__ */
 
 /* Revision control strings from this header and associated .c file */
 extern const char miscutil_rcs[];

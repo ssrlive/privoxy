@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.4 2001/10/23 21:48:19 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.5 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -35,6 +35,12 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.4 2001/10/23 21:48:19 jongfoster 
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.5  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.4  2001/10/23 21:48:19  jongfoster
  *    Cleaning up error handling in CGI functions - they now send back
  *    a HTML error page and should never cause a FATAL error.  (Fixes one
@@ -90,13 +96,6 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.4 2001/10/23 21:48:19 jongfoster 
 #ifdef _WIN32
 #define snprintf _snprintf
 #endif /* def _WIN32 */
-
-#ifdef __OS2__
-/*
- * FIXME: gotta write a snprintf routine.  snprintf.  You guys kill me.
- */
-#define snprintf(X,Y,Z) sprintf(X,Z)
-#endif /* __OS2__ */
 
 #include "project.h"
 #include "cgi.h"
