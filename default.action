@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.25 2002/04/26 14:07:51 morcego Exp $
+#  $Id: default.action,v 1.26 2002/04/26 17:41:49 morcego Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -512,3 +512,6 @@ www.ugu.com/sui/ugu/adv
 /downloads/
 # adv for globalintersec means advanced, not advertisement
 www.globalintersec.com/adv
+# We all want weather forecast to work
+banners.wunderground.com/banner/gizmotemp/
+
