@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.57 2001/11/16 00:47:43 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.58 2001/11/30 23:37:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.57 2001/11/16 00:47:43 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.58  2001/11/30 23:37:24  jongfoster
+ *    Renaming the Win32 config file to config.txt - this is almost the
+ *    same as the corresponding UNIX name "config"
+ *
  *    Revision 1.57  2001/11/16 00:47:43  jongfoster
  *    Changing the tty-disconnection code to use setsid().
  *
@@ -867,6 +871,7 @@ static void chat(struct client_state *csp)
                    csp->ip_addr_str, http->cmd);
       }
 
+
       /* Write the answer to the client */
       if(rsp)
       {
@@ -907,7 +912,7 @@ static void chat(struct client_state *csp)
 
          if(rsp)
          {
-            if ((write_socket(csp->cfd, rsp->head, n) != n)
+            if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
              || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
