@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.41 2002/01/17 20:56:22 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.42 2002/01/21 00:33:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,12 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.41 2002/01/17 20:56:22 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.42  2002/01/21 00:33:20  jongfoster
+ *    Replacing strsav() with the safer string_append() or string_join().
+ *    Adding map_block_keep() to save a few bytes in the edit-actions-list HTML.
+ *    Adding missing html_encode() to error message generators.
+ *    Adding edit-actions-section-swap and many "shortcuts" to the list of CGIs.
+ *
  *    Revision 1.41  2002/01/17 20:56:22  jongfoster
  *    Replacing hard references to the URL of the config interface
  *    with #defines from project.h
@@ -682,7 +688,16 @@ struct http_response *error_response(struct client_state *csp,
    if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
    if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
    if (!err) err = map(exports, "error", 1, html_encode_and_free_original(safe_strerror(sys_err)), 0);
-   if (!err) err = map(exports, "host-ip", 1, html_encode(csp->http->host_ip_addr_str), 0);
+   if (!err)
+   {
+     err = map(exports, "host-ip", 1, html_encode(csp->http->host_ip_addr_str), 0);
+     if (err)
+     {
+       // Some failures, like "404 no such domain", don't have an IP address.
+       err = map(exports, "host-ip", 1, html_encode(csp->http->host), 0);
+     }
+   }
+
 
    if (err)
    {
@@ -747,7 +762,7 @@ void cgi_init_error_messages(void)
       "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
       "<body>\r\n"
       "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
-      "<p>JunkBuster <b>ran out of memory</b> whilst processing your request.</p>\r\n"
+      "<p>JunkBuster <b>ran out of memory</b> while processing your request.</p>\r\n"
       "<p>Please contact your proxy administrator, or try again later</p>\r\n"
       "</body>\r\n"
       "</html>\r\n";
@@ -815,7 +830,7 @@ jb_err cgi_error_no_template(struct client_state *csp,
       "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
       "<body>\r\n"
       "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
-      "<p>JunkBuster encountered an error whilst processing your request:</p>\r\n"
+      "<p>JunkBuster encountered an error while processing your request:</p>\r\n"
       "<p><b>Could not load template file <code>";
    static const char body_suffix[] =
       "</code></b></p>\r\n"
