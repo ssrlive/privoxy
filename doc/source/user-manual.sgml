@@ -1,13 +1,12 @@
-<!DOCTYPE Article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
 <!--
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
 
  Purpose     :  user manual
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.26 2002/01/09 20:02:50 hal9 Exp $
+ $Id: user-manual.sgml,v 1.27 2002/01/11 14:14:32 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +29,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.26 2002/01/09 20:02:50 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.27 2002/01/11 14:14:32 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -218,11 +217,11 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- ./configure	(--help to see options)
- make        	(the make from gnu, gmake for *BSD) 
+ ./configure      (--help to see options)
+ make             (the make from gnu, gmake for *BSD) 
  su 
- make -n install	(to see where all the files will go)
- make install		(to really install)
+ make -n install  (to see where all the files will go)
+ make install     (to really install)
  </screen>
 </para>
 
@@ -486,11 +485,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>blockfile blocklist.ini</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -560,11 +559,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>confdir  /etc/junkbuster</emphasis>       # No trailing /, please.
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -576,11 +575,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>logdir  /var/log/junkbuster</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -602,11 +601,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>actionsfile  ijb.action</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -621,11 +620,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>re_filterfile  re_filterfile</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -657,11 +656,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>logfile  logfile</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -674,11 +673,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>#jarfile  jarfile</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -695,11 +694,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>#trustfile  trust</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
  
@@ -713,12 +712,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>trust-info-url http://www.your-site.com/why_we_block.html</emphasis>
   <emphasis>trust-info-url http://www.your-site.com/what_we_allow.html</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -746,11 +745,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>#admin-address  fill@me.in.please</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -765,11 +764,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>proxy-info-url  http://www.your-site.com/proxy.html</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -802,11 +801,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>listen-address  192.168.0.1:8000</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -817,11 +816,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>listen-address  :8000</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -838,10 +837,10 @@ configuration section below. HB.)
  levels of debug are probably only of interest to developers.
 </para>
 
-<Para>
- <Literal>
-  <MSGText> 
-   <LiteralLayout>
+<para>
+ <literal>
+  <msgtext> 
+   <literallayout>
   debug         1 # GPC   = show each GET/POST/CONNECT request
   debug         2 # CONN  = show each connection status
   debug         4 # IO    = show I/O status
@@ -855,10 +854,10 @@ configuration section below. HB.)
   debug      1024 #       = debug kill popups
   debug      4096 # INFO  = Startup banner and warnings.
   debug      8192 # ERROR = Non-fatal errors
-    </LiteralLayout>
-  </MSGText>
- </Literal>
-</Para>
+    </literallayout>
+  </msgtext>
+ </literal>
+</para>
 
 <para>
  It is <emphasis>highly recommended</emphasis> that you enable ERROR
@@ -882,11 +881,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>debug    15     # same as setting the first 4 listed above</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -896,13 +895,13 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>debug   1     # URLs</emphasis>
   <emphasis>debug   4096  # Info</emphasis>
   <emphasis>debug   8192  # Errors - *we highly recommended enabling this*</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -918,11 +917,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>#single-threaded</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -954,11 +953,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>toggle    1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -982,11 +981,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>buffer-limit    4069</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1007,11 +1006,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>enable-edit-actions    1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1032,11 +1031,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>enable-remote-toggle    1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1090,11 +1089,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1104,7 +1103,7 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>ACTION</emphasis>      = <quote>permit-access</quote> or <quote>deny-access</quote>
 
@@ -1114,7 +1113,7 @@ configuration section below. HB.)
  <emphasis>DST_ADDR</emphasis>    = server or forwarder hostname or dotted IP address
  <emphasis>DST_MASKLEN</emphasis> = number of bits in the subnet mask for the target
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1144,11 +1143,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>permit-access  localhost</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1159,11 +1158,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>permit-access    www.junkbusters.com/24</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1173,11 +1172,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>deny-access      ident.junkbusters.com</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1188,11 +1187,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>permit-access    207.153.200.0/24</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1202,11 +1201,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>permit-access    0.0.0.0/0</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1216,11 +1215,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>permit-access    .org</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1238,7 +1237,7 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>permit-access 0.0.0.0/0   0.0.0.0/0</emphasis>   # other clients can go anywhere 
                                        # with the following exceptions:
@@ -1252,7 +1251,7 @@ configuration section below. HB.)
  <emphasis>permit 123.124.0.0/16 0.0.0.0/0</emphasis>          # the ISP's clients can go 
                                           # anywhere
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1298,13 +1297,13 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward target_domain[:port] http_proxy_host[:port]</emphasis>
  <emphasis>forward-socks4  target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
  <emphasis>forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1325,11 +1324,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>forward   .*   .       </emphasis># implicit
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1340,12 +1339,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward   .*     lpwa.com:8000</emphasis>
  <emphasis>forward   :443   .</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1358,11 +1357,11 @@ configuration section below. HB.)
    
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>forward   lpwa.  lpwa.com:8000</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
  
@@ -1379,12 +1378,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward    .*         caching.myisp.net:8000</emphasis>
  <emphasis>forward    myisp.net  .</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1395,11 +1394,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>forward    .*    proxy:8080</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1417,12 +1416,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward-socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</emphasis>
  <emphasis>forward    my_company.com  .</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1432,11 +1431,11 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>forward-socks4a   .*  .  firewall.my_company.com:1080</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1464,12 +1463,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward    .*         .</emphasis>
  <emphasis>forward    isp-b.com  host-b:8000</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1480,12 +1479,12 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward    .*          .</emphasis>
  <emphasis>forward    isp-a.com   host-a:8000</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1503,7 +1502,7 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  <emphasis>forward  *. ssbcache.ukc.ac.uk:3128</emphasis>  # Use the proxy, except for:
  <emphasis>forward  .ukc.ac.uk            .    </emphasis> # Anything on the same domain as us
@@ -1513,7 +1512,7 @@ configuration section below. HB.)
  <emphasis>forward  localhost.localdomain .    </emphasis> # Loopback address
  <emphasis>forward  www.ukc.mirror.ac.uk  .    </emphasis> # Specific host
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1529,7 +1528,7 @@ configuration section below. HB.)
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   # Define junkbuster as parent cache 
  <!-- per feedback from user...
@@ -1549,7 +1548,7 @@ configuration section below. HB.)
   # Forward the rest to junkbuster 
   never_direct allow all 
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1578,11 +1577,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>activity-animation   1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1594,11 +1593,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-messages       1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1615,11 +1614,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-buffer-size      1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1630,11 +1629,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-max-lines      200</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1646,11 +1645,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-highlight-messages   1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1660,11 +1659,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-font-name        Comic Sans MS</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1674,11 +1673,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>log-font-size        8</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1690,11 +1689,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>show-on-task-bar     0</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1706,11 +1705,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   <emphasis>close-button-minimizes  1</emphasis>
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1723,11 +1722,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   #hide-console
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -1916,12 +1915,12 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>{+name}</emphasis>        # enable this action
   <emphasis>{-name}</emphasis>        # disable this action
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -1929,16 +1928,16 @@ Removed references to Win32. HB 09/23/01
 
  <listitem>
   <para>  
-   Parameterized (e.g. <quote>+/-hide-user-agent</quote>):
+   parameterized (e.g. <quote>+/-hide-user-agent</quote>):
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>{+name{param}}</emphasis>  # enable action and set parameter to <quote>param</quote>
   <emphasis>{-name}</emphasis>         # disable action
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -1949,13 +1948,13 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>{+name{param}}</emphasis>   # enable action and add parameter <quote>param</quote>
   <emphasis>{-name{param}}</emphasis>   # remove the parameter <quote>param</quote>
   <emphasis>{-name}</emphasis>          # disable this action totally
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -1991,11 +1990,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+add-header{Name: value}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2007,11 +2006,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+block</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2029,12 +2028,12 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+deanimate-gifs{last}</emphasis>
   <emphasis>+deanimate-gifs{first}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2049,11 +2048,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+downgrade</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem> 
@@ -2082,11 +2081,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+fast-redirects</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2097,11 +2096,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
  <emphasis>+filter{filename}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2112,11 +2111,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-forwarded</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2129,12 +2128,12 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-from{block}</emphasis>
   <emphasis>+hide-from{spam@sittingduck.xqq}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2148,13 +2147,13 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-referer{block}</emphasis>
   <emphasis>+hide-referer{forge}</emphasis>
   <emphasis>+hide-referer{http://nowhere.com}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2168,11 +2167,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-referrer{...}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2186,11 +2185,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  <!-- 
@@ -2199,11 +2198,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-user-agent{JunkBuster/1.0}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
    (Don't change the version number from 1.0 - after all, why tell them?)
@@ -2211,11 +2210,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+hide-user-agent{browser-type}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
 -->
@@ -2229,11 +2228,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+image</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2252,13 +2251,13 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+image-blocker{logo}</emphasis>
   <emphasis>+image-blocker{blank}</emphasis>
   <emphasis>+image-blocker{http://i.j.b/send-banner}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2289,14 +2288,14 @@ Removed references to Win32. HB 09/23/01
 
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+limit-connect{443}                 # This is the default and need no be specified.</emphasis>
   <emphasis>+limit-connect{80,443}              # Ports 80 and 443 are OK.</emphasis>
   <emphasis>+limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100</emphasis>
   <emphasis>                                    #and above 500 are OK.</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
 
@@ -2314,11 +2313,11 @@ Removed references to Win32. HB 09/23/01
 
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+nocompression</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem> 
@@ -2332,11 +2331,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+no-cookies-keep</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2347,11 +2346,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+no-cookies-read</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2362,11 +2361,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+no-cookies-set</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2379,12 +2378,12 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+no-popup</emphasis>
   <emphasis>+no-popups</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2399,11 +2398,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+vanilla-wafer</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2415,11 +2414,11 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    <literal>
-    <MSGText> 
+    <msgtext> 
      <literallayout>
   <emphasis>+wafer{name=value}</emphasis>
      </literallayout>
-    </MSGText> 
+    </msgtext> 
    </literal>
   </para>
  </listitem>
@@ -2442,7 +2441,7 @@ Removed references to Win32. HB 09/23/01
   
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # Turn off all persistant cookies
  { +no-cookies-read }
@@ -2465,7 +2464,7 @@ Removed references to Win32. HB 09/23/01
  .sourceforge.net
  .sf.net
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2475,7 +2474,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # Turn them off!
  {+fast-redirects}
@@ -2485,7 +2484,7 @@ Removed references to Win32. HB 09/23/01
  www.ukc.ac.uk/cgi-bin/wac\.cgi\?
  login.yahoo.com
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2495,7 +2494,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # Run everything through the default filter file (<filename>re_filterfile</filename>):
  {+filter}
@@ -2504,7 +2503,7 @@ Removed references to Win32. HB 09/23/01
  {-filter}
  .cvs.sourceforge.net
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2516,7 +2515,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
   # Blocklist:
   {+block}
@@ -2564,7 +2563,7 @@ Removed references to Win32. HB 09/23/01
   /.*/adlib/server\.cgi
   /autoads/
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2595,7 +2594,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # Useful customer aliases we can use later. These must come first!
  {{alias}}
@@ -2612,7 +2611,7 @@ Removed references to Win32. HB 09/23/01
  c3 = +no-cookies-set -no-cookies-read
  #... etc.  Customize to your heart's content.
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2623,7 +2622,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # These sites are very complex and require
  # minimal interference.
@@ -2644,7 +2643,7 @@ Removed references to Win32. HB 09/23/01
  .dabs.com
  .overclockers.co.uk
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2677,13 +2676,13 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # The status bar is for displaying link targets, not pointless buzzwords.
  # Again, check it out on http://www.airport-cgn.de/.
  s/status='.*?';*//ig
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2694,11 +2693,11 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  s/microsoft(?!.com)/MicroSuck/ig
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -2708,7 +2707,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  <literal>
-  <MSGText> 
+  <msgtext> 
    <literallayout>
  # Kill refresh tags. I like to refresh myself. Manually.
  # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
@@ -2716,7 +2715,7 @@ Removed references to Win32. HB 09/23/01
  s/&lt;meta[^&gt;]*http-equiv[^&gt;]*refresh.*URL=([^&gt;]*?)"?&gt;/&lt;link rev="x-refresh" href=$1&gt;/i
  s/&lt;meta[^&gt;]*http-equiv="?page-enter"?[^&gt;]*content=[^&gt;]*&gt;/&lt;!--no page enter for me--&gt;/i
    </literallayout>
-  </MSGText> 
+  </msgtext> 
  </literal>
 </para>
 
@@ -3079,7 +3078,7 @@ communication (bugs, feature requests, etc.)
 
 <simplelist>
  <member>
-  <emphasis>()</emphasis> - Pararentheses are used to group a sub-expression,
+  <emphasis>()</emphasis> - pararentheses are used to group a sub-expression,
   or multiple sub-expressions.
  </member>
 </simplelist>
@@ -3238,6 +3237,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.27  2002/01/11 14:14:32  hal9
+ Added a very short section on Templates
+
  Revision 1.26  2002/01/09 20:02:50  hal9
  Fix bug re: auto-detect config file changes.
 
