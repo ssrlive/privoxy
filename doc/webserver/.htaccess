@@ -1,0 +1,26 @@
+# http://privoxy.org/.htaccess
+#
+# By Jon Foster
+#
+# Intercepts requests for these servers:
+#    http://ijbswa.sourceforge.net/
+#    http://privoxy.com/
+#    http://www.privoxy.com/
+#    http://www.privoxy.org/
+#
+# And redirects all requests to the canonical web server:
+#    http://privoxy.org/
+#
+#
+# Uses Apache's mod_rewrite
+# See http://httpd.apache.org/docs/mod/mod_rewrite.html
+#
+
+# Enable mod_rewrite
+RewriteEngine on
+
+
+RewriteCond %{HTTP_HOST}   !^privoxy\.org\.?$ [NC]
+RewriteCond %{HTTP_HOST}   !^$
+RewriteRule ^(.*)$         http://privoxy.org/$1 [R,L]
+
