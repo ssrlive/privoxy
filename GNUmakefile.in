@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.41 2002/03/28 20:43:00 swa Exp $
+# $Id: GNUmakefile.in,v 1.42 2002/03/29 06:59:04 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -553,7 +553,7 @@ webserver:
 	@$(ECHO) Note that this command scps all stuff to the webserver,
 	@$(ECHO) it will not remove obsolete documents.
 	@$(ECHO) -------------------------------------------------------
-	chmod -R 664 doc/webserver
+	find doc/webserver -type f -exec chmod 664 {} \;
 # not sure if we need next line.swa.
 	chmod 775 doc/webserver/redirect.php
 	find doc/webserver -type d -exec chmod a+rx {} \;
@@ -657,6 +657,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.42  2002/03/29 06:59:04  swa
+# other users could not modify files on webserver
+#
 # Revision 1.41  2002/03/28 20:43:00  swa
 # set make correctly
 #
