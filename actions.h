@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.4 2001/09/16 15:47:37 jongfoster Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.5 2001/10/14 21:58:22 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,17 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.5  2001/10/14 21:58:22  jongfoster
+ *    Adding support for the CGI-based editor:
+ *    - Exported get_actions()
+ *    - Added new function free_alias_list()
+ *    - Added support for {{settings}} and {{description}} blocks
+ *      in the actions file.  They are currently ignored.
+ *    - Added restriction to only one {{alias}} block which must appear
+ *      first in the file, to simplify the editor's rewriting rules.
+ *    - Note that load_actions_file() is no longer used by the CGI-based
+ *      editor, but some of the other routines in this file are.
+ *
  *    Revision 1.4  2001/09/16 15:47:37  jongfoster
  *    First version of CGI-based edit interface.  This is very much a
  *    work-in-progress, and you can't actually use it to edit anything
@@ -75,17 +86,17 @@ struct action_alias
 };
 
 
-extern int get_actions (char *line, 
-                        struct action_alias * alias_list,
-                        struct action_spec *cur_action);
+extern jb_err get_actions (char *line, 
+                           struct action_alias * alias_list,
+                           struct action_spec *cur_action);
 extern void free_alias_list(struct action_alias *alias_list);
 
 extern void init_action(struct action_spec *dest);
 extern void free_action(struct action_spec *src);
-extern void merge_actions (struct action_spec *dest, 
+extern jb_err merge_actions (struct action_spec *dest, 
+                             const struct action_spec *src);
+extern jb_err copy_action (struct action_spec *dest, 
                            const struct action_spec *src);
-extern void copy_action (struct action_spec *dest, 
-                         const struct action_spec *src);
 extern char * actions_to_text     (struct action_spec *action);
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 extern char * actions_to_html     (struct action_spec *action);
@@ -93,11 +104,11 @@ extern char * actions_to_html     (struct action_spec *action);
 
 extern void init_current_action     (struct current_action_spec *dest);
 extern void free_current_action     (struct current_action_spec *src);
-extern void merge_current_action    (struct current_action_spec *dest, 
+extern jb_err merge_current_action  (struct current_action_spec *dest, 
                                      const struct action_spec *src);
 extern char * current_action_to_text(struct current_action_spec *action);
 
-extern int get_action_token(char **line, char **name, char **value);
+extern jb_err get_action_token(char **line, char **name, char **value);
 extern void unload_actions_file(void *file_data);
 extern int load_actions_file(struct client_state *csp);
 
