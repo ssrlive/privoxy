@@ -26,6 +26,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.3  2001/06/09 10:58:57  jongfoster
+ *    Removing a single unused #define which referenced BUFSIZ
+ *
  *    Revision 1.2  2001/05/25 11:03:55  oes
  *    Added sanity check for NULL jobs to pcrs_exec_substitution
  *
@@ -46,55 +49,79 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.2 2001/05/25 11:03:55 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.3 2001/06/09 10:58:57 jongfoster Exp $"
 
-
 
 #include <pcre.h>
 
+/*
+ * Constants:
+ */
+
 #define FALSE 0
 #define TRUE 1
+
+/* Capacity */
 #define PCRS_MAX_MATCHES 300
 #define PCRS_MAX_SUBMATCHES 33
 
+/* Error codes */
 #define PCRS_ERR_NOMEM     -10      /* Failed to acquire memory. */
 #define PCRS_ERR_CMDSYNTAX -11      /* Syntax of s///-command */
 #define PCRS_ERR_STUDY     -12      /* pcre error while studying the pattern */
 #define PCRS_ERR_BADJOB    -13      /* NULL job pointer, pattern or substitute */
 
+/* Flags */
+#define PCRS_GLOBAL          1      /* Job should be applied globally, as with perl's g option */
+#define PCRS_SUCCESS         2      /* Job did previously match */
+#define PCRS_TRIVIAL         4      /* No backreferences need to be parsed in the substitute */
+
+/*
+ * Data types:
+ */
+
+/* A compiled substitute */
 typedef struct S_PCRS_SUBSTITUTE {
-  char *text;
-  int backrefs;
-  int block_offset[PCRS_MAX_SUBMATCHES];
-  int block_length[PCRS_MAX_SUBMATCHES];
-  int backref[PCRS_MAX_SUBMATCHES];
-  int backref_count[PCRS_MAX_SUBMATCHES];
+  char *text;                               /* The plaintext part of the substitute, with all backreferences stripped */
+  int backrefs;                             /* The number of backreferences */
+  int block_offset[PCRS_MAX_SUBMATCHES];    /* Array with the offsets of all plaintext blocks in text */
+  int block_length[PCRS_MAX_SUBMATCHES];    /* Array with the lengths of all plaintext blocks in text */
+  int backref[PCRS_MAX_SUBMATCHES];         /* Array with the backref number for all plaintext block borders */
+  int backref_count[PCRS_MAX_SUBMATCHES];   /* Array with the number of reference to each backref index */
 } pcrs_substitute;
 
 typedef struct S_PCRS_MATCH {
   /* char *buffer; */
-  int submatches;
-  int submatch_offset[PCRS_MAX_SUBMATCHES];
-  int submatch_length[PCRS_MAX_SUBMATCHES];
+  int submatches;                           /* Number of submatches. Note: The zeroth is the whole match */
+  int submatch_offset[PCRS_MAX_SUBMATCHES]; /* Offset for each submatch in the subject */
+  int submatch_length[PCRS_MAX_SUBMATCHES]; /* Length of each submatch in the subject */
 } pcrs_match;
 
 typedef struct S_PCRS_JOB {
-  pcre *pattern;
-  pcre_extra *hints;
-  int options;
-  int globalflag;
-  int successflag;
-  pcrs_substitute *substitute;
-  struct S_PCRS_JOB *next;
+  pcre *pattern;                            /* The compiled pcre pattern */
+  pcre_extra *hints;                        /* The pcre hints for the pattern */
+  int options;                              /* The pcre options (numeric) */
+  int flags;                                /* The pcrs and user flags (see "Flags" above) */
+  pcrs_substitute *substitute;              /* The compiles pcrs substitute */
+  struct S_PCRS_JOB *next;                  /* Pointer for chaining jobs to joblists */
 } pcrs_job;
 
-extern int              pcrs_compile_perl_options(char *optstring, int *globalflag);
-extern pcrs_substitute *pcrs_compile_replacement(char *replacement, int *errptr);
-extern pcrs_job        *pcrs_free_job(pcrs_job *job);
-extern pcrs_job        *pcrs_make_job(char *command, int *errptr);
-extern pcrs_job        *create_pcrs_job(pcre *pattern, pcre_extra *hints, int options, int globalflag, pcrs_substitute *substitute, int *errptr);
-extern int              pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length);
+/*
+ * Prototypes:
+ */
 
+/* Main usage */
+extern pcrs_job        *pcrs_compile(char *command, int *errptr);
+extern pcrs_job        *pcrs_make_job(char *pattern, char *substitute, char *options, int *errptr);
+extern int              pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length);
+
+/* Freeing jobs */
+extern pcrs_job        *pcrs_free_job(pcrs_job *job);
+extern void             pcrs_free_joblist(pcrs_job *joblist);
+
+/* Expert usage */
+extern int              pcrs_compile_perl_options(char *optstring, int *flags);
+extern pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, int *errptr);
 
 #endif /* ndef _PCRS_H */
 
