@@ -278,7 +278,7 @@ configuration files on important issues.
 3.1. The Main Configuration File
 
 Again, the main configuration file is named config on Linux/Unix/BSD and OS/2,
-and config3.txt on Windows. Configuration lines consist of an initial keyword
+and config.txt on Windows. Configuration lines consist of an initial keyword
 followed by a list of values, all separated by whitespace (any number of spaces
 or tabs). For example:
 
