@@ -1,7 +1,7 @@
 #ifdef AMIGA
 #ifndef _AMIGA_H
 #define _AMIGA_H
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.2 2001/05/23 00:13:58 joergs Exp $"
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.3 2001/05/25 21:53:27 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: amiga.h,v $
+ *    Revision 1.3  2001/05/25 21:53:27  jongfoster
+ *    Fixing indentation
+ *
  *    Revision 1.2  2001/05/23 00:13:58  joergs
  *    AmigaOS support fixed.
  *
@@ -74,19 +77,25 @@ void amiga_exit(void);
 void __memCleanUp(void);
 __saveds ULONG server_thread(void);
 
-#define exit(x)\
-{\
-   if(main_task)\
-   {\
-      if(main_task == FindTask(NULL))\
-      {\
-         while(childs) Delay(10*TICKS_PER_SECOND); exit(x);\
-      } else {\
-         CloseLibrary(SocketBase);\
-         childs--;\
-         RemTask(NULL);\
-      }\
-   }\
+#define exit(x)                                             \
+{                                                           \
+   if(main_task)                                            \
+   {                                                        \
+      if(main_task == FindTask(NULL))                       \
+      {                                                     \
+         while(childs) Delay(10*TICKS_PER_SECOND); exit(x); \
+      }                                                     \
+      else                                                  \
+      {                                                     \
+         CloseLibrary(SocketBase);                          \
+         childs--;                                          \
+         RemTask(NULL);                                     \
+      }                                                     \
+   }                                                        \
+   else                                                     \
+   {                                                        \
+      exit(x);                                              \
+   }                                                        \
 }
 
 #define EINTR 0
