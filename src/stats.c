@@ -1,4 +1,4 @@
-const char stats_rcs[] = "$Id: stats.c,v 2.2 2002/12/28 04:17:58 david__schmidt Exp $";
+const char stats_rcs[] = "$Id: stats.c,v 2.3 2002/12/30 19:56:16 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/stats.c,v $
@@ -31,12 +31,16 @@ const char stats_rcs[] = "$Id: stats.c,v 2.2 2002/12/28 04:17:58 david__schmidt 
  *                or write to the Free Software Foundation, Inc., 59
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
+ * Revisions   :
+ *    $Log: stats.c,v $
+ *
  *********************************************************************/
 
 
 #include <string.h>
 #ifdef unix
 #include <sys/signal.h>
+#include <pthread.h>
 #endif
 #include "project.h"
 #include "errlog.h"
@@ -49,9 +53,7 @@ const char stats_h_rcs[] = STATS_H_VERSION;
 const char ipc_h_rcs[] = IPC_H_VERSION;
 static IPC_MUTEX_LOCK stats_lock;
 
-struct configuration_spec *latest_config;
-int changed = 0,
-    stats_array[STATS_MAX_KEYS];
+stats_struct *main_stats;
 
 /*********************************************************************
  *
@@ -68,18 +70,21 @@ int changed = 0,
  *********************************************************************/
 void init_stats_config(struct configuration_spec * config)
 {
-  int rc, i, child_id;
-#if defined(FEATURE_PTHREAD)
+  int i, child_id;
+#ifdef unix
   pthread_attr_t attr;
   pthread_t thread;
-#endif /* def FEATURE_PTHREAD */
+#endif /* def unix */
 
+  main_stats = zalloc(sizeof(stats_struct));
   IPC_CREATE_MUTEX(stats_lock);
   for (i=0; i < STATS_MAX_KEYS; i++)
   {
-    stats_array[i] = 0;
+    main_stats->stats_array[i] = 0;
   }
-  latest_config = config;
+  main_stats->config = config;
+
+  accumulate_stats(STATS_PRIVOXY_PORT, config->hport);
 
   /*
    * Start the timing/sending thread - I stole this from jcc.c. 
@@ -93,15 +98,12 @@ void init_stats_config(struct configuration_spec * config)
 /* Use pthreads in preference to any native code */
 #if defined(FEATURE_PTHREAD) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
-  pthread_t the_thread;
-  pthread_attr_t attrs;
-
   signal(SIGALRM, null_routine);  /* Ignore the SIGALRM signal */
-  pthread_attr_init(&attrs);
-  pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
-  child_id = (pthread_create(&the_thread, &attrs,
-    (void*)forward_stats, NULL) ? -1 : 0);
-  pthread_attr_destroy(&attrs);
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  child_id = (pthread_create(&thread, &attr,
+    (void*)forward_stats, main_stats) ? -1 : 0);
+  pthread_attr_destroy(&attr);
 #endif
 
 #if defined(_WIN32) && !defined(_CYGWIN) && !defined(SELECTED_ONE_OPTION)
@@ -109,7 +111,7 @@ void init_stats_config(struct configuration_spec * config)
   child_id = _beginthread(
     (void (*)(void *))forward_stats,
     64 * 1024,
-    NULL);
+    main_stats);
 #endif
 
 #if defined(__OS2__) && !defined(SELECTED_ONE_OPTION)
@@ -118,14 +120,13 @@ void init_stats_config(struct configuration_spec * config)
     (void(* _Optlink)(void*))forward_stats,
     NULL,
     64 * 1024,
-    NULL);
+    main_stats);
 #endif
 
 #if defined(__BEOS__) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
   thread_id tid = spawn_thread
     (server_thread, "forward_stats", B_NORMAL_PRIORITY, NULL);
-
   if ((tid >= 0) && (resume_thread(tid) == B_OK))
   {
     child_id = (int) tid;
@@ -156,11 +157,12 @@ void init_stats_config(struct configuration_spec * config)
   /* I don't think the IPC will really work in a fork()'d environment,
    * so proceed with caution.  FIXME.
    */
+#error FIXME - stats won't work without pthreads!
   child_id = fork();
 
   if (child_id == 0)   /* child */
   {
-     forward_stats();
+     forward_stats(main_stats);
      _exit(0);
   }
   else if (child_id > 0) /* parent */
@@ -188,7 +190,7 @@ void init_stats_config(struct configuration_spec * config)
  *********************************************************************/
 void update_stats_config(struct configuration_spec * config)
 {
-  latest_config = config;
+  main_stats->config = config;
 }
 
 /*********************************************************************
@@ -210,8 +212,8 @@ void accumulate_stats(int key, int value)
   if (key < STATS_MAX_KEYS)
   {
     IPC_LOCK_MUTEX(stats_lock);
-    stats_array[key] += value;
-    changed = 1;
+    main_stats->stats_array[key] += value;
+    main_stats->changed = 1;
     IPC_UNLOCK_MUTEX(stats_lock);
   }
 }
@@ -229,18 +231,18 @@ void accumulate_stats(int key, int value)
  * Returns     :  N/A
  *
  *********************************************************************/
-void *forward_stats()
+void *forward_stats(stats_struct *pstats)
 {
   int local_stats_array[STATS_MAX_KEYS];
-  
+ 
   for (;;)
   {
-    IPC_SLEEP_SECONDS(latest_config->activity_freq);
-    if (changed == 1)
+    IPC_SLEEP_SECONDS(pstats->config->activity_freq);
+    if (pstats->changed == 1)
     {
       IPC_LOCK_MUTEX(stats_lock);
-      memcpy(local_stats_array,stats_array,sizeof(stats_array));
-      changed = 0;
+      memcpy(local_stats_array,pstats->stats_array,sizeof(pstats->stats_array));
+      pstats->changed = 0;
       IPC_UNLOCK_MUTEX(stats_lock);
       send_stats(local_stats_array);
     }
@@ -269,17 +271,15 @@ void send_stats(int local_stats_array[])
   int i;
 
   /* Here, we initiate the socket send to the console */
-  sk = connect_to(latest_config->activity_address,latest_config->activity_port,NULL);
+  sk = connect_to(main_stats->config->activity_address,main_stats->config->activity_port,NULL);
   if (sk > 0)
   {
     /* max size of a key looks like this: xxxxx:xxxxxb */
     msg = zalloc(
-      64 + /* space for socket key ("serving:") and value and stuff */
       STATS_MAX_KEYS * 64  /* Space for keys - much bigger than necessary for safety */
       );
     if (msg)
     {
-      sprintf(msg,"serving:%d ",latest_config->hport);
       for (i = 0; i < STATS_MAX_KEYS; i++)
       {
         sprintf(tmp_msg,"%d:%d ",i,local_stats_array[i]);

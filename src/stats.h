@@ -1,6 +1,6 @@
 #ifndef STATS_H_INCLUDED
 #define STATS_H_INCLUDED
-#define STATS_H_VERSION "$Id: stats.h,v 2.2 2002/12/28 04:17:58 david__schmidt Exp $"
+#define STATS_H_VERSION "$Id: stats.h,v 2.3 2002/12/30 19:56:16 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/stats.h,v $
@@ -35,6 +35,13 @@
  *
  * Revisions   :
  *    $Log: stats.h,v $
+ *    Revision 2.3  2002/12/30 19:56:16  david__schmidt
+ *    End of initial drop of statistics console infrastructure.  Data stream
+ *    is transmitted on the stats port every interval, provided the data has
+ *    changed since the last transmission.  More work probably needs to be
+ *    done with regard to multiplatform threading; I stole the thread spawning
+ *    code from jcc.c, but haven't been able to test it everywhere.
+ *
  *    Revision 2.2  2002/12/28 04:17:58  david__schmidt
  *    Fix null_routine on unix
  *
@@ -53,20 +60,21 @@ extern const char stats_h_rcs[];
 /* Global variables */
 
 /* These are the different types of statistics we will be gathering. */
-#define STATS_REQUEST 0
-#define STATS_FILTER 1
-#define STATS_GIF_DEANIMATE 2
-#define STATS_ACL_RESTRICT 3
-#define STATS_IMAGE_BLOCK 4
+#define STATS_PRIVOXY_PORT 0
+#define STATS_REQUEST 1
+#define STATS_FILTER 2
+#define STATS_IMAGE_BLOCK 3
+#define STATS_GIF_DEANIMATE 4
 #define STATS_COOKIE 5
 #define STATS_REFERER 6
-#define STATS_CLIENT_UA 7
-#define STATS_CLIENT_FROM 8
-#define STATS_CLIENT_X_FORWARDED 9
+#define STATS_ACL_RESTRICT 7
+#define STATS_CLIENT_UA 8
+#define STATS_CLIENT_FROM 9
+#define STATS_CLIENT_X_FORWARDED 10
 /** Define the maximum number of 'keys' we'll be sending.  Always keep this
   * number one greater than the last actual key; it is used to define an 
   * array (i.e. int stats[STATS_MAX_KEYS]. */
-#define STATS_MAX_KEYS 10
+#define STATS_MAX_KEYS 11
 
 /* Functions */
 
@@ -78,6 +86,15 @@ void send_stats(int p_local_stats_array[]);
 #ifdef unix
 void null_routine(int sig);
 #endif /* def unix */
+
+/* Typedefs */
+
+typedef struct
+{
+  int changed;
+  int stats_array[STATS_MAX_KEYS];
+  struct configuration_spec *config;
+} stats_struct;
 
 #endif /* ndef STATS_H_INCLUDED */
 
