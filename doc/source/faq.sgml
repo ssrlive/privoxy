@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.65 2002/07/25 21:51:24 hal9 Exp $
+ $Id: faq.sgml,v 1.61.2.19 2002/08/25 23:31:56 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,9 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation.
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
  ========================================================================
 
 
@@ -70,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.65 2002/07/25 21:51:24 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.61.2.19 2002/08/25 23:31:56 hal9 Exp $</pubdate>
 
 <!--
 
@@ -110,9 +112,13 @@ Hal.
 ]]>
  <para>
  This FAQ gives quick answers to frequently asked  questions about
- <ulink url="http://www.privoxy.org/">Privoxy</ulink> 
- <![%p-stable;[ v.&p-version]]>. It can't and doesn't replace the
+ <ulink url="http://www.privoxy.org/">Privoxy</ulink>.
+ It can't and doesn't replace the
  <ulink url="../user-manual/index.html"><citetitle>User Manual</citetitle></ulink>.
+<!-- 
+ This works, at least in some situtations:
+ Test: <ulink url="privoxy-user-manual.pdf"><citetitle>User Manual</citetitle></ulink>.
+--> 
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
@@ -120,6 +126,8 @@ Hal.
 <!-- end boilerplate -->
 
  <para>
+  Please note that this document is constantly evolving. This copy represents
+  the state at the release of version &p-version;.
   You can find the latest version of the document at <ulink
   url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
   Please see the <link linkend="contact">Contact section</link> if you want to
@@ -454,8 +462,8 @@ special I have to do now?</title>
  </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="nothing">I just installed <application>Privoxy</application>, and nothing is happening.
+<sect2 renderas="sect3" id="nothing">
+<title>I just installed <application>Privoxy</application>, and nothing is happening.
 All the ads are there. What's wrong?</title>
 
 <para>
@@ -474,8 +482,6 @@ All the ads are there. What's wrong?</title>
  be that the browser is not set up correctly, or that
  <application>Privoxy</application> is not running at all. Check the <ulink
  url="../user-manual/config.html#LOGFILE">log file</ulink>.
-
-
 </para>
 
 </sect2>
@@ -486,6 +492,23 @@ All the ads are there. What's wrong?</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="configuration"><title>Configuration</title>
+
+<sect2 renderas="sect3" id="getupdates"><title>Where can I get updated Actions Files?</title>
+ <para>
+   Based on your feedback and the continuing development, updated actions files will be
+   made available on the <ulink
+  url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
+  our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
+ </para>
+
+ <para>
+  If you wish to receive an email notification whenever we release updates of
+  <application>Privoxy</application> or the actions file, <ulink
+  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
+  to our announce  mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
+ </para>
+
+</sect2>
 
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
@@ -545,7 +568,7 @@ way to do this?</title>
 
 <para>
  Actions files are just text files in a special syntax and can be edited
- with a text editor. The probably easiest way is to access
+ with a text editor. But probably the easiest way is to access
  <application>Privoxy</application>'s user interface with your web browser
  at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
  (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>) and then select
@@ -673,7 +696,7 @@ the differences?</title>
 <row>
   <entry>Pop-up killing</entry>
   <entry>no</entry>
-  <entry>no</entry>
+  <entry>yes</entry>
   <entry>yes</entry>
 </row>
 
@@ -711,6 +734,21 @@ the differences?</title>
   <entry>no</entry>
   <entry>yes</entry>
 </row>
+
+<row>
+  <entry>Image tag reordering</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>yes</entry>
+</row>
+
+<row>
+  <entry>Ad-filtering by link</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>yes</entry>
+</row>
+
 
 </tbody>
 </tgroup>
@@ -758,7 +796,7 @@ with a browser? Does that not raise security issues?</title>
 
 
 <sect2 renderas="sect3">
-<title id="filterfile">What is the <filename>default.filter</filename> file?</title>
+<title id="filterfile">What is the <filename>default.filter</filename> file? What is a <quote>filter</quote>?</title>
 <para>
  The <ulink url="../user-manual/filter-file.html"><filename>default.filter</filename></ulink>
  file is where <emphasis>filters</emphasis> are defined, which can be used to modify or
@@ -778,7 +816,6 @@ with a browser? Does that not raise security issues?</title>
  your own filters.  This is potentially a very powerful feature, but
  requires some expertise in both regular expressions and HTML/HTTP. 
 </para>
-
 
 <para>
  Presently, there is no GUI editor option for this part of the configuration, 
@@ -803,7 +840,7 @@ with a browser? Does that not raise security issues?</title>
  it is uncommented, and assign it the address of the LAN gateway interface,
  and port number to use. Assuming your LAN address is 192.168.1.1 and you
  wish to run <application>Privoxy</application> on port 8118, this line
- schould look like:
+ should look like:
 </para>
 
 <para>
@@ -1000,6 +1037,17 @@ proxies like <application>Squid</application>?</title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="port-80">
+<title>Can I just set <application>Privoxy</application> to use port 80
+and thus avoid individual browser configuration?</title>
+
+<para>
+ No, its more complicated than that. This only works with special kinds 
+ of proxies known as <quote>transparent</quote> proxies (see below).
+</para>
+
+</sect2>
+
 <sect2 renderas="sect3" id="transparent">
 <title>Can <application>Privoxy</application> run as a <quote>transparent
 </quote> proxy?</title>
@@ -1073,6 +1121,7 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  </para>
 <para>
  Filtering is automatically disabled for inappropriate MIME types.
+
 </para>
 </sect2>
 
@@ -1366,7 +1415,6 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect2>
 
-
 <sect2 renderas="sect3" id="turnoff">
 <title>How can I temporarily disable <application>Privoxy</application>?</title>
 <para>
@@ -1388,6 +1436,51 @@ out of the picture?</title>
  doing any of the things that <application>Privoxy</application> would
  normally be expected to do. It is still a <quote>middle-man</quote> in 
  the interaction between your browser and web sites.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="crunch">
+<title>My logs show <application>Privoxy</application> <quote>crunches</quote> 
+ads, but also its own CGI pages. What is a <quote>crunch</quote>?</title>
+<para>
+ A <quote>crunch</quote> simply means <application>Privoxy</application> intercepted 
+ <emphasis>something</emphasis>, nothing more. Often this is indeed ads or
+ banners, but <application>Privoxy</application> uses the same mechanism for
+ trapping requests for its own internal pages. For instance, a request for
+ <application>Privoxy's</application> configuration page at: <ulink
+ url="http://config.privoxy.org">http://config.privoxy.org</ulink>, is
+ intercepted (i.e. it does not go out to the 'net), and the familiar CGI
+ configuration is returned to the browser, and the log consequently will show
+ a <quote>crunch</quote>.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="downloads">
+<title>Can <application>Privoxy</application> effect files that I download
+from a webserver? FTP server?</title>
+<para>
+ From the webserver's perspective, there is no difference between
+ viewing a document (i.e. a page), and downloading a file. The same is true of
+ <application>Privoxy</application>. If there is a match for a <literal><ulink
+ url="../user-manual/actions-file.html#BLOCK">block</ulink></literal> pattern,
+ it will still be blocked, and of course this is obvious. Filtering is
+ potentially more of a concern since the results are not always so obvious.
+</para>
+<para>
+ <application>Privoxy</application> knows the differences in files according
+ to the <quote>Document Type</quote> as reported by the webserver. If this is
+ reported accurately (e.g. <quote>application/zip</quote> for a zip archive),
+ then <application>Privoxy</application> knows to ignore these where
+ appropriate. It is possible, however, that documents that are of an unknown
+ type (generally assumed to be <quote>text/plain</quote>) will be filtered, as
+ will those that might be incorrectly reported by the webserver. If such a
+ file is a downloaded file that is intended to be saved to disk, then any
+ content that might have been altered by filtering, will be saved too, for
+ these (probably very rare) cases.
+</para>
+<para>
+ <application>Privoxy</application> does not do FTP at all, only HTTP 
+  protocols.
 </para>
 </sect2>
 
@@ -1459,8 +1552,8 @@ still getting through. How?</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="badsite">One of my favorite sites does not work with <application>Privoxy</application>.
+<sect2 id="badsite" renderas="sect3">
+<title >One of my favorite sites does not work with <application>Privoxy</application>.
 What can I do?</title>
 
 <para>
@@ -1510,7 +1603,7 @@ What can I do?</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="dun">
+<sect2 id="dun" renderas="sect3">
 <title>After installing <application>Privoxy</application>, I have to log in
 every time I start IE. What gives?</title>
 
@@ -1560,7 +1653,7 @@ every time I start IE. What gives?</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="ftp">
+<sect2 id="ftp" renderas="sect3">
 <title>I cannot connect to any FTP sites. <application>Privoxy</application>
  seems to be blocking me.</title>
  <para>
@@ -1569,6 +1662,67 @@ every time I start IE. What gives?</title>
   as an FTP proxy. The same is true for any protocol other than HTTP or HTTPS.
  </para>
 </sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="osxie" renderas="sect3">
+<title>In Mac OSX, I can't configure Microsoft Internet Explorer to use 
+ <application>Privoxy</application> as the HTTP proxy.</title>
+ <para>
+  Microsoft Internet Explorer (in versions like 5.1) respects system-wide
+  network settings.  In order to change the HTTP proxy, open System
+  Preferences, and click on the Network icon.  In the settings pane that
+  comes up, click on the Proxies tab.  Ensure the "Web Proxy (HTTP)" checkbox 
+  is checked and enter <literal>127.0.0.1</literal> in the entry field.  
+  Enter <literal>8118</literal> in the Port field.  The next time you start
+  IE, it should reflect these values.
+ </para>
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3" id="osxuninstall">
+<title>In Mac OSX, I dragged the Privoxy folder to the trash in order to 
+ uninstall it.  Now the finder tells me I don't have sufficient privileges to
+ empty the trash.</title>
+ <para>
+  Just dragging the <application>Privoxy</application> folder to the trash is
+  not enough to delete it.  <application>Privoxy</application> supplies an
+  <application>uninstall.command</application> file that takes care of
+  these details.  Open the trash, drag the <application>uninstall.command</application>
+  file out of the trash and double-click on it.  You will be prompted for
+  confirmation and the administration password.
+ </para> 
+ <para>
+  The trash may still appear full after this command; emptying the trash 
+  from the desktop should make it appear empty again.
+ </para>
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3" id="blankpage">
+<title>I get a completely blank page at one site. <quote>View Source</quote>
+ shows only: <markup><![CDATA[<html><body></body></html>]]></markup>.</title>
+ <para>
+  This is often the result of a webserver using
+  <application>PHP</application> that mishandles the request
+  <application>Privoxy</application> sends to not compress the content 
+  (a <application>PHP</application> bug).
+ </para>
+ <para>
+  In a default configuration, <application>Privoxy</application> requests all
+  data be sent <quote>uncompressed</quote>. This is required for the page 
+  filtering and other magic to work. In some rare cases, the browser and 
+  webserver miscommunicate and the result is a totally blank page. The 
+  suggested work around is to selectively turn off this feature for sites 
+  that exhibit such behavior. Example section for <filename>user.action</filename>:
+ </para>
+ <screen>
+   # Make exceptions for ill-behaved sites:                                     
+   #                                                                    
+   {-prevent-compression}                                               
+    .example.com</screen>
+</sect2>
+
 
 </sect1>
 <!--
@@ -1662,19 +1816,65 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
-Revision 1.65  2002/07/25 21:51:24  hal9
-Warnings on non-HTTP traffic.
+Revision 1.61.2.19  2002/08/25 23:31:56  hal9
+Fix one grammatical error. Add brief FAQ relating to tranparent proxies (ie
+port 80 setting). Add FAQ on effects of Privoxy on downloaded files
+(especially filtering).
 
-Revision 1.64  2002/06/09 16:37:31  hal9
-Sync with filtering clarifications in 3.0 branch.
+Revision 1.61.2.18  2002/08/14 16:39:37  hal9
+Fix wrong tag on FAQ addition.
 
-Revision 1.63  2002/06/05 00:31:55  hal9
-Mass commit for new entities, most significantly so docs can read version
-and code status info from tmp files, so perl is no longer used. Also, docs can
-differentiate on alpha -> beta -> stable now.
+Revision 1.61.2.17  2002/08/14 00:01:18  hal9
+Add a crunch FAQ.
 
-Revision 1.62  2002/06/03 00:28:16  hal9
-Sync with various changes from 3.0 branch. Add two new files for config stuff.
+Revision 1.61.2.16  2002/08/13 00:10:38  hal9
+Add faq to troubleshooting re: blank page syndrome, ie {-prevent-compression}.
+
+Revision 1.61.2.15  2002/08/10 11:34:22  oes
+Add disclaimer about probably being out-of-date
+
+Revision 1.61.2.14  2002/08/07 02:53:43  hal9
+Fix some minor markup errors, and move one OSX Q/A to troubleshooting section.
+
+Revision 1.61.2.13  2002/08/06 11:55:32  oes
+Added missing close tag
+
+Revision 1.61.2.12  2002/08/06 11:43:46  david__schmidt
+Updated OSX uninstall FAQ... we have an uninstall script now.
+
+Revision 1.61.2.11  2002/08/06 08:54:03  oes
+Style police: Fixed formatting details
+
+Revision 1.61.2.10  2002/08/02 14:00:25  david__schmidt
+Made the OSX removal commands far less dangerous
+
+Revision 1.61.2.9  2002/08/02 13:14:45  oes
+Added warning about sudo rm -r for Mac OSX deinstallation; moved this item to install section
+
+Revision 1.61.2.8  2002/08/02 02:01:42  david__schmidt
+Add FAQ item for MSIE on OSX HTTP proxy confusion
+
+Revision 1.61.2.7  2002/08/02 01:46:01  david__schmidt
+Added FAQ item for Mac OSX uninstall woes
+
+Revision 1.61.2.6  2002/07/30 20:04:56  hal9
+Fix typo: 'schould'.
+
+Revision 1.61.2.5  2002/07/26 15:22:58  oes
+- Updated to reflect changes in standard.action
+- Added info on where to get updated actions files
+
+Revision 1.61.2.4  2002/07/25 21:42:29  hal9
+Add brief notes on not proxying non-HTTP protocols.
+
+Revision 1.61.2.3  2002/06/09 16:36:33  hal9
+Clarifications on filtering and MIME. Hardcode 'latest release' in index.html.
+
+Revision 1.61.2.2  2002/06/06 02:51:34  hal9
+Fix typo in URL http:/config.privoxy.org
+
+Revision 1.61.2.1  2002/06/05 23:10:43  hal9
+Add new FAQ re: DUN/IE. Change release date from May to June :)
 
 Revision 1.61  2002/05/25 12:37:25  hal9
 Various minor changes and edits.
