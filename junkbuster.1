@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.11 (beta) Date: 2002/03/06"
+.TH JUNKBUSTER 1 "v2.9.11 (beta) Date: 2002/03/12"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -122,18 +122,26 @@ A brief example of what an \fIijb.action\fP configuration might look like:
 
 # Define a few useful custom aliases for later use
 {{alias}}
+
 # Don't accept cookies
 +no-cookies = +no-cookies-set +no-cookies-read
+
 # Do accept cookies
 -no-cookies = -no-cookies-set -no-cookies-read
+
+# Treat these blocked URLs as images.
 +imageblock = +block +image
+
+# Define page filters we want to use.
+myfilters = +filter{html-annoyances} +filter{js-annoyances}\\
+            +filter{no-popups} +filter{webbugs}
 
 ## Default Policies (actions) ############################
 { \\
  -block \\
  -downgrade \\
  +fast-redirects \\
- +filter \\
+ myfilters \\
  +no-compression \\
  +hide-forwarded \\
  +hide-from{block} \\
