@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.42 2002/03/29 06:59:04 swa Exp $
+# $Id: GNUmakefile.in,v 1.43 2002/03/29 07:40:03 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@ MAN_DEST    = @mandir@
 # Build tools
 #############################################################################
 
-PROGRAM    = privoxy@EXEEXT@
+PROGRAM    = privproxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
@@ -73,7 +73,6 @@ CAT        = cat
 RPM        = rpm
 MV	   = mv
 TAR        = tar
-MAKE       = make
 LN         = ln
 WDUMP      = @WDUMP@ -dump
 JADEBIN    = @JADEBIN@
@@ -285,14 +284,14 @@ gen-dist:
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	$(TAR) -C.. -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
+	cd .. && $(TAR) -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
@@ -440,7 +439,7 @@ win-dist:
 #############################################################################
 tarball-dist: clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
-	$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
+	cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
 	@$(ECHO) Tarball (without any binary) created.
 
@@ -657,6 +656,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.43  2002/03/29 07:40:03  swa
+# fixed make webserver. doh
+#
 # Revision 1.42  2002/03/29 06:59:04  swa
 # other users could not modify files on webserver
 #
