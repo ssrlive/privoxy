@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.25  2002/05/21 21:02:52  oes
+#    Added more help links
+#
 #    Revision 1.24  2002/05/21 19:11:40  oes
 #     - Added client-side JavaScript versions of edit and add URL forms
 #     - Moved jump targets to before container table cell
@@ -261,7 +264,7 @@ function a_p(section)
         <p>
          If you haven't already done so, it is <b>strongly recommended</b> that you at 
          least skim <a href="@user-manual@@actions-help-prefix@ACTIONS-FILE">the
-         chapter on the actions file</a> in the <a href="@user-manual@">user manual</a>
+         chapter on actions files</a> in the <a href="@user-manual@">user manual</a>
          before making any changes. You will also find a comprehensive list of all available actions
          there.
         </p>
