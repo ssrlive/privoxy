@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.18 2001/11/07 00:06:06 steudten Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.19 2001/11/13 00:14:07 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.18 2001/11/07 00:06:06 steudten E
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.19  2001/11/13 00:14:07  jongfoster
+ *    Fixing stupid bug now I've figured out what || means.
+ *    (It always returns 0 or 1, not one of it's paramaters.)
+ *
  *    Revision 1.18  2001/11/07 00:06:06  steudten
  *    Add line number in error output for lineparsing for
  *    actionsfile.
@@ -146,7 +150,7 @@ const char actions_h_rcs[] = ACTIONS_H_VERSION;
 #define AV_ADD_STRING 1 /* +stropt{string} */
 #define AV_REM_STRING 2 /* -stropt */
 #define AV_ADD_MULTI  3 /* +multiopt{string} +multiopt{string2} */
-#define AV_REM_MULTI  4 /* -multiopt{string} -multiopt{*}       */
+#define AV_REM_MULTI  4 /* -multiopt{string} -multiopt          */
 
 /*
  * We need a structure to hold the name, flag changes,
@@ -691,7 +695,7 @@ char * actions_to_text(struct action_spec *action)
 #define DEFINE_ACTION_MULTI(__name, __index)         \
    if (action->multi_remove_all[__index])            \
    {                                                 \
-      string_append(&result, " -" __name "{*}");     \
+      string_append(&result, " -" __name);           \
    }                                                 \
    else                                              \
    {                                                 \
@@ -790,7 +794,7 @@ char * actions_to_html(struct action_spec *action)
 #define DEFINE_ACTION_MULTI(__name, __index)          \
    if (action->multi_remove_all[__index])             \
    {                                                  \
-      string_append(&result, "\n<br>-" __name "{*}"); \
+      string_append(&result, "\n<br>-" __name);       \
    }                                                  \
    else                                               \
    {                                                  \
@@ -871,7 +875,7 @@ char * actions_to_html(struct action_spec *action)
  *********************************************************************/
 char * current_action_to_text(struct current_action_spec *action)
 {
-   unsigned flags  = action->flags;
+   unsigned long flags  = action->flags;
    char * result = strdup("");
    struct list_entry * lst;
 
