@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.44 2001/10/02 18:13:57 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.45 2001/10/07 15:42:11 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,25 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.44 2001/10/02 18:13:57 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.45  2001/10/07 15:42:11  oes
+ *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
+ *
+ *    Moved downgrading of the HTTP version from parse_http_request to
+ *      chat(), since we can't decide if it is necessary before we have
+ *      determined the actions for the URL. The HTTP command is now
+ *      *always* re-built so the repairs need no longer be special-cased.
+ *
+ *    filter_popups now gets a csp pointer so it can raise the new
+ *      CSP_FLAG_MODIFIED flag.
+ *
+ *    Bugfix
+ *
+ *    Added configurable size limit for the IOB. If the IOB grows so
+ *      large that the next read would exceed the limit, the header
+ *      is generated, and the header & unfiltered buffer are flushed
+ *      to the client. Chat then continues in non-buffering,
+ *      non-filtering body mode.
+ *
  *    Revision 1.44  2001/10/02 18:13:57  oes
  *    Ooops
  *
@@ -539,23 +558,34 @@ static void chat(struct client_state *csp)
     * we have to do one of the following:
     *
     * create = use the original HTTP request to create a new
-    *          HTTP request that has only the path component
-    *          without the http://domainspec
-    * pass   = pass the original HTTP request unchanged
+    *          HTTP request that has either the path component
+    *          without the http://domainspec (w/path) or the
+    *          full orininal URL (w/url)
+    *          Note that the path and/or the HTTP version may
+    *          have been altered by now.
+    * 
+    * connect = Open a socket to the host:port of the server
+    *           and short-circuit server and client socket.
     *
-    * drop   = drop the HTTP request
+    * pass =  Pass the request unchanged if forwarding a CONNECT
+    *         request to a parent proxy. Note that we'll be sending
+    *         the CFAIL message ourselves if connecting to the parent
+    *         fails, but we won't send a CSUCCEED message if it works,
+    *         since that would result in a double message (ours and the
+    *         parent's). After sending the request to the parent, we simply
+    *         tunnel.
     *
-    * here's the matrix:
+    * here's the matrix: 
     *                        SSL
     *                    0        1
     *                +--------+--------+
     *                |        |        |
-    *             0  | create | drop   |
-    *                |        |        |
+    *             0  | create | connect|
+    *                | w/path |        |
     *  Forwarding    +--------+--------+
     *                |        |        |
-    *             1  | pass   | pass   |
-    *                |        |        |
+    *             1  | create | pass   |
+    *                | w/url  |        |
     *                +--------+--------+
     *
     */
@@ -588,10 +618,10 @@ static void chat(struct client_state *csp)
    }
 
    /*
-    * (Re)build the HTTP request. If forwarding, use the whole URL,
-    * else, use only the path.
+    * (Re)build the HTTP request for non-SSL requests.
+    * If forwarding, use the whole URL, else, use only the path.
     */
-   if (http->ssl == 0)
+   if (http->ssl == 0)  
    {  
       freez(http->cmd);
 
@@ -610,8 +640,8 @@ static void chat(struct client_state *csp)
       http->cmd = strsav(http->cmd, " ");
       http->cmd = strsav(http->cmd, http->ver);
 
-      enlist(csp->headers, http->cmd);
    }
+   enlist(csp->headers, http->cmd);
 
 
    /*
