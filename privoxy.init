@@ -3,7 +3,7 @@
 # This is file /etc/rc.d/init.d/privoxy and was put here 
 # by the privoxy rpm
 #
-# chkconfig: 235 84 09
+# chkconfig: 2345 84 09
 #
 # description: This shell script takes care of starting and stopping \
 #              privoxy.
@@ -11,7 +11,7 @@
 
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init,v $
+#  File        :  $Source: /cvsroot/ijbswa//current/privoxy.init,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
 #                 privoxy.
@@ -43,6 +43,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.init,v $
+#     Revision 1.8  2002/04/09 02:51:31  hal9
+#     Changed $JB to $PRIVOXY.
+#
 #     Revision 1.7  2002/04/08 14:54:51  morcego
 #     Moved the chkconfig comments to the begining of the file, couse Linuxconf
 #     was getting confused with it where it was.
@@ -183,8 +186,8 @@ PRIVOXY_LOCK=/var/lock/subsys/$PRIVOXY_PRG
 PRIVOXY="$PRIVOXY_BIN --user $PRIVOXY_USER.$PRIVOXY_USER --pidfile $PRIVOXY_PID $PRIVOXY_CONF"
 
 # some checks for us
-! [ -x $PRIVOXY_BIN  ] && echo "Can't find $PRIVOXY_BIN, exit." && exit 0
-! [ -f $PRIVOXY_CONF ] && echo "Can't find $PRIVOXY_CONF, exit." && exit 0
+! [ -x $PRIVOXY_BIN  ] && echo $"Can't find $PRIVOXY_BIN, exit." && exit 0
+! [ -f $PRIVOXY_CONF ] && echo $"Can't find $PRIVOXY_CONF, exit." && exit 0
 
 # See how we were called.
 
