@@ -8,7 +8,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.72 2002/04/10 04:06:19 hal9 Exp $
+ $Id: user-manual.sgml,v 1.73 2002/04/10 18:45:15 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.72 2002/04/10 04:06:19 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.73 2002/04/10 18:45:15 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3182,10 +3182,38 @@ icon being being cached by the browser, which will speed up the display.
 Requests</title>
 
 <!-- Include contacting.sgml boilerplate: -->
-
  &contacting;
-
 <!-- end boilerplate -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="submitactions">
+<title>Submitting Ads and <quote>Action</quote> Problems</title>
+<para>
+ Ads and banners that are not stopped by <application>Privoxy</application> 
+ can be submitted to the developers by accessing a special page and filling 
+ out the brief, required form. Conversely, you can also report pages, images,
+ etc. that <application>Privoxy</application> is blocking, but should not.
+ The form itself does require Internet access.
+</para>
+<para>
+ To do this, point your browser to <application>Privoxy</application> 
+ at <ulink url="http://p.p/">http://p.p/</ulink>, and then select 
+ <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Actions file feedback system</ulink>, 
+ near the bottom of the page. Paste in the URL that is the cause of the 
+ unwanted behavior, and follow the prompts. The developers will 
+ try to incorporate your submission into future versions.
+</para>
+
+<para>
+ New <filename>default.actions</filename> files will occasionally be made
+ available based on your feedback. These 
+ will be announced on the 
+ <ulink
+ url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
+ list.
+</para>
+</sect2>
 
 </sect1>
 
@@ -3957,6 +3985,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.73  2002/04/10 18:45:15  swa
+ generated
+
  Revision 1.72  2002/04/10 04:06:19  hal9
  Added actions feedback  to Bookmarklets section
 
