@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.4 2002/01/17 21:44:04 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.5 2002/02/27 15:30:39 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.5  2002/02/27 15:30:39  hal9
+# Reset $(RPM_PACKAGEV) to 1 (was 2)
+#
 # Revision 1.4  2002/01/17 21:44:04  jongfoster
 # Adding urlmatch.[ch]
 #
@@ -247,6 +250,7 @@ MV	        = mv
 TAR        = tar
 MAKE       = make
 LN         = ln
+DB         = jade -t sgml -ihtml -D.. -d ldp.dsl\#html
 
 # Program to do LF->CRLF
 #
@@ -348,7 +352,8 @@ all: $(PROGRAM)
 # Phony targets
 #############################################################################
 .PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
-suse-upload win-dist tarball-dist dok webserver clean clobber tags install
+suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
+install
 
 
 #############################################################################
@@ -506,6 +511,29 @@ dok:
 	cd doc/source && db2html -s ldp.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && db2html -s ldp.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
+redhat-dok:
+	mkdir -p doc/text doc/man doc/source/user-manual \
+          doc/source/developer-manual doc/source/faq
+##  user manual
+	rm -rf doc/webserver/user-manual
+	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. &&\
+          mv user-manual ../webserver
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && w3m \
+          -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
+          user-manual
+##  developer manual
+	rm -rf doc/webserver/developer-manual
+	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml &&\
+          cd .. && mv developer-manual ../webserver
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && \
+          w3m -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
+          developer-manual
+##  faq
+	rm -rf doc/webserver/faq
+	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
+	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && w3m -dump \
+          tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+
 #############################################################################
 #
 # Webserver
@@ -515,7 +543,7 @@ dok:
 #############################################################################
 webserver:
 	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) You have run make dok before, right?
+	@$(ECHO) You have run make dok/redhat-dok before, right?
 	@$(ECHO) Note that this command scps all stuff to the webserver,
 	@$(ECHO) it will not remove obsolete documents.
 	@$(ECHO) -------------------------------------------------------
