@@ -1,0 +1,6 @@
+*.sgml
+*.dsl
+*.out
+*.tex
+*.log
+*.aux
