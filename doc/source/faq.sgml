@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.61.2.19 2002/08/25 23:31:56 hal9 Exp $
+ $Id: faq.sgml,v 2.2 2002/09/05 04:25:05 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.61.2.19 2002/08/25 23:31:56 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.2 2002/09/05 04:25:05 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1501,6 +1501,20 @@ and related issues?</title>
 -->
 </sect2>
 
+<sect2 renderas="sect3" id="microsuck">
+<title>I've noticed that Privoxy changes <quote>Microsoft</quote> to 
+<quote>MicroSuck</quote>! Why are you manipulating my browsing?</title>
+
+<para>
+ We're not. The text substitutions that you are seeing are disabled
+ in the default configuration as shipped. You have either manually
+ activated the <quote><literal>fun</literal></quote> filter which
+ is clearly labeled <quote>Text replacements for subversive browsing
+ fun!</quote> or you have implicitly activated it by choosing the
+ <quote>Advanced</quote> profile in the web-based editor.
+</para>
+</sect2>
+
 </sect1>
 
 
@@ -1701,26 +1715,31 @@ every time I start IE. What gives?</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 renderas="sect3" id="blankpage">
 <title>I get a completely blank page at one site. <quote>View Source</quote>
- shows only: <markup><![CDATA[<html><body></body></html>]]></markup>.</title>
+ shows only: <markup><![CDATA[<html><body></body></html>]]></markup>. Without
+ <application>Privoxy</application> the page loads fine.</title>
  <para>
-  This is often the result of a webserver using
-  <application>PHP</application> that mishandles the request
-  <application>Privoxy</application> sends to not compress the content 
-  (a <application>PHP</application> bug).
+  Chances are that the site suffers from a bug in
+  <ulink url="http://www.php.net/"><application>PHP</application></ulink>,
+  which results in empty pages being sent if the client explicitly requests
+  an uncompressed page, like <application>Privoxy</application> does.
+  This bug has been fixed in PHP 4.2.3.
  </para>
  <para>
-  In a default configuration, <application>Privoxy</application> requests all
-  data be sent <quote>uncompressed</quote>. This is required for the page 
-  filtering and other magic to work. In some rare cases, the browser and 
-  webserver miscommunicate and the result is a totally blank page. The 
-  suggested work around is to selectively turn off this feature for sites 
-  that exhibit such behavior. Example section for <filename>user.action</filename>:
+  To find out if this is in fact the source of the problem, try adding
+  the site to a <literal>-prevent-compression</literal> section in
+  <filename>user.action</filename>:
  </para>
  <screen>
    # Make exceptions for ill-behaved sites:                                     
    #                                                                    
    {-prevent-compression}                                               
     .example.com</screen>
+ <para>
+  If that works, you may also want to report the problem to the
+  site's webmasters, telling them to use zlib.output_compression
+  instead of ob_gzhandler in their PHP applications (workaround)
+  or upgrade to PHP 4.2.3 or later (fix).
+ </para>
 </sect2>
 
 
@@ -1816,6 +1835,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.2  2002/09/05 04:25:05  hal9
+Sync with 3.0 branch. No new content.
+
 Revision 1.61.2.19  2002/08/25 23:31:56  hal9
 Fix one grammatical error. Add brief FAQ relating to tranparent proxies (ie
 port 80 setting). Add FAQ on effects of Privoxy on downloaded files
