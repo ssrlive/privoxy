@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.11 2002/04/02 08:51:51 oes Exp $
+#  $Id: default.action,v 1.12 2002/04/03 19:49:52 swa Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -158,7 +158,7 @@
 #   -name         # disable totally
 #
 # The default (if you don't specify anything in this file) is not to take
-# any actions - i.e completely disabled, so JunkBuster will just be a
+# any actions - i.e completely disabled, so Privoxy will just be a
 # normal, non-blocking, non-anonymizing proxy.  You must specifically
 # enable the privacy and blocking features you need (although the 
 # provided default actions file will do that for you).
@@ -260,8 +260,8 @@
 #    browser type.  (Breaks many web sites).  Specify the user-agent
 #    value you want - e.g., to pretend to be using Netscape on Linux:
 #      +hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}
-#    Or to identify yourself explicitly as a JunkBuster user:
-#      +hide-user-agent{JunkBuster/1.0}
+#    Or to identify yourself explicitly as a Privoxy user:
+#      +hide-user-agent{Privoxy/1.0}
 #    (Don't change the version number from 1.0 - after all, why tell them?)
 #
 # +image

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.41 2002/03/31 17:19:00 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.42 2002/04/05 15:50:15 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.41 2002/03/31 17:19:00 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.42  2002/04/05 15:50:15  oes
+ *    fix for invalid HTML proxy_args
+ *
  *    Revision 1.41  2002/03/31 17:19:00  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -346,7 +349,7 @@ const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
 #ifdef FEATURE_TOGGLE
 /* by haroon - indicates if ijb is enabled */
-int g_bToggleIJB        = 1;   /* JunkBusters is enabled by default. */
+int g_bToggleIJB        = 1;   /* Junkbusters is enabled by default. */
 #endif /* def FEATURE_TOGGLE */
 
 /* The filename of the configfile */

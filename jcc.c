@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.89 2002/03/31 17:18:59 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.90 2002/04/02 14:57:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.89 2002/03/31 17:18:59 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.90  2002/04/02 14:57:28  oes
+ *    Made sending wafers independent of FEATURE_COOKIE_JAR
+ *
  *    Revision 1.89  2002/03/31 17:18:59  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -2239,7 +2242,7 @@ static void listen_loop(void)
 
             log_error(LOG_LEVEL_ERROR, "can't fork: %E");
 
-            sprintf(buf , "JunkBuster: can't fork: errno = %d", errno);
+            sprintf(buf , "Privoxy: can't fork: errno = %d", errno);
 
             write_socket(csp->cfd, buf, strlen(buf));
             close_socket(csp->cfd);
