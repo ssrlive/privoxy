@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.86 2002/03/25 17:04:55 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.87 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.86 2002/03/25 17:04:55 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.87  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.86  2002/03/25 17:04:55  david__schmidt
  *    Workaround for closing the jarfile before load_config() comes around again
  *
@@ -2153,7 +2156,7 @@ static void listen_loop(void)
 #if defined(__OS2__) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
          child_id = _beginthread(
-            serve,
+            (void(* _Optlink)(void*))serve,
             NULL,
             64 * 1024,
             csp);

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.35 2002/03/24 15:23:33 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.36 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.35 2002/03/24 15:23:33 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.36  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.35  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *
@@ -228,6 +231,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.35 2002/03/24 15:23:33 jongfoster E
 #endif /* def _WIN32 */
 
 #ifdef __OS2__
+#include <sys/socket.h> /* For sock_errno */
 #define INCL_DOS
 #include <os2.h>
 #endif
