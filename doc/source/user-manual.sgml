@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.59 2002/03/27 00:54:33 hal9 Exp $
+ $Id: user-manual.sgml,v 1.60 2002/03/27 01:57:34 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.59 2002/03/27 00:54:33 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.60 2002/03/27 01:57:34 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -2230,9 +2230,9 @@ Removed references to Win32. HB 09/23/01
   </para>
   <para>
    The <quote>+fast-redirects</quote> option enables interception of these
-   requests by <application>Privoxy</application>, who will cut off all but
-   the last valid URL in the request and send a local redirect back to your
-   browser without contacting the remote site.
+   types of requests by <application>Privoxy</application>, who will cut off
+   all but the last valid URL in the request and send a local redirect back to
+   your browser without contacting the intermediate site(s).
   </para>
   <para>
    <literal>
@@ -3285,10 +3285,10 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2>
+<sect2 id="history">
 <title>History</title>
 <para>
- <application>Privoxy</application> is derived from
+ <application>Privoxy</application> is evolved, and derived from, 
  <application>the Internet Junkbuster</application>, with many 
  improvments and enhancements over the original.
 </para>
@@ -3317,7 +3317,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>
+   &nbsp; <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>, 
+   the Project Page for <application>Privoxy</application>.
   </member>
  </simplelist>
  <simplelist>
@@ -4020,6 +4021,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.60  2002/03/27 01:57:34  hal9
+ Added more to Anatomy section.
+
  Revision 1.59  2002/03/27 00:54:33  hal9
  Touch up intro for new name.
 
