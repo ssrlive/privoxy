@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.98 2002/04/28 05:43:59 hal9 Exp $
+ $Id: user-manual.sgml,v 1.99 2002/04/28 16:59:05 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.98 2002/04/28 05:43:59 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.99 2002/04/28 16:59:05 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -558,7 +558,7 @@ must find a better place for this paragraph
 <para>
  Another feature where you will probably want to define exceptions for trusted
  sites is the popup-killing (through the <ulink
- url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>and
+ url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink> and
  <ulink
  url="actions-file.html#FILTER-POPUPS"><quote>+filter{popups}</quote></ulink>
  actions), because your favorite shopping, banking, or leisure site may need
@@ -2559,22 +2559,47 @@ forward-socks4 and forward-socks4a</title>
  <application>Privoxy</application> takes for which URLs, and thus determines
  how ad images, cookies and various other aspects of HTTP content and
  transactions are handled, and on which sites (or even parts thereof). There 
- are three such files included with <application>Privoxy</application>, 
- with slightly different purposes. <filename>default.action</filename> sets
- the default policies. <filename>standard.action</filename> is used by 
- <application>Privoxy</application> and the web based editor to set 
- pre-defined values (and normally should not be edited). Local exceptions 
- are best done in <filename>user.action</filename>. The content of these 
+ are three such files included with <application>Privoxy</application> (as of 
+ version 2.9.15), with differing purposes:
+ </para>
+ 
+ <para>
+  <itemizedlist>
+   <listitem>
+    <para>
+      <filename>standard.action</filename> - is used by the web based editor, 
+      to set various pre-defined sets of rules for the default actions section
+      in <filename>default.action</filename>. These have increasing levels of
+      aggressiveness. It is not recommend to edit this file.
+    </para>
+   </listitem> 
+   <listitem>
+    <para>
+     <filename>default.action</filename> - is the primary action file 
+     that sets the initial values for all actions. It is intended to 
+     provide a base level of functionality for
+     <application>Privoxy's</application> array of features. So it is 
+     a set of broad rules that should work reasonably well for users everywhere.
+     This is the file that the developers are keeping updated, and making 
+     available to users.
+    </para>
+   </listitem> 
+   <listitem>
+    <para>
+     <filename>user.action</filename> - is intended to be for local site 
+     preferences and exceptions. As an example, if your ISP or your bank
+     has specific requirements, and need special handling, this kind of 
+     thing should go here. This file will not be upgraded.
+    </para>
+  </listitem> 
+  </itemizedlist>
+ </para> 
+
+<para>
+ The list of actions files to be used are defined in the main configuration 
+ file, and are processed in the order they are defined. The content of these
  can all be viewed and edited from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
- </para>
-
-<para> 
- Anything you want can be blocked, including ads, banners, or just some obnoxious
- URL that you would rather not see is done here. Cookies can be accepted or rejected, or
- accepted only during the current browser session (i.e. not written to disk),
- content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
- See below for a complete list of available actions.
 </para>
 
 <para>
@@ -2583,6 +2608,14 @@ forward-socks4 and forward-socks4a</title>
  url="actions-file.html#ALIASES">below</ulink>), then the default set of rules
  which will apply universally to all sites and pages. And then below that,
  exceptions to the defined universal policies. 
+</para>
+
+<para> 
+ Actions can be used to block anything you want, including ads, banners, or
+ just some obnoxious URL that you would rather not see. Cookies can be accepted
+ or rejected, or accepted only during the current browser session (i.e. not
+ written to disk), content can be modified, JavaScripts tamed, user-tracking
+ fooled, and much more. See below for a complete list of actions.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -4582,12 +4615,14 @@ for-privoxy-version=3.0
  { <ulink url="actions-file.html#BLOCK">+block</ulink> }
  www.my-isp-example.com/logo[0-9].gif
 
+
 # Say the site where you do your homebanking needs to open
 # popup windows, but you have chosen to kill popups by
 # default. This will allow it for your-example-bank.com:
 #
  { <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> }
  .my-example-bank.com
+
 
 # This site is delicate, and requires kid-glove 
 # treatment.
@@ -5781,6 +5816,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.99  2002/04/28 16:59:05  swa
+ more structure in starting section
+
  Revision 1.98  2002/04/28 05:43:59  hal9
  This is the break up of configuration.html into multiple files. This
  will probably break links elsewhere :(
