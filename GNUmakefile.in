@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.122 2002/10/11 06:03:08 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.123 2002/10/12 06:05:41 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -99,17 +99,19 @@ INSTALL_T  = -m 0644
 INSTALL_D  = -m 0755 -d
 # install options for superuser install
 #INSTALL_S  = -g @GROUP@ -o @USER@ 
-ID         = id -u
+# id -u is not universal. FIXME: need to set from configure. Breaks on
+# Solaris.
+#ID         = id -u
 LD         = @CC@
 RM         = rm -f
 RMDIR      = rmdir
 MKDIR      = ./mkinstalldirs
 STRIP_PROG = strip
-SED	   = sed
+SED	      = sed
 GREP       = grep
 CAT        = cat
 RPM        = rpm
-MV	   = mv
+MV	      = mv
 TAR        = tar
 LN         = ln
 TOUCH      = touch
@@ -134,7 +136,7 @@ DKPREFIX   = @DKPREFIX@
 
 #User Group paras
 USER       = @USER@
-GROUP	   = @GROUP@
+GROUP	 = @GROUP@
 
 # Program to do LF->CRLF
 #
@@ -270,7 +272,7 @@ all: $(PROGRAM) default.action
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
 install conectiva-spec conectiva-dist conectiva-upload debian-dist \
 debian-upload ensure-wdump ensure-jadebin ensure-dkprefix CONF_DEST LOG_DEST \
-PID_DEST check_doc install-strip
+PID_DEST check_doc install-strip uninstall GROUP_T
 
 
 #############################################################################
@@ -840,22 +842,34 @@ check_doc:=$(shell if [ ! -d "$(SHARE_DEST)/doc" ] && [ "$(prefix)" = "/usr/loca
 		 $(ECHO) "0";\
 	 fi)
 
+# If USER is specified but no GROUP, assume there is a GROUP of same name.
+GROUP_T:=$(shell if [ x$(GROUP) = x ] && [ x$(USER) != x ];then \
+		$(ECHO) "$(USER)" ;\
+	 else\
+		 $(ECHO) "$(GROUP)";\
+	 fi)
+
 install-strip:  
 	$(MAKE) INSTALL_P='$(INSTALL_P) -s'  install
 
-install: CONF_DEST LOG_DEST PID_DEST check_doc all
-	@$(ECHO) -e "\nCreating directories, and preparing Privoxy installation"
-	@$(CHMOD) 0755 $(MKDIR)
-	@$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(SHARE_DEST) $(MAN_DEST) $(LOG_DEST) $(PID_DEST)
-	@$(INSTALL) $(INSTALL_D) $(CONF_DEST)
-	@$(INSTALL) $(INSTALL_D) $(CONF_DEST)/templates
+# FIXME: id handling needs help, probably via configure, since 'id -u' is not 
+# universally reliable (eg Solaris). Group handling is weak. If group is null,
+# we blindly assume there is a group that matches $(USER). configure only 
+# tests for the first group outputted from groups command. Perhaps the whole 
+# user/group validation should be done here. hal.
+install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
+	$(ECHO) "Creating directories, and preparing Privoxy installation"
+	$(CHMOD) 0755 $(MKDIR)
+	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(SHARE_DEST) $(MAN_DEST) $(LOG_DEST) $(PID_DEST)
+	$(INSTALL) $(INSTALL_D) $(CONF_DEST)
+	$(INSTALL) $(INSTALL_D) $(CONF_DEST)/templates
 		
-	@# Install the executable binary
-	@$(ECHO) Installing $(PROGRAM) executable to $(SBIN_DEST)
-	@$(INSTALL) $(INSTALL_P) $(PROGRAM) $(SBIN_DEST)
+	# Install the executable binary
+	$(ECHO) Installing $(PROGRAM) executable to $(SBIN_DEST)
+	$(INSTALL) $(INSTALL_P) $(PROGRAM) $(SBIN_DEST)
 
-	@# Install the DOCS and man page 
-	@if [ $(check_doc) = 0 ]; then \
+	# Install the DOCS and man page 
+	-if [ $(check_doc) = 0 ]; then \
 		DOC=$(DOC_DEST) ;\
 	else \
 		DOC=$(prefix)/doc/privoxy ;\
@@ -863,63 +877,64 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 	$(INSTALL) $(INSTALL_D) $$DOC ;\
 	$(INSTALL) $(INSTALL_D) $$DOC/user-manual ;\
 	$(INSTALL) $(INSTALL_D) $$DOC/faq ;\
+	$(INSTALL) $(INSTALL_D) $$DOC/developer-manual ;\
+	$(INSTALL) $(INSTALL_D) $$DOC/man-page ;\
 	$(INSTALL) $(INSTALL_D) $$DOC/images ;\
 	if [ -d "$(DOK_WEB)" ]; then \
-		$(ECHO) Installing FAQ, Manual, and other docs to $$DOC.;\
+		$(ECHO) Installing FAQ, Manual, and other docs to $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/user-manual/*html $$DOC/user-manual;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/faq/*html $$DOC/faq;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/man-page/*html $$DOC/man-page;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/developer-manual/*html $$DOC/developer-manual;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/images/*jpg $$DOC/images;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/privoxy-index.html $$DOC/index.html;\
 		$(INSTALL) $(INSTALL_T) AUTHORS $$DOC;\
 		$(INSTALL) $(INSTALL_T) LICENSE $$DOC;\
 		$(INSTALL) $(INSTALL_T) README $$DOC;\
 		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
 	fi
-	@$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1.gz
-	@-$(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
+	$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1.gz
+	-$(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
 
-	@# Change the Config file default directories acording to the configured ones
-	@$(ECHO) Rewriting config.
-	@if [ -f config.base ] ; then \
+	# Change the config file default directories according to the configured ones
+	$(ECHO) Rewriting config
+	if [ -f config.base ] ; then \
 		$(CAT) config >config~ ;\
 		$(MV) config.base config ;\
 	fi
-	@$(SED) 's+confdir .+confdir $(CONF_DEST)+' config | \
+	$(SED) 's+confdir .+confdir $(CONF_DEST)+' config | \
 	$(SED) 's+logdir .+logdir $(LOG_DEST)+' >config.updated
-	@$(MV) config config.base
-	@$(MV) config.updated config 
+	$(MV) config config.base
+	$(MV) config.updated config 
 
-	@# Install the config support files. Test for root install, and abort 
-	@# if there is no privoxy user, and no other user was enabled during 
-	@# configure.
-	@$(ECHO) Installing templates to $(CONF_DEST)/templates
-	@$(INSTALL) $(INSTALL_T) `find templates -type f` $(CONF_DEST)/templates
-	@if [ "`id |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
+	# Install the config support files. Test for root install, and abort 
+	# if there is no privoxy user, and no other user was enabled during 
+	# configure.
+	$(ECHO) Installing templates to $(CONF_DEST)/templates
+	$(INSTALL) $(INSTALL_T) `find templates -type f` $(CONF_DEST)/templates
+	if [ "`id |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
 		if [ x$(USER) = x ]; then \
 			if [ "`id privoxy`" ]; then \
-				$(ECHO) -e "\n Setting user and group to privoxy";\
+				$(ECHO) "Setting user and group to privoxy";\
 				INSTALL_CONF="$(INSTALL_T) -b -g privoxy -o privoxy" ;\
 			else \
-				$(ECHO) -e "******************************************************************" ;\
-				$(ECHO) -e " WARNING! WARNING! installing config files as root!" ;\
-				$(ECHO) -e " It is strongly recommended to run $(PROGRAM) as non-root user," ;\
-				$(ECHO) -e " and to install the config files as that user!" ;\
-				$(ECHO) -e " Please read INSTALL, and create a privoxy user!" ;\
-				$(ECHO) -e "*******************************************************************" ;\
+				$(ECHO)  "******************************************************************" ;\
+				$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
+				$(ECHO)  " It is strongly recommended to run $(PROGRAM) as non-root user," ;\
+				$(ECHO)  " and to install the config files as that user!" ;\
+				$(ECHO)  " Please read INSTALL, and create a privoxy user!" ;\
+				$(ECHO)  "*******************************************************************" ;\
 				exit 1 ;\
 			fi ;\
 		else \
-			if [ x$(GROUP) = x ]; then \
-				$(ECHO) -e "\n Superuser install, installing config files as $(USER),$(USER)" ;\
-				INSTALL_CONF="$(INSTALL_T) -b -o $(USER) -g $(USER)" ;\
-			else \
-				$(ECHO) -e "\n Superuser install, installing config files as $(USER),$(GROUP)" ;\
-				INSTALL_CONF="$(INSTALL_T) -b -o $(USER) -g $(GROUP)" ;\
-			fi ;\
+			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
+			INSTALL_CONF="$(INSTALL_T) -b -o $(USER) -g $(GROUP_T)" ;\
 		fi ;\
 	else \
 		if [ ! "`id $(USER)`" = "`id`" ] ;then \
-			$(ECHO) -e "\n  ** WARNING ** current install user different from configured user!! edit may fail.\n" ;\
+			$(ECHO) "** WARNING ** current install user different from configured user!!" ;\
+			$(ECHO) "Edit may fail." ;\
 		fi ;\
 		INSTALL_CONF="$(INSTALL_T) -b " ;\
 	fi ;\
@@ -932,82 +947,95 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 		$(INSTALL) $$INSTALL_CONF trust  $(CONF_DEST) ;\
 	fi ;\
 
-	@# setup the logfiles
-	@# mode 0640 in the logs for privacy reasons 
-	@$(ECHO) Creating logfiles in $(LOG_DEST)
-	@$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
-	@if [ x$(USER) != x ]; then \
-		$(CHOWN) $(USER),$(GROUP) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
-			$(ECHO) -e "\n** WARNING ** current install user different from configured user." ;\
-			$(ECHO) -e  "              Logging may fail!!" ;\
+	# Set up the logfiles, mode 0640 for privacy reasons 
+	$(ECHO) Creating logfiles in $(LOG_DEST)
+	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
+	if [ x$(USER) != x ]; then \
+		$(CHOWN) $(USER):$(GROUP_T) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
+		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
 	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
 
-	@# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
-	@# Install if dest is writable.
-	@if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
+	# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
+	# Install if dest is writable.
+	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
 		$(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
 		$(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
 		$(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
 		$(SED) 's+%USER%+$(USER)+' | \
-		$(SED) 's+%GROUP%+$(GROUP)+' >slackware/rc.privoxy ;\
+		$(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
 		$(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
-		$(ECHO) -e "\nInstalling for Slackware." ;\
-		$(ECHO) -e "\n Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
+		$(ECHO) "Installing for Slackware." ;\
+		$(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
 	elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
-		$(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy." ;\
-		$(INSTALL) $(INSTALL_P) privoxy.init /etc/rc./init.d/privoxy ;\
+		$(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
+		$(INSTALL) $(INSTALL_P) privoxy.init /etc/rc.d/init.d/privoxy ;\
 		$(MKDIR) /etc/logrotate.d/ ;\
 		$(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
 	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
-		$(ECHO) "Installing generic init script to /etc/init.d/privoxy." ;\
+		$(ECHO) "Installing generic init script to /etc/init.d/privoxy" ;\
 		$(INSTALL) $(INSTALL_P) privoxy-generic.init /etc/init.d/privoxy ;\
 	else \
-		$(ECHO) "No init script installed, install it manually if needed." ;\
+		$(ECHO) "No init script installed, install it manually if needed" ;\
 	fi
+	# mmmmm, good.
 	@$(ECHO) "Privoxy installation succeeded!"
+	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
 
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
-	#
-	# FIXME: test this in all systems and with several options and report any bugs
-	#
-	
+	$(ECHO) Starting Privoxy uninstallation
 	# KILL privoxy if running
-	-@ $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid `  >/dev/nul 2>/dev/null
-	-@ $(KILL) `$(CAT) /var/run/privoxy.pid `  >/dev/nul 2>/dev/null
+	-@ test -f $(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+          $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid` 
+	-@ test -f /var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+          $(KILL) `$(CAT) /var/run/privoxy.pid `
 
 	# Program binary
+	$(ECHO) Removing $(PROGRAM) binary
 	$(RM) $(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
 
 	# config files and dir and maybe old install backups
+	$(ECHO) Removing $(PROGRAM) config files
 	$(RM) $(CONF_DEST)/config $(CONF_DEST)/default.action $(CONF_DEST)/default.filter \
 		$(CONF_DEST)/trust $(CONF_DEST)/standard.action $(CONF_DEST)/user.action \
 		$(CONF_DEST)/config~ $(CONF_DEST)/default.action~ $(CONF_DEST)/default.filter~ \
 		$(CONF_DEST)/trust~ $(CONF_DEST)/standard.action~ $(CONF_DEST)/user.action~
 	$(RM) -r $(CONF_DEST)/templates
-	-$(RMDIR) $(CONF_DEST) || $(ECHO) -e "  $(CONF_DEST) is not empty, couldnt remove it\n" ;\
 	
 	# man page and docs
+	$(ECHO) Removing $(PROGRAM) docs
 	-$(RM) $(MAN_DEST)/privoxy.1.gz
 	-$(RM) -r $(DOC_DEST) || $(RM) -r $(prefix)/doc/privoxy
 
 	# Log and jarfile and pidfile
-	-$(RM) $(LOG_DEST)/logfile || $(RM) /var/log/privoxy/logfile
-	-$(RM) $(LOG_DEST)/jarfile || $(RM) /var/log/privoxy/jarfile
-	-$(RM) $(PID_DEST)/privoxy.pid || $(RM) /var/run/privoxy.pid
+	$(ECHO) Removing $(PROGRAM) logs
+	-$(RM) $(LOG_DEST)/logfile $(PID_DEST)/privoxy.pid $(LOG_DEST)/jarfile
 
-	# final clean up of unused directories
+	# Final clean up of unused directories. Special handling of CONF and LOG
+     # destinations.
+	$(ECHO) Removing $(PROGRAM) directories
+	$(RMDIR) $(LOG_DEST)  || $(ECHO) "$(LOG_DEST) is not empty, not removed" ;\
+	$(RMDIR) $(CONF_DEST) || $(ECHO) "$(CONF_DEST) is not empty, not removed" ;\
 	if [  ! "$(prefix)" = "/usr/local" ] ;then \
-		$(RMDIR)  $(MAN_DEST) || $(ECHO) -e "  $(MAN_DEST) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(MAN_DIR) || $(ECHO) -e "  $(MAN_DIR) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(SHARE_DEST)/doc || $(ECHO) -e "  $(SHARE_DEST)/doc is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(SHARE_DEST) || $(ECHO) -e "  $(SHARE_DEST) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(CONF_BASE) || $(ECHO) -e "  $(CONF_BASE) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(SBIN_DEST) || $(ECHO) -e "  $(SBIN_DEST) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(LOG_DEST) || $(ECHO) -e "  $(LOG_DEST) is not empty, couldnt remove it\n" ;\
-		$(RMDIR)  $(prefix) || $(ECHO) -e "  $(prefix) is not empty, couldnt remove it\n" ;\
+		$(RMDIR) $(MAN_DEST) || $(ECHO) "$(MAN_DEST) is not empty, not removed" ;\
+		$(RMDIR) $(MAN_DIR)  || $(ECHO) "$(MAN_DIR) is not empty, not removed" ;\
+		$(RMDIR) $(SHARE_DEST)/doc || $(ECHO) "$(SHARE_DEST)/doc is not empty, not removed" ;\
+		$(RMDIR) $(SHARE_DEST) || $(ECHO) "$(SHARE_DEST) is not empty, not removed" ;\
+		$(RMDIR) $(SBIN_DEST)  || $(ECHO) "$(SBIN_DEST) is not empty, not removed" ;\
+          if test $(LOG_DEST) != /var/log/privoxy ; then \
+               $(RMDIR) $(prefix)/var/log || $(ECHO) "$(prefix)/var/log is not empty, not removed";\
+          fi ;\
+          if test $(PID_DEST) != /var/run ;then \
+               $(RMDIR) $(prefix)/var/run || $(ECHO) "$(prefix)/var/run is not empty, not removed";\
+          fi ;\
+          if test -d $(prefix)/var ; then \
+               $(RMDIR) $(prefix)/var || $(ECHO) "$(prefix)/var is not empty, not removed" ;\
+          fi ;\
+		$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
 	fi
+
 	# init scripts and logrotate
+	$(ECHO) Removing $(PROGRAM) init script
 	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
 		$(RM) /etc/rc.d/rc.privoxy ;\
 	elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ]  && [ -w /etc/rc.d/init.d/ ] ; then \
@@ -1015,8 +1043,9 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
 		$(RM) /etc/init.d/privoxy ;\
 	else \
-		$(ECHO) -e "\n Unable to remove privoxy init script... not installed or permition denied" ;\
+		$(ECHO) "Unable to remove privoxy init script, not installed or permission denied" ;\
 	fi
+	$(ECHO) Privoxy uninstalled, bye
 
 coffee:
 	 @perl -e 'print pack "C*", (31,139,8,8,153,63,226,60,2,3,99,111,102,102,101,101,0,109,143,205,13,192,32,8,133,\
@@ -1032,6 +1061,15 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.123  2002/10/12 06:05:41  hal9
+# WIP: This is mostly to fix various problems encountered on SF CF Solaris
+# servers for the install target only. This did not handle /[^C]*, test -e, not
+# quoting within tests (ie [ `id $(USER)` = `id` ] needs quoting) in some
+# situations, and does not support id -u (with the id in $PATH, but there is
+# another...). Also, cleaned up output. Needs testing. I am unable to test the
+# root install stuff either. It installs now at least (not tested further).
+# A few other nits.
+#
 # Revision 1.122  2002/10/11 06:03:08  hal9
 # Really install FAQ this time, and not u-m in two locations. Include images
 # for u-m.
