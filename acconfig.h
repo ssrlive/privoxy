@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.6  2001/07/15 17:54:29  jongfoster
+ *    Renaming #define STATIC to STATIC_PCRE
+ *    Adding new #define FEATURE_PTHREAD that will be used to enable
+ *    POSIX threads support.
+ *
  *    Revision 1.5  2001/07/13 13:48:37  oes
  *     - (Fix:) Copied CODE_STATUS #define from config.h.in
  *     - split REGEX #define into REGEX_GNU and REGEX_PCRE
@@ -298,5 +303,15 @@
 #if defined(FEATURE_PTHREAD) && defined(_WIN32)
 #define __CLEANUP_C
 #endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
+
+/*
+ * BEOS does not currently support POSIX threads.
+ * This *should* be detected by ./configure, but let's be sure.
+ */
+#if defined(FEATURE_PTHREAD) && defined(__BEOS__)
+#error BEOS does not support pthread - please run ./configure again with "--disable-pthread"
+
+#endif /* defined(FEATURE_PTHREAD) && defined(__BEOS__) */
+
 
 #endif /* _CONFIG_H */
