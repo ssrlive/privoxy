@@ -1,6 +1,6 @@
 #ifndef _DEANIMATE_H
 #define _DEANIMATE_H
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.1 2001/07/13 13:40:09 oes Exp $"
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.2 2001/07/13 13:46:20 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 1.2  2001/07/13 13:46:20  oes
+ *    Introduced GIF deanimation feature
+ *
  *
  *********************************************************************/
 
@@ -58,7 +61,7 @@ struct binbuffer
 /*
  * Function prototypes
  */
-extern int gif_deanimate(struct binbuffer *src, struct binbuffer *dst);
+extern int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_image);
 extern void buf_free(struct binbuffer *buf);
 
 /* 
