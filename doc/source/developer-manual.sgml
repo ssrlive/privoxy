@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.14 2002/03/30 19:04:08 swa Exp $
+ $Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.14 2002/03/30 19:04:08 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -72,14 +72,30 @@
 
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="introduction"><title>Introduction</title>
-    <para>To be filled.
-</para>
+<!--
+
+ I don't like seeing blank space :) So added *something* here.
+
+ --> 
+    <para>
+     <application>Privoxy</application>, as an heir to
+     <application>Junkbuster</application>, is an Open Source project 
+     and licensed under the GPL. As such, <application>Privoxy</application>
+     development is potentially open to anyone who has the time, knowledge,
+     and desire to contribute in any capacity. Our goals are simply to
+     continue the mission, to improve <application>Privoxy</application>, and
+     to make it available to as wide an audience as possible. 
+    </para>
+    <para>
+     One does not have to be a programmer to contribute. Packaging, testing,
+     and porting, are all important jobs as well.
+    </para>
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>
-You'll need an account on Sourceforge to support our development. Mail you ID
+You'll need an account on Sourceforge to support our development. Mail your ID
 to the list and wait until a project manager has added you.
 
 For the time beeing (read, this section is under construction), please note the
@@ -107,15 +123,47 @@ following guidelines for changing stuff in the code. If it is
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="documentation"><title>Documentation Guidelines</title>
     <para>
-        All docs are in SGML format and located in the <computeroutput>doc/source</computeroutput> directory.
+        All formal documents are maintained in docbook SGML and located
+        in the <computeroutput>doc/source</computeroutput> directory. You will
+        need <ulink url="http://www.docbook.org">docbook</ulink> and the
+        docbook stylesheets (or comparable alternatives), and either 
+        <application>jade</application> or <application>openjade</application> 
+        installed in order to build docs from source. Currently there is 
+        <ulink
+        url="../user-manual/index.html"><citetitle>user-manual</citetitle></ulink>,
+        <ulink
+        url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>,
+        and, of course this, the <citetitle>developer-manual</citetitle> in
+        this format.
         </para>
         <para>
-        How do you update the webserver (i.e. the pages on sourceforge)?
+         Packagers are encouraged to include this documentation. For those
+         without the ability to build the docs locally, text versions of 
+         each are kept in CVS. Or HTML versions can be downloaded from the <ulink
+         url="http://www.privoxy.org">www.privoxy.org</ulink> website, which
+         should be fairly current.
+        </para>
+        <para>
+          Documents are built with the Makefile targets of 
+          <computeroutput>make dok</computeroutput>, or alternately
+          <computeroutput>make redhat-dok</computeroutput>. If you 
+          have problems, try both. The build process uses the document 
+          SGML sources in <computeroutput>doc/source</computeroutput> to
+          update all text files in <computeroutput>doc/text</computeroutput>
+          and to update all HTML documents in
+          <computeroutput>doc/webserver</computeroutput>.
+        </para>
+        <para>
+         Documentation writers should please make sure documents build 
+         successfully before committing to CVS.
+        </para>
+        <para>
+        How do you update the webserver (i.e. the pages on privoxy.org)?
         <orderedlist numeration="arabic">
                 <listitem><para>
-        Run <computeroutput>make dok</computeroutput> (which uses the documents in <computeroutput>doc/source</computeroutput> to update all
-        text files in <computeroutput>doc/text</computeroutput> and to update
-all web documents in <computeroutput>doc/webserver</computeroutput>.
+        First, build the docs by running <computeroutput>make
+        dok</computeroutput> (or alternately <computeroutput>make
+        redhat-dok</computeroutput>).                 
                 </para></listitem>
                 <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all files from
@@ -1256,7 +1304,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.14 2002/03/30 19:04:08 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1316,7 +1364,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.14 2002/03/30 19:04:08 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1912,19 +1960,27 @@ at sourceforge. Three simple steps:
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="contact"><title>Contact the developers</title>
-    <para>Please see the user manual for information on how to contact the developers.
+    <para>
+     Please see the contact page in the <ulink
+     url="../user-manual/contact.html">user-manual</ulink> for details.
     </para>
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="copyright"><title>Copyright and History</title>
-    <para>Please see the user manual for information on Copyright and History.
-    </para>
+    <para>
+     Please see the <ulink
+     url="../user-manual/copyright.html#HISTORY">user-manual</ulink> for
+     information on Copyright and History.
+  </para>
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="seealso"><title>See also</title>
-    <para>Please see the user manual for information on references.
+    <para>
+      Please see the <ulink
+      url="../user-manual/seealso.html">user-manual</ulink> for others
+      references.
     </para>
   </sect1>
 
@@ -1949,6 +2005,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.15  2002/03/30 22:29:47  swa
+  wrong make flavour
+
   Revision 1.14  2002/03/30 19:04:08  swa
   people release differently. no good.
   I want to make parts of the docs only.
