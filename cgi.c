@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.42 2002/01/21 00:33:20 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.43 2002/03/05 21:33:45 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.42 2002/01/21 00:33:20 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.43  2002/03/05 21:33:45  david__schmidt
+ *    - Re-enable OS/2 building after new parms were added
+ *    - Fix false out of memory report when resolving CGI templates when no IP
+ *      address is available of failed attempt (a la no such domain)
+ *
  *    Revision 1.42  2002/01/21 00:33:20  jongfoster
  *    Replacing strsav() with the safer string_append() or string_join().
  *    Adding map_block_keep() to save a few bytes in the edit-actions-list HTML.
@@ -693,7 +698,7 @@ struct http_response *error_response(struct client_state *csp,
      err = map(exports, "host-ip", 1, html_encode(csp->http->host_ip_addr_str), 0);
      if (err)
      {
-       // Some failures, like "404 no such domain", don't have an IP address.
+       /* Some failures, like "404 no such domain", don't have an IP address. */
        err = map(exports, "host-ip", 1, html_encode(csp->http->host), 0);
      }
    }

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.28 2002/03/04 17:59:59 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.29 2002/03/04 23:45:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.28 2002/03/04 17:59:59 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.29  2002/03/04 23:45:13  jongfoster
+ *    Printing thread ID if using Win32 native threads
+ *
  *    Revision 1.28  2002/03/04 17:59:59  oes
  *    Deleted deletePidFile(), cosmetics
  *
@@ -472,7 +475,7 @@ void log_error(int loglevel, char *fmt, ...)
    while ((*src) && (outc < BUFFER_SIZE-2))
    {
       char tempbuf[BUFFER_SIZE];
-      char *sval;
+      char *sval = NULL;
       int ival;
       unsigned uval;
       long lval;
@@ -607,6 +610,9 @@ void log_error(int loglevel, char *fmt, ...)
             sval = w32_socket_strerr(ival, tempbuf);
 #elif __OS2__
             ival = sock_errno();
+            if (ival == 0)
+              ival = errno;
+            sval = strerror(ival);
 #else /* ifndef _WIN32 */
             ival = errno; 
 #ifdef HAVE_STRERROR
