@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.33 2002/04/03 16:02:18 gliptak Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.34 2002/04/08 20:31:41 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.33 2002/04/03 16:02:18 glipta
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.34  2002/04/08 20:31:41  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.33  2002/04/03 16:02:18  gliptak
  *    Correcting compile warning with older gcc
  *
@@ -634,7 +637,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
    jb_socket afd;
-#if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__)
+#if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
    /* Wierdness - fix a warning. */
    int c_length, s_length;
 #else
