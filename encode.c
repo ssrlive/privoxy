@@ -1,7 +1,7 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/encode.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
  *
  * Purpose     :  Functions to encode and decode URLs, and also to
  *                encode cookies and HTML text.
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.1 2001/05/13 21:57:06 administrator
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
