@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.10 2002/03/16 23:54:06 jongfoster Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.11 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -9,7 +9,7 @@
  *                the main connection-handling function.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.11  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.10  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

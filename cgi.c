@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.55 2002/03/24 16:55:06 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.56 2002/03/24 17:50:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -12,7 +12,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.55 2002/03/24 16:55:06 oes Exp $";
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.55 2002/03/24 16:55:06 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.56  2002/03/24 17:50:46  jongfoster
+ *    Fixing compile error if actions file editor disabled
+ *
  *    Revision 1.55  2002/03/24 16:55:06  oes
  *    Making GIF checkerboard transparent
  *

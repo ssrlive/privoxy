@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.23 2002/03/24 13:32:41 swa Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.24 2002/03/24 15:23:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -16,7 +16,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.23 2002/03/24 13:32:41 swa Exp $"
  *                Stick to the short names in this file for consistency.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.23 2002/03/24 13:32:41 swa Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.24  2002/03/24 15:23:33  jongfoster
+ *    Name changes
+ *
  *    Revision 1.23  2002/03/24 13:32:41  swa
  *    name change related issues
  *

@@ -6,10 +6,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.56 2002/03/24 16:17:06 swa Exp $
+ $Id: user-manual.sgml,v 1.57 2002/03/24 20:33:30 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
- Privoxy team.  http://ijbswa.sourceforge.net
+ Privoxy team. http://www.privoxy.org/
 
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.56 2002/03/24 16:17:06 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.57 2002/03/24 20:33:30 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -51,7 +51,7 @@ Hal Burgiss <hal@foobox.net>
   stand-alone systems and multi-user networks.
  </para>
  <para>
-You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
+You can find the latest version of the user manual at  <ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
  </para>
 
 <!--   <para> -->
@@ -480,7 +480,7 @@ configuration section below. HB.)
 <para>
  <application>Privoxy</application> can be reached by the special 
  URL <ulink url="http://p.p/">http://p.p/</ulink> (or alternately
- <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>), 
+ <ulink url="http://www.privoxy.org/config/">http://www.privoxy.org/config/</ulink>), 
  which is an internal page. You will see the following section:
 
 </para>
@@ -3315,7 +3315,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://ijbswa.sourceforge.net/">http://ijbswa.sourceforge.net/</ulink>
+   &nbsp; <ulink url="http://www.privoxy.org/">http://www.privoxy.org/</ulink>
   </member>
  </simplelist>
  <simplelist>
@@ -3619,7 +3619,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
   <blockquote>
    <para> 
-     <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>
+     <ulink url="http://www.privoxy.org/config/">http://www.privoxy.org/config/</ulink>
    </para>
   </blockquote>
   <para>
@@ -3635,7 +3635,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
    <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/show-status">http://ijbswa.sourceforge.net/config/show-status</ulink>
+    <ulink url="http://www.privoxy.org/config/show-status">http://www.privoxy.org/config/show-status</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3646,7 +3646,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
   <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/show-version">http://ijbswa.sourceforge.net/config/show-version</ulink>
+    <ulink url="http://www.privoxy.org/config/show-version">http://www.privoxy.org/config/show-version</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3657,7 +3657,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
   <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/show-request">http://ijbswa.sourceforge.net/config/show-request</ulink>
+    <ulink url="http://www.privoxy.org/config/show-request">http://www.privoxy.org/config/show-request</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3668,7 +3668,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
    <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+    <ulink url="http://www.privoxy.org/config/show-url-info">http://www.privoxy.org/config/show-url-info</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3679,7 +3679,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
    <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/toggle">http://ijbswa.sourceforge.net/config/toggle</ulink>
+    <ulink url="http://www.privoxy.org/config/toggle">http://www.privoxy.org/config/toggle</ulink>
    </para>
   </blockquote>
   <para>
@@ -3687,12 +3687,12 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
    <blockquote>
    <para> 
-     <ulink url="http://ijbswa.sourceforge.net/config/toggle?set=disable">http://ijbswa.sourceforge.net/config/toggle?set=disable</ulink>
+     <ulink url="http://www.privoxy.org/config/toggle?set=disable">http://www.privoxy.org/config/toggle?set=disable</ulink>
    </para>
   </blockquote>
    <blockquote>
    <para> 
-     <ulink url="http://ijbswa.sourceforge.net/config/toggle?set=enable">http://ijbswa.sourceforge.net/config/toggle?set=enable</ulink>
+     <ulink url="http://www.privoxy.org/config/toggle?set=enable">http://www.privoxy.org/config/toggle?set=enable</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3703,7 +3703,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
   </para>
    <blockquote>
    <para> 
-    <ulink url="http://ijbswa.sourceforge.net/config/edit-actions">http://ijbswa.sourceforge.net/config/edit-actions</ulink>
+    <ulink url="http://www.privoxy.org/config/edit-actions">http://www.privoxy.org/config/edit-actions</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -3733,7 +3733,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  the actions files themselves, since they tend to be filled with 
  <quote>regular expressions</quote> whose consequences are not always 
  so obvious. <application>Privoxy</application> provides the 
- <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+ <ulink url="http://www.privoxy.org/config/show-url-info">http://www.privoxy.org/config/show-url-info</ulink>
  page that can show us very specifically how <application>actions</application>
  are being applied to any given URL. This is a big help for troubleshooting.
  </para>
@@ -3960,6 +3960,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.57  2002/03/24 20:33:30  hal9
+ A few minor catch ups with name change.
+
  Revision 1.56  2002/03/24 16:17:06  swa
  configure needs to be generated.
 

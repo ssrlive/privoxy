@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.45 2002/03/16 23:54:06 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.46 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -9,7 +9,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.45 2002/03/16 23:54:06 jongfoster
  *                unload files that are no longer in use.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.45 2002/03/16 23:54:06 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.46  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.45  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

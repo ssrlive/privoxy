@@ -11,7 +11,7 @@
  *                getting ludicrously long with feature defines.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.13  2002/03/24 17:08:12  jongfoster
+ *    Version number bump
+ *
  *    Revision 1.12  2002/03/24 13:25:43  swa
  *    name change related issues
  *

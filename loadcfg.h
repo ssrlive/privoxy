@@ -1,6 +1,6 @@
 #ifndef LOADCFG_H_INCLUDED
 #define LOADCFG_H_INCLUDED
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.9 2002/03/16 23:54:06 jongfoster Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.10 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -11,7 +11,7 @@
  *                variables it writes to.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.10  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.9  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

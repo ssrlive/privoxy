@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.21 2002/03/24 15:23:33 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.22 2002/03/24 16:18:15 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -10,7 +10,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.21 2002/03/24 15:23:33 jongfo
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.21 2002/03/24 15:23:33 jongfo
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.22  2002/03/24 16:18:15  jongfoster
+ *    Removing old logo
+ *
  *    Revision 1.21  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *

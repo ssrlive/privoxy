@@ -6,10 +6,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.29 2002/03/25 05:23:57 hal9 Exp $
+ $Id: faq.sgml,v 1.30 2002/03/25 16:39:22 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
- PRIVOXY team.  http://ijbswa.sourceforge.net
+ Privoxy team. http://www.privoxy.org/
 
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.29 2002/03/25 05:23:57 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.30 2002/03/25 16:39:22 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -44,9 +44,9 @@ tastes. <application>Privoxy</application> has application for both stand-alone
 systems and multi-user networks.
  </para>
  <para>
-You can find the latest version of the document at <ulink url="http://ijbswa.sourceforge.net/faq/">http://ijbswa.sourceforge.net/faq/</ulink>.
+You can find the latest version of the document at <ulink url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
 Please see the Contact section in the 
-<ulink url="http://ijbswa.sourceforge.net/user-manual/contact.html">user-manual</ulink> if you want to contact the developers.
+<ulink url="http://www.privoxy.org/user-manual/contact.html">user-manual</ulink> if you want to contact the developers.
  </para>
 
 <!--   <para> -->
@@ -371,7 +371,7 @@ repository, and together we'll find a suitable task for you.
  </para>
  <para>
   See the <ulink
-  url="http://ijbswa.sourceforge.net/user-manual/">user-manual</ulink> for
+  url="http://www.privoxy.org/user-manual/">user-manual</ulink> for
   platform specific installation instructions. [FIXME: This is meant for after
   the name change for 3.0!]
  </para>
@@ -509,7 +509,7 @@ way to do this?</title>
  The easiest way to do this, is to access <application>Privoxy</application>
  with your web browser at <ulink url="http://p.p/">http://p.p/</ulink>, 
  and then select 
- "<ulink url="http://ijbswa.sourceforge.net/config/edit-actions">Edit the actions list</ulink>"
+ "<ulink url="http://www.privoxy.org/config/edit-actions">Edit the actions list</ulink>"
  from the selection list. You can also do this by editing the appropriate 
  file with a text editor.
 </para>
@@ -896,7 +896,7 @@ programmed to handle certain pages specially.
 <para>
 With recent versions of <application>Privoxy</application> (version 2.9.x), you can get some
 information about <application>Privoxy</application> and change some settings by going to
-http://p.p/ or, equivalently, http://ijbswa.sourceforge.net/config/
+http://p.p/ or, equivalently, http://www.privoxy.org/config/
 (Note that p.p is far easier to type but may not work in some
 configurations).
 </para>
@@ -908,7 +908,7 @@ handled by a special web server which is built in to <application>Privoxy</appli
 
 <para>
 If you are not running <application>Privoxy</application>, then http://p.p/ will fail, and
-http://ijbswa.sourceforge.net/config/ will return a web page telling you
+http://www.privoxy.org/config/ will return a web page telling you
 you're not running <application>Privoxy</application>.
 </para>
 
@@ -1201,7 +1201,7 @@ still getting through. How?</title>
 <para>
  If this doesn't help, you probably have an error in the rule you
  applied. Try pasting the full URL of the offending ad into <ulink
- url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+ url="http://www.privoxy.org/config/show-url-info">http://www.privoxy.org/config/show-url-info</ulink>
  and see if any actions match your new rule.
 </para>
 
@@ -1312,6 +1312,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.30  2002/03/25 16:39:22  hal9
+A few new sections. Made all links relative to user-manual.
+
 Revision 1.29  2002/03/25 05:23:57  hal9
 Moved section, and touch ups.
 

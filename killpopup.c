@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.14 2002/03/07 03:46:53 oes Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.15 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -6,7 +6,7 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.14 2002/03/07 03:46:53 oes Ex
  * Purpose     :  Handles the filtering of popups.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -32,6 +32,9 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.14 2002/03/07 03:46:53 oes Ex
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.15  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.14  2002/03/07 03:46:53  oes
  *    Fixed compiler warnings etc
  *

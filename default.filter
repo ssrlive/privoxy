@@ -5,7 +5,7 @@
 #  Purpose     :  Rules to process the content of web pages
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 Privoxy team.  http://ijbswa.sourceforge.net
+#                 Privoxy team. http://www.privoxy.org/
 # 
 #                 This program is free software; you can redistribute it
 #                 and/or modify it under the terms of the GNU General
@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.3  2002/03/24 16:08:03  jongfoster
+#     Fixing banners-by-size for new config URLs
+#
 #     Revision 1.2  2002/03/24 13:02:18  swa
 #     name change related issues.
 #

@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.9 2002/03/13 00:27:04 jongfoster Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.10 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -10,7 +10,7 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.9 2002/03/13 00:27:04 jongfos
  *                gif_extract_image
  *
  * Copyright   :  Written by and Copyright (C) 2001 by the the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the GIF file format specification (see
  *                http://tronche.com/computer-graphics/gif/gif89a.html)
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.9 2002/03/13 00:27:04 jongfos
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.10  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.9  2002/03/13 00:27:04  jongfoster
  *    Killing warnings
  *

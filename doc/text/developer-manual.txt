@@ -3,7 +3,7 @@ Privoxy Developer Manual
 
    By: Privoxy Developers
    
-   $Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $
+   $Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:01 swa Exp $
    
    The developer manual gives the users information on how to help the
    developer team. It provides guidance on coding, testing, documentation
@@ -16,9 +16,8 @@ Privoxy Developer Manual
    multi-user networks.
    
    You can find the latest version of the user manual at
-   [1]http://ijbswa.sourceforge.net/developer-manual/. Please see the
-   Contact section in the user-manual if you want to contact the
-   developers.
+   [1]http://www.privoxy.org/developer-manual/. Please see the Contact
+   section in the user-manual if you want to contact the developers.
      _________________________________________________________________
    
    Table of Contents
@@ -1039,8 +1038,8 @@ static void unload_re_filterfile( void *f ) { ... }
 4.8. Addendum: Template for files and function comment blocks:
 
    Example for file comments:
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:
-05 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.10 2002/03/24 12:33
+:01 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1048,7 +1047,7 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                PRIVOXY team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1097,8 +1096,8 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
    Example for file header comments:
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:0
-5 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:
+01 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1106,7 +1105,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                PRIVOXY team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1248,7 +1247,7 @@ int FUNCTION_NAME( void *param1, const char *x )
 
 References
 
-   1. http://ijbswa.sourceforge.net/developer-manual/
+   1. http://www.privoxy.org/developer-manual/
    2. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INTRODUCTION
    3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUICKSTART
    4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#DOCUMENTATION

@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.59 2002/03/24 15:23:33 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.60 2002/03/24 15:52:17 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                (though it does declare some macros).
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.60  2002/03/24 15:52:17  jongfoster
+ *    Changing CGI URL prefixes for new name
+ *
  *    Revision 1.59  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *

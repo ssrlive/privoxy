@@ -7,7 +7,7 @@
 # 
 #
 # Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                Privoxy team.  http://ijbswa.sourceforge.net
+#                Privoxy team. http://www.privoxy.org/
 #
 #                Original Author: Copyright (C) 2001 Jonathan Foster
 #                http://www.jon-foster.co.uk/
@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.18  2002/03/24 16:32:08  jongfoster
+#    Removing logo option
+#
 #    Revision 1.17  2002/03/24 15:23:33  jongfoster
 #    Name changes
 #

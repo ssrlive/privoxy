@@ -1,6 +1,6 @@
 #ifndef SSPLIT_H_INCLUDED
 #define SSPLIT_H_INCLUDED
-#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.3 2001/07/29 18:43:08 jongfoster Exp $"
+#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.4 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  A function to split a string at specified deliminters.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: ssplit.h,v $
+ *    Revision 1.4  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.3  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.

@@ -2,10 +2,10 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/basic.action,v $
 # 
-#  $Id: basic.action,v 1.1 2002/03/24 11:37:39 jongfoster Exp $
+#  $Id: basic.action,v 1.2 2002/03/24 13:02:18 swa Exp $
 #
 #  Purpose     :  Very basic actions file, see
-#                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
+#                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
 # 
 # We value your feedback. However, to provide you with the best support,
 # please note:
@@ -343,7 +343,7 @@ rstrip.namezero.com
 ######################################################################
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 Privoxy team.  http://ijbswa.sourceforge.net
+#                 Privoxy team. http://www.privoxy.org/
 # 
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and 

@@ -1,7 +1,7 @@
 #ifdef AMIGA
 #ifndef AMIGA_H_INCLUDED
 #define AMIGA_H_INCLUDED
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.7 2002/03/03 09:18:03 joergs Exp $"
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.8 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
@@ -9,7 +9,7 @@
  * Purpose     :  Amiga-specific declarations.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                This program is free software; you can redistribute it 
  *                and/or modify it under the terms of the GNU General
@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: amiga.h,v $
+ *    Revision 1.8  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.7  2002/03/03 09:18:03  joergs
  *    Made jumbjuster work on AmigaOS again.
  *

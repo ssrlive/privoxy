@@ -1,7 +1,7 @@
-# $Id: Makefile,v 1.1 2001/12/01 11:24:29 jongfoster Exp $
+# $Id: Makefile,v 1.2 2002/03/24 13:25:42 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# Privoxy team.  http://ijbswa.sourceforge.net
+# Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile,v $
+# Revision 1.2  2002/03/24 13:25:42  swa
+# name change related issues
+#
 # Revision 1.1  2001/12/01 11:24:29  jongfoster
 # Will display a warning if non-GNU make is used
 #

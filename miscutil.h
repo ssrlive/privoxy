@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.18 2002/03/07 03:46:17 oes Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.19 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -11,7 +11,7 @@
  *                really fit in any other file.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.19  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.18  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *

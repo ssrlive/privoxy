@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.6 2002/03/13 00:27:04 jongfoster Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.7 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -7,7 +7,7 @@ const char encode_rcs[] = "$Id: encode.c,v 1.6 2002/03/13 00:27:04 jongfoster Ex
  *                encode cookies and HTML text.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.6 2002/03/13 00:27:04 jongfoster Ex
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.7  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.6  2002/03/13 00:27:04  jongfoster
  *    Killing warnings
  *

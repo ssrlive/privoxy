@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.10 2002/03/07 03:46:17 oes Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.11 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -10,7 +10,7 @@
  *                   `destroy_list', `enlist' and `list_to_text'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.11  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.10  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *

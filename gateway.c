@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.13 2002/03/13 00:29:59 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.14 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -8,7 +8,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.13 2002/03/13 00:29:59 jongfoster
  *                proxy).
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.13 2002/03/13 00:29:59 jongfoster
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.14  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.13  2002/03/13 00:29:59  jongfoster
  *    Killing warnings
  *

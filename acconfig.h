@@ -11,7 +11,7 @@
  *                getting ludicrously long with feature defines.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.21  2002/03/24 14:31:08  swa
+ *    remove more crappy files. set RPM
+ *    release version correctly.
+ *
  *    Revision 1.20  2002/03/24 13:46:44  swa
  *    name change related issue.
  *

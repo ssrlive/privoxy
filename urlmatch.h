@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.1 2002/01/17 20:53:46 jongfoster Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.2 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -9,7 +9,7 @@
  *                patterns.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: urlmatch.h,v $
+ *    Revision 1.2  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.1  2002/01/17 20:53:46  jongfoster
  *    Moving all our URL and URL pattern parsing code to the same file - it
  *    was scattered around in filters.c, loaders.c and parsers.c.

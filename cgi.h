@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.22 2002/03/24 13:25:43 swa Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.23 2002/03/24 16:18:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -12,7 +12,7 @@
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.23  2002/03/24 16:18:15  jongfoster
+ *    Removing old logo
+ *
  *    Revision 1.22  2002/03/24 13:25:43  swa
  *    name change related issues
  *

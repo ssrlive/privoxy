@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.17 2002/03/16 23:54:06 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.18 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -11,7 +11,7 @@
  *                unload files that are no longer in use.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.18  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.17  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

@@ -284,7 +284,7 @@ exit 0
 #addr_clean.pl:}
 
 
-#gen_list.c:const char gen_list_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#gen_list.c:const char gen_list_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #gen_list.c:/*********************************************************************
 #gen_list.c: *
 #gen_list.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -293,7 +293,7 @@ exit 0
 #gen_list.c: *						list management.
 #gen_list.c: *
 #gen_list.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#gen_list.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#gen_list.c: *                Privoxy team. http://www.privoxy.org/
 #gen_list.c: *
 #gen_list.c: *                This program is free software; you can redistribute it
 #gen_list.c: *                and/or modify it under the terms of the GNU General
@@ -318,6 +318,9 @@ exit 0
 #gen_list.c: *
 #gen_list.c: * Revisions   :
 #gen_list.c: *    $Log: contrib.sh,v $
+#gen_list.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#gen_list.c: *    name change related issues
+#gen_list.c: *
 #gen_list.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #gen_list.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #gen_list.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -1374,7 +1377,7 @@ exit 0
 
 #gen_list.h:#ifndef GEN_LIST_H_INCLUDED
 #gen_list.h:#define GEN_LIST_H_INCLUDED
-#gen_list.h:#define GEN_LIST_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#gen_list.h:#define GEN_LIST_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #gen_list.h:/*********************************************************************
 #gen_list.h: *
 #gen_list.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -1383,7 +1386,7 @@ exit 0
 #gen_list.h: *						list management.
 #gen_list.h: *
 #gen_list.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#gen_list.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#gen_list.h: *                Privoxy team. http://www.privoxy.org/
 #gen_list.h: *
 #gen_list.h: *                This program is free software; you can redistribute it
 #gen_list.h: *                and/or modify it under the terms of the GNU General
@@ -1408,6 +1411,9 @@ exit 0
 #gen_list.h: *
 #gen_list.h: * Revisions   :
 #gen_list.h: *    $Log: contrib.sh,v $
+#gen_list.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#gen_list.h: *    name change related issues
+#gen_list.h: *
 #gen_list.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #gen_list.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #gen_list.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -1516,7 +1522,7 @@ exit 0
 #gen_list.h:*/
 
 
-#isa.c:const char isa_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#isa.c:const char isa_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #isa.c:/*********************************************************************
 #isa.c: *
 #isa.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -1528,7 +1534,7 @@ exit 0
 #isa.c: *								per project.
 #isa.c: *
 #isa.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#isa.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#isa.c: *                Privoxy team. http://www.privoxy.org/
 #isa.c: *
 #isa.c: *                This program is free software; you can redistribute it
 #isa.c: *                and/or modify it under the terms of the GNU General
@@ -1553,6 +1559,9 @@ exit 0
 #isa.c: *
 #isa.c: * Revisions   :
 #isa.c: *    $Log: contrib.sh,v $
+#isa.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#isa.c: *    name change related issues
+#isa.c: *
 #isa.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #isa.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #isa.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -1594,7 +1603,7 @@ exit 0
 
 #isa.h:#ifndef ISA_H_INCLUDED
 #isa.h:#define ISA_H_INCLUDED
-#isa.h:#define ISA_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#isa.h:#define ISA_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #isa.h:/*********************************************************************
 #isa.h: *
 #isa.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -1606,7 +1615,7 @@ exit 0
 #isa.h: *								per project.
 #isa.h: *
 #isa.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#isa.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#isa.h: *                Privoxy team. http://www.privoxy.org/
 #isa.h: *
 #isa.h: *                This program is free software; you can redistribute it
 #isa.h: *                and/or modify it under the terms of the GNU General
@@ -1631,6 +1640,9 @@ exit 0
 #isa.h: *
 #isa.h: * Revisions   :
 #isa.h: *    $Log: contrib.sh,v $
+#isa.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#isa.h: *    name change related issues
+#isa.h: *
 #isa.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #isa.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #isa.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -1677,7 +1689,7 @@ exit 0
 #isa.h:*/
 
 
-#main.c:const char main_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#main.c:const char main_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #main.c:/*********************************************************************
 #main.c: *
 #main.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -1685,7 +1697,7 @@ exit 0
 #main.c: * Purpose     :  To test "generic list" creation and manipulation.
 #main.c: *
 #main.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#main.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#main.c: *                Privoxy team. http://www.privoxy.org/
 #main.c: *
 #main.c: *                This program is free software; you can redistribute it
 #main.c: *                and/or modify it under the terms of the GNU General
@@ -1717,6 +1729,9 @@ exit 0
 #main.c: *
 #main.c: * Revisions   :
 #main.c: *    $Log: contrib.sh,v $
+#main.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#main.c: *    name change related issues
+#main.c: *
 #main.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #main.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #main.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2062,7 +2077,7 @@ exit 0
 #main.c:*/
 
 
-#malloc_police.c:const char malloc_police_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#malloc_police.c:const char malloc_police_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #malloc_police.c:/*********************************************************************
 #malloc_police.c: *
 #malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2074,7 +2089,7 @@ exit 0
 #malloc_police.c: *						be most helpful to developers and debugers.
 #malloc_police.c: *
 #malloc_police.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#malloc_police.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#malloc_police.c: *                Privoxy team. http://www.privoxy.org/
 #malloc_police.c: *
 #malloc_police.c: *                This program is free software; you can redistribute it
 #malloc_police.c: *                and/or modify it under the terms of the GNU General
@@ -2099,6 +2114,9 @@ exit 0
 #malloc_police.c: *
 #malloc_police.c: * Revisions   :
 #malloc_police.c: *    $Log: contrib.sh,v $
+#malloc_police.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#malloc_police.c: *    name change related issues
+#malloc_police.c: *
 #malloc_police.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #malloc_police.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #malloc_police.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2390,7 +2408,7 @@ exit 0
 
 #malloc_police.h:#ifndef MALLOC_POLICE_H_INCLUDED
 #malloc_police.h:#define MALLOC_POLICE_H_INCLUDED
-#malloc_police.h:#define MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#malloc_police.h:#define MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #malloc_police.h:/*********************************************************************
 #malloc_police.h: *
 #malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2402,7 +2420,7 @@ exit 0
 #malloc_police.h: *						be most helpful to developers and debugers.
 #malloc_police.h: *
 #malloc_police.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#malloc_police.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#malloc_police.h: *                Privoxy team. http://www.privoxy.org/
 #malloc_police.h: *
 #malloc_police.h: *                This program is free software; you can redistribute it
 #malloc_police.h: *                and/or modify it under the terms of the GNU General
@@ -2427,6 +2445,9 @@ exit 0
 #malloc_police.h: *
 #malloc_police.h: * Revisions   :
 #malloc_police.h: *    $Log: contrib.sh,v $
+#malloc_police.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#malloc_police.h: *    name change related issues
+#malloc_police.h: *
 #malloc_police.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #malloc_police.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #malloc_police.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2466,7 +2487,7 @@ exit 0
 #malloc_police.h:*/
 
 
-#rec_char.c:const char rec_char_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#rec_char.c:const char rec_char_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #rec_char.c:/*********************************************************************
 #rec_char.c: *
 #rec_char.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2474,7 +2495,7 @@ exit 0
 #rec_char.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_char.c: *
 #rec_char.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_char.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_char.c: *                Privoxy team. http://www.privoxy.org/
 #rec_char.c: *
 #rec_char.c: *                This program is free software; you can redistribute it
 #rec_char.c: *                and/or modify it under the terms of the GNU General
@@ -2499,6 +2520,9 @@ exit 0
 #rec_char.c: *
 #rec_char.c: * Revisions   :
 #rec_char.c: *    $Log: contrib.sh,v $
+#rec_char.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_char.c: *    name change related issues
+#rec_char.c: *
 #rec_char.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_char.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_char.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2666,7 +2690,7 @@ exit 0
 
 #rec_char.h:#ifndef REC_CHAR_H_INCLUDED
 #rec_char.h:#define REC_CHAR_H_INCLUDED
-#rec_char.h:#define REC_CHAR_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#rec_char.h:#define REC_CHAR_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #rec_char.h:/*********************************************************************
 #rec_char.h: *
 #rec_char.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2674,7 +2698,7 @@ exit 0
 #rec_char.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_char.h: *
 #rec_char.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_char.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_char.h: *                Privoxy team. http://www.privoxy.org/
 #rec_char.h: *
 #rec_char.h: *                This program is free software; you can redistribute it
 #rec_char.h: *                and/or modify it under the terms of the GNU General
@@ -2699,6 +2723,9 @@ exit 0
 #rec_char.h: *
 #rec_char.h: * Revisions   :
 #rec_char.h: *    $Log: contrib.sh,v $
+#rec_char.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_char.h: *    name change related issues
+#rec_char.h: *
 #rec_char.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_char.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_char.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2746,7 +2773,7 @@ exit 0
 #rec_char.h:*/
 
 
-#rec_charptr.c:const char rec_charptr_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#rec_charptr.c:const char rec_charptr_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #rec_charptr.c:/*********************************************************************
 #rec_charptr.c: *
 #rec_charptr.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2754,7 +2781,7 @@ exit 0
 #rec_charptr.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_charptr.c: *
 #rec_charptr.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_charptr.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_charptr.c: *                Privoxy team. http://www.privoxy.org/
 #rec_charptr.c: *
 #rec_charptr.c: *                This program is free software; you can redistribute it
 #rec_charptr.c: *                and/or modify it under the terms of the GNU General
@@ -2779,6 +2806,9 @@ exit 0
 #rec_charptr.c: *
 #rec_charptr.c: * Revisions   :
 #rec_charptr.c: *    $Log: contrib.sh,v $
+#rec_charptr.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_charptr.c: *    name change related issues
+#rec_charptr.c: *
 #rec_charptr.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_charptr.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_charptr.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -2958,7 +2988,7 @@ exit 0
 
 #rec_charptr.h:#ifndef REC_CHARPTR_H_INCLUDED
 #rec_charptr.h:#define REC_CHARPTR_H_INCLUDED
-#rec_charptr.h:#define REC_CHARPTR_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#rec_charptr.h:#define REC_CHARPTR_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #rec_charptr.h:/*********************************************************************
 #rec_charptr.h: *
 #rec_charptr.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -2966,7 +2996,7 @@ exit 0
 #rec_charptr.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_charptr.h: *
 #rec_charptr.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_charptr.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_charptr.h: *                Privoxy team. http://www.privoxy.org/
 #rec_charptr.h: *
 #rec_charptr.h: *                This program is free software; you can redistribute it
 #rec_charptr.h: *                and/or modify it under the terms of the GNU General
@@ -2991,6 +3021,9 @@ exit 0
 #rec_charptr.h: *
 #rec_charptr.h: * Revisions   :
 #rec_charptr.h: *    $Log: contrib.sh,v $
+#rec_charptr.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_charptr.h: *    name change related issues
+#rec_charptr.h: *
 #rec_charptr.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_charptr.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_charptr.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3038,7 +3071,7 @@ exit 0
 #rec_charptr.h:*/
 
 
-#rec_double.c:const char rec_double_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#rec_double.c:const char rec_double_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #rec_double.c:/*********************************************************************
 #rec_double.c: *
 #rec_double.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3046,7 +3079,7 @@ exit 0
 #rec_double.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_double.c: *
 #rec_double.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_double.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_double.c: *                Privoxy team. http://www.privoxy.org/
 #rec_double.c: *
 #rec_double.c: *                This program is free software; you can redistribute it
 #rec_double.c: *                and/or modify it under the terms of the GNU General
@@ -3071,6 +3104,9 @@ exit 0
 #rec_double.c: *
 #rec_double.c: * Revisions   :
 #rec_double.c: *    $Log: contrib.sh,v $
+#rec_double.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_double.c: *    name change related issues
+#rec_double.c: *
 #rec_double.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_double.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_double.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3238,7 +3274,7 @@ exit 0
 
 #rec_double.h:#ifndef REC_DOUBLE_H_INCLUDED
 #rec_double.h:#define REC_DOUBLE_H_INCLUDED
-#rec_double.h:#define REC_DOUBLE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#rec_double.h:#define REC_DOUBLE_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #rec_double.h:/*********************************************************************
 #rec_double.h: *
 #rec_double.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3246,7 +3282,7 @@ exit 0
 #rec_double.h: * Purpose     :  gen_A "derived class" of gen_list_rec.
 #rec_double.h: *
 #rec_double.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_double.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_double.h: *                Privoxy team. http://www.privoxy.org/
 #rec_double.h: *
 #rec_double.h: *                This program is free software; you can redistribute it
 #rec_double.h: *                and/or modify it under the terms of the GNU General
@@ -3271,6 +3307,9 @@ exit 0
 #rec_double.h: *
 #rec_double.h: * Revisions   :
 #rec_double.h: *    $Log: contrib.sh,v $
+#rec_double.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_double.h: *    name change related issues
+#rec_double.h: *
 #rec_double.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_double.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_double.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3318,7 +3357,7 @@ exit 0
 #rec_double.h:*/
 
 
-#rec_long.c:const char rec_long_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#rec_long.c:const char rec_long_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #rec_long.c:/*********************************************************************
 #rec_long.c: *
 #rec_long.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3326,7 +3365,7 @@ exit 0
 #rec_long.c: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_long.c: *
 #rec_long.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_long.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_long.c: *                Privoxy team. http://www.privoxy.org/
 #rec_long.c: *
 #rec_long.c: *                This program is free software; you can redistribute it
 #rec_long.c: *                and/or modify it under the terms of the GNU General
@@ -3351,6 +3390,9 @@ exit 0
 #rec_long.c: *
 #rec_long.c: * Revisions   :
 #rec_long.c: *    $Log: contrib.sh,v $
+#rec_long.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_long.c: *    name change related issues
+#rec_long.c: *
 #rec_long.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_long.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_long.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3518,7 +3560,7 @@ exit 0
 
 #rec_long.h:#ifndef REC_LONG_H_INCLUDED
 #rec_long.h:#define REC_LONG_H_INCLUDED
-#rec_long.h:#define REC_LONG_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#rec_long.h:#define REC_LONG_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #rec_long.h:/*********************************************************************
 #rec_long.h: *
 #rec_long.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3526,7 +3568,7 @@ exit 0
 #rec_long.h: * Purpose     :  A "derived class" of gen_list_rec.
 #rec_long.h: *
 #rec_long.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_long.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_long.h: *                Privoxy team. http://www.privoxy.org/
 #rec_long.h: *
 #rec_long.h: *                This program is free software; you can redistribute it
 #rec_long.h: *                and/or modify it under the terms of the GNU General
@@ -3551,6 +3593,9 @@ exit 0
 #rec_long.h: *
 #rec_long.h: * Revisions   :
 #rec_long.h: *    $Log: contrib.sh,v $
+#rec_long.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_long.h: *    name change related issues
+#rec_long.h: *
 #rec_long.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_long.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_long.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3598,7 +3643,7 @@ exit 0
 #rec_long.h:*/
 
 
-#rec_malloc_police.c:const char rec_malloc_police_rcs[] = "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $";
+#rec_malloc_police.c:const char rec_malloc_police_rcs[] = "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $";
 #rec_malloc_police.c:/*********************************************************************
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3611,7 +3656,7 @@ exit 0
 #rec_malloc_police.c: *						and debugers.
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_malloc_police.c: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_malloc_police.c: *                Privoxy team. http://www.privoxy.org/
 #rec_malloc_police.c: *
 #rec_malloc_police.c: *                This program is free software; you can redistribute it
 #rec_malloc_police.c: *                and/or modify it under the terms of the GNU General
@@ -3636,6 +3681,9 @@ exit 0
 #rec_malloc_police.c: *
 #rec_malloc_police.c: * Revisions   :
 #rec_malloc_police.c: *    $Log: contrib.sh,v $
+#rec_malloc_police.c: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_malloc_police.c: *    name change related issues
+#rec_malloc_police.c: *
 #rec_malloc_police.c: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_malloc_police.c: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_malloc_police.c: *    linked list.  This file is a home brew "bash tar" (I cannot create a
@@ -3862,7 +3910,7 @@ exit 0
 
 #rec_malloc_police.h:#ifndef REC_MALLOC_POLICE_H_INCLUDED
 #rec_malloc_police.h:#define REC_MALLOC_POLICE_H_INCLUDED
-#rec_malloc_police.h:#define REC_MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.1 2001/12/07 01:54:50 iwanttokeepanon Exp $"
+#rec_malloc_police.h:#define REC_MALLOC_POLICE_H_VERSION "$Id: contrib.sh,v 1.2 2002/03/24 13:25:43 swa Exp $"
 #rec_malloc_police.h:/*********************************************************************
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * File        :  $Source: /cvsroot/ijbswa/current/contrib.sh,v $
@@ -3875,7 +3923,7 @@ exit 0
 #rec_malloc_police.h: *						and debugers.
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#rec_malloc_police.h: *                Privoxy team.  http://ijbswa.sourceforge.net
+#rec_malloc_police.h: *                Privoxy team. http://www.privoxy.org/
 #rec_malloc_police.h: *
 #rec_malloc_police.h: *                This program is free software; you can redistribute it
 #rec_malloc_police.h: *                and/or modify it under the terms of the GNU General
@@ -3900,6 +3948,9 @@ exit 0
 #rec_malloc_police.h: *
 #rec_malloc_police.h: * Revisions   :
 #rec_malloc_police.h: *    $Log: contrib.sh,v $
+#rec_malloc_police.h: *    Revision 1.2  2002/03/24 13:25:43  swa
+#rec_malloc_police.h: *    name change related issues
+#rec_malloc_police.h: *
 #rec_malloc_police.h: *    Revision 1.1  2001/12/07 01:54:50  iwanttokeepanon
 #rec_malloc_police.h: *    A contribution/recomendation to the IJBSWA group for a generic doubly
 #rec_malloc_police.h: *    linked list.  This file is a home brew "bash tar" (I cannot create a

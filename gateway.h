@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.5 2002/03/24 13:25:43 swa Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.6 2002/03/25 22:12:45 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -10,7 +10,7 @@
  *                proxy).  Also contains the list of gateway types.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.6  2002/03/25 22:12:45  oes
+ *    Added fix for undefined INADDR_NONE on Solaris by Bart Schelstraete
+ *
  *    Revision 1.5  2002/03/24 13:25:43  swa
  *    name change related issues
  *

@@ -8,7 +8,7 @@
 #                 to the machine.
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 PRIVOXY team.  http://ijbswa.sourceforge.net
+#                 Privoxy team. http://www.privoxy.org/
 # 
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and 
@@ -34,6 +34,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.weekly,v $
+#     Revision 1.2  2002/03/24 11:40:14  swa
+#     name change
+#
 #     Revision 1.1  2002/03/24 11:23:44  swa
 #     name change
 #

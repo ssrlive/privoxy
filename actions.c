@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.24 2002/03/16 23:54:06 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.25 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -7,7 +7,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.24 2002/03/16 23:54:06 jongfoster
  *                Functions declared include: FIXME
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.24 2002/03/16 23:54:06 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.25  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.24  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand

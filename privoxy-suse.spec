@@ -1,7 +1,7 @@
-# $Id: privoxy-suse.spec,v 1.4 2002/03/24 12:56:21 swa Exp $
+# $Id: privoxy-suse.spec,v 1.5 2002/03/25 03:10:50 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# PRIVOXY team.  http://ijbswa.sourceforge.net
+# Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -30,7 +30,7 @@
 %define ijbconf %{_sysconfdir}/privoxy
 
 Summary:      Privoxy - privacy enhancing proxy
-Vendor:       http://ijbswa.sourceforge.net
+Vendor:       http://www.privoxy.org
 Name:         privoxy-suse
 Distribution: defineme
 Version: 2.9.13
@@ -41,7 +41,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Packager:     Stefan Waldherr <stefan@waldherr.org>
 Copyright:    GPL
 Group:        Networking/Utilities
-URL:          http://ijbswa.sourceforge.net/
+URL:          http://www.privoxy.org/
 Provides:     privoxy
 Obsoletes:    privoxy
 Autoreqprov:  on
@@ -68,7 +68,7 @@ development. Several other developers are now contributing.
 
 Authors:
 --------
-    http://ijbswa.sourceforge.net
+    http://www.privoxy.org/
 
 SuSE series: n
 
@@ -287,6 +287,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.5  2002/03/25 03:10:50  hal9
+# Added faq to docs.
+#
 # Revision 1.4  2002/03/24 12:56:21  swa
 # name change related issues.
 #

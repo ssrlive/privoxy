@@ -13,7 +13,7 @@
  *                    DEFINE_ACTION_ALIAS
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.14  2002/03/24 16:32:08  jongfoster
+ *    Removing logo option
+ *
  *    Revision 1.13  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *

@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.11 2002/03/06 23:02:57 jongfoster Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.12 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -9,7 +9,7 @@
  *                printf-like fashion.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.12  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.11  2002/03/06 23:02:57  jongfoster
  *    Removing tabs
  *

@@ -6,10 +6,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $
+ $Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:01 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
- Privoxy team.  http://ijbswa.sourceforge.net
+ Privoxy team. http://www.privoxy.org/
 
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
@@ -20,7 +20,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:01 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -44,7 +44,7 @@ systems and multi-user networks.
  </para>
       <para>
 You can find the latest version of the user manual at <ulink
-url="http://ijbswa.sourceforge.net/developer-manual/">http://ijbswa.sourceforge.net/developer-manual/</ulink>.
+url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
 Please see the Contact section in the user-manual if you want to contact the developers.
  </para>
 
@@ -1241,7 +1241,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:01 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1249,7 +1249,7 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:0
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                PRIVOXY team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1301,7 +1301,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.9 2002/03/24 11:01:05 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.10 2002/03/24 12:33:01 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1309,7 +1309,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                PRIVOXY team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1498,6 +1498,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.10  2002/03/24 12:33:01  swa
+  more additions.
+
   Revision 1.9  2002/03/24 11:01:05  swa
   name change
 

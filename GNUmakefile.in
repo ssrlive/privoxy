@@ -1,9 +1,9 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.30 2002/03/25 12:52:25 swa Exp $
+# $Id: GNUmakefile.in,v 1.31 2002/03/26 14:00:18 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# Privoxy team.  http://ijbswa.sourceforge.net
+# Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -524,7 +524,7 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
+	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) junkbuster
 
 clobber: clean
 	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz configure
@@ -557,6 +557,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.31  2002/03/26 14:00:18  swa
+# fixed make tarball, tarball-dist, tarball-clean
+#
 # Revision 1.30  2002/03/25 12:52:25  swa
 # new targets
 #

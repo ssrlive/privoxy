@@ -1,12 +1,12 @@
 #############################################################################
 # Sample actions file for Privoxy
 #
-# For information, see http://ijbswa.sourceforge.net/
+# For information, see http://www.privoxy.org/
 #
-# $Id: default.action,v 1.2 2002/03/24 13:02:18 swa Exp $
+# $Id: default.action,v 1.3 2002/03/24 16:24:02 jongfoster Exp $
 #
 #  Purpose     :  Default actions file, see
-#                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
+#                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
 # 
 # We value your feedback. However, to provide you with the best support,
 # please note:

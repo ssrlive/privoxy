@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.38 2002/03/24 13:05:48 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.39 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -9,7 +9,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.38 2002/03/24 13:05:48 jongfoster
  *                variables it writes to.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.38 2002/03/24 13:05:48 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.39  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.38  2002/03/24 13:05:48  jongfoster
  *    Renaming re_filterfile to filterfile
  *

@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.23 2002/03/13 00:27:05 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.24 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -17,7 +17,7 @@
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.24  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.23  2002/03/13 00:27:05  jongfoster
  *    Killing warnings
  *

@@ -5,7 +5,7 @@
  * Purpose     :  README file to give a short intro.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -33,7 +33,7 @@
 
 This README is included with the development version of Privoxy,
 which will eventually become Privoxy v3.0 (and soon we hope!). See
-http://ijbswa.sourceforge.net.
+http://www.privoxy.org/.
 
 Privoxy is a web proxy with advanced filtering capabilities for
 protecting privacy, filtering web page content, managing cookies,
@@ -61,7 +61,7 @@ WARNING! If upgrading from earlier versions of this project via
 RPM packages, the new package will delete any previously installed 
 'Junkbuster' packages.
 
-IMPORTANT! READ! Configuration Change as of 03/04/02: The default
+IMPORTANT! READ! Configuration Change as of 3 Apr 2002: The default
 listening port is now 8118 due to conflicts with port 8000 assignment.
 You will need to change your browser if upgrading!!! And maybe
 firewall, etc.
@@ -118,7 +118,7 @@ of these included with varying degrees of aggressiveness. On Unix-like
 systems, these files are installed in /etc/privoxy.  On Windows, then wherever
 the executable itself is installed. There are many significant changes and
 advances since Junkbuster v2.0.x. The user-manual has a run down of
-configuration options, and examples: http://ijbswa.sourceforge.net/user-manual/.
+configuration options, and examples: http://www.privoxy.org/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or
 whatever you specify in the config file under 'listen-address'.
@@ -177,4 +177,4 @@ here too.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.19 2002/03/24 16:15:18 swa Exp $
+$Id: README,v 1.20 2002/03/24 19:57:28 hal9 Exp $

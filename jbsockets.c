@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.27 2002/03/13 00:27:05 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.28 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -9,7 +9,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.27 2002/03/13 00:27:05 jongfo
  *                on many platforms.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.27 2002/03/13 00:27:05 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.28  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.27  2002/03/13 00:27:05  jongfoster
  *    Killing warnings
  *

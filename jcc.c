@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.85 2002/03/24 15:23:33 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.86 2002/03/25 17:04:55 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -7,7 +7,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.85 2002/03/24 15:23:33 jongfoster Exp $";
  *                the main connection-handling function.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.85 2002/03/24 15:23:33 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.86  2002/03/25 17:04:55  david__schmidt
+ *    Workaround for closing the jarfile before load_config() comes around again
+ *
  *    Revision 1.85  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *

@@ -1,798 +1,874 @@
+
 Privoxy Frequently Asked Questions
 
-By: Privoxy Developers
-
-$Id: faq.sgml,v 1.29 2002/03/25 05:23:57 hal9 Exp $
-
-The FAQ document gives users and developers alike answers to frequently asked
-questions about Privoxy. Privoxy is a web proxy with advanced filtering
-capabilities for protecting privacy, filtering web page content, managing
-cookies, controlling access, and removing ads, banners, pop-ups and other
-obnoxious Internet Junk. Privoxy has a very flexible configuration and can be
-customized to suit individual needs and tastes. Privoxy has application for
-both stand-alone systems and multi-user networks.
-
-You can find the latest version of the document at http://
-ijbswa.sourceforge.net/faq/. Please see the Contact section in the user-manual
-if you want to contact the developers.
-
--------------------------------------------------------------------------------
-
-Table of Contents
-1. Frequently Asked Questions
+   By: Privoxy Developers
    
-    1.1. General Information
-       
-        1.1.1. What is this new version of Privoxy?
-        1.1.2. Why "Privoxy"? Why a name change at all?
-        1.1.3. How does it differ from the old Junkbuster?
-        1.1.4. What are some of the new features?
-        1.1.5. What is a "proxy"? How does Privoxy work?
-        1.1.6. My browser does the same things as Privoxy. Why should I use
-            Privoxy at all?
-        1.1.7. Is there is a license or fee? What about a warranty?
-            Registration?
-        1.1.8. I would like to help you, what do I do?
-       
-    1.2. Installation
-       
-        1.2.1. Which browsers are supported by Privoxy?
-        1.2.2. Which operating systems are supported?
-        1.2.3. Can I install Privoxy over Junkbuster?
-        1.2.4. I just installed Privoxy. Is there anything special I have to do
-            now?
-        1.2.5. What is the proxy address of Privoxy?
-        1.2.6. I just installed Privoxy, and nothing is happening. All the ads
-            are there. What's wrong?
-       
-    1.3. Configuration
-       
-        1.3.1. Can I use my old config files?
-        1.3.2. What is an "actions" file?
-        1.3.3. The "actions"concept confuses me. Please list some of these
-            "actions".
-        1.3.4. How are actions files configured? What is the easiest way to do
-            this?
-        1.3.5. What are the differences between intermediate.action,
-            basic.action, etc.?
-        1.3.6. Why can I change the configuration with a browser? Does that not
-            raise security issues?
-        1.3.7. What is a "default.filter"?
-        1.3.8. How can I set up Privoxy to act as a proxy for my LAN?
-        1.3.9. Instead of ads, now I get a checkerboard pattern. I don't want
-            to see anything.
-        1.3.10. Why would anybody want to see a checkerboard pattern?
-        1.3.11. I see large red banners on some pages that say "Blocked". How
-            do I get rid of this?
-        1.3.12. How can I make Privoxy work with other proxies like Squid?
-       
-    1.4. Miscellaneous
-       
-        1.4.1. How much does Privoxy slow my browsing down? This has to add
-            extra time to browsing.
-        1.4.2. I noticed considerable delays in page requests compared to the
-            old Junkbuster. What's wrong?
-        1.4.3. What is the "http://p.p/"?
-        1.4.4. Do you still maintain the blocklists?
-        1.4.5. How can I submit new ads?
-        1.4.6. How can I hide my IP address?
-        1.4.7. Can Privoxy guarantee I am anonymous?
-        1.4.8. Might some things break because header information is being
-            altered?
-        1.4.9. Can Privoxy act as a "caching" proxy to speed up web browsing?
-        1.4.10. What about as a firewall? Can Privoxy protect me?
-        1.4.11. The Privoxy logo that replaces ads is very blocky and ugly
-            looking. Can't a better font be used?
-        1.4.12. I have large empty spaces now where ads used to be. Why does
-            Privoxy leave these large gaps?
-        1.4.13. How can Privoxy filter Secure (HTTPS) URLs?
-        1.4.14. Privoxy runs as a "server". How secure is it? Do I need to take
-            any special precautions?
-        1.4.15. How can I temporarily disable Privoxy?
-       
-    1.5. Troubleshooting
-       
-        1.5.1. I just upgraded and am getting "connection refused" with every
-            web page?
-        1.5.2. I just added a new rule, but the steenkin ad is still getting
-            through. How?
-        1.5.3. One of my favorite sites does not work with Privoxy. What can I
-            do?
-        1.5.4. What time is it?
-       
-2. Copyright and History
-3. See also
-
+   $Id: faq.sgml,v 1.30 2002/03/25 16:39:22 hal9 Exp $
+   
+   The FAQ document gives users and developers alike answers to
+   frequently asked questions about Privoxy. Privoxy is a web proxy with
+   advanced filtering capabilities for protecting privacy, filtering web
+   page content, managing cookies, controlling access, and removing ads,
+   banners, pop-ups and other obnoxious Internet Junk. Privoxy has a very
+   flexible configuration and can be customized to suit individual needs
+   and tastes. Privoxy has application for both stand-alone systems and
+   multi-user networks.
+   
+   You can find the latest version of the document at
+   [1]http://www.privoxy.org/faq/. Please see the Contact section in the
+   [2]user-manual if you want to contact the developers.
+     _________________________________________________________________
+   
+   Table of Contents
+   1. [3]Frequently Asked Questions
+          
+        1.1. [4]General Information
+                
+              1.1.1. [5]What is this new version of Privoxy?
+              1.1.2. [6]Why "Privoxy"? Why a name change at all?
+              1.1.3. [7]How does it differ from the old Junkbuster?
+              1.1.4. [8]What are some of the new features?
+              1.1.5. [9]What is a "proxy"? How does Privoxy work?
+              1.1.6. [10]My browser does the same things as Privoxy. Why
+                      should I use Privoxy at all?
+                      
+              1.1.7. [11]Is there is a license or fee? What about a
+                      warranty? Registration?
+                      
+              1.1.8. [12]I would like to help you, what do I do?
+                      
+        1.2. [13]Installation
+                
+              1.2.1. [14]Which browsers are supported by Privoxy?
+              1.2.2. [15]Which operating systems are supported?
+              1.2.3. [16]Can I install Privoxy over Junkbuster?
+              1.2.4. [17]I just installed Privoxy. Is there anything
+                      special I have to do now?
+                      
+              1.2.5. [18]What is the proxy address of Privoxy?
+              1.2.6. [19]I just installed Privoxy, and nothing is
+                      happening. All the ads are there. What's wrong?
+                      
+        1.3. [20]Configuration
+                
+              1.3.1. [21]Can I use my old config files?
+              1.3.2. [22]What is an "actions" file?
+              1.3.3. [23]The "actions"concept confuses me. Please list
+                      some of these "actions".
+                      
+              1.3.4. [24]How are actions files configured? What is the
+                      easiest way to do this?
+                      
+              1.3.5. [25]What are the differences between
+                      intermediate.action, basic.action, etc.?
+                      
+              1.3.6. [26]Why can I change the configuration with a
+                      browser? Does that not raise security issues?
+                      
+              1.3.7. [27]What is a "default.filter"?
+              1.3.8. [28]How can I set up Privoxy to act as a proxy for
+                      my LAN?
+                      
+              1.3.9. [29]Instead of ads, now I get a checkerboard
+                      pattern. I don't want to see anything.
+                      
+              1.3.10. [30]Why would anybody want to see a checkerboard
+                      pattern?
+                      
+              1.3.11. [31]I see large red banners on some pages that say
+                      "Blocked". How do I get rid of this?
+                      
+              1.3.12. [32]How can I make Privoxy work with other proxies
+                      like Squid?
+                      
+        1.4. [33]Miscellaneous
+                
+              1.4.1. [34]How much does Privoxy slow my browsing down?
+                      This has to add extra time to browsing.
+                      
+              1.4.2. [35]I noticed considerable delays in page requests
+                      compared to the old Junkbuster. What's wrong?
+                      
+              1.4.3. [36]What is the "http://p.p/"?
+              1.4.4. [37]Do you still maintain the blocklists?
+              1.4.5. [38]How can I submit new ads?
+              1.4.6. [39]How can I hide my IP address?
+              1.4.7. [40]Can Privoxy guarantee I am anonymous?
+              1.4.8. [41]Might some things break because header
+                      information is being altered?
+                      
+              1.4.9. [42]Can Privoxy act as a "caching" proxy to speed up
+                      web browsing?
+                      
+              1.4.10. [43]What about as a firewall? Can Privoxy protect
+                      me?
+                      
+              1.4.11. [44]The Privoxy logo that replaces ads is very
+                      blocky and ugly looking. Can't a better font be
+                      used?
+                      
+              1.4.12. [45]I have large empty spaces now where ads used to
+                      be. Why does Privoxy leave these large gaps?
+                      
+              1.4.13. [46]How can Privoxy filter Secure (HTTPS) URLs?
+              1.4.14. [47]Privoxy runs as a "server". How secure is it?
+                      Do I need to take any special precautions?
+                      
+              1.4.15. [48]How can I temporarily disable Privoxy?
+                      
+        1.5. [49]Troubleshooting
+                
+              1.5.1. [50]I just upgraded and am getting "connection
+                      refused" with every web page?
+                      
+              1.5.2. [51]I just added a new rule, but the steenkin ad is
+                      still getting through. How?
+                      
+              1.5.3. [52]One of my favorite sites does not work with
+                      Privoxy. What can I do?
+                      
+              1.5.4. [53]What time is it?
+                      
+   2. [54]Copyright and History
+   3. [55]See also
+          
 1. Frequently Asked Questions
 
 1.1. General Information
 
 1.1.1. What is this new version of Privoxy?
 
-The original Internet Junkbuster (tm) is a copyrighted product of Junkbusters
-Corporation. Development of this effort stopped some time ago as of version
-2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to rekindle
-development. Other developers subsequently joined with Stefan, and have since
-added many new features, refinements and enhancements.
-
-The new Privoxy started with the same Junkbuster code base, but has changed
-significantly at this point.
-
--------------------------------------------------------------------------------
-
+   The original Internet Junkbuster (tm) is a copyrighted product of
+   [56]Junkbusters Corporation. Development of this effort stopped some
+   time ago as of version 2.0.2. Stefan Waldherr started the ijbswa
+   project on [57]Sourceforge to rekindle development. Other developers
+   subsequently joined with Stefan, and have since added many new
+   features, refinements and enhancements.
+   
+   The new Privoxy started with the same Junkbuster code base, but has
+   changed significantly at this point.
+     _________________________________________________________________
+   
 1.1.2. Why "Privoxy"? Why a name change at all?
 
-Privoxy is for "Privacy Enhancing Proxy". There are possible legal
-complications from the continued use of the Junkbuster name, which is a
-trademark of Junkbusters Corporation. (There are no objections from Junkbusters
-Corporation to the Privoxy project itself though, and they in fact still share
-our ideals and goals.)
-
-The developers also believed that there so many changes from the original code,
-that it was time to make a clean break from the past and make a name in their
-own right, especially now with the pending release of version 3.0. 
-
--------------------------------------------------------------------------------
-
+   Privoxy is for "Privacy Enhancing Proxy". There are possible legal
+   complications from the continued use of the Junkbuster name, which is
+   a trademark of [58]Junkbusters Corporation. (There are no objections
+   from Junkbusters Corporation to the Privoxy project itself though, and
+   they in fact still share our ideals and goals.)
+   
+   The developers also believed that there so many changes from the
+   original code, that it was time to make a clean break from the past
+   and make a name in their own right, especially now with the pending
+   release of version 3.0.
+     _________________________________________________________________
+   
 1.1.3. How does it differ from the old Junkbuster?
 
-All the old features remain. The new Privoxy still blocks ads and banners,
-still manages cookies, and still helps protect your privacy. But, these are all
-enhanced, and many new features have been added, all in the same vein.
-
-The configuration has changed significantly as well. This is something that
-users will notice right off the bat. The "blocklist" file does not exist any
-more. This is replaced by "actions" files, such as default.actions. This is
-where most of the per site configuration is now.
-
--------------------------------------------------------------------------------
-
+   All the old features remain. The new Privoxy still blocks ads and
+   banners, still manages cookies, and still helps protect your privacy.
+   But, these are all enhanced, and many new features have been added,
+   all in the same vein.
+   
+   The configuration has changed significantly as well. This is something
+   that users will notice right off the bat. The "blocklist" file does
+   not exist any more. This is replaced by "actions" files, such as
+   default.actions. This is where most of the per site configuration is
+   now.
+     _________________________________________________________________
+   
 1.1.4. What are some of the new features?
 
-  * Integrated browser based configuration and control utility (http://p.p).
-    Browser-based tracing of rule and filter effects.
+     * Integrated browser based configuration and control utility
+       ([59]http://p.p). Browser-based tracing of rule and filter
+       effects.
+     * Blocking of annoying pop-up browser windows.
+     * HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+     * Support for Perl Compatible Regular Expressions in the
+       configuration files, and generally a more sophisticated and
+       flexible configuration syntax over previous versions.
+     * GIF de-animation.
+     * Web page content filtering (removes banners based on size,
+       invisible "web-bugs", JavaScript, pop-ups, status bar abuse, etc.)
+     * Bypass many click-tracking scripts (avoids script redirection).
+     * Multi-threaded (POSIX and native threads).
+     * Auto-detection and re-reading of config file changes.
+     * User-customizable HTML templates (e.g. 404 error page).
+     * Improved cookie management features (e.g. session based cookies).
+     * Builds from source on most UNIX-like systems. Packages available
+       for: Linux (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac
+       OSX, OS/2, HP-UX 11 and AmigaOS.
+     * In addition, the configuration is much more powerful and versatile
+       over-all.
+     _________________________________________________________________
    
-  * Blocking of annoying pop-up browser windows.
-   
-  * HTTP/1.1 compliant (most, but not all 1.1 features are supported).
-   
-  * Support for Perl Compatible Regular Expressions in the configuration files,
-    and generally a more sophisticated and flexible configuration syntax over
-    previous versions.
-   
-  * GIF de-animation.
-   
-  * Web page content filtering (removes banners based on size, invisible
-    "web-bugs", JavaScript, pop-ups, status bar abuse, etc.)
-   
-  * Bypass many click-tracking scripts (avoids script redirection).
-   
-  * Multi-threaded (POSIX and native threads).
-   
-  * Auto-detection and re-reading of config file changes.
-   
-  * User-customizable HTML templates (e.g. 404 error page).
-   
-  * Improved cookie management features (e.g. session based cookies).
-   
-  * Builds from source on most UNIX-like systems. Packages available for: Linux
-    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11
-    and AmigaOS.
-   
-  * In addition, the configuration is much more powerful and versatile
-    over-all.
-   
--------------------------------------------------------------------------------
-
 1.1.5. What is a "proxy"? How does Privoxy work?
 
-When you connect to a web site with Privoxy, you are really connecting to your
-locally running version of Privoxy. Privoxy intercepts your requests for the
-web page, and relays that to the "real" web site. The web site sends the HTTP
-data stream back to Privoxy, where Privoxy can work its magic before it relays
-this data back to your web browser.
+   When you connect to a web site with Privoxy, you are really connecting
+   to your locally running version of Privoxy. Privoxy intercepts your
+   requests for the web page, and relays that to the "real" web site. The
+   web site sends the HTTP data stream back to Privoxy, where Privoxy can
+   work its magic before it relays this data back to your web browser.
+   
+   Since Privoxy sits between you and the WWW, it is in a position to
+   intercept and completely manage all web traffic and HTTP content
+   before it gets to your browser. Privoxy uses various programming
+   methods to do this, all of which is under your control via the various
+   configuration files and options.
+   
+   There are many kinds of proxies. Privoxy best fits the "filtering
+   proxy" category.
+     _________________________________________________________________
+   
+1.1.6. My browser does the same things as Privoxy. Why should I use Privoxy
+at all?
 
-Since Privoxy sits between you and the WWW, it is in a position to intercept
-and completely manage all web traffic and HTTP content before it gets to your
-browser. Privoxy uses various programming methods to do this, all of which is
-under your control via the various configuration files and options.
-
-There are many kinds of proxies. Privoxy best fits the "filtering proxy"
-category.
-
--------------------------------------------------------------------------------
-
-1.1.6. My browser does the same things as Privoxy. Why should I use Privoxy at
-all?
-
-Modern browsers do indeed have some of the same functionality as Privoxy. Maybe
-this is adequate for you. But Privoxy is much more versatile and powerful, and
-can do a number of things that browsers just can't.
-
-In addition, a proxy is good choice if you use multiple browsers, or have a LAN
-with multiple computers. This way all the configuration is in one place, and
-you don't have to maintain a similar configuration for possibly many browsers.
-
--------------------------------------------------------------------------------
-
+   Modern browsers do indeed have some of the same functionality as
+   Privoxy. Maybe this is adequate for you. But Privoxy is much more
+   versatile and powerful, and can do a number of things that browsers
+   just can't.
+   
+   In addition, a proxy is good choice if you use multiple browsers, or
+   have a LAN with multiple computers. This way all the configuration is
+   in one place, and you don't have to maintain a similar configuration
+   for possibly many browsers.
+     _________________________________________________________________
+   
 1.1.7. Is there is a license or fee? What about a warranty? Registration?
 
-Privoxy is licensed under the GNU General Public License (GPL). It is free to
-use, copy, modify or distribute as you wish under the terms of this license.
-See http://www.gnu.org/copyleft/gpl.html for specifics.
-
-There is no warranty of any kind, expressed, implied or otherwise. That is
-something that would cost real money ;-) There is no registration either.
-Privoxy really is free in every respect!
-
--------------------------------------------------------------------------------
-
+   Privoxy is licensed under the GNU General Public License (GPL). It is
+   free to use, copy, modify or distribute as you wish under the terms of
+   this license. See [60]http://www.gnu.org/copyleft/gpl.html for
+   specifics.
+   
+   There is no warranty of any kind, expressed, implied or otherwise.
+   That is something that would cost real money ;-) There is no
+   registration either. Privoxy really is free in every respect!
+     _________________________________________________________________
+   
 1.1.8. I would like to help you, what do I do?
 
 1.1.8.1. Money Money Money
 
-We, of course, welcome donations and use the money for domain registering,
-regular world-wide get-togethers (hahaha). Anyway, we'll soon describe the
-process how to donate money to the team.
-
--------------------------------------------------------------------------------
-
+   We, of course, welcome donations and use the money for domain
+   registering, regular world-wide get-togethers (hahaha). Anyway, we'll
+   soon describe the process how to donate money to the team.
+     _________________________________________________________________
+   
 1.1.8.2. You want to work with us?
 
-Well, helping the team is always a good idea. We welcome new developers, RPM
-gurus or documentation makers. Simply get an account on sourceforge.net and
-mail your id to the developer mailing list. Then read the section Quickstart in
-the developers manual.
-
-Once we have added you to the team, you'll have write access to the CVS
-repository, and together we'll find a suitable task for you.
-
--------------------------------------------------------------------------------
-
+   Well, helping the team is always a good idea. We welcome new
+   developers, RPM gurus or documentation makers. Simply get an account
+   on sourceforge.net and mail your id to the developer mailing list.
+   Then read the section Quickstart in the developers manual.
+   
+   Once we have added you to the team, you'll have write access to the
+   CVS repository, and together we'll find a suitable task for you.
+     _________________________________________________________________
+   
 1.2. Installation
 
 1.2.1. Which browsers are supported by Privoxy?
 
-Any browser that can be configured to use a "proxy", which is probably almost
-all browsers. Direct browser support is not necessary since Privoxy runs as a
-separate application and just exchanges standard HTML data with your browser.
-
--------------------------------------------------------------------------------
-
+   Any browser that can be configured to use a "proxy", which is probably
+   almost all browsers. Direct browser support is not necessary since
+   Privoxy runs as a separate application and just exchanges standard
+   HTML data with your browser.
+     _________________________________________________________________
+   
 1.2.2. Which operating systems are supported?
 
-Right now Win32, Mac OSX, OS/2, AmigaOS, Linux, and many flavors of Unix.
-
-Source code is available, so porting to other operating systems, is always a
-possibility. 
-
--------------------------------------------------------------------------------
-
+   Right now Win32, Mac OSX, OS/2, AmigaOS, Linux, and many flavors of
+   Unix.
+   
+   Source code is available, so porting to other operating systems, is
+   always a possibility.
+     _________________________________________________________________
+   
 1.2.3. Can I install Privoxy over Junkbuster?
 
-We recommend you uninstall Junkbuster first to minimize conflicts and
-confusion. You may want to save your old configuration files for future
-reference. The configuration is substantially changed.
-
-See the user-manual for platform specific installation instructions. [FIXME:
-This is meant for after the name change for 3.0!]
-
--------------------------------------------------------------------------------
-
+   We recommend you uninstall Junkbuster first to minimize conflicts and
+   confusion. You may want to save your old configuration files for
+   future reference. The configuration is substantially changed.
+   
+   See the [61]user-manual for platform specific installation
+   instructions. [FIXME: This is meant for after the name change for
+   3.0!]
+     _________________________________________________________________
+   
 1.2.4. I just installed Privoxy. Is there anything special I have to do now?
 
-All browsers must be told to use Privoxy as a proxy by specifying the correct
-proxy address and port number in the appropriate configuration area for the
-browser. See below. 
-
--------------------------------------------------------------------------------
-
+   All browsers must be told to use Privoxy as a proxy by specifying the
+   correct proxy address and port number in the appropriate configuration
+   area for the browser. See below.
+     _________________________________________________________________
+   
 1.2.5. What is the proxy address of Privoxy?
 
-If you set up the Privoxy to run on the computer you browse from (rather than
-your ISP's server or some networked computer on a LAN), the proxy will be on
-"localhost" (which is the special name used by every computer on the Internet
-to refer to itself) and the port will be 8118 (unless you have Privoxy to run
-on a different port with the listen-address config option).
-
-When configuring your browser's proxy settings you typically enter the word
-"localhost" in the boxes next to "HTTP" and "Secure" (HTTPS) and then the
-number "8118" for "port". This tells your browser to send all web requests to
-Privoxy instead of directly to the Internet.
-
-Privoxy can also be used to proxy for a Local Area Network. In this case, your
-would enter either the IP address of the LAN host where Privoxy is running, or
-the equivalent hostname. Port assignment would be same as above.
-
-Privoxy does not currently handle protocols such as FTP, SMTP, IM, IRC, ICQ, or
-other Internet protocols.
-
--------------------------------------------------------------------------------
-
+   If you set up the Privoxy to run on the computer you browse from
+   (rather than your ISP's server or some networked computer on a LAN),
+   the proxy will be on "localhost" (which is the special name used by
+   every computer on the Internet to refer to itself) and the port will
+   be 8118 (unless you have Privoxy to run on a different port with the
+   listen-address config option).
+   
+   When configuring your browser's proxy settings you typically enter the
+   word "localhost" in the boxes next to "HTTP" and "Secure" (HTTPS) and
+   then the number "8118" for "port". This tells your browser to send all
+   web requests to Privoxy instead of directly to the Internet.
+   
+   Privoxy can also be used to proxy for a Local Area Network. In this
+   case, your would enter either the IP address of the LAN host where
+   Privoxy is running, or the equivalent hostname. Port assignment would
+   be same as above.
+   
+   Privoxy does not currently handle protocols such as FTP, SMTP, IM,
+   IRC, ICQ, or other Internet protocols.
+     _________________________________________________________________
+   
 1.2.6. I just installed Privoxy, and nothing is happening. All the ads are
 there. What's wrong?
 
-Did you configure your browser to use Privoxy as a proxy? It does not sound
-like it. See above. You might also try flushing the browser's caches to force a
-full re-reading of pages. You can verify that Privoxy is running, and your
-browser is correctly configured by entering the special URL: http://p.p/. This
-should give you a banner that says "This is Privoxy" and access to Privoxy's
-internal configuration. If you see this, then you are good to go. If not, the
-browser or Privoxy are not set up correctly. 
-
--------------------------------------------------------------------------------
-
+   Did you configure your browser to use Privoxy as a proxy? It does not
+   sound like it. See above. You might also try flushing the browser's
+   caches to force a full re-reading of pages. You can verify that
+   Privoxy is running, and your browser is correctly configured by
+   entering the special URL: [62]http://p.p/. This should give you a
+   banner that says "This is Privoxy" and access to Privoxy's internal
+   configuration. If you see this, then you are good to go. If not, the
+   browser or Privoxy are not set up correctly.
+     _________________________________________________________________
+   
 1.3. Configuration
 
 1.3.1. Can I use my old config files?
 
-There are major changes to Junkbuster configuration from version 2.0.x to 2.9.x
-and later. The older files will not work at all. If this is the case, you will
-need to re-enter your old data into the new configuration structure. This is
-probably also a good recommendation even if upgrading from 2.9.x to 3.x since
-there were many minor changes along the way.
-
--------------------------------------------------------------------------------
-
+   There are major changes to Junkbuster configuration from version 2.0.x
+   to 2.9.x and later. The older files will not work at all. If this is
+   the case, you will need to re-enter your old data into the new
+   configuration structure. This is probably also a good recommendation
+   even if upgrading from 2.9.x to 3.x since there were many minor
+   changes along the way.
+     _________________________________________________________________
+   
 1.3.2. What is an "actions" file?
 
-"actions" files are where various actions that Privoxy might take, are
-configured. Typically, you would define a set of default actions that apply to
-all URLs, then add exceptions to these defaults.
+   "actions" files are where various actions that Privoxy might take, are
+   configured. Typically, you would define a set of default actions that
+   apply to all URLs, then add exceptions to these defaults.
+   
+   Actions can be defined on a per site basis, or for groups of sites.
+   Actions can also be grouped together and then applied to one or more
+   sites. There are many possible actions that might apply to any given
+   site. As an example, if we are blocking cookies as one of our default
+   actions, but need to accept cookies from a given site, we would define
+   this in our "actions" file.
+   
+   Privoxy comes with several default actions files, with varying degrees
+   of filtering and blocking, as starting points for your own
+   configuration (see below).
+     _________________________________________________________________
+   
+1.3.3. The "actions"concept confuses me. Please list some of these
+"actions".
 
-Actions can be defined on a per site basis, or for groups of sites. Actions can
-also be grouped together and then applied to one or more sites. There are many
-possible actions that might apply to any given site. As an example, if we are
-blocking cookies as one of our default actions, but need to accept cookies from
-a given site, we would define this in our "actions" file. 
-
-Privoxy comes with several default actions files, with varying degrees of
-filtering and blocking, as starting points for your own configuration (see
-below).
-
--------------------------------------------------------------------------------
-
-1.3.3. The "actions"concept confuses me. Please list some of these "actions".
-
-These are all explained in the user-manual. Please refer to that.
-
--------------------------------------------------------------------------------
-
+   These are all explained in the [63]user-manual. Please refer to that.
+     _________________________________________________________________
+   
 1.3.4. How are actions files configured? What is the easiest way to do this?
 
-The easiest way to do this, is to access Privoxy with your web browser at http:
-//p.p/, and then select "Edit the actions list" from the selection list. You
-can also do this by editing the appropriate file with a text editor.
-
-Please see the user-manual for a detailed explanation of these and other
-configuration files, and their various options and syntax.
-
--------------------------------------------------------------------------------
-
+   The easiest way to do this, is to access Privoxy with your web browser
+   at [64]http://p.p/, and then select "[65]Edit the actions list" from
+   the selection list. You can also do this by editing the appropriate
+   file with a text editor.
+   
+   Please see the [66]user-manual for a detailed explanation of these and
+   other configuration files, and their various options and syntax.
+     _________________________________________________________________
+   
 1.3.5. What are the differences between intermediate.action, basic.action,
 etc.?
 
-Configuring Privoxy is not easy. To help you get started, we provide you with
-three different default configurations. The following table shows you, which
-features are enabled in each configuration.
+   Configuring Privoxy is not easy. To help you get started, we provide
+   you with three different default configurations. The following table
+   shows you, which features are enabled in each configuration.
+   
+   Table 1. Default Configurations
+   Feature default.action basic.action intermediate.action
+   advanced.action
+   ad-filtering ? x x x
+   blank image ? x x x
+   de-animate GIFs ? x x x
+   referer forging ? x x x
+   jon's +no-cookies-keep (i.e. session cookies only) ? x x x
+   no-popup windows ?   x x
+   fast redirects ?   x x
+   hide-referrer ?   x x
+   hide-useragent ?   x x
+   content-modification ?     x
+   feature-x ?
+   feature-y ?
+   feature-z ?
+     _________________________________________________________________
+   
+1.3.6. Why can I change the configuration with a browser? Does that not
+raise security issues?
 
-Table 1. Default Configurations
-
-+--------------------------------------------------------------------------------------+
-|Feature             |default.action|basic.action  |intermediate.action|advanced.action|
-|--------------------+--------------+--------------+-------------------+---------------|
-|ad-filtering        |?             |x             |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|blank image         |?             |x             |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|de-animate GIFs     |?             |x             |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|referer forging     |?             |x             |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|jon's               |?             |x             |x                  |x              |
-|+no-cookies-keep    |              |              |                   |               |
-|(i.e. session       |              |              |                   |               |
-|cookies only)       |              |              |                   |               |
-|--------------------+--------------+--------------+-------------------+---------------|
-|no-popup windows    |?             |              |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|fast redirects      |?             |              |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|hide-referrer       |?             |              |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|hide-useragent      |?             |              |x                  |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|content-modification|?             |              |                   |x              |
-|--------------------+--------------+--------------+-------------------+---------------|
-|feature-x           |?             |              |                   |               |
-|--------------------+--------------+--------------+-------------------+---------------|
-|feature-y           |?             |              |                   |               |
-|--------------------+--------------+--------------+-------------------+---------------|
-|feature-z           |?             |              |                   |               |
-+--------------------------------------------------------------------------------------+
-
--------------------------------------------------------------------------------
-
-1.3.6. Why can I change the configuration with a browser? Does that not raise
-security issues?
-
-What I don't understand, is how I can browser edit the config file as a regular
-user, while the whole /etc/privoxy hierarchy belongs to the user "privoxy",
-with only 644 perms.
-
-When you use the browser-based editor, Privoxy itself is writing to the config
-files. Because Privoxy is running as the user "privoxy", it can update the
-config files.
-
-If you don't like this, setting "enable-edit-actions 0" in the config file will
-disable the browser-based editor. If you're that paranoid, you should also
-consider setting "enable-remote-toggle 0" to prevent browser-based enabling/
-disabling of Privoxy.
-
-Note that normally only local users can connect to Privoxy, so this is not
-(normally) a security problem.
-
--------------------------------------------------------------------------------
-
+   What I don't understand, is how I can browser edit the config file as
+   a regular user, while the whole /etc/privoxy hierarchy belongs to the
+   user "privoxy", with only 644 perms.
+   
+   When you use the browser-based editor, Privoxy itself is writing to
+   the config files. Because Privoxy is running as the user "privoxy", it
+   can update the config files.
+   
+   If you don't like this, setting "enable-edit-actions 0" in the config
+   file will disable the browser-based editor. If you're that paranoid,
+   you should also consider setting "enable-remote-toggle 0" to prevent
+   browser-based enabling/disabling of Privoxy.
+   
+   Note that normally only local users can connect to Privoxy, so this is
+   not (normally) a security problem.
+     _________________________________________________________________
+   
 1.3.7. What is a "default.filter"?
 
-The "default.filter" file is used to "filter" any web page content. By
-"filtering" we mean it can modify, remove, or change anything on the page,
-including HTML tags, and JavaScript. Regular expressions are used to accomplish
-this, and operate on a line by line basis. This is potentially a very powerful
-feature, but requires some expertise.
-
-If you are familiar with regular expressions, and HTML, you can look at the
-provided default.filter with a text editor and see some of things it can be
-used for.
-
-Presently, there is no GUI editor option for this part of the configuration,
-but you can disable/enable various sections of the included default file with
-the "Actions List Editor" from your browser.
-
--------------------------------------------------------------------------------
-
+   The "default.filter" file is used to "filter" any web page content. By
+   "filtering" we mean it can modify, remove, or change anything on the
+   page, including HTML tags, and JavaScript. Regular expressions are
+   used to accomplish this, and operate on a line by line basis. This is
+   potentially a very powerful feature, but requires some expertise.
+   
+   If you are familiar with regular expressions, and HTML, you can look
+   at the provided default.filter with a text editor and see some of
+   things it can be used for.
+   
+   Presently, there is no GUI editor option for this part of the
+   configuration, but you can disable/enable various sections of the
+   included default file with the "Actions List Editor" from your
+   browser.
+     _________________________________________________________________
+   
 1.3.8. How can I set up Privoxy to act as a proxy for my LAN?
 
-By default, Privoxy only responds to requests from localhost. To have it act as
-a server for a network, this needs to be changed in the main config file where
-the Privoxy configuration is located. In that file is a "listen-address"
-option. It may be commented out with a "#" symbol. Make sure it is uncommented,
-and assign it the address of the LAN gateway interface, and port number to use:
+   By default, Privoxy only responds to requests from localhost. To have
+   it act as a server for a network, this needs to be changed in the main
+   config file where the Privoxy configuration is located. In that file
+   is a "listen-address" option. It may be commented out with a "#"
+   symbol. Make sure it is uncommented, and assign it the address of the
+   LAN gateway interface, and port number to use:
+   
+  listen-address  192.168.1.1:8118
 
-  listen-address  192.168.1.1:8118                                             
-                                                                               
-
-Save the file, and restart Privoxy. Configure all browsers on the network then
-to use this address and port number.
-
--------------------------------------------------------------------------------
-
+   Save the file, and restart Privoxy. Configure all browsers on the
+   network then to use this address and port number.
+     _________________________________________________________________
+   
 1.3.9. Instead of ads, now I get a checkerboard pattern. I don't want to see
 anything.
 
-This is a configuration option for images that Privoxy is stopping. You have
-the choice a checkerboard pattern, a transparent 1x1 GIF image (aka "blank"),
-or a custom URL or your choice.
-
-If you want to see nothing, then change the "+image-blocker" action to
-"+image-blocker{blank}". This can be done from the "Edit Actions List"
-selection at http://p.p/. Or by hand editing the appropriate actions file. This
-will only effect what is defined as "images" though.  
-
--------------------------------------------------------------------------------
-
+   This is a configuration option for images that Privoxy is stopping.
+   You have the choice a checkerboard pattern, a transparent 1x1 GIF
+   image (aka "blank"), or a custom URL or your choice.
+   
+   If you want to see nothing, then change the "+image-blocker" action to
+   "+image-blocker{blank}". This can be done from the "Edit Actions List"
+   selection at [67]http://p.p/. Or by hand editing the appropriate
+   actions file. This will only effect what is defined as "images"
+   though.
+     _________________________________________________________________
+   
 1.3.10. Why would anybody want to see a checkerboard pattern?
 
-This can be helpful for troubleshooting problems. It might also be good for
-anyone new to Privoxy so that they can see if their favorite pages are
-displaying correctly, and Privoxy is not inadvertently removing something
-important.
+   This can be helpful for troubleshooting problems. It might also be
+   good for anyone new to Privoxy so that they can see if their favorite
+   pages are displaying correctly, and Privoxy is not inadvertently
+   removing something important.
+     _________________________________________________________________
+   
+1.3.11. I see large red banners on some pages that say "Blocked". How do I
+get rid of this?
 
--------------------------------------------------------------------------------
-
-1.3.11. I see large red banners on some pages that say "Blocked". How do I get
-rid of this?
-
-These are URLs that match something in one of Privoxy's block actions (+block).
-It is meant to be a warning so that you know something has been blocked and an
-easy way for you to see why. These are handled differently than what has been
-defined as "images" (e.g. ad banners). If you want them to be treated as if
-they were images, so that they can be made invisible, then move the offending
-URL from the "+block" section to the "+imageblock" section of your actions
-file. Alternately, you could modify the "block" HTML template that is used by
-Privoxy to display this, and make it something more to your liking.
-
--------------------------------------------------------------------------------
-
+   These are URLs that match something in one of Privoxy's block actions
+   (+block). It is meant to be a warning so that you know something has
+   been blocked and an easy way for you to see why. These are handled
+   differently than what has been defined as "images" (e.g. ad banners).
+   If you want them to be treated as if they were images, so that they
+   can be made invisible, then move the offending URL from the "+block"
+   section to the "+imageblock" section of your actions file.
+   Alternately, you could modify the "block" HTML template that is used
+   by Privoxy to display this, and make it something more to your liking.
+     _________________________________________________________________
+   
 1.3.12. How can I make Privoxy work with other proxies like Squid?
 
-This can be done. See the user manual, which describes how to do this. 
-
--------------------------------------------------------------------------------
-
+   This can be done. See the [68]user manual, which describes how to do
+   this.
+     _________________________________________________________________
+   
 1.4. Miscellaneous
 
-1.4.1. How much does Privoxy slow my browsing down? This has to add extra time
-to browsing.
+1.4.1. How much does Privoxy slow my browsing down? This has to add extra
+time to browsing.
 
-It should not slow you down any in real terms, and may actually help speed
-things up since ads, banners and other junk are not being displayed. The actual
-processing time required by Privoxy itself for each page, is relatively small
-in the overall scheme of things, and happens very quickly. This is typically
-more than offset by time saved not downloading and rendering ad images.
-
-"Filtering" via the filterfile mechanism may cause a perceived slowdown, since
-the entire page is buffered before displaying. See below.
-
--------------------------------------------------------------------------------
-
+   It should not slow you down any in real terms, and may actually help
+   speed things up since ads, banners and other junk are not being
+   displayed. The actual processing time required by Privoxy itself for
+   each page, is relatively small in the overall scheme of things, and
+   happens very quickly. This is typically more than offset by time saved
+   not downloading and rendering ad images.
+   
+   "Filtering" via the filterfile mechanism may cause a perceived
+   slowdown, since the entire page is buffered before displaying. See
+   below.
+     _________________________________________________________________
+   
 1.4.2. I noticed considerable delays in page requests compared to the old
 Junkbuster. What's wrong?
 
-Using the default filtering configuration, I noticed considerable delays in
-page requests compared to the old Junkbuster. Loading pages with large contents
-seemed to take forever, then suddenly delivering all the content at once.
-
-The whole content must be loaded in order to filter, and nothing is is sent to
-the browser during this time. The loading time does not really change in real
-numbers, but the feeling is different, because most browsers are able to start
-rendering incomplete content, giving the user a feeling of "it works".
-
-To modify the content of a page (i.e. make frames resizeable again, etc.) and
-not just replace ads, Privoxy needs to download the entire page first, do its
-content magic and then send the page to the browser.
-
--------------------------------------------------------------------------------
-
+   Using the default filtering configuration, I noticed considerable
+   delays in page requests compared to the old Junkbuster. Loading pages
+   with large contents seemed to take forever, then suddenly delivering
+   all the content at once.
+   
+   The whole content must be loaded in order to filter, and nothing is is
+   sent to the browser during this time. The loading time does not really
+   change in real numbers, but the feeling is different, because most
+   browsers are able to start rendering incomplete content, giving the
+   user a feeling of "it works".
+   
+   To modify the content of a page (i.e. make frames resizeable again,
+   etc.) and not just replace ads, Privoxy needs to download the entire
+   page first, do its content magic and then send the page to the
+   browser.
+     _________________________________________________________________
+   
 1.4.3. What is the "http://p.p/"?
 
-Since Privoxy sits between your web browser and the Internet, it can be
-programmed to handle certain pages specially.
-
-With recent versions of Privoxy (version 2.9.x), you can get some information
-about Privoxy and change some settings by going to http://p.p/ or,
-equivalently, http://ijbswa.sourceforge.net/config/ (Note that p.p is far
-easier to type but may not work in some configurations).
-
-These pages are *not* forwarded to a server on the Internet - instead they are
-handled by a special web server which is built in to Privoxy.
-
-If you are not running Privoxy, then http://p.p/ will fail, and http://
-ijbswa.sourceforge.net/config/ will return a web page telling you you're not
-running Privoxy.
-
-If you have version 2.0.2, then the equivalent is http://example.com/
-show-proxy-args (but you get far less information, and you should really
-consider upgrading to 2.9.x).
-
--------------------------------------------------------------------------------
-
+   Since Privoxy sits between your web browser and the Internet, it can
+   be programmed to handle certain pages specially.
+   
+   With recent versions of Privoxy (version 2.9.x), you can get some
+   information about Privoxy and change some settings by going to
+   http://p.p/ or, equivalently, http://www.privoxy.org/config/ (Note
+   that p.p is far easier to type but may not work in some
+   configurations).
+   
+   These pages are *not* forwarded to a server on the Internet - instead
+   they are handled by a special web server which is built in to Privoxy.
+   
+   If you are not running Privoxy, then http://p.p/ will fail, and
+   http://www.privoxy.org/config/ will return a web page telling you
+   you're not running Privoxy.
+   
+   If you have version 2.0.2, then the equivalent is
+   http://example.com/show-proxy-args (but you get far less information,
+   and you should really consider upgrading to 2.9.x).
+     _________________________________________________________________
+   
 1.4.4. Do you still maintain the blocklists?
 
-No. The format of the blocklists has changed significantly in the versions
-2.9.x. Once we have released the new version, there will again be blocklists
-that you can update automatically.
-
--------------------------------------------------------------------------------
-
+   No. The format of the blocklists has changed significantly in the
+   versions 2.9.x. Once we have released the new version, there will
+   again be blocklists that you can update automatically.
+     _________________________________________________________________
+   
 1.4.5. How can I submit new ads?
 
-As of now, please discontinue to submit new ad blocking infos. Once we have
-released the new version, there will again be a form on the website, which you
-can use to contribute new ads.
-
--------------------------------------------------------------------------------
-
+   As of now, please discontinue to submit new ad blocking infos. Once we
+   have released the new version, there will again be a form on the
+   website, which you can use to contribute new ads.
+     _________________________________________________________________
+   
 1.4.6. How can I hide my IP address?
 
-You cannot hide your IP address with Privoxy or any other software, since the
-server needs to know your IP address to send the answer to you.
-
-Fortunately there are many publicly usable anonymous proxies out there, which
-solve the problem by providing a further level of indirection between you and
-the web server, shared by many people and thus letting your requests "drown" in
-white noise of unrelated requests as far as user tracking is concerned.
-
-Most of them will, however, log your IP address and make it available to the
-authorities in case you abuse that anonymity for criminal purposes. In fact you
-can't even rule out that some of them only exist to *collect* information on
-(those suspicious) people with a more than average preference for privacy.
-
-You can find a list of anonymous public proxies at multiproxy.org and many more
-through Google.
-
--------------------------------------------------------------------------------
-
+   You cannot hide your IP address with Privoxy or any other software,
+   since the server needs to know your IP address to send the answer to
+   you.
+   
+   Fortunately there are many publicly usable anonymous proxies out
+   there, which solve the problem by providing a further level of
+   indirection between you and the web server, shared by many people and
+   thus letting your requests "drown" in white noise of unrelated
+   requests as far as user tracking is concerned.
+   
+   Most of them will, however, log your IP address and make it available
+   to the authorities in case you abuse that anonymity for criminal
+   purposes. In fact you can't even rule out that some of them only exist
+   to *collect* information on (those suspicious) people with a more than
+   average preference for privacy.
+   
+   You can find a list of anonymous public proxies at [69]multiproxy.org
+   and many more through Google.
+     _________________________________________________________________
+   
 1.4.7. Can Privoxy guarantee I am anonymous?
 
-No. Your chances of remaining anonymous are greatly improved, but unless you
-are an expert on Internet security it would be safest to assume that everything
-you do on the Web can be traced back to you.
-
-Privoxy can remove various information about you, and allows you more freedom
-to decide which sites you can trust. But it's still possible that web sites can
-find out who you are. Here's one way this can happen.
-
-A few browsers disclose the user's email address in certain situations, such as
-when transferring a file by FTP. Privoxy does not filter FTP. If you need this
-feature, or are concerned about the mail handler of your browser disclosing
-your email address, you might consider products such as NSClean.
-
-Browsers available only as binaries could use non-standard headers to give out
-any information they can have access to: see the manufacturer's license
-agreement. It's impossible to anticipate and prevent every breach of privacy
-that might occur. The professionally paranoid prefer browsers available as
-source code, because anticipating their behavior is easier. Trust the source,
-Luke!
-
--------------------------------------------------------------------------------
-
+   No. Your chances of remaining anonymous are greatly improved, but
+   unless you are an expert on Internet security it would be safest to
+   assume that everything you do on the Web can be traced back to you.
+   
+   Privoxy can remove various information about you, and allows you more
+   freedom to decide which sites you can trust. But it's still possible
+   that web sites can find out who you are. Here's one way this can
+   happen.
+   
+   A few browsers disclose the user's email address in certain
+   situations, such as when transferring a file by FTP. Privoxy does not
+   filter FTP. If you need this feature, or are concerned about the mail
+   handler of your browser disclosing your email address, you might
+   consider products such as NSClean.
+   
+   Browsers available only as binaries could use non-standard headers to
+   give out any information they can have access to: see the
+   manufacturer's license agreement. It's impossible to anticipate and
+   prevent every breach of privacy that might occur. The professionally
+   paranoid prefer browsers available as source code, because
+   anticipating their behavior is easier. Trust the source, Luke!
+     _________________________________________________________________
+   
 1.4.8. Might some things break because header information is being altered?
 
-Definitely. More and more sites use HTTP header content to decide what to
-display and how to display it. There is many ways that this can be handled, so
-having hard and fast rules, is tricky.
-
-"USER AGENT" in particular is often used in this way to identify the browser,
-and adjust content accordingly. Changing this now is not recommended, since so
-many sites do look for this. You may get undesirable results by changing this.
-
-For instance, different browsers use different encodings of Russian and Czech
-characters, certain web servers convert pages on-the-fly according to the User
-Agent header. Giving a "User Agent" with the wrong operating system or browser
-manufacturer causes some sites in these languages to be garbled; Surfers to
-Eastern European sites should change it to something closer. And then some page
-access counters work by looking at the "REFERER" header; they may fail or break
-if unavailable. The weather maps of Intellicast have been blocked by their
-server when no "REFERER" or cookie is provided, is another example. There are
-many, many other ways things can go wrong when trying to fool a web server.
-
-If you have problems with a site, you will have to adjust your configuration
-accordingly. Cookies are probably the most likely adjustment that may be
-required, but by no means the only one. 
-
--------------------------------------------------------------------------------
-
+   Definitely. More and more sites use HTTP header content to decide what
+   to display and how to display it. There is many ways that this can be
+   handled, so having hard and fast rules, is tricky.
+   
+   "USER AGENT" in particular is often used in this way to identify the
+   browser, and adjust content accordingly. Changing this now is not
+   recommended, since so many sites do look for this. You may get
+   undesirable results by changing this.
+   
+   For instance, different browsers use different encodings of Russian
+   and Czech characters, certain web servers convert pages on-the-fly
+   according to the User Agent header. Giving a "User Agent" with the
+   wrong operating system or browser manufacturer causes some sites in
+   these languages to be garbled; Surfers to Eastern European sites
+   should change it to something closer. And then some page access
+   counters work by looking at the "REFERER" header; they may fail or
+   break if unavailable. The weather maps of Intellicast have been
+   blocked by their server when no "REFERER" or cookie is provided, is
+   another example. There are many, many other ways things can go wrong
+   when trying to fool a web server.
+   
+   If you have problems with a site, you will have to adjust your
+   configuration accordingly. Cookies are probably the most likely
+   adjustment that may be required, but by no means the only one.
+     _________________________________________________________________
+   
 1.4.9. Can Privoxy act as a "caching" proxy to speed up web browsing?
 
-No, it does not have this ability at all. You want something like Squid for
-this. And, yes, before you ask, Privoxy can co-exist with other kinds of
-proxies like "Squid".
-
--------------------------------------------------------------------------------
-
+   No, it does not have this ability at all. You want something like
+   [70]Squid for this. And, yes, before you ask, Privoxy can co-exist
+   with other kinds of proxies like "Squid".
+     _________________________________________________________________
+   
 1.4.10. What about as a firewall? Can Privoxy protect me?
 
-Not in the way you mean, or in the way a true firewall can, or a proxy that has
-this specific capability. Privoxy can help protect your privacy, but not really
-protect you from intrusion attempts.
-
--------------------------------------------------------------------------------
-
+   Not in the way you mean, or in the way a true firewall can, or a proxy
+   that has this specific capability. Privoxy can help protect your
+   privacy, but not really protect you from intrusion attempts.
+     _________________________________________________________________
+   
 1.4.11. The Privoxy logo that replaces ads is very blocky and ugly looking.
 Can't a better font be used?
 
-This is not a font problem. The logo is an image that is created by Privoxy on
-the fly. So as to not waste memory, the image is rather small. The blockiness
-comes when the image is scaled to fill a largish area. There is not much to be
-done about this, other than to use one of the other "imageblock" directives:
-pattern, blank, or a URL of your choosing.
-
-Given the above problem, we have decided to remove the logo option entirely [as
-of v2.9.13].
-
--------------------------------------------------------------------------------
-
+   This is not a font problem. The logo is an image that is created by
+   Privoxy on the fly. So as to not waste memory, the image is rather
+   small. The blockiness comes when the image is scaled to fill a largish
+   area. There is not much to be done about this, other than to use one
+   of the other "imageblock" directives: pattern, blank, or a URL of your
+   choosing.
+   
+   Given the above problem, we have decided to remove the logo option
+   entirely [as of v2.9.13].
+     _________________________________________________________________
+   
 1.4.12. I have large empty spaces now where ads used to be. Why does Privoxy
 leave these large gaps?
 
-It would be easy enough to just eliminate this space altogether, rather than
-fill it with blank space. But, this would create problems with many pages that
-use the overall size of the ad to help organize the page layout and position
-the various components of the page where they were intended to be. It is best
-left this way.
-
--------------------------------------------------------------------------------
-
+   It would be easy enough to just eliminate this space altogether,
+   rather than fill it with blank space. But, this would create problems
+   with many pages that use the overall size of the ad to help organize
+   the page layout and position the various components of the page where
+   they were intended to be. It is best left this way.
+     _________________________________________________________________
+   
 1.4.13. How can Privoxy filter Secure (HTTPS) URLs?
 
-This is a limitation since HTTPS transactions are encrypted SSL sessions
-between your browser and the secure site, and are meant to be reliably secure
-and private. This means that all cookies and HTTP header information are also
-encrypted from the time they leave your browser, to the site, and vice versa.
-Privoxy does not try to unencrypt this information, so it just passes through
-as is. Privoxy can still catch images and ads that are embedded in the SSL
-stream though.
-
--------------------------------------------------------------------------------
-
+   This is a limitation since HTTPS transactions are encrypted SSL
+   sessions between your browser and the secure site, and are meant to be
+   reliably secure and private. This means that all cookies and HTTP
+   header information are also encrypted from the time they leave your
+   browser, to the site, and vice versa. Privoxy does not try to
+   unencrypt this information, so it just passes through as is. Privoxy
+   can still catch images and ads that are embedded in the SSL stream
+   though.
+     _________________________________________________________________
+   
 1.4.14. Privoxy runs as a "server". How secure is it? Do I need to take any
 special precautions?
 
-There are no known exploits that might effect Privoxy. On Unix-like systems,
-Privoxy can run as a non-privileged user, which is how we recommend it be run.
-Also, by default Privoxy only listens to requests from "localhost". It is not
-itself directly exposed to the Internet in this configuration. If you want to
-have Privoxy serve as a LAN proxy, this will have to be opened up to allow for
-LAN requests. In this case, we'd recommend you specify only the LAN gateway
-address, e.g. 192.168.1.1 in the main Privoxy config file. All LAN hosts can
-then use this as their proxy address in the browser proxy configuration. In
-this way, Privoxy will not listen on any external ports. Of course, a firewall
-is always good too. Better safe than sorry.
-
--------------------------------------------------------------------------------
-
+   There are no known exploits that might effect Privoxy. On Unix-like
+   systems, Privoxy can run as a non-privileged user, which is how we
+   recommend it be run. Also, by default Privoxy only listens to requests
+   from "localhost". It is not itself directly exposed to the Internet in
+   this configuration. If you want to have Privoxy serve as a LAN proxy,
+   this will have to be opened up to allow for LAN requests. In this
+   case, we'd recommend you specify only the LAN gateway address, e.g.
+   192.168.1.1 in the main Privoxy config file. All LAN hosts can then
+   use this as their proxy address in the browser proxy configuration. In
+   this way, Privoxy will not listen on any external ports. Of course, a
+   firewall is always good too. Better safe than sorry.
+     _________________________________________________________________
+   
 1.4.15. How can I temporarily disable Privoxy?
 
-The easiest way is to access Privoxy with your browser by using the special
-URL: http://p.p/ and select "Toggle Privoxy on or off" from that page. 
-
--------------------------------------------------------------------------------
-
+   The easiest way is to access Privoxy with your browser by using the
+   special URL: [71]http://p.p/ and select "Toggle Privoxy on or off"
+   from that page.
+     _________________________________________________________________
+   
 1.5. Troubleshooting
 
-1.5.1. I just upgraded and am getting "connection refused" with every web page?
+1.5.1. I just upgraded and am getting "connection refused" with every web
+page?
 
-Either Privoxy is not running, or your browser is configured for a different
-port than what Privoxy is using.
+   Either Privoxy is not running, or your browser is configured for a
+   different port than what Privoxy is using.
+   
+   The old Privoxy (and also Junkbuster) used port 8000 by default. This
+   has been changed to port 8118 now, due to a conflict with NAS (Network
+   Audio Service), which uses port 8000. If you haven't, you need to
+   change your browser to the new port number, or alternately change
+   Privoxy's "listen-address" setting in the config file used to start
+   Privoxy.
+     _________________________________________________________________
+   
+1.5.2. I just added a new rule, but the steenkin ad is still getting
+through. How?
 
-The old Privoxy (and also Junkbuster) used port 8000 by default. This has been
-changed to port 8118 now, due to a conflict with NAS (Network Audio Service),
-which uses port 8000. If you haven't, you need to change your browser to the
-new port number, or alternately change Privoxy's "listen-address" setting in
-the config file used to start Privoxy.
-
--------------------------------------------------------------------------------
-
-1.5.2. I just added a new rule, but the steenkin ad is still getting through.
-How?
-
-If the ad had been displayed before you added its URL, it will probably be held
-in the browser's cache for some time, so it will be displayed without the need
-for any request to the server, and Privoxy will not be in the picture. The best
-thing to do is try flushing the browser's caches. And then try again.
-
-If this doesn't help, you probably have an error in the rule you applied. Try
-pasting the full URL of the offending ad into http://ijbswa.sourceforge.net/
-config/show-url-info and see if any actions match your new rule.
-
--------------------------------------------------------------------------------
-
+   If the ad had been displayed before you added its URL, it will
+   probably be held in the browser's cache for some time, so it will be
+   displayed without the need for any request to the server, and Privoxy
+   will not be in the picture. The best thing to do is try flushing the
+   browser's caches. And then try again.
+   
+   If this doesn't help, you probably have an error in the rule you
+   applied. Try pasting the full URL of the offending ad into
+   [72]http://www.privoxy.org/config/show-url-info and see if any actions
+   match your new rule.
+     _________________________________________________________________
+   
 1.5.3. One of my favorite sites does not work with Privoxy. What can I do?
 
-First verify that it is indeed a Privoxy problem, by disabling Privoxy
-filtering and blocking. Go to http://p.p/ and click on "Toggle Privoxy On or
-Off", then disable it. Now try that page again.
-
-If still a problem, go to "Show which actions apply to a URL and why" from 
-http://p.p/ and paste the full URL of the page in question into the prompt. See
-which actions are being applied to the URL. Now, armed with this information,
-go to "Edit the actions list". Here you should see various sections that have
-various Privoxy features disabled for specific sites. Disabled "actions" will
-have a "-" (minus sign) in front of them. Add your problem page URL to one of
-these sections that looks like it is disabling the feature that is causing the
-problem. Re-try the page. There might be some trial and error involved. This is
-discussed in a little more detail in the user-manual appendix. 
-
-Alternately, if you are comfortable with a text editor, you can accomplish the
-same thing by editing the appropriate "actions" file.
-
--------------------------------------------------------------------------------
-
+   First verify that it is indeed a Privoxy problem, by disabling Privoxy
+   filtering and blocking. Go to [73]http://p.p/ and click on "Toggle
+   Privoxy On or Off", then disable it. Now try that page again.
+   
+   If still a problem, go to "Show which actions apply to a URL and why"
+   from [74]http://p.p/ and paste the full URL of the page in question
+   into the prompt. See which actions are being applied to the URL. Now,
+   armed with this information, go to "Edit the actions list". Here you
+   should see various sections that have various Privoxy features
+   disabled for specific sites. Disabled "actions" will have a "-" (minus
+   sign) in front of them. Add your problem page URL to one of these
+   sections that looks like it is disabling the feature that is causing
+   the problem. Re-try the page. There might be some trial and error
+   involved. This is discussed in a little more detail in the
+   [75]user-manual appendix.
+   
+   Alternately, if you are comfortable with a text editor, you can
+   accomplish the same thing by editing the appropriate "actions" file.
+     _________________________________________________________________
+   
 1.5.4. What time is it?
 
-Time for you to go!
-
--------------------------------------------------------------------------------
-
+   Time for you to go!
+     _________________________________________________________________
+   
 2. Copyright and History
 
-Please see the user manual for information on Copyright and History.
-
--------------------------------------------------------------------------------
-
+   Please see the user manual for information on Copyright and History.
+     _________________________________________________________________
+   
 3. See also
 
-Please see the user manual for information on references.
+   Please see the user manual for information on references.
 
+References
+
+   1. http://www.privoxy.org/faq/
+   2. http://www.privoxy.org/user-manual/contact.html
+   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUESTIONS
+   4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#GENERAL
+   5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWJB
+   6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN32
+   7. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#DIFFERS
+   8. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#FEATURES
+   9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#PROXYMORON
+  10. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BROWSERS2
+  11. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LICENSE
+  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#JOINTEAM
+  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION
+  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#WHICHBROWSERS
+  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#WHICHOS
+  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWINSTALL
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN146
+  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LOCALHOST
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN171
+  20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURATION
+  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWCONFIG
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN187
+  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSS
+  24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN205
+  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGFILES
+  26. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BROWSECONFIG
+  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN322
+  28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN334
+  29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN346
+  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN357
+  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN362
+  32. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#OTHERPROXY
+  33. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#MISC
+  34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN381
+  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LOADINGTIMES
+  36. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURL
+  37. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BLOCKLIST
+  38. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWADS
+  39. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#IP
+  40. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN422
+  41. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN433
+  42. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN443
+  43. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN451
+  44. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN456
+  45. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN465
+  46. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN469
+  47. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN476
+  48. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#TURNOFF
+  49. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN494
+  50. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN496
+  51. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN509
+  52. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN515
+  53. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN533
+  54. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
+  55. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
+  56. http://www.junkbusters.com/
+  57. http://ijbswa.sourceforge.net/
+  58. http://junkbusters.com/
+  59. http://p.p/
+  60. http://www.gnu.org/copyleft/gpl.html
+  61. http://www.privoxy.org/user-manual/
+  62. http://p.p/
+  63. file://localhost/home/swa/sf/current-org/doc/user-manual/configuration.html#ACTIONSFILE
+  64. http://p.p/
+  65. http://www.privoxy.org/config/edit-actions
+  66. file://localhost/home/swa/sf/current-org/doc/user-manual/configuration.html#ACTIONSFILE
+  67. http://p.p/
+  68. file://localhost/home/swa/sf/current-org/doc/user-manual/configuration.html#FORWARDING
+  69. http://www.multiproxy.org/anon_list.htm
+  70. http://www.squid-cache.org/
+  71. http://p.p/
+  72. http://www.privoxy.org/config/show-url-info
+  73. http://p.p/
+  74. http://p.p/
+  75. file://localhost/home/swa/sf/current-org/doc/user-manual/appendix.html#ACTIONSANAT

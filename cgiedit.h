@@ -1,6 +1,6 @@
 #ifndef CGIEDIT_H_INCLUDED
 #define CGIEDIT_H_INCLUDED
-#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.5 2002/01/22 23:24:48 jongfoster Exp $"
+#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.6 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.h,v $
@@ -11,7 +11,7 @@
  * 
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team.  http://ijbswa.sourceforge.net
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: cgiedit.h,v $
+ *    Revision 1.6  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.5  2002/01/22 23:24:48  jongfoster
  *    Adding edit-actions-section-swap
  *
