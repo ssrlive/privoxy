@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.33 2001/10/14 22:28:41 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.34 2001/10/18 22:22:09 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.33 2001/10/14 22:28:41 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.34  2001/10/18 22:22:09  david__schmidt
+ *    Only show "Local support" on templates conditionally:
+ *      - if either 'admin-address' or 'proxy-info-url' are uncommented in config
+ *      - if not, no Local support section appears are removed automatically
+ *
  *    Revision 1.33  2001/10/14 22:28:41  jongfoster
  *    Fixing stupid typo.
  *
@@ -265,6 +270,9 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          cgi_show_url_info, 
          "Show which actions apply to a URL and why"  },
 #ifdef FEATURE_CGI_EDIT_ACTIONS
+   { "toggle",
+         cgi_toggle, 
+         "Toggle JunkBuster on or off" },
    { "edit-actions",
          cgi_edit_actions, 
          "Edit the actions list" },
@@ -280,6 +288,21 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "edit-actions-submit",
          cgi_edit_actions_submit, 
          NULL /* Change the actions for (a) specified URL(s) */ },
+   { "edit-actions-url",
+         cgi_edit_actions_url, 
+         NULL /* Change a URL pattern in the actionsfile */ },
+   { "edit-actions-add-url",
+         cgi_edit_actions_add_url, 
+         NULL /* Add a URL pattern to the actionsfile */ },
+   { "edit-actions-remove-url",
+         cgi_edit_actions_remove_url, 
+         NULL /* Add a URL pattern to the actionsfile */ },
+   { "edit-actions-section-remove",
+         cgi_edit_actions_section_remove, 
+         NULL /* Remove a section from the actionsfile */ },
+   { "edit-actions-section-add",
+         cgi_edit_actions_section_add, 
+         NULL /* Remove a section from the actionsfile */ },
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
    { "robots.txt", 
          cgi_robots_txt,  
@@ -319,6 +342,9 @@ const char image_blank_gif_data[] =
    "\000\001\000\000\002\002D\001\000;";
 
 const int image_blank_gif_length = sizeof(image_blank_gif_data) - 1;
+
+
+static struct http_response cgi_error_memory_response[1];
 
 
 static struct http_response *dispatch_known_cgi(struct client_state * csp,
@@ -415,11 +441,11 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
    struct http_response *rsp;
    char *query_args_start;
    char *path_copy;
-   int result;
+   jb_err err;
 
    if (NULL == (path_copy = strdup(path)))
    {
-      return NULL;
+      return cgi_error_memory();
    }
 
    query_args_start = path_copy;
@@ -435,7 +461,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
    if (NULL == (param_list = parse_cgi_parameters(query_args_start)))
    {
       free(path_copy);
-      return(NULL);
+      return cgi_error_memory();
    }
 
 
@@ -450,7 +476,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
    {
       free(path_copy);
       free_map(param_list);
-      return NULL;
+      return cgi_error_memory();
    }
 
    log_error(LOG_LEVEL_GPC, "%s%s cgi call", csp->http->hostport, csp->http->path);
@@ -462,19 +488,23 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
    {
       if ((d->name == NULL) || (strcmp(path_copy, d->name) == 0))
       {
-         result = (d->handler)(csp, rsp, param_list);
+         err = (d->handler)(csp, rsp, param_list);
          free(path_copy);
          free_map(param_list);
-         if (result)
+         if (err == JB_ERR_CGI_PARAMS)
          {
-            /* Error in handler */
-            free_http_response(rsp);
-            return(NULL);
+            err = cgi_error_bad_param(csp, rsp);
+         }
+         if (!err)
+         {
+            /* It worked */
+            return finish_http_response(rsp);
          }
          else
          {
-            /* It worked */
-            return(finish_http_response(rsp));
+            /* Error in handler, probably out-of-memory */
+            free_http_response(rsp);
+            return cgi_error_memory();
          }
       }
    }
@@ -513,11 +543,15 @@ static struct map *parse_cgi_parameters(char *argstring)
       if ((NULL != (p = strchr(vector[i], '='))) && (*(p+1) != '\0'))
       {
          *p = '\0';
-         map(cgi_params, url_decode(vector[i]), 0, url_decode(++p), 0);
+         if (map(cgi_params, url_decode(vector[i]), 0, url_decode(++p), 0))
+         {
+            free_map(cgi_params);
+            return NULL;
+         }
       }
    }
 
-   return(cgi_params);
+   return cgi_params;
 
 }
 
@@ -532,44 +566,248 @@ static struct map *parse_cgi_parameters(char *argstring)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  templatename = Which template should be used for the answer
- *          3  :  errno = system error number
+ *          3  :  sys_err = system error number
  *
- * Returns     :  NULL if no memory, else http_response
+ * Returns     :  A http_response.  If we run out of memory, this
+ *                will be cgi_error_memory().
  *
  *********************************************************************/
-struct http_response *error_response(struct client_state *csp, const char *templatename, int err)
+struct http_response *error_response(struct client_state *csp,
+                                     const char *templatename,
+                                     int sys_err)
 {
+   jb_err err;
    struct http_response *rsp;
    struct map * exports = default_exports(csp, NULL);
+   if (exports == NULL)
+   {
+      return cgi_error_memory();
+   }
 
    if (NULL == (rsp = alloc_http_response()))
    {
-      return NULL;
+      free_map(exports);
+      return cgi_error_memory();
    }
 
-   map(exports, "host-html", 1, html_encode(csp->http->host), 0);
-   map(exports, "hostport", 1, csp->http->hostport, 1);
-   map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-   map(exports, "path", 1, csp->http->path, 1);
-   map(exports, "path-html", 1, html_encode(csp->http->path), 0);
-   map(exports, "error", 1, safe_strerror(err), 0);
-   map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
+   err = map(exports, "host-html", 1, html_encode(csp->http->host), 0)
+      || map(exports, "hostport", 1, csp->http->hostport, 1)
+      || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0)
+      || map(exports, "path", 1, csp->http->path, 1)
+      || map(exports, "path-html", 1, html_encode(csp->http->path), 0)
+      || map(exports, "error", 1, safe_strerror(sys_err), 0)
+      || map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
 
-   rsp->body = template_load(csp, templatename);
-   template_fill(&rsp->body, exports);
-   free_map(exports);
+   if (err)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
    if (!strcmp(templatename, "no-such-domain"))
    {
-      rsp->status = strdup("404 No such domain"); 
+      rsp->status = strdup("404 No such domain");
+      if (rsp->status == NULL)
+      {
+         free_map(exports);
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
    }
    else if (!strcmp(templatename, "connect-failed"))
    {
       rsp->status = strdup("503 Connect failed");
+      if (rsp->status == NULL)
+      {
+         free_map(exports);
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
    }
 
-   return(finish_http_response(rsp));
+   err = template_fill_for_cgi(csp, templatename, exports, rsp);
+   if (err)
+   {
+      free_http_response(rsp);
+      return cgi_error_memory();
+   }
 
+   return finish_http_response(rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_init_error_messages
+ *
+ * Description :  Call at the start of the program to initialize
+ *                the error message used by cgi_error_memory().
+ *
+ * Parameters  :  N/A
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void cgi_init_error_messages(void)
+{
+   memset(cgi_error_memory_response, '\0', sizeof(*cgi_error_memory_response));
+   cgi_error_memory_response->head =
+      "HTTP/1.0 500 Internal JunkBuster Proxy Error\r\n"
+      "Content-Type: text/html\r\n"
+      "\r\n";
+   cgi_error_memory_response->body =
+      "<html>\r\n"
+      "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
+      "<body>\r\n"
+      "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
+      "<p>JunkBuster <b>ran out of memory</b> whilst processing your request.</p>\r\n"
+      "<p>Please contact your proxy administrator, or try again later</p>\r\n"
+      "</body>\r\n"
+      "</html>\r\n";
+
+   cgi_error_memory_response->head_length =
+      strlen(cgi_error_memory_response->head);
+   cgi_error_memory_response->content_length =
+      strlen(cgi_error_memory_response->body);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_memory
+ *
+ * Description :  Called if a CGI function runs out of memory.
+ *                Returns a statically-allocated error response.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  template_name = Name of template that could not
+ *                                be loaded.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+struct http_response *cgi_error_memory(void)
+{
+   /* assert that it's been initialized. */
+   assert(cgi_error_memory_response->head);
+
+   return cgi_error_memory_response;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_no_template
+ *
+ * Description :  Almost-CGI function that is called if a templae
+ *                cannot be loaded.  Note this is not a true CGI,
+ *                it takes a template name rather than a map of 
+ *                parameters.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  template_name = Name of template that could not
+ *                                be loaded.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_error_no_template(struct client_state *csp,
+                             struct http_response *rsp,
+                             const char *template_name)
+{
+   static const char status[] =
+      "500 Internal JunkBuster Proxy Error";
+   static const char body_prefix[] =
+      "<html>\r\n"
+      "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
+      "<body>\r\n"
+      "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
+      "<p>JunkBuster encountered an error whilst processing your request:</p>\r\n"
+      "<p><b>Could not load template file <code>";
+   static const char body_suffix[] =
+      "</code></b></p>\r\n"
+      "<p>Please contact your proxy administrator.</p>\r\n"
+      "<p>If you are the proxy administrator, please put the required file "
+      "in the <code><i>(confdir)</i>/templates</code> directory.  The "
+      "location of the <code><i>(confdir)</i></code> directory "
+      "is specified in the main JunkBuster <code>config</code> "
+      "file.  (It's typically the JunkBuster install directory"
+#ifndef _WIN32
+      ", or <code>/etc/junkbuster/</code>"
+#endif /* ndef _WIN32 */
+      ").</p>\r\n"
+      "</body>\r\n"
+      "</html>\r\n";
+
+   assert(csp);
+   assert(rsp);
+   assert(template_name);
+
+   /* Reset rsp, if needed */
+   freez(rsp->status);
+   freez(rsp->head);
+   freez(rsp->body);
+   rsp->content_length = 0;
+   rsp->head_length = 0;
+   rsp->is_static = 0;
+
+   rsp->body = malloc(strlen(body_prefix) + strlen(template_name) + strlen(body_suffix) + 1);
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+   strcpy(rsp->body, body_prefix);
+   strcat(rsp->body, template_name);
+   strcat(rsp->body, body_suffix);
+
+   rsp->status = strdup(status);
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_bad_param
+ *
+ * Description :  CGI function that is called if the parameters
+ *                (query string) for a CGI were wrong.
+ *               
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_error_bad_param(struct client_state *csp,
+                           struct http_response *rsp)
+{
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-bad-param", exports, rsp);
 }
 
 
@@ -621,7 +859,6 @@ void get_http_time(int time_offset, char *buf)
       t->tm_min,
       t->tm_sec
       );
-   buf[32] = '\0';
 
 }
 
@@ -636,18 +873,28 @@ void get_http_time(int time_offset, char *buf)
  * Parameters  :
  *          1  :  rsp = pointer to http_response to be processed
  *
- * Returns     :  http_response, or NULL on failiure
+ * Returns     :  A http_response, usually the rsp parameter.
+ *                On error, free()s rsp and returns cgi_error_memory()
  *
  *********************************************************************/
 struct http_response *finish_http_response(struct http_response *rsp)
 {
    char buf[BUFFER_SIZE];
+   jb_err err;
+
+   /* Special case - do NOT change this statically allocated response,
+    * which is ready for output anyway.
+    */
+   if (rsp == cgi_error_memory_response)
+   {
+      return rsp;
+   }
 
    /* 
     * Fill in the HTTP Status
     */
    sprintf(buf, "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
-   enlist_first(rsp->headers, buf);
+   err = enlist_first(rsp->headers, buf);
 
    /* 
     * Set the Content-Length
@@ -657,7 +904,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
       rsp->content_length = rsp->body ? strlen(rsp->body) : 0;
    }
    sprintf(buf, "Content-Length: %d", rsp->content_length);
-   enlist(rsp->headers, buf);
+   err = err || enlist(rsp->headers, buf);
 
    /* 
     * Fill in the default headers:
@@ -670,7 +917,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
     * 
     * See http://www.w3.org/Protocols/rfc2068/rfc2068
     */
-   enlist_unique(rsp->headers, "Content-Type: text/html", 13);
+   err = err || enlist_unique(rsp->headers, "Content-Type: text/html", 13);
 
    if (rsp->is_static)
    {
@@ -680,13 +927,13 @@ struct http_response *finish_http_response(struct http_response *rsp)
        */
 
       get_http_time(0, buf);
-      enlist_unique_header(rsp->headers, "Date", buf);
+      err = err || enlist_unique_header(rsp->headers, "Date", buf);
 
       /* Some date in the past. */
-      enlist_unique_header(rsp->headers, "Last-Modified", "Sat, 17 Jun 2000 12:00:00 GMT");
+      err = err || enlist_unique_header(rsp->headers, "Last-Modified", "Sat, 17 Jun 2000 12:00:00 GMT");
 
       get_http_time(10 * 60, buf); /* 10 * 60sec = 10 minutes */
-      enlist_unique_header(rsp->headers, "Expires", buf);
+      err = err || enlist_unique_header(rsp->headers, "Expires", buf);
    }
    else
    {
@@ -695,28 +942,28 @@ struct http_response *finish_http_response(struct http_response *rsp)
        * setting.  However, to be certain, we also set both "Last-Modified"
        * and "Expires" to the current time.
        */
-      enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
+      err = err || enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
       get_http_time(0, buf);
-      enlist_unique_header(rsp->headers, "Date", buf);
-      enlist_unique_header(rsp->headers, "Last-Modified", buf);
-      enlist_unique_header(rsp->headers, "Expires", buf);
+      err = err || enlist_unique_header(rsp->headers, "Date", buf);
+      err = err || enlist_unique_header(rsp->headers, "Last-Modified", buf);
+      err = err || enlist_unique_header(rsp->headers, "Expires", buf);
    }
 
 
    /* 
     * Write the head
     */
-   if (NULL == (rsp->head = list_to_text(rsp->headers)))
+   if (err || (NULL == (rsp->head = list_to_text(rsp->headers))))
    {
       free_http_response(rsp);
-      return(NULL);
+      return cgi_error_memory();
    }
    rsp->head_length = strlen(rsp->head);
 
-   return(rsp);
+   return rsp;
 
 }
-  
+
 
 /*********************************************************************
  *
@@ -751,7 +998,10 @@ struct http_response *alloc_http_response(void)
  *********************************************************************/
 void free_http_response(struct http_response *rsp)
 {
-   if (rsp)
+   /*
+    * Must special case cgi_error_memory_response, which is never freed.
+    */
+   if (rsp && (rsp != cgi_error_memory_response))
    {
       freez(rsp->status);
       freez(rsp->head);
@@ -773,31 +1023,68 @@ void free_http_response(struct http_response *rsp)
  *
  * Parameters  :
  *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  template_ptr = Destination for pointer to loaded
+ *                               template text.
  *           3 :  template = name of the HTML template to be used
  *
- * Returns     :  char * with loaded template, or NULL if failure
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_FILE if the template file cannot be read
  *
  *********************************************************************/
-char *template_load(struct client_state *csp, const char *templatename)
+jb_err template_load(struct client_state *csp, char ** template_ptr, 
+                     const char *templatename)
 {
-   char buf[BUFFER_SIZE];
-   char *file_buffer = NULL;
+   char *templates_dir_path;
+   char *full_path;
+   char *file_buffer;
    FILE *fp;
+   char buf[BUFFER_SIZE];
+
+   assert(csp);
+   assert(template_ptr);
+   assert(templatename);
+
+   *template_ptr = NULL;
 
    /*
     * Open template file or fail
     */
-   snprintf(buf, BUFFER_SIZE, "%s/templates/%s", csp->config->confdir, templatename);
 
-   if(NULL == (fp = fopen(buf, "r")))
+   templates_dir_path = make_path(csp->config->confdir, "templates");
+   if (templates_dir_path == NULL)
    {
-      log_error(LOG_LEVEL_FATAL, "error loading template %s: %E", buf);
-      return NULL;
+      return JB_ERR_MEMORY;
    }
-   
+
+   full_path = make_path(templates_dir_path, templatename);
+   free(templates_dir_path);
+   if (full_path == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   file_buffer = strdup("");
+   if (file_buffer == NULL)
+   {
+      free(full_path);
+      return JB_ERR_MEMORY;
+   }
+
+   if (NULL == (fp = fopen(full_path, "r")))
+   {
+      log_error(LOG_LEVEL_ERROR, "Cannot open template file %s: %E", full_path);
+      free(full_path);
+      free(file_buffer);
+      return JB_ERR_FILE;
+   }
+   free(full_path);
 
    /* 
-    * Read the file, ignoring comments
+    * Read the file, ignoring comments.
+    *
+    * FIXME: The comment handling could break with lines >BUFFER_SIZE long.
+    *        This is unlikely in practise.
     */
    while (fgets(buf, BUFFER_SIZE, fp))
    {
@@ -806,19 +1093,24 @@ char *template_load(struct client_state *csp, const char *templatename)
       {
          continue;
       }
-   
-      file_buffer = strsav(file_buffer, buf);
+
+      if (string_append(&file_buffer, buf))
+      {
+         fclose(fp);
+         return JB_ERR_MEMORY;
+      }
    }
    fclose(fp);
 
-   return(file_buffer);
+   *template_ptr = file_buffer;
 
+   return JB_ERR_OK;
 }
 
 
 /*********************************************************************
  *
- * Function    :  fill_template
+ * Function    :  template_fill
  *
  * Description :  CGI support function that fills in a pre-loaded
  *                HTML template by replacing @name@ with value using
@@ -835,10 +1127,11 @@ char *template_load(struct client_state *csp, const char *templatename)
  *                                    Caller must free().
  *           2 :  exports = map with fill in symbol -> name pairs
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error
  *
  *********************************************************************/
-void template_fill(char **template_ptr, struct map *exports)
+jb_err template_fill(char **template_ptr, const struct map *exports)
 {
    struct map_entry *m;
    pcrs_job *job;
@@ -891,17 +1184,29 @@ void template_fill(char **template_ptr, struct map *exports)
       job = pcrs_compile(buf, m->value, flags,  &error);
       if (job == NULL) 
       {
-         log_error(LOG_LEVEL_ERROR, "Error compiling template fill job %s: %d", m->name, error);
+         if (error == PCRS_ERR_NOMEM)
+         {
+            free(file_buffer);
+            *template_ptr = NULL;
+            return JB_ERR_MEMORY;
+         }
+         else
+         {
+            log_error(LOG_LEVEL_ERROR, "Error compiling template fill job %s: %d", m->name, error);
+            /* Hope it wasn't important and silently ignore the invalid job */
+         }
       }
       else
       {
          pcrs_execute(job, file_buffer, size, &tmp_out_buffer, &size);
-         if (NULL != tmp_out_buffer)
-         {
-            free(file_buffer);
-            file_buffer = tmp_out_buffer;
-         }
+         free(file_buffer);
          pcrs_free_job(job);
+         if (NULL == tmp_out_buffer)
+         {
+            *template_ptr = NULL;
+            return JB_ERR_MEMORY;
+         }
+         file_buffer = tmp_out_buffer;
       }
    }
 
@@ -909,9 +1214,56 @@ void template_fill(char **template_ptr, struct map *exports)
     * Return
     */
    *template_ptr = file_buffer;
-
+   return JB_ERR_OK;
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  template_fill_for_cgi
+ *
+ * Description :  CGI support function that loads a HTML template
+ *                and fills it in.  Handles file-not-found errors
+ *                by sending a HTML error message.  For convenience,
+ *                this function also frees the passed "exports" map.
+ *
+ * Parameters  :
+ *           1 :  csp = Client state
+ *           2 :  templatename = name of the HTML template to be used
+ *           3 :  exports = map with fill in symbol -> name pairs.
+ *                          Will be freed by this function.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error
+ *
+ *********************************************************************/
+jb_err template_fill_for_cgi(struct client_state *csp,
+                             const char *templatename,
+                             struct map *exports,
+                             struct http_response *rsp)
+{
+   jb_err err;
+   
+   assert(csp);
+   assert(templatename);
+   assert(exports);
+   assert(rsp);
+
+   err = template_load(csp, &rsp->body, templatename);
+   if (err == JB_ERR_FILE)
+   {
+      free_map(exports);
+      return cgi_error_no_template(csp, rsp, templatename);
+   }
+   else if (err)
+   {
+      free_map(exports);
+      return err; /* JB_ERR_MEMORY */
+   }
+   err = template_fill(&rsp->body, exports);
+   free_map(exports);
+   return err;
+}
 
 /*********************************************************************
  *
@@ -921,62 +1273,77 @@ void template_fill(char **template_ptr, struct map *exports)
  *                which are common to all CGI functions.
  *
  * Parameters  :
- *          1  :  exports = Structure to write output to.  This
- *                structure should be newly allocated and will be
- *                zeroed.
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  caller = name of CGI who calls us and which should
- *                         be excluded from the generated menu.
- * Returns     :  NULL if no memory, else map
+ *                         be excluded from the generated menu. May be
+ *                         NULL.
+ * Returns     :  NULL if no memory, else a new map.  Caller frees.
  *
  *********************************************************************/
 struct map *default_exports(const struct client_state *csp, const char *caller)
 {
    char buf[20];
+   int err = 0;
+   struct map * exports;
    int local_help_exists = 0;
-   struct map * exports = new_map();
 
-   map(exports, "version", 1, VERSION, 1);
-   map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1);
-   map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1);
-   map(exports, "homepage", 1, HOME_PAGE_URL, 1);
-   map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1);
-   map(exports, "menu", 1, make_menu(caller), 0);
-   map(exports, "code-status", 1, CODE_STATUS, 1);
+   assert(csp);
+
+   exports = new_map();
+   if (exports == NULL)
+   {
+      return NULL;
+   }
+
+
+   err = map(exports, "version", 1, VERSION, 1)
+      || map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1)
+      || map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1)
+      || map(exports, "homepage", 1, HOME_PAGE_URL, 1)
+      || map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1)
+      || map(exports, "menu", 1, make_menu(caller), 0)
+      || map(exports, "code-status", 1, CODE_STATUS, 1);
 
    snprintf(buf, 20, "%d", csp->config->hport);
-   map(exports, "my-port", 1, buf, 1);
+   err = err || map(exports, "my-port", 1, buf, 1);
 
    if(!strcmp(CODE_STATUS, "stable"))
    {
-      map_block_killer(exports, "unstable");
+      err = err || map_block_killer(exports, "unstable");
    }
 
    if(csp->config->admin_address != NULL)
    {
-      map(exports, "admin-address", 1, csp->config->admin_address, 1);
+      err = err || map(exports, "admin-address", 1, csp->config->admin_address, 1);
       local_help_exists = 1;
    }
    else
    {
-      map_block_killer(exports, "have-adminaddr-info");
+      err = err || map_block_killer(exports, "have-adminaddr-info");
    }
 
    if(csp->config->proxy_info_url != NULL)
    {
-      map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
+      err = err || map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
       local_help_exists = 1;
    }
    else
    {
-      map_block_killer(exports, "have-proxy-info");
-   }
+      err = err || map_block_killer(exports, "have-proxy-info");
+   }   
 
    if (local_help_exists == 0)
-      map_block_killer(exports, "have-help-info");
+   {
+      err = err || map_block_killer(exports, "have-help-info");
+   }
 
-   return (exports);
+   if (err)
+   {
+      free_map(exports);
+      return NULL;
+   }
 
+   return exports;
 }
 
 
@@ -994,16 +1361,20 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
  *          1  :  exports = map to extend
  *          2  :  name = name of conditional block
  *
- * Returns     :  extended map
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-void map_block_killer(struct map *exports, const char *name)
+jb_err map_block_killer(struct map *exports, const char *name)
 {
    char buf[1000]; /* Will do, since the names are hardwired */
 
-   snprintf(buf, 1000, "if-%s-start.*if-%s-end", name, name);
-   map(exports, buf, 1, "", 1);
+   assert(exports);
+   assert(name);
+   assert(strlen(name) < 490);
 
+   snprintf(buf, 1000, "if-%s-start.*if-%s-end", name, name);
+   return map(exports, buf, 1, "", 1);
 }
 
 
@@ -1028,22 +1399,32 @@ void map_block_killer(struct map *exports, const char *name)
  *          2  :  name = name of conditional block
  *          3  :  choose_first = nonzero for first, zero for second.
  *
- * Returns     :  extended map
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-void map_conditional(struct map *exports, const char *name, int choose_first)
+jb_err map_conditional(struct map *exports, const char *name, int choose_first)
 {
    char buf[1000]; /* Will do, since the names are hardwired */
+   jb_err err;
+
+   assert(exports);
+   assert(name);
+   assert(strlen(name) < 480);
 
    snprintf(buf, 1000, (choose_first
       ? "else-not-%s@.*@endif-%s"
       : "if-%s-then@.*@else-not-%s"),
       name, name);
-   map(exports, buf, 1, "", 1);
+
+   err = map(exports, buf, 1, "", 1);
+   if (err)
+   {
+      return err;
+   }
 
    snprintf(buf, 1000, (choose_first ? "if-%s-then" : "endif-%s"), name);
-   map(exports, buf, 1, "", 1);
-
+   return map(exports, buf, 1, "", 1);
 }
 
 

@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.15 2001/09/16 15:02:35 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.16 2001/09/16 17:08:54 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.16  2001/09/16 17:08:54  jongfoster
+ *    Moving simple CGI functions from cgi.c to new file cgisimple.c
+ *
  *    Revision 1.15  2001/09/16 15:02:35  jongfoster
  *    Adding i.j.b/robots.txt.
  *    Inlining add_stats() since it's only ever called from one place.
@@ -129,17 +132,29 @@ extern struct http_response *finish_http_response(struct http_response *rsp);
 
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
 
-extern void map_block_killer (struct map *exports, const char *name);
-extern void map_conditional  (struct map *exports, const char *name, int choose_first);
+extern jb_err map_block_killer (struct map *exports, const char *name);
+extern jb_err map_conditional  (struct map *exports, const char *name, int choose_first);
 
-extern char *template_load(struct client_state *csp, const char *templatename);
-extern void template_fill(char ** template_ptr, struct map *exports);
+extern jb_err template_load(struct client_state *csp, char ** template_ptr, 
+                            const char *templatename);
+extern jb_err template_fill(char ** template_ptr, const struct map *exports);
+extern jb_err template_fill_for_cgi(struct client_state *csp,
+                                    const char *templatename,
+                                    struct map *exports,
+                                    struct http_response *rsp);
 
-extern void get_http_time(int time_offset, char * buf);
+extern void cgi_init_error_messages(void);
+extern struct http_response *cgi_error_memory(void);
+extern jb_err cgi_error_no_template(struct client_state *csp,
+                                    struct http_response *rsp,
+                                    const char *template_name);
+extern jb_err cgi_error_bad_param(struct client_state *csp,
+                                  struct http_response *rsp);
 
 /*
  * Text generators
  */
+extern void get_http_time(int time_offset, char * buf);
 extern char *make_menu(const char *self);
 extern char *dump_map(const struct map *map);
 

@@ -1,0 +1,90 @@
+##########################################################
+#
+# Toggle Output template for junkbuster 2.9.x.
+#
+#
+# USING HTML TEMPLATES:
+# ---------------------
+#
+# Template files are written win plain HTML, with a few
+# additions:
+# 
+# - Lines that start with a '#' character like this one
+#   are ignored
+#
+# - Each item in the below list of exported symbols will
+#   be replaced by dynamically generated text, if they
+#   are enclosed in '@'-characters. E.g. The string @version@
+#   will be replaced by the version number of Junkbuster.
+#
+# - One special application of this is to make whole blocks
+#   of the HTML template disappear if the condition <name>
+#   is not given. Simply enclose the block between the two
+#   strings @if-<name>start and if-<name>-end@. The strings
+#   should be placed in HTML comments (<!-- -->), so the
+#   html structure won't be messed when the magic happens.
+#   
+# USABLE SYMBOLS IN THIS TEMPLATE:
+# --------------------------------
+#
+#  my-ip-addr:
+#    The IP-address that the client used to reach this proxy
+#  my-hostname:
+#    The hostname associated with my-ip-addr
+#  admin-address:
+#    The email address of the pxoxy's administrator, as configured
+#    in the config file
+#  default-cgi:
+#    The URL for the "main menu" builtin CGI of this proxy
+#  menu:
+#    List of <li> elements linking to the other available CGIs
+#  version:
+#    The version number of the proxy software
+#  code-status:
+#    The development status of the proxy software: "alpha", "beta",
+#    or "stable".
+#  homepage:
+#    The URL of the SourceForge ijbswa project, who maintains this
+#    software.
+#
+# CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
+# ------------------------------------------------------------------
+#
+#  unstable:
+#    this is an alpha or beta release of the proxy software
+#  have-adminaddr-info:
+#    An e-mail address for the local Junkbuster adminstrator has
+#    been specified and is available through the "admin-address"
+#    symbol
+#  have-proxy-info:
+#    A URL for online documentation about this proxy has been
+#    specified and is available through the "proxy-info-url"
+#    symbol
+#  have-help-info:
+#    If either have-proxy-info is true or have-adminaddr-info is
+#    true, have-help-info is true.  Used to conditionally include
+#    a grey box for any and all help info.
+#  @if-enabled-then@ on @else-not-enabled@ off @endif-enabled@
+#
+<html>
+
+<head>
+  
+  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - JunkBuster@@my-hostname@</title>
+  <style type="text/css">
+    BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+  </style>
+</head>
+
+<body bgcolor="#eeeeee" marginwidth="3" marginheight="3"
+leftmargin="3" rightmargin="3" topmargin="3" bottommargin="3">
+<center>
+<a href="@default-cgi@/" target="_blank">JunkBuster</a> is 
+<b>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</b>.
+<a href="@default-cgi@/toggle?mini=y&set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@"
+>@if-enabled-then@[Disable]@else-not-enabled@[Enable]@endif-enabled@</a>
+<br>
+<a href="" onclick="window.close();">[Close]</a>
+</center>
+</body>
+</html>

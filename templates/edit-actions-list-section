@@ -28,16 +28,17 @@
       <td colspan="2">
         <table border="0" cellspacing="0" cellpadding="4">
           <tr valign="middle" align="center">
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_up(@sectionid@)"
               value="Move section up">&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
-              value="Split section">&nbsp;&nbsp;&nbsp;</td>
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_add(@sectionid@)"
+              value="Insert new section below">&nbsp;&nbsp;&nbsp;</td>
           </tr>
           <tr valign="middle" align="center">
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_down(@sectionid@)"
               value="Move section down">&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
-              value="Merge with next">&nbsp;&nbsp;&nbsp;</td>
+            <td><!-- @if-empty-section-start -->&nbsp;&nbsp;&nbsp;<input
+              type="button" onclick="section_remove(@sectionid@)" value="Delete whole section"
+              >&nbsp;&nbsp;<!-- if-empty-section-end@ -->&nbsp;</td>
           </tr>
         </table>
       </td>

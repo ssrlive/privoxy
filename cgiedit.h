@@ -1,6 +1,6 @@
 #ifndef CGIEDIT_H_INCLUDED
 #define CGIEDIT_H_INCLUDED
-#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.1 2001/09/16 15:47:37 jongfoster Exp $"
+#define CGIEDIT_H_VERSION "$Id: cgiedit.h,v 1.2 2001/10/14 22:12:49 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.h,v $
@@ -37,6 +37,17 @@
  *
  * Revisions   :
  *    $Log: cgiedit.h,v $
+ *    Revision 1.2  2001/10/14 22:12:49  jongfoster
+ *    New version of CGI-based actionsfile editor.
+ *    Major changes, including:
+ *    - Completely new file parser and file output routines
+ *    - edit-actions CGI renamed edit-actions-for-url
+ *    - All CGIs now need a filename parameter, except for...
+ *    - New CGI edit-actions which doesn't need a filename,
+ *      to allow you to start the editor up.
+ *    - edit-actions-submit now works, and now automatically
+ *      redirects you back to the main edit-actions-list handler.
+ *
  *    Revision 1.1  2001/09/16 15:47:37  jongfoster
  *    First version of CGI-based edit interface.  This is very much a
  *    work-in-progress, and you can't actually use it to edit anything
@@ -57,18 +68,36 @@ extern "C" {
  * CGI functions
  */
 #ifdef FEATURE_CGI_EDIT_ACTIONS
-extern int cgi_edit_actions        (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_edit_actions_for_url(struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_edit_actions_list   (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_edit_actions_submit (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
+extern jb_err cgi_edit_actions        (struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_for_url(struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_list   (struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_submit (struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_url    (struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_add_url(struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters);
+extern jb_err cgi_edit_actions_remove_url    (struct client_state *csp,
+                                              struct http_response *rsp,
+                                              const struct map *parameters);
+extern jb_err cgi_edit_actions_section_remove(struct client_state *csp,
+                                              struct http_response *rsp,
+                                              const struct map *parameters);
+extern jb_err cgi_edit_actions_section_add   (struct client_state *csp,
+                                              struct http_response *rsp,
+                                              const struct map *parameters);
+extern jb_err cgi_toggle(struct client_state *csp,
+                         struct http_response *rsp,
+                         const struct map *parameters);
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 

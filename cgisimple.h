@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.2 2001/10/02 15:31:20 oes Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.3 2001/10/14 22:00:32 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.3  2001/10/14 22:00:32  jongfoster
+ *    Adding support for a 404 error when an invalid CGI page is requested.
+ *
  *    Revision 1.2  2001/10/02 15:31:20  oes
  *    Introduced show-request cgi
  *
@@ -57,30 +60,30 @@ extern "C" {
 /*
  * CGI functions
  */
-extern int cgi_default             (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_error_404           (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_robots_txt          (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_send_banner         (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_status         (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_url_info       (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_version        (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_request        (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
+extern jb_err cgi_default      (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_error_404    (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_robots_txt   (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_send_banner  (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_show_status  (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_show_url_info(struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_show_version (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
+extern jb_err cgi_show_request (struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters);
 
 /* Revision control strings from this header and associated .c file */
 extern const char cgisimple_rcs[];

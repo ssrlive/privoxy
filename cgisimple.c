@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.5 2001/10/07 15:30:41 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.6 2001/10/14 22:00:32 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.5 2001/10/07 15:30:41 oes Exp
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.6  2001/10/14 22:00:32  jongfoster
+ *    Adding support for a 404 error when an invalid CGI page is requested.
+ *
  *    Revision 1.5  2001/10/07 15:30:41  oes
  *    Removed FEATURE_DENY_GZIP
  *
@@ -84,7 +87,7 @@ const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
 
 static char *show_rcs(void);
-static void show_defines(struct map *exports);
+static jb_err show_defines(struct map *exports);
 
 
 /*********************************************************************
@@ -99,36 +102,63 @@ static void show_defines(struct map *exports);
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * Returns     :  0
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                (Problems other than out-of-memory should be
+ *                handled by this routine - it should set the
+ *                rsp appropriately and return "success")
  *
  *********************************************************************/
-int cgi_default(struct client_state *csp, struct http_response *rsp,
-                struct map *parameters)
+jb_err cgi_default(struct client_state *csp,
+                   struct http_response *rsp,
+                   const struct map *parameters)
 {
    char *p;
-   char *tmp = NULL;
-   struct map *exports = default_exports(csp, "");
+   char *tmp;
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, "")))
+   {
+      return JB_ERR_MEMORY;
+   }
 
    /* If there were other parameters, export a dump as "cgi-parameters" */
-   if(parameters)
+   if (parameters->first)
    {
-      p = dump_map(parameters);
-      tmp = strsav(tmp, "<p>What made you think this cgi takes parameters?\n"
-                        "Anyway, here they are, in case you're interested:</p>\n");
-      tmp = strsav(tmp, p);
-      map(exports, "cgi-parameters", 1, tmp, 0);
+      if (NULL == (p = dump_map(parameters)))
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+      tmp = strdup("<p>What made you think this cgi takes parameters?\n"
+                   "Anyway, here they are, in case you're interested:</p>\n");
+      string_append(&tmp, p);
       free(p);
+      if (tmp == NULL)
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+      if (map(exports, "cgi-parameters", 1, tmp, 0))
+      {
+         return JB_ERR_MEMORY;
+      }
    }
    else
    {
-      map(exports, "cgi-parameters", 1, "", 1);
+      if (map(exports, "cgi-parameters", 1, "", 1))
+      {
+         return JB_ERR_MEMORY;
+      }
    }
 
-   rsp->body = template_load(csp, "default");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
-   return(0);
-
+   return template_fill_for_cgi(csp, "default", exports, rsp);
 }
 
 
@@ -138,7 +168,7 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
  *
  * Function    :  cgi_error_404
  *
- * Description :  CGI function that is called if an unknow action was
+ * Description :  CGI function that is called if an unknown action was
  *                given.
  *               
  * Parameters  :
@@ -146,20 +176,35 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * Returns     :  0
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_error_404(struct client_state *csp,
-                  struct http_response *rsp,
-                  struct map *parameters)
+jb_err cgi_error_404(struct client_state *csp,
+                     struct http_response *rsp,
+                     const struct map *parameters)
 {
-   struct map *exports = default_exports(csp, NULL);
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
 
    rsp->status = strdup("404 JunkBuster configuration page not found");
-   rsp->body = template_load(csp, "cgi-error-404");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
-   return 0;
+   if (rsp->status == NULL)
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-404", exports, rsp);
 }
 
 
@@ -175,14 +220,27 @@ int cgi_error_404(struct client_state *csp,
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * Returns     :  0
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_show_request(struct client_state *csp, struct http_response *rsp,
-                struct map *parameters)
+jb_err cgi_show_request(struct client_state *csp,
+                        struct http_response *rsp,
+                        const struct map *parameters)
 {
    char *p;
-   struct map *exports = default_exports(csp, "show-request");
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, "show-request")))
+   {
+      return JB_ERR_MEMORY;
+   }
    
    /*
     * Repair the damage done to the IOB by get_header()
@@ -196,14 +254,20 @@ int cgi_show_request(struct client_state *csp, struct http_response *rsp,
     * Export the original client's request and the one we would
     * be sending to the server if this wasn't a CGI call
     */
-   map(exports, "client-request", 1, csp->iob->buf, 1);
-   map(exports, "processed-request", 1, sed(client_patterns, add_client_headers, csp), 0);
+
+   if (map(exports, "client-request", 1, csp->iob->buf, 1))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   if (map(exports, "processed-request", 1, sed(client_patterns, add_client_headers, csp), 0))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
    
-   rsp->body = template_load(csp, "show-request");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
-   return(0);
- 
+   return template_fill_for_cgi(csp, "show-request", exports, rsp);
 }
 
 
@@ -222,13 +286,15 @@ int cgi_show_request(struct client_state *csp, struct http_response *rsp,
  *           type : Selects the type of banner between "trans" and "jb".
  *                  Defaults to "jb" if absent or != "trans".
  *
- * Returns     :  0
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
-                    struct map *parameters)
+jb_err cgi_send_banner(struct client_state *csp,
+                       struct http_response *rsp,
+                       const struct map *parameters)
 {
-   if(strcmp(lookup(parameters, "type"), "trans"))
+   if (strcmp(lookup(parameters, "type"), "trans"))
    {
       rsp->body = bindup(image_junkbuster_gif_data, image_junkbuster_gif_length);
       rsp->content_length = image_junkbuster_gif_length;
@@ -239,10 +305,19 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
       rsp->content_length = image_blank_gif_length;
    }   
 
-   enlist(rsp->headers, "Content-Type: image/gif");
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if (enlist(rsp->headers, "Content-Type: image/gif"))
+   {
+      return JB_ERR_MEMORY;
+   }
+
    rsp->is_static = 1;
 
-   return(0);
+   return JB_ERR_OK;
 
 }
 
@@ -261,22 +336,32 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
  *
  * CGI Parameters : none
  *
- * Returns     :  0
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_show_version(struct client_state *csp, struct http_response *rsp,
-                     struct map *parameters)
+jb_err cgi_show_version(struct client_state *csp,
+                        struct http_response *rsp,
+                        const struct map *parameters)
 {
-   struct map * exports = default_exports(csp, "show-version");
+   struct map *exports;
 
-   map(exports, "sourceversions", 1, show_rcs(), 0);  
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
 
-   rsp->body = template_load(csp, "show-version");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
+   if (NULL == (exports = default_exports(csp, "show-version")))
+   {
+      return JB_ERR_MEMORY;
+   }
 
-   return(0);
+   if (map(exports, "sourceversions", 1, show_rcs(), 0))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
 
+   return template_fill_for_cgi(csp, "show-version", exports, rsp);
 }
 
  
@@ -292,13 +377,21 @@ int cgi_show_version(struct client_state *csp, struct http_response *rsp,
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * CGI Parameters : none
+ * CGI Parameters :
+ *        file :  Which file to show.  Only first letter is checked,
+ *                valid values are:
+ *                - "p"ermissions (actions) file
+ *                - "r"egex
+ *                - "t"rust
+ *                Default is to show menu and other information.
  *
- * Returns     :  0
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_show_status(struct client_state *csp, struct http_response *rsp,
-                    struct map *parameters)
+jb_err cgi_show_status(struct client_state *csp,
+                       struct http_response *rsp,
+                       const struct map *parameters)
 {
    char *s = NULL;
    int i;
@@ -313,8 +406,18 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    int local_urls_read;
    int local_urls_rejected;
 #endif /* ndef FEATURE_STATISTICS */
+   jb_err err;
 
-   struct map * exports = default_exports(csp, "show-status");
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, "show-status")))
+   {
+      return JB_ERR_MEMORY;
+   }
 
    switch (*(lookup(parameters, "file")))
    {
@@ -347,47 +450,66 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 
    if (NULL != filename)
    {
-      map(exports, "file-description", 1, file_description, 1);
-      map(exports, "filepath", 1, html_encode(filename), 0);
+      if ( map(exports, "file-description", 1, file_description, 1)
+        || map(exports, "filepath", 1, html_encode(filename), 0) )
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
 
       if ((fp = fopen(filename, "r")) == NULL)
       {
-         map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1);
+         if (map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1))
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
       }
       else
       {
-         while (fgets(buf, sizeof(buf), fp))
+         s = strdup("");
+         while ((s != NULL) && fgets(buf, sizeof(buf), fp))
          {
             p = html_encode(buf);
             if (p)
             {
-               s = strsav(s, p);
+               string_append(&s, p);
                freez(p);
-               s = strsav(s, "<br>");
+               string_append(&s, "<br>");
             }
          }
          fclose(fp);
-         map(exports, "contents", 1, s, 0);
-      }
-      rsp->body = template_load(csp, "show-status-file");
-      template_fill(&rsp->body, exports);
-      free_map(exports);
-      return(0);
 
+         if (map(exports, "contents", 1, s, 0))
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
+      }
+
+      return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
    }
 
-   map(exports, "redirect-url", 1, REDIRECT_URL, 1);
+   if (map(exports, "redirect-url", 1, REDIRECT_URL, 1))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
    
-   s = NULL;
+   s = strdup("");
    for (i=0; i < Argc; i++)
    {
-      s = strsav(s, Argv[i]);
-      s = strsav(s, " ");
+      string_append(&s, Argv[i]);
+      string_append(&s, " ");
    }
-   map(exports, "invocation", 1, s, 0);
+   if (map(exports, "invocation", 1, s, 0))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
 
-   map(exports, "options", 1, csp->config->proxy_args, 1);
-   show_defines(exports);
+   err = map(exports, "options", 1, csp->config->proxy_args, 1);
+   err = err || show_defines(exports);
 
 #ifdef FEATURE_STATISTICS
    local_urls_read     = urls_read;
@@ -405,65 +527,67 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 
    if (local_urls_read == 0)
    {
-      map_block_killer(exports, "have-stats");
+      err = err || map_block_killer(exports, "have-stats");
    }
    else
    {
-      map_block_killer(exports, "have-no-stats");
+      err = err || map_block_killer(exports, "have-no-stats");
 
       perc_rej = (float)local_urls_rejected * 100.0F /
             (float)local_urls_read;
 
       sprintf(buf, "%d", local_urls_read);
-      map(exports, "requests-received", 1, buf, 1);
+      err = err || map(exports, "requests-received", 1, buf, 1);
 
       sprintf(buf, "%d", local_urls_rejected);
-      map(exports, "requests-blocked", 1, buf, 1);
+      err = err || map(exports, "requests-blocked", 1, buf, 1);
 
       sprintf(buf, "%6.2f", perc_rej);
-      map(exports, "percent-blocked", 1, buf, 1);
+      err = err || map(exports, "percent-blocked", 1, buf, 1);
    }
 
 #else /* ndef FEATURE_STATISTICS */
-   map_block_killer(exports, "statistics");
+   err = err || map_block_killer(exports, "statistics");
 #endif /* ndef FEATURE_STATISTICS */
 
    if (csp->actions_list)
    {
-      map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
+      err = err || map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
    }
    else
    {
-      map(exports, "actions-filename", 1, "None specified", 1);
+      err = err || map(exports, "actions-filename", 1, "None specified", 1);
    }
 
    if (csp->rlist)
    {
-      map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
+      err = err || map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
    }
    else
    {
-      map(exports, "re-filter-filename", 1, "None specified", 1);
+      err = err || map(exports, "re-filter-filename", 1, "None specified", 1);
    }
 
 #ifdef FEATURE_TRUST
    if (csp->tlist)
    {
-      map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
+      err = err || map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
    }
    else
    {
-       map(exports, "trust-filename", 1, "None specified", 1);
+      err = err || map(exports, "trust-filename", 1, "None specified", 1);
    }
 #else
-   map_block_killer(exports, "trust-support");
+   err = err || map_block_killer(exports, "trust-support");
 #endif /* ndef FEATURE_TRUST */
 
-   rsp->body = template_load(csp, "show-status");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
-   return(0);
+   if (err)
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
 
+   return template_fill_for_cgi(csp, "show-status", exports, rsp);
 }
 
  
@@ -486,24 +610,41 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
  *                  set, so that all but the form can be suppressed in
  *                  the template.
  *
- * Returns     :  0
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
-                      struct map *parameters)
+jb_err cgi_show_url_info(struct client_state *csp,
+                         struct http_response *rsp,
+                         const struct map *parameters)
 {
-   char *url_param;
+   const char *url_param_const;
    char *host = NULL;
-   struct map * exports = default_exports(csp, "show-url-info");
+   struct map *exports;
 
-   if (NULL == (url_param = strdup(lookup(parameters, "url"))) || *url_param == '\0')
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, "show-url-info")))
    {
-      map_block_killer(exports, "url-given");
-      map(exports, "url", 1, "", 1);
+      return JB_ERR_MEMORY;
+   }
+
+   url_param_const = lookup(parameters, "url");
+   if (*url_param_const == '\0')
+   {
+      if (map_block_killer(exports, "url-given")
+        || map(exports, "url", 1, "", 1))
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
    }
    else
    {
-      char *matches = NULL;
+      char *url_param;
+      char *matches;
       char *path;
       char *s;
       int port = 80;
@@ -513,30 +654,51 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       struct url_spec url[1];
       struct current_action_spec action[1];
       
+      if (NULL == (url_param = strdup(url_param_const)))
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+
       host = url_param;
       host += (strncmp(url_param, "http://", 7)) ? 0 : 7;
 
-      map(exports, "url", 1, host, 1);
-      map(exports, "url-html", 1, html_encode(host), 0);
+      if (map(exports, "url", 1, host, 1)
+       || map(exports, "url-html", 1, html_encode(host), 0))
+      {
+         free(url_param);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
 
       init_current_action(action);
 
       s = current_action_to_text(action);
-      map(exports, "default", 1, s , 0);
+      if (map(exports, "default", 1, s , 0))
+      {
+         free_current_action(action);
+         free(url_param);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
 
       if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
       {
-         map(exports, "matches", 1, "none" , 1);
-         map(exports, "final", 1, lookup(exports, "default"), 1);
+         jb_err err;
 
-         freez(url_param);
+         err = map(exports, "matches", 1, "none" , 1)
+            || map(exports, "final", 1, lookup(exports, "default"), 1);
+
          free_current_action(action);
+         free(url_param);
 
-         rsp->body = template_load(csp, "show-url-info");
-         template_fill(&rsp->body, exports);
-         free_map(exports);
+         if (err)
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
 
-         return 0;
+         return template_fill_for_cgi(csp, "show-url-info", exports, rsp);
       }
 
       s = strchr(host, '/');
@@ -549,6 +711,14 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       {
          path = strdup("");
       }
+      if (NULL == path)
+      {
+         free_current_action(action);
+         free(url_param);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+
       s = strchr(host, ':');
       if (s != NULL)
       {
@@ -562,19 +732,25 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       /* if splitting the domain fails, punt */
       if (url->dbuf == NULL)
       {
-         map(exports, "matches", 1, "none" , 1);
-         map(exports, "final", 1, lookup(exports, "default"), 1);
+         jb_err err;
+         
+         err = map(exports, "matches", 1, "none" , 1)
+            || map(exports, "final", 1, lookup(exports, "default"), 1);
 
          freez(url_param);
          freez(path);
          free_current_action(action);
 
-         rsp->body = template_load(csp, "show-url-info");
-         template_fill(&rsp->body, exports);
-         free_map(exports);
+         if (err)
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
 
-         return 0;
+         return template_fill_for_cgi(csp, "show-url-info", exports, rsp);
       }
+
+      matches = strdup("");
 
       for (b = b->next; NULL != b; b = b->next)
       {
@@ -591,48 +767,68 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
                )
                {
                   s = actions_to_text(b->action);
-                  matches = strsav(matches, "<b>{");
-                  matches = strsav(matches, s);
-                  matches = strsav(matches, " }</b><br>\n<code>");
-                  matches = strsav(matches, b->url->spec);
-                  matches = strsav(matches, "</code><br>\n<br>\n");
-                  freez(s);
+                  if (s == NULL)
+                  {
+                     freez(url->dbuf);
+                     freez(url->dvec);
 
-                  merge_current_action(action, b->action);
+                     free(url_param);
+                     free(path);
+                     free_current_action(action);
+                     free_map(exports);
+                     return JB_ERR_MEMORY;
+                  }
+                  string_append(&matches, "<b>{");
+                  string_append(&matches, s);
+                  string_append(&matches, " }</b><br>\n<code>");
+                  string_append(&matches, b->url->spec);
+                  string_append(&matches, "</code><br>\n<br>\n");
+                  free(s);
+
+                  merge_current_action(action, b->action); /* FIXME: Add error checking */
                   hits++;
                }
             }
          }
       }
 
-      if (hits)
-      {
-         map(exports, "matches", 1, matches , 0);
-      }
-      else
-      {
-         map(exports, "matches", 1, "none", 1);
-      }
-      matches = NULL;
-
       freez(url->dbuf);
       freez(url->dvec);
 
-      freez(url_param);
-      freez(path);
+      free(url_param);
+      free(path);
+
+      if (matches == NULL)
+      {
+         free_current_action(action);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+
+      if (!hits)
+      {
+         free(matches);
+         matches = strdup("none");
+      }
+      if (map(exports, "matches", 1, matches , 0))
+      {
+         free_current_action(action);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
 
       s = current_action_to_text(action);
-      map(exports, "final", 1, s, 0);
-      s = NULL;
 
       free_current_action(action);
+
+      if (map(exports, "final", 1, s, 0))
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
    }
 
-   rsp->body = template_load(csp, "show-url-info");
-   template_fill(&rsp->body, exports);
-   free_map(exports);
-   return 0;
-
+   return template_fill_for_cgi(csp, "show-url-info", exports, rsp);
 }
 
 
@@ -649,13 +845,16 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
  *
  * CGI Parameters : None
  *
- * Returns     :  0
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int cgi_robots_txt(struct client_state *csp, struct http_response *rsp,
-                   struct map *parameters)
+jb_err cgi_robots_txt(struct client_state *csp,
+                      struct http_response *rsp,
+                      const struct map *parameters)
 {
    char buf[100];
+   jb_err err;
 
    rsp->body = strdup(
       "# This is the Internet Junkbuster control interface.\n"
@@ -665,16 +864,19 @@ int cgi_robots_txt(struct client_state *csp, struct http_response *rsp,
       "User-agent: *\n"
       "Disallow: /\n"
       "\n");
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
 
-   enlist_unique(rsp->headers, "Content-Type: text/plain", 13);
+   err = enlist_unique(rsp->headers, "Content-Type: text/plain", 13);
 
    rsp->is_static = 1;
 
    get_http_time(7 * 24 * 60 * 60, buf); /* 7 days into future */
-   enlist_unique_header(rsp->headers, "Expires", buf);
+   err = err || enlist_unique_header(rsp->headers, "Expires", buf);
 
-   return 0;
-
+   return (err ? JB_ERR_MEMORY : JB_ERR_OK);
 }
 
 
@@ -682,109 +884,113 @@ int cgi_robots_txt(struct client_state *csp, struct http_response *rsp,
  *
  * Function    :  show_defines
  *
- * Description :  Create a string with all conditional #defines used
- *                when building
+ * Description :  Add to a map the state od all conditional #defines
+ *                used when building
  *
- * Parameters  :  None
+ * Parameters  :
+ *           1 :  exports = map to extend
  *
- * Returns     :  string 
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-static void show_defines(struct map *exports)
+static jb_err show_defines(struct map *exports)
 {
+   jb_err err = JB_ERR_OK;
 
 #ifdef FEATURE_ACL
-   map_conditional(exports, "FEATURE_ACL", 1);
+   err = err || map_conditional(exports, "FEATURE_ACL", 1);
 #else /* ifndef FEATURE_ACL */
-   map_conditional(exports, "FEATURE_ACL", 0);
+   err = err || map_conditional(exports, "FEATURE_ACL", 0);
 #endif /* ndef FEATURE_ACL */
 
 #ifdef FEATURE_COOKIE_JAR
-   map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
+   err = err || map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
 #else /* ifndef FEATURE_COOKIE_JAR */
-   map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
+   err = err || map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
 #endif /* ndef FEATURE_COOKIE_JAR */
 
 #ifdef FEATURE_FAST_REDIRECTS
-   map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
+   err = err || map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
 #else /* ifndef FEATURE_FAST_REDIRECTS */
-   map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
+   err = err || map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
 #endif /* ndef FEATURE_FAST_REDIRECTS */
 
 #ifdef FEATURE_FORCE_LOAD
-   map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
+   err = err || map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
 #else /* ifndef FEATURE_FORCE_LOAD */
-   map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
+   err = err || map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
 #endif /* ndef FEATURE_FORCE_LOAD */
 
 #ifdef FEATURE_IMAGE_BLOCKING
-   map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
+   err = err || map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
 #else /* ifndef FEATURE_IMAGE_BLOCKING */
-   map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
+   err = err || map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
 #endif /* ndef FEATURE_IMAGE_BLOCKING */
 
 #ifdef FEATURE_IMAGE_DETECT_MSIE
-   map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
+   err = err || map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
 #else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
-   map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
+   err = err || map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
 #endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
 
 #ifdef FEATURE_KILL_POPUPS
-   map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
+   err = err || map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
 #else /* ifndef FEATURE_KILL_POPUPS */
-   map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
+   err = err || map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
 #endif /* ndef FEATURE_KILL_POPUPS */
 
 #ifdef FEATURE_PTHREAD
-   map_conditional(exports, "FEATURE_PTHREAD", 1);
+   err = err || map_conditional(exports, "FEATURE_PTHREAD", 1);
 #else /* ifndef FEATURE_PTHREAD */
-   map_conditional(exports, "FEATURE_PTHREAD", 0);
+   err = err || map_conditional(exports, "FEATURE_PTHREAD", 0);
 #endif /* ndef FEATURE_PTHREAD */
 
 #ifdef FEATURE_STATISTICS
-   map_conditional(exports, "FEATURE_STATISTICS", 1);
+   err = err || map_conditional(exports, "FEATURE_STATISTICS", 1);
 #else /* ifndef FEATURE_STATISTICS */
-   map_conditional(exports, "FEATURE_STATISTICS", 0);
+   err = err || map_conditional(exports, "FEATURE_STATISTICS", 0);
 #endif /* ndef FEATURE_STATISTICS */
 
 #ifdef FEATURE_TOGGLE
-   map_conditional(exports, "FEATURE_TOGGLE", 1);
+   err = err || map_conditional(exports, "FEATURE_TOGGLE", 1);
 #else /* ifndef FEATURE_TOGGLE */
-   map_conditional(exports, "FEATURE_TOGGLE", 0);
+   err = err || map_conditional(exports, "FEATURE_TOGGLE", 0);
 #endif /* ndef FEATURE_TOGGLE */
 
 #ifdef FEATURE_TRUST
-   map_conditional(exports, "FEATURE_TRUST", 1);
+   err = err || map_conditional(exports, "FEATURE_TRUST", 1);
 #else /* ifndef FEATURE_TRUST */
-   map_conditional(exports, "FEATURE_TRUST", 0);
+   err = err || map_conditional(exports, "FEATURE_TRUST", 0);
 #endif /* ndef FEATURE_TRUST */
 
 #ifdef REGEX_GNU
-   map_conditional(exports, "REGEX_GNU", 1);
+   err = err || map_conditional(exports, "REGEX_GNU", 1);
 #else /* ifndef REGEX_GNU */
-   map_conditional(exports, "REGEX_GNU", 0);
+   err = err || map_conditional(exports, "REGEX_GNU", 0);
 #endif /* def REGEX_GNU */
 
 #ifdef REGEX_PCRE
-   map_conditional(exports, "REGEX_PCRE", 1);
+   err = err || map_conditional(exports, "REGEX_PCRE", 1);
 #else /* ifndef REGEX_PCRE */
-   map_conditional(exports, "REGEX_PCRE", 0);
+   err = err || map_conditional(exports, "REGEX_PCRE", 0);
 #endif /* def REGEX_PCRE */
 
 #ifdef STATIC_PCRE
-   map_conditional(exports, "STATIC_PCRE", 1);
+   err = err || map_conditional(exports, "STATIC_PCRE", 1);
 #else /* ifndef STATIC_PCRE */
-   map_conditional(exports, "STATIC_PCRE", 0);
+   err = err || map_conditional(exports, "STATIC_PCRE", 0);
 #endif /* ndef STATIC_PCRE */
 
 #ifdef STATIC_PCRS
-   map_conditional(exports, "STATIC_PCRS", 1);
+   err = err || map_conditional(exports, "STATIC_PCRS", 1);
 #else /* ifndef STATIC_PCRS */
-   map_conditional(exports, "STATIC_PCRS", 0);
+   err = err || map_conditional(exports, "STATIC_PCRS", 0);
 #endif /* ndef STATIC_PCRS */
 
-   map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
+   err = err || map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
 
+   return err;
 }
 
 
@@ -796,12 +1002,12 @@ static void show_defines(struct map *exports)
  *
  * Parameters  :  None
  *
- * Returns     :  string 
+ * Returns     :  A string, or NULL on out-of-memory.
  *
  *********************************************************************/
 static char *show_rcs(void)
 {
-   char *b = NULL;
+   char *result = strdup("");
    char buf[BUFFER_SIZE];
 
    /* Instead of including *all* dot h's in the project (thus creating a
@@ -809,11 +1015,11 @@ static char *show_rcs(void)
     * as extern's.  This forces the developer to add to this list, but oh well.
     */
 
-#define SHOW_RCS(__x)            \
-   {                             \
-      extern const char __x[];   \
-      sprintf(buf, "%s\n", __x); \
-      b = strsav(b, buf);        \
+#define SHOW_RCS(__x)              \
+   {                               \
+      extern const char __x[];     \
+      sprintf(buf, "%s\n", __x);   \
+      string_append(&result, buf); \
    }
 
    /* In alphabetical order */
@@ -881,7 +1087,7 @@ static char *show_rcs(void)
 
 #undef SHOW_RCS
 
-   return(b);
+   return result;
 
 }
 

@@ -71,6 +71,7 @@ function disable_unless(target, checkbox)
 <p>&nbsp;</p>
 <form method="GET" action="http://i.j.b/edit-actions-submit" id="myform">
   <input type="hidden" name="filename" value="@filename@">
+  <input type="hidden" name="ver" value="@ver@">
   <input type="hidden" name="section" value="@section@">
   <table border="0" width="100%" cellspacing="0">
     <tr align="left">

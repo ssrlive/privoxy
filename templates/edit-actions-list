@@ -22,29 +22,58 @@ td.action    { font-weight: bold; font-style: italic }
 
 <script type="text/javascript">
 <!--
+function not_yet()
+{
+   window.alert("The feature you are trying to use has not been implemented yet.");
+}
+
 function edit_pattern(b,p,ct)
 {
    ct=unescape(ct);
-	nt=window.prompt("Edit this URL pattern:",ct);
-	if ((nt!=null)&&(nt!=ct)&&(nt!=""))
-	{ window.location.href="http://i.j.b/edit-actions-url?filename=@filename@&filename=@filename@&section="+b+"&pattern="+p+"&newval="+escape(nt)+"#s"+b+"url"+p; }
+   nt=window.prompt("Edit this URL pattern:",ct);
+   if ((nt!=null)&&(nt!=ct)&&(nt!=""))
+   { window.location.href="http://i.j.b/edit-actions-url?filename=@filename@&ver=@ver@&section="+b+"&pattern="+p+"&newval="+escape(nt)+"#s"+b+"url"+p; }
+}
+
+function remove_pattern(b,p,ct)
+{
+   if (window.confirm("Are you sure you want to delete this URL pattern?\nPattern is: "+unescape(ct)))
+   { window.location.href="http://i.j.b/edit-actions-remove-url?filename=@filename@&ver=@ver@&section="+b+"&pattern="+p+"#s"+b+"urls"; }
 }
 
 function add_pattern(b)
 {
-	nt=window.prompt("Enter URL pattern to add:", "");
-	if ((nt!=null)&&(nt!=""))
-	{ window.location.href="http://i.j.b/edit-actions-add-url?filename=@filename@&section="+b+"&newval="+escape(nt)+"#s"+b+"urls"; }
+   nt=window.prompt("Enter URL pattern to add:", "");
+   if ((nt!=null)&&(nt!=""))
+   { window.location.href="http://i.j.b/edit-actions-add-url?filename=@filename@&ver=@ver@&section="+b+"&newval="+escape(nt)+"#s"+b+"urls"; }
 }
 
 function edit_actions(b)
 {
-	window.location.href="http://i.j.b/edit-actions-for-url?filename=@filename@&section="+b;
+   window.location.href="http://i.j.b/edit-actions-for-url?filename=@filename@&ver=@ver@&section="+b;
 }
 
-function not_yet()
+function section_down(b)
 {
-	window.alert("The feature you are trying to use has not been implemented yet.");
+   not_yet();
+   //window.location.href="http://i.j.b/edit-actions-section-down?filename=@filename@&ver=@ver@&section="+b+"#s"+b+"urls";
+}
+
+function section_up(b)
+{
+   not_yet();
+   //window.location.href="http://i.j.b/edit-actions-section-up?filename=@filename@&ver=@ver@&section="+b+"#s"+b+"urls";
+}
+
+function section_add(b)
+{
+   window.location.href="http://i.j.b/edit-actions-section-add?filename=@filename@&ver=@ver@&section="+b+"#s"+b+"urls";
+}
+
+function section_remove(b)
+{
+   if (window.confirm("Are you REALLY sure you want to delete this empty section?"))
+   window.location.href="http://i.j.b/edit-actions-section-remove?filename=@filename@&ver=@ver@&section="+b+"#s"+b+"urls";
 }
 //-->
 </script>
@@ -52,6 +81,12 @@ function not_yet()
 
 <body>
 <h1>Editing @filename@.action</h1>
+
+<p>
+<form action="http://i.j.b/">
+<input type="button" onclick="section_add(0)" value="Insert new section at top">
+</form>
+</p>
 
 @sections@
 
