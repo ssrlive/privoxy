@@ -50,10 +50,41 @@ Table of Contents
     7.3. The Main Configuration File
        
         7.3.1. Configuration and Log File Locations
+           
+            7.3.1.1. confdir
+            7.3.1.2. logdir
+            7.3.1.3. actionsfile
+            7.3.1.4. filterfile
+            7.3.1.5. logfile
+            7.3.1.6. jarfile
+            7.3.1.7. trustfile
+           
         7.3.2. Local Set-up Documentation
+           
+            7.3.2.1. trust-info-url
+            7.3.2.2. admin-address
+            7.3.2.3. proxy-info-url
+           
         7.3.3. Debugging
+           
+            7.3.3.1. debug
+            7.3.3.2. single-threaded
+           
         7.3.4. Access Control and Security
+           
+            7.3.4.1. listen-address
+            7.3.4.2. toggle
+            7.3.4.3. enable-remote-toggle
+            7.3.4.4. enable-edit-actions
+            7.3.4.5. ACLs: permit-access and deny-access
+            7.3.4.6. buffer-limit
+           
         7.3.5. Forwarding
+           
+            7.3.5.1. forward
+            7.3.5.2. forward-socks4 and forward-socks4a
+            7.3.5.3. Advanced Forwarding Examples
+           
         7.3.6. Windows GUI Options
        
     7.4. Actions Files
@@ -62,10 +93,40 @@ Table of Contents
         7.4.2. How to Edit
         7.4.3. How Actions are Applied to URLs
         7.4.4. Patterns
+           
+            7.4.4.1. The Domain Pattern
+            7.4.4.2. The Path Pattern
+           
         7.4.5. Actions
+           
+            7.4.5.1. +add-header
+            7.4.5.2. +block
+            7.4.5.3. +deanimate-gifs
+            7.4.5.4. +downgrade-http-version
+            7.4.5.5. +fast-redirects
+            7.4.5.6. +filter
+            7.4.5.7. +hide-forwarded-for-headers
+            7.4.5.8. +hide-from-header
+            7.4.5.9. +hide-referer
+            7.4.5.10. +hide-user-agent
+            7.4.5.11. +handle-as-image
+            7.4.5.12. +set-image-blocker
+            7.4.5.13. +limit-connect
+            7.4.5.14. +prevent-compression
+            7.4.5.15. +session-cookies-only
+            7.4.5.16. +prevent-reading-cookies
+            7.4.5.17. +prevent-setting-cookies
+            7.4.5.18. +kill-popups
+            7.4.5.19. +send-vanilla-wafer
+            7.4.5.20. +send-wafer
+            7.4.5.21. Actions Examples
+           
         7.4.6. Aliases
        
     7.5. The Filter File
+       
+        7.5.1. The +filter Action
+       
     7.6. Templates
    
 8. Contacting the Developers, Bug Reporting and Feature Requests
@@ -339,7 +400,6 @@ now ready to start enjoying the benefits of using Privoxy!
 Privoxy is typically started by specifying the main configuration file to be
 used on the command line. Example Unix startup command:
 
-                                                                               
  # /usr/sbin/privoxy /etc/privoxy/config                                       
 
 See below for other command line options.
@@ -464,11 +524,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ??  View & change the current configuration                            
-        ??  View the source code version numbers                               
-        ??  View the request headers.                                          
-        ??  Look up which actions apply to a URL and why                       
-        ??  Toggle Privoxy on or off                                           
+        ?  View & change the current configuration                             
+        ?  View the source code version numbers                                
+        ?  View the request headers.                                           
+        ?  Look up which actions apply to a URL and why                        
+        ?  Toggle Privoxy on or off                                            
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -1476,11 +1536,11 @@ normally should not be edited). Local exceptions are best done in user.action.
 The content of these can all be viewed and edited from http://
 config.privoxy.org/show-status.
 
-Anything you want can blocked, including ads, banners, or just some obnoxious
-URL that you would rather not see is done here. Cookies can be accepted or
-rejected, or accepted only during the current browser session (i.e. not written
-to disk), content can be modified, JavaScripts tamed, user-tracking fooled, and
-much more. See below for a complete list of available actions.
+Anything you want can be blocked, including ads, banners, or just some
+obnoxious URL that you would rather not see is done here. Cookies can be
+accepted or rejected, or accepted only during the current browser session (i.e.
+not written to disk), content can be modified, JavaScripts tamed, user-tracking
+fooled, and much more. See below for a complete list of available actions.
 
 An actions file typically has sections. Near the top, "aliases" are optionally
 defined (discussed below), then the default set of rules which will apply
@@ -1679,7 +1739,8 @@ must specifically enable the privacy and blocking features you need (although
 the provided default actions files will give a good starting point).
 
 Later defined actions always over-ride earlier ones. So exceptions to any rules
-you make, should come in the latter part of the file. For multi-valued actions,
+you make, should come in the latter part of the file (or in a file that is
+processed later when using multiple actions files). For multi-valued actions,
 the actions are applied in the order they are specified. Actions files are
 processed in the order they are defined in config (the default installation has
 three actions files). It also quite possible for any given URL pattern to match
@@ -1689,7 +1750,7 @@ The list of valid Privoxy "actions" are:
 
 -------------------------------------------------------------------------------
 
-7.4.5.1. +add-header{Name: value}
+7.4.5.1. +add-header
 
 Type:
    
@@ -1745,9 +1806,9 @@ Notes:
     URL and display its special "BLOCKED" page instead. If there is sufficient
     space, a large red banner will appear with a friendly message about why the
     page was blocked, and a way to go there anyway. If there is insufficient
-    space a smaller blocked page will appear without the red banner. Click here
-    to view the default blocked HTML page (Privoxy must be running for this to
-    work as intended!).
+    space a smaller "BLOCKED" page will appear without the red banner. Click
+    here to view the default blocked HTML page (Privoxy must be running for
+    this to work as intended!).
    
     A very important exception is if the URL matches both "+block" and 
     "+handle-as-image", then it will be handled by "+set-image-blocker" (see
@@ -2378,10 +2439,175 @@ Note that the meaning of any of the above examples is reversed by preceding the
 action with a "-", in place of the "+". Also, that some actions are turned on
 in the default section of the actions file, and require little to no additional
 configuration. These are just "on". But, other actions that are turned on the
-default section do typically require exceptions to be listed in the lower
-sections of actions file. E.g. by default no URLs are "blocked" (i.e. in the
-default definitions of default.action). We need exceptions to this in order to
-enable ad blocking.
+default section do typically require exceptions to be listed in the latter
+sections of one of our actions file. For instance, by default no URLs are
+"blocked" (i.e. in the default definitions of default.action). We need
+exceptions to this in order to enable ad blocking in the lower sections. But we
+need to be very selective about what we do block.
+
+Below is a liberally commented default.action file to demonstrate the pieces
+all come together. And to show how exceptions to the default policies can be
+handled. This is followed by a user.action with similar examples.
+
+
+##########################################################################
+# Aliases must be defined *before* they are used. These are
+# easier to remember, and combine several actions into one:
+##########################################################################
+
+# Some useful aliases.
+ +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
+ -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
+ +imageblock      = +block +handle-as-image
+
+# Fragile sites should have the minimum changes:
+ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
+               -prevent-cookies -kill-popups
+
+# Shops should be allowed to set persistent cookies
+ shop        = -filter -prevent-cookies -prevent-keeping-cookies
+
+
+##########################################################################
+# Begin default action settings. Anything in this section will match 
+# all URLs -- UNLESS we have exceptions defined below this section. 
+# We will show all potential actions here whether they are on or off. 
+# We could omit any disabled action if we wanted, since all actions are 
+# 'off' by default anyway. Shown for completeness only.
+##########################################################################
+ { \
+ -add-header \
+ -block \
+ -deanimate-gifs \
+ -downgrade-http-version \
+ +fast-redirects \
+ +filter{html-annoyances} \
+ +filter{js-annoyances} \
+ -filter{content-cookies} \
+ -filter{popups} \
+ +filter{webbugs} \
+ -filter{refresh-tags} \
+ -filter{fun} \
+ +filter{nimda} \
+ +filter{banners-by-size} \
+ -filter{shockwave-flash} \
+ -filter{crude-prental} \
+ +hide-forwarded-for-headers \
+ +hide-from-header{block} \
+ -hide-referrer \
+ -hide-user-agent \
+ -handle-as-image \
+ +set-image-blocker{pattern} \
+ -limit-connect \
+ +prevent-compression \
+ -session-cookies-only \
+ -prevent-reading-cookies \
+ -prevent-setting-cookies \
+ -kill-popups \
+ -send-vanilla-wafer \
+ -send-wafer \
+ }
+ / # forward slash will match all potential URLs patterns. 
+
+##########################################################################
+# Default behavior is now set. Time for some exceptions to our 
+# default actions.
+##########################################################################
+
+# These sites are very complex and require very minimal interference.
+# We'll disable most actions with our 'fragile' alias.
+ {fragile}
+ .office.microsoft.com
+ .windowsupdate.microsoft.com
+
+
+# Shopping sites - not as fragile. We still want to block ads.
+ {shop}
+ .quietpc.com 
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+
+
+# These sites require pop-ups too :(  We'll combine our 'shop' 
+# alias with two other actions into one rule to allow all popups.
+ {shop -no-popups -filter{popups}}
+ .dabs.com
+ .overclockers.co.uk
+
+
+# The 'Fast-redirects' action breaks some sites. Disable this action
+# for these known sensitive sites.
+ {-fast-redirects}
+ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+ login.yahoo.com
+ edit.europe.yahoo.com
+ .google.com
+ .altavista.com/.*(like|url|link):http
+ .altavista.com/trans.*urltext=http
+ .nytimes.com
+
+
+# Define which file types will be treated as images. Important
+# for ad blocking.
+ {+handle-as-image}
+ /.*\.(gif|jpe?g|png|bmp|ico)
+
+
+# Now lets list some domains that are known ad generators. And
+# our alias here will block these as well as force them to be 
+# treated as images. This combination of actions is important 
+# for ad blocking. What the browser will show instead is 
+# determined by the setting of "+set-image-blocker"
+ {+imageblock}
+ ar.atwola.com 
+ .ad.doubleclick.net
+ .a.yimg.com/(?:(?!/i/).)*$
+ .a[0-9].yimg.com/(?:(?!/i/).)*$
+ bs*.gsanet.com
+ bs*.einets.com
+ .qkimg.net
+ ad.*.doubleclick.net
+
+
+# These will just simply be blocked. They will generate the BLOCKED
+# banner page, if matched. Heavy use of wildcards and regular 
+# expressions in this example.
+ {+block}
+ ad*.
+ .*ads.
+ banner?.
+ count*.
+ /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+ /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
+ .hitbox.com 
+
+
+# The above block section will catch some sites we DO NOT want 
+# blocked via wildcards and regular expressions. Now set exceptions 
+# to the exceptions so the good guys get better treatment.
+ {-block}
+ advogato.org
+ adsl.
+ ad[ud]*.
+ advice.
+# Let's just trust universities
+ .edu
+ www.ugu.com/sui/ugu/adv
+# We'll need to access to path names containing 'download' 
+ .*downloads.
+ /downloads/
+# 'adv' is for globalintersec means advanced, not advertisement
+ www.globalintersec.com/adv
+
+
+# Don't filter *anything* from our friends at sourceforge.
+# Notice we don't have to name the individual filter 
+# identifiers -- we just turn them all off.
+ {-filter}
+ .sourceforge.net
+
+   
 
 Some examples:
 
@@ -2591,6 +2817,22 @@ Kill those pesky little web-bugs:
  s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1
 (\D[^>]*?)?>/<!-- Squished WebBug -->/sig
    
+
+-------------------------------------------------------------------------------
+
+7.5.1. The +filter Action
+
+Filters are enabled with the "+filter" action from within one of the actions
+files. "+filter" requires one parameter, which should match one of the section
+identifiers in the filter file itself. Example:
+
+  +filter{html-annoyances}                                                     
+                                                                               
+
+This would activate that particular filter. Similarly, "+filter" can be turned
+off for selected sites as: "-filter{html-annoyances}". Remember, all actions
+are off by default, unless they are explicity enabled in one of the actions
+files.
 
 -------------------------------------------------------------------------------
 
@@ -3107,7 +3349,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
-  Final results:                                                                   
+ Final results:                                                                    
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3122,7 +3364,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3148,7 +3390,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
-  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
+ Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3167,7 +3409,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
-  { -block }                                                                   
+ { -block }                                                                    
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3176,7 +3418,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3186,7 +3428,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
-  {shop}                                                                       
+ {shop}                                                                        
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3196,7 +3438,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
-  {-filter}                                                                    
+ {-filter}                                                                     
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site
