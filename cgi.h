@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.8 2001/07/30 22:08:36 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.9 2001/08/01 00:17:54 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.9  2001/08/01 00:17:54  jongfoster
+ *    Adding prototype for map_conditional
+ *
  *    Revision 1.8  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -86,6 +89,8 @@ extern struct map *parse_cgi_parameters(char *argstring);
 /*
  * CGI functions
  */
+extern int cgi_show_version(struct client_state *csp, struct http_response *rsp,
+                            struct map *parameters);
 extern int cgi_default(struct client_state *csp, struct http_response *rsp,
                        struct map *parameters);
 extern int cgi_show_status(struct client_state *csp, struct http_response *rsp,

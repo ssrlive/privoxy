@@ -186,11 +186,6 @@
             <th>#define</th> <th>Enabled?</th> <th>Effects when enabled</th>
           </tr>
           <tr>
-             <td><code>FEATURE_PTHREAD</code></td>
-             <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
-             <td>Use POSIX threads rather than native threads</td>
-          </tr>
-          <tr>
              <td><code>FEATURE_ACL</code></td>
              <td>@if-FEATURE_ACL-then@ Yes @else-not-FEATURE_ACL@ No @endif-FEATURE_ACL@</td>
              <td>Allows the use of an ACL to control access to the proxy by IP address.</td>
@@ -235,6 +230,11 @@
              <td>Allows the +no-popups action, to block JavaScript popups.</td>
           </tr>
           <tr>
+             <td><code>FEATURE_PTHREAD</code></td>
+             <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
+             <td>Use POSIX threads rather than native threads</td>
+          </tr>
+          <tr>
              <td><code>FEATURE_STATISTICS</code></td>
              <td>@if-FEATURE_STATISTICS-then@ Yes @else-not-FEATURE_STATISTICS@ No @endif-FEATURE_STATISTICS@</td>
              <td>Enables the statistics function.</td>
@@ -273,13 +273,6 @@
              by <code>./configure</code> if you do not have the libpcrs installed.</td>
           </tr>
         </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Source code versions:</h2>
-        <blockquote><pre>@sourceversions@</pre></blockquote>
       </td>
     </tr>
 
