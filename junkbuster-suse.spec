@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.7 2001/09/10 17:44:22 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.8 2001/09/13 16:22:42 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.8  2001/09/13 16:22:42  swa
+# man page is legacy. suse rpm now contains html
+# documentation.
+#
 # Revision 1.7  2001/09/10 17:44:22  swa
 # integrate three pieces of documentation.
 #
@@ -64,7 +68,7 @@ Group:        Networking/Utilities
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
-Version: 2.9.8
+Version: 2.9.9
 Release: 1
 Summary:      The Internet Junkbuster
 Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
