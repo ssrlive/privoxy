@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/seealso.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa//current/doc/source/seealso.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 1.7 2002/05/10 01:48:20 hal9 Exp $
+ $Id: seealso.sgml,v 1.8 2002/05/17 13:49:30 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -95,6 +95,13 @@
   <member>
    <ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>, a very popular
    caching proxy, which is often used together with <application>Privoxy</application>.
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   <ulink
+   url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>, 
+   the <application>Privoxy</application> developer manual. 
   </member>
  </simplelist>
 </para>
