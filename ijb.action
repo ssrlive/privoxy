@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.6 2002/03/08 17:14:12 oes Exp $
+# $Id: ijb.action,v 1.6 2002/03/08 17:25:52 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -497,6 +497,7 @@ ar.atwola.com # This serves all ads for CNN and AOL
 /?.*/ad(sdna_image|gifs?)/
 /?.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
 /?.*/adbanners/
+/?.*/ad_banner/
 /?.*/adserver
 /?.*/adstream\.cgi
 /?.*/adv((er)?ts?|ertis(ing|ements?))?/
