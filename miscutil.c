@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.5 2001/06/01 10:31:51 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.7 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,64 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.5 2001/06/01 10:31:51 oes Exp $
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.7  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.6  2001/06/01 18:14:49  jongfoster
+ *    Changing the calls to strerr() to check HAVE_STRERR (which is defined
+ *    in config.h if appropriate) rather than the NO_STRERR macro.
+ *
  *    Revision 1.5  2001/06/01 10:31:51  oes
  *    Added character class matching to trivimatch; renamed to simplematch
  *
@@ -514,6 +572,39 @@ int simplematch(char *pattern, char *text)
    return(*pat);
 
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  bindup
+ *
+ * Description :  Duplicate the first n characters of a string that may
+ *                contain '\0' characters.
+ *
+ * Parameters  :
+ *          1  :  string = string to be duplicated
+ *          2  :  n = number of bytes to duplicate
+ *
+ * Returns     :  pointer to copy, or NULL if failiure
+ *
+ *********************************************************************/
+char *bindup(const char *string, int n)
+{
+   char *dup;
+
+   if (NULL == (dup = (char *)malloc(n)))
+   {
+	   return NULL;
+	}
+   else
+	{
+	  memcpy(dup, string, n);
+	}
+
+   return dup;
+
+}
+
 
 /*
   Local Variables:
