@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.13 2002/03/04 02:07:59 david__schmidt Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.14 2002/03/05 00:24:51 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.13 2002/03/04 02:07:59 david__sch
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.14  2002/03/05 00:24:51  jongfoster
+ *    Patch to always edit the current actions file.
+ *
  *    Revision 1.13  2002/03/04 02:07:59  david__schmidt
  *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
  *
@@ -342,9 +345,9 @@ static jb_err map_copy_parameter_url(struct map *out,
  *                encoding it.
  *
  * Parameters  :
- *           1 :  out = target map
- *           2 :  in = source map
- *           3 :  name = name of cgi parameter to copy
+ *          1  :  out = target map
+ *          2  :  in = source map
+ *          3  :  name = name of cgi parameter to copy
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -391,9 +394,9 @@ static jb_err map_copy_parameter_html(struct map *out,
  *                encoding it.
  *
  * Parameters  :
- *           1 :  out = target map
- *           2 :  in = source map
- *           3 :  name = name of cgi parameter to copy
+ *          1  :  out = target map
+ *          2  :  in = source map
+ *          3  :  name = name of cgi parameter to copy
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -439,9 +442,9 @@ static jb_err map_copy_parameter_url(struct map *out,
  *                edit-actions-url
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters
  *           f : (filename) Identifies the file to edit
@@ -535,9 +538,9 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
  *                edit-actions-url
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -593,9 +596,9 @@ jb_err cgi_edit_actions_add_url_form(struct client_state *csp,
  *                edit-actions-url
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -944,8 +947,8 @@ static void edit_free_file_lines(struct file_line * first_line)
  * Description :  Match an actions file {{header}} line
  *
  * Parameters  :
- *          1  :  line - String from file
- *          2  :  name - Header to match against
+ *          1  :  line = String from file
+ *          2  :  name = Header to match against
  *
  * Returns     :  0 iff they match.
  *
@@ -1002,10 +1005,10 @@ static int match_actions_file_header_line(const char * line, const char * name)
  * Description :  Match an actions file {{header}} line
  *
  * Parameters  :
- *          1  :  line - String from file.  Must not start with
+ *          1  :  line = String from file.  Must not start with
  *                       whitespace (else infinite loop!)
- *          2  :  name - Destination for name
- *          2  :  name - Destination for value
+ *          2  :  name = Destination for name
+ *          2  :  name = Destination for value
  *
  * Returns     :  JB_ERR_OK     on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -1717,13 +1720,13 @@ jb_err edit_read_actions_file(struct client_state *csp,
  *                secure.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  parameters = map of cgi parameters
- *           3 :  param_name = The name of the parameter to read
- *           4 :  suffix = File extension, e.g. ".actions"
- *           5 :  pfilename = destination for full filename.  Caller
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  parameters = map of cgi parameters
+ *          3  :  param_name = The name of the parameter to read
+ *          4  :  suffix = File extension, e.g. ".actions"
+ *          5  :  pfilename = destination for full filename.  Caller
  *                free()s.  Set to NULL on error.
- *           6 :  pparam = destination for partial filename,
+ *          6  :  pparam = destination for partial filename,
  *                suitable for use in another URL.  Allocated as part
  *                of the map "parameters", so don't free it.
  *                Set to NULL if not specified.
@@ -1838,10 +1841,10 @@ static jb_err get_file_name_param(struct client_state *csp,
  *                passed to a CGI function.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  parameters = map of cgi parameters
- *           3 :  name = Name of CGI parameter to read
- *           4 :  pvalue = destination for value.
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  parameters = map of cgi parameters
+ *          3  :  name = Name of CGI parameter to read
+ *          4  :  pvalue = destination for value.
  *                         Set to -1 on error.
  *
  * Returns     :  JB_ERR_OK         on success
@@ -1915,10 +1918,10 @@ static jb_err get_number_param(struct client_state *csp,
  *                spaces and validates it.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  parameters = map of cgi parameters
- *           3 :  name = Name of CGI parameter to read
- *           4 :  pvalue = destination for value.  Will be malloc()'d.
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  parameters = map of cgi parameters
+ *          3  :  name = Name of CGI parameter to read
+ *          4  :  pvalue = destination for value.  Will be malloc()'d.
  *                         Set to NULL on error.
  *
  * Returns     :  JB_ERR_OK         on success
@@ -2048,10 +2051,10 @@ static jb_err get_url_spec_param(struct client_state *csp,
  *                Where 'sel' is 'a', 'b', or 'c'.
  *
  * Parameters  :
- *           1 :  exports = Exports map to modify.
- *           2 :  optionname = name for map
- *           3 :  values = null-terminated list of values;
- *           4 :  value = Selected value.
+ *          1  :  exports = Exports map to modify.
+ *          2  :  optionname = name for map
+ *          3  :  values = null-terminated list of values;
+ *          4  :  value = Selected value.
  *
  * CGI Parameters : None
  *
@@ -2117,9 +2120,9 @@ static jb_err map_radio(struct map * exports,
  *                outside the CGI editor.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  filename = The file that was modified.
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  filename = The file that was modified.
  *
  * CGI Parameters : none
  *
@@ -2162,9 +2165,9 @@ jb_err cgi_error_modified(struct client_state *csp,
  *                be parsed by the CGI editor.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  file = The file that was modified.
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  file = The file that was modified.
  *
  * CGI Parameters : none
  *
@@ -2216,9 +2219,9 @@ jb_err cgi_error_parse(struct client_state *csp,
  *                opened by the CGI editor.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  filename = The file that was modified.
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  filename = The file that was modified.
  *
  * CGI Parameters : none
  *
@@ -2261,8 +2264,8 @@ jb_err cgi_error_file(struct client_state *csp,
  *                (query string) for a CGI were wrong.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
  *
  * CGI Parameters : none
  *
@@ -2295,9 +2298,9 @@ jb_err cgi_error_disabled(struct client_state *csp,
  *                actions file to edit.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters : None
  *
@@ -2341,9 +2344,9 @@ jb_err cgi_edit_actions(struct client_state *csp,
  *                FIXME: This function shouldn't FATAL ever.
  *                FIXME: This function doesn't check the retval of map()
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters : filename
  *
@@ -2696,9 +2699,9 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
  * Description :  CGI function that edits the Actions list.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters : None
  *
@@ -2785,9 +2788,9 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
  * Description :  CGI function that actually edits the Actions list.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters : None
  *
@@ -2928,9 +2931,9 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
  *                an actions file.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *    filename : Identifies the file to edit
@@ -3050,9 +3053,9 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
  *                an actions file.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *    filename : Identifies the file to edit
@@ -3189,9 +3192,9 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
  *                the actions file.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -3306,9 +3309,9 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
  *                (else JB_ERR_CGI_PARAMS).
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -3437,9 +3440,9 @@ jb_err cgi_edit_actions_section_remove(struct client_state *csp,
  *                an actions file.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -3614,9 +3617,9 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
  *                specified.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *           f : (filename) Identifies the file to edit
@@ -3810,9 +3813,9 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
  *                an actions file.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
  *         set : If present, how to change toggle setting:

@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.36 2002/01/22 23:46:18 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.37 2002/03/03 15:07:49 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.36 2002/01/22 23:46:18 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.37  2002/03/03 15:07:49  oes
+ *    Re-enabled automatic config reloading
+ *
  *    Revision 1.36  2002/01/22 23:46:18  jongfoster
  *    Moving edit_read_line() and simple_read_line() to loaders.c, and
  *    extending them to support reading MS-DOS, Mac and UNIX style files
@@ -881,7 +884,7 @@ jb_err edit_read_line(FILE *fp,
  *          1  :  buf = Buffer to use.
  *          2  :  buflen = Size of buffer in bytes.
  *          3  :  fp = File to read from
- *	    4  :  linenum = linenumber in file
+ *          4  :  linenum = linenumber in file
  *
  * Returns     :  NULL on EOF or error
  *                Otherwise, returns buf.

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.74 2002/03/06 00:49:31 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.75 2002/03/06 10:02:19 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.74 2002/03/06 00:49:31 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.75  2002/03/06 10:02:19  oes
+ *    Fixed stupid bug when --user was not given
+ *
  *    Revision 1.74  2002/03/06 00:49:31  jongfoster
  *    Fixing warning on Windows
  *    Making #ifdefs that refer to the same variable consistently
@@ -585,7 +588,7 @@ static const char VANILLA_WAFER[] =
  *                to be reopened by the main thread on HUP.
  *
  * Parameters  :
- *          1  :  the_signal - the signal cause this function to call 
+ *          1  :  the_signal = the signal cause this function to call
  *
  * Returns     :  - 
  *

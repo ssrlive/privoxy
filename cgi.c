@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.43 2002/03/05 21:33:45 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.44 2002/03/05 22:43:45 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.43 2002/03/05 21:33:45 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.44  2002/03/05 22:43:45  david__schmidt
+ *    - Better error reporting on OS/2
+ *    - Fix double-slash comment (oops)
+ *
  *    Revision 1.43  2002/03/05 21:33:45  david__schmidt
  *    - Re-enable OS/2 building after new parms were added
  *    - Fix false out of memory report when resolving CGI templates when no IP
@@ -787,9 +791,9 @@ void cgi_init_error_messages(void)
  *                Returns a statically-allocated error response.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  template_name = Name of template that could not
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  template_name = Name of template that could not
  *                                be loaded.
  *
  * Returns     :  JB_ERR_OK on success
@@ -815,9 +819,9 @@ struct http_response *cgi_error_memory(void)
  *                parameters.
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  template_name = Name of template that could not
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  template_name = Name of template that could not
  *                                be loaded.
  *
  * Returns     :  JB_ERR_OK on success
@@ -891,8 +895,8 @@ jb_err cgi_error_no_template(struct client_state *csp,
  *                (query string) for a CGI were wrong.
  *               
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
  *
  * CGI Parameters : none
  *
@@ -1145,10 +1149,10 @@ void free_http_response(struct http_response *rsp)
  *                lines. 
  *
  * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  template_ptr = Destination for pointer to loaded
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  template_ptr = Destination for pointer to loaded
  *                               template text.
- *           3 :  template = name of the HTML template to be used
+ *          3  :  template = name of the HTML template to be used
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory error.  
@@ -1244,11 +1248,11 @@ jb_err template_load(struct client_state *csp, char ** template_ptr,
  *                interpretation.
  *
  * Parameters  :
- *           1 :  template_ptr = IN: Template to be filled out.
+ *          1  :  template_ptr = IN: Template to be filled out.
  *                                   Will be free()d.
  *                               OUT: Filled out template.
  *                                    Caller must free().
- *           2 :  exports = map with fill in symbol -> name pairs
+ *          2  :  exports = map with fill in symbol -> name pairs
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory error
@@ -1351,9 +1355,9 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
  *                this function also frees the passed "exports" map.
  *
  * Parameters  :
- *           1 :  csp = Client state
- *           2 :  templatename = name of the HTML template to be used
- *           3 :  exports = map with fill in symbol -> name pairs.
+ *          1  :  csp = Client state
+ *          2  :  templatename = name of the HTML template to be used
+ *          3  :  exports = map with fill in symbol -> name pairs.
  *                          Will be freed by this function.
  *
  * Returns     :  JB_ERR_OK on success
