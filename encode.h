@@ -1,6 +1,6 @@
 #ifndef ENCODE_H_INCLUDED
 #define ENCODE_H_INCLUDED
-#define ENCODE_H_VERSION "$Id: encode.h,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $"
+#define ENCODE_H_VERSION "$Id: encode.h,v 1.2 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: encode.h,v $
+ *    Revision 1.2  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -50,6 +54,8 @@ extern char * html_encode(const char *s);
 extern char * cookie_encode(const char *s);
 extern char * url_encode(const char *s);
 extern char * url_decode(const char *str);
+
+extern char * html_encode_and_free_original(char *s);
 
 /* Revision control strings from this header and associated .c file */
 extern const char encode_rcs[];
