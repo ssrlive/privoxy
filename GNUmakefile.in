@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.70 2002/04/07 08:59:40 swa Exp $
+# $Id: GNUmakefile.in,v 1.71 2002/04/07 20:32:03 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -241,10 +241,35 @@ trust.txt: trust
 re_filterfile.txt: re_filterfile
 	$(DOSFILTER) < $< > $@ 
 
+
+#############################################################################
+# Pre-dist check:
+#############################################################################
+dist-check:
+	@if [ -d CVS ]; then \
+           $(ECHO) "***************************************************"; \
+           $(ECHO) "***                                             ***"; \
+           $(ECHO) "***                  WARNING                    ***"; \
+           $(ECHO) "***                                             ***"; \
+           $(ECHO) "*** The presence of a CVS subdirectory suggests ***"; \
+           $(ECHO) "*** that you are trying to build a distribution ***"; \
+           $(ECHO) "*** package based on a checked out, not an      ***"; \
+           $(ECHO) "*** exported copy of the source tree. Please    ***"; \
+           $(ECHO) "*** see \"Releasing a new version\" in the        ***"; \
+           $(ECHO) "*** developer manual.                           ***"; \
+           $(ECHO) "***                                             ***"; \
+           $(ECHO) "***************************************************"; \
+           $(ECHO) "Type \"yes i am sure\" if you are sure that you"; \
+           $(ECHO) -n "want to continue: "; \
+           read answer; \
+           if [ "$$answer" != "yes i am sure" ]; then exit 1; fi \
+         fi;
+
+
 #############################################################################
 # RPM specifice stuff (SuSE or Redhat, ..)
 #############################################################################
-rpm-stuff: clean clobber
+rpm-stuff: dist-check clean clobber 
 	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
 			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
@@ -337,7 +362,7 @@ suse-clean:
 #############################################################################
 # generic distribution
 #############################################################################
-gen-dist:
+gen-dist: dist-check
 	@$(ECHO) ""
 	@$(ECHO) "You have run autoconf && autoheader && ./configure right?"
 	@$(ECHO) ""
@@ -441,7 +466,7 @@ win-dist:
 
 MISC_FILES = install-sh config.sub configure.in GNUmakefile.in config.h.in config.guess privoxy*
 
-tarball-dist:
+tarball-dist: dist-check
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add source files
 	for foo in `find . -name "*.c"`; do \
@@ -642,6 +667,7 @@ webserver: tidy
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/* -type d | xargs chmod 775 2>/dev/null'
 	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/* -type f | xargs chmod 664 2>/dev/null'
+	@ssh ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
 
 web-actions: tidy
 	@$(ECHO) Uploading 
@@ -650,7 +676,8 @@ web-actions: tidy
           $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xv'
 
 	@$(ECHO) Fixing permissions
-	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/* -type f | xargs chmod 664 2>/dev/null'	
+	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/* -type f | xargs chmod 664 2>/dev/null'
+	@ssh ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
 
 #############################################################################
 # Source file dependencies
@@ -761,6 +788,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.71  2002/04/07 20:32:03  hal9
+# -Add meta data kludge for make dok-webserver via $(PERL).
+# -Add subdirs for 'make dok-release'.
+#
 # Revision 1.70  2002/04/07 08:59:40  swa
 # generated files. do NOT edit.
 # fixed directory bug in makefile.
