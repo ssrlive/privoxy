@@ -1,8 +1,47 @@
-#  Illustrative Trustfile for the Internet Junkbuster
+######################################################################
+# 
+#  File        :  $Source: /cvsroot/ijbswa/current/basic.action,v $
+# 
+#  $Id: basic.action,v 1.3 2002/03/26 22:29:54 swa Exp $
 #
-# Copyright 1997-8 Junkbusters Corp.  For distribution, modification and use
-# under the GNU General Public License. These files come with NO WARRANTY.
-# See http://www.junkbusters.com/ht/en/gpl.html or README file for details.
+#  Purpose     :  Trustfiles are an experimental feature used for
+#                 building "whitelists" (versus the usual "blacklists"
+#                 in a blockfile).
+# 
+#  Copyright   :  Written by and Copyright
+#                 Privoxy team. http://www.privoxy.org/
+#
+#                 Based on the Internet Junkbuster originally written
+#                 by and Copyright (C) 1997 Anonymous Coders and
+#                 Junkbusters Corporation.  http://www.junkbusters.com
+#
+# We value your feedback. However, to provide you with the best support,
+# please note:
+#  
+#  * Use the support forum to get help:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+#  * Submit bugs only thru our bug forum:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+#    Make sure that the bug has not already been submitted. Please try
+#    to verify that it is a Junkbuster bug, and not a browser or site
+#    bug first. If you are using your own custom configuration, please
+#    try the stock configs to see if the problem is a configuration
+#    related bug. And if not using the latest development snapshot,
+#    please try the latest one. Or even better, CVS sources.
+#  * Submit feature requests only thru our feature request forum:
+#    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+#      
+# For any other issues, feel free to use the mailing lists:
+# http://sourceforge.net/mail/?group_id=11118
+#    
+# Anyone interested in actively participating in development and related
+# discussions can join the appropriate mailing list here:
+# http://sourceforge.net/mail/?group_id=11118. Archives are available
+# here too.
+# 
+######################################################################
+#
+#  Illustrative Trustfile for Privoxy
 
 # For this file to have any effect, the line beginning "trustfile" must
 # be commented in, with the name of this file following the word "trustfile"

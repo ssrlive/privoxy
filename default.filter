@@ -2,109 +2,44 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
+#  $Id: basic.action,v 1.3 2002/03/26 22:29:54 swa Exp $
+#
 #  Purpose     :  Rules to process the content of web pages
 # 
-#  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#  Copyright   :  Written by and Copyright
 #                 Privoxy team. http://www.privoxy.org/
+#
+#                 Based on the Internet Junkbuster originally written
+#                 by and Copyright (C) 1997 Anonymous Coders and
+#                 Junkbusters Corporation.  http://www.junkbusters.com
+#
+# We value your feedback. However, to provide you with the best support,
+# please note:
+#  
+#  * Use the support forum to get help:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+#  * Submit bugs only thru our bug forum:
+#    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+#    Make sure that the bug has not already been submitted. Please try
+#    to verify that it is a Junkbuster bug, and not a browser or site
+#    bug first. If you are using your own custom configuration, please
+#    try the stock configs to see if the problem is a configuration
+#    related bug. And if not using the latest development snapshot,
+#    please try the latest one. Or even better, CVS sources.
+#  * Submit feature requests only thru our feature request forum:
+#    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+#      
+# For any other issues, feel free to use the mailing lists:
+# http://sourceforge.net/mail/?group_id=11118
+#    
+# Anyone interested in actively participating in development and related
+# discussions can join the appropriate mailing list here:
+# http://sourceforge.net/mail/?group_id=11118. Archives are available
+# here too.
 # 
-#                 This program is free software; you can redistribute it
-#                 and/or modify it under the terms of the GNU General
-#                 Public License as published by the Free Software
-#                 Foundation; either version 2 of the License, or (at
-#                 your option) any later version.
-# 
-#                 This program is distributed in the hope that it will
-#                 be useful, but WITHOUT ANY WARRANTY; without even the
-#                 implied warranty of MERCHANTABILITY or FITNESS FOR A
-#                 PARTICULAR PURPOSE.  See the GNU General Public
-#                 License for more details.
-# 
-#                 The GNU General Public License should be included with
-#                 this file.  If not, you can view it at
-#                 http://www.gnu.org/copyleft/gpl.html
-#                 or write to the Free Software Foundation, Inc., 59
-#                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-# 
-#  Revisions   :
-#     $Log: default.filter,v $
-#     Revision 1.3  2002/03/24 16:08:03  jongfoster
-#     Fixing banners-by-size for new config URLs
-#
-#     Revision 1.2  2002/03/24 13:02:18  swa
-#     name change related issues.
-#
-#     Revision 1.1  2002/03/24 11:37:39  jongfoster
-#     Name change
-#
-#     Revision 1.24  2002/03/16 20:39:54  oes
-#      - Added descriptions to the filters so users will know what they select in the cgi editor
-#      - Added content-cookies filter
-#      - Bugfixed many jobs (Thanks to Al for some hints)
-#
-#     Revision 1.22  2002/03/12 13:42:50  oes
-#     Fixing & Optimizing REs
-#
-#     Revision 1.21  2002/03/12 11:59:20  oes
-#     Beefed up Buzzword Bingo
-#
-#     Revision 1.20  2002/03/12 01:42:50  oes
-#     Introduced modular filters
-#
-#     Revision 1.19  2002/03/10 19:49:24  oes
-#     Added expression to kill referer tracking in JavaScripts
-#
-#     Revision 1.18  2002/03/08 17:14:12  oes
-#     PNG -> image in comments
-#
-#     Revision 1.17  2002/03/07 03:50:54  oes
-#     Adapted comments to new built-in images
-#
-#     Revision 1.16  2002/02/21 00:12:19  jongfoster
-#     Modifying the banner regexps to use long URLS and to autodetect
-#     whether to show a logo or a transparent GIF, based on actionsfile
-#     setting.
-#
-#     Revision 1.15  2001/12/28 23:54:20  steudten
-#     Fix for feature Req #495374: http-equiv problem
-#
-#     Revision 1.14  2001/12/09 18:55:11  david__schmidt
-#     Updated CODE_STATUS to beta, commented out microsuck line in re_filterfile
-#     for 2.9.10 beta
-#
-#     Revision 1.13  2001/10/13 13:11:20  joergs
-#     Fixed WebBug filter.
-#
-#     Revision 1.12  2001/10/07 15:46:42  oes
-#     Followed Guy's proposal to change the document.cookie job
-#
-#     Revision 1.11  2001/09/21 12:34:00  joergs
-#     Added filter to replace "Nimda" code by a warning.
-#
-#     Revision 1.10  2001/07/20 11:04:26  oes
-#     Added Rodneys javascript cookie filter
-#
-#     Revision 1.9  2001/07/13 14:03:48  oes
-#     Elimiated yet another bug in the banner-by-size jobs. Shame on me!
-#
-#     Revision 1.8  2001/06/29 13:34:00  oes
-#     - Added explanation for U and T options
-#     - Added hint on image replacement by CGI call
-#     - Fixed bug in banner-by-size jobs
-#
-#     Revision 1.7  2001/06/19 14:21:56  oes
-#     Fixed microsuck line
-#
-#     Revision 1.6  2001/06/09 14:01:57  swa
-#     header. cosmetics. default: no messing ala microsuck.
-#
-#
-# 
-
 #################################################################################
 #
 # Syntax:
-#
-#################################################################################
 #
 # Filters start with a line "FILTER: name description". They are then referrable
 # from the actionsfile with +filter{name}
@@ -318,3 +253,83 @@ FILTER: crude-parental Crude parental filtering (demo only)
 
 s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
 s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
+
+############################################################################## 
+#
+#  Revisions   :
+#     $Log: default.filter,v $
+#     Revision 1.4  2002/03/26 22:29:54  swa
+#     we have a new homepage!
+#
+#     Revision 1.3  2002/03/24 16:08:03  jongfoster
+#     Fixing banners-by-size for new config URLs
+#
+#     Revision 1.2  2002/03/24 13:02:18  swa
+#     name change related issues.
+#
+#     Revision 1.1  2002/03/24 11:37:39  jongfoster
+#     Name change
+#
+#     Revision 1.24  2002/03/16 20:39:54  oes
+#      - Added descriptions to the filters so users will know what they select in the cgi editor
+#      - Added content-cookies filter
+#      - Bugfixed many jobs (Thanks to Al for some hints)
+#
+#     Revision 1.22  2002/03/12 13:42:50  oes
+#     Fixing & Optimizing REs
+#
+#     Revision 1.21  2002/03/12 11:59:20  oes
+#     Beefed up Buzzword Bingo
+#
+#     Revision 1.20  2002/03/12 01:42:50  oes
+#     Introduced modular filters
+#
+#     Revision 1.19  2002/03/10 19:49:24  oes
+#     Added expression to kill referer tracking in JavaScripts
+#
+#     Revision 1.18  2002/03/08 17:14:12  oes
+#     PNG -> image in comments
+#
+#     Revision 1.17  2002/03/07 03:50:54  oes
+#     Adapted comments to new built-in images
+#
+#     Revision 1.16  2002/02/21 00:12:19  jongfoster
+#     Modifying the banner regexps to use long URLS and to autodetect
+#     whether to show a logo or a transparent GIF, based on actionsfile
+#     setting.
+#
+#     Revision 1.15  2001/12/28 23:54:20  steudten
+#     Fix for feature Req #495374: http-equiv problem
+#
+#     Revision 1.14  2001/12/09 18:55:11  david__schmidt
+#     Updated CODE_STATUS to beta, commented out microsuck line in re_filterfile
+#     for 2.9.10 beta
+#
+#     Revision 1.13  2001/10/13 13:11:20  joergs
+#     Fixed WebBug filter.
+#
+#     Revision 1.12  2001/10/07 15:46:42  oes
+#     Followed Guy's proposal to change the document.cookie job
+#
+#     Revision 1.11  2001/09/21 12:34:00  joergs
+#     Added filter to replace "Nimda" code by a warning.
+#
+#     Revision 1.10  2001/07/20 11:04:26  oes
+#     Added Rodneys javascript cookie filter
+#
+#     Revision 1.9  2001/07/13 14:03:48  oes
+#     Elimiated yet another bug in the banner-by-size jobs. Shame on me!
+#
+#     Revision 1.8  2001/06/29 13:34:00  oes
+#     - Added explanation for U and T options
+#     - Added hint on image replacement by CGI call
+#     - Fixed bug in banner-by-size jobs
+#
+#     Revision 1.7  2001/06/19 14:21:56  oes
+#     Fixed microsuck line
+#
+#     Revision 1.6  2001/06/09 14:01:57  swa
+#     header. cosmetics. default: no messing ala microsuck.
+#
+#
+# 

@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.35 2002/03/27 14:53:19 swa Exp $
+# $Id: GNUmakefile.in,v 1.36 2002/03/27 14:58:08 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -106,7 +106,7 @@ C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
 C_OBJS = $(C_SRC:.c=.@OBJEXT@)
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
 
-CONFIG_FILES = config \
+CONFIG_FILES = config trust \
 		default.action \
 		basic.action intermediate.action advanced.action \
 		default.filter \
@@ -620,6 +620,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.36  2002/03/27 14:58:08  swa
+# can be used by mutilple targets
+#
 # Revision 1.35  2002/03/27 14:53:19  swa
 # added solaris-dist
 #
