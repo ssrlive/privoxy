@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.16 2002/11/11 13:40:38 oes Exp $
+#  $Id: default.filter,v 1.17 2002/11/12 16:16:49 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -220,6 +220,7 @@ s|<img (src=(?:(['"])[^>\\\\2]+\2\|[^'">\\\s]+?))([^>]*)width\s*=\s*(["']?)(\d+?
 #
 # Note: Use http://config.privoxy.org/send-banner?type=trans for a transparent 1x1 image
 #       Use http://config.privoxy.org/send-banner?type=pattern for a grey/white pattern image
+#       Use http://config.privoxy.org/send-banner?type=custom for the image specified in config
 #       Use http://config.privoxy.org/send-banner?type=auto  to auto-select.
 #
 # Note2: Use img-reorder before this filter to ensure maximum matching success
@@ -395,6 +396,9 @@ s/\x9B/>/g                  # 155
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.17  2002/11/12 16:16:49  oes
+#     Exchanged js-annoyance filter against status bar rewrites with improved version by Don Libes
+#
 #     Revision 1.16  2002/11/11 13:40:38  oes
 #     Make refresh-tags filter work even on incorrect refresh tags like found on usatoday.com
 #
