@@ -4,8 +4,7 @@
 >Appendix</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -79,44 +78,54 @@ NAME="REGEX"
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> can use <SPAN
+> uses Perl-style <SPAN
 CLASS="QUOTE"
->"regular expressions"</SPAN
-> 
- in various config files. Assuming support for <SPAN
-CLASS="QUOTE"
->"pcre"</SPAN
-> (Perl
- Compatible Regular Expressions) is compiled in, which is the default. Such
- configuration directives do not require regular expressions, but they can be
- used to increase flexibility by matching a pattern with wild-cards against
- URLs.</P
+>"regular
+ expressions"</SPAN
+> in its <A
+HREF="actions-file.html"
+>actions
+ files</A
+> and <A
+HREF="filter-file.html"
+>filter file</A
+>,
+ through the <A
+HREF="http://www.pcre.org/"
+TARGET="_top"
+>PCRE</A
+> and
+ <A
+HREF="http://www.oesterhelt.org/pcrs/"
+TARGET="_top"
+>PCRS</A
+> libraries.</P
 ><P
 > If you are reading this, you probably don't understand what <SPAN
 CLASS="QUOTE"
 >"regular
  expressions"</SPAN
 > are, or what they can do. So this will be a very brief
- introduction only. A full explanation would require a book ;-)</P
+ introduction only. A full explanation would require a <A
+HREF="http://www.oreilly.com/catalog/regex/"
+TARGET="_top"
+>book</A
+> ;-)</P
 ><P
-> <SPAN
-CLASS="QUOTE"
->"Regular expressions"</SPAN
-> is a way of matching one character
- expression against another to see if it matches or not. One of the
- <SPAN
-CLASS="QUOTE"
->"expressions"</SPAN
-> is a literal string of readable characters
- (letter, numbers, etc), and the other is a complex string of literal
- characters combined with wild-cards, and other special characters, called
- meta-characters. The <SPAN
+> Regular expressions provide a language to describe patterns that can be
+ run against strings of characters (letter, numbers, etc), to see if they
+ match the string or not. The  patterns are themselves (sometimes complex)
+ strings of literal characters, combined with  wild-cards, and other special
+ characters, called meta-characters. The <SPAN
 CLASS="QUOTE"
 >"meta-characters"</SPAN
-> have special meanings and
- are used to build the complex pattern to be matched against. Perl Compatible
- Regular Expressions is an enhanced form of the regular expression language
- with backward compatibility.</P
+> have
+ special meanings and are used to build complex patterns to be matched against.
+ Perl Compatible Regular Expressions are an especially convenient
+ <SPAN
+CLASS="QUOTE"
+>"dialect"</SPAN
+> of the regular expression language.</P
 ><P
 > To make a simple analogy, we do something similar when we use wild-card
  characters when listing files with the <B
@@ -372,36 +381,6 @@ CLASS="QUOTE"
 >"that
   example"</SPAN
 >, and nothing else.
- </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></P
-><P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->  <I
-CLASS="EMPHASIS"
->s/string1/string2/g</I
-> - This is used to rewrite strings of text. 
-  <SPAN
-CLASS="QUOTE"
->"string1"</SPAN
-> is replaced by <SPAN
-CLASS="QUOTE"
->"string2"</SPAN
-> in this
-  example. There must of course be a match on <SPAN
-CLASS="QUOTE"
->"string1"</SPAN
-> first.
  </TD
 ></TR
 ></TBODY
@@ -694,41 +673,6 @@ CLASS="QUOTE"
 > is not
  in the expression anywhere).</P
 ><P
-> <I
-CLASS="EMPHASIS"
-><TT
-CLASS="LITERAL"
->s/microsoft(?!.com)/MicroSuck/i</TT
-></I
-> - This is 
- a substitution. <SPAN
-CLASS="QUOTE"
->"MicroSuck"</SPAN
-> will replace any occurrence of 
- <SPAN
-CLASS="QUOTE"
->"microsoft"</SPAN
->.  The <SPAN
-CLASS="QUOTE"
->"i"</SPAN
-> at the end of the expression
- means ignore case. The <SPAN
-CLASS="QUOTE"
->"(?!.com)"</SPAN
-> means 
- the match should fail if <SPAN
-CLASS="QUOTE"
->"microsoft"</SPAN
-> is followed by
- <SPAN
-CLASS="QUOTE"
->".com"</SPAN
->. In other words, this acts like a <SPAN
-CLASS="QUOTE"
->"NOT"</SPAN
->
- modifier. In case this is a hyperlink, we don't want to break it ;-).</P
-><P
 > We are barely scratching the surface of regular expressions here so that you
  can understand the default <SPAN
 CLASS="APPLICATION"
@@ -745,13 +689,20 @@ HREF="http://www.perldoc.com/perl5.6/pod/perlre.html"
 TARGET="_top"
 >http://www.perldoc.com/perl5.6/pod/perlre.html</A
 ></P
+><P
+> For information on regular expression based substititions and their applications
+ in filters, please see the <A
+HREF="filter-file.html"
+>filter file tutorial</A
+>
+ in this manual.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2732"
+NAME="AEN3218"
 >14.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -800,7 +751,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN2747"
+NAME="AEN3233"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -814,12 +765,16 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><P
->   Alternately, this may be reached at <A
+>   There is a shortcut: <A
 HREF="http://p.p/"
 TARGET="_top"
 >http://p.p/</A
->, but this
-   variation may not work as reliably as the above in some configurations.
+> (But it
+   doesn't provide a fallback to a real page, in case the request is not
+   sent through <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>)
   </P
 ></LI
 ><LI
@@ -829,7 +784,7 @@ TARGET="_top"
     editing of actions files:
   </P
 ><A
-NAME="AEN2754"
+NAME="AEN3241"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -849,7 +804,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN2759"
+NAME="AEN3246"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -869,7 +824,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN2764"
+NAME="AEN3251"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -889,7 +844,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN2769"
+NAME="AEN3256"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -913,7 +868,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN2775"
+NAME="AEN3262"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -930,7 +885,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN2779"
+NAME="AEN3266"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -944,7 +899,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN2782"
+NAME="AEN3269"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1051,16 +1006,16 @@ TARGET="_top"
 ><LI
 ><P
 >    <A
-HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
+HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions/index.php?url='+escape(location.href),'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
 TARGET="_top"
->Privoxy - Submit Filter Feedback</A
+>Privoxy - Submit Actions File Feedback</A
 >
    </P
 ></LI
 ></UL
 ></P
 ><P
-> Credit: The site which gave me the general idea for these bookmarklets is
+> Credit: The site which gave us the general idea for these bookmarklets is
  <A
 HREF="http://www.bookmarklets.com"
 TARGET="_top"
@@ -1115,7 +1070,6 @@ CLASS="APPLICATION"
 > checks to see if the URL 
    matches any <A
 HREF="actions-file.html#BLOCK"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
@@ -1124,7 +1078,6 @@ CLASS="QUOTE"
    so, the URL is then blocked, and the remote web server will not be contacted.
    <A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+handle-as-image"</SPAN
@@ -1137,7 +1090,6 @@ CLASS="QUOTE"
 > page is sent back. Otherwise, if it does match,
    an image is returned. The type of image depends on the setting of <A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+set-image-blocker"</SPAN
@@ -1159,7 +1111,6 @@ CLASS="FILENAME"
 ><P
 >   If the URL pattern matches the <A
 HREF="actions-file.html#FAST-REDIRECTS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+fast-redirects"</SPAN
@@ -1173,7 +1124,6 @@ CLASS="QUOTE"
 >   Now the rest of the client browser's request headers are processed. If any
    of these match any of the relevant actions (e.g. <A
 HREF="actions-file.html#HIDE-USER-AGENT"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+hide-user-agent"</SPAN
@@ -1195,16 +1145,14 @@ CLASS="QUOTE"
    things, the MIME type (document type) and encoding. The headers are then
    filtered as deterimed by the 
    <A
-HREF="actions-file.html#PREVENT-SETTING-COOKIES"
-TARGET="_top"
+HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
 ><SPAN
 CLASS="QUOTE"
->"+prevent-setting-cookies"</SPAN
+>"+crunch-incoming-cookies"</SPAN
 ></A
 >,
    <A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+session-cookies-only"</SPAN
@@ -1212,7 +1160,6 @@ CLASS="QUOTE"
 >,
    and <A
 HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+downgrade-http-version"</SPAN
@@ -1225,7 +1172,6 @@ CLASS="QUOTE"
 ><P
 >   If the <A
 HREF="actions-file.html#KILL-POPUPS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+kill-popups"</SPAN
@@ -1239,7 +1185,6 @@ CLASS="QUOTE"
 ><P
 >   If a <A
 HREF="actions-file.html#FILTER"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
@@ -1247,7 +1192,6 @@ CLASS="QUOTE"
 >
    or <A
 HREF="actions-file.html#DEANIMATE-GIFS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+deanimate-gifs"</SPAN
@@ -1274,7 +1218,6 @@ CLASS="APPLICATION"
 ><P
 >   If neither <A
 HREF="actions-file.html#FILTER"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
@@ -1282,7 +1225,6 @@ CLASS="QUOTE"
 >
    or <A
 HREF="actions-file.html#DEANIMATE-GIFS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+deanimate-gifs"</SPAN
@@ -1323,19 +1265,10 @@ CLASS="APPLICATION"
 > applies 
  <A
 HREF="actions-file.html#ACTIONS"
-TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-></A
->
- and <A
+>actions</A
+> and <A
 HREF="actions-file.html#FILTER"
-TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"filters"</SPAN
-></A
+>filters</A
 >
  to any given URL can be complex, and not always so
  easy to understand what is happening. And sometimes we need to be able to
@@ -1352,11 +1285,11 @@ CLASS="APPLICATION"
 > is doing
  is causing us a problem inadvertently. It can be a little daunting to look at
  the actions and filters files themselves, since they tend to be filled with
- <SPAN
-CLASS="QUOTE"
->"regular expressions"</SPAN
-> whose consequences are not always 
- so obvious. </P
+ <A
+HREF="appendix.html#REGEX"
+>regular expressions</A
+> whose consequences are not
+ always so obvious. </P
 ><P
 > One quick test to see if <SPAN
 CLASS="APPLICATION"
@@ -1392,7 +1325,6 @@ CLASS="APPLICATION"
  how the current configuration will handle it. This will not
  help with filtering effects (i.e. the <A
 HREF="actions-file.html#FILTER"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
@@ -1442,8 +1374,8 @@ CLASS="SCREEN"
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only -prevent-reading-cookies 
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+ +prevent-compression +session-cookies-only -crunch-outgoing-cookies 
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer }
 /
 
  { -session-cookies-only }
@@ -1462,7 +1394,6 @@ CLASS="SCREEN"
 > This tells us how we have defined our 
  <A
 HREF="actions-file.html#ACTIONS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -1511,7 +1442,6 @@ CLASS="QUOTE"
 >. The first is negating our previous cookie setting, 
  which was for <A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+session-cookies-only"</SPAN
@@ -1524,7 +1454,6 @@ CLASS="EMPHASIS"
 > any 
  <A
 HREF="actions-file.html#FAST-REDIRECTS"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+fast-redirects"</SPAN
@@ -1583,8 +1512,8 @@ CLASS="SCREEN"
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression -session-cookies-only -prevent-reading-cookies 
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer</PRE
+ +prevent-compression -session-cookies-only -crunch-outgoing-cookies 
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1636,7 +1565,6 @@ CLASS="QUOTE"
 >"+imageblock"</SPAN
 >. (<A
 HREF="actions-file.html#ALIASES"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"Aliases"</SPAN
@@ -1655,7 +1583,6 @@ CLASS="QUOTE"
 >
  is done here -- as both a <A
 HREF="actions-file.html#BLOCK"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
@@ -1667,7 +1594,6 @@ CLASS="EMPHASIS"
 > an 
  <A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
-TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
 >"+handle-as-image"</SPAN
@@ -1700,8 +1626,8 @@ CLASS="SCREEN"
    +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
    +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
    +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
-   +prevent-compression +session-cookies-only -prevent-setting-cookies 
-   -prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }
+   +prevent-compression +session-cookies-only -crunch-incoming-cookies 
+   -crunch-outgoing-cookies +kill-popups -send-vanilla-wafer -send-wafer }
    /
 
  { +block +handle-as-image }

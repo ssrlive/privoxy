@@ -4,8 +4,7 @@
 >Privoxy User Manual</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="NEXT"
 TITLE="Introduction"
 HREF="introduction.html"><LINK
@@ -45,7 +44,7 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $<BR></P
+>$Id: user-manual.sgml,v 1.117 2002/05/17 13:56:16 oes Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -147,7 +146,7 @@ HREF="installation.html#INSTALLATION-PACKAGES"
 ><DT
 >2.1.1. <A
 HREF="installation.html#INSTALLATION-PACK-RPM"
->Red Hat and SuSE RPMs</A
+>Red Hat, SuSE RPMs and Conectiva</A
 ></DT
 ><DT
 >2.1.2. <A
@@ -214,7 +213,7 @@ CLASS="APPLICATION"
 ><DT
 >5.1. <A
 HREF="startup.html#START-REDHATDEBIAN"
->RedHat and Debian</A
+>RedHat, Conectiva and Debian</A
 ></DT
 ><DT
 >5.2. <A
@@ -265,7 +264,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >6.1. <A
-HREF="configuration.html#AEN346"
+HREF="configuration.html#AEN357"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -456,34 +455,39 @@ HREF="actions-file.html"
 ><DL
 ><DT
 >8.1. <A
-HREF="actions-file.html#AEN1378"
+HREF="actions-file.html#AEN1403"
 >Finding the Right Mix</A
 ></DT
 ><DT
 >8.2. <A
-HREF="actions-file.html#AEN1385"
+HREF="actions-file.html#AEN1410"
 >How to Edit</A
 ></DT
 ><DT
 >8.3. <A
-HREF="actions-file.html#AEN1394"
+HREF="actions-file.html#ACTIONS-APPLY"
 >How Actions are Applied to URLs</A
 ></DT
 ><DT
 >8.4. <A
-HREF="actions-file.html#AEN1408"
+HREF="actions-file.html#AF-PATTERNS"
 >Patterns</A
 ></DT
 ><DD
 ><DL
 ><DT
+>22<A
+HREF="actions-file.html#AEN1440"
+></A
+></DT
+><DT
 >8.4.1. <A
-HREF="actions-file.html#AEN1448"
+HREF="actions-file.html#AEN1473"
 >The Domain Pattern</A
 ></DT
 ><DT
 >8.4.2. <A
-HREF="actions-file.html#AEN1510"
+HREF="actions-file.html#AEN1535"
 >The Path Pattern</A
 ></DT
 ></DL
@@ -500,7 +504,7 @@ HREF="actions-file.html#ACTIONS"
 HREF="actions-file.html#ADD-HEADER"
 ><I
 CLASS="EMPHASIS"
->+add-header</I
+>add-header</I
 ></A
 ></DT
 ><DT
@@ -508,165 +512,160 @@ CLASS="EMPHASIS"
 HREF="actions-file.html#BLOCK"
 ><I
 CLASS="EMPHASIS"
->+block</I
+>block</I
 ></A
 ></DT
 ><DT
 >8.5.3. <A
-HREF="actions-file.html#DEANIMATE-GIFS"
+HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
 ><I
 CLASS="EMPHASIS"
->+deanimate-gifs</I
+>crunch-incoming-cookies</I
 ></A
 ></DT
 ><DT
 >8.5.4. <A
-HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
+HREF="actions-file.html#CRUNCH-OUTGOING-COOKIES"
 ><I
 CLASS="EMPHASIS"
->+downgrade-http-version</I
+>crunch-outgoing-cookies</I
 ></A
 ></DT
 ><DT
 >8.5.5. <A
-HREF="actions-file.html#FAST-REDIRECTS"
+HREF="actions-file.html#DEANIMATE-GIFS"
 ><I
 CLASS="EMPHASIS"
->+fast-redirects</I
+>deanimate-gifs</I
 ></A
 ></DT
 ><DT
 >8.5.6. <A
-HREF="actions-file.html#FILTER"
+HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
 ><I
 CLASS="EMPHASIS"
->+filter</I
+>downgrade-http-version</I
 ></A
 ></DT
 ><DT
 >8.5.7. <A
-HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
+HREF="actions-file.html#FAST-REDIRECTS"
 ><I
 CLASS="EMPHASIS"
->+hide-forwarded-for-headers</I
+>fast-redirects</I
 ></A
 ></DT
 ><DT
 >8.5.8. <A
-HREF="actions-file.html#HIDE-FROM-HEADER"
+HREF="actions-file.html#FILTER"
 ><I
 CLASS="EMPHASIS"
->+hide-from-header</I
+>filter</I
 ></A
 ></DT
 ><DT
 >8.5.9. <A
-HREF="actions-file.html#HIDE-REFERER"
+HREF="actions-file.html#HANDLE-AS-IMAGE"
 ><I
 CLASS="EMPHASIS"
->+hide-referer</I
+>handle-as-image</I
 ></A
 ></DT
 ><DT
 >8.5.10. <A
-HREF="actions-file.html#HIDE-USER-AGENT"
+HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
 ><I
 CLASS="EMPHASIS"
->+hide-user-agent</I
+>hide-forwarded-for-headers</I
 ></A
 ></DT
 ><DT
 >8.5.11. <A
-HREF="actions-file.html#HANDLE-AS-IMAGE"
+HREF="actions-file.html#HIDE-FROM-HEADER"
 ><I
 CLASS="EMPHASIS"
->+handle-as-image</I
+>hide-from-header</I
 ></A
 ></DT
 ><DT
 >8.5.12. <A
-HREF="actions-file.html#SET-IMAGE-BLOCKER"
+HREF="actions-file.html#HIDE-REFERRER"
 ><I
 CLASS="EMPHASIS"
->+set-image-blocker</I
+>hide-referrer</I
 ></A
 ></DT
 ><DT
 >8.5.13. <A
-HREF="actions-file.html#LIMIT-CONNECT"
+HREF="actions-file.html#HIDE-USER-AGENT"
 ><I
 CLASS="EMPHASIS"
->+limit-connect</I
+>hide-user-agent</I
 ></A
 ></DT
 ><DT
 >8.5.14. <A
-HREF="actions-file.html#PREVENT-COMPRESSION"
+HREF="actions-file.html#KILL-POPUPS"
 ><I
 CLASS="EMPHASIS"
->+prevent-compression</I
-></A
-></DT
-><DT
->8.5.15. <A
-HREF="actions-file.html#SESSION-COOKIES-ONLY"
-><I
-CLASS="EMPHASIS"
->+session-cookies-only</I
-></A
-></DT
-><DT
->8.5.16. <A
-HREF="actions-file.html#PREVENT-READING-COOKIES"
-><I
-CLASS="EMPHASIS"
->+prevent-reading-cookies</I
-></A
-></DT
-><DT
->8.5.17. <A
-HREF="actions-file.html#PREVENT-SETTING-COOKIES"
-><I
-CLASS="EMPHASIS"
->+prevent-setting-cookies</I
-></A
-></DT
-><DT
->8.5.18. <A
-HREF="actions-file.html#KILL-POPUP"
-><I
-CLASS="EMPHASIS"
->+kill-popups<A
-NAME="KILL-POPUPS"
+>kill-popups<A
+NAME="KILL-POPUP"
 ></A
 ></I
 ></A
 ></DT
 ><DT
->8.5.19. <A
+>8.5.15. <A
+HREF="actions-file.html#LIMIT-CONNECT"
+><I
+CLASS="EMPHASIS"
+>limit-connect</I
+></A
+></DT
+><DT
+>8.5.16. <A
+HREF="actions-file.html#PREVENT-COMPRESSION"
+><I
+CLASS="EMPHASIS"
+>prevent-compression</I
+></A
+></DT
+><DT
+>8.5.17. <A
 HREF="actions-file.html#SEND-VANILLA-WAFER"
 ><I
 CLASS="EMPHASIS"
->+send-vanilla-wafer</I
+>send-vanilla-wafer</I
+></A
+></DT
+><DT
+>8.5.18. <A
+HREF="actions-file.html#SEND-WAFER"
+><I
+CLASS="EMPHASIS"
+>send-wafer</I
+></A
+></DT
+><DT
+>8.5.19. <A
+HREF="actions-file.html#SESSION-COOKIES-ONLY"
+><I
+CLASS="EMPHASIS"
+>session-cookies-only</I
 ></A
 ></DT
 ><DT
 >8.5.20. <A
-HREF="actions-file.html#SEND-WAFER"
+HREF="actions-file.html#SET-IMAGE-BLOCKER"
 ><I
 CLASS="EMPHASIS"
->+send-wafer</I
+>set-image-blocker</I
 ></A
 ></DT
 ><DT
 >8.5.21. <A
-HREF="actions-file.html#AEN2289"
+HREF="actions-file.html#AEN2469"
 >Summary</A
-></DT
-><DT
->8.5.22. <A
-HREF="actions-file.html#ACT-EXAMPLES"
->Sample Actions Files</A
 ></DT
 ></DL
 ></DD
@@ -675,6 +674,25 @@ HREF="actions-file.html#ACT-EXAMPLES"
 HREF="actions-file.html#ALIASES"
 >Aliases</A
 ></DT
+><DT
+>8.7. <A
+HREF="actions-file.html#ACT-EXAMPLES"
+>Actions Files Tutorial</A
+></DT
+><DD
+><DL
+><DT
+>8.7.1. <A
+HREF="actions-file.html#AEN2521"
+>default.action</A
+></DT
+><DT
+>8.7.2. <A
+HREF="actions-file.html#AEN2675"
+>user.action</A
+></DT
+></DL
+></DD
 ></DL
 ></DD
 ><DT
@@ -686,11 +704,8 @@ HREF="filter-file.html"
 ><DL
 ><DT
 >9.1. <A
-HREF="filter-file.html#AEN2432"
->The <I
-CLASS="EMPHASIS"
->+filter</I
-> Action</A
+HREF="filter-file.html#AEN2778"
+>Filter File Tutorial</A
 ></DT
 ></DL
 ></DD
@@ -715,17 +730,17 @@ HREF="contact.html#CONTACT-SUPPORT"
 ><DT
 >11.2. <A
 HREF="contact.html#CONTACT-BUGS"
->Report bugs</A
+>Report Bugs</A
 ></DT
 ><DT
 >11.3. <A
 HREF="contact.html#CONTACT-FEATURE"
->Request new features</A
+>Request New Features</A
 ></DT
 ><DT
 >11.4. <A
 HREF="contact.html#CONTACT-ADS"
->Report ads or other filter problems</A
+>Report Ads or Other Actions-Related Problems</A
 ></DT
 ><DT
 >11.5. <A
@@ -746,13 +761,18 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >12.1. <A
-HREF="copyright.html#AEN2498"
+HREF="copyright.html#AEN2972"
 >License</A
 ></DT
 ><DT
 >12.2. <A
 HREF="copyright.html#HISTORY"
 >History</A
+></DT
+><DT
+>12.3. <A
+HREF="copyright.html#AUTHORS"
+>Authors</A
 ></DT
 ></DL
 ></DD
@@ -775,7 +795,7 @@ HREF="appendix.html#REGEX"
 ></DT
 ><DT
 >14.2. <A
-HREF="appendix.html#AEN2732"
+HREF="appendix.html#AEN3218"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN

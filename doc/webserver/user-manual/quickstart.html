@@ -4,8 +4,7 @@
 >Quickstart to Using Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -82,12 +81,12 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->   If upgrading, please back up any configuration files. See 
-   the <A
+>   If upgrading, from versions before 2.9.16, please back up any configuration
+   files. See the <A
 HREF="upgradersnote.html"
 >Note to Upgraders</A
 > Section.
-  </P
+ </P
 ></LI
 ><LI
 ><P
@@ -97,9 +96,25 @@ CLASS="APPLICATION"
 >. See the <A
 HREF="installation.html"
 >Installation Section</A
-> for platform specific
+> below for platform specific
   information. 
  </P
+></LI
+><LI
+><P
+>   Advanced users and those who want to offer <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+   service to more than just their local machine should check the <A
+HREF="config.html"
+>main config file</A
+>, especially the <A
+HREF="config.html#ACCESS-CONTROL"
+>security-relevant</A
+> options. These are 
+   off by default.
+  </P
 ></LI
 ><LI
 ><P
@@ -107,38 +122,8 @@ HREF="installation.html"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >, if the installation program has
-  not done this already. See the section <A
-HREF="startup.html"
->Starting
-  <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></A
->.
-  </P
-></LI
-><LI
-><P
->  Set your browser to use <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> as HTTP and HTTPS
-  proxy by setting the proxy configuration for address of
-  <TT
-CLASS="LITERAL"
->localhost</TT
-> and port <TT
-CLASS="LITERAL"
->8118</TT
->.
-  (<SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> and earlier versions of
-  <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> used port 8000.) See the section <A
+  not done this already (may vary according to platform). See the section
+  <A
 HREF="startup.html"
 >Starting <SPAN
 CLASS="APPLICATION"
@@ -149,37 +134,88 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->    Flush your browser's caches, to remove any cached ad images.
+>   Set your browser to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as HTTP and
+   HTTPS proxy by setting the proxy configuration for address of
+   <TT
+CLASS="LITERAL"
+>127.0.0.1</TT
+> and port <TT
+CLASS="LITERAL"
+>8118</TT
+>.
+   (<SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> and earlier versions of
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> used port 8000.) See the section <A
+HREF="startup.html"
+>Starting <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+> below
+   for more details on this.
   </P
 ></LI
 ><LI
 ><P
->  Enjoy surfing with enhanced comfort and privacy.  You may want to customize the
-  <A
-HREF="actions-file.html"
-><TT
-CLASS="FILENAME"
->user.action</TT
-></A
-> file to
-  personalize your new browsing experience. See the <A
+>    Flush your browser's disk and memory caches, to remove any cached ad images.
+  </P
+></LI
+><LI
+><P
+>   A default installation should provide a reasonable starting point for 
+   most. There will undoubtedly be occasions where you will want to adjust the
+   configuration, but that can be dealt with as the need arises. Little 
+   to no initial configuration is required in most cases.
+  </P
+><P
+>   See the <A
 HREF="configuration.html"
 >Configuration section</A
-> for more configuration
-  options, and how to further customize your installation.
+> for more
+   configuration options, and how to customize your installation.
+ 
   </P
 ></LI
 ><LI
 ><P
->   If you experience problems with sites that <SPAN
+>    If you experience ads that slipped through, innocent images that are
+    blocked, or otherwise feel the need to fine-tune
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> behaviour, take a look at the <A
+HREF="actions-file.html"
+>actions files</A
+>. As a quick start, you might
+    find the <A
+HREF="actions-file.html#ACT-EXAMPLES"
+>richly commented examples</A
+>
+    helpful. You can also view and edit the actions files through the <A
+HREF="http://config.privoxy.org"
+TARGET="_top"
+>web-based user interface</A
+>. The
+    Appendix <SPAN
+CLASS="QUOTE"
+>"<A
+HREF="appendix.html#ACTIONSANAT"
+>Anatomy of an
+    Action</A
+>"</SPAN
+> has hints how to debug actions that
+    <SPAN
 CLASS="QUOTE"
 >"misbehave"</SPAN
->, see
-   the <A
-HREF="appendix.html#ACTIONSANAT"
->Anatomy of an Action</A
-> section in the
-   Appendix.
+>.
   </P
 ></LI
 ><LI
@@ -190,6 +226,11 @@ HREF="contact.html"
    Developers</A
 > on how to report bugs or problems with websites or to get
    help. 
+  </P
+></LI
+><LI
+><P
+>   Now enjoy surfing with enhanced comfort and privacy!
   </P
 ></LI
 ></UL

@@ -4,8 +4,7 @@
 >The Main Configuration File</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -343,7 +342,7 @@ CLASS="LITERAL"
 > suffix</P
 ></DD
 ><DT
->Default value:</DT
+>Default values:</DT
 ><DD
 ><P
 ></P
@@ -443,9 +442,9 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    The <A
-HREF="actions-file.html#FILTER"
->filter</A
-> file to use
+HREF="filter-file.html"
+>filter file</A
+> to use
    </P
 ></DD
 ><DT
@@ -473,7 +472,10 @@ CLASS="EMPHASIS"
 >    No textual content filtering takes place, i.e. all
     <TT
 CLASS="LITERAL"
->+filter{<TT
+>+<A
+HREF="actions-file.html#FILTER"
+>filter</A
+>{<TT
 CLASS="REPLACEABLE"
 ><I
 >name</I
@@ -487,15 +489,15 @@ CLASS="REPLACEABLE"
 >Notes:</DT
 ><DD
 ><P
->    The <SPAN
-CLASS="QUOTE"
->"default.filter"</SPAN
-> file contains content modification rules 
-    that use <SPAN
-CLASS="QUOTE"
->"regular expressions"</SPAN
->. These rules permit powerful
-    changes on the content of Web pages, e.g., you could disable your favorite
+>    The <A
+HREF="filter-file.html"
+>filter file</A
+> contains content modification
+    rules that use <A
+HREF="appendix.html#REGEX"
+>regular expressions</A
+>. These rules permit
+    powerful changes on the content of Web pages, e.g., you could disable your favorite
     JavaScript annoyances, re-write the actual displayed text, or just have some
     fun replacing <SPAN
 CLASS="QUOTE"
@@ -505,6 +507,43 @@ CLASS="QUOTE"
 >"MicroSuck"</SPAN
 > wherever
     it appears on a Web page.
+   </P
+><P
+>    The
+    <TT
+CLASS="LITERAL"
+>+<A
+HREF="actions-file.html#FILTER"
+>filter</A
+>{<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>}</TT
+>
+    actions rely on the relevant filter (<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>)
+    to be defined in the filter file!
+   </P
+><P
+>    A pre-defined filter file called <TT
+CLASS="FILENAME"
+>default.filter</TT
+> that contains
+    a bunch of handy filters for common problems is included in the distribution.
+    See the section on the <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FILTER"
+>filter</A
+></TT
+>
+    action for a list.
    </P
 ></DD
 ></DL
@@ -770,8 +809,8 @@ NAME="LOCAL-SET-UP"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > for more users
-    that just yourself, it might be a good idea to let them know how to reach
-    you, what you block and why you do that, your policies etc.
+    than just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies, etc.
    </P
 ><DIV
 CLASS="SECT3"
@@ -841,7 +880,7 @@ CLASS="APPLICATION"
 ><DD
 ><P
 >    The User Manual URI is used for help links from some of the internal CGI pages. 
-    The manual itself is normally packaged with the binary distributions, so you propably want
+    The manual itself is normally packaged with the binary distributions, so you probably want
     to set this to a locally installed copy. For multi-user setups, you could provide a copy on
     a local webserver for all your users and use the corresponding URL here.
    </P
@@ -964,9 +1003,12 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    The value of this option only matters if the experimental trust mechanism has been
-    activated. (See <TT
-CLASS="LITERAL"
->trustfile</TT
+    activated. (See <A
+HREF="config.html#TRUSTFILE"
+><I
+CLASS="EMPHASIS"
+>trustfile</I
+></A
 > above.)
    </P
 ><P
@@ -1147,7 +1189,14 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    Key values that determine what information gets logged.
+>    Key values that determine what information gets logged to the 
+    <A
+HREF="config.html#LOGFILE"
+><I
+CLASS="EMPHASIS"
+>logfile</I
+></A
+>.
    </P
 ></DD
 ><DT
@@ -1364,13 +1413,13 @@ CLASS="REPLACEABLE"
 >Default value:</DT
 ><DD
 ><P
->localhost:8118</P
+>127.0.0.1:8118</P
 ></DD
 ><DT
 >Effect if unset:</DT
 ><DD
 ><P
->    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended for
+>    Bind to 127.0.0.1 (localhost), port 8118. This is suitable and recommended for
     home users who run <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -1484,17 +1533,17 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"toggled off"</SPAN
 > mode, i.e. behave like a normal, content-neutral
-    proxy. See <TT
+    proxy where all ad blocking, filtering, etc are disabled. See
+    <TT
 CLASS="LITERAL"
 >enable-remote-toggle</TT
->
-    below. This is not really useful anymore, since toggling is much easier
-    via <A
+> below. This is not really useful
+    anymore, since toggling is much easier via <A
 HREF="http://config.privoxy.org/toggle"
 TARGET="_top"
->the web
-    interface</A
-> than via editing the <TT
+>the web interface</A
+> than via
+    editing the <TT
 CLASS="FILENAME"
 >conf</TT
 > file.
@@ -1797,11 +1846,16 @@ CLASS="EMPHASIS"
     <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> only listens on the localhost or internal (home)
-    network address by means of the <TT
-CLASS="LITERAL"
->listen-address</TT
-> option.
+> only listens on the localhost
+    (127.0.0.1) or internal (home) network address by means of the
+    <A
+HREF="config.html#LISTEN-ADDRESS"
+><I
+CLASS="EMPHASIS"
+>listen-address</I
+></A
+>
+    option. 
    </P
 ><P
 >    Please see the warnings in the FAQ that this proxy is not intended to be a substitute

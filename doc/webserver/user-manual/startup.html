@@ -4,8 +4,7 @@
 >Starting Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -86,8 +85,8 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > as a HTTP and HTTPS proxy. The default is
- localhost for the proxy address, and port 8118 (earlier versions used port
- 8000). This is the one configuration step that must be done!</P
+ 127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
+ used port 8000). This is the one configuration step that must be done!</P
 ><P
 > 
  With <SPAN
@@ -114,7 +113,7 @@ CLASS="LITERAL"
 CLASS="QUOTE"
 >"Use Proxy"</SPAN
 > and fill in the appropriate info (Address:
- localhost, Port: 8118). Include if HTTPS proxy support too.</P
+ 127.0.0.1, Port: 8118). Include if HTTPS proxy support too.</P
 ><P
 > After doing this, flush your browser's disk and memory caches to force a
  re-reading of all pages and to get rid of any ads that may be cached. You 
@@ -147,7 +146,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-REDHATDEBIAN"
->5.1. RedHat and Debian</A
+>5.1. RedHat, Conectiva and Debian</A
 ></H2
 ><P
 >We use a script. Note that RedHat does not start Privoxy upon booting per
