@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.19 2002/03/16 18:38:14 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.20 2002/03/16 20:28:34 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.19 2002/03/16 18:38:14 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.20  2002/03/16 20:28:34  oes
+ *    Added descriptions to the filters so users will know what they select in the cgi editor
+ *
  *    Revision 1.19  2002/03/16 18:38:14  jongfoster
  *    Stopping stupid or malicious users from breaking the actions
  *    file using the web-based editor.
@@ -4153,17 +4156,17 @@ jb_err cgi_toggle(struct client_state *csp,
 
    mode = get_char_param(parameters, "set");
 
-   if (mode == 'e')
+   if (mode == 'E')
    {
       /* Enable */
       g_bToggleIJB = 1;
    }
-   else if (mode == 'd')
+   else if (mode == 'D')
    {
       /* Disable */
       g_bToggleIJB = 0;
    }
-   else if (mode == 't')
+   else if (mode == 'T')
    {
       /* Toggle */
       g_bToggleIJB = !g_bToggleIJB;
