@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.17 2001/10/10 18:59:28 hal9 Exp $
+# $Id: junkbuster-rh.spec,v 1.19 2001/10/15 03:23:59 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.19  2001/10/15 03:23:59  hal9
+# Nits.
+#
 # Revision 1.17  2001/10/10 18:59:28  hal9
 # Minor change for init script.
 #
@@ -100,7 +103,7 @@ Conflicts: junkbuster-raw junkbuster-blank
 The Internet Junkbuster stops your browser from displaying the
 advertisement images that pervade many commercial web pages.  Since
 your browser has to download fewer images, surfing the web should be
-faster.
+faster. 
 
 %define ijbconf %{_sysconfdir}/junkbuster
 
@@ -108,13 +111,12 @@ faster.
 %setup -c -n ijbswa
 
 %build
-OPT_FLAGS="$RPM_OPT_FLAGS -Ipcre -Wall"
-./configure
-make "CFLAGS=$OPT_FLAGS"
+%configure
+make "CFLAGS=$RPM_OPT_FLAGS -Ipcre -Wall"
 strip junkbuster
 
 %pre
-/usr/sbin/useradd -d /etc/junkbuster -u 73 -r junkbust -s "" > /dev/null 2>&1 || /bin/true
+/usr/sbin/useradd -d /etc/junkbuster -u 73 -r junkbuster -s "" > /dev/null 2>&1 || /bin/true
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -150,19 +152,17 @@ cat config | \
     $RPM_BUILD_ROOT%{ijbconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' actionsfile >\
     $RPM_BUILD_ROOT%{ijbconf}/actionsfile
-perl -pi -e 's/JB_USER=\"junkbuster\"/JB_USER=\"junkbust\"/' \
-    $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/junkbuster
 
 %post
+# for upgrade from 2.0.x
+[ -f /var/log/junkbuster/junkbuster ] &&\
+ mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || /bin/true
+chown -R junkbuster:junkbuster /var/log/junkbuster 2>/dev/null
+chown -R junkbuster:junkbuster /etc/junkbuster 2>/dev/null
 if [ "$1" = "1" ]; then
      /sbin/chkconfig --add junkbuster
 	/sbin/service junkbuster condrestart > /dev/null 2>&1
 fi
-# for upgrade from 2.0.x
-chown junkbust:junkbust /var/log/junkbuster/* 2>/dev/null
-chown junkbust:junkbust /etc/junkbuster 2>/dev/null
-[ -f /var/log/junkbuster/junkbuster ] &&\
- mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || /bin/true
 
 %preun
 if [ "$1" = "0" ]; then
@@ -184,14 +184,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc junkbuster.weekly junkbuster.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
-%attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
+%attr(0744,junkbuster,junkbuster) %dir /var/log/junkbuster
 %config %{_sysconfdir}/logrotate.d/junkbuster
-%attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
+%attr(0744,junkbuster,junkbuster)/usr/sbin/junkbuster
 %{_mandir}/man8/*
 %config %{_sysconfdir}/rc.d/init.d/junkbuster
 
 
 %changelog
+* Wed Oct 24 2001 Hal Burigss <hal@foobox.net>
+- Back to user 'junkbuster' and fix configure macro.
+
 * Wed Oct 10 2001 Hal Burigss <hal@foobox.net>
 - More changes for user 'junkbust'. Init script had 'junkbuster'.
 
