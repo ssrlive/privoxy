@@ -79,14 +79,13 @@
   <table cellpadding=20 cellspacing=10 border=0 width=100%>
     <tr>
       <td bgcolor=#dddddd>
-        <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
-          <font size=+2><b> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></font></p>
+        <p><font size=+2><b>This is Privoxy (privacy enhancing proxy) @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></font></p>
       </td>
     </tr>
 
     <tr>
       <td bgcolor=#eeeeee>
-        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Internet Privoxy!</b></p>
+        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Privoxy!</b></p>
         <p>Please choose from the following options:</p>
         <ul>@menu@</ul>
       </td>
