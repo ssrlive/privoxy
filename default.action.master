@@ -1,8 +1,8 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa//current/Attic/default.action.master,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.1.2.9 2002/08/27 16:33:04 oes Exp $
+#  $Id: default.action.master,v 1.2 2002/09/04 15:32:10 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -421,6 +421,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -fast-redirects \
 +filter{js-annoyances} \
 +filter{html-annoyances} \
++filter{content-cookies} \
 +filter{webbugs} \
 +filter{popups} \
 -filter{frameset-borders} \
@@ -431,6 +432,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -filter{fun} \
 +filter{nimda} \
 -filter{shockwave-flash} \
++filter{quicktime-kioskmode} \
 -filter{js-events} \
 -filter{crude-parental} \
 -handle-as-image \
