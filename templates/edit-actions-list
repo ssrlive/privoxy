@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-list,v $
+# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-list,v $
 #
 # Purpose     :  Template used to edit the actions file.
 # 
@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.23  2002/05/12 15:53:10  jongfoster
+#    Restoring CVS log information accidentally removed in
+#    my previous commit.
+#
 #    Revision 1.22  2002/05/12 15:45:33  jongfoster
 #    Applying [Patch 552094] New templates for edit-actions-list
 #    This cleans up the templates by:
@@ -118,7 +122,7 @@
 #   MS Internet Explorer 4+  - Untested
 #   MS IE 3.x, NS3.x         - Untested (Don't support CSS, so everything
 #                              should work, but will look ugly).
-#   Mozilla >=0.6            - Untested
+#   Mozilla >=0.6            - Yes - everything works.
 #
 # All browsers should work, you just might not get the pretty CSS buttons.
 #
@@ -201,7 +205,21 @@ td.indentbuttons {
 function rm_p(pattern,curtext)
 {
    if (window.confirm("Are you sure you want to delete this URL pattern?\nPattern is: "+unescape(curtext)))
-   { window.location.href="edit-actions-remove-url?f=@f@&v=@v@&p="+pattern+"#l"+pattern; }
+   { window.location.href="edit-actions-remove-url?f=@f@&v=@v@&p="+pattern; }
+   return false;
+}
+
+function e_p(pattern,curtext)
+{
+   if(newtext=window.prompt("Edit the pattern to your needs:", unescape(curtext)))
+   { window.location.href="edit-actions-url?f=@f@&v=@v@&p="+pattern+"&u="+escape(newtext); }
+   return false;
+}
+
+function a_p(section)
+{
+   if(newtext=window.prompt("Enter the new pattern:", ""))
+   { window.location.href="edit-actions-add-url?f=@f@&v=@v@&s="+section+"&u="+escape(newtext); }
    return false;
 }
 
@@ -236,7 +254,7 @@ function rm_p(pattern,curtext)
 	<h2>What is all this?</h2>
         <p>
          If you haven't already done so, it is <b>strongly recommended</b> that you at 
-         least skim <a href="@user-manual@@helplink@ACTIONS-FILE">the
+         least skim <a href="@user-manual@@actions-help-prefix@ACTIONS-FILE">the
          chapter on the actions file</a> in the <a href="@user-manual@">user manual</a>
          before making any changes. You will also find a comprehensive list of all available actions
          there.
@@ -255,7 +273,7 @@ function rm_p(pattern,curtext)
          <a href="http://www.privoxy.org/">Privoxy.org</a> on a regular basis. 
          It is therefore <b>not recommended</b> that you add your private
          rules here, since they will be lost if you install an update in the future.
-         Put your rules in a separate actions file, like user.action instead.
+         Put your rules in a separate actions file, like <tt>user.action</tt> instead.
         </p>
         <!-- @else-not-default-action@@endif-default-action@ -->
       </td>
@@ -274,21 +292,25 @@ function rm_p(pattern,curtext)
 
     <!-- @if-all-urls-present-then@ -->
     <tr>
-      <td class="container">
-<table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
-<tr class="actions"><td class="header">Actions</td></tr>
-<tr class="actions"><td class="indentbuttons">
-<a name="l@all-urls-s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a>
-@all-urls-buttons@
-</td></tr>
-<tr class="actions"><td class="action">@all-urls-actions@</td></tr>
-<tr class="url"><td class="header">URL patterns</td></tr>
-<tr class="url"><td class="indentbuttons">/ &nbsp; <i>(Matches all requests)</a></td></tr>
-<tr class="adv"><td class="header">Advanced</td></tr>
-<tr class="adv"><td class="indentbuttons">
-<a href="easa?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert new section below</a>
-</td></tr>
-</table>
+      <td class="container"><a name="l@all-urls-s@"></a>
+        <table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
+          <tr class="actions"><td class="header">Actions</td></tr>
+          <tr class="actions">
+            <td class="indentbuttons">
+              <a href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a>
+              @all-urls-buttons@
+            </td>
+          </tr>
+          <tr class="actions"><td class="action">@all-urls-actions@</td></tr>
+          <tr class="url"><td class="header">URL patterns</td></tr>
+          <tr class="url"><td class="indentbuttons">/ &nbsp; <i>(Matches all requests)</a></td></tr>
+          <tr class="adv"><td class="header">Advanced</td></tr>
+          <tr class="adv">
+            <td class="indentbuttons">
+              <a href="easa?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert new section below</a>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
     <!-- @else-not-all-urls-present@@endif-all-urls-present@ -->
