@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.4 2001/11/16 00:46:31 jongfoster Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.5 2002/03/24 12:03:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -7,7 +7,7 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.4 2001/11/16 00:46:31 jongf
  *                workspace tray icon
  *
  * Copyright   :  Written by and Copyright (C) 2001-2002 members of
- *                the Privoxy team.  http://privoxy.org/
+ *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.4 2001/11/16 00:46:31 jongf
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.5  2002/03/24 12:03:47  jongfoster
+ *    Name change
+ *
  *    Revision 1.4  2001/11/16 00:46:31  jongfoster
  *    Fixing compiler warnings
  *

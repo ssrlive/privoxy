@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.21 2002/03/24 12:07:35 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.22 2002/03/24 12:48:23 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -7,7 +7,7 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.21 2002/03/24 12:07:35 jongfoster E
  *                ouputting strings, processing messages and so on.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2002 members of
- *                the Privoxy team.  http://privoxy.org/
+ *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.21 2002/03/24 12:07:35 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.22  2002/03/24 12:48:23  jongfoster
+ *    Fixing doc links
+ *
  *    Revision 1.21  2002/03/24 12:07:35  jongfoster
  *    Consistern name for filters file
  *

@@ -1,6 +1,6 @@
 #ifndef W32RES_H_INCLUDED
 #define W32RES_H_INCLUDED
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.11 2002/03/24 12:03:47 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.12 2002/03/24 12:07:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Identifiers for Windows GUI resources.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2002 members of
- *                the Privoxy team.  http://privoxy.org/
+ *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.12  2002/03/24 12:07:36  jongfoster
+ *    Consistern name for filters file
+ *
  *    Revision 1.11  2002/03/24 12:03:47  jongfoster
  *    Name change
  *

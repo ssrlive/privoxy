@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.6 2002/03/16 21:53:28 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.7 2002/03/24 12:03:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -6,7 +6,7 @@ const char win32_rcs[] = "$Id: win32.c,v 1.6 2002/03/16 21:53:28 jongfoster Exp 
  * Purpose     :  Win32 User Interface initialization and message loop
  *
  * Copyright   :  Written by and Copyright (C) 2001-2002 members of
- *                the Privoxy team.  http://privoxy.org/
+ *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.6 2002/03/16 21:53:28 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.7  2002/03/24 12:03:47  jongfoster
+ *    Name change
+ *
  *    Revision 1.6  2002/03/16 21:53:28  jongfoster
  *    VC++ Heap debug option
  *
