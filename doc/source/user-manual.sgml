@@ -65,11 +65,11 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <para>
  <application>Internet Junkbuster</application> is a web proxy with advanced
  filtering capabilities for protecting privacy, filtering web page content,
- managing cookies and removing ads, banners, pop-ups and other obnoxious
- Internet Junk. <application>Junkbuster</application> has a very flexible
- configuration and can be customized to suit individual needs and tastes.
- <application>Internet Junkbuster</application> has application for both 
- stand-alone systems and multi-user networks.
+ managing cookies, controlling access, and removing ads, banners, pop-ups and
+ other obnoxious Internet Junk. <application>Junkbuster</application> has a
+ very flexible configuration and can be customized to suit individual needs
+ and tastes. <application>Internet Junkbuster</application> has application
+ for both stand-alone systems and multi-user networks.
 </para>
 
 <para>
@@ -77,7 +77,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <application>Internet Junkbuster</application> and is incomplete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
- of version 3.0 is currently underway, and includes significant changes and
+ of version 3.0 is currently underway, and includes many significant changes and
  enhancements over earlier verions. The target release date for stable v3.0 is 
  December 2001.
 </para>
@@ -85,7 +85,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <para>
  Since this is a development version, some features are in the process of
  being implemented. This documentation may be slightly out of sync as a 
- result. And there <emphasis>are</emphasis> bugs! 
+ result. And there <emphasis>are</emphasis> bugs, though hopefully not many! 
 </para>
 
 
@@ -110,7 +110,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-   A browser based GUI configuration utility.
+   A browser based GUI configuration utility (not finished).
   </para>
  </listitem> 
 
@@ -162,7 +162,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <application>Junkbuster</application> is available as raw source code, or
  pre-compiled binaries. See the <ulink
  url="http://sourceforge.net/projects/ijbswa/">Junkbuster Home Page</ulink>
- for current releases. <application>Junkbuster</application> is also available
+ for current release info. <application>Junkbuster</application> is also available
  via <ulink
  url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
  This is the recommended approach at this time. But please be aware that CVS 
@@ -241,7 +241,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.8-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.9-1.src.rpm
 </para>
 
 <para>
@@ -250,7 +250,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
  </screen>
 </para>
 
@@ -280,10 +280,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/suse/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/suse/SRPMS/junkbuster-2.9.8-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/suse/SRPMS/junkbuster-2.9.9-1.src.rpm
 </para>
 
 <para>
@@ -292,7 +292,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
  </screen>
 </para>
 
@@ -360,8 +360,8 @@ Thanx David Schmidt!
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-win"><title>Windows</title>
-<para>I need help on this. Not a clue here. Also for 
-configuration section below.
+<para>Click-click. (I need help on this. Not a clue here. Also for 
+configuration section below. HB.)
 </para>
 </sect2>
 
@@ -409,7 +409,8 @@ configuration section below.
    <para>
      The main configuration file is named <filename>config</filename>
      on Linux, Unix, BSD, and OS/2, and <filename>junkbustr.txt</filename> on
-     Windows.
+     Windows. On Amiga, it is
+     <filename>AmiTCP:db/junkbuster/config</filename>.
    </para>
   </listitem> 
 
@@ -1160,7 +1161,7 @@ configuration section below.
 <title>Forwarding</title>
 
 <para>
- This feature allows routing of HTTP requests via multiple proxies.
+ This feature allows chaining of HTTP requests via multiple proxies.
  It can be used to better protect privacy and confidentiality when
  accessing specific domains by routing requests to those domains
  to a special purpose filtering proxy such as lpwa.com.
@@ -1418,8 +1419,11 @@ configuration section below.
   <MSGText> 
    <literallayout>
   # Define junkbuster as parent cache 
+ <!-- per feedback from user...
   cache_peer 127.0.0.1 8000 parent 0 no-query 
-
+ --> 
+  cache_peer 127.0.0.1 parent 8000 0 no-query
+  
   # Define ACL for protocol FTP 
   acl FTP proto FTP 
 
@@ -2428,13 +2432,15 @@ Removed references to Win32. HB 09/23/01
 <title>Aliases</title>
 <para>
  Custom <quote>actions</quote>, known to <application>Junkbuster</application>
- as <quote>aliases</quote>, can be defined by combing other <quote>actions</quote>.
+ as <quote>aliases</quote>, can be defined by combining other <quote>actions</quote>.
  These can in turn be invoked just like the built-in <quote>actions</quote>.
  Currently, an alias can contain any character except space, tab, <quote>=</quote>,
  <quote>{</quote> or <quote>}</quote>. But please use only <quote>a</quote>-
  <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
- <quote>-</quote>. Alias names are not case sensitive, and must be defined 
- before they are used.
+ <quote>-</quote>. Alias names are not case sensitive, and 
+ <emphasis>must be defined  before anything</emphasis> else in
+ <filename>actionsfile</filename>! And there can only be one set of
+ <quote>aliases</quote> of defined.
 </para>
 
 <para>
@@ -2445,10 +2451,8 @@ Removed references to Win32. HB 09/23/01
  <literal>
   <MSGText> 
    <literallayout>
- # Aliases
+ # Useful customer aliases we can use later. These must come first!
  {{alias}}
-
- # Useful aliases
  +no-cookies = +no-cookies-set +no-cookies-read
  -no-cookies = -no-cookies-set -no-cookies-read
  fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
@@ -2480,6 +2484,7 @@ Removed references to Win32. HB 09/23/01
  {fragile}
  .office.microsoft.com
  .windowsupdate.microsoft.com
+ .nytimes.com
 
  # Shopping sites - still want to block ads.
  {shop}
@@ -2576,14 +2581,39 @@ Removed references to Win32. HB 09/23/01
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
 <para>
- Install package, then run and enjoy! Be sure your browser is set to use 
+ Install package, then run and enjoy! <application>Junbuster</application> 
+ accepts only one command line option -- the configuration file to be 
+ used. Example Unix startup command:
+</para>
+
+<para>
+ <screen>
+ 
+ # /usr/sbin/junkbuster /etc/junkbuster/config &
+ 
+ </screen>
+</para>
+
+<para>
+ If no configuration file is specified on the command line,
+ <application>Junkbuster</application> will look for a file named
+ <filename>config</filename> in the current directory. Except on Amiga where
+ it will look for <filename>AmiTCP:db/junkbuster/config</filename> and Win32
+ where it will try <filename>junkbstr.txt</filename>. If no file is specified 
+ on the command line and no default configuration file can be found, 
+ <application>Junkbuster</application> will fail to start.
+</para>
+
+<para>
+ Be sure your browser is set to use 
  the proxy which is by default at localhost, port 8000. With 
  <application>Netscape</application> (and <application>Mozilla</application>),
  this can be set under <literal>Edit -&gt; Preferences -&gt; Advanced -&gt;
  Proxies -&gt; HTTP Proxy</literal>. For <application>Internet
- Explorer</application>: <literal>Internet Properties -&gt; Connections -&gt;
- LAN Setting</literal>. Then, check <quote>Use Proxy</quote> and fill in the 
- appropriate info (Address: localhost, Port: 8000).
+ Explorer</application>: <literal>Tools &gt; Internet Properties -&gt;
+ Connections -&gt; LAN Setting</literal>. Then, check <quote>Use Proxy</quote>
+ and fill in the appropriate info (Address: localhost, Port: 8000). 
+ Include if HTTPS proxy support too.
 </para>
 
 <para>
@@ -2600,11 +2630,19 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
+ If a particular site shows problems loading properly, try adding it 
+ to the <literal>{fragile}</literal> section of
+ <filename>actionsfile</filename>. This will turn off most actions for 
+ this site.
+</para>
+
+<para>
  HTTP/1.1 support is not fully implemented. If browsers that
- support HTTP/1.1 (like Mozilla or recent versions of I.E.) experience 
- problems, you might try to force HTTP/1.0 compatiblity. For Mozilla, look under <literal>Edit -&gt;
- Preferences -&gt; Debug -&gt; Networking</literal>. Or set the 
- <quote>+downgrade</quote> config option in <filename>actionsfile</filename>.
+ support HTTP/1.1 (like <application>Mozilla</application> or recent versions
+ of I.E.) experience problems, you might try to force HTTP/1.0 compatiblity.
+ For Mozilla, look under <literal>Edit -&gt; Preferences -&gt; Debug -&gt;
+ Networking</literal>. Or set the <quote>+downgrade</quote> config option in
+ <filename>actionsfile</filename>.
 </para>
 
 <para>
@@ -2706,7 +2744,44 @@ communication (bugs, feature requests, etc.)
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See also</title>
-<para>To be filled. What should go here :/
+<para>
+ 
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://ijbswa.sourceforge.net/">http://ijbswa.sourceforge.net/</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp; <ulink url="http://privacy.net/analyze/">http://privacy.net/analyze/</ulink>
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   &nbsp;<ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>
+  </member>
+ </simplelist>
+
 </para>
 </sect1>
 
