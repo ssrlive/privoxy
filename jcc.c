@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.50 2001/10/25 03:40:48 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.51 2001/10/26 17:38:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.50 2001/10/25 03:40:48 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.51  2001/10/26 17:38:28  oes
+ *    Cosmetics
+ *
  *    Revision 1.50  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -1080,7 +1083,7 @@ static void chat(struct client_state *csp)
                 * switch to non-filtering mode, i.e. make & write the
                 * header, flush the socket and get out of the way.
                 */
-               if (csp->iob->eod - csp->iob->buf + BUFFER_SIZE > csp->config->buffer_limit)
+               if (((size_t)(csp->iob->eod - csp->iob->buf)) + (size_t)BUFFER_SIZE > csp->config->buffer_limit)
                {
                   log_error(LOG_LEVEL_ERROR, "Buffer size limit reached! Flushing and stepping back.");
 
