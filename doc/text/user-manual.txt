@@ -519,11 +519,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ??  View & change the current configuration                            
-        ??  View the source code version numbers                               
-        ??  View the request headers.                                          
-        ??  Look up which actions apply to a URL and why                       
-        ??  Toggle Privoxy on or off                                           
+        ?  View & change the current configuration                             
+        ?  View the source code version numbers                                
+        ?  View the request headers.                                           
+        ?  Look up which actions apply to a URL and why                        
+        ?  Toggle Privoxy on or off                                            
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -1556,23 +1556,39 @@ console.
 The actions files are used to define what actions Privoxy takes for which URLs,
 and thus determines how ad images, cookies and various other aspects of HTTP
 content and transactions are handled, and on which sites (or even parts
-thereof). There are three such files included with Privoxy, with slightly
-different purposes. default.action sets the default policies. standard.action
-is used by Privoxy and the web based editor to set pre-defined values (and
-normally should not be edited). Local exceptions are best done in user.action.
-The content of these can all be viewed and edited from http://
-config.privoxy.org/show-status.
+thereof). There are three such files included with Privoxy (as of version
+2.9.15), with differing purposes:
 
-Anything you want can be blocked, including ads, banners, or just some
-obnoxious URL that you would rather not see is done here. Cookies can be
-accepted or rejected, or accepted only during the current browser session (i.e.
-not written to disk), content can be modified, JavaScripts tamed, user-tracking
-fooled, and much more. See below for a complete list of available actions.
+  * standard.action - is used by the web based editor, to set various
+    pre-defined sets of rules for the default actions section in
+    default.action. These have increasing levels of aggressiveness. It is not
+    recommend to edit this file.
+   
+  * default.action - is the primary action file that sets the initial values
+    for all actions. It is intended to provide a base level of functionality
+    for Privoxy's array of features. So it is a set of broad rules that should
+    work reasonably well for users everywhere. This is the file that the
+    developers are keeping updated, and making available to users.
+   
+  * user.action - is intended to be for local site preferences and exceptions.
+    As an example, if your ISP or your bank has specific requirements, and need
+    special handling, this kind of thing should go here. This file will not be
+    upgraded.
+   
+The list of actions files to be used are defined in the main configuration
+file, and are processed in the order they are defined. The content of these can
+all be viewed and edited from http://config.privoxy.org/show-status.
 
 An actions file typically has sections. Near the top, "aliases" are optionally
 defined (discussed below), then the default set of rules which will apply
 universally to all sites and pages. And then below that, exceptions to the
 defined universal policies.
+
+Actions can be used to block anything you want, including ads, banners, or just
+some obnoxious URL that you would rather not see. Cookies can be accepted or
+rejected, or accepted only during the current browser session (i.e. not written
+to disk), content can be modified, JavaScripts tamed, user-tracking fooled, and
+much more. See below for a complete list of actions.
 
 -------------------------------------------------------------------------------
 
@@ -2707,12 +2723,14 @@ Now a few examples of some things that one might do with a user.action file.
  { +block }
  www.my-isp-example.com/logo[0-9].gif
 
+
 # Say the site where you do your homebanking needs to open
 # popup windows, but you have chosen to kill popups by
 # default. This will allow it for your-example-bank.com:
 #
  { -filter{popups} -kill-popups }
  .my-example-bank.com
+
 
 # This site is delicate, and requires kid-glove 
 # treatment.
@@ -3371,7 +3389,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
-  Final results:                                                                   
+ Final results:                                                                    
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3386,7 +3404,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3412,7 +3430,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
-  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
+ Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3431,7 +3449,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
-  { -block }                                                                   
+ { -block }                                                                    
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3440,7 +3458,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3450,7 +3468,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
-  {shop}                                                                       
+ {shop}                                                                        
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3460,7 +3478,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
-  {-filter}                                                                    
+ {-filter}                                                                     
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site

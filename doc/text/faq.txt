@@ -57,19 +57,19 @@ Table of Contents
     3.3. The "actions" concept confuses me. Please list some of these
         "actions".
     3.4. How are actions files configured? What is the easiest way to do this?
-    3.5. Why can I change the configuration with a browser? Does that not raise
+    3.5. There are several different "actions" files. What are the differences?
+    3.6. Why can I change the configuration with a browser? Does that not raise
         security issues?
-    3.6. What is "default.filter"?
-    3.7. How can I set up Privoxy to act as a proxy for my LAN?
-    3.8. Instead of ads, now I get a checkerboard pattern. I don't want to see
+    3.7. What is "default.filter"?
+    3.8. How can I set up Privoxy to act as a proxy for my LAN?
+    3.9. Instead of ads, now I get a checkerboard pattern. I don't want to see
         anything.
-    3.9. Why would anybody want to see a checkerboard pattern?
-    3.10. I see large red banners on some pages that say "Blocked". Why and how
+    3.10. Why would anybody want to see a checkerboard pattern?
+    3.11. I see large red banners on some pages that say "Blocked". Why and how
         do I get rid of this?
-    3.11. I cannot see all of the "Blocked" page banner. All I see is a bright
-        red square.
-    3.12. Can Privoxy run as a service on Win2K/NT?
-    3.13. How can I make Privoxy work with other proxies like Squid?
+    3.12. I cannot see all of the "Blocked" page banner. Help.
+    3.13. Can Privoxy run as a service on Win2K/NT?
+    3.14. How can I make Privoxy work with other proxies like Squid?
    
 4. Miscellaneous
    
@@ -101,7 +101,6 @@ Table of Contents
     5.2. I just added a new rule, but the steenkin ad is still getting through.
         How?
     5.3. One of my favorite sites does not work with Privoxy. What can I do?
-    5.4. What time is it?
    
 7. Contacting the developers, Bug Reporting and Feature Requests
    
@@ -122,12 +121,12 @@ Table of Contents
 
 1.1. What is this new version of Privoxy?
 
-The original Internet Junkbuster&trade; (tm) is a copyrighted product of 
-Junkbusters Corporation. Development of this effort stopped some time ago as of
-version 2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to
-rekindle development. Other developers subsequently joined with Stefan, and
-have since added many new features, refinements and enhancements. The result of
-this effort is Privoxy.
+The original Internet JunkbusterTM (tm) is a copyrighted product of Junkbusters
+Corporation. Development of this effort stopped some time ago as of version
+2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to rekindle
+development. Other developers subsequently joined with Stefan, and have since
+added many new features, refinements and enhancements. The result of this
+effort is Privoxy.
 
 Privoxy has evolved from the Junkbuster 2.0.2 code base, and has advanced
 significantly at this point.
@@ -411,17 +410,13 @@ minor changes along the way.
 
 "actions" files are where various actions that Privoxy might take, are
 configured. Typically, you would define a set of default actions that apply to
-all URLs, then add exceptions to these defaults.
+all URLs, then add exceptions to these defaults where needed.
 
 Actions can be defined on a per site basis, or for groups of sites. Actions can
 also be grouped together and then applied to one or more sites. There are many
 possible actions that might apply to any given site. As an example, if we are
 blocking cookies as one of our default actions, but need to accept cookies from
 a given site, we would define this in our "actions" file. 
-
-Privoxy comes with several default actions files, with varying degrees of
-filtering and blocking, as starting points for your own configuration (see
-below).
 
 -------------------------------------------------------------------------------
 
@@ -434,15 +429,28 @@ These are all explained in the user-manual. Please refer to that.
 3.4. How are actions files configured? What is the easiest way to do this?
 
 The easiest way to do this, is to access Privoxy with your web browser at http:
-//p.p/, and then select "Edit the actions list" from the selection list. You
-can also do this by editing the appropriate file with a text editor.
+//p.p/, and then select "View & change the current configuration" from the
+selection list. You can also do this by editing the appropriate file with a
+text editor.
 
 Please see the user-manual for a detailed explanation of these and other
 configuration files, and their various options and syntax.
 
 -------------------------------------------------------------------------------
 
-3.5. Why can I change the configuration with a browser? Does that not raise
+3.5. There are several different "actions" files. What are the differences?
+
+As of Privoxy v2.9.15, three actions files are being included, to be used for
+different purposes. These are default.action, standard.action, and user.action.
+Please see the User Manual for an explanation of each.
+
+Earlier versions included three different versions default.action files. The
+new scheme allows for greater flexibility of local configuration, and for
+browser based configuration.
+
+-------------------------------------------------------------------------------
+
+3.6. Why can I change the configuration with a browser? Does that not raise
 security issues?
 
 What I don't understand, is how I can browser edit the config file as a regular
@@ -463,13 +471,13 @@ Note that normally only local users can connect to Privoxy, so this is not
 
 -------------------------------------------------------------------------------
 
-3.6. What is "default.filter"?
+3.7. What is "default.filter"?
 
-The "default.filter" file is used to "filter" any web page content. By
-"filtering" we mean it can modify, remove, or change anything on the page,
-including HTML tags, and JavaScript. Regular expressions are used to accomplish
-this, and operate on a line by line basis. This is potentially a very powerful
-feature, but requires some expertise.
+The "default.filter" file is where "filters" are defined, which are used to
+"filter" any web page content. By "filtering" we mean it can modify, remove, or
+change anything on the page, including HTML tags, and JavaScript. Regular
+expressions are used to accomplish this, and operate on a line by line basis.
+This is potentially a very powerful feature, but requires some expertise.
 
 If you are familiar with regular expressions, and HTML, you can look at the
 provided default.filter with a text editor and see some of things it can be
@@ -477,11 +485,11 @@ used for.
 
 Presently, there is no GUI editor option for this part of the configuration,
 but you can disable/enable various sections of the included default file with
-the "Actions List Editor" from your browser.
+the "View & change the current configuration" from your browser.
 
 -------------------------------------------------------------------------------
 
-3.7. How can I set up Privoxy to act as a proxy for my LAN?
+3.8. How can I set up Privoxy to act as a proxy for my LAN?
 
 By default, Privoxy only responds to requests from localhost. To have it act as
 a server for a network, this needs to be changed in the main config file where
@@ -496,25 +504,25 @@ to use this address and port number.
 
 -------------------------------------------------------------------------------
 
-3.8. Instead of ads, now I get a checkerboard pattern. I don't want to see
+3.9. Instead of ads, now I get a checkerboard pattern. I don't want to see
 anything.
 
 This is a configuration option for images that Privoxy is stopping. You have
 the choice of a checkerboard pattern, a transparent 1x1 GIF image (aka
 "blank"), or a custom URL of your choice. Note that to fit this category, the
-URL must match both the "+image" and "+block" actions.
+URL must match both the "+handle-as-image" and "+block" actions.
 
-If you want to see nothing, then change the "+image-blocker" action to
-"+image-blocker{blank}". This can be done from the "Edit Actions List"
-selection at http://p.p/. Or by hand editing the appropriate actions file. This
-will only effect what is defined as "images" though. Also, some URLs that
-generate the bright red "Blocked" banner, can be moved to the "+image-blocker"
-section for the same reason, but there are some limits and risks to this (see
-below).
+If you want to see nothing, then change the "+set-image-blocker" action to
+"+image-blocker{blank}". This can be done from the "View & change the current
+configuration" selection at http://p.p/. Or by hand editing the appropriate
+actions file. This will only effect what is defined as "images" though. Also,
+some URLs that generate the bright red "Blocked" banner, can be moved to the
+"+set-image-blocker" section for the same reason, but there are some limits and
+risks to this (see below).
 
 -------------------------------------------------------------------------------
 
-3.9. Why would anybody want to see a checkerboard pattern?
+3.10. Why would anybody want to see a checkerboard pattern?
 
 This can be helpful for troubleshooting problems. It might also be good for
 anyone new to Privoxy so that they can see if their favorite pages are
@@ -523,23 +531,23 @@ important.
 
 -------------------------------------------------------------------------------
 
-3.10. I see large red banners on some pages that say "Blocked". Why and how do
+3.11. I see large red banners on some pages that say "Blocked". Why and how do
 I get rid of this?
 
-These are URLs that match something in one of Privoxy's block actions (+block).
-It is meant to be a warning so that you know something has been blocked and an
-easy way for you to see why. These are handled differently than what has been
-defined explicitly as "images" (e.g. ad banners). Depending on the URL itself,
-it is sometimes hard for Privoxy to really know whether there is indeed an ad
-image there or not. And there are limitations as to what Privoxy can do to
-"fool" the browser.
+These are URLs that match something in one of Privoxy's block actions ("+block"
+). It is meant to be a warning so that you know something has been blocked and
+an easy way for you to see why. These are handled differently than what has
+been defined explicitly as "images" (e.g. ads that are GIF image files).
+Depending on the URL itself, it is sometimes hard for Privoxy to really know
+whether there is indeed an ad image there or not. And there are limitations as
+to what Privoxy can do to "fool" the browser.
 
 For instance, if the ad is in a frame, then it is embedded in the separate HTML
-page used for the frame. In this case, you cannot just substitute an aribitray
+page used for the frame. In this case, you cannot just substitute an aribitrary
 image (like we would for a "blank" image), for an HTML page. The browser is
-expecting an HTML page, and that is what it must have for frames. So this
-situation can be a little trickier to deal with, and Privoxy will use the
-"Blocked" page.
+expecting an HTML page, and that is what it must have for frames. Such
+situations can be a little trickier to deal with, and Privoxy may show the
+"Blocked" page, despite your best efforts.
 
 If you want these to be treated as if they were images, so that they can be
 made invisible, you can try moving the offending URL from the "+block" section
@@ -556,22 +564,25 @@ or create your own page, and use this to replace templates/blocked, which is
 what Privoxy uses to display the "Blocked" page.
 
 Another way to deal with this is find why and where Privoxy is blocking the
-frame, and diable this. Then let the "+image-blocker" action handle the ad that
-is embedded in the frame's HTML page.
+frame, and diable this. Then let the "+set-image-blocker" action handle the ad
+that is embedded in the frame's HTML page.
 
 -------------------------------------------------------------------------------
 
-3.11. I cannot see all of the "Blocked" page banner. All I see is a bright red
-square.
+3.12. I cannot see all of the "Blocked" page banner. Help.
 
-There is not enough space to fit the entire page. Try right clicking on the
-visible, red portion, and select "Show Frame", or equivalent. This will usually
-allow you to see the entire Privoxy "Blocked" page, and from there you can see
-just what is being blocked, and why.
+There is not enough available space to fit the entire Blocked page. Try right
+clicking on the visible portion, and select "Show Frame", or equivalent. This
+will usually allow you to see the entire Privoxy "Blocked" page, and from there
+you can see just what is being blocked, and why.
+
+As of Privoxy 2.9.14, the Blocked banner page is re-sizeable, and tries to
+adjust to the allotted space. There may be occassions where there just isn't
+enough room to display much of anything useful though.  
 
 -------------------------------------------------------------------------------
 
-3.12. Can Privoxy run as a service on Win2K/NT?
+3.13. Can Privoxy run as a service on Win2K/NT?
 
 Yes, it can run as a system service using srvany.exe. The only catch is that
 this will effectively disable the Privoxy icon in the taskbar. You can have one
@@ -583,7 +594,7 @@ details, and a sample configuration.
 
 -------------------------------------------------------------------------------
 
-3.13. How can I make Privoxy work with other proxies like Squid?
+3.14. How can I make Privoxy work with other proxies like Squid?
 
 This can be done. See the user manual, which describes how to do this. 
 
@@ -608,14 +619,11 @@ the entire page is buffered before displaying. See below.
 4.2. I noticed considerable delays in page requests compared to the old
 Junkbuster. What's wrong?
 
-Using the default filtering configuration, I noticed considerable delays in
-page requests compared to the old Junkbuster. Loading pages with large contents
-seemed to take forever, then suddenly delivering all the content at once.
-
-The whole content must be loaded in order to filter, and nothing is is sent to
-the browser during this time. The loading time does not really change in real
-numbers, but the feeling is different, because most browsers are able to start
-rendering incomplete content, giving the user a feeling of "it works".
+The entire page content must be loaded into memory in order for the filtering
+mechanism to work, and nothing is sent to the browser during this time. The
+loading time does not really change in real numbers, but the feeling is
+different, because most browsers are able to start rendering incomplete
+content, giving the user a feeling of "it works".
 
 To modify the content of a page (i.e. make frames resizeable again, etc.) and
 not just replace ads, Privoxy needs to download the entire page first, do its
@@ -871,30 +879,24 @@ show-url-info and see if any actions match your new rule.
 First verify that it is indeed a Privoxy problem, by disabling Privoxy
 filtering and blocking. Go to http://p.p/ and click on "Toggle Privoxy On or
 Off", then disable it. Now try that page again. It's probably a good idea to
-flush the browser cache as well.
+flush the browser cache as well with Shift+Reload to flush caches.
 
 If still a problem, go to "Show which actions apply to a URL and why" from 
 http://p.p/ and paste the full URL of the page in question into the prompt. See
 which actions are being applied to the URL. Now, armed with this information,
-go to "Edit the actions list". Here you should see various sections that have
-various Privoxy features disabled for specific sites. Most disabled "actions"
-will have a "-" (minus sign) in front of them. Some aliases are used just to
-disable other actions, e.g. "shop" and "fragile", and won't necessarily use a
-"+" or "-" sign. Add your problem page URL to one of these sections that looks
-like it is disabling the feature that is causing the problem. Rember to flush
-your browser's caches when making such changes! As a last resort, try "fragile"
-which disables most actions. Now re-try the page. There might be some trial and
-error involved. This is discussed in a little more detail in the user-manual
-appendix. 
+go to "View & change the current configuration". Here you should see various
+sections that have various Privoxy features disabled for specific sites. Most
+disabled "actions" will have a "-" (minus sign) in front of them. Some aliases
+are used just to disable other actions, e.g. "shop" and "fragile", and won't
+necessarily use a "+" or "-" sign. Add your problem page URL to one of these
+sections that looks like it is disabling the feature that is causing the
+problem. Rember to flush your browser's caches when making such changes! As a
+last resort, try "fragile" which disables most actions. Now re-try the page.
+There might be some trial and error involved. This is discussed in more detail
+in the user-manual appendix. 
 
 Alternately, if you are comfortable with a text editor, you can accomplish the
 same thing by editing the appropriate "actions" file.
-
--------------------------------------------------------------------------------
-
-5.4. What time is it?
-
-Time for you to go!
 
 -------------------------------------------------------------------------------
 
