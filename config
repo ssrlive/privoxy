@@ -1,7 +1,7 @@
 #  Sample Configuration file for Privoxy
 
 #
-# $Id: config,v 1.31 2002/03/24 12:58:57 swa Exp $
+# $Id: config,v 1.32 2002/04/02 20:11:35 oes Exp $
 #
 
 #  Table of Contents
@@ -308,9 +308,9 @@ toggle 1
 #  require up to buffer-limit Kbytes *each*, unless you have set
 #  single-threaded below.
 #
-#  Default: 4069, i.e. 4 MB
+#  Default: 4096, i.e. 4 MB
 #
-buffer-limit 4069
+buffer-limit 4096
 
 
 #

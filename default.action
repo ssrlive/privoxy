@@ -30,13 +30,13 @@ shop        = -filter -no-cookies-keep
 +filter{webbugs} \
 +filter{nimda} \
 +filter{banners-by-size} \
-+no-compression \
 +hide-forwarded \
 +hide-from{block} \
 +hide-referer{forge} \
 -hide-user-agent \
 -image \
 +image-blocker{pattern} \
++no-compression \
 +no-cookies-keep \
 -no-cookies-read \
 -no-cookies-set \

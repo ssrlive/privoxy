@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.64 2002/04/03 22:28:03 gliptak Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.65 2002/04/04 00:36:36 gliptak Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.65  2002/04/04 00:36:36  gliptak
+ *    always use pcre for matching
+ *
  *    Revision 1.64  2002/04/03 22:28:03  gliptak
  *    Removed references to gnu_regex
  *
@@ -993,7 +996,7 @@ struct configuration_spec
    int debug;
    int multi_threaded;
 
-   /* Features that can be enabled/disabled throuigh the config file */
+   /* Features that can be enabled/disabled through the config file */
    unsigned feature_flags;
 
    const char *logfile;
