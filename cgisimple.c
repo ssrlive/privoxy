@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.1 2001/09/16 17:08:54 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.2 2001/09/19 18:01:11 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.1 2001/09/16 17:08:54 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.2  2001/09/19 18:01:11  oes
+ *    Fixed comments; cosmetics
+ *
  *    Revision 1.1  2001/09/16 17:08:54  jongfoster
  *    Moving simple CGI functions from cgi.c to new file cgisimple.c
  *
@@ -61,11 +64,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.1 2001/09/16 17:08:54 jongfos
 #include "cgisimple.h"
 #include "list.h"
 #include "encode.h"
-#include "ssplit.h"
 #include "jcc.h"
 #include "filters.h"
 #include "actions.h"
-#include "errlog.h"
 #include "miscutil.h"
 #include "loadcfg.h"
 

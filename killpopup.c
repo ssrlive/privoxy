@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.8 2001/07/30 22:08:36 jongfoster Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.9 2001/07/31 14:44:22 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,9 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.8 2001/07/30 22:08:36 jongfos
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.9  2001/07/31 14:44:22  oes
+ *    Deleted unused size parameter from filter_popups()
+ *
  *    Revision 1.8  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -94,7 +97,6 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.8 2001/07/30 22:08:36 jongfos
 
 #include "project.h"
 #include "killpopup.h"
-#include "jcc.h"
 #include "errlog.h"
 
 const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
