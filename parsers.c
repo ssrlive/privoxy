@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.43 2001/11/23 00:26:38 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.44 2001/12/14 01:22:54 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.43 2001/11/23 00:26:38 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.44  2001/12/14 01:22:54  steudten
+ *    Remove 'user:pass@' from 'proto://user:pass@host' for the
+ *    new added header 'Host: ..'. (See Req ID 491818)
+ *
  *    Revision 1.43  2001/11/23 00:26:38  jongfoster
  *    Fixing two really stupid errors in my previous commit
  *
@@ -1675,10 +1679,14 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
        */
       char tempbuf[ BUFFER_SIZE ];
       time_t now; 
-      struct tm *tm_now; 
+      struct tm tm_now; 
       time (&now); 
-      tm_now = localtime (&now); 
-      strftime (tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", tm_now); 
+#ifdef HAVE_LOCALTIME_R
+       tm_now = *localtime_r(&now, &tm_now);
+#else
+       tm_now = *localtime (&now); 
+#endif
+      strftime(tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", &tm_now); 
 
       fprintf(csp->config->jar, "%s %s\t%s\n", tempbuf, csp->http->host, (s + v->len + 1));
    }
