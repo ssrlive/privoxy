@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.7 2001/08/05 16:06:20 jongfoster Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.8 2001/08/07 14:00:20 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.7 2001/08/05 16:06:20 jongfoster Exp $"
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.8  2001/08/07 14:00:20  oes
+ *    Fixed comment
+ *
  *    Revision 1.7  2001/08/05 16:06:20  jongfoster
  *    Modifiying "struct map" so that there are now separate header and
  *    "map_entry" structures.  This means that functions which modify a
@@ -89,11 +92,11 @@ const char list_rcs[] = "$Id: list.c,v 1.7 2001/08/05 16:06:20 jongfoster Exp $"
 #include <ctype.h>
 #include <string.h>
 
-#include <assert.h>
-
 #ifndef _WIN32
 #include <unistd.h>
 #endif
+
+#include <assert.h>
 
 #include "project.h"
 #include "jcc.h"
@@ -105,37 +108,196 @@ const char list_h_rcs[] = LIST_H_VERSION;
 
 /*********************************************************************
  *
+ * Function    :  list_init
+ *
+ * Description :  Create a new, empty list in user-allocated memory.
+ *                Caller should allocate a "struct list" variable,
+ *                then pass it to this function.
+ *                (Implementation note:  Rather than calling this
+ *                function, you can also just memset the memory to
+ *                zero, e.g. if you have a larger structure you 
+ *                want to initialize quickly.  However, that isn't 
+ *                really good design.)
+ *
+ * Parameters  :
+ *          1  :  the_list = pointer to list
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void init_list(struct list *the_list)
+{
+   memset(the_list, '\0', sizeof(*the_list));
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  destroy_list
+ *
+ * Description :  Destroy a string list (opposite of list_init).
+ *                On return, the memory used by the list entries has
+ *                been freed, but not the memory used by the_list
+ *                itself.  You should not re-use the_list without
+ *                calling list_init().
+ *
+ *                (Implementation note:  You *can* reuse the_list
+ *                without calling list_init(), but please don't.  
+ *                If you want to remove all entries from a list
+ *                and still have a usable list, then use 
+ *                list_remove_all().)
+ *
+ * Parameters  :
+ *          1  :  the_list = pointer to list
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void destroy_list (struct list *the_list)
+{
+   struct list_entry *cur_entry, *next_entry;
+
+   assert(the_list);
+
+   for (cur_entry = the_list->first; cur_entry ; cur_entry = next_entry)
+   {
+      next_entry = cur_entry->next;
+      freez((char *)cur_entry->str);
+      free(cur_entry);
+   }
+
+   the_list->first = NULL;
+   the_list->last = NULL;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  list_is_valid
+ *
+ * Description :  Check that a string list is valid.  The intended
+ *                usage is "assert(list_is_valid(the_list))".
+ *                Currently this checks that "the_list->last"
+ *                is correct, and that the list dosn't contain 
+ *                circular references.  It is likely to crash if
+ *                it's passed complete garbage.
+ *
+ * Parameters  :
+ *          1  :  the_list = pointer to list.  Must be non-null.
+ *
+ * Returns     :  1 if list is valid, 0 otherwise.
+ *
+ *********************************************************************/
+static int list_is_valid (const struct list *the_list)
+{
+   /*
+    * If you don't want this check, just change the line below
+    * from "#if 1" to "#if 0".
+    */
+#if 1
+   const struct list_entry *cur_entry;
+   const struct list_entry *last_entry = NULL;
+   int length = 0;
+
+   assert(the_list);
+
+   for (cur_entry = the_list->first; cur_entry ; cur_entry = cur_entry->next)
+   {
+      last_entry = cur_entry;
+
+      if (cur_entry->str)
+      {
+         /*
+          * Just check that this string can be accessed - i.e. it's a valid 
+          * pointer.
+          */
+         strlen(cur_entry->str);
+      }
+
+      /*
+       * Check for looping back to first
+       */
+      if ((length != 0) && (cur_entry == the_list->first))
+      {
+         return 0;
+      }
+
+      /*
+       * Arbitrarily limit length to prevent infinite loops.
+       */
+      if (++length > 1000)
+      {
+         return 0;
+      }
+
+      /*
+       * Check this isn't marked as the last entry, unless of course it's
+       * *really* the last entry.
+       */
+      if ((the_list->last == cur_entry) && (cur_entry->next != NULL))
+      {
+         /* This is the last entry, but there's data after it !!?? */
+         return 0;
+      }
+   }
+
+   return (the_list->last == last_entry);
+#else
+   return 1;
+#endif
+}
+
+/*********************************************************************
+ *
  * Function    :  enlist
  *
  * Description :  Append a string into a specified string list.
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
+ *          1  :  the_list = pointer to list
  *          2  :  str = string to add to the list (maybe NULL)
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on out-of-memory error.  On
+ *                error, the_list will be unchanged.
  *
  *********************************************************************/
-void enlist(struct list *header, const char *str)
+int enlist(struct list *the_list, const char *str)
 {
-   struct list *cur = (struct list *)malloc(sizeof(*cur));
-   struct list *last;
+   struct list_entry *cur;
 
-   if (cur)
+   assert(the_list);
+   assert(list_is_valid(the_list));
+
+   if (NULL == (cur = (struct list_entry *)zalloc(sizeof(*cur))))
    {
-      cur->str  = (str ? strdup(str) : NULL);
-      cur->next = NULL;
-
-      last = header->last;
-      if (last == NULL)
-      {
-         last = header;
-      }
-
-      last->next   = cur;
-      header->last = cur;
+      return 1;
    }
 
+   if (str)
+   {
+      if (NULL == (cur->str = strdup(str)))
+      {
+         free(cur);
+         return 1;
+      }
+   }
+   /* else { cur->str = NULL; }  - implied by zalloc */
+
+   /* cur->next = NULL;  - implied by zalloc */
+
+   if (the_list->last)
+   {
+      the_list->last->next = cur;
+      the_list->last = cur;
+   }
+   else
+   {
+      the_list->first = cur;
+      the_list->last = cur;
+   }
+
+   assert(list_is_valid(the_list));
+   return 0;
 }
 
 
@@ -147,28 +309,45 @@ void enlist(struct list *header, const char *str)
  *                string list.
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
+ *          1  :  the_list = pointer to list
  *          2  :  str = string to add to the list (maybe NULL)
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on out-of-memory error.  On
+ *                error, the_list will be unchanged.
  *
  *********************************************************************/
-void enlist_first(struct list *header, const char *str)
+int enlist_first(struct list *the_list, const char *str)
 {
-   struct list *cur = (struct list *)malloc(sizeof(*cur));
+   struct list_entry *cur;
 
-   if (cur)
+   assert(the_list);
+   assert(list_is_valid(the_list));
+
+   if (NULL == (cur = (struct list_entry *)zalloc(sizeof(*cur))))
    {
-      cur->str  = (str ? strdup(str) : NULL);
-      cur->next = header->next;
-
-      header->next = cur;
-      if (header->last == NULL)
-      {
-         header->last = cur;
-      }
+      return 1;
    }
 
+   if (str)
+   {
+      if (NULL == (cur->str = strdup(str)))
+      {
+         free(cur);
+         return 1;
+      }
+   }
+   /* else { cur->str = NULL; }  - implied by zalloc */
+   
+   cur->next = the_list->first;
+
+   the_list->first = cur;
+   if (the_list->last == NULL)
+   {
+      the_list->last = cur;
+   }
+
+   assert(list_is_valid(the_list));
+   return 0;
 }
 
 
@@ -178,49 +357,58 @@ void enlist_first(struct list *header, const char *str)
  *
  * Description :  Append a string into a specified string list,
  *                if & only if it's not there already.
- *                If the n argument is nonzero, only compare up to
- *                the nth character. 
+ *                If the num_significant_chars argument is nonzero,
+ *                only compare up to the nth character. 
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  str = string to add to the list (maybe NULL)
- *          3  :  n = number of chars to use for uniqueness test
+ *          1  :  the_list = pointer to list
+ *          2  :  str = string to add to the list
+ *          3  :  num_significant_chars = number of chars to use
+ *                for uniqueness test, or 0 to require an exact match.
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on out-of-memory error.  On
+ *                error, the_list will be unchanged.  "Success"
+ *                does not indicate whether or not the item was
+ *                already in the list.
  *
  *********************************************************************/
-void enlist_unique(struct list *header, const char *str, int n)
+int enlist_unique(struct list *the_list, const char *str,
+                  int num_significant_chars)
 {
-   struct list *last;
-   struct list *cur = header->next;
+   struct list_entry *cur_entry;
 
-   while (cur != NULL)
+   assert(the_list);
+   assert(list_is_valid(the_list));
+   assert(str);
+   assert(num_significant_chars >= 0);
+   assert((size_t)num_significant_chars <= strlen(str));
+
+   if (num_significant_chars > 0)
    {
-      if ((cur->str != NULL) && (
-         (n && (0 == strncmp(str, cur->str, n))) || 
-         (!n && (0 == strcmp(str, cur->str)))))
+      for (cur_entry = the_list->first; cur_entry != NULL; cur_entry = cur_entry->next)
       {
-         /* Already there */
-         return;
+         if ( (cur_entry->str != NULL)
+           && (0 == strncmp(str, cur_entry->str, num_significant_chars)))
+         {
+            /* Already there */
+            return 0;
+         }
       }
-      cur = cur->next;
+   }
+   else
+   {
+      /* Test whole string */
+      for (cur_entry = the_list->first; cur_entry != NULL; cur_entry = cur_entry->next)
+      {
+         if ( (cur_entry->str != NULL) && (0 == strcmp(str, cur_entry->str)))
+         {
+            /* Already there */
+            return 0;
+         }
+      }
    }
 
-   cur = (struct list *)malloc(sizeof(*cur));
-
-   if (cur != NULL)
-   {
-      cur->str  = (str ? strdup(str) : NULL); /* FIXME check retval */
-      cur->next = NULL;
-
-      last = header->last;
-      if (last == NULL)
-      {
-         last = header;
-      }
-      last->next   = cur;
-      header->last = cur;
-   }
+   return enlist(the_list, str);
 }
 
 
@@ -233,80 +421,81 @@ void enlist_unique(struct list *header, const char *str, int n)
  *                if & only if there isn't already a header with that name.
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  name = name of header to be added
- *          3  :  value = value of header to be added
+ *          1  :  the_list = pointer to list
+ *          2  :  name = HTTP header name (e.g. "Content-type")
+ *          3  :  value = HTTP header value (e.g. "text/html")
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on out-of-memory error.  On
+ *                error, the_list will be unchanged.  "Success"
+ *                does not indicate whether or not the header was
+ *                already in the list.
  *
  *********************************************************************/
-void enlist_unique_header(struct list *header, const char *name, const char *value)
+int enlist_unique_header(struct list *the_list, const char *name, const char *value)
 {
-   struct list *last;
-   struct list *cur = header->next;
    int length;
-   char *dummy;
+   int result;
+   char *str;
 
-   if (name == NULL || value == NULL) return;
+   assert(the_list);
+   assert(list_is_valid(the_list));
+   assert(name);
+   assert(value);
 
-   dummy = strdup(name);
-   dummy = strsav(dummy, ": ");
-   length = strlen(dummy);
-
-   while (cur != NULL)
+   length = strlen(name) + 2;
+   if (NULL == (str = (char *)malloc(length + strlen(value) + 1)))
    {
-      if ((cur->str != NULL) && 
-   		(0 == strncmp(dummy, cur->str, length)))
-      {
-         /* Already there */
-         return;
-      }
-      cur = cur->next;
+      return 1;
    }
+   strcpy(str, name);
+   str[length - 2] = ':';
+   str[length - 1] = ' ';
+   strcpy(str + length, value);
 
-   cur = (struct list *)malloc(sizeof(*cur));
+   result = enlist_unique(the_list, str, length);
 
-   if (cur != NULL)
-   {
-      cur->str  = strsav(dummy, value);
-      cur->next = NULL;
+   free(str);
 
-      last = header->last;
-      if (last == NULL)
-      {
-         last = header;
-      }
-      last->next   = cur;
-      header->last = cur;
-   }
+   assert(list_is_valid(the_list));
+
+   return result;
 }
 
 
 /*********************************************************************
  *
- * Function    :  destroy_list
+ * Function    :  list_remove_all
  *
- * Description :  Destroy a string list (opposite of enlist)
+ * Description :  Remove all entries from a list.  On return, the_list
+ *                is a valid, empty list.  Note that this is similar
+ *                to destroy_list(), but the difference is that this
+ *                function guarantees that the list structure is still 
+ *                valid after the call.
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
+ *          1  :  the_list = pointer to list
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void destroy_list(struct list *header)
+void list_remove_all(struct list *the_list)
 {
-   struct list *p, *n;
+   struct list_entry *cur_entry;
+   struct list_entry *next_entry;
 
-   for (p = header->next; p ; p = n)
+   assert(the_list);
+   assert(list_is_valid(the_list));
+
+   for (cur_entry = the_list->first; cur_entry ; cur_entry = next_entry)
    {
-      n = p->next;
-      freez(p->str);
-      free(p);
+      next_entry = cur_entry->next;
+      freez((char *)cur_entry->str);
+      free(cur_entry);
    }
 
-   memset(header, '\0', sizeof(*header));
+   the_list->first = the_list->last = NULL;
 
+   assert(list_is_valid(the_list));
 }
 
 
@@ -314,27 +503,32 @@ void destroy_list(struct list *header)
  *
  * Function    :  list_to_text
  *
- * Description :  "Flaten" a string list into 1 long \r\n delimited string,
- *                adding an empty line at the end.
+ * Description :  "Flatten" a string list into 1 long \r\n delimited string,
+ *                adding an empty line at the end.  NULL entries are ignored.
+ *                This function does not change the_list.
  *
  * Parameters  :
- *          1  :  h = pointer to list 'dummy' header
+ *          1  :  the_list = pointer to list
  *
  * Returns     :  NULL on malloc error, else new long string.
+ *                Caller must free() it.
  *
  *********************************************************************/
-char *list_to_text(struct list *h)
+char *list_to_text(const struct list *the_list)
 {
-   struct list *p;
+   struct list_entry *cur_entry;
    char *ret = NULL;
    char *s;
    int size = 2;
 
-   for (p = h->next; p ; p = p->next)
+   assert(the_list);
+   assert(list_is_valid(the_list));
+
+   for (cur_entry = the_list->first; cur_entry ; cur_entry = cur_entry->next)
    {
-      if (p->str)
+      if (cur_entry->str)
       {
-         size += strlen(p->str) + 2;
+         size += strlen(cur_entry->str) + 2;
       }
    }
 
@@ -347,11 +541,11 @@ char *list_to_text(struct list *h)
 
    s = ret;
 
-   for (p = h->next; p ; p = p->next)
+   for (cur_entry = the_list->first; cur_entry ; cur_entry = cur_entry->next)
    {
-      if (p->str)
+      if (cur_entry->str)
       {
-         strcpy(s, p->str);
+         strcpy(s, cur_entry->str);
          s += strlen(s);
          *s++ = '\r'; *s++ = '\n';
       }
@@ -359,7 +553,6 @@ char *list_to_text(struct list *h)
    *s++ = '\r'; *s++ = '\n';
 
    return(ret);
-
 }
 
 
@@ -370,36 +563,54 @@ char *list_to_text(struct list *h)
  * Description :  Remove a string from a specified string list.
  *
  * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  str = string to remove from the list
+ *          1  :  the_list = pointer to list
+ *          2  :  str = string to remove from the list - non-NULL
  *
  * Returns     :  Number of times it was removed.
  *
  *********************************************************************/
-int list_remove_item(struct list *header, const char *str)
+int list_remove_item(struct list *the_list, const char *str)
 {
-   struct list *prev = header;
-   struct list *cur = prev->next;
+   struct list_entry *prev = NULL;
+   struct list_entry *cur;
+   struct list_entry *next;
    int count = 0;
+
+   assert(the_list);
+   assert(list_is_valid(the_list));
+   assert(str);
+
+   cur = the_list->first;
 
    while (cur != NULL)
    {
+      next = cur->next;
+
       if ((cur->str != NULL) && (0 == strcmp(str, cur->str)))
       {
          count++;
 
-         prev->next = cur->next;
-         free(cur->str);
+         if (prev != NULL)
+         {
+            prev->next = next;
+         }
+         else
+         {
+            the_list->first = next;
+         }
+         free((char *)cur->str);
          free(cur);
       }
       else
       {
          prev = cur;
       }
-      cur = prev->next;
+      cur = next;
    }
 
-   header->last = prev;
+   the_list->last = prev;
+
+   assert(list_is_valid(the_list));
 
    return count;
 }
@@ -422,17 +633,24 @@ int list_remove_item(struct list *header, const char *str)
  *********************************************************************/
 int list_remove_list(struct list *dest, const struct list *src)
 {
-   struct list *cur = src->next;
+   struct list_entry *cur;
    int count = 0;
 
-   while (cur != NULL)
+   assert(src);
+   assert(dest);
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
+
+   for (cur = src->first; cur != NULL; cur = cur->next)
    {
       if (cur->str != NULL)
       {
          count += list_remove_item(dest, cur->str);
       }
-      cur = cur->next;
    }
+
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
 
    return count;
 }
@@ -442,35 +660,95 @@ int list_remove_list(struct list *dest, const struct list *src)
  *
  * Function    :  list_duplicate
  *
- * Description :  Duplicate a string list
+ * Description :  Copy a string list
  *
  * Parameters  :
- *          1  :  dest = pointer to destination for copy.  Caller allocs.
- *          2  :  src = pointer to source for copy.
+ *          1  :  dest = Destination list.  Must be a valid list.
+ *                       All existing entries will be removed.
+ *          1  :  src = pointer to source list for copy.
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on error.  On error, dest
+ *                will be empty.
  *
  *********************************************************************/
-void list_duplicate(struct list *dest, const struct list *src)
+int list_duplicate(struct list *dest, const struct list *src)
 {
-   struct list * cur_src = src->next;
-   struct list * cur_dest = dest;
+   struct list_entry * cur_src;
+   struct list_entry * cur_dest;
 
-   memset(dest, '\0', sizeof(*dest));
+   assert(src);
+   assert(dest);
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
 
-   while (cur_src)
+   list_remove_all(dest);
+
+   /* Need to process first entry specially so we can set dest->first */
+   cur_src = src->first;
+   if (cur_src)
    {
-      cur_dest = cur_dest->next = (struct list *)zalloc(sizeof(*cur_dest));
+      cur_dest = dest->first = (struct list_entry *)zalloc(sizeof(*cur_dest));
       if (cur_dest == NULL)
       {
-         return;
+         destroy_list(dest);
+
+         assert(list_is_valid(src));
+         assert(list_is_valid(dest));
+
+         return 1;
       }
-      cur_dest->str = strdup(cur_src->str);
-      cur_src = cur_src->next;
+
+      if (cur_src->str)
+      {
+         cur_dest->str = strdup(cur_src->str);
+         if (cur_dest->str == NULL)
+         {
+            destroy_list(dest);
+
+            assert(list_is_valid(src));
+            assert(list_is_valid(dest));
+
+            return 1;
+         }
+      }
+      /* else { cur_dest->str = NULL; }  - implied by zalloc */
+
+      /* Now process the rest */
+      for (cur_src = cur_src->next; cur_src; cur_src = cur_src->next)
+      {
+         cur_dest = cur_dest->next = (struct list_entry *)zalloc(sizeof(*cur_dest));
+         if (cur_dest == NULL)
+         {
+            destroy_list(dest);
+
+            assert(list_is_valid(src));
+            assert(list_is_valid(dest));
+
+            return 1;
+         }
+         if (cur_src->str)
+         {
+            cur_dest->str = strdup(cur_src->str);
+            if (cur_dest->str == NULL)
+            {
+               destroy_list(dest);
+
+               assert(list_is_valid(src));
+               assert(list_is_valid(dest));
+
+               return 1;
+            }
+         }
+         /* else { cur_dest->str = NULL; }  - implied by zalloc */
+      }
+
+      dest->last = cur_dest;
    }
 
-   dest->last = cur_dest;
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
 
+   return 0;
 }
 
 
@@ -482,106 +760,72 @@ void list_duplicate(struct list *dest, const struct list *src)
  *                Duplicate items are not added.
  *
  * Parameters  :
- *          1  :  dest = pointer to destination for merge.  Caller allocs.
+ *          1  :  dest = pointer to destination list for merge.
  *          2  :  src = pointer to source for merge.
  *
- * Returns     :  N/A
+ * Returns     :  0 on success, nonzero on out-of-memory error.
+ *                On error, some (but not all) of src might have
+ *                been copied into dest.
  *
  *********************************************************************/
-void list_append_list_unique(struct list *dest, const struct list *src)
+int list_append_list_unique(struct list *dest, const struct list *src)
 {
-   struct list * cur = src->next;
+   struct list_entry * cur;
 
-   while (cur)
+   assert(src);
+   assert(dest);
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
+
+   for (cur = src->first; cur; cur = cur->next)
    {
-      enlist_unique(dest, cur->str, 0);
-      cur = cur->next;
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  map
- *
- * Description :  Add a mapping from given name to given value to a
- *                given map.
- *
- *                Note: Since all strings will be free()d in free_map()
- *                      later, use the copy flags for constants or
- *                      strings that will be independantly free()d.
- *
- * Parameters  :
- *          1  :  the_map = map to add to
- *          2  :  name = name to add
- *          3  :  nc = flag set if a copy of name should be used
- *          4  :  value = value to add
- *          5  :  vc = flag set if a copy of value should be used
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void map(struct map *the_map, const char *name, int nc, const char *value, int vc)
-{
-   struct map_entry *new_entry;
-
-   if (NULL == (new_entry = zalloc(sizeof(*new_entry))))
-   {
-      return;
-   }
-
-   new_entry->name  = nc ? strdup(name) : name;
-   new_entry->value = vc ? strdup(value) : value;
-   /* new_entry->next = NULL;  - implied by zalloc */
-
-   if (the_map->last)
-   {
-      the_map->last = the_map->last->next = new_entry;
-   }
-   else
-   {
-      the_map->last = the_map->first = new_entry;
-   }
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  lookup
- *
- * Description :  Look up an item with a given name in a map, and
- *                return its value
- *
- * Parameters  :
- *          1  :  name = name parameter to look for
- *
- * Returns     :  the value if found, else the empty string
- *
- *********************************************************************/
-const char *lookup(const struct map *the_map, const char *name)
-{
-   const struct map_entry *cur_entry = the_map->first;
-
-   while (cur_entry)
-   {
-      if (!strcmp(name, cur_entry->name))
+      if (cur->str)
       {
-         return cur_entry->value;
+         if (enlist_unique(dest, cur->str, 0))
+         {
+            assert(list_is_valid(src));
+            assert(list_is_valid(dest));
+
+            return 1;
+         }
       }
-      cur_entry = cur_entry->next;
    }
-   return "";
+
+   assert(list_is_valid(src));
+   assert(list_is_valid(dest));
+
+   return 0;
 }
 
 
 /*********************************************************************
  *
- * Function    :  new_nap
+ * Function    :  list_is_empty
+ *
+ * Description :  Test whether a list is empty.  Does not change the list.
+ *
+ * Parameters  :
+ *          1  :  the_list = pointer to list to test.
+ *
+ * Returns     :  Nonzero iff the list contains no entries.
+ *
+ *********************************************************************/
+int list_is_empty(const struct list *the_list)
+{
+   assert(the_list);
+   assert(list_is_valid(the_list));
+   
+   return (the_list->first == NULL);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  new_map
  *
  * Description :  Create a new, empty map.
  *
- * Parameters  :
+ * Parameters  :  N/A
  *
  * Returns     :  A new, empty map, or NULL if out of memory.
  *
@@ -600,7 +844,7 @@ struct map *new_map(void)
  *                depandant strings
  *
  * Parameters  :
- *          1  :  cur_entry = map to be freed.  May be NULL.
+ *          1  :  the_map = map to be freed.  May be NULL.
  *
  * Returns     :  N/A
  *
@@ -627,6 +871,118 @@ void free_map(struct map *the_map)
    the_map->first = the_map->last = NULL;
 
    free(the_map);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  map
+ *
+ * Description :  Add a mapping from given name to given value to a
+ *                given map.
+ *
+ *                Note: Since all strings will be free()d in free_map()
+ *                      later, set the copy flags for constants or
+ *                      strings that will be independantly free()d.
+ *
+ * Parameters  :
+ *          1  :  the_map = map to add to
+ *          2  :  name = name to add
+ *          3  :  name_needs_copying = flag set if a copy of name should be used
+ *          4  :  value = value to add
+ *          5  :  value_needs_copying = flag set if a copy of value should be used
+ *
+ * Returns     :  0 on success, nonzero on out-of-memory error.
+ *
+ *********************************************************************/
+int map(struct map *the_map,
+        const char *name, int name_needs_copying,
+        const char *value, int value_needs_copying)
+{
+   struct map_entry *new_entry;
+
+   assert(the_map);
+   assert(name);
+   assert(value);
+
+   if (NULL == (new_entry = zalloc(sizeof(*new_entry))))
+   {
+      return 1;
+   }
+
+   if (name_needs_copying)
+   {
+      if (NULL == (name = strdup(name)))
+      {
+         free(new_entry);
+         return 1;
+      }
+   }
+
+   if (value_needs_copying)
+   {
+      if (NULL == (value = strdup(value)))
+      {
+         if (name_needs_copying)
+         {
+             free((char *)name);
+         }
+         free(new_entry);
+         return 1;
+      }
+   }
+
+   new_entry->name = name;
+   new_entry->value = value;
+   /* new_entry->next = NULL;  - implied by zalloc */
+
+   if (the_map->last)
+   {
+      the_map->last->next = new_entry;
+      the_map->last = new_entry;
+   }
+   else
+   {
+      the_map->first = new_entry;
+      the_map->last = new_entry;
+   }
+
+   return 0;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  lookup
+ *
+ * Description :  Look up an item with a given name in a map, and
+ *                return its value
+ *
+ * Parameters  :
+ *          1  :  the_map = map to look in
+ *          2  :  name = name parameter to look for
+ *
+ * Returns     :  the value if found, else the empty string.
+ *                Return value is alloced as part of the map, so
+ *                it is freed when the map is destroyed.  Caller
+ *                must not free or modify it.
+ *
+ *********************************************************************/
+const char *lookup(const struct map *the_map, const char *name)
+{
+   const struct map_entry *cur_entry;
+
+   assert(the_map);
+   assert(name);
+
+   for (cur_entry = the_map->first; cur_entry != NULL; cur_entry = cur_entry->next)
+   {
+      if (!strcmp(name, cur_entry->name))
+      {
+         return cur_entry->value;
+      }
+   }
+   return "";
 }
 
 

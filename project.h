@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.29 2001/09/13 23:29:43 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.30 2001/09/13 23:52:00 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.30  2001/09/13 23:52:00  jongfoster
+ *    Support for both static and dynamically generated CGI pages
+ *
  *    Revision 1.29  2001/09/13 23:29:43  jongfoster
  *    Defining FORWARD_SPEC_INITIALIZER
  *
@@ -307,16 +310,28 @@ extern "C" {
 #define HADDR_PORT      8000
 
 
+/* Forward defs for various structures */
+
 /* Need this for struct client_state */
 struct configuration_spec;
 
+
 /* Generic linked list of strings */
-struct list /* FIXME: Why not separate entries and header? */
+
+struct list_entry
 {
-   char *       str;  /* valid in an entry */
-   struct list *last; /* valid in header */
-   struct list *next;
+   const char *str;
+   struct list_entry *next;
 };
+
+struct list
+{
+   struct list_entry *first;
+   struct list_entry *last;
+};
+
+
+/* A map from a string to another string */
 
 struct map_entry
 {
@@ -330,6 +345,7 @@ struct map
    struct map_entry *first;
    struct map_entry *last;
 };
+
 
 struct http_request
 {
