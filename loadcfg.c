@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.19 2001/07/15 17:45:16 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.20 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.19 2001/07/15 17:45:16 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.20  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.19  2001/07/15 17:45:16  jongfoster
  *    Removing some unused #includes
  *
@@ -226,14 +232,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.19 2001/07/15 17:45:16 jongfoster
 #include "jcc.h"
 #include "filters.h"
 #include "loaders.h"
-#include "showargs.h"
-#include "parsers.h"
-#include "killpopup.h"
 #include "miscutil.h"
 #include "errlog.h"
-#include "jbsockets.h"
-#include "gateway.h"
 #include "ssplit.h"
+#include "encode.h"
 
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
@@ -310,6 +312,8 @@ static struct file_list *current_configfile = NULL;
 #define hash_log_messages              2291744899ul /* "log-messages" */
 #define hash_show_on_task_bar           215410365ul /* "show-on-task-bar" */
 
+
+static void savearg(char *c, char *o, struct configuration_spec * config);
 
 
 /*********************************************************************
@@ -1281,6 +1285,62 @@ struct configuration_spec * load_config(void)
    current_configfile = fs;
 
    return (config);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  savearg
+ *
+ * Description :  Called from `load_config'.  It saves each non-empty
+ *                and non-comment line from config into a list.  This
+ *                list is used to create the show-proxy-args page.
+ *
+ * Parameters  :
+ *          1  :  c = config setting that was found
+ *          2  :  o = the setting's argument (if any)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void savearg(char *c, char *o, struct configuration_spec * config)
+{
+   char buf[BUFFER_SIZE];
+
+   *buf = '\0';
+
+   if ( ( NULL != c ) && ( '\0' != *c ) )
+   {
+      if ((c = html_encode(c)))
+      {
+         sprintf(buf, "<a href=\"" REDIRECT_URL "option#%s\">%s</a> ", c, c);
+      }
+      freez(c);
+   }
+   if ( ( NULL != o ) && ( '\0' != *o ) )
+   {
+      if ((o = html_encode(o)))
+      {
+         if (strncmpic(o, "http://", 7) == 0)
+         {
+            strcat(buf, "<a href=\"");
+            strcat(buf, o);
+            strcat(buf, "\">");
+            strcat(buf, o);
+            strcat(buf, "</a>");
+         }
+         else
+         {
+            strcat(buf, o);
+         }
+      }
+      freez(o);
+   }
+
+   strcat(buf, "<br>\n");
+
+   config->proxy_args = strsav(config->proxy_args, buf);
+
 }
 
 
