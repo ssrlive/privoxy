@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.8 2002/03/24 13:25:43 swa Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.9 2002/03/26 22:29:54 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.9  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.8  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -112,14 +115,14 @@ extern jb_err copy_action (struct action_spec *dest,
                            const struct action_spec *src);
 extern char * actions_to_text     (struct action_spec *action);
 #ifdef FEATURE_CGI_EDIT_ACTIONS
-extern char * actions_to_html     (struct action_spec *action);
+extern char * actions_to_html     (struct action_spec *action, struct client_state *csp);
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 extern void init_current_action     (struct current_action_spec *dest);
 extern void free_current_action     (struct current_action_spec *src);
 extern jb_err merge_current_action  (struct current_action_spec *dest, 
                                      const struct action_spec *src);
-extern char * current_action_to_text(struct current_action_spec *action);
+extern char * current_action_to_html(struct current_action_spec *action, struct client_state *csp);
 
 extern jb_err get_action_token(char **line, char **name, char **value);
 extern void unload_actions_file(void *file_data);
