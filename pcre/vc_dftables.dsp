@@ -100,8 +100,32 @@ PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(OutDir)\..\chartables.c
 # Begin Source File
 
 SOURCE=..\config.h.win
+!IF  "$(CFG)" == "vc_dftables - Win32 Release"
+
+# Begin Custom Build
+WkspDir=.
+InputPath=..\config.h.win
+
+"$(WkspDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(WkspDir)\config.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug"
+
+# Begin Custom Build
+WkspDir=.
+InputPath=..\config.h.win
+
+"$(WkspDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(WkspDir)\config.h
+
+# End Custom Build
+
+!ENDIF 
 # End Source File
 # End Group
+
 # Begin Source File
 
 SOURCE=..\config.h
