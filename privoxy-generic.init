@@ -39,6 +39,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy-generic.init,v $
+#     Revision 1.3  2002/09/11 01:09:14  hal9
+#     Better handling of pidfile, and process owner.
+#
 #     Revision 1.2  2002/09/08 20:27:58  hal9
 #     -Rewrote script config section.
 #     -Added comments to script.
@@ -94,7 +97,7 @@ case "$1" in
  start)
      if [ -f $P_PIDFILE ]; then
        if kill -0 `cat $P_PIDFILE`; then
-         echo "Error: $NAME is already running, exiting."
+         echo "Error: $P_NAME is already running, exiting."
          exit 1
        else
          rm -f $P_PIDFILE
