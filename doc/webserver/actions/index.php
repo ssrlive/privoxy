@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.19 2002/04/09 13:06:29 oes Exp $
+  $Id: index.php,v 1.21 2002/04/10 13:44:07 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.20  2002/04/10 00:07:35  oes
+  Moved window sizing and positioning code to Bookmarklet
+
   Revision 1.19  2002/04/09 13:06:29  oes
   Resize and jump to the right on load
 
@@ -156,9 +159,9 @@ function error_abort($title, $message)
  * Bookmarklet that leads here:
  */
 $my_address = "http://" . $HTTP_SERVER_VARS["HTTP_HOST"] . $PHP_SELF;
-$bookmarklet = "javascript:void(window.open('$my_address?url='+escape(location.href), 'Feedback', " .
-               "'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());";
-
+$bookmarklet = "javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('$my_address?url='+escape(location.href)," .
+               "'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no," .
+               "copyhistory=no').focus());";
 
 /* 
  * Provide default if URL unset
