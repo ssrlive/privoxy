@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.92 2002/04/25 18:55:13 hal9 Exp $
+ $Id: user-manual.sgml,v 1.94 2002/04/26 05:24:36 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.92 2002/04/25 18:55:13 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.94 2002/04/26 05:24:36 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -99,7 +99,6 @@
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-
 <sect1 label="1" id="introduction"><title>Introduction</title>
 <para>
  This documentation is included with the current &p-status; version of
@@ -123,15 +122,13 @@
 ]]>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="newfeatures">
-<title>New Features</title>
+<sect2 id="features"><title>Features</title>
 <para>
  In addition to <application>Internet Junkbuster's</application> traditional
  features of ad and banner blocking and cookie management,
  <application>Privoxy</application> provides new features<![%p-not-stable;[,
  some of them currently under development]]>:
 </para>
-
 <!-- Include newfeatures.sgml boilerplate here: -->
  &newfeatures;
 <!-- end boilerplate -->
@@ -149,7 +146,9 @@
  <application>Privoxy</application> is available both in convenient pre-compiled
  packages for a wide range of operating systems, and as raw source code.
  For most users, we recommend using the packages, which can be downloaded from our
- <ulink url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink>.
+ <ulink url="http://sourceforge.net/projects/ijbswa/">Privoxy Project
+ Page</ulink>. For installing and compiling the source code, please look 
+ into our Developer Manual.
 </para>
 
 <para>
@@ -158,15 +157,12 @@
  version directly from <ulink url="http://sourceforge.net/cvs/?group_id=11118">the
  CVS repository</ulink> or simply download <ulink
  url="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.gz">the nightly CVS
- tarball.</ulink>
+ tarball.</ulink> Again, we refer you to the Developer Manual.
 </para>
 
 <!-- Include supported.sgml boilerplate -->
  &supported; 
 <!-- end boilerplate -->
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-packages"><title>Binary Packages</title>
 
 <para>
  Note: If you have a previous <application>Junkbuster</application> or
@@ -178,15 +174,12 @@
 <para>
  In any case <emphasis>be sure to backup your old configuration
  if it is valuable to you.</emphasis> See the
- <link linkend="upgradersnote">note to upgraders</link>.
-</para>
-
-<para>
- How to install the binary packages depends on your operating system:
+ <link linkend="upgradersnote">note to upgraders</link> section
+ below.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-rpm"><title>Red Hat and SuSE RPMs</title>
+<sect2 id="installation-pack-rpm"><title>Red Hat and SuSE RPMs</title>
 
 <para>
  RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
@@ -195,9 +188,11 @@
 </para>
 
 <para>
- Note that on Red Hat, <application>Privoxy</application> will not be
- automatically started on system boot. You will need to enable that using
- <command>chkconfig</command>, <command>ntsysv</command>, or similar method.
+ Note that on Red Hat, <application>Privoxy</application> will
+ <emphasis>not</emphasis> be automatically started on system boot. You will
+ need to enable that using <command>chkconfig</command>,
+ <command>ntsysv</command>, or similar methods. Note that SuSE will 
+automatically start Privoxy in the boot process.
 </para>
 
 <para>
@@ -212,36 +207,38 @@
  Otherwise, RPM will try to remove <application>Junkbuster</application>
  automatically, before installing <application>Privoxy</application>.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-deb"><title>Debian</title>
+<sect2 id="installation-deb"><title>Debian</title>
 <para>
  FIXME.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-win"><title>Windows</title>
+<sect2 id="installation-pack-win"><title>Windows</title>
 
 <para>
  Just double-click the installer, which will guide you through
- the installation process.
+ the installation process. You will find the configuration files
+ in the same directory as you installed Privoxy in. We do not
+ use the registry of Windows. 
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, FreeBSD, HP-UX</title>
+<sect2 id="installation-pack-bintgz"><title>Solaris, NetBSD, FreeBSD, HP-UX</title>
 
 <para>
  Create a new directory, <literal>cd</literal> to it, then unzip and
  untar the archive. For the most part, you'll have to figure out where
  things go. FIXME.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-os2"><title>OS/2</title>
+<sect2 id="installation-os2"><title>OS/2</title>
 
 <para>
  First, make sure that no previous installations of
@@ -261,10 +258,10 @@
  The directory you choose to install <application>Privoxy</application>
  into will contain all of the configuration files.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-mac"><title>Max OSX</title>
+<sect2 id="installation-mac"><title>Max OSX</title>
 <para>
  Unzip the downloaded package (you can either double-click on the file
  in the finder, or on the desktop if you downloaded it there).  Then,
@@ -276,10 +273,10 @@
  automatically on system bring-up via
  <literal>/System/Library/StartupItems/Privoxy</literal>.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-amiga"><title>AmigaOS</title>
+<sect2 id="installation-amiga"><title>AmigaOS</title>
 <para>
  Copy and then unpack the <filename>lha</filename> archive to a suitable location. 
  All necessary files will be installed into <application>Privoxy</application>
@@ -295,29 +292,13 @@
  TCP/IP stack (just ignore the harmless warning your TCP/IP stack may display that
  <application>Privoxy</application> is still running).
 </para>
-</sect3>
 </sect2>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-source"><title>Building from Source</title>
-
-<!-- include buildsource.sgml boilerplate: -->
- &buildsource;
-<!-- end boilerplate -->
-</sect2>
-
 </sect1>
 
 <!--  ~  End section  ~  -->
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
-
-<sect1 id="quickstart"><title>Quickstart to Using <application>Privoxy</application></title>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="upgradersnote">
+<sect1 id="upgradersnote">
 <title>Note to Upgraders</title>
 <para>
  There are very significant changes from older versions of 
@@ -395,11 +376,49 @@
 
  </itemizedlist>
 </para>
-
-</sect2>
+</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="startup">
+<sect1 id="quickstart"><title>Quickstart to Using <application>Privoxy</application></title>
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+  Install <application>Privoxy</application>. See the section <link linkend="installation">Installing</link>.
+  </para>
+ </listitem>  
+
+ <listitem>
+  <para>
+  Start <application>Privoxy</application>. See the section <link linkend="startup">Starting <application>Privoxy</application></link>.
+  </para>
+ </listitem>  
+
+ <listitem>
+  <para>
+  Change your browser's configuration to use the proxy <literal>localhost</literal> on port
+  <literal>8118</literal>. See the section <link linkend="startup">Starting <application>Privoxy</application></link>.
+  </para>
+ </listitem>  
+
+ <listitem>
+  <para>
+  Enjoy surfing with enhanced comfort and privacy. Please see the section
+  <link linkend="contact">Contacting the Developers</link> on how to report
+  bugs or problems with websites or to get help. You may want to change the
+  file <filename>user.action</filename> to further tweak your new browsing
+  experience.
+  </para>
+ </listitem>  
+
+ </itemizedlist>
+</para>
+
+</sect1>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="startup">
 <title>Starting <application>Privoxy</application></title>
 <para>
  Before launching <application>Privoxy</application> for the first time, you 
@@ -437,8 +456,7 @@
  <screen>
  
  # /usr/sbin/privoxy /etc/privoxy/config
- 
- </screen>
+</screen>
 </para>
 
 <para>
@@ -553,9 +571,6 @@
  section <ulink url="contact.html"><quote>Contacting the
  Developers</quote></ulink> below. 
 </para>
-
-</sect2>
-
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="cmdoptions">
@@ -786,7 +801,7 @@
 
 <para>
  All files use the <quote><literal>#</literal></quote> character to denote a
- comment (the rest of the line will be ignored) and understand line continuation
+ comment (the rest of the line will be ignored) angd understand line continuation
  through placing a backslash ("<literal>\</literal>") as the very last character
  in a line. If the <literal>#</literal> is preceded by a backslash, it looses
  its special function. Placing a <literal>#</literal> in front of an otherwise
@@ -1018,7 +1033,7 @@ actionsfile
     The default values include standard.action, which is used for internal
     purposes and should be loaded, default.action, which is the
     <quote>main</quote> actions file maintained by the developers, and
-    user.action, where you can make your personal additions.
+    <filename>user.action</filename>, where you can make your personal additions.
    </para>
    <para> 
     There is no point in using <application>Privoxy</application> without an actions file.
@@ -1462,7 +1477,7 @@ actionsfile
   debug      1024 # debug kill pop-ups
   debug      4096 # Startup banner and warnings.
   debug      8192 # Non-fatal errors
-    </programlisting>
+</programlisting>
    </para>
    <para>
     To select multiple debug levels, you can either add them or use
@@ -1610,7 +1625,7 @@ actionsfile
    <para>
     <programlisting>
   listen-address  192.168.0.1:8118
-    </programlisting>
+</programlisting>
    </para>
   </listitem>
  </varlistentry>
@@ -1876,7 +1891,7 @@ ACLs: permit-access and deny-access</title>
    <para>
     <screen>
   permit-access  localhost
-    </screen>
+</screen>
    </para>
    <para>
     Allow any host on the same class C subnet as www.privoxy.org access to
@@ -1885,7 +1900,7 @@ ACLs: permit-access and deny-access</title>
    <para>
     <screen>
   permit-access  www.privoxy.org/24 www.example.com/32
-    </screen>
+</screen>
    </para>
    <para>
     Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
@@ -1895,7 +1910,7 @@ ACLs: permit-access and deny-access</title>
     <screen>
   permit-access  192.168.45.64/26
   deny-access    192.168.45.73    www.dirty-stuff.example.com
-    </screen>
+</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -2048,7 +2063,7 @@ ACLs: permit-access and deny-access</title>
     <screen>
   forward   .*     anon-proxy.example.org:8080
   forward   :443   .
-    </screen>
+</screen>
    </para>
    <para>
     Everything goes to our example ISP's caching proxy, except for requests
@@ -2058,7 +2073,7 @@ ACLs: permit-access and deny-access</title>
     <screen>
   forward   .*.                caching-proxy.example-isp.net:8000
   forward   .example-isp.net   .
-    </screen>
+</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -2142,7 +2157,7 @@ forward-socks4 and forward-socks4a</title>
     <screen>
   forward-socks4a   .*.            socks-gw.example.com:1080  www-cache.example-isp.net:8080
   forward           .example.com   .
-    </screen>
+</screen>
    </para>
    <para>
     A rule that uses a SOCKS 4 gateway for all destinations but no HTTP parent looks like this:
@@ -2150,7 +2165,7 @@ forward-socks4 and forward-socks4a</title>
    <para>
     <screen>
   forward-socks4   .*.            socks-gw.example.com:1080  .
-    </screen>
+</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -2180,7 +2195,7 @@ forward-socks4 and forward-socks4a</title>
  <screen>
   forward    .*.         .
   forward    .isp-b.net  host-b:8118
- </screen>
+</screen>
 </para>
 
 <para>
@@ -2191,7 +2206,7 @@ forward-socks4 and forward-socks4a</title>
  <screen>
   forward    .*.         .
   forward    .isp-a.net  host-a:8118
- </screen>
+</screen>
 </para>
 
 <para>
@@ -2223,8 +2238,7 @@ forward-socks4 and forward-socks4a</title>
   always_direct allow ftp 
 
   # Forward all the rest to Privoxy
-  never_direct allow all 
- </screen>
+  never_direct allow all</screen>
 </para>
 
 <para>
@@ -2426,8 +2440,7 @@ forward-socks4 and forward-socks4a</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="actions-file">
-<title>Actions Files</title>
+<sect2 id="actions-file"><title>Actions Files</title>
 
 <para>
  The actions files are used to define what actions
@@ -4541,35 +4554,6 @@ Requests</title>
  &contacting;
 <!-- end boilerplate -->
 
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="submitactions">
-<title>Submitting Ads and <quote>Action</quote> Problems</title>
-<para>
- Ads and banners that are not stopped by <application>Privoxy</application> 
- can be submitted to the developers by accessing a special page and filling 
- out the brief, required form. Conversely, you can also report pages, images,
- etc. that <application>Privoxy</application> is blocking, but should not.
- The form itself does require Internet access.
-</para>
-<para>
- To do this, point your browser to <application>Privoxy</application> 
- at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
- (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), and then select 
- <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Actions file feedback system</ulink>, 
- near the bottom of the page. Paste in the URL that is the cause of the 
- unwanted behavior, and follow the prompts. The developers will 
- try to incorporate a fix for the problem you reported into future versions.
-</para>
-
-<para>
- New, improved <filename>default.action</filename> files will occasionally be made
- available based on your feedback. These will be announced on the <ulink
- url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
- list.
-</para>
-</sect2>
-
 </sect1>
 
 
@@ -4992,31 +4976,35 @@ Requests</title>
 
   <listitem>
    <para>
-    <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable Privoxy</ulink>
+    <ulink
+    url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Enable</ulink>
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable Privoxy</ulink>
+    <ulink
+    url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Disable</ulink>
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle Privoxy</ulink> (Toggles between enabled and disabled)
+    <ulink
+    url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&#38;set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Toggle Privoxy</ulink> (Toggles between enabled and disabled)
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View Privoxy Status</ulink>
+    <ulink
+    url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy- View Status</ulink>
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Actions file feedback system</ulink>
+    <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Filter Feedback</ulink>
    </para>
   </listitem> 
 
@@ -5241,7 +5229,6 @@ Requests</title>
 
 --- File user ---
 (no matches in this file)  
-
 </screen>
 </para>
 
@@ -5301,9 +5288,8 @@ Requests</title>
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
  +prevent-compression -session-cookies-only -prevent-reading-cookies 
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer 
- 
- </screen>
+ -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer
+</screen>
 </para>
 
 <para>
@@ -5326,8 +5312,7 @@ Requests</title>
 
  { +block +handle-as-image }
   .doubleclick.net
-
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5376,8 +5361,7 @@ Requests</title>
 
  { +block +handle-as-image }
   /ads
-
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5393,8 +5377,7 @@ Requests</title>
 
  { -block }
   /adsl
- 
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5412,8 +5395,7 @@ Requests</title>
 
  { +block +handle-as-image }
  /ads
-  
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5434,8 +5416,7 @@ Requests</title>
  .jungle.com
  .scan.co.uk
  .forbes.com
- 
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5450,8 +5431,7 @@ Requests</title>
 
  {-filter}
  .forbes.com
- 
- </screen>
+</screen>
 </para>
 
 <para>
@@ -5491,6 +5471,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.94  2002/04/26 05:24:36  hal9
+ -Add most of Andreas suggestions to Chain of Events section.
+ -A few other minor corrections and touch up.
+
  Revision 1.92  2002/04/25 18:55:13  hal9
  More catchups on new actions files, and new actions names.
  Other assorted cleanups, and minor modifications.

@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $
+ $Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1720,7 +1720,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1780,7 +1780,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1986,7 +1986,7 @@ at sourceforge. Three simple steps:
        <para> 
         <programlisting>
   {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}
-        </programlisting>
+</programlisting>
        </para>
        <para> 
         Then change the version info in doc/webserver/actions/index.php,
@@ -2035,7 +2035,7 @@ at sourceforge. Three simple steps:
   cd dist
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
-     </programlisting>
+</programlisting>
     </para>
   
     <para>
@@ -2060,7 +2060,7 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then do:
@@ -2068,7 +2068,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   make tarball-dist
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	To upload the package to Sourceforge, simply issue
@@ -2076,7 +2076,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   make tarball-upload
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Go to the displayed URL and release the file publicly on Sourceforge.
@@ -2095,7 +2095,7 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then do
@@ -2103,7 +2103,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   make suse-dist (or make redhat-dist)
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	To upload the package to Sourceforge, simply issue
@@ -2111,7 +2111,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   make suse-upload (or make redhat-upload)
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Go to the displayed URL and release the file publicly on Sourceforge.
@@ -2128,7 +2128,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	You will need a mix of development tools.
@@ -2148,7 +2148,7 @@ at sourceforge. Three simple steps:
 	<para>
  	<programlisting>
   installExeName='privoxyos2_setup_X.Y.Z.exe'
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
  	Next, edit the <filename>IJB.wis</filename> file so the release number matches
@@ -2157,7 +2157,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	You're now ready to build.  Run:
@@ -2165,7 +2165,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   os2build
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
          You will find the  WarpIN-installable executable in the
@@ -2183,7 +2183,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   ssh cf.sourceforge.net
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Choose the right operating system (not the Debian one).
@@ -2195,7 +2195,7 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then run
@@ -2203,7 +2203,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   gmake solaris-dist
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
@@ -2228,7 +2228,7 @@ at sourceforge. Three simple steps:
       <para>
       <programlisting>
         cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
-      </programlisting>
+</programlisting>
       </para>
       <para>
         Then you can build the package.  This is fully automated, and is
@@ -2239,7 +2239,7 @@ at sourceforge. Three simple steps:
       <programlisting>
         cd winsetup
         make
-      </programlisting>
+</programlisting>
       </para>
       <para>
         Now you can manually rename <filename>privoxy_setup.exe</filename> to
@@ -2259,7 +2259,7 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then do FIXME.
@@ -2275,7 +2275,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then run:
@@ -2284,7 +2284,7 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd osxsetup
   build
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	This will run <filename>autoheader</filename>, <filename>autoconf</filename> and
@@ -2301,7 +2301,7 @@ at sourceforge. Three simple steps:
 	<para>
 	<programlisting>
 zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	You can then upload <filename>privoxyosx_setup_x.y.z.zip</filename> anonymously to 
@@ -2318,7 +2318,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<para>
 	<programlisting>
   ssh cf.sourceforge.net
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Choose the right operating system.
@@ -2330,7 +2330,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then run:
@@ -2338,7 +2338,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<para>
 	<programlisting>
   gmake freebsd-dist
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
@@ -2359,7 +2359,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then do FIXME.
@@ -2376,7 +2376,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then do FIXME.
@@ -2390,7 +2390,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<para>
 	<programlisting>
   ssh cf.sourceforge.net
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Choose the right operating system.
@@ -2402,7 +2402,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<programlisting>
   cd current
   autoheader && autoconf && ./configure
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	Then run:
@@ -2410,7 +2410,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	<para>
 	<programlisting>
   make aix-dist
-	</programlisting>
+</programlisting>
 	</para>
 	<para>
 	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
@@ -2450,7 +2450,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
    <para>
     <programlisting>
   make dok # (or make redkat-dok if make dok doesn't work for you)
-    </programlisting>
+</programlisting>
    </para>
    <para>
     That will generate <filename>doc/webserver/user-manual</filename>,
@@ -2476,7 +2476,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
    <para>
     <programlisting>
   make webserver
-    </programlisting>
+</programlisting>
    </para>
    <para>
     This will do the upload to <ulink url="http://www.privoxy.org/">the
@@ -2542,6 +2542,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.36  2002/04/26 05:25:23  hal9
+  Mass commit to catch a few scattered fixes.
+
   Revision 1.35  2002/04/17 15:16:15  oes
   Added link to docbook crash course
 

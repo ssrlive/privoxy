@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.5 2002/04/18 12:11:50 oes Exp $
+ $Id: buildsource.sgml,v 1.6 2002/04/26 05:25:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -43,7 +43,7 @@
  <screen>
  tar xzvf privoxy-&p-version;<![%p-not-stable;[-beta]]>-src* [.tgz or .tar.gz]
  cd privoxy-&p-version;<![%p-not-stable;[-beta]]>
- </screen>
+</screen>
 </para>
 
 <para>
@@ -57,7 +57,7 @@
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
   cd current
- </screen>
+</screen>
 </para>
 
 <para>
@@ -78,7 +78,7 @@
  su 
  make -n install  # (to see where all the files will go)
  make install     # (to really install)
- </screen>
+</screen>
 </para>
 
 <para>
@@ -89,7 +89,7 @@
 <para>
  <screen>
   make
- </screen>
+</screen>
 </para>
 
 <para>

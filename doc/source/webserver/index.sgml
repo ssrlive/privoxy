@@ -19,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.7 2002/04/12 10:11:53 swa Exp $
+ $Id: index.sgml,v 1.9 2002/04/14 01:00:07 hal9 Exp $
 
  Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -84,7 +84,7 @@ page</ulink> on Sourceforge
 	</listitem>
 	<listitem>
 	<literallayout>
-	A list of <ulink url="user-manual/introduction.html#AEN37">new features</ulink>
+	A list of <ulink url="user-manual/introduction.html#AEN37">features</ulink>
 	</literallayout>
 	</listitem>
 	<listitem>
@@ -156,6 +156,7 @@ page</ulink> on Sourceforge
 	<listitem>
 	<literallayout>
 	<ulink url="developer-manual/index.html">Developer Manual</ulink>
+<!--  	,alternatively as a pdf file: <ulink url="">developer-manual.pdf</ulink>. -->
 	</literallayout>
 	</listitem>
  </itemizedlist>
@@ -237,6 +238,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.9  2002/04/14 01:00:07  hal9
+ Fix the logo properly with docbook.
+
  Revision 1.7  2002/04/12 10:11:53  swa
  changed bookmarklet text so that users can easily find the bookmark
 

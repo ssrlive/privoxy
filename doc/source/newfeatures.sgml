@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 1.5 2002/04/18 01:05:12 hal9 Exp $
+ $Id: newfeatures.sgml,v 1.6 2002/04/18 10:16:36 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -27,6 +27,13 @@
 -->
 <para>
  <itemizedlist>
+
+ <listitem>
+  <para>
+  FIXME: complete the list of features. change the order: most important
+  features to the top of the list. prefix new features with "NEW".
+  </para>
+ </listitem> 
 
  <listitem>
   <para>
@@ -112,14 +119,6 @@
    Improved signal handling, and a true daemon mode (Unix).
   </para>
 </listitem> 
-
- <listitem>
-  <para>
-   Builds from source on most UNIX-like systems. Packages available for: Linux
-   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11,
-   NetBSD and AmigaOS.
-  </para>
- </listitem> 
 
  <listitem>
   <para>

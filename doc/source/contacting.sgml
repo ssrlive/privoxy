@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.9 2002/04/26 05:25:23 hal9 Exp $
+ $Id: contacting.sgml,v 1.10 2002/04/26 12:06:52 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -31,24 +31,27 @@
 
 <para>
  We value your feedback. However, to provide you with the best support, please
- note:
+ note the following sections.
+</para>
 
- <itemizedlist>
-
-  <listitem>
+<sect2 id="contact-support"><title>Get Support</title>
+  <para>
    <literallayout class="normal">
-Use the Sourceforge Support Forum to get help:
-   
+To get support, use the Sourceforge Support Forum:
+
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118</ulink>
    </literallayout>
-  </listitem>
- 
-  <listitem>
+  </para>
+</sect2>
+
+<sect2 id="contact-bugs"><title>Report bugs</title>
+  <para>
    <literallayout class="normal">
-Submit bugs only through our Sourceforge Bug Forum:
- 
+To submit bugs, use the Sourceforge Bug Forum:
+
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</ulink>. 
     </literallayout>
+ </para>
   <para>
    Make sure that the bug has not already been submitted.  Please try to
    verify that it is a <application>Privoxy</application> bug, and not a
@@ -60,39 +63,45 @@ Submit bugs only through our Sourceforge Bug Forum:
    pertinent log data, any other relevant details (please be specific) and,
    if possible, some way to reproduce the bug.
   </para>
- </listitem>
- 
-  <listitem>
+</sect2>
+
+<sect2 id="contact-feature"><title>Request new features</title>
+  <para>
    <literallayout class="normal">
-Submit feature requests only through our Sourceforge feature request forum:
- 
+To submit ideas on new features, use the Sourceforge feature request forum:
+
     <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse"></ulink>.
    </literallayout>
-  </listitem>
+  </para>
+</sect2>
 
-
-  <listitem>
-   <literallayout class="normal">
+<sect2 id="contact-ads"><title>Report ads or other filter problems</title>
+  <para>
+<!--     <literallayout class="normal"> -->
 You can also send feedback on websites that Privoxy has problems with. Please bookmark
 the following link: <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>Privoxy - Submit Filter Feedback</quote></ulink>. Once you surf to a page with problems, use the
 bookmark to send us feedback. We will look into the issue as soon as possible.
-   </literallayout>
-  </listitem>
+<!--     </literallayout> -->
+  </para>
+<para>
+ New, improved <filename>default.action</filename> files will occasionally be made
+ available based on your feedback. These will be announced on the <ulink
+ url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
+ list.
+</para>
+</sect2>
 
-
- <listitem>
+<sect2 id="contact-other"><title>Other</title>
+ <para>
    <literallayout class="normal">
 For any other issues, feel free to use the mailing lists:
  
     <ulink url="http://sourceforge.net/mail/?group_id=11118">http://sourceforge.net/mail/?group_id=11118</ulink>.
  </literallayout>
+ </para>
  <para>
   Anyone interested in actively participating in development and related
   discussions can also join the appropriate mailing list. Archives are
-  available, too. 
+  available, too. See the page on Sourceforge.
  </para>
- </listitem>
-
- </itemizedlist>
-</para>
-
+</sect2>

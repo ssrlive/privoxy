@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.9 2002/04/24 04:04:12 hal9 Exp $
+ $Id: readme.sgml,v 1.10 2002/04/26 05:25:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -80,7 +80,6 @@
  <literal>
   <msgtext>
    <literallayout>
-
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
@@ -113,7 +112,7 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *********************************************************************/
-   </literallayout>
+</literallayout>
   </msgtext>
  </literal>
 </para>
@@ -258,10 +257,10 @@
  <LiteralLayout>
  -------------------------------------------------------------------------
  ijbswa-developers@lists.sourceforge.net
- </LiteralLayout>
+</LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.9 2002/04/24 04:04:12 hal9 Exp $
+ $Id: readme.sgml,v 1.10 2002/04/26 05:25:23 hal9 Exp $
 </para>
 
 </article>

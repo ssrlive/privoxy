@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.49 2002/04/12 10:10:18 swa Exp $
+ $Id: faq.sgml,v 1.50 2002/04/26 05:25:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.49 2002/04/12 10:10:18 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.50 2002/04/26 05:25:23 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -560,6 +560,7 @@ FIXME: Commenting these out until we have some data there. HB 03/17/02.
 </sect2>
 -->
 
+<!--
 <sect2 renderas="sect3" id="configfiles"> <title>What are the differences between
 intermediate.action, basic.action, etc.?</title>
  <para>
@@ -584,7 +585,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>advanced.action</entry>
 </row>
 </thead>
-
+-->
 <!--  <tfoot> -->
 <!--  <row> -->
 <!--    <entry>f1</entry> -->
@@ -594,9 +595,9 @@ following table shows you, which features are enabled in each configuration.
 <!--    <entry>f5</entry> -->
 <!--  </row> -->
 <!--  </tfoot> -->
-
+<!--
 <tbody>
-<!-- new row -->
+
 <row>
   <entry>ad-filtering</entry>
   <entry>?</entry>
@@ -604,7 +605,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>blank image</entry>
   <entry>?</entry>
@@ -612,7 +613,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>de-animate GIFs</entry>
   <entry>?</entry>
@@ -620,7 +621,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>referer forging</entry>
   <entry>?</entry>
@@ -628,7 +629,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>jon's +no-cookies-keep (i.e. session cookies only)</entry>
   <entry>?</entry>
@@ -636,7 +637,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>no-popup windows</entry>
   <entry>?</entry>
@@ -644,7 +645,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>fast redirects</entry>
   <entry>?</entry>
@@ -652,7 +653,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>hide-referrer</entry>
   <entry>?</entry>
@@ -660,7 +661,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>hide-useragent</entry>
   <entry>?</entry>
@@ -668,7 +669,7 @@ following table shows you, which features are enabled in each configuration.
   <entry>x</entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>content-modification</entry>
   <entry>?</entry>
@@ -676,7 +677,7 @@ following table shows you, which features are enabled in each configuration.
   <entry></entry>
   <entry>x</entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>feature-x</entry>
   <entry>?</entry>
@@ -684,7 +685,7 @@ following table shows you, which features are enabled in each configuration.
   <entry></entry>
   <entry></entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>feature-y</entry>
   <entry>?</entry>
@@ -692,7 +693,7 @@ following table shows you, which features are enabled in each configuration.
   <entry></entry>
   <entry></entry>
 </row>
-<!-- new row -->
+
 <row>
   <entry>feature-z</entry>
   <entry>?</entry>
@@ -700,12 +701,14 @@ following table shows you, which features are enabled in each configuration.
   <entry></entry>
   <entry></entry>
 </row>
-<!-- finish -->
+
 </tbody>
 </tgroup>
 </table>
 </para>
 </sect2>
+
+ -->
 
 <sect2 renderas="sect3" id="browseconfig"> <title>Why can I change the configuration with a
 browser? Does that not raise security issues?</title>
@@ -775,7 +778,7 @@ problem.
 <para>
  <screen>
   listen-address  192.168.1.1:8118
- </screen>
+</screen>
 </para>
 
 <para>
@@ -1027,23 +1030,12 @@ FIXME: commented out until we have data. HB 03/18/02.
 
 <sect2 renderas="sect3" id="newads"><title>How can I submit new ads?</title>
 <para>
- Beginning with <application>Privoxy v2.9.14</application>, missed ads and 
- banners and other actions file problems, can be submitted by accessing
- <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
- from <ulink url="http://p.p/">http://p.p/</ulink>.
+Please see the <ulink url="contact.html">Contact section</ulink>.
 </para>
 
 <para>
  This process does not work with earlier versions of <application>Privoxy</application>
  or <application>Junkbuster</application>.
-</para>
-
-<para> 
- There will soon be regularly updated actions files posted. These 
- will be announced on the 
- <ulink
- url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
- list.
 </para>
 
 </sect2>
@@ -1358,17 +1350,6 @@ What can I do?</title>
 
 </sect2>
 
-<sect2 renderas="sect3" id="bugs">
-<title>Where can I get help? Report bugs? Feature Requests? Etc?</title>
-<para>
- Feedback is encouraged, whether good, bad or ugly. Please see the contact
- page in the <ulink url="../user-manual/contact.html">user-manual</ulink> for
- details.
-
-</para>
-
-</sect2>
-
 <sect2 renderas="sect3">
 <title id="time">What time is it?</title>
 <para>
@@ -1453,6 +1434,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.50  2002/04/26 05:25:23  hal9
+Mass commit to catch a few scattered fixes.
+
 Revision 1.49  2002/04/12 10:10:18  swa
 version update
 
