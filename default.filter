@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.5 2002/03/27 15:30:26 swa Exp $
+#  $Id: default.filter,v 1.6 2002/04/03 19:49:52 swa Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -74,11 +74,11 @@ FILTER: html-annoyances Get rid of particularly annoying HTML abuse
 # New browser windows (if allowed -- see no-popups filter below) should be
 # resizeable and have a location and status bar
 #
-s/(<a\s+href[^>]+)resizable=['"]?(no|0|false)['"]?(.*>)/$1resizable=1$3/igU 
-s/(<a\s+href[^>]+)location=['"]?(no|0)['"]?(.*>)/$1location=1$3/igU 
-s/(<a\s+href[^>]+)status=['"]?(no|0)['"]?(.*>)/$1status=1$3/igU
-s/(<a\s+href[^>]+)scrolling=['"]?(no|0|auto)['"]?(.*>)/$1scrolling=no$3/igU
-s/(<a\s+href[^>]+)menubar=['"]?(no|0)['"]?(.*>)/$1menubar=1$3/igU
+s/(<a\s+href[^>]+)resizable=['"]?(no|0|false)['"]?(.*>)/$1resizable="1"$3/igU 
+s/(<a\s+href[^>]+)location=['"]?(no|0)['"]?(.*>)/$1location="1"$3/igU 
+s/(<a\s+href[^>]+)status=['"]?(no|0)['"]?(.*>)/$1status="1"$3/igU
+s/(<a\s+href[^>]+)scrolling=['"]?(no|0|auto)['"]?(.*>)/$1scrolling="no"$3/igU
+s/(<a\s+href[^>]+)menubar=['"]?(no|0)['"]?(.*>)/$1menubar="1"$3/igU
 
 # The <BLINK> tag was a crime!
 #
@@ -189,7 +189,7 @@ s* industry[ -]leading \
 |  unmatched \
 |  unparalleled \
 |  unrivalled \
-*<font color=red><b>BINGO!</b></font> \
+*<font color="red"><b>BINGO!</b></font> \
 *igx
 
 
@@ -200,7 +200,7 @@ s* industry[ -]leading \
 #################################################################################
 FILTER: nimda Remove Nimda (virus) code
 
-s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><hr><font size=7><b>Internet J</b></font><b><font size=6>UNK</font><font size=5 color="red"><i>BUSTER</i></font></b><font size=7> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
+s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><font size="7"> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
 
 
 #################################################################################
@@ -218,24 +218,24 @@ s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null
 #################################################################################
 FILTER: banners-by-size Kill banners by size
 
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
 
 # One more. (Where is 200x50 from?)
 #
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
 
 
 #################################################################################
@@ -258,6 +258,9 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.6  2002/04/03 19:49:52  swa
+#     name change
+#
 #     Revision 1.5  2002/03/27 15:30:26  swa
 #     have a consistent appearance
 #
