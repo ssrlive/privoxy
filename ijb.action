@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.2 2001/11/30 23:34:08 jongfoster Exp $
+# $Id: ijb.action,v 1.3 2002/03/05 14:35:39 morcego Exp $
 #
 #############################################################################
 # Syntax
@@ -475,6 +475,7 @@ a196.g.akamai.net/7/196/2670/000[1-3]/images\.gmx\.net/.*images/.*/.*/
 .linkexchange.com/.*/showl(ogo|e)
 MoneyBanner.de
 pixel.intares.net/cgi-bin/janus
+ar.atwola.com # This serves all ads for CNN and AOL
 
 #############################################################################
 # Blocklist:
