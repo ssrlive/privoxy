@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.59 2002/04/04 08:32:45 swa Exp $
+# $Id: GNUmakefile.in,v 1.60 2002/04/04 12:25:41 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -505,21 +505,21 @@ dok-devel: doc/source/ldpOK.dsl
 	mkdir -p doc/text
 	rm -rf doc/webserver/developer-manual
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
 
 ##  user manual
 dok-user: doc/source/ldpOK.dsl
 	mkdir -p doc/text
 	rm -rf doc/webserver/user-manual
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
 
 ##  faq
 dok-faq: doc/source/ldpOK.dsl
 	mkdir -p doc/text
 	rm -rf doc/webserver/faq
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
 ## man page
 dok-man: doc/source/ldpOK.dsl
@@ -534,13 +534,13 @@ dok-man: doc/source/ldpOK.dsl
           $(MAKE) groff2html; \
 	fi
 
-readme: doc/source/ldpOK.dsl
+dok-readme: doc/source/ldpOK.dsl
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks readme.sgml > tmp.html &&\
-     lynx -dump tmp.html > ../../README && rm -rf tmp.html 
+     $(WDUMP) tmp.html > ../../README && rm -rf tmp.html readme
      # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
-dok: dok-devel dok-user dok-faq dok-man readme
+dok: dok-devel dok-user dok-faq dok-man dok-readme
 ## kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -733,6 +733,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.60  2002/04/04 12:25:41  oes
+# Tidy webserver upload w/o *~ files, CVS dirs and logfiles and with proper dir and file permissions
+#
 # Revision 1.59  2002/04/04 08:32:45  swa
 # wrong name for tarball-dist target. further fixed content of tarball dist
 #
