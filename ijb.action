@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.4 2002/03/06 21:08:00 oes Exp $
+# $Id: ijb.action,v 1.6 2002/03/08 17:14:12 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -228,7 +228,7 @@
 #    There are 5 options.  "-image-blocker" will send a HTML "blocked" page,
 #    usually resulting in a "broken image" icon.  "+image-blocker{logo}"
 #    will send a "JunkBuster" image.  "+image-blocker{blank}" will send
-#    a 1x1 transparent PNG, "+image-blocker{pattern}" will send a 4x4
+#    a 1x1 transparent image, "+image-blocker{pattern}" will send a 4x4
 #    grey/white pattern which is less intrusive than the logo but easier
 #    to recognize than the transparent one. And finally, "+image-blocker{<URL>}"
 #    will send a HTTP temporary redirect to the specified image URL.
