@@ -1,0 +1,9 @@
+body { margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:0px;}
+h1 { margin-left:20px; font-family:Helvetica,Arial; font-size:18pt;}
+h2 { margin-left:25px; font-family:Helvetica,Arial; font-size:14pt; }
+h3 { margin-left:25px; font-family:Helvetica,Arial; font-size:12pt; }
+p  { margin-left:27px; margin-right:20px; font-size:10pt; }
+# next definition removes bullets for netscape
+# li { margin-left:27px; margin-right:20px; font-size:10pt; }
+form,pre,ul,ol { margin-left:27px; margin-right:20px; font-size:10pt; }
+div,td,th,address,nobr,b,i { font-size:10pt; }

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
+
+ Purpose     :  Gives direction on writing documentation.
+                This file belongs into
+                ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
+                
+ $Id: Makefile.in,v 1.12 2001/06/12 17:15:56 swa Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ IJBSWA team.  http://ijbswa.sourceforge.net
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+-->
+
+<head>
+<title>Junkbuster|Documentation Guidelines</title>
+<link rel=stylesheet type="text/css" href="swa.css">
+
+</head>
+ 
+ <body bgcolor="#ffffff"
+ topmargin="0" leftmargin="0" marginwidth = "0" marginheight = "0" 
+ text="#000000" 
+ link="#0000ff" 
+ vlink="#ff0000" 
+ alink="#ff0000"
+ >
+
+<body>
+<p>
+<br><br>
+<h1>Documentation guideline:</h1>
+<p>
+All docs should be ...
+<ul>
+  <li>in a format that is widely used. I propose HTML.
+  <li>we either
+      <ul>
+	<li>generate man pages from the documentation (let's _NOT_ write them manually), or 
+	<li>we have a man page that points to the documentation (I propose
+	    this option)
+      </ul>
+  <li>have a consistent layout
+  <li>have a link to the latest version of the document (i.e. point to a URL at sf)
+  <li>be consistent with the redirect script (i.e. the junkbuster program
+      points via the redirect URL at sf to valid end-points in the document)
+  <li>started from scratch but recycle parts from the original junkbuster documents
+</ul>
+
+<br>
+
+<hr>
+<address></address><p>
+<!-- hhmts start -->
+Last modified: Wed Jun 13 16:06:08 CEST 2001
+<!-- hhmts end -->
+</body>
+ <!--
+ This program is free software; you can redistribute it 
+ and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software
+ Foundation; either version 2 of the License, or (at
+ your option) any later version.
+
+ This program is distributed in the hope that it will
+ be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A
+ PARTICULAR PURPOSE.  See the GNU General Public
+ License for more details.
+
+ The GNU General Public License should be included with
+ this file.  If not, you can view it at
+ http://www.gnu.org/copyleft/gpl.html
+ or write to the Free Software Foundation, Inc., 59
+ Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+$Log: Makefile.in,v $
+ Revision 1.12  2001/06/12 17:15:56  swa
+ fixes, because a clean build on rh6.1 was impossible.
+ GZIP confuses make, %configure confuses rpm, etc.
+
+-->
+</html>
