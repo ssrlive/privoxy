@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.13 2001/09/16 11:00:10 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.14 2001/09/16 11:38:02 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,14 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.14  2001/09/16 11:38:02  jongfoster
+ *    Splitting fill_template() into 2 functions:
+ *    template_load() loads the file
+ *    template_fill() performs the PCRS regexps.
+ *    This is because the CGI edit interface has a "table row"
+ *    template which is used many times in the page - this
+ *    change means it's only loaded from disk once.
+ *
  *    Revision 1.13  2001/09/16 11:00:10  jongfoster
  *    New function alloc_http_response, for symmetry with free_http_response
  *
@@ -105,19 +113,29 @@ extern struct map *parse_cgi_parameters(char *argstring);
 /*
  * CGI functions
  */
-extern int cgi_show_version(struct client_state *csp, struct http_response *rsp,
-                            struct map *parameters);
-extern int cgi_default(struct client_state *csp, struct http_response *rsp,
-                       struct map *parameters);
-extern int cgi_show_status(struct client_state *csp, struct http_response *rsp,
-                           struct map *parameters);
-extern int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
-                             struct map *parameters);
-extern int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
-   		                  struct map *parameters);
+extern int cgi_default             (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_robots_txt          (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_send_banner         (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_show_status         (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_show_url_info       (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_show_version        (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
 
 /* Not exactly a CGI */
-extern struct http_response *error_response(struct client_state *csp, const char *template, int err);
+extern struct http_response * error_response(struct client_state *csp,
+                                             const char *templatename,
+                                             int err);
 
 /*
  * CGI support functions
@@ -140,10 +158,6 @@ extern void template_fill(char ** template_ptr, struct map *exports);
  */
 extern char *make_menu(const char *self);
 extern char *dump_map(const struct map *map);
-
-#ifdef FEATURE_STATISTICS
-extern struct map *add_stats(struct map *exports);
-#endif /* def FEATURE_STATISTICS */
 
 /*
  * Some images.
