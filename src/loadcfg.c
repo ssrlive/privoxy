@@ -1,7 +1,7 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.1 2002/06/04 17:22:36 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.2 2002/09/04 15:48:33 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/loadcfg.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/loadcfg.c,v $
  *
  * Purpose     :  Loads settings from the configuration file into
  *                global variables.  This file contains both the
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.1 2002/06/04 17:22:36 jongfoster 
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 2.2  2002/09/04 15:48:33  oes
+ *    Synced with the stable branch:
+ *        Revision 1.48.2.1  2002/08/21 17:58:05  oes
+ *        Temp kludge to let user and default action file be edited through win32 GUI (FR 592080)
+ *
  *    Revision 2.1  2002/06/04 17:22:36  jongfoster
  *    Adding comments
  *
@@ -471,9 +476,9 @@ void unload_configfile (void * data)
 {
    struct configuration_spec * config = (struct configuration_spec *)data;
    struct forward_spec *cur_fwd = config->forward;
+   int i;
 #ifdef FEATURE_ACL
    struct access_control_list *cur_acl = config->acl;
-   int i;
 
    while (cur_acl != NULL)
    {
