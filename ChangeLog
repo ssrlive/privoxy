@@ -1,10 +1,12 @@
 --------------------------------------------------------------------
-ChangeLog for Internet JunkBuster
+ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Current CVS *** 
 - Fix Solaris compile problem (gateway.h and filters.h)
 - Makefile fixes for Solaris, FreeBSD (?)
-
+- Fix build failure where certain features were disabled.
+- New 'blocked-compact' template.
+- Various other minor fixes.
 
 *** Version 2.9.13 Beta *** 
 
