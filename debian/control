@@ -16,8 +16,4 @@ Description: Privacy enhancing HTTP Proxy
  and can be customized to suit individual needs and tastes. Privoxy
  has application for both stand-alone systems and multi-user networks.
  .
- Privoxy is based on the code of the Internet Junkbuster. Junkbuster
- was originally written by JunkBusters Corporation, and was released
- as free open-source software under the GNU GPL. Stefan Waldherr made
- many improvements, and started the SourceForge project to continue
- development. Several other developers are now contributing.
+ Privoxy is based on Internet Junkbuster (tm).
