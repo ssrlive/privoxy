@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.11 2002/03/06 14:33:18 sarantis Exp $
+# $Id: GNUmakefile.in,v 1.12 2002/03/07 15:28:27 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.12  2002/03/07 15:28:27  swa
+# more informative
+#
 # Revision 1.11  2002/03/06 14:33:18  sarantis
 # Use proper temp file, not "abc".
 #
@@ -290,7 +293,6 @@ DOSFILTER  = perl -p -e 's/\n/\r\n/'
 
 TAR_ARCH = /tmp/ijbswa-$(RPM_VERSION).tar.gz
 RPM_BASE = @RPM_BASE@
-TMPFILE = mktemp -q /tmp/$(PROGRAM).XXXXXX
 
 #############################################################################
 # Filenames and libraries
@@ -416,21 +418,31 @@ re_filterfile.txt: re_filterfile
 #############################################################################
 
 redhat-dist:
-	@for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
+	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
 			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
 			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
 			$(ECHO) "%_topdir /home/foo/rpm-build"; \
-			exit; \
+			exit 1; \
 		fi; \
-	done ; \
-	$(MAKE) clobber; \
-	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH); \
-	$(SED) 's/^\(Version:\).*/\1 $(RPM_VERSION)/g; \
-	        s/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' junkbuster-rh.spec > $(TMPFILE) && $(MV) -f $(TMPFILE) junkbuster-rh.spec; \
-	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf $(TAR_ARCH) . ; \
-	$(RPM) --clean -ta  $(TAR_ARCH); \
-	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH)
+	done; \
+
+	$(MAKE) clobber
+	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
+
+	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
+              junkbuster-rh.spec > $$TMPFILE ; then \
+      $(MV) -f $$TMPFILE junkbuster-rh.spec; \
+   else \
+      $(ECHO) "Could not set version info in specfile."; \
+      exit 1;\
+   fi
+
+	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
 #
 # anonymously ncftps the rpms to sourceforge
