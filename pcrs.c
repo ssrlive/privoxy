@@ -1,15 +1,15 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.9 2001/07/18 17:27:00 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.11 2001/08/15 15:26:24 oes Exp $";
 
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
  *
  * Purpose     :  pcrs is a supplement to the brilliant pcre library by Philip
- *                Hazel (ph10@cam.ac.uk) and adds Perl-style substitution. That
+ *                Hazel <ph10@cam.ac.uk> and adds Perl-style substitution. That
  *                is, it mimics Perl's 's' operator.
  *
  *                Currently, there's no documentation besides comments and the
- *                source itself ;-)
+ *                source itself :-(
  *
  *                Note: In addition to perl's options, 'U' for ungreedy and 'T'
  *                for trivial (i.e.: ignore backrefs in the substitute) are
@@ -38,6 +38,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.9 2001/07/18 17:27:00 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.10  2001/08/05 13:13:11  jongfoster
+ *    Making parameters "const" where possible.
+ *
  *    Revision 1.9  2001/07/18 17:27:00  oes
  *    Changed interface; Cosmetics
  *
@@ -64,33 +67,12 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.9 2001/07/18 17:27:00 oes Exp $";
  *    - Removed create_pcrs_job() which was useless
  *    - Fixed a bug in pcrs_execute
  *    - Success flag is now handled by pcrs instead of user
- *    - Removed logentry from cancelled commit
  *
  *    Revision 1.6  2001/06/03 19:12:45  oes
  *    added FIXME
  *
  *    Revision 1.5  2001/05/29 09:50:24  jongfoster
- *    Unified blocklist/imagelist/permissionslist.
- *    File format is still under discussion, but the internal changes
- *    are (mostly) done.
- *
- *    Also modified interceptor behaviour:
- *    - We now intercept all URLs beginning with one of the following
- *      prefixes (and *only* these prefixes):
- *        * http://i.j.b/
- *        * http://ijbswa.sf.net/config/
- *        * http://ijbswa.sourceforge.net/config/
- *    - New interceptors "home page" - go to http://i.j.b/ to see it.
- *    - Internal changes so that intercepted and fast redirect pages
- *      are not replaced with an image.
- *    - Interceptors now have the option to send a binary page direct
- *      to the client. (i.e. ijb-send-banner uses this)
- *    - Implemented show-url-info interceptor.  (Which is why I needed
- *      the above interceptors changes - a typical URL is
- *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
- *      The previous mechanism would not have intercepted that, and
- *      if it had been intercepted then it then it would have replaced
- *      it with an image.)
+ *    (Fixed one int -> size_t)
  *
  *    Revision 1.4  2001/05/25 14:12:40  oes
  *    Fixed bug: Empty substitutes now detected
@@ -100,47 +82,11 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.9 2001/07/18 17:27:00 oes Exp $";
  *
  *    Revision 1.2  2001/05/22 18:46:04  oes
  *
- *    - Enabled filtering banners by size rather than URL
- *      by adding patterns that replace all standard banner
- *      sizes with the "Junkbuster" gif to the re_filterfile
- *
- *    - Enabled filtering WebBugs by providing a pattern
- *      which kills all 1x1 images
- *
- *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      Added support for PCRE_UNGREEDY behaviour to pcrs,
  *      which is selected by the (nonstandard and therefore
  *      capital) letter 'U' in the option string.
  *      It causes the quantifiers to be ungreedy by default.
  *      Appending a ? turns back to greedy (!).
- *
- *    - Added a new interceptor ijb-send-banner, which
- *      sends back the "Junkbuster" gif. Without imagelist or
- *      MSIE detection support, or if tinygif = 1, or the
- *      URL isn't recognized as an imageurl, a lame HTML
- *      explanation is sent instead.
- *
- *    - Added new feature, which permits blocking remote
- *      script redirects and firing back a local redirect
- *      to the browser.
- *      The feature is conditionally compiled, i.e. it
- *      can be disabled with --disable-fast-redirects,
- *      plus it must be activated by a "fast-redirects"
- *      line in the config file, has its own log level
- *      and of course wants to be displayed by show-proxy-args
- *      Note: Boy, all the #ifdefs in 1001 locations and
- *      all the fumbling with configure.in and acconfig.h
- *      were *way* more work than the feature itself :-(
- *
- *    - Because a generic redirect template was needed for
- *      this, tinygif = 3 now uses the same.
- *
- *    - Moved GIFs, and other static HTTP response templates
- *      to project.h
- *
- *    - Some minor fixes
- *
- *    - Removed some >400 CRs again (Jon, you really worked
- *      a lot! ;-)
  *
  *    Revision 1.1.1.1  2001/05/15 13:59:02  oes
  *    Initial import of version 2.9.3 source tree
@@ -152,12 +98,13 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.9 2001/07/18 17:27:00 oes Exp $";
 #include <pcre.h>
 #include <string.h>
 #include "pcrs.h"
+#include <stdio.h>
 const char pcrs_h_rcs[] = PCRS_H_VERSION;
 
 
 /*********************************************************************
  *
- * Function    :  pcrs_compile_perl_options
+ * Function    :  pcrs_parse_perl_options
  *
  * Description :  This function parses a string containing the options to
  *                Perl's s/// operator. It returns an integer that is the
@@ -174,7 +121,7 @@ const char pcrs_h_rcs[] = PCRS_H_VERSION;
  * Returns     :  option integer suitable for pcre 
  *
  *********************************************************************/
-int pcrs_compile_perl_options(const char *optstring, int *flags)
+int pcrs_parse_perl_options(const char *optstring, int *flags)
 {
    size_t i;
    int rc = 0;
@@ -183,7 +130,7 @@ int pcrs_compile_perl_options(const char *optstring, int *flags)
    {
       switch(optstring[i])
       {
-         case 'e': break;
+         case 'e': break; /* ToDo ;-) */
          case 'g': *flags |= PCRS_GLOBAL; break;
          case 'i': rc |= PCRE_CASELESS; break;
          case 'm': rc |= PCRE_MULTILINE; break;
@@ -212,7 +159,11 @@ int pcrs_compile_perl_options(const char *optstring, int *flags)
  * Parameters  :
  *          1  :  replacement = replacement part of s/// operator
  *                              in perl syntax
- *          2  :  errptr = pointer to an integer in which error
+ *          2  :  trivialflag = Flag that causes backreferences to be
+ *                              ignored.
+ *          3  :  capturecount = Number of capturing subpatterns in
+ *                               the pattern. Needed for $+ handling.
+ *          4  :  errptr = pointer to an integer in which error
  *                         conditions can be returned.
  *
  * Returns     :  pcrs_substitute data structure, or NULL if an
@@ -220,89 +171,130 @@ int pcrs_compile_perl_options(const char *optstring, int *flags)
  *                the reason.
  *
  *********************************************************************/
-pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int *errptr)
+pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int capturecount, int *errptr)
 {
-   int length, i, k = 0, l = 0, quoted = 0, idx;
-   char *text, *num_ptr, *numbers = "0123456789";
+   int length, i, k, l, quoted;
+   char *text;
    pcrs_substitute *r;
 
-   r = (pcrs_substitute *)malloc(sizeof(pcrs_substitute));
-   if (r == NULL) return NULL;
-   memset(r, '\0', sizeof(pcrs_substitute));
+   i = k = l = quoted = 0;
 
-   text = strdup(replacement);      /* must be free()d by caller */
-   if (text  == NULL)
+   /*
+    * Get memory or fail
+    */
+   if (NULL == (r = (pcrs_substitute *)malloc(sizeof(pcrs_substitute))))
    {
       *errptr = PCRS_ERR_NOMEM;
-      free(r);
       return NULL;
    }
+   memset(r, '\0', sizeof(pcrs_substitute));
 
    length = strlen(replacement);
 
+   if (NULL == (text = (char *)malloc(length + 1)))
+   {
+      free(r);
+      *errptr = PCRS_ERR_NOMEM;
+      return NULL;
+   }
+   memset(r, '\0', length + 1);
+   
+
+   /*
+    * In trivial mode, just copy the substitute text
+    */
    if (trivialflag)
    {
-       k = length;
+      text = strncpy(text, replacement, length + 1);
+      k = length;
    }
+
+   /*
+    * Else, parse, cut out and record all backreferences
+    */
    else
    {
-      for (i=0; i < length; i++)
+      while(i < length)
       {
-         /* Backslash treatment */
+         /* Quoting */
          if (replacement[i] == '\\')
          {
             if (quoted)
             {
-               text[k++] = replacement[i];
+               text[k++] = replacement[i++];
                quoted = 0;
             }
             else
             {
                quoted = 1;
+               i++;
             }
             continue;
          }
 
-         /* Dollar treatment */
+         /* Backreferences */
          if (replacement[i] == '$' && !quoted && i < length - 1)
          {
-            if (strchr("0123456789&", replacement[i + 1]) == NULL)
+            char *symbol, symbols[] = "'`+&";
+            r->block_length[l] = k - r->block_offset[l];
+
+            /* Numerical backreferences */
+            if (isdigit(replacement[i + 1]))
             {
-               text[k++] = replacement[i];
+               while (i < length && isdigit(replacement[++i]))
+               {
+                  r->backref[l] = r->backref[l] * 10 + replacement[i] - 48;
+               }
             }
+
+            /* Symbolic backreferences: */
+            else if (NULL != (symbol = strchr(symbols, replacement[i + 1])))
+            {
+               
+               if (symbol - symbols == 2) /* $+ */
+               {
+                  r->backref[l] = capturecount;
+               }
+               else if (symbol - symbols == 3) /* $& */
+               {
+                  r->backref[l] = 0;
+               }
+               else /* $' or $` */
+               {
+                  r->backref[l] = PCRS_MAX_SUBMATCHES + 1 - (symbol - symbols);
+               }
+               i += 2;
+            }
+
+            /* Invalid backref -> plain '$' */
             else
             {
-               r->block_length[l] = k - r->block_offset[l];
-               r->backref[l] = 0;
-               if (replacement[i + 1] != '&')
-               {
-                  while ((num_ptr = strchr(numbers, replacement[++i])) != NULL && i < length)
-                  {
-                     idx = num_ptr - numbers;
-                     r->backref[l] = r->backref[l] * 10 + idx;
-                  }
-                  i--;
-               }
-               else
-                  i++;
-               if (r->backref[l] < PCRS_MAX_SUBMATCHES)
-                  r->backref_count[r->backref[l]] += 1;
-               l++;
-               r->block_offset[l] = k;
+               goto plainchar;
+            }
+
+            /* Valid and in range? -> record */
+            if (r->backref[l] < PCRS_MAX_SUBMATCHES + 2)
+            {
+               r->backref_count[r->backref[l]] += 1;
+               r->block_offset[++l] = k;
             }
             continue;
          }
-
-         /* Plain char treatment */
-         text[k++] = replacement[i];
+         
+plainchar:
+         /* Plain chars are copied */
+         text[k++] = replacement[i++];
          quoted = 0;
       }
    } /* -END- if (!trivialflag) */
 
-   text[k] = '\0';
+   /*
+    * Finish & return
+    */
    r->text = text;
    r->backrefs = l;
    r->block_length[l] = k - r->block_offset[l];
+
    return r;
 
 }
@@ -313,8 +305,7 @@ pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialfl
  * Function    :  pcrs_free_job
  *
  * Description :  Frees the memory used by a pcrs_job struct and its
- *                dependant structures. Returns a pointer to the next
- *                job, if there was any, or NULL otherwise.
+ *                dependant structures.
  *
  * Parameters  :
  *          1  :  job = pointer to the pcrs_job structure to be freed
@@ -346,6 +337,7 @@ pcrs_job *pcrs_free_job(pcrs_job *job)
    return next;
 
 }
+
 
 /*********************************************************************
  *
@@ -424,7 +416,7 @@ pcrs_job *pcrs_compile_command(const char *command, int *errptr)
    		   l = -1;
             break;
          }
-          tokens[0][k++] = '\0';
+         tokens[0][k++] = '\0';
          tokens[++l] = tokens[0] + k;
          continue;
       }
@@ -437,7 +429,6 @@ pcrs_job *pcrs_compile_command(const char *command, int *errptr)
       tokens[0][k++] = command[i];
       quoted = FALSE;
    }
-
 
    /*
     * Syntax error ?
@@ -479,6 +470,7 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
 {
    pcrs_job *newjob;
    int flags;
+   int capturecount;
    const char *error;
 
 
@@ -504,7 +496,7 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    /*
     * Evaluate the options
     */
-   newjob->options = pcrs_compile_perl_options(options, &flags);
+   newjob->options = pcrs_parse_perl_options(options, &flags);
    newjob->flags = flags;
 
 
@@ -532,10 +524,21 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    }
  
 
+   /* 
+    * Determine the number of capturing subpatterns. 
+    * This is needed for handling $+ in the substitute.
+    */
+   if (0 > (*errptr = pcre_fullinfo(newjob->pattern, newjob->hints, PCRE_INFO_CAPTURECOUNT, &capturecount)))
+   {
+      pcrs_free_job(newjob);
+      return NULL;
+   }
+ 
+
    /*
     * Compile the substitute
     */
-   if (NULL == (newjob->substitute = pcrs_compile_replacement(substitute, newjob->flags & PCRS_TRIVIAL, errptr)))
+   if (NULL == (newjob->substitute = pcrs_compile_replacement(substitute, newjob->flags & PCRS_TRIVIAL, capturecount, errptr)))
    {
       pcrs_free_job(newjob);
       return NULL;
@@ -564,6 +567,7 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
  *                INCLUDING the terminating zero, if string!
  *          4  :  result = char** for returning  the result 
  *          5  :  result_length = int* for returning the result's length
+ *          6  :  max_matches = maximum number of matches in global searches
  *
  * Returns     :  the number of substitutions that were made. May be > 1
  *                if job->flags contained PCRS_GLOBAL
@@ -575,14 +579,15 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
        offset, i, k,
        matches_found,
        newsize,
-       submatches;
-   pcrs_match matches[PCRS_MAX_MATCHES];
+       submatches,
+       max_matches = PCRS_MAX_MATCH_INIT;
+   pcrs_match *matches, *dummy;
    char *result_offset;
 
    offset = i = k = 0;
 
    /* 
-    * Sanity check
+    * Sanity check & memory allocation
     */
    if (job == NULL || job->pattern == NULL || job->substitute == NULL)
    {
@@ -590,10 +595,17 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
       return(PCRS_ERR_BADJOB);
    }
 
-   
+   if (NULL == (matches = (pcrs_match *)malloc(max_matches * sizeof(pcrs_match))))
+   {
+      *result = NULL;
+      return(PCRS_ERR_NOMEM);
+   }
+   memset(matches, '\0', max_matches * sizeof(pcrs_match));
+
+
    /*
     * Find the pattern and calculate the space
-    * requirements for the result (newsize)
+    * requirements for the result
     */
    newsize=subject_length;
 
@@ -601,6 +613,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
    {
       job->flags |= PCRS_SUCCESS;
       matches[i].submatches = submatches;
+
       for (k=0; k < submatches; k++)
       {
          matches[i].submatch_offset[k] = offsets[2 * k];
@@ -614,8 +627,31 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
       /* plus replacement text size minus match text size */
       newsize += strlen(job->substitute->text) - matches[i].submatch_length[0]; 
 
+      /* chunk before match */
+      matches[i].submatch_offset[PCRS_MAX_SUBMATCHES] = 0;
+      matches[i].submatch_length[PCRS_MAX_SUBMATCHES] = offsets[0];
+      newsize += offsets[0] * job->substitute->backref_count[PCRS_MAX_SUBMATCHES];
+
+      /* chunk after match */
+      matches[i].submatch_offset[PCRS_MAX_SUBMATCHES + 1] = offsets[1];
+      matches[i].submatch_length[PCRS_MAX_SUBMATCHES + 1] = subject_length - offsets[1] - 1;
+      newsize += (subject_length - offsets[1])* job->substitute->backref_count[PCRS_MAX_SUBMATCHES + 1];
+
       /* Non-global search or limit reached? */
-      if (++i >= PCRS_MAX_MATCHES || !(job->flags & PCRS_GLOBAL) ) break;
+      if (!(job->flags & PCRS_GLOBAL)) break;
+
+      /* Storage for matches exhausted? -> Extend! */
+      if (++i >= max_matches)
+      {
+         max_matches *= PCRS_MAX_MATCH_GROW;
+         if (NULL == (dummy = (pcrs_match *)realloc(matches, max_matches * sizeof(pcrs_match))))
+         {
+            free(matches);
+            *result = NULL;
+            return(PCRS_ERR_NOMEM);
+         }
+         matches = dummy;
+      }
 
       /* Don't loop on empty matches */
       if (offsets[1] == offset)
@@ -628,7 +664,11 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
          offset = offsets[1];
    }
    /* Pass pcre error through if failiure */
-   if (submatches < -1) return submatches;   
+   if (submatches < -1)
+   {
+      free(matches);
+      return submatches;   
+   }
    matches_found = i;
 
 
@@ -637,6 +677,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
     */
    if ((*result = (char *)malloc(newsize)) == NULL)   /* must be free()d by caller */
    {
+      free(matches);
       return PCRS_ERR_NOMEM;
    }
 
@@ -663,7 +704,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
          /* ..plus, if it's not the last chunk, i.e.: There *is* a backref.. */
          if (k != job->substitute->backrefs
              /* ..in legal range.. */
-             && job->substitute->backref[k] <= PCRS_MAX_SUBMATCHES
+             && job->substitute->backref[k] < PCRS_MAX_SUBMATCHES + 2
              /* ..and referencing a nonempty match.. */
              && matches[i].submatch_length[job->substitute->backref[k]] > 0)
          {
@@ -683,6 +724,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
    memcpy(result_offset, subject + offset, subject_length - offset);
 
    *result_length = newsize;
+   free(matches);
    return matches_found;
 
 }
