@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.26 2001/11/05 21:41:43 steudten Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.27 2001/11/07 00:02:13 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.26 2001/11/05 21:41:43 steudten E
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.27  2001/11/07 00:02:13  steudten
+ *    Add line number in error output for lineparsing for
+ *    actionsfile and configfile.
+ *    Special handling for CLF added.
+ *
  *    Revision 1.26  2001/11/05 21:41:43  steudten
  *    Add changes to be a real daemon just for unix os.
  *    (change cwd to /, detach from controlling tty, set
@@ -349,7 +354,6 @@ static struct file_list *current_configfile = NULL;
 
 static void savearg(char *c, char *o, struct configuration_spec * config);
 
-
 /*********************************************************************
  *
  * Function    :  unload_configfile
@@ -442,7 +446,7 @@ struct configuration_spec * load_config(void)
    unsigned long linenum = 0;
 
    DBG(1, ("load_config() entered..\n") );
-   if (!check_file_changed(current_configfile, configfile, &fs))
+   if ( !check_file_changed(current_configfile, configfile, &fs))
    {
       /* No need to load */
       return ((struct configuration_spec *)current_configfile->f);
@@ -1368,6 +1372,7 @@ struct configuration_spec * load_config(void)
    files->next = fs;
 
    current_configfile = fs;
+   MustReload = 0;
 
    return (config);
 }

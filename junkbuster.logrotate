@@ -35,6 +35,11 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.logrotate,v $
+#     Revision 1.6  2001/12/13 23:19:43  steudten
+#     Add 'restart' of junkbuster service after rotate logfiles.
+#     Better we could use the well known 'kill -HUP', but the handler
+#     isn't there at this time.
+#
 #     Revision 1.5  2001/11/05 21:31:51  steudten
 #     Change switch mode from weekly to size 1M
 #
@@ -60,7 +65,7 @@
    compress
    size 1M
    postrotate
-        /sbin/service junkbuster restart 2> /dev/null || true
+        /sbin/service junkbuster reload  2> /dev/null || true
    endscript
 }
 
@@ -69,6 +74,6 @@
    compress
    size 1M
    postrotate
-        /sbin/service junkbuster restart 2> /dev/null || true
+        /sbin/service junkbuster reload  2> /dev/null || true
    endscript
 }

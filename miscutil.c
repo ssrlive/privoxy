@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.24 2001/11/05 21:41:43 steudten Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.25 2001/11/13 00:16:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.24 2001/11/05 21:41:43 steudten
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.25  2001/11/13 00:16:38  jongfoster
+ *    Replacing references to malloc.h with the standard stdlib.h
+ *    (See ANSI or K&R 2nd Ed)
+ *
  *    Revision 1.24  2001/11/05 21:41:43  steudten
  *    Add changes to be a real daemon just for unix os.
  *    (change cwd to /, detach from controlling tty, set
@@ -158,7 +162,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.24 2001/11/05 21:41:43 steudten
 #include "config.h"
 
 #include <stdio.h>
+#include <sys/types.h>
 #include <stdlib.h>
+#if !defined(_WIN32) && !defined(__OS2__)
+#include <unistd.h>
+#endif /* #if !defined(_WIN32) && !defined(__OS2__) */
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -193,7 +201,52 @@ void *zalloc(int size)
 
    return(ret);
 }
+#if defined(unix)
+/*********************************************************************
+ *
+ * Function    : deletePidFile 
+ *
+ * Description :  deletes the pid file with the pid of the main process 
+ *
+ * Parameters  : -
+ *
+ * Returns     : - 
+ *
+ *********************************************************************/
+void deletePidFile( void )
+{
+  char pidfile[ 64 ];
 
+  snprintf( pidfile, sizeof(pidfile), "%s/%s", PID_FILE_PATH, PID_FILE_NAME);
+  unlink( pidfile );
+}
+/*********************************************************************
+ *
+ * Function    : writePidFile 
+ *
+ * Description :  writes the pid file with the pid of the main process 
+ *
+ * Parameters  : -
+ *
+ * Returns     : - 
+ *
+ *********************************************************************/
+void writePidFile( void )
+{
+  FILE   *fp;
+  char   pidfile[64];
+
+  snprintf( pidfile, sizeof(pidfile), "%s/%s", PID_FILE_PATH, PID_FILE_NAME);
+  if ((fp = fopen( pidfile,"w")) == NULL )
+  {
+      log_error(LOG_LEVEL_INFO, "can't open pidfile '%s': %E", pidfile);
+      return;
+  }
+
+  fprintf( fp,"%u\n", (unsigned int) getpid());
+  fclose ( fp );
+}
+#endif /* unix */
 
 /*********************************************************************
  *

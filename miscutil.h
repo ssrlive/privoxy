@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.13 2001/10/29 03:48:10 david__schmidt Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.14 2001/11/05 21:43:48 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.14  2001/11/05 21:43:48  steudten
+ *    Add global var 'basedir' for unix os.
+ *
  *    Revision 1.13  2001/10/29 03:48:10  david__schmidt
  *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
  *    by and __OS2__ ifdef.
@@ -119,6 +122,11 @@ extern "C" {
 
 extern const char *basedir;
 extern void *zalloc(int size);
+
+#if defined(unix)
+extern void writePidFile( void );
+extern void deletePidFile( void );
+#endif /* unix */
 
 extern unsigned int hash_string(const char* s);
 

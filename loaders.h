@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.11 2001/10/23 21:38:53 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.12 2001/11/07 00:02:13 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.12  2001/11/07 00:02:13  steudten
+ *    Add line number in error output for lineparsing for
+ *    actionsfile and configfile.
+ *    Special handling for CLF added.
+ *
  *    Revision 1.11  2001/10/23 21:38:53  jongfoster
  *    Adding error-checking to create_url_spec()
  *
@@ -130,6 +135,7 @@ extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);
 
+extern short int MustReload;
 extern int load_actions_file(struct client_state *csp);
 extern int load_re_filterfile(struct client_state *csp);
 

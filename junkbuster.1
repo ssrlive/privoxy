@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.10 (beta) Date: 2001/12/02"
+.TH JUNKBUSTER 1 "v2.9.10 (beta) Date: 2001/12/30"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -70,7 +70,7 @@ otherwise
 won't be proxied.
 
 .SH CONFIGURATION
-All \fBJunkbuster\fP configuration is done via the various configuarion 
+All \fBJunkbuster\fP configuration is done via the various configuration 
 files. The default configuration files are: \fIconfig\fP, 
 \fIijb.action\fP, and \fIre_filterfile\fP. These are well commented. 
 On Unix and Unix-like systems, these are located in \fI/etc/junkbuster/\fP 
@@ -206,6 +206,17 @@ Various other files should be included, but may vary depending on platform
 and build configuration. More documentation should be included in the local
 documentation directory, though is not complete at this time.
 
+.SH SIGNALS
+\fBJunkbuster\fP use the signal \fISIGHUP\fP (see kill -l) to reload all configuration
+files (see CONFIGURATION). This includes the re-open of the logfiles
+(logfile and jarfile) eg. used
+after rotation of the logfiles by logrotate.
+The \fISIGHUP\fP behavior is only for UNIX like OS'.
+.br
+However the configfile will be read if \fBJunkbuster\fP notice a different
+modification time of this file and behaves so like start of \fBJunkbuster\fP 
+in context of all the files.
+ 
 .SH NOTES
 This is a development version of \fBJunkbuster\fP. Not all features are  
 complete.
@@ -229,6 +240,8 @@ http://www.junkbusters.com/ht/en/cookies.html\" cookies.html#
 http://privacy.net/analyze/
 .br
 http://www.squid-cache.org/
+.br
+http://linuxalpha.ch/packages/
 
 .SH DEVELOPMENT TEAM
 .br

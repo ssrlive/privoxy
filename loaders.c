@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.32 2001/11/07 00:02:13 steudten Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.33 2001/11/13 00:16:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.32 2001/11/07 00:02:13 steudten E
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.33  2001/11/13 00:16:38  jongfoster
+ *    Replacing references to malloc.h with the standard stdlib.h
+ *    (See ANSI or K&R 2nd Ed)
+ *
  *    Revision 1.32  2001/11/07 00:02:13  steudten
  *    Add line number in error output for lineparsing for
  *    actionsfile and configfile.
@@ -572,11 +576,11 @@ int check_file_changed(const struct file_list * current,
        && (current->lastmodified == statbuf->st_mtime)
        && (0 == strcmp(current->filename, filename)))
    {
-      return 0;
+       /* force reload of configfile and all the logs */
+       if ( !MustReload ) return 0;
    }
 
    fs = (struct file_list *)zalloc(sizeof(struct file_list));
-
    if (fs == NULL)
    {
       /* Out of memory error */
@@ -592,11 +596,8 @@ int check_file_changed(const struct file_list * current,
       freez (fs);
       return 1;
    }
-
-
    *newfl = fs;
    return 1;
-
 }
 
 

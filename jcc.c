@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.58 2001/11/30 23:37:24 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.59 2001/12/13 14:07:18 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.58 2001/11/30 23:37:24 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.59  2001/12/13 14:07:18  oes
+ *    Fixed Bug: 503 error page now sent OK
+ *
  *    Revision 1.58  2001/11/30 23:37:24  jongfoster
  *    Renaming the Win32 config file to config.txt - this is almost the
  *    same as the corresponding UNIX name "config"
@@ -461,6 +464,8 @@ const char project_h_rcs[] = PROJECT_H_VERSION;
 struct client_state  clients[1];
 struct file_list     files[1];
 
+short int MustReload = 0;
+
 #ifdef FEATURE_STATISTICS
 int urls_read     = 0;     /* total nr of urls read inc rejected */
 int urls_rejected = 0;     /* total nr of urls rejected */
@@ -502,6 +507,44 @@ static const char VANILLA_WAFER[] =
    "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 
+#if !defined(_WIN32) && !defined(__OS2__)
+/*********************************************************************
+ *
+ * Function    :  SIG_handler 
+ *
+ * Description :  Signal handler for different signals.
+ *                see man kill, signal .. 
+ *
+ * Parameters  :
+ *          1  : signal - the signal cause this function to call 
+ *
+ * Returns     :  - 
+ *
+ *********************************************************************/
+static void SIG_handler( int signal )
+{
+   switch( signal )
+   {
+      case SIGHUP:
+         MustReload = 1;
+         break;
+      case SIGTERM:
+         log_error(LOG_LEVEL_INFO, "exiting by signal %d .. bye", signal);
+         
+#if defined(unix)
+         deletePidFile();
+#endif /* unix */
+
+         exit( signal );
+         break;
+
+      default:
+         /* want to exit jb so use FATAL */
+         log_error(LOG_LEVEL_FATAL, "SIG_handler: receive signal %d without handler.", signal);
+   }
+   return;
+}
+#endif
 /*********************************************************************
  *
  * Function    :  chat
@@ -1472,8 +1515,44 @@ int main(int argc, const char *argv[])
 
 
 #if !defined(_WIN32) && !defined(__OS2__)
-   signal(SIGPIPE, SIG_IGN);
-   signal(SIGCHLD, SIG_IGN);
+{
+   int sig;
+   struct sigaction action;
+
+   for ( sig = 1; sig < 16; sig++ )
+   {
+      switch( sig )
+      {
+         case 9:
+         case SIGPIPE:
+         case SIGCHLD:
+         case SIGHUP:
+                 continue;
+      }
+      if ( signal(sig, SIG_handler)  == SIG_ERR )
+         log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal %d: %E", sig);
+   }
+   /* SIG_IGN */
+   if ( signal(SIGPIPE, SIG_IGN) == SIG_ERR )
+      log_error(LOG_LEVEL_FATAL, "Can't set SIG_IGN to SIGPIPE: %E");
+   if ( signal(SIGCHLD, SIG_IGN) == SIG_ERR )
+      log_error(LOG_LEVEL_FATAL, "Can't set SIG_IGN to SIGCHLD: %E");
+   /* log file reload */
+   if (!sigaction(SIGHUP,NULL,&action))
+   {
+      action.sa_handler = &SIG_handler;
+      action.sa_flags   = SA_RESTART;
+
+      if ( sigaction(SIGHUP,&action,NULL))
+         log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal SIGHUP: %E");
+   } 
+   else
+   {
+      perror("sigaction");
+      log_error(LOG_LEVEL_FATAL, "Can't get sigaction data for signal SIGHUP");
+   }
+      
+}
 
 #else /* ifdef _WIN32 */
 # ifdef _WIN_CONSOLE
@@ -1558,6 +1637,7 @@ int main(int argc, const char *argv[])
 #endif /* _DEBUG */
    chdir("/");
 
+   writePidFile();
 }
 #endif /* defined unix */
 

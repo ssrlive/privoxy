@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.14  2001/10/23 21:24:09  jongfoster
+ *    Support for FEATURE_CGI_EDIT_ACTIONS
+ *
  *    Revision 1.13  2001/10/07 15:30:41  oes
  *    Removed FEATURE_DENY_GZIP
  *
@@ -183,6 +186,11 @@
  * Status of the code: "alpha", "beta" or "stable".
  */
 #undef CODE_STATUS
+
+/*
+ * pid file used under unix.
+ */
+#undef PID_FILE_PATH 
 
 /*
  * Regular expression matching for URLs.  (Highly recommended).

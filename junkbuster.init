@@ -33,6 +33,10 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.10  2001/11/05 21:30:23  steudten
+#     Make JB startup without & due to be a 'real' daemon right now.
+#     Make the script easy to change.
+#
 #     Revision 1.9  2001/09/15 01:53:12  steudten
 #
 #     Remove test for subsys flag in start. Some minor changes.
@@ -68,8 +72,9 @@
 # chkconfig: 235 84 09
 #
 # description: This shell script takes care of starting and stopping \
-#             junkbuster.
+#              junkbuster.
 #
+
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -83,6 +88,7 @@ JB_PRG="junkbuster"
 JB_BIN="/usr/sbin/$JB_PRG"
 JB_CONF="/etc/$JB_PRG/config"
 JB_USER="junkbuster"
+JB_PID="/etc/junkbuster"/$JB_PRG.pid
 
 # some checks for us
 [ -x $JB_BIN  ] || exit 0
@@ -105,7 +111,7 @@ start () {
 stop () {
 	# stop daemon
 	echo -n $"Stopping $JB_PRG: "
-	killproc $JB_PRG && rm -f /var/lock/subsys/$JB_PRG
+	killproc $JB_PRG && rm -f /var/lock/subsys/$JB_PRG $JB_PID
 	RETVAL=$?
 	echo
 	return $RETVAL
@@ -118,14 +124,20 @@ case "$1" in
   stop)
 	stop	
 	;;
-  reload|restart)
+  reload)
+	if [ -f $JB_PID ] ; then
+                kill -HUP `cat $JB_PID`
+	        RETVAL=$?
+        fi
+	;;
+  restart)
 	stop
 	start
 	RETVAL=$?
 	;;
   condrestart)
 	# restart only if already running
-	if [ -f /var/lock/subsys/$JB_PRG ] ; then
+	if [ -f $JB_PID ] ; then
 		stop
 		start
 		RETVAL=$?
@@ -135,8 +147,17 @@ case "$1" in
 	status $JB_PRG 
 	RETVAL=$?
 	;;
+  top)
+	if [ -f $JB_PID ]; then
+                a=""
+                for i in `pidof $JB_PRG` ; do
+                        a="$a -p $i"
+                done
+                top $a
+        fi
+	;;
   *)
-	echo $"Usage: $JB_PRG {start|stop|reload|restart|condrestart|status}"
+	echo $"Usage: $JB_PRG {start|stop|reload|restart|condrestart|status|top}"
 	exit 1
 esac
 

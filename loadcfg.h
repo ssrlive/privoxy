@@ -1,6 +1,6 @@
 #ifndef LOADCFG_H_INCLUDED
 #define LOADCFG_H_INCLUDED
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.6 2001/07/29 18:58:15 jongfoster Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.7 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -37,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.7  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.6  2001/07/29 18:58:15  jongfoster
  *    Removing nested #includes, adding forward declarations for needed
  *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
@@ -139,6 +145,7 @@ extern const char *configfile;
  */
 extern int Argc;
 extern const char **Argv;
+extern short int MustReload;
 
 
 extern struct configuration_spec * load_config(void);

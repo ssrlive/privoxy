@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.42 2001/11/05 21:42:41 steudten Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.43 2001/11/22 21:57:51 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.43  2001/11/22 21:57:51  jongfoster
+ *    Making action_spec->flags into an unsigned long rather than just an
+ *    unsigned int.
+ *    Adding ACTION_NO_COOKIE_KEEP
+ *
  *    Revision 1.42  2001/11/05 21:42:41  steudten
  *    Include DBG() macro.
  *
@@ -419,6 +424,10 @@ typedef int jb_err;
 #define HADDR_DEFAULT   "127.0.0.1"
 #define HADDR_PORT      8000
 
+/*
+ * pid file name
+ */
+#define PID_FILE_NAME   "junkbuster.pid"
 
 /* Forward defs for various structures */
 
