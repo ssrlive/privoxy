@@ -1,9 +1,9 @@
 #ifndef W32RES_H_INCLUDED
 #define W32RES_H_INCLUDED
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.13 2002/03/26 22:57:10 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/w32res.h,v $
  *
  * Purpose     :  Identifiers for Windows GUI resources.
  *
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.13  2002/03/26 22:57:10  jongfoster
  *    Web server name should begin www.
  *
@@ -133,7 +136,7 @@
 #define IDI_ANIMATED7                     207
 #define IDI_ANIMATED8                     208
 
-#define ID_SHOWWINDOW                     4000
+#define ID_TOGGLE_SHOWWINDOW              4000
 #define ID_HELP_ABOUT                     4001
 #define ID_FILE_EXIT                      4002
 #define ID_VIEW_CLEARLOG                  4003
@@ -151,11 +154,12 @@
 
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITCONFIG               5000
-#define ID_TOOLS_EDITACTIONS              5001
-#define ID_TOOLS_EDITFILTERS              5002
+#define ID_TOOLS_EDITDEFAULTACTIONS       5001
+#define ID_TOOLS_EDITUSERACTIONS          5002
+#define ID_TOOLS_EDITFILTERS              5003
 
 #ifdef FEATURE_TRUST
-#define ID_TOOLS_EDITTRUST                5003
+#define ID_TOOLS_EDITTRUST                5004
 #endif /* def FEATURE_TRUST */
 
 /*
