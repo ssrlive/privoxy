@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.62 2002/04/04 20:49:50 swa Exp $
+# $Id: GNUmakefile.in,v 1.63 2002/04/04 21:06:22 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -688,7 +688,7 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -iname TAGS`
+	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -name TAGS -o -name tags` 
 
 tidy:
 	$(RM) `find . -name "*~" -o -name "#*#"`
@@ -732,6 +732,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.63  2002/04/04 21:06:22  swa
+# cosmetics.
+#
 # Revision 1.62  2002/04/04 20:49:50  swa
 # attempt to consolidate the
 # different dokbook versions.
