@@ -1,7 +1,7 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.36 2002/05/26 23:23:10 joergs Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/jbsockets.c,v $
  *
  * Purpose     :  Contains wrappers for system-specific sockets code,
  *                so that the rest of Junkbuster can be more
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.36 2002/05/26 23:23:10 joergs
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.36  2002/05/26 23:23:10  joergs
  *    AmigaOS: Fixed wrong type for len in write_socket()
  *
@@ -274,29 +277,37 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 
    if ((addr = resolve_hostname_to_ip(host)) == INADDR_NONE)
    {
-      csp->http->host_ip_addr_str = strdup("unknown");
+      if (csp)
+      {
+        csp->http->host_ip_addr_str = strdup("unknown");
+      }
       return(JB_INVALID_SOCKET);
    }
 
 #ifdef FEATURE_ACL
-   dst->addr = ntohl((unsigned long) addr);
-   dst->port = portnum;
-
-   if (block_acl(dst, csp))
+   if (csp)
    {
+     dst->addr = ntohl((unsigned long) addr);
+     dst->port = portnum;
+
+     if (block_acl(dst, csp))
+     {
 #ifdef __OS2__
-      errno = SOCEPERM;
+        errno = SOCEPERM;
 #else
-      errno = EPERM;
+        errno = EPERM;
 #endif
-      return(JB_INVALID_SOCKET);
+        return(JB_INVALID_SOCKET);
+     }
    }
 #endif /* def FEATURE_ACL */
 
    inaddr.sin_addr.s_addr = addr;
    inaddr.sin_family      = AF_INET;
-   csp->http->host_ip_addr_str = strdup(inet_ntoa(inaddr.sin_addr));
-
+   if (csp)
+   {
+     csp->http->host_ip_addr_str = strdup(inet_ntoa(inaddr.sin_addr));
+   }
 #ifndef _WIN32
    if (sizeof(inaddr.sin_port) == sizeof(short))
 #endif /* ndef _WIN32 */

@@ -1,4 +1,4 @@
-const char stats_rcs[] = "$Id: stats.c,v 2.1 2002/12/28 03:58:19 david__schmidt Exp $";
+const char stats_rcs[] = "$Id: stats.c,v 2.2 2002/12/28 04:17:58 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/stats.c,v $
@@ -34,13 +34,16 @@ const char stats_rcs[] = "$Id: stats.c,v 2.1 2002/12/28 03:58:19 david__schmidt 
  *********************************************************************/
 
 
+#include <string.h>
 #ifdef unix
 #include <sys/signal.h>
 #endif
 #include "project.h"
 #include "errlog.h"
+#include "miscutil.h"
 #include "stats.h"
 #include "ipc.h"
+#include "jbsockets.h"
 
 const char stats_h_rcs[] = STATS_H_VERSION;
 const char ipc_h_rcs[] = IPC_H_VERSION;
@@ -65,15 +68,12 @@ int changed = 0,
  *********************************************************************/
 void init_stats_config(struct configuration_spec * config)
 {
-  int i;
-#if defined (_WIN32) || defined (__OS2__)
-  int child_id;
-#else
+  int rc, i, child_id;
+#if defined(FEATURE_PTHREAD)
   pthread_attr_t attr;
   pthread_t thread;
-#endif /* def unix */
+#endif /* def FEATURE_PTHREAD */
 
-  log_error(LOG_LEVEL_INFO, "init_stats_config hit.");
   IPC_CREATE_MUTEX(stats_lock);
   for (i=0; i < STATS_MAX_KEYS; i++)
   {
@@ -82,29 +82,94 @@ void init_stats_config(struct configuration_spec * config)
   latest_config = config;
 
   /*
-   * Start the timing/sending thread - we'll need a lot of work here
-   * for each platform.  I imagine there is also a possibility of 
-   * doing this via fork() instead of threads.
+   * Start the timing/sending thread - I stole this from jcc.c. 
+   * The idea is to get a mutiplatform thread started.
+   * YMMV - please tweak for your platform!
    */
 
-#ifdef _WIN32
-    child_id = _beginthread(
-            (void (*)(void *))forward_stats,
-            64 * 1024,
-            NULL);
-#elif __OS2__
-    child_id = _beginthread(
-            (void(* _Optlink)(void*))forward_stats,
-            NULL,
-            64 * 1024,
-            NULL);
-#else
-    /* Generic unix processing */
-    signal(SIGALRM, null_routine);  /* Ignore the SIGALRM signal */
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    pthread_create(&thread, &attr, forward_stats, NULL);
+/* this is a switch () statment in the C preprocessor - ugh */
+#undef SELECTED_ONE_OPTION
+
+/* Use pthreads in preference to any native code */
+#if defined(FEATURE_PTHREAD) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+  pthread_t the_thread;
+  pthread_attr_t attrs;
+
+  signal(SIGALRM, null_routine);  /* Ignore the SIGALRM signal */
+  pthread_attr_init(&attrs);
+  pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
+  child_id = (pthread_create(&the_thread, &attrs,
+    (void*)forward_stats, NULL) ? -1 : 0);
+  pthread_attr_destroy(&attrs);
 #endif
+
+#if defined(_WIN32) && !defined(_CYGWIN) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+  child_id = _beginthread(
+    (void (*)(void *))forward_stats,
+    64 * 1024,
+    NULL);
+#endif
+
+#if defined(__OS2__) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+  child_id = _beginthread(
+    (void(* _Optlink)(void*))forward_stats,
+    NULL,
+    64 * 1024,
+    NULL);
+#endif
+
+#if defined(__BEOS__) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+  thread_id tid = spawn_thread
+    (server_thread, "forward_stats", B_NORMAL_PRIORITY, NULL);
+
+  if ((tid >= 0) && (resume_thread(tid) == B_OK))
+  {
+    child_id = (int) tid;
+  }
+  else
+  {
+    child_id = -1;
+  }
+#endif
+
+#if defined(AMIGA) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+  if((child_id = (int)CreateNewProcTags(
+     NP_Entry, (ULONG)server_thread,
+     NP_Output, Output(),
+     NP_CloseOutput, FALSE,
+     NP_Name, (ULONG)"privoxy child",
+     NP_StackSize, 200*1024,
+     TAG_DONE)))
+  {
+     childs++;
+     Signal((struct Task *)child_id, SIGF_SINGLE);
+     Wait(SIGF_SINGLE);
+  }
+#endif
+
+#if !defined(SELECTED_ONE_OPTION)
+  /* I don't think the IPC will really work in a fork()'d environment,
+   * so proceed with caution.  FIXME.
+   */
+  child_id = fork();
+
+  if (child_id == 0)   /* child */
+  {
+     forward_stats();
+     _exit(0);
+  }
+  else if (child_id > 0) /* parent */
+  {
+  }
+#endif
+
+#undef SELECTED_ONE_OPTION
+/* end of c preprocessor switch () */
 
 }
 
@@ -149,7 +214,6 @@ void accumulate_stats(int key, int value)
     changed = 1;
     IPC_UNLOCK_MUTEX(stats_lock);
   }
-  /* log_error(LOG_LEVEL_INFO, "Accumulate stats: key %d, value %d, total %d; send to: %s:%d", key, value, stats_array[key], latest_config->activity_address,latest_config->activity_port); */
 }
 
 /*********************************************************************
@@ -169,7 +233,6 @@ void *forward_stats()
 {
   int local_stats_array[STATS_MAX_KEYS];
   
-  log_error(LOG_LEVEL_INFO, "forward_stats ready.");
   for (;;)
   {
     IPC_SLEEP_SECONDS(latest_config->activity_freq);
@@ -179,7 +242,7 @@ void *forward_stats()
       memcpy(local_stats_array,stats_array,sizeof(stats_array));
       changed = 0;
       IPC_UNLOCK_MUTEX(stats_lock);
-      send_stats(&local_stats_array);
+      send_stats(local_stats_array);
     }
   }
 }
@@ -188,20 +251,45 @@ void *forward_stats()
  *
  * Function    :  send_stats
  *
- * Description :  Attempt to send statistics to the listening console
+ * Description :  Attempt to send statistics to the listening console.
+ *                Stats are formatted as a clear-text string for now -
+ *                no need for any encoding fanciness just yet.
  *
- * Parameters  :  N/A
+ * Parameters  :
+ *          1  :  local_stats_array, a pointer to a local copy of the
+ *                statistics array.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void send_stats(int *local_stats_array[])
+void send_stats(int local_stats_array[])
 {
+  jb_socket sk;
+  char *msg = NULL, tmp_msg[64];
+  int i;
+
   /* Here, we initiate the socket send to the console */
-  /*
-  log_error(LOG_LEVEL_INFO, "send_stats sending stats: %d %d %d %d %d %d %d %d %d %d",
-    local_stats_array[0],local_stats_array[1],local_stats_array[2],local_stats_array[3],local_stats_array[4],local_stats_array[5],local_stats_array[6],local_stats_array[7],local_stats_array[8],local_stats_array[9]);
-  */
+  sk = connect_to(latest_config->activity_address,latest_config->activity_port,NULL);
+  if (sk > 0)
+  {
+    /* max size of a key looks like this: xxxxx:xxxxxb */
+    msg = zalloc(
+      64 + /* space for socket key ("serving:") and value and stuff */
+      STATS_MAX_KEYS * 64  /* Space for keys - much bigger than necessary for safety */
+      );
+    if (msg)
+    {
+      sprintf(msg,"serving:%d ",latest_config->hport);
+      for (i = 0; i < STATS_MAX_KEYS; i++)
+      {
+        sprintf(tmp_msg,"%d:%d ",i,local_stats_array[i]);
+        strcat(msg,tmp_msg);
+      }
+      write_socket(sk,msg,strlen(msg));
+      freez(msg);
+    }
+    close_socket(sk);
+  }
 }
 
 /*********************************************************************
