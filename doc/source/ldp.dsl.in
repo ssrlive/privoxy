@@ -29,14 +29,6 @@
 ;; see http://docbook.sourceforge.net/projects/dsssl/doc/print.html
 ;;
 
-(define %generate-part-toc-on-titlepage%
-  ;; Should the Part TOC appear on the Part title page?
-  #f)
-
-(define %generate-article-toc-on-titlepage%
-  ;; Should the Article TOC appear on the Article title page?
-  #f)
-
 (define %indent-screen-lines%
   ;; Indent lines in a 'Screen'?
   #t)
@@ -73,14 +65,6 @@
 
 (define %funcsynopsis-decoration%
   ;; make funcsynopsis look pretty
-  #t)
-
-(define %generate-article-toc% 
-  ;; Should a Table of Contents be produced for Articles?
-  ;; If true, a Table of Contents will be generated for each 'Article'.
-  #t)
-
-(define %generate-part-toc%
   #t)
 
 ;;(define %shade-verbatim%
@@ -163,8 +147,30 @@
 
 ;; swa1
 
-;; This seems to have no affect
-(define %generate-article-titlepage-on-separate-page% #t)
+(define %generate-part-toc%
+  #f)
+
+(define %generate-article-toc% 
+  ;; Should a Table of Contents be produced for Articles?
+  ;; If true, a Table of Contents will be generated for each 'Article'.
+  #t)
+
+(define %generate-part-toc-on-titlepage%
+  ;; Should the Part TOC appear on the Part title page?
+  #f)
+
+;;Do you want a separate page for the title?
+(define %generate-article-titlepage-on-separate-page%
+ #t)
+
+;;Do you want the article toc on the titlepage or separate?
+(define %generate-article-toc-on-titlepage%
+ #f)
+
+;;Titlepage Separate?
+;; This is the one that makes TOC only on first page!! hal.
+(define (chunk-skip-first-element-list)
+ '())
 
 (define %body-start-indent%
   ;; Default indent of body text
