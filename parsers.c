@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.48 2002/03/07 03:46:53 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.49 2002/03/09 20:03:52 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,30 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.48 2002/03/07 03:46:53 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.49  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.48  2002/03/07 03:46:53  oes
  *    Fixed compiler warnings etc
  *
@@ -1064,11 +1088,11 @@ jb_err client_referrer(struct client_state *csp, char **header)
          log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
       }
 
-      log_error(LOG_LEVEL_HEADER, "crunch+forge!");
       *header = strdup("Referer: http://");
       string_append(header, csp->http->hostport);
       string_append(header, "/");
-
+      log_error(LOG_LEVEL_HEADER, "crunch+forge to %s", *header);
+      
       return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
    }
 }
