@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.34 2002/04/08 20:31:41 swa Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.35 2002/04/26 15:50:04 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.34 2002/04/08 20:31:41 swa Ex
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.35  2002/04/26 15:50:04  joergs
+ *    AmigaOS: No socklen_t, added AMIGA to the systems using int instead.
+ *
  *    Revision 1.34  2002/04/08 20:31:41  swa
  *    fixed JB spelling
  *
@@ -393,7 +396,11 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
  *                nonzero on error.
  *
  *********************************************************************/
+#ifdef AMIGA
+int write_socket(jb_socket fd, const char *buf, ssize_t len)
+#else
 int write_socket(jb_socket fd, const char *buf, size_t len)
+#endif
 {
    if (len == 0)
    {

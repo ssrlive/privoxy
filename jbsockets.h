@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.8 2002/03/26 22:29:54 swa Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.9 2002/04/08 20:31:41 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.9  2002/04/08 20:31:41  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.8  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -97,7 +100,11 @@ extern "C" {
 struct client_state;
 
 extern jb_socket connect_to(const char *host, int portnum, struct client_state *csp);
+#ifdef AMIGA
+extern int write_socket(jb_socket fd, const char *buf, ssize_t n);
+#else
 extern int write_socket(jb_socket fd, const char *buf, size_t n);
+#endif
 extern int read_socket(jb_socket fd, char *buf, int n);
 extern void close_socket(jb_socket fd);
 
