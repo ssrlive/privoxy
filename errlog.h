@@ -1,6 +1,6 @@
-#ifndef _ERRLOG_H
-#define _ERRLOG_H
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.6 2001/07/13 13:59:22 oes Exp $"
+#ifndef ERRLOG_H_INCLUDED
+#define ERRLOG_H_INCLUDED
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.7 2001/07/19 19:02:53 haroon Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.7  2001/07/19 19:02:53  haroon
+ *    Added define for LOG_LEVEL_POPUPS
+ *
  *    Revision 1.6  2001/07/13 13:59:22  oes
  *     - Added LOG_LEVEL_DEANIMATE
  *     - Changed LOG_LEVEL_CLF
@@ -143,7 +146,7 @@ extern const char errlog_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _ERRLOG_H */
+#endif /* ndef ERRLOG_H_INCLUDED */
 
 /*
   Local Variables:

@@ -1,9 +1,9 @@
-#ifndef _W32TASKBAR_H
-#define _W32TASKBAR_H
-#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#ifndef W32TASKBAR_H_INCLUDED
+#define W32TASKBAR_H_INCLUDED
+#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/w32taskbar.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.h,v $
  *
  * Purpose     :  Functions for creating, setting and destroying the
  *                workspace tray icon
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32taskbar.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -55,7 +58,7 @@ extern const char w32taskbar_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _W32TASKBAR_H */
+#endif /* ndef W32TASKBAR_H_INCLUDED */
 
 
 /*

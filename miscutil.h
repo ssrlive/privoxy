@@ -1,6 +1,6 @@
-#ifndef _MISCUTIL_H
-#define _MISCUTIL_H
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.7 2001/06/05 22:32:01 jongfoster Exp $"
+#ifndef MISCUTIL_H_INCLUDED
+#define MISCUTIL_H_INCLUDED
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.8 2001/06/29 13:32:14 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.8  2001/06/29 13:32:14  oes
+ *    Removed logentry from cancelled commit
+ *
  *    Revision 1.7  2001/06/05 22:32:01  jongfoster
  *    New function make_path() to splice directory and file names together.
  *
@@ -121,7 +124,7 @@ extern const char miscutil_h_rcs[];
 }
 #endif
 
-#endif /* ndef _MISCUTIL_H */
+#endif /* ndef MISCUTIL_H_INCLUDED */
 
 /*
   Local Variables:

@@ -1,6 +1,6 @@
-#ifndef _SSPLIT_H
-#define _SSPLIT_H
-#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $"
+#ifndef SSPLIT_H_INCLUDED
+#define SSPLIT_H_INCLUDED
+#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.2 2001/05/29 08:54:25 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.h,v $
@@ -34,6 +34,11 @@
  *
  * Revisions   :
  *    $Log: ssplit.h,v $
+ *    Revision 1.2  2001/05/29 08:54:25  jongfoster
+ *    Rewrote the innards of ssplit() to be easier to understand,
+ *    faster, and to use less memory.  Didn't change the interface
+ *    except to give the parameters meaningful names.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:04  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -56,7 +61,7 @@ extern const char ssplit_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _SSPLIT_H */
+#endif /* ndef SSPLIT_H_INCLUDED */
 
 /*
   Local Variables:

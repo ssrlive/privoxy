@@ -1,9 +1,9 @@
-#ifndef _ENCODE_H
-#define _ENCODE_H
-#define ENCODE_H_VERSION "$Id: encode.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#ifndef ENCODE_H_INCLUDED
+#define ENCODE_H_INCLUDED
+#define ENCODE_H_VERSION "$Id: encode.h,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/encode.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/encode.h,v $
  *
  * Purpose     :  Functions to encode and decode URLs, and also to
  *                encode cookies and HTML text.
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: encode.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -56,7 +59,7 @@ extern const char encode_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _ENCODE_H */
+#endif /* ndef ENCODE_H_INCLUDED */
 
 /*
   Local Variables:

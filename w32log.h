@@ -1,6 +1,6 @@
-#ifndef _W32LOG_H
-#define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.5 2001/06/07 23:08:12 jongfoster Exp $"
+#ifndef W32LOG_H_INCLUDED
+#define W32LOG_H_INCLUDED
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.6 2001/07/13 14:04:59 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.6  2001/07/13 14:04:59  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.5  2001/06/07 23:08:12  jongfoster
  *    Forward and ACL edit options removed.
  *
@@ -135,7 +138,7 @@ extern const char w32log_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _W32LOG_H */
+#endif /* ndef W32LOG_H_INCLUDED */
 
 
 /*

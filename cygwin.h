@@ -1,9 +1,9 @@
-#ifndef _CYGWIN_H
-#define _CYGWIN_H
-#define CYGWIN_H_VERSION "$Id: cygwin.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#ifndef CYGWIN_H_INCLUDED
+#define CYGWIN_H_INCLUDED
+#define CYGWIN_H_VERSION "$Id: cygwin.h,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/cygwin.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cygwin.h,v $
  *
  * Purpose     :  The windows.h file seems to be a *tad* different, so I
  *                will bridge the gaps here.  Perhaps I should convert the
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: cygwin.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -53,7 +56,7 @@
  */
 
 #endif /* def __MINGW32__ */
-#endif /* ndef _CYGWIN_H */
+#endif /* ndef CYGWIN_H_INCLUDED */
 
 
 /*

@@ -1,6 +1,6 @@
-#ifndef _LIST_H
-#define _LIST_H
-#define LIST_H_VERSION "$Id: list.h,v 1.3 2001/06/03 11:03:48 oes Exp $"
+#ifndef LIST_H_INCLUDED
+#define LIST_H_INCLUDED
+#define LIST_H_VERSION "$Id: list.h,v 1.4 2001/06/29 13:30:37 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.4  2001/06/29 13:30:37  oes
+ *    - Introduced enlist_unique_header()
+ *    - Removed logentry from cancelled commit
+ *
  *    Revision 1.3  2001/06/03 11:03:48  oes
  *    introduced functions for new list type "map": map(), lookup(),
  *    free_map(), and extended enlist_unique
@@ -98,7 +102,7 @@ extern const char list_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _LIST_H */
+#endif /* ndef LIST_H_INCLUDED */
 
 /*
   Local Variables:

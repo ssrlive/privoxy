@@ -1,6 +1,6 @@
-#ifndef _PROJECT_H
-#define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.23 2001/07/18 12:32:23 oes Exp $"
+#ifndef PROJECT_H_INCLUDED
+#define PROJECT_H_INCLUDED
+#define PROJECT_H_VERSION "$Id: project.h,v 1.24 2001/07/25 17:20:27 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.24  2001/07/25 17:20:27  oes
+ *    Introduced http->user_agent
+ *
  *    Revision 1.23  2001/07/18 12:32:23  oes
  *    - Added ACTION_STRING_DEANIMATE
  *    - moved #define freez from jcc.h to project.h
@@ -799,7 +802,7 @@ static const char CHEADER[] =
 } /* extern "C" */
 #endif
 
-#endif /* ndef _PROJECT_H */
+#endif /* ndef PROJECT_H_INCLUDED */
 
 /*
   Local Variables:

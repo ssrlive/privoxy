@@ -1,7 +1,7 @@
 #ifdef AMIGA
-#ifndef _AMIGA_H
-#define _AMIGA_H
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.3 2001/05/25 21:53:27 jongfoster Exp $"
+#ifndef AMIGA_H_INCLUDED
+#define AMIGA_H_INCLUDED
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.4 2001/05/29 20:05:06 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
@@ -31,6 +31,10 @@
  *
  * Revisions   :
  *    $Log: amiga.h,v $
+ *    Revision 1.4  2001/05/29 20:05:06  joergs
+ *    Fixed exit() macro not exiting if called before InitAmiga()
+ *    (junkbuster --help and --version).
+ *
  *    Revision 1.3  2001/05/25 21:53:27  jongfoster
  *    Fixing indentation
  *
@@ -100,5 +104,5 @@ __saveds ULONG server_thread(void);
 
 #define EINTR 0
 
-#endif /* ndef _AMIGA_H */
+#endif /* ndef AMIGA_H_INCLUDED */
 #endif /* def AMIGA */

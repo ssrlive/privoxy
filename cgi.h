@@ -1,6 +1,6 @@
-#ifndef _CGI_H
-#define _CGI_H
-#define CGI_H_VERSION "$Id: cgi.h,v 1.5 2001/06/29 13:22:44 oes Exp $"
+#ifndef CGI_H_INCLUDED
+#define CGI_H_INCLUDED
+#define CGI_H_VERSION "$Id: cgi.h,v 1.6 2001/06/29 21:45:41 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.6  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.5  2001/06/29 13:22:44  oes
  *    - Cleaned up
  *    - Added new functions: default_exports(), make_menu(),
@@ -136,7 +139,7 @@ extern const char cgi_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _CGI_H */
+#endif /* ndef CGI_H_INCLUDED */
 
 /*
   Local Variables:

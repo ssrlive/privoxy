@@ -1,6 +1,6 @@
-#ifndef _PARSERS_H
-#define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.7 2001/06/29 13:32:14 oes Exp $"
+#ifndef PARSERS_H_INCLUDED
+#define PARSERS_H_INCLUDED
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.8 2001/07/13 14:01:54 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.8  2001/07/13 14:01:54  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.7  2001/06/29 13:32:14  oes
  *    Removed logentry from cancelled commit
  *
@@ -135,7 +138,7 @@ extern const char parsers_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _PARSERS_H */
+#endif /* ndef PARSERS_H_INCLUDED */
 
 /*
   Local Variables:

@@ -1,6 +1,6 @@
-#ifndef _W32RULESDLG_H
-#define _W32RULESDLG_H
-#define W32RULESDLG_H_VERSION "$Id: w32rulesdlg.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
+#ifndef W32RULESDLG_H_INCLUDED
+#define W32RULESDLG_H_INCLUDED
+#define W32RULESDLG_H_VERSION "$Id: w32rulesdlg.h,v 1.2 2001/05/26 01:26:34 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32rulesdlg.h,v $
@@ -34,6 +34,11 @@
  *
  * Revisions   :
  *    $Log: w32rulesdlg.h,v $
+ *    Revision 1.2  2001/05/26 01:26:34  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -62,7 +67,7 @@ extern const char w32rulesdlg_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _W32RULESDLG_H */
+#endif /* ndef W32RULESDLG_H_INCLUDED */
 
 
 /*

@@ -1,6 +1,6 @@
-#ifndef _W32RES_H
-#define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.7 2001/06/07 23:08:12 jongfoster Exp $"
+#ifndef W32RES_H_INCLUDED
+#define W32RES_H_INCLUDED
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.8 2001/07/13 14:04:59 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.8  2001/07/13 14:04:59  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.7  2001/06/07 23:08:12  jongfoster
  *    Forward and ACL edit options removed.
  *
@@ -170,7 +173,7 @@
 #define ID_EDIT_COPY  30000
 
 
-#endif /* ndef _W32RES_H */
+#endif /* ndef W32RES_H_INCLUDED */
 
 /*
   Local Variables:

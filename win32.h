@@ -1,9 +1,9 @@
-#ifndef _WIN32_H
-#define _WIN32_H
-#define WIN32_H_VERSION "$Id: win32.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#ifndef WIN32_H_INCLUDED
+#define WIN32_H_INCLUDED
+#define WIN32_H_VERSION "$Id: win32.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/win32.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/win32.h,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
@@ -33,6 +33,9 @@
  *
  * Revisions   :
  *    $Log: win32.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -62,7 +65,7 @@ extern const char win32_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _WIN32_H */
+#endif /* ndef WIN32_H_INCLUDED */
 
 /*
   Local Variables:
