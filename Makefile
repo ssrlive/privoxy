@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.3 2002/03/26 22:29:54 swa Exp $
+# $Id: Makefile,v 1.4 2002/04/09 16:38:10 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile,v $
+# Revision 1.4  2002/04/09 16:38:10  oes
+# Added option to run the whole build process
+#
 # Revision 1.3  2002/03/26 22:29:54  swa
 # we have a new homepage!
 #
@@ -53,7 +56,7 @@ error:
 	    echo "***"; \
 	    echo -n "*** Shall I do this for you now? (y/n) "; \
 	    read answer; \
-	    if [ $$answer == "y" ]; then \
+	    if [ $$answer = "y" ]; then \
 	       autoheader && autoconf && ./configure && make;\
 	    fi; \
 	 fi
