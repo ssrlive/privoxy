@@ -25,46 +25,146 @@
 ;; ==============================
 ;; customize the print stylesheet
 ;; ==============================
-
-;;
-;; shamelessly stolen from the wine project.
 ;;
 ;; see http://docbook.sourceforge.net/projects/dsssl/doc/print.html
 ;;
 
+(define %generate-part-toc-on-titlepage%
+  ;; Should the Part TOC appear on the Part title page?
+  #f)
 
-;; I was hoping that this would take out the many blank pages in the
-;; PDF file, but it doesn't, it just slides the page numbers over.  
-;; (define %two-side% #f)
+(define %generate-article-toc-on-titlepage%
+  ;; Should the Article TOC appear on the Article title page?
+  #f)
 
-(define %generate-article-titlepage% #t)
+(define %indent-screen-lines%
+  ;; Indent lines in a 'Screen'?
+  #t)
 
-;;;;Titlepage Not Separate
-;;(define (chunk-skip-first-element-list)
-;;  (list (normalize "sect1")
-;;	(normalize "section")))
+(define %callout-fancy-bug% 
+  ;; Use fancy callout bugs?
+  #t)
 
-;;Titlepage Separate?
-;(define (chunk-skip-first-element-list) 
-;  '())
+(define %chap-app-running-heads% 
+  ;; Generate running headers and footers on chapter-level elements?
+  #t)
 
-(define (list-element-list)
-  ;; fixes bug in Table of Contents generation
-  '())
+(define %chap-app-running-head-autolabel% 
+  ;; Put chapter labels in running heads?
+  #t)
+
+;; this is necessary because right now jadetex does not understand
+;; symbolic entities, whereas things work well with numeric entities.
+(declare-characteristic preserve-sdata?
+  "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
+  #f)
+
+;; put the legal notice in a separate file
+(define %generate-legalnotice-link%
+  #t)
+
+;; use graphics in admonitions, and have their path be "stylesheet-images"
+;; NO: they do not yet look very good
+(define %admon-graphics-path%
+  "./stylesheet-images/")
+
+(define %admon-graphics%
+  #f)
+
+(define %funcsynopsis-decoration%
+  ;; make funcsynopsis look pretty
+  #t)
 
 (define %generate-article-toc% 
   ;; Should a Table of Contents be produced for Articles?
   ;; If true, a Table of Contents will be generated for each 'Article'.
   #t)
 
-(define (toc-depth nd)
-  2)
-
-(define %shade-verbatim%
+(define %generate-part-toc%
   #t)
 
+;;(define %shade-verbatim%
+;;  #t)
+
+(define %section-autolabel% #t)
+  ;; For enumerated sections (1.1, 1.1.1, 1.2, etc.)
+  
+;; HB changed TOC depth to 3 levels.
+(define (toc-depth nd)
+  3)
+
+;; HB added 03/20/02, see dbparam.dsl ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define %body-attr% 
+  ;; REFENTRY body-attr
+  ;; PURP What attributes should be hung off of BODY?
+  ;; DESC
+  ;; A list of the the BODY attributes that should be generated.
+  ;; The format is a list of lists, each interior list contains the
+  ;; name and value of a BODY attribute.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  (list
+   (list "BGCOLOR" "#EEEEEE")
+   (list "TEXT" "#000000")
+   (list "LINK" "#0000FF")
+   (list "VLINK" "#840084")
+   (list "ALINK" "#0000FF")))
+
+(define %stylesheet%
+  ;; REFENTRY stylesheet
+  ;; PURP Name of the stylesheet to use
+  ;; DESC
+  ;; The name of the stylesheet to place in the HTML LINK TAG, or '#f' to
+  ;; suppress the stylesheet LINK.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  "../p_doc.css")
+
+(define %stylesheet-type%
+  ;; REFENTRY stylesheet-type
+  ;; PURP The type of the stylesheet to use
+  ;; DESC
+  ;; The type of the stylesheet to place in the HTML LINK TAG.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  "text/css")
+
+(define %css-liststyle-alist%
+  ;; REFENTRY css-liststyle-alist
+  ;; PURP Map DocBook OVERRIDE and MARK attributes to CSS
+  ;; DESC
+  ;; If '%css-decoration%' is turned on then the list-style-type property of
+  ;; list items will be set to reflect the list item style selected in the
+  ;; DocBook instance.  This associative list maps the style type names used
+  ;; in your instance to the appropriate CSS names.  If no mapping exists,
+  ;; the name from the instance will be used.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  '(("bullet" "disc")
+    ("box" "square")))
+
+(define %css-decoration%
+  ;; REFENTRY css-decoration
+  ;; PURP Enable CSS decoration of elements
+  ;; DESC
+  ;; If '%css-decoration%' is turned on then HTML elements produced by the
+  ;; stylesheet may be decorated with STYLE attributes.  For example, the
+  ;; LI tags produced for list items may include a fragment of CSS in the
+  ;; STYLE attribute which sets the CSS property "list-style-type".
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  #t)
+
+;; swa1
+
 ;; This seems to have no affect
-(define %generate-article-titlepage-on-separate-page% #f)
+(define %generate-article-titlepage-on-separate-page% #t)
 
 (define %body-start-indent%
   ;; Default indent of body text
@@ -73,6 +173,8 @@
 (define %para-indent-firstpara%
   ;; First line start-indent for the first paragraph
   0pt)
+
+;; swa2
 
 (define %para-indent%
   ;; First line start-indent for paragraphs (other than the first)
@@ -85,6 +187,10 @@
 ;;Define distance between paragraphs
 (define %para-sep% 
  (/ %bf-size% 2.0))
+
+;; with swa2 no effects
+
+;; swa3
 
 ;;Define distance between block elements (figures, tables, etc.).
 (define %block-sep% 
@@ -99,7 +205,6 @@
 (define %right-margin% 5pi)
 (define %top-margin% 5pi)
 (define %bottom-margin% 5pi)
-
 (define %footer-margin% 2pi)
 (define %header-margin% 2pi)
 
@@ -129,11 +234,6 @@
   ;; Which Lists of Titles should be produced for Articles?
   (list ))
 
-;;(define tex-backend 
-;;  ;; Are we using the TeX backend?
-;;  ;; This parameter exists so that '-V tex-backend' can be used on the
-;;  ;; command line to explicitly select the TeX backend.
-;;  #t)
 
 </style-specification-body>
 </style-specification>

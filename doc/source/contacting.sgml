@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.10 2002/04/26 12:06:52 swa Exp $
+ $Id: contacting.sgml,v 1.11 2002/04/26 17:23:29 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -40,7 +40,7 @@
 To get support, use the Sourceforge Support Forum:
 
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118</ulink>
-   </literallayout>
+</literallayout>
   </para>
 </sect2>
 
@@ -50,7 +50,7 @@ To get support, use the Sourceforge Support Forum:
 To submit bugs, use the Sourceforge Bug Forum:
 
     <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</ulink>. 
-    </literallayout>
+</literallayout>
  </para>
   <para>
    Make sure that the bug has not already been submitted.  Please try to
@@ -71,7 +71,7 @@ To submit bugs, use the Sourceforge Bug Forum:
 To submit ideas on new features, use the Sourceforge feature request forum:
 
     <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse"></ulink>.
-   </literallayout>
+</literallayout>
   </para>
 </sect2>
 
@@ -97,7 +97,7 @@ bookmark to send us feedback. We will look into the issue as soon as possible.
 For any other issues, feel free to use the mailing lists:
  
     <ulink url="http://sourceforge.net/mail/?group_id=11118">http://sourceforge.net/mail/?group_id=11118</ulink>.
- </literallayout>
+</literallayout>
  </para>
  <para>
   Anyone interested in actively participating in development and related
