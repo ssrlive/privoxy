@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.39 2001/11/16 00:48:13 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.40 2002/01/09 14:26:46 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.39 2001/11/16 00:48:13 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.40  2002/01/09 14:26:46  oes
+ *    Added support for thread-safe gmtime_r call.
+ *
  *    Revision 1.39  2001/11/16 00:48:13  jongfoster
  *    Fixing a compiler warning
  *
@@ -398,8 +401,10 @@ static struct map *parse_cgi_parameters(char *argstring);
  * 
  * Function    :  dispatch_cgi
  *
- * Description :  Checks if a request URL has either the magical hostname
- *                i.j.b or matches HOME_PAGE_URL/config/. If so, it passes
+ * Description :  Checks if a request URL has either the magical
+ *                hostname CGI_SITE_1_HOST (usully http://i.j.b/) or
+ *                matches CGI_SITE_2_HOST CGI_SITE_2_PATH (usually
+ *                http://ijbswa.sourceforge.net/config). If so, it passes
  *                the (rest of the) path onto dispatch_known_cgi, which
  *                calls the relevant CGI handler function.
  *
@@ -418,27 +423,34 @@ struct http_response *dispatch_cgi(struct client_state *csp)
     * Should we intercept ?
     */
 
-   /* Either the host matches CGI_PREFIX_HOST ..*/
-   if (   (0 == strcmpic(host, CGI_PREFIX_HOST))
+   /* Note: "example.com" and "example.com." are equivalent hostnames. */
+
+   /* Either the host matches CGI_SITE_1_HOST ..*/
+   if (   ( (0 == strcmpic(host, CGI_SITE_1_HOST))
+         || (0 == strcmpic(host, CGI_SITE_1_HOST ".")))
        && (path[0] == '/') )
    {
       /* ..then the path will all be for us.  Remove leading '/' */
       path++;
    }
-   /* Or it's the host part HOME_PAGE_URL, and the path /config/ */
-   else if (   (0 == strcmpic(host, HOME_PAGE_URL + 7 ))
-            && (0 == strncmpic(path,"/config", 7)) )
+   /* Or it's the host part CGI_SITE_2_HOST, and the path CGI_SITE_2_PATH */
+   else if ( ( (0 == strcmpic(host, CGI_SITE_2_HOST ))
+            || (0 == strcmpic(host, CGI_SITE_2_HOST ".")) )
+          && (0 == strncmpic(path, CGI_SITE_2_PATH, strlen(CGI_SITE_2_PATH))) )
    {
-      /* take everything following "/config" */
-      path += 7;
+      /* take everything following CGI_SITE_2_PATH */
+      path += strlen(CGI_SITE_2_PATH);
       if (*path == '/')
       {
-         /* skip the forward slash after "/config" */
+         /* skip the forward slash after CGI_SITE_2_PATH */
          path++;
       }
       else if (*path != '\0')
       {
-         /* wierdness: URL is /configXXX, where XXX is some string */
+         /*
+          * wierdness: URL is /configXXX, where XXX is some string
+          * Do *NOT* intercept.
+          */
          return NULL;
       }
    }
@@ -1360,7 +1372,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1);
    if (!err) err = map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1);
    if (!err) err = map(exports, "homepage", 1, HOME_PAGE_URL, 1);
-   if (!err) err = map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1);
+   if (!err) err = map(exports, "default-cgi", 1, CGI_PREFIX, 1);
    if (!err) err = map(exports, "menu", 1, make_menu(caller), 0);
    if (!err) err = map(exports, "code-status", 1, CODE_STATUS, 1);
    if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
@@ -1517,8 +1529,8 @@ char *make_menu(const char *self)
    {
       if (d->description && strcmp(d->name, self))
       {
-         snprintf(buf, BUFFER_SIZE, "<li><a href=\"%s/config/%s\">%s</a></li>\n",
-   	       HOME_PAGE_URL, d->name, d->description);
+         snprintf(buf, BUFFER_SIZE, "<li><a href=\"%s%s\">%s</a></li>\n",
+   	       CGI_PREFIX, d->name, d->description);
          result = strsav(result, buf);
       }
    }
