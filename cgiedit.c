@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.10 2002/01/23 00:22:59 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.11 2002/01/23 01:03:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.10 2002/01/23 00:22:59 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.11  2002/01/23 01:03:31  jongfoster
+ *    Fixing gcc [CygWin] compiler warnings
+ *
  *    Revision 1.10  2002/01/23 00:22:59  jongfoster
  *    Adding new function cgi_edit_actions_section_swap(), to reorder
  *    the actions file.
@@ -700,7 +703,11 @@ jb_err edit_write_file(struct editable_file * file)
    assert(file);
    assert(file->filename);
 
+#ifdef AMIGA
+   if (NULL == (fp = fopen(file->filename, "w")))
+#else
    if (NULL == (fp = fopen(file->filename, "wt")))
+#endif /* def AMIGA */
    {
       return JB_ERR_FILE;
    }
@@ -1527,7 +1534,11 @@ jb_err edit_read_file(struct client_state *csp,
       }
    }
 
+#ifdef AMIGA
+   if (NULL == (fp = fopen(filename,"r")))
+#else
    if (NULL == (fp = fopen(filename,"rt")))
+#endif /* def AMIGA */
    {
       free(filename);
       return JB_ERR_FILE;

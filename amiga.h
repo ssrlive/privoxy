@@ -1,7 +1,7 @@
 #ifdef AMIGA
 #ifndef AMIGA_H_INCLUDED
 #define AMIGA_H_INCLUDED
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.5 2001/07/29 18:43:08 jongfoster Exp $"
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.6 2001/10/13 12:46:08 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: amiga.h,v $
+ *    Revision 1.6  2001/10/13 12:46:08  joergs
+ *    Added #undef EINTR to avoid warnings
+ *
  *    Revision 1.5  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.
@@ -61,6 +64,7 @@
 #undef __NOLIBBASE__
 
 #define __CONSTLIBBASEDECL__ const
+#define DEVICES_TIMER_H
 #include <proto/exec.h>
 #include <exec/tasks.h>
 #include <proto/dos.h>

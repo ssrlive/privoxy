@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.26 2001/12/30 14:07:32 steudten Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.27 2002/01/21 00:52:32 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.26 2001/12/30 14:07:32 steudten
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.27  2002/01/21 00:52:32  jongfoster
+ *    Adding string_join()
+ *
  *    Revision 1.26  2001/12/30 14:07:32  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -832,7 +835,21 @@ char * make_path(const char * dir, const char * file)
 
    if(dir)
    {
-      strncpy(path,dir,512);
+      if(dir[0] == '.')
+      {
+         if(dir[1] == '/')
+         {
+            strncpy(path,dir+2,512);
+         }
+         else
+         {
+            strncpy(path,dir+1,512);
+         }
+      }
+      else
+      {
+         strncpy(path,dir,512);
+      }
       path[511]=0;
    } else {
       path[0]=0;

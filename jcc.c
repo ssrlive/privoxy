@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.62 2002/02/20 23:17:23 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.63 2002/03/02 04:14:50 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.62 2002/02/20 23:17:23 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.63  2002/03/02 04:14:50  david__schmidt
+ *    Clean up a little CRLF unpleasantness that suddenly appeared
+ *
  *    Revision 1.62  2002/02/20 23:17:23  jongfoster
  *    Detecting some out-of memory conditions and exiting with a log message.
  *
@@ -522,7 +525,7 @@ static const char VANILLA_WAFER[] =
    "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
  *
  * Function    :  SIG_handler 
@@ -1485,9 +1488,7 @@ int main(int argc, const char *argv[])
    int argc_pos = 1;
 
    configfile =
-#ifdef AMIGA
-   "AmiTCP:db/junkbuster/config"
-#elif !defined(_WIN32)
+#if !defined(_WIN32)
    "config"
 #else
    "config.txt"
@@ -1564,7 +1565,7 @@ int main(int argc, const char *argv[])
 #endif
 
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 {
    int sig;
    struct sigaction action;

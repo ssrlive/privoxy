@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.3 2001/09/12 22:54:51 joergs Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.4 2001/10/07 15:35:13 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.3 2001/09/12 22:54:51 joergs Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.4  2001/10/07 15:35:13  oes
+ *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
+ *
  *    Revision 1.3  2001/09/12 22:54:51  joergs
  *    Stacksize of main thread increased.
  *
@@ -90,12 +93,15 @@ __saveds ULONG server_thread(void)
    return 0;
 }
 
+static BPTR olddir;
+
 void amiga_exit(void)
 {
    if(SocketBase)
    {
       CloseLibrary(SocketBase);
    }
+   CurrentDir(olddir);
 }
 
 static struct SignalSemaphore memsem;
@@ -123,12 +129,13 @@ void InitAmiga(void)
    InitSemaphore(&memsem);
    memsemptr = &memsem;
 
+   olddir=CurrentDir(GetProgramDir());
    atexit(amiga_exit);
 }
 
 #ifdef __GNUC__
 #ifdef libnix
-/* multitaskingsafe libnix replacements */
+/* multithreadingsafe libnix replacements */
 static void *memPool=NULL;
 
 void *malloc (size_t s)
@@ -237,7 +244,7 @@ ADD2EXIT(__memCleanUp,-50);
 #error No libnix and no ixemul!?
 #endif /* libnix */
 #else
-#error Only GCC is supported, multitasking safe malloc/free required.
+#error Only GCC is supported, multithreading safe malloc/free required.
 #endif /* __GNUC__ */
 
 #endif /* def AMIGA */
