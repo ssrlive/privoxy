@@ -150,15 +150,16 @@ CLASS="APPLICATION"
 > sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.</P
 ><P
->With recent versions of <SPAN
+> With recent versions of <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> (version 2.9.x), you can get some
-information about <SPAN
+> (version 2.9.x and
+ greater), you can get some information about
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > and change some settings by going to
-<A
+ <A
 HREF="http://p.p/"
 TARGET="_top"
 >http://p.p/</A
@@ -166,25 +167,25 @@ TARGET="_top"
 HREF="http://config.privoxy.org/"
 TARGET="_top"
 >http://config.privoxy.org/</A
->
-(Note that p.p is far easier to type but may not work in some
-configurations. With the name change to <SPAN
+> (Note
+ that p.p is far easier to type but may not work in some configurations. With
+ the name change to <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->,
-this is changed from the previous http://i.j.b/ or earlier 2.9.x versions).</P
+>, this is changed from
+ the previous http://i.j.b/ and earlier 2.9.x versions).</P
 ><P
->These pages are <I
+> These pages are <I
 CLASS="EMPHASIS"
 >not</I
-> forwarded to a server on the Internet
-- instead they are handled by a special web server which is built in to
-<SPAN
+> forwarded to a server on the
+ Internet - instead they are handled by a special web server which is built in to
+  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >.</P
 ><P
->If you are not running <SPAN
+> If you are not running <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >, then <A
@@ -196,15 +197,15 @@ HREF="http://config.privoxy.org/"
 TARGET="_top"
 >http://config.privoxy.org/</A
 > will
-return a web page telling you you're not running
-<SPAN
+ return a web page telling you you're not running
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >.</P
 ><P
->If you have version 2.0.2, then the equivalent is
-http://example.com/show-proxy-args (but you get far less information, and you
-should really consider upgrading to 2.9.14).</P
+> If you have version 2.0.2, then the equivalent is
+ http://example.com/show-proxy-args (but you get far less information, and
+ you should really consider upgrading to 2.9.14).</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -215,10 +216,12 @@ NAME="BLOCKLIST"
 >4.4. Do you still maintain the blocklists?</A
 ></H3
 ><P
->    No. The format of the blocklists has changed significantly in versions
-    2.9.x and later. Once we have released the new stable
-    version, v3.0, there will again be blocklists that you can update
-    automatically.</P
+>    No, not by this name. The format of the blocklists has changed
+    significantly in versions 2.9.x and later. This functionality 
+    is done by the <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> file now. See next question ...</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -229,9 +232,43 @@ NAME="NEWADS"
 >4.5. How can I submit new ads?</A
 ></H3
 ><P
->    As of now, please discontinue to submit new ad blocking infos. Once we
-    have released the new version, there will again be a form on the website,
-    which you can use to contribute new ads.</P
+> Beginning with <SPAN
+CLASS="APPLICATION"
+>Privoxy v2.9.14</SPAN
+>, missed ads and 
+ banners and other actions file problems, can be submitted by accessing
+ <A
+HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"actions file feedback system"</SPAN
+></A
+>
+ from <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+></P
+><P
+> This process does not work with earlier versions of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ or <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+>.</P
+><P
+> 
+ There will soon be regularly updated actions files posted. These 
+ will be announced on the 
+ <A
+HREF="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce"
+TARGET="_top"
+>ijbswa-announce</A
+>
+ list.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -246,7 +283,7 @@ NAME="IP"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > or any other software, since
-the server needs to know your IP address to send the answer to you.</P
+the server needs to know your IP address to send the answers back to you.</P
 ><P
 >Fortunately there are many publicly usable anonymous proxies out there, which
 solve the problem by providing a further level of indirection between you and
@@ -270,7 +307,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN522"
+NAME="AEN532"
 >4.7. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -316,7 +353,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN533"
+NAME="AEN543"
 >4.8. Might some things break because header information is
 being altered?</A
 ></H3
@@ -362,7 +399,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN543"
+NAME="AEN553"
 >4.9. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -393,7 +430,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN551"
+NAME="AEN561"
 >4.10. What about as a firewall? Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -412,7 +449,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN556"
+NAME="AEN566"
 >4.11. The <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -448,7 +485,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN565"
+NAME="AEN575"
 >4.12. I have large empty spaces now where ads used to be. 
 Why?</A
 ></H3
@@ -464,7 +501,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN568"
+NAME="AEN578"
 >4.13. How can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -494,7 +531,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN575"
+NAME="AEN585"
 >4.14. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -660,6 +697,36 @@ TARGET="_top"
 >http://config.privoxy.org</A
 >
    may work in some situations where the first does not.
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>, and select <A
+HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"actions file feedback system"</SPAN
+></A
+>  
+   to submit <SPAN
+CLASS="QUOTE"
+>"misses"</SPAN
+> to the developers. 
   </TD
 ></TR
 ></TBODY
