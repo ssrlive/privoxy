@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.20 2002/03/24 12:03:47 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.21 2002/03/24 12:07:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.20 2002/03/24 12:03:47 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.21  2002/03/24 12:07:35  jongfoster
+ *    Consistern name for filters file
+ *
  *    Revision 1.20  2002/03/24 12:03:47  jongfoster
  *    Name change
  *
@@ -1123,15 +1126,15 @@ void OnLogCommand(int nCommand)
 #endif /* def FEATURE_TRUST */
 
       case ID_HELP_GPL:
-         ShellExecute(g_hwndLogFrame, "open", "doc/gpl.html", NULL, NULL, SW_SHOWNORMAL);
+         ShellExecute(g_hwndLogFrame, "open", "LICENSE.txt", NULL, NULL, SW_SHOWNORMAL);
          break;
 
       case ID_HELP_FAQ:
-         ShellExecute(g_hwndLogFrame, "open", "doc/ijbfaq.html", NULL, NULL, SW_SHOWNORMAL);
+         ShellExecute(g_hwndLogFrame, "open", "doc\\faq\\index.html", NULL, NULL, SW_SHOWNORMAL);
          break;
 
       case ID_HELP_MANUAL:
-         ShellExecute(g_hwndLogFrame, "open", "doc/ijbman.html", NULL, NULL, SW_SHOWNORMAL);
+         ShellExecute(g_hwndLogFrame, "open", "doc\\user-manual\\index.html", NULL, NULL, SW_SHOWNORMAL);
          break;
 
       case ID_HELP_STATUS:
