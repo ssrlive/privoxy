@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.67 2002/03/04 18:18:57 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.68 2002/03/04 20:17:32 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.67 2002/03/04 18:18:57 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.68  2002/03/04 20:17:32  oes
+ *    Fixed usage info
+ *
  *    Revision 1.67  2002/03/04 18:18:57  oes
  *    - Removed _DEBUG mode
  *    - Cleand up cmdline parsing
@@ -1586,10 +1589,8 @@ int main(int argc, const char *argv[])
          if (++argc_pos == argc) usage(argv[0]);
          pidfile = strdup(argv[argc_pos]);
       }
-
-#endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
-
       else
+#endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
       {
          configfile = argv[argc_pos];
       }
@@ -1759,6 +1760,64 @@ int main(int argc, const char *argv[])
 
 /*********************************************************************
  *
+ * Function    :  bind_port_helper
+ *
+ * Description :  Bind the listen port.  Handles logging, and aborts
+ *                on failure.
+ *
+ * Parameters  :
+ *          1  :  config = Junkbuster configuration.  Specifies port
+ *                         to bind to.
+ *
+ * Returns     :  Port that was opened.
+ *
+ *********************************************************************/
+static int bind_port_helper(struct configuration_spec * config)
+{
+   int bfd;
+
+   if ( (config->haddr != NULL)
+     && (config->haddr[0] == '1')
+     && (config->haddr[1] == '2')
+     && (config->haddr[2] == '7')
+     && (config->haddr[3] == '.') )
+   {
+      log_error(LOG_LEVEL_INFO, "Listening on port %d for local connections only",
+                config->hport);
+   }
+   else if (config->haddr == NULL)
+   {
+      log_error(LOG_LEVEL_INFO, "Listening on port %d on all IP addresses",
+                config->hport);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_INFO, "Listening on port %d on IP address %s",
+                config->hport, config->haddr);
+   }
+
+   bfd = bind_port(config->haddr, config->hport);
+
+   if (bfd < 0)
+   {
+      log_error(LOG_LEVEL_FATAL, "can't bind %s:%d: %E "
+         "- There may be another junkbuster or some other "
+         "proxy running on port %d",
+         (NULL != config->haddr) ? config->haddr : "INADDR_ANY",
+         config->hport, config->hport
+      );
+      /* shouldn't get here */
+      return -1;
+   }
+
+   config->need_bind = 0;
+
+   return bfd;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  listen_loop
  *
  * Description :  bind the listen port and enter a "FOREVER" listening loop.
@@ -1776,24 +1835,7 @@ static void listen_loop(void)
 
    config = load_config();
 
-   log_error(LOG_LEVEL_CONNECT, "bind (%s, %d)",
-             config->haddr ? config->haddr : "INADDR_ANY", config->hport);
-
-   bfd = bind_port(config->haddr, config->hport);
-
-   if (bfd < 0)
-   {
-      log_error(LOG_LEVEL_FATAL, "can't bind %s:%d: %E "
-         "- There may be another junkbuster or some other "
-         "proxy running on port %d",
-         (NULL != config->haddr) ? config->haddr : "INADDR_ANY",
-         config->hport, config->hport
-      );
-      /* shouldn't get here */
-      return;
-   }
-
-   config->need_bind = 0;
+   bfd = bind_port_helper(config);
 
    while (FOREVER)
    {
@@ -1809,6 +1851,7 @@ static void listen_loop(void)
        */
       sweep();
 
+#if defined(unix)
       /*
        * Re-open the errlog after HUP signal
        */
@@ -1817,6 +1860,7 @@ static void listen_loop(void)
          init_error_log(Argv[0], config->logfile, config->debug);
          received_hup_signal = 0;
       }
+#endif
 
       if ( NULL == (csp = (struct client_state *) zalloc(sizeof(*csp))) )
       {
@@ -1846,23 +1890,7 @@ static void listen_loop(void)
 
          close_socket(bfd);
 
-         log_error(LOG_LEVEL_CONNECT, "bind (%s, %d)",
-                   config->haddr ? config->haddr : "INADDR_ANY", config->hport);
-         bfd = bind_port(config->haddr, config->hport);
-
-         if (bfd < 0)
-         {
-            log_error(LOG_LEVEL_FATAL, "can't bind %s:%d: %E "
-               "- There may be another junkbuster or some other "
-               "proxy running on port %d",
-               (NULL != config->haddr) ? config->haddr : "INADDR_ANY",
-               config->hport, config->hport
-            );
-            /* shouldn't get here */
-            return;
-         }
-
-         config->need_bind = 0;
+         bfd = bind_port_helper(config);
       }
 
       log_error(LOG_LEVEL_CONNECT, "accept connection ... ");
