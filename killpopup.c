@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.5 2001/07/18 15:02:52 haroon Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.6 2001/07/19 19:11:35 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,10 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.5 2001/07/18 15:02:52 haroon 
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.6  2001/07/19 19:11:35  haroon
+ *    - Implemented Guy's idea of replacing window.open( with 1;''.concat(
+ *    - Implemented Guy's idea of replacing .resizeTo( with .scrollTo(
+ *
  *    Revision 1.5  2001/07/18 15:02:52  haroon
  *    improved nuking of window.open
  *
@@ -85,11 +89,6 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
 
 #ifdef KILLPOPUPS
 
-/* Change these for debug output.  *lots*. */
-/*#define POPUP_VERBOSE 1*/
-#undef POPUP_VERBOSE
-
-
 /*********************************************************************
  *
  * Function    :  filter_popups
@@ -121,9 +120,7 @@ void filter_popups(char *buff, int size)
           * Guy's idea (thanks)
           */
          strncpy(popup, "1;''.concat(", 12);
-#ifdef POPUP_VERBOSE
          log_error(LOG_LEVEL_POPUPS, "Blocked popup window open");
-#endif
       }
    }
    
@@ -136,9 +133,7 @@ void filter_popups(char *buff, int size)
           * Guy's idea (thanks)
           */
          strncpy(popup, ".scrollTo(", 10);
-#ifdef POPUP_VERBOSE
          log_error(LOG_LEVEL_POPUPS, "Blocked popup window resize");
-#endif
       }
    }
 
