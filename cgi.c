@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.21 2001/09/13 23:53:03 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.22 2001/09/16 11:00:10 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.21 2001/09/13 23:53:03 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.22  2001/09/16 11:00:10  jongfoster
+ *    New function alloc_http_response, for symmetry with free_http_response
+ *
  *    Revision 1.21  2001/09/13 23:53:03  jongfoster
  *    Support for both static and dynamically generated CGI pages.
  *    Correctly setting Last-Modified: and Expires: HTTP headers.
@@ -309,10 +312,18 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    {
       if (strncmp(argstring, d->name, d->name_length) == 0)
       {
-         param_list = parse_cgi_parameters(argstring + d->name_length);
+         if (NULL == (param_list = 
+             parse_cgi_parameters(argstring + d->name_length)))
+         {
+            free_map(param_list);
+            free_http_response(rsp);
+            return(NULL);
+         }
          if ((d->handler)(csp, rsp, param_list))
          {
-            freez(rsp);
+            free_map(param_list);
+            free_http_response(rsp);
+            return(NULL);
          }
 
          free_map(param_list);
@@ -321,7 +332,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    }
 
    /* Can't get here, since cgi_default will match all requests */
-   freez(rsp);
+   free_http_response(rsp);
    return(NULL);
 
 }
@@ -337,7 +348,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
  * Parameters  :
  *          1  :  string = string to be parsed 
  *
- * Returns     :  pointer to param list
+ * Returns     :  pointer to param list, or NULL if out of memory.
  *
  *********************************************************************/
 struct map *parse_cgi_parameters(char *argstring)
@@ -345,13 +356,22 @@ struct map *parse_cgi_parameters(char *argstring)
    char *tmp, *p;
    char *vector[BUFFER_SIZE];
    int pairs, i;
-   struct map *cgi_params = new_map();
+   struct map *cgi_params;
+
+   if (NULL == (cgi_params = new_map()))
+   {
+      return NULL;
+   }
 
    if(*argstring == '?')
    {
       argstring++;
    }
-   tmp = strdup(argstring);
+   if (NULL == (tmp = strdup(argstring)))
+   {
+      free_map(cgi_params);
+      return NULL;
+   }
 
    pairs = ssplit(tmp, "&", vector, SZ(vector), 1, 1);
 
