@@ -1,7 +1,7 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.58 2002/04/24 02:11:17 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.58 2002/04/24 02:11:17 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.58  2002/04/24 02:11:17  oes
  *    Jon's multiple AF patch: url_actions now evaluates rules
  *    from all AFs.
@@ -215,7 +218,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.58 2002/04/24 02:11:17 oes Exp $"
  *       generic content modification interface of pcrs_filter_response
  *       and acts as a wrapper to deanimate.c:gif_deanimate()
  *     - Renamed re_process_buffer to pcrs_filter_response
- *     - pcrs_filter_response now returns NULL on failiure
+ *     - pcrs_filter_response now returns NULL on failure
  *     - Removed all #ifdef PCRS
  *
  *    Revision 1.20  2001/07/01 17:01:04  oes

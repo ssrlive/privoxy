@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.17 2002/07/25 21:51:25 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 2.1 2002/07/29 22:08:41 jongfoster Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -132,7 +132,7 @@
       <para>
         On startup, write the process ID to <replaceable class="parameter">pidfile</replaceable>.
         Delete the <replaceable class="parameter">pidfile</replaceable> on exit.
-        Failiure to create or delete the <replaceable class="parameter">pidfile</replaceable>
+        Failure to create or delete the <replaceable class="parameter">pidfile</replaceable>
         is non-fatal. If no <command>--pidfile</command> option is given, no PID file will be used.
       </para>
     </listitem>
