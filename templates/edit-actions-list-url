@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-list-url,v $
+# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-list-url,v $
 #
 # Purpose     :  Template which forms part of edit-actions-list
 # 
@@ -31,6 +31,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-url,v $
+#    Revision 1.9  2002/05/12 15:45:33  jongfoster
+#    Applying [Patch 552094] New templates for edit-actions-list
+#    This cleans up the templates by:
+#    - Removing the (confusing) alternating color scheme.
+#    - Making everything left-justified.
+#
 #    Revision 1.8  2002/04/26 12:58:11  oes
 #    Central "button" link style in cgi-style.css
 #
@@ -74,5 +80,5 @@
 <tr class="url" valign="top">
 <td class="indentbuttons"><a name="l@p@"
 href="ear?f=@f@&amp;v=@v@&amp;p=@p@" onclick="return rm_p(@p@,'@url@');">Remove</a>&nbsp;&nbsp;&nbsp;<a
-href="eau?f=@f@&amp;v=@v@&amp;p=@p@">Edit</a>&nbsp; @url-html@</td>
+href="eau?f=@f@&amp;v=@v@&amp;p=@p@" onclick="return  e_p(@p@,'@url@');">Edit</a>&nbsp; @url-html@</td>
 </tr>
