@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.2 2001/06/29 21:45:41 oes Exp $
+# $Id: actionsfile,v 1.4 2001/07/18 12:27:33 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -1354,9 +1354,7 @@ www.iez-auktion.de
 
 
 # Jon's addition: MSDN
-
 .msdn.microsoft.com
-
 
 #js
 .adbusters.com
@@ -1364,6 +1362,8 @@ www.iez-auktion.de
 foggy.sda.t-online.de
 .us.i1.yimg.com/us.yimg.com/i/pim/ad2.gif
 www.nexgo.de/.*/bg_banner.jpg
+
+prdownloads.sourceforge.net
 
 # New GIF deanimation feature. Just try http://www.oesterhelt.org/deanimate-demo
 # with and without it.
