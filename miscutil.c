@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.20 2001/10/22 15:33:56 david__schmidt Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.21 2001/10/23 21:27:50 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.20 2001/10/22 15:33:56 david__s
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.21  2001/10/23 21:27:50  jongfoster
+ *    Standardising error codes in string_append
+ *    make_path() no longer adds '\\' if the dir already ends in '\\' (this
+ *    is just copying a UNIX-specific fix to the Windows-specific part)
+ *
  *    Revision 1.20  2001/10/22 15:33:56  david__schmidt
  *    Special-cased OS/2 out of the Netscape-abort-on-404-in-js problem in
  *    filters.c.  Added a FIXME in front of the offending code.  I'll gladly
@@ -148,16 +153,6 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.20 2001/10/22 15:33:56 david__s
 #include "errlog.h"
 
 const char miscutil_h_rcs[] = MISCUTIL_H_VERSION;
-
-/* Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- * Solaris's isspace() is a macro which uses it's argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- */
-#define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
-#define ijb_isspace(__X) isspace((int)(unsigned char)(__X))   
 
 /*********************************************************************
  *
