@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.27 2002/03/04 02:08:01 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.28 2002/03/04 17:59:59 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.27 2002/03/04 02:08:01 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.28  2002/03/04 17:59:59  oes
+ *    Deleted deletePidFile(), cosmetics
+ *
  *    Revision 1.27  2002/03/04 02:08:01  david__schmidt
  *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
  *
@@ -372,8 +375,9 @@ void log_error(int loglevel, char *fmt, ...)
    /* FIXME get current thread id */
 #ifdef FEATURE_PTHREAD
    this_thread = (long)pthread_self();
-#elif __OS2__
-  
+#elif defined(_WIN32)
+   this_thread = GetCurrentThreadId();
+#elif defined(__OS2__)
    ulrc = DosGetInfoBlocks(&ptib, NULL);
    if (ulrc == 0)
      this_thread = ptib -> tib_ptib2 -> tib2_ultid;
