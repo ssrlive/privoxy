@@ -1,7 +1,7 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.91 2002/04/08 20:35:58 swa Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 2.2 2002/07/12 04:26:17 agotneja Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and
  *                the main connection-handling function.
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.91 2002/04/08 20:35:58 swa Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 2.2  2002/07/12 04:26:17  agotneja
+ *    Re-factored 'chat()' to become understandable and maintainable as
+ *    a first step in adding Transparent Proxy functionality.
+ *
+ *    Added several new static functions in jcc.c, and moved some data
+ *    parameters up into project.h to allow them to be passed between
+ *    the new functions.
+ *
  *    Revision 1.91  2002/04/08 20:35:58  swa
  *    fixed JB spelling
  *
@@ -792,7 +800,7 @@ static void chat(struct client_state *csp)
    /* 
     * The page passed the intercept routine, so open a forwarding
     * connection for conversation
-	*/
+    */
    if (open_forwarding_connection(csp) != JB_ERR_OK )
       return ;
 
@@ -850,8 +858,9 @@ static void chat(struct client_state *csp)
          return;
       }
 
-      /* this is the body of the browser's request
-       * just read it and write it.
+      /*
+       * This is the body of the browser's request.
+       * Just read it and write it.
        */
 
       if (FD_ISSET(csp->cfd, &rfds))
@@ -880,7 +889,7 @@ static void chat(struct client_state *csp)
       if (FD_ISSET(csp->sfd, &rfds))
          tmp_ret_val = relay_server_traffic(csp) ;
 
-	  
+
       if (tmp_ret_val == JB_ERR_OK)
          continue ;
       else
@@ -1156,85 +1165,85 @@ int main(int argc, const char *argv[])
     * from tty and get process group leadership
     */
 #if defined(unix)
-{
-   pid_t pid = 0;
+   {
+      pid_t pid = 0;
 #if 0
-   int   fd;
+      int   fd;
 #endif
 
-   if (!no_daemon)
-   {
-      pid  = fork();
+      if (!no_daemon)
+      {
+         pid  = fork();
 
-      if ( pid < 0 ) /* error */
-      {
-         perror("fork");
-         exit( 3 );
-      }
-      else if ( pid != 0 ) /* parent */
-      {
-         int status;
-         pid_t wpid;
-         /*
-          * must check for errors
-          * child died due to missing files aso
-          */
-         sleep( 1 );
-         wpid = waitpid( pid, &status, WNOHANG );
-         if ( wpid != 0 )
+         if ( pid < 0 ) /* error */
          {
-            exit( 1 );
+            perror("fork");
+            exit( 3 );
          }
-         exit( 0 );
-      }
-      /* child */
+         else if ( pid != 0 ) /* parent */
+         {
+            int status;
+            pid_t wpid;
+            /*
+             * must check for errors
+             * child died due to missing files aso
+             */
+            sleep( 1 );
+            wpid = waitpid( pid, &status, WNOHANG );
+            if ( wpid != 0 )
+            {
+               exit( 1 );
+            }
+            exit( 0 );
+         }
+         /* child */
 #if 1
-      /* Should be more portable, but not as well tested */
-      setsid();
+         /* Should be more portable, but not as well tested */
+         setsid();
 #else /* !1 */
 #ifdef __FreeBSD__
-      setpgrp(0,0);
+         setpgrp(0,0);
 #else /* ndef __FreeBSD__ */
-      setpgrp();
+         setpgrp();
 #endif /* ndef __FreeBSD__ */
-      fd = open("/dev/tty", O_RDONLY);
-      if ( fd )
-      {
-         /* no error check here */
-         ioctl( fd, TIOCNOTTY,0 );
-         close ( fd );
-      }
+         fd = open("/dev/tty", O_RDONLY);
+         if ( fd )
+         {
+            /* no error check here */
+            ioctl( fd, TIOCNOTTY,0 );
+            close ( fd );
+         }
 #endif /* 1 */
-      /* FIXME: should close stderr (fd 2) here too, but the test
-       * for existence
-       * and load config file is done in listen_loop() and puts
-       * some messages on stderr there.
+         /* FIXME: should close stderr (fd 2) here too, but the test
+          * for existence
+          * and load config file is done in listen_loop() and puts
+          * some messages on stderr there.
+          */
+
+         close( 0 );
+         close( 1 );
+         chdir("/");
+
+      } /* -END- if (!no_daemon) */
+
+      /*
+       * As soon as we have written the PID file, we can switch
+       * to the user and group ID indicated by the --user option
        */
-
-      close( 0 );
-      close( 1 );
-      chdir("/");
-
-   } /* -END- if (!no_daemon) */
-
-   /*
-    * As soon as we have written the PID file, we can switch
-    * to the user and group ID indicated by the --user option
-    */
-   write_pid_file();
+      write_pid_file();
    
-   if (NULL != pw)
-   {
-      if (((NULL != grp) && setgid(grp->gr_gid)) || (setgid(pw->pw_gid)))
+      if (NULL != pw)
       {
-         log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
-      }
-      if (setuid(pw->pw_uid))
-      {
-         log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
+         if (((NULL != grp) && setgid(grp->gr_gid)) || (setgid(pw->pw_gid)))
+         {
+            log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
+         }
+         if (setuid(pw->pw_uid))
+         {
+            log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
+         }
       }
    }
-}
 #endif /* defined unix */
 
    listen_loop();
@@ -1373,6 +1382,9 @@ static void listen_loop(void)
        * Need a workaround here: we have to fclose() the jarfile, or we die because it's
        * already open.  I think unload_configfile() is not being run, which should do
        * this work.  Until that can get resolved, we'll use this workaround.
+       *
+       * [Note from Jon: We don't unload_configfile() until all existing threads have
+       * exited - they're likely to hang aroung transferring data to the browser.]
        */
        if (csp)
          if(csp->config)
@@ -1655,18 +1667,18 @@ static jb_err relay_server_traffic( struct client_state *csp )
    int block_popups_now = 0; /* bool, 1==currently blocking popups */
 #endif /* def FEATURE_KILL_POPUPS */
    
-  char buf[BUFFER_SIZE];
-  int len; /* for buffer sizes */
-  int ms_iis5_hack = 0;
-  int byte_count = 0;
-  char *hdr;
-  char *p;
+   char buf[BUFFER_SIZE];
+   int len; /* for buffer sizes */
+   int ms_iis5_hack = 0;
+   int byte_count = 0;
+   char *hdr;
+   char *p;
 
-  /* Skeleton for HTTP response, if we should intercept the request */
-  struct http_response *rsp;
+   /* Skeleton for HTTP response, if we should intercept the request */
+   struct http_response *rsp;
 
-  int pcrs_filter;        /* bool, 1==will filter through pcrs */
-  int gif_deanimate;      /* bool, 1==will deanimate gifs */
+   int pcrs_filter;        /* bool, 1==will filter through pcrs */
+   int gif_deanimate;      /* bool, 1==will deanimate gifs */
 
 #ifdef FEATURE_KILL_POPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
@@ -1678,15 +1690,15 @@ static jb_err relay_server_traffic( struct client_state *csp )
    gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
 
 
-  fflush (0);
-  len = read_socket (csp->sfd, buf, sizeof (buf) - 1);
+   fflush (0);
+   len = read_socket (csp->sfd, buf, sizeof (buf) - 1);
 
-  if (len < 0)
-    {
+   if (len < 0)
+   {
       log_error (LOG_LEVEL_ERROR, "read from: %s failed: %E", csp->http->host);
 
       log_error (LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-		 csp->ip_addr_str, csp->http->ocmd);
+         csp->ip_addr_str, csp->http->ocmd);
 
       rsp = error_response (csp, "connect-failed", errno);
 
@@ -1702,42 +1714,42 @@ static jb_err relay_server_traffic( struct client_state *csp )
 
       free_http_response (rsp);
       return JB_ERR_GENERIC;
-    }
+   }
 
-  /* Add a trailing zero.  This lets filter_popups
-   * use string operations.
-   */
-  buf[len] = '\0';
+   /* Add a trailing zero.  This lets filter_popups
+    * use string operations.
+    */
+   buf[len] = '\0';
 
 #ifdef FEATURE_KILL_POPUPS
-  /* Filter the popups on this read. */
-  if (block_popups_now)
-    {
+   /* Filter the popups on this read. */
+   if (block_popups_now)
+   {
       filter_popups (buf, csp);
-    }
+   }
 #endif /* def FEATURE_KILL_POPUPS */
 
 
-  /* Normally, this would indicate that we've read
-   * as much as the server has sent us and we can
-   * close the client connection.  However, Microsoft
-   * in its wisdom has released IIS/5 with a bug that
-   * prevents it from sending the trailing \r\n in
-   * a 302 redirect header (and possibly other headers).
-   * To work around this if we've haven't parsed
-   * a full header we'll append a trailing \r\n
-   * and see if this now generates a valid one.
-   *
-   * This hack shouldn't have any impacts.  If we've
-   * already transmitted the header or if this is a
-   * SSL connection, then we won't bother with this
-   * hack.  So we only work on partially received
-   * headers.  If we append a \r\n and this still
-   * doesn't generate a valid header, then we won't
-   * transmit anything to the client.
-   */
-  if (len == 0)
-    {
+   /* Normally, this would indicate that we've read
+    * as much as the server has sent us and we can
+    * close the client connection.  However, Microsoft
+    * in its wisdom has released IIS/5 with a bug that
+    * prevents it from sending the trailing \r\n in
+    * a 302 redirect header (and possibly other headers).
+    * To work around this if we've haven't parsed
+    * a full header we'll append a trailing \r\n
+    * and see if this now generates a valid one.
+    *
+    * This hack shouldn't have any impacts.  If we've
+    * already transmitted the header or if this is a
+    * SSL connection, then we won't bother with this
+    * hack.  So we only work on partially received
+    * headers.  If we append a \r\n and this still
+    * doesn't generate a valid header, then we won't
+    * transmit anything to the client.
+    */
+   if (len == 0)
+   {
 
       if (csp->all_headers_read || csp->http->ssl)
       {
@@ -1769,7 +1781,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
 
             if (write_socket (csp->cfd, hdr, strlen (hdr))
                || write_socket (csp->cfd, p != NULL ? p : csp->iob->cur,
-               	       csp->content_length))
+                          csp->content_length))
             {
                log_error (LOG_LEVEL_ERROR,
                   "write modified content to client failed: %E");
@@ -1799,16 +1811,16 @@ static jb_err relay_server_traffic( struct client_state *csp )
        */
 
       ms_iis5_hack = 1;
-    }
+   }
 
-  /*
-   * If this is an SSL connection or we're in the body
-   * of the server document, just write it to the client,
-   * unless we need to buffer the body for later content-filtering
-   */
+   /*
+    * If this is an SSL connection or we're in the body
+    * of the server document, just write it to the client,
+    * unless we need to buffer the body for later content-filtering
+    */
 
-  if (csp->all_headers_read || csp->http->ssl)
-    {
+   if (csp->all_headers_read || csp->http->ssl)
+   {
       if (csp->content_filter)
       {
          add_to_iob (csp, buf, len);
@@ -1865,10 +1877,11 @@ static jb_err relay_server_traffic( struct client_state *csp )
       }
       byte_count += len;
       return JB_ERR_OK ;
-    }
-  else
-    {
-      /* we're still looking for the end of the
+   }
+   else
+   {
+      /*
+       * we're still looking for the end of the
        * server's header ... (does that make header
        * parsing an "out of body experience" ?
        */
@@ -1933,7 +1946,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
          log_error (LOG_LEVEL_FATAL, "Out of memory parsing server header");
       }
 
-	  
+  
 
 #ifdef FEATURE_KILL_POPUPS
       /* Start blocking popups if appropriate. */
@@ -1965,7 +1978,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
 
       if ((csp->content_type & CT_GIF) &&        /* It's a image/gif MIME-Type */
           !csp->http->ssl &&                     /* We talk plaintext */
-          gif_deanimate)	                        /* Policy allows */
+          gif_deanimate)                         /* Policy allows */
       {
          csp->content_filter = gif_deanimate_response;
       }
@@ -2009,7 +2022,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
       {
          return JB_ERR_GENERIC ;
       }
-    }
+   }
    return JB_ERR_OK ;
 } /* END relay_server_traffic() */
 
@@ -2043,7 +2056,7 @@ static jb_err read_client_headers( struct client_state *csp, struct http_request
     * could get blocked here if a client connected, then didn't say anything!
     *
     * This will read all the client headers.
-   */
+    */
 
    req = NULL ;
    for (;;)
@@ -2538,7 +2551,7 @@ static jb_err is_connect_request_allowed( struct client_state *csp )
     * Check if a CONNECT request is allowable:
     * In the absence of a +limit-connect action, allow only port 443.
     * If there is an action, allow whatever matches the specificaton.
-   */
+    */
 
    if(csp->http->ssl)
    {
