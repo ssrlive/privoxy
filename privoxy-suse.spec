@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.20 2002/05/25 02:08:23 hal9 Exp $
+# $Id: privoxy-suse.spec,v 1.21 2002/05/28 03:56:59 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -36,7 +36,7 @@ Summary:      Privoxy - privacy enhancing proxy
 Vendor:       Privoxy.Org
 Name:         privoxy-suse
 Distribution: defineme
-Version: 2.9.15
+Version: 3.1.1
 Release: 1
 # Needs makefile change: Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}-%{status}-src.tar.gz
 Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}.tar.gz
@@ -203,7 +203,54 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc doc/webserver/images
 #%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{privoxyconf}
-%config %{privoxyconf}/*
+#%config %{privoxyconf}/*
+# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
+# We should not use wildchars here. This could mask missing files problems
+# -- morcego
+# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
+%config(noreplace) %{privoxyconf}/config
+%config %{privoxyconf}/standard.action
+%config(noreplace) %{privoxyconf}/user.action
+%config %{privoxyconf}/default.action
+%config %{privoxyconf}/default.filter
+%config %{privoxyconf}/trust
+
+# Please keep these alphabetized so its easier to find one that 
+# is not included.
+%config %{privoxyconf}/templates/blocked
+%config %{privoxyconf}/templates/cgi-error-404
+%config %{privoxyconf}/templates/cgi-error-bad-param
+%config %{privoxyconf}/templates/cgi-error-disabled
+%config %{privoxyconf}/templates/cgi-error-file
+%config %{privoxyconf}/templates/cgi-error-file-read-only
+%config %{privoxyconf}/templates/cgi-error-modified
+%config %{privoxyconf}/templates/cgi-error-parse
+%config %{privoxyconf}/templates/cgi-style.css
+%config %{privoxyconf}/templates/connect-failed
+%config %{privoxyconf}/templates/default
+%config %{privoxyconf}/templates/edit-actions-add-url-form
+%config %{privoxyconf}/templates/edit-actions-for-url
+%config %{privoxyconf}/templates/edit-actions-for-url-filter
+%config %{privoxyconf}/templates/edit-actions-list
+%config %{privoxyconf}/templates/edit-actions-list-button
+%config %{privoxyconf}/templates/edit-actions-list-section
+%config %{privoxyconf}/templates/edit-actions-list-url
+%config %{privoxyconf}/templates/edit-actions-remove-url-form
+%config %{privoxyconf}/templates/edit-actions-url-form
+%config %{privoxyconf}/templates/mod-local-help
+%config %{privoxyconf}/templates/mod-support-and-service
+%config %{privoxyconf}/templates/mod-title
+%config %{privoxyconf}/templates/mod-unstable-warning
+%config %{privoxyconf}/templates/no-such-domain
+%config %{privoxyconf}/templates/show-request
+%config %{privoxyconf}/templates/show-status
+%config %{privoxyconf}/templates/show-status-file
+%config %{privoxyconf}/templates/show-url-info
+%config %{privoxyconf}/templates/show-version
+%config %{privoxyconf}/templates/toggle
+%config %{privoxyconf}/templates/toggle-mini
+%config %{privoxyconf}/templates/untrusted
+
 %attr(0744,privoxy,privoxy) %dir /var/log/privoxy
 %config %{_sysconfdir}/logrotate.d/privoxy
 %attr(0755,root,root)/usr/sbin/privoxy
@@ -215,6 +262,11 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Tue Sep 03 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-3.1.1-1
+- Explicitly list %%config files, and set noreplace flag for config and 
+user.action. Note: no way I can test this change! Bump version while here.
+
 * Mon May 27 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
 - Index.html is now privoxy-index.html.
@@ -323,6 +375,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.21  2002/05/28 03:56:59  hal9
+# Index.html re-vamped as privoxy-index.html for docs.
+#
 # Revision 1.20  2002/05/25 02:08:23  hal9
 # Add doc/images directory.
 # Redhat: alphabetized list of templates (and I think added one in the process)
