@@ -33,6 +33,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-remove-url-form,v $
+#    Revision 1.11  2002/04/05 16:01:30  oes
+#    Correct HTML, external Stylesheets, eye candy, some fixes
+#
 #    Revision 1.10  2002/03/26 22:29:56  swa
 #    we have a new homepage!
 #
@@ -112,7 +115,7 @@
       <td class="title">
         <h1>
           This is <a href="@homepage@">Privoxy</a> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@,
-          @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@
+          @if-enabled-display-then@enabled@else-not-enabled-display@disabled@endif-enabled-display@
         </h1>
       </td>
     </tr>

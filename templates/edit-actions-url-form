@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-url-form,v $
+#    Revision 1.11  2002/04/05 16:01:32  oes
+#    Correct HTML, external Stylesheets, eye candy, some fixes
+#
 #    Revision 1.10  2002/03/26 22:29:56  swa
 #    we have a new homepage!
 #
@@ -125,7 +128,7 @@ function validate(text)
       <td class="title">
         <h1>
           This is <a href="@homepage@">Privoxy</a> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@,
-          @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@
+          @if-enabled-display-then@enabled@else-not-enabled-display@disabled@endif-enabled-display@
         </h1>
       </td>
     </tr>
