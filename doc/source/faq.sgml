@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $
+ $Id: faq.sgml,v 1.8 2002/03/09 15:55:48 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.8 2002/03/09 15:55:48 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -362,7 +362,25 @@ should really consider upgrading to 2.9.x).
 
 <sect3 id="ip"><title>How can I hide my IP address?</title>
 <para>
- You cannot hide your IP address with Junkbuster.
+ You cannot hide your IP address with Junkbuster or any other software, since
+the server needs to know your IP address to send the answer to you.
+</para>
+<para>
+Fortunately there are many publicly usable anonymous proxies out there, which
+solve the problem by providing a further level of indirection between you and
+the web server, shared by many people and thus letting your requests "drown"
+in white noise of unrelated requests as far as user tracking is concerned.
+</para>
+<para>
+Most of them will, however, log your IP address and make it available to the
+authorities in case you abuse that anonymity for criminal purposes. In fact
+you can't even rule out that some of them only exist to *collect* information
+on (those suspicious) people with a more than average preference for privacy.
+</para>
+<para>
+You can find a list of anonymous public proxies at <ulink
+url="http://www.multiproxy.org/anon_list.htm">multiproxy.org</ulink> and many
+more through Google.
 </para>
 </sect3>
 
@@ -421,6 +439,9 @@ should really consider upgrading to 2.9.x).
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.8  2002/03/09 15:55:48  swa
+added default config section
+
 Revision 1.7  2002/03/07 18:16:55  swa
 looks better
 
