@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.33 2001/09/20 13:30:08 steudten Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.34 2001/10/07 15:45:25 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,21 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.34  2001/10/07 15:45:25  oes
+ *    Added url member to struct http_request and commented all
+ *      members
+ *
+ *    Added CT_TABOO
+ *
+ *    Added ACTION_DOWNGRADE and ACTION_NO_COMPRESSION
+ *
+ *    Replaced struct client_state members rejected,
+ *      force, active and toggled_on with "flags" bitmap.
+ *
+ *    Added CSP_FLAG_MODIFIED and CSP_FLAG_CHUNKED
+ *
+ *    Added buffer_limit to struct configuration_spec
+ *
  *    Revision 1.33  2001/09/20 13:30:08  steudten
  *
  *    Make freez() more secure in case of: if (exp) { free(z) ; a=*z }
@@ -366,6 +381,7 @@ struct http_request
    char *gpc;      /* HTTP method: GET, POST, .. */
    char *url;      /* The URL */
    char *ver;      /* Protocol version */
+   int status;     /* HTTP Status */
 
    char *host;     /* Host part of URL */
    int   port;     /* Port of URL or 80 (default) */
