@@ -1,7 +1,7 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.40 2002/05/22 01:27:27 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/errlog.c,v $
  *
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.40 2002/05/22 01:27:27 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.40  2002/05/22 01:27:27  david__schmidt
  *
  *    Add os2_socket_strerr mirroring w32_socket_strerr.
@@ -613,6 +616,10 @@ void log_error(int loglevel, char *fmt, ...)
             break;
          case 's':
             sval = va_arg( ap, char * );
+            if (sval == NULL)
+            {
+               sval = "[null]";
+            }
             oldoutc = outc;
             outc += strlen(sval);
             if (outc < BUFFER_SIZE-1) 
@@ -630,6 +637,10 @@ void log_error(int loglevel, char *fmt, ...)
              */
             ival = va_arg( ap, int );
             sval = va_arg( ap, char * );
+            if (sval == NULL)
+            {
+               sval = "[null]";
+            }
             if (ival < 0)
             {
                ival = 0;
