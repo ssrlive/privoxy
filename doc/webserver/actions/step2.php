@@ -21,8 +21,10 @@
   Added Feedback mechanism for actions file
 
 
-  Written by and Copyright (C) 2002 the SourceForge
-  Privoxy team. http://www.privoxy.org/
+  Copyright (C) 2002 the SourceForge Privoxy team.
+  http://www.privoxy.org/
+
+  Written by Andreas Oesterhelt
 
   This program is free software; you can redistribute it
   and/or modify it under the terms of the GNU General
@@ -47,16 +49,7 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <style type="text/css">
-   body,td,th { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
-   body { background-color: #ffffff; color: #000000 }
-   h1 { font-size: 140%; marign: 0px; }
-   h2 { font-size: 120%; marign: 0px; }
-   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; padding:20px; }
-   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; padding:20px; }
-   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; padding:20px; width: 60%; }
-   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; padding:20px; width: 60%; }
-  </style>
+  <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
   <script language="javascript" type="text/javascript">
   <!--
@@ -111,22 +104,70 @@
  * For testing: 
  */
 //phpinfo();
-//error_reporting(E_ALL);
-error_reporting(E_NONE);
+error_reporting(E_ALL);
+//error_reporting(E_NONE);
 
-
-/* 
- * Cannot start with step 2:
+/*
+ * Function: link_to_absolute
+ * Purpose:  Make links from $base absolute
  */
-if (!isset($referrer_url))
+function link_to_absolute($base, $link)
 {
-   echo ("  <title>Invalid Feedback Submission</title>
+   /*
+    * If $link already is absolute, we're done:
+    */
+   if (!strncmp("http://", $link, 7) || !strncmp("https://", $link, 8))
+   {
+      return $link;
+   }
+
+   /*
+    * Cut the base to it's proto://host/ or to its proto://host/dir/,
+    * depending whether $link is host-relative or path-relative.
+    */
+   if ($link{0} == "/")
+   {
+      /*
+       * host-relative:
+       */
+       preg_match('|^(https?://[^/]+)|i', $base, $results);
+       $base = $results[1];
+   }
+   else
+   {
+      /*
+       * path-relative:
+       */
+      if (strpos($base, '/') != strlen($base))
+      {
+         $base = substr($base, 0, -strpos(strrev($base), '/'));
+      }
+   }
+   return $base.$link;
+}
+
+/*
+ * Function: error_abort
+ * Purpose:  Return an error page with $title and $message
+ */
+function error_abort($title, $message)
+{
+   if ($title == "invalid") /* shortcut */
+   {
+      $title = "Invalid Feedback Submission";
+   }
+
+   echo ("  <title>Privoxy: $title</title>
            </head>
            <body>
-            <div class=\"title\"><h1>Invalid Feedback Submission</h1></div>
+            <div class=\"title\">
+             <h1>
+              <a href=\"http://www.privoxy.org/\">Privoxy</a>: $title
+              </h1>
+             </div>
             <center>
-             <div class=\"errorbox\">When submitting your feedback please start with
-              <a href=\"index.php\">step 1</a>.
+             <div class=\"errorbox\">
+              $message
              </div>
             </center>
             <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
@@ -135,25 +176,32 @@ if (!isset($referrer_url))
    exit; 
 }
 
+/* 
+ * Cannot start with step 2:
+ */
+if (!isset($referrer_url))
+{
+   error_abort("invalid", "When submitting your feedback please start with
+                <a href=\"index.php\">step 1</a>.");
+}
+
 
 /* 
  * Cannot work on unknown problem:
  */
 if (!isset($problem) || $problem == "INVALID")
 {
-   echo ("  <title>Invalid Feedback Submission</title>
-           </head>
-           <body>
-            <div class=\"title\"><h1>Invalid Feedback Submission</h1></div>
-            <center>
-             <div class=\"errorbox\">You need to select the nature of the problem in
-              <a href=\"javascript:history.back();\">step 1</a>.
-             </div>
-            </center>
-           <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
-           </body>
-          </html>\n");
-   exit; 
+   error_abort("invalid", "You need to select the nature of the problem in
+                <a href=\"javascript:history.back();\">step 1</a>.");
+}
+
+
+/*
+ * If the protocol is missing from $referrer_url, prepend "http://"
+ */
+if (strncmp("http://", $referrer_url, 7))
+{
+   $referrer_url = "http://" . $referrer_url;
 }
 
 
@@ -165,6 +213,11 @@ if (!isset($problem) || $problem == "INVALID")
  *        PHP's fopen() supports URLs, but it seems that
  *        curls options for Timeouts and HTTP error handling
  *        are not supported by fopen().
+ */
+
+
+/*
+ * Slurp the page in:
  */
 $ch = curl_init ($referrer_url);
 
@@ -182,25 +235,29 @@ curl_close ($ch);
 
 if (!$success)
 {
-   echo ("  <title>Invalid Feedback Submission</title>
-           </head>
-           <body>
-            <div class=\"title\"><h1>Invalid Feedback Submission</h1></div>
-            <center>
-             <div class=\"errorbox\">
-              <p>The URL that you entered (<a href=\"$referrer_url\">$referrer_url</a>)
-               <br>could not be retrieved.
-              </p>
-              <p>Make sure the URL is correct and publicly accessible.</p>
-              <p><a href=\"javascript:history.back();\">Back to step 1</a></p>
-             </div>
-            </center>
-            <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
-           </body>
-          </html>\n");
-   exit; 
+   $url_confirm = "
+     <dt>
+      <p><b>Confirm the URL:</b></p>
+     </dt>
+     <dd>
+      <p>
+       The URL that you entered could not be retrieved. Please make sure that
+      </p>
+      <p class=\"important\">
+       <a href=\"$referrer_url\">$referrer_url</a>
+      </p>
+      <p>
+       is correct and publicly accssible.
+      </p>
+      <p>
+       <input type=\"checkbox\" name=\"url_confirmed\" value=\"user\"> Yes, I'm sure.
+      </p>
+     </dd>";
 }
-
+else
+{
+   $url_confirm = "<input type=\"hidden\" name=\"url_confirmed\" value=\"automatic\">";
+}
 
 /* 
  * Create description from problem code:
@@ -244,7 +301,13 @@ switch($problem)
 <?php
 
 /*
- * Create / suppress for elements depending on type of
+ * Include the confirmation for an unretrievable URL if
+ * necessary
+ */
+echo ($url_confirm);
+
+/*
+ * Create / suppress form elements depending on type of
  * problem
  */
 if ($problem != "P1")
@@ -258,33 +321,13 @@ else
     * absolute, and present them (scaled to reasonable size)
     * in a table for the user to select
     */
+
    preg_match_all('|<img\s+[^>]*?src=[\'"]?(.*?)[\'" >]|i', $page, $matches);
    $image_urls = array_values(array_unique($matches[1]));
    $count = count($image_urls);
 
    if ($count > 0)
    {
-      /* 
-       * Base URL ends in slash: don't touch.
-       */
-      if (strpos(strrev($referrer_url), '/') == 0)
-      {
-         $referrer_base = $referrer_url;
-      }
-      /* 
-       * Else grab URL up to last slash as base.
-       */
-      else
-      {
-         $referrer_base = substr($referrer_url, 0, -strpos(strrev($referrer_url), '/'));
-      }
-
-      /* 
-       * Get the protocol + host info for relative links
-       * that start with slash. FIXME: Cut trailing slash off!
-       */
-      $referrer_host = "http://".strrev(strrchr(strrev(substr($referrer_url, 7)), "/"));
-
       /*
        * Open section in <dl>; Open table:
        */
@@ -298,22 +341,7 @@ else
        */
       for ($i=0; $i< $count; $i++)
       {
-         $image_url = $image_urls[$i];
- 
-         /*
-          * Make image URLs absolute:
-          */
-         if (strncmp("http://", $image_url, 7))
-         {
-            if ($image_url{0} == "/")
-            {
-               $image_url = $referrer_host.$image_url;
-            }
-            else
-            {
-               $image_url = $referrer_base.$image_url;
-            }
-         }
+         $image_url = link_to_absolute($referrer_url, $image_urls[$i]);
 
          /*
           * Print the row(s):
@@ -397,7 +425,7 @@ else
      </dd>
 
      <dt>
-      <b>Your Name:</b> <i>(optional)</i>
+      <b>Your Name:</b> <i>(optional, public)</i>
      </dt>
      <dd>
       <p>

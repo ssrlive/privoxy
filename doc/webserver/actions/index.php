@@ -53,33 +53,55 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <style type="text/css">
-   body,td,th { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
-   body { background-color: #ffffff; color: #000000 }
-   h1 { font-size: 140%; marign: 0px; }
-   h2 { font-size: 120%; marign: 0px; }
-   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; padding:20px; }
-   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; padding:20px; }
-   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; padding:20px; width: 60%; }
-   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; padding:20px; width: 60%; text-align: left; } 
-  </style>
+  <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
 <?php
 
 /*
- * MUST be updated in sync with actions file:
+ * Config:
  */
 $required_actions_file_version = "1.0";
 $required_privoxy_version = "2.9.13";
 $actions_file_download = "http://www.privoxy.org/actions/testdrive.action";
+$submit_target = "http://www.oesterhelt.org/actions-test/step2.php";
 
 
 /*
- * For testing: 
+ * Debug:
  */
 //phpinfo();
 //error_reporting(E_ALL);
 error_reporting(E_NONE);
+
+/*
+ * Function: error_abort
+ * Purpose:  Return an error page with $title and $message
+ */
+function error_abort($title, $message)
+{
+   if ($title == "invalid") /* shortcut */
+   {
+      $title = "Invalid Feedback Submission";
+   }
+
+   echo ("  <title>Privoxy: $title</title>
+           </head>
+           <body>
+            <div class=\"title\">
+             <h1>
+              <a href=\"http://www.privoxy.org/\">Privoxy</a>: $title
+              </h1>
+             </div>
+            <center>
+             <div class=\"errorbox\">
+              $message
+             </div>
+            </center>
+            <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
+           </body>
+          </html>\n");
+   exit; 
+}
 
 
 /*
@@ -107,22 +129,14 @@ $headers = getallheaders();
 
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] < $required_actions_file_version)
 {
-   echo ("<title>Invalid Privoxy Action List Feedback</title></head>
-          <body><div class=\"title\"><h1>Invalid Feedback Submission</h1></div>
-           <center>
-            <div class=\"errorbox\"><p>As much as we welcome your feedback, please note that
-             we can only accept problem reports based on:
-             <ul>
-              <li><a href=\"http://www.privoxy.org/\">Privoxy</a> version $required_privoxy_version or later</li>
-              <li><a href=\"$actions_file_download\">Actionsfile</a> version  version $required_actions_file_version or later</li>
-             </ul>
-             <p>We hope you will understand that we feel unable to maintain concurrent versions of the file.</p>
-            </div>
-           </center>
-           <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
-          </body>
-         </html>");
-   exit;
+
+   error_abort("invalid", "<p>As much as we welcome your feedback, please note that
+               we can only accept problem reports based on:
+               <ul>
+                <li><a href=\"http://www.privoxy.org/\">Privoxy</a> version $required_privoxy_version or later</li>
+                <li><a href=\"$actions_file_download\">Actionsfile</a> version  version $required_actions_file_version or later</li>
+               </ul>
+               <p>We hope you will understand that we feel unable to maintain concurrent versions of the file.</p>");
 }
 
 ?>
@@ -149,14 +163,14 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   </div>
 
   <div class="box">
-   <form action="step2.php" method="post">
+   <form action="<?php echo($submit_target); ?>" method="post">
 
     <table border="0" cellpadding="0" cellspacing="4">
 
      <tr>
       <td align="right">URL:</td>
       <td>
-       <input name="referrer_url" value="<?php echo ($url); ?>" type="text" size="45" maxlength="255">
+       <input name="referrer_url" value="<?php echo($url); ?>" type="text" size="45" maxlength="255">
       </td>
      </tr>
 
