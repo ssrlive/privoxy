@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.8 2001/07/29 18:43:08 jongfoster Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.9 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,12 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.9  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.8  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.
@@ -131,8 +137,10 @@ extern "C" {
 
 #define LOG_LEVEL_CLF        0x0200 /* Common Log File format */
 #ifdef FEATURE_KILL_POPUPS
-#define LOG_LEVEL_POPUPS	0x0400 /* Kill Popups */
+#define LOG_LEVEL_POPUPS	  0x0400 /* Kill Popups */
 #endif /* def FEATURE_KILL_POPUPS */
+
+#define LOG_LEVEL_CGI   0x0800 /* CGI / templates */
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000
