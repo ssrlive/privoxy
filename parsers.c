@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.44 2001/12/14 01:22:54 steudten Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.45 2002/01/09 14:33:03 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -10,8 +10,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.44 2001/12/14 01:22:54 steudten E
  *                   `client_uagent', `client_x_forwarded',
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
- *                   `flush_socket', `free_http_request', `get_header',
- *                   `list_to_text', `parse_http_request', `sed',
+ *                   `flush_socket', ``get_header', `sed',
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
@@ -41,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.44 2001/12/14 01:22:54 steudten E
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.45  2002/01/09 14:33:03  oes
+ *    Added support for localtime_r.
+ *
  *    Revision 1.44  2001/12/14 01:22:54  steudten
  *    Remove 'user:pass@' from 'proto://user:pass@host' for the
  *    new added header 'Host: ..'. (See Req ID 491818)
@@ -677,178 +679,6 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
    hdr = list_to_text(csp->headers);
 
    return hdr;
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  free_http_request
- *
- * Description :  Freez a http_request structure
- *
- * Parameters  :
- *          1  :  http = points to a http_request structure to free
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void free_http_request(struct http_request *http)
-{
-   assert(http);
-
-   freez(http->cmd);
-   freez(http->gpc);
-   freez(http->host);
-   freez(http->url);
-   freez(http->hostport);
-   freez(http->path);
-   freez(http->ver);
-   freez(http->host_ip_addr_str);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  parse_http_request
- *
- * Description :  Parse out the host and port from the URL.  Find the
- *                hostname & path, port (if ':'), and/or password (if '@')
- *
- * Parameters  :
- *          1  :  req = URL (or is it URI?) to break down
- *          2  :  http = pointer to the http structure to hold elements
- *          3  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void parse_http_request(char *req, struct http_request *http, struct client_state *csp)
-{
-   char *buf, *v[10], *url, *p;
-   int n;
-
-   memset(http, '\0', sizeof(*http));
-   http->cmd = strdup(req);
-
-   buf = strdup(req);
-   n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
-
-   if (n == 3)
-   {
-      /* this could be a CONNECT request */
-      if (strcmpic(v[0], "connect") == 0)
-      {
-         http->ssl      = 1;
-         http->gpc      = strdup(v[0]);
-         http->hostport = strdup(v[1]);
-         http->ver      = strdup(v[2]);
-      }
-
-      /* or it could be any other basic HTTP request type */
-      if ((0 == strcmpic(v[0], "get"))
-       || (0 == strcmpic(v[0], "head"))
-       || (0 == strcmpic(v[0], "post"))
-       || (0 == strcmpic(v[0], "put"))
-       || (0 == strcmpic(v[0], "delete"))
-
-       /* or a webDAV extension (RFC2518) */
-       || (0 == strcmpic(v[0], "propfind"))
-       || (0 == strcmpic(v[0], "proppatch"))
-       || (0 == strcmpic(v[0], "move"))
-       || (0 == strcmpic(v[0], "copy"))
-       || (0 == strcmpic(v[0], "mkcol"))
-       || (0 == strcmpic(v[0], "lock"))
-       || (0 == strcmpic(v[0], "unlock"))
-       )
-      {
-         http->ssl    = 0;
-         http->gpc    = strdup(v[0]);
-         http->url    = strdup(v[1]);
-         http->ver    = strdup(v[2]);
-
-         url = v[1];
-         if (strncmpic(url, "http://",  7) == 0)
-         {
-            url += 7;
-         }
-         else if (strncmpic(url, "https://", 8) == 0)
-         {
-            url += 8;
-         }
-         else
-         {
-            url = NULL;
-         }
-
-         if (url)
-         {
-            if ((p = strchr(url, '/')))
-            {
-               http->path = strdup(p);
-               *p = '\0';
-               http->hostport = strdup(url);
-            }
-            /*
-             * Repair broken HTTP requests that don't contain a path
-             */
-            else
-            {
-               http->path = strdup("/");
-               http->hostport = strdup(url);
-            }
-         }
-      }
-   }
-
-   freez(buf);
-
-
-   if (http->hostport == NULL)
-   {
-      free_http_request(http);
-      return;
-   }
-
-   buf = strdup(http->hostport);
-
-
-   /* check if url contains password */
-   n = ssplit(buf, "@", v, SZ(v), 1, 1);
-   if (n == 2)
-   {
-      char * newbuf = NULL;
-      newbuf = strdup(v[1]);
-      freez(buf);
-      buf = newbuf;
-   }
-
-   n = ssplit(buf, ":", v, SZ(v), 1, 1);
-
-   if (n == 1)
-   {
-      http->host = strdup(v[0]);
-      http->port = 80;
-   }
-
-   if (n == 2)
-   {
-      http->host = strdup(v[0]);
-      http->port = atoi(v[1]);
-   }
-
-   freez(buf);
-
-   if (http->host == NULL)
-   {
-      free_http_request(http);
-   }
-
-   if (http->path == NULL)
-   {
-      http->path = strdup("/");
-   }
 
 }
 

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.59 2001/12/13 14:07:18 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.60 2001/12/30 14:07:32 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.59 2001/12/13 14:07:18 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.60  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.59  2001/12/13 14:07:18  oes
  *    Fixed Bug: 503 error page now sent OK
  *
@@ -457,6 +465,7 @@ int ldebug = 0;
 #include "actions.h"
 #include "cgi.h"
 #include "loadcfg.h"
+#include "urlmatch.h"
 
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
