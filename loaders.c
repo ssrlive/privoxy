@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.39 2002/03/07 03:46:17 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.40 2002/03/08 17:46:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.39 2002/03/07 03:46:17 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.40  2002/03/08 17:46:04  jongfoster
+ *    Fixing int/size_t warnings
+ *
  *    Revision 1.39  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *
@@ -1091,7 +1094,8 @@ load_trustfile_error:
  *
  * Function    :  unload_re_filterfile
  *
- * Description :  Unload the re_filter list.
+ * Description :  Unload the re_filter list by freeing all chained
+ *                re_filterfile specs and their data.
  *
  * Parameters  :
  *          1  :  f = the data structure associated with the filterfile.
@@ -1101,27 +1105,31 @@ load_trustfile_error:
  *********************************************************************/
 static void unload_re_filterfile(void *f)
 {
-   struct re_filterfile_spec *b = (struct re_filterfile_spec *)f;
+   struct re_filterfile_spec *a, *b = (struct re_filterfile_spec *)f;
 
-   if (b == NULL)
+   while (b != NULL)
    {
-      return;
-   }
+      a = b->next;
 
-   destroy_list(b->patterns);
-   pcrs_free_joblist(b->joblist);
-   freez(b);
+      destroy_list(b->patterns);
+      pcrs_free_joblist(b->joblist);
+      freez(b);
+
+      b = a;
+   }
 
    return;
 }
+
 
 /*********************************************************************
  *
  * Function    :  load_re_filterfile
  *
- * Description :  Load the re_filterfile. Each non-comment, non-empty
- *                line is instantly added to the joblist, which is
- *                a chained list of pcrs_job structs.
+ * Description :  Load the re_filterfile. 
+ *                Generate a chained list of re_filterfile_spec's from
+ *                the "FILTER: " blocks, compiling all their substitutions
+ *                into chained lists of pcrs_job structs.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1133,7 +1141,7 @@ int load_re_filterfile(struct client_state *csp)
 {
    FILE *fp;
 
-   struct re_filterfile_spec *bl;
+   struct re_filterfile_spec *bl, *new_bl;
    struct file_list *fs;
 
    char  buf[BUFFER_SIZE];
@@ -1141,9 +1149,11 @@ int load_re_filterfile(struct client_state *csp)
    unsigned long linenum = 0;
    pcrs_job *dummy;
 
+   /*
+    * No need to reload if unchanged
+    */
    if (!check_file_changed(current_re_filterfile, csp->config->re_filterfile, &fs))
    {
-      /* No need to load */
       if (csp)
       {
          csp->rlist = current_re_filterfile;
@@ -1155,46 +1165,87 @@ int load_re_filterfile(struct client_state *csp)
       goto load_re_filterfile_error;
    }
 
+   /*
+    * Allocate the first re_filterfile_spec struct
+    */
    fs->f = bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
    if (bl == NULL)
    {
       goto load_re_filterfile_error;
    }
 
-   /* Open the file or fail */
+   /*
+    * Initialize the name in case there are
+    * expressions before the first block header
+    */
+   bl->filtername = "default";
+
+   /* 
+    * Open the file or fail
+    */
    if ((fp = fopen(csp->config->re_filterfile, "r")) == NULL)
    {
       goto load_re_filterfile_error;
    }
 
-   /* Read line by line */
+   /* 
+    * Read line by line
+    */
    while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
    {
-      enlist( bl->patterns, buf );
+      /*
+       * If this is the head of a new filter block, make it a
+       * re_filterfile spec of its own and chain it to the list:
+       */
+      if (strncmp(buf, "FILTER:", 7) == 0)
+      {
+         new_bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
+         if (new_bl == NULL)
+         {
+            goto load_re_filterfile_error;
+         }
+         else
+         {
+            new_bl->filtername = strdup(chomp(buf + 7));
+            bl->next = new_bl;
+            bl = new_bl;
+         }
+         continue;
+      }
 
-      /* We have a meaningful line -> make it a job */
+      /* 
+       * Else, save the expression, make it a pcrs_job
+       * and chain it into the current filter's joblist 
+       */
+      enlist(bl->patterns, buf);
+
       if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
       {
          log_error(LOG_LEVEL_RE_FILTER,
-               "Adding re_filter job %s failed with error %d.", buf, error);
+               "Adding re_filter job %s to filter %s failed with error %d.", buf, bl->filtername, error);
          continue;
       }
       else
       {
          dummy->next = bl->joblist;
          bl->joblist = dummy;
-         log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s succeeded.", buf);
+         log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s to filter %s succeeded.", buf, bl->filtername);
       }
    }
 
    fclose(fp);
 
-   /* the old one is now obsolete */
+   /* 
+    * Schedule the now-obsolete old data for unloading
+    */
    if ( NULL != current_re_filterfile )
    {
       current_re_filterfile->unloader = unload_re_filterfile;
    }
 
+   /*
+    * Chain this file into the global list of loaded files
+    */
    fs->next    = files->next;
    files->next = fs;
    current_re_filterfile = fs;

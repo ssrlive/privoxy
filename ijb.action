@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.6 2002/03/08 17:25:52 oes Exp $
+# $Id: ijb.action,v 1.7 2002/03/08 18:01:48 morcego Exp $
 #
 #############################################################################
 # Syntax
@@ -179,9 +179,23 @@
 #    request and send a local redirect back to your browser without
 #    contacting the remote site.
 #
-# +filter
-#    Filter the website through the re_filterfile
-#    FIXME: The syntax should be +filter{filename}
+# +filter{name}
+#    Filter the website through one or more regular expression filters.
+#    Repeat for multiple filters.
+#   
+#    Filters predefined in the supplied re_filterfile include:
+#
+#     html-annoyances:  Get rid of particularly annoying HTML abuse
+#     js-annoyances:    Get rid of particularly annoying JavaScript abuse
+#     no-poups:         Kill all popups in JS and HTML
+#     frameset-borders: Give frames a border
+#     webbugs:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
+#     no-refresh:       Automatic refresh sucks on auto-dialup lines
+#     fun:              Text replacements  for subversive browsing fun!
+#     nimda:            Remove (virus) Nimda code.
+#     banners-by-size:  Kill banners by size
+#     crude-parental:   Kill all web pages that contain the words "sex" or "warez"
+#
 #
 # +hide-forwarded
 #    Block any existing X-Forwarded-for header, and do not add a new one.
@@ -317,13 +331,17 @@
 +no-cookies = +no-cookies-set +no-cookies-read
 -no-cookies = -no-cookies-set -no-cookies-read
 +imageblock = +block +image
-+filter-all = +filter +no-compression
 
 # Fragile sites should have the minimum changes
 fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -no-cookies -no-popups
 
 # Shops should be allowed to set persistent cookies
 shop        = -filter -no-cookies -no-cookies-keep
+
+# Your favourite blend of filters:
+#
+myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
+              +filter{webbugs} +filter{nimda} +filter{banners-by-size}
 
 #... etc.  Customize to your heart's content.
 
@@ -336,7 +354,7 @@ shop        = -filter -no-cookies -no-cookies-keep
 -deanimate-gifs \
 -downgrade \
 +fast-redirects \
-+filter \
+myfilters \
 +no-compression \
 +no-cookies-keep \
 +hide-forwarded \

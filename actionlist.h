@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.10  2002/03/08 18:19:14  jongfoster
+ *    Adding +image-blocker{pattern} option to edit interface
+ *
  *    Revision 1.9  2001/11/22 21:58:41  jongfoster
  *    Adding action +no-cookies-keep
  *
@@ -86,7 +89,7 @@ DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRI
 DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
 DEFINE_ACTION_BOOL       ("downgrade",       ACTION_DOWNGRADE)
 DEFINE_ACTION_BOOL       ("fast-redirects",  ACTION_FAST_REDIRECTS)
-DEFINE_ACTION_BOOL       ("filter",          ACTION_FILTER)
+DEFINE_ACTION_MULTI      ("filter",          ACTION_MULTI_FILTER)
 DEFINE_ACTION_BOOL       ("hide-forwarded",  ACTION_HIDE_FORWARDED)
 DEFINE_ACTION_STRING     ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM)
 DEFINE_CGI_PARAM_RADIO   ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "block", 1)

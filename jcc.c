@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.79 2002/03/09 20:03:52 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.80 2002/03/11 22:07:05 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.79 2002/03/09 20:03:52 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.80  2002/03/11 22:07:05  david__schmidt
+ *    OS/2 port maintenance:
+ *    - Fixed EMX build - it had decayed a little
+ *    - Fixed inexplicable crash during FD_ZERO - must be due to a bad macro.
+ *      substituted a memset for now.
+ *
  *    Revision 1.79  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -944,7 +950,7 @@ static void chat(struct client_state *csp)
 #endif /* def FEATURE_KILL_POPUPS */
 
    pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
-                                ((csp->action->flags & ACTION_FILTER) != 0);
+                                (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]));
 
    gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
 

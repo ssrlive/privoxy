@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.11  2002/03/08 18:19:14  jongfoster
+#    Adding +image-blocker{pattern} option to edit interface
+#
 #    Revision 1.10  2002/03/03 10:29:12  swa
 #    point users to the right feedback forms,
 #    not necessarily the developer list.
@@ -215,6 +218,18 @@ function show_deanimate_opts(tf)
         target = document.getElementById("deanimate_opts");
     } else if (document.all) {
         target = document.deanimate_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
+}
+
+function show_filter_opts(tf)
+{
+    if (document.getElementById) {
+        target = document.getElementById("filter_opts");
+    } else if (document.all) {
+        target = document.filter_opts;
     } else {
         return;
     }
@@ -443,16 +458,22 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
     </tr>
     <tr class="bg2" align="left" valign="top">
       <td class="action">+filter</td>
-      <td>Filter the website through the re_filterfile</td>
+      <td>Filter the website through one or more regular expression filters.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="filter" value="Y" @filter-y@
-        ></td>
+        name="filter" id="filter_y" value="Y" @filter-y@
+        onclick="show_filter_opts(true)"></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="filter" value="N" @filter-n@ 
-        ></td>
+        name="filter" id="filter_n" value="N" @filter-n@
+        onclick="show_filter_opts(false)"></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="filter" value="X" @filter-x@
-         ></td>
+        name="filter" id="filter_x" value="X" @filter-x@
+        onclick="show_filter_opts(false)"></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top" id="filter_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">Editing the settings for this option, or turning
+        it on if it was off, is not yet supported using this web-based
+        editor.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="action">+hide-forwarded</td>

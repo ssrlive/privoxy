@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.53 2002/03/08 16:48:55 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.54 2002/03/09 20:03:52 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,30 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.54  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.53  2002/03/08 16:48:55  oes
  *    Added FEATURE_NO_GIFS and BUILTIN_IMAGE_MIMETYPE
  *
@@ -622,20 +646,19 @@ struct iob
 #define ACTION_DEANIMATE       0x00000002UL
 #define ACTION_DOWNGRADE       0x00000004UL
 #define ACTION_FAST_REDIRECTS  0x00000008UL
-#define ACTION_FILTER          0x00000010UL
-#define ACTION_HIDE_FORWARDED  0x00000020UL
-#define ACTION_HIDE_FROM       0x00000040UL
-#define ACTION_HIDE_REFERER    0x00000080UL /* sic - follow HTTP, not English */
-#define ACTION_HIDE_USER_AGENT 0x00000100UL
-#define ACTION_IMAGE           0x00000200UL
-#define ACTION_IMAGE_BLOCKER   0x00000400UL
-#define ACTION_NO_COMPRESSION  0x00000800UL
-#define ACTION_NO_COOKIE_KEEP  0x00001000UL
-#define ACTION_NO_COOKIE_READ  0x00002000UL
-#define ACTION_NO_COOKIE_SET   0x00004000UL
-#define ACTION_NO_POPUPS       0x00008000UL
-#define ACTION_VANILLA_WAFER   0x00010000UL
-#define ACTION_LIMIT_CONNECT   0x00020000UL
+#define ACTION_HIDE_FORWARDED  0x00000010UL
+#define ACTION_HIDE_FROM       0x00000020UL
+#define ACTION_HIDE_REFERER    0x00000040UL /* sic - follow HTTP, not English */
+#define ACTION_HIDE_USER_AGENT 0x00000080UL
+#define ACTION_IMAGE           0x00000100UL
+#define ACTION_IMAGE_BLOCKER   0x00000200UL
+#define ACTION_NO_COMPRESSION  0x00000400UL
+#define ACTION_NO_COOKIE_KEEP  0x00000800UL
+#define ACTION_NO_COOKIE_READ  0x00001000UL
+#define ACTION_NO_COOKIE_SET   0x00002000UL
+#define ACTION_NO_POPUPS       0x00004000UL
+#define ACTION_VANILLA_WAFER   0x00008000UL
+#define ACTION_LIMIT_CONNECT   0x00010000UL
 
 #define ACTION_STRING_DEANIMATE     0
 #define ACTION_STRING_FROM          1
@@ -647,7 +670,9 @@ struct iob
 
 #define ACTION_MULTI_ADD_HEADER     0
 #define ACTION_MULTI_WAFER          1
-#define ACTION_MULTI_COUNT          2
+#define ACTION_MULTI_FILTER         2
+#define ACTION_MULTI_COUNT          3
+
 
 /*
  * This structure contains a list of actions to apply to a URL.
@@ -896,12 +921,18 @@ struct forward_spec
 #define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
 
+/*
+ * This struct represents one filter (one block) from
+ * the re_filterfile. If there is more than one filter
+ * in the file, the file will be represented by a
+ * chained list of re_filterfile specs.
+ */
 struct re_filterfile_spec
 {
-   char *username;
-   char *filtername;
-   struct list patterns[1];
-   pcrs_job *joblist;
+   char *filtername;                /* Name from FILTER: statement in re_filterfile (or "default") */
+   struct list patterns[1];         /* The patterns from the re_filterfile */
+   pcrs_job *joblist;               /* The resulting compiled pcrs_jobs */
+   struct re_filterfile_spec *next; /* The pointer for chaining */
 };
 
 #ifdef FEATURE_ACL

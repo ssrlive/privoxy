@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.44 2002/03/07 03:49:31 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.45 2002/03/08 16:47:50 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.44 2002/03/07 03:49:31 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.45  2002/03/08 16:47:50  oes
+ *    Added choice beween GIF and PNG built-in images
+ *
  *    Revision 1.44  2002/03/07 03:49:31  oes
  *     - Fixed compiler warnings etc
  *     - Changed built-in images from GIF to PNG
@@ -1188,16 +1191,17 @@ int is_untrusted_url(struct client_state *csp)
  *
  * Function    :  pcrs_filter_response
  *
- * Description :  Apply all the pcrs jobs from the joblist (re_filterfile)
- *                to the text buffer that's been accumulated in
- *                csp->iob->buf and set csp->content_length to the modified
- *                size and raise the CSP_FLAG_MODIFIED flag if appropriate.
+ * Description :  Ecexute all text substitutions from all applying
+ *                +filter actions on the text buffer that's been accumulated
+ *                in csp->iob->buf. If this changes the contents, set
+ *                csp->content_length to the modified size and raise the
+ *                CSP_FLAG_MODIFIED flag.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  a pointer to the (newly allocated) modified buffer.
- *                or NULL in case something went wrong
+ *                or NULL if there were no hits or something went wrong
  *
  *********************************************************************/
 char *pcrs_filter_response(struct client_state *csp)
@@ -1210,13 +1214,22 @@ char *pcrs_filter_response(struct client_state *csp)
 
    struct file_list *fl;
    struct re_filterfile_spec *b;
+   struct list_entry *filtername;
 
-   /* Sanity first */
+   /* 
+    * Sanity first
+    */
    if (csp->iob->cur >= csp->iob->eod)
    {
       return(NULL);
    }
    size = csp->iob->eod - csp->iob->cur;
+
+   if ( ( NULL == (fl = csp->rlist) ) || ( NULL == fl->f) )
+   {
+      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+      return(NULL);
+   }
 
    /*
     * If the body has a "chunked" transfer-encoding,
@@ -1233,30 +1246,39 @@ char *pcrs_filter_response(struct client_state *csp)
       csp->flags |= CSP_FLAG_MODIFIED;
    }
 
-   if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
+   /*
+    * For all applying +filter actions, look if a filter by that
+    * name exists and if yes, execute it's pcrs_joblist on the
+    * buffer.
+    */
+   for (b = fl->f; b; b = b->next)
    {
-      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
-      return(NULL);
+      for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
+           filtername ; filtername = filtername->next)
+      {
+         if (strcmp(b->filtername, filtername->str) == 0)
+         {
+            if ( NULL == b->joblist )
+            {
+               log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->filtername);
+               return(NULL);
+            }
+
+            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s...",
+                      csp->http->hostport, csp->http->path, size, b->filtername);
+
+            /* Apply all jobs from the joblist */
+            for (job = b->joblist; NULL != job; job = job->next)
+            {
+               hits += pcrs_execute(job, old, size, &new, &size);
+               if (old != csp->iob->cur) free(old);
+               old=new;
+            }
+
+            log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", hits, size);
+         }
+      }
    }
-
-   if ( NULL == b->joblist )
-   {
-      log_error(LOG_LEVEL_RE_FILTER, "Empty joblist. Nothing to do.");
-      return(NULL);
-   }
-
-   log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) ...",
-              csp->http->hostport, csp->http->path, size);
-
-   /* Apply all jobs from the joblist */
-   for (job = b->joblist; NULL != job; job = job->next)
-   {
-      hits += pcrs_execute(job, old, size, &new, &size);
-      if (old != csp->iob->cur) free(old);
-      old=new;
-   }
-
-   log_error(LOG_LEVEL_RE_FILTER, " produced %d hits (new size %d).", hits, size);
 
    /*
     * If there were no hits, destroy our copy and let
