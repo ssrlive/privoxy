@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.29 2001/09/20 15:47:44 steudten Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.30 2001/10/02 15:30:57 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.29 2001/09/20 15:47:44 steudten Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.30  2001/10/02 15:30:57  oes
+ *    Introduced show-request cgi
+ *
  *    Revision 1.29  2001/09/20 15:47:44  steudten
  *
  *    Fix BUG: Modify int size to size_t size in fill_template()
@@ -716,7 +719,7 @@ char *template_load(struct client_state *csp, const char *templatename)
 
    if(NULL == (fp = fopen(buf, "r")))
    {
-      log_error(LOG_LEVEL_ERROR, "error loading template %s: %E", buf);
+      log_error(LOG_LEVEL_FATAL, "error loading template %s: %E", buf);
       return NULL;
    }
    
