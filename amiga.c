@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.2 2001/05/23 00:13:58 joergs Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.3 2001/09/12 22:54:51 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.2 2001/05/23 00:13:58 joergs Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.3  2001/09/12 22:54:51  joergs
+ *    Stacksize of main thread increased.
+ *
  *    Revision 1.2  2001/05/23 00:13:58  joergs
  *    AmigaOS support fixed.
  *
@@ -75,12 +78,12 @@ __saveds ULONG server_thread(void)
          Signal(main_task,SIGF_SINGLE);
          serve((struct client_state *) local_csp);
       } else {
-         local_csp->active = 0;
+         local_csp->flags &= ~CSP_FLAG_ACTIVE;
          Signal(main_task,SIGF_SINGLE);
       }
       CloseLibrary(SocketBase);
    } else {
-      local_csp->active = 0;
+      local_csp->flags &= ~CSP_FLAG_ACTIVE;
       Signal(main_task,SIGF_SINGLE);
    }
    childs--;
