@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.12 2002/04/26 17:45:36 swa Exp $
+ $Id: readme.sgml,v 1.13 2002/05/04 08:44:45 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -63,9 +63,7 @@
  stable and unstable versions. You only want one or the other!
 
 -->
-
 <article id="index">
-
 <![%dummy;[
  <para>
  <comment>
@@ -75,7 +73,6 @@
  </comment>
  </para>
 ]]>
-
 <para>
  <literal>
   <msgtext>
@@ -113,10 +110,10 @@
  *
  *********************************************************************/
 </literallayout>
-  </msgtext>
- </literal>
+</msgtext>
+</literal>
 </para>
-
+ 
 <para>
  <!-- include some conditional text -->
  This README is included with <![%p-not-stable;[ the development version of]]>
@@ -129,12 +126,8 @@
 &p-intro;
 <!-- end boilerplate -->
 
-<para>
- <LiteralLayout>
-
- IMPORTANT CHANGES
-------------------</LiteralLayout>
-</para>
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
 <para>
  NEWS! As of 03/24/02, the name of this project has been changed from
  ijbswa/Junkbuster to Privoxy. This is reflected in many of the included
@@ -149,25 +142,17 @@
  port is now 8118 due to conflicts with port 8000 assignment. You will need to
  change your browser if upgrading!!! And maybe firewall, etc.
 </para>
+</sect1>
 
-<para>
- <LiteralLayout>
-
- INSTALL
---------</LiteralLayout>
-</para>
-
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="install" ><title>INSTALL</title>
 <!-- include buildsource.sgml boilerplate: -->
  &buildsource;
 <!-- end boilderplate -->
+</sect1>
 
-<para>
- <LiteralLayout>
-
- RUN
----- </LiteralLayout>
-</para>
-
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="run"><title>RUN</title>
 <para>
  privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
   [--user USER[.GROUP]] [config_file]
@@ -186,13 +171,10 @@
 <para>
  Or for SuSE:   /etc/rc.d/privoxy start
 </para>
+</sect1>
 
-<para>
- <LiteralLayout>
-
- CONFIGURATION
--------------- </LiteralLayout>
-</para>
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="configuration"><title>CONFIGURATION</title>
 <para>
  See: 'config', 'default.action', 'user.action', and 'default.filter'.
  'user.action' is for personal configuration. These are all well commented.
@@ -218,12 +200,11 @@
  development process.
 </para>
 ]]>
+</sect1>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="documentation"><title>DOCUMENTATION</title>
 <para>
- <LiteralLayout>
-
- DOCUMENTATION
---------------</LiteralLayout>
  There should be documentation in the 'doc' subdirectory<![%p-not-stable;[, but it
  is not completed at this point]]>. In particular, see the user-manual there,
  the faq, and those interested in Privoxy development, should look at
@@ -241,28 +222,23 @@
 <para>
  Included documentation may vary according to platform and packager.
 </para>
+</sect1>
 
-<para>
- <LiteralLayout>
-
- CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
---------------------------------------------------------------</LiteralLayout>
-</para>
-
-<!--  <sect1 id="none" label=""><title></title> -->
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="contact" label=""><title>CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS</title>
 <!-- Include contacting.sgml boilerplate: -->
-<!--   &contacting; -->
+  &contacting;
 <!-- end boilerplate -->
-<!--  </sect1> -->
+</sect1>
 
-<para>
- <LiteralLayout>
- -------------------------------------------------------------------------
- ijbswa-developers@lists.sourceforge.net
-</LiteralLayout>
-</para>
-<para>
- $Id: readme.sgml,v 1.12 2002/04/26 17:45:36 swa Exp $
-</para>
+<!-- <para> -->
+<!--  <LiteralLayout> -->
+<!--  ------------------------------------------------------------------------- -->
+<!--  ijbswa-developers@lists.sourceforge.net -->
+<!-- </LiteralLayout> -->
+<!-- </para> -->
+<!-- <para> -->
+<!--  $Id: readme.sgml,v 1.13 2002/05/04 08:44:45 swa Exp $ -->
+<!-- </para> -->
 
 </article>
