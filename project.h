@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.41 2001/10/28 19:12:06 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.42 2001/11/05 21:42:41 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.42  2001/11/05 21:42:41  steudten
+ *    Include DBG() macro.
+ *
  *    Revision 1.41  2001/10/28 19:12:06  jongfoster
  *    Adding ijb_toupper()
  *
@@ -540,25 +543,26 @@ struct iob
 
 #define ACTION_MASK_ALL        (~0U)
 
-#define ACTION_MOST_COMPATIBLE 0x0000U
+#define ACTION_MOST_COMPATIBLE 0x00000000UL
 
-#define ACTION_BLOCK           0x0001U
-#define ACTION_DEANIMATE       0x0002U
-#define ACTION_DOWNGRADE       0x0004U
-#define ACTION_FAST_REDIRECTS  0x0008U
-#define ACTION_FILTER          0x0010U
-#define ACTION_HIDE_FORWARDED  0x0020U
-#define ACTION_HIDE_FROM       0x0040U
-#define ACTION_HIDE_REFERER    0x0080U /* sic - follow HTTP, not English */
-#define ACTION_HIDE_USER_AGENT 0x0100U
-#define ACTION_IMAGE           0x0200U
-#define ACTION_IMAGE_BLOCKER   0x0400U
-#define ACTION_NO_COMPRESSION  0x0800U
-#define ACTION_NO_COOKIE_READ  0x1000U
-#define ACTION_NO_COOKIE_SET   0x2000U
-#define ACTION_NO_POPUPS       0x4000U
-#define ACTION_VANILLA_WAFER   0x8000U
-#define ACTION_LIMIT_CONNECT   0x010000U
+#define ACTION_BLOCK           0x00000001UL
+#define ACTION_DEANIMATE       0x00000002UL
+#define ACTION_DOWNGRADE       0x00000004UL
+#define ACTION_FAST_REDIRECTS  0x00000008UL
+#define ACTION_FILTER          0x00000010UL
+#define ACTION_HIDE_FORWARDED  0x00000020UL
+#define ACTION_HIDE_FROM       0x00000040UL
+#define ACTION_HIDE_REFERER    0x00000080UL /* sic - follow HTTP, not English */
+#define ACTION_HIDE_USER_AGENT 0x00000100UL
+#define ACTION_IMAGE           0x00000200UL
+#define ACTION_IMAGE_BLOCKER   0x00000400UL
+#define ACTION_NO_COMPRESSION  0x00000800UL
+#define ACTION_NO_COOKIE_KEEP  0x00001000UL
+#define ACTION_NO_COOKIE_READ  0x00002000UL
+#define ACTION_NO_COOKIE_SET   0x00004000UL
+#define ACTION_NO_POPUPS       0x00008000UL
+#define ACTION_VANILLA_WAFER   0x00010000UL
+#define ACTION_LIMIT_CONNECT   0x00020000UL
 
 #define ACTION_STRING_DEANIMATE     0
 #define ACTION_STRING_FROM          1
@@ -580,7 +584,7 @@ struct iob
  */
 struct current_action_spec
 {
-   unsigned flags;    /* a bit set to "1" = add action    */
+   unsigned long flags;    /* a bit set to "1" = add action    */
 
    /* For those actions that require parameters: */
 
@@ -599,8 +603,8 @@ struct current_action_spec
  */
 struct action_spec
 {
-   unsigned mask;   /* a bit set to "0" = remove action */
-   unsigned add;    /* a bit set to "1" = add action    */
+   unsigned long mask;   /* a bit set to "0" = remove action */
+   unsigned long add;    /* a bit set to "1" = add action    */
 
    /* For those actions that require parameters: */
 
