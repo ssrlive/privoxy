@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.15 2002/05/24 00:02:05 oes Exp $
+ $Id: index.sgml,v 1.16 2002/05/24 10:06:31 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -157,7 +157,7 @@
   </listitem>
   <listitem>
    <para>
-    <ulink url="team/index.html">Pictures of the Privoxy Team</ulink>
+    <ulink url="http://privoxy.org/team/index.html">Pictures of the Privoxy Team</ulink>
    </para>
   </listitem>
  </itemizedlist>
@@ -229,6 +229,9 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.16  2002/05/24 10:06:31  oes
+ Nit
+
  Revision 1.15  2002/05/24 00:02:05  oes
  Tried to make more useful and concise:
    Reordered, no more TOC, link to instead of include info,
