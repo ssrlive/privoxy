@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.16 2001/06/01 18:49:17 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.18 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,63 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.16 2001/06/01 18:49:17 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.18  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.17  2001/06/01 20:07:23  jongfoster
+ *    Now uses action +image-blocker{} rather than config->tinygif
+ *
  *    Revision 1.16  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
  *    worth the extra complexity.
@@ -236,6 +293,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.16 2001/06/01 18:49:17 jongfoster Exp $";
 #include "jbsockets.h"
 #include "gateway.h"
 #include "actions.h"
+#include "cgi.h"
 
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
@@ -335,6 +393,7 @@ static void chat(struct client_state *csp)
    int pcrs_filter;   /* bool, 1==will filter through pcrs */
    int filtering = 0; /* bool, 1==currently filtering through pcrs */
 #endif /* def PCRS */
+   struct http_response *rsp;
 
    http = csp->http;
 
@@ -518,17 +577,23 @@ static void chat(struct client_state *csp)
     * we're toggled off or in force mode. 
     */
  
-   if (intercept_url(http, csp))
+   if (NULL != (rsp = cgi_dispatch(csp)))
    {
-      /*
-       * The interceptor will write out the data.
-       * We don't need to do anything else
-       */
+	   if(0 != (n = make_http_response(rsp)))
+      {
+         if ((write_socket(csp->cfd, rsp->head, n) != n)
+		     || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+         { 
+            log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
+	      }
+	   }
+
 
 #ifdef STATISTICS
       csp->rejected = 1;
 #endif /* def STATISTICS */
 
+      free_http_response(rsp);
       freez(hdr);
       return;
    }
