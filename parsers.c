@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.5 2001/05/26 00:28:36 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.6 2001/05/26 13:39:32 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -11,7 +11,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.5 2001/05/26 00:28:36 jongfoster 
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
  *                   `flush_socket', `free_http_request', `get_header',
- *                   `list_to_text', `match', `parse_http_request', `sed',
+ *                   `list_to_text', `parse_http_request', `sed',
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
@@ -41,6 +41,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.5 2001/05/26 00:28:36 jongfoster 
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.6  2001/05/26 13:39:32  jongfoster
+ *    Only crunches Content-Length header if applying RE filtering.
+ *    Without this fix, Microsoft Windows Update wouldn't work.
+ *
  *    Revision 1.5  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -209,43 +213,6 @@ void (* const add_client_headers[])(struct client_state *) = {
 void (* const add_server_headers[])(struct client_state *) = {
    NULL
 };
-
-
-/*********************************************************************
- *
- * Function    :  match
- *
- * Description :  Do a `strncmpic' on every pattern in pats.
- *
- * Parameters  :
- *          1  :  buf = a string to match to a list of patterns
- *          2  :  pats = list of strings to compare against buf.
- *
- * Returns     :  Return the matching "struct parsers *",
- *                or NULL if no pattern matches.
- *
- *********************************************************************/
-static const struct parsers *match(char *buf, const struct parsers *pats)
-{
-   const struct parsers *v;
-
-   if (buf == NULL)
-   {
-      /* hit me */
-      log_error(LOG_LEVEL_ERROR, "NULL parameter to match()");
-      return(NULL);
-   }
-
-   for (v = pats; v->str ; v++)
-   {
-      if (strncmpic(buf, v->str, v->len) == 0)
-      {
-         return(v);
-      }
-   }
-   return(NULL);
-
-}
 
 
 /*********************************************************************
@@ -551,17 +518,24 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
    char *hdr;
    void (* const *f)();
 
-   for (p = csp->headers->next; p ; p = p->next)
+   for (v = pats; v->str ; v++)
    {
-      log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
-
-      if ((v = match(p->str, pats)))
+      for (p = csp->headers->next; p ; p = p->next)
       {
-         hdr = v->parser(v, p->str, csp);
-         freez(p->str);
-         p->str = hdr;
-      }
+         if (v == pats) log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
 
+         if (p->str == NULL)
+         {
+            /* hit me */
+            log_error(LOG_LEVEL_ERROR, "NULL header");
+         }
+         else if (strncmpic(p->str, v->str, v->len) == 0)
+         {
+            hdr = v->parser(v, p->str, csp);
+            freez(p->str);
+            p->str = hdr;
+         }
+      }
    }
 
    /* place any additional headers on the csp->headers list */
@@ -805,6 +779,7 @@ char *content_type(const struct parsers *v, char *s, struct client_state *csp)
 }
 #endif /* defined(PCRS) || defined(KILLPOPUPS) */
 
+
 #ifdef PCRS
 /*********************************************************************
  *
@@ -823,7 +798,7 @@ char *content_type(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *content_length(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if ((csp->permissions & PERMIT_RE_FILTER) != 0)
+   if (((csp->permissions & PERMIT_RE_FILTER) != 0) && csp->is_text)
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);

@@ -1,6 +1,6 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.3 2001/05/26 13:39:32 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -13,7 +13,7 @@
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
  *                   `flush_socket', `free_http_request', `get_header',
- *                   `list_to_text', `match', `parse_http_request', `sed',
+ *                   `list_to_text', `parse_http_request', `sed',
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.3  2001/05/26 13:39:32  jongfoster
+ *    Only crunches Content-Length header if applying RE filtering.
+ *    Without this fix, Microsoft Windows Update wouldn't work.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
