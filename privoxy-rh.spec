@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.6 2002/03/24 19:56:40 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.7 2002/03/24 21:07:18 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -65,6 +65,9 @@ development. Several other developers are now contributing.
 %setup -q -c
 
 %build
+echo This specfile is broken. Please, wait while we fix it
+echo == morcego
+exit 1
 autoheader
 autoconf
 %configure
@@ -494,6 +497,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.7  2002/03/24 21:07:18  hal9
+# Add autoheader, etc.
+#
 # Revision 1.6  2002/03/24 19:56:40  hal9
 # /etc/junkbuster is now /etc/privoxy. Fixed ';' typo.
 #
