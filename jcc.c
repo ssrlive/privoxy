@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.72 2002/03/05 21:33:45 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.73 2002/03/05 23:57:30 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.72 2002/03/05 21:33:45 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.73  2002/03/05 23:57:30  hal9
+ *    Stray character 's' on line 1618 was breaking build.
+ *
  *    Revision 1.72  2002/03/05 21:33:45  david__schmidt
  *    - Re-enable OS/2 building after new parms were added
  *    - Fix false out of memory report when resolving CGI templates when no IP
@@ -1568,7 +1571,9 @@ int main(int argc, const char *argv[])
 #endif
 {
    int argc_pos = 0;
+#ifdef unix
    struct passwd *pw;
+#endif
 
    Argc = argc;
    Argv = argv;
@@ -1603,7 +1608,7 @@ int main(int argc, const char *argv[])
       {
          no_daemon = 1;
       }
-#if !defined(__OS2__)
+#if defined(unix)
       else if (strcmp(argv[argc_pos], "--pidfile" ) == 0)
       {
          if (++argc_pos == argc) usage(argv[0]);
@@ -1620,7 +1625,7 @@ int main(int argc, const char *argv[])
             log_error(LOG_LEVEL_FATAL, "User %s not found.", argv[argc_pos]);
          }
       }
-#endif /* !defined(__OS2__) */
+#endif /* defined(unix) */
       else
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
       {
