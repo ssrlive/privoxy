@@ -1,0 +1,7 @@
+For those who hate reading docs:
+
+For a clean build you **MUST** run autoheader && autoconf && ./configure
+before you run make.
+
+Please refer to REDAME and the doc subdirectory for more info.
+
