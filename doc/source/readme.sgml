@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.13 2002/05/04 08:44:45 swa Exp $
+ $Id: readme.sgml,v 1.14 2002/05/05 13:46:59 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -64,6 +64,7 @@
 
 -->
 <article id="index">
+<artheader>
 <![%dummy;[
  <para>
  <comment>
@@ -73,6 +74,7 @@
  </comment>
  </para>
 ]]>
+<abstract>
 <para>
  <literal>
   <msgtext>
@@ -113,7 +115,7 @@
 </msgtext>
 </literal>
 </para>
- 
+
 <para>
  <!-- include some conditional text -->
  This README is included with <![%p-not-stable;[ the development version of]]>
@@ -121,6 +123,8 @@
  hope!)]]>. See http://www.privoxy.org/ for more information. The current code
  level is &p-status;<![%p-not-stable;[, and seems stable to us :)]]>.
 </para>
+</abstract>
+</artheader>
 
 <!-- Include privoxy.sgml boilerplate: -->
 &p-intro;
@@ -154,8 +158,9 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="run"><title>RUN</title>
 <para>
- privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
-  [--user USER[.GROUP]] [config_file]
+ privoxy [&mdash;&mdash;help] [&mdash;&mdash;version]
+ [&mdash;&mdash;no-daemon] [&mdash;&mdash;pidfile PIDFILE] [&mdash;&mdash;user
+ USER[.GROUP]] [config_file]
 </para>
 <para>
  See the man page or user-manual for a brief explanation of each option.
@@ -225,7 +230,7 @@
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="contact" label=""><title>CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS</title>
+<sect1 id="contact"><title>CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS</title>
 <!-- Include contacting.sgml boilerplate: -->
   &contacting;
 <!-- end boilerplate -->
@@ -238,7 +243,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 1.13 2002/05/04 08:44:45 swa Exp $ -->
+<!--  $Id: readme.sgml,v 1.14 2002/05/05 13:46:59 swa Exp $ -->
 <!-- </para> -->
 
 </article>
