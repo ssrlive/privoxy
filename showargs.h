@@ -1,6 +1,6 @@
-#ifndef _SHOWARGS_H
-#define _SHOWARGS_H
-#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.4 2001/06/03 19:13:05 oes Exp $"
+#ifndef SHOWARGS_H_INCLUDED
+#define SHOWARGS_H_INCLUDED
+#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.5 2001/06/29 13:35:41 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: showargs.h,v $
+ *    Revision 1.5  2001/06/29 13:35:41  oes
+ *    adapted to reflect the changes in showargs.c
+ *
  *    Revision 1.4  2001/06/03 19:13:05  oes
  *    moved stuff to cgi.c
  *
@@ -72,4 +75,11 @@ extern const char showargs_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _SHOWARGS_H */
+#endif /* ndef SHOWARGS_H_INCLUDED */
+
+/*
+  Local Variables:
+  tab-width: 3
+  end:
+*/
+
