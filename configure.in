@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.49 2002/03/27 02:19:52 david__schmidt Exp $
+dnl $Id: configure.in,v 1.50 2002/03/27 03:03:45 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.50  2002/03/27 03:03:45  hal9
+dnl Add test for man2html
+dnl
 dnl Revision 1.49  2002/03/27 02:19:52  david__schmidt
 dnl More Mac OSX support:
 dnl - Get rid of extraneous, noisy -pthread warnings
@@ -303,7 +306,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.49 $)
+AC_REVISION($Revision: 1.50 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -370,7 +373,7 @@ AC_PROG_CPP
 dnl AC_PROG_CXX
 dnl AC_PROG_INSTALL
 dnl AC_PROG_LN_S
-dnl AC_PROG_MAKE_SET
+AC_PROG_MAKE_SET
 dnl RANLIB is for PCRE:
 dnl AC_PROG_RANLIB
 

@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.39 2002/03/28 01:04:14 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.40 2002/03/28 04:22:44 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -27,6 +27,11 @@
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
+
+#############################################################################
+# Set make command correctly
+#############################################################################
+@SET_MAKE@
 
 #############################################################################
 # Version number (for RPM)
@@ -650,6 +655,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.40  2002/03/28 04:22:44  hal9
+# More on man2html stuff.
+#
 # Revision 1.39  2002/03/28 01:04:14  hal9
 # More man2html stuff for docs.
 #
