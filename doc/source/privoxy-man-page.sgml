@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.5 2002/04/11 10:02:27 oes Exp $
+ $Id: privoxy-man-page.sgml,v 1.6 2002/04/12 01:55:43 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -16,22 +16,24 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation. 
  ========================================================================
 
- Doc NOTES: This is some tricky stuff! There are some quirks
+ Doc NOTES: This is some tricky markup! There are some quirks
  to how this markup is handled. It is not always so co-operative.
- Please don't change the markup, unless you are willing to 
- un-do your changes! 
+ Please don't change the markup unless you can verify the changes 
+ will improve finished output! 
  
  literallayout tags are particularly sensitive to where they are placed.
  The 'replaceable' and 'command' tags are used here somewhat unconventionally,
  since it seems to generate the proper formatting (at least for me :).
 
- Create man page: 'docbook2man privoxy-man-page.sgml'
+ Create man page: 'make man'
 
+ Requires docbook2man (short perl script), see CVS
+ http://sources.redhat.com/docbook-tools/. Also requires openjade and SGMLSpm
+ perl module. 
+ 
  For man page references, see:
  http://www.linuxdoc.org/HOWTO/mini/DocBook-Install/using.html
  http://docbook.org/tdg/en/html/ch02.html#making-refentry
