@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.71 2002/04/07 20:32:03 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.72 2002/04/08 13:42:11 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -55,7 +55,7 @@ DEST        = @prefix@
 CONFDEST    = @prefix@@sysconfdir@
 SBIN_DEST   = @prefix@@sbindir@
 MAN_DEST    = @prefix@@mandir@
-
+DOK_WEB_USEM=doc/webserver/user-manual
 
 #############################################################################
 # Build tools
@@ -770,11 +770,11 @@ install: all
 	$(STRIP_PROG) $(PROGRAM)
 	$(INSTALL) $(INSTALL_D) $(SBIN_DEST)
 	$(INSTALL) $(INSTALL_D) $(DEST)/user-manual
-	$(INSTALL) $(INSTALL_D) $(DEST)/templates
-	$(INSTALL) $(INSTALL_D) $(CONFDEST)
+	$(INSTALL) $(INSTALL_D) $(CONFDEST)/templates
+	$(INSTALL) $(INSTALL_D) $(DEST)/$(DOK_WEB_USEM)
 	$(INSTALL) $(INSTALL_P) $(PROGRAM) $(SBIN_DEST)
-	if [ -d "doc/webserver/user-manual" ]; then $(INSTALL) $(INSTALL_T) doc/webserver/user-manual $(DEST); fi
-	$(INSTALL) $(INSTALL_T) templates/[a-z]* $(DEST)/templates
+	if [ -d "$(DOK_WEB_USEM)" ]; then $(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/[a-z]* $(DEST)/$(DOK_WEB_USEM); fi
+	$(INSTALL) $(INSTALL_T) templates/[a-z]* $(CONFDEST)/templates
 	$(INSTALL) $(INSTALL_T) config default.action default.filter trust $(CONFDEST)
 	# FIXME $(ECHO) privoxy.logrotate privoxy.monthly privoxy.weekly
 	# FIXME: Need new manual! $(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
@@ -788,6 +788,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.72  2002/04/08 13:42:11  oes
+# Added safety check to *-dist targets; fixed permissions for feedback logfile
+#
 # Revision 1.71  2002/04/07 20:32:03  hal9
 # -Add meta data kludge for make dok-webserver via $(PERL).
 # -Add subdirs for 'make dok-release'.
