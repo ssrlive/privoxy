@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.15 2001/07/29 17:41:10 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.16 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.15 2001/07/29 17:41:10 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.16  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.15  2001/07/29 17:41:10  jongfoster
  *    Now prints thread ID for each message (pthreads only)
  *
@@ -166,9 +172,6 @@ const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
 /* where to log (default: stderr) */
 static FILE *logfp = NULL;
-
-/* where to log (NULL == stderr) */
-static char * logfilename = NULL;
 
 /* logging detail level.  */
 static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
@@ -312,41 +315,41 @@ void log_error(int loglevel, char *fmt, ...)
    switch (loglevel)
    {
       case LOG_LEVEL_ERROR:
-         outc = sprintf(outbuf, "IJB(%d) Error: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Error: ", this_thread);
          break;
       case LOG_LEVEL_FATAL:
-         outc = sprintf(outbuf, "IJB(%d) Fatal error: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Fatal error: ", this_thread);
          break;
       case LOG_LEVEL_GPC:
-         outc = sprintf(outbuf, "IJB(%d) Request: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Request: ", this_thread);
          break;
       case LOG_LEVEL_CONNECT:
-         outc = sprintf(outbuf, "IJB(%d) Connect: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Connect: ", this_thread);
          break;
       case LOG_LEVEL_LOG:
-         outc = sprintf(outbuf, "IJB(%d) Writing: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Writing: ", this_thread);
          break;
       case LOG_LEVEL_HEADER:
-         outc = sprintf(outbuf, "IJB(%d) Header: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Header: ", this_thread);
          break;
       case LOG_LEVEL_INFO:
-         outc = sprintf(outbuf, "IJB(%d) Info: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Info: ", this_thread);
          break;
       case LOG_LEVEL_RE_FILTER:
-         outc = sprintf(outbuf, "IJB(%d) Re-Filter: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Re-Filter: ", this_thread);
          break;
 #ifdef FEATURE_FORCE_LOAD
       case LOG_LEVEL_FORCE:
-         outc = sprintf(outbuf, "IJB(%d) Force: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Force: ", this_thread);
          break;
 #endif /* def FEATURE_FORCE_LOAD */
 #ifdef FEATURE_FAST_REDIRECTS
       case LOG_LEVEL_REDIRECTS:
-         outc = sprintf(outbuf, "IJB(%d) Redirect: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Redirect: ", this_thread);
          break;
 #endif /* def FEATURE_FAST_REDIRECTS */
       case LOG_LEVEL_DEANIMATE:
-         outc = sprintf(outbuf, "IJB(%d) Gif-Deanimate: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Gif-Deanimate: ", this_thread);
          break;
       case LOG_LEVEL_CLF:
          outc = 0;
@@ -354,11 +357,11 @@ void log_error(int loglevel, char *fmt, ...)
          break;
 #ifdef FEATURE_KILL_POPUPS
       case LOG_LEVEL_POPUPS:
-         outc = sprintf(outbuf, "IJB(%d) Kill-Popups: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) Kill-Popups: ", this_thread);
          break;
 #endif /* def FEATURE_KILL_POPUPS */
       default:
-         outc = sprintf(outbuf, "IJB(%d) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
+         outc = sprintf(outbuf, "IJB(%ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
    }
    
@@ -433,7 +436,7 @@ void log_error(int loglevel, char *fmt, ...)
             else
             {
                /* Error */
-               sprintf(outbuf, "IJB(%d) Error: log_error(): Bad format string:\n"
+               sprintf(outbuf, "IJB(%ld) Error: log_error(): Bad format string:\n"
                                "Format = \"%s\"\n"
                                "Exiting.", this_thread, fmt);
                /* FIXME RACE HAZARD: should start critical section error_log_use here */
@@ -560,7 +563,7 @@ void log_error(int loglevel, char *fmt, ...)
             }
             break;
          default:
-            sprintf(outbuf, "IJB(%d) Error: log_error(): Bad format string:\n"
+            sprintf(outbuf, "IJB(%ld) Error: log_error(): Bad format string:\n"
                             "Format = \"%s\"\n"
                             "Exiting.", this_thread, fmt);
             /* FIXME RACE HAZARD: should start critical section error_log_use here */
