@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.14 2001/11/05 21:43:48 steudten Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.15 2001/12/30 14:07:32 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,14 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.15  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.14  2001/11/05 21:43:48  steudten
  *    Add global var 'basedir' for unix os.
  *
@@ -137,6 +145,7 @@ extern int strncmpic(const char *s1, const char *s2, size_t n);
 
 extern char *strsav(char *old, const char *text_to_append);
 extern jb_err string_append(char **target_string, const char *text_to_append);
+extern jb_err string_join  (char **target_string,       char *text_to_append);
 
 extern char *chomp(char *string);
 extern int simplematch(char *pattern, char *text);
