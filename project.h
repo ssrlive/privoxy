@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.16 2001/06/04 18:31:58 swa Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.17 2001/06/07 23:15:09 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,12 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.17  2001/06/07 23:15:09  jongfoster
+ *    Merging ACL and forward files into config file.
+ *    Moving struct gateway members into struct forward_spec
+ *    Removing config->proxy_args_gateways
+ *    Cosmetic: Adding a few comments
+ *
  *    Revision 1.16  2001/06/04 18:31:58  swa
  *    files are now prefixed with either `confdir' or `logdir'.
  *    `make redhat-dist' replaces both entries confdir and logdir
@@ -280,6 +286,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define BUFFER_SIZE 5000
 
 #define FOREVER 1
 
@@ -587,10 +595,10 @@ struct parsers
 
 struct cgi_dispatcher
 {
-   char *name;
-   int   name_length;
-   int   (*handler)(struct client_state *csp, struct http_response *rsp, struct map *parameters);
-   char *description;
+   const char *name;
+   int         name_length;
+   int         (*handler)(struct client_state *csp, struct http_response *rsp, struct map *parameters);
+   const char *description;
 };
 
 struct file_list
