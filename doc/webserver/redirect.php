@@ -75,22 +75,25 @@ parse_parameters();
 
 // Note 2: Should *not* include #target part in these URLs.
 // (It works with MS IE, but is not valid HTTP.)
-
+//http://ijbswa.sourceforge.net/user-manual/configuration.html
 switch($to)
 {
    case "faq":
       // Used by 2.9.0+
-      header ("Location: http://www.junkbusters.com/ht/en/ijb2faq.html");
-      exit;
+//      header ("Location: http://www.junkbusters.com/ht/en/ijb2faq.html");
+        header ("Location: http://www.privoxy.org/faq/");
+    exit;
    case "option":
       // Used by 2.9.0+
       // Config file options
       // called as redirect.php?v=X.X.X&to=option#optionname
-      header ("Location: http://www.junkbusters.com/ht/en/ijb2man.html");
+//      header ("Location: http://www.junkbusters.com/ht/en/ijb2man.html");
+      header ("Location: http://www.privoxy.org/user-manual/configuration.html");
       exit;
    case "win":
       // Used by 2.9.0+ on WIN32
-      header ("Location: http://www.junkbusters.com/ht/en/ijbwin.html");
+//      header ("Location: http://www.junkbusters.com/ht/en/ijbwin.html");
+      header ("Location: http://www.privoxy.org/user-manual/configuration.html");
       exit;
 //   case "home":
 //      // Currently hard-wired into the code.
@@ -101,7 +104,7 @@ switch($to)
 //      header ("Location: http://www.fsf.org/copyleft/gpl.html");
 //      exit;
    default:
-      header ("Location: http://ijbswa.sourceforge.net/");
+      header ("Location: http://www.privoxy.org/");
       exit;
 }
 
