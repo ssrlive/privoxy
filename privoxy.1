@@ -1,25 +1,24 @@
 .\" Revised man page 10/13/01, for development version.
 .\" Hal Burgiss <hal@foobox.net> 
-.\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
+.\" for Privoxy developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.11 (beta) Date: 2002/03/12"
+.TH PRIVOXY 1 "v2.9.11 (beta) Date: 2002/03/12"
 
 .SH NAME
-\fBjunkbuster\fP
-- The
-Internet Junkbuster
+\fBprivoxy\fP
+- Privacy enhancing
 Proxy
-\s-2(TM)\s+2
+.\"\s-2(TM)\s+2
 .SH SYNOPSIS
-\fBjunkbuster\fP
+\fBprivoxy\fP
 [--help] [--version] [--no-daemon] [--pidfile \fIpidfile\fP] [--user \fIuser\fP[.\fIgroup\fP]] 
 \fI\&[configfile]\fP (Unix)
 .TP
-\fBjunkbstr.exe\fP \fI[configfile]\fP (Windows)
+\fBprivoxy.exe\fP \fI[configfile]\fP (Windows)
 .br
 
 .SH OPTIONS
-\fBJunkbuster\fP may be invoked with the following command-line options:
+\fBPrivoxy\fP may be invoked with the following command-line options:
 .TP
 .BR --version " (unix only)"
 Print version info and exit.
@@ -46,24 +45,24 @@ Exit if the privileges are not sufficient to do so.
 
 .PP
 If the \fIconfigfile\fP is not specified on the command line,
-\fBJunkbuster\fP will look for a file named \fBconfig\fP in the 
+\fBPrivoxy\fP will look for a file named \fBconfig\fP in the 
 current directory (except on Win32 where it will try \fBconfig.txt\fP).
 
 
 .SH DESCRIPTION
-\fBJunkbuster\fP
+\fBPrivoxy\fP
 is an instrumentable HTTP proxy that filters the 
 \s-2HTTP\s0
 data stream between
 web servers and browsers.
-\fBJunkbuster\fP can be used to protect privacy, manage cookies, filter web
+\fBPrivoxy\fP can be used to protect privacy, manage cookies, filter web
 page content, manage access restrictions, and to discard such annoying Internet
 junk as ads, banners, and pop-ups. Or whatever other annoyances strike your
 fancy.
 
 .SH INSTALLATION AND USE
 Browsers must be configured to use 
-\fBJunkbuster\fP
+\fBPrivoxy\fP
 (the default is localhost, 
 port 8118).
 To set the 
@@ -96,12 +95,12 @@ won't be proxied.
 For other browsers, check the documentation.
 
 .SH CONFIGURATION
-\fBJunkbuster\fP can be configured with the various configuration 
+\fBPrivoxy\fP can be configured with the various configuration 
 files. The default configuration files are: \fIconfig\fP, 
-\fIijb.action\fP, and \fIre_filterfile\fP. These are well commented. 
-On Unix and Unix-like systems, these are located in \fI/etc/junkbuster/\fP 
+\fIdefault.action\fP, and \fIdefault.filter\fP. These are well commented. 
+On Unix and Unix-like systems, these are located in \fI/etc/privoxy/\fP 
 by default. On Windows, OS/2 and AmigaOS, these files are in the same directory 
-as the \fBJunkbuster\fP executable. 
+as the \fBPrivoxy\fP executable. 
 .P
 The name and number of configuration files has changed from previous versions,
 and is subject to change as development progresses. In fact, the configuration
@@ -110,13 +109,13 @@ explanation of all configuration options.
 .P
 The actions list (ad blocks, etc) can also be configured with your 
 web browser at \fIhttp://ijbswa.sourceforge.net/config\fP.
-\fBJunkbuster's\fP configuration parameters can also be viewed 
-at the same page. In addition, \fBJunkbuster\fP can be toggled on/off.
+\fBPrivoxy's\fP configuration parameters can also be viewed 
+at the same page. In addition, \fBPrivoxy\fP can be toggled on/off.
 This is an internal page. 
 
 .SH "SAMPLE CONFIGURATION"
 .PP
-A brief example of what an \fIijb.action\fP configuration might look like:
+A brief example of what an \fIdefault.action\fP configuration might look like:
 .PP
 .nf
 
@@ -214,29 +213,29 @@ myfilters = +filter{html-annoyances} +filter{js-annoyances}\\
 .sp
 .PP
 See the comments in the configuration files themselves, or the user-manual 
-for explanations of the above syntax, and other \fBJunkbuster\fP configuration 
+for explanations of the above syntax, and other \fBPrivoxy\fP configuration 
 options.
 
 .SH "FILES"
-\fI/usr/sbin/junkbuster\fP
+\fI/usr/sbin/privoxy\fP
 .br
-\fI/etc/junkbuster/config\fP
+\fI/etc/privoxy/config\fP
 .br
-\fI/etc/junkbuster/ijb.action\fP
+\fI/etc/privoxy/default.action\fP
 .br
-\fI/etc/junkbuster/ijb-advanced.action\fP
+\fI/etc/privoxy/advanced.action\fP
 .br
-\fI/etc/junkbuster/ijb-basic.action\fP
+\fI/etc/privoxy/basic.action\fP
 .br
-\fI/etc/junkbuster/ijb-intermediate.action\fP
+\fI/etc/privoxy/intermediate.action\fP
 .br
-\fI/etc/junkbuster/re_filterfile\fP
+\fI/etc/privoxy/default.filter\fP
 .br
-\fI/etc/junkbuster/trust\fP
+\fI/etc/privoxy/trust\fP
 .br
-\fI/etc/junkbuster/templates/*\fP
+\fI/etc/privoxy/templates/*\fP
 .br
-\fI/var/log/junkbuster/logfile\fP
+\fI/var/log/privoxy/logfile\fP
 
 .P
 Various other files should be included, but may vary depending on platform 
@@ -244,14 +243,14 @@ and build configuration. More documentation should be included in the local
 documentation directory, though is not complete at this time.
 
 .SH SIGNALS
-\fBJunkbuster\fP teriminates on the \fBSIGINT\fP, \fBSIGTERM\fP and \fBSIGABRT\fP
+\fBPrivoxy\fP terminates on the \fBSIGINT\fP, \fBSIGTERM\fP and \fBSIGABRT\fP
 signals. Log rotation scripts may cause a re-opening of the logfile by sending
-a \fBSIGHUP\fP to \fBJunkbuster\fP. Note that unlike other daemons, \fBJunkbuster\fP
+a \fBSIGHUP\fP to \fBPrivoxy\fP. Note that unlike other daemons, \fBPrivoxy\fP
 does not need to be made aware of config file changes by \fBSIGHUP\fP -- it will
 detect them automatically.
  
 .SH NOTES
-This is a \fBBETA\fP version of \fBJunkbuster\fP. Not all features are  
+This is a \fBBETA\fP version of \fBPrivoxy\fP. Not all features are  
 complete.
 .br
 Please see the user-maual on how to contact the developers for 
