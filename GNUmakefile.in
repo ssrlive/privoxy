@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.77 2002/04/09 13:28:53 swa Exp $
+# $Id: GNUmakefile.in,v 1.78 2002/04/09 13:37:11 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -672,12 +672,13 @@ webserver: tidy
 	@$(ECHO) Uploading 
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm'
+          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
 
 	@$(ECHO) Fixing permissions
-	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type d | xargs chmod 775 2>/dev/null'
-	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type f | xargs chmod 664 2>/dev/null'
-	@ssh ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
+	@ssh ijbswa.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
+	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type f | xargs chmod 664 2>/dev/null; true'
+	@ssh ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null; true'
+
 
 web-actions: tidy
 	@$(ECHO) Uploading 
@@ -800,6 +801,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.78  2002/04/09 13:37:11  sarantis
+# fix tar options typo
+#
 # Revision 1.77  2002/04/09 13:28:53  swa
 # build suse and gen-dist with html docs
 #
