@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.13 2001/05/31 21:21:30 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,63 @@ const char filters_rcs[] = "$Id: filters.c,v 1.13 2001/05/31 21:21:30 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.15  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.14  2001/06/01 10:30:55  oes
+ *    Added optional left-anchoring to domaincmp
+ *
  *    Revision 1.13  2001/05/31 21:21:30  jongfoster
  *    Permissionsfile / actions file changes:
  *    - Changed "permission" to "action" throughout
@@ -200,6 +257,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.13 2001/05/31 21:21:30 jongfoster
 #include "jbsockets.h"
 #include "miscutil.h"
 #include "actions.h"
+#include "cgi.h"
 
 #ifdef _WIN32
 #include "win32.h"
@@ -215,60 +273,6 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
  * the argument match the declared parameter type of "int".
  */
 #define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
-
-
-static const char CBLOCK[] = 
-#ifdef AMIGA 
-       "HTTP/1.0 403 Request for blocked URL\n" 
-#else /* ifndef AMIGA */
-       "HTTP/1.0 202 Request for blocked URL\n"
-#endif /* ndef AMIGA */
-       "Pragma: no-cache\n"
-       "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-       "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-       "Content-Type: text/html\n\n"
-       "<html>\n"
-       "<head>\n"
-       "<title>Internet Junkbuster: Request for blocked URL</title>\n"
-       "</head>\n"
-       WHITEBG
-       "<center><h1>"
-       BANNER
-       "</h1></center>\n"
-      "<p align=center>Your request for <b>%s%s</b>\n"
-      "was blocked.<br><a href=\"http://i.j.b/show-url-info?url=%s%s\">See why</a>"
-#ifdef FORCE_LOAD
-       " or <a href=\"http://%s" FORCE_PREFIX "%s\">"
-       "go there anyway.</a>"
-#endif /* def FORCE_LOAD */
-      "</p>\n"
-      "</body>\n"
-      "</html>\n";
-
-#ifdef TRUST_FILES
-static const char CTRUST[] =
-#ifdef AMIGA 
-       "HTTP/1.0 403 Request for untrusted URL\n"
-#else /* ifndef AMIGA */
-       "HTTP/1.0 202 Request for untrusted URL\n"
-#endif /* ndef AMIGA */
-       "Pragma: no-cache\n"
-       "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-       "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-       "Content-Type: text/html\n\n"
-       "<html>\n"
-       "<head>\n"
-       "<title>Internet Junkbuster: Request for untrusted URL</title>\n"
-       "</head>\n"
-       WHITEBG
-       "<center>"
-       "<a href=http://i.j.b/ij-untrusted-url?%s+%s+%s>"
-       BANNER
-       "</a>"
-       "</center>"
-       "</body>\n"
-       "</html>\n";
-#endif /* def TRUST_FILES */
 
 
 #ifdef ACL_FILES
@@ -495,70 +499,6 @@ int block_imageurl(struct http_request *http, struct client_state *csp)
 #endif /* def IMAGE_BLOCKING */
 
 
-#ifdef PCRS
-/*********************************************************************
- *
- * Function    :  re_process_buffer
- *
- * Description :  Apply all jobs from the joblist (aka. Perl regexp's) to
- *                the text buffer that's been accumulated in csp->iob->buf
- *                and set csp->content_length to the modified size.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  a pointer to the (newly allocated) modified buffer.
- *                
- *
- *********************************************************************/
-char *re_process_buffer(struct client_state *csp)
-{
-   int hits=0;
-   int size = csp->iob->eod - csp->iob->cur;
-   char *old=csp->iob->cur, *new = NULL;
-   pcrs_job *job, *joblist;
-
-   struct file_list *fl;
-   struct re_filterfile_spec *b;
-
-   /* Sanity first ;-) */
-   if (size <= 0)
-   {
-      return(strdup(""));
-   }
-
-   if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
-   {
-      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
-      return(strdup(""));
-   }
-
-   joblist = b->joblist;
-
-
-   log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) ...",
-              csp->http->hostport, csp->http->path, size);
-
-   /* Apply all jobs from the joblist */
-   for (job = joblist; NULL != job; job = job->next)
-   {
-      hits += pcrs_exec_substitution(job, old, size, &new, &size);
-      if (old != csp->iob->cur) free(old);
-      old=new;
-   }
-
-   log_error(LOG_LEVEL_RE_FILTER, " produced %d hits (new size %d).", hits, size);
-
-   csp->content_length = size;
-
-   /* fwiw, reset the iob */
-   IOB_RESET(csp);
-   return(new);
-
-}
-#endif /* def PCRS */
-
-
 #ifdef TRUST_FILES
 /*********************************************************************
  *
@@ -769,152 +709,69 @@ trust_url_not_trusted:
 #endif /* def TRUST_FILES */
 
 
-static const char C_HOME_PAGE[] =
-   "HTTP/1.0 200 OK\n"
-   "Pragma: no-cache\n"
-   "Expires: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: Information</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</h1></center>\n"
-   "<p><a href=\"" HOME_PAGE_URL "\">JunkBuster web site</a></p>\n"
-   "<p><a href=\"http://i.j.b/show-proxy-arg\">Proxy configuration</a></p>\n"
-   "<p><a href=\"http://i.j.b/show-url-info\">Look up a URL</a></p>\n"
-   "</body>\n"
-   "</html>\n";
-
-
+#ifdef PCRS
 /*********************************************************************
  *
- * Function    :  intercept_url
+ * Function    :  re_process_buffer
  *
- * Description :  checks the URL `basename' against a list of URLs to
- *                snarf. If it matches, it calls the associated function
- *                which returns an HTML page to send back to the client.
- *                Right now, we snarf:
- *                      "show-proxy-args", and
- *                      "ij-untrusted-url" (optional w/TRUST_FILES)
+ * Description :  Apply all jobs from the joblist (aka. Perl regexp's) to
+ *                the text buffer that's been accumulated in csp->iob->buf
+ *                and set csp->content_length to the modified size.
  *
  * Parameters  :
- *          1  :  http = http_request request, check `basename's of blocklist
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  1 if it intercepts & handles the request.
- *
- *********************************************************************/
-int intercept_url(struct http_request *http, struct client_state *csp)
-{
-   char *basename = NULL;
-   const struct interceptors *v;
-
-   if (0 == strcmpic(http->host,"i.j.b"))
-   {
-      /*
-       * Catch http://i.j.b/...
-       */
-      basename = http->path;
-   }
-   else if ( ( (0 == strcmpic(http->host,"ijbswa.sourceforge.net"))
-            || (0 == strcmpic(http->host,"ijbswa.sf.net")) )
-            && (0 == strncmpic(http->path,"/config", 7))
-            && ((http->path[7] == '/') || (http->path[7] == '\0')))
-   {
-      /*
-       * Catch http://ijbswa.sourceforge.net/config/...
-       * and   http://ijbswa.sf.net/config/...
-       */
-      basename = http->path + 7;
-   }
-
-   if (!basename)
-   {
-      /* Don't want to intercept */
-      return(0);
-   }
-
-   /* We have intercepted it. */
-
-   /* remove any leading slash */
-   if (*basename == '/')
-   {
-      basename++;
-   }
-
-   log_error(LOG_LEVEL_GPC, "%s%s intercepted!", http->hostport, http->path);
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", 
-                            csp->ip_addr_str, http->cmd); 
-
-   for (v = intercept_patterns; v->str; v++)
-   {
-      if (strncmp(basename, v->str, v->len) == 0)
-      {
-         char * p = ((v->interceptor)(http, csp));
-
-         if (p != NULL)
-         {
-            /* Send HTML redirection result */
-            write_socket(csp->cfd, p, strlen(p));
-
-            freez(p);
-         }
-         return(1);
-      }
-   }
-
-   write_socket(csp->cfd, C_HOME_PAGE, strlen(C_HOME_PAGE));
-
-   return(1);
-}
-
-#ifdef FAST_REDIRECTS
-/*********************************************************************
- *
- * Function    :  redirect_url
- *
- * Description :  Checks for redirection URLs and returns a HTTP redirect
- *                to the destination URL.
- *
- * Parameters  :
- *          1  :  http = http_request request, check `basename's of blocklist
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  NULL if URL was clean, HTTP redirect otherwise.
+ * Returns     :  a pointer to the (newly allocated) modified buffer.
+ *                
  *
  *********************************************************************/
-char *redirect_url(struct http_request *http, struct client_state *csp)
+char *re_process_buffer(struct client_state *csp)
 {
-   char *p, *q;
+   int hits=0;
+   int size = csp->iob->eod - csp->iob->cur;
+   char *old=csp->iob->cur, *new = NULL;
+   pcrs_job *job, *joblist;
 
-   p = q = csp->http->path;
-   log_error(LOG_LEVEL_REDIRECTS, "checking path: %s", p);
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
 
-   /* find the last URL encoded in the request */
-   while (p = strstr(p, "http://"))
+   /* Sanity first ;-) */
+   if (size <= 0)
    {
-      q = p++;
+      return(strdup(""));
    }
 
-   /* if there was any, generate and return a HTTP redirect */
-   if (q != csp->http->path)
+   if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
    {
-      log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
+      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+      return(strdup(""));
+   }
 
-      p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(q));
-      sprintf(p, HTTP_REDIRECT_TEMPLATE, q);
-      return(p);
-   }
-   else
+   joblist = b->joblist;
+
+
+   log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) ...",
+              csp->http->hostport, csp->http->path, size);
+
+   /* Apply all jobs from the joblist */
+   for (job = joblist; NULL != job; job = job->next)
    {
-      return(NULL);
+      hits += pcrs_exec_substitution(job, old, size, &new, &size);
+      if (old != csp->iob->cur) free(old);
+      old=new;
    }
+
+   log_error(LOG_LEVEL_RE_FILTER, " produced %d hits (new size %d).", hits, size);
+
+   csp->content_length = size;
+
+   /* fwiw, reset the iob */
+   IOB_RESET(csp);
+   return(new);
 
 }
-#endif /* def FAST_REDIRECTS */
+#endif /* def PCRS */
+
 
 /*********************************************************************
  *
@@ -1174,636 +1031,6 @@ int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
 
 }
 
-
-/* intercept functions */
-
-/*********************************************************************
- *
- * Function    :  show_proxy_args
- *
- * Description :  This "crunch"es "http:/any.thing/show-proxy-args" and
- *                returns a web page describing the current status of IJB.
- *
- * Parameters  :
- *          1  :  http = ignored
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  A string that contains the current status of IJB.
- *
- *********************************************************************/
-char *show_proxy_args(struct http_request *http, struct client_state *csp)
-{
-   char *s = NULL;
-
-#ifdef SPLIT_PROXY_ARGS
-   FILE * fp;
-   char buf[BUFSIZ];
-   char * p;
-   const char * filename = NULL;
-   const char * file_description = NULL;
-   char * query_string = strrchr(http->path, '?');
-   char which_file = '\0';
-
-
-   if (query_string != NULL)
-   {
-      /* first char past the last '?' (maybe '\0')*/
-      which_file = query_string[1];
-   }
-   switch (which_file)
-   {
-   case 'p':
-      if (csp->actions_list)
-      {
-         filename = csp->actions_list->filename;
-         file_description = "Actions List";
-      }
-      break;
-   case 'f':
-      if (csp->flist)
-      {
-         filename = csp->flist->filename;
-         file_description = "Forward List";
-      }
-      break;
-
-#ifdef ACL_FILES
-   case 'a':
-      if (csp->alist)
-      {
-         filename = csp->alist->filename;
-         file_description = "Access Control List";
-      }
-      break;
-#endif /* def ACL_FILES */
-
-#ifdef PCRS
-   case 'r':
-      if (csp->rlist)
-      {
-         filename = csp->rlist->filename;
-         file_description = "RE Filter List";
-      }
-      break;
-#endif /* def PCRS */
-
-#ifdef TRUST_FILES
-   case 't':
-      if (csp->tlist)
-      {
-         filename = csp->tlist->filename;
-         file_description = "Trust List";
-      }
-      break;
-#endif /* def TRUST_FILES */
-   }
-
-   if (filename)
-   {
-      /* Display specified file */
-      /* FIXME: Add HTTP headers so this isn't cached */
-      s = strsav(s,
-         "HTTP/1.0 200 OK\n"
-         "Server: IJ/" VERSION "\n"
-         "Content-type: text/html\n"
-         "Pragma: no-cache\n"
-         "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-         "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-         "\n"
-
-         "<html>"
-         "<head>"
-         "<title>Internet Junkbuster Proxy Status - ");
-      s = strsav(s, file_description);
-      s = strsav(s, 
-         "</title>"
-         "</head>\n"
-         "<body bgcolor=\"#f8f8f0\" link=\"#000078\" alink=\"#ff0022\" vlink=\"#787878\">\n"
-         "<center>\n"
-         "<h1>" BANNER "\n");
-      s = strsav(s, file_description);
-      s = strsav(s, 
-         "</h1></center>\n"
-         "<p><a href=\"show-proxy-args\">Back to proxy status</a></p>\n"
-         "<h2>");
-      s = strsav(s, file_description);
-      s = strsav(s,
-         "</h2>\n"
-         "Contents of file &quot;<code>");
-      p = html_encode(filename);
-      s = strsav(s, p);
-      freez(p);
-      s = strsav(s,
-         "</code>&quot;:<br>\n"
-         "</p>\n"
-         "<pre>");
-      
-      if ((fp = fopen(filename, "r")) == NULL)
-      {
-         s = strsav(s, "</pre><h1>ERROR OPENING FILE!</h1><pre>");
-      }
-      else
-      {
-         while (fgets(buf, sizeof(buf), fp))
-         {
-            p = html_encode(buf);
-            if (p)
-            {
-               s = strsav(s, p);
-               freez(p);
-               s = strsav(s, "<br>");
-            }
-         }
-         fclose(fp);
-      }
-
-      s = strsav(s,
-         "</pre>\n"
-         "<br>\n"
-         "<p><a href=\"show-proxy-args\">Back to proxy status</a></p>\n"
-         "<br>\n"
-         "<small><small><p>\n"
-         "The " BANNER " Proxy - \n"
-         "<a href=\"" HOME_PAGE_URL "\">" HOME_PAGE_URL "</a>\n"
-         "</small></small>"
-         "</body></html>\n");
-      return(s);
-   }
-#endif /* def SPLIT_PROXY_ARGS */
-   
-   s = strsav(s, csp->config->proxy_args_header);
-   s = strsav(s, csp->config->proxy_args_invocation);
-#ifdef STATISTICS
-   s = add_stats(s);
-#endif /* def STATISTICS */
-   s = strsav(s, csp->config->proxy_args_gateways);
-
-#ifdef SPLIT_PROXY_ARGS
-   s = strsav(s, 
-      "<h2>The following files are in use:</h2>\n"
-      "<p>(Click a filename to view it)</p>\n"
-      "<ul>\n");
-
-   if (csp->actions_list)
-   {
-      s = strsav(s, "<li>Actions List: <a href=\"show-proxy-args?permit\"><code>");
-      s = strsav(s, csp->actions_list->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-
-   if (csp->flist)
-   {
-      s = strsav(s, "<li>Forward List: <a href=\"show-proxy-args?forward\"><code>");
-      s = strsav(s, csp->flist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-
-#ifdef ACL_FILES
-   if (csp->alist)
-   {
-      s = strsav(s, "<li>Access Control List: <a href=\"show-proxy-args?acl\"><code>");
-      s = strsav(s, csp->alist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-#endif /* def ACL_FILES */
-
-#ifdef PCRS
-   if (csp->rlist)
-   {
-      s = strsav(s, "<li>RE Filter List: <a href=\"show-proxy-args?re\"><code>");
-      s = strsav(s, csp->rlist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-#endif /* def PCRS */
-
-#ifdef TRUST_FILES
-   if (csp->tlist)
-   {
-      s = strsav(s, "<li>Trust List: <a href=\"show-proxy-args?trust\"><code>");
-      s = strsav(s, csp->tlist->filename);
-      s = strsav(s, "</code></a></li>\n");
-   }
-#endif /* def TRUST_FILES */
-
-   s = strsav(s, "</ul>");
-
-#else /* ifndef SPLIT_PROXY_ARGS */
-   if (csp->clist)
-   {
-      s = strsav(s, csp->clist->proxy_args);
-   }
-
-   if (csp->flist)
-   {
-      s = strsav(s, csp->flist->proxy_args);
-   }
-
-#ifdef ACL_FILES
-   if (csp->alist)
-   {
-      s = strsav(s, csp->alist->proxy_args);
-   }
-#endif /* def ACL_FILES */
-
-#ifdef PCRS
-   if (csp->rlist)
-   {
-      s = strsav(s, csp->rlist->proxy_args);
-   }
-#endif /* def PCRS */
-
-#ifdef TRUST_FILES
-   if (csp->tlist)
-   {
-      s = strsav(s, csp->tlist->proxy_args);
-   }
-#endif /* def TRUST_FILES */
-
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   s = strsav(s, csp->config->proxy_args_trailer);
-
-   return(s);
-
-}
-
-
-static const char C_URL_INFO_HEADER[] =
-   "HTTP/1.0 200 OK\n"
-   "Pragma: no-cache\n"
-   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: URL Info</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</h1></center>\n"
-   "<p>Information for: <a href=\"http://%s\">http://%s</a></p>\n";
-static const char C_URL_INFO_FOOTER[] =
-   "\n</p>\n"
-   "</body>\n"
-   "</html>\n";
-
-static const char C_URL_INFO_FORM[] =
-   "HTTP/1.0 200 OK\n"
-   "Pragma: no-cache\n"
-   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: URL Info</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</h1></center>\n"
-   "<form method=\"GET\" action=\"http://i.j.b/show-url-info\">\n"
-   "<p>Please enter a URL, without the leading &quot;http://&quot;:</p>"
-   "<p><input type=\"text\" name=\"url\" size=\"80\">"
-   "<input type=\"submit\" value=\"Info\"></p>\n"
-   "</form>\n"
-   "</body>\n"
-   "</html>\n";
-
-
- /*********************************************************************
- *
- * Function    :  ijb_show_url_info
- *
- * Description :  (please fill me in)
- *
- * Parameters  :
- *          1  :  http = http_request request for crunched URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  ???FIXME
- *
- *********************************************************************/
-char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
-{
-   char * query_string = strchr(http->path, '?');
-   char * host = NULL;
-   
-   if (query_string != NULL)
-   {
-      query_string = url_decode(query_string + 1);
-      if (strncmpic(query_string, "url=", 4) == 0)
-      {
-         host = strdup(query_string + 4);
-      }
-      freez(query_string);
-   }
-   if (host != NULL)
-   {
-      char * result;
-      char * path;
-      char * s;
-      int port = 80;
-      struct file_list *fl;
-      struct url_actions *b;
-      struct url_spec url[1];
-      struct current_action_spec action[1];
-
-      init_current_action(action);
-
-      result = (char *)malloc(sizeof(C_URL_INFO_HEADER) + 2 * strlen(host));
-      sprintf(result, C_URL_INFO_HEADER, host, host);
-
-      s = current_action_to_text(action);
-      result = strsav(result, "<h3>Defaults:</h3>\n<p><b>{");
-      result = strsav(result, s);
-      result = strsav(result, " }</b></p>\n<h3>Patterns affecting the URL:</h3>\n<p>\n");
-      freez(s);
-
-      s = strchr(host, '/');
-      if (s != NULL)
-      {
-         path = strdup(s);
-         *s = '\0';
-      }
-      else
-      {
-         path = strdup("");
-      }
-      s = strchr(host, ':');
-      if (s != NULL)
-      {
-         *s++ = '\0';
-         port = atoi(s);
-      }
-
-      if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
-      {
-         freez(host);
-         freez(path);
-         result = strsav(result, C_URL_INFO_FOOTER);
-         return result;
-      }
-
-      *url = dsplit(host);
-
-      /* if splitting the domain fails, punt */
-      if (url->dbuf == NULL)
-      {
-         freez(host);
-         freez(path);
-         result = strsav(result, C_URL_INFO_FOOTER);
-         return result;
-      }
-
-      for (b = b->next; NULL != b; b = b->next)
-      {
-         if ((b->url->port == 0) || (b->url->port == port))
-         {
-            if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
-            {
-               if ((b->url->path == NULL) ||
-#ifdef REGEX
-                  (regexec(b->url->preg, path, 0, NULL, 0) == 0)
-#else
-                  (strncmp(b->url->path, path, b->url->pathlen) == 0)
-#endif
-               )
-               {
-                  s = actions_to_text(b->action);
-                  result = strsav(result, "<b>{");
-                  result = strsav(result, s);
-                  result = strsav(result, " }</b><br>\n<code>");
-                  result = strsav(result, b->url->spec);
-                  result = strsav(result, "</code><br>\n<br>\n");
-                  freez(s);
-
-                  merge_current_action(action, b->action);
-               }
-            }
-         }
-      }
-
-      freez(url->dbuf);
-      freez(url->dvec);
-
-      freez(host);
-      freez(path);
-
-      s = current_action_to_text(action);
-      result = strsav(result, "</p>\n<h2>Final Results:</h2>\n<p><b>{");
-      result = strsav(result, s);
-      result = strsav(result, " }</b><br>\n<br>\n");
-      freez(s);
-
-      free_current_action(action);
-
-      result = strsav(result, C_URL_INFO_FOOTER);
-      return result;
-   }
-   else
-   {
-      return strdup(C_URL_INFO_FORM);
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  ijb_send_banner
- *
- * Description :  This "crunch"es "http://i.j.b/ijb-send-banner and
- *                sends the image.
- *
- * Parameters  :
- *          1  :  http = http_request request for crunched URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  NULL, indicating that it has already sent the data.
- *
- *********************************************************************/
-char *ijb_send_banner(struct http_request *http, struct client_state *csp)
-{
-   write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
-   
-   return(NULL);
-}
-
-#ifdef TRUST_FILES
-/*********************************************************************
- *
- * Function    :  ij_untrusted_url
- *
- * Description :  This "crunch"es "http:/any.thing/ij-untrusted-url" and
- *                returns a web page describing why it was untrusted.
- *
- * Parameters  :
- *          1  :  http = http_request request for crunched URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  A string that contains why this was untrusted.
- *
- *********************************************************************/
-char *ij_untrusted_url(struct http_request *http, struct client_state *csp)
-{
-   int n;
-   char *hostport, *path, *refer, *p, *v[9];
-   char buf[BUFSIZ];
-   struct url_spec **tl, *t;
-
-
-   static const char format[] =
-      "HTTP/1.0 200 OK\r\n"
-      "Pragma: no-cache\n"
-      "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-      "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-      "Content-Type: text/html\n\n"
-      "<html>\n"
-      "<head>\n"
-      "<title>Internet Junkbuster: Request for untrusted URL</title>\n"
-      "</head>\n"
-      BODY
-      "<center><h1>"
-      BANNER
-      "</h1></center>"
-      "The " BANNER " Proxy "
-      "<A href=\"" HOME_PAGE_URL "\">"
-      "(" HOME_PAGE_URL ") </A>"
-      "intercepted the request for %s%s\n"
-      "because the URL is not trusted.\n"
-      "<br><br>\n";
-
-   if ((n = ssplit(http->path, "?+", v, SZ(v), 0, 0)) == 4)
-   {
-      hostport = url_decode(v[1]);
-      path     = url_decode(v[2]);
-      refer    = url_decode(v[3]);
-   }
-   else
-   {
-      hostport = strdup("undefined_host");
-      path     = strdup("/undefined_path");
-      refer    = strdup("undefined");
-   }
-
-   n  = sizeof(format);
-   n += strlen(hostport);
-   n += strlen(path    );
-
-   if ((p = (char *)malloc(n)))
-   {
-      sprintf(p, format, hostport, path);
-   }
-
-   strsav(p, "The referrer in this request was <strong>");
-   strsav(p, refer);
-   strsav(p, "</strong><br>\n");
-
-   freez(hostport);
-   freez(path    );
-   freez(refer   );
-
-   p = strsav(p, "<h3>The following referrers are trusted</h3>\n");
-
-   for (tl = csp->config->trust_list; (t = *tl) ; tl++)
-   {
-      sprintf(buf, "%s<br>\n", t->spec);
-      p = strsav(p, buf);
-   }
-
-   if (csp->config->trust_info->next)
-   {
-      struct list *l;
-
-      strcpy(buf,
-         "<p>"
-         "You can learn more about what this means "
-         "and what you may be able to do about it by "
-         "reading the following documents:<br>\n"
-         "<ol>\n"
-      );
-
-      p = strsav(p, buf);
-
-      for (l = csp->config->trust_info->next; l ; l = l->next)
-      {
-         sprintf(buf,
-            "<li> <a href=%s>%s</a><br>\n",
-               l->str, l->str);
-         p = strsav(p, buf);
-      }
-
-      p = strsav(p, "</ol>\n");
-   }
-
-   p = strsav(p, "</body>\n" "</html>\n");
-
-   return(p);
-
-}
-#endif /* def TRUST_FILES */
-
-
-#ifdef STATISTICS
-/*********************************************************************
- *
- * Function    :  add_stats
- *
- * Description :  Statistics function of JB.  Called by `show_proxy_args'.
- *
- * Parameters  :
- *          1  :  s = string that holds the proxy args description page
- *
- * Returns     :  A pointer to the descriptive status web page.
- *
- *********************************************************************/
-char *add_stats(char *s)
-{
-   /*
-    * Output details of the number of requests rejected and
-    * accepted. This is switchable in the junkbuster config.
-    * Does nothing if this option is not enabled.
-    */
-
-   float perc_rej;   /* Percentage of http requests rejected */
-   char out_str[81];
-   int local_urls_read     = urls_read;
-   int local_urls_rejected = urls_rejected;
-
-   /*
-    * Need to alter the stats not to include the fetch of this
-    * page.
-    *
-    * Can't do following thread safely! doh!
-    *
-    * urls_read--;
-    * urls_rejected--; * This will be incremented subsequently *
-    */
-
-   s = strsav(s,"<h2>Statistics for this " BANNER ":</h2>\n");
-
-   if (local_urls_read == 0)
-   {
-
-      s = strsav(s,"No activity so far!\n");
-
-   }
-   else
-   {
-
-      perc_rej = (float)local_urls_rejected * 100.0F /
-            (float)local_urls_read;
-
-      sprintf(out_str,
-         "%d requests received, %d filtered "
-         "(%6.2f %%).",
-         local_urls_read, 
-         local_urls_rejected, perc_rej);
-
-      s = strsav(s,out_str);
-   }
-
-   return(s);
-}
-#endif /* def STATISTICS */
 
 
 /*
