@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.47 2001/10/10 16:44:36 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.48 2001/10/10 19:56:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.47 2001/10/10 16:44:36 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.48  2001/10/10 19:56:46  jongfoster
+ *    Moving some code that wasn't cookie-related out of an #ifdef
+ *    FEATURE_COOKIE_JAR
+ *
  *    Revision 1.47  2001/10/10 16:44:36  oes
  *    Added CONNECT destination port limitation check
  *
@@ -1379,6 +1383,9 @@ int main(int argc, const char *argv[])
 # endif /* def _WIN_CONSOLE */
 #endif /* def _WIN32 */
 
+
+   /* Initialize the CGI subsystem */
+   cgi_init_error_messages();
 
    listen_loop();
 
