@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.32 2002/05/16 01:37:29 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.33 2002/05/25 02:08:23 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -244,6 +244,7 @@ fi
 %doc doc/webserver/faq
 %doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
 %doc doc/webserver/images
+%doc doc/webserver/man-page
 
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
@@ -658,6 +659,10 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.33  2002/05/25 02:08:23  hal9
+# Add doc/images directory.
+# Redhat: alphabetized list of templates (and I think added one in the process)
+#
 # Revision 1.32  2002/05/16 01:37:29  hal9
 # Add new template file so CGI stuff works :)
 #
