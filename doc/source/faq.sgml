@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.57 2002/05/05 20:26:02 hal9 Exp $
+ $Id: faq.sgml,v 1.58 2002/05/10 01:48:20 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.57 2002/05/05 20:26:02 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.58 2002/05/10 01:48:20 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1100,7 +1100,7 @@ FIXME: commented out until we have data. HB 03/18/02.
 
 <sect2 renderas="sect3" id="newads"><title>How can I submit new ads?</title>
 <para>
-Please see the <ulink url="contact.html">Contact section</ulink>.
+Please see the <link linkend="contact">Contact section</link>.
 </para>
 
 <para>
@@ -1513,6 +1513,11 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.58  2002/05/10 01:48:20  hal9
+This is mostly proposed copyright/licensing additions and changes. Docs
+are still GPL, but licensing and copyright are more visible. Also, copyright
+changed in doc header comments (eliminate references to JB except FAQ).
+
 Revision 1.57  2002/05/05 20:26:02  hal9
 Sorting out license vs copyright in these docs.
 
