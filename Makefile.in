@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.5 2001/06/03 13:57:26 swa Exp $
+# $Id: Makefile.in,v 1.6 2001/06/03 17:07:27 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.6  2001/06/03 17:07:27  swa
+# swa for oes
+#
 # Revision 1.5  2001/06/03 13:57:26  swa
 # compile cgi.c (for andreas' GUI)
 #
@@ -100,7 +103,7 @@ OBJEXT  = @OBJEXT@
 RM      = rm -f
 STRIP   = strip
 
-C_SRC  = cgi.c actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
+C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
          jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
          parsers.c showargs.c ssplit.c cgi.c
          
