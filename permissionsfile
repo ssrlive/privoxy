@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: permissionsfile,v 1.7 2001/06/01 13:51:24 oes Exp $
+# $Id: permissionsfile,v 1.7 2001/06/01 13:56:20 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -231,7 +231,6 @@ privacy.net
 .dabs.com
 .overclockers.co.uk
 
-# This is a graphical-> text only conversion script
 {-fast-redirects}
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 login.yahoo.com
@@ -268,7 +267,7 @@ www.carbuyer.com/cgi-carbuyer/getimage.cgi
 *.fxweb.com/v2-trackrun\.cgi
 195.63.104.61
 195.63.104.222
-213.165.64.3[89}
+213.165.64.3[89]
 213.165.64.4[1-4]
 194.221.183.22[1-7]
 a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
@@ -1069,7 +1068,7 @@ www.stattrack.com/stats/
 #Now they're Yahoo GeoCities, their junk is in a different place.
 ##geo.yahoo.com/serv
 ##visit.geocities.com/visit.gif
-.yimg.com/*/www.geocities.com/js_source
+.yimg.com/.*/www.geocities.com/js_source
 #http://us.toto.geo.yahoo.com/toto?s=76001086
 .geo.yahoo.com
 .visit.geocities.com
@@ -1088,7 +1087,7 @@ members.tripod.com/adm/popup/
 #count.exitexchange.com/exit/1100661
 #count.exitexchange.com/clients/navbar.html
 #(used in http://skyhivisuals.tripod.com/malfunctions_.htm)
--exitexchange.com
+.exitexchange.com
 
 #SourceForge ads.
 sfads.osdn.com
@@ -1100,7 +1099,6 @@ sfads.osdn.com
 .a.consumer.net
 
 #Lindsay.Marshall@newcastle.ac.uk suggested these, to kill Opera adverts:
-
 www.qksrv.net
 mirror.qkimg.net
 
@@ -1232,7 +1230,7 @@ www.iez-auktion.de
 .ibm.com
 .sgi.com
 
-# my banking stuff => no ads. last regexp for fast access :-)
+# my banking stuff => no ads.
 .comdirekt.de
 .comdirect.de
 .teledata.de
