@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.2 2001/05/29 09:50:24 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.3 2001/05/29 23:10:09 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,12 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.2 2001/05/29 09:50:24 jongfoste
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.3  2001/05/29 23:10:09  oes
+ *
+ *
+ *     - Introduced chomp()
+ *     - Moved strsav() from showargs to miscutil
+ *
  *    Revision 1.2  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -382,6 +388,86 @@ char *strsav(char *old, const char *text_to_append)
 
    strcpy(p + old_len, text_to_append);
    return(p);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  trivimatch
+ *
+ * Description :  Trivial string matching, with only one metacharacter,
+ *                namely '*', which stands for zero or more arbitrary
+ *                characters.
+ *
+ *                Note: The * is greedy, i.e. it will try to match as
+ *                      much text es possible.
+ *
+ * Parameters  :
+ *          1  :  pattern = pattern for matching
+ *          2  :  text    = text to be matched
+ *
+ * Returns     :  0 if match, else nonzero
+ *
+ *********************************************************************/
+int trivimatch(char *pattern, char *text)
+{
+   char *fallback; 
+   char *pat = pattern;
+   char *txt = text;
+   int wildcard = 0;
+  
+   while (*txt)
+   {
+      /* EOF pattern but !EOF text? */
+      if (*pat == '\0')
+      {
+         return 1;
+      }
+
+      /* '*' in the pattern?  */
+      if (*pat == '*') 
+      {
+
+         /* The pattern ends afterwards? Speed up the return. */
+         if (*++pat == '\0')
+         {
+            return 0;
+         }
+
+         /* Else, set wildcard mode and remember position after '*' */
+         wildcard = 1;
+         fallback = pat;
+      }
+
+      /* Compare: */
+      if (*pat != *txt)
+      {
+         /* In wildcard mode, just try again */
+         if(wildcard)
+         {
+            /* Without wildcard mode, this is fatal! */
+            pat = fallback;
+         }
+
+         /* Bad luck otherwise */
+         else
+         {
+            return 1;
+         }
+      }
+      /* We had a match, advance */
+      else
+      {
+         pat++;
+      }
+      txt++;
+  }
+
+  if(*pat == '*')  pat++;
+
+  /* Hey, we've made it all the way through! */
+  return(*pat);
 
 }
 

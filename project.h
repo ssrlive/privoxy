@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.7 2001/05/29 09:50:24 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.8 2001/05/29 20:09:15 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.8  2001/05/29 20:09:15  joergs
+ *    HTTP_REDIRECT_TEMPLATE fixed.
+ *
  *    Revision 1.7  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -405,7 +408,7 @@ struct url_spec
    char  *dbuf;
    char **dvec;
    int    dcnt;
-   int    toplevel;
+   int    unanchored;
 
    char *path;
    int   pathlen;

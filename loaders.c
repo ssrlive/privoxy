@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.10 2001/05/29 09:50:24 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.11 2001/05/29 23:25:24 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.10 2001/05/29 09:50:24 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.11  2001/05/29 23:25:24  oes
+ *
+ *     - load_config_line() and load_permissions_file() now use chomp()
+ *
  *    Revision 1.10  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -418,6 +422,7 @@ static int create_url_spec(struct url_spec * url, char * buf)
    url->dbuf = tmp_url->dbuf;
    url->dcnt = tmp_url->dcnt;
    url->dvec = tmp_url->dvec;
+   url->unanchored = tmp_url->unanchored;
 
    return 0; /* OK */
 }
