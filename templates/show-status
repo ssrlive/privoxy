@@ -199,16 +199,15 @@
              <td>Allows the use of an ACL to control access to the proxy by IP address.</td>
           </tr>
           <tr>
+             <td><code>FEATURE_CGI_EDIT_ACTIONS</code></td>
+             <td>@if-FEATURE_CGI_EDIT_ACTIONS-then@ Yes @else-not-FEATURE_CGI_EDIT_ACTIONS@ No @endif-FEATURE_CGI_EDIT_ACTIONS@</td>
+             <td>Allows the use of the web-based actions file 
+               editor@if-FEATURE_CGI_EDIT_ACTIONS-then@, which is <a href="http://i.j.b/edit-actions">here</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
+          </tr>
+          <tr>
              <td><code>FEATURE_COOKIE_JAR</code></td>
              <td>@if-FEATURE_COOKIE_JAR-then@ Yes @else-not-FEATURE_COOKIE_JAR@ No @endif-FEATURE_COOKIE_JAR@</td>
              <td>Allows the use of a "cookie jar" file to capture cookies.</td>
-          </tr>
-          <tr>
-             <td><code>FEATURE_DENY_GZIP</code></td>
-             <td>@if-FEATURE_DENY_GZIP-then@ Yes @else-not-FEATURE_DENY_GZIP@ No @endif-FEATURE_DENY_GZIP@</td>
-             <td>Prevents requests from being compressed.  This means that all 
-                 sites can be filtered through +filter and +no-popups, but it
-                 wastes bandwidth.</td>
           </tr>
           <tr>
              <td><code>FEATURE_FAST_REDIRECTS</code></td>

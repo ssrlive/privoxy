@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.7 2001/10/23 21:48:19 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.8 2001/11/13 00:14:07 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.7 2001/10/23 21:48:19 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.8  2001/11/13 00:14:07  jongfoster
+ *    Fixing stupid bug now I've figured out what || means.
+ *    (It always returns 0 or 1, not one of it's paramaters.)
+ *
  *    Revision 1.7  2001/10/23 21:48:19  jongfoster
  *    Cleaning up error handling in CGI functions - they now send back
  *    a HTML error page and should never cause a FATAL error.  (Fixes one
@@ -915,6 +919,12 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_ACL */
    if (!err) err = map_conditional(exports, "FEATURE_ACL", 0);
 #endif /* ndef FEATURE_ACL */
+
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+   if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 1);
+#else /* ifndef FEATURE_COOKIE_JAR */
+   if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 0);
+#endif /* ndef FEATURE_COOKIE_JAR */
 
 #ifdef FEATURE_COOKIE_JAR
    if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
