@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.81 2002/04/18 11:50:24 oes Exp $
+ $Id: user-manual.sgml,v 1.82 2002/04/18 12:04:50 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.81 2002/04/18 11:50:24 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.82 2002/04/18 12:04:50 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -197,6 +197,8 @@
 <para>
  Note that if you have a <application>Junkbuster</application> RPM installed
  on your system, you need to remove it first, because the packages conflict.
+ Otherwise, RPM will try removing Junkbuster automaticaly, before installing
+ privoxy. 
 </para>
 </sect3>
 
@@ -4425,6 +4427,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.82  2002/04/18 12:04:50  oes
+ Cosmetics
+
  Revision 1.81  2002/04/18 11:50:24  oes
  Extended Install section - needs fixing by packagers
 
