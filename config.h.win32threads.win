@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.12  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.11  2002/03/16 14:27:22  jongfoster
  *    Ignoring a very common warning.
  *
@@ -187,17 +190,17 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 10
+#define VERSION_POINT 13
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.10"
+#define VERSION "2.9.13"
 
 /*
  * Status of the code: alpha, beta or stable
  */
-#define CODE_STATUS "alpha"
+#define CODE_STATUS "beta"
 
 /*
  * Regular expression matching for URLs.  (Highly recommended).
