@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.5 2001/10/25 03:40:48 david__schmidt Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.6 2001/10/29 03:48:09 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -35,6 +35,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.5 2001/10/25 03:40:48 david__schm
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.6  2001/10/29 03:48:09  david__schmidt
+ *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
+ *    by and __OS2__ ifdef.
+ *
  *    Revision 1.5  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -86,7 +90,6 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.5 2001/10/25 03:40:48 david__schm
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
@@ -208,6 +211,8 @@ jb_err cgi_error_parse(struct client_state *csp,
 jb_err cgi_error_file(struct client_state *csp,
                       struct http_response *rsp,
                       const char *filename);
+jb_err cgi_error_disabled(struct client_state *csp,
+                          struct http_response *rsp);
 
 /* Internal arbitrary config file support functions */
 static jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile);
@@ -240,6 +245,292 @@ static jb_err actions_to_radio(struct map * exports,
                                const struct action_spec *action);
 static jb_err actions_from_radio(const struct map * parameters,
                                  struct action_spec *action);
+
+
+static jb_err map_copy_parameter_html(struct map *out,
+                                      const struct map *in,
+                                      const char *name);
+static jb_err map_copy_parameter_url(struct map *out,
+                                     const struct map *in,
+                                     const char *name);
+
+
+/*********************************************************************
+ *
+ * Function    :  map_copy_parameter_html
+ *
+ * Description :  Copy a CGI parameter from one map to another, HTML
+ *                encoding it.
+ *
+ * Parameters  :
+ *           1 :  out = target map
+ *           2 :  in = source map
+ *           3 :  name = name of cgi parameter to copy
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the parameter doesn't exist
+ *                                  in the source map
+ *
+ *********************************************************************/
+static jb_err map_copy_parameter_html(struct map *out,
+                                      const struct map *in,
+                                      const char *name)
+{
+   const char * value;
+   jb_err err;
+
+   assert(out);
+   assert(in);
+   assert(name);
+
+   value = lookup(in, name);
+   err = map(out, name, 1, html_encode(value), 0);
+
+   if (err)
+   {
+      /* Out of memory */
+      return err;
+   }
+   else if (*value == '\0')
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+   else
+   {
+      return JB_ERR_OK;
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  map_copy_parameter_html
+ *
+ * Description :  Copy a CGI parameter from one map to another, URL
+ *                encoding it.
+ *
+ * Parameters  :
+ *           1 :  out = target map
+ *           2 :  in = source map
+ *           3 :  name = name of cgi parameter to copy
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the parameter doesn't exist
+ *                                  in the source map
+ *
+ *********************************************************************/
+static jb_err map_copy_parameter_url(struct map *out,
+                                     const struct map *in,
+                                     const char *name)
+{
+   const char * value;
+   jb_err err;
+
+   assert(out);
+   assert(in);
+   assert(name);
+
+   value = lookup(in, name);
+   err = map(out, name, 1, url_encode(value), 0);
+
+   if (err)
+   {
+      /* Out of memory */
+      return err;
+   }
+   else if (*value == '\0')
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+   else
+   {
+      return JB_ERR_OK;
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_url_form
+ *
+ * Description :  CGI function that displays a form for
+ *                edit-actions-url
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters
+ *    filename : Identifies the file to edit
+ *         ver : File's last-modified time
+ *     section : Line number of section to edit
+ *     pattern : Line number of pattern to edit
+ *      oldval : Current value for pattern
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_url_form(struct client_state *csp,
+                                 struct http_response *rsp,
+                                 const struct map *parameters)
+{
+   struct map *exports;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map_copy_parameter_html(exports, parameters, "section");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "pattern");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "ver");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "filename");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "oldval");
+
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "edit-actions-url-form", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_add_url_form
+ *
+ * Description :  CGI function that displays a form for
+ *                edit-actions-url
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *    filename : Identifies the file to edit
+ *         ver : File's last-modified time
+ *     section : Line number of section to edit
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_add_url_form(struct client_state *csp,
+                                     struct http_response *rsp,
+                                     const struct map *parameters)
+{
+   struct map *exports;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map_copy_parameter_html(exports, parameters, "section");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "ver");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "filename");
+
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "edit-actions-add-url-form", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_remove_url_form
+ *
+ * Description :  CGI function that displays a form for
+ *                edit-actions-url
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *    filename : Identifies the file to edit
+ *         ver : File's last-modified time
+ *     section : Line number of section to edit
+ *     pattern : Line number of pattern to edit
+ *      oldval : Current value for pattern
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
+                                     struct http_response *rsp,
+                                     const struct map *parameters)
+{
+   struct map *exports;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map_copy_parameter_url(exports, parameters, "section");
+   if (!err) err = map_copy_parameter_url(exports, parameters, "pattern");
+   if (!err) err = map_copy_parameter_url(exports, parameters, "ver");
+   if (!err) err = map_copy_parameter_url(exports, parameters, "filename");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "oldval");
+
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "edit-actions-remove-url-form", exports, rsp);
+}
 
 
 /*********************************************************************
@@ -1901,6 +2192,44 @@ static jb_err actions_to_radio(struct map * exports,
 
 /*********************************************************************
  *
+ * Function    :  javascriptify
+ *
+ * Description :  Converts a string into a form JavaScript will like.
+ *
+ *                Netscape 4's JavaScript sucks - it doesn't use 
+ *                "id" parameters, so you have to set the "name"
+ *                used to submit a form element to something JavaScript
+ *                will like.  (Or access the elements by index in an
+ *                array.  That array contains >60 elements and will
+ *                be changed whenever we add a new action to the
+ *                editor, so I'm NOT going to use indexes that have
+ *                to be figured out by hand.)
+ *
+ *                Currently the only thing we have to worry about
+ *                is "-" ==> "_" conversion.
+ *
+ *                This is a length-preserving operation so it is
+ *                carried out in-place, no memory is allocated
+ *                or freed.
+ *
+ * Parameters  :
+ *          1  :  identifier = String to make JavaScript-friendly.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void javascriptify(char * identifier)
+{
+   char * p = identifier;
+   while (NULL != (p = strchr(p, '-')))
+   {
+      *p++ = '_';
+   }
+}
+
+
+/*********************************************************************
+ *
  * Function    :  actions_from_radio
  *
  * Description :  Converts a map of parameters passed to a CGI function
@@ -1919,102 +2248,115 @@ static jb_err actions_to_radio(struct map * exports,
 static jb_err actions_from_radio(const struct map * parameters,
                               struct action_spec *action)
 {
+   static int first_time = 1;
    const char * param;
    char * param_dup;
    char ch;
+   const char * js_name;
 
    assert(parameters);
    assert(action);
 
-#define DEFINE_ACTION_BOOL(name, bit)                 \
-   if (NULL != (param = lookup(parameters, name)))    \
+   /* Statics are generally a potential race condition,
+    * but in this case we're safe and don't need semaphores.
+    * Be careful if you modify this function.
+    * - Jon
+    */
+
+#define JAVASCRIPTIFY(dest_var, string)               \
    {                                                  \
-      ch = toupper((int)param[0]);                    \
-      if (ch == 'Y')                                  \
+      static char js_name_arr[] = string;             \
+      if (first_time)                                 \
       {                                               \
-         action->add  |= bit;                         \
-         action->mask |= bit;                         \
+         javascriptify(js_name_arr);                  \
       }                                               \
-      else if (ch == 'N')                             \
-      {                                               \
-         action->add  &= ~bit;                        \
-         action->mask &= ~bit;                        \
-      }                                               \
-      else if (ch == 'X')                             \
-      {                                               \
-         action->add  &= ~bit;                        \
-         action->mask |= bit;                         \
-      }                                               \
-   }
+      dest_var = js_name_arr;                         \
+   }                                                  \
 
-#define DEFINE_ACTION_STRING(name, bit, index)                    \
-   if (NULL != (param = lookup(parameters, name)))                \
-   {                                                              \
-      ch = toupper((int)param[0]);                                \
-      if (ch == 'Y')                                              \
-      {                                                           \
-         param = lookup(parameters, name "-mode");                \
-         if ((*param == '\0') || (0 == strcmp(param, "CUSTOM")))  \
-         {                                                        \
-            param = lookup(parameters, name "-param");            \
-         }                                                        \
-         if (*param != '\0')                                      \
-         {                                                        \
-            if (NULL == (param_dup = strdup(param)))              \
-            {                                                     \
-               return JB_ERR_MEMORY;                              \
-            }                                                     \
-            freez(action->string[index]);                         \
-            action->add  |= bit;                                  \
-            action->mask |= bit;                                  \
-            action->string[index] = param_dup;                    \
-         }                                                        \
-      }                                                           \
-      else if (ch == 'N')                                         \
-      {                                                           \
-         if (action->add & bit)                                   \
-         {                                                        \
-            freez(action->string[index]);                         \
-         }                                                        \
-         action->add  &= ~bit;                                    \
-         action->mask &= ~bit;                                    \
-      }                                                           \
-      else if (ch == 'X')                                         \
-      {                                                           \
-         if (action->add & bit)                                   \
-         {                                                        \
-            freez(action->string[index]);                         \
-         }                                                        \
-         action->add  &= ~bit;                                    \
-         action->mask |= bit;                                     \
-      }                                                           \
-   }
+#define DEFINE_ACTION_BOOL(name, bit)                 \
+   JAVASCRIPTIFY(js_name, name);                      \
+   param = lookup(parameters, js_name);               \
+   ch = ijb_toupper(param[0]);                        \
+   if (ch == 'Y')                                     \
+   {                                                  \
+      action->add  |= bit;                            \
+      action->mask |= bit;                            \
+   }                                                  \
+   else if (ch == 'N')                                \
+   {                                                  \
+      action->add  &= ~bit;                           \
+      action->mask &= ~bit;                           \
+   }                                                  \
+   else if (ch == 'X')                                \
+   {                                                  \
+      action->add  &= ~bit;                           \
+      action->mask |= bit;                            \
+   }                                                  \
 
-#define DEFINE_ACTION_MULTI(name, index)                          \
-   if (NULL != (param = lookup(parameters, name)))                \
-   {                                                              \
-      ch = toupper((int)param[0]);                                \
-      if (ch == 'Y')                                              \
-      {                                                           \
-         /* FIXME */                                              \
-      }                                                           \
-      else if (ch == 'N')                                         \
-      {                                                           \
-         list_remove_all(action->multi_add[index]);               \
-         list_remove_all(action->multi_remove[index]);            \
-         action->multi_remove_all[index] = 1;                     \
-      }                                                           \
-      else if (ch == 'X')                                         \
-      {                                                           \
-         list_remove_all(action->multi_add[index]);               \
-         list_remove_all(action->multi_remove[index]);            \
-         action->multi_remove_all[index] = 0;                     \
-      }                                                           \
-   }
+#define DEFINE_ACTION_STRING(name, bit, index)                 \
+   JAVASCRIPTIFY(js_name, name);                               \
+   param = lookup(parameters, js_name);                        \
+   ch = ijb_toupper(param[0]);                                 \
+   if (ch == 'Y')                                              \
+   {                                                           \
+      JAVASCRIPTIFY(js_name, name "-mode");                    \
+      param = lookup(parameters, js_name);                     \
+      if ((*param == '\0') || (0 == strcmp(param, "CUSTOM")))  \
+      {                                                        \
+         JAVASCRIPTIFY(js_name, name "-param");                \
+         param = lookup(parameters, js_name);                  \
+      }                                                        \
+      if (*param != '\0')                                      \
+      {                                                        \
+         if (NULL == (param_dup = strdup(param)))              \
+         {                                                     \
+            return JB_ERR_MEMORY;                              \
+         }                                                     \
+         freez(action->string[index]);                         \
+         action->add  |= bit;                                  \
+         action->mask |= bit;                                  \
+         action->string[index] = param_dup;                    \
+      }                                                        \
+   }                                                           \
+   else if (ch == 'N')                                         \
+   {                                                           \
+      if (action->add & bit)                                   \
+      {                                                        \
+         freez(action->string[index]);                         \
+      }                                                        \
+      action->add  &= ~bit;                                    \
+      action->mask &= ~bit;                                    \
+   }                                                           \
+   else if (ch == 'X')                                         \
+   {                                                           \
+      if (action->add & bit)                                   \
+      {                                                        \
+         freez(action->string[index]);                         \
+      }                                                        \
+      action->add  &= ~bit;                                    \
+      action->mask |= bit;                                     \
+   }                                                           \
 
-#define DEFINE_CGI_PARAM_CUSTOM(name, bit, index, default_val)
-#define DEFINE_CGI_PARAM_RADIO(name, bit, index, value, is_default)
-#define DEFINE_CGI_PARAM_NO_RADIO(name, bit, index, default_val)
+#define DEFINE_ACTION_MULTI(name, index)                       \
+   JAVASCRIPTIFY(js_name, name);                               \
+   param = lookup(parameters, js_name);                        \
+   ch = ijb_toupper((int)param[0]);                            \
+   if (ch == 'Y')                                              \
+   {                                                           \
+      /* FIXME */                                              \
+   }                                                           \
+   else if (ch == 'N')                                         \
+   {                                                           \
+      list_remove_all(action->multi_add[index]);               \
+      list_remove_all(action->multi_remove[index]);            \
+      action->multi_remove_all[index] = 1;                     \
+   }                                                           \
+   else if (ch == 'X')                                         \
+   {                                                           \
+      list_remove_all(action->multi_add[index]);               \
+      list_remove_all(action->multi_remove[index]);            \
+      action->multi_remove_all[index] = 0;                     \
+   }                                                           \
 
 #define DEFINE_ACTION_ALIAS 0 /* No aliases for URL parsing */
 
@@ -2024,9 +2366,9 @@ static jb_err actions_from_radio(const struct map * parameters,
 #undef DEFINE_ACTION_STRING
 #undef DEFINE_ACTION_BOOL
 #undef DEFINE_ACTION_ALIAS
-#undef DEFINE_CGI_PARAM_CUSTOM
-#undef DEFINE_CGI_PARAM_RADIO
-#undef DEFINE_CGI_PARAM_NO_RADIO
+#undef JAVASCRIPTIFY
+
+   first_time = 0;
 
    return JB_ERR_OK;
 }
@@ -2113,13 +2455,13 @@ jb_err cgi_error_parse(struct client_state *csp,
    }
 
    err = map(exports, "filename", 1, file->identifier, 1);
-   err = err || map(exports, "parse-error", 1, file->parse_error_text, 1);
+   if (!err) err = map(exports, "parse-error", 1, file->parse_error_text, 1);
 
    cur_line = file->parse_error;
    assert(cur_line);
 
-   err = err || map(exports, "line-raw", 1, html_encode(cur_line->raw), 0);
-   err = err || map(exports, "line-data", 1, html_encode(cur_line->unprocessed), 0);
+   if (!err) err = map(exports, "line-raw", 1, html_encode(cur_line->raw), 0);
+   if (!err) err = map(exports, "line-data", 1, html_encode(cur_line->unprocessed), 0);
 
    if (err)
    {
@@ -2292,7 +2634,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    struct map * url_exports;
    struct editable_file * file;
    struct file_line * cur_line;
-   int line_number = 0;
+   unsigned line_number = 0;
    int url_1_2;
    jb_err err;
 
@@ -2315,7 +2657,8 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    }
 
    err = map(exports, "filename", 1, file->identifier, 1);
-   err = err || map(exports, "ver", 1, file->version_str, 1);
+   if (!err) err = map(exports, "ver", 1, file->version_str, 1);
+
    if (err)
    {
       edit_free_file(file);
@@ -2401,14 +2744,15 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
       snprintf(buf, 50, "%d", line_number);
       err = map(section_exports, "sectionid", 1, buf, 1);
+      if (!err) err = map(section_exports, "actions", 1,
+                          actions_to_html(cur_line->data.action), 0);
 
-      err = err || map(section_exports, "actions", 1,
-                       actions_to_html(cur_line->data.action), 0);
-
-      if ((cur_line->next != NULL) && (cur_line->next->type == FILE_LINE_URL))
+      if ( (!err)
+        && (cur_line->next != NULL)
+        && (cur_line->next->type == FILE_LINE_URL))
       {
          /* This section contains at least one URL, don't allow delete */
-         err = err || map_block_killer(section_exports, "empty-section");
+         err = map_block_killer(section_exports, "empty-section");
       }
 
       if (err)
@@ -2458,10 +2802,12 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
          err = map(url_exports, "urlid", 1, buf, 1);
 
          snprintf(buf, 50, "%d", url_1_2);
-         err = err || map(url_exports, "url-1-2", 1, buf, 1);
+         if (!err) err = map(url_exports, "url-1-2", 1, buf, 1);
 
-         err = err || map(url_exports, "url", 1,
-                          html_encode(cur_line->unprocessed), 0);
+         if (!err) err = map(url_exports, "url-html", 1,
+                             html_encode(cur_line->unprocessed), 0);
+         if (!err) err = map(url_exports, "url", 1,
+                             url_encode(cur_line->unprocessed), 0);
 
          if (err)
          {
@@ -2489,9 +2835,10 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             return JB_ERR_MEMORY;
          }
 
-         err =        template_fill(&s, section_exports);
-         err = err || template_fill(&s, url_exports);
-         err = err || string_append(&urls, s);
+         err = template_fill(&s, section_exports);
+         if (!err) err = template_fill(&s, url_exports);
+         if (!err) err = string_append(&urls, s);
+
          free_map(url_exports);
          freez(s);
 
@@ -2540,7 +2887,8 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       }
 
       err = template_fill(&s, section_exports);
-      err = err || string_append(&sections, s);
+      if (!err) err = string_append(&sections, s);
+
       freez(s);
       free_map(section_exports);
 
@@ -2644,10 +2992,10 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    }
 
    err = map(exports, "filename", 1, file->identifier, 1);
-   err = err || map(exports, "ver", 1, file->version_str, 1);
-   err = err || map(exports, "section", 1, lookup(parameters, "section"), 1);
+   if (!err) err = map(exports, "ver", 1, file->version_str, 1);
+   if (!err) err = map(exports, "section", 1, lookup(parameters, "section"), 1);
 
-   err = err || actions_to_radio(exports, cur_line->data.action);
+   if (!err) err = actions_to_radio(exports, cur_line->data.action);
 
    edit_free_file(file);
 
@@ -2690,7 +3038,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    int len;
    struct editable_file * file;
    struct file_line * cur_line;
-   int line_number;
+   unsigned line_number;
    char * target;
    jb_err err;
 
@@ -2848,7 +3196,12 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
    }
 
    err = get_number_param(csp, parameters, "section", &sectionid);
-   err = err || get_number_param(csp, parameters, "pattern", &patternid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = get_number_param(csp, parameters, "pattern", &patternid);
    if (err)
    {
       return err;
@@ -2981,7 +3334,6 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
                                 const struct map *parameters)
 {
    unsigned sectionid;
-   unsigned patternid;
    const char * newval;
    char * new_pattern;
    struct file_line * new_line;
@@ -3004,7 +3356,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
 
    newval = lookup(parameters, "newval");
 
-   if ((*newval == '\0') || (sectionid < 1U) || (patternid < 1U))
+   if ((*newval == '\0') || (sectionid < 1U))
    {
       return JB_ERR_CGI_PARAMS;
    }
@@ -3138,7 +3490,12 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
    }
 
    err = get_number_param(csp, parameters, "section", &sectionid);
-   err = err || get_number_param(csp, parameters, "pattern", &patternid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = get_number_param(csp, parameters, "pattern", &patternid);
    if (err)
    {
       return err;
@@ -3620,6 +3977,8 @@ jb_err cgi_toggle(struct client_state *csp,
 
    return template_fill_for_cgi(csp, template_name, exports, rsp);
 }
+
+
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 
