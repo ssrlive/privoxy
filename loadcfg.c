@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,19 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.3  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.2  2001/05/17 23:01:01  oes
  *     - Cleaned CRLF's from the sources and related files
  *
@@ -153,6 +166,10 @@ int default_permissions = PERMIT_RE_FILTER;
 const char *re_filterfile = NULL;
 #endif /* def PCRS */
 
+#ifdef FAST_REDIRECTS
+int fast_redirects = 0;
+#endif /* def FAST_REDIRECTS */
+
 #ifdef TRUST_FILES
 const char *trustfile   = NULL;
 #endif /* def TRUST_FILES */
@@ -238,6 +255,7 @@ const char **Argv = NULL;
 #define hash_referrer                  10883969ul
 #define hash_referer                   2176719ul
 #define hash_from                      16264ul
+#define hash_fast_redirects            464873764lu
 #define hash_hide_console              2048809870ul
 #define hash_include_stats             2174146548ul
 #define hash_suppress_blocklists       1948693308ul
@@ -373,6 +391,10 @@ void load_config( int signum )
 #ifdef PCRS
    freez((char *)re_filterfile);
 #endif /* def PCRS */
+
+#ifdef FAST_REDIRECTS
+   fast_redirects = 0;
+#endif /* def FAST_REDIRECTS */
 
    if (NULL != configfile)
    {
@@ -576,6 +598,12 @@ void load_config( int signum )
                freez((char *)from);
                from = strdup(arg);
                continue;
+
+#ifdef FAST_REDIRECTS
+			   case hash_fast_redirects :
+               fast_redirects = 1;
+               continue;
+#endif /* def FAST_REDIRECTS */
 
 #ifdef _WIN_CONSOLE
             case hash_hide_console :

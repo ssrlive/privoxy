@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.2 2001/05/17 23:02:36 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,19 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.2 2001/05/17 23:02:36 oes Exp $";
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.3  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.2  2001/05/17 23:02:36  oes
  *     - Made referrer option accept 'L' as a substitute for '§'
  *
@@ -114,8 +127,9 @@ const struct parsers client_patterns[] = {
 
 const struct interceptors intercept_patterns[] = {
    { "show-proxy-args",    14, show_proxy_args },
+   { "ijb-send-banner",    14, ijb_send_banner },
 #ifdef TRUST_FILES
-   { "ij-untrusted-url",   14, ij_untrusted_url },
+   { "ij-untrusted-url",   15, ij_untrusted_url },
 #endif /* def TRUST_FILES */
    { NULL, 0, NULL }
 };

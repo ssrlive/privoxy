@@ -5,6 +5,10 @@
 # Note that you are free to choose the delimter as you
 # see fit.
 #
+# Note: in addidion to the Perl-options egimosx, U is supported
+# and turns the default to ungreedy matching. Add ? to quantifiers
+# to switch back to greedy.
+#
 
 # Kill OnUnload popups. Yummy.
 # check it out on http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
@@ -41,6 +45,28 @@ s/status='.*?';*//ig
 #
 # JavaScript: s/window\.open\(/who_wants_this_to.open(/ig
 # HTML      : s/target="?_blank"?/target_who/g
+
+# Kill banners by size:
+# (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
+#
+s|<img [^>]*?(width=['"]?468\D)[^>]*(height=['"]?60\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?234\D)[^>]*(height=['"]?60\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?88\D)[^>]*(height=['"]?31\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?90\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?60\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?160\D)[^>]*(height=['"]?600\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?600\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?125\D)[^>]*(height=['"]?125\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?240\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?180\D)[^>]*(height=['"]?150\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?300\D)[^>]*(height=['"]?250\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?250\D)[^>]*(height=['"]?250\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?240\D)[^>]*(height=['"]?400\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+s|<img [^>]*?(width=['"]?336\D)[^>]*(height=['"]?280\D).*?>|<img src=http://no.where/ijb-send-banner.gif $1 $2>|ig
+
+# Squish WebBugs:
+#
+s/<img [^>]*?(width|height) *= *['"]?1\D[^>]*?(width|height) *= *['"]?1\D.*?>/<!-- Squished WebBug -->/ig
 
 # Fun stuff:
 #

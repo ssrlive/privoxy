@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.2 2001/05/20 01:21:20 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.3 2001/05/20 16:44:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -7,9 +7,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.2 2001/05/20 01:21:20 jongfoster 
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
  *                   `block_url', `url_permissions', `domaincmp', `dsplit',
- *                   `filter_popups', `forward_url',
+ *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
- *                   `show_proxy_args', and `trust_url'
+ *                   `show_proxy_args', 'ijb_send_banner', and `trust_url'
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.2 2001/05/20 01:21:20 jongfoster 
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.3  2001/05/20 16:44:47  jongfoster
+ *    Removing last hardcoded JunkBusters.com URLs.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -123,8 +126,8 @@ static const char CBLOCK[] =
       "was blocked because it matches the following pattern "
       "in the blockfile: <b>%s</b>\n</p>"
 #ifdef FORCE_LOAD
-       "<p align=center><a href=\"http://" FORCE_PREFIX
-        "%s%s\">Go there anyway.</a></p>"
+       "<p align=center><a href=\"http://%s" FORCE_PREFIX
+        "%s\">Go there anyway.</a></p>"
 #endif /* def FORCE_LOAD */
       "</body>\n"
       "</html>\n";
@@ -805,6 +808,50 @@ char *intercept_url(struct http_request *http, struct client_state *csp)
 
 }
 
+#ifdef FAST_REDIRECTS
+/*********************************************************************
+ *
+ * Function    :  redirect_url
+ *
+ * Description :  Checks for redirection URLs and returns a HTTP redirect
+ *                to the destination URL.
+ *
+ * Parameters  :
+ *          1  :  http = http_request request, check `basename's of blocklist
+ *          2  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  NULL if URL was clean, HTTP redirect otherwise.
+ *
+ *********************************************************************/
+char *redirect_url(struct http_request *http, struct client_state *csp)
+{
+   char *p, *q;
+
+   p = q = csp->http->path;
+	log_error(LOG_LEVEL_REDIRECTS, "checking path: %s", p);
+
+   /* find the last URL encoded in the request */
+   while (p = strstr(p, "http://"))
+		{
+		  q = p++;
+		}
+
+   /* if there was any, generate and return a HTTP redirect */
+	if (q != csp->http->path)
+	{
+	  log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
+
+	  p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(q));
+	  sprintf(p, HTTP_REDIRECT_TEMPLATE, q);
+	  return(p);
+   }
+	else
+   {
+      return(NULL);
+	}
+
+}
+#endif /* def FAST_REDIRECTS */
 
 /*********************************************************************
  *
@@ -1331,6 +1378,28 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  ijb_send_banner
+ *
+ * Description :  This "crunch"es "http:/any.thing/ijb-send-banner and
+ *                thus triggers sending the image in jcc.c:chat.
+ *                For the unlikely case, that the imagefile/MSIE
+ *                mechanism is not used, or tinygif = 0, a page
+ *                describing the reson of the interception is generated.
+ *
+ * Parameters  :
+ *          1  :  http = http_request request for crunched URL
+ *          2  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  A string that contains why this was intercepted.
+ *
+ *********************************************************************/
+char *ijb_send_banner(struct http_request *http, struct client_state *csp)
+{
+   return(strdup(CNOBANNER));
+}
 
 #ifdef TRUST_FILES
 /*********************************************************************

@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.1.1.1 2001/05/15 13:58:52 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,19 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.2  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:52  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -63,6 +76,7 @@ extern char *block_url(struct http_request *http, struct client_state *csp);
 extern char *trust_url(struct http_request *http, struct client_state *csp);
 #endif /* def TRUST_FILES */
 extern char *intercept_url(struct http_request *http, struct client_state *csp);
+extern char *redirect_url(struct http_request *http, struct client_state *csp);
 
 #if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
 extern int block_imageurl(struct http_request *http, struct client_state *csp);
@@ -79,6 +93,7 @@ extern struct url_spec dsplit(char *domain);
 extern int domaincmp(struct url_spec *pattern, struct url_spec *fqdn);
 
 extern char *show_proxy_args(struct http_request *http, struct client_state *csp);
+extern char *ijb_send_banner(struct http_request *http, struct client_state *csp);
 
 #ifdef TRUST_FILES
 extern char *ij_untrusted_url(struct http_request *http, struct client_state *csp);

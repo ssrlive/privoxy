@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.1.1.1 2001/05/15 13:58:50 oes Exp $
+dnl $Id: configure.in,v 1.2 2001/05/20 01:21:20 jongfoster Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,19 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.2  2001/05/20 01:21:20  jongfoster
+dnl Version 2.9.4 checkin.
+dnl - Merged popupfile and cookiefile, and added control over PCRS
+dnl   filtering, in new "permissionsfile".
+dnl - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+dnl   file error you now get a message box (in the Win32 GUI) rather
+dnl   than the program exiting with no explanation.
+dnl - Made killpopup use the PCRS MIME-type checking and HTTP-header
+dnl   skipping.
+dnl - Removed tabs from "config"
+dnl - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+dnl - Bumped up version number.
+dnl
 dnl Revision 1.1.1.1  2001/05/15 13:58:50  oes
 dnl Initial import of version 2.9.3 source tree
 dnl
@@ -179,6 +192,12 @@ AC_ARG_ENABLE(force,
 [if test $enableval = yes; then
   AC_DEFINE(FORCE_LOAD)
 fi],AC_DEFINE(FORCE_LOAD))
+
+AC_ARG_ENABLE(fast-redirects,
+[  --disable-fast-redirects Don't support fast redirects],
+[if test $enableval = yes; then
+  AC_DEFINE(FAST_REDIRECTS)
+fi], AC_DEFINE(FAST_REDIRECTS))
 
 AC_ARG_ENABLE(killpopup,
 [  --disable-killpopup     Never block popups],

@@ -1,6 +1,6 @@
 #ifndef _ERRLOG_H
 #define _ERRLOG_H
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.2 2001/05/20 01:11:40 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,11 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.2  2001/05/20 01:11:40  jongfoster
+ *    Added support for LOG_LEVEL_FATAL
+ *    Renamed LOG_LEVEL_FRC to LOG_LEVEL_FORCE,
+ *    and LOG_LEVEL_REF to LOG_LEVEL_RE_FILTER
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -53,10 +58,15 @@ extern "C" {
 #define LOG_LEVEL_IO         0x0004
 #define LOG_LEVEL_HEADER     0x0008
 #define LOG_LEVEL_LOG        0x0010
-#ifdef PCRS
+#ifdef FORCE_LOAD
 #define LOG_LEVEL_FORCE      0x0020
+#endif /* def FORCE_LOAD */
+#ifdef PCRS
 #define LOG_LEVEL_RE_FILTER  0x0040
 #endif /* def PCRS */
+#ifdef FAST_REDIRECTS
+#define LOG_LEVEL_REDIRECTS  0x0080
+#endif /* def FAST_REDIRECTS */
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000

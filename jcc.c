@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.4 2001/05/21 19:34:01 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.4  2001/05/21 19:34:01  jongfoster
+ *    Made failure to bind() a fatal error.
+ *
  *    Revision 1.3  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -135,90 +138,6 @@ static void serve(struct client_state *csp);
 static int32 server_thread(void *data);
 #endif /* def __BEOS__ */
 
-
-#define BODY   "<body bgcolor=\"#f8f8f0\" link=\"#000078\" alink=\"#ff0022\" vlink=\"#787878\">\n"
-
-static const char CFAIL[] =
-   "HTTP/1.0 503 Connect failed\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: Connect failed</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</center></h1>"
-   "TCP connection to '%s' failed: %s.\n<br>"
-   "</body>\n"
-   "</html>\n";
-
-static const char CNXDOM[] =
-   "HTTP/1.0 404 Non-existent domain\n"
-   "Content-Type: text/html\n\n"
-   "<html>\n"
-   "<head>\n"
-   "<title>Internet Junkbuster: Non-existent domain</title>\n"
-   "</head>\n"
-   BODY
-   "<h1><center>"
-   BANNER
-   "</center></h1>"
-   "No such domain: %s\n"
-   "</body>\n"
-   "</html>\n";
-
-static const char CSUCCEED[] =
-   "HTTP/1.0 200 Connection established\n"
-   "Proxy-Agent: IJ/" VERSION "\n\n";
-
-static const char CHEADER[] =
-   "HTTP/1.0 400 Invalid header received from browser\n\n";
-
-static const char SHEADER[] =
-   "HTTP/1.0 502 Invalid header received from server\n\n";
-
-#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
-
-/*
- * Hint: You can encode your own GIFs like that:
- * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
- */
-
-static const char BLANKGIF[] =
-   "HTTP/1.0 200 OK\r\n"
-   "Pragma: no-cache\r\n"
-   "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Content-type: image/gif\r\n\r\n"
-   "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
-   "\000!\371\004\001\000\000\000\000,\000\000\000\000\001"
-   "\000\001\000\000\002\002D\001\000;";
-
-static const char JBGIF[] =
-   "HTTP/1.0 200 OK\r\n"
-   "Pragma: no-cache\r\n"
-   "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Content-type: image/gif\r\n\r\n"
-   "GIF89aD\000\013\000\360\000\000\000\000\000\377\377\377!"
-   "\371\004\001\000\000\001\000,\000\000\000\000D\000\013\000"
-   "\000\002a\214\217\251\313\355\277\000\200G&K\025\316hC\037"
-   "\200\234\230Y\2309\235S\230\266\206\372J\253<\3131\253\271"
-   "\270\215\342\254\013\203\371\202\264\334P\207\332\020o\266"
-   "N\215I\332=\211\312\3513\266:\026AK)\364\370\365aobr\305"
-   "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
-   "\037Q\000\000;";
-
-static const char FWGIF[] =
-   "HTTP/1.0 302 Blocked Advert\r\n" 
-   "Pragma: no-cache\r\n"
-   "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-   "Location: ";
-
-#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
-
 #ifdef _WIN32
 #define sleep(N)  Sleep(((N) * 1000))
 #endif
@@ -263,7 +182,6 @@ static void chat(struct client_state *csp)
 #   define IS_TRUSTED_URL
 #endif /* ndef TRUST_FILES */
 
-   
    char buf[BUFSIZ], *hdr, *p, *req;
    char *err = NULL;
    char *eno;
@@ -443,15 +361,8 @@ static void chat(struct client_state *csp)
 
    destroy_list(csp->headers);
 
-
-   /*
-    * by haroon - most of credit to srt19170
-    * if toggled_on flag is true then IJB is enabled, do the usual
-    * otherwise avoid crunching
-    */
-
  	/* Check the request against all rules, unless
- 	 * we're disabled or in force mode. 
+ 	 * we're toggled off or in force mode. 
     */
  
    if (IS_TOGGLED_ON
@@ -460,7 +371,11 @@ static void chat(struct client_state *csp)
 #endif /* def FORCE_LOAD */
        ( (p = intercept_url(http, csp)) ||
          IS_TRUSTED_URL
-         (p = block_url(http, csp)) ))
+         (p = block_url(http, csp))
+#ifdef FAST_REDIRECTS
+         || (fast_redirects && (p = redirect_url(http, csp))) 
+#endif /* def FAST_REDIRECTS */
+      ))
    {
 #ifdef STATISTICS
       csp->rejected = 1;
@@ -469,31 +384,33 @@ static void chat(struct client_state *csp)
       log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
 
 #if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
-      /* now use block_imageurl */
+      /* Block as image?  */
       if ( (tinygif > 0) && block_imageurl(http, csp) )
       {
          /* Send "blocked" image */
          log_error(LOG_LEVEL_GPC, "%s%s image crunch!",
                    http->hostport, http->path);
 
+         if ((tinygif == 2) || strstr(http->path, "ijb-send-banner"))
+         {
+            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
+         }
          if (tinygif == 1)
          {
             write_socket(csp->cfd, BLANKGIF, sizeof(BLANKGIF)-1);
          }
          else if ((tinygif == 3) && (tinygifurl))
          {
-            write_socket(csp->cfd, FWGIF, sizeof(FWGIF)-1);
-            write_socket(csp->cfd, tinygifurl, strlen(tinygifurl));
-         }
-         else
-         {
-            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
+            p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(tinygifurl));
+	         sprintf(p, HTTP_REDIRECT_TEMPLATE, tinygifurl);
+            write_socket(csp->cfd, p, strlen(p));
          }
       }
       else
 #endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+      /* Block as HTML */
       {
-         /* Send HTML "blocked" message */
+         /* Send HTML "blocked" message, interception, or redirection result */
          write_socket(csp->cfd, p, strlen(p));
       }
 

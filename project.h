@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.2 2001/05/17 23:01:01 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.3 2001/05/20 01:21:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,19 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.3  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.2  2001/05/17 23:01:01  oes
  *     - Cleaned CRLF's from the sources and related files
  *
@@ -117,7 +130,6 @@ struct http_request
    char *hostport; /* "host[:port]" */
    int   ssl;
 };
-
 
 struct gateway
 {
@@ -410,19 +422,112 @@ struct access_control_list
 #define BANNER    "<strong>Internet J<small>UNK<i><font color=\"red\">BUSTER</font></i></small></strong>"
 
 #ifdef FORCE_LOAD
-/*
- * FIXME: Unfortunately, IE lowercases the domain name.  JunkBuster does
- * a case-sensitive compare.  JunkBuster should be modified to do a
- * case-insensitive compatison.  As a temporary workaround, I've lowercased
- * the FORCE_PREFIX.
- *
- * #define FORCE_PREFIX "IJB-FORCE-LOAD-"
- */
-#define FORCE_PREFIX "ijb-force-load-"
+#define FORCE_PREFIX "/IJB-FORCE-LOAD"
 #endif /* def FORCE_LOAD */
 
 #define HOME_PAGE_URL  "http://ijbswa.sourceforge.net/"
 #define REDIRECT_URL HOME_PAGE_URL "redirect.php?v=" VERSION "&to="
+
+static const char CFAIL[] =
+   "HTTP/1.0 503 Connect failed\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: Connect failed</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</center></h1>"
+   "TCP connection to '%s' failed: %s.\n<br>"
+   "</body>\n"
+   "</html>\n";
+
+static const char CNXDOM[] =
+   "HTTP/1.0 404 Non-existent domain\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: Non-existent domain</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</center></h1>"
+   "No such domain: %s\n"
+   "</body>\n"
+   "</html>\n";
+
+static const char CNOBANNER[] =
+   "HTTP/1.0 200 No Banner\n"
+   "Content-Type: text/html\n\n"
+   "<html>\n"
+   "<head>\n"
+   "<title>Internet Junkbuster: No Banner</title>\n"
+   "</head>\n"
+   BODY
+   "<h1><center>"
+   BANNER
+   "</h1>"
+   "You asked for a banner that this proxy can't produce because either configuration does not permit.\n<br>"
+   "or the URL didn't end with .gif\n"
+   "</center></body>\n"
+   "</html>\n";
+
+static const char CSUCCEED[] =
+   "HTTP/1.0 200 Connection established\n"
+   "Proxy-Agent: IJ/" VERSION "\n\n";
+
+static const char CHEADER[] =
+   "HTTP/1.0 400 Invalid header received from browser\n\n";
+
+static const char SHEADER[] =
+   "HTTP/1.0 502 Invalid header received from server\n\n";
+
+#if defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+
+/*
+ * Hint: You can encode your own GIFs like that:
+ * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
+ */
+
+static const char BLANKGIF[] =
+   "HTTP/1.0 200 OK\r\n"
+   "Pragma: no-cache\r\n"
+   "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+   "Content-type: image/gif\r\n\r\n"
+   "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
+   "\000!\371\004\001\000\000\000\000,\000\000\000\000\001"
+   "\000\001\000\000\002\002D\001\000;";
+
+static const char JBGIF[] =
+   "HTTP/1.0 200 OK\r\n"
+   "Pragma: no-cache\r\n"
+   "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+   "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+   "Content-type: image/gif\r\n\r\n"
+   "GIF89aD\000\013\000\360\000\000\000\000\000\377\377\377!"
+   "\371\004\001\000\000\001\000,\000\000\000\000D\000\013\000"
+   "\000\002a\214\217\251\313\355\277\000\200G&K\025\316hC\037"
+   "\200\234\230Y\2309\235S\230\266\206\372J\253<\3131\253\271"
+   "\270\215\342\254\013\203\371\202\264\334P\207\332\020o\266"
+   "N\215I\332=\211\312\3513\266:\026AK)\364\370\365aobr\305"
+   "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
+   "\037Q\000\000;";
+
+#endif /* defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
+
+#if defined(FAST_REDIRECTS) || defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST)
+
+static const char HTTP_REDIRECT_TEMPLATE[] =
+      "HTTP/1.0 302 Local Redirect from Junkbuster\r\n" 
+      "Pragma: no-cache\r\n"
+      "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+      "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
+      "Location: %s\r\n";
+
+#endif /*  defined(DETECT_MSIE_IMAGES) || defined(USE_IMAGE_LIST) */
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.3 2001/05/20 01:11:40 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.4 2001/05/21 19:32:54 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.3 2001/05/20 01:11:40 jongfoster Ex
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.4  2001/05/21 19:32:54  jongfoster
+ *    Added another #ifdef _WIN_CONSOLE
+ *
  *    Revision 1.3  2001/05/20 01:11:40  jongfoster
  *    Added support for LOG_LEVEL_FATAL
  *    Renamed LOG_LEVEL_FRC to LOG_LEVEL_FORCE,
@@ -230,12 +233,21 @@ void log_error(int loglevel, char *fmt, ...)
       case LOG_LEVEL_INFO:
          outc = sprintf(outbuf, "IJB(%d) Info: ", this_thread);
          break;
+#ifdef PCRS
       case LOG_LEVEL_RE_FILTER:
          outc = sprintf(outbuf, "IJB(%d) Re-Filter: ", this_thread);
          break;
+#endif /* def PCRS */
+#ifdef FORCE_LOAD
       case LOG_LEVEL_FORCE:
          outc = sprintf(outbuf, "IJB(%d) Force: ", this_thread);
          break;
+#endif /* def FORCE_LOAD */
+#ifdef FAST_REDIRECTS
+      case LOG_LEVEL_REDIRECTS:
+         outc = sprintf(outbuf, "IJB(%d) Redirect: ", this_thread);
+         break;
+#endif /* def FAST_REDIRECTS */
       default:
          outc = sprintf(outbuf, "IJB(%d) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
