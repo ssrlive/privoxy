@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.83 2002/04/18 18:21:12 oes Exp $
+ $Id: user-manual.sgml,v 1.84 2002/04/18 21:17:13 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.83 2002/04/18 18:21:12 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.84 2002/04/18 21:17:13 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -198,7 +198,6 @@
  on your system, you need to remove it first, because the packages conflict.
  Otherwise, RPM will try to remove <application>Junkbuster</application>
  automatically, before installing <application>Privoxy</application>.
- future reference.
 </para>
 </sect3>
 
@@ -4427,6 +4426,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.84  2002/04/18 21:17:13  hal9
+ Spell Redhat correctly (ie Red Hat). A few minor grammar corrections.
+
  Revision 1.83  2002/04/18 18:21:12  oes
  Added RPM install detail
 
