@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.25 2002/01/04 15:27:18 oes Exp $
+dnl $Id: configure.in,v 1.26 2002/01/09 14:29:49 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,15 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.26  2002/01/09 14:29:49  oes
+dnl - Added AC_CHECK_FUNC tests for the availability of
+dnl   gethostbyname_r, gethostbyaddr_r, gmtime_r and
+dnl   localtime_r, as well as AC_TRY_COMPILE tests to
+dnl   determine their signatures.
+dnl
+dnl - Fixed a bug with the init of CFLAGS that was
+dnl   reported by barsnick
+dnl
 dnl Revision 1.25  2002/01/04 15:27:18  oes
 dnl Changed quoting of CODE_STATUS for use in make
 dnl
@@ -214,7 +223,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.25 $)
+AC_REVISION($Revision: 1.26 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -598,11 +607,11 @@ AC_OBJEXT
 AC_HEADER_STDC
 AC_C_CONST
 AC_TYPE_SIZE_T
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(char *)
-AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(long long)
-AC_CHECK_SIZEOF(size_t)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(char *, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(long long, 8)
+AC_CHECK_SIZEOF(size_t, 4)
 
 dnl Checks for header files.
 dnl AC_HEADER_SYS_WAIT
