@@ -15,9 +15,6 @@ DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 DEBDIR=`pwd`/debian/privoxy
 
-DB2HTML=jw -f docbook -b html -d `pwd`/ldpOK.dsl\#html
-
-
 CFLAGS="-O2"
 WITHDEBUG=""
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
@@ -31,7 +28,7 @@ configure-stamp:
 
 	autoheader
 	autoconf
-	env CFLAGS=$(CFLAGS) \
+	env CFLAGS=$(CFLAGS) WDUMP=w3m \
 		./configure --prefix=/usr --sysconfdir=/etc \
 		--mandir=/usr/share/man	$(WITHDEBUG) \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
@@ -43,16 +40,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	$(MAKE)
-
-# 	And now we create the documentation (manually):
-	$(MAKE) doc/source/ldpOK.dsl
-	(cd doc/source; \
-	 $(DB2HTML) -o faq faq.sgml; \
-	 $(DB2HTML) -o user-manual user-manual.sgml; \
-	 $(DB2HTML) -o developer-manual developer-manual.sgml; \
-	 docbook2txt faq.sgml; \
-	 docbook2txt user-manual.sgml; \
-	 docbook2txt developer-manual.sgml)
+	$(MAKE) dok-devel dok-user dok-faq
 
 	touch build-stamp
 
@@ -61,13 +49,11 @@ clean:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
-	-$(MAKE) clobber
+	-$(MAKE) clean
+	-$(MAKE) distclean
 	rm -f privoxy 
 	rm -f configure config.h GNUmakefile 
-	rm -f doc/source/ldpOK.dsl
-	rm -rf doc/source/faq doc/source/user-manual \
-		doc/source/developer-manual
-	rm -f doc/source/*.txt
+	rm -f doc/source/ldp.dsl
 
 	dh_clean
 
@@ -84,6 +70,8 @@ install: build
 	    -e 's#^logdir \.#logdir /var/log/privoxy#' \
 		< config > $(DEBDIR)/etc/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
+	install -m 0644 standard.action $(DEBDIR)/etc/privoxy/standard.action
+	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
 	install -m 0644 default.filter $(DEBDIR)/etc/privoxy/default.filter
 	install -m 0644 trust $(DEBDIR)/etc/privoxy/trust
 
@@ -101,7 +89,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf	
-	dh_installdocs
+	dh_installdocs -XCVS
 	dh_installexamples
 	dh_installmenu
 	dh_installlogrotate
