@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.43 2002/03/29 07:40:03 swa Exp $
+# $Id: GNUmakefile.in,v 1.44 2002/03/29 17:42:44 gliptak Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -558,6 +558,14 @@ webserver:
 	find doc/webserver -type d -exec chmod a+rx {} \;
 	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
+webquick:
+	find doc/webserver -type f -exec chmod 664 {} \;
+# not sure if we need next line.swa.
+	chmod 775 doc/webserver/redirect.php
+	find doc/webserver -type d -exec chmod a+rx {} \;
+	cd doc/webserver/submit && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/submit
+
+
 #############################################################################
 # Source file dependencies
 #############################################################################
@@ -656,6 +664,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.44  2002/03/29 17:42:44  gliptak
+# Correcting for Solaris tar limitations
+#
 # Revision 1.43  2002/03/29 07:40:03  swa
 # fixed make webserver. doh
 #
