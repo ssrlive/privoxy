@@ -29,6 +29,9 @@ core
 *.txt
 GNUmakefile
 Makefile
+autom4te.cache
+build-stamp
+configure-stamp
 configure
 config.cache
 config.h
