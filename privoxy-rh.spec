@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.38 2002/06/24 21:44:44 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.39 2002/06/26 17:32:04 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 4
+Release: 5
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -121,7 +121,7 @@ cat trust | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/trust
 cd templates
 for i in `ls`
 do
-	cat $i | sed -e 's/\r$//' > buildroot}%{privoxyconf}/templates/$i
+	cat $i | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/templates/$i
 done
 )
 
@@ -332,6 +332,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Jul 02 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-5
+- Fix typo in templates creation.
+
 * Wed Jun 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-4
 - Fixing issues created by specfile sync between branches
@@ -704,6 +708,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.39  2002/06/26 17:32:04  morcego
+# Fixing issues created by sync between the branches
+#
 # Revision 1.38  2002/06/24 21:44:44  hal9
 # Sync with Karsten's update in 3.0 branch. See changelog.
 #
