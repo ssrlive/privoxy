@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.2 2001/07/29 19:32:00 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.3 2001/11/16 00:46:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.2 2001/07/29 19:32:00 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.3  2001/11/16 00:46:31  jongfoster
+ *    Fixing compiler warnings
+ *
  *    Revision 1.2  2001/07/29 19:32:00  jongfoster
  *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
  *
@@ -138,7 +141,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
    }
 
    /* Allocate array of strings */
-   argv = (char **)malloc(sizeof(char *) * argc);
+   argv = (const char **)malloc(sizeof(const char *) * argc);
 
    /* step through command line replacing spaces with zeros, initialise array */
    argv[0] = szModule;
@@ -176,7 +179,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
    /* Cleanup */
-   free(argv);
+   free((void *)argv);
    free(pszArgs);
 
    return res;
