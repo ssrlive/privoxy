@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.19 2001/07/30 22:14:03 jongfoster Exp $
+# $Id: Makefile.in,v 1.20 2001/08/02 22:04:29 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.20  2001/08/02 22:04:29  jongfoster
+# Removing some remaining references to obsolete w32rulesdlg.[ch]
+#
 # Revision 1.19  2001/07/30 22:14:03  jongfoster
 # Removing obsolete w32rulesdlg.c and w32rulesdlg.h
 #
@@ -209,7 +212,7 @@ SPECIAL_CFLAGS = @SPECIAL_CFLAGS@
 DEBUG_CFLAGS  = -O3 # Full optimization
 
 CFLAGS = @CFLAGS@ @CPPFLAGS@ $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS) \
-         @STATIC_PCRE_ONLY@ -Ipcre
+         @STATIC_PCRE_ONLY@ -Ipcre -Wall
 
 LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
 
