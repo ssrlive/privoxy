@@ -31,6 +31,12 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.5  2001/05/26 13:24:31  jongfoster
+ *    New #define, WIN_GUI_EDIT, enables the (embryonic) Win32 GUI editor.
+ *    This #define cannot be set from ./configure - there's no point, it
+ *    doesn't work yet.  See feature request # 425722
+ *    (I missed this file in my original checkin)
+ *
  *    Revision 1.4  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -106,7 +112,7 @@ IDI_IDLE                ICON    DISCARDABLE     "icons/idle.ico"
 #ifdef _WIN32
 /* LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US */
 #pragma code_page(1252)
-#endif //_WIN32
+#endif /* def _WIN32 */
 
 /*
  * Menus
@@ -272,7 +278,7 @@ BEGIN
         BOTTOMMARGIN, 218
     END
 END
-#endif    // APSTUDIO_INVOKED
+#endif /* def APSTUDIO_INVOKED */
 
 
 /*
