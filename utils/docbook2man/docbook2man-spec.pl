@@ -52,7 +52,7 @@ Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 =cut
 
-# $Id: docbook2man-spec.pl,v 1.1.2.1 2002/08/11 20:01:30 hal9 Exp $
+# $Id: docbook2man-spec.pl,v 1.1.2.2 2002/08/13 03:46:00 hal9 Exp $
 
 use SGMLS;			# Use the SGMLS package.
 use SGMLS::Output;		# Use stack-based output.
@@ -1216,6 +1216,7 @@ sgml('sdata',sub
 {
 	if($_[0] =~ /\[minus \]/) { output "-"; }
 	elsif($_[0] =~ /\[copy  \]/) { output "(C)"; }
+	elsif($_[0] =~ /\[nbsp  \]/) { output " "; }
 	else { die "Unknown SDATA: " . $_[0]; }
 });
 sgml('pi',sub { die "Unknown processing instruction: " . $_[0]; });
