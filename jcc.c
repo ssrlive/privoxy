@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.42 2001/09/21 23:02:02 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.43 2001/10/02 15:32:13 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.42 2001/09/21 23:02:02 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.43  2001/10/02 15:32:13  oes
+ *    Moved generation of hdr
+ *
  *    Revision 1.42  2001/09/21 23:02:02  david__schmidt
  *    Cleaning up 2 compiler warnings on OS/2.
  *
@@ -741,6 +744,7 @@ static void chat(struct client_state *csp)
    log_error(LOG_LEVEL_CONNECT, "OK");
 
    hdr = sed(client_patterns, add_client_headers, csp);
+   list_remove_all(csp->headers);
 
    if (fwd->forward_host || (http->ssl == 0))
    {
