@@ -115,6 +115,34 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
+  <style type="text/css">
+    td.cmd {
+      padding: 2px;
+    }
+    td.cmd a {
+      white-space: nowrap;
+      width: auto;
+      padding: 1px;
+      background-color: #dddddd;
+      color:            #000000;
+      text-decoration: none;
+      border-top:    1px solid #ffffff;
+      border-left:   1px solid #ffffff;
+      border-bottom: 1px solid #000000;
+      border-right:  1px solid #000000;
+    }
+    td.cmd a:hover {
+      background-color: #eeeeee;
+    }
+    td.cmd a:active {
+      border-top:    1px solid #000000;
+      border-left:   1px solid #000000;
+      border-bottom: 1px solid #ffffff;
+      border-right:  1px solid #ffffff;
+    }
+
+      
+  </style>
 </head>
 
 <body>
@@ -141,7 +169,48 @@
 
     <tr>
       <td class="box">
-        <h2>The program was invoked as follows</h2>
+        <h2>The following files are in use:</h2>
+        <p>
+          <table class="transparent">
+            <tr>
+              <th colspan="2">Actions Files:</th>
+            </tr>
+              @actions-filenames@
+           <tr>
+              <th colspan="2">Filter File:</th>
+           </tr>
+           <tr>
+             <td>
+               @re-filter-filename@
+             </td>
+             <td class="cmd">
+               <!-- @if-have-filterfile-start -->
+               <a href="show-status?file=filter">View</a>
+               <!-- if-have-filterfile-end@ -->
+             </td>
+           </tr>
+<!-- @if-trust-support-start -->
+           <tr>
+              <th colspan="2">Trust File:</th>
+           </tr>
+            <td>
+               @trust-filename@
+             </td>
+             <td class="cmd">
+               <!-- @if-have-trustfile-start -->
+               <a href="show-status?file=trust">View</a>
+               <!-- if-have-trustfile-end@ -->
+            </td>
+           </tr>
+<!-- if-trust-support-end@ -->
+          </table>
+        </p>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="box">
+        <h2>Privoxy was invoked as follows:</h2>
         <p>@invocation@</p>
       </td>
     </tr>
@@ -169,22 +238,6 @@
       </td>
     </tr>
 <!-- if-statistics-end@ -->
-
-    <tr>
-      <td class="box">
-        <h2>The following files are in use:</h2>
-        <p>Click a filename to browse</p>
-        <ul>
-          <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
-<!-- @if-pcrs-support-start -->
-          <li>Regex Filter List: <a href="show-status?file=re">@re-filter-filename@</a></li>
-<!-- if-pcrs-support-end@ -->
-<!-- @if-trust-support-start -->
-          <li>Trust List: <a href="show-status?file=trust">@trust-filename@</a></li>
-<!-- if-trust-support-end@ -->
-        </ul>
-      </td>
-    </tr>
 
     <tr>
       <td class="box">
