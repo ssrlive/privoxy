@@ -11,6 +11,10 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.9  2001/08/18 11:35:29  oes
+ *    - Introduced pcrs_strerror()
+ *    - added pcrs_execute_list()
+ *
  *    Revision 1.8  2001/08/15 15:32:50  oes
  *    Replaced the hard limit for the maximum number of matches
  *    by dynamic reallocation
@@ -52,10 +56,12 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.8 2001/08/15 15:32:50 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.9 2001/08/18 11:35:29 oes Exp $"
 
 
+#ifndef _PCRE_H
 #include <pcre.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -101,6 +107,7 @@ typedef struct {
   int backref_count[PCRS_MAX_SUBMATCHES + 2]; /* Array with the number of references to each backref index */
 } pcrs_substitute;
 
+
 /*
  * A match, including all captured subpatterns (submatches)
  * Note: The zeroth is the whole match, the PCRS_MAX_SUBMATCHES + 0th
@@ -114,7 +121,8 @@ typedef struct {
   int submatch_length[PCRS_MAX_SUBMATCHES + 2]; /* Length of each submatch in the subject */
 } pcrs_match;
 
-/* A pcrs job */
+
+/* A PCRS job */
 
 typedef struct PCRS_JOB {
   pcre *pattern;                            /* The compiled pcre pattern */
@@ -142,10 +150,6 @@ extern void             pcrs_free_joblist(pcrs_job *joblist);
 
 /* Info on errors: */
 extern const char *pcrs_strerror(const int error);
-
-/* Expert usage */
-extern int              pcrs_parse_perl_options(const char *optstring, int *flags);
-extern pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int capturecount, int *errptr);
 
 
 #ifdef __cplusplus
