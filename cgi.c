@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.6 2001/06/07 23:05:19 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.7 2001/06/09 10:51:58 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.6 2001/06/07 23:05:19 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.7  2001/06/09 10:51:58  jongfoster
+ *    Changing "show URL info" handler to new style.
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.6  2001/06/07 23:05:19  jongfoster
  *    Removing code related to old forward and ACL files.
  *
@@ -48,61 +52,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.6 2001/06/07 23:05:19 jongfoster Exp $";
  *    Revision 1.3  2001/06/03 19:12:16  oes
  *    introduced new cgi handling
  *
- *    Revision 1.1  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
- *
- *
+ *    No revisions before 1.3
  *
  **********************************************************************/
 
@@ -134,7 +84,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.6 2001/06/07 23:05:19 jongfoster Exp $";
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
-const struct cgi_dispatcher cgi_dispatchers[] = {
+const struct cgi_dispatcher cgi_dispatcher[] = {
    { "show-status", 
          11, cgi_show_status,  
          "Show information about the version and configuration" }, 
@@ -144,14 +94,9 @@ const struct cgi_dispatcher cgi_dispatchers[] = {
    { "send-banner",
          11, cgi_send_banner, 
          "HIDE Send the transparent or \"Junkbuster\" gif" },
-#ifdef TRUST_FILES
-/* { "untrusted-url",
-         15, ij_untrusted_url,
-	      "HIDE Show why a URL was not trusted" }, */
-#endif /* def TRUST_FILES */
    { "",
          0, cgi_default,
-         "HIDE Send a page linking to all unhidden CGIs" },
+         "Junkbuster main page" },
    { NULL, 0, NULL, NULL }
 };
 
@@ -173,12 +118,12 @@ const struct cgi_dispatcher cgi_dispatchers[] = {
  * Returns     :  http_response if match, NULL if nonmatch or handler fail
  *
  *********************************************************************/
-struct http_response *cgi_dispatch(struct client_state *csp)
+struct http_response *dispatch_cgi(struct client_state *csp)
 {
    char *argstring = NULL;
    const struct cgi_dispatcher *d;
    struct map *param_list;
-   struct http_response *response;
+   struct http_response *rsp;
 
    /*
     * Should we intercept ?
@@ -190,7 +135,7 @@ struct http_response *cgi_dispatch(struct client_state *csp)
       /* ..then the path will all be for us */
       argstring = csp->http->path;
    }
-   /* Or it's the host part of HOME_PAGE_URL ? */
+   /* Or it's the host part HOME_PAGE_URL, and the path /config ? */
    else if (   (0 == strcmpic(csp->http->host, HOME_PAGE_URL + 7 ))
             && (0 == strncmpic(csp->http->path,"/config", 7))
             && ((csp->http->path[7] == '/') || (csp->http->path[7] == '\0')))
@@ -204,16 +149,16 @@ struct http_response *cgi_dispatch(struct client_state *csp)
    }
 
    /* 
-    * We have intercepted it.
+    * This is a CGI call.
     */
 
-   /* Get mem for response */
-   if (NULL == ( response = zalloc(sizeof(*response))))
+   /* Get mem for response or fail*/
+   if (NULL == ( rsp = zalloc(sizeof(*rsp))))
    {
       return NULL;
    }
 
-   /* remove any leading slash */
+   /* Remove leading slash */
    if (*argstring == '/')
    {
       argstring++;
@@ -223,22 +168,24 @@ struct http_response *cgi_dispatch(struct client_state *csp)
    log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", 
                             csp->ip_addr_str, csp->http->cmd); 
 
-   for (d = cgi_dispatchers; d->handler; d++)
+   /* Find and start the right CGI function*/
+   for (d = cgi_dispatcher; d->handler; d++)
    {
       if (strncmp(argstring, d->name, d->name_length) == 0)
       {
-         param_list = parse_cgi(argstring + d->name_length);
-         if ((d->handler)(csp, response, param_list))
-	      {
-	         freez(response);
-	      }
+         param_list = parse_cgi_parameters(argstring + d->name_length);
+         if ((d->handler)(csp, rsp, param_list))
+	 {
+	    freez(rsp);
+	 }
 
-	      free_map(param_list);
-	      return(response);
+	 free_map(param_list);
+	 return(finish_http_response(rsp));
       }
    }
 
-   freez(response);
+   /* Can't get here, since cgi_default will match all requests */
+   freez(rsp);
    return(NULL);
 
 }
@@ -246,7 +193,7 @@ struct http_response *cgi_dispatch(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  parse_cgi
+ * Function    :  parse_cgi_parameters
  *
  * Description :  Parse a URL-encoded argument string into name/value
  *                pairs and store them in a struct map list.
@@ -257,7 +204,7 @@ struct http_response *cgi_dispatch(struct client_state *csp)
  * Returns     :  poniter to param list, or NULL if failiure
  *
  *********************************************************************/
-struct map *parse_cgi(char *argstring)
+struct map *parse_cgi_parameters(char *argstring)
 {
    char *tmp, *p;
    char *vector[BUFFER_SIZE];
@@ -286,215 +233,10 @@ struct map *parse_cgi(char *argstring)
 
 /*********************************************************************
  *
- * Function    :  make_http_response
- *
- * Description :  Fill in the missing headers in an http response,
- *                and flatten the headers to an http head.
- *
- * Parameters  :
- *          1  :  rsp = pointer to http_response to be processed
- *
- * Returns     :  length of http head, or 0 on failiure
- *
- *********************************************************************/
-int make_http_response(struct http_response *rsp)
-{
-  char buf[BUFFER_SIZE];
-
-  /* Fill in the HTTP Status */
-  sprintf(buf, "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
-  enlist_first(rsp->headers, buf);
-
-  /* Set the Content-Length */
-  if (rsp->content_length == 0)
-  {
-     rsp->content_length = rsp->body ? strlen(rsp->body) : 0;
-  }
-
-
-  sprintf(buf, "Content-Length: %d", rsp->content_length);
-  enlist(rsp->headers, buf);
-
-  /* Fill in the default headers FIXME: Are these correct? sequence OK? check rfc! */
-  enlist_unique(rsp->headers, "Pragma: no-cache", 7);
-  enlist_unique(rsp->headers, "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT", 14);
-  enlist_unique(rsp->headers, "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT", 8);
-  enlist_unique(rsp->headers, "Content-Type: text/html", 13);
-  enlist(rsp->headers, "");
-  
-
-  /* Write the head */
-  if (NULL == (rsp->head = list_to_text(rsp->headers)))
-  {
-    free_http_response(rsp);
-    return(0);
-  }
- 
-  return(strlen(rsp->head));
-}
-  
-
-/*********************************************************************
- *
- * Function    :  free_http_response
- *
- * Description :  Free the memory occupied by an http_response
- *                and its depandant structures.
- *
- * Parameters  :
- *          1  :  rsp = pointer to http_response to be freed
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void free_http_response(struct http_response *rsp)
-{
-   if(rsp)
-   {
-      freez(rsp->status);
-      freez(rsp->head);
-      freez(rsp->body);
-      destroy_list(rsp->headers);
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  fill_template
- *
- * Description :  CGI support function that loads a given HTML
- *                template from the confdir, and fills it in
- *                by replacing @name@ with value using pcrs,
- *                for each item in the output map.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           3 :  template = name of the HTML template to be used
- *           2 :  answers = map with fill in symbol -> name pairs
- *                FIXME: needs better name!
- *
- * Returns     :  char * with filled out form, or NULL if failiure
- *
- *********************************************************************/
-char *fill_template(struct client_state *csp, char *template, struct map *answers)
-{
-   struct map *m;
-   pcrs_job *job, *joblist = NULL;
-   char buf[BUFFER_SIZE];
-   char *new, *old = NULL;
-   int size;
-   FILE *fp;
-
-   /*
-    * Open template file or fail
-    */
-   snprintf(buf, BUFFER_SIZE, "%s/templates/%s", csp->config->confdir, template);
-
-   if(NULL == (fp = fopen(buf, "r")))
-	{
-	   log_error(LOG_LEVEL_ERROR, "error loading template %s: %E", buf);
-      return NULL;
-	}
-	
-   /* 
-    * Assemble pcrs joblist from answers map
-    */
-   for (m = answers; m; m = m->next)
-	{
-	   int error;
-
-	   snprintf(buf, BUFFER_SIZE, "s°@%s@°%s°ig", m->name, m->value);
-
-	   if(NULL == (job = pcrs_make_job(buf, &error)))
-		{
-		  log_error(LOG_LEVEL_ERROR, "Adding template fill job %s failed with error %d",
-						buf, error);
-		  while ( NULL != (joblist = pcrs_free_job(joblist)) ) {};
-		  return NULL;
-		}
-		else
-		{
-		   job->next = joblist;
-			joblist = job;
-		}
-	}
-
-   /* 
-    * Read the file, ignoring comments
-    */
-	while (fgets(buf, BUFFER_SIZE, fp))
-	{
-      /* skip lines starting with '#' */
-	   if(*buf == '#') continue;
-	
-      old = strsav(old, buf);
-	}
-	fclose(fp);
-
-   /*
-    * Execute the jobs
-    */
-  	size = strlen(old) + 1;
-   new = old;
-
-   for (job = joblist; NULL != job; job = job->next)
-   {
-	   pcrs_exec_substitution(job, old, size, &new, &size);
-      if (old != buf) free(old);
-      old=new;
-	}
-
-   /*
-    * Free the jobs & return
-    */
-   while ( NULL != (joblist = pcrs_free_job(joblist)) ) {};
-   return(new);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  dump_map
- *
- * Description :  HTML-dump a map for debugging
- *
- * Parameters  :
- *          1  :  map = map to dump
- *
- * Returns     :  string with HTML
- *
- *********************************************************************/
-char *dump_map(struct map *map)
-{
-   struct map *p = map;
-   char *ret = NULL;
-
-
-   ret = strsav(ret, "<table>\n");
-
-   while (p)
-   {
-      ret = strsav(ret, "<tr><td><b>");
-      ret = strsav(ret, p->name);
-      ret = strsav(ret, "</b></td><td>");
-      ret = strsav(ret, p->value);
-      ret = strsav(ret, "</td></tr>\n");
-      p = p->next;
-   }
-
-   ret = strsav(ret, "</table>\n");
-   return(ret);
-}
-
-
-/*********************************************************************
- *
  * Function    :  cgi_default
  *
- * Description :  CGI function that is called if no action was given
- *                lists menu of available unhidden CGIs.
+ * Description :  CGI function that is called if no action was given.
+ *                Lists menu of available unhidden CGIs.
  *               
  * Parameters  :
  *           1 :  csp = Current client state (buffers, headers, etc...)
@@ -508,39 +250,24 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
                 struct map *parameters)
 {
    char *p, *tmp = NULL;
-   char buf[BUFFER_SIZE];
-   const struct cgi_dispatcher *d;
-	struct map *exports = NULL;
-
-   /* List available unhidden CGI's and export as "other-cgis" */
-   for (d = cgi_dispatchers; d->handler; d++)
-   {
-      if (strncmp(d->description, "HIDE", 4))
-	   {
-         snprintf(buf, BUFFER_SIZE, "<li><a href=%s/config/%s>%s</a></li>",
-				  HOME_PAGE_URL, d->name, d->description);
-         tmp = strsav(tmp, buf);
-      }
-	}
-	exports = map(exports, "other-cgis", 1, tmp, 0);
+   struct map *exports = default_exports(csp, "");
 
    /* If there were other parameters, export a dump as "cgi-parameters" */
    if(parameters)
-	{
+   {
       p = dump_map(parameters);
-	   tmp = strsav(tmp, "<p>What made you think this cgi takes options?\n"
+      tmp = strsav(tmp, "<p>What made you think this cgi takes parameters?\n"
                         "Anyway, here they are, in case you're interested:</p>\n");
-		tmp = strsav(tmp, p);
-		exports = map(exports, "cgi-parameters", 1, tmp, 0);
+      tmp = strsav(tmp, p);
+      exports = map(exports, "cgi-parameters", 1, tmp, 0);
       free(p);
-	}
-	else
-	{
-	   exports = map(exports, "cgi-parameters", 1, "", 1);
-	}
+   }
+   else
+   {
+      exports = map(exports, "cgi-parameters", 1, "", 1);
+   }
 
    rsp->body = fill_template(csp, "default", exports);
-
    free_map(exports);
    return(0);
 
@@ -570,66 +297,19 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
 {
    if(strcmp(lookup(parameters, "type"), "trans"))
    {
-     rsp->body = bindup(CJBGIF, sizeof(CJBGIF));
-     rsp->content_length = sizeof(CJBGIF);
+     rsp->body = bindup(JBGIF, sizeof(JBGIF));
+     rsp->content_length = sizeof(JBGIF);
    }
    else
    {
-     rsp->body = bindup(CBLANKGIF, sizeof(CBLANKGIF));
-     rsp->content_length = sizeof(CBLANKGIF);
+     rsp->body = bindup(BLANKGIF, sizeof(BLANKGIF));
+     rsp->content_length = sizeof(BLANKGIF);
    }   
 
    enlist(rsp->headers, "Content-Type: image/gif");
 
    return(0);
 }
-
-
-#ifdef FAST_REDIRECTS
-/*********************************************************************
- *
- * Function    :  redirect_url
- *
- * Description :  Checks for redirection URLs and returns a HTTP redirect
- *                to the destination URL.
- *
- * Parameters  :
- *          1  :  http = http_request request, check `basename's of blocklist
- *          2  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  NULL if URL was clean, HTTP redirect otherwise.
- *
- *********************************************************************/
-char *redirect_url(struct http_request *http, struct client_state *csp)
-{
-   char *p, *q;
-
-   p = q = csp->http->path;
-   log_error(LOG_LEVEL_REDIRECTS, "checking path: %s", p);
-
-   /* find the last URL encoded in the request */
-   while (p = strstr(p, "http://"))
-   {
-      q = p++;
-   }
-
-   /* if there was any, generate and return a HTTP redirect */
-   if (q != csp->http->path)
-   {
-      log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
-
-      p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(q));
-      sprintf(p, HTTP_REDIRECT_TEMPLATE, q);
-      return(p);
-   }
-   else
-   {
-      return(NULL);
-   }
-
-}
-#endif /* def FAST_REDIRECTS */
-
 
 
 /*********************************************************************
@@ -655,7 +335,8 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
                     struct map *parameters)
 {
    char *s = NULL;
-   struct map *exports = NULL;
+   int i;
+   struct map *exports = default_exports(csp, "show-status");
 
 #ifdef SPLIT_PROXY_ARGS
    FILE * fp;
@@ -699,12 +380,12 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 
    if (NULL != filename)
    {
- 	   exports = map(exports, "filename", 1, file_description, 1);
+      exports = map(exports, "file-description", 1, file_description, 1);
       exports = map(exports, "filepath", 1, html_encode(filename), 0);
 
       if ((fp = fopen(filename, "r")) == NULL)
       {
-         exports = map(exports, "content", 1, "</pre><h1>ERROR OPENING FILE!</h1><pre>", 1);
+         exports = map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1);
       }
       else
       {
@@ -721,7 +402,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
          fclose(fp);
          exports = map(exports, "contents", 1, s, 0);
       }
-      rsp->body = fill_template(csp, "show-status-file", exports);;
+      rsp->body = fill_template(csp, "show-status-file", exports);
       free_map(exports);
       return(0);
 
@@ -730,38 +411,51 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 #endif /* def SPLIT_PROXY_ARGS */
 
    exports = map(exports, "redirect-url", 1, REDIRECT_URL, 1);
-   exports = map(exports, "version", 1, VERSION, 1);
-   exports = map(exports, "home-page", 1, HOME_PAGE_URL, 1);
-   exports = map(exports, "invocation-args", 1, csp->config->proxy_args_header, 1);
+   
+   s = NULL;
+   for (i=0; i < Argc; i++)
+   {
+      s = strsav(s, Argv[i]);
+      s = strsav(s, " ");
+   }
+   exports = map(exports, "invocation", 1, s, 0);
 
+   exports = map(exports, "options", 1, csp->config->proxy_args, 1);
+   s =   show_rcs();
+   exports = map(exports, "sourceversions", 1, s, 0);  
+   s =   show_defines();
+   exports = map(exports, "defines", 1, s, 0); 
 
 #ifdef STATISTICS
-   exports = map(exports, "statistics", 1, add_stats(NULL), 0);
+   exports = add_stats(exports);
 #else
-   exports = map(exports, "statistics", 1, "", 1);
+   exports = map_block_killer(exports, "statistics");
 #endif /* ndef STATISTICS */
 
 #ifdef SPLIT_PROXY_ARGS
+
+   exports = map_block_killer(exports, "no-split-args");
+
    if (csp->actions_list)
    {
       exports = map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
-	}
+   }
    else
-	{
- 	   exports = map(exports, "actions-filename", 1, "None specified", 1);
-	}
+   {
+      exports = map(exports, "actions-filename", 1, "None specified", 1);
+   }
 
 #ifdef PCRS
    if (csp->rlist)
    {
       exports = map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
-	}
+   }
    else
-	{
- 	   exports = map(exports, "re-filter-filename", 1, "None specified", 1);
-	}
+   {
+      exports = map(exports, "re-filter-filename", 1, "None specified", 1);
+   }
 #else
-   exports = map(exports, "re-filter-killer-start.*re-filter-killer-end", 1, "", 1);
+   exports = map_block_killer(exports, "pcrs-support");
 #endif /* ndef PCRS */
 
 #ifdef TRUST_FILES
@@ -774,13 +468,11 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
  	   exports = map(exports, "trust-filename", 1, "None specified", 1);
 	}
 #else
-   exports = map(exports, "acl-killer-start.*acl-killer-end", 1, "", 1);
+   exports = map_block_killer(exports, "trust-support");
 #endif /* ndef TRUST_FILES */
 
-   exports = map(exports, ".list", 1, "" , 1);
-
 #else /* ifndef SPLIT_PROXY_ARGS */
-   exports = map(exports, "magic-eliminator-start.*magic-eliminator-end", 1, "", 1);
+   exports = map_block_killer(exports, "split-args");
 
    if (csp->clist)
    {
@@ -791,21 +483,17 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    if (csp->rlist)
    {
       map(exports, "rlist", 1, csp->rlist->proxy_args , 1);
-	}
+   }
 #endif /* def PCRS */
 
 #ifdef TRUST_FILES
     if (csp->tlist)
    {
       map(exports, "tlist", 1, csp->tlist->proxy_args , 1);
-	}
+   }
 #endif /* def TRUST_FILES */
 
 #endif /* ndef SPLIT_PROXY_ARGS */
-
-	s = end_proxy_args(csp->config);
-   exports = map(exports, "rcs-and-defines", 1, s , 0);
-
 
    rsp->body = fill_template(csp, "show-status", exports);
    free_map(exports);
@@ -818,38 +506,52 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
  *
  * Function    :  cgi_show_url_info
  *
- * Description :  (please fill me in)
+ * Description :  CGI function that determines and shows which actions
+ *                junkbuster will perform for a given url, and which
+ *                matches starting from the defaults have lead to that.
  *
  * Parameters  :
- *          1  :  http = http_request request for crunched URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
  *
- * Returns     :  ???FIXME
+ * CGI Parameters :
+ *            url : The url whose actions are to be determined.
+ *                  If url is unset, the url-given conditional will be
+ *                  set, so that all but the form can be suppressed in
+ *                  the template.
+ *
+ * Returns     :  0
  *
  *********************************************************************/
 int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
                       struct map *parameters)
 {
-   const char * host_param = lookup(parameters, "url");
-   char * host = NULL;
+   struct map *exports = default_exports(csp, "show-url-info");
+   char *url_param, *host = NULL;
 
-   if (*host_param != '\0')
+   if (NULL == (url_param = strdup(lookup(parameters, "url"))) || *url_param == '\0')
    {
-      host = strdup(host_param);
+      exports = map_block_killer(exports, "url-given");
+      exports = map(exports, "url", 1, "", 1);
    }
-   if (host != NULL)
+   else
    {
-      char * matches = NULL;
-      char * path;
-      char * s;
+      char *matches = NULL;
+      char *path;
+      char *s;
       int port = 80;
+      int hits = 0;
       struct file_list *fl;
       struct url_actions *b;
       struct url_spec url[1];
       struct current_action_spec action[1];
-      struct map *exports = NULL;
+      
+      host = url_param;
+      host += (strncmp(url_param, "http://", 7)) ? 0 : 7;
 
-      exports = map(exports, "url", 1, html_encode(host), 0);
+      exports = map(exports, "url", 1, host, 1);
+      exports = map(exports, "url-html", 1, html_encode(host), 0);
 
       init_current_action(action);
 
@@ -858,10 +560,10 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
 
       if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
       {
-         exports = map(exports, "matches", 1, "" , 1);
+         exports = map(exports, "matches", 1, "none" , 1);
          exports = map(exports, "final", 1, lookup(exports, "default"), 1);
 
-         freez(host);
+         freez(url_param);
          free_current_action(action);
 
          rsp->body = fill_template(csp, "show-url-info", exports);
@@ -893,10 +595,10 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       /* if splitting the domain fails, punt */
       if (url->dbuf == NULL)
       {
-         exports = map(exports, "matches", 1, "" , 1);
+         exports = map(exports, "matches", 1, "none" , 1);
          exports = map(exports, "final", 1, lookup(exports, "default"), 1);
 
-         freez(host);
+         freez(url_param);
          freez(path);
          free_current_action(action);
 
@@ -929,18 +631,26 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
                   freez(s);
 
                   merge_current_action(action, b->action);
+                  hits++;
                }
             }
          }
       }
 
-      exports = map(exports, "matches", 1, matches , 0);
+      if (hits)
+      {
+         exports = map(exports, "matches", 1, matches , 0);
+      }
+      else
+      {
+         exports = map(exports, "matches", 1, "none", 1);
+      }
       matches = NULL;
 
       freez(url->dbuf);
       freez(url->dvec);
 
-      freez(host);
+      freez(url_param);
       freez(path);
 
       s = current_action_to_text(action);
@@ -948,135 +658,393 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       s = NULL;
 
       free_current_action(action);
-
-      rsp->body = fill_template(csp, "show-url-info", exports);
-      free_map(exports);
-
-      return 0;
    }
-   else
-   {
-      rsp->body = fill_template(csp, "show-url-info-form", NULL);
 
-      return 0;
-   }
+   rsp->body = fill_template(csp, "show-url-info", exports);
+   free_map(exports);
+   return 0;
+
 }
 
 
-
-#ifdef TRUST_FILES
 /*********************************************************************
  *
- * Function    :  ij_untrusted_url
+ * Function    :  error_response
  *
- * Description :  This "crunch"es "http:/any.thing/ij-untrusted-url" and
- *                returns a web page describing why it was untrusted.
+ * Description :  returns an http_response that explains the reason
+ *                why a request failed.
  *
  * Parameters  :
- *          1  :  http = http_request request for crunched URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  template = Which template should be used for the answer
+ *          3  :  errno = system error number
  *
- * Returns     :  A string that contains why this was untrusted.
+ * Returns     :  NULL if no memory, else http_response
  *
  *********************************************************************/
-char *ij_untrusted_url(struct http_request *http, struct client_state *csp)
+struct http_response *error_response(struct client_state *csp, const char *template, int err)
 {
-   int n;
-   char *hostport, *path, *refer, *p, *v[9];
-   char buf[BUFFER_SIZE];
-   struct url_spec **tl, *t;
+   struct http_response *rsp;
+   struct map *exports = default_exports(csp, NULL);
 
-
-   static const char format[] =
-      "HTTP/1.0 200 OK\r\n"
-      "Pragma: no-cache\n"
-      "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\n"
-      "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\n"
-      "Content-Type: text/html\n\n"
-      "<html>\n"
-      "<head>\n"
-      "<title>Internet Junkbuster: Request for untrusted URL</title>\n"
-      "</head>\n"
-      BODY
-      "<center><h1>"
-      BANNER
-      "</h1></center>"
-      "The " BANNER " Proxy "
-      "<A href=\"" HOME_PAGE_URL "\">"
-      "(" HOME_PAGE_URL ") </A>"
-      "intercepted the request for %s%s\n"
-      "because the URL is not trusted.\n"
-      "<br><br>\n";
-
-   if ((n = ssplit(http->path, "?+", v, SZ(v), 0, 0)) == 4)
+   if (NULL == ( rsp = (struct http_response *)zalloc(sizeof(*rsp))))
    {
-      hostport = url_decode(v[1]);
-      path     = url_decode(v[2]);
-      refer    = url_decode(v[3]);
+      return NULL;
+   }  
+
+      exports = map(exports, "host-html", 1, html_encode(csp->http->host), 0);
+      exports = map(exports, "hostport", 1, csp->http->hostport, 1);
+      exports = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+      exports = map(exports, "path", 1, csp->http->path, 1);
+      exports = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+      exports = map(exports, "error", 1, safe_strerror(err), 0);
+      exports = map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
+
+      rsp->body = fill_template(csp, template, exports);
+      free_map(exports);
+      
+      if (!strcmp(template, "no-such-domain"))
+      {
+         rsp->status = strdup("404 No such domain"); 
+      }
+      else if (!strcmp(template, "connect-failed"))
+      {
+         rsp->status = strdup("503 Connect failed");
+      }
+
+      return(finish_http_response(rsp));
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  finish_http_response
+ *
+ * Description :  Fill in the missing headers in an http response,
+ *                and flatten the headers to an http head.
+ *
+ * Parameters  :
+ *          1  :  rsp = pointer to http_response to be processed
+ *
+ * Returns     :  http_response, or NULL on failiure
+ *
+ *********************************************************************/
+struct http_response *finish_http_response(struct http_response *rsp)
+{
+  char buf[BUFFER_SIZE];
+
+  /* 
+   * Fill in the HTTP Status
+   */
+  sprintf(buf, "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
+  enlist_first(rsp->headers, buf);
+
+  /* 
+   * Set the Content-Length
+   */
+  if (rsp->content_length == 0)
+  {
+     rsp->content_length = rsp->body ? strlen(rsp->body) : 0;
+  }
+  sprintf(buf, "Content-Length: %d", rsp->content_length);
+  enlist(rsp->headers, buf);
+
+  /* 
+   * Fill in the default headers FIXME: Are these correct? sequence OK? check rfc!
+   */
+  enlist_unique(rsp->headers, "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT", 14);
+  enlist_unique(rsp->headers, "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT", 8);
+  enlist_unique(rsp->headers, "Content-Type: text/html", 13);
+  enlist(rsp->headers, "");
+  
+
+  /* 
+   * Write the head
+   */
+  if (NULL == (rsp->head = list_to_text(rsp->headers)))
+  {
+    free_http_response(rsp);
+    return(NULL);
+  }
+  rsp->head_length = strlen(rsp->head);
+
+  return(rsp);
+
+}
+  
+
+/*********************************************************************
+ *
+ * Function    :  free_http_response
+ *
+ * Description :  Free the memory occupied by an http_response
+ *                and its depandant structures.
+ *
+ * Parameters  :
+ *          1  :  rsp = pointer to http_response to be freed
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void free_http_response(struct http_response *rsp)
+{
+   if(rsp)
+   {
+      freez(rsp->status);
+      freez(rsp->head);
+      freez(rsp->body);
+      destroy_list(rsp->headers);
+      freez(rsp);
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  fill_template
+ *
+ * Description :  CGI support function that loads a given HTML
+ *                template from the confdir, and fills it in
+ *                by replacing @name@ with value using pcrs,
+ *                for each item in the output map.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           3 :  template = name of the HTML template to be used
+ *           2 :  exports = map with fill in symbol -> name pairs
+ *
+ * Returns     :  char * with filled out form, or NULL if failiure
+ *
+ *********************************************************************/
+char *fill_template(struct client_state *csp, const char *template, struct map *exports)
+{
+   struct map *m;
+   pcrs_job *job, *joblist = NULL;
+   char buf[BUFFER_SIZE];
+   char *new, *old = NULL;
+   int size;
+   FILE *fp;
+
+
+   /*
+    * Open template file or fail
+    */
+   snprintf(buf, BUFFER_SIZE, "%s/templates/%s", csp->config->confdir, template);
+
+   if(NULL == (fp = fopen(buf, "r")))
+   {
+      log_error(LOG_LEVEL_ERROR, "error loading template %s: %E", buf);
+      return NULL;
+   }
+	
+
+   /* 
+    * Assemble pcrs joblist from exports map
+    */
+   for (m = exports; m; m = m->next)
+   {
+      int error;
+
+      /* Enclose name in @@ */
+      snprintf(buf, BUFFER_SIZE, "@%s@", m->name);
+
+      /* Make and chain in job */
+      if ( NULL == (job = (pcrs_make_job(buf, m->value, "sigTU", &error))) ) 
+      {
+         log_error(LOG_LEVEL_ERROR, "Error compiling template fill job %s: %d", m->name, error);
+      }
+      else
+      {
+         job->next = joblist;
+         joblist = job;
+      }
+   }
+
+
+   /* 
+    * Read the file, ignoring comments
+    */
+   while (fgets(buf, BUFFER_SIZE, fp))
+   {
+      /* skip lines starting with '#' */
+      if(*buf == '#') continue;
+	
+      old = strsav(old, buf);
+   }
+   fclose(fp);
+
+
+   /*
+    * Execute the jobs
+    */
+   size = strlen(old) + 1;
+   new = old;
+
+   for (job = joblist; NULL != job; job = job->next)
+   {
+      pcrs_execute(job, old, size, &new, &size);
+      if (old != buf) free(old);
+      old = new;
+   }
+
+
+   /*
+    * Free the jobs & return
+    */
+   pcrs_free_joblist(joblist);
+   return(new);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  default_exports
+ *
+ * Description :  returns a struct map list that contains exports
+ *                which are common to all CGI functions.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  caller = name of CGI who calls us and which should
+ *                         be excluded from the generated menu.
+ * Returns     :  NULL if no memory, else map
+ *
+ *********************************************************************/
+struct map *default_exports(struct client_state *csp, char *caller)
+{
+   struct map *exports = NULL;
+   char buf[20];
+
+   exports = map(exports, "version", 1, VERSION, 1);
+   exports = map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1);
+   exports = map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1);
+   exports = map(exports, "admin-address", 1, csp->config->admin_address ? csp->config->admin_address : "fill@me.in.please", 1);
+   exports = map(exports, "homepage", 1, HOME_PAGE_URL, 1);
+   exports = map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1);
+   exports = map(exports, "menu", 1, make_menu(caller), 0);
+   exports = map(exports, "code-status", 1, CODE_STATUS, 1);
+
+   snprintf(buf, 20, "%d", csp->config->hport);
+   exports = map(exports, "my-port", 1, buf, 1);
+
+   if(!strcmp(CODE_STATUS, "stable"))
+   {
+      exports = map_block_killer(exports, "unstable");
+   }
+
+   if(csp->config->proxy_info_url != NULL)
+   {
+      exports = map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
    }
    else
    {
-      hostport = strdup("undefined_host");
-      path     = strdup("/undefined_path");
-      refer    = strdup("undefined");
-   }
+      exports = map_block_killer(exports, "have-proxy-info");
+   }   
 
-   n  = sizeof(format);
-   n += strlen(hostport);
-   n += strlen(path    );
-
-   if ((p = (char *)malloc(n)))
-   {
-      sprintf(p, format, hostport, path);
-   }
-
-   strsav(p, "The referrer in this request was <strong>");
-   strsav(p, refer);
-   strsav(p, "</strong><br>\n");
-
-   freez(hostport);
-   freez(path    );
-   freez(refer   );
-
-   p = strsav(p, "<h3>The following referrers are trusted</h3>\n");
-
-   for (tl = csp->config->trust_list; (t = *tl) ; tl++)
-   {
-      sprintf(buf, "%s<br>\n", t->spec);
-      p = strsav(p, buf);
-   }
-
-   if (csp->config->trust_info->next)
-   {
-      struct list *l;
-
-      strcpy(buf,
-         "<p>"
-         "You can learn more about what this means "
-         "and what you may be able to do about it by "
-         "reading the following documents:<br>\n"
-         "<ol>\n"
-      );
-
-      p = strsav(p, buf);
-
-      for (l = csp->config->trust_info->next; l ; l = l->next)
-      {
-         sprintf(buf,
-            "<li> <a href=%s>%s</a><br>\n",
-               l->str, l->str);
-         p = strsav(p, buf);
-      }
-
-      p = strsav(p, "</ol>\n");
-   }
-
-   p = strsav(p, "</body>\n" "</html>\n");
-
-   return(p);
+   return(exports);
 
 }
-#endif /* def TRUST_FILES */
+
+
+/*********************************************************************
+ *
+ * Function    :  map_block_killer
+ *
+ * Description :  Convenience function.
+ *                Adds a "killer" for the conditional HTML-template
+ *                block <name>, i.e. a substitution of the regex
+ *                "if-<name>-start.*if-<name>-end" to the given
+ *                export list.
+ *
+ * Parameters  :  
+ *          1  :  exports = map to extend
+ *          2  :  name = name of conditional block
+ *
+ * Returns     :  extended map
+ *
+ *********************************************************************/
+struct map *map_block_killer(struct map *exports, char *name)
+{
+   char buf[1000]; /* Will do, since the names are hardwired */
+
+   snprintf(buf, 1000, "if-%s-start.*if-%s-end", name, name);
+   exports = map(exports, buf, 1, "", 1);
+
+   return(exports);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  make_menu
+ *
+ * Description :  Returns an HTML-formatted menu of the available 
+ *                unhidden CGIs, excluding the one given in <self>.
+ *
+ * Parameters  :  self = name of CGI to leave out, can be NULL
+ *
+ * Returns     :  menu string
+ *
+ *********************************************************************/
+char *make_menu(const char *self)
+{
+   const struct cgi_dispatcher *d;
+   char buf[BUFFER_SIZE], *tmp = NULL;
+
+   if (self == NULL) self = "NO-SUCH-CGI!";
+
+   /* List available unhidden CGI's and export as "other-cgis" */
+   for (d = cgi_dispatcher; d->handler; d++)
+   {
+      if (strncmp(d->description, "HIDE", 4) && strcmp(d->name, self))
+      {
+         snprintf(buf, BUFFER_SIZE, "<li><a href=%s/config/%s>%s</a></li>\n",
+		       HOME_PAGE_URL, d->name, d->description);
+         tmp = strsav(tmp, buf);
+      }
+   }
+   return(tmp);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  dump_map
+ *
+ * Description :  HTML-dump a map for debugging
+ *
+ * Parameters  :
+ *          1  :  map = map to dump
+ *
+ * Returns     :  string with HTML
+ *
+ *********************************************************************/
+char *dump_map(struct map *map)
+{
+   struct map *p = map;
+   char *ret = NULL;
+
+
+   ret = strsav(ret, "<table>\n");
+
+   while (p)
+   {
+      ret = strsav(ret, "<tr><td><b>");
+      ret = strsav(ret, p->name);
+      ret = strsav(ret, "</b></td><td>");
+      ret = strsav(ret, p->value);
+      ret = strsav(ret, "</td></tr>\n");
+      p = p->next;
+   }
+
+   ret = strsav(ret, "</table>\n");
+   return(ret);
+
+}
 
 
 #ifdef STATISTICS
@@ -1084,24 +1052,18 @@ char *ij_untrusted_url(struct http_request *http, struct client_state *csp)
  *
  * Function    :  add_stats
  *
- * Description :  Statistics function of JB.  Called by `show_proxy_args'.
+ * Description :  Add the blocking statistics to a given map.
  *
  * Parameters  :
- *          1  :  s = string that holds the proxy args description page
+ *          1  :  exports = map to write to.
  *
- * Returns     :  A pointer to the descriptive status web page.
+ * Returns     :  pointer to extended map
  *
  *********************************************************************/
-char *add_stats(char *s)
+struct map *add_stats(struct map *exports)
 {
-   /*
-    * Output details of the number of requests rejected and
-    * accepted. This is switchable in the junkbuster config.
-    * Does nothing if this option is not enabled.
-    */
-
    float perc_rej;   /* Percentage of http requests rejected */
-   char out_str[81];
+   char buf[1000];
    int local_urls_read     = urls_read;
    int local_urls_rejected = urls_rejected;
 
@@ -1115,30 +1077,29 @@ char *add_stats(char *s)
     * urls_rejected--; * This will be incremented subsequently *
     */
 
-   s = strsav(s,"<h2>Statistics for this " BANNER ":</h2>\n");
-
    if (local_urls_read == 0)
    {
-
-      s = strsav(s,"No activity so far!\n");
-
+      exports = map_block_killer(exports, "have-stats");
    }
    else
    {
+      exports = map_block_killer(exports, "have-no-stats");
 
       perc_rej = (float)local_urls_rejected * 100.0F /
             (float)local_urls_read;
 
-      sprintf(out_str,
-         "%d requests received, %d filtered "
-         "(%6.2f %%).",
-         local_urls_read, 
-         local_urls_rejected, perc_rej);
+      sprintf(buf, "%d", local_urls_read);
+      exports = map(exports, "requests-received", 1, buf, 1);
 
-      s = strsav(s,out_str);
+      sprintf(buf, "%d", local_urls_rejected);
+      exports = map(exports, "requests-blocked", 1, buf, 1);
+
+      sprintf(buf, "%6.2f", perc_rej);
+      exports = map(exports, "percent-blocked", 1, buf, 1);
    }
 
-   return(s);
+   return(exports);
+
 }
 #endif /* def STATISTICS */
 
