@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.4 2001/06/08 20:54:18 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.5 2001/06/09 09:14:11 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.5  2001/06/09 09:14:11  swa
+# shamelessly adapted RPM stuff from the newest rpm that
+# RedHat provided for the JB.
+#
 # Revision 1.4  2001/06/08 20:54:18  swa
 # type with status file. remove forward et. al from file list.
 #
@@ -43,81 +47,60 @@
 #
 #
 #
-%define PACKAGE_NAME junkbuster
-%define PACKAGE_URL http://ijbswa.sourceforge.net
 Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
-Name: %PACKAGE_NAME
-Version: 2.9
-Release: 4
+Name: junkbuster
+Version: 2.9.4
+Release: 1
 Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 Copyright: GPL
 BuildRoot: %{_tmppath}/%{name}-root
 Group: Networking/Utilities
-URL: %PACKAGE_URL
+URL: http://ijbswa.sourceforge.net/
 Packager: Stefan Waldherr <stefan@waldherr.org>
-Distribution: defineme
 Obsoletes: junkbuster-raw junkbuster-blank
 Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 Conflicts: junkbuster-raw junkbuster-blank
 
-#
-# -----------------------------------------------------------------------------
-#
 %description
 The Internet Junkbuster stops your browser from displaying the
 advertisement images that pervade many commercial web pages.  Since
 your browser has to download fewer images, surfing the web should be
 faster.
 
-#
-# -----------------------------------------------------------------------------
-#
+%define ijbconf %{_sysconfdir}/junkbuster
+
 %prep
-
-#
-# -----------------------------------------------------------------------------
-#
-
-# 
-%setup -c -n ijbswa
-
-#
-# -----------------------------------------------------------------------------
-#
+%setup -c -n %{name}-%{version}-%{release}
 %build
-#export DISTNAME='\"%PACKAGE_NAME-%PACKAGE_VERSION-%PACKAGE_RELEASE\"'
-#export DISTURL='\"%PACKAGE_URL\"'
-#make MORE_CFLAGS="$RPM_OPT_FLAGS"' -D_DISTNAME="$(DISTNAME)" -D_DISTURL="$(DISTURL)"'
-# adds 486 optimization and stuff => bad
-#make MORE_CFLAGS=' -D_DISTNAME="DDD" -D_DISTURL="UUU"'
-./configure
+%configure
 make
 strip junkbuster
 
-#
-# -----------------------------------------------------------------------------
-#
 %pre
 /usr/sbin/useradd -d /etc/junkbuster -u 73 -r junkbust > /dev/null 2>&1 || /bin/true
 
-#
-# -----------------------------------------------------------------------------
-#
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/var/log/junkbuster \
-	$RPM_BUILD_ROOT%{_sbindir} \
-	$RPM_BUILD_ROOT%{_mandir}/man8 \
-	$RPM_BUILD_ROOT/etc/{junkbuster,junkbuster/templates,logrotate.d,cron.weekly,cron.monthly,rc.d/init.d}
-install -s -m 744 junkbuster $RPM_BUILD_ROOT/usr/sbin/junkbuster
+mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
+         ${RPM_BUILD_ROOT}%{_mandir}/man8 \
+         ${RPM_BUILD_ROOT}/var/log/junkbuster \
+         ${RPM_BUILD_ROOT}%{ijbconf}/templates \
+         ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
+         ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
+
+install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
 cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
-cp -f permissionsfile $RPM_BUILD_ROOT/etc/junkbuster/permissionsfile
-cp -f re_filterfile $RPM_BUILD_ROOT/etc/junkbuster/re_filterfile
-# cp -f blocklist $RPM_BUILD_ROOT/etc/junkbuster/blocklist
-# cp -f imagelist $RPM_BUILD_ROOT/etc/junkbuster/imagelist
-# cp -f cookiefile $RPM_BUILD_ROOT/etc/junkbuster/cookiefile
-#cp -f aclfile $RPM_BUILD_ROOT/etc/junkbuster/aclfile
+cp -f permissionsfile $RPM_BUILD_ROOT%{ijbconf}/permissionsfile
+cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
+cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
+cp -f templates/default $RPM_BUILD_ROOT%{ijbconf}/templates/
+cp -f templates/show-status  $RPM_BUILD_ROOT%{ijbconf}/templates/
+cp -f templates/show-status-file  $RPM_BUILD_ROOT%{ijbconf}/templates/
+cp -f junkbuster.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/junkbuster
+install -m 755 junkbuster.init $RPM_BUILD_ROOT/etc/rc.d/init.d/junkbuster
+install -m 744 -d $RPM_BUILD_ROOT/var/log/junkbuster
+
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
 cat config | \
@@ -130,70 +113,38 @@ cat config | \
 #    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
     $RPM_BUILD_ROOT/etc/junkbuster/config
-#cp -f forward $RPM_BUILD_ROOT/etc/junkbuster/forward
-cp -f trust $RPM_BUILD_ROOT/etc/junkbuster/trust
-# cp -f popup $RPM_BUILD_ROOT/etc/junkbuster/popup
-cp -f templates/default $RPM_BUILD_ROOT/etc/junkbuster/templates/
-cp -f templates/show-status  $RPM_BUILD_ROOT/etc/junkbuster/templates/
-cp -f templates/show-status-file  $RPM_BUILD_ROOT/etc/junkbuster/templates/
-cp -f junkbuster.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/junkbuster
-install -m 755 junkbuster.init $RPM_BUILD_ROOT/etc/rc.d/init.d/junkbuster
-install -m 744 -d $RPM_BUILD_ROOT/var/log/junkbuster
 
-#
-# -----------------------------------------------------------------------------
-#
+%post
+if {[ "$1" = "1" ]; then
+        /sbin/chkconfig --add junkbuster
+fi
+
 %preun
 if [ "$1" = "0" ]; then
-	/sbin/service junkbuster stop > /dev/null 2>&1
+	/sbin/service junkbuster stop > /dev/null 2>&1 ||:
 	/sbin/chkconfig --del junkbuster
 fi
 
-#
-# -----------------------------------------------------------------------------
-#
 %postun
 if [ "$1" -ge "1" ]; then
 	/sbin/service junkbuster condrestart > /dev/null 2>&1
 fi
 
-#
-# -----------------------------------------------------------------------------
-#
-%post
-/sbin/chkconfig --add junkbuster
-
-#
-# -----------------------------------------------------------------------------
-#
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-#
-# -----------------------------------------------------------------------------
-#
 %files
 %defattr(-,root,root)
-# %doc ijbfaq.html ijbman.html README README.TOO gpl.html 
+# %doc ijbfaq.html ijbman.html README README.TOO gpl.html
 %doc junkbuster.weekly junkbuster.monthly
-%dir /etc/junkbuster
-%config /etc/junkbuster/config
-%config /etc/junkbuster/permissionsfile
-%config /etc/junkbuster/re_filterfile
-%config /etc/junkbuster/trust
-%dir /etc/junkbuster/templates
-%config /etc/junkbuster/templates/default
-%config /etc/junkbuster/templates/show-status
-%config /etc/junkbuster/templates/show-status-file
+%dir %{ijbconf}
+%config %{ijbconf}/*
 %attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
-%config /etc/logrotate.d/junkbuster
+%config %{_sysconfdir}/logrotate.d/junkbuster
 %attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
-%{_mandir}/*/*
+%{_mandir}/man8/*
 %config /etc/rc.d/init.d/junkbuster
 
-#
-# -----------------------------------------------------------------------------
-#
 
 %changelog
 
