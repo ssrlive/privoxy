@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.16 2002/06/03 00:28:16 hal9 Exp $
+ $Id: contacting.sgml,v 1.15.2.2 2002/07/26 15:21:33 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -19,7 +19,6 @@
   README
   user-manual
   webserver/index.sgml
-  privoxy-index.html
   announce.sgml
 
 -->
@@ -106,7 +105,9 @@
  New, improved <filename>default.action</filename> files will occasionally be made
  available based on your feedback. These will be announced on the <ulink
  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
- list and available from our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
+ list and available from our the <ulink
+ url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
+ our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
 </para>
 </sect2>
 
