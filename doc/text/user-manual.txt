@@ -2,7 +2,7 @@ Privoxy User Manual
 
 Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $
+$Id: user-manual.sgml,v 1.111 2002/05/14 23:01:36 oes Exp $
 
 The user manual gives users information on how to install, configure and use 
 Privoxy.
@@ -30,7 +30,7 @@ Table of Contents
    
     2.1. Binary Packages
        
-        2.1.1. Red Hat and SuSE RPMs
+        2.1.1. Red Hat, SuSE RPMs and Conectiva
         2.1.2. Debian
         2.1.3. Windows
         2.1.4. Solaris, NetBSD, FreeBSD, HP-UX
@@ -44,7 +44,7 @@ Table of Contents
 4. Quickstart to Using Privoxy
 5. Starting Privoxy
    
-    5.1. RedHat and Debian
+    5.1. RedHat, Conectiva and Debian
     5.2. SuSE
     5.3. Windows
     5.4. Solaris, NetBSD, FreeBSD, HP-UX and others
@@ -111,30 +111,30 @@ Table of Contents
        
     8.5. Actions
        
-        8.5.1. +add-header
-        8.5.2. +block
-        8.5.3. +deanimate-gifs
-        8.5.4. +downgrade-http-version
-        8.5.5. +fast-redirects
-        8.5.6. +filter
-        8.5.7. +hide-forwarded-for-headers
-        8.5.8. +hide-from-header
-        8.5.9. +hide-referer
-        8.5.10. +hide-user-agent
-        8.5.11. +handle-as-image
-        8.5.12. +set-image-blocker
-        8.5.13. +limit-connect
-        8.5.14. +prevent-compression
-        8.5.15. +session-cookies-only
-        8.5.16. +prevent-reading-cookies
-        8.5.17. +prevent-setting-cookies
-        8.5.18. +kill-popups
-        8.5.19. +send-vanilla-wafer
-        8.5.20. +send-wafer
+        8.5.1. add-header
+        8.5.2. block
+        8.5.3. crunch-incoming-cookies
+        8.5.4. crunch-outgoing-cookies
+        8.5.5. deanimate-gifs
+        8.5.6. downgrade-http-version
+        8.5.7. fast-redirects
+        8.5.8. filter
+        8.5.9. handle-as-image
+        8.5.10. hide-forwarded-for-headers
+        8.5.11. hide-from-header
+        8.5.12. hide-referrer
+        8.5.13. hide-user-agent
+        8.5.14. kill-popups
+        8.5.15. limit-connect
+        8.5.16. prevent-compression
+        8.5.17. send-vanilla-wafer
+        8.5.18. send-wafer
+        8.5.19. session-cookies-only
+        8.5.20. set-image-blocker
         8.5.21. Summary
-        8.5.22. Sample Actions Files
        
     8.6. Aliases
+    8.7. Sample Actions Files
    
 9. The Filter File
    
@@ -195,7 +195,7 @@ currently under development:
    
   * Modularized configuration that allows for standard settings and user
     settings to reside in separate files, so that installing updated actions
-    files won't overwrite idividual user settings.
+    files won't overwrite individual user settings.
    
   * HTTP/1.1 compliant (but not all optional 1.1 features are supported).
    
@@ -233,9 +233,9 @@ of operating systems, and as raw source code. For most users, we recommend
 using the packages, which can be downloaded from our Privoxy Project Page.
 
 Note: If you have a previous Junkbuster or Privoxy installation on your system,
-you will need to remove it. Some platforms do this for you as part of their
-installation procedure. (See below for your platform). In any case be sure to
-backup your old configuration if it is valuable to you. See the note to
+you will need to remove it. On some platforms, this may be done for you as part
+of their installation procedure. (See below for your platform). In any case be
+sure to backup your old configuration if it is valuable to you. See the note to
 upgraders section below.
 
 -------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ How to install the binary packages depends on your operating system:
 
 -------------------------------------------------------------------------------
 
-2.1.1. Red Hat and SuSE RPMs
+2.1.1. Red Hat, SuSE RPMs and Conectiva
 
 RPMs can be installed with rpm -Uvh privoxy-2.9.15-1.rpm, and will use /etc/
 privoxy for the location of configuration files.
@@ -433,7 +433,7 @@ A quick list of things to be aware of before upgrading:
     the section Starting Privoxy.
    
   * Set your browser to use Privoxy as HTTP and HTTPS proxy by setting the
-    proxy configuration for address of localhost and port 8118. (Junkbuster and
+    proxy configuration for address of 127.0.0.1 and port 8118. (Junkbuster and
     earlier versions of Privoxy used port 8000.) See the section Starting
     Privoxy.
    
@@ -455,14 +455,14 @@ A quick list of things to be aware of before upgrading:
 5. Starting Privoxy
 
 Before launching Privoxy for the first time, you will want to configure your
-browser(s) to use Privoxy as a HTTP and HTTPS proxy. The default is localhost
-for the proxy address, and port 8118 (earlier versions used port 8000). This is
-the one configuration step that must be done!
+browser(s) to use Privoxy as a HTTP and HTTPS proxy. The default is 127.0.0.1
+(or localhost) for the proxy address, and port 8118 (earlier versions used port
+8000). This is the one configuration step that must be done!
 
 With Netscape (and Mozilla), this can be set under Edit -> Preferences ->
 Advanced -> Proxies -> HTTP Proxy. For Internet Explorer: Tools -> Internet
 Properties -> Connections -> LAN Setting. Then, check "Use Proxy" and fill in
-the appropriate info (Address: localhost, Port: 8118). Include if HTTPS proxy
+the appropriate info (Address: 127.0.0.1, Port: 8118). Include if HTTPS proxy
 support too.
 
 After doing this, flush your browser's disk and memory caches to force a
@@ -476,7 +476,7 @@ Except on Win32 where it will try config.txt.
 
 -------------------------------------------------------------------------------
 
-5.1. RedHat and Debian
+5.1. RedHat, Conectiva and Debian
 
 We use a script. Note that RedHat does not start Privoxy upon booting per
 default. It will use the file /etc/privoxy/config as its main configuration
@@ -629,7 +629,7 @@ configuration files are:
     Multiple actions files may be defined in config. These are processed in the
     order they are defined. Local customizations and locally preferred
     exceptions to the default policies as defined in default.action (which you
-    will most propably want to define sooner or later) are probably best
+    will most probably want to define sooner or later) are probably best
     applied in user.action, where you can preserve them across upgrades.
     standard.action is for Privoxy's internal use.
    
@@ -921,9 +921,9 @@ Notes:
 
 7.2. Local Set-up Documentation
 
-If you intend to operate Privoxy for more users that just yourself, it might be
+If you intend to operate Privoxy for more users than just yourself, it might be
 a good idea to let them know how to reach you, what you block and why you do
-that, your policies etc.
+that, your policies, etc.
 
 -------------------------------------------------------------------------------
 
@@ -950,7 +950,7 @@ Notes:
    
     The User Manual URI is used for help links from some of the internal CGI
     pages. The manual itself is normally packaged with the binary
-    distributions, so you propably want to set this to a locally installed
+    distributions, so you probably want to set this to a locally installed
     copy. For multi-user setups, you could provide a copy on a local webserver
     for all your users and use the corresponding URL here.
    
@@ -1073,7 +1073,7 @@ debugging.
 
 Specifies:
    
-    Key values that determine what information gets logged.
+    Key values that determine what information gets logged to the logfile.
    
 Type of value:
    
@@ -1168,11 +1168,11 @@ Type of value:
    
 Default value:
    
-    localhost:8118
+    127.0.0.1:8118
    
 Effect if unset:
    
-    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended
+    Bind to 127.0.0.1 (localhost), port 8118. This is suitable and recommended
     for home users who run Privoxy on the same machine as their browser.
    
 Notes:
@@ -1220,9 +1220,10 @@ Effect if unset:
 Notes:
    
     If set to 0, Privoxy will start in "toggled off" mode, i.e. behave like a
-    normal, content-neutral proxy. See enable-remote-toggle below. This is not
-    really useful anymore, since toggling is much easier via the web interface
-    than via editing the conf file.
+    normal, content-neutral proxy where all ad blocking, filtering, etc are
+    disabled. See enable-remote-toggle below. This is not really useful
+    anymore, since toggling is much easier via the web interface than via
+    editing the conf file.
    
     The windows version will only display the toggle icon in the system tray if
     this option is present.
@@ -1323,8 +1324,8 @@ Notes:
     Access controls are included at the request of ISPs and systems
     administrators, and are not usually needed by individual users. For a
     typical home user, it will normally suffice to ensure that Privoxy only
-    listens on the localhost or internal (home) network address by means of the
-    listen-address option.
+    listens on the localhost (127.0.0.1) or internal (home) network address by
+    means of the listen-address option.
    
     Please see the warnings in the FAQ that this proxy is not intended to be a
     substitute for a firewall or to encourage anyone to defer addressing basic
@@ -1908,26 +1909,24 @@ The list of valid Privoxy actions are:
 
 -------------------------------------------------------------------------------
 
-8.5.1. +add-header
+8.5.1. add-header
 
+Typical use:
+   
+    Confuse log analysis, custom applications
+   
+Effect:
+   
+    Sends a user defined HTTP header to the web server.
+   
 Type:
    
     Multi-value.
    
-Purpose and typical uses:
+Parameter:
    
-    Send a user defined HTTP header to the web server. Can be used to confuse
-    log analysis.
-   
-Possible values:
-   
-    Any value is possible. Validity of the defined HTTP headers is not checked.
-    It is recommended that you use the "X-" prefix for custom headers.
-   
-Example usage:
-   
-         {+add-header{X-User-Tracking: sucks}}
-         .example.com
+    Any string value is possible. Validity of the defined HTTP headers is not
+    checked. It is recommended that you use the "X-" prefix for custom headers.
    
 Notes:
    
@@ -1935,77 +1934,155 @@ Notes:
     headers. This is rarely needed for the typical user. If you don't know what
     "HTTP headers" are, you definitely don't need to worry about this one.
    
+Example usage:
+   
+    +add-header{X-User-Tracking: sucks}                                
+   
 -------------------------------------------------------------------------------
 
-8.5.2. +block
+8.5.2. block
 
-Type:
+Typical use:
    
-    Boolean.
+    Block ads or other obnoxious content
    
-Purpose and typical uses:
+Effect:
    
     Requests for URLs to which this action applies are blocked, i.e. the
     requests are not forwarded to the remote server, but answered locally with
     a substitute page or image, as determined by the handle-as-image and 
-    set-image-blocker actions. It is typically used to block ads or other
-    obnoxious content.
+    set-image-blocker actions.
    
-Possible values:
+Type:
+   
+    Boolean.
+   
+Parameter:
    
     N/A
    
-Example usage:
-   
-         {+block}
-         .banners.example.com
-         .ads.r.us
-        
-   
 Notes:
    
-    If a URL matches one of the blocked patterns, Privoxy will intercept the
-    URL and display its special "BLOCKED" page instead. If there is sufficient
-    space, a large red banner will appear with a friendly message about why the
-    page was blocked, and a way to go there anyway. If there is insufficient
-    space a smaller "BLOCKED" page will appear without the red banner. Click
-    here to view the default blocked HTML page (Privoxy must be running for
-    this to work as intended!).
+    Privoxy sends a special "BLOCKED" page for requests to blocked pages. This
+    page contains links to find out why the request was blocked, and a
+    click-through to the blocked content (the latter only if compiled with the
+    force feature enabled). The "BLOCKED" page adapts to the available screen
+    space -- it displays full-blown if space allows, or miniaturized and
+    text-only if loaded into a small frame or window. If you are using Privoxy
+    right now, you can take a look at the "BLOCKED" page.
    
-    A very important exception is if the URL matches both "+block" and 
-    "+handle-as-image", then it will be handled by "+set-image-blocker" (see
-    below). It is important to understand this process, in order to understand
-    how Privoxy is able to deal with ads and other objectionable content.
+    A very important exception occurs if both block and handle-as-image, apply
+    to the same request: it will then be replaced by an image. If 
+    set-image-blocker (see below) also applies, the type of image will be
+    determined by its parameter, if not, the standard checkerboard pattern is
+    sent.
    
-    The "+filter" action can also perform some of the same functionality as
-    "+block", but by virtue of very different programming techniques, and is
-    most often used for different reasons.
+    It is important to understand this process, in order to understand how
+    Privoxy deals with ads and other unwanted content.
+   
+    The filter action can perform a very similar task, by "blocking" banner
+    images and other content through rewriting the relevant URLs in the
+    document's HTML source, so they don't get requested in the first place.
+    Note that this is a totally different technique, and it's easy to confuse
+    the two.
+   
+Example usage (section):
+   
+    {+block}      # Block and replace with "blocked" page              
+    .nasty-stuff.example.com                                           
+                                                                       
+    {+block +handle-as-image} # Block and replace with image           
+    .ad.doubleclick.net                                                
+    .ads.r.us                                                          
    
 -------------------------------------------------------------------------------
 
-8.5.3. +deanimate-gifs
+8.5.3. crunch-incoming-cookies
 
+Typical use:
+   
+    Prevent the web server from setting any cookies on your system
+   
+Effect:
+   
+    Deletes any "Set-Cookie:" HTTP headers from server replies.
+   
+Type:
+   
+    Boolean.
+   
+Parameter:
+   
+    N/A
+   
+Notes:
+   
+    This action is only concerned with incoming cookies. For outgoing cookies,
+    use crunch-outgoing-cookies. Use both to disable cookies completely.
+   
+    It makes no sense at all to use this action in conjunction with the 
+    session-cookies-only action, since it would prevent the session cookies
+    from being set.
+   
+Example usage:
+   
+    +crunch-incoming-cookies                                           
+   
+-------------------------------------------------------------------------------
+
+8.5.4. crunch-outgoing-cookies
+
+Typical use:
+   
+    Prevent the web server from reading any cookies from your system
+   
+Effect:
+   
+    Deletes any "Cookie:" HTTP headers from client requests.
+   
+Type:
+   
+    Boolean.
+   
+Parameter:
+   
+    N/A
+   
+Notes:
+   
+    This action is only concerned with outgoing cookies. For incoming cookies,
+    use crunch-incoming-cookies. Use both to disable cookies completely.
+   
+    It makes no sense at all to use this action in conjunction with the 
+    session-cookies-only action, since it would prevent the session cookies
+    from being read.
+   
+Example usage:
+   
+    +crunch-outgoing-cookies                                           
+   
+-------------------------------------------------------------------------------
+
+8.5.5. deanimate-gifs
+
+Typical use:
+   
+    Stop those annoying, distracting animated GIF images.
+   
+Effect:
+   
+    De-animate GIF animations, i.e. reduce them to their first or last image.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
-   
-    To stop those annoying, distracting animated GIF images.
-   
-Possible values:
+Parameter:
    
     "last" or "first"
    
-Example usage:
-   
-          {+deanimate-gifs{last}}
-          .example.com
-        
-   
 Notes:
    
-    De-animate all animated GIF images, i.e. reduce them to their last frame.
     This will also shrink the images considerably (in bytes, not pixels!). If
     the option "first" is given, the first frame of the animation is used as
     the replacement. If "last" is given, the last frame of the animation is
@@ -2013,68 +2090,74 @@ Notes:
     but also has the risk of not showing the entire last frame (if it is only a
     delta to an earlier frame).
    
+    You can safely use this action with patterns that will also match non-GIF
+    objects, because no attempt will be made at anything that doesn't look like
+    a GIF.
+   
+Example usage:
+   
+    +deanimate-gifs{last}                                              
+   
 -------------------------------------------------------------------------------
 
-8.5.4. +downgrade-http-version
+8.5.6. downgrade-http-version
 
+Typical use:
+   
+    Work around (very rare) problems with HTTP/1.1
+   
+Effect:
+   
+    Downgrades HTTP/1.1 client requests and server replies to HTTP/1.0.
+   
 Type:
    
     Boolean.
    
-Typical uses:
-   
-    "+downgrade-http-version" will downgrade HTTP/1.1 client requests to HTTP/
-    1.0 and downgrade the responses as well.
-   
-Possible values:
+Parameter:
    
     N/A
-   
-Example usage:
-   
-         {+downgrade-http-version}
-         .example.com
-        
    
 Notes:
    
-    Use this action for servers that use HTTP/1.1 protocol features that
-    Privoxy doesn't handle well yet. HTTP/1.1 is only partially implemented.
-    Default is not to downgrade requests. This is an infrequently needed
-    action, and is used to help with rare problem sites only.
+    This is a left-over from the time when Privoxy didn't support important
+    HTTP/1.1 features well. It is left here for the unlikely case that you
+    experience HTTP/1.1 related problems with some server out there. Not all
+    (optional) HTTP/1.1 features are supported yet, so there is a chance you
+    might need this action.
+   
+Example usage (section):
+   
+    {+downgrade-http-version}                                          
+    problem-host.example.com                                           
    
 -------------------------------------------------------------------------------
 
-8.5.5. +fast-redirects
+8.5.7. fast-redirects
 
+Typical use:
+   
+    Fool some click-tracking scripts and speed up indirect links
+   
+Effect:
+   
+    Cut off all but the last valid URL from requests.
+   
 Type:
    
     Boolean.
    
-Typical uses:
-   
-    The "+fast-redirects" action enables interception of "redirect" requests
-    from one server to another, which are used to track users.Privoxy can cut
-    off all but the last valid URL in a redirect request and send a local
-    redirect back to your browser without contacting the intermediate site(s).
-   
-Possible values:
+Parameter:
    
     N/A
-   
-Example usage:
-   
-         {+fast-redirects}
-         .example.com
-        
    
 Notes:
    
     Many sites, like yahoo.com, don't just link to other sites. Instead, they
-    will link to some script on their own server, giving the destination as a
+    will link to some script on their own servers, giving the destination as a
     parameter, which will then redirect you to the final target. URLs resulting
-    from this scheme typically look like: http://some.place/some_script?http://
-    some.where-else.
+    from this scheme typically look like: http://some.place/click-tracker.cgi?
+    target=http://some.where.else.
    
     Sometimes, there are even multiple consecutive redirects encoded in the
     URL. These redirections via scripts make your web browsing more traceable,
@@ -2083,62 +2166,47 @@ Notes:
     ask the server for one redirect after the other. Plus, it feeds the
     advertisers.
    
-    This is a normally "on" feature, and often requires exceptions for sites
-    that are sensitive to defeating this mechanism.
+    This feature is currently not very smart and is scheduled for improvement.
+    It is likely to break some sites. You should expect to need possibly many
+    exceptions to this action, if it is enabled by default in default.action.
+    Some sites just don't work without it.
+   
+Example usage:
+   
+    {+fast-redirects}                                                  
    
 -------------------------------------------------------------------------------
 
-8.5.6. +filter
+8.5.8. filter
 
+Typical use:
+   
+    Get rid of HTML and JavaScript annoyances, banner advertisements (by size),
+    do fun text replacements, etc.
+   
+Effect:
+   
+    Text documents, including HTML and JavaScript, to which this action
+    applies, are filtered on-the-fly through the specified regular expression
+    based substitutions.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
+Parameter:
    
-    Apply page filtering as defined by named sections of the default.filter
-    file to the specified site(s). "Filtering" can be any modification of the
-    raw page content, including re-writing or deletion of content.
-   
-Possible values:
-   
-    "+filter" must include the name of one of the section identifiers from
-    default.filter (or whatever filterfile is specified in config).
-   
-Example usage (from the current default.filter):
-   
-    +filter{html-annoyances}: Get rid of particularly annoying HTML abuse.
-   
-    +filter{js-annoyances}: Get rid of particularly annoying JavaScript abuse
-   
-    +filter{content-cookies}: Kill cookies that come in the HTML or JS content
-   
-    +filter{popups}: Kill all popups in JS and HTML
-   
-    +filter{frameset-borders}: Give frames a border and make them resizable
-   
-    +filter{webbugs}: Squish WebBugs (1x1 invisible GIFs used for user         
-    tracking)                                                                  
-   
-    +filter{refresh-tags}: Kill automatic refresh tags (for dial-on-demand     
-    setups)                                                                    
-   
-    +filter{fun}: Text replacements for subversive browsing fun!
-   
-    +filter{nimda}: Remove Nimda (virus) code.
-   
-    +filter{banners-by-size}: Kill banners by size (very efficient!)
-   
-    +filter{shockwave-flash}: Kill embedded Shockwave Flash objects
-   
-    +filter{crude-parental}: Kill all web pages that contain the words "sex" or
-    "warez"                                                                    
+    The name of a filter, as defined in the filter file (typically
+    default.filter, set by the filterfile option in the config file)
    
 Notes:
    
-    This is potentially a very powerful feature! And requires a knowledge of
-    regular expressions if you want to "roll your own". Filtering operates on a
-    line by line basis throughout the entire page.
+    For your convenience, there are a bunch of pre-defined filters available in
+    the distribution filter file that you can use. See the example below for a
+    list.
+   
+    This is potentially a very powerful feature! But "rolling your own" filters
+    requires a knowledge of regular expressions and HTML.
    
     Filtering requires buffering the page content, which may appear to slow
     down page rendering since nothing is displayed until all content has passed
@@ -2146,452 +2214,585 @@ Notes:
     page is not incrementally displayed.) This effect will be more noticeable
     on slower connections.
    
-    Filtering can achieve some of the effects as the "+block" action, i.e. it
-    can be used to block ads and banners. In the overall scheme of things,
-    filtering is one of the first things "Privoxy" does with a web page. So
-    other most other actions are applied to the already "filtered" page.
+    At this time, Privoxy cannot (yet!) uncompress compressed documents. If you
+    want filtering to work on all documents, even those that would normally be
+    sent compressed, use the prevent-compression action in conjunction with
+    filter.
+   
+    Filtering can achieve some of the effects as the block action, i.e. it can
+    be used to block ads and banners.
+   
+    Feedback with suggestions for new or improved filters is particularly
+    welcome!
+   
+Example usage (with filters from the distribution default.filter file):
+   
+    +filter{html-annoyances}     # Get rid of particularly annoying HTML abuse.
+   
+    +filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse
+   
+    +filter{banners-by-size}     # Kill banners by size (very efficient!)
+   
+    +filter{content-cookies}     # Kill cookies that come sneaking in the HTML or JS content
+   
+    +filter{popups}              # Kill all popups in JS and HTML      
+   
+    +filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking)
+   
+    +filter{fun}                 # Text replacements for subversive browsing fun!
+   
+    +filter{frameset-borders}    # Give frames a border and make them resizeable
+   
+    +filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups)
+   
+    +filter{nimda}               # Remove Nimda (virus) code.          
+   
+    +filter{shockwave-flash}     # Kill embedded Shockwave Flash objects
+   
+    +filter{crude-parental}      # Kill all web pages that contain the words "sex" or "warez"
    
 -------------------------------------------------------------------------------
 
-8.5.7. +hide-forwarded-for-headers
+8.5.9. handle-as-image
 
+Typical use:
+   
+    Mark URLs as belonging to images (so they'll be replaced by images if they
+    get blocked)
+   
+Effect:
+   
+    This action alone doesn't do anything noticeable. It just marks URLs as
+    images. If the block action also applies, the presence or absence of this
+    mark decides whether an HTML "blocked" page, or a replacement image (as
+    determined by the set-image-blocker action) will be sent to the client as a
+    substitute for the blocked content.
+   
 Type:
    
     Boolean.
    
-Typical uses:
-   
-    Block any existing X-Forwarded-for HTTP header, and do not add a new one.
-   
-Possible values:
+Parameter:
    
     N/A
    
-Example usage:
-   
-         {+hide-forwarded-for-headers}
-         .example.com
-        
-   
 Notes:
    
-    It is fairly safe to leave this on. It does not seem to break many sites.
+    The below generic example section is actually part of default.action. It
+    marks all URLs with well-known image file name extensions as images and
+    should be left intact.
+   
+    Users will probably only want to use the handle-as-image action in
+    conjunction with block, to block sources of banners, whose URLs don't
+    reflect the file type, like in the second example section.
+   
+    Note that you cannot treat HTML pages as images in most cases. For
+    instance, (inline) ad frames require an HTML page to be sent, or they won't
+    display properly. Forcing handle-as-image in this situation will not
+    replace the ad frame with an image, but lead to error messages.
+   
+Example usage (sections):
+   
+    # Generic image extensions:                                        
+    #                                                                  
+    {+handle-as-image}                                                 
+    /.*\.(gif|jpg|jpeg|png|bmp|ico)$                                   
+                                                                       
+    # These don't look like images, but they're banners and should be  
+    # blocked as images:                                               
+    #                                                                  
+    {+block +handle-as-image}                                          
+    some.nasty-banner-server.com/junk.cgi?output=trash                 
+                                                                       
+    # Banner source! Who cares if they also have non-image content?    
+    ad.doubleclick.net                                                 
    
 -------------------------------------------------------------------------------
 
-8.5.8. +hide-from-header
+8.5.10. hide-forwarded-for-headers
 
+Typical use:
+   
+    Improve privacy by hiding the true source of the request
+   
+Effect:
+   
+    Deletes any existing "X-Forwarded-for:" HTTP header from client requests,
+    and prevents adding a new one.
+   
+Type:
+   
+    Boolean.
+   
+Parameter:
+   
+    N/A
+   
+Notes:
+   
+    It is fairly safe to leave this on.
+   
+    This action is scheduled for improvement: It should be able to generate
+    forged "X-Forwarded-for:" headers using random IP addresses from a
+    specified network, to make successive requests from the same client look
+    like requests from a pool of different users sharing the same proxy.
+   
+Example usage:
+   
+    +hide-forwarded-for-headers                                        
+   
+-------------------------------------------------------------------------------
+
+8.5.11. hide-from-header
+
+Typical use:
+   
+    Keep your (old and ill) browser from telling web servers your email address
+   
+Effect:
+   
+    Deletes any existing "From:" HTTP header, or replaces it with the specified
+    string.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
-   
-    To block the browser from sending your email address in a "From:" header.
-   
-Possible values:
+Parameter:
    
     Keyword: "block", or any user defined value.
-   
-Example usage:
-   
-         {+hide-from-header{block}}
-         .example.com
-        
    
 Notes:
    
     The keyword "block" will completely remove the header (not to be confused
-    with the "+block" action). Alternately, you can specify any value you
-    prefer to send to the web server.
+    with the block action).
+   
+    Alternately, you can specify any value you prefer to be sent to the web
+    server. If you do, it is a matter of fairness not to use any address that
+    is actually used by a real person.
+   
+    This action is rarely needed, as modern web browsers don't send "From:"
+    headers anymore.
+   
+Example usage:
+   
+    +hide-from-header{block}                                           
+   
+    or
+   
+    +hide-from-header{spam-me-senseless@sittingduck.example.com}       
    
 -------------------------------------------------------------------------------
 
-8.5.9. +hide-referer
+8.5.12. hide-referrer
 
+Typical use:
+   
+    Conceal which link you followed to get to a particular site
+   
+Effect:
+   
+    Deletes the "Referer:" (sic) HTTP header from the client request, or
+    replaces it with a forged one.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
+Parameter:
    
-    Don't send the "Referer:" (sic) HTTP header to the web site. Or,
-    alternately send a forged header instead.
-   
-Possible values:
-   
-    Prevent the header from being sent with the keyword, "block". Or, "forge" a
-    URL to one from the same server as the request. Or, set to user defined
-    value of your choice.
-   
-Example usage:
-   
-         {+hide-referer{forge}}
-         .example.com
-        
-   
+      + "block" to delete the header completely.
+       
+      + "forge" to pretend to be coming from the homepage of the server we are
+        talking to.
+       
+      + Any other string to set a user defined referrer.
+       
 Notes:
    
     "forge" is the preferred option here, since some servers will not send
-    images back otherwise.
+    images back otherwise, in an attempt to prevent their valuable content from
+    being embedded elsewhere (and hence, without being surrounded by their
+    banners).
    
-    "+hide-referrer" is an alternate spelling of "+hide-referer". It has the
-    exact same parameters, and can be freely mixed with, "+hide-referer".
-    ("referrer" is the correct English spelling, however the HTTP specification
-    has a bug - it requires it to be spelled as "referer".)
+    hide-referer is an alternate spelling of hide-referrer and the two can be
+    can be freely substituted with each other. ("referrer" is the correct
+    English spelling, however the HTTP specification has a bug - it requires it
+    to be spelled as "referer".)
+   
+Example usage:
+   
+    +hide-referrer{forge}                                              
+   
+    or
+   
+    +hide-referrer{http://www.yahoo.com/}                              
    
 -------------------------------------------------------------------------------
 
-8.5.10. +hide-user-agent
+8.5.13. hide-user-agent
 
+Typical use:
+   
+    Conceal your type of browser and client operating system
+   
+Effect:
+   
+    Replaces the value of the "User-Agent:" HTTP header in client requests with
+    the specified value.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
+Parameter:
    
-    To change the "User-Agent:" header so web servers can't tell your browser
-    type. Who's business is it anyway?
-   
-Possible values:
-   
-    Any user defined string.
-   
-Example usage:
-   
-         {+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}}
-         .msn.com
-        
+    Any user-defined string.
    
 Notes:
    
-    Warning! This breaks many web sites that depend on this in order to
-    determine how the target browser will respond to various requests. Use with
-    caution.
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |This breaks many web sites that depend on looking at this header |
+    |in order to customize their content for different browsers       |
+    |(which, by the way, is NOT a smart way to do that!).             |
+    +-----------------------------------------------------------------+
+   
+    Using this action in multi-user setups or wherever different types of
+    browsers will access the same Privoxy is not recommended. In single-user,
+    single-browser setups, you might use it to delete your OS version
+    information from the headers, because it is an invitation to exploit known
+    bugs for your OS. It is also occasionally useful to forge this in order to
+    access sites that won't let you in otherwise (though there may be a good
+    reason in some cases). Example of this: some MSN sites will not let Mozilla
+    enter, yet forging to a Netscape 6.1 user-agent works just fine. (Must be
+    just a silly MS goof, I'm sure :-).
+   
+    This action is scheduled for improvement.
+   
+Example usage:
+   
+    +hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}         
    
 -------------------------------------------------------------------------------
 
-8.5.11. +handle-as-image
+8.5.14. kill-popups
 
+Typical use:
+   
+    Eliminate those annoying pop-up windows
+   
+Effect:
+   
+    While loading the document, replace JavaScript code that opens pop-up
+    windows with (syntactically neutral) dummy code on the fly.
+   
 Type:
    
     Boolean.
    
-Typical uses:
-   
-    To define what Privoxy should treat automatically as an image, and is an
-    important ingredient of how ads are handled.
-   
-Possible values:
+Parameter:
    
     N/A
    
-Example usage:
-   
-         {+handle-as-image}
-         /.*\.(gif|jpg|jpeg|png|bmp|ico)
-        
-   
 Notes:
    
-    This only has meaning if the URL (or pattern) also is "+block"ed, in which
-    case a user definable image can be sent rather than a HTML page. This is
-    integral to the whole concept of ad blocking: the URL must match both a 
-    "+block" rule, and "+handle-as-image". (See "+set-image-blocker" below for
-    control over what will actually be displayed by the browser.)
+    This action is easily confused with the built-in, hardwired filter action,
+    but there are important differences: For kill-popups, the document need not
+    be buffered, so it can be incrementally rendered while downloading. But
+    kill-popups doesn't catch as many pop-ups as filter{popups} does.
    
-    There is little reason to change the default definition for this action.
+    Think of it as a fast and efficient replacement for a filter that you can
+    use if you don't want any filtering at all. Note that it doesn't make sense
+    to combine it with any filter action, since as soon as one filter applies,
+    the whole document needs to be buffered anyway, which destroys the
+    advantage of the kill-popups action over it's filter equivalent.
+   
+    Killing all pop-ups is a dangerous business. Many shops and banks rely on
+    pop-ups to display forms, shopping carts etc, and killing only the unwanted
+    pop-ups would require artificial intelligence in Privoxy. If the only kind
+    of pop-ups that you want to kill are exit consoles (those really nasty
+    windows that appear when you close an other one), you might want to use 
+    filter{js-annoyances} instead.
+   
+Example usage:
+   
+    +kill-popups                                                       
    
 -------------------------------------------------------------------------------
 
-8.5.12. +set-image-blocker
+8.5.15. limit-connect
 
+Typical use:
+   
+    Prevent abuse of Privoxy as a TCP proxy relay
+   
+Effect:
+   
+    Specifies to which ports HTTP CONNECT requests are allowable.
+   
 Type:
    
     Parameterized.
    
-Typical uses:
+Parameter:
    
-    Decide what to do with URLs that end up tagged with both "+block" and 
-    "+handle-as-image", e.g an advertisement.
-   
-Possible values:
-   
-    There are four available options: "-set-image-blocker" will send a HTML
-    "blocked" page, usually resulting in a "broken image" icon.
-    "+set-image-blocker{blank}" will send a 1x1 transparent GIF image.
-    "+set-image-blocker{pattern}" will send a checkerboard type pattern (the
-    default). And finally, "+set-image-blocker{http://xyz.com}" will send a
-    HTTP temporary redirect to the specified image. This has the advantage of
-    the icon being being cached by the browser, which will speed up the
-    display.
-   
-Example usage:
-   
-         {+set-image-blocker{blank}}
-         .example.com
-        
+    A comma-separated list of ports or port ranges (the latter using dashes,
+    with the minimum defaulting to 0 and the maximum to 65K).
    
 Notes:
    
-    If you want invisible ads, they need to meet criteria as matching both
-    images and blocked actions. And then, "image-blocker" should be set to
-    "blank" for invisibility. Note you cannot treat HTML pages as images in
-    most cases. For instance, frames require an HTML page to display. So a
-    frame that is an ad, typically cannot be treated as an image. Forcing an
-    "image" in this situation just will not work reliably.
-   
--------------------------------------------------------------------------------
-
-8.5.13. +limit-connect
-
-Type:
-   
-    Parameterized.
-   
-Typical uses:
-   
-    By default, Privoxy only allows HTTP CONNECT requests to port 443 (the
-    standard, secure HTTPS port). Use "+limit-connect" to disable this
-    altogether, or to allow more ports.
-   
-Possible values:
-   
-    Any valid port number, or port number range.
-   
-Example usages:
-   
-         +limit-connect{443}                       #
-     This is the default and need not be specified.
-         +limit-connect{80,443}                  # Ports 80 and 443 are OK.
-         +limit-connect{-3, 7, 20-100, 500-}   #
-     Port less than 3, 7, 20 to 100 and above 500 are OK.
-        
-   
-Notes:
+    By default, i.e. if no limit-connect action applies, Privoxy only allows
+    HTTP CONNECT requests to port 443 (the standard, secure HTTPS port). Use
+    limit-connect if more fine-grained control is desired for some or all
+    destinations.
    
     The CONNECT methods exists in HTTP to allow access to secure websites
-    (https:// URLs) through proxies. It works very simply: the proxy connects
+    ("https://" URLs) through proxies. It works very simply: the proxy connects
     to the server on the specified port, and then short-circuits its
-    connections to the client and to the remote proxy. This can be a big
+    connections to the client and to the remote server. This can be a big
     security hole, since CONNECT-enabled proxies can be abused as TCP relays
     very easily.
    
-    If you want to allow CONNECT for more ports than this, or want to forbid
-    CONNECT altogether, you can specify a comma separated list of ports and
-    port ranges (the latter using dashes, with the minimum defaulting to 0 and
-    max to 65K).
-   
     If you don't know what any of this means, there probably is no reason to
-    change this one.
+    change this one, since the default is already very restrictive.
+   
+Example usages:
+   
+    +limit-connect{443}                   # This is the default and need not be specified.        
+    +limit-connect{80,443}                # Ports 80 and 443 are OK.                              
+    +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK. 
+    +limit-connect{-}                     # All ports are OK (gaping security hole!)              
    
 -------------------------------------------------------------------------------
 
-8.5.14. +prevent-compression
+8.5.16. prevent-compression
 
+Typical use:
+   
+    Ensure that servers send the content uncompressed, so it can be passed
+    through filters
+   
+Effect:
+   
+    Adds a header to the request that asks for uncompressed transfer.
+   
 Type:
    
     Boolean.
    
-Typical uses:
-   
-    Prevent the specified websites from compressing HTTP data.
-   
-Possible values:
+Parameter:
    
     N/A
+   
+Notes:
+   
+    More and more websites send their content compressed by default, which is
+    generally a good idea and saves bandwidth. But for the filter, 
+    deanimate-gifs and kill-popups actions to work, Privoxy needs access to the
+    uncompressed data. Unfortunately, Privoxy can't yet(!) uncompress, filter,
+    and re-compress the content on the fly. So if you want to ensure that all
+    websites, including those that normally compress, can be filtered, you need
+    to use this action.
+   
+    This will slow down transfers from those websites, though. If you use any
+    of the above-mentioned actions, you will typically want to use
+    prevent-compression in conjunction with them.
+   
+    Note that some (rare) ill-configured sites don't handle requests for
+    uncompressed documents correctly (they send an empty document body). If you
+    use prevent-compression per default, you'll have to add exceptions for
+    those sites. See the example for how to do that.
+   
+Example usage (sections):
+   
+    # Set default:                                                     
+    #                                                                  
+    {+prevent-compression}                                             
+    / # Match all sites                                                
+                                                                       
+    # Make exceptions for ill sites:                                   
+    #                                                                  
+    {-prevent-compression}                                             
+    www.debianhelp.org                                                 
+    www.pclinuxonline.com                                              
+   
+-------------------------------------------------------------------------------
+
+8.5.17. send-vanilla-wafer
+
+Typical use:
+   
+    Feed log analysis scripts with useless data.
+   
+Effect:
+   
+    Sends a cookie with each request stating that you do not accept any
+    copyright on cookies sent to you, and asking the site operator not to track
+    you.
+   
+Type:
+   
+    Boolean.
+   
+Parameter:
+   
+    N/A
+   
+Notes:
+   
+    The vanilla wafer is a (relatively) unique header and could conceivably be
+    used to track you.
+   
+    This action is rarely used and not enabled in the default configuration.
    
 Example usage:
    
-         {+prevent-compression}
-         .example.com
-        
-   
-Notes:
-   
-    Some websites do this, which can be a problem for Privoxy, since "+filter",
-    "+kill-popups" and "+gif-deanimate" will not work on compressed data. This
-    will slow down connections to those websites, though. Default typically is
-    to turn "prevent-compression" on.
+    +send-vanilla-wafer                                                
    
 -------------------------------------------------------------------------------
 
-8.5.15. +session-cookies-only
+8.5.18. send-wafer
 
-Type:
+Typical use:
    
-    Boolean.
+    Send custom cookies or feed log analysis scripts with even more useless
+    data.
    
-Typical uses:
+Effect:
    
-    Allow cookies for the current browser session only.
+    Sends a custom, user-defined cookie with each request.
    
-Possible values:
-   
-    N/A
-   
-Example usage (disabling):
-   
-         {-session-cookies-only}
-         .example.com
-        
-   
-Notes:
-   
-    If websites set cookies, "+session-cookies-only" will make sure they are
-    erased when you exit and restart your web browser. This makes profiling
-    cookies useless, but won't break sites which require cookies so that you
-    can log in for transactions. This is generally turned on for all sites, and
-    is the recommended setting.
-   
-    "+prevent-*-cookies" actions should be turned off as well (see below), for
-    "+session-cookies-only" to work. Or, else no cookies will get through at
-    all. For, "persistent" cookies that survive across browser sessions, see
-    below as well.
-   
--------------------------------------------------------------------------------
-
-8.5.16. +prevent-reading-cookies
-
-Type:
-   
-    Boolean.
-   
-Typical uses:
-   
-    Explicitly prevent the web server from reading any cookies on your system.
-   
-Possible values:
-   
-    N/A
-   
-Example usage:
-   
-         {+prevent-reading-cookies}
-         .example.com
-        
-   
-Notes:
-   
-    Often used in conjunction with "+prevent-setting-cookies" to disable
-    cookies completely. Note that "+session-cookies-only" requires these to
-    both be disabled (or else it never gets any cookies to cache).
-   
-    For "persistent" cookies to work (i.e. they survive across browser sessions
-    and reboots), all three cookie settings should be "off" for the specified
-    sites.
-   
--------------------------------------------------------------------------------
-
-8.5.17. +prevent-setting-cookies
-
-Type:
-   
-    Boolean.
-   
-Typical uses:
-   
-    Explicitly block the web server from storing cookies on your system.
-   
-Possible values:
-   
-    N/A
-   
-Example usage:
-   
-         {+prevent-setting-cookies}
-         .example.com
-        
-   
-Notes:
-   
-    Often used in conjunction with "+prevent-reading-cookies" to disable
-    cookies completely (see above).
-   
--------------------------------------------------------------------------------
-
-8.5.18. +kill-popups
-
-Type:
-   
-    Boolean.
-   
-Typical uses:
-   
-    Stop those annoying JavaScript pop-up windows!
-   
-Possible values:
-   
-    N/A
-   
-Example usage:
-   
-         {+kill-popups}
-         .example.com
-        
-   
-Notes:
-   
-    "+kill-popups" uses a built in filter to disable pop-ups that use the
-    window.open() function, etc. This is one of the first actions processed by
-    Privoxy as it contacts the remote web server. This action is not always
-    100% reliable, and is supplemented by "+filter{popups}".
-   
--------------------------------------------------------------------------------
-
-8.5.19. +send-vanilla-wafer
-
-Type:
-   
-    Boolean.
-   
-Typical uses:
-   
-    Sends a cookie for every site stating that you do not accept any copyright
-    on cookies sent to you, and asking them not to track you.
-   
-Possible values:
-   
-    N/A
-   
-Example usage:
-   
-         {+send-vanilla-wafer}
-         .example.com
-        
-   
-Notes:
-   
-    This action only applies if you are using a jarfile for saving cookies. Of
-    course, this is a (relatively) unique header and could conceivably be used
-    to track you.
-   
--------------------------------------------------------------------------------
-
-8.5.20. +send-wafer
-
 Type:
    
     Multi-value.
    
-Typical uses:
+Parameter:
    
-    This allows you to send an arbitrary, user definable cookie.
-   
-Possible values:
-   
-    User specified cookie name and corresponding value.
-   
-Example usage:
-   
-         {+send-wafer{name=value}}
-         .example.com
-        
+    A string of the form "name=value".
    
 Notes:
    
-    This can be specified multiple times in order to add as many cookies as you
-    like.
+    Being multi-valued, multiple instances of this action can apply to the same
+    request, resulting in multiple cookies being sent.
+   
+    This action is rarely used and not enabled in the default configuration.
+   
+Example usage (section):
+   
+    {+send-wafer{UsingPrivoxy=true}}                                   
+    my-internal-testing-server.void                                    
+   
+-------------------------------------------------------------------------------
+
+8.5.19. session-cookies-only
+
+Typical use:
+   
+    Allow only temporary "session" cookies (for the current browser session
+    only).
+   
+Effect:
+   
+    Deletes the "expires" field from "Set-Cookie:" server headers. Most
+    browsers will not store such cookies permanently and forget them in between
+    sessions.
+   
+Type:
+   
+    Boolean.
+   
+Parameter:
+   
+    N/A
+   
+Notes:
+   
+    This is less strict than crunch-incoming-cookies / crunch-outgoing-cookies
+    and allows you to browse websites that insist or rely on setting cookies,
+    without compromising your privacy too badly.
+   
+    Most browsers will not permanently store cookies that have been processed
+    by session-cookies-only and will forget about them between sessions. This
+    makes profiling cookies useless, but won't break sites which require
+    cookies so that you can log in for transactions. This is generally turned
+    on for all sites, and is the recommended setting.
+   
+    It makes no sense at all to use session-cookies-only together with 
+    crunch-incoming-cookies or crunch-outgoing-cookies. If you do, cookies will
+    be plainly killed.
+   
+    Note that it is up to the browser how it handles such cookies without an
+    "expires" field. If you use an exotic browser, you might want to try it out
+    to be sure.
+   
+Example usage:
+   
+    +session-cookies-only                                              
+   
+-------------------------------------------------------------------------------
+
+8.5.20. set-image-blocker
+
+Typical use:
+   
+    Choose the replacement for blocked images
+   
+Effect:
+   
+    This action alone doesn't do anything noticeable. If both block and 
+    handle-as-image also apply, i.e. if the request is to be blocked as an
+    image, then the parameter of this action decides what will be sent as a
+    replacement.
+   
+Type:
+   
+    Parameterized.
+   
+Parameter:
+   
+      + "pattern" to send a built-in checkerboard pattern image. The image is
+        visually decent, scales very well, and makes it obvious where banners
+        were busted.
+       
+      + "blank" to send a built-in transparent image. This makes banners
+        disappear completely, but makes it hard to detect where Privoxy has
+        blocked images on a given page and complicates troubleshooting if
+        Privoxy has blocked innocent images, like navigation icons.
+       
+      + "target-url" to send a redirect to target-url. You can redirect to any
+        image anywhere, even in your local filesystem (via "file:///" URL).
+       
+        A good application of redirects is to use special Privoxy-built-in
+        URLs, which send the built-in images, as target-url. This has the same
+        visual effect as specifying "blank" or "pattern" in the first place,
+        but enables your browser to cache the replacement image, instead of
+        requesting it over and over again.
+       
+Notes:
+   
+    The URLs for the built-in images are "http://config.privoxy.org/
+    send-banner?type=type", where type is either "blank" or "pattern".
+   
+    There is a third (advanced) type, called "auto". It is NOT to be used in
+    set-image-blocker, but meant for use from filters. Auto will select the
+    type of image that would have applied to the referring page, had it been an
+    image.
+   
+Example usage:
+   
+    Built-in pattern:
+   
+    +set-image-blocker{pattern}                                        
+   
+    Redirect to the BSD devil:
+   
+    +set-image-blocker{http://www.freebsd.org/gifs/dae_up3.gif}        
+   
+    Redirect to the built-in pattern for better caching:
+   
+    +set-image-blocker{http://config.privoxy.org/send-banner?type=pattern}
    
 -------------------------------------------------------------------------------
 
@@ -2605,12 +2806,97 @@ sites. See the Appendix for a brief example on troubleshooting actions.
 
 -------------------------------------------------------------------------------
 
-8.5.22. Sample Actions Files
+8.6. Aliases
 
-Remember that the meaning of any of the above references is reversed by
-preceding the action with a "-", in place of the "+". Also, that some actions
-are turned on in the default section of the actions file, and require little to
-no additional configuration. These are just "on".
+Custom "actions", known to Privoxy as "aliases", can be defined by combining
+other actions. These can in turn be invoked just like the built-in actions.
+Currently, an alias name can contain any character except space, tab, "=", "{"
+and "}", but we strongly recommend that you only use "a" to "z", "0" to "9",
+"+", and "-". Alias names are not case sensitive, and are not required to start
+with a "+" or "-" sign, since they are merely textually expanded.
+
+Aliases can be used throughout the actions file, but they must be defined in a
+special section at the top of the file! And there can only be one such section
+per actions file. Each actions file may have its own alias section, and the
+aliases defined in it are only visible within that file.
+
+There are two main reasons to use aliases: One is to save typing for frequently
+used combinations of actions, the other one is a gain in flexibility: If you
+decide once how you want to handle shops by defining an alias called "shop",
+you can later change your policy on shops in one place, and your changes will
+take effect everywhere in the actions file where the "shop" alias is used.
+Calling aliases by their purpose also makes your actions files more readable.
+
+Currently, there is one big drawback to using aliases, though: Privoxy's
+built-in web-based action file editor honors aliases when reading the actions
+files, but it expands them before writing. So the effects of your aliases are
+of course preserved, but the aliases themselves are lost when you edit sections
+that use aliases with it. This is likely to change in future versions of
+Privoxy.
+
+Now let's define some aliases...
+
+ # Useful custom aliases we can use later.                                                   
+ #                                                                                           
+ # Note the (required!) section header line and that this section                            
+ # must be at the top of the actions file!                                                   
+ #                                                                                           
+ {{alias}}                                                                                   
+                                                                                             
+ # These aliases just save typing later:                                                     
+ #                                                                                           
+ +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies                     
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies                     
+ +imageblock = +block +handle-as-image                                                       
+                                                                                             
+ # These aliases define combinations of actions                                              
+ # that are useful for certain types of sites:                                               
+ #                                                                                           
+ fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups 
+ shop        = -crunch-all-cookies -fast-redirects                                           
+                                                                                             
+ # Aliases defined from other aliases, for really lazy people ;-)                            
+ #                                                                                           
+ c0 = +crunch-all-cookies                                                                    
+ c1 = -crunch-all-cookies                                                                    
+
+...and put them to use. These sections would appear in the lower part of an
+actions file and define exceptions to the default actions (as specified further
+up for the "/" pattern):
+
+ # These sites are either very complex or very keen on                         
+ # user data and require minimal interference to work:                         
+ #                                                                             
+ {fragile}                                                                     
+ .office.microsoft.com                                                         
+ .windowsupdate.microsoft.com                                                  
+ .nytimes.com                                                                  
+                                                                               
+ # Shopping sites:                                                             
+ # Allow cookies (for setting and retrieving your customer data)               
+ #                                                                             
+ {shop}                                                                        
+ .quietpc.com                                                                  
+ .worldpay.com   # for quietpc.com                                             
+ .scan.co.uk                                                                   
+                                                                               
+ # These shops require pop-ups:                                                
+ #                                                                             
+ {shop -kill-popups -filter{popups}}                                           
+  .dabs.com                                                                    
+  .overclockers.co.uk                                                          
+
+Aliases like "shop" and "fragile" are often used for "problem" sites that
+require some actions to be disabled in order to function properly.
+
+-------------------------------------------------------------------------------
+
+8.7. Sample Actions Files
+
+Remember that the meaning of each action is reversed by preceding the action
+with a "-", in place of the "+". Also, that some actions are turned on in the
+default section of the actions file, and require little to no additional
+configuration. These are just "on".
 
 But, other actions that are turned on in the default section do typically
 require exceptions to be listed in the latter sections of one of our actions
@@ -2637,29 +2923,39 @@ for-privoxy-version=3.0
 # defined they can be used just like any built-in action -- but within 
 # this file only! Aliases do not require a + or - sign.
 ##########################################################################
+{{alias}}
 
 # Some useful aliases.
 # Alias to turn off cookie handling, ie allow all cookies unmolested.
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
+#
+mercy-for-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
                     -session-cookies-only
 
 # Alias to both block and treat as if an image for ad blocking
 # purposes.
- +imageblock      = +block +handle-as-image
-
-# Fragile sites should have the minimum changes:
- fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -prevent-cookies -kill-popups
+#
++block-as-image   = +block +handle-as-image
 
 # Shops should be allowed to set persistent cookies
- shop        = -filter -prevent-cookies -session-cookies-only
+#
+shop        = -filter mercy-for-cookies
 
+# Fragile sites should receive minimum interference:
+#
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
+              mercy-for-cookies -kill-popups
 
 ##########################################################################
-# Begin default action settings. Anything in this section will match 
-# all URLs -- UNLESS we have exceptions that also match, defined below this 
-# section. We will show all potential actions here whether they are on 
-# or off. We could omit any disabled action if we wanted, since all 
+# Matching starts here. Remember that at this time, all actions are
+# disabled, so we need to explicitly enable the ones we want. 
+#
+# We begin with "default" action settings, i.e. we define a set of actions
+# for a pattern ("/") that matches all URLs. This default set will be
+# applied to all requests as a start, and can be partly or wholly overridden
+# by later matches further down this file, or in user.action.
+#
+# We will show all potential actions here whether they are enabled
+# or not. We could omit any disabled action if we wanted, since all 
 # actions are 'off' by default anyway. Shown for completeness only.
 # Actions are enabled if preceded by a '+', otherwise they are disabled 
 # (unless an alias has been defined without this).
@@ -2680,7 +2976,7 @@ for-privoxy-version=3.0
  +filter{nimda} \
  +filter{banners-by-size} \
  -filter{shockwave-flash} \
- -filter{crude-prental} \
+ -filter{crude-parental} \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \
  -hide-referrer \
@@ -2690,8 +2986,8 @@ for-privoxy-version=3.0
  -limit-connect \
  +prevent-compression \
  -session-cookies-only \
- -prevent-reading-cookies \
- -prevent-setting-cookies \
+ -crunch-outgoing-cookies \
+ -crunch-incoming-cookies \
  -kill-popups \
  -send-vanilla-wafer \
  -send-wafer \
@@ -2712,7 +3008,7 @@ for-privoxy-version=3.0
 
 # Shopping sites - not as fragile but require some special 
 # handling. We still want to block ads, and we will allow 
-# persistant cookies via the 'shop' alias:
+# persistent cookies via the 'shop' alias:
  { shop }
  .quietpc.com 
  .worldpay.com   # for quietpc.com
@@ -2773,7 +3069,7 @@ for-privoxy-version=3.0
  .hitbox.com 
 
 
-# The above block section will probably inadvertantly catch some 
+# The above block section will probably inadvertently catch some 
 # sites we DO NOT want blocked via the wildcards and regular expressions. 
 # Now let's set exceptions to the exceptions so the good guys get better 
 # treatment. Disable block action:
@@ -2815,20 +3111,20 @@ Now a few examples of some things that one might do with a user.action file.
 
 # Any aliases you want to use need to be re-defined here.
 # Alias to turn off cookie handling, ie allow all cookies unmolested.
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
-                    -session-cookies-only
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
+                       -session-cookies-only
 
 # Fragile sites should have the minimum changes:
  fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -prevent-cookies -kill-popups
+               -crunch-all-cookies -kill-popups
 
 # Allow persistent cookies for a few regular sites that we 
 # trust via our above alias. These will be saved from one browser session 
-# to the next. We are explicity turning off any and all cookie handling, 
-# even though the prevent-*-cookie settings were disabled in our above 
+# to the next. We are explicitly turning off any and all cookie handling, 
+# even though the crunch-*-cookies settings were disabled in our above 
 # default.action anyway. So cookies from these domains will come through 
 # unmolested.
- { -prevent-cookies }
+ { -crunch-all-cookies }
  .sun.com
  .yahoo.com
  .msdn.microsoft.com
@@ -2843,7 +3139,7 @@ Now a few examples of some things that one might do with a user.action file.
  www.my-isp-example.com/logo[0-9].gif
 
 
-# Say the site where you do your homebanking needs to open
+# Say the site where you do your home banking needs to open
 # popup windows, but you have chosen to kill popups by
 # default. This will allow it for your-example-bank.com:
 #
@@ -2856,63 +3152,6 @@ Now a few examples of some things that one might do with a user.action file.
  { fragile }
  .forbes.com
    
-
--------------------------------------------------------------------------------
-
-8.6. Aliases
-
-Custom "actions", known to Privoxy as "aliases", can be defined by combining
-other "actions". These can in turn be invoked just like the built-in "actions".
-Currently, an alias can contain any character except space, tab, "=", "{" or "}
-". But please use only "a"- "z", "0"-"9", "+", and "-". Alias names are not
-case sensitive, and must be defined before other actions in the actions file!
-And there can only be one set of "aliases" defined per file. Each actions file
-may have its own aliases, but they are only visible within that file. Aliases
-do not requir a "+" or "-" sign in front, since they are merely expanded.
-
-Now let's define a few aliases:
-
- # Useful custom aliases we can use later. These must come first!
- {{alias}}
- +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
- fragile     =
- -block -prevent-cookies -filter -fast-redirects -hide-referer -kill-popups
- shop        = -prevent-cookies -filter -fast-redirects
- +imageblock = +block +handle-as-image
-
- # Aliases defined from other aliases, for people who don't like to type 
- # too much:  ;-)
- c0 = +prevent-cookies
- c1 = -prevent-cookies
- #... etc.  Customize to your heart's content.
-   
-
-Some examples using our "shop" and "fragile" aliases from above. These would
-appear in the lower sections of an actions file as exceptions to the default
-actions (as defined in the upper section):
-
- # These sites are very complex and require
- # minimal interference.
- {fragile}
-  .office.microsoft.com
-  .windowsupdate.microsoft.com
-  .nytimes.com
-
- # Shopping sites - but we still want to block ads.
- {shop}
-  .quietpc.com
-  .worldpay.com   # for quietpc.com
-  .scan.co.uk
-
- # These shops require pop-ups also 
- {shop -kill-popups}
-  .dabs.com
-  .overclockers.co.uk
-   
-
-The "shop" and "fragile" aliases are often used for "problem" sites that
-require most actions to be disabled in order to function properly. 
 
 -------------------------------------------------------------------------------
 
@@ -2993,7 +3232,7 @@ identifiers in the filter file itself. Example:
 
 This would activate that particular filter. Similarly, "+filter" can be turned
 off for selected sites as: "-filter{html-annoyances}". Remember too, all
-actions are off by default, unless they are explicity enabled in one of the
+actions are off by default, unless they are explicitly enabled in one of the
 actions files.
 
 -------------------------------------------------------------------------------
@@ -3008,7 +3247,8 @@ cgi-style.css is used to control the HTML attributes (fonts, etc).
 
 The default Blocked (Privoxy needs to be running for page to display) banner
 page with the bright red top banner, is called just "blocked". This may be
-customized or replaced with something else if desired. 
+customized or replaced with something else if desired (not recommended for the
+casual user).
 
 -------------------------------------------------------------------------------
 
@@ -3110,7 +3350,7 @@ this program; if not, write to the
 12.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
-improvments and enhancements over the original.
+improvements and enhancements over the original.
 
 Junkbuster was originally written by Anonymous Coders and Junkbusters
 Corporation, and was released as free open-source software under the GNU GPL. 
@@ -3405,7 +3645,7 @@ requested by your browser and Privoxy is on duty:
    
   * First, the server headers are read and processed to determine, among other
     things, the MIME type (document type) and encoding. The headers are then
-    filtered as deterimed by the "+prevent-setting-cookies", 
+    filtered as determined by the "+crunch-incoming-cookies", 
     "+session-cookies-only", and "+downgrade-http-version" actions.
    
   * If the "+kill-popups" action applies, and it is an HTML or JavaScript
@@ -3479,8 +3719,8 @@ Let's try an example, google.com, and look at it one section at a time:
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size}     
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge}          
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect       
- +prevent-compression +session-cookies-only -prevent-reading-cookies                
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }            
+ +prevent-compression +session-cookies-only -crunch-outgoing-cookies                
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer }            
 /                                                                                   
                                                                                     
  { -session-cookies-only }                                                          
@@ -3525,8 +3765,8 @@ Privoxy is applying all its "actions" to "google.com":
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size}    
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge}         
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect      
- +prevent-compression -session-cookies-only -prevent-reading-cookies               
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer             
+ +prevent-compression -session-cookies-only -crunch-outgoing-cookies               
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer             
 
 Notice the only difference here to the previous listing, is to "fast-redirects"
 and "session-cookies-only".
@@ -3566,8 +3806,8 @@ giving us problems. We are getting a blank page. Hmmm...
    +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal}             
    +filter{fun} +hide-forwarded-for-headers +hide-from-header{block}                 
    +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank}  
-   +prevent-compression +session-cookies-only -prevent-setting-cookies               
-   -prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }           
+   +prevent-compression +session-cookies-only -crunch-incoming-cookies               
+   -crunch-outgoing-cookies +kill-popups -send-vanilla-wafer -send-wafer }           
    /                                                                                 
                                                                                      
  { +block +handle-as-image }                                                         
