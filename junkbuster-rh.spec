@@ -93,6 +93,7 @@ URL: http://ijbswa.sourceforge.net/
 Packager: Stefan Waldherr <stefan@waldherr.org>
 Obsoletes: junkbuster-raw junkbuster-blank
 Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
+BuildRequires: perl
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
@@ -154,7 +155,8 @@ perl -pi -e 's/JB_USER=\"junkbuster\"/JB_USER=\"junkbust\"/' \
 
 %post
 if [ "$1" = "1" ]; then
-        /sbin/chkconfig --add junkbuster
+     /sbin/chkconfig --add junkbuster
+	/sbin/service junkbuster condrestart > /dev/null 2>&1
 fi
 # for upgrade from 2.0.x
 chown junkbust:junkbust /var/log/junkbuster/* 2>/dev/null
@@ -169,17 +171,17 @@ if [ "$1" = "0" ]; then
 fi
 
 %postun
-if [ "$1" -ge "1" ]; then
-	/sbin/service junkbuster condrestart > /dev/null 2>&1
-fi
+#if [ "$1" -ge "1" ]; then
+#	/sbin/service junkbuster condrestart > /dev/null 2>&1
+#fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc doc/webserver/developer-manual doc/webserver/user-manual README
-%doc junkbuster.weekly junkbuster.monthly
+%doc doc/webserver/developer-manual doc/webserver/user-manual README 
+%doc junkbuster.weekly junkbuster.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
 %attr(0744,junkbust,junkbust) %dir /var/log/junkbuster

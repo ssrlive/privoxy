@@ -31,7 +31,7 @@ is an instrumentable HTTP proxy that filters the
 data stream between
 web servers and browsers.
 \fBJunkbuster\fP can be used to protect privacy, manage cookies, filter web
-page content, manage access restrictions, and to remove such annoying Internet
+page content, manage access restrictions, and to discard such annoying Internet
 junk as ads, banners, and pop-ups. Or whatever other annoyances strike your
 fancy.
 
@@ -145,7 +145,6 @@ A brief example of what an \fIactionsfile\fP configuration might look like:
 # Block any URLs that match these patterns
 {+block}
  /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\\.(gif|jpe?g))
- /.*/(.*[-_.])?count(er)?(\\.cgi|\\.dll|\\.exe|[?/])
  /.*/(plain|live|rotate)[-_.]?ads?/
  /.*/(sponsor)s?[0-9]?/
  /.*/ad(server|stream|juggler)\\.(cgi|pl|dll|exe)
@@ -153,7 +152,6 @@ A brief example of what an \fIactionsfile\fP configuration might look like:
  /.*/adv((er)?ts?|ertis(ing|ements?))?/
  /.*/banners?/
  /.*/popupads/
- /.*/sponsor.*\\.gif
  /.*/advert[0-9]+\\.jpg
  /ad_images/
  /.*/ads/
@@ -169,7 +167,8 @@ A brief example of what an \fIactionsfile\fP configuration might look like:
 .sp
 .PP
 See the comments in the configuration files themselves, or the user-manual 
-for explanations of the above syntax.
+for explanations of the above syntax, and other \fBJunkbuster\fP configuration 
+options.
 
 .SH "FILES"
 \fI/usr/sbin/junkbuster\fP
@@ -183,12 +182,12 @@ for explanations of the above syntax.
 \fI/var/log/junkbuster/logfile\fP
 
 .P
-Various other files should be included, but may vary depending on platform.
-More documentation should be included in the local documentation directory,
-though is not complete at this time.
+Various other files should be included, but may vary depending on platform 
+and build configuration. More documentation should be included in the local
+documentation directory, though is not complete at this time.
 
 .SH NOTES
-This is a development version of \fBJunkbuster\fP. All features are not 
+This is a development version of \fBJunkbuster\fP. Not all features are  
 complete.
 
 .SH BUGS
@@ -238,8 +237,7 @@ http://www.squid-cache.org/
 .br
  Hal Burgiss
 
-
-.SH COPYRIGHT AND GPL
+.SH COPYRIGHT AND LICENSE
 Orginally written by, and copyrighted by, the Anonymous Coders and Junkbusters
 Corporation. 
 .P
