@@ -1232,7 +1232,7 @@ if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
   have_pcrs=yes
 else
   echo "$ac_t""no" 1>&6
-have_pcre=no
+have_pcrs=no
 fi
 
 else
