@@ -1,0 +1,107 @@
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+   Integrated browser based configuration and control utility (<ulink
+   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
+   and filter effects.
+  </para>
+ </listitem> 
+<!--
+ <listitem>
+  <para>
+   Modularized configuration that will allow for system wide settings, and
+   individual user settings. (not implemented yet, probably a 3.1 feature)
+  </para>
+ </listitem> 
+-->
+ <listitem>
+  <para>
+    Blocking of annoying pop-up browser windows.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Support for Perl Compatible Regular Expressions in the configuration files, and 
+   generally a more sophisticated and flexible configuration syntax over
+   previous versions. 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   GIF de-animation. 
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Web page content filtering (removes banners based on size,
+   invisible <quote>web-bugs</quote>, JavaScript, pop-ups, status bar abuse,
+   etc.)
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Bypass many click-tracking scripts (avoids script redirection).
+ 
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Multi-threaded (POSIX and native threads).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Auto-detection and re-reading of config file changes.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   User-customizable HTML templates (e.g. 404 error page).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Improved cookie management features (e.g. session based cookies).
+  </para>
+</listitem> 
+
+ <listitem>
+  <para>
+   Improved signal handling, and a true daemon mode (Unix).
+  </para>
+</listitem> 
+
+ <listitem>
+  <para>
+   Builds from source on most UNIX-like systems. Packages available for: Linux
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
+ 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   In addition, the configuration is much more powerful and versatile over-all.
+  </para>
+</listitem> 
+
+ </itemizedlist>
+</para>
+
+
