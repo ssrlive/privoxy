@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.39 2002/03/08 18:57:29 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.41 2002/03/11 22:58:32 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -33,7 +33,7 @@ Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.11
-Release: 8
+Release: 9
 Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -55,7 +55,7 @@ and tastes. Internet Junkbuster has application for both stand-alone
 systems and multi-user networks.
 
 %prep
-%setup -q -c -n ijbswa
+%setup -q -c
 
 %build
 %configure
@@ -434,6 +434,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 	additional "-r @" flag.
 
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.41  2002/03/11 22:58:32  hal9
+# Remove --enable-no-gifs
+#
 # Revision 1.39  2002/03/08 18:57:29  swa
 # remove user junkbuster after de-installation.
 #
