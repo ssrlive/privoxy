@@ -26,6 +26,7 @@
 
 -->
 
+<!-- READ: -->
 <!-- Careful of the literllayout tags and finished formatting -->
 
 <para>
@@ -81,7 +82,7 @@ blocked images, popups and the like. Check back.
    <literallayout>
  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
       
-      <ulink url="http://p.p/">http://p.p/</ulink>, and select <ulink url="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
+    <ulink url="http://p.p/">http://p.p/</ulink>, and select <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
    </literallayout>
    <para>
     This page can also be reached from many of the internal CGI pages.
