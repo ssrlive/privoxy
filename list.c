@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.9 2001/09/16 13:20:29 jongfoster Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.10 2001/09/16 17:30:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.9 2001/09/16 13:20:29 jongfoster Exp $"
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.10  2001/09/16 17:30:24  jongfoster
+ *    Fixing a compiler warning.
+ *
  *    Revision 1.9  2001/09/16 13:20:29  jongfoster
  *    Rewrite of list library.  Now has seperate header and list_entry
  *    structures.  Also added a large sprinking of assert()s to the list
@@ -269,11 +272,12 @@ static int list_is_valid (const struct list *the_list)
  *          1  :  the_list = pointer to list
  *          2  :  str = string to add to the list (maybe NULL)
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.  On
- *                error, the_list will be unchanged.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                On error, the_list will be unchanged.
  *
  *********************************************************************/
-int enlist(struct list *the_list, const char *str)
+jb_err enlist(struct list *the_list, const char *str)
 {
    struct list_entry *cur;
 
@@ -282,7 +286,7 @@ int enlist(struct list *the_list, const char *str)
 
    if (NULL == (cur = (struct list_entry *)zalloc(sizeof(*cur))))
    {
-      return 1;
+      return JB_ERR_MEMORY;
    }
 
    if (str)
@@ -290,7 +294,7 @@ int enlist(struct list *the_list, const char *str)
       if (NULL == (cur->str = strdup(str)))
       {
          free(cur);
-         return 1;
+         return JB_ERR_MEMORY;
       }
    }
    /* else { cur->str = NULL; }  - implied by zalloc */
@@ -309,7 +313,7 @@ int enlist(struct list *the_list, const char *str)
    }
 
    assert(list_is_valid(the_list));
-   return 0;
+   return JB_ERR_OK;
 }
 
 
@@ -324,11 +328,12 @@ int enlist(struct list *the_list, const char *str)
  *          1  :  the_list = pointer to list
  *          2  :  str = string to add to the list (maybe NULL)
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.  On
- *                error, the_list will be unchanged.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                On error, the_list will be unchanged.
  *
  *********************************************************************/
-int enlist_first(struct list *the_list, const char *str)
+jb_err enlist_first(struct list *the_list, const char *str)
 {
    struct list_entry *cur;
 
@@ -337,7 +342,7 @@ int enlist_first(struct list *the_list, const char *str)
 
    if (NULL == (cur = (struct list_entry *)zalloc(sizeof(*cur))))
    {
-      return 1;
+      return JB_ERR_MEMORY;
    }
 
    if (str)
@@ -345,7 +350,7 @@ int enlist_first(struct list *the_list, const char *str)
       if (NULL == (cur->str = strdup(str)))
       {
          free(cur);
-         return 1;
+         return JB_ERR_MEMORY;
       }
    }
    /* else { cur->str = NULL; }  - implied by zalloc */
@@ -359,7 +364,7 @@ int enlist_first(struct list *the_list, const char *str)
    }
 
    assert(list_is_valid(the_list));
-   return 0;
+   return JB_ERR_OK;
 }
 
 
@@ -378,14 +383,15 @@ int enlist_first(struct list *the_list, const char *str)
  *          3  :  num_significant_chars = number of chars to use
  *                for uniqueness test, or 0 to require an exact match.
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.  On
- *                error, the_list will be unchanged.  "Success"
- *                does not indicate whether or not the item was
- *                already in the list.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                On error, the_list will be unchanged.
+ *                "Success" does not indicate whether or not the
+ *                item was already in the list.
  *
  *********************************************************************/
-int enlist_unique(struct list *the_list, const char *str,
-                  int num_significant_chars)
+jb_err enlist_unique(struct list *the_list, const char *str,
+                     int num_significant_chars)
 {
    struct list_entry *cur_entry;
 
@@ -403,7 +409,7 @@ int enlist_unique(struct list *the_list, const char *str,
            && (0 == strncmp(str, cur_entry->str, num_significant_chars)))
          {
             /* Already there */
-            return 0;
+            return JB_ERR_OK;
          }
       }
    }
@@ -415,7 +421,7 @@ int enlist_unique(struct list *the_list, const char *str,
          if ( (cur_entry->str != NULL) && (0 == strcmp(str, cur_entry->str)))
          {
             /* Already there */
-            return 0;
+            return JB_ERR_OK;
          }
       }
    }
@@ -437,16 +443,18 @@ int enlist_unique(struct list *the_list, const char *str,
  *          2  :  name = HTTP header name (e.g. "Content-type")
  *          3  :  value = HTTP header value (e.g. "text/html")
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.  On
- *                error, the_list will be unchanged.  "Success"
- *                does not indicate whether or not the header was
- *                already in the list.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                On error, the_list will be unchanged.
+ *                "Success" does not indicate whether or not the
+ *                header was already in the list.
  *
  *********************************************************************/
-int enlist_unique_header(struct list *the_list, const char *name, const char *value)
+jb_err enlist_unique_header(struct list *the_list, const char *name,
+                            const char *value)
 {
    int length;
-   int result;
+   jb_err result;
    char *str;
 
    assert(the_list);
@@ -457,7 +465,7 @@ int enlist_unique_header(struct list *the_list, const char *name, const char *va
    length = strlen(name) + 2;
    if (NULL == (str = (char *)malloc(length + strlen(value) + 1)))
    {
-      return 1;
+      return JB_ERR_MEMORY;
    }
    strcpy(str, name);
    str[length - 2] = ':';
@@ -546,7 +554,7 @@ char *list_to_text(const struct list *the_list)
 
    if ((ret = (char *)malloc(size + 1)) == NULL)
    {
-      return(NULL);
+      return NULL;
    }
 
    ret[size] = '\0';
@@ -564,7 +572,7 @@ char *list_to_text(const struct list *the_list)
    }
    *s++ = '\r'; *s++ = '\n';
 
-   return(ret);
+   return ret;
 }
 
 
@@ -679,11 +687,12 @@ int list_remove_list(struct list *dest, const struct list *src)
  *                       All existing entries will be removed.
  *          1  :  src = pointer to source list for copy.
  *
- * Returns     :  0 on success, nonzero on error.  On error, dest
- *                will be empty.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *                On error, dest will be empty.
  *
  *********************************************************************/
-int list_duplicate(struct list *dest, const struct list *src)
+jb_err list_duplicate(struct list *dest, const struct list *src)
 {
    struct list_entry * cur_src;
    struct list_entry * cur_dest;
@@ -707,7 +716,7 @@ int list_duplicate(struct list *dest, const struct list *src)
          assert(list_is_valid(src));
          assert(list_is_valid(dest));
 
-         return 1;
+         return JB_ERR_MEMORY;
       }
 
       if (cur_src->str)
@@ -720,7 +729,7 @@ int list_duplicate(struct list *dest, const struct list *src)
             assert(list_is_valid(src));
             assert(list_is_valid(dest));
 
-            return 1;
+            return JB_ERR_MEMORY;
          }
       }
       /* else { cur_dest->str = NULL; }  - implied by zalloc */
@@ -736,7 +745,7 @@ int list_duplicate(struct list *dest, const struct list *src)
             assert(list_is_valid(src));
             assert(list_is_valid(dest));
 
-            return 1;
+            return JB_ERR_MEMORY;
          }
          if (cur_src->str)
          {
@@ -748,7 +757,7 @@ int list_duplicate(struct list *dest, const struct list *src)
                assert(list_is_valid(src));
                assert(list_is_valid(dest));
 
-               return 1;
+               return JB_ERR_MEMORY;
             }
          }
          /* else { cur_dest->str = NULL; }  - implied by zalloc */
@@ -760,7 +769,7 @@ int list_duplicate(struct list *dest, const struct list *src)
    assert(list_is_valid(src));
    assert(list_is_valid(dest));
 
-   return 0;
+   return JB_ERR_OK;
 }
 
 
@@ -775,12 +784,13 @@ int list_duplicate(struct list *dest, const struct list *src)
  *          1  :  dest = pointer to destination list for merge.
  *          2  :  src = pointer to source for merge.
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *                On error, some (but not all) of src might have
  *                been copied into dest.
  *
  *********************************************************************/
-int list_append_list_unique(struct list *dest, const struct list *src)
+jb_err list_append_list_unique(struct list *dest, const struct list *src)
 {
    struct list_entry * cur;
 
@@ -798,7 +808,7 @@ int list_append_list_unique(struct list *dest, const struct list *src)
             assert(list_is_valid(src));
             assert(list_is_valid(dest));
 
-            return 1;
+            return JB_ERR_MEMORY;
          }
       }
    }
@@ -806,7 +816,7 @@ int list_append_list_unique(struct list *dest, const struct list *src)
    assert(list_is_valid(src));
    assert(list_is_valid(dest));
 
-   return 0;
+   return JB_ERR_OK;
 }
 
 
@@ -897,6 +907,27 @@ void free_map(struct map *the_map)
  *                      later, set the copy flags for constants or
  *                      strings that will be independantly free()d.
  *
+ *                Note2: This function allows NULL parameters - it
+ *                       returns JB_ERR_MEMORY in that case.
+ *
+ *                Note3: If this function returns JB_ERR_MEMORY,
+ *                       it will free(name) unless you specify
+ *                       name_needs_copying, and similarly it will
+ *                       free(value) unless you specify
+ *                       value_needs_copying.
+ *
+ *                Due to Note2 and Note3 above, the following code
+ *                is legal, and will never crash or leak memory even
+ *                if the system runs out of memory:
+ *
+ *                    err = map(mymap, "xyz", 1, html_encode(somestring), 0);
+ *
+ *                err will be set to JB_ERR_MEMORY if either call runs
+ *                out-of-memory.  Without these features, you would 
+ *                need to check the return value of html_encode in the 
+ *                above example for NULL, which (at least) doubles the 
+ *                amount of error-checking code needed.
+ *
  * Parameters  :
  *          1  :  the_map = map to add to
  *          2  :  name = name to add
@@ -904,22 +935,31 @@ void free_map(struct map *the_map)
  *          4  :  value = value to add
  *          5  :  value_needs_copying = flag set if a copy of value should be used
  *
- * Returns     :  0 on success, nonzero on out-of-memory error.
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-int map(struct map *the_map,
-        const char *name, int name_needs_copying,
-        const char *value, int value_needs_copying)
+jb_err map(struct map *the_map,
+           const char *name, int name_needs_copying,
+           const char *value, int value_needs_copying)
 {
    struct map_entry *new_entry;
 
    assert(the_map);
-   assert(name);
-   assert(value);
 
-   if (NULL == (new_entry = zalloc(sizeof(*new_entry))))
+   if ( (NULL == value)
+     || (NULL == name)
+     || (NULL == (new_entry = zalloc(sizeof(*new_entry)))) )
    {
-      return 1;
+      if ((name != NULL) && (!name_needs_copying))
+      {
+          free((char *)name);
+      }
+      if ((value != NULL) && (!value_needs_copying))
+      {
+          free((char *)value);
+      }
+      return JB_ERR_MEMORY;
    }
 
    if (name_needs_copying)
@@ -927,7 +967,11 @@ int map(struct map *the_map,
       if (NULL == (name = strdup(name)))
       {
          free(new_entry);
-         return 1;
+         if (!value_needs_copying)
+         {
+             free((char *)value);
+         }
+         return JB_ERR_MEMORY;
       }
    }
 
@@ -935,12 +979,9 @@ int map(struct map *the_map,
    {
       if (NULL == (value = strdup(value)))
       {
-         if (name_needs_copying)
-         {
-             free((char *)name);
-         }
+         free((char *)name);
          free(new_entry);
-         return 1;
+         return JB_ERR_MEMORY;
       }
    }
 
@@ -959,7 +1000,7 @@ int map(struct map *the_map,
       the_map->last = new_entry;
    }
 
-   return 0;
+   return JB_ERR_OK;
 }
 
 

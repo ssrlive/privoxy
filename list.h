@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.7 2001/09/16 13:20:29 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.8 2001/09/16 17:30:24 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.8  2001/09/16 17:30:24  jongfoster
+ *    Fixing a compiler warning.
+ *
  *    Revision 1.7  2001/09/16 13:20:29  jongfoster
  *    Rewrite of list library.  Now has seperate header and list_entry
  *    structures.  Also added a large sprinking of assert()s to the list
@@ -99,18 +102,18 @@ extern "C" {
 extern void init_list    (struct list *the_list);
 extern void destroy_list (struct list *the_list);
 
-extern int  enlist                 (struct list *the_list, const char *str);
-extern int  enlist_unique          (struct list *the_list, const char *str, int num_significant_chars);
-extern int  enlist_unique_header   (struct list *the_list, const char *name, const char *value);
-extern int  enlist_first           (struct list *the_list, const char *str);
-extern int  list_append_list_unique(struct list *dest,     const struct list *src);
-extern int  list_duplicate         (struct list *dest,     const struct list *src);
+extern jb_err enlist                 (struct list *the_list, const char *str);
+extern jb_err enlist_unique          (struct list *the_list, const char *str, int num_significant_chars);
+extern jb_err enlist_unique_header   (struct list *the_list, const char *name, const char *value);
+extern jb_err enlist_first           (struct list *the_list, const char *str);
+extern jb_err list_append_list_unique(struct list *dest,     const struct list *src);
+extern jb_err list_duplicate         (struct list *dest,     const struct list *src);
 
-extern int  list_remove_item(struct list *the_list, const char *str);
-extern int  list_remove_list(struct list *dest,     const struct list *src);
-extern void list_remove_all (struct list *the_list);
+extern int    list_remove_item(struct list *the_list, const char *str);
+extern int    list_remove_list(struct list *dest,     const struct list *src);
+extern void   list_remove_all (struct list *the_list);
 
-extern int  list_is_empty(const struct list *the_list);
+extern int    list_is_empty(const struct list *the_list);
 
 extern char * list_to_text(const struct list *the_list);
 
