@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.24 2001/09/13 23:05:50 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.25 2001/09/16 13:21:27 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.24 2001/09/13 23:05:50 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.25  2001/09/16 13:21:27  jongfoster
+ *    Changes to use new list functions.
+ *
  *    Revision 1.24  2001/09/13 23:05:50  jongfoster
  *    Changing the string paramater to the header parsers a "const".
  *
@@ -241,7 +244,6 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.24 2001/09/13 23:05:50 jongfoster
 #include "encode.h"
 #include "filters.h"
 #include "loaders.h"
-#include "showargs.h"
 #include "jcc.h"
 #include "ssplit.h"
 #include "errlog.h"

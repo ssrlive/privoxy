@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgi.c,v 1.25 2001/09/16 15:02:35 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.1 2001/09/16 15:47:37 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -34,7 +34,13 @@ const char cgiedit_rcs[] = "$Id: cgi.c,v 1.25 2001/09/16 15:02:35 jongfoster Exp
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: cgi.c,v $
+ *    $Log: cgiedit.c,v $
+ *    Revision 1.1  2001/09/16 15:47:37  jongfoster
+ *    First version of CGI-based edit interface.  This is very much a
+ *    work-in-progress, and you can't actually use it to edit anything
+ *    yet.  You must #define FEATURE_CGI_EDIT_ACTIONS for these changes
+ *    to have any effect.
+ *
  *
  **********************************************************************/
 
@@ -67,7 +73,6 @@ const char cgiedit_rcs[] = "$Id: cgi.c,v 1.25 2001/09/16 15:02:35 jongfoster Exp
 #include "actions.h"
 #include "errlog.h"
 #include "miscutil.h"
-#include "showargs.h"
 #include "loadcfg.h"
 
 const char cgiedit_h_rcs[] = CGIEDIT_H_VERSION;

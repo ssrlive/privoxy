@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.39 2001/09/16 13:21:27 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.40 2001/09/16 15:41:45 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.39 2001/09/16 13:21:27 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.40  2001/09/16 15:41:45  jongfoster
+ *    Fixing signed/unsigned comparison warning.
+ *
  *    Revision 1.39  2001/09/16 13:21:27  jongfoster
  *    Changes to use new list functions.
  *
@@ -338,7 +341,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.39 2001/09/16 13:21:27 jongfoster Exp $";
 #include "jcc.h"
 #include "filters.h"
 #include "loaders.h"
-#include "showargs.h"
 #include "parsers.h"
 #include "killpopup.h"
 #include "miscutil.h"

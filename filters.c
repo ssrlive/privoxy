@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.31 2001/09/16 11:38:02 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.32 2001/09/16 13:21:27 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.31 2001/09/16 11:38:02 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.32  2001/09/16 13:21:27  jongfoster
+ *    Changes to use new list functions.
+ *
  *    Revision 1.31  2001/09/16 11:38:02  jongfoster
  *    Splitting fill_template() into 2 functions:
  *    template_load() loads the file
@@ -291,12 +294,8 @@ const char filters_rcs[] = "$Id: filters.c,v 1.31 2001/09/16 11:38:02 jongfoster
 #include "project.h"
 #include "filters.h"
 #include "encode.h"
-#include "jcc.h"
-#include "showargs.h"
 #include "parsers.h"
 #include "ssplit.h"
-#include "gateway.h"
-#include "jbsockets.h"
 #include "errlog.h"
 #include "jbsockets.h"
 #include "miscutil.h"
