@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.8 2001/06/03 19:12:00 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.9 2001/06/07 23:10:53 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,62 +40,11 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.9  2001/06/07 23:10:53  jongfoster
+ *    Replacing struct gateway with struct forward_spec
+ *
  *    Revision 1.8  2001/06/03 19:12:00  oes
  *    extracted-CGI relevant stuff
- *
- *    Revision 1.8  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.7  2001/05/31 21:21:30  jongfoster
  *    Permissionsfile / actions file changes:
@@ -213,30 +162,52 @@
 extern "C" {
 #endif
 
+/*
+ * ACL checking
+ */
 #ifdef ACL_FILES
 extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
 extern int acl_addr(char *aspec, struct access_control_addr *aca);
 #endif /* def ACL_FILES */
 
-extern char *block_url(struct http_request *http, struct client_state *csp);
+/*
+ * Interceptors
+ */
+extern struct http_response *block_url(struct client_state *csp);
+extern struct http_response *redirect_url(struct client_state *csp);
 #ifdef TRUST_FILES
-extern char *trust_url(struct http_request *http, struct client_state *csp);
+extern struct http_response *trust_url(struct client_state *csp);
+#endif /* def TRUST_FILES */
+
+/*
+ * Request inspectors
+ */
+#ifdef TRUST_FILES
+extern int is_untrusted_url(struct client_state *csp);
 #endif /* def TRUST_FILES */
 #ifdef IMAGE_BLOCKING
-extern int block_imageurl(struct http_request *http, struct client_state *csp);
+extern int is_imageurl(struct client_state *csp);
 #endif /* def IMAGE_BLOCKING */
 
+/*
+ * Determining applicable actions
+ */
 extern void url_actions(struct http_request *http, 
                         struct client_state *csp);
 extern void apply_url_actions(struct current_action_spec *action, 
                               struct http_request *http, 
                               struct url_actions *b);
-
+/*
+ * Determining parent proxies
+ */
 extern const struct forward_spec *forward_url(struct http_request *http, struct client_state *csp);
 
 extern struct url_spec dsplit(char *domain);
 extern int domaincmp(struct url_spec *pattern, struct url_spec *fqdn);
 
+/*
+ * Content modification
+ */
 #ifdef PCRS
 extern char *re_process_buffer(struct client_state *csp);
 #endif /* def PCRS */
