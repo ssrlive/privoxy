@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.31 2001/10/05 14:25:02 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.32 2001/10/07 15:43:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,35 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.31 2001/10/05 14:25:02 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.32  2001/10/07 15:43:28  oes
+ *    Removed FEATURE_DENY_GZIP and replaced it with client_accept_encoding,
+ *       client_te and client_accept_encoding_adder, triggered by the new
+ *       +no-compression action. For HTTP/1.1 the Accept-Encoding header is
+ *       changed to allow only identity and chunked, and the TE header is
+ *       crunched. For HTTP/1.0, Accept-Encoding is crunched.
+ *
+ *    parse_http_request no longer does anything than parsing. The rewriting
+ *      of http->cmd and version mangling are gone. It now also recognizes
+ *      the put and delete methods and saves the url in http->url. Removed
+ *      unused variable.
+ *
+ *    renamed content_type and content_length to have the server_ prefix
+ *
+ *    server_content_type now only works if csp->content_type != CT_TABOO
+ *
+ *    added server_transfer_encoding, which
+ *      - Sets CT_TABOO to prohibit filtering if encoding compresses
+ *      - Raises the CSP_FLAG_CHUNKED flag if Encoding is "chunked"
+ *      - Change from "chunked" to "identity" if body was chunked
+ *        but has been de-chunked for filtering.
+ *
+ *    added server_content_md5 which crunches any Content-MD5 headers
+ *      if the body was modified.
+ *
+ *    made server_http11 conditional on +downgrade action
+ *
+ *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
+ *
  *    Revision 1.31  2001/10/05 14:25:02  oes
  *    Crumble Keep-Alive from Server
  *
@@ -312,7 +341,7 @@ const struct parsers client_patterns[] = {
 
 
 const struct parsers server_patterns[] = {
-   { "HTTP/1.1 ",           9, server_http11 },
+   { "HTTP",                4, server_http },
    { "set-cookie:",        11, server_set_cookie },
    { "connection:",        11, crumble },
    { "Content-Type:",      13, server_content_type },
@@ -1485,10 +1514,13 @@ void connection_close_adder(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  server_http11
+ * Function    :  server_http
  *
- * Description :  Rewrite HTTP/1.1 answers to HTTP/1.0 if +downgrade
- *                action applies.
+ * Description :  - Save the HTTP Status into csp->http->status
+ *                - Set CT_TABOO to prevent filtering if the answer
+ *                  is a partial range (HTTP status 206)
+ *                - Rewrite HTTP/1.1 answers to HTTP/1.0 if +downgrade
+ *                  action applies.
  *
  * Parameters  :
  *          1  :  v = parser pattern that matched this header
@@ -1498,22 +1530,22 @@ void connection_close_adder(struct client_state *csp)
  * Returns     :  Copy of changed  or original answer.
  *
  *********************************************************************/
-char *server_http11(const struct parsers *v, const char *s, struct client_state *csp)
+char *server_http(const struct parsers *v, const char *s, struct client_state *csp)
 {
-   char *ret;
+   char *ret = strdup(s);
+   
+   sscanf(ret, "HTTP/%*d.%*d %d", &(csp->http->status));
+   if (csp->http->status == 206)
+   {
+      csp->content_type = CT_TABOO;
+   }
 
    if ((csp->action->flags & ACTION_DOWNGRADE) != 0)
    {
-      /* "HTTP/1.1 ..." -> "HTTP/1.0 ..." */
-      ret = strdup(s);
-      ret[7] = '0'; 
-
-      return(ret);
+      ret[7] = '0';
+      log_error(LOG_LEVEL_HEADER, "Downgraded answer to HTTP/1.0");
    }
-   else
-   {
-      return(strdup(s));
-   }
+   return(ret);
 
 }
 
