@@ -5,7 +5,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
-<!entity p-status "BETA">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
 <!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -19,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.1 2002/04/07 08:10:48 swa Exp $
+ $Id: index.sgml,v 1.2 2002/04/07 09:06:45 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -36,6 +36,8 @@
  to live a peaceful existence!
  ========================================================================
 
+ Note: This is the privoxy home page.
+
 -->
 
 <article id="index">
@@ -44,10 +46,9 @@
 
 <title>Privoxy - Homepage</title>
 
-<!-- FIXME -->
-<!-- <meta name="description" content="Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies."> -->
-<!-- <meta name="keywords" content="stop, junk, privoxy, ad, advertisement, werbung, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out "> -->
-<!-- <meta name="MSSmartTagsPreventParsing" content="TRUE"> -->
+<keywordset>
+ <Keyword>stop, junk, privoxy, ad, advertisement, werbung, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out</Keyword>
+</keywordset>
 
 <abstract>
 <![%dummy;[
@@ -67,12 +68,9 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="intro" label="">
 <title>Introduction</title>
-<!-- dummy section to force TOC on page by itself -->
-<!-- DO NOT REMOVE! please ;) -->
-<!--
- Include privoxy.sgml boilerplate:
--->
+<!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
+<!-- end boilerplate -->
 </sect1>
 
 <sect1 id="moreinfos" label="">
@@ -162,10 +160,9 @@ page</ulink> on Sourceforge
 
 <sect1 id="support" label="">
 <title>Support and Service via Sourceforge</title>
-<!--
- Include file
--->
+<!-- Include contacting.sgml -->
  &contacting;
+<!-- end include -->
 </sect1>
 
 <sect1 label="">
@@ -203,6 +200,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.2  2002/04/07 09:06:45  swa
+ users can now completely browse offline
+
  Revision 1.1  2002/04/07 08:10:48  swa
  create some of the webserver docs
  automatically (in particular if
