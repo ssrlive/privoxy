@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $
+ $Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1720,7 +1720,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1780,7 +1780,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.38 2002/04/29 02:20:31 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1952,13 +1952,59 @@ at sourceforge. Three simple steps:
         <filename>gmake</filename> (GNU's version of make), autoconf, cvs.
     </para>
 
+    <sect2 id="versionnumbers">
+    <title>Version numbers</title>
+
     <para>
-        In the following text, replace X, Y and Z with the actual version number
-        (X = major, Y = minor, Z = point):
+      First you need to determine which version number the release will have. 
+      <application>Privoxy</application> version numbers consist of three numbers,
+      separated by dots, like in X.Y.Z, where:
+        <itemizedlist>
+          <listitem>
+            <para>
+              X, the version major, is rarely ever changed. It is increased by one if
+              turning a development branch into stable substantially changes the functionality,
+              user interface or configuration syntax. Majors 1 and 2 were 
+              <application>Junkbuster</application>, and 3 will be the first stable
+              <application>Privoxy</application> release.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Y, the version minor, represents the branch within the major version.
+              At any point in time, there are two branches being maintained:
+              The stable branch, with an even minor, say, 2N, in which no functionality is
+              being added and only bugfixes are made, and 2N+1, the development branch, in
+              which the further development of <application>Privoxy</application> takes
+              place.
+              This enables us to turn the code upside down and inside out, while at the same time
+              providing and maintaining a stable version.
+              The minor is reset to zero (and one) when the major is inrcemented. When a development
+              branch has matured to the point where it can be turned into stable, the old stable branch
+              2N is given up (i.e. no longer maintained), the former development branch 2N+1 becomes the
+              new stable branch 2N+2, and a new development branch 2N+3 is opened.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Z, the point or sub version, represents a release of the software within a branch.
+              It is therefore incremented immediately before each code freeze. 
+              In development branches, only the even point versions correspond to actual releases,
+              while the odd ones denote the evolving state of the sources on CVS in between.
+              It follows that Z is odd on CVS in development branches most of the time. There, it gets
+              increased to an even number immediately before a code freeze, and is increased to an odd
+              number again immediately thereafter.
+              This ensures that builds from CVS snapshots are easily distinguished from released versions.
+              The point version is reset to zero when the minor changes.
+            </para>
+          </listitem>
+        </itemizedlist>
     </para>
+
+    </sect2>
      
     <sect2 id="beforerelease">
-    <title>Before the Release</title>
+    <title>Before the Release: Freeze</title>
      <para>
        The following <emphasis>must be done by one of the
        developers</emphasis> prior to each new release.
@@ -1969,19 +2015,21 @@ at sourceforge. Three simple steps:
         <para>
          Make sure that everybody who has worked on the code in the last
          couple of days has had a chance to yell <quote>no!</quote> in case
-         they have pending changes/fixes in their pipelines.
+         they have pending changes/fixes in their pipelines. Announce the
+         freeze so that nobody will interfere with last minute changes.
         </para>
       </listitem> 
       <listitem>
        <para>
-         Increment the version number and increase or reset the RPM release number
-         in <filename>configure.in</filename> as appropriate. 
+         Increment the version number (point from odd to even in development
+         branches!) in <filename>configure.in</filename>.
        </para>
       </listitem> 
       <listitem>
        <para>
-        If the default <filename>actionsfile</filename> has changed since last
-        release, bump up its version info in this line:
+        If <filename>default.action</filename> has changed since last
+        release (i.e. software release or standalone actions file release),
+        bump up its version info to A.B in this line:
        </para>
        <para> 
         <programlisting>
@@ -1996,20 +2044,38 @@ at sourceforge. Three simple steps:
       <listitem>
        <para>
         If the HTML documentation is not in sync with the SGML sources
-        you need to regenerate it. (If in doubt, just do it.) See the
-        Section "Updating the webserver" in this manual for details.
+        you need to regenerate and upload it to the webserver. (If in
+        doubt, just do it.) See the Section "Updating the webserver" in
+        this manual for details.
        </para>
       </listitem> 
       <listitem>
        <para>
         <emphasis>Commit all files that were changed in the above steps!</emphasis>
        </para>
-      </listitem> 
+      </listitem>
       <listitem>
        <para>
         Tag all files in CVS with the version number with
         <quote><command>cvs tag v_X_Y_Z</command></quote>.
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
+       </para>
+      </listitem> 
+     <listitem>
+       <para>
+        If the release was in a development branch, increase the point version
+        from even to odd (X.Y.(Z+1)) again in <filename>configure.in</filename> and
+        commit your change.
+       </para>
+      </listitem> 
+     <listitem>
+       <para>
+        On the webserver, copy the user manual to a new top-level directory
+        called <filename>X.Y.Z</filename>. This ensures that help links from the CGI
+        pages, which have the version as a prefix, will go into the right version of the manual.
+        If this is a development branch release, also symlink <filename>X.Y.(Z-1)</filename>
+        to <filename>X.Y.Z</filename> and <filename>X.Y.(Z+1)</filename> to
+        <filename>.</filename> (i.e. dot). 
        </para>
       </listitem> 
       </itemizedlist>
@@ -2085,11 +2151,30 @@ at sourceforge. Three simple steps:
       </para>
     </sect3>
 
-    <sect3 id="newrelease-rpm"><title>SuSE or Red Hat</title>
+    <sect3 id="newrelease-rpm"><title>SuSE or Red Hat RPM</title>
+        <para>
+        In following text, replace <replaceable class="parameter">dist</replaceable>
+        with either <quote>rh</quote> for Red Hat or <quote>suse</quote> for SuSE.
+        </para>
         <para>
 	First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then run:
+        packages" above). 
+	</para>
+	<para>
+        As the only exception to not changing anything after export from CVS,
+        now examine the file <filename>privoxy-</filename><replaceable class="parameter">dist</replaceable><filename>.spec</filename>
+        and make sure that the version information and the RPM release number are
+        correct. The RPM release numbers for each version start at one. Hence it must
+        be reset to one if this is the first RPM for
+        <replaceable class="parameter">dist</replaceable> which is built from version
+        X.Y.Z. Check the
+        <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">file
+        list</ulink> if unsure. Else, it must be set to the highest already available RPM
+        release number for that version plus one.
+	</para>
+	<para>
+        Then run:
 	</para>
 	<para>
 	<programlisting>
@@ -2102,7 +2187,7 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  make suse-dist (or make redhat-dist)
+  make <replaceable class="parameter">dist</replaceable>-dist
 </programlisting>
 	</para>
 	<para>
@@ -2110,12 +2195,14 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  make suse-upload (or make redhat-upload)
+  make <replaceable class="parameter">dist</replaceable>-upload <replaceable class="parameter">rpm_packagerev</replaceable>
 </programlisting>
 	</para>
 	<para>
+        where <replaceable class="parameter">rpm_packagerev</replaceable> is the
+        RPM release number as determined above.
 	Go to the displayed URL and release the file publicly on Sourceforge.
-        Use the release notes and çhange log from the source tarball package.
+        Use the release notes and change log from the source tarball package.
       </para>
     </sect3>
 
@@ -2426,7 +2513,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
    <title>Uploading and Releasing Your Package</title>
     <para>
       After the package is ready, it is time to upload it 
-      to SourceForge, and go through the release steps. The upload 
+      to SourceForge, and go through the release steps. The upload
       is done via FTP:
     </para>
      <para>
@@ -2595,6 +2682,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.38  2002/04/29 02:20:31  hal9
+  Add info on steps for uploading and the release process on SF.
+
   Revision 1.37  2002/04/26 17:23:29  swa
   bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
 
