@@ -37,9 +37,6 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
- *    Revision 1.15  2002/04/04 00:36:36  gliptak
- *    always use pcre for matching
- *
  *    Revision 1.14  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -211,6 +208,14 @@
  */
 #define CODE_STATUS "beta"
 
+/*
+ * Regular expression matching for URLs.  (Highly recommended).
+ * If neither of these are defined then you can ony use prefix matching.
+ * Don't bother to change this here! Use configure instead.
+ */
+/* #define REGEX_GNU 1 */
+#define REGEX_PCRE 1
+
 /* 
  * Should pcre be statically built in instead of linkling with libpcre?
  * (This is determined by configure depending on the availiability of
@@ -297,11 +302,6 @@
  * Kills JavaScript popups - window.open, onunload, etc.
  */
 #define FEATURE_KILL_POPUPS 1
-
-/*
- * Use PNG instead of GIF for built-in images
- */
-/* #undef FEATURE_NO_GIFS */
 
 /*
  * Use POSIX threads instead of native threads.

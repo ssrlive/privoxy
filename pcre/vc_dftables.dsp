@@ -166,14 +166,14 @@ PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(OutDir)\..\chartables.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\config.h.win
+SOURCE=..\vc_config_pthreads.h
 
 !IF  "$(CFG)" == "vc_dftables - Win32 Release"
 
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build - Copying config.h.win
+# Begin Custom Build - Copying vc_config_pthreads.h
 WkspDir=.
-InputPath=..\config.h.win
+InputPath=..\vc_config_pthreads.h
 
 "$(WkspDir)\..\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" "$(WkspDir)\..\config.h"
@@ -183,9 +183,9 @@ InputPath=..\config.h.win
 !ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug"
 
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build - Copying config.h.win
+# Begin Custom Build - Copying vc_config_pthreads.h
 WkspDir=.
-InputPath=..\config.h.win
+InputPath=..\vc_config_pthreads.h
 
 "$(WkspDir)\..\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" "$(WkspDir)\..\config.h"
@@ -207,7 +207,7 @@ InputPath=..\config.h.win
 # End Source File
 # Begin Source File
 
-SOURCE=..\config.h.win32threads.win
+SOURCE=..\vc_config_winthreads.h
 
 !IF  "$(CFG)" == "vc_dftables - Win32 Release"
 
@@ -222,9 +222,9 @@ SOURCE=..\config.h.win32threads.win
 !ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug with Win32 threads"
 
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build - Copying config.h.win32threads.win
+# Begin Custom Build - Copying vc_config_winthreads.h
 WkspDir=.
-InputPath=..\config.h.win32threads.win
+InputPath=..\vc_config_winthreads.h
 
 "$(WkspDir)\..\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" "$(WkspDir)\..\config.h"
@@ -234,9 +234,9 @@ InputPath=..\config.h.win32threads.win
 !ELSEIF  "$(CFG)" == "vc_dftables - Win32 Release with Win32 threads"
 
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build - Copying config.h.win32threads.win
+# Begin Custom Build - Copying vc_config_winthreads.h
 WkspDir=.
-InputPath=..\config.h.win32threads.win
+InputPath=..\vc_config_winthreads.h
 
 "$(WkspDir)\..\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" "$(WkspDir)\..\config.h"

@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.24  2002/04/04 00:36:36  gliptak
+ *    always use pcre for matching
+ *
  *    Revision 1.23  2002/04/03 22:28:03  gliptak
  *    Removed references to gnu_regex
  *
@@ -413,7 +416,7 @@
  * the error messages understandable, by bailing out now.
  */
 #ifdef _MSC_VER
-#error For MS VC++, please use config.h.win or config.h.win32threads.win.  You can usually do this by selecting the "Build", "Clean" menu option.
+#error For MS VC++, please use vc_config_winthreads.h or vc_config_pthreads.h.  You can usually do this by selecting the "Build", "Clean" menu option.
 #endif /* def _MSC_VER */
 
 #endif /* CONFIG_H_INCLUDED */
