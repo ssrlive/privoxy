@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.13.2.2 2002/07/25 21:49:52 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 1.17 2002/07/25 21:51:25 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -42,10 +42,12 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-version SYSTEM "doc_version.tmp">
+<!entity p-status SYSTEM "doc_status.tmp">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-stable "IGNORE">
+<!entity % p-alpha "IGNORE">
+<!entity % p-beta "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
 <!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
 <!entity my-copy "(C)">               <!-- db2man barfs on copyright symbol  -->
@@ -193,8 +195,6 @@
  The Secure (SSL) Proxy should also be set to the same values, otherwise
  https: URLs will not be proxied. Note: <command>Privoxy</command> can only
  proxy HTTP and HTTPS traffic. Do not try it with FTP or other protocols.
-</para>
-
 </para>
 <para>
  For other browsers, check the documentation.
@@ -385,9 +385,12 @@
 <refsect1><title>Notes</title>
 <![%p-not-stable;[
 <para>
- This is a &p-status; version of <command>Privoxy</command>. Not 
- all features are well tested.
-</para>]]>
+ This is a &p-status; version of <command>Privoxy</command>. Buyer beware! Do 
+ not use in production situations.]]> 
+<![%p-beta;[ Not all features are well tested. </para>]]>
+<![%p-alpha;[ Various features may be partially implemented, and 
+other stages of brokenness may well exist. Documentation may also be out of 
+sync with current code.</para>]]>
 <para>
  Please see the <citetitle>User Manual</citetitle> on how to contact the
  developers for feature requests, reporting problems, and other questions.

@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 1.1.2.3 2002/05/31 02:56:25 hal9 Exp $
+ $Id: p-config.sgml,v 1.2 2002/06/03 00:28:17 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -98,7 +98,7 @@
 Copyright (C) 2001, 2002 Privoxy Developers http://privoxy.org
 </para>
 <para>
-$Id: p-config.sgml,v 1.1.2.3 2002/05/31 02:56:25 hal9 Exp $
+$Id: p-config.sgml,v 1.2 2002/06/03 00:28:17 hal9 Exp $
 </para>
 
 <para>
