@@ -1,7 +1,6 @@
 #  Sample Configuration file for Privoxy
-
 #
-# $Id: config,v 1.34 2002/04/22 12:34:09 oes Exp $
+# $Id: config,v 1.35 2002/04/24 02:16:04 oes Exp $
 #
 ###################################################################
 #                                                                 #
@@ -18,6 +17,8 @@
 #       6. WINDOWS GUI OPTIONS                                    #
 #                                                                 #
 ###################################################################
+
+#user-manual http://www.privoxy.org/user-manual/
 
 #  I. INTRODUCTION
 #  ===============
