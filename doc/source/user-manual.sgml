@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.126 2002/06/05 00:31:55 hal9 Exp $
+ $Id: user-manual.sgml,v 1.127 2002/06/09 16:37:31 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.126 2002/06/05 00:31:55 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.127 2002/06/09 16:37:31 hal9 Exp $</pubdate>
 
 <!--
 
@@ -776,6 +776,10 @@ automatically start Privoxy in the boot process.
  <application>Privoxy</application> as a HTTP and HTTPS proxy. The default is
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
  used port 8000). This is the one configuration step that must be done!
+</para>
+<para>
+ Please note that <application>Privoxy</application> can only proxy HTTP and 
+ HTTPS traffic. It will not work with FTP or other protocols.
 </para>
 
  <!-- image of Mozilla Proxy configuration -->
@@ -5529,6 +5533,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.127  2002/06/09 16:37:31  hal9
+ Sync with filtering clarifications in 3.0 branch.
+
  Revision 1.126  2002/06/05 00:31:55  hal9
  Mass commit for new entities, most significantly so docs can read version
  and code status info from tmp files, so perl is no longer used. Also, docs can

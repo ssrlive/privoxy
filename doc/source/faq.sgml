@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.63 2002/06/05 00:31:55 hal9 Exp $
+ $Id: faq.sgml,v 1.64 2002/06/09 16:37:31 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -70,7 +70,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.63 2002/06/05 00:31:55 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.64 2002/06/09 16:37:31 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1559,6 +1559,17 @@ every time I start IE. What gives?</title>
 </sect2>
 
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="ftp">
+<title>I cannot connect to any FTP sites. <application>Privoxy</application>
+ seems to be blocking me.</title>
+ <para>
+  <application>Privoxy</application> cannot act as a proxy for FTP traffic, 
+  so do not configure your browser to use <application>Privoxy</application>
+  as an FTP proxy. The same is true for any protocol other than HTTP or HTTPS.
+ </para>
+</sect2>
+
 </sect1>
 <!--
 </sect1>
@@ -1651,6 +1662,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.64  2002/06/09 16:37:31  hal9
+Sync with filtering clarifications in 3.0 branch.
+
 Revision 1.63  2002/06/05 00:31:55  hal9
 Mass commit for new entities, most significantly so docs can read version
 and code status info from tmp files, so perl is no longer used. Also, docs can
