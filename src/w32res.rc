@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/w32.rc,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/w32res.rc,v $
  *
  * Purpose     :  Windows GUI resource script.
  *
@@ -30,7 +30,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: w32.rc,v $
+ *    $Log: w32res.rc,v $
+ *    Revision 2.0  2002/06/04 14:43:03  jongfoster
+ *    Moving to src/, renaming from w32.rc to w32res.rc
+ *
  *    Revision 1.17  2002/03/31 17:19:00  jongfoster
  *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
  *
@@ -230,21 +233,21 @@ BEGIN
     BEGIN
         MENUITEM "E&xit Privoxy",      ID_FILE_EXIT
         MENUITEM                       SEPARATOR
-        POPUP "&Options"
+        POPUP "E&dit.."
         BEGIN
-            MENUITEM "&Configuration...",           ID_TOOLS_EDITCONFIG
-            MENUITEM                                SEPARATOR
-            MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-            MENUITEM "&Filters...",                 ID_TOOLS_EDITFILTERS
+            MENUITEM "&Main Configuration",           ID_TOOLS_EDITCONFIG
+            MENUITEM "&Default Actions",              ID_TOOLS_EDITDEFAULTACTIONS
+            MENUITEM "&User Actions",                 ID_TOOLS_EDITUSERACTIONS
+            MENUITEM "&Filters",                      ID_TOOLS_EDITFILTERS
 #ifdef FEATURE_TRUST
-            MENUITEM "&Trust...",                   ID_TOOLS_EDITTRUST
+            MENUITEM "&Trust list",                   ID_TOOLS_EDITTRUST
 #endif /* def FEATURE_TRUST */
         END
         MENUITEM                              SEPARATOR
 #ifdef FEATURE_TOGGLE
         MENUITEM "&Enable",                   ID_TOGGLE_ENABLED, CHECKED
 #endif /* def FEATURE_TOGGLE */
-        MENUITEM "Show Privoxy &Window",      ID_SHOWWINDOW
+        MENUITEM "Show Privoxy &Window",      ID_TOGGLE_SHOWWINDOW, CHECKED
     END
 END
 
@@ -273,12 +276,12 @@ BEGIN
         MENUITEM "&Enable",                     ID_TOGGLE_ENABLED, CHECKED
         MENUITEM                                SEPARATOR
 #endif /* def FEATURE_TOGGLE */
-        MENUITEM "&Configuration...",           ID_TOOLS_EDITCONFIG
-        MENUITEM                                SEPARATOR
-        MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-            MENUITEM "&Filters...",             ID_TOOLS_EDITFILTERS
+        MENUITEM "Edit Main &Configuration",      ID_TOOLS_EDITCONFIG
+        MENUITEM "Edit &Default Actions",         ID_TOOLS_EDITDEFAULTACTIONS
+        MENUITEM "Edit &User Actions",            ID_TOOLS_EDITUSERACTIONS
+        MENUITEM "Edit &Filters",                 ID_TOOLS_EDITFILTERS
 #ifdef FEATURE_TRUST
-            MENUITEM "&Trust...",               ID_TOOLS_EDITTRUST
+        MENUITEM "Edit &Trust list",              ID_TOOLS_EDITTRUST
 #endif /* def FEATURE_TRUST */
     END
     POPUP "&Help"
