@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.54 2002/04/02 15:03:16 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.55 2002/05/08 16:01:07 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,14 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.54 2002/04/02 15:03:16 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.55  2002/05/08 16:01:07  oes
+ *    Optimized add_to_iob:
+ *     - Use realloc instead of malloc(), memcpy(), free()
+ *     - Expand to powers of two if possible, to get
+ *       O(log n) reallocs instead of O(n).
+ *     - Moved check for buffer limit here from chat
+ *     - Report failure via returncode
+ *
  *    Revision 1.54  2002/04/02 15:03:16  oes
  *    Tiny code cosmetics
  *
@@ -622,7 +630,7 @@ char *get_header(struct client_state *csp)
 
    if ((q = strchr(ret, '\r')) != NULL) *q = '\0';
 
-   /* is this a blank linke (i.e. the end of the header) ? */
+   /* is this a blank line (i.e. the end of the header) ? */
    if (*ret == '\0')
    {
       freez(ret);
