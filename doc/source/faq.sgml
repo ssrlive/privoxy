@@ -18,13 +18,13 @@
 <!entity  my-copy "&copy;">          <!-- kludge for docbook2man          -->
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa//current/doc/source/faq.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
 
  Purpose     :  FAQ
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $
+ $Id: faq.sgml,v 2.8 2002/10/15 12:47:23 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.8 2002/10/15 12:47:23 oes Exp $</pubdate>
 
 <!--
 
@@ -394,6 +394,24 @@ Include supported.sgml here:
 &supported;
 </sect2>
 
+<sect2 renderas="sect3" id="email-client">
+<title>Can I use <application>Privoxy</application> with my email client?</title>
+<para>
+ As long as there is some way to set a HTTP proxy for the client, then yes, 
+ any application can be used, whether it is strictly speaking a
+ <quote>browser</quote> or not. Though this may not be the best approach for
+ dealing with some of the common abuses of HTML in email. See <link
+ linkend="outlook">How can I configure <application>Privoxy</application> with
+ <application>Outlook Express</application>?</link> below for more on this. 
+</para>
+<para>
+ Be aware that HTML email presents a number of unique security and privacy
+ related issues, that can require advanced skills to overcome. The developers
+ recommend using email clients that can be configured to convert HTML to plain
+ text for these reasons.
+</para>
+</sect2>
+
 <sect2 renderas="sect3" id="newinstall"><title>Can I install  
  <application>Privoxy</application> over <application>Junkbuster</application>?</title>
  <para>
@@ -422,7 +440,7 @@ special I have to do now?</title>
  as a proxy by specifying the correct proxy address and port number 
  in the appropriate configuration area for the browser. See below.
  You should also flush your browser's memory and disk cache to get rid of any
- cached junk items.
+ cached junk items, and any stored cookies.
 
 </para>
 
@@ -543,7 +561,7 @@ All the ads are there. What's wrong?</title>
  There are many possible actions that might apply to any given site. As an example,
  if you are blocking cookies as one of your default actions, but need to accept
  cookies from a given site, you would need to define an exception for this
- site in one of your actions files, preferably in <filename>user.action</filename>
+ site in one of your actions files, preferably in <filename>user.action</filename>.
 </para>
 
 </sect2>
@@ -1101,6 +1119,36 @@ and thus avoid individual browser configuration?</title>
 
 </sect2>
 
+<sect2 renderas="sect3" id="outlook">
+<title>How can I configure <application>Privoxy</application> for use with <application>Outlook
+ Express</application>?</title>
+<para>
+ <application>Outlook Express</application> uses <application>Internet Explorer</application> 
+ components to both render HTML, and fetch any HTTP requests that may be embedded in an HTML email.
+ So however you have <application>Privoxy</application> configured to work
+ with IE, this configuration should automatically be shared.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="outlook-more">
+<title>How can I have separate rules just for HTML mail?</title>
+<para>
+ The short answer is, you can't. <application>Privoxy</application> has no way
+ of knowing which particular application makes a request, so there is no way to
+ distinguish between web pages and HTML mail.
+ <application>Privoxy</application> just blindly proxies all requests. In the
+ case of <application>Outlook Express</application> (see above), OE uses 
+ IE anyway, and there is no way for <application>Privoxy</application> to ever 
+ be able to distinguish between them (nor could any other proxy type
+ application for that matter).
+</para>
+<para>
+ For a good discussion of some of the issues involved (including privacy and 
+ security issues), see 
+ <ulink url="http://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118</ulink>.
+</para>
+</sect2>
+
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -1172,7 +1220,7 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
 <para>
  This also makes for a good test for your browser configuration: If entering the
  URL <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
- takes you to a page saying <quote>This is Privoxy..</quote>, everything is OK.
+ takes you to a page saying <quote>This is Privoxy ...</quote>, everything is OK.
  If you get a page saying <quote>Privoxy is not working</quote> instead, then
  your browser didn't use <application>Privoxy</application> for the request,
  hence it could not be intercepted, and you have accessed the <emphasis>real</emphasis>
@@ -1881,6 +1929,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.8  2002/10/15 12:47:23  oes
+Added Microsuck faq; more detail for PHP problem
+
 Revision 2.7  2002/10/12 01:14:42  hal9
 Updates for demoronizer filter, Radical profile, and the srvany.exe/icon
 win32 fix.
