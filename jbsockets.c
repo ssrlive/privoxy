@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.16 2001/07/30 22:08:36 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.17 2001/09/13 20:11:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.16 2001/07/30 22:08:36 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.17  2001/09/13 20:11:46  jongfoster
+ *    Fixing 2 compiler warnings under Win32
+ *
  *    Revision 1.16  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -123,6 +126,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.16 2001/07/30 22:08:36 jongfo
 #include <arpa/inet.h>
 #else
 #include <socket.h>
+#endif
+
+#ifdef __EMX__
+#include <sys/select.h>  /* OS/2/EMX needs a little help with select */
 #endif
 
 #endif

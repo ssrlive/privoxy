@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.40 2001/09/16 15:41:45 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.41 2001/09/16 17:05:14 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.40 2001/09/16 15:41:45 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.41  2001/09/16 17:05:14  jongfoster
+ *    Removing unused #include showarg.h
+ *
  *    Revision 1.40  2001/09/16 15:41:45  jongfoster
  *    Fixing signed/unsigned comparison warning.
  *
@@ -328,6 +331,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.40 2001/09/16 15:41:45 jongfoster Exp $";
 # ifdef __BEOS__
 #  include <socket.h>  /* BeOS has select() for sockets only. */
 #  include <OS.h>      /* declarations for threads and stuff. */
+# endif
+
+# ifdef __EMX__
+#  include <sys/select.h>  /* OS/2/EMX needs a little help with select */
 # endif
 
 # ifndef FD_ZERO
