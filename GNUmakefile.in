@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.87 2002/04/23 14:10:59 swa Exp $
+# $Id: GNUmakefile.in,v 1.88 2002/04/25 19:13:57 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -652,6 +652,14 @@ dok-pdf: doc/source/ldpOK.dsl dok-release
 	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf
 	rm -f doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
 
+# the layout and style with db2pdf sucks, here is an alternative
+dok-pdf2: doc/source/ldpOK.dsl dok-release 
+	mkdir -p doc/source/temp # this directory not in cvs
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > temp/privoxy-user-manual.html
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
+	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
+# one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
+
 #############################################################################
 #
 # Webserver
@@ -798,6 +806,12 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.88  2002/04/25 19:13:57  morcego
+# Removed RPM release number declaration on configure.in
+# Changed makefile to use given value for RPM_PACKAGEV when on uploading
+# targets (will produce an error, explaining who to do it, if no value
+# if provided).
+#
 # Revision 1.87  2002/04/23 14:10:59  swa
 # now create pdf documents
 #
