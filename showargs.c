@@ -1,10 +1,11 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.14 2001/06/07 23:15:40 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.15 2001/06/09 10:55:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
  *
  * Purpose     :  Contains various utility routines needed to 
  *                generate the show-proxy-args page.
+ *                FIXME: Is this really stuff for a separate file?
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
@@ -33,6 +34,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.14 2001/06/07 23:15:40 jongfost
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.15  2001/06/09 10:55:28  jongfoster
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.14  2001/06/07 23:15:40  jongfoster
  *    Removing config->proxy_args_gateways
  *    Missing return statement added to end_proxy_args().
@@ -44,58 +48,7 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.14 2001/06/07 23:15:40 jongfost
  *    show version string of cgi.h and cgi.c
  *
  *    Revision 1.11  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
+ *    moved stuff to cgi.c
  *
  *    Revision 1.10  2001/05/31 21:36:07  jongfoster
  *    Added RCS for actions.[ch] and list.[ch]
@@ -278,53 +231,23 @@ void savearg(char *c, char *o, struct configuration_spec * config)
 
    strcat(buf, "<br>\n");
 
-   config->proxy_args_invocation = strsav(config->proxy_args_invocation, buf);
+   config->proxy_args = strsav(config->proxy_args, buf);
 
 }
 
 
 /*********************************************************************
  *
- * Function    :  init_proxy_args
+ * Function    :  show_rcs
  *
- * Description :  Create the "top" of the show-proxy-args page.
- *
- * Parameters  :
- *          1  :  argc = argument count (same as in main)
- *          2  :  argv[] = program arguments (same as in main)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void init_proxy_args(int argc, const char *argv[], struct configuration_spec * config)
-{
-   char * b = NULL;
-   int i;
-
-   freez(config->proxy_args_header);
- 
-   
-   for (i=0; i < argc; i++)
-   {
-      b = strsav(b, argv[i]);
-      b = strsav(b, " ");
-   }
-   config->proxy_args_header = b;
-}
-
-
-/*********************************************************************
- *
- * Function    :  end_proxy_args
- *
- * Description :  Create the "bottom" of the show-proxy-args page.
+ * Description :  Create a string with the rcs info for all sourcefiles
  *
  * Parameters  :  None
  *
- * Returns     :  string with that bottom
+ * Returns     :  string 
  *
  *********************************************************************/
-char *end_proxy_args(struct configuration_spec * config)
+char *show_rcs(void)
 {
    char *b = NULL;
    char buf[BUFFER_SIZE];
@@ -333,18 +256,6 @@ char *end_proxy_args(struct configuration_spec * config)
     * tremendous amount of dependencies), I will concede to declaring them
     * as extern's.  This forces the developer to add to this list, but oh well.
     */
-
-#ifndef SPLIT_PROXY_ARGS
-   if (suppress_blocklists && suppress_message!=NULL)
-   {
-      b = strsav(b, "<h2>File contents</h2>\n");
-      b = strsav(b, suppress_message);
-      b = strsav(b, "\n");
-   }
-#endif /* ndef SPLIT_PROXY_ARGS */
-
-   b = strsav(b, "<h2>Source versions:</h2>\n");
-   b = strsav(b, "<pre>");
 
 #define SHOW_RCS(__x)            \
    {                             \
@@ -416,9 +327,24 @@ char *end_proxy_args(struct configuration_spec * config)
 
 #undef SHOW_RCS
 
-   b = strsav(b, "</pre>\n");
+	return(b);
+}
 
-   b = strsav(b, "<h2>Conditional defines:</h2>\n<ul>");
+/*********************************************************************
+ *
+ * Function    :  show_defines
+ *
+ * Description :  Create a string with all conditional #defines used
+ *                when building
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  string 
+ *
+ *********************************************************************/
+char *show_defines(void)
+{
+   char *b = NULL;
 
 #ifdef REGEX
    b = strsav(b, "  <li><code>#define <b>REGEX</b></code> - Support for regular expressions in the path specs.</li>\n");
@@ -515,10 +441,6 @@ char *end_proxy_args(struct configuration_spec * config)
 #else /* ifndef FAST_REDIRECTS */
    b = strsav(b, "  <li><code>#undef <b>FAST_REDIRECTS</b></code> - Disables intercepting remote script redirects.</li>\n");
 #endif /* ndef FAST_REDIRECTS */
-
-   b = strsav(b, "</ul>\n<br>\n");
-
-   config->proxy_args_trailer = b;
 
    return b;
 }
