@@ -21,7 +21,7 @@
 <!entity % p-config "IGNORE">
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 <!entity  my-copy "&copy;">         <!-- kludge for docbook2man           -->
-<!entity % draft "IGNORE">          <!-- WIP     -->
+<!entity % draft "IGNORE">          <!-- WIP stuff    -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.116 2002/05/17 03:23:46 hal9 Exp $
+ $Id: user-manual.sgml,v 1.117 2002/05/17 13:56:16 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.116 2002/05/17 03:23:46 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.117 2002/05/17 13:56:16 oes Exp $</pubdate>
 
 <!--
 
@@ -520,34 +520,39 @@ automatically start Privoxy in the boot process.
  </itemizedlist>
 </para>
 
+
 <!--   ~~~~~       New section      ~~~~~     -->
-<![%draft;[
 
 <sect2 id="quickstart-ad-blocking">
 <title>Quickstart to Ad Blocking</title>
 <!--
- FIXME: This is unfinished. Do not publish yet!
+ NOTE:  This section is deliberately redundant for those that don't 
+ want to read the whole thing (which is getting lengthy).
 -->
 <para>
  Ad blocking is but one of <application>Privoxy's</application>
  array of features. Many of these features are for the technically minded advanced 
- user. But, ad blocking is surely common ground for everybody.
+ user. But, ad and banner blocking is surely common ground for everybody.
 </para>
 <para> 
- This section will provide a quick overview of ad blocking so 
+ This section will provide a quick summary of ad blocking so 
  you can get up to speed quickly without having to read the more extensive
  information provided below, though this is highly recommeneded.
 </para>
 <para>
  First a bit of a warning ... blocking ads is much like blocking SPAM: the
- more aggressive you are about it, the more likely you are to block a few
+ more aggressive you are about it, the more likely you are to block 
  things that were not intended. So there is a trade off here. If you want
  extreme ad free browsing, be prepared to deal with more
  <quote>problem</quote> sites, and to spend more time adjusting the
- configuration to solve these unintended consequences.
+ configuration to solve these unintended consequences. In short, there is 
+ not an easy way to eliminate <emphasis>all</emphasis> ads. Either take 
+ the easy way and settle for <emphasis>most</emphasis> ads blocked with the
+ default configuration, or jump in and tweak it for your personal surfing
+ habits and preferences.
 </para>
 <para>
- Secondly, a quick note on <application>Privoxy's </application>
+ Secondly, a brief explanation of <application>Privoxy's </application>
  <quote>actions</quote>. <quote>Actions</quote> in this context, are 
  the directives we use to tell <application>Privoxy</application> to perform
  some task relating to HTTP transactions (i.e. web browsing). We tell
@@ -566,21 +571,22 @@ automatically start Privoxy in the boot process.
 </para>
 <para>
  When you connect to a website, the full path of the URL will either match one 
- of actions as defined in <application>Privoxy's</application> configuration,
- or not. If so, then <application>Privoxy</application> will perform the
- action accordingly. If not, then nothing special happens. Futhermore, web
- pages may contain embedded, secondary URLs that your web browser will
- display as it parses the original page's HTML content. An ad image for
- instance, is just a URL embedded in the page somewhere. The image itself may
- be on the same server, or a server somewhere else on the Internet. Complex
- web pages will have many such embedded URLs.
+ of the <quote>actions</quote> as defined in
+ <application>Privoxy's</application> configuration, or not. If so, then
+ <application>Privoxy</application> will perform the action accordingly. If
+ not, then nothing special happens. Futhermore, web pages may contain
+ embedded, secondary URLs that your web browser will display as it parses the
+ original page's HTML content. An ad image for instance, is just a URL
+ embedded in the page somewhere. The image itself may be on the same server,
+ or a server somewhere else on the Internet. Complex web pages will have many
+ such embedded URLs.
 </para>
 
 <para>
  The actions we need to know about for ad blocking are:  <link
  linkend="block">block</link>, <link
  linkend="handle-as-image">handle-as-image</link>, and <link 
- linkend="set-image-blocker">set-image-blocker</link>.
+ linkend="set-image-blocker">set-image-blocker</link>:
 </para>
 
 <para>
@@ -593,7 +599,7 @@ automatically start Privoxy in the boot process.
    action's configuration. It can be used for blocking ads, but also anything
    that is determined to be unwanted. By itself, it simply stops any
    communication with the remote server. If this is the only action that 
-   matches for a particular URL, then <application>Privoxy</application> will 
+   matches for this particular URL, then <application>Privoxy</application> will 
    display its own BLOCKED page to let you now what has happened.
   </para>
  </listitem> 
@@ -642,7 +648,7 @@ automatically start Privoxy in the boot process.
   <simplelist>
    <member>
     &nbsp;&nbsp;&nbsp;<emphasis>http://&lt;URL&gt;</emphasis> - A redirect to any URL of the
-    user's choosing.
+    user's choosing (advanced usage).
    </member>
   </simplelist>
   </listitem> 
@@ -650,8 +656,107 @@ automatically start Privoxy in the boot process.
 </itemizedlist>
 </para>
 
+<para>
+ The quickest way to adjust any of these settings is with your browser through
+ the special <application>Privoxy</application> editor  at <ulink
+ url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+ (shortcut: <ulink url="http://p.p/">http://p.p/show-status</ulink>). This 
+ is an internal page, and does not require Internet access. Select the
+ appropriate <quote>actions</quote> file, and click
+ <quote><guibutton>Edit</guibutton></quote>. It is best to put personal or
+ local preferences in <filename>user.action</filename> since this is not
+ meant to be overwritten during upgrades, and will over-ride the settings in
+ other files. Here you can insert new <quote>actions</quote>, and URLs for ad
+ blocking or other purposes, and make other adjustments to the configuration.
+ <application>Privoxy</application> will detect these changes automatically.
+</para>
+
+<para>
+ A quick and simple step by step example:
+</para>
+
+<para>
+ <itemizedlist>
+
+  <listitem>
+   <para>
+     Right click on the ad image to be blocked, then select 
+     <quote><guimenuitem>Copy Link Location</guimenuitem></quote> from the
+     pop-up menu. 
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    Set your browser to 
+    <ulink
+ url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    Find <filename>user.action</filename> in the top section, and click 
+    on <quote><guibutton>Edit</guibutton></quote>:
+   </para>
+
+ <!-- image of editor and actions files selections -->
+ <para>
+  <figure pgwide="0" float="0"><title>Actions Files in Use</title>
+   <mediaobject>
+     <imageobject>
+      <imagedata  fileref="../images/files-in-use.jpg" format="jpg">
+       </imageobject> 
+       <textobject>
+        <phrase>Screenshot of Files in Use</phrase>
+      </textobject>
+   </mediaobject>
+  </figure>
+ </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   You should have an Actions section labeled <emphasis>+block</emphasis>. 
+   If not, click the <quote><guibutton>Edit</guibutton></quote> button just
+   under the word <quote>Actions</quote>. This will bring up a list of all
+   actions. Find <emphasis>block</emphasis> near the top, and click in the
+   <quote>Enabled</quote> column, then
+   <quote><guibutton>Submit</guibutton></quote> just below the list.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   Now, in the <emphasis>+block</emphasis> actions section, click the
+   <quote><guibutton>Add</guibutton></quote> button, and paste the URL the
+   browser got from <quote><guimenuitem>Copy Link
+   Location</guimenuitem></quote>. Remove the <literal>http://</literal> at
+   the beginning of the URL. Then, click
+   <quote><guibutton>Submit</guibutton></quote>.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   Now go back to the original page, and press <keycap>SHIFT-Reload</keycap>
+   (or flush all browser caches). The image should be gone now.
+  </para>
+ </listitem> 
+ 
+ </itemizedlist>
+</para>
+
+<para>
+ This is a very crude and simple example. There might be good reasons to use a 
+ wildcard pattern match to include potentially similar images from the same
+ site. For a more extensive explanation of <quote>patterns</quote>, and 
+ the entire actions concept, see <link linkend="actions-file">the Actions
+ section</link>.
+</para>
+
+<para>
+ For advanced users who want to hand edit their config files, you might want
+ to now go to the <link linkend="act-examples">Actions Files Tutorial</link>.
+</para>
+
 </sect2>
-]]>
 
 </sect1>
 
@@ -6675,19 +6780,38 @@ Requests</title>
  <screen>
  Matches for http://google.com:
 
---- File standard ---
-(no matches in this file)
+ In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
---- File default ---
-
-{ -add-header -block +deanimate-gifs{last} -downgrade-http-version +fast-redirects 
- -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
- +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
- +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
- +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
- -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only -crunch-outgoing-cookies 
- -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+{-add-header 
+ -block 
+ -crunch-outgoing-cookies 
+ -crunch-incoming-cookies 
+ +deanimate-gifs{last} 
+ -downgrade-http-version 
+ +fast-redirects 
+ -filter{popups} 
+ -filter{fun} 
+ -filter{shockwave-flash} 
+ -filter{crude-parental} 
+ +filter{html-annoyances} 
+ +filter{js-annoyances} 
+ +filter{content-cookies} 
+ +filter{webbugs} 
+ +filter{refresh-tags} 
+ +filter{nimda} 
+ +filter{banners-by-size} 
+ +hide-forwarded-for-headers 
+ +hide-from-header{block} 
+ +hide-referer{forge} 
+ -hide-user-agent 
+ -handle-as-image 
+ -kill-popups 
+ -limit-connect 
+ +prevent-compression 
+ -send-vanilla-wafer 
+ -send-wafer 
+ +session-cookies-only 
+ +set-image-blocker{pattern} }
 /
 
  { -session-cookies-only }
@@ -6696,7 +6820,7 @@ Requests</title>
  { -fast-redirects }
  .google.com
 
---- File user ---
+In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 (no matches in this file)  
 </screen>
 </para>
@@ -6750,14 +6874,37 @@ Requests</title>
  <screen>
 
  Final results:
- -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects 
- -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental} 
- +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} 
- +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
- +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
- -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression -session-cookies-only -crunch-outgoing-cookies 
- -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer
+ 
+ -add-header 
+ -block 
+ -crunch-outgoing-cookies 
+ -crunch-incoming-cookies 
+ +deanimate-gifs{last} 
+ -downgrade-http-version 
+ -fast-redirects 
+ -filter{popups} 
+ -filter{fun} 
+ -filter{shockwave-flash} 
+ -filter{crude-parental} 
+ +filter{html-annoyances} 
+ +filter{js-annoyances} 
+ +filter{content-cookies} 
+ +filter{webbugs} 
+ +filter{refresh-tags} 
+ +filter{nimda} 
+ +filter{banners-by-size} 
+ +hide-forwarded-for-headers 
+ +hide-from-header{block} 
+ +hide-referer{forge} 
+ -hide-user-agent 
+ -handle-as-image 
+ -kill-popups 
+ -limit-connect 
+ +prevent-compression 
+ -send-vanilla-wafer 
+ -send-wafer
+ -session-cookies-only 
+ +set-image-blocker{pattern} 
 </screen>
 </para>
 
@@ -6819,13 +6966,34 @@ Requests</title>
 
  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
 
- { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects 
-   +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups} 
-   +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
-   +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
-   +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
-   +prevent-compression +session-cookies-only -crunch-incoming-cookies 
-   -crunch-outgoing-cookies +kill-popups -send-vanilla-wafer -send-wafer }
+ In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
+
+ {-add-header 
+  -block 
+  -crunch-incoming-cookies 
+  -crunch-outgoing-cookies 
+  +deanimate-gifs 
+  -downgrade-http-version 
+  +fast-redirects 
+  +filter{html-annoyances} 
+  +filter{js-annoyances} 
+  +filter{kill-popups} 
+  +filter{webbugs} 
+  +filter{nimda} 
+  +filter{banners-by-size} 
+  +filter{hal} 
+  +filter{fun} 
+  +hide-forwarded-for-headers 
+  +hide-from-header{block} 
+  +hide-referer{forge} 
+  -hide-user-agent 
+  -handle-as-image 
+  +kill-popups 
+  +prevent-compression 
+  -send-vanilla-wafer 
+  -send-wafer 
+  +session-cookies-only 
+  +set-image-blocker{blank} }
    /
 
  { +block +handle-as-image }
@@ -6940,6 +7108,11 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.117  2002/05/17 13:56:16  oes
+  - Reworked & extended Templates chapter
+  - Small changes to Regex appendix
+  - #included authors.sgml into (C) and hist chapter
+
  Revision 1.116  2002/05/17 03:23:46  hal9
  Fixing merge conflict in Quickstart section.
 
