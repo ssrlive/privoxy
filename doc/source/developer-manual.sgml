@@ -7,7 +7,7 @@
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.27 2002/04/08 15:31:18 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.27 2002/04/08 15:31:18 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1628,7 +1628,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.27 2002/04/08 15:31:18 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1688,7 +1688,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.26 2002/04/07 23:50:08 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.27 2002/04/08 15:31:18 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2414,6 +2414,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.27  2002/04/08 15:31:18  hal9
+  Touch ups to documentation section.
+
   Revision 1.26  2002/04/07 23:50:08  hal9
   Documentation changes to reflect HTML docs now in CVS, and new generated files
   list.

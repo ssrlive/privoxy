@@ -8,7 +8,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $
+ $Id: user-manual.sgml,v 1.70 2002/04/08 20:53:56 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.70 2002/04/08 20:53:56 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -214,7 +214,7 @@
  This will place the <application>Privoxy</application> configuration 
  files in <filename>/etc/privoxy/</filename>, and log files in 
  <filename>/var/log/privoxy/</filename>. Run 
- <command>ckconfig privoxy on</command> to have
+ <command>chkconfig privoxy on</command> to have
  <application>Privoxy</application> start automatically during init.
 
 </para>
@@ -3946,6 +3946,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.70  2002/04/08 20:53:56  swa
+ ?
+
  Revision 1.69  2002/04/06 05:07:29  hal9
  -Add privoxy-man-page.sgml, for man page.
  -Add authors.sgml for AUTHORS (and p-authors.sgml)
