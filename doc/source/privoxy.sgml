@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: privoxy.sgml,v 1.1 2002/04/02 00:54:19 hal9 Exp $
+ $Id: privoxy.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -12,13 +12,21 @@
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
 
--->
-
-<!--
 
  ======================================================================
   This file used for inclusion with other documents only.
  ======================================================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  privoxy-man-page
+  user-manual
+  faq
+  developer-manual
+  README
 
 -->
 
@@ -34,7 +42,7 @@
 
 <para>
  <application>Privoxy</application> is based on the code of the 
- <application>Internet Junkbuster</application>.
+ <application>Internet Junkbuster</application> (tm).
  <application>Junkbuster</application> was originally written by JunkBusters
  Corporation, and was released as free open-source software under the GNU GPL.
  Stefan Waldherr made many improvements, and started the SourceForge project
@@ -44,6 +52,6 @@
 <para>
  <application>Privoxy</application> continues the
  <application>Junkbuster</application> tradition, but adds many 
- refinements and enhancements.
+ refinements, enhancements and new features.
 </para>
 

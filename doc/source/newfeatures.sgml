@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/newfeaturs.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/newfeatures.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 1.0 2002/04/01 16:24:49 hal9 Exp $
+ $Id: newfeatures.sgml,v 1.2 2002/04/02 00:55:46 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,6 +11,19 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  user-manual
+  faq
+
 -->
 <para>
  <itemizedlist>

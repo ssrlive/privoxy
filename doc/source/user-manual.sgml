@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.67 2002/04/04 17:27:57 swa Exp $
+ $Id: user-manual.sgml,v 1.68 2002/04/04 18:46:47 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -33,13 +33,21 @@
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
 
+
+ ========================================================================
+ NOTE: Please read developer-manual/documentation.html before touching 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
+ ========================================================================
+
 -->
 
 <article id="index">
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.67 2002/04/04 17:27:57 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.68 2002/04/04 18:46:47 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -95,12 +103,13 @@
 
 <para>
  This documentation is included with the current &p-status; version of
- <application>Privoxy</application> and is mostly complete at this
- point. The most up to date reference for the time being is still the comments
- in the source files and in the individual configuration files. Development
- of version 3.0 is currently nearing completion, and includes many significant
- changes and enhancements over earlier versions. The target release date for
- stable v3.0 is <quote>soon</quote> ;-)
+ <application>Privoxy</application>, v.&p-version;<![%p-not-stable;[, 
+ and is mostly complete at this point. The most up to date reference for the
+ time being is still the comments in the source files and in the individual
+ configuration files. Development of version 3.0 is currently nearing
+ completion, and includes many significant changes and enhancements over
+ earlier versions. The target release date for
+ stable v3.0 is <quote>soon</quote> ;-)]]>.
 </para>
 
 <![%p-not-stable;[
@@ -287,9 +296,9 @@ Thanx David Schmidt!
  source distribution because it differs based on platform.  You will also
  need a compiler.
  The distribution has been created using IBM VisualAge compilers, but you
- can use any compiler you like.  GCC/EMX has the disadvantage of needing 
+ can use any compiler you like. GCC/EMX has the disadvantage of needing 
  to be single-threaded due to a limitation of EMX's implementation of the
- select() socket call.
+ <function>select()</function> socket call.
 </para>
 
 <para>
@@ -393,11 +402,11 @@ configuration section below. HB.)
 </para>
 
 <para>
-For for SuSE: /etc/rc.d/privoxy start
+ For for SuSE: <command>/etc/rc.d/privoxy start</command>
 </para>
 
 <para>
-For RedHat: /etc/rc.d/init.d/privoxy start
+ For RedHat: <command>/etc/rc.d/init.d/privoxy start</command>
 </para>
 
 
@@ -635,15 +644,15 @@ Please choose from the following options:
  For Unix, *BSD and Linux, all configuration files are located in
  <filename>/etc/privoxy/</filename> by default. For MS Windows, OS/2, and
  AmigaOS these are all in the same directory as the 
- <application>Privoxy</application> executable. The name and number of
- configuration files has changed from previous versions, and is subject to
- change as development progresses.
+ <application>Privoxy</application> executable. <![%p-not-stable;[ The name
+ and number of configuration files has changed from previous versions, and is
+ subject to change as development progresses.]]>
 </para>
 
 <para>
  The installed defaults provide a reasonable starting point, though possibly
  aggressive by some standards. For the time being, there are only three
- default configuration files (this will change in time):
+ default configuration files (this may change in time):
 </para>
 
 <para>
@@ -691,12 +700,14 @@ Please choose from the following options:
  automatically.
 </para>
 
+<![%p-not-stable;[
 <para>
  While under development, the configuration content is subject to change. 
  The below documentation may not be accurate by the time you read this. 
  Also, what constitutes a <quote>default</quote> setting, may change, so 
  please check all your configuration files on important issues.
 </para>
+]]>
 </sect2>
 
 
@@ -1102,10 +1113,12 @@ Please choose from the following options:
  </literal>
 </para>
 
+<![%p-not-stable;[
 <para>
  It is <emphasis>highly recommended</emphasis> that you enable ERROR
  reporting (debug 8192), at least until v3.0 is released.
 </para>
+]]>
 
 <para>
  The reporting of FATAL errors (i.e. ones which crash 
@@ -2341,7 +2354,7 @@ Removed references to Win32. HB 09/23/01
    will link to some script on their own server, giving the destination as a
    parameter, which will then redirect you to the final target. URLs resulting
    from this scheme typically look like:
-   http://some.place/some_script?http://some.where-else.
+   <emphasis>http://some.place/some_script?http://some.where-else</emphasis>.
   </para>
   <para>
    Sometimes, there are even multiple consecutive redirects encoded in the
@@ -2572,7 +2585,8 @@ Removed references to Win32. HB 09/23/01
    <emphasis>images</emphasis> and <emphasis>blocked</emphasis>. And also, 
    <quote>image-blocker</quote>  should be set to <quote>blank</quote>. Note you 
    cannot treat HTML pages as images in most cases. For instance, frames 
-   require an HTML page to display. Forcing an <quote>image</quote> in this 
+   require an HTML page to display. So a frame that is an ad, cannot be 
+   treated as an image. Forcing an <quote>image</quote> in this 
    situation just will not work.
   </para>
   <para>
@@ -2933,7 +2947,6 @@ icon being being cached by the browser, which will speed up the display.
  content he may depend on. There is no way to have hard and fast rules 
  for all sites. See the <link linkend="ACTIONSANAT">Appendix</link>
  for a brief example on troubleshooting actions.
-
 </para>
 
 </sect3>
@@ -2965,7 +2978,7 @@ icon being being cached by the browser, which will speed up the display.
  <literal>
   <msgtext> 
    <literallayout>
- # Useful customer aliases we can use later. These must come first!
+ # Useful custom aliases we can use later. These must come first!
  {{alias}}
  +no-cookies = +no-cookies-set +no-cookies-read
  -no-cookies = -no-cookies-set -no-cookies-read
@@ -3663,7 +3676,7 @@ Requests</title>
  actual URL that is pasted into the prompt area -- not any sub-URLs. If you
  want to know about embedded URLs like ads, you will have to dig those out of
  the HTML source. Use your browser's <quote>View Page Source</quote> option
- for this.
+ for this. Or right click on the ad, and grab the URL.
 </para>
 
 <para>
@@ -3847,13 +3860,11 @@ Requests</title>
 <para>
  Now the page displays ;-) Be sure to flush your browser's caches when 
  making such changes. Or, try using <literal>Shift+Reload</literal>.
-
 </para>
 
 <para>
  But now what about a situation where we get no explicit matches like 
  we did with:
-
 </para>
 
 <para>
@@ -3935,6 +3946,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.68  2002/04/04 18:46:47  swa
+ consistent look. reuse of copyright, history et. al.
+
  Revision 1.67  2002/04/04 17:27:57  swa
  more single file to be included at multiple points. make maintaining easier
 

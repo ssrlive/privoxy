@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.1 2002/04/04 01:14:18 hal9 Exp $
+ $Id: contacting.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,21 +11,17 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
--->
-
-<!-- 
- 
- READ:
- ======================================================================
- NOTE: The left margin spacing is *important* when using 'literallayout'
- WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
- <para> forces a linebreak.
- ======================================================================
-
 
  ======================================================================
   This file used for inclusion with other documents only.
  ======================================================================
+
+ This file is included into:
+
+  faq
+  developer-manual
+  README
+  user-manual
 
 -->
 

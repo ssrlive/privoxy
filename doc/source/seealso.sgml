@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 1.0 2002/04/02 00:54:19 hal9 Exp $
+ $Id: seealso.sgml,v 1.1 2002/04/02 01:48:33 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,6 +11,22 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+      ===========================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  privoxy-man-page
+  user-manual
+  faq
+  developer-manual
+
+ NOTE: 04/05/02, HB Removed &nbsp; tags. They were causing docbook2man 
+ to barf.
+
 -->
 
 <para>
@@ -21,21 +37,21 @@
 <para>
  <simplelist>
   <member>
-   &nbsp; <ulink
+    <ulink
    url="http://www.privoxy.org/">http://www.privoxy.org/</ulink>, 
    The <application>Privoxy</application> Home page. 
   </member>
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>, 
+    <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>, 
    the Project Page for <application>Privoxy</application> on 
    <ulink url="http://sourceforge.net">Sourceforge</ulink>.
   </member>
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://p.p/">http://p.p/</ulink>, access
+    <ulink url="http://p.p/">http://p.p/</ulink>, access
    <application>Privoxy</application> from your browser. Alternately, 
    <ulink url="http://config.privoxy.org">http://config.privoxy.org</ulink>
    may work in some situations where the first does not.
@@ -43,22 +59,22 @@
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</ulink>
+    <ulink url="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</ulink>
   </member>
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</ulink>
+    <ulink url="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</ulink>
   </member>
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://privacy.net/analyze/">http://privacy.net/analyze/</ulink>
+    <ulink url="http://privacy.net/analyze/">http://privacy.net/analyze/</ulink>
   </member>
  </simplelist>
  <simplelist>
   <member>
-   &nbsp;<ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>
+   <ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>
   </member>
  </simplelist>
 

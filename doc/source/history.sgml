@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/seealso.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/history.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 1.1 2002/04/02 01:48:33 hal9 Exp $
+ $Id: history.sgml,v 1.1 2002/04/04 17:27:57 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,6 +11,20 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  user-manual
+  developer-manual
+  faq
+
 -->
 
 <para>

@@ -1,0 +1,95 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-authors.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: p-authors.sgml,v 1.0 2002/04/02 01:48:33 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+
+
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  privoxy-man-page
+  AUTHORS
+
+-->
+<![%p-authors-formal;[
+<para>
+ Current Project Developers:
+</para>
+]]>
+
+<literallayout>
+ Stefan Waldherr
+ Andreas Oesterhelt
+ Jon Foster
+<![%p-authors-formal;[
+ ]]>
+ Markus Breitenbach
+ Thomas Steudten
+<![%p-authors-formal;[
+</literallayout>
+
+<para>
+ Current Project Contributors:
+</para>
+
+<literallayout>
+]]>
+ David Schmidt (OS/2, Mac OSX ports)
+ Gabriel L. Somlo
+ Hal Burgiss (docs)
+ Haroon Rafique
+ John Venvertloh
+ Joerg Strohmayer
+ Rodney Stromlund
+ Rodrigo Barbosa (RPM specfiles)
+ Sarantis Paskalis
+ Shamim Mohamed
+ Gábor Lipták
+</literallayout>
+
+<![%p-authors-formal;[
+<para>
+ Originally developed by:
+</para>
+
+<literallayout>
+ Junkbusters Corp.
+ Anonymous Coders
+</literallayout>
+
+<para>
+ Thanks to the many people who have tested Privoxy, reported bugs, or made
+ suggestions. These include (in alphabetical order):
+</para>
+
+<literallayout>
+ Aaron Hamid
+ Alexander Lazic  (FreeBSD patch)
+ Andrew J. Caines
+ Bart Schelstraete
+ Clifford Caoile
+ Darren Wiebe
+ Gabor Liptak
+ Guy
+ Ken Arromdee
+ Magnus Holmgren
+ Paul Lieverse
+ Peter E
+ Reiner Buehl
+</literallayout>
+]]>

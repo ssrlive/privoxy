@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $
+ $Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -336,7 +336,7 @@ following guidelines for changing stuff in the code. If it is
    </listitem> 
    <listitem>
     <para>
-      Tags should be nested like:
+      Tags should be nested and step indented like:
        <literallayout>
  &lt;para&gt;
   &lt;itemizedlist&gt;
@@ -369,6 +369,13 @@ following guidelines for changing stuff in the code. If it is
    <para>
      We have an international audience. Refrain from slang, or English 
      idiosyncrasies (too many to list :).
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    Try to keep overall line lengths in source files to 80 characters or less
+    for obvious reasons. This is not always possible, with lenghty URLs for
+    instance.
    </para>
   </listitem> 
   <listitem>
@@ -1615,7 +1622,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1675,7 +1682,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.23 2002/04/04 18:46:47 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2401,6 +2408,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.24  2002/04/04 21:33:37  hal9
+  More on documenting the documents.
+
   Revision 1.23  2002/04/04 18:46:47  swa
   consistent look. reuse of copyright, history et. al.
 

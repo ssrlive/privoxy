@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
+ $Id: readme.sgml,v 1.3 2002/04/04 07:06:18 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -25,6 +25,14 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+
+ ========================================================================
+ NOTE: Please read developer-manual/documentation.html before touching 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
+ ========================================================================
 
  ===================================================================
  READ: Document Note: This file generates the README in the top level 
@@ -39,7 +47,7 @@
  NOTE: The left margin spacing is *important* when using 'literallayout'
  WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
  the para tag forces a linebreak. Tags need to be carefully placed as a result
- to avoid extra blank lines, etc.
+ to avoid extra blank lines, etc. 
  ======================================================================
 
  For stable releases, change 
@@ -51,7 +59,8 @@
   entity % p-not-stable "IGNORE" 
   
  in the DTD at the top. This will toggle various text 'off'. BOTH
- MUST be toggled in this case.
+ MUST be toggled in this case or you will get both text referencing 
+ stable and unstable versions. You only want one or the other!
 
 -->
 
@@ -165,7 +174,7 @@
   [--user USER[.GROUP]] [config_file]
 </para>
 <para>
-See the man page or user-manual for a brief explanation of each option.
+ See the man page or user-manual for a brief explanation of each option.
 </para>
 <para>
  If no config_file is specified on the command line, Privoxy will look for a
@@ -253,7 +262,7 @@ See the man page or user-manual for a brief explanation of each option.
  </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
+ $Id: readme.sgml,v 1.3 2002/04/04 07:06:18 hal9 Exp $
 </para>
 
 </article>
