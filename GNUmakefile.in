@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.127 2002/10/18 00:58:07 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.128 2002/10/18 05:36:32 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -850,22 +850,22 @@ GROUP_T:=$(shell if [ x$(GROUP) = x ] && [ x$(USER) != x ];then \
 install-strip:
 	$(MAKE) install STRIP=-s
 
-# FIXME: redhat init script has wrong paths for /usr/local/ install.
-#
-# FIXME: Check USER and GROUP on Slack to make user this works as 
+# FIXME: Test USER and GROUP on Slack to make sure this works as 
 # intended.
 #
 # FIXME: id handling needs help, probably via configure, since 'id -u' is not 
-# universally reliable (eg Solaris). Group handling is weak. If group is null,
-# we blindly assume there is a group that matches $(USER). configure only 
-# tests for the first group outputted from groups command. Perhaps the whole 
-# user/group validation should be done here. In fact, it should probably be
-# tested for and set first thing, ie for a root install.
+# universally reliable (eg Solaris). Group handling could be better. 
+# Perhaps the whole user/group validation should be done here.
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# Quick test for valid USER.
 	if [ -n "$(USER)" ]; then \
 		id $(USER) >/dev/null || exit 1;\
 	fi
+	# Test for valid group.
+	if [ -n "$(GROUP_T)" ] && [ -n "$(USER)" ] && ! groups $(USER) | $(GREP) "\<$(GROUP_T)\>" >/dev/null; then \
+		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
+	fi
+	
 	$(ECHO) "Creating directories, and preparing Privoxy installation"
 	$(CHMOD) 0755 $(MKDIR)
 	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
@@ -923,10 +923,11 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	for i in `find templates -type f`; do \
 		$(INSTALL) $(INSTALL_T) $$i $(CONF_DEST)/templates ;\
 	done
+
 	if [ "`id |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
-		if [ x$(USER) = x ]; then \
+		if [ x$(USER) = x ] || [ $(USER) = root ]; then \
 			if [ "`id privoxy`" ]; then \
-				$(ECHO) "Setting user and group to privoxy";\
+				$(ECHO) "Warning: Setting user and group to privoxy";\
 				INSTALL_CONF="$(INSTALL_T) -g privoxy -o privoxy" ;\
 				USER=privoxy ;\
 				GROUP_T=privoxy ;\
@@ -977,19 +978,22 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
 	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
-	if [ "$(prefix)" = "/usr/local" ]; then \
+	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
                $(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
                $(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
-               $(SED) 's+%USER%+$(USER)+' | \
+               $(SED) 's+%USER%+$$USER+' | \
                $(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
 			$(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
                $(ECHO) "Installing for Slackware." ;\
                $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
 		elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
                $(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
-			$(INSTALL) $(INSTALL_P) privoxy.init /etc/rc.d/init.d/privoxy ;\
+			$(SED) 's,^PRIVOXY_BIN=.*,PRIVOXY_BIN="/usr/local/sbin/$(PROGRAM)",' privoxy.init |\
+			$(SED) 's,^PRIVOXY_CONF=.*,PRIVOXY_CONF="$(CONF_DEST)/config",' |\
+			$(SED) "s,^PRIVOXY_USER=.*,PRIVOXY_USER=$$USER," > init.tmp ;\
+			$(INSTALL) $(INSTALL_P) init.tmp /etc/rc.d/init.d/privoxy && $(RM) init.tmp;\
 			$(MKDIR) /etc/logrotate.d/ ;\
 			$(ECHO) "Installing logrotate script to /etc/logrotate.d/" ;\
 			$(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
@@ -1006,10 +1010,14 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
 
 # rmdir is used as a precaution since it will not remove non-empty
-# directories.
+# directories. RH creates lock file and pid file.
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(ECHO) Starting Privoxy uninstallation
 	# KILL privoxy if running
+	-if [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
+		/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
+		chkconfig --del $(PROGRAM) 2>/dev/null;\
+	fi
 	-@ test -f $(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
           $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid` 
 	-@ test -f /var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
@@ -1065,7 +1073,7 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	fi
 
 	# init scripts and logrotate
-	if [ "$(prefix)" = "/usr/local" ]; then \
+	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		$(ECHO) Removing $(PROGRAM) init script ;\
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
 			$(RM) /etc/rc.d/rc.privoxy ;\
@@ -1093,6 +1101,14 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.128  2002/10/18 05:36:32  hal9
+# More install target fixes:
+# - Quick fix of log ownership on root install (lightly tested). If this goes
+#   true to form, then the fix will break something else :(
+# - Fix what looks like was invalid user on Slack if root install and
+#   we use an existing privoxy user. No way to test this.
+# See FIXMEs.
+#
 # Revision 1.127  2002/10/18 00:58:07  hal9
 # More install/uninstall/install-strip updates:
 # - Don't install gzipped man page (Solaris again).
