@@ -90,10 +90,9 @@
   <table cellpadding="20" cellspacing="10" border="0" width="100%">
     <tr>
       <td class="title">
-        <h1>
-          This is <a href="@homepage@">Privoxy</a> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@,
-          @if-enabled-display-then@enabled@else-not-enabled-display@disabled@endif-enabled-display@
-        </h1>
+
+#include mod-title
+
       </td>
     </tr>
 
@@ -101,12 +100,9 @@
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
       <td class="warning">
-        <h2>Warning:</h2>
-          <p>
-            <b>Please note that this <em class="warning">@code-status@</em> release
-            of the proxy software is not intended for production systems!
-            <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
-          </p>
+
+#include mod-unstable-warning
+
       </td>
     </tr>
 <!-- if-unstable-end@ -->
@@ -127,51 +123,18 @@
 
     <tr>
       <td class="info">
-        <h2>Support and Service via Sourceforge:</h2>
-        <p>
-          We value your feedback. To provide you with the best support,
-          we ask that you:
-        </p>
-        <ul>
-          <li>
-            use the <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a> or (better) the
-            <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.
-          </li>
-          <li>
-            submit banners and all problems with the actions file only through the
-            <a href="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">actions
-            file feedback system</a>.
-          </li>
-          <li>
-            submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>.
-            Make sure that the bug has not yet been submitted.
-          </li>
-          <li>
-            submit feature requests only through our <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature
-            request tracker</a>.
-          </li>
-        </ul>
+
+#include mod-support-and-service
+
       </td>
     </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>
       <td class="info">
-        <h2>Local Privoxy support:</h2>
 
-<!-- @if-have-proxy-info-start -->
-        <p>
-          You can consult the <a href="@proxy-info-url@">online documentation</a> for more information
-           about this Privoxy installation.
-        </p>
-<!-- if-have-proxy-info-end@ -->
+#include mod-local-help
 
-<!-- @if-have-adminaddr-info-start -->
-        <p>Address e-mail questions about this service to
-          <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
-          who will be glad to help you.
-        </p>
-<!-- if-have-adminaddr-info-end@ -->
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->

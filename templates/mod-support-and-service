@@ -1,0 +1,24 @@
+        <h2>Support and Service via Sourceforge:</h2>
+        <p>
+          We value your feedback. To provide you with the best support,
+          we ask that you:
+        </p>
+        <ul>
+          <li>
+            use the <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a> or (better) the
+            <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.
+          </li>
+          <li>
+            submit banners and all problems with the actions file only through the
+            <a href="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">actions
+            file feedback system</a>.
+          </li>
+          <li>
+            submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>.
+            Make sure that the bug has not yet been submitted.
+          </li>
+          <li>
+            submit feature requests only through our <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature
+            request tracker</a>.
+          </li>
+        </ul>
