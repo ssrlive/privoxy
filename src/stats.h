@@ -1,6 +1,6 @@
 #ifndef STATS_H_INCLUDED
 #define STATS_H_INCLUDED
-#define STATS_H_VERSION "$Id: stats.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
+#define STATS_H_VERSION "$Id: stats.h,v 2.1 2002/12/28 03:58:19 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/stats.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: stats.h,v $
+ *    Revision 2.1  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *
  *********************************************************************/
 
@@ -68,6 +72,9 @@ void update_stats_config(struct configuration_spec * config);
 void accumulate_stats(int key, int value);
 void *forward_stats();
 void send_stats(int *p_local_stats_array[]);
+#ifdef unix
+void null_routine(int sig);
+#endif /* def unix */
 
 #endif /* ndef STATS_H_INCLUDED */
 

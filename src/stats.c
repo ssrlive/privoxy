@@ -1,10 +1,10 @@
-const char stats_rcs[] = "$Id: stats.c,v 2.3 2002/07/18 22:06:12 jongfoster Exp $";
+const char stats_rcs[] = "$Id: stats.c,v 2.1 2002/12/28 03:58:19 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/stats.c,v $
  *
- * Purpose     :  
- *                
+ * Purpose     :  Functions and definitions for accumulating and
+ *                sending statistics to an "external" stats console
  *
  * Copyright   :  Written by and Copyright (C) 2002, 2003 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
