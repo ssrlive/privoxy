@@ -4,204 +4,506 @@
 # $Id: config,v 1.2 2001/04/30 03:05:11 rodney Exp $
 #
 
+#  Table of Contents
 #
+#	1. INTRODUCTION
+#       2. FORMAT OF THE CONFIGURATION FILE
+#       3. OTHER CONFIGURATION FILES
+#	4. GENERAL OPTIONS
+#       5. WINDOWS GUI OPTIONS
 #
-# Copyright 1997-8 Junkbusters Corp.  For distribution, modification and use
-# under the GNU General Public License. These files come with NO WARRANTY.
-# See http://www.junkbusters.com/ht/en/gpl.html or README file for details.
+#  1. INTRODUCTION
 #
-# When starting the proxy, give the name of this file as an argument.
-# Any changes made to this file are *not* automatically loaded; you have 
-# to stop and restart the proxy.
-
-# For information see http://www.junkbusters.com/ht/en/ijbman.html
-# or the documentation that came with the release
-
-# Lines beginning with a # character are comments; they are ignored.
-# Many example lines are provided here commented out
-
-# the blockfile contains patterns to be blocked by the proxy
-blockfile      ./blocklist # comments are OK here, too
-
-# the imagefile contains patterns to detect blocked images
-imagefile      ./imagelist
-
-# the popfile contains patterns of servers where javascript popups are disabled
+#  This file holds the Junkbuster configuration.  If you modify this
+#  file, you will need to stop & restart Junkbuster, or use the
+#  "Reload Config" option (Windows) before any changes take effect.
 #
-# if the next line is not commented out, all javascript popups from the sites 
-# that match the patterns in popup will be blocked
-# popupfile     ./popup
+#  When starting Junkbuster on Unix systems, give the name of this
+#  file as an argument.  On Windows systems, Junkbuster will look for
+#  this file with the name 'junkbustr.txt' in the same directory where
+#  Junkbuster is installed.
+#
+#  2. FORMAT OF THE CONFIGURATION FILE
+#
+#  Configuration lines consist of an initial keyword followed by a list
+#  of values, all separated by whitespace (any number of spaces or
+#  tabs).  For example,
+#
+#  blockfile blocklist.ini
+#
+#  Indicates that the blockfile is named 'blocklist.ini'.
+#
+#  The '#' indicates a comment.  Any part of a line following a # is
+#  ignored. 
+#
+#  Thus, by placing a # at the start of an existing configuration line,
+#  you can make it a comment and it will be treated as if it weren't there. 
+#  This is called "commenting out" an option and can be useful to turn
+#  off features: If you comment out the "logfile" line, junkbuster will
+#  not log at all. Watch for the "default:" section in each explanation
+#  to see what happens if the option is left unset (or commented out). 
+#  
 
-# File containing content modification rules
-#re_filterfile   ./re_filterfile
+#
+#  3. OTHER CONFIGURATION FILES
+#
+#  Junkbuster uses a number of other files to tell it what ads to
+#  block, what cookies to accept, etc.  This section of the
+#  configuration file tells Junkbuster where to find all those other
+#  files.
+#
+#  On Windows, Junkbuster looks for these files in the same
+#  directory as the executable.  On Unix, Junkbuster looks for these
+#  files in the current working directory.  In either case, an
+#  absolute path name can be used to avoid problems.
 
-# Uncomment to filter *all* traffic. Default is to
-# filter only if we wouldn't send a cookie either.
+#
+#  The blockfile contains regular expressions, one per line, of URLs
+#  to be blocked by Junkbuster.
+#
+#  Default: Don't block anything.
+#
+blockfile	./blocklist
+
+#
+#  The imagefile contains regular expressions, one per line, of URLs
+#  to be blocked as images by Junkbuster, regardless of whether they
+#  look like image URLs or not.
+#
+#  Default: Block all URLs as HTML requests.
+#
+imagefile	./imagelist 
+
+#
+#  The popfile contains regular expressions, one per line, of sites
+#  where Junkbuster should disable Javascript popups.
+#
+#  Default: No popup filtering.
+#
+popupfile	./popup
+
+#
+#  The re_filterfile contains content modification rules.  These rules
+#  permit powerful changes on the content of Web pages, e.g., you
+#  could disable your favourite JavaScript annoyances, rewrite the
+#  actual content, or just have some fun replacing "Microsoft"
+#  with "Microsuck" wherever it appears on a Web page.
+#
+#  Default: No content modification.
+#
+re_filterfile	./re_filterfile
+
+#
+#  The cookiefile defines how Junkbuster should treat cookies: filter
+#  them out; permit them; permit them only one-way from your browser
+#  to the site, etc.  You can set this on a site-by-site basis, so
+#  that you can, for example, use cookies at sites you trust while
+#  filtering them out everywhere else.
+#
+#  Default: Cookies to and from all destinations are filtered.
+#
+cookiefile	./cookiefile
+
+#
+#  The logfile is where all logging and error messages are written.
+#  The logfile can be useful for tracking down a problem with
+#  Junkbuster (e.g., it's not blocking an ad you think it should
+#  block) but in most cases you probably will never look at it.
+#
+#  If you do not use 'log-buffer-size'/'log-max-lines' (see below)
+#  your logfile will grow indefinitely, and you will probably want to
+#  periodically remove it.  On Unix systems, you can do this with a
+#  cron job (see 'man cron').
+#
+#  On SuSE Linux systems, you can place a line like
+#  "/var/log/junkbuster.* +1024k 644 nobody.nogroup" in /etc/logfiles,
+#  with the effect that cron.daily will automatically archive, gzip,
+#  and empty the log, when it exceeds 1M size.
+#
+#  Default: Log to the standard error channel, not to a file
+#
+logfile		./junkbuster.log
+
+#
+#  The jarfile defines where Junkbuster stores the cookies it
+#  intercepts.  Note that if you use a jarfile, it may grow quite
+#  large. 
+#
+#  Default: Don't store intercepted cookies
+#
+#jarfile	./jarfile	
+
+#
+#  The forwardfile defines domain-specific forwarding of HTTP
+#  requests.  In some cases, you may want Junkbuster to forward your
+#  request to another proxy instead of trying to fetch the request
+#  itself.  In those cases, you can use the forwardfile to indicate
+#  which requests should be forwarded and to where.
+#
+#  Default: Make all connections directly.
+#
+forwardfile	./forward
+
+#
+#  Generally, Junkbuster is used as a personal proxy.  The default
+#  behaviour of Junkbuster is to listen on port 8000 on the "loopback"
+#  interface, so that it will only listen to local requests from the
+#  same machine.  Using 'listen-address' (see below) you can serve
+#  requests from other machines as well.
+#
+#  In that case, it is a wise thing to define access control lists
+#  (acls), which state who can connect to your proxy and what service
+#  they will be given. Note that setting the listen-address to an IP
+#  address that is only internally reachable from your local network
+#  might already do the trick.
+#
+#  Default: No access control. Everybody that can reach junkbuster
+#           will be served.
+#
+#aclfile	./aclfile
+
+#
+#  4. OPTIONS
+#
+#  This part of the configuration file contains options that control
+#  how Junkbuster operates.
+#
+
+#
+#  If 're_filter_all' is set, (commented in) Junkbuster will attempt
+#  content modification (see 're_filterfile' above) on all requests.
+#
+#  Default: Content modification takes only place if no cookie would
+#           be sent to the server.
 #
 #re_filter_all
 
-
-# the cookiefile contains patterns to specify the cookie management policy
 #
-cookiefile     ./cookiefile
-
-# the logfile is where all logging and error messages are written
+#  If 'add-forwarded-header' is set, an "X-Forwarded-For:"
+#  specification will be added to each request header.  Generally,
+#  this is not needed and will reduce your privacy, as the server
+#  will not only see which proxy the request came through, but also
+#  which machine behind that proxy the request originally came from.
 #
-logfile        ./junkbuster.log
-
-# the jarfile is where cookies can be stored
-#
-#jarfile    ./jarfile
-
-# the forwardfile defines domain-specific routing
-#
-#forwardfile    ./forward
-
-# file which lists and into which trusted domains are written
-#
-#trustfile     ./trust
-# files specify locations of "for information about trusted referers, see.."
-# multiple trust_info_url lines are OK
-#
-# trust_info_url     http://internet.junkbuster.com/
-# trust_info_url     http://www.yoursite.com/our_trust_policy.html
-#
-
-# The access control list file can be used to restrict IP addresses
-# that are permitted to use the proxy (see warnings in the FAQ).
-#
-#aclfile ./aclfile
-
-# add an "X-Forwarded-For:" specification to each request header
+#  Default: Don't add the "X-Forwarded-For:" header.
 #
 #add-forwarded-header
 
-# if logging cookies into a jarfile, and no other wafers were
-# explicity set, then by default a vanilla wafer is sent with
-# each request.
 #
-# setting 'suppress-vanilla-wafer' stops this vanilla wafer from
-# being sent.
+#  Junkbuster can add "wafers", i.e. fake cookies, to each request
+#  header it sends out.
+#  These wafers can be seen by Web site operators in their log files,
+#  so it's a way for you to communicate (very indirectly!) with
+#  them. Junkbuster will add as many wafers as you like to each
+#  request, just list them all here.  Here's an example:
+#
+#     wafer    NOTE=Like most people, I want my browsing to be anonymous.
+#     wafer    WARNING=Please do not attempt to track me.
+#
+#  Wafers make each request larger and will have a (small) impact on
+#  your browsing speed, so you probably don't want to do this unless
+#  you have a particular need.
+#
+#  Default: Don't add a wafer
+#
+#wafer NOTE=Add your wafer here...
+
+#
+# There's also a pre-defined wafer containing a privacy message,
+# called the vanilla wafer, which is sent by default. Setting
+# suppress-vanilla-wafer suppresses this. You guessed that, didn't you?
+#
+# Default: Send the vanilla wafer
 #
 suppress-vanilla-wafer
 
-# add these wafers to each request header
-# multiple wafer lines are OK
 #
-#wafer    NOTE=Like most people, I want my browsing to be anonymous.
-#wafer    WARNING=Please do not attempt to track me.
-
-# Anything can be added to the request headers. Please don't litter.
-# multiple add-header lines are OK
+#  In fact, Junkbuster can add anything at all to the request headers.
+#  You can specify the headers to add with the add-header option.  For
+#  example: 
 #
-#add-header     Forwarded: by http://stay-out-of-my-backyard.net
-#add-header    Forwarded: by http://pro-privacy-isp.net
-#add-header    Proxy-Connection: Keep-Alive
+#     add-header  Forwarded: by http://stay-out-of-my-backyard.net
+#
+#  Generally, random headers will simply be ignored by the Web site,
+#  so there's little use in adding them.  However, there are some
+#  cases where you might want to add a header, e.g., if you're
+#  forwarding Junkbuster requests to another proxy you might want to
+#  add:
+#
+#     add-header    Proxy-Connection: Keep-Alive
+# 
+#  to every request.
+#
+#add-header My-Header: Whatever you'd like...
 
-# listen-address specifies where the Junkbuster will listen for connections
-# Specifying a port is optional; if unspecified the defaults is 8000.
-# Before Version 2.0.2 the default was to bind to all IP addresses (INADDR_ANY)
-# This has been restricted to localhost to avoid unintended security breaches.
-# To open the proxy to all, uncomment the following line:
-#listen-address      :8000
-# other example usage:
-#listen-address      124.207.250.245:8080
-# to explicitly state what is now the default:
-#listen-address      localhost
-# or equivalently:
-listen-address    127.0.0.1:8000
+#
+#  Listen-address specifies the address and port where Junkbuster will
+#  listen for connections from your Web browser.  The default is to
+#  listen on the local host on port 8000, and this is suitable for
+#  most users.  (In your web browser, under proxy configuration, list
+#  the proxy server as 'localhost' and the port as '8000').
+# 
+#  If you already have another service running on port 8000, or if you
+#  want to serve requests from other machines (e.g. on your local
+#  network) as well, you will need to override the default. The syntax
+#  is "listen-address [<ip-address>]:<port>" If you leave out the ip
+#  adress, junkbuster will bind to all interfaces (addresses) on your
+#  machine and may become reachable from the internet. In that case,
+#  consider using access control lists (acl's) (see "aclfile" above).
+#
+#  For example, suppose you are running Junkbuster on a machine which
+#  has the address 192.168.0.1 on your local private network
+#  (192.168.0.0) and has another outside connection with a different
+#  address. You want it to serve requests from inside only:
+#
+#     listen-address 192.168.0.1:8000
+#
+#  If you want it to listen on all addresses (including the outside
+#  connection):
+#
+#     listen-address :8000
+#
+#  If you do this, consider using acls (see "aclfile" above).
+#
+#  Note: you will need to point your browser(s) to the address
+#  and port that you have configured here.
+#
+#  Default:  listen-address    localhost:8000 
+#            listen-address    127.0.0.1:8000
+#
 
-# user-agent specifies treatment of the "User-Agent:" (and "UA-*:") header(s)
-# default: Forge the "User-Agent:" 
-# 'text' : Always send <text> as the "User-Agent:"
-# .      : Pass the "User-Agent:" unchanged
-# @      : Pass the "User-Agent:" if the server is in the cookie file,
-#          forge the "User-Agent:" otherwise
-#user-agent     @
-
-# note: Russian browsers may be confused if user agent misidentifies
-# the operating system (Mac vs Windows); see FAQ
+#
+#  When your Web browser makes a request from a Web site, it informs
+#  the Web site what sort of browser it is, e.g., "Internet Explorer
+#  V2.0" or some such.  In theory, Web sites can use this information
+#  to tailor themselves for your browser.
+#
+#  The 'user-agent' option controls whether Junkbuster will conceal
+#  your browser type or not.  If user-agent is set to . (period) the
+#  User-Agent header is passed to the server unchanged, along with any
+#  UA headers produced by MS-IE (which would otherwise be deleted). If
+#  user-agent is set to @ (at) these headers are sent unchanged in
+#  cases where the cookiefile specifies that a cookie would be sent,
+#  otherwise only a default User-Agent header is sent. That default is
+#  Mozilla/3.0 (Netscape) with an unremarkable Linux configuration. 
+#  If left unset, the default header is always sent.
+#
+#  Note that if you choose to mislead Web sites about your browser
+#  type, you may get Web pages that confuse your browser or display
+#  incorrectly.  In most cases, it's probably fine to send your real
+#  browser type.
+#
+#  Default: Always send the (forged) default user agent header
+#
 user-agent    .
 
-# referer specifies treatment of the "Referer:" header
-# New option by "Andreas S. Oesterhelt" <oes@paradis.rhein.de>
 #
-# default: Kill the referrer-header from the client
-# 'text' : Always send <text> as the referrer
-# .      : Pass the referrer unchanged
-# @      : Pass the referrer if the server is in the cookie file,
-#          kill the referrer otherwise
-# §      : Pass the referrer if the server is in the cookie file,
-#       send a forged referrer that points to the root-diretory URL
-#       of the current request otherwise
-referer     §
+#  When your Web browser requests a page from a Web site, it also
+#  informs the Web site where it came from, i.e., when you click
+#  through to a new web page, your browser tells the new web site the
+#  URL of the old web page.  This is called the "Referer" header.
+#
+#  Junkbuster has the ability to mask the Referer header.  Referer
+#  headers can be used to track users as they browse around the web,
+#  and many consider them invasive.  Junkbuster provides several
+#  options for dealing with referer headers:
+#
+#       VALUE       EFFECT
+#       =====       ======
+#	default     Kill the referrer-header from the client.
+#	.           Pass the referrer unchanged.
+#       @           Pass the referrer if the server is in the cookie file,
+#                   kill the referrer otherwise.
+#       L           Pass the referrer if the server is in the cookie file,
+#                   send a forged referrer that points to the
+#                   root-directory URL of the current request otherwise.
+#       'text'      Always send <text> as the referrer.
+#
+#  L is probably preferable to @, because it will break fewer Web
+#  sites while still concealing your browsing path.
+#
+#  Default: see above
+#
+referer		L
 
-# from specifies value to be subsituted if browser provides a "From:" header
 #
-#from        spam-me-senseless@sittingduck.net
+#  Some browsers provide a "From:" header that gives Web sites your
+#  email address.  The only real effect of this is to make you a
+#  target for unsolicited email (spam).  There are three options
+#  what to do with the "From:" header if it is present:
+# 
+#       VALUE       EFFECT
+#       =====       ======
+#       default     Kill every "From:" header
+#       .           Pass the "From:" header unchanged
+#       'text'      replace the email address in the "From:" header with 'text'
+#
+#  Default: see above
+#
+from		spam-me-senseless@sittingduck.xqq
 
-# tinygif allows you to change the appearance of blocked images
 #
-# tinygif      0  # Show a "broken icon"
-# tinygif      1  # Show a GIF of one transparent pixel
-# tinygif      2  # Show a GIF with the word "JUNKBUSTER"
-tinygif     2
-# tinygif  3 http://localhost/1x1.gif   # Temporary redirect to this URL
+#  The 'tinygif' option lets you change how Junkbuster treats blocked
+#  images.  The default behavior is to send an HTML answer to requests
+#  for images, resulting in a "broken image icon" in place of the blocked
+#  image.  That's a little ugly, so several other options are available:
+#
+#     VALUE       EFFECT
+#     =====       ======
+#	0	  Send HTML
+#	1	  Send a GIF of one transparent pixel
+#	2	  Send a GIF with the word "JUNKBUSTER"
+#       3 <url>   Send a redirect to the image indicated by the <url>
+#
+#  As an example of the last option:
+#
+#    tinygif 3 http://www.junkbusters.com/images/fb.gif
+#
+#  Will replace every blocked image with the "fb.gif" image.
+#
+#  There is one non-obvious benefit to using option "3".  If you use
+#  option 3, your Web browser will likely cache the image you specify
+#  on your local machine.  That means that after the first use, that
+#  image will load very quickly (and won't require a request to the
+#  junkbuster proxy)
+#
+#  Default: 0, i.e. send HTML
+#
+tinygif		2
 
-# Andrew <anw@tirana.freewire.co.uk> added
-# The following can be used to suppress display of the block lists when the
-# page http://x.x/show-proxy-args is displayed. With a long block list this
-# accelerates loading of the configuration page and also hides the contents of
-# the block lists (for whatever reason). Maintainers of junkbuster proxies for 
-# multiple use can specify a message for any use who wants to know what is in
-# these files.
 #
-#suppress-blocklists Contact sysadmin@example.com for details.
-# suppress-blocklists
+#  The debug option sets the level of debugging information to log in
+#  the logfile (and to the console in the Windows version).  A debug
+#  level of 1 is informative because it will show you each request as
+#  it happens.  Higher levels of debug are probably only of interest
+#  to developers.
+#
+#   debug         1 # GPC  = show each GET/POST/CONNECT request
+#   debug         2 # CONN = show each connection status
+#   debug         4 # IO   = show I/O status
+#   debug         8 # HDR  = show header parsing
+#   debug        16 # LOG  = log all data into the logfile
+#   debug        32 # FRC  = debug force feature
+#   debug        64 # REF  = debug regular expression filter 
+#
+#  Multiple "debug" directives, are OK - they're logical-OR'd
+#  together. 
+#
+#   debug         15 # same as setting the first 4 listed above
+#
+#  Default: 0, i.e. log nothing but errors and infos
+#
+debug 		  1
 
-# debug sets the level of debugging information to log in the logfile
 #
-# debug         1 # GPC  = show each GET/POST/CONNECT request
-# debug         2 # CONN = show each connection status
-# debug         4 # IO   = show I/O status
-# debug         8 # HDR  = show header parsing
-# debug        16 # LOG  = log all data into the logfile
-# debug        32 # FRC  = debug force feature
-# debug        64 # REF  = debug regular expression filter 
+#  Junkbuster normally uses "multi-threading", a software technique
+#  that permits it to handle many different requests simultaneously.
+#  In some cases you may wish to disable this -- particularly if
+#  you're trying to debug a problem.  The 'single-threaded' option
+#  forces Junkbuster to handle requests sequentially.
 #
-# multiple "debug" directives, are OK - they're logical-OR'd together
-#
-#debug         15 # same as setting the first 4 listed above
-debug 1
-#debug 255
-
-# single-threaded operation (i.e. disallows multiple threads or processes)
-# This is most often used for debugging because it keeps the
-# debugging output "in order" for easy reading.
+#  Default: Multithreaded mode
 #
 #single-threaded
 
-# Toggle flag.  0 => disabled, anything else (ie. 1) => enabled
+#
+#    'toggle' controls whether Junkbuster can temporarily be toggled on
+#    and off.
+#    
+#    The Windows version of Junkbuster puts an icon in the system
+#    tray.  If you right-click on that icon (or select the 'Options'
+#    menu), one choice is "Enable".  Clicking on enable toggles
+#    Junkbuster on and off.  This is useful if you want to temporarily
+#    disable Junkbuster, e.g., to access a site that requires cookies
+#    which you normally have blocked.
+#
+#    Unix versions of Junkbuster are toggled on and off by sending a
+#    SIGHUP to Junkbuster.
+#
+#    'toggle 1' means permit toggling of Junkbuster, 'toggle 0' means
+#    don't.
+#
+#  Default: 1
+#
 toggle 1
 
-
-# Win32 GUI specific options.  Moved here from ijbw32.ini
-# in hopes of keep all of our config settings together.
-
-activity-animation      1
-log-messages            1
-log-highlight-messages  1
-log-buffer-size         1
-log-max-lines           200
-log-font-name           Comic Sans MS
-log-font-size           8
-show-on-task-bar        0
-close-button-minimizes  1
-
-# hide-console is used only on Win32 console mode. It instructs
-# the Internet Junkbuster to disconnect from and hide the
-# command console.
 #
-#hide-console
+#  5. WINDOWS GUI OTPIONS
+#
+#  Junkbuster has a number of options specific to the Windows GUI
+#  interface:
+#
+#    activity-animation      {1 or 0}
+#
+#    If set to 1, the Junkbuster icon will animate when Junkbuster is
+#    active.
+#
+#Win32-only: activity-animation      1
+
+#    log-messages            {1 or 0}
+#
+#    If set to 1, Junkbuster will log messages to the console window.
+#
+#Win32-only: log-messages            1
+
+#    log-buffer-size         {1 or 0}?
+#
+#    If log-buffer-size is set to 1, the size of the log buffer, that
+#    is the amount of memory used for the log messages displayed in
+#    the console window, will be limited to 'log-max-lines' (see below).
+#
+#    Warning: Setting this to 0 will result in the buffer to grow
+#             infinitely and eat up all your memory!
+#
+#Win32-only: log-buffer-size		1
+
+#    log-max-lines	{number of lines, e.g., '200'}
+#
+#    Maximum number of lines held in the log buffer. See above.
+#
+#Win32-only: log-max-lines		200
+
+#    log-highlight-messages  {1 or 0}
+#
+#    If set to 1, Junkbuster will highlight portions of the log
+#    messages with a bold-faced font.
+#
+#Win32-only: log-highlight-messages  1
+
+#    log-font-name           {font name, e.g., 'Comic Sans MS'}
+#
+#    The font used in the console window.
+#
+#Win32-only: log-font-name           Comic Sans MS
+
+#    log-font-size           {font size in points, e.g., '8'}
+#
+#    Font size used in the console window.
+#
+#Win32-only: log-font-size           8
+
+#    show-on-task-bar        {1 or 0}
+#
+#    Controls whether or not Junkbuster will appear on the Task bar
+#    when minimized.
+#
+#Win32-only: show-on-task-bar        0
 
 
+#    close-button-minimizes  1
+#
+#    If set, the Windows close button will minimize Junkbuster instead
+#    of closing the program (close with the exit option on the File
+#    menu).
+#
+#Win32-only: close-button-minimizes  1
+
+#    hide-console
+#
+#    If this option is used, Junkbuster will disconnect from and hide 
+#    the command console.
+#
+#Win32-only: #hide-console
+
+# Note: Junkbuster is distributed under the GNU General Public License (GPL)
+#       For details, see http://www.gnu.org/copyleft/gpl.html
