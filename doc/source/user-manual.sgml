@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.22 2001/11/05 23:57:51 hal9 Exp $
+ $Id: user-manual.sgml,v 1.23 2001/12/02 00:20:41 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.22 2001/11/05 23:57:51 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.23 2001/12/02 00:20:41 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -430,7 +430,7 @@ configuration section below. HB.)
     <quote>actions</quote> relating to images, banners, pop-ups, access
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
-    url="http://i.j.b./">http://i.j.b./</ulink>. This is the easiest method of
+    url="http://i.j.b">http://i.j.b</ulink>. This is the easiest method of
     configuring actions. (Still under active development.)
    </para>
   </listitem> 
@@ -930,7 +930,7 @@ configuration section below. HB.)
  to temporarily disable <application>Junkbuster</application>, e.g., to access
  a site that requires cookies which you would otherwise have blocked. This can also
  be toggled via a web browser at the <application>Junkbuster</application>
- internal address of <ulink url="http://i.j.b./">http://i.j.b./</ulink> on 
+ internal address of <ulink url="http://i.j.b">http://i.j.b</ulink> on 
  any platform.
 </para>
 
@@ -985,7 +985,7 @@ configuration section below. HB.)
  that you must have compiled <application>JunkBuster</application> with
  support for this feature, otherwise this option has no effect. This 
  internal page can be reached at <ulink
- url="http://i.j.b./">http://i.j.b./</ulink>.
+ url="http://i.j.b">http://i.j.b</ulink>.
  </para>
 
 <para>
@@ -1014,7 +1014,7 @@ configuration section below. HB.)
 
 <para>
  Security note:  If this is enabled, anyone who can use the proxy can toggle
- it on or off (see <ulink url="http://i.j.b./">http://i.j.b./</ulink>), and
+ it on or off (see <ulink url="http://i.j.b">http://i.j.b</ulink>), and
  their changes will affect all users. For shared proxies, you probably want to
  disable this. Default: enabled.
 </para>
@@ -1751,7 +1751,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The actions file can be edited with a browser by loading 
- <ulink url="http://i.j.b">http://i.j.b</ulink>, and then select 
+ <ulink url="http://i.j.b/">http://i.j.b/</ulink>, and then select 
  <quote>Edit Actions</quote>.
 </para>
 
@@ -2796,7 +2796,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  preferences and requirements. There are many, many aspects that can 
  be customized. <quote>Actions</quote> (as specified in <filename>ijb.action</filename>) 
  can be adjusted by pointing your browser to 
- <ulink url="http://i.j.b./">http://i.j.b./</ulink>, 
+ <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
  and then follow the link to <quote>edit the actions list</quote>. 
  (This is an internal page and does not require Internet access.)
 </para>
@@ -2917,7 +2917,7 @@ communication (bugs, feature requests, etc.)
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://i.j.b./">http://i.j.b./</ulink>
+   &nbsp; <ulink url="http://i.j.b/">http://i.j.b/</ulink>
   </member>
  </simplelist>
  <simplelist>
@@ -3203,6 +3203,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.23  2001/12/02 00:20:41  hal9
+ Updates for recent changes.
+
  Revision 1.22  2001/11/05 23:57:51  hal9
  Minor update for startup now daemon mode.
 
