@@ -1,9 +1,9 @@
 #ifndef _SSPLIT_H
 #define _SSPLIT_H
-#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/ssplit.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/ssplit.h,v $
  *
  * Purpose     :  A function to split a string at specified deliminters.
  *
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: ssplit.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:04  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -42,7 +45,8 @@
 extern "C" {
 #endif
 
-extern int ssplit(char *s, char *c, char *v[], int n, int m, int l);
+extern int ssplit(char *str, const char *delim, char *vec[], int vec_len, 
+                  int dont_save_empty_fields, int ignore_leading);
 
 /* Revision control strings from this header and associated .c file */
 extern const char ssplit_rcs[];

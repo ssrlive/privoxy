@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -32,6 +32,9 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $
  *
  * Revisions   :
  *    $Log: ssplit.c,v $
+ *    Revision 1.2  2001/05/17 23:01:01  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:04  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -54,180 +57,139 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $
 const char ssplit_h_rcs[] = SSPLIT_H_VERSION;
 
 /* Define this for lots of debugging information to stdout */
-/* #define SSPLIT_VERBOSE */
-
-#ifdef SSPLIT_VERBOSE
-/*********************************************************************
- *
- * Function    :  print
- *
- * Description :  Debugging routine to spit info on stdout.  Not very
- *                useful to the non-console based IJB compiles.
- *
- * Parameters  :
- *          1  :  v = an array of strings
- *          2  :  n = number of strings in `v' to dump to stdout
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void print(char **v, int n)
-{
-   int i;
-   printf("dump %d strings\n", n);
-   for (i=0; i < n; i++)
-   {
-      printf("%d '%s'\n", i, v[i]);
-   }
-
-}
-#endif /* def SSPLIT_VERBOSE */
+#undef SSPLIT_VERBOSE
+/* #define SSPLIT_VERBOSE 1 */
 
 
 /*********************************************************************
  *
  * Function    :  ssplit
  *
- * Description :  Split a string using deliminters in `c'.  Results go
- *                into `v'.
+ * Description :  Split a string using delimiters in `delim'.  Results
+ *                go into `vec'.
  *
  * Parameters  :
- *          1  :  s = string to split
- *          2  :  c = array of delimiters
- *          3  :  v[] = results vector (aka. array)
- *          4  :  n = number of usable slots in the vector (aka. array size)
- *          5  :  m = consecutive delimiters means multiple fields?
- *          6  :  l = ignore leading field separators?
+ *          1  :  str = string to split.  Will be split in place
+ *                (i.e. do not free until you've finished with vec,
+ *                previous contents will be trashed by the call).
+ *          2  :  delim = array of delimiters (if NULL, uses " \t").
+ *          3  :  vec[] = results vector (aka. array) [out]
+ *          4  :  vec_len = number of usable slots in the vector (aka. array size)
+ *          5  :  dont_save_empty_fields = zero if consecutive delimiters
+ *                give a null output field(s), nonzero if they are just 
+ *                to be considered as single delimeter
+ *          6  :  ignore_leading = nonzero to ignore leading field
+ *                separators.
  *
- * Returns     :  -1 => failure, else the number of fields put in `v'.
+ * Returns     :  -1 => Error: vec_len is too small to hold all the 
+ *                      data, or str == NULL.
+ *                >=0 => the number of fields put in `vec'.
+ *                On error, vec and str may still have been overwritten.
  *
  *********************************************************************/
-int ssplit(char *s, char *c, char *v[], int n, int m, int l)
+int ssplit(char *str, const char *delim, char *vec[], int vec_len, 
+           int dont_save_empty_fields, int ignore_leading)
 {
-   char t[256];
-   char **x = NULL;
-   int xsize = 0;
-   unsigned char *p, b;
-   int xi = 0;
-   int vi = 0;
-   int i;
-   int last_was_null;
+   unsigned char is_delim[256];
+   unsigned char char_type;
+   int vec_count = 0;
 
-   if (!s)
+   if (!str)
    {
       return(-1);
    }
 
-   memset(t, '\0', sizeof(t));
 
-   p = (unsigned char *) c;
+   /* Build is_delim array */
 
-   if (!p)
+   memset(is_delim, '\0', sizeof(is_delim));
+
+   if (!delim)
    {
-      p = (unsigned char *) " \t";  /* default field separators */
+      delim = " \t";  /* default field separators */
    }
 
-   while (*p)
+   while (*delim)
    {
-      t[*p++] = 1;   /* separator  */
+      is_delim[(unsigned)(unsigned char)*delim++] = 1;   /* separator  */
    }
 
-   t['\0'] = 2;   /* terminator */
-   t['\n'] = 2;   /* terminator */
+   is_delim[(unsigned)(unsigned char)'\0'] = 2;   /* terminator */
+   is_delim[(unsigned)(unsigned char)'\n'] = 2;   /* terminator */
 
-   p = (unsigned char *) s;
 
-   if (l)/* are we to skip leading separators ? */
+   /* Parse string */
+
+   if (ignore_leading)
    {
-      while ((b = t[*p]) != 2)
+      /* skip leading separators */
+      while (is_delim[(unsigned)(unsigned char)*str] == 1)
       {
-         if (b != 1)
-         {
-            break;
-         }
-         p++;
+         str++;
       }
    }
 
-   xsize = 256;
-
-   x = (char **) zalloc((xsize) * sizeof(char *));
-
-   x[xi++] = (char *) p;   /* first pointer is the beginning of string */
-
-   /* first pass:  save pointers to the field separators */
-   while ((b = t[*p]) != 2)
-   {
-      if (b == 1)    /* if the char is a separator ... */
+   /* first pointer is the beginning of string */
+   /* Check if we want to save this field */
+   if ( (!dont_save_empty_fields)
+     || (is_delim[(unsigned)(unsigned char)*str] == 0) )
       {
-         *p++ = '\0';      /* null terminate the substring */
-
-         if (xi == xsize)
-         {
-            /* get another chunk */
-            int new_xsize = xsize + 256;
-            char **new_x = (char **)zalloc((new_xsize) * sizeof(char *));
-
-            for (i=0; i < xsize; i++)
-            {
-               new_x[i] = x[i];
-            }
-
-            free(x);
-            xsize = new_xsize;
-            x     = new_x;
-         }
-         x[xi++] = (char *) p;   /* save pointer to beginning of next string */
-      }
-      else
+      /*
+       * We want empty fields, or the first character in this 
+       * field is not a delimiter or the end of string.
+       * So save it.
+       */
+      if (vec_count >= vec_len)
       {
-         p++;
-      }
-   }
-   *p = '\0';     /* null terminate the substring */
-
-
-#ifdef SSPLIT_VERBOSE
-   if (DEBUG(HDR))
-   {
-      print(x, xi); /* debugging */
-   }
-#endif /* def SSPLIT_VERBOSE */
-
-
-   /* second pass: copy the relevant pointers to the output vector */
-   last_was_null = 0;
-   for (i=0 ; i < xi; i++)
-   {
-      if (m)
-      {
-         /* there are NO null fields */
-         if (*x[i] == 0)
-         {
-            continue;
-         }
-      }
-      if (vi < n)
-      {
-         v[vi++] = x[i];
-      }
-      else
-      {
-         free(x);
          return(-1); /* overflow */
       }
+      vec[vec_count++] = (char *) str;   
    }
-   free(x);
+
+   while ((char_type = is_delim[(unsigned)(unsigned char)*str]) != 2)
+   {
+      if (char_type == 1)    
+      {
+         /* the char is a separator */
+
+         /* null terminate the substring */
+         *str++ = '\0';      
+
+         /* Check if we want to save this field */
+         if ( (!dont_save_empty_fields)
+           || (is_delim[(unsigned)(unsigned char)*str] == 0) )
+            {
+            /*
+             * We want empty fields, or the first character in this 
+             * field is not a delimiter or the end of string.
+             * So save it.
+             */
+            if (vec_count >= vec_len)
+            {
+               return(-1); /* overflow */
+            }
+            vec[vec_count++] = (char *) str;   
+         }
+      }
+      else
+      {
+         str++;
+      }
+   }
+   *str = '\0';     /* null terminate the substring */
 
 #ifdef SSPLIT_VERBOSE
-   if (DEBUG(HDR))
    {
-      print(v, vi); /* debugging  */
+      int i;
+      printf("dump %d strings\n", vec_count);
+      for (i = 0; i < vec_count; i++)
+      {
+         printf("%d '%s'\n", i, vec[i]);
+      }
    }
 #endif /* def SSPLIT_VERBOSE */
 
-   return(vi);
-
+   return(vec_count);
 }
 
 
