@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $
+ $Id: user-manual.sgml,v 1.4 2001/09/24 01:27:56 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.2 2001/09/13 15:27:40 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.4 2001/09/24 01:27:56 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -301,8 +301,8 @@ configuration section below.
 <sect1 id="configuration"><title>Junkbuster Configuration</title>
 <para>
  For Unix and Linux, all configuraton files are located in
- <filename>/etc/junkbuster/</filename> by default. For MS Windows, these 
- are all in the same directory as the <application>Junkbuster</application>
+ <filename>/etc/junkbuster/</filename> by default. For MS Windows and OS/2,
+ these are all in the same directory as the <application>Junkbuster</application>
  executable. The name and number of configuration files has changed from
  previous versions, and is subject to change as development progresses.
 </para>
@@ -319,7 +319,7 @@ configuration section below.
   <listitem>
    <para>
      The main configuration file is named <filename>config</filename>
-     on Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
+     on Linux, Unix and OS/2, and <filename>junkbustr.txt</filename> on Windows.
    </para>
   </listitem> 
 
@@ -356,7 +356,7 @@ configuration section below.
 <title>The Main Configuration File</title>
 <para>
  Again, the main configuration file is named <filename>config</filename> on
- Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
+ Linux, Unix and OS/2, and <filename>junkbustr.txt</filename> on Windows.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:
@@ -419,7 +419,7 @@ configuration section below.
 
 <para>
  On <application>Windows</application>, <application>Junkbuster</application>
- looks for these files in the same directory as the executable.  On Unix,
+ looks for these files in the same directory as the executable.  On Unix and OS/2,
  <application>Junkbuster</application> looks for these files in the current
  working directory.  In either case, an absolute path name can be used to
  avoid problems.
@@ -2468,6 +2468,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.4  2001/09/24 01:27:56  hal9
+ Draft. Unfinished.
+
  Revision 1.2  2001/09/13 15:27:40  swa
  cosmetics
 
