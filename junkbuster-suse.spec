@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.14 2002/03/07 19:10:21 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.15 2002/03/07 19:23:50 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -45,6 +45,7 @@ URL: http://ijbswa.sourceforge.net/
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
+BuildRequires: perl gzip docbktls libtool
 
 #
 # -----------------------------------------------------------------------------
@@ -79,14 +80,22 @@ autoconf
 ./configure
 make
 make dok
-strip junkbuster
+
+## Explicitily stripping is not recomended.
+## This is handled altomaticaly by RPM, and can couse troubles if
+## anyone wants to build an unstriped version - morcego
+#strip %{name}
 
 #
 # -----------------------------------------------------------------------------
 # hint by kukuk@suse.de
 %pre
-usr/sbin/groupadd -r junkbuster
-usr/sbin/useradd -g junkbuster -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
+# -r does not work
+#usr/sbin/groupadd -r junkbuster
+usr/sbin/groupadd junkbuster
+# -r does not work
+#usr/sbin/useradd -g junkbuster -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
+usr/sbin/useradd -g junkbuster -d /etc/junkbuster -s "/bin/false" junkbuster > /dev/null 2>&1 || /bin/true
 
 #
 # -----------------------------------------------------------------------------
@@ -141,6 +150,9 @@ sbin/insserv etc/init.d/junkbuster
 #
 %postun
 sbin/insserv etc/init.d/
+# dont forget to remove user and group junkbuster
+/usr/sbin/userdel junkbuster > /dev/null 2>&1 || /bin/true
+/usr/sbin/groupdel junkbuster > /dev/null 2>&1 || /bin/true
 
 #
 # -----------------------------------------------------------------------------
@@ -236,6 +248,9 @@ sbin/insserv etc/init.d/
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.15  2002/03/07 19:23:50  swa
+# i hate to scroll. suse: wrong configdir.
+#
 # Revision 1.14  2002/03/07 19:10:21  swa
 # builds cleanly. thanks to kukuk@suse.de
 # not yet tested.
