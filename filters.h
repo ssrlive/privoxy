@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.12 2001/07/29 19:01:11 jongfoster Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.13 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,12 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.13  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.12  2001/07/29 19:01:11  jongfoster
  *    Changed _FILENAME_H to FILENAME_H_INCLUDED.
  *    Added forward declarations for needed structures.
@@ -233,6 +239,7 @@ extern int domaincmp(struct url_spec *pattern, struct url_spec *fqdn);
  */
 extern char *pcrs_filter_response(struct client_state *csp);
 extern char *gif_deanimate_response(struct client_state *csp);
+extern int remove_chunked_transfer_coding(char *buffer, const size_t size);
 
 /* 
  * Revision control strings from this header and associated .c file
