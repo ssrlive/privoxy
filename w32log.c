@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.5 2001/05/26 00:28:36 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.6 2001/05/26 00:31:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.5 2001/05/26 00:28:36 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.6  2001/05/26 00:31:30  jongfoster
+ *    Fixing compiler warning about comparing signed/unsigned.
+ *
  *    Revision 1.5  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -951,7 +954,9 @@ void OnLogRButtonUp(int nModifier, int x, int y)
    if (hMenu != NULL)
    {
       HMENU hMenuPopup = GetSubMenu(hMenu, 0);
+#ifdef WIN_GUI_EDIT
       char *szURL;
+#endif /* def WIN_GUI_EDIT */
 
       /* Check if there is a selection */
       CHARRANGE range;
@@ -965,6 +970,7 @@ void OnLogRButtonUp(int nModifier, int x, int y)
          EnableMenuItem(hMenuPopup, ID_EDIT_COPY, MF_BYCOMMAND | MF_ENABLED);
       }
 
+#ifdef WIN_GUI_EDIT
       /* Check if cursor is over a link */
       szURL = LogGetURLUnderCursor();
       if (szURL)
@@ -996,6 +1002,7 @@ void OnLogRButtonUp(int nModifier, int x, int y)
 
          free(szURL);
       }
+#endif /* def WIN_GUI_EDIT */
 
       /* Display the popup */
       TrackPopupMenu(hMenuPopup, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, x, y, 0, g_hwndLogFrame, NULL);
@@ -1112,9 +1119,11 @@ void OnLogCommand(int nCommand)
          break;
 #endif /* def TRUST_FILES */
 
+#ifdef WIN_GUI_EDIT
       case ID_NEW_BLOCKER:
          ShowRulesDialog(g_hwndLogFrame);
          break;
+#endif /* def WIN_GUI_EDIT */
 
       case ID_HELP_GPL:
          ShellExecute(g_hwndLogFrame, "open", "gpl.html", NULL, NULL, SW_SHOWNORMAL);

@@ -1,6 +1,6 @@
 #ifndef _W32RES_H
 #define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.3 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,13 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.3  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -53,17 +60,22 @@
  *
  *********************************************************************/
 
+#ifdef WIN_GUI_EDIT
 #define IDS_NEW_BLOCKER                   1
 
 #define ID_NEW_BLOCKER                    100
+#endif /* def WIN_GUI_EDIT */
+
 #define IDR_TRAYMENU                      101
 #define IDI_IDLE                          102
 #define IDR_LOGVIEW                       103
 #define IDR_ACCELERATOR                   104
 #define IDR_POPUP_SELECTION               105
+
+#ifdef WIN_GUI_EDIT
 #define IDD_RULES                         106
-#define IDI_DENYRULE                      107
-#define IDI_ALLOWRULE                     108
+#endif /* def WIN_GUI_EDIT */
+
 
 #define IDI_JUNKBUSTER                    200
 #define IDI_JUNKBUSTER1                   201
@@ -75,6 +87,10 @@
 #define IDI_JUNKBUSTER7                   207
 #define IDI_JUNKBUSTER8                   208
 
+#ifdef WIN_GUI_EDIT
+#define IDI_DENYRULE                      209
+#define IDI_ALLOWRULE                     210
+
 #define IDC_NEW                           300
 #define IDC_ACTION                        301
 #define IDC_RULES                         302
@@ -83,6 +99,7 @@
 #define IDC_MOVEDOWN                      305
 #define IDC_DELETE                        306
 #define IDC_SAVE                          307
+#endif /* def WIN_GUI_EDIT */
 
 #define ID_SHOWWINDOW                     4000
 #define ID_HELP_ABOUTJUNKBUSTER           4001

@@ -1,9 +1,9 @@
 #ifndef _W32RULESDLG_H
 #define _W32RULESDLG_H
-#define W32RULESDLG_H_VERSION "$Id: w32rulesdlg.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define W32RULESDLG_H_VERSION "$Id: w32rulesdlg.h,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/w32rulesdlg.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32rulesdlg.h,v $
  *
  * Purpose     :  A dialog to allow GUI editing of the rules.
  *                Unfinished.
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32rulesdlg.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -42,8 +45,14 @@
 extern "C" {
 #endif
 
+#ifndef _WIN_CONSOLE /* entire file */
+#ifdef WIN_GUI_EDIT /* entire file */
+
 extern int ShowRulesDialog(HWND hwndParent);
 extern void SetDefaultRule(const char *pszRule);
+
+#endif /* def WIN_GUI_EDIT - entire file */
+#endif /* ndef _WIN_CONSOLE - entire file */
 
 /* Revision control strings from this header and associated .c file */
 extern const char w32rulesdlg_rcs[];

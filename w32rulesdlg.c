@@ -1,4 +1,4 @@
-const char w32rulesdlg_rcs[] = "$Id: w32rulesdlg.c,v 1.2 2001/05/20 15:07:54 jongfoster Exp $";
+const char w32rulesdlg_rcs[] = "$Id: w32rulesdlg.c,v 1.3 2001/05/22 18:56:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32rulesdlg.c,v $
@@ -32,6 +32,9 @@ const char w32rulesdlg_rcs[] = "$Id: w32rulesdlg.c,v 1.2 2001/05/20 15:07:54 jon
  *
  * Revisions   :
  *    $Log: w32rulesdlg.c,v $
+ *    Revision 1.3  2001/05/22 18:56:28  oes
+ *    CRLF -> LF
+ *
  *    Revision 1.2  2001/05/20 15:07:54  jongfoster
  *    File is now ignored if _WIN_CONSOLE is defined.
  *
@@ -58,7 +61,10 @@ const char w32rulesdlg_rcs[] = "$Id: w32rulesdlg.c,v 1.2 2001/05/20 15:07:54 jon
 
 const char w32rulesdlg_h_rcs[] = W32RULESDLG_H_VERSION;
 
+
 #ifndef _WIN_CONSOLE /* entire file */
+#ifdef WIN_GUI_EDIT /* entire file */
+
 
 const int nSmallIconWidth = 16;
 const int nSmallIconHeight = 16;
@@ -532,6 +538,7 @@ static BOOL CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 }
 
+#endif /* def WIN_GUI_EDIT - entire file */
 #endif /* ndef _WIN_CONSOLE - entire file */
 
 /*
