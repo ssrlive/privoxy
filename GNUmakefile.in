@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.129 2002/10/20 07:15:12 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.130 2002/10/22 05:49:14 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -277,6 +277,7 @@ $(DIR_PRIVOXY_OBJ)/%.o: $(DIR_PRIVOXY_SRC_PCRE)/%.c $(DIR_PRIVOXY_OBJ)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 $(DIR_PRIVOXY_OBJ):
+	$(CHMOD) 0755 $(MKDIR)
 	$(MKDIR) obj
 
 #############################################################################
@@ -1095,6 +1096,12 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.130  2002/10/22 05:49:14  hal9
+# Make install:
+# - /bin/sh on Solaris does not handle: ! test.
+# - Remove some unused doc variables.
+# - Make configs group writable.
+#
 # Revision 1.129  2002/10/20 07:15:12  hal9
 # Getting near the end (I hope) of install target updates:
 # - Rewrite RH init script to reflect configured values.
