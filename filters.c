@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.53 2002/03/26 22:29:54 swa Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.54 2002/04/02 14:55:56 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.53 2002/03/26 22:29:54 swa Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.54  2002/04/02 14:55:56  oes
+ *    Bugfix: is_untrusted_url() now depends on FEATURE_TRUST, not FEATURE_COOKIE_JAR
+ *
  *    Revision 1.53  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -818,9 +821,11 @@ struct http_response *block_url(struct client_state *csp)
 
 #ifdef FEATURE_FORCE_LOAD
       err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
-#else /* ifndef FEATURE_FORCE_LOAD */
-      err = map_block_killer(exports, "force-support");
+      if (csp->http->ssl != 0)
 #endif /* ndef FEATURE_FORCE_LOAD */
+      {
+         err = map_block_killer(exports, "force-support");
+      }
 
       if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
       if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
