@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.29 2001/09/24 21:09:24 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.30 2001/09/29 12:56:03 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.29 2001/09/24 21:09:24 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.30  2001/09/29 12:56:03  joergs
+ *    IJB now changes HTTP/1.1 to HTTP/1.0 in requests and answers.
+ *
  *    Revision 1.29  2001/09/24 21:09:24  jongfoster
  *    Fixing 2 memory leaks that Guy spotted, where the paramater to
  *    enlist() was not being free()d.
@@ -311,6 +314,7 @@ const struct parsers server_patterns[] = {
    { "connection:",        11, crumble },
    { "Content-Type:",      13, content_type },
    { "Content-Length:",    15, content_length },
+   { "Keep-Alive:",        11, crumble },
    { NULL, 0, NULL }
 };
 
@@ -643,7 +647,7 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
             http->ver = strdup(v[2]);
          }
 
-	 save_url = url;
+         save_url = url;
          if (strncmpic(url, "http://",  7) == 0)
          {
             url += 7;
