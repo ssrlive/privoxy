@@ -1,8 +1,8 @@
 Privoxy Frequently Asked Questions
 
-By: Privoxy Developers
+Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: faq.sgml,v 1.55 2002/05/04 00:41:56 hal9 Exp $
+$Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -110,21 +110,22 @@ Table of Contents
     6.4. Report ads or other filter problems
     6.5. Other
    
-7. Copyright and History
+7. Copyright, License and History
    
     7.1. Copyright
-    7.2. History
+    7.2. License
+    7.3. History
    
 1. General Information
 
 1.1. What is this new version of Privoxy?
 
-The original Internet Junkbuster&trade; (tm) is a copyrighted product of 
-Junkbusters Corporation. Development of this effort stopped some time ago as of
-version 2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to
-rekindle development. Other developers subsequently joined with Stefan, and
-have since added many new features, refinements and enhancements. The result of
-this effort is Privoxy.
+The original Internet JunkbusterTM (tm) is a copyrighted product of Junkbusters
+Corporation. Development of this effort stopped some time ago as of version
+2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to rekindle
+development. Other developers subsequently joined with Stefan, and have since
+added many new features, refinements and enhancements. The result of this
+effort is Privoxy.
 
 Privoxy has evolved from the Junkbuster 2.0.2 code base, and has advanced
 significantly at this point.
@@ -974,9 +975,22 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7. Copyright and History
+7. Copyright, License and History
 
 7.1. Copyright
+
+Permission is granted to copy, distribute and/or modify this document under the
+terms of the GNU Free Documentation License, Version 1.1 or any later version
+published by the Free Software Foundation with no Invariant Sections, no
+Front-Cover Texts, and no Back-Cover Texts. A copy of the license can be found 
+http://www.gnu.org/licenses/fdl.html.
+
+Portions of this document are "borrowed" from the original Junkbuster (tm) FAQ,
+and modified as appropriate for Privoxy.
+
+-------------------------------------------------------------------------------
+
+7.2. License
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -995,7 +1009,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-7.2. History
+7.3. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.

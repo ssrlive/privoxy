@@ -1,8 +1,8 @@
 Privoxy User Manual
 
-By: Privoxy Developers
+Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $
+$Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $
 
 The user manual gives users information on how to install, configure and use 
 Privoxy.
@@ -149,10 +149,11 @@ Table of Contents
     11.4. Report ads or other filter problems
     11.5. Other
    
-12. Copyright and History
+12. Copyright, License and History
    
     12.1. Copyright
-    12.2. History
+    12.2. License
+    12.3. History
    
 13. See Also
 14. Appendix
@@ -582,11 +583,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ??  View & change the current configuration                            
-        ??  View the source code version numbers                               
-        ??  View the request headers.                                          
-        ??  Look up which actions apply to a URL and why                       
-        ??  Toggle Privoxy on or off                                           
+        ?  View & change the current configuration                             
+        ?  View the source code version numbers                                
+        ?  View the request headers.                                           
+        ?  Look up which actions apply to a URL and why                        
+        ?  Toggle Privoxy on or off                                            
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -3076,9 +3077,19 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-12. Copyright and History
+12. Copyright, License and History
 
 12.1. Copyright
+
+Permission is granted to copy, distribute and/or modify this document under the
+terms of the GNU Free Documentation License, Version 1.1 or any later version
+published by the Free Software Foundation with no Invariant Sections, no
+Front-Cover Texts, and no Back-Cover Texts. A copy of the license can be found 
+http://www.gnu.org/licenses/fdl.html.
+
+-------------------------------------------------------------------------------
+
+12.2. License
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -3097,7 +3108,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-12.2. History
+12.3. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
@@ -3508,7 +3519,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
-  Final results:                                                                   
+ Final results:                                                                    
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3523,7 +3534,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3549,7 +3560,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
-  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
+ Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3568,7 +3579,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
-  { -block }                                                                   
+ { -block }                                                                    
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3577,7 +3588,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
-  { +block +handle-as-image }                                                  
+ { +block +handle-as-image }                                                   
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3587,7 +3598,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
-  {shop}                                                                       
+ {shop}                                                                        
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3597,7 +3608,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
-  {-filter}                                                                    
+ {-filter}                                                                     
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site
