@@ -12,7 +12,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.63 2002/04/01 16:24:49 hal9 Exp $
+ $Id: user-manual.sgml,v 1.64 2002/04/03 03:53:43 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -34,7 +34,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.63 2002/04/01 16:24:49 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.64 2002/04/03 03:53:43 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1791,7 +1791,8 @@ Please choose from the following options:
 </para>
 
 <para>
- Your squid configuration could then look like this:
+Your squid configuration could then look like this (assuming that the IP
+address of the box is <literal>192.168.0.1</literal> ):
 </para>
 
 <para>
@@ -1802,7 +1803,16 @@ Please choose from the following options:
  <!-- per feedback from user...
   cache_peer 127.0.0.1 8118 parent 0 no-query 
  --> 
-  cache_peer 127.0.0.1 parent 8118 0 no-query
+  cache_peer 192.168.0.1 parent 8118 0 no-query
+
+  # don't listen to the whole world
+  http_port 192.168.0.1:3128
+
+  # define the local lan
+  acl mylocallan src 192.168.0.1-192.168.0.5/255.255.255.255
+
+  # grant access for http to local lan
+  http_access allow mylocallan
   
   # Define ACL for protocol FTP 
   acl FTP proto FTP 
@@ -4040,6 +4050,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.64  2002/04/03 03:53:43  hal9
+ A few minor bug fixes, and touch ups. Ready for review.
+
  Revision 1.63  2002/04/01 16:24:49  hal9
  Define entities to include boilerplate text. See doc/source/*.
 
