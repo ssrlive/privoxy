@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.65 2002/04/25 19:13:57 morcego Exp $
+dnl $Id: configure.in,v 1.66 2002/05/03 00:41:56 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.66  2002/05/03 00:41:56  oes
+dnl Set version to 2.9.15 to comply with new versioning scheme
+dnl
 dnl Revision 1.65  2002/04/25 19:13:57  morcego
 dnl Removed RPM release number declaration on configure.in
 dnl Changed makefile to use given value for RPM_PACKAGEV when on uploading
@@ -359,7 +362,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.65 $)
+AC_REVISION($Revision: 1.66 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1091,4 +1094,4 @@ AC_SUBST(SPECIAL_CFLAGS)
 
 AC_SUBST(PTHREAD_LIB)
 
-AC_OUTPUT(GNUmakefile)
+AC_OUTPUT(GNUmakefile doc/source/ldp.dsl)
