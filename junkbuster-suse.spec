@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.12 2002/03/02 15:50:04 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.13 2002/03/07 18:25:56 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.13  2002/03/07 18:25:56  swa
+# synced redhat and suse build process
+#
 # Revision 1.12  2002/03/02 15:50:04  swa
 # 2.9.11 version. more input for docs.
 #
@@ -67,26 +70,25 @@
 # header fixed
 #
 #
-# neededforbuild  -ijb
-# usedforbuild    -ijb aaa_base aaa_dir autoconf automake base bash bindutil binutils bison bzip compress cpio cracklib db devs diffutils e2fsprogs file fileutils findutils flex gawk gcc gdbm gdbm-devel gettext glibc glibc-devel gpm gppshare groff gzip kbd less libtool libz lx_suse make mktemp modutils ncurses ncurses-devel net-tools netcfg nkitb pam pam-devel patch perl pgp ps rcs rpm sendmail sh-utils shadow strace syslogd sysvinit texinfo textutils timezone unzip util-linux vim xdevel xf86 xshared
 
 %define ijbconf %{_sysconfdir}/%{name}
 
+Summary:      The Internet Junkbuster
 Vendor:       http://ijbswa.sourceforge.net
-Distribution: defineme
 Name:         junkbuster-suse
+Distribution: defineme
+Version: 2.9.11
+Release: 1
+Source: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
+# not sure if this works
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Packager:     Stefan Waldherr <stefan@waldherr.org>
 Copyright:    GPL
-# buildroot does not work under f*cking suse :-(
-#BuildRoot: /tmp/junkbuster-rpmbuild
 Group:        Networking/Utilities
+URL: http://ijbswa.sourceforge.net/
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
-Version: 2.9.11
-Release: 1
-Summary:      The Internet Junkbuster
-Source: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 
 #
 # -----------------------------------------------------------------------------
@@ -119,54 +121,63 @@ SuSE series: n
 autoheader
 autoconf
 ./configure
-gmake
+make
+make dok
 strip junkbuster
+
+#
+# -----------------------------------------------------------------------------
+# hint by kukuk@suse.de
+%pre
+usr/sbin/groupadd -r junkbuster
+usr/sbin/useradd -g junkbuster -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
 
 #
 # -----------------------------------------------------------------------------
 #
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,share/man/man1,share/doc/packages/junkbuster,share/doc/packages/junkbuster/user-manual,share/doc/packages/junkbuster/developer-manual,share/doc/packages/junkbuster/faq},etc/{junkbuster,junkbuster/templates,init.d}}
-
-# make sure that we can write in the log directory
-chown nobody.nogroup $RPM_BUILD_ROOT/var/log/junkbuster
-install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT/etc/init.d/junkbuster
-# next line might require an additional rpm_build_root
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
+         ${RPM_BUILD_ROOT}%{_mandir}/man8 \
+         ${RPM_BUILD_ROOT}/var/log/junkbuster \
+         ${RPM_BUILD_ROOT}%{ijbconf}/templates \
+         ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
+         ${RPM_BUILD_ROOT}%{_sysconfdir}/init.d
+gzip README AUTHORS ChangeLog junkbuster.1 || /bin/true
+install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
+cp -f junkbuster.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8.gz
+cp -f *.action $RPM_BUILD_ROOT%{ijbconf}/
+cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
+cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
+cp -f templates/*  $RPM_BUILD_ROOT%{ijbconf}/templates/
+cp -f junkbuster.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/junkbuster
+install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT%{_sysconfdir}/init.d/junkbuster
+install -m 711 -d $RPM_BUILD_ROOT/var/log/junkbuster
 ln -sf /etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
 
-install -m 755 junkbuster $RPM_BUILD_ROOT/usr/sbin
-install -d $RPM_BUILD_ROOT/etc/junkbuster
-install -d $RPM_BUILD_ROOT/etc/junkbuster/templates
-install -m 644 ijb.action $RPM_BUILD_ROOT/etc/junkbuster
-install -m 644 re_filterfile $RPM_BUILD_ROOT/etc/junkbuster
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
 cat config | \
     sed 's/^confdir.*/confdir \/etc\/junkbuster/g' | \
-    sed 's/^ijb.action.*/ijb.action \/etc\/junkbuster\/ijb.action/g' | \
+#    sed 's/^permissionsfile.*/permissionsfile \/etc\/junkbuster\/permissionsfile/g' | \
 #    sed 's/^re_filterfile.*/re_filterfile \/etc\/junkbuster\/re_filterfile/g' | \
 #    sed 's/^logfile.*/logfile \/var\/log\/junkbuster\/logfile/g' | \
 #    sed 's/^jarfile.*/jarfile \/var\/log\/junkbuster\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/junkbuster\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
-    config.tmp
-cp -f config.tmp config
-install -m 644 config $RPM_BUILD_ROOT/etc/junkbuster
-#install -m 644 forward $RPM_BUILD_ROOT/etc/junkbuster
-install -m 644 trust $RPM_BUILD_ROOT/etc/junkbuster
-install -m 644 templates/* $RPM_BUILD_ROOT/etc/junkbuster/templates
-# install -m 644 junkbuster.1 $RPM_BUILD_ROOT/usr/share/man/man1
-cp -r doc/webserver/user-manual $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
-cp -r doc/webserver/developer-manual $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
-cp -r doc/webserver/faq $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
-%{?suse_check}
+    $RPM_BUILD_ROOT%{ijbconf}/config
 
 #
 # -----------------------------------------------------------------------------
 #
 %post
+# for upgrade from 2.0.x
+if [ -f /var/log/junkbuster/junkbuster ]; then
+ mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile
+ chown -R junkbuster:junkbuster /var/log/junkbuster 2>/dev/null
+ chown -R junkbuster:junkbuster /etc/junkbuster 2>/dev/null
+fi
 sbin/insserv etc/init.d/junkbuster
 
 #
@@ -178,21 +189,69 @@ sbin/insserv etc/init.d/
 #
 # -----------------------------------------------------------------------------
 #
-%files
-%doc /usr/share/doc/packages/junkbuster/faq/
-%doc /usr/share/doc/packages/junkbuster/user-manual/
-%doc /usr/share/doc/packages/junkbuster/developer-manual/
-/usr/sbin/junkbuster
-#/usr/share/man/man1/junkbuster.1.gz
-%config(noreplace) /etc/junkbuster
-/etc/init.d/junkbuster
-/usr/sbin/rcjunkbuster
-/var/log/junkbuster
+%clean
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 #
 # -----------------------------------------------------------------------------
 #
-%changelog -n junkbuster
+%files
+%defattr(-,root,root)
+%doc README.gz AUTHORS.gz ChangeLog.gz
+%doc doc/webserver/developer-manual doc/webserver/user-manual
+%doc doc/webserver/user-manual
+#%doc junkbuster.weekly junkbuster.monthly AUTHORS
+%dir %{ijbconf}
+%config %{ijbconf}/*
+%attr(0744,junkbuster,junkbuster) %dir /var/log/junkbuster
+%config %{_sysconfdir}/logrotate.d/junkbuster
+%attr(0755,root,root)/usr/sbin/junkbuster
+%{_mandir}/man8/*
+%config %{_sysconfdir}/init.d/junkbuster
+/usr/sbin/rcjunkbuster
+
+#
+# -----------------------------------------------------------------------------
+#
+%changelog
+* Thu Mar  7 2002 Stefan Waldherr <stefan@waldherr.org>
+- major rework of rpm, help by kukuk@suse.de
+
+* Sun Mar 03 2002 Hal Burgiss <hal@foobox.net>
+- /bin/false for shell causes init script to fail. Reverting.
+
+* Wed Jan 09 2002 Hal Burgiss <hal@foobox.net>
+- Removed UID 73. Included user-manual and developer-manual in docs.
+  Include other actions files. Default shell is now /bin/false.
+  Userdel user=junkbust. ChangeLog was not zipped. Removed
+  RPM_OPT_FLAGS kludge.
+
+* Fri Dec 28 2001 Thomas Steudten <thomas@steudten.ch>
+- add paranoia check for 'rm -rf $RPM_BUILD_ROOT'
+- add gzip to 'BuildRequires'
+
+* Sat Dec  1 2001 Hal Burgiss <hal@foobox.net>
+- actionsfile is now ijb.action.
+
+* Tue Nov  6 2001 Thomas Steudten <thomas@steudten.ch>
+- Compress manpage
+- Add more documents for installation
+- Add version string to name and source
+
+* Wed Oct 24 2001 Hal Burigss <hal@foobox.net>
+- Back to user 'junkbuster' and fix configure macro.
+
+* Wed Oct 10 2001 Hal Burigss <hal@foobox.net>
+- More changes for user 'junkbust'. Init script had 'junkbuster'.
+
+* Sun Sep 23 2001 Hal Burgiss <hal@foobox.net>
+- Change of $RPM_OPT_FLAGS handling. Added new HTML doc files.
+- Changed owner of /etc/junkbuster to shut up PAM/xauth log noise.
+
+* Thu Sep 13 2001 Hal Burgiss <hal@foobox.net>
+- Added $RPM_OPT_FLAGS support, renaming of old logfile, and
+- made sure no default shell exists for user junkbust.
+
 * Sun Jun  3 2001 Stefan Waldherr <stefan@waldherr.org>
 - rework of RPM
 * Wed Feb 14 2001 - uli@suse.de
