@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.53 2002/04/03 14:19:16 oes Exp $
+# $Id: GNUmakefile.in,v 1.54 2002/04/03 14:54:07 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -374,7 +374,7 @@ gen-clean:
 	$(RM) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar*
 
 #############################################################################
-# solaris distribution
+# solaris distribution. verified on SF machines by swa.
 #############################################################################
 solaris-dist: gen-dist
 	@$(ECHO) Done.
@@ -418,12 +418,16 @@ amiga-upload:
 	@$(ECHO) coming soon. 
 
 #############################################################################
-# freebsd distribution
+# freebsd distribution. verified on SF machines by swa.
 #############################################################################
-freebsd-dist:
-	@$(ECHO) coming soon. 
-freebsd-upload:
-	@$(ECHO) coming soon. 
+freebsd-dist: gen-dist
+	@$(ECHO) Done.
+# anonymously ncftps the package to sourceforge
+freebsd-upload: gen-upload
+	@$(ECHO) Done.
+# use with care
+freebsd-clean: gen-clean
+	@$(ECHO) Done.
 
 #############################################################################
 # Windows distribution
@@ -433,14 +437,31 @@ win-dist:
 
 
 #############################################################################
-# Tarball distribution
+# Tarball distribution. Only source files. No binaries.
 #############################################################################
 tarball-dist: clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
-	cd .. && find privoxy-$(VERSION)-$(CODE_STATUS)
-#	cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
-#	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
-	@$(ECHO) Tarball without any binary created.
+# add source files
+	for foo in `find . -name ".*\.c"`; do \
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done; 
+# add header files
+	for foo in `find . -name ".*\.h"`; do \
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done; 
+# add misc files
+	for foo in configure.in GNUMakefile.in ; do \
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done; 
+# add documentation
+	for foo in $(DOC_FILES); do \
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done;
+# and zip the archive
+	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
+	$(GZIP_PROG) ../privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
+	@$(ECHO) Tarball distribution created.
+
 
 # anonymously ncftps the tarball to sourceforge
 tarball-upload:
@@ -681,6 +702,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.54  2002/04/03 14:54:07  oes
+# Standard clean and clobber semantics II
+#
 # Revision 1.53  2002/04/03 14:19:16  oes
 # Standard clean and clobber semantics
 #
