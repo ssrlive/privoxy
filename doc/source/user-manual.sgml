@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.51 2002/03/23 15:13:11 swa Exp $
+ $Id: user-manual.sgml,v 1.52 2002/03/24 11:01:06 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.51 2002/03/23 15:13:11 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.52 2002/03/24 11:01:06 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -551,7 +551,7 @@ Please choose from the following options:
 
   <listitem>
    <para>
-    The <filename>ijb.action</filename> file is used  to define various 
+    The <filename>default.action</filename> file is used  to define various 
     <quote>actions</quote> relating to images, banners, pop-ups, access
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
@@ -563,7 +563,7 @@ Please choose from the following options:
 
   <listitem>
    <para>
-    The <filename>re_filterfile</filename> file can be used to re-write the raw
+    The <filename>default.filter</filename> file can be used to re-write the raw
     page content, including viewable text as well as embedded HTML and JavaScript,
     and whatever else lurks on any given web page.
    </para>
@@ -573,7 +573,7 @@ Please choose from the following options:
 </para>
 
 <para>
- <filename>ijb.action</filename> and <filename>re_filterfile</filename> 
+ <filename>default.action</filename> and <filename>default.filter</filename> 
  can use Perl style regular expressions for maximum flexibility. All files use
  the <quote><literal>#</literal></quote> character to denote a comment. Such
  lines are not processed by <application>Privoxy</application>. After
@@ -712,11 +712,11 @@ Please choose from the following options:
 </para>
 
 <para>
- The <quote>ijb.action</quote> file contains patterns to specify the actions
+ The <quote>default.action</quote> file contains patterns to specify the actions
  to apply to requests for each site. Default: Cookies to and from all
  destinations are kept only during the current browser session (i.e. they are
  not saved to disk). Pop-ups are disabled for all sites. All sites are
- filtered through selected sections of <quote>re_filterfile</quote>. No sites
+ filtered through selected sections of <quote>default.filter</quote>. No sites
  are blocked. The <application>Privoxy</application> logo is displayed for
  filtered ads and other images. The syntax of this file is explained in detail
  <link linkend="actionsfile">below</link>. Other <quote>actions</quote> files
@@ -728,14 +728,14 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>actionsfile  ijb.action</emphasis>
+  <emphasis>actionsfile  default.action</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
 </para>
 
 <para>
- The <quote>re_filterfile</quote> file contains content modification rules 
+ The <quote>default.filter</quote> file contains content modification rules 
  that use <quote>regular expressions</quote>. These rules permit powerful
  changes on the content of Web pages, e.g., you could disable your favorite
  JavaScript annoyances, re-write the actual displayed text, or just have some
@@ -757,7 +757,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>re_filterfile  re_filterfile</emphasis>
+  <emphasis>filterfile  default.filter</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1125,7 +1125,7 @@ Please choose from the following options:
 </para>
 
 <para>
- To enable the web-based <filename>ijb.action</filename> file editor set
+ To enable the web-based <filename>default.action</filename> file editor set
  <application>enable-edit-actions</application> to 1, or 0 to disable.  Note
  that you must have compiled <application>Privoxy</application> with
  support for this feature, otherwise this option has no effect. This 
@@ -1878,14 +1878,14 @@ Removed references to Win32. HB 09/23/01
 <title>The Actions File</title>
 
 <para>
- The <quote>ijb.action</quote> file (formerly
+ The <quote>default.action</quote> file (formerly
  <filename>actionsfile</filename>) is used to define what actions
  <application>Privoxy</application> takes, and thus determines how images,
  cookies and various other aspects of HTTP content and transactions are
  handled. Images can be anything you want, including ads, banners, or just
  some obnoxious URL that you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. 
- not written to disk). Changes to <filename>ijb.action</filename> should 
+ not written to disk). Changes to <filename>default.action</filename> should 
  be immediately visible to <application>Privoxy</application> without 
  the need to restart.
 </para>
@@ -2105,7 +2105,7 @@ Removed references to Win32. HB 09/23/01
  So in this case <application>Privoxy</application> would just be a
  normal, non-blocking, non-anonymizing proxy. You must specifically
  enable the privacy and blocking features you need (although the 
- provided default <filename>ijb.action</filename> file will 
+ provided default <filename>default.action</filename> file will 
  give a good starting point).
 </para>
 
@@ -2233,8 +2233,8 @@ Removed references to Win32. HB 09/23/01
  <listitem>
   <para>  
    Apply the filters in the <literal>section_header</literal> 
-   section of the <filename>re_filterfile</filename> file to the site(s).
-   <filename>Re_filterfile</filename> sections are grouped according to like
+   section of the <filename>default.filter</filename> file to the site(s).
+   <filename>default.filter</filename> sections are grouped according to like
    functionality. 
   </para> 
    
@@ -2250,7 +2250,7 @@ Removed references to Win32. HB 09/23/01
 
   <para>   
    Filter sections that are pre-defined in the supplied
-   <filename>re_filterfile</filename> include:
+   <filename>default.filter</filename> include:
   </para>
 
  <blockquote>
@@ -2808,7 +2808,7 @@ Removed references to Win32. HB 09/23/01
  <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
  <quote>-</quote>. Alias names are not case sensitive, and 
  <emphasis>must be defined  before anything</emphasis> else in the
- <filename>ijb.action</filename>file ! And there can only be one set of
+ <filename>default.action</filename>file ! And there can only be one set of
  <quote>aliases</quote> defined.
 </para>
 
@@ -2884,7 +2884,7 @@ Removed references to Win32. HB 09/23/01
  Any web page can be dynamically modified with the filter file. This
  modification can be removal, or re-writing, of any web page content,
  including tags and non-visible content. The default filter file is
- <filename>re_filterfile</filename>, located in the config directory. 
+ <filename>default.filter</filename>, located in the config directory. 
 </para>
 
 <para>
@@ -2898,7 +2898,7 @@ Removed references to Win32. HB 09/23/01
 <para>
  This file uses regular expressions to alter or remove any string in the
  target page. The expressions can only operate on one line at a time. Some
- examples from the included default <filename>re_filterfile</filename>:
+ examples from the included default <filename>default.filter</filename>:
 </para>
 
 <para>
@@ -3050,10 +3050,10 @@ For RedHat: /etc/rc.d/init.d/privoxy start
  The included default configuration files should give a reasonable starting
  point, though may be somewhat aggressive in blocking junk. You will probably
  want to keep an eye out for sites that require persistent cookies, and add these to
- <filename>ijb.action</filename> as needed. By default, most of these will
+ <filename>default.action</filename> as needed. By default, most of these will
  be accepted only during the current browser session, until you add them to
  the configuration. If you want the browser to handle this instead, you will
- need to edit <filename>ijb.action</filename> and disable this feature. If you
+ need to edit <filename>default.action</filename> and disable this feature. If you
  use more than one browser, it would make more sense to let
  <application>Privoxy</application> handle this. In which case, the
  browser(s) should be set to accept all cookies.
@@ -3062,7 +3062,7 @@ For RedHat: /etc/rc.d/init.d/privoxy start
 <para>
  If a particular site shows problems loading properly, try adding it 
  to the <literal>{fragile}</literal> section of
- <filename>ijb.action</filename>. This will turn off most actions for 
+ <filename>default.action</filename>. This will turn off most actions for 
  this site.
 </para>
 
@@ -3073,14 +3073,14 @@ For RedHat: /etc/rc.d/init.d/privoxy start
  problems, you might try to force HTTP/1.0 compatibility. For Mozilla, look
  under <literal>Edit -&gt; Preferences -&gt; Debug -&gt; Networking</literal>.
  Or set the <quote>+downgrade</quote> config option in
- <filename>ijb.action</filename>.
+ <filename>default.action</filename>.
 </para>
 
 <para>
  After running <application>Privoxy</application> for a while, you can 
  start to fine tune the configuration to suit your personal, or site, 
  preferences and requirements. There are many, many aspects that can 
- be customized. <quote>Actions</quote> (as specified in <filename>ijb.action</filename>) 
+ be customized. <quote>Actions</quote> (as specified in <filename>default.action</filename>) 
  can be adjusted by pointing your browser to 
  <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
  and then follow the link to <quote>edit the actions list</quote>. 
@@ -3092,7 +3092,7 @@ For RedHat: /etc/rc.d/init.d/privoxy start
  configuration can be viewed from this page, including 
  current configuration parameters, source code version numbers, 
  the browser's request headers, and <quote>actions</quote> that apply 
- to a given URL. In addition to the <filename>ijb.action</filename> file 
+ to a given URL. In addition to the <filename>default.action</filename> file 
  editor mentioned above, <application>Privoxy</application> can also 
  be turned <quote>on</quote> and <quote>off</quote> from this page.
 </para>
@@ -3725,7 +3725,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  First, enter one URL (or partial URL) at the prompt, and then
  <application>Privoxy</application> will tell us 
  how current configuration will handle it. This will not
- help with filtering effects from the <filename>re_filterfile</filename>! It
+ help with filtering effects from the <filename>default.filter</filename>! It
  also will not tell you about any other URLs that may be embedded within the
  URL you are testing. For instance, images such as ads are expressed as URLs
  within the raw page source of HTML pages. So you will only get info for the
@@ -3943,6 +3943,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.52  2002/03/24 11:01:06  swa
+ name change
+
  Revision 1.51  2002/03/23 15:13:11  swa
  renamed every reference to the old name with foobar.
  fixed "application foobar application" tag, fixed

@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.20 2002/03/23 15:13:11 swa Exp $
+ $Id: faq.sgml,v 1.21 2002/03/24 11:01:06 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.20 2002/03/23 15:13:11 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.21 2002/03/24 11:01:06 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -101,7 +101,7 @@ Please see the Contact section in the
   The configuration has changed significantly as well. This is something that
   users will notice right off the bat. The <quote>blocklist</quote> file does
   not exist any more. This is replaced by <quote>actions</quote> files, such
-  as <filename>ijb.actions</filename>. This is where most of the per site
+  as <filename>default.actions</filename>. This is where most of the per site
   configuration is now.
 
  </para>
@@ -474,7 +474,7 @@ FIXME: Commenting these out until we have some data there. HB 03/17/02.
 -->
 
 <sect3 id="configfiles"> <title>What are the differences between
-ijb-intermediate.action, ijb-basic.action, etc.?</title>
+intermediate.action, basic.action, etc.?</title>
  <para>
 Configuring <application>Privoxy</application> is not easy. To help you get
 started, we provide you with three different default configurations. The
@@ -491,10 +491,10 @@ following table shows you, which features are enabled in each configuration.
 <thead>
 <row>
   <entry>Feature</entry>
-  <entry>ijb.action</entry>
-  <entry>ijb-basic.action</entry>
-  <entry>ijb-intermediate.action</entry>
-  <entry>ijb-advanced.action</entry>
+  <entry>default.action</entry>
+  <entry>basic.action</entry>
+  <entry>intermediate.action</entry>
+  <entry>advanced.action</entry>
 </row>
 </thead>
 
@@ -745,7 +745,7 @@ has to add extra time to browsing.</title>
 </para>
 
 <para>
- <quote>Filtering</quote> via the <filename>re_filterfile</filename> 
+ <quote>Filtering</quote> via the <filename>filterfile</filename> 
  mechanism may cause a perceived slowdown, since the entire page is buffered
  before displaying. See below.
 </para>
@@ -755,10 +755,10 @@ has to add extra time to browsing.</title>
 
 
 <sect3 id="loadingtimes"><title>I noticed considerable
-delays in page requests compared to the old IJB. What's wrong?</title>
+delays in page requests compared to the old Junkbuster. What's wrong?</title>
 <para>
 Using the default filtering configuration, I noticed considerable delays in
-page requests compared to the old IJB. Loading pages with large contents
+page requests compared to the old Junkbuster. Loading pages with large contents
 seemed to take forever, then suddenly delivering all the content at once.
  </para>
 <para>
@@ -1043,9 +1043,9 @@ secure is it? Do I need to take any special precautions?</title>
 </sect3>
 
 <sect3>
-<title id="filterfile">What is a <quote>re_filterfile</quote>?</title>
+<title id="filterfile">What is a <quote>default.filter</quote>?</title>
 <para>
- The <quote>re_filterfile</quote> is used to <quote>filter</quote> any
+ The <quote>default.filter</quote> is used to <quote>filter</quote> any
  page content. By <quote>filtering</quote> we mean it can modify, remove, 
  or change <emphasis>anything</emphasis> on the page, including HTML tags, and
  JavaScript. Regular expressions are used to accomplish this. This is
@@ -1054,7 +1054,7 @@ secure is it? Do I need to take any special precautions?</title>
 
 <para>
  If you are familiar with regular expressions, and HTML, you can look at 
- the provided <filename>re_filterfile</filename> with a text editor and see
+ the provided <filename>default.filter</filename> with a text editor and see
  some of things it can be used for.
 </para>
 
@@ -1212,6 +1212,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.21  2002/03/24 11:01:06  swa
+name change
+
 Revision 1.20  2002/03/23 15:13:11  swa
 renamed every reference to the old name with foobar.
 fixed "application foobar application" tag, fixed
