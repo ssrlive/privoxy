@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1726,7 +1726,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1786,7 +1786,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2122,6 +2122,106 @@ at sourceforge. Three simple steps:
      individual platform dependent binary packages below. And details 
      on the Sourceforge release process below that.
     </para>
+
+    <sect3 id="pack-guidelines">
+    <title>Note on Privoxy Packaging</title>
+     <para>
+      Please keep these general guidelines in mind when putting together 
+      your package. These apply to <emphasis>all</emphasis> platforms!
+     </para>
+     <para>
+      <itemizedlist>
+       <listitem>
+        <para>
+          <application>Privoxy</application> <emphasis>requires</emphasis>
+          write access to: all <filename>*.action</filename> files, all 
+          logfiles, and the <filename>trust</filename> file. You will 
+          need to determine the best way to do this for your platform.
+        </para>
+       </listitem> 
+       <listitem>
+        <para>
+          Please include up to date documentation. At a bare minimum:
+        </para>
+        <simplelist>
+         <member>
+          <filename>LICENSE</filename> (toplevel directory)
+         </member>
+        </simplelist>
+        <simplelist>
+         <member>
+          <filename>README</filename> (toplevel directory)
+         </member>
+        </simplelist>
+        <simplelist>
+         <member>
+          <filename>AUTHORS</filename> (toplevel directory)
+         </member>
+        </simplelist>
+        <simplelist>
+         <member>
+          <filename>man page</filename> (toplevel directory, Unix-like
+          platforms only)
+         </member>
+        </simplelist>
+        <simplelist>
+         <member>
+          <filename>The User Manual</filename> (doc/webserver/user-manual/)
+         </member>
+        </simplelist>
+        <simplelist>
+         <member>
+          <filename>FAQ</filename> (doc/webserver/faq/)
+         </member>
+        </simplelist>
+        <para>
+          Also suggested: <filename>Developer Manual</filename>
+          (doc/webserver/devel-manual) and <filename>ChangeLog</filename>
+          (toplevel directory). <filename>FAQ</filename> and the manuals are
+          HTML docs. There are also text versions in
+          <filename>doc/text/</filename> which could conceivably also be
+          included.
+        </para>
+        <para>
+         The documentation has been designed such that the manuals are linked
+         to each other from parallel directories, and should be packaged 
+         that way. <filename>index.html</filename> can also be included and 
+         can serve as a focal point for docs and other links of interest.
+         This should be one level up from the manuals. There are two 
+         css stylesheets that can be included for better presentation:
+         <filename>p_doc.css</filename> and <filename>p_web.css</filename>.
+         These should be in the same directory with
+         <filename>index.html</filename>, (i.e. one level up from the manual 
+         directories).
+        </para>
+      </listitem> 
+      <listitem>
+       <para>
+        <filename>user.action</filename> is designed for local preferences. 
+        Make sure this does not get overwritten!
+       </para>
+      </listitem> 
+      <listitem>
+       <para>
+        Other configuration files should be installed as the new defaults, 
+        but all previously installed configuration files should be preserved
+        as backups. This is just good manners :-)
+       </para>
+     </listitem> 
+     <listitem>
+      <para>
+       Please check platform specific notes in this doc, if you haven't 
+       done <quote>Privoxy</quote> packaging before for other platform 
+       specific issues. Conversely, please add any notes that you know 
+       are important for your platform (or contact one of the doc 
+       maintainers to do this if you can't).
+      </para>
+    </listitem> 
+
+      </itemizedlist>
+     </para> 
+    
+    </sect3>
 
     <sect3 id="newrelease-tarball"><title>Source Tarball</title>
         <para>
@@ -2700,6 +2800,10 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.44  2002/05/15 03:55:17  hal9
+  Fix ulink -> link, and minor modification to release process section for
+  clarification.
+
   Revision 1.43  2002/05/10 01:48:19  hal9
   This is mostly proposed copyright/licensing additions and changes. Docs
   are still GPL, but licensing and copyright are more visible. Also, copyright
