@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.26 2001/07/30 22:08:36 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.27 2001/08/05 16:06:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,13 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.27  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.26  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -604,7 +611,7 @@ struct parsers
 {
    char *str;
    char  len;
-   char *(*parser)(const struct parsers *, char *, struct client_state *);
+   char *(*parser)(const struct parsers *, const char *, struct client_state *);
 };
 
 struct cgi_dispatcher

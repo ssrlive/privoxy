@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.10 2001/07/30 22:08:36 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.11 2001/07/31 14:46:53 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.11  2001/07/31 14:46:53  oes
+ *    Added prototype for connection_close_adder
+ *
  *    Revision 1.10  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -115,32 +118,32 @@ extern char *sed(const struct parsers pats[], void (* const more_headers[])(stru
 extern void free_http_request(struct http_request *http);
 extern void parse_http_request(char *req, struct http_request *http, struct client_state *csp);
 
-extern char *crumble(const struct parsers *v, char *s, struct client_state *csp);
+extern char *crumble(const struct parsers *v, const char *s, struct client_state *csp);
 
-extern char *client_referrer(const struct parsers *v, char *s, struct client_state *csp);
-extern char *client_uagent(const struct parsers *v, char *s, struct client_state *csp);
-extern char *client_ua(const struct parsers *v, char *s, struct client_state *csp);
-extern char *client_from(const struct parsers *v, char *s, struct client_state *csp);
-extern char *client_send_cookie(const struct parsers *v, char *s, struct client_state *csp);
-extern char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *csp);
+extern char *client_referrer(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_uagent(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_ua(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_from(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_send_cookie(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_x_forwarded(const struct parsers *v, const char *s, struct client_state *csp);
 
 extern void client_cookie_adder(struct client_state *csp);
 extern void client_xtra_adder(struct client_state *csp);
 extern void connection_close_adder(struct client_state *csp); 
 extern void client_x_forwarded_adder(struct client_state *csp);
 
-extern char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp);
+extern char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp);
 
-extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
-extern char *content_length(const struct parsers *v, char *s, struct client_state *csp);
+extern char *content_type(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *content_length(const struct parsers *v, const char *s, struct client_state *csp);
 
 #ifdef FEATURE_FORCE_LOAD
-char *client_host(const struct parsers *v, char *s, struct client_state *csp);
+char *client_host(const struct parsers *v, const char *s, struct client_state *csp);
 int strclean(const char *string, const char *substring);
 #endif /* def FEATURE_FORCE_LOAD */
 
 #if defined(FEATURE_IMAGE_DETECT_MSIE)
-extern char *client_accept(const struct parsers *v, char *s, struct client_state *csp);
+extern char *client_accept(const struct parsers *v, const char *s, struct client_state *csp);
 #endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
 
 /* Revision control strings from this header and associated .c file */
