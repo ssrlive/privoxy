@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.11 2001/07/21 18:00:07 jongfoster Exp $
+dnl $Id: configure.in,v 1.12 2001/07/25 19:16:27 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.12  2001/07/25 19:16:27  oes
+dnl Bumping version number to 2.9.8
+dnl
 dnl Revision 1.11  2001/07/21 18:00:07  jongfoster
 dnl Bumping version number to 2.9.7
 dnl
@@ -149,59 +152,173 @@ dnl Revision 1.1.1.1  2001/05/15 13:58:50  oes
 dnl Initial import of version 2.9.3 source tree
 dnl
 dnl 
+
+
+dnl =================================================================
+dnl AutoConf Initialization
+dnl =================================================================
+
+AC_REVISION($Revision: 1.11 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
+
+
+dnl =================================================================
+dnl Application version number
+dnl =================================================================
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
 VERSION_POINT=8
+CODE_STATUS="\"alpha\""
+
+dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
+dnl used for CGI output
+
+dnl =================================================================
+dnl Substitute the version numbers
+dnl =================================================================
 
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_POINT)
 
-dnl This can be "alpha", "beta", or "stable"
-dnl and will be used for CGI output
 dnl
-AC_DEFINE(CODE_STATUS, "alpha")
-
 AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR})
 AC_DEFINE_UNQUOTED(VERSION_MINOR,${VERSION_MINOR})
 AC_DEFINE_UNQUOTED(VERSION_POINT,${VERSION_POINT})
 AC_DEFINE_UNQUOTED(VERSION,"${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_POINT}")
+AC_DEFINE_UNQUOTED(CODE_STATUS,${CODE_STATUS})
 
-dnl Checks for programs.
-dnl AC_PROG_CXX
+
+dnl =================================================================
+dnl Checks for programs needed to build.
+dnl =================================================================
 AC_PROG_CC
 AC_PROG_CPP
+dnl AC_PROG_CXX
 dnl AC_PROG_INSTALL
 dnl AC_PROG_LN_S
 dnl AC_PROG_MAKE_SET
 dnl RANLIB is for PCRE:
 dnl AC_PROG_RANLIB
 
+
+dnl =================================================================
+dnl Build type
+dnl =================================================================
+dnl
+dnl Must do this first.
+dnl
+dnl Reason: This sets CFLAGS in order to switch the Cygwin compiler
+dnl into Cygwin or MinGW32 modes.  Depending on the mode selected,
+dnl the compiler will use completely different sets of library
+dnl and include files.
+dnl 
+dnl =================================================================
+
 AC_MINGW32
 AC_CYGWIN
+
+if test "$MINGW32" = "yes"; then
+  target_type=mingw
+else
+  if test "$CYGWIN" = "yes"; then
+    target_type=cygwin
+  else
+    target_type=unix
+  fi
+fi
+
+dnl Decide what to do based on target_type
+dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
+dnl This is because we don't know yet whether pthread is enabled.
+
+AC_ARG_ENABLE(mingw32,
+[  --enable-mingw32        Use mingw32 for a Windows GUI],
+[if test $enableval = yes; then
+  target_type=mingw
+fi])
+
+if test $target_type = mingw; then
+  WIN_ONLY=
+  SPECIAL_CFLAGS="-mwindows -mno-cygwin"
+  PTHREAD_LIB=-lpthreadGC
+  echo "Using mingw32 (Win32 GUI)"
+else
+  WIN_ONLY=#
+  if test $target_type = cygwin; then
+    SPECIAL_CFLAGS="-mno-win32"
+    PTHREAD_LIB=
+    echo "Using Cygnus (Win32 command line)"
+  else
+    SPECIAL_CFLAGS=
+    PTHREAD_LIB=-lpthread
+  fi
+fi
+AC_SUBST(WIN_ONLY)
+
+dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
+old_CFLAGS_nospecial=$CFLAGS
+CFLAGS="$CFLAGS $SPECIAL_CFLAGS"
+
+# Hack to force AutoConf to use the CFLAGS we just set
+dnl Warning: This may break with a future version of Autoconf
+dnl          Tested with autoconf 2.13
+ac_cpp='$CPP $CPPFLAGS $SPECIAL_CFLAGS'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
+ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+
+
+dnl =================================================================
+dnl Thread support
+dnl =================================================================
+
+AC_CHECK_HEADER(pthread.h, [have_pthread=yes], [have_pthread=no])
+
+AC_ARG_ENABLE(pthread,
+[  --disable-pthread       Don't use POSIX threads (pthreads)],
+[if test $enableval = no; then
+  # Disable pthreads
+  have_pthread=no
+fi])
+
+if test $have_pthread = yes; then
+  PTHREAD_ONLY=
+  AC_DEFINE(FEATURE_PTHREAD)
+  echo Using POSIX threads
+  if test "$GCC" = "yes"; then
+    # Set a GCC specific switch:
+    if test "$target_type" = "unix"; then
+      # This compiler switch makes Linux thread-safe
+      # Don't know about other OS's?  Is this switch
+      # supported?
+      PTHREAD_LIB=
+      SPECIAL_CFLAGS="-pthread"
+    fi
+  fi
+else
+  PTHREAD_ONLY=#
+  echo Using native threads
+fi
+
+AC_SUBST(PTHREAD_LIB)
+AC_SUBST(PTHREAD_ONLY)
+
+
+dnl =================================================================
+dnl Check for standard compiler stuff
+dnl =================================================================
+
 AC_EXEEXT
 AC_OBJEXT
-
-dnl Checks for libraries.
-dnl Note: Some systems have the library but not the system header file,
-dnl       so we must check for both.
-AC_CHECK_LIB(pcre, pcre_compile, [AC_CHECK_HEADER(pcre.h, [have_pcre=yes], [have_pcre=no])], [have_pcre=no])
-AC_CHECK_LIB(pcreposix, regcomp, [AC_CHECK_HEADER(pcreposix.h, [have_pcreposix=yes], [have_pcreposix=no])], [have_pcreposix=no], -lpcre)
-AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no])
-
-dnl Checks for header files.
 AC_HEADER_STDC
-dnl AC_HEADER_SYS_WAIT
-dnl AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/time.h unistd.h)
-dnl limits.h is for PCRE:
-dnl AC_CHECK_HEADERS(limits.h)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_SIZE_T
+
+dnl Checks for header files.
+dnl AC_HEADER_SYS_WAIT
+dnl AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/time.h unistd.h)
 
 dnl Checks for library functions.
 dnl AC_TYPE_SIGNAL
@@ -209,53 +326,44 @@ dnl AC_CHECK_FUNC(strstr)
 dnl bcopy and memmove are for PCRE
 AC_CHECK_FUNCS(strerror bcopy memmove)
 
-dnl Build type
 
-dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
+dnl =================================================================
+dnl Checks for libraries.
+dnl =================================================================
+dnl Note: Some systems may have the library but not the system header
+dnl       file, so we must check for both.
+AC_CHECK_LIB(pcre, pcre_compile, [AC_CHECK_HEADER(pcre.h, [have_pcre=yes], [have_pcre=no])], [have_pcre=no])
+AC_CHECK_LIB(pcreposix, regcomp, [AC_CHECK_HEADER(pcreposix.h, [have_pcreposix=yes], [have_pcreposix=no])], [have_pcreposix=no], -lpcre)
+AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no])
 
-AC_ARG_ENABLE(mingw32,
-[  --enable-mingw32        Use mingw32 for a Windows GUI],
-[if test $enableval = yes; then
-    WIN_ONLY=
-    CYGWIN_FLAGS="-mwindows -mno-cygwin"
-    PTHREAD_LIB=-lpthreadGC
-    echo "Using mingw32 (Win32 GUI)"
-  else
-    WIN_ONLY=#
-    if test "$CYGWIN" = "yes"; then
-      CYGWIN_FLAGS="-mno-win32"
-      PTHREAD_LIB=
-      echo "Using Cygnus (Win32 command line)"
-    else
-      CYGWIN_FLAGS=
-      PTHREAD_LIB=-lpthread
-    fi
-  fi],
-[if test "$MINGW32" = "yes"; then
-    WIN_ONLY=
-    CYGWIN_FLAGS="-mwindows -mno-cygwin"
-    PTHREAD_LIB=-lpthreadGC
-    echo "Using mingw32 (Win32 GUI)"
-  else
-    WIN_ONLY=#
-    if test "$CYGWIN" = "yes"; then
-      CYGWIN_FLAGS="-mno-win32"
-      PTHREAD_LIB=
-      echo "Using Cygnus (Win32 command line)"
-    else
-      CYGWIN_FLAGS=
-      PTHREAD_LIB=-lpthread
-    fi
-  fi])
 
-AC_SUBST(WIN_ONLY)
-AC_SUBST(CYGWIN_FLAGS)
-AC_SUBST(PTHREAD_LIB)
+dnl =================================================================
+dnl Solaris specific
+dnl FIXME: Not tested on Solaris yet...
+dnl =================================================================
+
+AC_CANONICAL_HOST
 
 SOLARIS_ONLY=#
+
+case "$target" in
+*-solaris*) AC_DEFINE(_REENTRANT)
+            AC_DEFINE(__EXTENSIONS__)
+            SOLARIS_ONLY=
+;;
+esac
+
 AC_SUBST(SOLARIS_ONLY)
 
+dnl =================================================================
+dnl Always defined
+dnl =================================================================
+
+AC_DEFINE(__MT__)
+
+dnl =================================================================
 dnl Features
+dnl =================================================================
 
 AC_ARG_ENABLE(toggle,
 [  --disable-toggle        Don't support temporary disable],
@@ -263,26 +371,16 @@ AC_ARG_ENABLE(toggle,
   AC_DEFINE(TOGGLE)
 fi],AC_DEFINE(TOGGLE))
 
-AC_ARG_ENABLE(pthread,
-[  --disable-pthread       Don't use POSIX threads (pthreads)],
-[if test $enableval = yes; then
-  PTHREAD_ONLY=
-  AC_DEFINE(FEATURE_PTHREAD)
-else
-  PTHREAD_ONLY=#
-fi],[AC_DEFINE(FEATURE_PTHREAD)
-  PTHREAD_ONLY=
-])
-AC_SUBST(PTHREAD_ONLY)
-
 AC_ARG_ENABLE(gzip,
-[  --enable-gzip           Allow gzip'ed transfer of documents. Note that this will make content modification impossible.],
+[  --disable-gzip          Block gzip'ed transfer of documents.  Note that
+                          this is required if you want content modification
+                          even with gzip-supporting servers.],
 [if test $enableval = "no"; then
   AC_DEFINE(DENY_GZIP)
 fi])
 
 AC_ARG_ENABLE(force,
-[  --disable-force         Don't allow blockfle to be bypassed],
+[  --disable-force         Don't allow blockfile to be bypassed],
 [if test $enableval = yes; then
   AC_DEFINE(FORCE_LOAD)
 fi],AC_DEFINE(FORCE_LOAD))
@@ -312,8 +410,8 @@ AC_ARG_ENABLE(split-proxy-args,
 fi],AC_DEFINE(SPLIT_PROXY_ARGS))
 
 AC_ARG_ENABLE(webdav,
-[  --disable-webdav        Don't support WebDAV.  This option stops MS Outlook
-                          Express from accessing HotMail e-mail.],
+[  --disable-webdav        Don't support WebDAV.  This option breaks MS
+                          Outlook Express when accessing HotMail e-mail.],
 [if test $enableval = yes; then
   AC_DEFINE(WEBDAV)
 fi],
@@ -362,18 +460,23 @@ dnl the choice is only between static and
 dnl dynamic:
 
 AC_ARG_ENABLE(regex-matching,
-[  --enable-regex-matching=pcre     Use perl-compatible regex for actionsfile pattern matching (default)
-  --enable-regex-matching=gnu      Use gnu style regex for actionsfile pattern matching (-> bigger binary)
-  --disable-regex-matching         Don't use regex matching, compare URL prefix instead (won't shrink birary)],
+[  --enable-regex-matching=pcre     Use perl-compatible regex for actionsfile
+                                   pattern matching (default)
+  --enable-regex-matching=gnu      Use gnu style regex for actionsfile pattern
+                                   matching (-> bigger binary)
+  --disable-regex-matching         Don't use regex matching, compare URL
+                                   prefix instead (won't shrink birary)],
 [ regex_matching=$enableval ],
 [ regex_matching=pcre ])
 
 AC_ARG_ENABLE(dynamic-pcre,
-[  --disable-dynamic-pcre           Use the built-in, static pcre, even if libpcre is available],
+[  --disable-dynamic-pcre           Use the built-in, static pcre, even if
+                                   libpcre is available],
 [ if test $enableval = "no"; then have_pcre=no; fi ])
 
 AC_ARG_ENABLE(dynamic-pcrs,
-[  --disable-dynamic-pcrs           Use the built-in, static pcrs, even if libpcrs is available],
+[  --disable-dynamic-pcrs           Use the built-in, static pcrs, even if
+                                   libpcrs is available],
 [ if test $enableval = "no"; then have_pcrs=no; fi ])
 
 
@@ -442,6 +545,15 @@ AC_SUBST(GNU_REGEX_ONLY)
 AC_SUBST(PCRE_REGEX_ONLY)
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)
+
+dnl =================================================================
+dnl Final cleanup and output
+dnl =================================================================
+
+dnl Remove the SPECIAL_CFLAGS stuff from CFLAGS, and add it seperately
+dnl in the Makefile
+CFLAGS=$old_CFLAGS_nospecial
+AC_SUBST(SPECIAL_CFLAGS)
 
 AC_OUTPUT(Makefile)
 

@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.16 2001/07/15 19:45:33 jongfoster Exp $
+# $Id: Makefile.in,v 1.17 2001/07/28 16:44:54 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.17  2001/07/28 16:44:54  oes
+# Fixed sed LF->CRLF conversion and removed deprecated files
+#
 # Revision 1.16  2001/07/15 19:45:33  jongfoster
 # Added support for linking with POSIX threads library
 #
@@ -91,7 +94,11 @@
 #
 #
 
-# define version (will be wired into the rpm.)
+
+#############################################################################
+# Version number (for RPM)
+#############################################################################
+
 VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
@@ -100,46 +107,34 @@ VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 RPM_VERSION   = $(VERSION)
 RPM_PACKAGEV  = 1
 
-# The version is currently specified in config.h, which is
-# written by "configure".
-#
-#VERSION_CFLAGS = -DVERSION_MAJOR=$(VERSION_MAJOR) \
-#                 -DVERSION_MINOR=$(VERSION_MINOR) \
-#                 -DVERSION_POINT=$(VERSION_POINT) \
-#                 -DVERSION="$(VERSION)"
 
+#############################################################################
 # Directories for "make install"
+#############################################################################
+
 DEST        = /etc/junkbuster
 SBIN_DEST   = @sbindir@
 MAN_DEST    = @mandir@
 
-# The flag "-mno-win32" can be used by Cygwin to emulate a un?x type install.
-# The flag "-mwindows -mno-cygwin" will cause Cygwin to use MingW32 for Win32 install.
-CYGWIN_FLAGS = @CYGWIN_FLAGS@
 
-# Either/Or of these next two lines
-#DEBUG_CFLAGS = -g
-DEBUG_CFLAGS  = -O3
+#############################################################################
+# Build tools
+#############################################################################
 
-# Solaris needs a special define:
-# FIXME: This is always commented out
-SOLARIS_FLAGS = @SOLARIS_ONLY@-D__EXTENSIONS__=1
+PROGRAM    = junkbuster@EXEEXT@
+CC         = @CC@
+ECHO       = echo
+GZIP_PROG  = gzip
+INSTALL    = cp -f
+LD         = gcc
+OBJEXT     = @OBJEXT@
+RM         = rm -f
+STRIP_PROG = strip
 
-#  -DSTDC_HEADERS Now in config.h
-# Do we need  -DHAVE_STRING  ???
-CFLAGS = @CFLAGS@ @CPPFLAGS@ \
-         -D__MT__=1 -D__STDC__=1 $(SOLARIS_FLAGS) -DHAVE_STRING $(DEBUG_CFLAGS) \
-         $(CYGWIN_FLAGS) $(PCRE_WIN_FLAGS) @STATIC_PCRE_ONLY@ -Ipcre
 
-PROGRAM = junkbuster@EXEEXT@
-CC      = gcc
-ECHO    = echo
-GZIP_PROG    = gzip
-INSTALL = cp -f
-LD      = gcc
-OBJEXT  = @OBJEXT@
-RM      = rm -f
-STRIP_PROG   = strip
+#############################################################################
+# Filenames and libraries
+#############################################################################
 
 C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
          jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
@@ -178,42 +173,68 @@ REGEX_HDRS   = $(REGEX_SRC:.c=.h)
 PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcre.h
 
 # Only need this on Solaris
-# FIXME: This is always commented out
 SOCKET_LIB   = @SOLARIS_ONLY@-lsocket -lnsl
 
 # PThreads library, if needed.
 PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
 
-LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
-
 SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
 OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
 HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
+LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
 
 
-# -------------------------------------------------------------------------
-# Do not change anything below this line
-# And there should NOT be any targets above this line.
-# -------------------------------------------------------------------------
-LDFLAGS = $(DEBUG_CFLAGS) $(CYGWIN_FLAGS)
+#############################################################################
+# Compiler switches
+#############################################################################
 
+# The flag "-mno-win32" can be used by Cygwin to emulate a un?x type build.
+# The flag "-mwindows -mno-cygwin" will cause Cygwin to use MingW32 for a
+# Win32 GUI build.
+# The flag "-pthread" is required if using Pthreads under Linux (and
+# possibly other OSs).
+SPECIAL_CFLAGS = @SPECIAL_CFLAGS@
+
+# Either/Or of these next two lines
+#DEBUG_CFLAGS = -g  # Debug build
+DEBUG_CFLAGS  = -O3 # Full optimization
+
+CFLAGS = @CFLAGS@ @CPPFLAGS@ $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS) \
+         @STATIC_PCRE_ONLY@ -Ipcre
+
+LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
+
+
+#############################################################################
+# Build section.
+#
+# There should NOT be any targets above this line.
+#############################################################################
 all: $(PROGRAM)
 
-SUFFIX     = .txt:o
-.SUFFIXES  : .txt
+
+#############################################################################
+# Define this explicitly because Solaris is broken!
+#############################################################################
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+
+#############################################################################
+# Win32 config files
+#############################################################################
 
 %.txt:
 	sed -e $$'s,$$,\r,' < $< > $@ 
 
-
 inifiles: $(W32_INIS)
 
 junkbstr.txt: config
-	sed	-e 's!\(/etc/junkbuster\|.\)/actionsfile!sactions.txt!' \
-			-e 's!\(/etc/junkbuster\|.\)/trust!strust.txt!' \
-			-e 's!\(/var/log/junkbuster\|.\)/jarfile!jar.log!' \
-			-e 's!\(/var/log/junkbuster\|.\)/logfile!junkbstr.log!' \
-			-e 's!\(/etc/junkbuster\|.\)/re_filterfile!sregexp.txt!' \
+	sed	-e 's!\actionsfile!sactions.txt!' \
+			-e 's!\trust!strust.txt!' \
+			-e 's!\jarfile!jar.log!' \
+			-e 's!\logfile!junkbstr.log!' \
+			-e 's!\re_filterfile!sregexp.txt!' \
 			-e $$'s,$$,\r,' \
 			-e 's!#Win32-only: !!' \
 	< $< > $@
@@ -223,9 +244,10 @@ strust.txt: trust
 sregexp.txt: re_filterfile
 
 
-# -------------------------------------------------------------------------
+#############################################################################
 # redhat distribution
-# -------------------------------------------------------------------------
+#############################################################################
+
 redhat-dist:
 	@make clobber
 # verify that i'm root needs to be done
@@ -236,9 +258,11 @@ redhat-dist:
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
-# -------------------------------------------------------------------------
+
+#############################################################################
 # suse distribution
-# -------------------------------------------------------------------------
+#############################################################################
+
 suse-dist:
 	@make clobber
 # verify that i'm root needs to be done
@@ -249,15 +273,17 @@ suse-dist:
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
-# -------------------------------------------------------------------------
-#
-# -------------------------------------------------------------------------
+
+#############################################################################
+# Windows distribution
+#############################################################################
 win-dist:
 	$(ECHO) Not implemented.
 
-# -------------------------------------------------------------------------
-#
-# -------------------------------------------------------------------------
+
+#############################################################################
+# Tarball distribution
+#############################################################################
 tarball-dist:
 	@make clean
 	make $(PROGRAM) 
@@ -266,9 +292,10 @@ tarball-dist:
 	chmod a+r ../../ijb-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
 
-# -------------------------------------------------------------------------
-#
-# -------------------------------------------------------------------------
+
+#############################################################################
+# Source file dependencies
+#############################################################################
 
 actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
 encode.@OBJEXT@:    encode.c    encode.h    config.h
@@ -351,6 +378,8 @@ install: all
 	$(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
 	$(INSTALL) junkbuster.init /sbin/init.d/junkbuster
 
+
+#############################################################################
 
 ## Local Variables:
 ## tab-width: 3

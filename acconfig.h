@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.7  2001/07/25 22:53:59  jongfoster
+ *    Will #error if pthreads is enabled under BeOs
+ *
  *    Revision 1.6  2001/07/15 17:54:29  jongfoster
  *    Renaming #define STATIC to STATIC_PCRE
  *    Adding new #define FEATURE_PTHREAD that will be used to enable
@@ -294,7 +297,34 @@
  */
 #undef FEATURE_PTHREAD
 
+/*
+ * Defined on Solaris only.  Makes the system libraries thread safe.
+ */
+#undef _REENTRANT
+
+/*
+ * Defined on Solaris only.  Without this, many important functions are not
+ * defined in the system headers.
+ */
+#undef __EXTENSIONS__
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with MultiThreading?)
+ */
+#undef __MT__
+
 @BOTTOM@
+
+/*
+ * Defined always.
+ * FIXME: Don't know what it does or why we need it.
+ * (presumably something to do with ANSI Standard C?)
+ */
+#ifndef __STDC__
+#define __STDC__ 1
+#endif /* ndef __STDC__ */
 
 /*
  * Need to set up this define only for the Pthreads library for
