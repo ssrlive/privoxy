@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.8 2002/04/02 08:45:22 oes Exp $
+  $Id: index.php,v 1.9 2002/04/02 19:32:45 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.9  2002/04/02 19:32:45  oes
+  Adding temporary fix for missing curl support on SF (step 2 + 3 on oesterhelt.org)
+
   Revision 1.8  2002/04/02 08:45:22  oes
   Made script location indepandant
 
@@ -51,15 +54,7 @@
  -->
 
  <head>
-  <style type="text/css">
-   body, div, p, h1, h2, ul, ol, li, td, th, dl, dt, dd { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
-   body { background-color: #ffffff }
-   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:15px; font-weight:bold }
-   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:10px }
-   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
-   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
-  </style>
-
+    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 <?php
 
 /*
@@ -103,7 +98,9 @@ $headers = getallheaders();
 
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] < $required_actions_file_version)
 {
-   echo ("<title>Invalid Privoxy Action List Feedback</title></head>
+   echo ("<title>Invalid Privoxy Action List Feedback</title>
+    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
+	</head>
           <body><div class=\"title\">Invalid Feedback Submission</div>
            <div align=\"center\">
             <div class=\"errorbox\" align=\"left\"><p>As much as we welcome your feedback, please note that
@@ -123,6 +120,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
 ?>
 
   <title>Privoxy Action List Feedback - Step 1 of 2</title>
+    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
  </head>
 
  <body>

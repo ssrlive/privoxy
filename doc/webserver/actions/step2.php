@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step2.php,v 1.4 2002/04/01 19:13:47 oes Exp $
+  $Id: step2.php,v 1.6 2002/04/02 07:22:19 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.6  2002/04/02 07:22:19  oes
+  Elimnating duplicate images; using relative link for step3
+
   Revision 1.4  2002/04/01 19:13:47  oes
   Extended, fixed bugs, beefed up design, made IE-safe
 
@@ -42,14 +45,7 @@
  -->
 
  <head>
-  <style type="text/css">
-   body, div, p, h1, h2, ul, ol, li, td, th, dl, dt, dd { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
-   body { background-color: #ffffff }
-   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:15px; font-weight:bold }
-   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:10px }
-   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
-   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
-  </style>
+    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
   <script language="javascript">
    //
@@ -112,6 +108,7 @@ error_reporting(E_NONE);
 if (!isset($referrer_url))
 {
    echo ("  <title>Invalid Feedback Submission</title>
+	    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
            </head>
            <body>
             <div class=\"title\">Invalid Feedback Submission</div>
@@ -132,6 +129,7 @@ if (!isset($referrer_url))
 if (!isset($problem) || $problem == "INVALID")
 {
    echo ("  <title>Invalid Feedback Submission</title>
+	    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
            </head>
            <body>
             <div class=\"title\">Invalid Feedback Submission</div>
@@ -172,6 +170,7 @@ curl_close ($ch);
 if (!$success)
 {
    echo ("  <title>Invalid Feedback Submission</title>
+	    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
            </head>
            <body>
             <div class=\"title\">Invalid Feedback Submission</div>
@@ -206,6 +205,7 @@ switch($problem)
 ?>
 
   <title>Privoxy Action List Feedback - Step 2 of 2</title>
+    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
  </head>
  <body>
 
