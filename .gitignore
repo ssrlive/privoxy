@@ -37,3 +37,6 @@ junkbuster.log
 logfile
 permissionsfile
 re_filterfile
+vc_junkbuster.opt
+vc_junkbuster.ncb
+junkbstr.txt
