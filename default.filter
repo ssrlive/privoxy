@@ -1,8 +1,8 @@
 # ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa//current/default.filter,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.11.2.6 2002/08/23 14:12:26 oes Exp $
+#  $Id: default.filter,v 1.12 2002/09/05 14:55:38 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -205,10 +205,10 @@ FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* fi
 # This makes banners-by-size more effective and allows both banners-by-size
 # and banners-by-link to preserve the original image URL in the alt attribute.
 
-s|<img\s+([^\\>]*)src\s*=\s*(['"])([^>\\\2]+)\2(.*)>|<img src="$3" $1$4>|siUg
-s|<img\s+([^\\>]*)src\s*=\s*([^'">\\\s]+?)([^\\>]*)>|<img src="$2" $1$3>|siUg
+s|<img\s+?([^>]*)src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2$1|siUg
+s|<img\s+?([^>]*)src\s*=\s*([^'">\\\s]+)|<img src=$2$1|sig
 
-s|<img (src="[^"]*") ([^>]*)width\s*=\s*?(["']?)(\d+?)\3(.*)>|<img $1 width="$4" $2$5>|siUg
+s|<img (src=(?:(['"])[^>\\\\2]+\2\|[^'">\\\s]+?))([^>]*)width\s*=\s*(["']?)(\d+?)|<img $1 width=$4$5$4$3|siUg
 
 
 #################################################################################
@@ -223,31 +223,33 @@ s|<img (src="[^"]*") ([^>]*)width\s*=\s*?(["']?)(\d+?)\3(.*)>|<img $1 width="$4"
 #       Use http://config.privoxy.org/send-banner?type=pattern for a grey/white pattern image
 #       Use http://config.privoxy.org/send-banner?type=auto  to auto-select.
 #
+# Note2: Use img-reorder before this filter to ensure maximum matching success
+#
 #################################################################################
 FILTER: banners-by-size Kill banners by size
 
 # 88*31
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)88\3)[^>]*(height=(['"]?)31\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)88\4)[^>]*?(height=(['"]?)31\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 120*60, 120*90, 120*240, 120*600
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)120\3)[^>]*(height=(['"]?)(?:600?|90|240)\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)120\4)[^>]*?(height=(['"]?)(?:600?|90|240)\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 125*125
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)125\3)[^>]*(height=(['"]?)125\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)125\4)[^>]*?(height=(['"]?)125\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 160*600
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)160\3)[^>]*(height=(['"]?)600\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)160\4)[^>]*?(height=(['"]?)600\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 180*150
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)180\3)[^>]*(height=(['"]?)150\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)180\4)[^>]*?(height=(['"]?)150\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 234*60, 468*60 (Most Banners!)
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)(?:234|468)\3)[^>]*(height=(['"]?)60\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)(?:234|468)\4)[^>]*?(height=(['"]?)60\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 240*400
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)240\3)[^>]*(height=(['"]?)400\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)240\4)[^>]*?(height=(['"]?)400\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 250*250, 300*250
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)(?:250|300)\3)[^>]*(height=(['"]?)250\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)(?:250|300)\4)[^>]*?(height=(['"]?)250\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 # 336*280
-s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)336\3)[^>]*(height=(['"]?)280\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)336\4)[^>]*?(height=(['"]?)280\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 
 # Note: 200*50 was also proposed, but it probably causes too much collateral damage:
 #
-#s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)200\3)[^>]*(height=(['"]?)50\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+#s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)200\4)[^>]*?(height=(['"]?)50\6)[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed-$2-by-size$1 $3 $5>@sig
 
 
 #################################################################################
@@ -259,18 +261,18 @@ FILTER: banners-by-link Kill banners by their links to known clicktrackers
 
 # Common case with width and height attributes:
 #
-s@<a\s+href\s*=\s*(['"]??)([^>\1]*(?:\
+s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:\
   adclick                             # See www.dn.se \
 | atwola\.com/(?:link|redir)          # see www.cnn.com \
 | /jump/                              # redirs for doublecklick.net ads \
 | tracker | counter                   # common \
 | adlog\.pl                           # see sf.net \
-)[^>\1]*)\1[^>]*>\s*<img(?: src="([^"]*)")??[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\5)[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\7)[^>]*>\
-@<img $4 $6 src="http://config.privoxy.org/send-banner?type=auto" alt="Killed $3 by hwlink to $2">@siUgx
+)[^>\1\s]*)\1[^>]*>\s*<img\s+(?:src\s*=\s*(['"]?)([^>\\\3\s]+)\3)?[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\6)[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\8)[^>]*>\
+@<img $5 $7 src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed $4 by link to $2$1>@sigx
 
 # Rare case w/o explicit dimensions:
 #
-s@<a\s+href\s*=\s*(['"]??)([^>\1]*(?:adclick|atwola\.com/(?:link|redir)|doubleclick\.net/jump)[^>\1]*)\1[^>]*>\s*<img(?: src="([^"]*)")??[^>]*>@<img src="http://config.privoxy.org/send-banner?type=auto" alt="Killed $3 by link to $2">@siUg
+s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:adclick|atwola\.com/(?:link|redir)|doubleclick\.net/jump/|tracker|counter|adlog\.pl)[^>\1\s]*)\1[^>]*>\s*<img\s+(?:src\s*=\s*(['"]?)([^>\\\3\s]+)\3)?[^>]*>@<img src=$1http://config.privoxy.org/send-banner?type=auto$1 alt=$1Killed $4 by link to $2$1>@sig
 
 #################################################################################
 #
@@ -358,6 +360,29 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.12  2002/09/05 14:55:38  oes
+#     Synced with the stable branch:
+#         Revision 1.11.2.6  2002/08/23 14:12:26  oes
+#         Proofed frameset-borders against "fremaborder=0 border=0"
+#
+#         Revision 1.11.2.5  2002/08/22 15:05:20  oes
+#         Added Filter to make Quicktime movies saveable (thanks to aaron@linville.org for the idea)
+#
+#         Revision 1.11.2.4  2002/08/10 11:32:29  oes
+#         Attribute values in replacement tags of banners-by-size filter now undelimited. (Fixes bug #592493)
+#
+#         Revision 1.11.2.3  2002/08/05 11:43:56  oes
+#         Fixed a bug in the popups filter that was introduced with the last fix :-(
+#
+#         Revision 1.11.2.2  2002/08/01 11:20:13  oes
+#         Fixed bugs 587802, 577802 and an unreported one
+#
+#         Revision 1.11.2.1  2002/07/26 15:18:26  oes
+#         - All filters reviewed and many shorcomings fixed
+#         - New filters: img-reorder, banners-by-link and js-events
+#         - Jobs reorderd because they are now executed in order of
+#           appearance
+#
 #     Revision 1.11  2002/05/24 00:57:18  oes
 #     Made WeBugs job ungreedy; Fixes bug 559190
 #
