@@ -26,6 +26,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.6  2001/07/29 18:52:06  jongfoster
+ *    Renaming _PCRS_H, and adding "extern C {}"
+ *
  *    Revision 1.5  2001/07/18 17:27:00  oes
  *    Changed interface; Cosmetics
  *
@@ -57,7 +60,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.5 2001/07/18 17:27:00 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.6 2001/07/29 18:52:06 jongfoster Exp $"
 
 
 #include <pcre.h>
@@ -123,8 +126,8 @@ typedef struct PCRS_JOB {
  */
 
 /* Main usage */
-extern pcrs_job        *pcrs_compile_command(char *command, int *errptr);
-extern pcrs_job        *pcrs_compile(char *pattern, char *substitute, char *options, int *errptr);
+extern pcrs_job        *pcrs_compile_command(const char *command, int *errptr);
+extern pcrs_job        *pcrs_compile(const char *pattern, const char *substitute, const char *options, int *errptr);
 extern int              pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length);
 
 /* Freeing jobs */
@@ -132,8 +135,8 @@ extern pcrs_job        *pcrs_free_job(pcrs_job *job);
 extern void             pcrs_free_joblist(pcrs_job *joblist);
 
 /* Expert usage */
-extern int              pcrs_compile_perl_options(char *optstring, int *flags);
-extern pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, int *errptr);
+extern int              pcrs_compile_perl_options(const char *optstring, int *flags);
+extern pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int *errptr);
 
 #ifdef __cplusplus
 } /* extern "C" */
