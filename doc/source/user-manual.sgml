@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $
+ $Id: user-manual.sgml,v 1.92 2002/04/25 18:55:13 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.92 2002/04/25 18:55:13 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -478,22 +478,22 @@
 </para>
 
 <para>
- You will probably want to keep an eye out for sites that require persistent
- cookies, and add these to your actions configuration as needed. By
+ You will probably want to keep an eye out for sites for which you may prefer
+ persistent cookies, and add these to your actions configuration as needed. By
  default, most of these will be accepted only during the current browser
- session (aka <quote>session cookies</quote>), until you add them to the
+ session (aka <quote>session cookies</quote>), unless you add them to the
  configuration. If you want the browser to handle this instead, you will need
  to edit <filename>user.action</filename> (or through the web based interface)
- and disable this feature. If you use more than one browser, it would make more
- sense to let <application>Privoxy</application> handle this. In which case,
- the browser(s) should be set to accept all cookies.
+ and disable this feature. If you use more than one browser, it would make
+ more sense to let <application>Privoxy</application> handle this. In which
+ case, the browser(s) should be set to accept all cookies.
 </para>
 
 <para>
  Another feature where you will probably want to define exceptions for trusted
  sites is the popup-killing (through the <literal>+popup</literal> and
  <literal>+filter{popups}</literal> actions), because your favorite shopping,
- banking, or leisure site may need popups. 
+ banking, or leisure site may need popups (explained below). 
 </para>
 
 <para>
@@ -550,7 +550,7 @@
 <para>
  If you can't get rid of the problem at all, think you've found a bug in
  Privoxy, want to propose a new feature or smarter rules, please see the 
- chapter <ulink url="contact.html"><quote>Contacting the
+ section <ulink url="contact.html"><quote>Contacting the
  Developers</quote></ulink> below. 
 </para>
 
@@ -647,7 +647,6 @@
   in text files. These files can be edited with a text editor.
   Many important aspects of <application>Privoxy</application> can 
   also be controlled easily with a web browser.
-
  </para>
 
 
@@ -664,19 +663,31 @@
 
 </para>
 
-<para>
- <screen>
+<!-- Needs to be put in a table and colorized  -->
+<screen>
+ <msgtext>
+ <bridgehead renderas="sect2">Privoxy Menu</bridgehead>
 
-Privoxy Menu:
+ <simplelist>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-status">View & change the current configuration</ulink>
+ </member>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-version">View the source code version numbers</ulink>
+ </member>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-request">View the request headers.</ulink>
+ </member>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-url-info">Look up which actions apply to a URL and why</ulink>
+ </member>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/toggle">Toggle Privoxy on or off</ulink>
+ </member>
+ </simplelist>
+ </msgtext>
+</screen>
 
-    * View & change the current configuration
-    * View the source code version numbers
-    * View the request headers.
-    * Look up which actions apply to a URL and why
-    * Toggle Privoxy on or off
-
- </screen>
-</para>
 
 <para>
  This should be self-explanatory. Note the first item leads to an editor for the
@@ -729,7 +740,7 @@ Privoxy Menu:
 
   <listitem>
    <para>
-     The main configuration file is named <filename>config</filename>
+     The main configuration file is named <link linkend="config">config</link>
      on Linux, Unix, BSD, OS/2, and AmigaOS and <filename>config.txt</filename>
      on Windows. This is a required file.
    </para>
@@ -737,7 +748,7 @@ Privoxy Menu:
 
   <listitem>
    <para>
-    <filename>default.action</filename> (the main actions file) is used to define
+    <filename>default.action</filename> (the main <link linkend="actions-file">actions file</link>) is used to define
     the default settings for various <quote>actions</quote> relating to images, banners, 
     pop-ups, access restrictions, banners and cookies.
    </para>
@@ -751,21 +762,22 @@ Privoxy Menu:
     for <application>Privoxy's</application> internal use.
    </para>
    <para>    
-    There is also a web based editor for this file that can be accessed at
+    There is also a web based editor that can be accessed from
     <ulink
-    url="http://config.privoxy.org/edit-actions/">http://config.privoxy.org/edit-actions/</ulink>
+    url="http://config.privoxy.org/show-status/">http://config.privoxy.org/show-status/</ulink>
     (Shortcut: <ulink
-    url="http://p.p/edit-actions/">http://p.p/edit-actions/</ulink>) for the
+    url="http://p.p/show-status/">http://p.p/show-status/</ulink>) for the
     various actions files. 
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    <filename>default.filter</filename> (the filter file) can be used to re-write the raw
-    page content, including viewable text as well as embedded HTML and JavaScript,
-    and whatever else lurks on any given web page. The filtering jobs are only
-    pre-defined here; whether to apply them or not is up to the actions files.
+    <filename>default.filter</filename> (the <link linkend="filter-file">filter
+    file</link>) can be used to re-write the raw page content, including
+    viewable text as well as embedded HTML and JavaScript, and whatever else
+    lurks on any given web page. The filtering jobs are only pre-defined here;
+    whether to apply them or not is up to the actions files.
    </para>
   </listitem> 
 
@@ -962,7 +974,7 @@ actionsfile
   <term>Specifies:</term>
   <listitem>
    <para>
-    The actions file(s) to use
+    The <link linkend="actions">actions</link> file(s) to use
    </para>
   </listitem>
  </varlistentry>
@@ -1022,7 +1034,7 @@ actionsfile
   <term>Specifies:</term>
   <listitem>
    <para>
-    The filter file to use
+    The <link linkend="filter">filter</link> file to use
    </para>
   </listitem>
  </varlistentry>
@@ -1720,7 +1732,7 @@ actionsfile
   <term>Specifies:</term>
   <listitem>
    <para>
-    Whether or not the <ulink url="http://config.privoxy.org/edit-actions">web-based actions
+    Whether or not the <ulink url="http://config.privoxy.org/show-status">web-based actions
     file editor</ulink> may be used
    </para>
   </listitem>
@@ -2427,12 +2439,14 @@ forward-socks4 and forward-socks4a</title>
  the default policies. <filename>standard.action</filename> is used by 
  <application>Privoxy</application> and the web based editor to set 
  pre-defined values (and normally should not be edited). Local exceptions 
- are best done in <filename>user.action</filename>.
-</para>
+ are best done in <filename>user.action</filename>. The content of these 
+ can all be viewed and edited from <ulink
+ url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
+ </para>
 
 <para> 
  Anything you want can blocked, including ads, banners, or just some obnoxious
- URL that you would rather not see. Cookies can be accepted or rejected, or
+ URL that you would rather not see is done here. Cookies can be accepted or rejected, or
  accepted only during the current browser session (i.e. not written to disk),
  content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
  See below for a complete list of available actions.
@@ -2450,16 +2464,16 @@ forward-socks4 and forward-socks4a</title>
 <sect3>
 <title>Finding the Right Mix</title>
 <para>
- Note that some actions like cookie suppression or script disabling may
- render some sites unusable, which rely on these techniques to work properly.
- Finding the right mix of actions is not easy and certainly a matter of personal
- taste. In general, it can be said that the more <quote>aggressive</quote>
- your default settings (in the top section of the actions file) are,
- the more exceptions for <quote>trusted</quote> sites you will have to
- make later. If, for example, you want to kill popup windows per default, you'll
- have to make exceptions from that rule for sites that you regularly use
- and that require popups for actually useful content, like maybe your bank,
- favorite shop, or newspaper.
+ Note that some <link linkend="actions">actions</link> like cookie suppression
+ or script disabling may render some sites unusable, which rely on these
+ techniques to work properly. Finding the right mix of actions is not easy and
+ certainly a matter of personal taste. In general, it can be said that the more
+ <quote>aggressive</quote> your default settings (in the top section of the
+ actions file) are, the more exceptions for <quote>trusted</quote> sites you
+ will have to make later. If, for example, you want to kill popup windows per
+ default, you'll have to make exceptions from that rule for sites that you
+ regularly use and that require popups for actually useful content, like maybe
+ your bank, favorite shop, or newspaper.
 </para>
 
 <para>
@@ -2475,8 +2489,8 @@ forward-socks4 and forward-socks4a</title>
 <title>How to Edit</title>
 <para>
  The easiest way to edit the <quote>actions</quote> files is with a browser by
- using our browser-based editor, which is available at <ulink
- url="http://config.privoxy.org/edit-actions">http://config.privoxy.org/edit-actions</ulink>.
+ using our browser-based editor, which can be reached from <ulink
+ url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
 </para>
 
 <para>
@@ -2490,7 +2504,7 @@ forward-socks4 and forward-socks4a</title>
 <title>How Actions are Applied to URLs</title>
 <para>
  Actions files are divided into sections. There are special sections,
- like the <quote>alias</quote> sections which will be discussed later. For now
+ like the <quote><link linkend="aliases">alias</link></quote> sections which will be discussed later. For now
  let's concentrate on regular sections: They have a heading line (often split
  up to multiple lines for readability) which consist of a list of actions,
  separated by whitespace and enclosed in curly braces. Below that, there
@@ -2502,7 +2516,11 @@ forward-socks4 and forward-socks4a</title>
  compared to all patterns in this file. Every time it matches, the list of
  applicable actions for the URL is incrementally updated, using the heading
  of the section in which the pattern is located. If multiple matches for
- the same URL set the same action differently, the last match wins.
+ the same URL set the same action differently, the last match wins. If not, 
+ the effects are aggregated (e.g. a URL might match both the 
+ <ulink url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
+ and <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink> actions).
+ 
 </para>
 
 <para>
@@ -2920,12 +2938,15 @@ forward-socks4 and forward-socks4a</title>
     instead. If there is sufficient space, a large red banner will appear with
     a friendly message about why the page was blocked, and a way to go there
     anyway. If there is insufficient space a smaller blocked page will appear
-    without the red banner.
+    without the red banner. 
+    <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Click here</ulink>
+    to view the default blocked HTML page (<application>Privoxy</application> must be running 
+    for this to work as intended!).
    </para>
 
    <para> 
-    A very important exception is if the URL <emphasis>matches both</emphasis> <quote>+block</quote> 
-    and <ulink
+    A very important exception is if the URL <emphasis>matches both</emphasis>
+    <quote>+block</quote> and <ulink
     url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
     then it will be handled by 
     <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
@@ -2934,7 +2955,8 @@ forward-socks4 and forward-socks4a</title>
     ads and other objectionable content.
    </para>
    <para>
-    The <quote>+filter</quote> action can also perform some of the 
+    The <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+    action can also perform some of the 
     same functionality as <quote>+block</quote>, but by virtue of very 
     different programming techniques, and is most often used for different 
     reasons.
@@ -3257,8 +3279,9 @@ forward-socks4 and forward-socks4a</title>
     Filtering can achieve some of the effects as the 
     <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink>
     action, i.e. it can be used to block ads and banners. In the overall 
-    scheme of things, filtering is one of the last things <quote>Privoxy</quote> 
-    does with a web page. So other actions are applied first.
+    scheme of things, filtering is one of the first things <quote>Privoxy</quote> 
+    does with a web page. So other most other actions are applied to the 
+    already <quote>filtered</quote> page.
    </para>
   </listitem>
  </varlistentry>
@@ -3368,7 +3391,8 @@ forward-socks4 and forward-socks4a</title>
   <listitem>
    <para>
     The keyword <quote>block</quote> will completely remove the header 
-    (not to be confused with the <quote>+block</quote> action).
+    (not to be confused with the <ulink
+    url="configuration.html#BLOCK"><quote>+block</quote></ulink> action).
     Alternately, you can specify any value you prefer to send to the web
     server.
    </para>
@@ -3549,13 +3573,17 @@ forward-socks4 and forward-socks4a</title>
   <listitem>
    <para>
     This only has meaning if the URL (or pattern) also is
-    <quote>+block</quote>ed, in which case a <quote>blocked</quote> image can
-    be sent rather than a HTML page. (See 
-    <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
-     below for control over what will actually be displayed by the browser.)    
+    <quote>+block</quote>ed, in which case a user definable image can
+    be sent rather than a HTML page. This is integral to the whole concept of
+    ad blocking: the URL must match <emphasis>both</emphasis> a <ulink
+    url="configuration.html#BLOCK"><quote>+block</quote></ulink> rule,
+    <emphasis>and</emphasis> <quote>+handle-as-image</quote>.
+    (See <ulink
+    url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+    below for control over what will actually be displayed by the browser.)
    </para>
    <para>
-    There is little reason to change the default definition for this.
+    There is little reason to change the default definition for this action.
    </para>
   </listitem>
  </varlistentry>
@@ -4864,7 +4892,8 @@ Requests</title>
 
  <listitem>
   <para>  
-    Show information about the current configuration: 
+    Show information about the current configuration, including viewing and 
+    editing of actions files:
   </para>
    <blockquote>
    <para> 
@@ -4886,7 +4915,7 @@ Requests</title>
  
  <listitem>
   <para>  
-   Show the client's request headers:
+   Show the browser's request headers:
   </para>
   <blockquote>
    <para> 
@@ -4927,17 +4956,6 @@ Requests</title>
    <blockquote>
    <para> 
      <ulink url="http://config.privoxy.org/toggle?set=enable">http://config.privoxy.org/toggle?set=enable</ulink>
-   </para>
-  </blockquote>
- </listitem>
-
- <listitem>
-  <para>  
-   Edit the actions list file:
-  </para>
-   <blockquote>
-   <para> 
-    <ulink url="http://config.privoxy.org/edit-actions">http://config.privoxy.org/edit-actions</ulink>
    </para>
   </blockquote>
  </listitem>
@@ -5033,7 +5051,7 @@ Requests</title>
   <para>
    First, your web browser requests a web page. The browser knows to send 
    the request to <application>Privoxy</application>, who in turn, 
-   will relay the request to the remote web server after passing a few quick
+   will relay the request to the remote web server after passing the following 
    tests: 
   </para>
  </listitem> 
@@ -5117,8 +5135,10 @@ Requests</title>
 <title>Anatomy of an Action</title>
 
 <para>
- The way <application>Privoxy</application> applies <quote>actions</quote>
- and <quote>filters</quote> to any given URL can be complex, and not always so
+ The way <application>Privoxy</application> applies 
+ <ulink url="configuration.html#ACTIONS"><quote>actions</quote></ulink>
+ and <ulink url="configuration.html#FILTER"><quote>filters</quote></ulink>
+ to any given URL can be complex, and not always so
  easy to understand what is happening. And sometimes we need to be able to
  <emphasis>see</emphasis> just what <application>Privoxy</application> is
  doing. Especially, if something <application>Privoxy</application> is doing
@@ -5430,6 +5450,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.92  2002/04/25 18:55:13  hal9
+ More catchups on new actions files, and new actions names.
+ Other assorted cleanups, and minor modifications.
+
  Revision 1.91  2002/04/24 02:39:31  hal9
  Add 'Chain of Events' section.
 
