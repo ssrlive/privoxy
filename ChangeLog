@@ -2,7 +2,7 @@
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
-*** Version 2.2.11 Beta and CVS Changes (WIP 03/07/02) *** 
+*** Version 2.9.11 Beta and CVS Changes (WIP 03/07/02) *** 
 
 - **READ**: The default listening PORT is NOW 8118!!! Changed from 
 8000 due to conflict with NAS (Network Audio Server, whatever that 
@@ -33,7 +33,7 @@ to the specified user.
 - Various other minor fixes.
 
 
-*** Version 2.2.10 Beta Changes ***
+*** Version 2.9.10 Beta Changes ***
 
 - Add "session" cookie concept where cookies exist for the life 
 of that browser session only (ie never goes to disk). 
@@ -45,7 +45,7 @@ of that browser session only (ie never goes to disk).
 URLs to fail in some cases.
 
 
-*** Version 2.2.10 Alpha Changes ***
+*** Version 2.9.10 Alpha Changes ***
 
 - A web-based editor for the actions file is included (go to http://i.j.b/).
 - Web-based toggle IJB on/off support.
