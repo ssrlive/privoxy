@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.113 2002/07/30 21:50:25 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.114 2002/09/05 11:58:30 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -305,9 +305,63 @@ dist-check:
            if [ "$$answer" != "yes i am sure" ]; then exit 1; fi \
          fi;
 
+#############################################################################
+# create tar.gz from CVS:
+# This make-target is usually called through 'create-archive'. If you 
+# run 'make create-snapshot' without setting SNAPVERSION, you'll get a
+# tar.gz with the current date in the name and as a releasenumber in the 
+# spec-file. But the main usage is to run it as follows (Red Hat example):
+# make SNAPVERSION=1.6x create-snapshot
+# This creates a tar.gz and spec-file for a Red Hat 6.x version.
+#############################################################################
+create-snapshot:
+	@tag=`cvs -d $(CVSROOT) status Makefile | awk ' /Sticky Tag/ { print $$3 } '` 2> /dev/null; \
+	[ x"$$tag" = x"(none)" ] && tag=HEAD; \
+	echo "*** Creating package from $$tag!"; \
+	cd $(TMPDIR) ; cvs -Q -d $(CVSROOT) export -r $$tag current || echo "Um... export aborted."
+	@cd $(TMPDIR)/current; \
+	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+		-e 's/^\(Release:\).*/\1 $(SNAPVERSION)/g' \
+		privoxy-rh.spec > $$TMPFILE ; then \
+			$(MV) -f $$TMPFILE privoxy-rh.spec; \
+	else \
+		$(ECHO) "Could not set version info in specfile."; \
+		exit 1;\
+	fi;\
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+             -e 's/^\(Release:\).*/\1 $(SNAPVERSION)/g' \
+              privoxy-suse.spec > $$TMPFILE ; then \
+			$(MV) -f $$TMPFILE privoxy-suse.spec; \
+	else \
+		$(ECHO) "Could not set version info in specfile."; \
+		exit 1;\
+	fi; \
+	$(RM) $(TMPFILE); \
+	cd $(TMPDIR)/current; \
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude \
+		"privoxy-suse.spec" -czf $(TMPDIR)/$(PROGRAM)-rh-$(VERSION).tar.gz .; \
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude \
+		"privoxy-rh.spec" -czf $(TMPDIR)/$(PROGRAM)-suse-$(VERSION).tar.gz .
+	@$(MV) -f $(TMPDIR)/$(PROGRAM)-rh-$(VERSION).tar.gz .
+	@$(MV) -f $(TMPDIR)/$(PROGRAM)-suse-$(VERSION).tar.gz .
+	@$(RM) -rf $(TMPDIR)
+	@echo "Resulting files are $(PROGRAM)-rh-$(VERSION).tar.gz and"
+	@echo "                    $(PROGRAM)-suse-$(VERSION).tar.gz"
+
 
 #############################################################################
-# RPM specifice stuff (SuSE or Redhat, ..)
+# looks at the version of Makefile and exports a corresponding source-tree
+# example: if the Makefile has the sticky tag v_2_9_13, you'll get 
+# privoxy-*-2.4.13.tar.gz. Two different tar files will be written, one for
+# Red Hat and one for SuSe (different spec-files)
+#############################################################################
+create-archive:
+	make SNAPVERSION=$(SNAPVERSION) create-snapshot
+
+
+#############################################################################
+# RPM specific stuff (SuSE or Redhat, ..)
 #############################################################################
 rpm-stuff: dist-check clean clobber 
 	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
@@ -760,6 +814,14 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.114  2002/09/05 11:58:30  oes
+# Synced in some changes fromm the stable branch:
+#   From Revision 1.104.2.14  2002/08/10 11:19:37  oes:
+#    - Add dependency: pcrs.o deps on config.h
+#   Revision 1.104.2.9  2002/07/26 15:17:02  oes
+#    - Added generation of default.action from defaul.action.master
+#    - Deleted obsolete re_filterfile.txt generation
+#
 # Revision 1.113  2002/07/30 21:50:25  hal9
 # Add redhat-test target, and migrate the RPM_PACKAGEV stuff from 3.0 branch.
 #
