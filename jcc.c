@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.22 2001/06/29 21:45:41 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.23 2001/07/02 02:28:25 iwanttokeepanon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.22 2001/06/29 21:45:41 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.23  2001/07/02 02:28:25  iwanttokeepanon
+ *    Added "#ifdef ACL_FILES" conditional compilation to line 1291 to exclude
+ *    the `block_acl' call.  This prevents a compilation error when the user
+ *    does not wish to use the "ACL" feature.
+ *
  *    Revision 1.22  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -363,10 +368,14 @@ static void chat(struct client_state *csp)
    int block_popups;         /* bool, 1==will block popups */
    int block_popups_now = 0; /* bool, 1==currently blocking popups */
 #endif /* def KILLPOPUPS */
-#ifdef PCRS
-   int pcrs_filter;   /* bool, 1==will filter through pcrs */
-   int filtering = 0; /* bool, 1==currently filtering through pcrs */
-#endif /* def PCRS */
+
+   int pcrs_filter;        /* bool, 1==will filter through pcrs */
+   int gif_deanimate;      /* bool, 1==will deanimate gifs */
+
+   /* Function that does the content filtering for the current request */
+   char *(*content_filter)() = NULL; 
+
+   /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
 
    http = csp->http;
@@ -513,11 +522,11 @@ static void chat(struct client_state *csp)
 #ifdef KILLPOPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
 #endif /* def KILLPOPUPS */
-#ifdef PCRS
+
    pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
                                 ((csp->action->flags & ACTION_FILTER) != 0);
-#endif /* def PCRS */
 
+   gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
 
    /* grab the rest of the client's headers */
 
@@ -750,7 +759,7 @@ static void chat(struct client_state *csp)
       /*
        * The server wants to talk.  It could be the header or the body.
        * If `hdr' is null, then it's the header otherwise it's the body.
-       * FIXME: Does `hdr' really mean `host'?
+       * FIXME: Does `hdr' really mean `host'? No.
        */
 
 
@@ -814,29 +823,47 @@ static void chat(struct client_state *csp)
           */
          if (n == 0)
          {
-            /* This hack must only be enforced for headers. */
+            
             if (server_body || http->ssl)
             {
-#ifdef PCRS
-               if (filtering)
+               /*
+                * If we have been buffering up the document,
+                * now is the time to apply content modification
+                * and send the result to the client.
+                */
+               if (content_filter)
                {
-                  p = re_process_buffer(csp);
+                  /*
+                   * If the content filter fails, use the original
+                   * buffer and length.
+                   * (see p != NULL ? p : csp->iob->cur below)
+                   */
+                  if (NULL == (p = (*content_filter)(csp)))
+                  {
+                     csp->content_length = csp->iob->eod - csp->iob->cur;
+                  }
+
                   hdr = sed(server_patterns, add_server_headers, csp);
                   n = strlen(hdr);
+
                   if ((write_socket(csp->cfd, hdr, n) != n)
-                      || (write_socket(csp->cfd, p, csp->content_length) != csp->content_length))
+                      || (write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length) != csp->content_length))
                   {
                      log_error(LOG_LEVEL_CONNECT, "write modified content to client failed: %E");
                      return;
                   }
-               freez(hdr);
-               freez(p);
+
+                  freez(hdr);
+                  freez(p);
                }
-#endif /* def PCRS */
+
                break; /* "game over, man" */
             }
 
-            /* Let's pretend the server just sent us a blank line. */
+            /*
+             * This is NOT the body, so 
+             * Let's pretend the server just sent us a blank line.
+             */
             n = sprintf(buf, "\r\n");
 
             /*
@@ -854,13 +881,13 @@ static void chat(struct client_state *csp)
 
          if (server_body || http->ssl)
          {
-#ifdef PCRS
-            if (filtering)
+
+            if (content_filter)
             {
                add_to_iob(csp, buf, n); /* Buffer the body for filtering */
             }
+
             else
-#endif /* def PCRS */
             {
                /* just write */
                if (write_socket(csp->cfd, buf, n) != n)
@@ -939,36 +966,38 @@ static void chat(struct client_state *csp)
 #ifdef KILLPOPUPS
             /* Start blocking popups if appropriate. */
 
-            if (csp->is_text  &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&  /* We talk plaintext */
-                block_popups)     /* Policy allows */
+            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
+                !http->ssl    &&                  /* We talk plaintext */
+                block_popups)                     /* Policy allows */
             {
                block_popups_now = 1;
             }
 
 #endif /* def KILLPOPUPS */
 
-#ifdef PCRS
-            /* Start re_filtering this if appropriate. */
+            /* Buffer and pcrs filter this if appropriate. */
 
-            if (csp->is_text  &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&  /* We talk plaintext */
-                pcrs_filter)      /* Policy allows */
+            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
+                !http->ssl    &&                  /* We talk plaintext */
+                pcrs_filter)                      /* Policy allows */
             {
-               filtering = 1;
+               content_filter = pcrs_filter_response;
             }
 
-/* This next line is a little ugly, but it simplifies the if statement below. */
-/* Basically if using PCRS, we want the OR condition to require "!filtering"  */
-#define NOT_FILTERING_AND !filtering &&
+            /* Buffer and gif_deanimate this if appropriate. */
 
-#else /* not def PCRS */
+            if ((csp->content_type & CT_GIF)  &&  /* It's a image/gif MIME-Type */
+                !http->ssl    &&                  /* We talk plaintext */
+                gif_deanimate)                    /* Policy allows */
+            {
+               content_filter = gif_deanimate_response;
+            }
 
-#define NOT_FILTERING_AND
 
-#endif /* def PCRS */
-
-            if (NOT_FILTERING_AND ((write_socket(csp->cfd, hdr, n) != n)
+            /*
+             * Only write if we're not buffering for content modification
+             */
+            if (!content_filter && ((write_socket(csp->cfd, hdr, n) != n)
                 || (n = flush_socket(csp->cfd, csp) < 0)))
             {
                log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
@@ -981,7 +1010,7 @@ static void chat(struct client_state *csp)
                return;
             }
 
-            NOT_FILTERING_AND (byte_count += n);
+            !content_filter && (byte_count += n);
 
             /* we're finished with the server's header */
 
