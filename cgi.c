@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.34 2001/10/18 22:22:09 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.35 2001/10/23 21:48:19 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,18 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.34 2001/10/18 22:22:09 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.35  2001/10/23 21:48:19  jongfoster
+ *    Cleaning up error handling in CGI functions - they now send back
+ *    a HTML error page and should never cause a FATAL error.  (Fixes one
+ *    potential source of "denial of service" attacks).
+ *
+ *    CGI actions file editor that works and is actually useful.
+ *
+ *    Ability to toggle JunkBuster remotely using a CGI call.
+ *
+ *    You can turn off both the above features in the main configuration
+ *    file, e.g. if you are running a multi-user proxy.
+ *
  *    Revision 1.34  2001/10/18 22:22:09  david__schmidt
  *    Only show "Local support" on templates conditionally:
  *      - if either 'admin-address' or 'proxy-info-url' are uncommented in config
@@ -269,16 +281,13 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "show-url-info",
          cgi_show_url_info, 
          "Show which actions apply to a URL and why"  },
-#ifdef FEATURE_CGI_EDIT_ACTIONS
    { "toggle",
          cgi_toggle, 
          "Toggle JunkBuster on or off" },
+#ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions",
          cgi_edit_actions, 
          "Edit the actions list" },
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
-
-#ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions-for-url",
          cgi_edit_actions_for_url, 
          NULL /* Edit the actions for (a) specified URL(s) */ },
@@ -1015,7 +1024,7 @@ void free_http_response(struct http_response *rsp)
 
 /*********************************************************************
  *
- * Function    :  fill_template
+ * Function    :  template_load
  *
  * Description :  CGI support function that loads a given HTML
  *                template from the confdir, ignoring comment
@@ -1264,6 +1273,7 @@ jb_err template_fill_for_cgi(struct client_state *csp,
    free_map(exports);
    return err;
 }
+
 
 /*********************************************************************
  *
