@@ -54,7 +54,7 @@ to continue development.
 For tarball, first unpack:
 
  tar xzvf ijb_source_* [.tgz or .tar.gz]
- cd ijb_source_2.9.9_alpha
+ cd ijb_source_2.9.10_alpha
 
  autoheader   [suggested for CVS source]
  autoconf     [suggested for CVS source]
@@ -88,14 +88,14 @@ Or for SuSE:   /etc/rc.d/junkbuster start
 
 The only command line option supported is the location of the 
 main configuration file. If none is specified, Junkbuster will 
-look for a file named 'config' for unix, junkbstr.txt for win
+look for a file named 'config' for unix, config.txt for Win32 
 in the current directory.
 
 
  CONFIGURATION
 --------------
 
-See: 'config', 'actionsfile', and 're_filterfile'. These are all well
+See: 'config', 'ijb.action', and 're_filterfile'. These are all well
 commented. On Unix-like systems, these files are installed in /etc/junkbuster.
 On Windows, then wherever the executable itself is installed. There are many
 significant changes and advances since v2.0.x. The user-manual has a 
@@ -105,6 +105,9 @@ http://ijbswa.sourceforge.net/user-manual/.
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>,
 or whatever you specify in the config file under 'listen-address'.
 DEFAULT is localhost:8000.
+
+The ijb.action file can be configured via the web interface accessed via
+http://i.j.b/, as well other options.
 
 
  DOCUMENTATION
@@ -135,4 +138,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.7 2001/10/26 18:36:52 swa Exp $
+$Id: README,v 1.8 2001/11/05 21:54:48 steudten Exp $
