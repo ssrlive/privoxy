@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.11 2002/03/11 18:42:27 swa Exp $
+ $Id: faq.sgml,v 1.12 2002/03/11 20:13:21 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.11 2002/03/11 18:42:27 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.12 2002/03/11 20:13:21 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -55,27 +55,279 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+
+<!--
 <sect1 id="introduction"><title>Introduction</title>
 <para>
    Fillme.
 </para>
 </sect1>
-
+-->
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="questions"><title>Frequently Asked Questions</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2 id="installation"><title>Installation</title>
+<sect2 id="general"><title>General Information</title>
+
+<sect3 id="newjb"><title>What is this new <application>Junkbuster</application>?</title>
  <para>
-   Fillme.
+  The original <application>Junkbuster</application> was a product of 
+  Junkbusters Corporation (tm). Development of this effort stopped 
+  as of version 2.0.2. Stefan Walherr started the ijbswa project on 
+  <ulink url="http://ijbswa.sourceforge.net">Sourceforge</ulink> to 
+  rekindle development. Other developers subsequently joined with 
+  Stefan, and have since added many new features and enhancements.
  </para>
+</sect3>
+
+<sect3 id="differs"><title>How does it differ from the old <application>Junkbuster?</application></title>
+ <para>
+   All the old features remain. The new <application>Junkbuster</application> 
+   still blocks ads and banners, still manages cookies, and protects 
+   privacy. But, these are all enhanced, and many new features have been 
+   added, all in the same vein.
+ </para>
+ <para>
+  The configuration has changed significantly. This is something that users
+  will notice right off the bat. The <quote>blocklist</quote> file does 
+  not exist any more. This is replaced by <quote>actions</quote>
+  files, such as <filename>ijb.actions</filename>. This is where most of 
+  the per site configuration is now.
+
+ </para>
+</sect3>
+
+<sect3 id="features"><title>What are some of the new features?</title>
+<!--
+ The section is in both user-manual and faq. Please keep in sync!!!
+-->
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+   Integrated browser based configuration and control utility (<ulink
+   url="http://i.j.b">http://i.j.b</ulink>). Browser-based tracing of rule
+   and filter effects.
+  </para>
+ </listitem> 
+<!--
+ <listitem>
+  <para>
+   Modularized configuration that will allow for system wide settings, and
+   individual user settings. (not implemented yet, probably a 3.1 feature)
+  </para>
+ </listitem> 
+-->
+ <listitem>
+  <para>
+    Blocking of annoying pop-up browser windows.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Support for Perl Compatible Regular Expressions in the configuration files, and 
+   generally a more sophisticated and flexible configuration syntax over
+   previous versions. 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   GIF de-animation. 
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Web page content filtering (removes banners based on size,
+   invisible <quote>web-bugs</quote>, JavaScript, pop-ups, status bar abuse,
+   etc.)
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Bypass many click-tracking scripts (avoids script redirection).
+ 
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Multi-threaded (POSIX and native threads).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Auto-detection and re-reading of config file changes.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   User-customizable HTML templates (e.g. 404 error page).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Improved cookie management features (e.g. session based cookies).
+  </para>
+</listitem> 
+
+ <listitem>
+  <para>
+   Builds from source on most UNIX-like systems. Packages available for: Linux
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
+ 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   In addition, the configuration is much more powerful and versatile over-all.
+  </para>
+</listitem> 
+
+ </itemizedlist>
+</para>
+
+</sect3>
+
+<sect3 id="proxymoron"><title>How does <application>Junkbuster</application>
+ work? What is a <quote>proxy</quote>?</title>
+ <para>
+  When you connect to a web site with <application>Junkbuster</application>, 
+  you are really connecting to your locally running version of 
+  <application>Junkbuster</application>. <application>Junkbuster</application>
+  intercepts your requests for the web page, and relays that to the 
+  <quote>real</quote> web site. The web site sends the HTTP data stream 
+  back to <application>Junkbuster</application>, where
+  <application>Junkbuster</application> can work its magic before it 
+  relays this data back to your web browser.
+
+ </para>
+
+ <para>
+  Since <application>Junkbuster</application> sits between you and the 
+  WWW, it is in a position to intercept and completely manage all web traffic and 
+  HTTP content before it gets to your browser.
+  <application>Junkbuster</application> uses various programming methods to do
+  this, all of which is under your control via the various configuration
+  files.
+
+ </para>
+</sect3>
+
+<sect3 id="browsers2"><title>My browser does the same things as 
+Junkbuster. Why should I use Junkbuster at all?</title>
+ <para>
+  Modern browsers do indeed have <emphasis>some</emphasis> of the same
+  functionality as <application>Junkbuster</application>. Maybe this is
+  adequate for you. But <application>Junkbuster</application> is much more
+  verstatile and flexible, and can do some things that browsers just can't.
+ </para>
+ <para>
+  In addition, a proxy is good choice if you use multiple browsers, or 
+  have a LAN with multiple computers. This way all the configuration 
+  is in one place, and you don't have to maintain a similar configuration 
+  for possibly many browsers.
+
+ </para>
+</sect3>
+
+
+
+<sect3 id="license"><title>Is there is a license or fee? What about a 
+warranty? Registration?</title>
+ <para>
+  <application>Junkbuster</application> is licensed under the 
+  GNU General Public License (GPL). It is free to use, copy, 
+  modify or distribute as you wish.
+ </para>
+ <para>
+  There is no warranty of any kind, expressed, implied or otherwise. That is something
+  that would cost real money ;-) There is no registration either. 
+  <application>Junkbuster</application> really is <emphasis>free</emphasis>
+  in every respect!
+
+ </para>
+</sect3>
+
+
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2 id="installation"><title>Installation</title>
+<sect3 id="newinstall"><title>Can I install the new 
+ <application>Junkbuster</application> over the old one?</title>
+ <para>
+   We recommend you uninstall the old <application>Junkbuster</application>
+   first to minimize conflicts and confusion. You may want to 
+   save your old configuration files for future reference.
+ </para>
+ <para>
+  See the user-manual for platform specific installation instructions.
+
+ </para>
+ 
+</sect3>
+
+<sect3 id="localhost"><title>What is the proxy address of Junkbuster?</title>
+ <para>
+  If you set up the <application>Junkbuster</application> to run on
+  the computer you browse from (rather than your ISP's server or some
+  networked computer on a LAN), the proxy will be on <quote>localhost</quote>
+  (which is the special name used by every computer on the Internet to refer
+  to itself) and the port will be 8118 (unless you have told the Internet
+  Junkbuster to run on a different port with the
+  <emphasis>listen-address</emphasis> config option). 
+ </para>
+ <para>
+  So you when configuring your browser's proxy settings you typically enter
+  the word <quote>localhost</quote> in the boxes next to <quote>HTTP</quote>
+  and <quote>Secure</quote> (HTTPS) and then the number <quote>8118</quote>
+  for <quote>port</quote>.  
+ </para>
+ <para>
+  <application>Junkbuster</application> can also be used to proxy for 
+  a Local Area Network. In this case, your would enter either the IP 
+  address of the LAN host where <application>Junkbuster</application> 
+  is running, or the equivalent hostname. Port assignment would be 
+  same as above.
+ </para>
+ <para>
+  <application>Junkbuster</application> does not currently handle
+  protocols such as FTP, SMTP, IM, IRC, ICQ, or other Internet
+  protocols. 
+ </para>
+</sect3>
+
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2 id="configuration"><title>Configuration</title>
+
+<sect3 id="newconfig"><title>Can I use my old config files?</title>
+ <para>
+   No. These will not work. You will need to re-enter your old 
+   data into the new configuration structure.
+ </para>
+</sect3>
+
 
 <sect3 id="yahoo"><title>How can I make my Yahoo account work?</title>
  <para>
@@ -452,6 +704,9 @@ more through Google.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.12  2002/03/11 20:13:21  swa
+typo
+
 Revision 1.11  2002/03/11 18:42:27  swa
 new section
 
