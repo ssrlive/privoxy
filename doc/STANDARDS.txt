@@ -215,7 +215,12 @@ if ( 1 == X )
 
 @@@ Explanation:
 
-Seperate words via an underscore ('_').
+Use all lowercase, and seperate words via an underscore ('_').
+Do not start an identifier with an underscore.  (ANSI C
+reserves these for use by the compiler and system headers.)
+Do not use identifiers which are reserved in ANSI C++.
+(E.g. template, class, true, false, ...).  This is in case
+we ever decide to port JunkBuster to C++.
 
 @@@ Example:
 
@@ -231,16 +236,21 @@ int msIis5Hack = 0;
 
 @@@ Explanation:
 
-Seperate words via an underscore ('_').
+Use all lowercase, and seperate words via an underscore ('_').
+Do not start an identifier with an underscore.  (ANSI C
+reserves these for use by the compiler and system headers.)
+Do not use identifiers which are reserved in ANSI C++.
+(E.g. template, class, true, false, ...).  This is in case
+we ever decide to port JunkBuster to C++.
 
 @@@ Example:
 
-int load_aclfile( struct client_state *csp )
+int load_some_file( struct client_state *csp )
 
 @@@ Instead of:
 
-int loadaclfile( struct client_state *csp )
-int loadAclFile( struct client_state *csp )
+int loadsomefile( struct client_state *csp )
+int loadSomeFile( struct client_state *csp )
 
 
 @@ Header file prototypes
@@ -262,35 +272,30 @@ that you use in the c file.
 (.c) int load_aclfile( struct client_state *csp )
 
 
-18.  Ennumerations, and #defines
+@@  Enumerations, and #defines
 
 @@@ Explanation:
 
 Use all capital letters, with underscores between words.
+Do not start an identifier with an underscore.  (ANSI C
+reserves these for use by the compiler and system headers.)
 
 @@@ Example:
 
 (enumeration) : enum Boolean { FALSE, TRUE };
 (#define) : #define DEFAULT_SIZE 100;
 
-@@@ Note: We should have a standard naming scheme for Symbols that
-toggle a feature in the precompiler, and the constants used by that
-feature. I'd propose that the toggles should be just one word, with
-a common prefix, and that any depandant constants should be
-prefixed by that word.
-
-The prefix could be WITH_, HAVE_, ENABLE_, FEATURE_ etc.
-
-@@@ Status: I see some this in the code currently!  Anybody "figured"
-out a standard way to do this?
+@@@ Note: We have a standard naming scheme for #defines that
+toggle a feature in the preprocessor: FEATURE_xxx, where 
+xxx is a short (preferably 1 or 2 word) description.
 
 @@@ Example:
 
-#define ENABLE_FORCE 1
+#define FEATURE_FORCE 1
 
-#ifdef ENABLE_FORCE
+#ifdef FEATURE_FORCE
 #define FORCE_PREFIX blah
-#endif /* def ENABLE_FORCE */
+#endif /* def FEATURE_FORCE */
 
 
 @@ Constants
@@ -694,15 +699,37 @@ Prevents compiler and linker errors resulting from redefinition of
 items.
 
 Wrap each header file with the following syntax to prevent multiple
-inclusions of the file.  Of course, replace FILENAME_UPPERCASE with
+inclusions of the file.  Of course, replace PROJECT_H with
 your file name, with "." Changed to "_", and make it uppercase.
 
 @@@ Example:
 
-#ifndef _PROJECT_H
-#define _PROJECT_H
-   ...
-#endif /* ndef _PROJECT_H */
+#ifndef PROJECT_H_INCLUDED
+#define PROJECT_H_INCLUDED
+ ...
+#endif /* ndef PROJECT_H_INCLUDED */
+
+
+@@ Use `extern "C"` when appropriate
+
+@@@ Explanation:
+
+If our headers are included from C++, they must declare our 
+functions as `extern "C"`.  This has no cost in C, but increases
+the potential re-usability of our code.
+
+@@@ Example:
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif /* def __cplusplus */
+
+... function definitions here ...
+
+#ifdef __cplusplus
+}
+#endif /* def __cplusplus */
 
 
 @@ Where Possible, Use Forward Struct Declaration Instead of Includes
@@ -728,6 +755,15 @@ prototype a pointer, however, the header file is unneccessary.
 
 
 @ General Coding Practices
+
+
+@@ Turn on warnings
+
+@@@ Explanation
+
+Compiler warnings are meant to help you find bugs.  You should turn
+on as many as possible.  With GCC, the switch is "-Wall".  Try and 
+fix as many warnings as possible.
 
 
 @@ Provide a default case for all switch statements
@@ -802,6 +838,17 @@ platforms, int has the range of short.
 (including X/GNU-Emacs), there are typedefs to int4, int8, int16, (or
 equivalence ... I forget the exact typedefs now).  Should we add these
 to IJB now that we have a "configure" script?
+
+
+@@ Don't mix size_t and other types
+
+@@@Explanation:
+
+The type of size_t varies across platforms.  Do not make assumptions
+about whether it is signed or unsigned, or about how long it is.
+Do not compare a size_t against another variable of a different type
+(or even against a constant) without casting one of the values.  
+Try to avoid using size_t if you can.
 
 
 @@ Declare each variable and struct on its own line.
@@ -924,10 +971,10 @@ thing (tm)", it will be easier to identify and include in the project
 
 @@@ Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.3 2001/07/02 01:50:04 iwanttokeepanon Exp $";
+const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.4 2001/07/13 01:27:19 iwanttokeepanon Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
+ * File        :  $S<!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -957,23 +1004,7 @@ const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.3 2001/07/02 01:50:04 iwantt
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: STANDARDS.txt,v $
- *    Revision 1.3  2001/07/02 01:50:04  iwanttokeepanon
- *    A modified STANDARDS.txt file.  I removed my XEmacs test lines (commited in v1.2)
- *    and made the file Outline-mode compatible.  I used "@" for my header lines instead
- *    of "*" (which interfered in some C comments).  I also removed the formfeed character
- *    from the `outline-regexp' variable because it interfered with the "H" file header and
- *    the "C" file header comments.
- *
- *    All of the "stardards points/issues" are still available for discussion, cussing,
- *    and/or flaming <G>.
- *
- *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
- *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
- *
- *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
- *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
- *
+ *    $L<!-- Break CVS Substitution -->og$
  *
  *********************************************************************/
 
@@ -999,10 +1030,10 @@ and get to the heart of the code (via `forward-page' and
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.3 2001/07/02 01:50:04 iwanttokeepanon Exp $"
+#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.4 2001/07/13 01:27:19 iwanttokeepanon Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
+ * File        :  $S<!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1032,23 +1063,7 @@ and get to the heart of the code (via `forward-page' and
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: STANDARDS.txt,v $
- *    Revision 1.3  2001/07/02 01:50:04  iwanttokeepanon
- *    A modified STANDARDS.txt file.  I removed my XEmacs test lines (commited in v1.2)
- *    and made the file Outline-mode compatible.  I used "@" for my header lines instead
- *    of "*" (which interfered in some C comments).  I also removed the formfeed character
- *    from the `outline-regexp' variable because it interfered with the "H" file header and
- *    the "C" file header comments.
- *
- *    All of the "stardards points/issues" are still available for discussion, cussing,
- *    and/or flaming <G>.
- *
- *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
- *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
- *
- *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
- *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
- *
+ *    $L<!-- Break CVS Substitution -->og$
  *
  *********************************************************************/
 
