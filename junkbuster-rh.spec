@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.37 2002/03/07 19:23:49 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.38 2002/03/08 13:45:27 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -157,6 +157,8 @@ fi
 #if [ "$1" -ge "1" ]; then
 #	/sbin/service %{name} condrestart > /dev/null 2>&1
 #fi
+# dont forget to remove user and group junkbuster
+id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -424,6 +426,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.38  2002/03/08 13:45:27  morcego
+# Adding libtool to Buildrequires
+#
 # Revision 1.37  2002/03/07 19:23:49  swa
 # i hate to scroll. suse: wrong configdir.
 #
