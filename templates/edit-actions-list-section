@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-list-section,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-list-section,v $
 #
 # Purpose     :  Template which forms part of edit-actions-list
 # 
@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-section,v $
+#    Revision 1.14  2002/05/21 19:12:43  oes
+#     - Added client-side JavaScript versions of edit and add URL forms
+#     - Moved jump targets to before container table cell
+#
 #    Revision 1.13  2002/05/12 15:45:33  jongfoster
 #    Applying [Patch 552094] New templates for edit-actions-list
 #    This cleans up the templates by:
@@ -93,13 +97,13 @@
 
 <tr><td class="container"><a name="l@s@"></a>
 <table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
-<tr class="actions"><td class="header">Actions</td></tr>
+<tr class="actions"><td class="header"><a href="@user-manual@@actions-help-prefix@ACTIONS">Actions</a>:</td></tr>
 <tr class="actions"><td class="indentbuttons"><a href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td></tr>
 <tr class="actions"><td class="action">@actions@</td></tr>
-<tr class="url"><td class="header">URL patterns</td></tr>
+<tr class="url"><td class="header"><a href="@user-manual@@actions-help-prefix@AF-PATTERNS">URL patterns</a>:</td></tr>
 <tr class="url"><td class="indentbuttons"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@" onclick="return a_p(@s@);">Add</a></td></tr>
 @urls@
-<tr class="adv"><td class="header">Advanced</td></tr>
+<tr class="adv"><td class="header">Advanced:</td></tr>
 <tr class="adv"><td class="indentbuttons">
 @if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@#l@s-prev@">Move section up</a> &nbsp; @if-s-prev-exists-end@
 @if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@#l@s@">Move section down</a> &nbsp; @if-s-next-exists-end@
