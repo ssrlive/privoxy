@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.17 2002/03/08 13:45:48 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.18 2002/03/08 14:17:14 oes Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.17 2002/03/08 13:45:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.18  2002/03/08 14:17:14  oes
+ *    Fixing -Wconversion warnings
+ *
  *    Revision 1.17  2002/03/08 13:45:48  oes
  *    Hiding internal functions
  *
@@ -214,7 +217,7 @@ static int pcrs_parse_perl_options(const char *optstring, int *flags)
 
    if (NULL == optstring) return 0;
 
-   for (i=0; i < strlen(optstring); i++)
+   for (i = 0; i < strlen(optstring); i++)
    {
       switch(optstring[i])
       {
@@ -311,7 +314,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
     */
    else
    {
-      while(i < length)
+      while (i < (int)length)
       {
          /* Quoting */
          if (replacement[i] == '\\')
@@ -325,7 +328,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
             {
                if (replacement[i+1] && strchr("tnrfae0", replacement[i+1]))
                {
-                  switch(replacement[++i])
+                  switch (replacement[++i])
                   {
                   case 't':
                      text[k++] = '\t';
@@ -361,15 +364,15 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
          }
 
          /* Backreferences */
-         if (replacement[i] == '$' && !quoted && i < length - 1)
+         if (replacement[i] == '$' && !quoted && i < (int)(length - 1))
          {
             char *symbol, symbols[] = "'`+&";
             r->block_length[l] = k - r->block_offset[l];
 
             /* Numerical backreferences */
-            if (isdigit((int) replacement[i + 1]))
+            if (isdigit((int)replacement[i + 1]))
             {
-               while (i < length && isdigit((int) replacement[++i]))
+               while (i < (int)length && isdigit((int)replacement[++i]))
                {
                   r->backref[l] = r->backref[l] * 10 + replacement[i] - 48;
                }
@@ -543,7 +546,7 @@ pcrs_job *pcrs_compile_command(const char *command, int *errptr)
 
    tokens[l] = (char *) malloc(limit + 1);
 
-   for (i=0; i <= limit; i++)
+   for (i = 0; i <= (int)limit; i++)
    {
       
       if (command[i] == delimiter && !quoted)
@@ -808,12 +811,12 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
     */
    newsize = subject_length;
 
-   while ((submatches = pcre_exec(job->pattern, job->hints, subject, (int) subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
+   while ((submatches = pcre_exec(job->pattern, job->hints, subject, (int)subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
    {
       job->flags |= PCRS_SUCCESS;
       matches[i].submatches = submatches;
 
-      for (k=0; k < submatches; k++)
+      for (k = 0; k < submatches; k++)
       {
          matches[i].submatch_offset[k] = offsets[2 * k];
 
@@ -839,7 +842,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
       /* Storage for matches exhausted? -> Extend! */
       if (++i >= max_matches)
       {
-         max_matches = (int) (max_matches * PCRS_MAX_MATCH_GROW);
+         max_matches = (int)(max_matches * PCRS_MAX_MATCH_GROW);
          if (NULL == (dummy = (pcrs_match *)realloc(matches, max_matches * sizeof(pcrs_match))))
          {
             free(matches);
@@ -854,9 +857,6 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
 
       /* Don't loop on empty matches */
       if (offsets[1] == offset)
-         /* FIXME: is offset an int or a size_t?  Previous line compares
-          * against int, the next one compares against size_t.
-          */
          if ((size_t)offset < subject_length)
             offset++;
          else
@@ -890,14 +890,14 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
    offset = 0;
    result_offset = *result;
 
-   for (i=0; i < matches_found; i++)
+   for (i = 0; i < matches_found; i++)
    {
       /* copy the chunk preceding the match */
-      memcpy(result_offset, subject + offset, (size_t) matches[i].submatch_offset[0] - offset); 
+      memcpy(result_offset, subject + offset, (size_t)matches[i].submatch_offset[0] - offset); 
       result_offset += matches[i].submatch_offset[0] - offset;
 
       /* For every segment of the substitute.. */
-      for (k=0; k <= job->substitute->backrefs; k++)
+      for (k = 0; k <= job->substitute->backrefs; k++)
       {
          /* ...copy its text.. */
          memcpy(result_offset, job->substitute->text + job->substitute->block_offset[k], job->substitute->block_length[k]);
