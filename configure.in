@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.57 2002/04/04 00:36:36 gliptak Exp $
+dnl $Id: configure.in,v 1.58 2002/04/04 20:49:20 swa Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.58  2002/04/04 20:49:20  swa
+dnl attempt to consolidate the
+dnl different dokbook versions.
+dnl
 dnl Revision 1.57  2002/04/04 00:36:36  gliptak
 dnl always use pcre for matching
 dnl
@@ -327,7 +331,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.57 $)
+AC_REVISION($Revision: 1.58 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
@@ -391,12 +395,9 @@ dnl Checks for programs needed to build.
 dnl =================================================================
 AC_PROG_CC
 AC_PROG_CPP
-AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-dnl RANLIB is for PCRE:
-AC_PROG_RANLIB
 
 AC_CHECK_PROG(GDB,gdb,yes,no)
 
