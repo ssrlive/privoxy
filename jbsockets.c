@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.21 2002/01/09 14:32:33 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.22 2002/03/04 02:08:02 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.21 2002/01/09 14:32:33 oes Ex
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.22  2002/03/04 02:08:02  david__schmidt
+ *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
+ *
  *    Revision 1.21  2002/01/09 14:32:33  oes
  *    Added support for gethostbyname_r and gethostbyaddr_r.
  *
@@ -443,11 +446,9 @@ int bind_port(const char *hostnam, int portnum)
 {
    struct sockaddr_in inaddr;
    int fd;
-#if 0
 #ifndef _WIN32
    int one = 1;
 #endif /* ndef _WIN32 */
-#endif
 
    memset((char *)&inaddr, '\0', sizeof inaddr);
 
@@ -474,17 +475,18 @@ int bind_port(const char *hostnam, int portnum)
       return(-1);
    }
 
-#if 0
 #ifndef _WIN32
    /*
-    * FIXME: This is not needed for Win32 - in fact, it stops
+    * This is not needed for Win32 - in fact, it stops
     * duplicate instances of JunkBuster from being caught.
-    * Is this really needed under UNIX, or should it be taked out?
-    * -- Jon
+    *
+    * On UNIX, we assume the user is sensible enough not
+    * to start JunkBuster multiple times on the same IP.
+    * Without this, stopping and restarting JunkBuster
+    * from a script fails.
     */
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
-#endif
 
    if (bind (fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
    {
