@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.6 2002/03/09 20:03:52 jongfoster Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.7 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.6 2002/03/09 20:03:52 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 1.7  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.6  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -83,7 +86,7 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.6 2002/03/09 20:03:52 jongfoster Exp 
 const char amiga_h_rcs[] = AMIGA_H_VERSION;
 
 unsigned long __stack = 100*1024;
-static char ver[] = "$VER: junkbuster " __AMIGAVERSION__ " (" __AMIGADATE__ ")";
+static char ver[] = "$VER: Privoxy " __AMIGAVERSION__ " (" __AMIGADATE__ ")";
 struct Task *main_task = NULL;
 int childs = 0;
 
