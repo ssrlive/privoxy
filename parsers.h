@@ -1,6 +1,6 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.1.1.1 2001/05/15 13:59:01 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,19 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.2  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:01  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -90,6 +103,10 @@ extern char *server_set_cookie(const struct parsers *v, char *s, struct client_s
 #if defined(PCRS) || defined(KILLPOPUPS)
 extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
 #endif /* defined(PCRS) || defined(KILLPOPUPS) */
+
+#ifdef PCRS
+extern char *content_length(const struct parsers *v, char *s, struct client_state *csp);
+#endif /* def PCRS */
 
 #ifdef FORCE_LOAD
 char *client_host(const struct parsers *v, char *s, struct client_state *csp);

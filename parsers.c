@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.4 2001/05/22 18:46:04 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.5 2001/05/26 00:28:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.4 2001/05/22 18:46:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.5  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.4  2001/05/22 18:46:04  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -183,8 +190,10 @@ const struct parsers server_patterns[] = {
    { "connection:",        11, crumble },
 #if defined(PCRS) || defined(KILLPOPUPS)
    { "Content-Type:",      13, content_type },
-   { "Content-Length:",    15, crumble },
 #endif /* defined(PCRS) || defined(KILLPOPUPS) */
+#ifdef PCRS
+   { "Content-Length:",    15, content_length },
+#endif /* def PCRS */
    { NULL, 0, NULL }
 };
 
@@ -794,8 +803,38 @@ char *content_type(const struct parsers *v, char *s, struct client_state *csp)
    return(strdup(s));
 
 }
-
 #endif /* defined(PCRS) || defined(KILLPOPUPS) */
+
+#ifdef PCRS
+/*********************************************************************
+ *
+ * Function    :  content_length
+ *
+ * Description :  Crunch Content-Length header if & only if we are
+ *                filtering this page through PCRS.
+ *
+ * Parameters  :
+ *          1  :  v = ignored
+ *          2  :  s = header string we are "considering"
+ *          3  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ *
+ *********************************************************************/
+char *content_length(const struct parsers *v, char *s, struct client_state *csp)
+{
+   if ((csp->permissions & PERMIT_RE_FILTER) != 0)
+   {
+      log_error(LOG_LEVEL_HEADER, "crunch!");
+      return(NULL);
+   }
+   else
+   {
+      return(strdup(s));
+   }
+}
+
+#endif /* def PCRS */
 
 
 /*********************************************************************
