@@ -2,7 +2,7 @@
 #define CONFIG_H_INCLUDED
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/vc_config_pthreads.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -36,7 +36,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h.win,v $
+ *    $Log: vc_config_pthreads.h,v $
+ *    Revision 1.1  2002/04/06 20:38:01  jongfoster
+ *    Renaming VC++ versions of config.h
+ *
  *    Revision 1.20  2002/04/03 22:28:03  gliptak
  *    Removed references to gnu_regex
  *
@@ -199,12 +202,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 13
+#define VERSION_POINT 14
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.13"
+#define VERSION "2.9.14"
 
 /*
  * Status of the code: alpha, beta or stable
