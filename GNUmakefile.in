@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.80 2002/04/11 12:50:00 oes Exp $
+# $Id: GNUmakefile.in,v 1.81 2002/04/11 14:40:27 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -470,7 +470,8 @@ win-dist:
 tarball-dist: dist-check clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 
-	for i in `find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; do \
+	for i in `find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \
+	 -o -name ".cvsignore" -o -path "*/debian/*" \)`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
@@ -784,6 +785,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.81  2002/04/11 14:40:27  oes
+# Fixed typo -- Thanks, Moritz!
+#
 # Revision 1.80  2002/04/11 12:50:00  oes
 # Fixed tarball-dist target
 #
