@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.21  2002/03/12 11:59:20  oes
+#     Beefed up Buzzword Bingo
+#
 #     Revision 1.20  2002/03/12 01:42:50  oes
 #     Introduced modular filters
 #
@@ -84,6 +87,8 @@
 #
 # Syntax:
 #
+#################################################################################
+#
 # Filters start with a line "FILTER: name". They are then referrable
 # from the actionsfile with +filter{name}
 #
@@ -113,12 +118,14 @@
 #################################################################################
 FILTER: html-annoyances
 
-# New browser windows should be resizeable and have a location and status bar
+# New browser windows (if allowed -- see no-popups filter below) should be
+# resizeable and have a location and status bar
 #
-s/resizable="?(no|0)"?/resizable=1/ig s/noresize/yesresize/ig
-s/location="?(no|0)"?/location=1/ig s/status="?(no|0)"?/status=1/ig
-s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
-s/menubar="?(no|0)"?/menubar=1/ig 
+s/(<a\s+href[^>]+)resizable="?(no|0)"?(.*>)/$1resizable=1$3/igU 
+s/(<a\s+href[^>]+)location="?(no|0)"?(.*>)/$1location=1$3/igU 
+s/(<a\s+href[^>]+)status="?(no|0)"?(.*>)/$1status=1$3/igU
+s/(<a\s+href[^>]+)scrolling="?(no|0|auto)"?(.*>)/$1scrolling=no$3/igU
+s/(<a\s+href[^>]+)menubar="?(no|0)"?(.*>)/$1menubar=1$3/igU
 
 # The <BLINK> tag was a crime!
 #
@@ -126,9 +133,8 @@ s*<blink>|</blink>**ig
 
 # Is this evil? 
 #
-#s/framespacing="?(no|0)"?//ig
 #s/margin(height|width)=[0-9]*//gi
-
+#s/noresize/yesresize/igU
 
 #################################################################################
 #
@@ -156,24 +162,25 @@ s/(<body .*)onunload(.*>)/$1never$2/iU
 
 ##################################################################################
 #
-# no-poups: Kill all popups in JS and HTML
+# no-popups: Kill all popups in JS and HTML
 #
 #################################################################################
-FILTER: no-poups
+FILTER: no-popups
 
-s/window\.open\(/1;''\.concat\(/ig      # JavaScript
-s/target=['"]?_blank['"]?/target_who/g  # HTML
-
+s/window\.open\(/1;''\.concat\(/ig           # JavaScript
+s/target=['"]?_blank['"]?/target_crunched/ig # HTML
+s/target=['"]?_new['"]?/target_crunched/ig   # HTML
 
 #################################################################################
 #
-# frameset-borders: Give frames a border
+# frameset-borders: Give frames a border and make them resizable
 #
 #################################################################################
 FILTER: frameset-borders
 
-s/(<frameset[^>]+?)border=['"]?(no|0)['"]?/$1/ig
-s/(<frameset[^>]+?)frameborder=['"]?(no|0)['"]?/$1/ig
+s/(<frameset[^>]+)framespacing=['"]?(no|0['"]?(.*>)/$1$3/igU
+s/(<frameset[^>]+)border=['"]?(no|0)['"]?(.*>)/$1$3/igU
+s/(<frameset[^>]+)frameborder=['"]?(no|0)['"]?(.*>)/$1$3/igU
 
 
 #################################################################################
@@ -212,7 +219,7 @@ s/microsoft(?!.com)/MicroSuck/ig
 #
 s* industry[ -]leading \
 |  cutting[ -]edge \
-|  award[ -]winning # Comments are OK, too!\
+|  award[ -]winning # Comments are OK, too! \
 |  high[ -]performance \
 |  solutions[ -]based \
 |  unmatched \
