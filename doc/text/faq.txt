@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $
+$Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -121,12 +121,12 @@ Table of Contents
 
 1.1. What is this new version of Privoxy?
 
-The original Internet JunkbusterTM (tm) is a copyrighted product of Junkbusters
-Corporation. Development of this effort stopped some time ago as of version
-2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to rekindle
-development. Other developers subsequently joined with Stefan, and have since
-added many new features, refinements and enhancements. The result of this
-effort is Privoxy.
+The original Internet Junkbuster&trade; (tm) is a copyrighted product of 
+Junkbusters Corporation. Development of this effort stopped some time ago as of
+version 2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to
+rekindle development. Other developers subsequently joined with Stefan, and
+have since added many new features, refinements and enhancements. The result of
+this effort is Privoxy.
 
 Privoxy has evolved from the Junkbuster 2.0.2 code base, and has advanced
 significantly at this point.

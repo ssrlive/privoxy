@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $
+$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -100,23 +100,24 @@ Table of Contents
    
 8. Releasing a New Version
    
-    8.1. Before the Release
-    8.2. Building and Releasing the Packages
+    8.1. Version numbers
+    8.2. Before the Release: Freeze
+    8.3. Building and Releasing the Packages
        
-        8.2.1. Source Tarball
-        8.2.2. SuSE or Red Hat
-        8.2.3. OS/2
-        8.2.4. Solaris
-        8.2.5. Windows
-        8.2.6. Debian
-        8.2.7. Mac OSX
-        8.2.8. FreeBSD
-        8.2.9. HP-UX 11
-        8.2.10. Amiga OS
-        8.2.11. AIX
+        8.3.1. Source Tarball
+        8.3.2. SuSE or Red Hat RPM
+        8.3.3. OS/2
+        8.3.4. Solaris
+        8.3.5. Windows
+        8.3.6. Debian
+        8.3.7. Mac OSX
+        8.3.8. FreeBSD
+        8.3.9. HP-UX 11
+        8.3.10. Amiga OS
+        8.3.11. AIX
        
-    8.3. Uploading and Releasing Your Package
-    8.4. After the Release
+    8.4. Uploading and Releasing Your Package
+    8.5. After the Release
    
 9. Update the Webserver
 10. Contacting the developers, Bug Reporting and Feature Requests
@@ -296,17 +297,18 @@ sufficient for our purposes.
 
 Some common elements that you likely will use:
 
-<para></para>, paragraph delimiter. Most text needs to be within paragraph     
-elements (there are some exceptions).                                          
-<emphasis></emphasis>, the stylesheets make this italics.                      
-<filename></filename>, files and directories.                                  
-<command></command>, command examples.                                         
-<literallayout></literallayout>, like <pre>, more or less.                     
-<itemizedlist></itemizedlist>, list with bullets.                              
-<listitem></listitem>, member of the above.                                    
-<screen></screen>, screen output, implies <literallayout>.                     
-<ulink url="example.com"></ulink>, like HTML <a> tag.                          
-<quote></quote>, for, doh, quoting text.                                       
+, paragraph delimiter. Most text needs to be within paragraph elements (there  
+are some exceptions).                                                          
+, the stylesheets make this italics.                                           
+, files and directories.                                                       
+, command examples.                                                            
+, like                                                                         
+, more or less.                                                                
+, list with bullets.                                                           
+, member of the above.                                                         
+, screen output, implies .                                                     
+, like HTML tag.                                                               
+, for, doh, quoting text.                                                      
 
 Look at any of the existing docs for examples of all these and more.
 
@@ -1081,13 +1083,13 @@ other header files.
 
 Example:
 
-#include <iostream.h>     /* This is not a local include */                    
+#include      /* This is not a local include */                                
 #include "config.h"       /* This IS a local include */                        
 
 Exception:
 
 /* This is not a local include, but requires a path element. */                
-#include <sys/fileName.h>                                                      
+#include                                                                       
 
 Note: Please! do not add "-I." to the Makefile without a _very_ good reason.
 This duplicates the #include "file.h" behavior.
@@ -1370,7 +1372,7 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $"; 
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $"; 
 /*********************************************************************                         
  *                                                                                             
  * File        :  $Source$                                                                     
@@ -1427,7 +1429,7 @@ Example for file header comments:
 
 #ifndef _FILENAME_H                                                                          
 #define _FILENAME_H                                                                          
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $" 
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $" 
 /*********************************************************************                       
  *                                                                                           
  * File        :  $Source$                                                                   
@@ -1582,24 +1584,59 @@ outlined in this chapter.
 The following programs are required to follow this process: ncftpput (ncftp),
 scp, ssh (ssh), gmake (GNU's version of make), autoconf, cvs.
 
-In the following text, replace X, Y and Z with the actual version number (X =
-major, Y = minor, Z = point):
-
 -------------------------------------------------------------------------------
 
-8.1. Before the Release
+8.1. Version numbers
+
+First you need to determine which version number the release will have. Privoxy
+version numbers consist of three numbers, separated by dots, like in X.Y.Z,
+where:
+
+  * X, the version major, is rarely ever changed. It is increased by one if
+    turning a development branch into stable substantially changes the
+    functionality, user interface or configuration syntax. Majors 1 and 2 were
+    Junkbuster, and 3 will be the first stable Privoxy release.
+   
+  * Y, the version minor, represents the branch within the major version. At
+    any point in time, there are two branches being maintained: The stable
+    branch, with an even minor, say, 2N, in which no functionality is being
+    added and only bugfixes are made, and 2N+1, the development branch, in
+    which the further development of Privoxy takes place. This enables us to
+    turn the code upside down and inside out, while at the same time providing
+    and maintaining a stable version. The minor is reset to zero (and one) when
+    the major is inrcemented. When a development branch has matured to the
+    point where it can be turned into stable, the old stable branch 2N is given
+    up (i.e. no longer maintained), the former development branch 2N+1 becomes
+    the new stable branch 2N+2, and a new development branch 2N+3 is opened.
+   
+  * Z, the point or sub version, represents a release of the software within a
+    branch. It is therefore incremented immediately before each code freeze. In
+    development branches, only the even point versions correspond to actual
+    releases, while the odd ones denote the evolving state of the sources on
+    CVS in between. It follows that Z is odd on CVS in development branches
+    most of the time. There, it gets increased to an even number immediately
+    before a code freeze, and is increased to an odd number again immediately
+    thereafter. This ensures that builds from CVS snapshots are easily
+    distinguished from released versions. The point version is reset to zero
+    when the minor changes.
+   
+-------------------------------------------------------------------------------
+
+8.2. Before the Release: Freeze
 
 The following must be done by one of the developers prior to each new release.
 
   * Make sure that everybody who has worked on the code in the last couple of
     days has had a chance to yell "no!" in case they have pending changes/fixes
-    in their pipelines.
+    in their pipelines. Announce the freeze so that nobody will interfere with
+    last minute changes.
    
-  * Increment the version number and increase or reset the RPM release number
-    in configure.in as appropriate.
+  * Increment the version number (point from odd to even in development
+    branches!) in configure.in.
    
-  * If the default actionsfile has changed since last release, bump up its
-    version info in this line:
+  * If default.action has changed since last release (i.e. software release or
+    standalone actions file release), bump up its version info to A.B in this
+    line:
    
       {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}    
    
@@ -1607,17 +1644,26 @@ The following must be done by one of the developers prior to each new release.
     '$required_actions_file_version = "A.B";'
    
   * If the HTML documentation is not in sync with the SGML sources you need to
-    regenerate it. (If in doubt, just do it.) See the Section "Updating the
-    webserver" in this manual for details.
+    regenerate and upload it to the webserver. (If in doubt, just do it.) See
+    the Section "Updating the webserver" in this manual for details.
    
   * Commit all files that were changed in the above steps!
    
   * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z". Don't
     use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
    
+  * If the release was in a development branch, increase the point version from
+    even to odd (X.Y.(Z+1)) again in configure.in and commit your change.
+   
+  * On the webserver, copy the user manual to a new top-level directory called
+    X.Y.Z. This ensures that help links from the CGI pages, which have the
+    version as a prefix, will go into the right version of the manual. If this
+    is a development branch release, also symlink X.Y.(Z-1) to X.Y.Z and X.Y.
+    (Z+1) to . (i.e. dot).
+   
 -------------------------------------------------------------------------------
 
-8.2. Building and Releasing the Packages
+8.3. Building and Releasing the Packages
 
 Now the individual packages can be built and released. Note that for GPL
 reasons the first package to be released is always the source tarball.
@@ -1640,7 +1686,7 @@ platform dependent binary packages below.
 
 -------------------------------------------------------------------------------
 
-8.2.1. Source Tarball
+8.3.1. Source Tarball
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1661,28 +1707,42 @@ change log field, use the relevant section of the ChangeLog file.
 
 -------------------------------------------------------------------------------
 
-8.2.2. SuSE or Red Hat
+8.3.2. SuSE or Red Hat RPM
+
+In following text, replace dist with either "rh" for Red Hat or "suse" for
+SuSE.
 
 First, make sure that you have freshly exported the right version into an empty
-directory. (See "Building and releasing packages" above). Then run:
+directory. (See "Building and releasing packages" above).
+
+As the only exception to not changing anything after export from CVS, now
+examine the file privoxy-dist.spec and make sure that the version information
+and the RPM release number are correct. The RPM release numbers for each
+version start at one. Hence it must be reset to one if this is the first RPM
+for dist which is built from version X.Y.Z. Check the file list if unsure.
+Else, it must be set to the highest already available RPM release number for
+that version plus one.
+
+Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
 
 Then do
 
-  make suse-dist (or make redhat-dist)                                         
+  make dist-dist                                                               
 
 To upload the package to Sourceforge, simply issue
 
-  make suse-upload (or make redhat-upload)                                     
+  make dist-upload rpm_packagerev                                              
 
-Go to the displayed URL and release the file publicly on Sourceforge. Use the
-release notes and çhange log from the source tarball package.
+where rpm_packagerev is the RPM release number as determined above. Go to the
+displayed URL and release the file publicly on Sourceforge. Use the release
+notes and change log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.3. OS/2
+8.3.3. OS/2
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the OS/2
@@ -1717,7 +1777,7 @@ tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.4. Solaris
+8.3.4. Solaris
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1741,7 +1801,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.5. Windows
+8.3.5. Windows
 
 You should ensure you have the latest version of Cygwin (from http://
 www.cygwin.com/). Run the following commands from within a Cygwin bash shell.
@@ -1764,7 +1824,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.6. Debian
+8.3.6. Debian
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then, run:
@@ -1776,7 +1836,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.2.7. Mac OSX
+8.3.7. Mac OSX
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Mac OSX
@@ -1806,7 +1866,7 @@ the release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.8. FreeBSD
+8.3.8. FreeBSD
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1830,7 +1890,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.2.9. HP-UX 11
+8.3.9. HP-UX 11
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1842,7 +1902,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.2.10. Amiga OS
+8.3.10. Amiga OS
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1854,7 +1914,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-8.2.11. AIX
+8.3.11. AIX
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1878,7 +1938,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3. Uploading and Releasing Your Package
+8.4. Uploading and Releasing Your Package
 
 After the package is ready, it is time to upload it to SourceForge, and go
 through the release steps. The upload is done via FTP:
@@ -1890,8 +1950,8 @@ through the release steps. The upload is done via FTP:
   * password: ijbswa-developers@lists.sourceforge.net
    
 Once this done go to http://sourceforge.net/project/admin/editpackages.php?
-group_id=11118, making sure you are logged in. Find the your target platform in
-the second column, and click Add Release. You will then need to create a new
+group_id=11118, making sure you are logged in. Find your target platform in the
+second column, and click Add Release. You will then need to create a new
 release for your package, using the format of $VERSION ($CODE_STATUS), e.g.
 2.9.14 (beta).
 
@@ -1909,7 +1969,7 @@ essentially the same steps, but select Edit Release, instead of Add Release.
 
 -------------------------------------------------------------------------------
 
-8.4. After the Release
+8.5. After the Release
 
 When all (or: most of the) packages have been uploaded and made available, send
 an email to the announce mailing list, Subject: "Version X.Y.Z available for

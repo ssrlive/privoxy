@@ -102,17 +102,82 @@ CLASS="FILENAME"
 >gmake</TT
 > (GNU's version of make), autoconf, cvs.
     </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="VERSIONNUMBERS"
+>8.1. Version numbers</A
+></H2
 ><P
->        In the following text, replace X, Y and Z with the actual version number
-        (X = major, Y = minor, Z = point):
+>      First you need to determine which version number the release will have. 
+      <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version numbers consist of three numbers,
+      separated by dots, like in X.Y.Z, where:
+        <P
+></P
+><UL
+><LI
+><P
+>              X, the version major, is rarely ever changed. It is increased by one if
+              turning a development branch into stable substantially changes the functionality,
+              user interface or configuration syntax. Majors 1 and 2 were 
+              <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+>, and 3 will be the first stable
+              <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> release.
+            </P
+></LI
+><LI
+><P
+>              Y, the version minor, represents the branch within the major version.
+              At any point in time, there are two branches being maintained:
+              The stable branch, with an even minor, say, 2N, in which no functionality is
+              being added and only bugfixes are made, and 2N+1, the development branch, in
+              which the further development of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> takes
+              place.
+              This enables us to turn the code upside down and inside out, while at the same time
+              providing and maintaining a stable version.
+              The minor is reset to zero (and one) when the major is inrcemented. When a development
+              branch has matured to the point where it can be turned into stable, the old stable branch
+              2N is given up (i.e. no longer maintained), the former development branch 2N+1 becomes the
+              new stable branch 2N+2, and a new development branch 2N+3 is opened.
+            </P
+></LI
+><LI
+><P
+>              Z, the point or sub version, represents a release of the software within a branch.
+              It is therefore incremented immediately before each code freeze. 
+              In development branches, only the even point versions correspond to actual releases,
+              while the odd ones denote the evolving state of the sources on CVS in between.
+              It follows that Z is odd on CVS in development branches most of the time. There, it gets
+              increased to an even number immediately before a code freeze, and is increased to an odd
+              number again immediately thereafter.
+              This ensures that builds from CVS snapshots are easily distinguished from released versions.
+              The point version is reset to zero when the minor changes.
+            </P
+></LI
+></UL
+>
     </P
+></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
 NAME="BEFORERELEASE"
->8.1. Before the Release</A
+>8.2. Before the Release: Freeze</A
 ></H2
 ><P
 >       The following <I
@@ -132,25 +197,27 @@ CLASS="EMPHASIS"
 CLASS="QUOTE"
 >"no!"</SPAN
 > in case
-         they have pending changes/fixes in their pipelines.
+         they have pending changes/fixes in their pipelines. Announce the
+         freeze so that nobody will interfere with last minute changes.
         </P
 ></LI
 ><LI
 ><P
->         Increment the version number and increase or reset the RPM release number
-         in <TT
+>         Increment the version number (point from odd to even in development
+         branches!) in <TT
 CLASS="FILENAME"
 >configure.in</TT
-> as appropriate. 
+>.
        </P
 ></LI
 ><LI
 ><P
->        If the default <TT
+>        If <TT
 CLASS="FILENAME"
->actionsfile</TT
+>default.action</TT
 > has changed since last
-        release, bump up its version info in this line:
+        release (i.e. software release or standalone actions file release),
+        bump up its version info to A.B in this line:
        </P
 ><P
 > 
@@ -177,8 +244,9 @@ CLASS="PROGRAMLISTING"
 ><LI
 ><P
 >        If the HTML documentation is not in sync with the SGML sources
-        you need to regenerate it. (If in doubt, just do it.) See the
-        Section "Updating the webserver" in this manual for details.
+        you need to regenerate and upload it to the webserver. (If in
+        doubt, just do it.) See the Section "Updating the webserver" in
+        this manual for details.
        </P
 ></LI
 ><LI
@@ -202,6 +270,41 @@ CLASS="COMMAND"
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </P
 ></LI
+><LI
+><P
+>        If the release was in a development branch, increase the point version
+        from even to odd (X.Y.(Z+1)) again in <TT
+CLASS="FILENAME"
+>configure.in</TT
+> and
+        commit your change.
+       </P
+></LI
+><LI
+><P
+>        On the webserver, copy the user manual to a new top-level directory
+        called <TT
+CLASS="FILENAME"
+>X.Y.Z</TT
+>. This ensures that help links from the CGI
+        pages, which have the version as a prefix, will go into the right version of the manual.
+        If this is a development branch release, also symlink <TT
+CLASS="FILENAME"
+>X.Y.(Z-1)</TT
+>
+        to <TT
+CLASS="FILENAME"
+>X.Y.Z</TT
+> and <TT
+CLASS="FILENAME"
+>X.Y.(Z+1)</TT
+> to
+        <TT
+CLASS="FILENAME"
+>.</TT
+> (i.e. dot). 
+       </P
+></LI
 ></UL
 >
      </P
@@ -212,7 +315,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="THERELEASE"
->8.2. Building and Releasing the Packages</A
+>8.3. Building and Releasing the Packages</A
 ></H2
 ><P
 >      Now the individual packages can be built and released. Note that for
@@ -266,7 +369,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-TARBALL"
->8.2.1. Source Tarball</A
+>8.3.1. Source Tarball</A
 ></H3
 ><P
 >	First, <I
@@ -343,15 +446,65 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-RPM"
->8.2.2. SuSE or Red Hat</A
+>8.3.2. SuSE or Red Hat RPM</A
 ></H3
+><P
+>        In following text, replace <TT
+CLASS="REPLACEABLE"
+><I
+>dist</I
+></TT
+>
+        with either <SPAN
+CLASS="QUOTE"
+>"rh"</SPAN
+> for Red Hat or <SPAN
+CLASS="QUOTE"
+>"suse"</SPAN
+> for SuSE.
+        </P
 ><P
 >	First, <I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
 >. (See "Building and releasing
-        packages" above). Then run:
+        packages" above). 
+	</P
+><P
+>        As the only exception to not changing anything after export from CVS,
+        now examine the file <TT
+CLASS="FILENAME"
+>privoxy-</TT
+><TT
+CLASS="REPLACEABLE"
+><I
+>dist</I
+></TT
+><TT
+CLASS="FILENAME"
+>.spec</TT
+>
+        and make sure that the version information and the RPM release number are
+        correct. The RPM release numbers for each version start at one. Hence it must
+        be reset to one if this is the first RPM for
+        <TT
+CLASS="REPLACEABLE"
+><I
+>dist</I
+></TT
+> which is built from version
+        X.Y.Z. Check the
+        <A
+HREF="http://sourceforge.net/project/showfiles.php?group_id=11118"
+TARGET="_top"
+>file
+        list</A
+> if unsure. Else, it must be set to the highest already available RPM
+        release number for that version plus one.
+	</P
+><P
+>        Then run:
 	</P
 ><P
 >	<TABLE
@@ -381,7 +534,12 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  make suse-dist (or make redhat-dist)</PRE
+>  make <TT
+CLASS="REPLACEABLE"
+><I
+>dist</I
+></TT
+>-dist</PRE
 ></TD
 ></TR
 ></TABLE
@@ -399,15 +557,32 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  make suse-upload (or make redhat-upload)</PRE
+>  make <TT
+CLASS="REPLACEABLE"
+><I
+>dist</I
+></TT
+>-upload <TT
+CLASS="REPLACEABLE"
+><I
+>rpm_packagerev</I
+></TT
+></PRE
 ></TD
 ></TR
 ></TABLE
 >
 	</P
 ><P
->	Go to the displayed URL and release the file publicly on Sourceforge.
-        Use the release notes and çhange log from the source tarball package.
+>        where <TT
+CLASS="REPLACEABLE"
+><I
+>rpm_packagerev</I
+></TT
+> is the
+        RPM release number as determined above.
+	Go to the displayed URL and release the file publicly on Sourceforge.
+        Use the release notes and change log from the source tarball package.
       </P
 ></DIV
 ><DIV
@@ -416,7 +591,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-OS2"
->8.2.3. OS/2</A
+>8.3.3. OS/2</A
 ></H3
 ><P
 >	First, <I
@@ -550,7 +725,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-SOLARIS"
->8.2.4. Solaris</A
+>8.3.4. Solaris</A
 ></H3
 ><P
 >	Login to Sourceforge's compilefarm via ssh:
@@ -630,7 +805,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-WINDOWS"
->8.2.5. Windows</A
+>8.3.5. Windows</A
 ></H3
 ><P
 >        You should ensure you have the latest version of Cygwin (from
@@ -707,7 +882,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-DEBIAN"
->8.2.6. Debian</A
+>8.3.6. Debian</A
 ></H3
 ><P
 >	First, <I
@@ -743,7 +918,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-MACOSX"
->8.2.7. Mac OSX</A
+>8.3.7. Mac OSX</A
 ></H3
 ><P
 >	First, <I
@@ -848,7 +1023,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-FREEBSD"
->8.2.8. FreeBSD</A
+>8.3.8. FreeBSD</A
 ></H3
 ><P
 >	Login to Sourceforge's compilefarm via ssh:
@@ -928,7 +1103,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-HPUX"
->8.2.9. HP-UX 11</A
+>8.3.9. HP-UX 11</A
 ></H3
 ><P
 >	First, <I
@@ -964,7 +1139,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-AMIGA"
->8.2.10. Amiga OS</A
+>8.3.10. Amiga OS</A
 ></H3
 ><P
 >	First, <I
@@ -1000,7 +1175,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="NEWRELEASE-AIX"
->8.2.11. AIX</A
+>8.3.11. AIX</A
 ></H3
 ><P
 >	Login to Sourceforge's compilefarm via ssh:
@@ -1081,11 +1256,11 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="RELEASING"
->8.3. Uploading and Releasing Your Package</A
+>8.4. Uploading and Releasing Your Package</A
 ></H2
 ><P
 >      After the package is ready, it is time to upload it 
-      to SourceForge, and go through the release steps. The upload 
+      to SourceForge, and go through the release steps. The upload
       is done via FTP:
     </P
 ><P
@@ -1183,7 +1358,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="AFTERRELEASE"
->8.4. After the Release</A
+>8.5. After the Release</A
 ></H2
 ><P
 >      When all (or: most of the) packages have been uploaded and made available,
