@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.2 2001/05/17 22:42:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.2  2001/05/17 22:42:01  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *     - Repaired logging for REF and FRC
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -64,8 +68,15 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $
 
 const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
-/* LOG_LEVEL_ERROR and LOG_LEVEL_INFO cannot be turned off. FIXME: Why?*/
-#define LOG_LEVEL_MINIMUM  (LOG_LEVEL_ERROR | LOG_LEVEL_INFO)
+
+/*
+ * LOG_LEVEL_FATAL, LOG_LEVEL_ERROR and LOG_LEVEL_INFO
+ * cannot be turned off.  (There are some exceptional situations
+ * where we need to get a message to the user).
+ *
+ * FIXME: Do we need LOG_LEVEL_INFO here?
+ */
+#define LOG_LEVEL_MINIMUM  (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO)
 
 /* where to log (default: stderr) */
 static FILE *logfp = NULL;
@@ -75,6 +86,35 @@ static char * logfilename = NULL;
 
 /* logging detail level.  */
 static int debug = LOG_LEVEL_MINIMUM;  
+
+static void fatal_error(const char * error_message);
+
+
+/*********************************************************************
+ *
+ * Function    :  fatal_error
+ *
+ * Description :  Displays a fatal error to standard error (or, on 
+ *                a WIN32 GUI, to a dialog box), and exits
+ *                JunkBuster with status code 1.
+ *
+ * Parameters  :
+ *          1  :  error_message = The error message to display.
+ *
+ * Returns     :  Does not return.
+ *
+ *********************************************************************/
+static void fatal_error(const char * error_message)
+{
+#if defined(_WIN32) && !defined(_WIN_CONSOLE)
+   MessageBox(NULL, error_message, "Internet JunkBuster Error", 
+      MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
+#else /* if !defined(_WIN32) || defined(_WIN_CONSOLE) */
+   fputs(error_message, stderr);
+#endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
+
+   exit(1);
+}
 
 
 /*********************************************************************
@@ -112,12 +152,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
    {
       if( !(fp = fopen(logfname, "a")) )
       {
-         log_error(LOG_LEVEL_ERROR, "init_errlog(): can't open logfile: %s", logfname);
-#if defined(_WIN32) && ! defined (_WIN_CONSOLE)
-            MessageBox(NULL, "init_errlog(): can't open logfile", "Internet JunkBuster Error", 
-               MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
-#endif /* defined(_WIN32) && ! defined (_WIN_CONSOLE) */
-         exit(1);
+         log_error(LOG_LEVEL_FATAL, "init_errlog(): can't open logfile: %s", logfname);
       }
 
       /* set logging to be completely unbuffered */
@@ -173,6 +208,9 @@ void log_error(int loglevel, char *fmt, ...)
       case LOG_LEVEL_ERROR:
          outc = sprintf(outbuf, "IJB(%d) Error: ", this_thread);
          break;
+      case LOG_LEVEL_FATAL:
+         outc = sprintf(outbuf, "IJB(%d) Fatal error: ", this_thread);
+         break;
       case LOG_LEVEL_GPC:
          outc = sprintf(outbuf, "IJB(%d) Request: ", this_thread);
          break;
@@ -185,10 +223,10 @@ void log_error(int loglevel, char *fmt, ...)
       case LOG_LEVEL_INFO:
          outc = sprintf(outbuf, "IJB(%d) Info: ", this_thread);
          break;
-      case LOG_LEVEL_REF:
+      case LOG_LEVEL_RE_FILTER:
          outc = sprintf(outbuf, "IJB(%d) Re-Filter: ", this_thread);
          break;
-      case LOG_LEVEL_FRC:
+      case LOG_LEVEL_FORCE:
          outc = sprintf(outbuf, "IJB(%d) Force: ", this_thread);
          break;
       default:
@@ -277,11 +315,8 @@ void log_error(int loglevel, char *fmt, ...)
                }
                fputs(outbuf, logfp);
                /* FIXME RACE HAZARD: should end critical section error_log_use here */
-#if defined(_WIN32) && ! defined (_WIN_CONSOLE)
-               MessageBox(NULL, outbuf, "Internet JunkBuster Error", 
-                  MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
-#endif /* defined(_WIN32) && ! defined (_WIN_CONSOLE) */
-               exit(1);
+               fatal_error(outbuf);
+               /* Never get here */
                break;
             }
             if (outc < BUFSIZ-1) 
@@ -348,11 +383,8 @@ void log_error(int loglevel, char *fmt, ...)
             }
             fputs(outbuf, logfp);
             /* FIXME RACE HAZARD: should end critical section error_log_use here */
-#if defined(_WIN32) && ! defined (_WIN_CONSOLE)
-            MessageBox(NULL, outbuf, "Internet JunkBuster Error", 
-               MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
-#endif /* defined(_WIN32) && ! defined (_WIN_CONSOLE) */
-            exit(1);
+            fatal_error(outbuf);
+            /* Never get here */
             break;
 
       } /* switch( p ) */
@@ -396,6 +428,12 @@ void log_error(int loglevel, char *fmt, ...)
    }
 
    fputs(outbuf, logfp);
+
+   if (loglevel == LOG_LEVEL_FATAL)
+   {
+      fatal_error(outbuf);
+      /* Never get here */
+   }
 
    /* FIXME RACE HAZARD: should end critical section error_log_use here */
 
