@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.37 2002/03/05 23:53:49 hal9 Exp $
+ $Id: user-manual.sgml,v 1.38 2002/03/05 23:55:14 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.37 2002/03/05 23:53:49 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.38 2002/03/05 23:55:14 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -226,7 +226,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <para>
  <screen>
  tar xzvf ijb_source_* [.tgz or .tar.gz]
- cd ijb_source_2.9.10_beta
+ cd ijb_source_2.9.11_beta
  </screen>
 </para>
 
@@ -589,7 +589,6 @@ configuration section below. HB.)
   </para>
  </listitem> 
 
-
  </itemizedlist>
 </para>
 
@@ -721,10 +720,11 @@ configuration section below. HB.)
  apply to requests for each site. Default: Cookies to and from all
  destinations are kept only during the current browser session (i.e. they 
  are not saved to disk). Pop-ups are disabled for all sites. All sites are
- filtered if <quote>re_filterfile</quote> specified. No sites are blocked. An
- empty image is displayed for filtered ads and other images (formerly
- <quote>tinygif</quote>). The syntax of this file is explained in detail <link
- linkend="actionsfile">below</link>.
+ filtered if <quote>re_filterfile</quote> specified according to the 
+ contents of <quote>re_filterfile</quote>. No sites are blocked. The 
+ JunkBuster logo is displayed for filtered ads and other images . The syntax
+ of this file is explained in detail <link
+ linkend="actionsfile">below</link>. 
 </para>
 
 <para>
@@ -744,6 +744,15 @@ configuration section below. HB.)
  content, or just have some fun replacing <quote>Microsoft</quote> with
  <quote>MicroSuck</quote> wherever it appears on a Web page. Default: No
  content modification, or whatever the developers are playing with :-/
+</para>
+
+<para>
+ Filtering requires buffering the page content, which may appear to slow down
+ page rendering since nothing is displayed until all content has passed 
+ the filters. (It does not really take longer, but seems that way since 
+ the page is not incrementally displayed.) This effect will be more noticeable
+ on slower connections.
+
 </para>
 
 <para>
@@ -3020,6 +3029,8 @@ communication (bugs, feature requests, etc.)
  and not a browser or site bug first. Also, check to make sure this is not
  already a known bug. If you are using your own custom configuration, please
  try the stock configs to see if the problem is a configuration related bug.
+ And if not using the latest development snapshot, please try the latest 
+ one. Or even better, CVS sources.
 </para>
 
 </sect1>
@@ -3373,6 +3384,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.38  2002/03/05 23:55:14  hal9
+ Stupid I did it again. Double hyphen in comment breaks jade.
+
  Revision 1.37  2002/03/05 23:53:49  hal9
  jade barfs on '- -' embedded in comments. - -user option broke it.
 
