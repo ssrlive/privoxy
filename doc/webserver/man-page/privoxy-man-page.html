@@ -1,0 +1,343 @@
+<html><head><title>Privoxy Man page</title><link rel="stylesheet" type="text/css" href="../p_web.css"></head><body><H2>NAME</H2>
+<PRE>
+<!-- Manpage converted by man2html 3.0.1 -->
+       <B>privoxy</B> - Privacy enhancing Proxy
+
+
+</PRE>
+<H2>SYNOPSIS</H2><PRE>
+       <B>privoxy</B> [--help] [--version] [--no-daemon] [--pidfile <I>pid­</I>
+       <I>file</I>] [--user <I>user</I>[.<I>group</I>]] <I>[configfile]</I> (Unix)
+
+       <B>privoxy.exe</B> <I>[configfile]</I> (Windows)
+
+
+
+</PRE>
+<H2>OPTIONS</H2><PRE>
+       <B>Privoxy</B> may be invoked  with  the  following  command-line
+       options:
+
+       <B>--version</B> (unix only)
+              Print version info and exit.
+
+       <B>--help</B> (unix only)
+              Print a short usage info and exit.
+
+       <B>--no-daemon</B> (unix only)
+              Don't  become  a daemon, i.e. don't fork and become
+              process group leader, don't detach from controlling
+              tty, and do all logging there.
+
+        <B>--pidfile</B> <I>pidfile</I> (unix only)
+              On startup, write the process ID to <I>pidfile</I>. Delete
+              the <I>pidfile</I> on exit. Failiure to create  or  delete
+              the <I>pidfile</I> is non-fatal. If no <B>--pidfile</B> option is
+              given, no PID file will be used.
+
+        <B>--user</B> <I>user</I>[.<I>group</I>] (unix only)
+              After (optionally) writing the PID file, assume the
+              user  ID  of  <I>user</I> and the GID of <I>group</I>, or, if the
+              optional <I>group</I> was not given, the default group  of
+              <I>user</I>.  Exit if the privileges are not sufficient to
+              do so.
+
+
+       If the <I>configfile</I> is not specified on  the  command  line,
+       <B>Privoxy</B>  will  look for a file named <B>config</B> in the current
+       directory (except on Win32 where it will try  <B>config.txt</B>).
+
+
+
+
+</PRE>
+<H2>DESCRIPTION</H2><PRE>
+       <B>Privoxy</B>  is  a web proxy with advanced filtering capabili­
+       ties for protecting privacy, filtering web  page  content,
+       managing  cookies,  controlling  access, and removing ads,
+       banners,  pop-ups  and  other  obnoxious  Internet   junk.
+       <B>Privoxy</B>  has a very flexible configuration and can be cus­
+       tomized to suit individual needs and tastes.  <B>Privoxy</B>  has
+       application  for  both  stand-alone systems and multi-user
+       <B>Junkbuster</B>  was originally written by JunkBusters Corpora­
+       tion, and was released as free open-source software  under
+       the  GNU  GPL. Stefan Waldherr made many improvements, and
+       started the SourceForge project to continue development.
+
+
+
+</PRE>
+<H2>INSTALLATION AND USE</H2><PRE>
+       Browsers must be individually configured to use <B>Privoxy</B> as
+       a  HTTP  proxy.   The default setting is for localhost, on
+       port 8118 (configurable in the main config file).  To  set
+       the  HTTP proxy in Netscape and Mozilla, go through: <B>Edit</B>;
+       <B>Preferences</B>; <B>Advanced</B>; <B>Proxies</B>;  <B>Manual</B>  <B>Proxy</B>  <B>Configura­</B>
+       <B>tion</B>; <B>View</B>.
+
+       For Internet Explorer, go through: <B>Tools</B>; <B>Internet</B> <B>Proper­</B>
+       <B>ties</B>; <B>Connections</B>; <B>LAN</B> <B>Settings</B>.
+
+       The Secure (SSL) Proxy should also be set to the same val­
+       ues, otherwise <B>https:</B> URLs will not be proxied.
+
+       For other browsers, check the documentation.
+
+
+
+</PRE>
+<H2>CONFIGURATION</H2><PRE>
+       <B>Privoxy</B>  can  be configured with the various configuration
+       files.  The  default  configuration  files  are:   <I>config</I>,
+       <I>default.action</I>,  and  <I>default.filter</I>.  These are well com­
+       mented.  On Unix and Unix-like systems, these are  located
+       in <I>/etc/privoxy/</I> by default. On Windows, OS/2 and AmigaOS,
+       these files are in the same directory as the <B>Privoxy</B>  exe­
+       cutable.
+
+       The  name  and  number  of configuration files has changed
+       from previous versions, and is subject to change as devel­
+       opment  progresses.  In  fact, the configuration itself is
+       changed and much more sophisticated. See  the  user-manual
+       for a brief explanation of all configuration options.
+
+       The  actions  list (ad blocks, etc) can also be configured
+       with your web  browser  at  <I>http://www.privoxy.org/config</I>.
+       <B>Privoxy's</B>  configuration  parameters can also be viewed at
+       the same page. In addition, <B>Privoxy</B> can be toggled on/off.
+       This is an internal page.
+
+
+
+</PRE>
+<H2>SAMPLE CONFIGURATION</H2><PRE>
+       A  brief  example  of  what a <I>default.action</I> configuration
+       might look like:
+
+
+       # Define a few useful custom aliases for later use
+       {{alias}}
+       +no-cookies = +no-cookies-set +no-cookies-read
+
+       # Do accept cookies
+       -no-cookies = -no-cookies-set -no-cookies-read
+
+       # Treat these blocked URLs as images.
+       +imageblock = +block +image
+
+       # Define page filters we want to use.
+       myfilters = +filter{html-annoyances} +filter{js-annoyances}\
+                   +filter{no-popups} +filter{webbugs}
+
+       ## Default Policies (actions) ############################
+       { \
+        -block \
+        -downgrade \
+        +fast-redirects \
+        myfilters \
+        +no-compression \
+        +hide-forwarded \
+        +hide-from{block} \
+        +hide-referer{forge} \
+        -hide-user-agent \
+        -image \
+        +image-blocker{blank} \
+        +no-cookies-keep \
+        -no-cookies-read \
+        -no-cookies-set \
+        +no-popups \
+        -vanilla-wafer \
+        -wafer \
+       }
+       /
+
+       # Now set exceptions to the above defined policies #######
+
+       # Sites where we want persistant cookies
+       {-no-cookies -no-cookies-keep}
+        .redhat.com
+        .sun.com
+        .yahoo.com
+        .msdn.microsoft.com
+
+       # This site requires cookies AND 'fast-redirects' on
+       {-no-cookies -no-cookies-keep -fast-redirects}
+        .nytimes.com
+
+       # Add custom headers, and turn off filtering of page source
+       {+add-header{X-Privacy: Yes please} #-add-header{*} \
+        +add-header{X-User-Tracking: No thanks!} -filter}
+        privacy.net
+
+        .adforce.imgis.com
+        .ad.preferences.com/image.*
+        .ads.web.aol.com
+        .ad-adex3.flycast.com
+        .ad.doubleclick.net
+        .ln.doubleclick.net
+        .ad.de.doubleclick.net
+        /.*/count\.cgi\?.*df=
+        194.221.183.22[1-7]
+        a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
+
+       # Block any URLs that match these patterns
+       {+block}
+        /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
+        /.*/(plain|live|rotate)[-_.]?ads?/
+        /.*/(sponsor)s?[0-9]?/
+        /.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+        /.*/adbanners/
+        /.*/adv((er)?ts?|ertis(ing|ements?))?/
+        /.*/banners?/
+        /.*/popupads/
+        /.*/advert[0-9]+\.jpg
+        /ad_images/
+        /.*/ads/
+        /images/.*/.*_anim\.gif
+        /rotations/
+        /.*(ms)?backoff(ice)?.*\.(gif|jpe?g)
+        195.63.104.*/(inbox|log|meld|folderlu|folderru|log(in|out)[lmr]u|)
+        .images.nytimes.com
+        .images.yahoo.com/adv/
+        /.*cnnstore\.gif
+
+
+
+       See the comments in the configuration files themselves, or
+       the  user-manual for explanations of the above syntax, and
+       other <B>Privoxy</B> configuration options.
+
+
+
+</PRE>
+<H2>FILES</H2><PRE>
+       <I>/usr/sbin/privoxy</I>
+       <I>/etc/privoxy/config</I>
+       <I>/etc/privoxy/default.action</I>
+       <I>/etc/privoxy/advanced.action</I>
+       <I>/etc/privoxy/basic.action</I>
+       <I>/etc/privoxy/intermediate.action</I>
+       <I>/etc/privoxy/default.filter</I>
+       <I>/etc/privoxy/trust</I>
+       <I>/etc/privoxy/templates/*</I>
+       <I>/var/log/privoxy/logfile</I>
+
+
+       mentation should be included in  the  local  documentation
+       directory, though is not complete at this time.
+
+
+
+</PRE>
+<H2>SIGNALS</H2><PRE>
+       <B>Privoxy</B> terminates on the <B>SIGINT</B>, <B>SIGTERM</B> and <B>SIGABRT</B> sig­
+       nals. Log rotation scripts may cause a re-opening  of  the
+       logfile  by  sending a <B>SIGHUP</B> to <B>Privoxy</B>. Note that unlike
+       other daemons, <B>Privoxy</B> does not need to be made  aware  of
+       config file changes by <B>SIGHUP</B> -- it will detect them auto­
+       matically.
+
+
+
+</PRE>
+<H2>NOTES</H2><PRE>
+       This is a <B>BETA</B> version of <B>Privoxy</B>. Not  all  features  are
+       well tested.
+
+       Please see the user-maual on how to contact the developers
+       for feature requests, reporting problems, and other  ques­
+       tions.
+
+
+
+</PRE>
+<H2>BUGS</H2><PRE>
+       Probably.  Please see the user-manual for how and where to
+       report bugs.
+
+
+
+</PRE>
+<H2>SEE ALSO</H2><PRE>
+       http://www.privoxy.org/
+       http://config.privoxy.org/
+       http://www.privoxy.org/faq/
+       http://www.privoxy.org/user-manual/
+       http://www.privoxy.org/developer-manual/
+       http://sourceforge.net/projects/ijbswa  (Privoxy   Project
+       Page)
+       http://www.waldherr.org/junkbuster/
+       http://www.junkbusters.com/ht/en/cookies.html
+       http://privacy.net/analyze/
+       http://www.squid-cache.org/
+       http://linuxalpha.ch/steudten/software/
+
+
+
+</PRE>
+<H2>DEVELOPMENT TEAM</H2><PRE>
+        Stefan Waldherr
+        Andreas Oesterhelt
+        Jon Foster
+        Markus Breitenbach
+        Thomas Steudten
+        David Schmidt
+        Haroon Rafique
+        Joerg Strohmayer
+        Shamim Mohamed
+        John Venvertloh
+        Hal Burgiss
+        Rodrigo Barbosa
+        Gábor Lipták
+
+
+
+</PRE>
+<H2>COPYRIGHT AND LICENSE</H2><PRE>
+       This  program  is  free  software; you can redistribute it
+       and/or modify it under the terms of the GNU General Public
+       License  as  published  by  the  Free Software Foundation;
+       either version 2 of the License, or (at your  option)  any
+       later version.
+
+       This  program  is  distributed in the hope that it will be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty  of  MERCHANTABILITY  or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the GNU  General  Public  License  for  more
+       details.
+
+       You  should have received a copy of the GNU General Public
+       License along with this program; if not, write to the Free
+       Software  Foundation,  Inc.,  59  Temple Place, Suite 330,
+       Boston, MA  02111-1307  USA
+
+       Internet Junkbuster Proxy is a  trademark  of  Junkbusters
+       Corporation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</body></html>

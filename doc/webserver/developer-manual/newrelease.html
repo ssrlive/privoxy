@@ -1,0 +1,1299 @@
+<HTML
+><HEAD
+><TITLE
+>Releasing a new version</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+REL="HOME"
+TITLE="Privoxy Developer Manual"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Testing Guidelines"
+HREF="testing.html"><LINK
+REL="NEXT"
+TITLE="Contacting the developers, Bug Reporting and Feature Requests"
+HREF="contact.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy Developer Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="testing.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="contact.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="NEWRELEASE"
+>8. Releasing a new version</A
+></H1
+><P
+>	To minimize trouble with distribution contents, webpage
+	errors and the like, we strongly encourage you
+	to follow this section if you prepare a new release of
+	code or new pages on the webserver.
+    </P
+><P
+>	The following programs are required to follow this process:
+	<TT
+CLASS="FILENAME"
+>ncftpput</TT
+> (ncftp), <TT
+CLASS="FILENAME"
+>scp</TT
+> (ssh),
+<TT
+CLASS="FILENAME"
+>gmake</TT
+> (GNU's version of make), autoconf, cvs, ???.
+    </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="BEFORERELEASE"
+>8.1. Before the Release</A
+></H2
+><P
+>       The following <I
+CLASS="EMPHASIS"
+>must be done by one of the
+       developers</I
+> prior to each new release:
+     </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+>         Make sure that everybody who has worked on the code in the last
+         couple of days has had a chance to yell <SPAN
+CLASS="QUOTE"
+>"no!"</SPAN
+> in case
+         they have pending changes/fixes in their pipelines.
+        </P
+></LI
+><LI
+><P
+>         Increment the version number in <TT
+CLASS="FILENAME"
+>configure.in</TT
+> in
+         CVS. Also, the RPM release number in
+         <TT
+CLASS="FILENAME"
+>configure.in</TT
+>. Do NOT touch version information
+         after export from CVS. <I
+CLASS="EMPHASIS"
+>All packages</I
+> will use the
+         version and release data from <TT
+CLASS="FILENAME"
+>configure.in</TT
+>.
+         Local files should not be changed, except prior to a CVS commit!!!
+         This way we are all on the same page!
+       </P
+></LI
+><LI
+><P
+>        If the default actionsfile has changed since last release,
+        bump up its version info in this line:
+       </P
+><P
+> 
+        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}
+        </PRE
+></TD
+></TR
+></TABLE
+>
+       </P
+><P
+> 
+        Then change the version info in doc/webserver/actions/index.php,
+        line: '$required_actions_file_version = "A.B";'
+       </P
+></LI
+><LI
+><P
+>        Tag all files in CVS with the version number with
+        <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>cvs tag v_X_Y_Z</B
+>"</SPAN
+> (where X = major, Y
+        = minor, Z = point). Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work)
+        etc.
+       </P
+></LI
+><LI
+><P
+>        The first package uploaded should be the official
+        <SPAN
+CLASS="QUOTE"
+>"tarball"</SPAN
+> release. This is built with the
+        <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make tarball-dist</B
+>"</SPAN
+> Makefile 
+        target, and then can be uploaded with 
+        <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make tarball-upload</B
+>"</SPAN
+> (see below).
+       </P
+></LI
+></UL
+>
+     </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-WEB"
+>8.2. Update the webserver</A
+></H2
+><P
+>	All files must be group-readable and group-writable (or no one else
+	will be able to change them). To update the webserver, create any
+	pages locally in the <TT
+CLASS="FILENAME"
+>doc/webserver</TT
+> directory (or
+	create new directories under <TT
+CLASS="FILENAME"
+>doc/webserver</TT
+>), then do
+	</P
+><P
+> 	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make webserver
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Note that <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make dok</B
+>"</SPAN
+> 
+     (or <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make redhat-dok</B
+>"</SPAN
+>) creates
+	<TT
+CLASS="FILENAME"
+>doc/webserver/user-manual</TT
+>,
+	<TT
+CLASS="FILENAME"
+>doc/webserver/developer-manual</TT
+>,
+	<TT
+CLASS="FILENAME"
+>doc/webserver/faq</TT
+> and
+	<TT
+CLASS="FILENAME"
+>doc/webserver/man-page</TT
+> automatically.
+      </P
+><P
+>      Please do NOT use any other means of transferring files to the
+      webserver. <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make webserver</B
+>"</SPAN
+> not only
+      uploads, but will make sure that the appropriate permissions are 
+      preserved for shared group access.
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-RPM"
+>8.3. SuSE or Red Hat</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	 first. 
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make suse-dist or make redhat-dist
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	To upload the package to Sourceforge, simply issue
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make suse-upload or make redhat-upload
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Go to the displayed URL and release the file publicly on Sourceforge.
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-OS2"
+>8.4. OS/2</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd ..
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	You will need a mix of development tools.
+	The main compilation takes place with IBM Visual Age C++.
+	Some ancillary work takes place with GNU tools, available from
+	various sources like hobbes.nmsu.edu.
+	Specificially, you will need <TT
+CLASS="FILENAME"
+>autoheader</TT
+>,
+	<TT
+CLASS="FILENAME"
+>autoconf</TT
+> and <TT
+CLASS="FILENAME"
+>sh</TT
+> tools.
+	The packaging takes place with WarpIN, available from various sources, including
+	its home page: <A
+HREF="http://www.xworkplace.org/"
+TARGET="_top"
+>xworkplace</A
+>.
+	</P
+><P
+>	Change directory to the <TT
+CLASS="FILENAME"
+>os2setup</TT
+> directory.
+	Edit the os2build.cmd file to set the final executable filename.
+	For example, 
+ 	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  installExeName='privoxyos2_setup_X.Y.Z.exe'
+	</PRE
+></TD
+></TR
+></TABLE
+>
+ 	Next, edit the <TT
+CLASS="FILENAME"
+>IJB.wis</TT
+> file so the release number matches
+ 	in the <TT
+CLASS="FILENAME"
+>PACKAGEID</TT
+> section:
+ 	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	You're now ready to build.  Run:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  os2build
+	</PRE
+></TD
+></TR
+></TABLE
+>
+     And in the <TT
+CLASS="FILENAME"
+>./files</TT
+> directory you will have the
+     WarpIN-installable executable. 
+     Upload this anonymously to
+     <TT
+CLASS="FILENAME"
+>uploads.sourceforge.net/incoming</TT
+>, create a release
+     for it, and you're done.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-SOLARIS"
+>8.5. Solaris</A
+></H2
+><P
+>	Login to Sourceforge's compilefarm via ssh
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  ssh cf.sourceforge.net
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Choose the right operating system (not the Debian one). If you have
+	downloaded <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> before,
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	If not, please <A
+HREF="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE"
+TARGET="_top"
+>checkout
+	Privoxy via CVS first</A
+>. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then run
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  gmake solaris-dist
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	which creates a gzip'ed tar archive. Sadly, you cannot use <B
+CLASS="COMMAND"
+>make
+	solaris-upload</B
+> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publicly.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-WINDOWS"
+>8.6. Windows</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	 Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do FIXME.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-DEBIAN"
+>8.7. Debian</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	first. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do FIXME.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-MACOSX"
+>8.8. Mac OSX</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd ..
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	From the osxsetup directory, run:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  build
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	This will run <TT
+CLASS="FILENAME"
+>autoheader</TT
+>, <TT
+CLASS="FILENAME"
+>autoconf</TT
+> and
+	<TT
+CLASS="FILENAME"
+>configure</TT
+> as well as <TT
+CLASS="FILENAME"
+>make</TT
+>.
+	Finally, it will copy over the necessary files to the ./osxsetup/files directory
+	for further processing by <TT
+CLASS="FILENAME"
+>PackageMaker</TT
+>.
+	</P
+><P
+>	Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the package
+	name to match the release, and hit the "Create package" button.
+	If you specify ./Privoxy.pkg as the output package name, you can then create
+	the distributable zip file with the command:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	You can then upload <TT
+CLASS="FILENAME"
+>privoxyosx_setup_x.y.z.zip</TT
+> anonymously to 
+	<TT
+CLASS="FILENAME"
+>uploads.sourceforge.net/incoming</TT
+>,
+	create a release for it, and you're done.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-FREEBSD"
+>8.9. FreeBSD</A
+></H2
+><P
+>	Change the version number of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> in the
+	configure.in file. Run:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	Then ...
+      </P
+><P
+>	Login to Sourceforge's compilefarm via ssh:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  ssh cf.sourceforge.net
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Choose the right operating system. If you have downloaded Privoxy
+	before,
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	If not, please <A
+HREF="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE"
+TARGET="_top"
+>checkout
+	Privoxy via CVS first</A
+>. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  gmake freebsd-dist
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	which creates a gzip'ed tar archive. Sadly, you cannot use <B
+CLASS="COMMAND"
+>make
+	freebsd-upload</B
+> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publicly.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-TARBALL"
+>8.10. Tarball</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	first. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make clobber
+  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make tarball-dist
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	To upload the package to Sourceforge, simply issue
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make tarball-upload
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Goto the displayed URL and release the file publicly on Sourceforge.
+      </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-HPUX"
+>8.11. HP-UX 11</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	first. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do FIXME.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-AMIGA"
+>8.12. Amiga OS</A
+></H2
+><P
+>	Ensure that you have the latest code version. Hence run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	first. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then do FIXME.
+	</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="NEWRELEASE-AIX"
+>8.13. AIX</A
+></H2
+><P
+>	Login to Sourceforge's compilefarm via ssh:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  ssh cf.sourceforge.net
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Choose the right operating system. If you have downloaded Privoxy
+	before:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	If not, please <A
+HREF="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE"
+TARGET="_top"
+>checkout
+	Privoxy via CVS first</A
+>. Run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	Then run:
+	</P
+><P
+>	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make aix-dist
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	which creates a gzip'ed tar archive. Sadly, you cannot use <B
+CLASS="COMMAND"
+>make
+	aix-upload</B
+> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publicly.
+	</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="testing.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="contact.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Testing Guidelines</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Contacting the developers, Bug Reporting and Feature Requests</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

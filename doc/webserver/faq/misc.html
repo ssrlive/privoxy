@@ -1,0 +1,803 @@
+<HTML
+><HEAD
+><TITLE
+>Miscellaneous</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+REL="HOME"
+TITLE="Privoxy Frequently Asked Questions"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Configuration"
+HREF="configuration.html"><LINK
+REL="NEXT"
+TITLE="Troubleshooting"
+HREF="trouble.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy Frequently Asked Questions</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="configuration.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="trouble.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MISC"
+>4. Miscellaneous</A
+></H1
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN473"
+>4.1. How much does <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> slow my browsing down? This 
+has to add extra time to browsing.</A
+></H3
+><P
+> It should not slow you down any in real terms, and may actually help 
+ speed things up since ads, banners and other junk are not being displayed.
+ The actual processing time required by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 
+ itself for each page, is relatively small in the overall scheme of things,
+ and happens very quickly. This is typically more than offset by time saved
+ not downloading and rendering ad images.</P
+><P
+> <SPAN
+CLASS="QUOTE"
+>"Filtering"</SPAN
+> via the <TT
+CLASS="FILENAME"
+>filterfile</TT
+> 
+ mechanism may cause a perceived slowdown, since the entire page is buffered
+ before displaying. See below.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="LOADINGTIMES"
+>4.2. I noticed considerable
+delays in page requests compared to the old Junkbuster. What's wrong?</A
+></H3
+><P
+>Using the default filtering configuration, I noticed considerable delays in
+page requests compared to the old Junkbuster. Loading pages with large contents
+seemed to take forever, then suddenly delivering all the content at once.
+ </P
+><P
+>The whole content must be loaded in order to filter, and nothing is is
+sent to the browser during this time. The loading time does not really
+change in real numbers, but the feeling is different, because most
+browsers are able to start rendering incomplete content, giving the
+user a feeling of "it works". 
+ </P
+><P
+>To modify the content of a page (i.e. make frames resizeable again, etc.) and
+not just replace ads, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> needs to download the
+entire page first, do its content magic and then send the page to the browser.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="CONFIGURL"
+>4.3. What is the "http://p.p/"?</A
+></H3
+><P
+>Since <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> sits between your web browser and the Internet, it can be
+programmed to handle certain pages specially.</P
+><P
+>With recent versions of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> (version 2.9.x), you can get some
+information about <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and change some settings by going to
+<A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+> or, equivalently, <A
+HREF="http://config.privoxy.org/"
+TARGET="_top"
+>http://config.privoxy.org/</A
+>
+(Note that p.p is far easier to type but may not work in some
+configurations. With the name change to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>,
+this is changed from the previous http://i.j.b/ or earlier 2.9.x versions).</P
+><P
+>These pages are <I
+CLASS="EMPHASIS"
+>not</I
+> forwarded to a server on the Internet
+- instead they are handled by a special web server which is built in to
+<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.</P
+><P
+>If you are not running <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, then <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+> will fail, and <A
+HREF="http://config.privoxy.org/"
+TARGET="_top"
+>http://config.privoxy.org/</A
+> will
+return a web page telling you you're not running
+<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.</P
+><P
+>If you have version 2.0.2, then the equivalent is
+http://example.com/show-proxy-args (but you get far less information, and you
+should really consider upgrading to 2.9.13).</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="BLOCKLIST"
+>4.4. Do you still maintain the blocklists?</A
+></H3
+><P
+>    No. The format of the blocklists has changed significantly in versions
+    2.9.x and later. Once we have released the new stable
+    version, v3.0, there will again be blocklists that you can update
+    automatically.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="NEWADS"
+>4.5. How can I submit new ads?</A
+></H3
+><P
+>    As of now, please discontinue to submit new ad blocking infos. Once we
+    have released the new version, there will again be a form on the website,
+    which you can use to contribute new ads.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="IP"
+>4.6. How can I hide my IP address?</A
+></H3
+><P
+> You cannot hide your IP address with <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> or any other software, since
+the server needs to know your IP address to send the answer to you.</P
+><P
+>Fortunately there are many publicly usable anonymous proxies out there, which
+solve the problem by providing a further level of indirection between you and
+the web server, shared by many people and thus letting your requests "drown"
+in white noise of unrelated requests as far as user tracking is concerned.</P
+><P
+>Most of them will, however, log your IP address and make it available to the
+authorities in case you abuse that anonymity for criminal purposes. In fact
+you can't even rule out that some of them only exist to *collect* information
+on (those suspicious) people with a more than average preference for privacy.</P
+><P
+>You can find a list of anonymous public proxies at <A
+HREF="http://www.multiproxy.org/anon_list.htm"
+TARGET="_top"
+>multiproxy.org</A
+> and many
+more through Google.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN520"
+>4.7. Can <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> guarantee I am anonymous?</A
+></H3
+><P
+> No. Your chances of remaining anonymous are greatly improved, but unless you
+ are an expert on Internet security it would be safest to assume that
+ everything you do on the Web can be traced back to you.</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can remove various information about you,
+ and allows <I
+CLASS="EMPHASIS"
+>you</I
+> more freedom  to decide which sites 
+ you can trust, and what details you want to reveal. But it's still possible
+ that web sites can find out who you are. Here's one way this can happen.</P
+><P
+> A few browsers disclose the user's email address in certain situations, such
+ as when transferring a file by FTP. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ does not filter FTP. If you need this feature, or are concerned about the
+ mail handler of your browser disclosing your email address, you might
+ consider products such as <SPAN
+CLASS="APPLICATION"
+>NSClean</SPAN
+>.</P
+><P
+> Browsers available only as binaries could use non-standard headers to give
+ out any information they can have access to: see the manufacturer's license
+ agreement. It's impossible to anticipate and prevent every breach of privacy
+ that might occur. The professionally paranoid prefer browsers available as
+ source code, because anticipating their behavior is easier. Trust the source,
+ Luke!</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN531"
+>4.8. Might some things break because header information is
+being altered?</A
+></H3
+><P
+> Definitely. More and more sites use HTTP header content to decide what to
+ display and how to display it. There is many ways that this can be handled, 
+ so having hard and fast rules, is tricky.</P
+><P
+> <SPAN
+CLASS="QUOTE"
+>"USER AGENT"</SPAN
+> in particular is often used in this way to identify
+ the browser, and adjust content accordingly. Changing this now is not
+ recommended, since so many sites do look for this. You may get undesirable 
+ results by changing this.</P
+><P
+> For instance, different browsers use different encodings of Russian and Czech
+ characters, certain web servers convert pages on-the-fly according to the
+ User Agent header. Giving a <SPAN
+CLASS="QUOTE"
+>"User Agent"</SPAN
+> with the wrong
+ operating system or browser manufacturer causes some sites in these languages
+ to be garbled; Surfers to Eastern European sites should change it to
+ something closer. And then some page access counters work by looking at the
+ <SPAN
+CLASS="QUOTE"
+>"REFERER"</SPAN
+> header; they may fail or break if unavailable. The
+ weather maps of Intellicast have been blocked by their server when no
+ <SPAN
+CLASS="QUOTE"
+>"REFERER"</SPAN
+> or cookie is provided, is another example. There are
+ many, many other ways things can go wrong when trying to fool a web server.</P
+><P
+> If you have problems with a site, you will have to adjust your configuration 
+ accordingly. Cookies are probably the most likely adjustment that may 
+ be required, but by no means the only one.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN541"
+>4.9. Can <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> act as a <SPAN
+CLASS="QUOTE"
+>"caching"</SPAN
+> proxy to 
+speed up web browsing?</A
+></H3
+><P
+> No, it does not have this ability at all. You want something like 
+ <A
+HREF="http://www.squid-cache.org/"
+TARGET="_top"
+>Squid</A
+> for this. And, yes, 
+ before you ask, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can co-exist 
+ with other kinds of proxies like <SPAN
+CLASS="APPLICATION"
+>Squid</SPAN
+>.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN549"
+>4.10. What about as a firewall? Can <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> protect me?</A
+></H3
+><P
+> Not in the way you mean, or in the way a true firewall can, or a proxy that
+ has this specific capability. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can help
+ protect your privacy, but not really protect you from intrusion attempts.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN554"
+>4.11. The <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> logo that replaces ads is very blocky 
+and ugly looking. Can't a better font be used?</A
+></H3
+><P
+> This is not a font problem. The logo is an image that is created by 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> on the fly. So as to not waste 
+ memory, the image is rather small. The blockiness comes when the 
+ image is scaled to fill a largish area. There is not much to be done 
+ about this, other than to use one of the other
+ <SPAN
+CLASS="QUOTE"
+>"imageblock"</SPAN
+> directives: <I
+CLASS="EMPHASIS"
+>pattern</I
+>, 
+ <I
+CLASS="EMPHASIS"
+>blank</I
+>, or a URL of your choosing.</P
+><P
+>Given the above problem, we have decided to remove the logo option entirely 
+[as of v2.9.13].</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN563"
+>4.12. I have large empty spaces now where ads used to be. 
+Why?</A
+></H3
+><P
+> It would be easy enough to just eliminate this space altogether, rather than
+ fill it with blank space. But, this would create problems with many pages
+ that use the overall size of the ad to help organize the page layout and
+ position the various components of the page where they were intended to be.
+ It is best left this way.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN566"
+>4.13. How can <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> filter Secure (HTTPS) URLs?</A
+></H3
+><P
+> This is a limitation since HTTPS transactions are encrypted SSL sessions
+ between your browser and the secure site, and are meant to be reliably 
+ <I
+CLASS="EMPHASIS"
+>secure</I
+> and private. This means that all cookies and HTTP
+ header information are also encrypted from the time they leave your browser,
+ to the site, and vice versa. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> does not
+ try to unencrypt this information, so it just passes through as is.
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can still catch images and ads that
+ are embedded in the SSL stream though.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN573"
+>4.14. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> runs as a <SPAN
+CLASS="QUOTE"
+>"server"</SPAN
+>. How 
+secure is it? Do I need to take any special precautions?</A
+></H3
+><P
+> There are no known exploits that might effect
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. On Unix-like systems, 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can run as a non-privileged 
+ user, which is how we recommend it be run. Also, by default 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> only listens to requests 
+ from <SPAN
+CLASS="QUOTE"
+>"localhost"</SPAN
+>. The server aspect of
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is not itself directly exposed to the
+ Internet in this configuration. If you want to have
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> serve as a LAN proxy, this will have to
+ be opened up to allow for LAN requests. In this case, we'd recommend
+ you specify only the LAN gateway address, e.g. 192.168.1.1, in the main 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> config file. All LAN hosts can then use 
+ this as their proxy address in the browser proxy configuration. In this way, 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will not listen on any external ports.
+ Of course, a firewall is always good too. Better safe than sorry.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="TURNOFF"
+>4.15. How can I temporarily disable <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>?</A
+></H3
+><P
+> The easiest way is to access <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with your 
+ browser by using the special URL: <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>
+ and select "Toggle Privoxy on or off" from that page.&#13;</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="SEEALSO"
+>4.16. Where can I find more information about <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+and related issues?</A
+></H3
+><P
+> Other references and sites of interest to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ users:</P
+><P
+> <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://www.privoxy.org/"
+TARGET="_top"
+>http://www.privoxy.org/</A
+>, 
+   The <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> Home page. 
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://sourceforge.net/projects/ijbswa"
+TARGET="_top"
+>http://sourceforge.net/projects/ijbswa</A
+>, 
+   the Project Page for <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> on 
+   <A
+HREF="http://sourceforge.net"
+TARGET="_top"
+>Sourceforge</A
+>.
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>, access
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> from your browser. Alternately, 
+   <A
+HREF="http://config.privoxy.org"
+TARGET="_top"
+>http://config.privoxy.org</A
+>
+   may work in some situations where the first does not.
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://www.junkbusters.com/ht/en/cookies.html"
+TARGET="_top"
+>http://www.junkbusters.com/ht/en/cookies.html</A
+>
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://www.waldherr.org/junkbuster/"
+TARGET="_top"
+>http://www.waldherr.org/junkbuster/</A
+>
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>    <A
+HREF="http://privacy.net/analyze/"
+TARGET="_top"
+>http://privacy.net/analyze/</A
+>
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+ <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>   <A
+HREF="http://www.squid-cache.org/"
+TARGET="_top"
+>http://www.squid-cache.org/</A
+>
+  </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>&#13;</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="configuration.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="trouble.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Configuration</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Troubleshooting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

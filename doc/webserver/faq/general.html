@@ -1,0 +1,658 @@
+<HTML
+><HEAD
+><TITLE
+>General Information</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+REL="HOME"
+TITLE="Privoxy Frequently Asked Questions"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Privoxy Frequently Asked Questions"
+HREF="index.html"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy Frequently Asked Questions</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="index.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="installation.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="GENERAL"
+>1. General Information</A
+></H1
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="NEWJB"
+>1.1. What is this new version of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>?</A
+></H3
+><P
+>  The original <SPAN
+CLASS="APPLICATION"
+><SPAN
+CLASS="TRADEMARK"
+>Internet
+  Junkbuster</SPAN
+>&trade;</SPAN
+> (tm) is a copyrighted product of <A
+HREF="http://www.junkbusters.com"
+TARGET="_top"
+>Junkbusters Corporation</A
+>.
+  Development of this effort stopped some time ago as of version 2.0.2. Stefan
+  Waldherr started the ijbswa project on <A
+HREF="http://sourceforge.net/projects/ijbswa/"
+TARGET="_top"
+>Sourceforge</A
+> to
+  rekindle development. Other developers subsequently joined with Stefan, and
+  have since added many new features, refinements and enhancements. The result
+  of this effort is <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+ </P
+><P
+>  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has evolved from the 
+  <SPAN
+CLASS="APPLICATION"
+>Junkbuster 2.0.2</SPAN
+> code base, and has advanced
+  significantly at this point. 
+ </P
+><P
+> 
+  Please see the History section for more
+  information on the history of <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> and 
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN47"
+>1.2. Why <SPAN
+CLASS="QUOTE"
+>"Privoxy"</SPAN
+>? Why a name change at all?</A
+></H3
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is the 
+ <SPAN
+CLASS="QUOTE"
+>"<I
+CLASS="EMPHASIS"
+>Privacy Enhancing Proxy</I
+>"</SPAN
+>.</P
+><P
+> There are potential legal complications from the continued use of the 
+ <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> name, which is a trademark of 
+ <A
+HREF="http://junkbusters.com"
+TARGET="_top"
+>Junkbusters Corporation</A
+>.
+ (There are, however, no objections from Junkbusters Corporation to the 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> project itself, and they, in fact, still
+ share our ideals and goals.)</P
+><P
+> The developers also believed that there are so many changes from the original 
+ code, that it was time to make a clean break from the past and make 
+ a name in their own right, especially now with the pending
+ release of version 3.0.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="DIFFERS"
+>1.3. How does <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> differ
+from the old <SPAN
+CLASS="APPLICATION"
+>Junkbuster?</SPAN
+></A
+></H3
+><P
+>  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> picks up where
+  <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> left off. All the old features remain.
+  The new <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> still blocks ads and banners,
+  still manages cookies, and still helps protect your privacy. But, these are
+  all enhanced, and many new features have been added, all in the same vein.
+ </P
+><P
+>  The configuration has changed significantly as well. This is something that
+  users will notice right off the bat if you are upgrading from 
+  <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> 2.0.x. The <SPAN
+CLASS="QUOTE"
+>"blocklist"</SPAN
+>
+  file does not exist any more. This is replaced by <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+>
+  files, such as <TT
+CLASS="FILENAME"
+>default.actions</TT
+>. This is where most of
+  the per site configuration is now.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="FEATURES"
+>1.4. What are some of the new features?</A
+></H3
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>   Integrated browser based configuration and control utility (<A
+HREF="http://p.p"
+TARGET="_top"
+>http://p.p</A
+>). Browser-based tracing of rule
+   and filter effects.
+  </P
+></LI
+><LI
+><P
+>    Blocking of annoying pop-up browser windows.
+  </P
+></LI
+><LI
+><P
+>   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
+  </P
+></LI
+><LI
+><P
+>   Support for Perl Compatible Regular Expressions in the configuration files, and 
+   generally a more sophisticated and flexible configuration syntax over
+   previous versions. 
+  </P
+></LI
+><LI
+><P
+>   GIF de-animation. 
+  </P
+></LI
+><LI
+><P
+>   Web page content filtering (removes banners based on size,
+   invisible <SPAN
+CLASS="QUOTE"
+>"web-bugs"</SPAN
+>, JavaScript, pop-ups, status bar abuse,
+   etc.)
+  </P
+></LI
+><LI
+><P
+>   Bypass many click-tracking scripts (avoids script redirection).
+ 
+  </P
+></LI
+><LI
+><P
+>   Multi-threaded (POSIX and native threads).
+  </P
+></LI
+><LI
+><P
+>   Auto-detection and re-reading of config file changes.
+  </P
+></LI
+><LI
+><P
+>   User-customizable HTML templates (e.g. 404 error page).
+  </P
+></LI
+><LI
+><P
+>   Improved cookie management features (e.g. session based cookies).
+  </P
+></LI
+><LI
+><P
+>   Improved signal handling, and a true daemon mode (Unix).
+  </P
+></LI
+><LI
+><P
+>   Builds from source on most UNIX-like systems. Packages available for: Linux
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
+ 
+  </P
+></LI
+><LI
+><P
+>   In addition, the configuration is much more powerful and versatile over-all.
+  </P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="PROXYMORON"
+>1.5. What is a <SPAN
+CLASS="QUOTE"
+>"proxy"</SPAN
+>? How does
+<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> work?</A
+></H3
+><P
+>  When you connect to a web site with <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, 
+  you are really connecting to your locally running version of 
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+  intercepts your requests for the web page, and relays that to the 
+  <SPAN
+CLASS="QUOTE"
+>"real"</SPAN
+> web site. The web site sends the HTTP data stream 
+  back to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, where
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can work its magic before it 
+  relays this data back to your web browser.
+ </P
+><P
+>  Since <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> sits between you and the 
+  WWW, it is in a position to intercept and completely manage all web traffic and 
+  HTTP content before it gets to your browser.
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> uses various programming methods to do
+  this, all of which is under your control via the various configuration
+  files and options.
+ </P
+><P
+>  There are many kinds of proxies. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> best 
+  fits the <SPAN
+CLASS="QUOTE"
+>"filtering proxy"</SPAN
+> category.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN123"
+>1.6. How does <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> know what is
+an ad, and what is not?</A
+></H3
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> processes all the raw content of every 
+ web page. So it reads everything on each page. It then compares this to the
+ rules as set up in the configuration files, and looks for any matches to
+ these rules. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> makes heavy use of
+ <SPAN
+CLASS="QUOTE"
+>"regular expressions"</SPAN
+>. (If you are not familiar with regular
+ expressions, it is explained briefly in <A
+HREF="../user-manual/appendix.html"
+TARGET="_top"
+>the user manual</A
+>.) Regular
+ expressions facilitate matching of one text string against another, using
+ wildcards to build complex patterns. So <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ will typically look for URLs and other content that match certain key words
+ and expressions as defined in the configuration files. For instance a URL
+ that contains <SPAN
+CLASS="QUOTE"
+>"/banners"</SPAN
+>, has a high probability of containing
+ ad banners, and thus would be a prime candidate to have a matching rule.</P
+><P
+> So <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will look for these kinds of obvious 
+ looking culprits. And also, will use lists of known organizations that
+ specialize in ads. Again, using complex patterns to match as many potential 
+ combinations as possible since there tend to be many, many variations used by 
+ advertisers, and new ones are being introduced all the time.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN135"
+>1.7. Can <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> make mistakes? 
+This does not sound very scientific.</A
+></H3
+><P
+> Actually, it's a black art ;-) And yes, it is always possible to have a broad rule
+ accidentally block something by mistake. There is a good chance you may run 
+ into such a situation at some point. It is tricky writing rules to cover
+ every conceivable possibility, and not occasionally get false positives.</P
+><P
+> But this should not be a big concern since the
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> configuration is very flexible, and
+ includes tools to help identify these types of situations so they can be
+ addressed as needed, allowing you to customize your installation.
+ (<A
+HREF="trouble.html#AEN645"
+>See the Troubleshooting section below</A
+>.)</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="BROWSERS2"
+>1.8. My browser does the same things as
+<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. Why should I use
+<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> at all?</A
+></H3
+><P
+>  Modern browsers do indeed have <I
+CLASS="EMPHASIS"
+>some</I
+> of the same
+  functionality as <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. Maybe this is
+  adequate for you. But <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is much more
+  versatile and powerful, and can do a number of things that browsers just can't.
+ </P
+><P
+>  In addition, a proxy is good choice if you use multiple browsers, or 
+  have a LAN with multiple computers. This way all the configuration 
+  is in one place, and you don't have to maintain a similar configuration 
+  for possibly many browsers.
+
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="LICENSE"
+>1.9. Is there is a license or fee? What about a 
+warranty? Registration?</A
+></H3
+><P
+>  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is licensed under the GNU General Public
+  License (GPL). It is free to use, copy, modify or distribute as you wish
+  under the terms of this license.  Please see the Copyright section for more
+  information on the license and copyright.
+
+  </P
+><P
+>  There is no warranty of any kind, expressed, implied or otherwise. That is
+  something that would cost real money ;-) There is no registration either.
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> really is <I
+CLASS="EMPHASIS"
+>free</I
+>
+  in every respect!
+
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="JOINTEAM"
+>1.10. I would like to help you, what do I do?</A
+></H3
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="JOINTEAM-MONEY"
+>1.10.1. Money Money Money</A
+></H4
+><P
+> We, of course, welcome donations and use the money for domain registering,
+ regular world-wide get-togethers (hahaha). Anyway, we'll soon describe the
+ process how to donate money to the team.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="JOINTEAM-WORK"
+>1.10.2. You want to work with us?</A
+></H4
+><P
+>   Well, helping the team is always a good idea. We welcome new developers,
+   RPM gurus or documentation makers. Simply get an account on sourceforge.net
+   and mail your id to the developer mailing list. Then read the
+   section Quickstart in the <A
+HREF="../developer-manual/quickstart.html"
+TARGET="_top"
+>   Developer's Manual</A
+>.</P
+><P
+> Once we have added you to the team, you'll have write access to the CVS
+ repository, and together we'll find a suitable task for you.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="index.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="installation.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Privoxy Frequently Asked Questions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

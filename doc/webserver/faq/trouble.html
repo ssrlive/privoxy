@@ -1,0 +1,329 @@
+<HTML
+><HEAD
+><TITLE
+>Troubleshooting</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+REL="HOME"
+TITLE="Privoxy Frequently Asked Questions"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Miscellaneous"
+HREF="misc.html"><LINK
+REL="NEXT"
+TITLE="Contacting the developers, Bug Reporting and Feature Requests"
+HREF="contact.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy Frequently Asked Questions</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="misc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="contact.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="TROUBLE"
+>5. Troubleshooting</A
+></H1
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN626"
+>5.1. I just upgraded and am getting <SPAN
+CLASS="QUOTE"
+>"connection refused"</SPAN
+>
+with every web page?</A
+></H3
+><P
+> Either <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is not running, or your 
+ browser is configured for a different port than what
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is using.</P
+><P
+> The old <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> (and also
+ <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+>) used port 8000 by 
+ default. This has been changed to port 8118 now, due to a conflict 
+ with NAS (Network Audio Service), which uses port 8000. If you haven't, 
+ you need to change your browser to the new port number, or alternately 
+ change <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> <SPAN
+CLASS="QUOTE"
+>"listen-address"</SPAN
+>
+ setting in the <TT
+CLASS="FILENAME"
+>config</TT
+> file used to start 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN639"
+>5.2. I just added a new rule, but the steenkin ad is 
+still getting through. How?</A
+></H3
+><P
+> If the ad had been displayed before you added its URL, it will probably be
+ held in the browser's cache for some time, so it will be displayed without
+ the need for any request to the server, and <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ will not be in the picture. The best thing to do is try flushing the browser's
+ caches. And then try again.</P
+><P
+> If this doesn't help, you probably have an error in the rule you
+ applied. Try pasting the full URL of the offending ad into <A
+HREF="http://config.privoxy.org/show-url-info"
+TARGET="_top"
+>http://config.privoxy.org/show-url-info</A
+>
+ and see if any actions match your new rule.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN645"
+>5.3. One of my favorite sites does not work with <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+What can I do?</A
+></H3
+><P
+> First verify that it is indeed a <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> problem, 
+ by disabling <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> filtering and blocking. 
+ Go to <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+> and click on 
+ <SPAN
+CLASS="QUOTE"
+>"Toggle Privoxy On or Off"</SPAN
+>, then disable it. Now try that 
+ page again. It's probably a good idea to flush the browser cache as well.</P
+><P
+> If still a problem, go to <SPAN
+CLASS="QUOTE"
+>"Show which actions apply to a URL and
+ why"</SPAN
+> from <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+> and paste
+ the full URL of the page in question into the prompt. See which actions are
+ being applied to the URL. Now, armed with this information, go to <SPAN
+CLASS="QUOTE"
+>"Edit
+ the actions list"</SPAN
+>. Here you should see various sections that have
+ various <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> features disabled for specific
+ sites. Most disabled <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> will have a <SPAN
+CLASS="QUOTE"
+>"-"</SPAN
+> (minus
+ sign) in front of them. Some aliases are used just to disable other actions, 
+ e.g. <SPAN
+CLASS="QUOTE"
+>"shop"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"fragile"</SPAN
+>, and won't necessarily 
+ use a <SPAN
+CLASS="QUOTE"
+>"+"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"-"</SPAN
+> sign. Add your problem page
+ URL to one of these sections that looks like it is disabling the feature that
+ is causing the problem. Rember to flush your browser's caches when making 
+ such changes! As a last resort, try <SPAN
+CLASS="QUOTE"
+>"fragile"</SPAN
+> which
+ disables most actions. Now re-try the page. There might be some trial and
+ error involved. This is discussed in a little more detail in the <A
+HREF="../user-manual/appendix.html#ACTIONSANAT"
+TARGET="_top"
+>user-manual appendix</A
+>.&#13;</P
+><P
+> Alternately, if you are comfortable with a text editor, you can accomplish 
+ the same thing by editing the appropriate <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> file.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="BUGS"
+>5.4. Where can I get help? Report bugs? Feature Requests? Etc?</A
+></H3
+><P
+> Feedback is encouraged, whether good, bad or ugly. Please see the contact
+ page in the <A
+HREF="../user-manual/contact.html"
+TARGET="_top"
+>user-manual</A
+> for
+ details.&#13;</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN672"
+>5.5. What time is it?</A
+></H3
+><P
+> Time for you to go!</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="misc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="contact.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Miscellaneous</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Contacting the developers, Bug Reporting and Feature Requests</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

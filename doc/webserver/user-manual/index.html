@@ -1,0 +1,483 @@
+<HTML
+><HEAD
+><TITLE
+>Privoxy User Manual</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+REL="NEXT"
+TITLE="Introduction"
+HREF="introduction.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="ARTICLE"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="ARTICLE"
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+>Privoxy User Manual</A
+></H1
+><DIV
+CLASS="AUTHORGROUP"
+><A
+NAME="AEN5"
+></A
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN6"
+></A
+></H3
+><DIV
+CLASS="AFFILIATION"
+><SPAN
+CLASS="ORGNAME"
+>By: Privoxy Developers<BR></SPAN
+></DIV
+></DIV
+><P
+CLASS="PUBDATE"
+>$Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $<BR></P
+><DIV
+><DIV
+CLASS="ABSTRACT"
+><A
+NAME="AEN9"
+></A
+><P
+></P
+><P
+> 
+ </P
+><P
+>  The user manual gives users information on how to install, configure and use
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+  </P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is a web proxy with advanced filtering
+ capabilities for protecting privacy, filtering web page content, managing
+ cookies, controlling access, and removing ads, banners, pop-ups and other
+ obnoxious Internet junk. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has a very
+ flexible configuration and can be customized to suit individual needs and
+ tastes. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has application for both
+ stand-alone systems and multi-user networks.</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is based on the code of the 
+ <SPAN
+CLASS="APPLICATION"
+>Internet Junkbuster</SPAN
+> (tm).
+ <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> was originally written by JunkBusters
+ Corporation, and was released as free open-source software under the GNU GPL.
+ Stefan Waldherr made many improvements, and started the SourceForge project
+ to continue development.</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> continues the
+ <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> tradition, but adds many 
+ refinements, enhancements and new features.</P
+><P
+>  You can find the latest version of the user manual at  <A
+HREF="http://www.privoxy.org/user-manual/"
+TARGET="_top"
+>http://www.privoxy.org/user-manual/</A
+>. Please see the Contact section on how to contact the developers.
+  </P
+><P
+></P
+></DIV
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="index.html#INTRO"
+></A
+></DT
+><DT
+>1. <A
+HREF="introduction.html"
+>Introduction</A
+></DT
+><DD
+><DL
+><DT
+>1.1. <A
+HREF="introduction.html#AEN37"
+>New Features</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="installation.html"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+>3.1. <A
+HREF="installation.html#INSTALLATION-SOURCE"
+>Source</A
+></DT
+><DD
+><DL
+><DT
+>3.1.1. <A
+HREF="installation.html#INSTALLATION-RH"
+>Red Hat</A
+></DT
+><DT
+>3.1.2. <A
+HREF="installation.html#INSTALLATION-SUSE"
+>SuSE</A
+></DT
+><DT
+>3.1.3. <A
+HREF="installation.html#INSTALLATION-OS2"
+>OS/2</A
+></DT
+><DT
+>3.1.4. <A
+HREF="installation.html#INSTALLATION-WIN"
+>Windows</A
+></DT
+><DT
+>3.1.5. <A
+HREF="installation.html#INSTALLATION-OTHER"
+>Other</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>4. <A
+HREF="quickstart.html"
+>Quickstart to Using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="quickstart.html#AEN230"
+>Command Line Options</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
+HREF="configuration.html"
+><SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> Configuration</A
+></DT
+><DD
+><DL
+><DT
+>5.1. <A
+HREF="configuration.html#AEN275"
+>Controlling <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with Your Web Browser</A
+></DT
+><DT
+>5.2. <A
+HREF="configuration.html#AEN293"
+>Configuration Files Overview</A
+></DT
+><DT
+>5.3. <A
+HREF="configuration.html#AEN324"
+>The Main Configuration File</A
+></DT
+><DD
+><DL
+><DT
+>5.3.1. <A
+HREF="configuration.html#AEN357"
+>Defining Other Configuration Files</A
+></DT
+><DT
+>5.3.2. <A
+HREF="configuration.html#AEN450"
+>Other Configuration Options</A
+></DT
+><DT
+>5.3.3. <A
+HREF="configuration.html#AEN587"
+>Access Control List (ACL)</A
+></DT
+><DT
+>5.3.4. <A
+HREF="configuration.html#FORWARDING"
+>Forwarding</A
+></DT
+><DT
+>5.3.5. <A
+HREF="configuration.html#AEN785"
+>Windows GUI Options</A
+></DT
+></DL
+></DD
+><DT
+>5.4. <A
+HREF="configuration.html#ACTIONSFILE"
+>The Actions File</A
+></DT
+><DD
+><DL
+><DT
+>5.4.1. <A
+HREF="configuration.html#AEN887"
+>URL Domain and Path Syntax</A
+></DT
+><DT
+>5.4.2. <A
+HREF="configuration.html#AEN963"
+>Actions</A
+></DT
+><DT
+>5.4.3. <A
+HREF="configuration.html#AEN1285"
+>Aliases</A
+></DT
+></DL
+></DD
+><DT
+>5.5. <A
+HREF="configuration.html#FILTERFILE"
+>The Filter File</A
+></DT
+><DT
+>5.6. <A
+HREF="configuration.html#AEN1351"
+>Templates</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="contact.html"
+>Contacting the Developers, Bug Reporting and Feature
+Requests</A
+></DT
+><DT
+>7. <A
+HREF="copyright.html"
+>Copyright and History</A
+></DT
+><DD
+><DL
+><DT
+>7.1. <A
+HREF="copyright.html#AEN1385"
+>Copyright</A
+></DT
+><DT
+>7.2. <A
+HREF="copyright.html#HISTORY"
+>History</A
+></DT
+></DL
+></DD
+><DT
+>8. <A
+HREF="seealso.html"
+>See Also</A
+></DT
+><DT
+>9. <A
+HREF="appendix.html"
+>Appendix</A
+></DT
+><DD
+><DL
+><DT
+>9.1. <A
+HREF="appendix.html#REGEX"
+>Regular Expressions</A
+></DT
+><DD
+><DL
+><DT
+>21<A
+HREF="appendix.html#AEN1459"
+></A
+></DT
+><DT
+>22<A
+HREF="appendix.html#AEN1467"
+></A
+></DT
+><DT
+>23<A
+HREF="appendix.html#AEN1470"
+></A
+></DT
+><DT
+>24<A
+HREF="appendix.html#AEN1473"
+></A
+></DT
+><DT
+>25<A
+HREF="appendix.html#AEN1476"
+></A
+></DT
+><DT
+>26<A
+HREF="appendix.html#AEN1481"
+></A
+></DT
+><DT
+>27<A
+HREF="appendix.html#AEN1484"
+></A
+></DT
+><DT
+>28<A
+HREF="appendix.html#AEN1487"
+></A
+></DT
+><DT
+>29<A
+HREF="appendix.html#AEN1493"
+></A
+></DT
+></DL
+></DD
+><DT
+>9.2. <A
+HREF="appendix.html#AEN1587"
+><SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s Internal Pages</A
+></DT
+><DD
+><DL
+><DT
+>9.2.1. <A
+HREF="appendix.html#BOOKMARKLETS"
+>Bookmarklets</A
+></DT
+></DL
+></DD
+><DT
+>9.3. <A
+HREF="appendix.html#ACTIONSANAT"
+>Anatomy of an Action</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INTRO"
+></A
+></H1
+><P
+> </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="introduction.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introduction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
