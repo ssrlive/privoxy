@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.7 2002/03/24 21:07:18 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.8 2002/03/24 21:13:01 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -27,16 +27,17 @@
 #
 
 # Defines should happen in the begining of the file
+%define veryoldname junkbust
 %define oldname junkbuster
 %define privoxyconf %{_sysconfdir}/%{name}
 
-Summary: Privoxy - privacy enhancing proxy
-Vendor: http://ijbswa.sourceforge.net
 Name: privoxy
 Version: 2.9.13
-Release: 1
-Source0: http://www.waldherr.org/%{name}/privoxy-%{version}.tar.gz
+Release: 2
+Summary: Privoxy - privacy enhancing proxy
 License: GPL
+Vendor: http://ijbswa.sourceforge.net
+Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
 URL: http://ijbswa.sourceforge.net/
@@ -65,9 +66,6 @@ development. Several other developers are now contributing.
 %setup -q -c
 
 %build
-echo This specfile is broken. Please, wait while we fix it
-echo == morcego
-exit 1
 autoheader
 autoconf
 %configure
@@ -128,24 +126,46 @@ cat config | \
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
     %{buildroot}%{privoxyconf}/default.action
 
+
+# Creating ghost init files
+mkdir -p %{buildroot}/%{_sysconfdir}/rc.d/rc{0,1,2,3,4,5,6}.d
+for i in 0 1 4 6
+do
+ln -sf ../init.d/%{name} %{buildroot}/%{_sysconfdir}/rc.d/rc${i}.d/K09%{name}
+done
+for i in 2 3 5
+do
+ln -sf ../init.d/%{name} %{buildroot}/%{_sysconfdir}/rc.d/rc${i}.d/S84%{name}
+done
+
 ## Macros are expanded even on commentaries. So, we have to use %%
 ## -- morcego
 #%%makeinstall
 
 %pre
-# We check to see if the user privoxy exists.
-# If it does, we do nothing
-# If we don't, we check to see if the user junkbust exist and, in case it
-# does, we change it do junkbuster. If it also does not exist, we create the
-# privoxy user -- morcego
-id privoxy > /dev/null 2>&1 
+# This is where we handle old usernames (junkbust and junkbuster)
+# I'm not sure we should do that, but this is the way we have been
+# doing it for some time now -- morcego
+# We should do it for the group as well -- morcego
+# Doing it by brute force. Much cleaner (no more Mr. Nice Guy) -- morcego
+
+# Change the group name. Remove anything left behind.
+groupmod -n %{name} %{oldname} > /dev/null 2>&1 ||:
+groupmod -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
+groupdel %{oldname} > /dev/null 2>&1 ||:
+groupdel %{veryoldname} > /dev/null 2>&1 ||:
+
+# Same for username
+usermod -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
+usermod -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
+userdel %{oldname} > /dev/null 2>&1 ||:
+userdel %{veryoldname} > /dev/null 2>&1 ||:
+
+# Check to see if everything is okey. Create user if it still does not
+# exist
+id %{name} > /dev/null 2>&1
 if [ $? -eq 1 ]; then
-	id privoxy > /dev/null 2>&1 
-	if [ $? -eq 0 ]; then
-		/usr/sbin/usermod -l privoxy -d %{_sysconfdir}/%{name} -s "" privoxy  > /dev/null 2>&1
-	else
-		/usr/sbin/useradd -d %{_sysconfdir}/%{name} -r -s "" privoxy > /dev/null 2>&1 
-	fi
+	/usr/sbin/useradd -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
 fi
 
 %post
@@ -157,27 +177,26 @@ fi
 chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null
 chown -R %{name}:%{name} /etc/%{name} 2>/dev/null
 if [ "$1" = "1" ]; then
-#     /sbin/chkconfig --add %{name}
 	/sbin/service %{name} condrestart > /dev/null 2>&1
 fi
-# 01/09/02 HB, getting rid of any user=junkbust
-# Changed by morcego to use the id command.
-id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
 
 %preun
+/sbin/service %{veryoldname} stop > /dev/null 2>&1 ||:
 /sbin/service %{oldname} stop > /dev/null 2>&1 ||:
-/sbin/chkconfig --del %{oldname} ||:
 
 if [ "$1" = "0" ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1 ||:
+	# No need to use chkconfig. The %%ghost files will handle it
 fi
 
 %postun
 #if [ "$1" -ge "1" ]; then
 #	/sbin/service %{name} condrestart > /dev/null 2>&1
 #fi
-# dont forget to remove user and group privoxy
-id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+# We only remove it we this is not an upgrade
+if [ "$1" = "0" ]; then
+	id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+fi
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -189,16 +208,17 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/ijb_docs.css
-#%doc %{name}.weekly %{name}.monthly AUTHORS
 
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
-%attr(0744,privoxy,privoxy) %dir %{_localstatedir}/log/%{name}
+%attr(0744,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
 
-%attr(0744,privoxy,privoxy)%{_sbindir}/%{name}
+%attr(0744,%{name},%{name})%{_sbindir}/%{name}
 
+# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
+# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
 %config %{privoxyconf}/config
 %config %{privoxyconf}/advanced.action
 %config %{privoxyconf}/basic.action
@@ -236,17 +256,26 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/S84%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
-#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/S84%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/K09%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
+%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/K09%{name}
 
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sun Mar 24 2002 Rodrigo Barbosa <rodrigob@suespammers.org>
++ privoxy-2.9.13-2
+- Fixed the init files entries. Now we use %%ghost
+- improved username (and groupname) handling on the %%pre section. By improved
+  I mean: we do it by brute force now. Much easier to maintain. Yeah, you
+  got it right. No more Mr. Nice Guy.
+- Removed the userdel call on %%post. No need, once it's complety handled on
+  the %%pre section
+
 * Sun Mar 24 2002 Hal Burgiss <hal@foobox.net>
 + junkbusterng-2.9.13-1
   Added autoheader. Added autoconf to buildrequires.
@@ -497,6 +526,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.8  2002/03/24 21:13:01  morcego
+# Tis broken.
+#
 # Revision 1.7  2002/03/24 21:07:18  hal9
 # Add autoheader, etc.
 #
