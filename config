@@ -1,7 +1,7 @@
 #  Sample Configuration file for Privoxy
 
 #
-# $Id: config,v 1.33 2002/04/15 19:06:43 jongfoster Exp $
+# $Id: config,v 1.34 2002/04/22 12:34:09 oes Exp $
 #
 ###################################################################
 #                                                                 #
@@ -134,24 +134,31 @@ logdir .
 #     
 #  Type of value:
 #     
-#      File name, relative to confdir
+#      File name, relative to confdir, without the .action (Unix)
+#      or .action.txt (Windows) extension.
 #     
-#  Default value:
-#     
-#      default.action (Unix) or default.action.txt (Windows)
+#  Default values:
+#      standard  # Internal purpose, recommended
+#      default   # Main actions file
+#      user      # User customizations
 #     
 #  Effect if unset:
 #     
 #      No action is taken at all. Simple neutral proxying.
 #     
 #  Notes:
-#     
-#      There is no point in using Privoxy without an actions file. There
-#      are three different actions files included in the distribution,
-#      with varying degrees of aggressiveness: default.action,
-#      intermediate.action and advanced.action.
+#      Multiple actionsfile lines are OK and are in fact recommended!
 #
-actionsfile default.action
+#      The default values include standard.action, which is used for
+#      internal purposes and should be loaded, default.action, which
+#      is the "main" actions file maintained by the developers, and
+#      user.action, where you can make your personal additions.
+#     
+#      There is no point in using Privoxy without an actions file.
+#
+actionsfile standard  # Internal purpose, recommended
+actionsfile default   # Main actions file
+actionsfile user      # User customizations
 
 
 #  1.4. filterfile
