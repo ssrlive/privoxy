@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.6 2002/03/24 13:25:43 swa Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.7 2002/03/26 22:29:55 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.6 2002/03/24 13:25:43 swa Exp $
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.7  2002/03/26 22:29:55  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.6  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -665,6 +668,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
 
          freez(url->spec);
          freez(url->path);
+         regfree(url->preg);
          freez(url->preg);
 
          return JB_ERR_PARSE;
@@ -704,6 +708,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          freez(url->spec);
          freez(url->path);
 #ifdef REGEX
+         regfree(url->preg);
          freez(url->preg);
 #endif /* def REGEX */
          return JB_ERR_MEMORY;
@@ -723,6 +728,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          freez(url->spec);
          freez(url->path);
 #ifdef REGEX
+         regfree(url->preg);
          freez(url->preg);
 #endif /* def REGEX */
          freez(url->dbuffer);
@@ -741,6 +747,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
             freez(url->spec);
             freez(url->path);
 #ifdef REGEX
+            regfree(url->preg);
             freez(url->preg);
 #endif /* def REGEX */
             freez(url->dbuffer);
