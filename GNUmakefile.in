@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.15 2002/03/08 20:00:28 swa Exp $
+# $Id: GNUmakefile.in,v 1.16 2002/03/14 22:32:32 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.16  2002/03/14 22:32:32  hal9
+# Bumped the RPM version.
+#
 # Revision 1.15  2002/03/08 20:00:28  swa
 # some leftovers.
 #
@@ -275,16 +278,17 @@ INSTALL    = cp -f
 LD         = @CC@
 RM         = rm -f
 STRIP_PROG = strip
-SED	     = sed
+SED	   = sed
 CAT        = cat
 RPM        = rpm
-MV	        = mv
+MV	   = mv
 TAR        = tar
 MAKE       = make
 LN         = ln
 WDUMP      = @WDUMP@ -dump
 JADEBIN    = @JADEBIN@
 DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
+DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 
 # Program to do LF->CRLF
@@ -558,16 +562,16 @@ dok: doc/source/ldpOK.dsl
 	mkdir -p doc/text doc/man
 #  user manual
 	rm -rf doc/webserver/user-manual
-	cd doc/source && db2html -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && db2html -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
 ##  developer manual
 	rm -rf doc/webserver/developer-manual
-	cd doc/source && db2html -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
-	cd doc/source && db2html -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
 ##  faq
 	rm -rf doc/webserver/faq
-	cd doc/source && db2html -s ldpOK.dsl faq.sgml && mv faq ../webserver
-	cd doc/source && db2html -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
 redhat-dok: doc/source/ldpOK.dsl
 	mkdir -p doc/text doc/man doc/source/user-manual \
