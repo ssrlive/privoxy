@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.2 2001/05/20 15:07:54 jongfoster Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.3 2001/05/22 18:56:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.2 2001/05/20 15:07:54 jongf
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.3  2001/05/22 18:56:28  oes
+ *    CRLF -> LF
+ *
  *    Revision 1.2  2001/05/20 15:07:54  jongfoster
  *    File is now ignored if _WIN_CONSOLE is defined.
  *
@@ -234,7 +237,7 @@ LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
       case WM_TRAYMSG:
       {
-         UINT uID = (UINT) wParam;
+         /* UINT uID = (UINT) wParam; */
          UINT uMouseMsg = (UINT) lParam;
 
          if (uMouseMsg == WM_RBUTTONDOWN)

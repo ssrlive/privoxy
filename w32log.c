@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.15 2001/07/30 22:08:36 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.16 2001/08/01 19:58:12 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,10 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.15 2001/07/30 22:08:36 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.16  2001/08/01 19:58:12  jongfoster
+ *    Fixing documentation filenames in help menu, and making status
+ *    option work without needing the "Junkbuster Status.URL" file.
+ *
  *    Revision 1.15  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -822,7 +826,6 @@ HWND CreateLogWindow(HINSTANCE hInstance, int nCmdShow)
 
    HWND hwnd = NULL;
    HWND hwndOwner = (g_bShowOnTaskBar) ? NULL : CreateHiddenLogOwnerWindow(hInstance);
-   HWND hwndChild = NULL;
    RECT rcClient;
    WNDCLASSEX wc;
 

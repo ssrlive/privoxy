@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.2 2001/07/29 19:32:00 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $";
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.2  2001/07/29 19:32:00  jongfoster
+ *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -108,7 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
    int argc = 0;
    int i;
    int res;
-   char **argv = NULL;
+   const char **argv = NULL;
    char *pszArgs = NULL;
    char *pszLastTok;
    char szModule[MAX_PATH+1];

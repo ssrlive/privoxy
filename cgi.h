@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.16 2001/09/16 17:08:54 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.17 2001/10/23 21:48:19 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,18 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.17  2001/10/23 21:48:19  jongfoster
+ *    Cleaning up error handling in CGI functions - they now send back
+ *    a HTML error page and should never cause a FATAL error.  (Fixes one
+ *    potential source of "denial of service" attacks).
+ *
+ *    CGI actions file editor that works and is actually useful.
+ *
+ *    Ability to toggle JunkBuster remotely using a CGI call.
+ *
+ *    You can turn off both the above features in the main configuration
+ *    file, e.g. if you are running a multi-user proxy.
+ *
  *    Revision 1.16  2001/09/16 17:08:54  jongfoster
  *    Moving simple CGI functions from cgi.c to new file cgisimple.c
  *
@@ -112,10 +124,9 @@ extern "C" {
 #endif
 
 /*
- * Dispatch & parameter parsing functions
+ * Main dispatch function
  */
 extern struct http_response *dispatch_cgi(struct client_state *csp);
-extern struct map *parse_cgi_parameters(char *argstring);
 
 /* Not exactly a CGI */
 extern struct http_response * error_response(struct client_state *csp,
