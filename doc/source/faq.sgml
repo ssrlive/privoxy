@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.28 2002/03/25 04:27:33 hal9 Exp $
+ $Id: faq.sgml,v 1.29 2002/03/25 05:23:57 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.28 2002/03/25 04:27:33 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.29 2002/03/25 05:23:57 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -85,7 +85,8 @@ Please see the Contact section in the
  </para>
  <para>
   The new <application>Privoxy</application> started with the same
-  code base, but has changed significantly at this point.
+  <application>Junkbuster</application> code base, but has changed
+  significantly at this point. 
  </para>
 
 </sect3>
@@ -97,15 +98,18 @@ Please see the Contact section in the
  <application>Privoxy</application> is for <quote>Privacy Enhancing Proxy</quote>.
  There are possible legal complications from the continued use of the 
  <application>Junkbuster</application> name, which is a trademark of 
- <ulink url="http://junkbusters.com">The Junkbusters Corporation</ulink>.
- There are no objections from Junkbusters Corporation to the project 
- itself though.
+ <ulink url="http://junkbusters.com">Junkbusters Corporation</ulink>.
+ (There are no objections from Junkbusters Corporation to the 
+ <application>Privoxy</application> project itself though, and they 
+ in fact still share our ideals and goals.)
 </para>
 
 <para>
  The developers also believed that there so many changes from the original 
  code, that it was time to make a clean break from the past and make 
- a name in their own right.
+ a name in their own right, especially now with the pending release of 
+ version 3.0.
+
 </para>
 </sect3>
 
@@ -333,10 +337,34 @@ repository, and together we'll find a suitable task for you.
 
 <sect2 id="installation"><title>Installation</title>
 
-<sect3 id="newinstall"><title>Can I install the new 
- <application>Privoxy</application> over the old one?</title>
+<sect3 id="whichbrowsers">
+<title>Which browsers are supported by <application>Privoxy</application>?</title>
+<para>
+ Any browser that can be configured to use a <quote>proxy</quote>, which 
+ is probably almost all browsers. Direct browser support is not necessary
+ since <application>Privoxy</application> runs as a separate application and
+ just exchanges standard HTML data with your browser.
+</para>
+</sect3>
+
+<sect3 id="whichos">
+<title>Which operating systems are supported?</title>
+<para>
+ Right now Win32, Mac OSX, OS/2, AmigaOS, Linux, and many 
+ flavors of Unix.
+</para>
+
+<para>
+ Source code is available, so porting to other operating systems, 
+ is always a possibility.
+
+</para>
+</sect3>
+
+<sect3 id="newinstall"><title>Can I install  
+ <application>Privoxy</application> over <application>Junkbuster</application>?</title>
  <para>
-   We recommend you uninstall the old <application>Junkbuster</application>
+   We recommend you uninstall <application>Junkbuster</application>
    first to minimize conflicts and confusion. You may want to 
    save your old configuration files for future reference. The configuration
    is substantially changed.
@@ -467,7 +495,7 @@ All the ads are there. What's wrong?</title>
 some of these <quote>actions</quote>.</title>
 <para>
  These are all explained in the 
- <ulink url="http://ijbswa.sourceforge.net/user-manual/configuration.html#ACTIONSFILE">user-manual</ulink>.
+ <ulink url="../user-manual/configuration.html#ACTIONSFILE">user-manual</ulink>.
  Please refer to that.
 </para>
 </sect3>
@@ -489,7 +517,7 @@ way to do this?</title>
 <para>
  Please see the 
  <ulink
- url="http://ijbswa.sourceforge.net/user-manual/configuration.html#ACTIONSFILE">user-manual</ulink> for a
+ url="../user-manual/configuration.html#ACTIONSFILE">user-manual</ulink> for a
  detailed explanation of these and other configuration files, and their
  various options and syntax.
 </para>
@@ -695,10 +723,11 @@ Note that normally only local users can connect to <application>Privoxy</applica
 <title id="filterfile">What is a <quote>default.filter</quote>?</title>
 <para>
  The <quote>default.filter</quote> file is used to <quote>filter</quote> any
- page content. By <quote>filtering</quote> we mean it can modify, remove, 
+ web page content. By <quote>filtering</quote> we mean it can modify, remove, 
  or change <emphasis>anything</emphasis> on the page, including HTML tags, and
- JavaScript. Regular expressions are used to accomplish this. This is
- potentially a very powerful feature, but requires some expertise. 
+ JavaScript. Regular expressions are used to accomplish this, and operate 
+ on a line by line basis. This is potentially a very powerful feature, but
+ requires some expertise. 
 </para>
 
 <para>
@@ -710,7 +739,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 <para>
  Presently, there is no GUI editor option for this part of the configuration, 
  but you can disable/enable various sections of the included default 
- file with the Actions List Editor from your browser.
+ file with the <quote>Actions List Editor</quote> from your browser.
 </para>
 
 </sect3>
@@ -748,8 +777,8 @@ Note that normally only local users can connect to <application>Privoxy</applica
  This is a configuration option for images that
  <application>Privoxy</application> is stopping. You have the choice <!-- of
  the --> <!-- <application>Privoxy</application> logo, --> a checkerboard
- pattern (this scales better), a transparent 1x1 GIF image, or a custom URL or
- your choice.
+ pattern, a transparent 1x1 GIF image (aka <quote>blank</quote>), or a custom
+ URL or your choice.
 </para>
 
 <para>
@@ -766,7 +795,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 
 <sect3>
-<title id="whyseeum">Why would anybody want to see the checkerboard?</title>
+<title id="whyseeum">Why would anybody want to see a checkerboard pattern?</title>
 <para>
  This can be helpful for troubleshooting problems. It might also be good 
  for anyone new to <application>Privoxy</application> so that they can 
@@ -786,7 +815,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
  to be a warning so that you know something has been blocked and an easy way
  for you to see why. These are handled differently than what has been defined
  as <quote>images</quote> (e.g. ad banners). If you want them to be treated
- as if they were images, so that they can be invisible, then move the
+ as if they were images, so that they can be made invisible, then move the
  offending URL from the <quote>+block</quote> section to the
  <quote>+imageblock</quote> section of your actions file. Alternately, you
  could modify the <quote><filename>block</filename></quote> HTML template that
@@ -796,11 +825,23 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 </sect3>
 
+<sect3 id="otherproxy">
+<title>How can I make <application>Privoxy</application> work with other 
+proxies like <application>Squid</application>?</title>
+<para>
+ This can be done. See the <ulink
+ url="../user-manual/configuration.html#FORWARDING">user manual</ulink>, 
+ which describes how to do this.
+
+</para>
+
+</sect3>
+
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2 id="misc"><title>Misc</title>
+<sect2 id="misc"><title>Miscellaneous</title>
 
 <sect3>
 <title id="slowsme">How much does <application>Privoxy</application> slow my browsing down? This 
@@ -1049,7 +1090,8 @@ and ugly looking. Can't a better font be used?</title>
  <emphasis>blank</emphasis>, or a URL of your choosing.
 </para>
 <para>
-Given the above problem, we have decided to remove the logo option entirely.
+Given the above problem, we have decided to remove the logo option entirely 
+[as of v2.9.13].
 </para>
 </sect3>
 
@@ -1103,6 +1145,16 @@ secure is it? Do I need to take any special precautions?</title>
  Of course, a firewall is always good too. Better safe than sorry.
 </para>
 
+</sect3>
+
+<sect3 id="turnoff">
+<title>How can I temporarily disable <application>Privoxy</application>?</title>
+<para>
+ The easiest way is to access <application>Privoxy</application> with your 
+ browser by using the special URL: <ulink url="http://p.p/">http://p.p/</ulink>
+ and select "Toggle Privoxy on or off" from that page.
+
+</para>
 </sect3>
 
 </sect2>
@@ -1179,7 +1231,7 @@ What can I do?</title>
  that looks like it is disabling the feature that is causing the
  problem. Re-try the page. There might be some trial and error involved. This
  is discussed in a little more detail in the <ulink
- url="http://ijbswa.sourceforge.net/user-manual/appendix.html#ACTIONSANAT">user-manual
+ url="../user-manual/appendix.html#ACTIONSANAT">user-manual
  appendix</ulink>.
 
 </para>
@@ -1212,12 +1264,17 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 </para>
 </sect1>
 -->
+
 <!--   ~~~~~       New section      ~~~~~     -->
+<!--
+
+This is referenced in the doc header already. HB 03/25/02
+
 <sect1 id="contact"><title>Contact the developers</title>
 <para>Please see the user manual for information on how to contact the developers.
 </para>
 </sect1>
-
+-->
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="copyright"><title>Copyright and History</title>
 <para>Please see the user manual for information on Copyright and History.
@@ -1255,6 +1312,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.29  2002/03/25 05:23:57  hal9
+Moved section, and touch ups.
+
 Revision 1.28  2002/03/25 04:27:33  hal9
 New section related to name change.
 
