@@ -8,7 +8,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.14">
+<!entity p-version "2.9.13">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.71 2002/04/08 22:59:26 hal9 Exp $
+ $Id: user-manual.sgml,v 1.72 2002/04/10 04:06:19 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.71 2002/04/08 22:59:26 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.72 2002/04/10 04:06:19 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3957,6 +3957,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.72  2002/04/10 04:06:19  hal9
+ Added actions feedback  to Bookmarklets section
+
  Revision 1.71  2002/04/08 22:59:26  hal9
  Version update. Spell chkconfig correctly :)
 
