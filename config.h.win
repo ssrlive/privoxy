@@ -3,7 +3,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -37,7 +37,13 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h,v $
+ *    $Log: config.h.win,v $
+ *    Revision 1.1  2001/06/01 17:56:07  jongfoster
+ *    Removing generated files config.h and pcre/chartables.c
+ *    Now use a custom build step to copy config.h.win to config.h
+ *    New VC++ project pcre/vc_dftables.dsp will generate pcre/chartables.c
+ *    Also adding the new files list.[ch], actions.[ch] to the console build.
+ *
  *    Revision 1.6  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -120,6 +126,11 @@
  * Version number, as a string
  */
 #define VERSION "2.9.4"
+
+/*
+ * Status of the code: alpha, beta or stable
+ */
+#define CODE_STATUS "alpha"
 
 /*
  * Regular expression matching for URLs.  (Highly recommended).  If this is 
