@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.16  2002/01/10 12:36:18  oes
+ *    Moved HAVE_*_R to acconfig.h, where they belong.
+ *
  *    Revision 1.15  2001/12/30 14:07:31  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -194,11 +197,6 @@
  * Status of the code: "alpha", "beta" or "stable".
  */
 #undef CODE_STATUS
-
-/*
- * pid file used under unix.
- */
-#undef PID_FILE_PATH 
 
 /*
  * Regular expression matching for URLs.  (Highly recommended).
