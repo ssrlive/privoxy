@@ -1,7 +1,7 @@
-const char filters_rcs[] = "$Id: filters.c,v 2.1 2002/08/26 11:08:18 sarantis Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.2 2002/09/04 15:38:24 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/filters.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -38,6 +38,17 @@ const char filters_rcs[] = "$Id: filters.c,v 2.1 2002/08/26 11:08:18 sarantis Ex
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.2  2002/09/04 15:38:24  oes
+ *    Synced with the stable branch:
+ *        Revision 1.58.2.2  2002/08/01 17:18:28  oes
+ *        Fixed BR 537651 / SR 579724 (MSIE image detect improper for IE/Mac)
+ *
+ *        Revision 1.58.2.1  2002/07/26 15:18:53  oes
+ *        - Bugfix: Executing a filters without jobs no longer results in
+ *          turing off *all* filters.
+ *        - Security fix: Malicious web servers can't cause a seg fault
+ *          through bogus chunk sizes anymore
+ *
  *    Revision 2.1  2002/08/26 11:08:18  sarantis
  *    Fix typo.
  *
@@ -440,7 +451,9 @@ const char filters_rcs[] = "$Id: filters.c,v 2.1 2002/08/26 11:08:18 sarantis Ex
 #include "list.h"
 #include "deanimate.h"
 #include "urlmatch.h"
-
+#ifdef FEATURE_ACTIVITY_CONSOLE
+#include "stats.h"
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
 #ifdef _WIN32
 #include "win32.h"
 #endif
@@ -506,6 +519,9 @@ int block_acl(struct access_control_addr *dst, struct client_state *csp)
             }
             else
             {
+#ifdef FEATURE_ACTIVITY_CONSOLE
+               accumulate_stats(STATS_ACL_RESTRICT, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
                return(1);
             }
          }
@@ -724,6 +740,9 @@ struct http_response *block_url(struct client_state *csp)
       /* and handle accordingly: */
       if ((p == NULL) || (0 == strcmpic(p, "pattern")))
       {
+#ifdef FEATURE_ACTIVITY_CONSOLE
+         accumulate_stats(STATS_IMAGE_BLOCK, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
          rsp->body = bindup(image_pattern_data, image_pattern_length);
          if (rsp->body == NULL)
          {
@@ -741,6 +760,9 @@ struct http_response *block_url(struct client_state *csp)
 
       else if (0 == strcmpic(p, "blank"))
       {
+#ifdef FEATURE_ACTIVITY_CONSOLE
+         accumulate_stats(STATS_IMAGE_BLOCK, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
          rsp->body = bindup(image_blank_data, image_blank_length);
          if (rsp->body == NULL)
          {
@@ -1351,6 +1373,10 @@ char *pcrs_filter_response(struct client_state *csp)
       free(new);
       return(NULL);
    }
+#ifdef FEATURE_ACTIVITY_CONSOLE
+   else
+     accumulate_stats(STATS_FILTER, hits);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
 
    csp->flags |= CSP_FLAG_MODIFIED;
    csp->content_length = size;
@@ -1422,6 +1448,9 @@ char *gif_deanimate_response(struct client_state *csp)
       }
       else
       {
+#ifdef FEATURE_ACTIVITY_CONSOLE
+         accumulate_stats(STATS_GIF_DEANIMATE, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
          log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
       }
       csp->content_length = out->offset;

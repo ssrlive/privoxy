@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 2.1 2002/07/04 14:35:05 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 2.0 2002/06/04 14:34:21 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 2.1  2002/07/04 14:35:05  oes
+ *    Added ability to send redirects to send-banner CGI, so that it can completely mimic the image blocking action if called with type=auto
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -1410,6 +1413,9 @@ static char *show_rcs(void)
    SHOW_RCS(filters_rcs)
    SHOW_RCS(gateway_h_rcs)
    SHOW_RCS(gateway_rcs)
+#ifdef FEATURE_ACTIVITY_CONSOLE
+   SHOW_RCS(ipc_h_rcs)
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
    SHOW_RCS(jbsockets_h_rcs)
    SHOW_RCS(jbsockets_rcs)
    SHOW_RCS(jcc_h_rcs)
@@ -1433,6 +1439,10 @@ static char *show_rcs(void)
    SHOW_RCS(project_h_rcs)
    SHOW_RCS(ssplit_h_rcs)
    SHOW_RCS(ssplit_rcs)
+#ifdef FEATURE_ACTIVITY_CONSOLE
+   SHOW_RCS(stats_h_rcs)
+   SHOW_RCS(stats_rcs)
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
    SHOW_RCS(urlmatch_h_rcs)
    SHOW_RCS(urlmatch_rcs)
 #ifdef _WIN32

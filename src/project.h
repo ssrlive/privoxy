@@ -1,10 +1,10 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 2.2 2002/07/12 04:26:17 agotneja Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 2.3 2002/09/05 08:00:23 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/project.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/project.h,v $
  *
  * Purpose     :  Defines data structures which are widely used in the
  *                project.  Does not define any variables or functions
@@ -37,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 2.3  2002/09/05 08:00:23  oes
+ *    Synced with the stable branch:
+ *        Revision 1.72.2.1  2002/08/10 11:25:18  oes
+ *        - Include config.h for access to config data
+ *        - Include <pcre*.h> depending on where they are
+ *
  *    Revision 2.2  2002/07/12 04:26:17  agotneja
  *    Re-factored 'chat()' to become understandable and maintainable as
  *    a first step in adding Transparent Proxy functionality.
@@ -1352,6 +1358,31 @@ struct configuration_spec
 
    /** Size limit for IOB */
    size_t buffer_limit;
+
+#ifdef FEATURE_ACTIVITY_CONSOLE
+
+  /**
+   * Default IP address to send statistics to, as a string.
+   * Set to "127.0.0.1".
+   */
+  #define ACTIVTY_ADDR_DEFAULT   "127.0.0.1"
+
+  /**
+   * Default port to listen on, as a number.
+   * Set to 8119.
+   */
+  #define ACTIVTY_ADDR_PORT      8119
+
+   /** IP address to talk to for activity/statistics reporting. */
+   const char *activity_address;
+
+   /** Port to bind to.  Defaults to ACTIVTY_ADDR_PORT == 8119. */
+   int         activity_port;
+
+   /** Frequency, in seconds, of how often to update the stats console. */
+   int         activity_freq;
+
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
 
 #ifdef FEATURE_TRUST
 
