@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.47 2002/02/20 23:15:13 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.48 2002/03/03 14:50:40 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.48  2002/03/03 14:50:40  oes
+ *    Fixed CLF logging: Added ocmd member for client's request to struct http_request
+ *
  *    Revision 1.47  2002/02/20 23:15:13  jongfoster
  *    Parsing functions now handle out-of-memory gracefully by returning
  *    an error code.
@@ -456,11 +459,6 @@ typedef int jb_err;
 /* Default IP and port to listen on */
 #define HADDR_DEFAULT   "127.0.0.1"
 #define HADDR_PORT      8000
-
-/*
- * pid file name
- */
-#define PID_FILE_NAME   "junkbuster.pid"
 
 /* Forward defs for various structures */
 
