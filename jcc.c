@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.6 2001/05/23 00:13:58 joergs Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.7 2001/05/25 22:34:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.6 2001/05/23 00:13:58 joergs Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.7  2001/05/25 22:34:30  jongfoster
+ *    Hard tabs->Spaces
+ *
  *    Revision 1.6  2001/05/23 00:13:58  joergs
  *    AmigaOS support fixed.
  *
@@ -447,13 +450,14 @@ static void chat(struct client_state *csp)
          {
             write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
          }
-         if (tinygif == 1)
+         else if (tinygif == 1)
          {
             write_socket(csp->cfd, BLANKGIF, sizeof(BLANKGIF)-1);
          }
          else if ((tinygif == 3) && (tinygifurl))
          {
-            p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(tinygifurl));
+            freez(p);
+            p = (char *)malloc(sizeof(HTTP_REDIRECT_TEMPLATE) + strlen(tinygifurl));
             sprintf(p, HTTP_REDIRECT_TEMPLATE, tinygifurl);
             write_socket(csp->cfd, p, strlen(p));
          }
