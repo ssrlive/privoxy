@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1628,7 +1628,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1688,7 +1688,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1859,12 +1859,15 @@ at sourceforge. Three simple steps:
 	<filename>ncftpput</filename> (ncftp), <filename>scp</filename> (ssh),
 <filename>gmake</filename> (GNU's version of make), autoconf, cvs, ???.
     </para>
+    <para>
+        Replace X, Y and Z with the actual version number (X = major, Y = minor, Z = point):
+    </para>
      
     <sect2 id="beforerelease">
     <title>Before the Release</title>
      <para>
        The following <emphasis>must be done by one of the
-       developers</emphasis> prior to each new release:
+       developers</emphasis> prior to each new release.
      </para>
      <para>
       <itemizedlist>
@@ -1878,10 +1881,11 @@ at sourceforge. Three simple steps:
       <listitem>
        <para>
          Increment the version number in <filename>configure.in</filename> in
-         CVS. Also, the RPM release number in
-         <filename>configure.in</filename>. Do NOT touch version information
-         after export from CVS. <emphasis>All packages</emphasis> will use the
-         version and release data from <filename>configure.in</filename>.
+         CVS. Also, inrease or reset the RPM release number in
+         <filename>configure.in</filename> as appropriate. Do <emphasis>NOT</emphasis>
+         touch version information after export from CVS.
+         <emphasis>All packages</emphasis> will use the version and release data
+         from <filename>configure.in</filename>.
          Local files should not be changed, except prior to a CVS commit!!!
          This way we are all on the same page!
        </para>
@@ -1904,9 +1908,8 @@ at sourceforge. Three simple steps:
       <listitem>
        <para>
         Tag all files in CVS with the version number with
-        <quote><command>cvs tag v_X_Y_Z</command></quote> (where X = major, Y
-        = minor, Z = point). Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work)
-        etc.
+        <quote><command>cvs tag v_X_Y_Z</command></quote>.
+        Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
       </listitem> 
       <listitem>
@@ -1956,9 +1959,9 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -1996,7 +1999,6 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd ..
@@ -2052,9 +2054,9 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2089,9 +2091,9 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2113,9 +2115,9 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2137,7 +2139,6 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd ..
@@ -2188,20 +2189,17 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</programlisting>
 	</para>
 	<para>
-	Choose the right operating system. If you have downloaded Privoxy
-	before,
+	Choose the right operating system.
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
-	If not, please <ulink
-	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
-	Privoxy via CVS first</ulink>. Run:
+	Run:
 	</para>
 	<para>
 	<programlisting>
@@ -2226,13 +2224,13 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 
     <sect2 id="newrelease-tarball"><title>Tarball</title>
       <para>
-	Ensure that you have the latest code version. Hence run:
+	Ensure that you have the right code version. Hence run:
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2240,7 +2238,6 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</para>
 	<para>
 	<programlisting>
-  make clobber
   autoheader && autoconf && ./configure
 	</programlisting>
 	</para>
@@ -2271,9 +2268,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2295,9 +2292,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2328,9 +2325,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</para>
 	<para>
 	<programlisting>
-  cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd current
 	</programlisting>
 	</para>
 	<para>
@@ -2414,6 +2411,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.29  2002/04/10 18:45:14  swa
+  generated
+
   Revision 1.28  2002/04/08 22:59:26  hal9
   Version update. Spell chkconfig correctly :)
 
