@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.32 2001/10/09 22:38:19 jongfoster Exp $
+# $Id: Makefile.in,v 1.33 2001/10/10 12:43:33 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.33  2001/10/10 12:43:33  oes
+# Added ugly hack to make install target work at least for some setups.
+#
 # Revision 1.32  2001/10/09 22:38:19  jongfoster
 # Correcting actionsfile filename for Win32 INI build
 #
@@ -309,7 +312,7 @@ redhat-dist:
 # verify that i'm root needs to be done
 	rm -f ../ijbswa.tar.gz
 # verify all version strings, FLAGS, etc. in the spec file
-	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
+	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && mv -f abc junkbuster-rh.spec
 	tar --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
@@ -324,7 +327,7 @@ suse-dist:
 # verify that i'm root needs to be done
 	rm -f ../ijbswa.tar.gz
 # verify all version strings, FLAGS, etc. in the spec file
-	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-suse.spec
+	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && mv -f abc junkbuster-suse.spec
 	tar --exclude "CVS" --exclude "junkbuster-rh.spec" -cvzf ../ijbswa.tar.gz .
 # verify all files in their correct location needs to be done
 # never use buildroot to define the location inside the spec
@@ -465,7 +468,7 @@ clean:
 	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
 
 clobber: clean
-	$(RM) $(PROGRAM) *.pdb *.lib *.exp TAGS junkbuster.log
+	$(RM) $(PROGRAM) *.pdb *.lib *.exp TAGS junkbuster.log config.cache
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
