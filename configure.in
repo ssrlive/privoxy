@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.33 2002/03/05 17:31:11 morcego Exp $
+dnl $Id: configure.in,v 1.34 2002/03/06 20:57:00 morcego Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.34  2002/03/06 20:57:00  morcego
+dnl Fixing detection of stylesheets on SuSe.
+dnl
 dnl Revision 1.33  2002/03/05 17:31:11  morcego
 dnl Search for docbook.dsl. Should solve portability problems for SuSe.
 dnl
@@ -247,11 +250,26 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.33 $)
+AC_REVISION($Revision: 1.34 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
+dodk=dump
+DKPREFIX="none"
+AC_ARG_WITH(docbook, dnl
+  --with-docbook=[[yes|no|directory]]	
+                           Enable docbook documentation creation 
+			   (default = yes, for gnu and linux),[dnl
+case "$with_docbook" in
+yes) dodk=yes;;
+no) dodk=no;;
+*) 
+	dodk=no
+	DKPREFIX=$withval
+	;;
+esac
+])
 
 dnl =================================================================
 dnl Application version number
@@ -363,6 +381,17 @@ else
   fi
 fi
 
+if test $dodk = dump; then
+	dodk = no
+	if test $target_type = unix; then
+		case "$host_os" in
+		linux* | gnu*)
+			dodk=yes
+		;;
+		esac
+	fi
+fi
+
 dnl Decide what to do based on target_type
 dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
 dnl This is because we don't know yet whether pthread is enabled.
@@ -415,8 +444,11 @@ AC_CHECK_PROGS(JADEBIN,jade openjade,false)
 AC_SUBST(JADEBIN)
 
 dnl Checking for the docbook.dsl stylesheet file
-DKPREFIX=none
-AC_CHECK_FILE(/usr/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl,DKPREFIX=/usr/share/sgml/docbook/dsssl-stylesheets,AC_CHECK_FILE(/usr/share/sgml/docbkdsl/html/docbook.dsl,DKPREFIX=/usr/share/sgml/docbkdsl))
+if test $dodk = yes; then
+	if test $DKPREFIX = none; then
+		AC_CHECK_FILE(/usr/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl,DKPREFIX=/usr/share/sgml/docbook/dsssl-stylesheets,AC_CHECK_FILE(/usr/share/sgml/docbkdsl/html/docbook.dsl,DKPREFIX=/usr/share/sgml/docbkdsl))
+	fi
+fi
 AC_SUBST(DKPREFIX)
 
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
