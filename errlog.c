@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.16 2001/07/30 22:08:36 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.17 2001/09/10 10:17:13 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.16 2001/07/30 22:08:36 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.17  2001/09/10 10:17:13  oes
+ *    Removed unused variable; Fixed sprintf format
+ *
  *    Revision 1.16  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -178,8 +181,9 @@ static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
 
 /* static functions */
 static void fatal_error(const char * error_message);
-static char * w32_socket_strerr(int errcode, char * tmp_buf);
-
+#ifdef _WIN32
+static char *w32_socket_strerr(int errcode, char *tmp_buf);
+#endif
 
 /*********************************************************************
  *
@@ -653,7 +657,7 @@ void log_error(int loglevel, char *fmt, ...)
  *                tmp_buf.
  *
  *********************************************************************/
-static char * w32_socket_strerr(int errcode, char * tmp_buf)
+static char *w32_socket_strerr(int errcode, char *tmp_buf)
 {
 #define TEXT_FOR_ERROR(code,text) \
    if (errcode == code)           \
