@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 2.2 2002/09/05 05:45:30 hal9 Exp $
+ $Id: buildsource.sgml,v 2.3 2002/09/06 01:58:28 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -94,6 +94,10 @@
 </para>
 
 <para>
+ Some binary packages may do this for you.
+</para>
+
+<para>
  Then, to build from either unpacked tarball or CVS source:
 </para>
 
@@ -108,7 +112,8 @@
  make install     # (to really install)
 </screen>
 </para>
-
+<!--
+/we hope this is fixed! 09/24/02
 <warning>
  <para> 
   The <quote>make install</quote> target is temporary quite broken! It is
@@ -116,7 +121,7 @@
   install the components. Sorry.
  </para>
 </warning>
-
+-->
 <para>
   If you have GNU <command>make</command>, you can have the first four steps
   automatically done for you by just typing:
@@ -130,6 +135,48 @@
 
 <para>
   in the freshly downloaded or unpacked source directory.
+</para>
+
+<para>
+ The default installation path for <command>make install</command> is 
+ <filename>/usr/local</filename>. This may of course be customized with 
+ the various <command>./configure</command> path options.
+ <command>configure</command> also accepts a <literal>--with-user</literal> and
+ <literal>--with-group</literal> options for setting user and group
+ ownership.
+</para>
+
+<para>
+ If you do install to <filename>/usr/local</filename>, the install will use
+ <literal>sysconfdir=$prefix/etc/privoxy</literal> by default. All other
+ destinations, and the direct usage of <literal>--sysconfdir</literal> flag
+ behave like normal, i.e. will not add the extra <filename>privoxy</filename>
+ directory. This is for a safer install, as there may already exist another
+ program that uses a file with the <quote>config</quote> name, and thus makes
+ <filename>/usr/local/etc</filename> cleaner.
+</para>
+
+<para>
+ If installing to <filename>/usr/local</filename>, the docs will go by default
+ to <filename>$prefix/share/doc</filename>. But if this directory doesn't
+ exist, it will then try <filename>$prefix/doc</filename> and install there before
+ creating a new <filename>$prefix/share/doc</filename> just for
+ <application>Privoxy</application>.
+</para>
+
+<para>
+ Again, if the installs goes to <filename>/usr/local</filename>, the
+ <literal>localstatedir</literal> (ie: var/) will default to
+ <filename>/var</filename> instead of <literal>$prefix/var</literal> so the
+ logs will go to <filename>/var/log/privoxy/</filename>, and the pid file will
+ be created in <filename>/var/run/privoxy.pid</filename>. 
+</para>
+
+<para>
+ <command>make install</command> will attempt to set the correct values 
+ in <filename>config</filename> (main configuration file). If appropriate,
+ an init script will be installed, but it is up to the user to determine 
+ how and where to start <application>Privoxy</application>.
 </para>
 
 <para>
