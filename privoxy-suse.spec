@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.9 2002/03/30 09:01:52 swa Exp $
+# $Id: privoxy-suse.spec,v 1.10 2002/04/08 20:24:13 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@ URL:          http://www.privoxy.org/
 Provides:     privoxy
 Obsoletes:    privoxy
 Autoreqprov:  on
-BuildRequires: perl gzip docbktls libtool
+BuildRequires: perl gzip docbktls libtool autoconf
 Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 #
@@ -103,7 +103,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{ijbconf}/templates \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/init.d
-gzip README AUTHORS ChangeLog privoxy.1 || /bin/true
+gzip README AUTHORS ChangeLog privoxy.1 LICENSE || /bin/true
 install -s -m 744 privoxy $RPM_BUILD_ROOT%{_sbindir}/privoxy
 cp -f privoxy.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/privoxy.8.gz
 cp -f *.action $RPM_BUILD_ROOT%{ijbconf}/
@@ -195,11 +195,11 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 #
 %files
 %defattr(-,root,root)
-%doc README.gz AUTHORS.gz ChangeLog.gz
-%doc doc/webserver/developer-manual doc/webserver/user-manual
+%doc README.gz AUTHORS.gz ChangeLog.gz LICENSE.gz
+%doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/p_doc.css
+%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
 #%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
@@ -214,6 +214,11 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Mon Apr 08 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-4
+- Add LICENSE.gz, p_web.css, and index.html. Add autoconf
+- to Buildrequires.
+
 * Wed Mar 27 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-3
 - Doc css has changed names.
@@ -294,6 +299,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.10  2002/04/08 20:24:13  swa
+# fixed JB spelling
+#
 # Revision 1.9  2002/03/30 09:01:52  swa
 # new release
 #
