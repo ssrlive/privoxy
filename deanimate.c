@@ -1,7 +1,7 @@
-const char deanimate_rcs[] = "$Id: $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.1 2001/07/13 13:40:09 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: $
+ * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
  *
  * Purpose     :  Declares functions to deanimate GIF images on the fly.
  *                
@@ -36,7 +36,7 @@ const char deanimate_rcs[] = "$Id: $";
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: $
+ *    $Log: deanimate.c,v $
  *
  **********************************************************************/
 
