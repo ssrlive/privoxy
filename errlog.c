@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.13 2001/07/13 13:58:58 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.14 2001/07/19 19:03:48 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.13 2001/07/13 13:58:58 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.14  2001/07/19 19:03:48  haroon
+ *    - Added case for LOG_LEVEL_POPUPS
+ *
  *    Revision 1.13  2001/07/13 13:58:58  oes
  *     - Added case for LOG_LEVEL_DEANIMATE
  *     - Removed all #ifdef PCRS
@@ -134,7 +137,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.13 2001/07/13 13:58:58 oes Exp $";
 #endif /* ndef _WIN32 */
 
 #include <errno.h>
-/* #include <pthread.h> */
+#ifdef FEATURE_PTHREAD
+#include <pthread.h>
+#endif /* def FEATURE_PTHREAD */
 
 #ifdef _WIN32
 #include <windows.h>
@@ -297,7 +302,9 @@ void log_error(int loglevel, char *fmt, ...)
    }
 
    /* FIXME get current thread id */
-   /* this_thread = (long)pthread_self(); */
+#ifdef FEATURE_PTHREAD
+   this_thread = (long)pthread_self();
+#endif /* def FEATURE_PTHREAD */
 
    switch (loglevel)
    {
