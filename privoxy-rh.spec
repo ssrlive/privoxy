@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.10 2002/03/24 22:16:14 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.11 2002/03/25 03:09:51 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -262,6 +262,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sun Mar 24 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-2
+- Added faq to docs.
+
 * Sun Mar 24 2002 Rodrigo Barbosa <rodrigob@suespammers.org>
 + privoxy-2.9.13-2
 - Fixed the init files entries. Now we use %%ghost
@@ -521,6 +525,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.11  2002/03/25 03:09:51  hal9
+# Added faq to docs.
+#
 # Revision 1.10  2002/03/24 22:16:14  morcego
 # Just removing some old commentaries.
 #
