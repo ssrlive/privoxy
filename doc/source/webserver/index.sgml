@@ -4,7 +4,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -19,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.5 2002/04/12 02:05:19 david__schmidt Exp $
+ $Id: index.sgml,v 1.6 2002/04/12 08:34:18 swa Exp $
 
  Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -205,6 +205,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.6  2002/04/12 08:34:18  swa
+ added link to new page
+
  Revision 1.5  2002/04/12 02:05:19  david__schmidt
  Tiny English fix: infos -> info
  Add copyright date 2002
