@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.17 2001/10/23 21:48:19 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.18 2001/11/16 00:46:31 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.18  2001/11/16 00:46:31  jongfoster
+ *    Fixing compiler warnings
+ *
  *    Revision 1.17  2001/10/23 21:48:19  jongfoster
  *    Cleaning up error handling in CGI functions - they now send back
  *    a HTML error page and should never cause a FATAL error.  (Fixes one
@@ -144,6 +147,7 @@ extern struct http_response *finish_http_response(struct http_response *rsp);
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
 
 extern jb_err map_block_killer (struct map *exports, const char *name);
+extern jb_err map_block_keep   (struct map *exports, const char *name);
 extern jb_err map_conditional  (struct map *exports, const char *name, int choose_first);
 
 extern jb_err template_load(struct client_state *csp, char ** template_ptr, 
