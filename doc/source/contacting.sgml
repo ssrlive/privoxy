@@ -1,0 +1,87 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/contacting.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: contacting.sgml,v 1.0 2002/04/02 00:54:19 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+-->
+
+<!-- 
+ 
+ READ:
+ ======================================================================
+ NOTE: The left margin spacing is *important* when using 'literallayout'
+ WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
+ <para> forces a linebreak.
+ ======================================================================
+
+-->
+
+<para>
+ We value your feedback. However, to provide you with the best support, please
+ note:
+
+ <itemizedlist>
+
+  <listitem>
+   <literallayout>
+ Use the Sourceforge Support Forum to get help:
+   
+ <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118</ulink>
+   </literallayout>
+  </listitem>
+ 
+  <listitem>
+   <literallayout>
+ Submit bugs only through our Sourceforge Bug Forum:
+ 
+ <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</ulink>. 
+    </literallayout>
+  <para>
+   Make sure that the bug has not already been submitted.  Please try to
+   verify that it is a <application>Privoxy</application> bug, and not a
+   browser or site bug first. If you are using your own custom configuration,
+   please try the stock configs to see if the problem is a configuration
+   related bug.  And if not using the latest development snapshot, please try
+   the latest one. Or even better, CVS sources. Please be sure to include the
+   <application>Privoxy</application>/<application>Junkbuster</application>
+   version, platform, browser, any pertinent log data, any other relevant
+   details (please be specific) and, if possible, some way to reproduce the
+   bug.
+  </para>
+ </listitem>
+ 
+  <listitem>
+   <literallayout>
+ Submit feature requests only through our Sourceforge feature request 
+ forum:
+ 
+ <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse"></ulink>.
+   </literallayout>
+  </listitem>
+
+
+ <listitem>
+   <literallayout>
+ For any other issues, feel free to use the mailing lists:
+ 
+ <ulink url="http://sourceforge.net/mail/?group_id=11118">http://sourceforge.net/mail/?group_id=11118</ulink>.
+ </literallayout>
+
+ <para>
+  Anyone interested in actively participating in development and related
+  discussions can also join the appropriate mailing list. Archives are
+  available too. 
+ </para>
+ </listitem>
+
+ </itemizedlist>
+</para>
+
