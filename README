@@ -102,24 +102,29 @@ then build as above.
 ----
 
 privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
- [--user USER] [config_file]
+ [--user USER[.GROUP]] [config_file]
 
-Or for RedHat: /etc/rc.d/init.d/privoxy start
+See the man page or user-manual for a brief explanation of each option.
+
+If no config_file is specified on the command line, Privoxy will look for 
+a file named 'config' in the current directory (except Win32 which will look
+for 'config.txt'). If no config_file is found, Privoxy will fail to start.
+
+Or for Red Hat: /etc/rc.d/init.d/privoxy start
 Or for SuSE:   /etc/rc.d/privoxy start
-
-See the man page or user-manual for a brief explanation of each.
 
 
  CONFIGURATION
 --------------
 
-See: 'config', '*.action', and 'default.filter'. These are all well
-commented. Most of the magic is in '*.action', and there are several 
-of these included with varying degrees of aggressiveness. On Unix-like
-systems, these files are installed in /etc/privoxy.  On Windows, then wherever
-the executable itself is installed. There are many significant changes and
-advances since Junkbuster v2.0.x. The user-manual has a run down of
-configuration options, and examples: http://www.privoxy.org/user-manual/.
+See: 'config', 'default.action', and 'default.filter'. There are several 
+actions files included. These are all well commented. Most of the magic
+is in '*.action', and there are several of these included with varying degrees
+of aggressiveness. On Unix-like systems, these files are installed in
+/etc/privoxy.  On Windows, then wherever the executable itself is installed.
+There are many significant changes and advances since Junkbuster v2.0.x. The
+user-manual has a run down of configuration options, and examples:
+http://www.privoxy.org/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or
 whatever you specify in the config file under 'listen-address'.
@@ -128,22 +133,21 @@ DEFAULT is localhost:8118.
 The default.action file can be configured via the web interface accessed
 via http://p.p/, as well other options.
 
+All configuration files are subject to unannounced changes during the 
+development process.
+
 
  DOCUMENTATION
 --------------
 
 There is a growing amount of documentation in the 'doc' subdirectory,
-but it is not finished at this point. In particular, see the
-user-manual there, and developers should look at developer-manual.
+but it is not completed at this point. In particular, see the
+user-manual there, the faq, and developers should look at developer-manual.
 
 The most up to date source of information on the current development version,
 may still be either comments in the source code, or the included configuration
 files, which are all well commented. These are 'config', '*.action', and
 'default.filter' in the toplevel source directory.
-
-Some legacy Junkbuster documentation may also be included only to give an idea
-of what Privoxy can do under doc/obsolete/*. Much has changed since these docs
-were written, so beware.
 
 Included documentation may vary according to platform and packager.
 
@@ -156,14 +160,21 @@ please note:
    
  * Use the support forum to get help:
    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+ 
  * Submit bugs only thru our bug forum:
    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+   
    Make sure that the bug has not already been submitted. Please try
    to verify that it is a Privoxy bug, and not a browser or site
    bug first. If you are using your own custom configuration, please
    try the stock configs to see if the problem is a configuration
    related bug. And if not using the latest development snapshot,
-   please try the latest one. Or even better, CVS sources.
+   please try the latest one. Or even better, CVS sources. Please 
+   be sure to include the Privoxy/Junkbuster version, platform, 
+   browser, any pertinent log data, any other relevant details 
+   (please be specific) and, if possible, some way to reproduce the 
+   bug.
+ 
  * Submit feature requests only thru our feature request forum:
    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
      
@@ -178,4 +189,4 @@ here too.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.21 2002/03/26 22:29:54 swa Exp $
+$Id: README,v 1.22 2002/03/27 01:06:40 hal9 Exp $
