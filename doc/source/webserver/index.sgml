@@ -19,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.6 2002/04/12 08:34:18 swa Exp $
+ $Id: index.sgml,v 1.7 2002/04/12 10:11:53 swa Exp $
 
  Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -31,12 +31,11 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation. 
  ========================================================================
 
- Note: This is the privoxy home page.
+ Note: This is the privoxy home page. The Makefile is adding additional
+ meta data and content via perl.
 
 -->
 
@@ -184,6 +183,27 @@ page</ulink> on Sourceforge
 <!-- end -->
 </sect1>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 label="">
+<title></title>
+<para></para>
+<!-- dummy, for spacing -->
+</sect1>
+
+<!--
+BWAAAAAAA!!!!!!!!!!!
+<para>
+ <ulink url="http://sourceforge.net/>
+  <graphic align="center" fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1"></graphic>
+ </ulink>
+</para>
+
+NOTE: Sourceforge Logo is required. Makefile is dumping that here, 
+courtesy of Mr Perl.
+
+-->
+
  <!--
 
  This program is free software; you can redistribute it 
@@ -205,6 +225,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.7  2002/04/12 10:11:53  swa
+ changed bookmarklet text so that users can easily find the bookmark
+
  Revision 1.6  2002/04/12 08:34:18  swa
  added link to new page
 
