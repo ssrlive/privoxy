@@ -2,7 +2,7 @@
 # 
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/privoxy-generic.init,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
 #                 privoxy.
@@ -31,9 +31,18 @@
 #                 http://www.gnu.org/copyleft/gpl.html
 #                 or write to the Free Software Foundation, Inc., 59
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# Developer's NOTE: This script should be tested against a true /bin/sh, which
+# has notable differences from bash. By design, this script does not try to do
+# too much, so as to be as cross-platform as possible.
+#
 # 
 #  Revisions   :
 #     $Log: privoxy-generic.init,v $
+#     Revision 1.1  2002/09/06 00:20:26  hal9
+#     Creating a generic init script, meant to be used on platforms where don't have
+#     a custom init script.
+#
 #     Revision 1.0  2002/09/05 17:14:32  hal9
 #
 #######################################################################
@@ -41,25 +50,41 @@
 # Is this needed by Solaris?
 #ident  "@(#)privoxy  1.0     02/09/05"
 
+# NOTE: This script may require editing to ensure proper location of 
+# config file, and the privoxy executable. Care should be taken to ensure 
+# logfile is writable by $P_USER (logfile is defined in config), and that 
+# there is suitable write access for $P_PIDFILE.
+
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin/:/usr/bin:/sbin:/bin
-NAME=Privoxy
-DAEMON=privoxy
-P_CONF_FILE=/etc/${NAME}/config
-PIDFILE=/var/run/${NAME}.pid
-#RUN_AS="--user privoxy"
+P_NAME=Privoxy
+# Path to executable.
+P_DAEMON=privoxy
+P_USER=privoxy
+# Full path to location of Privoxy config file. 
+P_CONF_FILE=./config
+# Full path to PID file location. Location must be writable by 
+# whoever runs this script.
+P_PIDFILE=`pwd`/${P_USER}.pid
+# User that will own the Privoxy process.
+P_DAEMON_OWNER="$USER"
 
 if [ ! -f $P_CONF_FILE ]; then
   echo "Can't find $P_CONF_FILE, exiting."
   exit 1
 fi
 
+# If a privoxy user exists, lets use that. /bin/sh does not seem to 
+# know about $UID.
+if [ "$USER" = "root" ] && [ "$P_DAEMON_OWNER" = "$USER" ] && id $P_USER >/dev/null; then
+  P_DAEMON_OWNER="$P_USER"
+fi
+
 case "$1" in
  
  start)
-     test -f $PIDFILE && echo "$PIDFILE exists, exiting." && exit 1
-	echo -n "Starting $NAME: "
-	$DAEMON --pidfile $PIDFILE $RUN_AS $P_CONF_FILE 2>/dev/null &&\
-     echo "OK." || echo "Failed."
+     test -f $P_PIDFILE && echo "$P_PIDFILE exists, exiting." && exit 1
+	$P_DAEMON --pidfile $P_PIDFILE --user $P_DAEMON_OWNER $P_CONF_FILE 2>/dev/null &&\
+     echo "Starting $P_NAME, OK." || echo "Starting $P_NAME, Failed."
         
      ;;
  
@@ -69,15 +94,16 @@ case "$1" in
      ;;
  
  stop)
-	echo -n "Stopping $NAME: "
-     kill `cat $PIDFILE` &&\
-     echo "OK." || echo "Failed."
+     test ! -f $P_PIDFILE && echo "No $P_PIDFILE file found, exiting." && exit 1
+     kill `cat $P_PIDFILE` &&\
+     echo "Stopping $P_NAME, OK." || echo "Stopping $P_NAME, failed."
      ;;
  
  *)
      echo "Usage: $0 {start|stop|restart}"
      exit 1
      ;;
+
 esac
 
 exit 0
