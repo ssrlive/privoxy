@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.6 2001/07/30 22:08:36 jongfoster Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.7 2001/11/05 21:41:43 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,15 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.7  2001/11/05 21:41:43  steudten
+ *    Add changes to be a real daemon just for unix os.
+ *    (change cwd to /, detach from controlling tty, set
+ *    process group and session leader to the own process.
+ *    Add DBG() Macro.
+ *    Add some fatal-error log message for failed malloc().
+ *    Add '-d' if compiled with 'configure --with-debug' to
+ *    enable debug output.
+ *
  *    Revision 1.6  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -79,9 +88,11 @@ extern int urls_rejected;
 #endif /*def FEATURE_STATISTICS*/
 
 extern struct client_state clients[];
-
 extern struct file_list    files[];
 
+#ifdef unix
+extern const char *pidfile;
+#endif
 
 /* Functions */
 
