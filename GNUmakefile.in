@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.126 2002/10/16 05:38:00 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.127 2002/10/18 00:58:07 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -850,11 +850,17 @@ GROUP_T:=$(shell if [ x$(GROUP) = x ] && [ x$(USER) != x ];then \
 install-strip:
 	$(MAKE) install STRIP=-s
 
+# FIXME: redhat init script has wrong paths for /usr/local/ install.
+#
+# FIXME: Check USER and GROUP on Slack to make user this works as 
+# intended.
+#
 # FIXME: id handling needs help, probably via configure, since 'id -u' is not 
 # universally reliable (eg Solaris). Group handling is weak. If group is null,
 # we blindly assume there is a group that matches $(USER). configure only 
 # tests for the first group outputted from groups command. Perhaps the whole 
-# user/group validation should be done here. hal.
+# user/group validation should be done here. In fact, it should probably be
+# tested for and set first thing, ie for a root install.
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# Quick test for valid USER.
 	if [ -n "$(USER)" ]; then \
@@ -912,7 +918,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 
 	# Install the config support files. Test for root install, and abort 
 	# if there is no privoxy user, and no other user was enabled during 
-	# configure.
+	# configure. Later, install init script if appropriate.
 	$(ECHO) Installing templates to $(CONF_DEST)/templates
 	for i in `find templates -type f`; do \
 		$(INSTALL) $(INSTALL_T) $$i $(CONF_DEST)/templates ;\
@@ -922,6 +928,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			if [ "`id privoxy`" ]; then \
 				$(ECHO) "Setting user and group to privoxy";\
 				INSTALL_CONF="$(INSTALL_T) -g privoxy -o privoxy" ;\
+				USER=privoxy ;\
+				GROUP_T=privoxy ;\
 			else \
 				$(ECHO)  "******************************************************************" ;\
 				$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
@@ -949,27 +957,26 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			$(INSTALL) $$i $(CONF_DEST)/$$i.new || exit 1;\
 			NEW=1;\
 		else \
-			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
+			if test "$$i" = "config" || test "$$i" = "default.filter"; then \
+				$(INSTALL)  $$i $(CONF_DEST) || exit 1;\
+				$(CHMOD) 0640 $(CONF_DEST)/$$i ;\
+			else \
+				$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
+			fi;\
 		fi ;\
 	done ;\
 	if [ -n "$$NEW" ]; then \
 		$(CHMOD) 0640 $(CONF_DEST)/*.new || exit 1 ;\
 		$(ECHO) "Warning: Older config files are preserved. Check new versions for changes!" ;\
-	fi
-
-	# Set up the logfiles, mode 0640 for privacy reasons 
-	! test -f $(LOG_DEST)/logfile && $(ECHO) Creating logfiles in $(LOG_DEST) ||\
-		$(ECHO) Checking logfiles in $(LOG_DEST)
-	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1
-	if [ x$(USER) != x ]; then \
-		$(CHOWN) $(USER):$(GROUP_T) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
+	fi ;\
+	! test -f $(LOG_DEST)/logfile && $(ECHO) Creating logfiles in $(LOG_DEST) || \
+		$(ECHO) Checking logfiles in $(LOG_DEST) ;\
+	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
+	if [ x$$USER != x ]; then \
+		$(CHOWN) $$USER:$$GROUP_T $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
-	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1
-
-	# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
-	# Install if dest is writable and its a system install. Hardcode 755 mode
-     # to avoid problems with install-strip target.
+	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
 	if [ "$(prefix)" = "/usr/local" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
@@ -1086,6 +1093,18 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.127  2002/10/18 00:58:07  hal9
+# More install/uninstall/install-strip updates:
+# - Don't install gzipped man page (Solaris again).
+# - Don't overwrite existing config files, and install new versions as *.new.
+#   Fix permissions/ownership here too.
+# - Better testing before removing directories.
+# - Some better messages during install, ie 'Preserving configs', etc.
+# - Better handling of install-strip to fix previous problem of trying to strip
+#   init scripts.
+# - Crude test for valid USER in case is set on command line.
+# - Force immediate exit on some errors (eg invalid group).
+#
 # Revision 1.126  2002/10/16 05:38:00  hal9
 # More make install/uninstall updates:
 # -Make compatible with install-sh with does not support -b flag, and can only
