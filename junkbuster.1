@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.10 (alpha) Date: 2001/12/01"
+.TH JUNKBUSTER 1 "v2.9.10 (beta) Date: 2001/12/02"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -125,7 +125,7 @@ A brief example of what an \fIijb.action\fP configuration might look like:
 
 # Now set exceptions to the above defined policies #######
 
-# Sites that DO need persistant cookies
+# Sites where we want persistant cookies
 {-no-cookies -no-cookies-keep}
  .redhat.com
  .sun.com
@@ -141,6 +141,7 @@ A brief example of what an \fIijb.action\fP configuration might look like:
  +add-header{X-User-Tracking: No thanks!} -filter}
  privacy.net
 
+# Block, and treat these URLs as 'images'.
 {+imageblock}
  .adforce.imgis.com
  .ad.preferences.com/image.*
@@ -188,7 +189,15 @@ options.
 .br
 \fI/etc/junkbuster/ijb.action\fP
 .br
+\fI/etc/junkbuster/ijb-advanced.action\fP
+.br
+\fI/etc/junkbuster/ijb-basic.action\fP
+.br
+\fI/etc/junkbuster/ijb-intermediate.action\fP
+.br
 \fI/etc/junkbuster/re_filterfile\fP
+.br
+\fI/etc/junkbuster/trust\fP
 .br
 \fI/var/log/junkbuster/logfile\fP
 
