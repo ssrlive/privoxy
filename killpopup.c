@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.3 2001/05/22 18:56:28 oes Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.5 2001/07/18 15:02:52 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,12 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.3 2001/05/22 18:56:28 oes Exp
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.5  2001/07/18 15:02:52  haroon
+ *    improved nuking of window.open
+ *
+ *    Revision 1.4  2001/06/29 13:29:55  oes
+ *    Added FIXMEs (and didn't repair, hehe)
+ *
  *    Revision 1.3  2001/05/22 18:56:28  oes
  *    CRLF -> LF
  *
@@ -73,6 +79,7 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.3 2001/05/22 18:56:28 oes Exp
 #include "project.h"
 #include "killpopup.h"
 #include "jcc.h"
+#include "errlog.h"
 
 const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
 
@@ -90,6 +97,7 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
  * Description :  Filter the block of data that's been read from the server.
  *                Caller is responsible for checking permissons list
  *                to determine if this function should be called.
+ *                Remember not to change the content length (substitute char by char)
  *
  * Parameters  :
  *          1  :  buff = Buffer to scan and modify.  Null terminated.
@@ -106,44 +114,31 @@ void filter_popups(char *buff, int size)
 
    while ((popup = strstr( buff, "window.open(" )) != NULL)
    {
-#ifdef POPUP_VERBOSE
-      fprintf(logfp, "Found start of window open" );
-#endif
-      close = strstr( popup+1, ");" );
-      if ( close )
+      if ( popup )
       {
+         /*
+          * replace the window.open( with a harmless JavaScript replacement (notice the two single quotes)
+          * Guy's idea (thanks)
+          */
+         strncpy(popup, "1;''.concat(", 12);
 #ifdef POPUP_VERBOSE
-         fprintf(logfp, "Found end of window open" );
-#endif
-         p = popup;
-         *p++ = '1';
-         for ( ; p != (close+1); p++ )
-         {
-            *p = ' ';
-         }
-#ifdef POPUP_VERBOSE
-         fprintf(logfp, "Blocked %s\n", host_name );
+         log_error(LOG_LEVEL_POPUPS, "Blocked popup window open");
 #endif
       }
-      else
+   }
+   
+   while ((popup = strstr( buff, ".resizeTo(" )) != NULL)
+   {
+      if ( popup )
       {
-#ifdef POPUP_VERBOSE
-         fprintf(logfp, "Couldn't find end, turned into comment.  Read boundary?\n" );
-#endif
-         *popup++ = '1';
-         *popup++ = ';';
-         *popup++ = '/';
-         *popup = '/';
          /*
-          * result of popup is assigned to variable and the rest commented out
-          * window.open(blah
-          *		will be translated to
-          * 1;//ow.open(blah
-          *		and
-          * myWindow = window.open(blah
-          *		will be translated to
-          * myWindow = 1;//ow.open(blah
+          * replace the .resizeTo( with a harmless JavaScript replacement
+          * Guy's idea (thanks)
           */
+         strncpy(popup, ".scrollTo(", 10);
+#ifdef POPUP_VERBOSE
+         log_error(LOG_LEVEL_POPUPS, "Blocked popup window resize");
+#endif
       }
    }
 
