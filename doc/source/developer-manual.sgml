@@ -11,7 +11,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -25,7 +25,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1312,7 +1312,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1372,7 +1372,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1682,19 +1682,40 @@ at sourceforge. Three simple steps:
 	<programlisting>
   cd current
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
+  cd ..
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
 	</programlisting>
 	</para>
 	<para>
-	first. 
+	You will need a mix of development tools.
+	The main compilation takes place with IBM Visual Age C++.
+	Some ancillary work takes place with GNU tools, available from
+	various sources like hobbes.nmsu.edu.
+	Specificially, you will need <filename>autoheader</filename>,
+	<filename>autoconf</filename> and <filename>sh</filename> tools.
+	The packaging takes place with WarpIN, available from various sources, including
+	its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
 	</para>
 	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
+	Change directory to the <filename>os2setup</filename> directory.
+	Edit the os2build.cmd file to set the final executable filename.
+	For example, 
+ 	<programlisting>
+  installExeName='privoxyos2_setup_2.9.13_beta.exe'
 	</programlisting>
-	</para>
-	<para>
-	Then do FIXME.
+ 	Next, edit the <filename>IJB.wis</filename> file so the release number matches
+ 	in the <filename>PACKAGEID</filename> section:
+ 	<programlisting>
+  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\2\9\13"
+	</programlisting>
+	You're now ready to build.  Run:
+ 	<programlisting>
+  os2build
+	</programlisting>
+	And in the <filename>./files</filename> directory you will have the WarpIN-installable executable.
+ 	Upload this to <filename>uploads.sourceforge.net/incoming<filename>, create a release for it, and
+  	you're done.
 	</para>
     </sect2>
 
@@ -2076,6 +2097,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.18  2002/04/03 03:51:48  hal9
+  Touch ups.
+
   Revision 1.17  2002/04/03 01:21:17  hal9
   Implementing Andreas's suggestions for Release sections.
 
