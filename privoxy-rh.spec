@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.43 2002/03/21 16:04:10 hal9 Exp $
+# $Id: junkbusterng-rh.spec,v 1.1 2002/03/22 20:53:03 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -471,7 +471,54 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 	junkbuster.init was modified. It now starts junkbuster with an
 	additional "-r @" flag.
 
-# $Log: junkbuster-rh.spec,v $
+# $Log: junkbusterng-rh.spec,v $
+# Revision 1.1  2002/03/22 20:53:03  morcego
+# - Ongoing process to change name to JunkbusterNG
+# - configure/configure.in: no change needed
+# - GNUmakefile.in:
+#         - TAR_ARCH = /tmp/JunkbusterNG-$(RPM_VERSION).tar.gz
+#         - PROGRAM    = jbng@EXEEXT@
+#         - rh-spec now references as junkbusterng-rh.spec
+#         - redhat-upload: references changed to junkbusterng-* (package names)
+#         - tarball-dist: references changed to JunkbusterNG-distribution-*
+#         - tarball-src: now JunkbusterNG-*
+#         - install: initscript now junkbusterng.init and junkbusterng (when
+#                    installed)
+# - junkbuster-rh.spec: renamed to junkbusterng-rh.spec
+# - junkbusterng.spec:
+#         - References to the expression ijb where changed where possible
+#         - New package name: junkbusterng (all in lower case, acording to
+#           the LSB recomendation)
+#         - Version changed to: 2.9.13
+#         - Release: 1
+#         - Added: junkbuster to obsoletes and conflicts (Not sure this is
+#           right. If it obsoletes, why conflict ? Have to check it later)
+#         - Summary changed: Stefan, please check and aprove it
+#         - Changes description to use the new name
+#         - Sed string was NOT changed. Have to wait to the manpage to
+#           change first
+#         - Keeping the user junkbuster for now. It will require some aditional
+#           changes on the script (scheduled for the next specfile release)
+#         - Added post entry to move the old logfile to the new log directory
+#         - Removing "chkconfig --add" entry (not good to have it automaticaly
+#           added to the startup list).
+#         - Added preun section to stop the service with the old name, as well
+#           as remove it from the startup list
+#         - Removed the chkconfig --del entry from the conditional block on
+#           the preun scriptlet (now handled on the %files section)
+# - junkbuster.init: renamed to junkbusterng.init
+# - junkbusterng.init:
+#         - Changed JB_BIN to jbng
+#         - Created JB_OBIN with the old value of JB_BIN (junkbuster), to
+#           be used where necessary (config dir)
+#
+# Aditional notes:
+# - The config directory is /etc/junkbuster yet. Have to change it on the
+# specfile, after it is changes on the code
+# - The only files that got renamed on the cvs tree were the rh specfile and
+# the init file. Some file references got changes on the makefile and on the
+# rh-spec (as listed above)
+#
 # Revision 1.43  2002/03/21 16:04:10  hal9
 # added ijb_docs.css to %doc
 #

@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.20 2002/03/12 13:42:14 sarantis Exp $
+# $Id: junkbuster-suse.spec,v 1.21 2002/03/21 16:04:33 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -34,7 +34,7 @@ Vendor:       http://ijbswa.sourceforge.net
 Name:         junkbuster-suse
 Distribution: defineme
 Version: 2.9.11
-Release: 1
+Release: 3
 Source: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 # not sure if this works
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -276,6 +276,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.21  2002/03/21 16:04:33  hal9
+# added ijb_docs.css to %%doc
+#
 # Revision 1.20  2002/03/12 13:42:14  sarantis
 # remove hardcoded "ijbswa" from build phase
 #

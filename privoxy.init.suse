@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init.suse,v $
+#     Revision 1.7  2002/03/11 11:44:46  oes
+#     Working in suggestions by Thorsten Kukuk <kukuk@suse.de>
+#
 #     Revision 1.6  2002/03/09 14:56:34  swa
 #     wrong user.group
 #
