@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.37 2001/11/01 00:52:04 hal9 Exp $
+# $Id: Makefile.in,v 1.38 2001/11/05 21:35:23 steudten Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,14 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.38  2001/11/05 21:35:23  steudten
+# Complete rewrite for the 'redhat-dist' target.
+# Checks for writeable RPM build directories for calling user.
+# So you must not be root, just set the modes to 1777 to
+# build a RH package.
+# Fix the upload-target to be arch independant.
+# Add target for 'solaris-dist' - coming soon.
+#
 # Revision 1.37  2001/11/01 00:52:04  hal9
 # Redhat-upload stuff per Stefan.
 #
@@ -347,7 +355,7 @@ redhat-dist:
 		$(SED) 's/^Version:.*/Version: $(RPM_VERSION)/g;s/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && \
 		$(MV) -f abc junkbuster-rh.spec; \
 	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf $(TAR_ARCH) . ; \
-	$(RPM) -ta  $(TAR_ARCH); \
+	$(RPM) --clean -ta  $(TAR_ARCH); \
 	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH)
 
 #
