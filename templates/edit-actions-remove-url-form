@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-remove-url-form,v $
+# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-remove-url-form,v $
 #
 # Purpose     :  Template used to confirm removal of a particular URL
 #                pattern from an actions file.  Only used on browsers that
@@ -33,6 +33,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-remove-url-form,v $
+#    Revision 1.13  2002/04/10 13:32:53  oes
+#    Made templates modular
+#
 #    Revision 1.12  2002/04/08 17:08:14  oes
 #    Cosmetic: make status in title lowercase
 #
@@ -96,6 +99,7 @@
 # section
 # pattern
 # oldval
+# jumptarget - append to eal URL to jump to relevant section
 #
 #############################################################################
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -139,9 +143,9 @@
         <p>Are you sure you want to delete this URL pattern?  The pattern is:</p>
         <p class="important">@u@</p>
         <p>
-          <a href="edit-actions-remove-url?f=@f@&amp;v=@v@&amp;p=@p@">OK</a>
+          <a class="cmd" href="edit-actions-remove-url?f=@f@&amp;v=@v@&amp;p=@p@">OK</a>
           &nbsp;
-          <a href="edit-actions-list?f=@f@">Cancel</a>
+          <a class="cmd" href="edit-actions-list?f=@f@@jumptarget@">Cancel</a>
         </p>
       </td>
     </tr>
