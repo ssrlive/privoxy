@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 1.3 2002/04/06 05:07:29 hal9 Exp $
+ $Id: newfeatures.sgml,v 1.4 2002/04/15 23:39:04 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -115,7 +115,8 @@
  <listitem>
   <para>
    Builds from source on most UNIX-like systems. Packages available for: Linux
-   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11,
+   NetBSD and AmigaOS.
   </para>
  </listitem> 
 
