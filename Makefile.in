@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.35 2001/10/15 22:14:59 joergs Exp $
+# $Id: Makefile.in,v 1.36 2001/10/31 19:26:13 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.36  2001/10/31 19:26:13  swa
+# automate process of uploading new releases
+# to sf.
+#
 # Revision 1.35  2001/10/15 22:14:59  joergs
 # Removed -O2 and -Wall from AmigaOS-only CFLAGS since they are now in
 #  the general CFLAGS already.
@@ -329,17 +333,14 @@ redhat-dist:
 # anonymously ncftps the rpms to sourceforge
 #
 redhat-upload:
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Not configured yet.
-	@$(ECHO) -------------------------------------------------------
-#	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/SRPMS/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-#	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/RPMS/i386/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/redhat/SRPMS/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/redhat/RPMS/i386/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
-
+     # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 
 #############################################################################
 # suse distribution (need to be root to build)
