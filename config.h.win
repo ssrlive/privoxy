@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win,v $
+ *    Revision 1.8  2001/07/25 19:16:27  oes
+ *    Bumping version number to 2.9.8
+ *
  *    Revision 1.7  2001/07/21 18:00:07  jongfoster
  *    Bumping version number to 2.9.7
  *
@@ -203,58 +206,72 @@
  */
 #define STATIC_PCRS 1
 
-/*
- * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
- * non-anonymizing proxy.  This is useful if you're trying to access a
- * blocked or broken site - just change the setting in the config file
- * and send a SIGHUP (UN*X), or use the handy "Disable" menu option (Windows
- * GUI).
- */
-#define TOGGLE 1
 
 /*
- * If a stream is compressed via gzip (Netscape specific I think), then
- * it cannot be modified with Perl regexps.  This forces it to be 
- * uncompressed.
+ * Regular expression matching for URLs.  (Highly recommended).
+ * If neither of these are defined then you can ony use prefix matching.
+ * Don't bother to change this here! Use configure instead.
  */
-#define DENY_GZIP 1
+/* #undef REGEX_GNU */
+#define REGEX_PCRE 1
+
+/* 
+ * Should pcre be statically built in instead of linkling with libpcre?
+ * (This is determined by configure depending on the availiability of
+ * libpcre and user preferences). The name is ugly, but pcre needs it.
+ * Don't bother to change this here! Use configure instead.
+ */
+#define STATIC_PCRE 1
+
+/* 
+ * Should pcrs be statically built in instead of linkling with libpcrs?
+ * (This is determined by configure depending on the availiability of
+ * libpcrs and user preferences).
+ * Don't bother to change this here! Use configure instead.
+ */
+#define STATIC_PCRS 1
 
 /*
- * Enables statistics function.
+ * Allows the use of an ACL to control access to the proxy by IP address.
  */
-#define STATISTICS 1
+#define FEATURE_ACL 1
 
 /*
- * Bypass filtering for 1 page only
+ * Allows the use of jar files to capture cookies.
  */
-#define FORCE_LOAD 1
+#define FEATURE_COOKIE_JAR 1
+
+/*
+ * If a stream is compressed via gzip, then it cannot be filtered through
+ * the PCRE regexps.  (Commonly happens with Netscape browsers).
+ * This forces it to be uncompressed.
+ */
+/* #undef FEATURE_DENY_GZIP */
 
 /*
  * Locally redirect remote script-redirect URLs
  */
-#define FAST_REDIRECTS 1
+#define FEATURE_FAST_REDIRECTS 1
 
 /*
- * Split the show-proxy-args page into a page for each config file.
+ * Bypass filtering for 1 page only
  */
-#define SPLIT_PROXY_ARGS 1
+#define FEATURE_FORCE_LOAD 1
 
 /*
- * Kills JavaScript popups - window.open, onunload, etc.
+ * Allow blocking using images as well as HTML.
+ * If you do not define this then everything is blocked as HTML.
+ *
+ * Note that this is required if you want to use FEATURE_IMAGE_DETECT_MSIE.
  */
-#define KILLPOPUPS 1
-
-/*
- * Support for webDAV - e.g. so Microsoft Outlook can access HotMail e-mail
- */
-#define WEBDAV 1
+#define FEATURE_IMAGE_BLOCKING 1
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
  * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
  *
- * You must also define IMAGE_BLOCKING to use this feature.
+ * You must also define FEATURE_IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -279,35 +296,35 @@
  * These limitations are due to IE making inconsistent choices
  * about which "Accept:" header to send.
  */
-#define DETECT_MSIE_IMAGES 1
+#define FEATURE_IMAGE_DETECT_MSIE 1
 
 /*
- * Allow blocking using images as well as HTML.
- * If you do not define this then everything is blocked as HTML.
- *
- * Note that this is required if you want to use DETECT_MSIE_IMAGES.
+ * Kills JavaScript popups - window.open, onunload, etc.
  */
-#define IMAGE_BLOCKING 1
-
-/*
- * Allows the use of ACL files to control access to the proxy by IP address.
- */
-#define ACL_FILES 1
-
-/*
- * Allows the use of trust files.
- */
-#define TRUST_FILES 1
-
-/*
- * Allows the use of jar files to capture cookies.
- */
-#define JAR_FILES 1
+#define FEATURE_KILL_POPUPS 1
 
 /*
  * Use POSIX threads instead of native threads.
  */
 #define FEATURE_PTHREAD 1
+
+/*
+ * Enables statistics function.
+ */
+#define FEATURE_STATISTICS 1
+
+/*
+ * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
+ * non-anonymizing proxy.  This is useful if you're trying to access a
+ * blocked or broken site - just change the setting in the config file,
+ * or use the handy "Disable" menu option in the Windows GUI.
+ */
+#define FEATURE_TOGGLE 1
+
+/*
+ * Allows the use of trust files.
+ */
+#define FEATURE_TRUST 1
 
 /* Define if you have the bcopy function.  */
 #define HAVE_BCOPY 1

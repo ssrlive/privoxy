@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.11  2001/07/21 17:53:41  jongfoster
+ *    Adding version information block.
+ *
  *    Revision 1.10  2001/07/19 19:14:19  haroon
  *    -  Removed all #ifdef PCRS. The .rc file extension had eluded Andreas.
  *
@@ -207,14 +210,14 @@ BEGIN
             MENUITEM                                SEPARATOR
             MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
             MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
             MENUITEM "&Trust...",                   ID_TOOLS_EDITTRUST
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
         END
         MENUITEM                              SEPARATOR
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
         MENUITEM "&Enable",                   ID_TOGGLE_IJB, CHECKED
-#endif
+#endif /* def FEATURE_TOGGLE */
         MENUITEM "Show &JunkBuster Window",   ID_SHOWWINDOW
     END
 END
@@ -240,17 +243,17 @@ BEGIN
     END
     POPUP "&Options"
     BEGIN
-#ifdef TOGGLE
+#ifdef FEATURE_TOGGLE
         MENUITEM "&Enable",                     ID_TOGGLE_IJB, CHECKED
         MENUITEM                                SEPARATOR
-#endif
+#endif /* def FEATURE_TOGGLE */
         MENUITEM "&Configuration...",           ID_TOOLS_EDITJUNKBUSTER
         MENUITEM                                SEPARATOR
         MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
             MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
-#ifdef TRUST_FILES
+#ifdef FEATURE_TRUST
             MENUITEM "&Trust...",               ID_TOOLS_EDITTRUST
-#endif /* def TRUST_FILES */
+#endif /* def FEATURE_TRUST */
     END
     POPUP "&Help"
     BEGIN
@@ -281,73 +284,5 @@ IDR_ACCELERATOR ACCELERATORS DISCARDABLE
 BEGIN
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
 END
-
-#ifdef WIN_GUI_EDIT
-
-/*
- * Icons
- *
- * Icon with lowest ID value placed first to ensure application icon
- * remains consistent on all systems.
- */
-IDI_DENYRULE            ICON    DISCARDABLE     "icons/denyrule.ico"
-IDI_ALLOWRULE           ICON    DISCARDABLE     "icons/icon1.ico"
-
-/*
- * Dialog
- */
-
-IDD_RULES DIALOG DISCARDABLE  0, 0, 239, 225
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Blockers"
-FONT 8, "MS Sans Serif"
-BEGIN
-    GROUPBOX        "New Rule",IDC_STATIC,5,5,230,55
-    LTEXT           "For:",IDC_STATIC,10,15,13,8
-    EDITTEXT        IDC_NEW,10,25,220,12,ES_AUTOHSCROLL
-    COMBOBOX        IDC_ACTION,10,40,75,37,CBS_DROPDOWNLIST | CBS_SORT |
-                    WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "C&reate!",IDC_CREATE,90,40,50,14
-    GROUPBOX        "Rules",IDC_STATIC,5,65,230,135
-    CONTROL         "List1",IDC_RULES,"SysListView32",LVS_REPORT |
-                    LVS_SHOWSELALWAYS | LVS_EDITLABELS | WS_BORDER |
-                    WS_TABSTOP,10,75,220,100
-    PUSHBUTTON      "Move &Up",IDC_MOVEUP,10,180,50,14,WS_DISABLED
-    PUSHBUTTON      "Move &Down",IDC_MOVEDOWN,65,180,50,14,WS_DISABLED
-    PUSHBUTTON      "&Delete",IDC_DELETE,120,180,50,14,WS_DISABLED
-    PUSHBUTTON      "&Save",IDC_SAVE,130,205,50,14
-    PUSHBUTTON      "&Cancel",IDCANCEL,185,205,50,14
-END
-
-
-/*
- * DESIGNINFO
- */
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE
-BEGIN
-    IDD_RULES, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 232
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 218
-    END
-END
-#endif /* def APSTUDIO_INVOKED */
-
-
-/*
- * String Table
- */
-
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_NEW_BLOCKER         "Create rule for ""%s""..."
-END
-
-
-#endif /* def WIN_GUI_EDIT */
 
 #endif /* English (U.S.) resources */

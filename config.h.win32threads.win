@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.3  2001/07/25 19:16:27  oes
+ *    Bumping version number to 2.9.8
+ *
  *    Revision 1.2  2001/07/21 18:00:07  jongfoster
  *    Bumping version number to 2.9.7
  *
@@ -210,51 +213,41 @@
  * and send a SIGHUP (UN*X), or use the handy "Disable" menu option (Windows
  * GUI).
  */
-#define TOGGLE 1
+#define FEATURE_TOGGLE 1
 
 /*
  * If a stream is compressed via gzip (Netscape specific I think), then
  * it cannot be modified with Perl regexps.  This forces it to be 
  * uncompressed.
  */
-#define DENY_GZIP 1
+#define FEATURE_DENY_GZIP 1
 
 /*
  * Enables statistics function.
  */
-#define STATISTICS 1
+#define FEATURE_STATISTICS 1
 
 /*
  * Bypass filtering for 1 page only
  */
-#define FORCE_LOAD 1
+#define FEATURE_FORCE_LOAD 1
 
 /*
  * Locally redirect remote script-redirect URLs
  */
-#define FAST_REDIRECTS 1
-
-/*
- * Split the show-proxy-args page into a page for each config file.
- */
-#define SPLIT_PROXY_ARGS 1
+#define FEATURE_FAST_REDIRECTS 1
 
 /*
  * Kills JavaScript popups - window.open, onunload, etc.
  */
-#define KILLPOPUPS 1
-
-/*
- * Support for webDAV - e.g. so Microsoft Outlook can access HotMail e-mail
- */
-#define WEBDAV 1
+#define FEATURE_KILL_POPUPS 1
 
 /*
  * Detect image requests automatically for MSIE.  Will fall back to
  * other image-detection methods (i.e. "+image" permission) for other
  * browsers.
  *
- * You must also define IMAGE_BLOCKING to use this feature.
+ * You must also define FEATURE_IMAGE_BLOCKING to use this feature.
  *
  * It detects the following header pair as an image request:
  *
@@ -279,7 +272,7 @@
  * These limitations are due to IE making inconsistent choices
  * about which "Accept:" header to send.
  */
-#define DETECT_MSIE_IMAGES 1
+#define FEATURE_IMAGE_DETECT_MSIE 1
 
 /*
  * Allow blocking using images as well as HTML.
@@ -287,22 +280,22 @@
  *
  * Note that this is required if you want to use DETECT_MSIE_IMAGES.
  */
-#define IMAGE_BLOCKING 1
+#define FEATURE_IMAGE_BLOCKING 1
 
 /*
  * Allows the use of ACL files to control access to the proxy by IP address.
  */
-#define ACL_FILES 1
+#define FEATURE_ACL 1
 
 /*
  * Allows the use of trust files.
  */
-#define TRUST_FILES 1
+#define FEATURE_TRUST 1
 
 /*
  * Allows the use of jar files to capture cookies.
  */
-#define JAR_FILES 1
+#define FEATURE_COOKIE_JAR 1
 
 /*
  * Use POSIX threads instead of native threads.
