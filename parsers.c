@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.16 2001/06/29 13:32:42 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.17 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.16 2001/06/29 13:32:42 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.17  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.16  2001/06/29 13:32:42  oes
  *    - Fixed a comment
  *    - Adapted free_http_request
@@ -254,12 +257,8 @@ const struct parsers client_patterns[] = {
 const struct parsers server_patterns[] = {
    { "set-cookie:",        11, server_set_cookie },
    { "connection:",        11, crumble },
-#if defined(PCRS) || defined(KILLPOPUPS)
    { "Content-Type:",      13, content_type },
-#endif /* defined(PCRS) || defined(KILLPOPUPS) */
-#ifdef PCRS
    { "Content-Length:",    15, content_length },
-#endif /* def PCRS */
    { NULL, 0, NULL }
 };
 
@@ -550,7 +549,6 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
    http->cmd = strdup(req);
 
    buf = strdup(req);
-
    n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
 
    if (n == 3)
@@ -612,11 +610,29 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
             url = NULL;
          }
 
-         if (url && (p = strchr(url, '/')))
+         if (url)
          {
-            http->path = strdup(p);
-            *p = '\0';
-            http->hostport = strdup(url);
+            if (p = strchr(url, '/'))
+            {
+               http->path = strdup(p);
+               *p = '\0';
+               http->hostport = strdup(url);
+            }
+            /* 
+             * Repair broken HTTP requests that don't contain a path
+             */
+            else
+            {
+               /* Repair hostport & path */
+               http->path = strdup("/");
+               http->hostport = strdup(url);
+
+               /* Even repair cmd in case we're just forwarding. Boy are we nice ;-)  */
+               freez(http->cmd);
+               http->cmd = strsav(http->cmd, http->gpc);
+               http->cmd = strsav(http->cmd, " / ");
+               http->cmd = strsav(http->cmd, http->ver);
+            }
          }
       }
    }
@@ -698,8 +714,6 @@ char *crumble(const struct parsers *v, char *s, struct client_state *csp)
 }
 
 
-#if defined(PCRS) || defined(KILLPOPUPS)
-
 /*********************************************************************
  *
  * Function    :  content_type
@@ -716,24 +730,24 @@ char *crumble(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *content_type(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (strstr (s, " text/") || strstr (s, "application/x-javascript"))
-      csp->is_text = 1;
+   if (strstr(s, " text/") || strstr(s, "application/x-javascript"))
+      csp->content_type = CT_TEXT;
+   else if (strstr(s, " image/gif"))
+      csp->content_type = CT_GIF;
    else
-      csp->is_text = 0;
+      csp->content_type = 0;
 
    return(strdup(s));
 
 }
-#endif /* defined(PCRS) || defined(KILLPOPUPS) */
 
 
-#ifdef PCRS
 /*********************************************************************
  *
  * Function    :  content_length
  *
- * Description :  Adjust Content-Length header if we have 
- *                filtered this page through PCRS.
+ * Description :  Adjust Content-Length header if we modified
+ *                the body.
  *
  * Parameters  :
  *          1  :  v = ignored
@@ -749,6 +763,7 @@ char *content_length(const struct parsers *v, char *s, struct client_state *csp)
    {
       s = (char *) zalloc(100);
       sprintf(s, "Content-Length: %d", csp->content_length);
+
    	log_error(LOG_LEVEL_HEADER, "Adjust Content-Length to %d", csp->content_length);
       return(s);
    }
@@ -756,9 +771,8 @@ char *content_length(const struct parsers *v, char *s, struct client_state *csp)
    {
       return(strdup(s));
    }
-}
 
-#endif /* def PCRS */
+}
 
 
 /*********************************************************************
