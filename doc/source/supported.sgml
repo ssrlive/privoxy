@@ -1,0 +1,20 @@
+<para>
+ At present, <application>Privoxy</application> is known to run on Win32, Mac
+ OSX, OS/2, AmigaOS, Linux, and many flavors of Unix. There are releases 
+ for these available for download at 
+ <ulink
+ url="http://sourceforge.net/project/showfiles.php?group_id=11118">http://sourceforge.net/project/showfiles.php?group_id=11118</ulink>.
+</para>
+<para>
+ But any operating system that runs TCP/IP, can conceivably take advantage of
+ <application>Privoxy</application> in a networked situation where
+ <application>Privoxy</application> would run as a server on a LAN gateway. 
+ Then only the <quote>gateway</quote> needs to be running one of the above
+ operating systems. 
+</para>
+
+<para>
+ Source code is freely available, so porting to other operating systems, 
+ is always a possibility.
+</para>
+
