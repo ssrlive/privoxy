@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.12 2001/10/23 21:27:50 jongfoster Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.13 2001/10/29 03:48:10 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.13  2001/10/29 03:48:10  david__schmidt
+ *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
+ *    by and __OS2__ ifdef.
+ *
  *    Revision 1.12  2001/10/23 21:27:50  jongfoster
  *    Standardising error codes in string_append
  *    make_path() no longer adds '\\' if the dir already ends in '\\' (this
@@ -113,6 +117,7 @@
 extern "C" {
 #endif
 
+extern const char *basedir;
 extern void *zalloc(int size);
 
 extern unsigned int hash_string(const char* s);
