@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.5 2001/06/05 19:59:16 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.6 2001/06/07 23:05:19 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.5 2001/06/05 19:59:16 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.6  2001/06/07 23:05:19  jongfoster
+ *    Removing code related to old forward and ACL files.
+ *
  *    Revision 1.5  2001/06/05 19:59:16  jongfoster
  *    Fixing multiline character string (a GCC-only "feature"), and snprintf (it's _snprintf under VC++).
  *
@@ -135,9 +138,9 @@ const struct cgi_dispatcher cgi_dispatchers[] = {
    { "show-status", 
          11, cgi_show_status,  
          "Show information about the version and configuration" }, 
-/* { "show-url-info",
+   { "show-url-info",
          13, cgi_show_url_info, 
-         "Show which actions apply to a URL and why"  },*/
+         "Show which actions apply to a URL and why"  },
    { "send-banner",
          11, cgi_send_banner, 
          "HIDE Send the transparent or \"Junkbuster\" gif" },
@@ -257,7 +260,7 @@ struct http_response *cgi_dispatch(struct client_state *csp)
 struct map *parse_cgi(char *argstring)
 {
    char *tmp, *p;
-   char *vector[BUFSIZ];
+   char *vector[BUFFER_SIZE];
    int pairs, i;
    struct map *cgi_params = NULL;
 
@@ -296,7 +299,7 @@ struct map *parse_cgi(char *argstring)
  *********************************************************************/
 int make_http_response(struct http_response *rsp)
 {
-  char buf[BUFSIZ];
+  char buf[BUFFER_SIZE];
 
   /* Fill in the HTTP Status */
   sprintf(buf, "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
@@ -378,7 +381,7 @@ char *fill_template(struct client_state *csp, char *template, struct map *answer
 {
    struct map *m;
    pcrs_job *job, *joblist = NULL;
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
    char *new, *old = NULL;
    int size;
    FILE *fp;
@@ -386,7 +389,7 @@ char *fill_template(struct client_state *csp, char *template, struct map *answer
    /*
     * Open template file or fail
     */
-   snprintf(buf, BUFSIZ, "%s/templates/%s", csp->config->confdir, template);
+   snprintf(buf, BUFFER_SIZE, "%s/templates/%s", csp->config->confdir, template);
 
    if(NULL == (fp = fopen(buf, "r")))
 	{
@@ -401,7 +404,7 @@ char *fill_template(struct client_state *csp, char *template, struct map *answer
 	{
 	   int error;
 
-	   snprintf(buf, BUFSIZ, "s°@%s@°%s°ig", m->name, m->value);
+	   snprintf(buf, BUFFER_SIZE, "s°@%s@°%s°ig", m->name, m->value);
 
 	   if(NULL == (job = pcrs_make_job(buf, &error)))
 		{
@@ -420,7 +423,7 @@ char *fill_template(struct client_state *csp, char *template, struct map *answer
    /* 
     * Read the file, ignoring comments
     */
-	while (fgets(buf, BUFSIZ, fp))
+	while (fgets(buf, BUFFER_SIZE, fp))
 	{
       /* skip lines starting with '#' */
 	   if(*buf == '#') continue;
@@ -505,7 +508,7 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
                 struct map *parameters)
 {
    char *p, *tmp = NULL;
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
    const struct cgi_dispatcher *d;
 	struct map *exports = NULL;
 
@@ -514,7 +517,7 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
    {
       if (strncmp(d->description, "HIDE", 4))
 	   {
-         snprintf(buf, BUFSIZ, "<li><a href=%s/config/%s>%s</a></li>",
+         snprintf(buf, BUFFER_SIZE, "<li><a href=%s/config/%s>%s</a></li>",
 				  HOME_PAGE_URL, d->name, d->description);
          tmp = strsav(tmp, buf);
       }
@@ -656,7 +659,7 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
 
 #ifdef SPLIT_PROXY_ARGS
    FILE * fp;
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
    char * p;
    const char * filename = NULL;
    char * file_description = NULL;
@@ -717,10 +720,10 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
          }
          fclose(fp);
          exports = map(exports, "contents", 1, s, 0);
-     }
-         rsp->body = fill_template(csp, "show-status-file", exports);;
-         free_map(exports);
-         return(0);
+      }
+      rsp->body = fill_template(csp, "show-status-file", exports);;
+      free_map(exports);
+      return(0);
 
    }
 
@@ -824,23 +827,19 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
  * Returns     :  ???FIXME
  *
  *********************************************************************/
-char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
+int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
+                      struct map *parameters)
 {
-   char * query_string = strchr(http->path, '?');
+   const char * host_param = lookup(parameters, "url");
    char * host = NULL;
-   
-   if (query_string != NULL)
+
+   if (*host_param != '\0')
    {
-      query_string = url_decode(query_string + 1);
-      if (strncmpic(query_string, "url=", 4) == 0)
-      {
-         host = strdup(query_string + 4);
-      }
-      freez(query_string);
+      host = strdup(host_param);
    }
    if (host != NULL)
    {
-      char * result;
+      char * matches = NULL;
       char * path;
       char * s;
       int port = 80;
@@ -848,17 +847,28 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
       struct url_actions *b;
       struct url_spec url[1];
       struct current_action_spec action[1];
+      struct map *exports = NULL;
+
+      exports = map(exports, "url", 1, html_encode(host), 0);
 
       init_current_action(action);
 
-      result = (char *)malloc(sizeof(C_URL_INFO_HEADER) + 2 * strlen(host));
-      sprintf(result, C_URL_INFO_HEADER, host, host);
-
       s = current_action_to_text(action);
-      result = strsav(result, "<h3>Defaults:</h3>\n<p><b>{");
-      result = strsav(result, s);
-      result = strsav(result, " }</b></p>\n<h3>Patterns affecting the URL:</h3>\n<p>\n");
-      freez(s);
+      exports = map(exports, "default", 1, s , 0);
+
+      if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
+      {
+         exports = map(exports, "matches", 1, "" , 1);
+         exports = map(exports, "final", 1, lookup(exports, "default"), 1);
+
+         freez(host);
+         free_current_action(action);
+
+         rsp->body = fill_template(csp, "show-url-info", exports);
+         free_map(exports);
+
+         return 0;
+      }
 
       s = strchr(host, '/');
       if (s != NULL)
@@ -875,14 +885,7 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
       {
          *s++ = '\0';
          port = atoi(s);
-      }
-
-      if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
-      {
-         freez(host);
-         freez(path);
-         result = strsav(result, C_URL_INFO_FOOTER);
-         return result;
+         s = NULL;
       }
 
       *url = dsplit(host);
@@ -890,10 +893,17 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
       /* if splitting the domain fails, punt */
       if (url->dbuf == NULL)
       {
+         exports = map(exports, "matches", 1, "" , 1);
+         exports = map(exports, "final", 1, lookup(exports, "default"), 1);
+
          freez(host);
          freez(path);
-         result = strsav(result, C_URL_INFO_FOOTER);
-         return result;
+         free_current_action(action);
+
+         rsp->body = fill_template(csp, "show-url-info", exports);
+         free_map(exports);
+
+         return 0;
       }
 
       for (b = b->next; NULL != b; b = b->next)
@@ -911,11 +921,11 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
                )
                {
                   s = actions_to_text(b->action);
-                  result = strsav(result, "<b>{");
-                  result = strsav(result, s);
-                  result = strsav(result, " }</b><br>\n<code>");
-                  result = strsav(result, b->url->spec);
-                  result = strsav(result, "</code><br>\n<br>\n");
+                  matches = strsav(matches, "<b>{");
+                  matches = strsav(matches, s);
+                  matches = strsav(matches, " }</b><br>\n<code>");
+                  matches = strsav(matches, b->url->spec);
+                  matches = strsav(matches, "</code><br>\n<br>\n");
                   freez(s);
 
                   merge_current_action(action, b->action);
@@ -924,6 +934,9 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
          }
       }
 
+      exports = map(exports, "matches", 1, matches , 0);
+      matches = NULL;
+
       freez(url->dbuf);
       freez(url->dvec);
 
@@ -931,19 +944,21 @@ char *cgi_show_url_info(struct http_request *http, struct client_state *csp)
       freez(path);
 
       s = current_action_to_text(action);
-      result = strsav(result, "</p>\n<h2>Final Results:</h2>\n<p><b>{");
-      result = strsav(result, s);
-      result = strsav(result, " }</b><br>\n<br>\n");
-      freez(s);
+      exports = map(exports, "final", 1, s, 0);
+      s = NULL;
 
       free_current_action(action);
 
-      result = strsav(result, C_URL_INFO_FOOTER);
-      return result;
+      rsp->body = fill_template(csp, "show-url-info", exports);
+      free_map(exports);
+
+      return 0;
    }
    else
    {
-      return strdup(C_URL_INFO_FORM);
+      rsp->body = fill_template(csp, "show-url-info-form", NULL);
+
+      return 0;
    }
 }
 
@@ -968,7 +983,7 @@ char *ij_untrusted_url(struct http_request *http, struct client_state *csp)
 {
    int n;
    char *hostport, *path, *refer, *p, *v[9];
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
    struct url_spec **tl, *t;
 
 
