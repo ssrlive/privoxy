@@ -8,9 +8,13 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.10 2002/04/06 15:19:35 oes Exp $
+  $Id: step3.php,v 1.11 2002/04/06 15:54:08 swa Exp $
 
   $Log: step3.php,v $
+  Revision 1.11  2002/04/06 15:54:08  swa
+  prework: list of what needs to
+  be submitted to the tracker.
+
   Revision 1.10  2002/04/06 15:19:35  oes
   Clean-up, smarter handling of unreachable URLs
 
@@ -67,6 +71,18 @@ $logfile = "results/actions-feedback.txt";
 //phpinfo();
 //error_reporting(E_ALL);
 error_reporting(E_NONE);
+
+// // Debug short cut
+// $referrer_url="http://informer2.comdirect.de/de/my/homepage/index.html?Show=main.html&callerPage=%2fde%2fmy%2fhomepage%2findex.html";
+// $problem="P1";
+// $url_confirmed="yes";
+// $severity="1";
+// $remarks="this is the first line of text\nthe 2nd line\nthird line.";
+// //$block_image="";
+// $num_images=0;
+// $manual_image_url="http://www.someimage.de/de/my/homepage/index.html?Show=main.html&callerPage=%2fde%2fmy%2fhomepage%2findex.html";
+// $image_url="http://www.someimage.de/de/my/homepage/index.html?Show=main.html&callerPage=%2fde%2fmy%2fhomepage%2findex.html";
+// // end debug short cut
 
 /*
  * Function: error_abort
@@ -280,6 +296,7 @@ fclose($fp);
 // <OPTION VALUE="8">8</OPTION>
 // <OPTION VALUE="9">9 - Highest</OPTION>
 //
+// <INPUT TYPE="TEXT" NAME="summary" SIZE="35" MAXLENGTH="40">
 // 
 // we can either put everything in here (nicely formatted) ..
 // <TEXTAREA NAME="details" ROWS="30" COLS="55" WRAP="HARD"></TEXTAREA>
@@ -292,7 +309,100 @@ fclose($fp);
 //
 // <INPUT TYPE="SUBMIT" NAME="SUBMIT" VALUE="SUBMIT">
 
+//
+// TODO: - set all variables above this point
+//       - evaluate alternative: file attachment
+//
+
+// INFORMATION:
+// below this point, all variables _must_ be set (no checking is performed)
+//
+
+//  need to switch the following statement for type of problem
+switch($problem)
+{
+   case "P1": $sf_cat_id="412811"; $sf_summary="an advertisment was not blocked"; break;
+   case "P2": $sf_cat_id="412810"; $sf_summary="an innocent image was blocked"; break;
+   case "P3": $sf_cat_id="412812"; $sf_summary="the whole page was erraneously blocked"; break;
+   case "P4": $sf_cat_id="412813"; $sf_summary="the page needs popups but they don't work"; break;
+   case "P5": $sf_cat_id="412814"; $sf_summary="a problem occured"; break;
+   default: $sf_cat_id="412814"; $sf_summary="AN UNPROCESSABLE PROBLEM OCCURED"; break;
+}
+// need to switch the following statement for action file version
+$sf_agroup_id="195870"; // assume 1.0 for the time being
+// this is always set to nobody
+$sf_assigned_to="100";
+// need to set values from [1...9]
+switch($severity)
+{
+   case "1": $sf_prio="1"; break;  // low
+   case "2": $sf_prio="5"; break;  // medium
+   case "3": $sf_prio="9"; break;  // high
+   default: $sf_cat_id="1"; break;
+}
+// here comes the beef
+$sf_trackertext="\n\n\nIt would be awesome if the links below were clickable :-)\n\n";
+$sf_trackertext=$sf_trackertext . "This item was submitted by $name\n\n";
+$sf_trackertext=$sf_trackertext . "Where did it happen?\n$referrer_url\n\n";
+$sf_trackertext=$sf_trackertext . "What happened?\n$sf_summary (" . date("r") . ")\n\n";
+switch($problem)
+{
+   case "P1":
+     $sf_trackertext=$sf_trackertext."These URLs are likely advertisements\n";
+     for($i=0; $i < $num_images; $i++)
+       {
+	 if (isset($block_image[$i]))
+	   {
+	     $sf_trackertext = $sf_trackertext . "$image_url[$i]\n\n";
+	   }
+       }
+     if ($manual_image_url != "")
+       {
+	 $sf_trackertext=$sf_trackertext . "$manual_image_url";
+       }
+     $sf_trackertext= $sf_trackertext . "\n\n";
+     break;
+   case "P2": $sf_trackertext= $sf_trackertext . "The URL of the image that was incorrectly blocked:\n$image_url\n\n"; break;
+   case "P3": $sf_trackertext= $sf_trackertext . "\n\n"; break;
+   case "P4": $sf_trackertext= $sf_trackertext . "\n\n"; break;
+   case "P5": $sf_trackertext= $sf_trackertext . "\n\n"; break;
+   default: $sf_trackertext= $sf_trackertext . "\n\n"; break; break;
+}
+$sf_trackertext= $sf_trackertext . "Remarks:\n--------\n$remarks\n\n\n";
+
 ?>
+
+<div class="title">
+<h1>
+<a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 3 of 4.
+</h1>
+</div>
+</head>
+<body>
+<div class="box">
+<p>
+Thank you. We have preliminary validated you input. Please click on "Submit"
+to transfer you feedback to our tracker.
+</p>
+<p align=center>
+<form action="http://sourceforge.net/tracker/index.php?group_id=11118&atid=460288" method="post" enctype="multipart/form-data">
+<input type="hidden" name="func" value="postadd">
+<input type="hidden" name="category_id" value="<?php echo ($sf_cat_id) ?>">
+<input type="hidden" name="artifact_group_id" value="<?php echo ($sf_agroup_id) ?>">
+<input type="hidden" name="assigned_to" value="<?php echo ($sf_assigned_to) ?>">
+<input type="hidden" name="priority" value="<?php echo ($sf_prio) ?>">
+<input type="hidden" name="summary" value="<?php echo ($sf_summary) ?>">
+<input type="hidden" name="details" value="<?php echo ($sf_trackertext) ?>">
+<input type="submit" name="submit" value="Submit">
+</form>
+The script will take you to Sourceforge where all submissions are collected.
+</p>
+</div>
+<p>Valid <a href="http://validator.w3.org/">HTML 4.01 Transitional</a></p>
+</body>
+</html>
+
+<!--
 
   <title>Privoxy Action List Feedback - Result</title>
  </head>
@@ -324,3 +434,5 @@ fclose($fp);
 
  </body>
 </html>
+
+ -->
