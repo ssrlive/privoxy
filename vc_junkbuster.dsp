@@ -280,14 +280,6 @@ SOURCE=.\w32res.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\w32rulesdlg.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\w32rulesdlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\w32taskbar.c
 # End Source File
 # Begin Source File

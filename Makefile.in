@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.17 2001/07/28 16:44:54 oes Exp $
+# $Id: Makefile.in,v 1.18 2001/07/29 17:09:17 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,13 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.18  2001/07/29 17:09:17  jongfoster
+# Major changes to build system in order to fix these bugs:
+# - pthreads under Linux was broken - changed -lpthread to -pthread
+# - Compiling in MinGW32 mode under CygWin now correctly detects
+#   which shared libraries are available
+# - Solaris support (?) (Not tested under Solaris yet)
+#
 # Revision 1.17  2001/07/28 16:44:54  oes
 # Fixed sed LF->CRLF conversion and removed deprecated files
 #
@@ -143,13 +150,12 @@ C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
 C_OBJS = $(C_SRC:.c=.$(OBJEXT))
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
 
-W32_SRC   = @WIN_ONLY@w32log.c w32rulesdlg.c w32taskbar.c win32.c
+W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
 W32_FILES = @WIN_ONLY@w32.res
 W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.$(OBJEXT)) $(W32_FILES)
-W32_HDRS  = @WIN_ONLY@w32log.h w32res.h w32rulesdlg.h w32taskbar.h
+W32_HDRS  = @WIN_ONLY@w32log.h w32taskbar.h win32.h w32res.h
 W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
-W32_INIS  = @WIN_ONLY@junkbstr.txt saclfile.txt sblock.txt scookie.txt  \
-            @WIN_ONLY@sforward.txt simage.txt spopup.txt strust.txt sregexp.txt
+W32_INIS  = @WIN_ONLY@junkbstr.txt sactions.txt strust.txt sregexp.txt
 
 PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
 PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.$(OBJEXT))
