@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.21 2002/03/24 12:43:57 swa Exp $
+# $Id: GNUmakefile.in,v 1.22 2002/03/24 12:56:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -309,7 +309,7 @@ suse-upload:
 
 # handle with care. use with root.
 suse-clean:
-	rpm -e junkbuster-suse
+	rpm -e junkbuster-suse || true
 	rm -rf /etc/junkbuster
 	rm -rf /etc/rc.d/junkbuster*
 	rm -rf /var/run/junkbuster.pid 
@@ -318,7 +318,7 @@ suse-clean:
 	rm -f /usr/sbin/junkbuster
 	rm -f /usr/sbin/rcjunkbuster
 	rm -f /usr/share/man/man1/junkbuster.1.gz
-	rpm -e privoxy-suse
+	rpm -e privoxy-suse || true
 	rm -rf /etc/privoxy
 	rm -rf /etc/rc.d/privoxy*
 	rm -rf /var/run/privoxy.pid 
@@ -518,6 +518,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.22  2002/03/24 12:56:21  swa
+# name change related issues.
+#
 # Revision 1.21  2002/03/24 12:43:57  swa
 # name change
 #
