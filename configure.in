@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.58 2002/04/04 20:49:20 swa Exp $
+dnl $Id: configure.in,v 1.59 2002/04/06 20:23:55 jongfoster Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.59  2002/04/06 20:23:55  jongfoster
+dnl Removing unnessacery tests (C++, ranlib)
+dnl
 dnl Revision 1.58  2002/04/04 20:49:20  swa
 dnl attempt to consolidate the
 dnl different dokbook versions.
@@ -331,8 +334,20 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.58 $)
+AC_REVISION($Revision: 1.59 $)
 AC_INIT(jcc.c)
+
+if test ! -f config.h.in; then
+   echo "You need to run autoheader first. "
+   echo -n "Shall I do this for you now? (y/n) "
+   read answer
+   if test $answer != "y"; then
+      exit 1
+   else
+      autoheader
+  fi
+fi  
+
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 
