@@ -134,15 +134,15 @@
           </p>
 
           <ul>
-            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable Privoxy</a></li>
-            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable Privoxy</a></li>
-            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle Privoxy</a>
+            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Enable</a></li>
+            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Disable</a></li>
+            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&amp;set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Toggle Privoxy</a>
                   (Toggles between enabled and disabled)</li>
-            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View Privoxy Status</a></li>
+            <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - View Status</a></li>
           </ul>
 
           <p>
-            <b>Credit:</b> The site which gave me the general idea for these
+            <b>Credit:</b> The site which gave us the general idea for these
             bookmarklets is <a href="http://www.bookmarklets.com/">www.bookmarklets.com</a>.
             They have more information <a href="http://www.bookmarklets.com/about/">about bookmarklets</a>.
           </p>
