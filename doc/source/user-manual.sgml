@@ -9,9 +9,9 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
-<!entity p-status "BETA">
-<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
-<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.68 2002/04/04 18:46:47 swa Exp $
+ $Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.68 2002/04/04 18:46:47 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3946,6 +3946,12 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.69  2002/04/06 05:07:29  hal9
+ -Add privoxy-man-page.sgml, for man page.
+ -Add authors.sgml for AUTHORS (and p-authors.sgml)
+ -Reworked various aspects of various docs.
+ -Added additional comments to sub-docs.
+
  Revision 1.68  2002/04/04 18:46:47  swa
  consistent look. reuse of copyright, history et. al.
 

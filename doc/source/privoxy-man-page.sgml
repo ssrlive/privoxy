@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.0 2002/04/04 21:59:53 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 1.1 2002/04/06 05:07:29 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,9 +44,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity authors SYSTEM "p-authors.sgml">
 <!entity p-version "2.9.13">
-<!entity p-status "BETA">
-<!entity % p-not-stable "INCLUDE">    <!-- set to IGNORE for stable release  -->
-<!entity % p-stable "IGNORE">         <!-- set INCLUDE for stable release    -->
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
 <!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
 ]>
