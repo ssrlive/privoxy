@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.7 2002/04/09 18:34:51 oes Exp $
+#  $Id: default.filter,v 1.8 2002/04/10 17:07:21 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -129,8 +129,8 @@ s|<meta\s+http-equiv=['"]?set-cookie['"]?\s+content=[^>].*>|<!--no cookies here 
 #################################################################################
 FILTER: no-popups Kill all popups in JS and HTML
 
-s/window\.open\(/concat(/ig                  # JavaScript
-s/([ =;])open\(/$1concat(/ig                 # JavaScript
+s/window\.open\s*\(/concat(/ig               # JavaScript
+s/([ =;])open\s*\(/$1concat(/ig              # JavaScript alternative
 s/target=['"]?(_blank|_new)['"]?/notarget/ig # HTML
 
 
@@ -267,6 +267,9 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.8  2002/04/10 17:07:21  oes
+#     Fixed potentially desctructive jobs, added noflash filter
+#
 #     Revision 1.7  2002/04/09 18:34:51  oes
 #     Fixed HTML syntax in replacements
 #
