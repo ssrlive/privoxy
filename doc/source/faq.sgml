@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.59 2002/05/15 04:03:30 hal9 Exp $
+ $Id: faq.sgml,v 1.60 2002/05/22 17:17:48 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.59 2002/05/15 04:03:30 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.60 2002/05/22 17:17:48 oes Exp $</pubdate>
 
 <!--
 
@@ -266,7 +266,7 @@ an ad, and what is not?</title>
 This does not sound very scientific.</title>
 <para>
  Actually, it's a black art ;-) And yes, it is always possible to have a broad
- rule accidentally block of change something by mistake. There is a good chance
+ rule accidentally block or change something by mistake. There is a good chance
  you may run into such a situation at some point. It is tricky writing rules to
  cover every conceivable possibility, and not occasionally get false positives.
 </para>
@@ -425,8 +425,9 @@ special I have to do now?</title>
  <para>
   If you set up the <application>Privoxy</application> to run on
   the computer you browse from (rather than your ISP's server or some
-  networked computer on a LAN), the proxy will be on <quote>localhost</quote>
-  (which is the special name used by every computer on the Internet to refer
+  networked computer on a LAN), the proxy will be on <literal>127.0.0.1</literal> 
+  (sometimes referred to as <quote>localhost</quote>,
+  which is the special name used by every computer on the Internet to refer
   to itself) and the port will be 8118 (unless you have <application>Privoxy</application>
   to run on a different port with the <ulink
   url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink> config option). 
@@ -790,15 +791,16 @@ with a browser? Does that not raise security issues?</title>
  LAN?</title>
 <para>
  By default, <application>Privoxy</application> only responds to requests 
- from localhost. To have it act as a server for a network, this needs to be 
- changed in the<ulink url="../user-manual/config.html">main configuration
- file</ulink>. Look for the <literal><ulink
- url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink></literal> 
- option, which may be commented out with a <quote>#</quote> symbol. Make sure 
- it is uncommented, and assign it the address of the LAN gateway interface, 
- and port number to use. Assuming your LAN address is 192.168.1.1 and you wish
- to run <application>Privoxy</application> on port 8118, this line schould look
- like:
+ from <literal>127.0.0.1</literal> (localhost). To have it act as a server for
+ a network, this needs to be changed in the <ulink
+ url="../user-manual/config.html">main configuration file</ulink>. Look for
+ the <literal><ulink
+ url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink></literal>
+ option, which may be commented out with a <quote>#</quote> symbol. Make sure
+ it is uncommented, and assign it the address of the LAN gateway interface,
+ and port number to use. Assuming your LAN address is 192.168.1.1 and you
+ wish to run <application>Privoxy</application> on port 8118, this line
+ schould look like:
 </para>
 
 <para>
@@ -1443,7 +1445,7 @@ What can I do?</title>
  by toggling off <application>Privoxy</application> through <ulink
  url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>,
  and then shift-reloading the problem page (i.e. holding down the shift key
- while clicking reload. Alternatively, flush your browsers' disk any memory
+ while clicking reload. Alternatively, flush your browser's disk and memory
  caches).
 </para>
 
@@ -1467,7 +1469,7 @@ What can I do?</title>
 </para>
 <para>
  Alternately, if you are comfortable with a text editor, you can accomplish 
- the same thing by editing the appropriate actions file. The probably easiest 
+ the same thing by editing the appropriate actions file. Probably the easiest 
  way to deal with such problems when editing by hand is to add your
  site to a <literal>{ fragile }</literal> section in <filename>user.action</filename>,
  which is an alias that turns off most <quote>dangerous</quote>
@@ -1575,6 +1577,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.60  2002/05/22 17:17:48  oes
+Proofread & added more links into u-m
+
 Revision 1.59  2002/05/15 04:03:30  hal9
 Fix ulink -> link markup.
 
