@@ -4,7 +4,7 @@
 #
 # Redirects any request for any file in this directory tree
 # to an error page.  The error page is reached through the
-# URL http://privoxy.org/config/ and is actually in
+# URL http://www.privoxy.org/config/ and is actually in
 # the file index.php
 #
 # Uses Apache's mod_rewrite
@@ -18,17 +18,17 @@ RewriteEngine on
 RewriteBase   /config/
 
 # The only file which really exists is index.php - allow this
-RewriteCond %{HTTP_HOST}   ^privoxy\.org\.?$ [NC,OR]
+RewriteCond %{HTTP_HOST}   ^www\.privoxy\.org\.?$ [NC,OR]
 RewriteCond %{HTTP_HOST}   ^$
 RewriteRule  index.php - [L]
 
 # Silently redirect the config dir to index.php
-RewriteCond %{HTTP_HOST}   ^privoxy\.org\.?$ [NC,OR]
+RewriteCond %{HTTP_HOST}   ^www\.privoxy\.org\.?$ [NC,OR]
 RewriteCond %{HTTP_HOST}   ^$
 RewriteRule  ^$      index.php [L]
 
 # anything else gets redirected to the config dir, and we update
 # the browser's location bar.
-RewriteRule  ^(.*)$  http://privoxy.org/config/  [R,L]
+RewriteRule  ^(.*)$  http://www.privoxy.org/config/  [R,L]
 
 
