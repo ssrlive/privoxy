@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.5 2001/05/25 22:34:30 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.6 2001/05/26 00:28:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 1.5 2001/05/25 22:34:30 jongfoster 
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.6  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.5  2001/05/25 22:34:30  jongfoster
  *    Hard tabs->Spaces
  *
@@ -214,21 +221,23 @@ static const char CTRUST[] =
  *                Decide yes or no based on ACL file.
  *
  * Parameters  :
- *          1  :  src = Address the browser/user agent is requesting.
- *          2  :  dst = The proxy or gateway address this is going to.
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  dst = The proxy or gateway address this is going to.
+ *                      Or NULL to check all possible targets.
+ *          2  :  csp = Current client state (buffers, headers, etc...)
+ *                      Also includes the client IP address.
  *
  * Returns     : 0 = FALSE (don't block) and 1 = TRUE (do block)
  *
  *********************************************************************/
-int block_acl(struct access_control_addr *src, struct access_control_addr *dst, struct client_state *csp)
+int block_acl(struct access_control_addr *dst,
+              struct client_state *csp)
 {
    struct file_list *fl;
    struct access_control_list *a, *acl;
-   struct access_control_addr s[1], d[1];
 
    /* if not using an access control list, then permit the connection */
-   if (((fl = csp->alist) == NULL) || ((acl = fl->f) == NULL))
+   if (((fl = csp->alist) == NULL) || 
+       ((acl = (struct access_control_list *) fl->f) == NULL))
    {
       return(0);
    }
@@ -236,28 +245,27 @@ int block_acl(struct access_control_addr *src, struct access_control_addr *dst, 
    /* search the list */
    for (a = acl->next ; a ; a = a->next)
    {
-      *s = *src;
-      *d = *dst;
-
-      s->addr &= a->src->mask;
-      d->addr &= a->dst->mask;
-
-      if ((s->addr  == a->src->addr)
-      && (d->addr  == a->dst->addr)
-      && ((s->port == a->src->port)
-       || (s->port == 0)
-       || (a->src->port == 0))
-      && ((d->port == a->dst->port)
-       || (d->port == 0)
-       || (a->dst->port == 0)))
+      if ((csp->ip_addr_long & a->src->mask) == a->src->addr)
       {
-         if (a->action == ACL_PERMIT)
+         if (dst == NULL)
          {
-            return(0);
+            /* Just want to check if they have any access */
+            if (a->action == ACL_PERMIT)
+            {
+               return(0);
+            }
          }
-         else
+         else if ( ((dst->addr & a->dst->mask) == a->dst->addr)
+           && ((dst->port == a->dst->port) || (a->dst->port == 0)))
          {
-            return(1);
+            if (a->action == ACL_PERMIT)
+            {
+               return(0);
+            }
+            else
+            {
+               return(1);
+            }
          }
       }
    }

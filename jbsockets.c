@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.3 2001/05/25 21:57:54 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.4 2001/05/26 00:37:42 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.3 2001/05/25 21:57:54 jongfos
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.4  2001/05/26 00:37:42  jongfoster
+ *    Cosmetic indentation correction.
+ *
  *    Revision 1.3  2001/05/25 21:57:54  jongfoster
  *    Now gives a warning under Windows if you try to bind
  *    it to a port that's already in use.
@@ -116,7 +119,7 @@ int connect_to(char *host, int portnum, struct client_state *csp)
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
 
 #ifdef ACL_FILES
-   struct access_control_addr src[1], dst[1];
+   struct access_control_addr dst[1];
 #endif /* def ACL_FILES */
 
    memset((char *)&inaddr, 0, sizeof inaddr);
@@ -127,13 +130,10 @@ int connect_to(char *host, int portnum, struct client_state *csp)
    }
 
 #ifdef ACL_FILES
-   src->addr = csp->ip_addr_long;
-   src->port = 0;
-
    dst->addr = ntohl(addr);
    dst->port = portnum;
 
-   if (block_acl(src, dst, csp))
+   if (block_acl(dst, csp))
    {
       errno = EPERM;
       return(-1);
