@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.11 2001/06/01 18:14:49 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.12 2001/06/09 10:55:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.11 2001/06/01 18:14:49 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.12  2001/06/09 10:55:28  jongfoster
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.11  2001/06/01 18:14:49  jongfoster
  *    Changing the calls to strerr() to check HAVE_STRERR (which is defined
  *    in config.h if appropriate) rather than the NO_STRERR macro.
@@ -315,11 +318,9 @@ void log_error(int loglevel, char *fmt, ...)
       case LOG_LEVEL_INFO:
          outc = sprintf(outbuf, "IJB(%d) Info: ", this_thread);
          break;
-#ifdef PCRS
       case LOG_LEVEL_RE_FILTER:
          outc = sprintf(outbuf, "IJB(%d) Re-Filter: ", this_thread);
          break;
-#endif /* def PCRS */
 #ifdef FORCE_LOAD
       case LOG_LEVEL_FORCE:
          outc = sprintf(outbuf, "IJB(%d) Force: ", this_thread);
@@ -330,6 +331,9 @@ void log_error(int loglevel, char *fmt, ...)
          outc = sprintf(outbuf, "IJB(%d) Redirect: ", this_thread);
          break;
 #endif /* def FAST_REDIRECTS */
+      case LOG_LEVEL_DEANIMATE:
+         outc = sprintf(outbuf, "IJB(%d) Gif-Deanimate: ", this_thread);
+         break;
       case LOG_LEVEL_CLF:
          outc = 0;
          outbuf[0] = '\0';
