@@ -769,7 +769,7 @@ struct configuration_spec
 
 /* Shouldn't end with '/' */
 #define HOME_PAGE_URL  "http://ijbswa.sourceforge.net"
-#define REDIRECT_URL HOME_PAGE_URL "redirect.php?v=" VERSION "&to="
+#define REDIRECT_URL HOME_PAGE_URL "/redirect.php?v=" VERSION "&to="
 
 #define CGI_PREFIX_HOST "i.j.b"
 
