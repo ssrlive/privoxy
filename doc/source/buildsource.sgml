@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.6 2002/04/26 05:25:23 hal9 Exp $
+ $Id: buildsource.sgml,v 1.7 2002/04/26 17:22:28 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -29,14 +29,18 @@
 
 <para>
  To build <application>Privoxy</application> from source, 
- autoheader, autoconf, <ulink
+ <ulink url="http://www.gnu.org/software/autoconf/autoconf.html">autoconf</ulink>,
+ <ulink
  url="http://www.gnu.org/software/make/make.html">GNU make
- (gmake)</ulink>, and, of course, a C compiler are required.
+ (gmake)</ulink>, and, of course, a C compiler like <ulink
+ url="http://www.gnu.org/software/gcc/gcc.html">gcc</ulink> are required.
 </para>
 
 <para>
  When building from a source tarball (either release version or
- nightly CVS tarball), first unpack the source: 
+ <ulink
+ url="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.gz">nightly CVS
+ tarball</ulink>), first unpack the source: 
 </para>
 
 <para>
