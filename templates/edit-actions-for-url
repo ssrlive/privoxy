@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.10  2002/03/03 10:29:12  swa
+#    point users to the right feedback forms,
+#    not necessarily the developer list.
+#
 #    Revision 1.9  2002/01/23 00:26:45  jongfoster
 #    Reducing length of URLs
 #    Where encoded and unencoded versions of a string existed, removing
@@ -109,10 +113,10 @@
 # hide-referer-param-custom
 # hide-referer-param
 # hide-user-agent-param
+# image-blocker-param-pattern
 # image-blocker-param-logo
 # image-blocker-param-blank
 # image-blocker-param-custom
-# image-blocker-param-logo
 #
 #
 #############################################################################
@@ -577,8 +581,16 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <td>&nbsp;</td>
       <td colspan="4"><input type="radio" name="image_blocker_mode"
         onclick="image_blocker_param_disable(true)"
+        value="pattern" id="image_blocker_mode_pattern"
+        @image-blocker-param-pattern@><label
+        for="image_blocker_mode_pattern">Send a pattern (<img
+        src="send-banner?type=p" width="12" height="12"
+        alt="pattern">)</label><br>
+        <input type="radio" name="image_blocker_mode"
+        onclick="image_blocker_param_disable(true)"
         value="logo" id="image_blocker_mode_logo" @image-blocker-param-logo@><label
-        for="image_blocker_mode_logo">Send Junkbuster logo</label><br>
+        for="image_blocker_mode_logo">Send Junkbuster logo
+        (<img src="send-banner?type=l" alt="logo">)</label><br>
         <input type="radio" name="image_blocker_mode" value="blank"
         onclick="image_blocker_param_disable(true)"
         id="image_blocker_mode_blank" @image-blocker-param-blank@><label 
