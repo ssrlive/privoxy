@@ -33,15 +33,16 @@
 # before the "/".
 #
 # Flags are:
-#       >    Allow cookies to be read by the website, but not set.
-#       <    Allow cookies to be set by the website, but not read.
+#
+# (no flags) Allow cookies and popups, don't re_filter.  (compatibility mode)
+#       >    Do not allow cookies to be set by the website.
+#       <    Do not allow cookies to be read by the website.
 #       <>   Block all cookies.
 #       %    Enable re_filterfile processing for this site
 #       ^    Block popups from this site.
 #       ~    Same as all of <>%^
-# (no flags) Allow cookies and popups, don't re_filter.
 #
-# Multiple flags (up to 4) may be specified.
+# Multiple flags may be specified.
 #
 # If a web page's URL matches the specified pattern, then the
 # flags specified for that site are used.  If it matches more
