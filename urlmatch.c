@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c JGF $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.1 2002/01/17 20:53:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,23 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c JGF $";
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.1  2002/01/17 20:53:46  jongfoster
+ *    Moving all our URL and URL pattern parsing code to the same file - it
+ *    was scattered around in filters.c, loaders.c and parsers.c.
+ *
+ *    Providing a single, simple url_match(pattern,url) function - rather than
+ *    the 3-line match routine which was repeated all over the place.
+ *
+ *    Renaming free_url to free_url_spec, since it frees a struct url_spec.
+ *
+ *    Providing parse_http_url() so that URLs can be parsed without faking a
+ *    HTTP request line for parse_http_request() or repeating the parsing
+ *    code (both of which were techniques that were actually in use).
+ *
+ *    Standardizing that struct http_request is used to represent a URL, and
+ *    struct url_spec is used to represent a URL pattern.  (Before, URLs were
+ *    represented as seperate variables and a partially-filled-in url_spec).
+ *
  *
  *********************************************************************/
 
@@ -295,8 +312,10 @@ jb_err parse_http_url(const char * url,
 
       if (http->dcount <= 0)
       {
-         // Error: More than SZ(vec) components in domain
-         //    or: no components in domain
+         /*
+          * Error: More than SZ(vec) components in domain
+          *    or: no components in domain
+          */
          free_http_request(http);
          return JB_ERR_PARSE;
       }
@@ -550,8 +569,8 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
  *                When finished, free with unload_url().
  *
  * Parameters  :
- *          1  :  url = Target url_spec to be filled in.  Must be
- *                      zeroed out before the call (e.g. using zalloc).
+ *          1  :  url = Target url_spec to be filled in.  Will be
+ *                      zeroed before use.
  *          2  :  buf = Source pattern, null terminated.  NOTE: The
  *                      contents of this buffer are destroyed by this
  *                      function.  If this function succeeds, the
@@ -571,6 +590,9 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
 
    assert(url);
    assert(buf);
+
+   /* Zero memory */
+   memset(url, '\0', sizeof(*url));
 
    /* save a copy of the orignal specification */
    if ((url->spec = strdup(buf)) == NULL)
