@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: ijb.action,v 1.3 2002/03/05 14:35:39 morcego Exp $
+# $Id: ijb.action,v 1.4 2002/03/06 21:08:00 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -222,15 +222,16 @@
 #
 # +image-blocker{logo}
 # +image-blocker{blank}
-# +image-blocker{http://i.j.b/send-banner}
+# +image-blocker{pattern}
+# +image-blocker{<URL>} with <url> being any valid image URL
 #    Decides what to do with URLs that end up tagged with {+block +image}.
-#    There are 4 options.  "-image-blocker" will send a HTML "blocked" page,
+#    There are 5 options.  "-image-blocker" will send a HTML "blocked" page,
 #    usually resulting in a "broken image" icon.  "+image-blocker{logo}"
 #    will send a "JunkBuster" image.  "+image-blocker{blank}" will send
-#    a 1x1 transparent GIF.  And finally, "+image-blocker{http://xyz.com}"
-#    will send a HTTP temporary redirect to the specified image - this 
-#    has the advantage of the icon being beeing cached by the browser,
-#    which will speed up the display.  
+#    a 1x1 transparent PNG, "+image-blocker{pattern}" will send a 4x4
+#    grey/white pattern which is less intrusive than the logo but easier
+#    to recognize than the transparent one. And finally, "+image-blocker{<URL>}"
+#    will send a HTTP temporary redirect to the specified image URL.
 #
 #
 # +limit-connect{portlist}

@@ -27,6 +27,11 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.16  2002/02/21 00:12:19  jongfoster
+#     Modifying the banner regexps to use long URLS and to autodetect
+#     whether to show a logo or a transparent GIF, based on actionsfile
+#     setting.
+#
 #     Revision 1.15  2001/12/28 23:54:20  steudten
 #     Fix for feature Req #495374: http-equiv problem
 #
@@ -138,13 +143,14 @@ s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
 #
 # Kill *all* popups a la popup.c. (But for *all* sites, so I wouldn't do that.)
 #
-# JavaScript: s/window\.open\(/who_wants_this_to.open(/ig
+# JavaScript: s/window\.open\(/1;''\.concat\(/ig
 # HTML      : s/target=['"]?_blank['"]?/target_who/g
 #
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
-# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 gif
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo gif
+# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 PNG
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo PNG
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for a grey/white pattern PNG
 #       Use http://ijbswa.sourceforge.net/config/send-banner?type=auto  to auto-select.
 # ********************************************************************/
 s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
