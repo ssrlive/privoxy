@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.65 2002/03/03 14:49:11 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.66 2002/03/03 15:06:55 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.65 2002/03/03 14:49:11 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.66  2002/03/03 15:06:55  oes
+ *    Re-enabled automatic config reloading
+ *
  *    Revision 1.65  2002/03/03 14:49:11  oes
  *    Fixed CLF logging: Now uses client's original HTTP request
  *
@@ -462,10 +465,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.65 2002/03/03 14:49:11 oes Exp $";
 
 #endif
 
-#ifdef _DEBUG
-int ldebug = 0;
-#endif
-
 #include "project.h"
 #include "list.h"
 #include "jcc.h"
@@ -485,6 +484,7 @@ int ldebug = 0;
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
 
+int no_daemon = 0;
 struct client_state  clients[1];
 struct file_list     files[1];
 
@@ -516,6 +516,8 @@ static int32 server_thread(void *data);
 
 #if defined(unix)
 const char *basedir;
+const char *pidfile = NULL;
+int received_hup_signal = 0;
 #endif /* defined unix */
 
 /* The vanilla wafer. */
@@ -532,41 +534,50 @@ static const char VANILLA_WAFER[] =
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
  *
- * Function    :  SIG_handler 
+ * Function    :  sig_handler 
  *
  * Description :  Signal handler for different signals.
- *                see man kill, signal .. 
+ *                Exit gracefully on ABRT, TERM and  INT
+ *                or set a flag that will cause the errlog
+ *                to be reopened by the main thread on HUP.
  *
  * Parameters  :
- *          1  : signal - the signal cause this function to call 
+ *          1  :  the_signal - the signal cause this function to call 
  *
  * Returns     :  - 
  *
  *********************************************************************/
-static void SIG_handler( int signal )
+static void sig_handler(int the_signal)
 {
-   switch( signal )
+   switch(the_signal)
    {
-      case SIGHUP:
-         log_error(LOG_LEVEL_INFO, "ignoring HUP signal (%d)", signal);
-         break;
+      case SIGABRT:
       case SIGTERM:
-         log_error(LOG_LEVEL_INFO, "exiting by signal %d .. bye", signal);
-         
+      case SIGINT:
+         log_error(LOG_LEVEL_INFO, "exiting by signal %d .. bye", the_signal);
 #if defined(unix)
-         deletePidFile();
+         unlink(pidfile);
 #endif /* unix */
-
-         exit( signal );
+         exit(the_signal);
          break;
+
+      case SIGHUP:
+         received_hup_signal = 1;
+         break;         
 
       default:
-         /* want to exit jb so use FATAL */
-         log_error(LOG_LEVEL_FATAL, "SIG_handler: receive signal %d without handler.", signal);
+         /* 
+          * We shouldn't be here, unless we catch signals
+          * in main() that we can't handle here!
+          */
+         log_error(LOG_LEVEL_FATAL, "sig_handler: exiting on unexpected signal %d", the_signal);
    }
    return;
+
 }
 #endif
+
+
 /*********************************************************************
  *
  * Function    :  chat
@@ -1472,6 +1483,28 @@ static int32 server_thread(void *data)
 
 /*********************************************************************
  *
+ * Function    :  usage
+ *
+ * Description :  Print usage info & exit.
+ *
+ * Parameters  :  Pointer to argv[0] for identifying ourselves
+ *
+ * Returns     :  No. ,-)
+ *
+ *********************************************************************/
+void usage(const char *myname)
+{
+   printf("JunkBuster proxy version " VERSION " (" HOME_PAGE_URL ")\n"
+           "Usage: %s [--no-daemon] [--pidfile pidfile] [--help] [configfile]\n"
+           "Aborting.\n", myname);
+ 
+   exit(2);
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  main
  *
  * Description :  Load the config file and start the listen loop.
@@ -1499,7 +1532,10 @@ int real_main(int argc, const char *argv[])
 int main(int argc, const char *argv[])
 #endif
 {
-   int argc_pos = 1;
+   int argc_pos = 0;
+
+   Argc = argc;
+   Argv = argv;
 
    configfile =
 #if !defined(_WIN32)
@@ -1509,38 +1545,43 @@ int main(int argc, const char *argv[])
 #endif
       ;
 
+   /*
+    * Parse the command line arguments
+    */
+   while (++argc_pos < argc)
+   {
 #if !defined(_WIN32) || defined(_WIN_CONSOLE)
-   if ((argc >= 2) && (strcmp(argv[1], "--help")==0))
-   {
-      printf("JunkBuster proxy version " VERSION ".\n\n"
-         "Usage: %s [configfile]\n\n"
-         "See " HOME_PAGE_URL " for details.\n"
-         "This program is distributed under the GNU GPL, version 2 or later.\n",
-         argv[0]);
-      exit(2);
-   }
-   if ((argc >= 2) && (strcmp(argv[1], "--version")==0))
-   {
-      printf(VERSION "\n");
-      exit(2);
-   }
-#ifdef _DEBUG
-   if ((argc >= 2) && (strcmp(argv[1], "-d")==0))
-   {
-      ldebug++;
-      argc_pos++;
-      fprintf(stderr,"debugging enabled..\n");
-   }
-#endif /* _DEBUG */
+
+      if (strcmp(argv[argc_pos], "--help") == 0)
+      {
+         usage(argv[0]);
+      }
+
+      else if(strcmp(argv[argc_pos], "--version") == 0)
+      {
+         printf("Junkbuster version " VERSION " (" HOME_PAGE_URL ")\n");
+         exit(0);
+      }
+
+      else if (strcmp(argv[argc_pos], "--no-daemon" ) == 0)
+      {
+         no_daemon = 1;
+      }
+
+      else if (strcmp(argv[argc_pos], "--pidfile" ) == 0)
+      {
+         if (++argc_pos == argc) usage(argv[0]);
+         pidfile = strdup(argv[argc_pos]);
+      }
+
 #endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
-   Argc = argc;
-   Argv = argv;
+      else
+      {
+         configfile = argv[argc_pos];
+      }
 
-   if (argc > argc_pos )
-   {
-      configfile = argv[argc_pos];
-   }
+   } /* -END- while (more arguments) */
 
 #if defined(unix)
    if ( *configfile != '/' )
@@ -1578,47 +1619,37 @@ int main(int argc, const char *argv[])
    InitWin32();
 #endif
 
-
+   /*
+    * Unix signal handling
+    *
+    * Catch the abort, interrupt and terminate signals for a graceful exit
+    * Catch the hangup signal so the errlog can be reopened.
+    * Ignore the broken pipe and child signals
+    *  FIXME: Isn't ignoring the default for SIGCHLD anyway and why ignore SIGPIPE? 
+    */
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 {
-   int sig;
-   struct sigaction action;
+   int idx;
+   const int catched_signals[] = { SIGABRT, SIGTERM, SIGINT, SIGHUP, 0 };
+   const int ignored_signals[] = { SIGPIPE, SIGCHLD, 0 };
 
-   for ( sig = 1; sig < 16; sig++ )
+   for (idx = 0; catched_signals[idx] != 0; idx++)
    {
-      switch( sig )
+      if (signal(catched_signals[idx], sig_handler) == SIG_ERR)
       {
-         case 9:
-         case SIGPIPE:
-         case SIGCHLD:
-         case SIGHUP:
-                 continue;
+         log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal %d: %E", catched_signals[idx]);
       }
-      if ( signal(sig, SIG_handler)  == SIG_ERR )
-         log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal %d: %E", sig);
    }
-   /* SIG_IGN */
-   if ( signal(SIGPIPE, SIG_IGN) == SIG_ERR )
-      log_error(LOG_LEVEL_FATAL, "Can't set SIG_IGN to SIGPIPE: %E");
-   if ( signal(SIGCHLD, SIG_IGN) == SIG_ERR )
-      log_error(LOG_LEVEL_FATAL, "Can't set SIG_IGN to SIGCHLD: %E");
-   /* log file reload */
-   if (!sigaction(SIGHUP,NULL,&action))
-   {
-      action.sa_handler = &SIG_handler;
-      action.sa_flags   = SA_RESTART;
 
-      if ( sigaction(SIGHUP,&action,NULL))
-         log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal SIGHUP: %E");
-   } 
-   else
+   for (idx = 0; ignored_signals[idx] != 0; idx++)
    {
-      perror("sigaction");
-      log_error(LOG_LEVEL_FATAL, "Can't get sigaction data for signal SIGHUP");
+      if (signal(ignored_signals[idx], SIG_IGN) == SIG_ERR)
+      {
+         log_error(LOG_LEVEL_FATAL, "Can't set ignore-handler for signal %d: %E", ignored_signals[idx]);
+      }
    }
-      
+
 }
-
 #else /* ifdef _WIN32 */
 # ifdef _WIN_CONSOLE
    /*
@@ -1633,6 +1664,11 @@ int main(int argc, const char *argv[])
    /* Initialize the CGI subsystem */
    cgi_init_error_messages();
 
+   /*
+    * If runnig on unix and without the --nodaemon
+    * option, become a daemon. I.e. fork, detach
+    * from tty and get process group leadership
+    */
 #if defined(unix)
 {
    pid_t pid = 0;
@@ -1640,69 +1676,62 @@ int main(int argc, const char *argv[])
    int   fd;
 #endif
 
-   /*
-    * we make us a real daemon
-    */
-#ifdef _DEBUG
-   if ( !ldebug)
-#endif
-   pid  = fork();
-   if ( pid < 0 ) /* error */
+   if (!no_daemon)
    {
-      perror("fork");
-      exit( 3 );
-   }
-   else if ( pid != 0 ) /* parent */
-   {
-      int status;
-      pid_t wpid;
-      /*
-       * must check for errors
-       * child died due to missing files aso
-       */
-      sleep( 1 );
-      wpid = waitpid( pid, &status, WNOHANG );
-      if ( wpid != 0 )
+      pid  = fork();
+
+      if ( pid < 0 ) /* error */
       {
-         exit( 1 );
+         perror("fork");
+         exit( 3 );
       }
-      exit( 0 );
-   }
-   /* child */
+      else if ( pid != 0 ) /* parent */
+      {
+         int status;
+         pid_t wpid;
+         /*
+          * must check for errors
+          * child died due to missing files aso
+          */
+         sleep( 1 );
+         wpid = waitpid( pid, &status, WNOHANG );
+         if ( wpid != 0 )
+         {
+            exit( 1 );
+         }
+         exit( 0 );
+      }
+      /* child */
 #if 1
-   /* Should be more portable, but not as well tested */
-   setsid();
+      /* Should be more portable, but not as well tested */
+      setsid();
 #else /* !1 */
 #ifdef __FreeBSD__
-   setpgrp(0,0);
+      setpgrp(0,0);
 #else /* ndef __FreeBSD__ */
-   setpgrp();
+      setpgrp();
 #endif /* ndef __FreeBSD__ */
-   fd = open("/dev/tty", O_RDONLY);
-   if ( fd )
-   {
-      /* no error check here */
-      ioctl( fd, TIOCNOTTY,0 );
-      close ( fd );
-   }
-#endif /* !1 */
-   /* should close stderr (fd 2) here too, but the test for existence
-   ** and load config file is done in listen_loop() and puts
-   ** some messages on stderr there.
-   */
-#ifdef _DEBUG
-   if ( !ldebug )
-   {
+      fd = open("/dev/tty", O_RDONLY);
+      if ( fd )
+      {
+         /* no error check here */
+         ioctl( fd, TIOCNOTTY,0 );
+         close ( fd );
+      }
+#endif /* 1 */
+      /* FIXME: should close stderr (fd 2) here too, but the test
+       * for existence
+       * and load config file is done in listen_loop() and puts
+       * some messages on stderr there.
+       */
+
       close( 0 );
       close( 1 );
-   }
-#else
-   close( 0 );
-   close( 1 );
-#endif /* _DEBUG */
-   chdir("/");
+      chdir("/");
 
-   writePidFile();
+      write_pid_file();
+
+   } /* -END- if (!no_daemon) */
 }
 #endif /* defined unix */
 
@@ -1761,7 +1790,20 @@ static void listen_loop(void)
          /* zombie children */
       }
 #endif /* !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+
+      /*
+       * Free data that was used by died threads
+       */
       sweep();
+
+      /*
+       * Re-open the errlog after HUP signal
+       */
+      if (received_hup_signal)
+      {
+         init_error_log(Argv[0], config->logfile, config->debug);
+         received_hup_signal = 0;
+      }
 
       if ( NULL == (csp = (struct client_state *) zalloc(sizeof(*csp))) )
       {
