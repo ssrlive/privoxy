@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.25  2002/04/26 21:37:50  jongfoster
+#    Fixing all(?) the substitutions that were broken in the
+#    recent actions rename.
+#
 #    Revision 1.24  2002/04/26 18:24:28  jongfoster
 #    Fixing typos in help hyperlinks
 #
@@ -471,14 +475,6 @@ function show_send_wafer_opts(tf)
       <td class="action"><a href="@user-manual@@helplink@FAST-REDIRECTS">fast-redirects</a></td>
       <td>Bypass some click-tracking URLs.</td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
-      <td class="en2">&nbsp;</td>
-      <td class="dis2">&nbsp;</td>
-      <td class="noc2">&nbsp;</td>
-      <td class="action"><a href="@user-manual@@helplink@FILTER">filter</a></td>
-      <td>Filter the website through regular expression filters.
-        You can enable or disable the filters individually.</td>
-    </tr>
 
     <tr class="bg2" align="left" valign="top">
       <td class="en2">&nbsp;</td>
@@ -486,7 +482,11 @@ function show_send_wafer_opts(tf)
         name="filter_all" id="filter_all_n" value="N" @filter-all-n@ ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
         name="filter_all" id="filter_all_x" value="X" @filter-all-x@ ></td>
-      <td class="subaction" colspan="2">&nbsp;&nbsp;All filters applied by previous rules</td>
+      <td class="action"><a href="@user-manual@@helplink@FILTER">filter</a> *</td>
+      <td>Filter the website through regular expression
+        filters.  You can use the radio buttons on this line to disable
+        all filters applied by previous rules, and/or you can enable or
+        disable the filters individually below.</td>
     </tr>
 @filter-params@
     <tr class="bg1" align="left" valign="top">
