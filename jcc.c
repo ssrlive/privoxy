@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.21 2001/06/29 13:29:36 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.22 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.21 2001/06/29 13:29:36 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.22  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.21  2001/06/29 13:29:36  oes
  *    - Cleaned up, improved comments
  *    - Unified all possible interceptors (CGI,
@@ -1285,6 +1288,7 @@ static void listen_loop(void)
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
 
+#ifdef ACL_FILES
       if (block_acl(NULL,csp))
       {
          log_error(LOG_LEVEL_CONNECT, "Connection dropped due to ACL");
@@ -1292,6 +1296,7 @@ static void listen_loop(void)
          freez(csp);
          continue;
       }
+#endif /* def ACL_FILES */
 
       /* add it to the list of clients */
       csp->next = clients->next;
