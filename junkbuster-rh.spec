@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.20 2001/10/24 15:45:49 hal9 Exp $
+# $Id: junkbuster-rh.spec,v 1.21 2001/10/31 19:27:27 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,11 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.21  2001/10/31 19:27:27  swa
+# consistent description. new name for suse since
+# we had troubles with rpms of identical names
+# on the webserver.
+#
 # Revision 1.20  2001/10/24 15:45:49  hal9
 # To keep Thomas happy (aka correcting my  mistakes)
 #
@@ -91,12 +96,11 @@ Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.9
 Release: 1
-Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
+Source0: http://www.waldherr.org/junkbuster/ijbswa-%{version}.tar.gz
 Copyright: GPL
-BuildRoot: %{_tmppath}/%{name}-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
 URL: http://ijbswa.sourceforge.net/
-Packager: Stefan Waldherr <stefan@waldherr.org>
 Obsoletes: junkbuster-raw junkbuster-blank
 Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 BuildRequires: perl
