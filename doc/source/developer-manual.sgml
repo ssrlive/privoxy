@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $</pubdate>
 
 <!--
 
@@ -96,10 +96,9 @@ Hal.
 <para>
  You can find the latest version of the this manual at <ulink
  url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
- Please see <ulink url="contact.html">the Contact section</ulink> 
+ Please see <link linkend="contact">the Contact section</link> 
  on how to contact the developers.
 </para>
-
 <!--        <para> -->
 <!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
 <!--   </para> -->
@@ -1727,7 +1726,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1787,7 +1786,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.43 2002/05/10 01:48:19 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2120,7 +2119,8 @@ at sourceforge. Three simple steps:
   
     <para>
      Please find additional instructions for the source tarball and the
-     individual platform dependent binary packages below.
+     individual platform dependent binary packages below. And details 
+     on the Sourceforge release process below that.
     </para>
 
     <sect3 id="newrelease-tarball"><title>Source Tarball</title>
@@ -2158,7 +2158,7 @@ at sourceforge. Three simple steps:
       </para>
     </sect3>
 
-    <sect3 id="newrelease-rpm"><title>SuSE or Red Hat RPM</title>
+    <sect3 id="newrelease-rpm"><title>SuSE, Conectiva or Red Hat RPM</title>
         <para>
         In following text, replace <replaceable class="parameter">dist</replaceable>
         with either <quote>rh</quote> for Red Hat or <quote>suse</quote> for SuSE.
@@ -2543,6 +2543,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
      </itemizedlist>
     </para> 
     <para>
+     Or use the <command>make</command> targets as described above.
+    </para>
+    <para>
      Once this done go to <ulink url="http://sourceforge.net/project/admin/editpackages.php?group_id=11118">http://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>, 
      making sure you are logged in. Find your target platform in the 
      second column, and click <literal>Add Release</literal>. You will 
@@ -2697,6 +2700,11 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.43  2002/05/10 01:48:19  hal9
+  This is mostly proposed copyright/licensing additions and changes. Docs
+  are still GPL, but licensing and copyright are more visible. Also, copyright
+  changed in doc header comments (eliminate references to JB except FAQ).
+
   Revision 1.42  2002/05/05 20:26:02  hal9
   Sorting out license vs copyright in these docs.
 
