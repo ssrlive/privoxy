@@ -1,6 +1,6 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.6 2001/06/03 11:03:48 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.6 2001/06/03 19:12:38 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,59 +43,8 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
- *    Revision 1.6  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
+ *    Revision 1.6  2001/06/03 19:12:38  oes
  *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.5  2001/05/31 21:30:33  jongfoster
  *    Removed list code - it's now in list.[ch]

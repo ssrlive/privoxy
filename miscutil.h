@@ -1,6 +1,6 @@
 #ifndef _MISCUTIL_H
 #define _MISCUTIL_H
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.6 2001/06/03 19:12:30 oes Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.7 2001/06/05 22:32:01 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,62 +37,11 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.7  2001/06/05 22:32:01  jongfoster
+ *    New function make_path() to splice directory and file names together.
+ *
  *    Revision 1.6  2001/06/03 19:12:30  oes
  *    introduced bindup()
- *
- *    Revision 1.6  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.5  2001/06/01 10:31:51  oes
  *    Added character class matching to trivimatch; renamed to simplematch
