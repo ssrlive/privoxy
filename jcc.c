@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.73 2002/03/05 23:57:30 hal9 Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.74 2002/03/06 00:49:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.73 2002/03/05 23:57:30 hal9 Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.74  2002/03/06 00:49:31  jongfoster
+ *    Fixing warning on Windows
+ *    Making #ifdefs that refer to the same variable consistently
+ *    use #ifdef unix rather than mixing #ifdef unix & #ifndef OS2
+ *
  *    Revision 1.73  2002/03/05 23:57:30  hal9
  *    Stray character 's' on line 1618 was breaking build.
  *
@@ -1572,7 +1577,7 @@ int main(int argc, const char *argv[])
 {
    int argc_pos = 0;
 #ifdef unix
-   struct passwd *pw;
+   struct passwd *pw = NULL;
 #endif
 
    Argc = argc;
@@ -1785,7 +1790,7 @@ int main(int argc, const char *argv[])
     */
    write_pid_file();
    
-   if (setuid(pw->pw_uid))
+   if ((NULL != pw) && setuid(pw->pw_uid))
    {
       log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
    }
