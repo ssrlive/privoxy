@@ -1,7 +1,7 @@
 #  Sample Configuration file for Privoxy
 
 #
-# $Id: config,v 1.29 2002/03/05 21:14:13 david__schmidt Exp $
+# $Id: config,v 1.30 2002/03/24 11:37:39 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -84,12 +84,12 @@ logdir .
 #
 #  Default: Cookies to and from all destinations are filtered.
 #           Popups are disabled for all sites.
-#           All sites are filtered if re_filterfile specified.
+#           All sites are filtered if filterfile specified.
 #           No sites are blocked.  Nothing is an image.
 #
 actionsfile default.action
 
-#  The re_filterfile contains content modification rules.  These rules
+#  The filterfile contains content modification rules.  These rules
 #  permit powerful changes on the content of Web pages, e.g., you
 #  could disable your favourite JavaScript annoyances, rewrite the
 #  actual content, or just have some fun replacing "Microsoft"
@@ -97,7 +97,7 @@ actionsfile default.action
 #
 #  Default: content modification. (see '+-filter' in actionsfile)
 #
-re_filterfile default.filter
+filterfile default.filter
 
 #
 #  The logfile is where all logging and error messages are written.

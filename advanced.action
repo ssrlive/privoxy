@@ -1,8 +1,8 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/ijb-advanced.action,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/advanced.action,v $
 # 
-#  $Id: ijb-advanced.action,v 1.2 2002/03/13 14:24:09 swa Exp $
+#  $Id: advanced.action,v 1.1 2002/03/24 11:37:39 jongfoster Exp $
 #
 #  Purpose     :  Most agressive actions file, see
 #                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
@@ -56,7 +56,7 @@
 ######################################################################
 # 
 #  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-#                 IJBSWA team.  http://ijbswa.sourceforge.net
+#                 Privoxy team.  http://ijbswa.sourceforge.net
 # 
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and 
