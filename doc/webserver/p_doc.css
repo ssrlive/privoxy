@@ -1,7 +1,7 @@
 /*
  * CSS for Privoxy documentation
  *
- * $Id: privoxy.css,v 1.2 2002/04/09 11:55:20 oes Exp $
+ * $Id: p_doc.css,v 1.2 2002/05/23 23:20:48 oes Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ h4 { color: #99001d; font-size: 110%; }
 div.sect1 { margin-left: 2%; }
 h1,h2,h3,h4 {margin-left: -2%; }
 h1.title { margin-left: 0; }
+h2.subtitle { margin-left: 0; }
 
 /*
  * Underlined links disturb the examples;

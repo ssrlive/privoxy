@@ -5,23 +5,22 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
+<!entity p-version "3.1.1">
+<!entity p-status "alpha">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
-<!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
-<!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
-<!entity % p-readme "IGNORE">
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
+<!entity % p-homepage "IGNORE">    <!-- toggle for webserver index.html   -->
+<!entity % p-index "IGNORE">       <!-- toggle for local doc index        -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/webserver/index.sgml,v $
 
- Purpose     :  Index file of the project's homepage
+ Purpose     :  Index file of the project's homepage and also documentation index
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.16 2002/05/24 10:06:31 oes Exp $
+ $Id: index.sgml,v 1.17 2002/05/28 02:31:38 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -31,14 +30,20 @@
  anything in this, or other Privoxy documentation. 
  ========================================================================
 
- Note: This is the privoxy home page. The Makefile is adding additional
- meta data and content via perl.
+ Note: This is the Privoxy home page *and* builds a page that can be 
+ used with local documentation as a focal point for docs or other points
+ of interest. The Makefile is adding additional meta data and content via
+ perl.
 
+ Generates: index.html, for webserver home page.
+            privoxy-index.html, for packaging with docs
+ 
 -->
 
 <article id="index">
 <artheader>
- <title>Privoxy - Homepage</title>
+ <title>Privoxy - <![%p-homepage;[Home Page]]><![%p-index;[The Privacy Enhancing Proxy]]></title>
+ <![%p-index;[<subtitle>Project Index Page v&p-version;</subtitle>]]>
 
 <!-- copyright is at bottom of page -->
 
@@ -68,9 +73,12 @@
   &p-intro;
 <!-- end boilerplate -->
 
+<![%p-homepage;[
   <para>
-   The most recent release is &p-version; (&p-status;).
+   The most recent version is &p-version; (&p-status;). (Odd numbered versions 
+   are available only through CVS.)
   </para>
+]]>
 
  </abstract>
 </artheader>
@@ -157,6 +165,8 @@
   </listitem>
   <listitem>
    <para>
+    <!-- please leave this link absolute so this file can be bundled with -->
+    <!-- documentation and still used locally -->
     <ulink url="http://privoxy.org/team/index.html">Pictures of the Privoxy Team</ulink>
    </para>
   </listitem>
@@ -164,7 +174,7 @@
 </para>
 </sect1>
 
-
+<![%p-homepage;[
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 label="">
 <!-- dummy section, for spacing -->
@@ -189,7 +199,7 @@
  </tgroup>
 </informaltable>
 </para>
-
+]]>
 
 <!--
 <informalfigure pgwide="1">
@@ -198,6 +208,12 @@
  </ulink>
 </informalfigure>
 -->
+
+
+<![%p-index;[
+<sect1 label=""><title></title>
+<!-- dummy section for layout and spacing -->
+]]>
 
 <!-- Formal copyright markup does not work here. HB. -->
 <para>
@@ -228,7 +244,9 @@
  or write to the Free Software Foundation, Inc., 59
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- $Log: index.sgml,v $
+ Revision 1.17  2002/05/26 17:40:02  hal9
+ Make team pictures link absolute for docs.
+
  Revision 1.16  2002/05/24 10:06:31  oes
  Nit
 
