@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $
+ $Id: faq.sgml,v 1.34 2002/03/29 04:35:56 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.34 2002/03/29 04:35:56 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -96,7 +96,7 @@ Please see the Contact section in the
   of this effort is <application>Privoxy</application>.
  </para>
  <para>
-  <application>Privoxy</application> started with the same
+  <application>Privoxy</application> started with the 
   <application>Junkbuster 2.0.2</application> code base, but has advanced
   significantly at this point. 
  </para>
@@ -588,7 +588,7 @@ way to do this?</title>
  The easiest way to do this, is to access <application>Privoxy</application>
  with your web browser at <ulink url="http://p.p/">http://p.p/</ulink>, 
  and then select 
- "<ulink url="http://www.privoxy.org/config/edit-actions">Edit the actions list</ulink>"
+ "<ulink url="http://config.privoxy.org">Edit the actions list</ulink>"
  from the selection list. You can also do this by editing the appropriate 
  file with a text editor.
 </para>
@@ -998,20 +998,24 @@ programmed to handle certain pages specially.
 <para>
 With recent versions of <application>Privoxy</application> (version 2.9.x), you can get some
 information about <application>Privoxy</application> and change some settings by going to
-http://p.p/ or, equivalently, http://www.privoxy.org/config/
+<ulink url="http://p.p/">http://p.p/</ulink> or, equivalently, <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
 (Note that p.p is far easier to type but may not work in some
-configurations).
+configurations. With the name change to <application>Privoxy</application>,
+this is changed from the previous http://i.j.b/ or earlier 2.9.x versions).
 </para>
 
 <para>
-These pages are *not* forwarded to a server on the Internet - instead they are
-handled by a special web server which is built in to <application>Privoxy</application>.
+These pages are <emphasis>not</emphasis> forwarded to a server on the Internet
+- instead they are handled by a special web server which is built in to
+<application>Privoxy</application>.
 </para>
 
 <para>
-If you are not running <application>Privoxy</application>, then http://p.p/ will fail, and
-http://www.privoxy.org/config/ will return a web page telling you
-you're not running <application>Privoxy</application>.
+If you are not running <application>Privoxy</application>, then <ulink
+url="http://p.p/">http://p.p/</ulink> will fail, and <ulink
+url="http://config.privoxy.org/">http://config.privoxy.org/</ulink> will
+return a web page telling you you're not running
+<application>Privoxy</application>.
 </para>
 
 <para>
@@ -1304,7 +1308,7 @@ still getting through. How?</title>
 <para>
  If this doesn't help, you probably have an error in the rule you
  applied. Try pasting the full URL of the offending ad into <ulink
- url="http://www.privoxy.org/config/show-url-info">http://www.privoxy.org/config/show-url-info</ulink>
+ url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>
  and see if any actions match your new rule.
 </para>
 
@@ -1432,6 +1436,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.34  2002/03/29 04:35:56  hal9
+Touch ups.
+
 Revision 1.33  2002/03/29 01:31:48  hal9
 Several new Q/A's and other touch ups.
 
