@@ -8,9 +8,9 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
-<!entity p-status "BETA">
-<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
-<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 ]>
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -156,7 +156,7 @@ following guidelines for changing stuff in the code. If it is
 <sect1 id="documentation"><title>Documentation Guidelines</title>
   <para>
     All formal documents are maintained in docbook SGML and located in the
-    <computeroutput>doc/source</computeroutput> directory. You will need
+    <computeroutput>doc/source/*</computeroutput> directory. You will need
     <ulink url="http://www.docbook.org">docbook</ulink> and the docbook
     stylesheets (or comparable alternatives), and either
     <application>jade</application> or <application>openjade</application>
@@ -165,31 +165,35 @@ following guidelines for changing stuff in the code. If it is
     url="../user-manual/index.html"><citetitle>user-manual</citetitle></ulink>,
     <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and,
     of course this, the <citetitle>developer-manual</citetitle> in this
-    format. The <citetitle>README</citetitle>, is also now maintained 
-    as SGML. The <citetitle>README</citetitle> in the top-level source 
-    directory is a generated file. <emphasis>DO NOT edit this
-    directly</emphasis>. Edit the SGML source!
+    format. The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle> 
+    <citetitle>privoxy.1</citetitle> (man page)
+    files are also now maintained 
+    as SGML. The finished files are all in the top-level source 
+    directory are generated files! Also, <filename>index.html</filename>, 
+    the <application>Privoxy</application> home page, is maintained 
+    as sgml. <emphasis>DO NOT edit these
+    directly</emphasis>. Edit the SGML source, or contact someone 
+    involved in the documentation (at present Stefan and Hal).
     </para> 
     <para>
-     Other, less formal documents (e.g. AUTHORS, LICENSE) are maintained as
+     Other, less formal documents (e.g. LICENSE, INSTALL) are maintained as
      plain text files in the toplevel source directory. At least for the 
      time being.
     </para>
     <para>
      Packagers are encouraged to include this documentation. For those without
      the ability to build the docs locally, text versions of each are kept in
-     CVS. Or HTML versions can be downloaded from the <ulink
-     url="http://www.privoxy.org">www.privoxy.org</ulink> website, which
-     should be fairly current. (This is only a temporary solution.)
+     CVS. HTML versions are also now being kept in CVS under 
+     <filename>doc/webserver/*</filename>.
     </para>
     <para>
      Formal documents are built with the Makefile targets of
      <computeroutput>make dok</computeroutput>, or alternately
      <computeroutput>make redhat-dok</computeroutput>. If you have problems,
      try both. The build process uses the document SGML sources in
-     <computeroutput>doc/source</computeroutput> to update all text files in
-     <computeroutput>doc/text</computeroutput> and to update all HTML
-     documents in <computeroutput>doc/webserver</computeroutput>.
+     <computeroutput>doc/source/*</computeroutput> to update all text files in
+     <computeroutput>doc/text/</computeroutput> and to update all HTML
+     documents in <computeroutput>doc/webserver/</computeroutput>.
     </para>
     <para>
      Documentation writers should please make sure documents build
@@ -321,8 +325,8 @@ following guidelines for changing stuff in the code. If it is
     </listitem> 
     <listitem>
      <para>
-       Tags delimiting a block of text should be on their own line. 
-       Like:
+       Tags delimiting a <emphasis>block</emphasis> of text should be on their
+       own line. Like:
        <literallayout>
  &lt;para&gt;
   Some text goes here.
@@ -336,7 +340,7 @@ following guidelines for changing stuff in the code. If it is
    </listitem> 
    <listitem>
     <para>
-      Tags should be nested and step indented like:
+      Tags should be nested and step indented like (except in-line tags):
        <literallayout>
  &lt;para&gt;
   &lt;itemizedlist&gt;
@@ -362,7 +366,8 @@ following guidelines for changing stuff in the code. If it is
     <para>
      Do not hesitate to make comments. Comments can either use the 
      &lt;comment&gt; element, or the &lt;!--  --&gt; style comment 
-     familiar from HTML.
+     familiar from HTML. (Note in Docbook v4.x &lt;comment&gt; is 
+     replaced by &lt;remark&gt;.)
     </para>
   </listitem> 
   <listitem>
@@ -1622,7 +1627,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1682,7 +1687,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2408,6 +2413,12 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.25  2002/04/06 05:07:28  hal9
+  -Add privoxy-man-page.sgml, for man page.
+  -Add authors.sgml for AUTHORS (and p-authors.sgml)
+  -Reworked various aspects of various docs.
+  -Added additional comments to sub-docs.
+
   Revision 1.24  2002/04/04 21:33:37  hal9
   More on documenting the documents.
 
