@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.11 2001/06/03 11:03:48 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.12 2001/06/04 10:41:52 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.11 2001/06/03 11:03:48 oes Exp 
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.12  2001/06/04 10:41:52  swa
+ *    show version string of cgi.h and cgi.c
+ *
  *    Revision 1.11  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -514,7 +517,7 @@ char *end_proxy_args(struct configuration_spec * config)
    b = strsav(b, "  <li><code>#define <b>FAST_REDIRECTS</b></code> - Enables intercepting remote script redirects.</li>\n");
 #else /* ifndef FAST_REDIRECTS */
    b = strsav(b, "  <li><code>#undef <b>FAST_REDIRECTS</b></code> - Disables intercepting remote script redirects.</li>\n");
-#endif  ndef /* FAST_REDIRECTS */
+#endif /* ndef FAST_REDIRECTS */
 
    b = strsav(b, "</ul>\n<br>\n");
 
