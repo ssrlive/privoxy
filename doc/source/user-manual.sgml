@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.55 2002/03/24 16:08:08 swa Exp $
+ $Id: user-manual.sgml,v 1.56 2002/03/24 16:17:06 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.55 2002/03/24 16:08:08 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.56 2002/03/24 16:17:06 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -73,6 +73,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <application>Privoxy</application> has a very flexible configuration and
  can be customized to suit individual needs and tastes. <application>Privoxy</application> has application for both stand-alone systems and
  multi-user networks.
+</para>
+
+<para>
+ <application>Privoxy</application> is derived from 
+ <application>Internet Junkbuster</application> by Junkbusters Corporation, 
+ which is no longer under development. Many enhancements and 
+ new features have been added.
+
 </para>
 
 <para>
@@ -234,8 +242,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- tar xzvf ijb_source_* [.tgz or .tar.gz]
- cd ijb_source_2.9.11_beta
+ tar xzvf privoxy-2.9.13-beta-src* [.tgz or .tar.gz]
+ cd privoxy-2.9.13-beta
  </screen>
 </para>
 
@@ -1879,7 +1887,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The <quote>default.action</quote> file (formerly
- <filename>actionsfile</filename>) is used to define what actions
+ <filename>actionsfile</filename> or <filename>ijb.action</filename>) is used to define what actions
  <application>Privoxy</application> takes, and thus determines how images,
  cookies and various other aspects of HTTP content and transactions are
  handled. Images can be anything you want, including ads, banners, or just
@@ -3273,6 +3281,12 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <sect2>
 <title>History</title>
 <para>
+ <application>Privoxy</application> is derived from
+ <application>the Internet Junkbuster</application>, with many 
+ improvments and enhancements over the original.
+</para>
+
+<para>
  <application>Junkbuster</application> was originally written by Anonymous
  Coders and <ulink
  url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbuster's
@@ -3281,7 +3295,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Waldherr</ulink> made many improvements, and started the <ulink
  url="http://sourceforge.net/projects/ijbswa/">SourceForge project
  Privoxy</ulink> to rekindle development. There are now several active
- developers contributing.  The last stable release was v2.0.2, which has now
+ developers contributing.  The last stable release of
+ <application>Junkbuster</application> was v2.0.2, which has now
  grown whiskers ;-).
 </para>
 
@@ -3726,8 +3741,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <para>
  First, enter one URL (or partial URL) at the prompt, and then
  <application>Privoxy</application> will tell us 
- how current configuration will handle it. This will not
- help with filtering effects from the <filename>default.filter</filename>! It
+ how the current configuration will handle it. This will not
+ help with filtering effects from the <filename>default.filter</filename> file! It
  also will not tell you about any other URLs that may be embedded within the
  URL you are testing. For instance, images such as ads are expressed as URLs
  within the raw page source of HTML pages. So you will only get info for the
@@ -3945,6 +3960,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.56  2002/03/24 16:17:06  swa
+ configure needs to be generated.
+
  Revision 1.55  2002/03/24 16:08:08  swa
  we are too lazy to make a block-built
  privoxy logo. hence removed the option.
