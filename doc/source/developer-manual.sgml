@@ -3,11 +3,11 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/developer-manual.sgml,v $
 
- Purpose     :  FAQ
+ Purpose     :  developer manual
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.1 2001/09/12 15:36:41 swa Exp $
+ $Id: developer-manual.sgml,v 1.2 2001/09/13 15:20:17 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -21,7 +21,7 @@
   <artheader>
     <title>Junkbuster Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.1 2001/09/12 15:36:41 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.2 2001/09/13 15:20:17 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1218,7 +1218,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: standards.html,v 1.1 2001/09/10 19:00:25 jongfoster Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.2 2001/09/13 15:20:17 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1278,7 +1278,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: standards.html,v 1.1 2001/09/10 19:00:25 jongfoster Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.2 2001/09/13 15:20:17 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1454,12 +1454,8 @@ at sourceforge. Three simple steps:
     </para>
   </sect1>
 
-  <!-- hhmts end -->
   <!--
-  Tue 09/11/01 06:38:14 PM EST: Test SGML doc by Hal Burgiss.
-  
-  Last modified: Mon Sep 10 19:22:09 CEST 2001
-  
+
   This program is free software; you can redistribute it 
   and/or modify it under the terms of the GNU General
   Public License as published by the Free Software
@@ -1479,6 +1475,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.2  2001/09/13 15:20:17  swa
+  merged standards into developer manual
+
   Revision 1.1  2001/09/12 15:36:41  swa
   source files for junkbuster documentation
 
