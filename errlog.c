@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.9 2001/05/28 16:15:17 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.10 2001/05/29 11:52:21 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.9 2001/05/28 16:15:17 jongfoster Ex
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.10  2001/05/29 11:52:21  oes
+ *    Conditional compilation of w32_socket_error
+ *
  *    Revision 1.9  2001/05/28 16:15:17  jongfoster
  *    Improved reporting of errors under Win32.
  *
@@ -474,11 +477,11 @@ void log_error(int loglevel, char *fmt, ...)
             sval = w32_socket_strerr(ival, tempbuf);
 #else /* ifndef _WIN32 */
             ival = errno; 
-#ifndef NOSTRERROR
+#ifdef HAVE_STRERROR
             sval = strerror(ival);
-#else /* def NOSTRERROR */
+#else /* ifndef HAVE_STRERROR */
             sval = NULL;
-#endif /* def NOSTRERROR */
+#endif /* ndef HAVE_STRERROR */
             if (sval == NULL)
             {
                sprintf(tempbuf, "(errno = %d)", ival);

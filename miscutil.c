@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.4 2001/05/31 17:32:31 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.5 2001/06/01 10:31:51 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.4 2001/05/31 17:32:31 oes Exp $
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.5  2001/06/01 10:31:51  oes
+ *    Added character class matching to trivimatch; renamed to simplematch
+ *
  *    Revision 1.4  2001/05/31 17:32:31  oes
  *
  *     - Enhanced domain part globbing with infix and prefix asterisk
@@ -208,9 +211,9 @@ char *safe_strerror(int err)
    char buf[BUFSIZ];
 
 
-#ifndef NOSTRERROR
+#ifdef HAVE_STRERROR
    s = strerror(err);
-#endif /* NOSTRERROR */
+#endif /* HAVE_STRERROR */
 
    if (s == NULL)
    {
