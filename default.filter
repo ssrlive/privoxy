@@ -1,8 +1,8 @@
 # ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
+#  File        :  $Source: /cvsroot/ijbswa//current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.10 2002/04/18 10:14:19 oes Exp $
+#  $Id: default.filter,v 1.11.2.6 2002/08/23 14:12:26 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -62,6 +62,53 @@
 
 #################################################################################
 #
+# js-annoyances: Get rid of particularly annoying JavaScript abuse
+#
+#################################################################################
+FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
+
+# Note: Most of these jobs would be safer if restricted to a
+# <script> context as in:
+#
+# s/(<script.*)nasty-item(?=.*<\/script>)/$1replacement/sigU
+#
+# but that would make them match only the first occurance of
+# nasty-item in each <script>. We need nestable jobs!
+
+# Get rid of Javascript referrer tracking. 
+# Test page: http://www.javascript-page.com/referrer.html
+#
+s|document\.referrer|"Not Your Business!"|gisU
+
+# The status bar is for displaying link targets, not pointless blahblah
+#
+s/([\n =;{}]|window\.)(default)?status\s*=/$1dUmMy=/ig
+
+# Kill OnUnload popups. Yummy.
+# Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
+#
+s/(<body\s+[^>]*)onunload(.*>)/$1never$2/siU
+s|(<script.*)window\.onunload(?=.*</script>)|$1never|sigU
+
+# If we allow window.open, we want normal window features: 
+# Test: http://www.htmlgoodies.com/beyond/notitle.html
+#
+s/(open\s*\([^\)]+resizable=)(["']?)(?:no|0)\2/$1$2yes$2/sigU
+s/(open\s*\([^\)]+location=)(["']?)(?:no|0)\2/$1$2yes$2/sigU 
+s/(open\s*\([^\)]+status=)(["']?)(?:no|0)\2/$1$2yes$2/sigU 
+s/(open\s*\([^\)]+scroll(?:ing|bars)=)(["']?)(?:no|0)\2/$1$2auto$2/sigU 
+s/(open\s*\([^\)]+menubar=)(["']?)(?:no|0)\2/$1$2yes$2/sigU 
+s/(open\s*\([^\)]+toolbar=)(["']?)(?:no|0)\2/$1$2yes$2/sigU 
+s/(open\s*\([^\)]+directories=)(["']?)(?:no|0)\2/$1$2yes$2/sigU 
+s/(open\s*\([^\)]+fullscreen=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
+s/(open\s*\([^\)]+always(?:raised|lowered)=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
+s/(open\s*\([^\)]+zlock=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
+s/(open\s*\([^\)]+hotkeys=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
+s/(open\s*\([^\)]+titlebar=)(["']?)(?:yes|1)\2/$1$2yes$2/sigU
+
+
+#################################################################################
+#
 # html-annoyances: Get rid of particularly annoying HTML abuse
 #
 #################################################################################
@@ -70,35 +117,15 @@ FILTER: html-annoyances Get rid of particularly annoying HTML abuse
 # New browser windows (if allowed -- see no-popups filter below) should be
 # resizeable and have a location and status bar
 #
-s/(<a\s+href[^>]+)resizable=['"]?(no|0|false)['"]?(.*>)/$1resizable="1"$3/igU 
-s/(<a\s+href[^>]+)location=['"]?(no|0)['"]?(.*>)/$1location="1"$3/igU 
-s/(<a\s+href[^>]+)status=['"]?(no|0)['"]?(.*>)/$1status="1"$3/igU
-s/(<a\s+href[^>]+)scrolling=['"]?(no|0|auto)['"]?(.*>)/$1scrolling="no"$3/igU
-s/(<a\s+href[^>]+)menubar=['"]?(no|0)['"]?(.*>)/$1menubar="1"$3/igU
+s/(<a\s+href[^>]+resizable=)(['"]?)(?:no|0)\2/$1$2yes$2/igU 
+s/(<a\s+href[^>]+location=)(['"]?)(?:no|0)\2/$1$2yes$2/igU 
+s/(<a\s+href[^>]+status=)(['"]?)(?:no|0)\2/$1$2yes1$2/igU
+s/(<a\s+href[^>]+scrolling=)(['"]?)(?:no|0)\2/$1$2auto$2/igU
+s/(<a\s+href[^>]+menubar=)(['"]?)(?:no|0)\2/$1$2yes$2/igU
 
 # The <BLINK> tag was a crime!
 #
 s*<blink>|</blink>**ig
-
-
-#################################################################################
-#
-# js-annoyances: Get rid of particularly annoying JavaScript abuse
-#
-#################################################################################
-FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
-
-# Get rid of Javascript referrer tracking. Test page: http://www.randomoddness.com/untitled.htm
-#
-s|(<script.*)document\.referrer(.*</script>)|$1"Not Your Business!"$2|Usg
-
-# The status bar is for displaying link targets, not pointless blahblah
-#
-s/window.status\s*=\s*['"].*?['"]/dUmMy=1/ig
-
-# Kill OnUnload popups. Yummy. Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
-#
-s/(<body .*)onunload(.*>)/$1never$2/iU
 
 
 #################################################################################
@@ -110,11 +137,21 @@ FILTER: content-cookies Kill cookies that come in the HTML or JS content
 
 # JS cookies, like found on privacy.net:
 #
-s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
+s|document\.cookie(?=[ \t\r\n]*=)|ZappedCookie|ig
 
 # HTML cookies:
 #
-s|<meta\s+http-equiv=['"]?set-cookie['"]?\s+content=[^>].*>|<!--no cookies here -->|iUT  
+s|<meta\s+http-equiv=['"]?set-cookie.*>|<!-- ZappedCookie -->|igU
+
+
+#################################################################################
+#
+# webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
+#
+#################################################################################
+FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
+
+s/<img\s+[^>]*(?:width|height)\s*=\s*['"]?1(?=\D)[^>]*(?:width|height)\s*=\s*['"]?1(?=\D)[^>]*?>//siUg
 
 
 ##################################################################################
@@ -124,9 +161,8 @@ s|<meta\s+http-equiv=['"]?set-cookie['"]?\s+content=[^>].*>|<!--no cookies here 
 #################################################################################
 FILTER: popups Kill all popups in JS and HTML
 
-s/window\.open\s*\(/concat(/ig               # JavaScript
-s/([ =;])open\s*\(/$1concat(/ig              # JavaScript alternative
-s/target=['"]?(_blank|_new)['"]?/notarget/ig # HTML
+s/([\n =;{}]|window\.)open\s*\\?\(/$1concat(/ig      # JavaScript
+s/ target\s*=\s*(['"]?)(_blank|_new)\1?/ notarget/ig # HTML
 
 
 #################################################################################
@@ -136,22 +172,12 @@ s/target=['"]?(_blank|_new)['"]?/notarget/ig # HTML
 #################################################################################
 FILTER: frameset-borders Give frames a border and make them resizable
 
-s/(<frameset [^>]+)framespacing=['"]?(no|0)['"]?(.*>)/$1$3/igU
-s/(<frameset [^>]+)(frame)?border=['"]?(no|0)['"]?(.*>)/$1$4/igU
-
-s/(<frame [^>]+)frameborder=['"]?(no|0)['"]?(.*>)/$1$3/igU
-s/(<frame [^>]+)noresize(.*>)/$1$2/igU
-s/(<frame [^>]+)resizable=['"]?(no)['"]?(.*>)/$1$3/igU 
-s/(<frame [^>]+)scrolling=['"]?(no)['"]?(.*>)/$1$3/igU
-
-#################################################################################
-#
-# webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
-#
-#################################################################################
-FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
-
-s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D[^>]*?)?>/<!-- Squished WebBug -->/siUg
+s/(<frameset\s+[^>]*)framespacing=(['"]?)(no|0)\2/$1/igU
+s/(<frameset\s+[^>]*)frameborder=(['"]?)(no|0)\2/$1/igU
+s/(<frameset\s+[^>]*)border=(['"]?)(no|0)\2/$1/igU
+s/(<frame\s+[^>]*)noresize/$1/igU
+s/(<frame\s+[^>]*)frameborder=(['"]?)(no|0)\2/$1/igU 
+s/(<frame\s+[^>]*)scrolling=(['"]?)(no|0)\2/$1/igU
 
 
 #################################################################################
@@ -161,9 +187,90 @@ s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D
 #################################################################################
 FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups)
 
-s/<meta\s+http-equiv=['"]?refresh['"]?\s+content=['"]?[0-9]*;\s+url=([^>]*)['"]?>/<link rev="x-refresh" href=$1>/iU   
-s/<meta\s+http-equiv=['"]?page-enter['"]?\s+content=[^>].*>/<!--no page enter for me-->/iU 
+# Note: Only deactivates refreshes with more than 9 seconds delay to
+#       preserve monster-stupid but common redirections via meta tags.
+#
+s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s*url\s*=\s*([^>\2]*))?\2\s*>/<link rev="x-refresh" href="$4">/iU
 
+
+#################################################################################
+#
+# img-reorder: Reorder attributes in <img> tags to make the banners-by-* filters more effective
+#
+#################################################################################
+FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* filters more effective
+
+# In the first step src is moved to the start, then width is moved to the second
+# place to guarantee an order of src, width, height.
+# This makes banners-by-size more effective and allows both banners-by-size
+# and banners-by-link to preserve the original image URL in the alt attribute.
+
+s|<img\s+([^\\>]*)src\s*=\s*(['"])([^>\\\2]+)\2(.*)>|<img src="$3" $1$4>|siUg
+s|<img\s+([^\\>]*)src\s*=\s*([^'">\\\s]+?)([^\\>]*)>|<img src="$2" $1$3>|siUg
+
+s|<img (src="[^"]*") ([^>]*)width\s*=\s*?(["']?)(\d+?)\3(.*)>|<img $1 width="$4" $2$5>|siUg
+
+
+#################################################################################
+#
+# banners-by-size: Kill banners by size
+#
+#################################################################################
+#
+# Standard banner sizes taken from http://www.iab.net/iab_banner_standards/bannersizes.html
+#
+# Note: Use http://config.privoxy.org/send-banner?type=trans for a transparent 1x1 image
+#       Use http://config.privoxy.org/send-banner?type=pattern for a grey/white pattern image
+#       Use http://config.privoxy.org/send-banner?type=auto  to auto-select.
+#
+#################################################################################
+FILTER: banners-by-size Kill banners by size
+
+# 88*31
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)88\3)[^>]*(height=(['"]?)31\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 120*60, 120*90, 120*240, 120*600
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)120\3)[^>]*(height=(['"]?)(?:600?|90|240)\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 125*125
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)125\3)[^>]*(height=(['"]?)125\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 160*600
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)160\3)[^>]*(height=(['"]?)600\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 180*150
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)180\3)[^>]*(height=(['"]?)150\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 234*60, 468*60 (Most Banners!)
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)(?:234|468)\3)[^>]*(height=(['"]?)60\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 240*400
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)240\3)[^>]*(height=(['"]?)400\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 250*250, 300*250
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)(?:250|300)\3)[^>]*(height=(['"]?)250\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+# 336*280
+s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)336\3)[^>]*(height=(['"]?)280\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+
+# Note: 200*50 was also proposed, but it probably causes too much collateral damage:
+#
+#s@<img(?: src="([^"]*)")??[^>]*(width=(['"]?)200\3)[^>]*(height=(['"]?)50\5)[^>]*>@<img src=http://config.privoxy.org/send-banner?type=auto alt=Killed-$1-by-size $2 $4>@sigU
+
+
+#################################################################################
+#
+# banners-by-link: Kill banners by their links to known clicktrackers
+#
+#################################################################################
+FILTER: banners-by-link Kill banners by their links to known clicktrackers
+
+# Common case with width and height attributes:
+#
+s@<a\s+href\s*=\s*(['"]??)([^>\1]*(?:\
+  adclick                             # See www.dn.se \
+| atwola\.com/(?:link|redir)          # see www.cnn.com \
+| /jump/                              # redirs for doublecklick.net ads \
+| tracker | counter                   # common \
+| adlog\.pl                           # see sf.net \
+)[^>\1]*)\1[^>]*>\s*<img(?: src="([^"]*)")??[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\5)[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\7)[^>]*>\
+@<img $4 $6 src="http://config.privoxy.org/send-banner?type=auto" alt="Killed $3 by hwlink to $2">@siUgx
+
+# Rare case w/o explicit dimensions:
+#
+s@<a\s+href\s*=\s*(['"]??)([^>\1]*(?:adclick|atwola\.com/(?:link|redir)|doubleclick\.net/jump)[^>\1]*)\1[^>]*>\s*<img(?: src="([^"]*)")??[^>]*>@<img src="http://config.privoxy.org/send-banner?type=auto" alt="Killed $3 by link to $2">@siUg
 
 #################################################################################
 #
@@ -178,6 +285,8 @@ s/microsoft(?!.com)/MicroSuck/ig
 #
 s* industry[ -]leading \
 |  cutting[ -]edge \
+|  customer[ -]focused \
+|  market[ -]driven \
 |  award[ -]winning # Comments are OK, too! \
 |  high[ -]performance \
 |  solutions[ -]based \
@@ -197,40 +306,6 @@ FILTER: nimda Remove Nimda (virus) code
 
 s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><font size="7"> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
 
-#################################################################################
-#
-# banners-by-size: Kill banners by size
-#
-#################################################################################
-#
-# Standard banner sizes taken from http://www.iab.net/iab_banner_standards/bannersizes.html
-#
-# Note: Use http://config.privoxy.org/send-banner?type=trans for a transparent 1x1 image
-#       Use http://config.privoxy.org/send-banner?type=pattern for a grey/white pattern image
-#       Use http://config.privoxy.org/send-banner?type=auto  to auto-select.
-#
-#################################################################################
-FILTER: banners-by-size Kill banners by size
-
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-
-# One more. (Where is 200x50 from?)
-#
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src="http://config.privoxy.org/send-banner?type=auto" $1 $2>|sig
-
 
 #################################################################################
 #
@@ -244,24 +319,48 @@ s|<embed [^>]*application/x-shockwave-flash.*</embed>|<!-- Squished Shockwave Fl
 
 #################################################################################
 #
+# quicktime-kioskmode: Make Quicktime movies saveable
+#
+#################################################################################
+FILTER: quicktime-kioskmode Make Quicktime movies saveable
+
+s/(<embed\s+[^>]*)kioskmode\s*=\s*(["']?)true\2/$1/ig 
+
+
+#################################################################################
+#
+# js-events: Kill all JS event bindings (Radically destructive! Only for extra nasty sites)
+#
+#################################################################################
+FILTER: js-events Kill all JS event bindings (Radically destructive! Only for extra nasty sites)
+
+s/(on|event\.)((mouse(over|out|down|up|move))|(un)?load|contextmenu|selectstart)/never/ig
+# Not events, but abused on the same type of sites:
+s/(alert|confirm)\s*\(/concat(/ig
+
+
+#################################################################################
+#
 # crude-parental: Crude parental filtering?  (Use along with a suitable blocklist).
 #                 Shows how to deny access to whole page based on a keyword.
 #
 #################################################################################
-#
+FILTER: crude-parental Crude parental filtering (demo only)
+
 # (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
 # (Note #2: Is 'sex' a rude word?!)
-#
-#################################################################################
-FILTER: crude-parental Crude parental filtering (demo only)
 
 s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
 s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
+
 
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.11  2002/05/24 00:57:18  oes
+#     Made WeBugs job ungreedy; Fixes bug 559190
+#
 #     Revision 1.10  2002/04/18 10:14:19  oes
 #     renamed some filters
 #
