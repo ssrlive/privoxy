@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.47 2002/03/11 13:13:27 swa Exp $
+ $Id: user-manual.sgml,v 1.48 2002/03/12 06:33:01 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.47 2002/03/11 13:13:27 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.48 2002/03/12 06:33:01 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -103,6 +103,9 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  features currently under development:
 </para>
 
+<!--
+ The section is in both user-manual and faq. Please keep in sync.
+-->
 <para>
  <itemizedlist>
 
@@ -113,14 +116,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
    and filter effects.
   </para>
  </listitem> 
-
+<!--
  <listitem>
   <para>
    Modularized configuration that will allow for system wide settings, and
    individual user settings. (not implemented yet, probably a 3.1 feature)
   </para>
  </listitem> 
-
+-->
  <listitem>
   <para>
     Blocking of annoying pop-up browser windows.
@@ -469,7 +472,7 @@ configuration section below. HB.)
 <para>
  <application>JunkBuster</application> can be reached by the special 
  URL <ulink url="http://i.j.b/">http://i.j.b/</ulink> (or alternately
- <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>, 
+ <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>), 
  which is an internal page. You will see the following section:
 
 </para>
@@ -612,7 +615,8 @@ Please choose from the following options:
 </para>
 
 <para>
- Indicates that the blockfile is named <quote>blocklist.ini</quote>.
+ Indicates that the blockfile is named <quote>blocklist.ini</quote>. (A 
+ default installation does not use this.)
 </para>
 
 <para>
@@ -714,8 +718,10 @@ Please choose from the following options:
  are not saved to disk). Pop-ups are disabled for all sites. All sites are
  filtered through selected sections of <quote>re_filterfile</quote>. No sites
  are blocked. The JunkBuster logo is displayed for filtered ads and other
- images . The syntax of this file is explained in detail <link
- linkend="actionsfile">below</link>. 
+ images. The syntax of this file is explained in detail <link
+ linkend="actionsfile">below</link>. Other <quote>actions</quote> files 
+ are included, and you are free to use any of them. They have varying 
+ degrees of aggressiveness.
 </para>
 
 <para>
@@ -990,7 +996,7 @@ Please choose from the following options:
 
 <para>
  It is <emphasis>highly recommended</emphasis> that you enable ERROR
- reporting (debug 8192), at least until the next stable release.
+ reporting (debug 8192), at least until v3.0 is released.
 </para>
 
 <para>
@@ -1478,7 +1484,9 @@ Please choose from the following options:
 </para>
 
 <para>
+<!--
  See the FAQ for instructions on how to automate the login procedure for LPWA.
+--> 
  Some users have reported difficulties related to LPWA's use of
  <quote>.</quote> as the last element of the domain, and have said that this
  can be fixed with this:
@@ -1533,7 +1541,7 @@ Please choose from the following options:
 
 <para>
  Also, we're told they insist on getting cookies and JavaScript, so you should 
- add home.com to the cookie file. We consider JavaScript a security risk.
+ allow cookies from home.com. We consider JavaScript a potential security risk.
  Java need not be enabled.
 </para>
 
@@ -1875,11 +1883,17 @@ Removed references to Win32. HB 09/23/01
  <application>Junkbuster</application> takes, and thus determines how images,
  cookies and various other aspects of HTTP content and transactions are
  handled. Images can be anything you want, including ads, banners, or just
- some obnoxious image that you would rather not see. Cookies can be accepted
+ some obnoxious URL that you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. 
  not written to disk). Changes to <filename>ijb.action</filename> should 
  be immediately visible to <application>Junkbuster</application> without 
  the need to restart.
+</para>
+
+<para>
+ The easiest way to edit <quote>actions</quote> file is with a browser by
+ loading <ulink url="http://i.j.b/">http://i.j.b/</ulink>, and then select
+ <quote>Edit Actions List</quote>. A text editor can also be used.
 </para>
 
 <para>
@@ -1890,11 +1904,6 @@ Removed references to Win32. HB 09/23/01
  url="http://i.j.b/show-url-info">http://i.j.b/show-url-info</ulink>. 
 </para>
 
-<para>
- The actions file can be edited with a browser by loading 
- <ulink url="http://i.j.b/">http://i.j.b/</ulink>, and then select 
- <quote>Edit Actions</quote>.
-</para>
 
 <para>
  There are four types of lines in this file: comments (begin with a 
@@ -2131,7 +2140,9 @@ Removed references to Win32. HB 09/23/01
  
  <listitem>
   <para>  
-   Block this URL totally.
+   Block this URL totally. In a default installation, a <quote>blocked</quote>
+   URL will result in bright red banner that says <quote>BLOCKED</quote>, 
+   with a reason why it is being blocked. 
   </para>
   <para>
    <literal>
@@ -2415,8 +2426,11 @@ Removed references to Win32. HB 09/23/01
  <listitem>
   <para>  
    Treat this URL as an image.  This only matters if it's also <quote>+block</quote>ed,
-    in which case a <quote>blocked</quote> image can be sent rather than a HTML page.
-    See <quote>+image-blocker{}</quote> below for the control over what is actually sent.
+   in which case a <quote>blocked</quote> image can be sent rather than a HTML page.
+   See <quote>+image-blocker{}</quote> below for the control over what is actually sent.
+   If you want <emphasis>invisible</emphasis> ads, they should be defined as 
+   <emphasis>images</emphasis> and <emphasis>blocked</emphasis>. And also, 
+   <quote>image-blocker</quote>  should be set to <quote>blank</quote>.
   </para>
   <para>
    <literal>
@@ -2766,6 +2780,16 @@ Removed references to Win32. HB 09/23/01
    </literallayout>
   </msgtext> 
  </literal>
+</para>
+
+<para>
+ Note that many of these actions have the potential to cause a page to
+ misbehave, possibly even not to display at all. There are many ways 
+ a site designer may choose to design his site, and what HTTP header 
+ content he may depend on. There is no way to have hard and fast rules 
+ for all sites. See the <link linkend="ACTIONSANAT">Appendix</link>
+ for a brief example on troubleshooting actions.
+
 </para>
 
 </sect3>
@@ -3565,8 +3589,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  The URLs listed below are the special ones that allow direct access 
  to <application>JunkBuster</application>. Of course,
  <application>JunkBuster</application> must be running to access these. If 
- not, you will get a friendly error message.
-
+ not, you will get a friendly error message. Internet access is not 
+ necessary either.
 </para>
 
 <para>
@@ -3677,6 +3701,222 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 </sect2>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="actionsanat">
+<title>Anatomy of an Action</title>
+
+<para>
+ The way <application>Junkbuster</application> applies <quote>actions</quote>
+ to any given URL can be complex, and not always so easy to understand what 
+ is happening. And sometimes we need to be able to <emphasis>see</emphasis>
+ just what <application>Junkbuster</application> is doing. Especially, 
+ if something <application>Junkbuster</application> is doing is causing 
+ us a problem inadvertantly. It can be a little daunting to look at 
+ the actions files themselves, since they tend to be filled with 
+ <quote>regular expressions</quote> whose consequences are not always 
+ so obvious.
+</para>
+
+<para>
+ First, you enter one URL (or partial URL), and this page will tell you how
+ the currently configured <application>Junkbuster</application>
+ <quote>actions</quote> are being applied to that specific URL. This will not
+ help with filtering effects from the <filename>re_filterfile</filename>! It
+ also will not tell you about any other URLs that may be embedded within the
+ URL you are testing. For instance, images such as ads are expressed as URLs
+ within the raw page source of HTML pages. So you will only get info for the
+ actual URL that is pasted into the prompt area -- not any sub-URLs. If you
+ want to know about embedded URLs like ads, you will have to dig those out of
+ the HTML source. Use your browser's <quote>View Page Source</quote> option
+ for this.
+</para>
+
+<para>
+ Let's look at an example, <ulink url="http://google.com">google.com</ulink>, 
+ one section at a time:
+</para>
+
+<para>
+ <screen>
+ System default actions:
+
+ { -add-header -block -deanimate-gifs -downgrade -fast-redirects -filter 
+   -hide-forwarded -hide-from -hide-referer -hide-user-agent -image 
+   -image-blocker -limit-connect -no-compression -no-cookies-keep 
+   -no-cookies-read -no-cookies-set -no-popups -vanilla-wafer -wafer }
+ 
+ </screen>
+</para>
+
+<para>
+ This is the top section, and only tells us of the compiled in defaults. This 
+ is basically what <application>Junkbuster</application> would do if there 
+ were not any <quote>actions</quote> defined, i.e. it does nothing. Every action 
+ is disabled. This is not particularly informative for our purposes here. OK,
+ next section:
+</para>
+
+<para>
+ <screen>
+
+ Matches for http://google.com:
+
+ { -add-header -block +deanimate-gifs -downgrade +fast-redirects 
+   +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
+   +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
+   +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
+   -hide-user-agent -image +image-blocker{blank} +no-compression 
+   +no-cookies-keep -no-cookies-read -no-cookies-set +no-popups 
+   -vanilla-wafer -wafer }
+   /
+
+ { -no-cookies-keep -no-cookies-read -no-cookies-set }
+  .google.com
+
+ { -fast-redirects }
+  .google.com
+
+ </screen>
+</para>
+
+<para>
+ This is much more informative, and tells us how we have defined our 
+ <quote>actions</quote>, and which ones match for our example, 
+ <quote>google.com</quote>. The first grouping shows our default 
+ settings, which would apply to all URLs. If you look at your <quote>actions</quote>
+ file, this would be the section just below the <quote>aliases</quote> section 
+ near the top. This applies to all URLs as signified by the single forward
+ slash -- <quote>/</quote>.
+ 
+</para>
+
+<para>
+ These are the default actions we have enabled. But we can define additional
+ actions that would be exceptions to these general rules, and then list 
+ specific URLs that these exceptions would apply to. Last match wins.
+ Just below this then are two explict matches for <quote>.google.com</quote>.
+ The first is negating our various cookie blocking actions (i.e. we will allow
+ cookies here). The second is allowing <quote>fast-redirects</quote>. Note
+ that there is a leading dot here -- <quote>.google.com</quote>. This will
+ match any hosts and sub-domains, in the google.com domain also, such as
+ <quote>www.google.com</quote>. So, apparently, we have these actions defined
+ somewhere in the lower part of our actions file, and
+ <quote>google.com</quote> is referenced in these sections.
+
+</para>
+
+<para>
+ And now we pull it altogether in the bottom section and summarize how
+ <application>Junkbuster</application> is appying all its <quote>actions</quote> 
+ to <quote>google.com</quote>:
+
+</para>
+
+<para>
+ <screen>
+
+ Final results:
+
+ -add-header -block -deanimate-gifs -downgrade -fast-redirects 
+ +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
+ +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
+ +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
+ -hide-user-agent -image +image-blocker{blank} -limit-connect +no-compression 
+ -no-cookies-keep -no-cookies-read -no-cookies-set +no-popups -vanilla-wafer 
+ -wafer
+
+ </screen>
+</para>
+
+<para>
+ Now another example, <quote>ad.doubleclick.net</quote>:
+</para>
+
+<para>
+ <screen>
+
+ { +block +image }
+  .ad.doubleclick.net
+
+ { +block +image }
+  ad*.
+
+ { +block +image }
+  .doubleclick.net
+
+ </screen>
+</para>
+
+<para>
+ We'll just show the interesting part here, the explicit matches. It is 
+ matched three different times. Each as an <quote>+block +image</quote>,
+ which is the expanded form of one of our aliases that had been defined as: 
+ <quote>+imageblock</quote>. (<quote>Aliases</quote> are defined in the 
+ first section of the actions file and typically used to combine more 
+ than one action.)
+</para>
+
+<para>
+ Any one of these would have done the trick and blocked this as an unwanted 
+ image. This is unnecessarily redundant since the last case effectively 
+ would also cover the first. No point in taking chances with these guys 
+ though ;-) Note that if you want an ad or obnoxious 
+ URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
+ is done here -- as both a <quote>+block</quote> <emphasis>and</emphasis> an
+ <quote>+image</quote>. The custom alias <quote>+imageblock</quote> does this
+ for us.
+</para>
+
+<para>
+ One last example. Let's try <quote>http://www.rhapsodyk.net/adsl/HOWTO/</quote>.
+ This one is giving us problems. We are getting a blank page. Hmmm...
+</para>
+
+<para>
+ <screen>
+
+ Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
+
+ { -add-header -block +deanimate-gifs -downgrade +fast-redirects 
+   +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups} 
+   +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
+   +filter{fun} +hide-forwarded +hide-from{block} +hide-referer{forge} 
+   -hide-user-agent -image +image-blocker{blank} +no-compression 
+   +no-cookies-keep -no-cookies-read -no-cookies-set +no-popups 
+   -vanilla-wafer -wafer }
+   /
+
+ { +block +image }
+  /ads
+
+ </screen>
+</para>
+
+<para>
+ Ooops, the <quote>/adsl/</quote> is matching <quote>/ads</quote>! But 
+ we did not want this at all! Now we see why we get the blank page. We could
+ now add a new action below this that explictly does <emphasis>not</emphasis>
+ block (-block) pages with <quote>adsl</quote>. There are various ways to
+ handle such exceptions. Example:
+</para>
+
+<para>
+ <screen>
+
+ { -block }
+  /adsl
+ 
+ </screen>
+</para>
+
+<para>
+ Now the page displays ;-)
+
+</para>
+
+</sect2>
+
 </sect1>
 
  <!--
@@ -3700,6 +3940,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.48  2002/03/12 06:33:01  hal9
+ Catching up to Andreas and re_filterfile changes.
+
  Revision 1.47  2002/03/11 13:13:27  swa
  correct feedback channels
 
