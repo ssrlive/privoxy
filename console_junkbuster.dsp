@@ -121,6 +121,14 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\deanimate.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\deanimate.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\errlog.c
 # End Source File
 # Begin Source File
@@ -216,7 +224,7 @@ InputDir=.
 InputPath=.\config.h.win
 
 "$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) $(InputDir)\config.h
+	copy "$(InputPath)" "$(InputDir)\config.h"
 
 # End Custom Build
 
