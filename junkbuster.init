@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.14  2002/03/06 06:13:40  hal9
+#     Adapted for Andreas' changes for --user and --pidfile.
+#
 #     Revision 1.13  2002/03/05 05:10:10  oes
 #     Changed pidfile path to conform with FHS
 #
@@ -104,7 +107,7 @@ JB_CONF="/etc/$JB_PRG/config"
 JB_USER="junkbuster"
 JB_PID=/var/run/$JB_PRG.pid
 JB_LOCK=/var/lock/subsys/$JB_PRG
-JB="$JB_BIN --user $JB_USER --pidfile $JB_PID $JB_CONF"
+JB="$JB_BIN --user $JB_USER.$JB_USER --pidfile $JB_PID $JB_CONF"
 
 # some checks for us
 ! [ -x $JB_BIN  ] && echo "Can't find $JB_BIN, exit." && exit 0
