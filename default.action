@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.22 2002/04/24 02:18:55 oes Exp $
+#  $Id: default.action,v 1.23 2002/04/26 12:02:25 swa Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -508,3 +508,5 @@ advice.
 .uni-*.de
 www.ugu.com/sui/ugu/adv
 .*downloads.
+# adv for globalintersec means advancecd, not advertisement
+www.globalintersec.com/adv
