@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.15 2002/03/07 19:23:50 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.16 2002/03/08 18:40:44 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -84,18 +84,7 @@ make dok
 ## Explicitily stripping is not recomended.
 ## This is handled altomaticaly by RPM, and can couse troubles if
 ## anyone wants to build an unstriped version - morcego
-#strip %{name}
-
-#
-# -----------------------------------------------------------------------------
-# hint by kukuk@suse.de
-%pre
-# -r does not work
-#usr/sbin/groupadd -r junkbuster
-usr/sbin/groupadd junkbuster
-# -r does not work
-#usr/sbin/useradd -g junkbuster -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
-usr/sbin/useradd -g junkbuster -d /etc/junkbuster -s "/bin/false" junkbuster > /dev/null 2>&1 || /bin/true
+#strip junkbuster
 
 #
 # -----------------------------------------------------------------------------
@@ -136,14 +125,50 @@ cat config | \
 #
 # -----------------------------------------------------------------------------
 #
-%post
-# for upgrade from 2.0.x
-if [ -f /var/log/junkbuster/junkbuster ]; then
- mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile
- chown -R junkbuster:junkbuster /var/log/junkbuster 2>/dev/null
- chown -R junkbuster:junkbuster /etc/junkbuster 2>/dev/null
+%pre
+# We check to see if the user junkbuster exists.
+# If it does, we do nothing
+# If we don't, we check to see if the user junkbust exist and, in case it
+# does, we change it do junkbuster. If it also does not exist, we create the
+# junkbuster user -- morcego
+id junkbuster > /dev/null 2>&1 
+if [ $? -eq 1 ]; then
+	id junkbust > /dev/null 2>&1 
+	if [ $? -eq 0 ]; then
+		/usr/sbin/usermod -l junkbuster -d %{_sysconfdir}/junkbuster -s "" junkbust  > /dev/null 2>&1
+	else
+# -r does not work on suse.
+		/usr/sbin/groupadd junkbuster
+		/usr/sbin/useradd -d %{_sysconfdir}/junkbuster -g junkbuster -s "" junkbuster > /dev/null 2>&1 
+	fi
 fi
+
+#
+# -----------------------------------------------------------------------------
+#
+%post
+[ -f /var/log/junkbuster/junkbuster ] &&\
+ mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || /bin/true
+chown -R junkbuster:junkbuster /var/log/junkbuster 2>/dev/null
+chown -R junkbuster:junkbuster /etc/junkbuster 2>/dev/null
+# not available on suse
+#if [ "$1" = "1" ]; then
+#     /sbin/chkconfig --add junkbuster
+#	/sbin/service junkbuster condrestart > /dev/null 2>&1
+#fi
+# 01/09/02 HB, getting rid of any user=junkbust
+# Changed by morcego to use the id command.
+id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
 sbin/insserv etc/init.d/junkbuster
+
+#
+# -----------------------------------------------------------------------------
+#
+%preun
+# need to stop the service on suse. swa.
+#if [ "$1" = "0" ]; then
+#	/sbin/service junkbuster stop > /dev/null 2>&1 ||:
+#fi
 
 #
 # -----------------------------------------------------------------------------
@@ -151,8 +176,7 @@ sbin/insserv etc/init.d/junkbuster
 %postun
 sbin/insserv etc/init.d/
 # dont forget to remove user and group junkbuster
-/usr/sbin/userdel junkbuster > /dev/null 2>&1 || /bin/true
-/usr/sbin/groupdel junkbuster > /dev/null 2>&1 || /bin/true
+id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 
 #
 # -----------------------------------------------------------------------------
@@ -248,6 +272,10 @@ sbin/insserv etc/init.d/
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.16  2002/03/08 18:40:44  swa
+# build requires tools. useradd and del works
+# now.
+#
 # Revision 1.15  2002/03/07 19:23:50  swa
 # i hate to scroll. suse: wrong configdir.
 #
