@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.9 (alpha) Date: 2001/10/24"
+.TH JUNKBUSTER 1 "v2.9.10 (alpha) Date: 2001/12/01"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -23,7 +23,7 @@ If the configuration file is not specified on the command line,
 \fBJunkbuster\fP will look for a file named \fIconfig\fP in the 
 current directory (except on Amiga where it will look for 
 \fIAmiTCP:db/junkbuster/config\fP and Win32 where it will try 
-\fIjunkbstr.txt\fP).
+\fIconfig.txt\fP).
 
 
 .SH DESCRIPTION
@@ -72,7 +72,7 @@ won't be proxied.
 .SH CONFIGURATION
 All \fBJunkbuster\fP configuration is done via the various configuarion 
 files. The default configuration files are: \fIconfig\fP, 
-\fIactionsfile\fP, and \fIre_filterfile\fP. These are well commented. 
+\fIijb.action\fP, and \fIre_filterfile\fP. These are well commented. 
 On Unix and Unix-like systems, these are located in \fI/etc/junkbuster/\fP 
 by default. On Windows and OS/2, these files are in the same directory 
 as the \fBJunkbuster\fP executable. 
@@ -84,12 +84,12 @@ explanation of all configuration options.
 .P
 \fBJunkbuster's\fP configuration parameters can be viewed at
 \fIhttp://i.j.b./\fP. This is an internal page. In
-addition, the \fIactionsfile\fP can be edited here, and \fBJunkbuster\fP can
+addition, the \fIijb.action\fP file can be edited here, and \fBJunkbuster\fP can
 be toggled on/off.
 
 .SH "SAMPLE CONFIGURATION"
 .PP
-A brief example of what an \fIactionsfile\fP configuration might look like:
+A brief example of what an \fIijb.action\fP configuration might look like:
 .PP
 .nf
 
@@ -182,7 +182,7 @@ options.
 .br
 \fI/etc/junkbuster/config\fP
 .br
-\fI/etc/junkbuster/actionsfile\fP
+\fI/etc/junkbuster/ijb.action\fP
 .br
 \fI/etc/junkbuster/re_filterfile\fP
 .br
