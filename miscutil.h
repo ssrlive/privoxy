@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.8 2001/06/29 13:32:14 oes Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.9 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.9  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.8  2001/06/29 13:32:14  oes
  *    Removed logentry from cancelled commit
  *
@@ -96,7 +100,7 @@ extern "C" {
 
 extern void *zalloc(int size);
 
-extern unsigned long hash_string(const char* s);
+extern unsigned int hash_string(const char* s);
 
 extern char *safe_strerror(int err);
 
