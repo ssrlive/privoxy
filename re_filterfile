@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.17  2002/03/07 03:50:54  oes
+#     Adapted comments to new built-in images
+#
 #     Revision 1.16  2002/02/21 00:12:19  jongfoster
 #     Modifying the banner regexps to use long URLS and to autodetect
 #     whether to show a logo or a transparent GIF, based on actionsfile
@@ -148,9 +151,9 @@ s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
 #
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
-# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 PNG
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo PNG
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for a grey/white pattern PNG
+# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 image
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo image
+#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for a grey/white pattern image
 #       Use http://ijbswa.sourceforge.net/config/send-banner?type=auto  to auto-select.
 # ********************************************************************/
 s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
