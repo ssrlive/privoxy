@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.44 2002/03/09 17:08:48 hal9 Exp $
+ $Id: user-manual.sgml,v 1.45 2002/03/09 17:43:53 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.44 2002/03/09 17:08:48 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.45 2002/03/09 17:43:53 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -2784,16 +2784,16 @@ Removed references to Win32. HB 09/23/01
 <sect2 id="filterfile">
 <title>The Filter File</title>
 <para>
- The filter file defines what filtering of web pages
- <application>Junkbuster</application> does. The default filter file is 
- <filename>re_filterfile</filename>, located in the config directory. In this 
- file, <emphasis>any document content</emphasis>, whether viewable text or
- embedded non-visible content, can be changed. 
+ Any web page can be dynamically modified with the filter file. This
+ modification can be removal, or re-writing, of any web page content,
+ including tags and non-visible content. The default filter file is
+ <filename>re_filterfile</filename>, located in the config directory. 
 </para>
 
 <para>
  This file uses regular expressions to alter or remove any string in the
- target page. Some examples from the included default <filename>re_filterfile</filename>:
+ target page. The expressions can only operate on one line at a time .Some
+ examples from the included default <filename>re_filterfile</filename>:
 </para>
 
 <para>
@@ -3440,6 +3440,140 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 </sect2>
 
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2>
+<title>JunkBuster's Internal Pages</title>
+
+<para>
+ Since <application>JunkBuster</application> proxies each requested 
+ web page, it is easy for <application>JunkBuster</application> to 
+ trap certain URLs. In this way, we can talk directly to
+ <application>JunkBuster</application>, and see how it is 
+ configured, see how our rules are being applied, change these 
+ rules and other configuration options, and even turn
+ <application>JunkBuster</application> off.
+
+</para>
+
+<para>
+ The URLs listed below are the special ones that allow direct access 
+ to <application>JunkBuster</application>. Of course,
+ <application>JunkBuster</application> must be running to access these. If 
+ not, you will get a friendly error message.
+
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>  
+   Junkbuster main page: 
+  </para>
+  <blockquote>
+   <para> 
+     <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>
+   </para>
+  </blockquote>
+  <para>
+   Alternately, this may be reached at <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
+   but this variation may not work as reliably as the above in some
+   configurations.
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>  
+    Show information about the current configuration: 
+  </para>
+   <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/show-status">http://ijbswa.sourceforge.net/config/show-status</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+    Show the source code version numbers:
+  </para>
+  <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/show-version">http://ijbswa.sourceforge.net/config/show-version</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Show the client's request headers:
+  </para>
+  <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/show-request">http://ijbswa.sourceforge.net/config/show-request</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Show which actions apply to a URL and why:
+  </para>
+   <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Toggle JunkBuster on or off:
+  </para>
+   <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/toggle">http://ijbswa.sourceforge.net/config/toggle</ulink>
+   </para>
+  </blockquote>
+  <para>
+   Short cuts. Turn off, then on: 
+  </para>
+   <blockquote>
+   <para> 
+     <ulink url="http://ijbswa.sourceforge.net/config/toggle?set=disable">http://ijbswa.sourceforge.net/config/toggle?set=disable</ulink>
+   </para>
+  </blockquote>
+   <blockquote>
+   <para> 
+     <ulink url="http://ijbswa.sourceforge.net/config/toggle?set=enable">http://ijbswa.sourceforge.net/config/toggle?set=enable</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+
+ <listitem>
+  <para>  
+   Edit the actions list file:
+  </para>
+   <blockquote>
+   <para> 
+    <ulink url="http://ijbswa.sourceforge.net/config/edit-actions">http://ijbswa.sourceforge.net/config/edit-actions</ulink>
+   </para>
+  </blockquote>
+ </listitem>
+ 
+ </itemizedlist>
+</para>
+
+<para>
+ These may be bookmarked for quick reference.
+
+</para>
+
+</sect2>
+
 </sect1>
 
  <!--
@@ -3463,6 +3597,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.45  2002/03/09 17:43:53  swa
+ more distros
+
  Revision 1.44  2002/03/09 17:08:48  hal9
  New section on Jon's actions file editor, and move some stuff around.
 
