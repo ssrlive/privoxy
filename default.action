@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.7 2002/03/30 03:23:45 oes Exp $
+#  $Id: default.action,v 1.8 2002/03/30 03:41:02 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -421,7 +421,7 @@ privacy.net
 #############################################################################
 {+add-header{X-Actions-File-Version: 1.0} -filter -no-popups}
 .privoxy.org/actions
-
+.oesterhelt.org/actions
 
 #############################################################################
 # Test for new GIF deanimation feature.
