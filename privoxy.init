@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.init,v $
+#     Revision 1.4  2002/03/25 04:16:48  hal9
+#     Fix proper config file location.
+#
 #     Revision 1.3  2002/03/24 19:12:15  hal9
 #     Fixed some naming conflicts.
 #
@@ -160,7 +163,6 @@
 #  Check that networking is up.
 [ ${NETWORKING} = "no" ] && exit 0
 
-JB_OPRG="junkbuster"
 JB_PRG="privoxy"
 JB_BIN="/usr/sbin/$JB_PRG"
 JB_CONF="/etc/$JB_PRG/config"
