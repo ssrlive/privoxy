@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.35 2002/03/05 00:17:27 hal9 Exp $
+ $Id: user-manual.sgml,v 1.36 2002/03/05 22:53:28 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.35 2002/03/05 00:17:27 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.36 2002/03/05 22:53:28 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3373,6 +3373,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.36  2002/03/05 22:53:28  hal9
+ Add new - - user option.
+
  Revision 1.35  2002/03/05 00:17:27  hal9
  Added section on command line options.
 
