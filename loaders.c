@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.34 2001/12/30 14:07:32 steudten Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.35 2002/01/17 21:03:08 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.34 2001/12/30 14:07:32 steudten E
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.35  2002/01/17 21:03:08  jongfoster
+ *    Moving all our URL and URL pattern parsing code to urlmatch.c.
+ *
+ *    Renaming free_url to free_url_spec, since it frees a struct url_spec.
+ *
  *    Revision 1.34  2001/12/30 14:07:32  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -444,6 +449,419 @@ int check_file_changed(const struct file_list * current,
 
 /*********************************************************************
  *
+ * Function    :  simple_read_line
+ *
+ * Description :  Read a single line from a file and return it.
+ *                This is basically a version of fgets() that malloc()s
+ *                it's own line buffer.  Note that the buffer will
+ *                always be a multiple of BUFFER_SIZE bytes long.
+ *                Therefore if you are going to keep the string for
+ *                an extended period of time, you should probably
+ *                strdup() it and free() the original, to save memory.
+ *
+ *
+ * Parameters  :
+ *          1  :  dest = destination for newly malloc'd pointer to
+ *                line data.  Will be set to NULL on error.
+ *          2  :  fp = File to read from
+ *          3  :  newline = Standard for newlines in the file.
+ *                Will be unchanged if it's value on input is not
+ *                NEWLINE_UNKNOWN.
+ *                On output, may be changed from NEWLINE_UNKNOWN to
+ *                actual convention in file.
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_FILE   on EOF.
+ *
+ *********************************************************************/
+jb_err simple_read_line(FILE *fp, char **dest, int *newline)
+{
+   int len = 0;
+   int buflen = BUFFER_SIZE;
+   char * buf;
+   char * p;
+   int ch;
+   int realnewline = NEWLINE_UNKNOWN;
+
+   if (NULL == (buf = malloc(buflen)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   p = buf;
+
+/*
+ * Character codes.  If you have a wierd compiler and the following are
+ * incorrect, you also need to fix NEWLINE() in loaders.h
+ */
+#define CHAR_CR '\r' /* ASCII 13 */
+#define CHAR_LF '\n' /* ASCII 10 */
+
+   while (FOREVER)
+   {
+      ch = fgetc(fp);
+      if (ch == EOF)
+      {
+         if (len > 0)
+         {
+            *p = '\0';
+            *dest = buf;
+            return JB_ERR_OK;
+         }
+         else
+         {
+            free(buf);
+            *dest = NULL;
+            return JB_ERR_FILE;
+         }
+      }
+      else if (ch == CHAR_CR)
+      {
+         ch = getc(fp);
+         if (ch == CHAR_LF)
+         {
+            if (*newline == NEWLINE_UNKNOWN)
+            {
+               *newline = NEWLINE_DOS;
+            }
+         }
+         else
+         {
+            if (ch != EOF)
+            {
+               ungetc(ch, fp);
+            }
+            if (*newline == NEWLINE_UNKNOWN)
+            {
+               *newline = NEWLINE_MAC;
+            }
+         }
+         *p = '\0';
+         *dest = buf;
+         if (*newline == NEWLINE_UNKNOWN)
+         {
+            *newline = realnewline;
+         }
+         return JB_ERR_OK;
+      }
+      else if (ch == CHAR_LF)
+      {
+         *p = '\0';
+         *dest = buf;
+         if (*newline == NEWLINE_UNKNOWN)
+         {
+            *newline = NEWLINE_UNIX;
+         }
+         return JB_ERR_OK;
+      }
+      else if (ch == 0)
+      {
+         *p = '\0';
+         *dest = buf;
+         return JB_ERR_OK;
+      }
+
+      *p++ = ch;
+
+      if (++len >= buflen)
+      {
+         buflen += BUFFER_SIZE;
+         if (NULL == (p = realloc(buf, buflen)));
+         {
+            free(buf);
+            return JB_ERR_MEMORY;
+         }
+         buf = p;
+         p = buf + len;
+      }
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  edit_read_line
+ *
+ * Description :  Read a single non-empty line from a file and return
+ *                it.  Trims comments, leading and trailing whitespace
+ *                and respects escaping of newline and comment char.
+ *                Provides the line in 2 alternative forms: raw and
+ *                preprocessed.
+ *                - raw is the raw data read from the file.  If the
+ *                  line is not modified, then this should be written
+ *                  to the new file.
+ *                - prefix is any comments and blank lines that were
+ *                  read from the file.  If the line is modified, then
+ *                  this should be written out to the file followed
+ *                  by the modified data.  (If this string is non-empty
+ *                  then it will have a newline at the end).
+ *                - data is the actual data that will be parsed
+ *                  further by appropriate routines.
+ *                On EOF, the 3 strings will all be set to NULL and
+ *                0 will be returned.
+ *
+ * Parameters  :
+ *          1  :  fp = File to read from
+ *          2  :  raw_out = destination for newly malloc'd pointer to
+ *                raw line data.  May be NULL if you don't want it.
+ *          3  :  prefix_out = destination for newly malloc'd pointer to
+ *                comments.  May be NULL if you don't want it.
+ *          4  :  data_out = destination for newly malloc'd pointer to
+ *                line data with comments and leading/trailing spaces
+ *                removed, and line continuation performed.  May be
+ *                NULL if you don't want it.
+ *          5  :  newline = Standard for newlines in the file.
+ *                On input, set to value to use or NEWLINE_UNKNOWN.
+ *                On output, may be changed from NEWLINE_UNKNOWN to
+ *                actual convention in file.  May be NULL if you
+ *                don't want it.
+ *          6  :  line_number = Line number in file.  In "lines" as
+ *                reported by a text editor, not lines containing data.
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_FILE   on EOF.
+ *
+ *********************************************************************/
+jb_err edit_read_line(FILE *fp,
+                      char **raw_out,
+                      char **prefix_out,
+                      char **data_out,
+                      int *newline,
+                      unsigned long *line_number)
+{
+   char *p;          /* Temporary pointer   */
+   char *linebuf;    /* Line read from file */
+   char *linestart;  /* Start of linebuf, usually first non-whitespace char */
+   int contflag = 0; /* Nonzero for line continuation - i.e. line ends '\' */
+   int is_empty = 1; /* Flag if not got any data yet */
+   char *raw    = NULL; /* String to be stored in raw_out    */
+   char *prefix = NULL; /* String to be stored in prefix_out */
+   char *data   = NULL; /* String to be stored in data_out   */
+   int scrapnewline;    /* Used for (*newline) if newline==NULL */
+   jb_err rval = JB_ERR_OK;
+
+   assert(fp);
+   assert(raw_out || data_out);
+   assert(newline == NULL
+       || *newline == NEWLINE_UNKNOWN
+       || *newline == NEWLINE_UNIX
+       || *newline == NEWLINE_DOS
+       || *newline == NEWLINE_MAC);
+
+   if (newline == NULL)
+   {
+      scrapnewline = NEWLINE_UNKNOWN;
+      newline = &scrapnewline;
+   }
+
+   /* Set output parameters to NULL */
+   if (raw_out)
+   {
+      *raw_out    = NULL;
+   }
+   if (prefix_out)
+   {
+      *prefix_out = NULL;
+   }
+   if (data_out)
+   {
+      *data_out   = NULL;
+   }
+
+   /* Set string variables to new, empty strings. */
+
+   if (raw_out)
+   {
+      if ((raw = malloc(1)) == NULL)
+      {
+         return JB_ERR_MEMORY;
+      }
+      *raw = '\0';
+   }
+   if (prefix_out)
+   {
+      if ((prefix = malloc(1)) == NULL)
+      {
+         freez(raw);
+         return JB_ERR_MEMORY;
+      }
+      *prefix = '\0';
+   }
+   if (data_out)
+   {
+      if ((data = malloc(1)) == NULL)
+      {
+         freez(raw);
+         freez(prefix);
+         return JB_ERR_MEMORY;
+      }
+      *data = '\0';
+   }
+
+   /* Main loop.  Loop while we need more data & it's not EOF. */
+
+   while ( (contflag || is_empty)
+        && (JB_ERR_OK == (rval = simple_read_line(fp, &linebuf, newline))))
+   {
+      if (line_number)
+      {
+         (*line_number)++;
+      }
+      if (raw)
+      {
+         string_append(&raw,linebuf);
+         if (string_append(&raw,NEWLINE(*newline)))
+         {
+            freez(prefix);
+            freez(data);
+            free(linebuf);
+            return JB_ERR_MEMORY;
+         }
+      }
+
+      /* Line continuation? Trim escape and set flag. */
+      p = linebuf + strlen(linebuf) - 1;
+      contflag = ((*linebuf != '\0') && (*p == '\\'));
+      if (contflag)
+      {
+         *p = '\0';
+      }
+
+      /* Trim leading spaces if we're at the start of the line */
+      linestart = linebuf;
+      if (*data == '\0')
+      {
+         /* Trim leading spaces */
+         while (*linestart && isspace((int)(unsigned char)*linestart))
+         {
+            linestart++;
+         }
+      }
+
+      /* Handle comment characters. */
+      p = linestart;
+      while ((p = strchr(p, '#')) != NULL)
+      {
+         /* Found a comment char.. */
+         if ((p != linebuf) && (*(p-1) == '\\'))
+         {
+            /* ..and it's escaped, left-shift the line over the escape. */
+            char *q = p - 1;
+            while ((*q = *(q + 1)) != '\0')
+            {
+               q++;
+            }
+            /* Now scan from just after the "#". */
+         }
+         else
+         {
+            /* Real comment.  Save it... */
+            if (p == linestart)
+            {
+               /* Special case:  Line only contains a comment, so all the
+                * previous whitespace is considered part of the comment.
+                * Undo the whitespace skipping, if any.
+                */
+               linestart = linebuf;
+               p = linestart;
+            }
+            if (prefix)
+            {
+               string_append(&prefix,p);
+               if (string_append(&prefix, NEWLINE(*newline)))
+               {
+                  freez(raw);
+                  freez(data);
+                  free(linebuf);
+                  return JB_ERR_MEMORY;
+               }
+            }
+
+            /* ... and chop off the rest of the line */
+            *p = '\0';
+         }
+      } /* END while (there's a # character) */
+
+      /* Write to the buffer */
+      if (*linestart)
+      {
+         is_empty = 0;
+         if (data)
+         {
+            if (string_append(&data, linestart))
+            {
+               freez(raw);
+               freez(prefix);
+               free(linebuf);
+               return JB_ERR_MEMORY;
+            }
+         }
+      }
+
+      free(linebuf);
+   } /* END while(we need more data) */
+
+   /* Handle simple_read_line() errors - ignore EOF */
+   if ((rval != JB_ERR_OK) && (rval != JB_ERR_FILE))
+   {
+      freez(raw);
+      freez(prefix);
+      freez(data);
+      return rval;
+   }
+
+   if (raw ? (*raw == '\0') : is_empty)
+   {
+      /* EOF and no data there.  (Definition of "data" depends on whether
+       * the caller cares about "raw" or just "data").
+       */
+
+      free(raw);
+      free(prefix);
+      free(data);
+
+      return JB_ERR_FILE;
+   }
+   else
+   {
+      /* Got at least some data */
+
+      /* Remove trailing whitespace */
+      chomp(data);
+
+      if (raw_out)
+      {
+         *raw_out    = raw;
+      }
+      else
+      {
+         free(raw);
+      }
+      if (prefix_out)
+      {
+         *prefix_out = prefix;
+      }
+      else
+      {
+         free(prefix);
+      }
+      if (data_out)
+      {
+         *data_out   = data;
+      }
+      else
+      {
+         free(data);
+      }
+      return JB_ERR_OK;
+   }
+}
+
+
+/*********************************************************************
+ *
  * Function    :  read_config_line
  *
  * Description :  Read a single non-empty line from a file and return
@@ -462,81 +880,26 @@ int check_file_changed(const struct file_list * current,
  *********************************************************************/
 char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum)
 {
-   char *p;
-   char *src;
-   char *dest;
-   char linebuf[BUFFER_SIZE];
-   int contflag = 0;
-
-   *buf = '\0';
-
-   while (fgets(linebuf, sizeof(linebuf), fp))
+   jb_err err;
+   char *buf2 = NULL;
+   err = edit_read_line(fp, NULL, NULL, &buf2, NULL, linenum);
+   if (err)
    {
-       (*linenum)++;
-      /* Trim off newline */
-      if ((p = strpbrk(linebuf, "\r\n")) != NULL)
+      if (err == JB_ERR_MEMORY)
       {
-         *p = '\0';
+         log_error(LOG_LEVEL_FATAL, "Out of memory loading a config file");
       }
-      else
-      {
-         p = linebuf + strlen(linebuf);
-      }
-
-      /* Line continuation? Trim escape and set flag. */
-      if ((p != linebuf) && (*--p == '\\'))
-      {
-         contflag = 1;
-         *p = '\0';
-      }
-
-      /* If there's a comment char.. */
-      p = linebuf;
-      while ((p = strchr(p, '#')) != NULL)
-      {
-         /* ..and it's escaped, left-shift the line over the escape. */
-         if ((p != linebuf) && (*(p-1) == '\\'))
-         {
-            src = p;
-            dest = p - 1;
-            while ((*dest++ = *src++) != '\0')
-            {
-               /* nop */
-            }
-            /* Now scan from just after the "#". */
-         }
-         /* Else, chop off the rest of the line */
-         else
-         {
-            *p = '\0';
-         }
-      }
-
-      /* Write to the buffer */
-      if (*linebuf)
-      {
-         strncat(buf, linebuf, buflen - strlen(buf));
-      }
-
-      /* Continue? */
-      if (contflag)
-      {
-         contflag = 0;
-         continue;
-      }
-
-      /* Remove leading and trailing whitespace */
-      chomp(buf);
-
-      if (*buf)
-      {
-         return buf;
-      }
+      return NULL;
    }
-
-   /* EOF */
-   return NULL;
-
+   else
+   {
+      assert(buf2);
+      assert(strlen(buf2) + 1U < (unsigned)buflen);
+      strncpy(buf, buf2, buflen - 1);
+      free(buf2);
+      buf[buflen - 1] = '\0';
+      return buf;
+   }
 }
 
 

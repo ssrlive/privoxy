@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.13 2001/12/30 14:07:32 steudten Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.14 2002/01/17 21:03:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.14  2002/01/17 21:03:08  jongfoster
+ *    Moving all our URL and URL pattern parsing code to urlmatch.c.
+ *
+ *    Renaming free_url to free_url_spec, since it frees a struct url_spec.
+ *
  *    Revision 1.13  2001/12/30 14:07:32  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -142,6 +147,33 @@ extern char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *li
 extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);
+
+extern jb_err edit_read_line(FILE *fp,
+                             char **raw_out,
+                             char **prefix_out,
+                             char **data_out,
+                             int *newline,
+                             unsigned long *line_number);
+
+extern jb_err simple_read_line(FILE *fp, char **dest, int *newline);
+
+/*
+ * Various types of newlines that a file may contain.
+ */
+#define NEWLINE_UNKNOWN 0  /* Newline convention in file is unknown */
+#define NEWLINE_UNIX    1  /* Newline convention in file is '\n'   (ASCII 10) */
+#define NEWLINE_DOS     2  /* Newline convention in file is '\r\n' (ASCII 13,10) */
+#define NEWLINE_MAC     3  /* Newline convention in file is '\r'   (ASCII 13) */
+
+/*
+ * Types of newlines that a file may contain, as strings.  If you have an
+ * extremely wierd compiler that does not have '\r' == CR == ASCII 13 and
+ * '\n' == LF == ASCII 10), then fix CHAR_CR and CHAR_LF in loaders.c as
+ * well as these definitions.
+ */
+#define NEWLINE(style) ((style)==NEWLINE_DOS ? "\r\n" : \
+                        ((style)==NEWLINE_MAC ? "\r" : "\n"))
+
 
 extern short int MustReload;
 extern int load_actions_file(struct client_state *csp);
