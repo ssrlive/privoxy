@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.24 2001/07/13 14:00:40 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.25 2001/07/15 19:43:49 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.24 2001/07/13 14:00:40 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.25  2001/07/15 19:43:49  jongfoster
+ *    Supports POSIX threads.
+ *    Also removed some unused #includes.
+ *
  *    Revision 1.24  2001/07/13 14:00:40  oes
  *     - Generic content modification scheme:
  *       Each feature has its own applicability flag that is set
@@ -891,20 +895,18 @@ static void chat(struct client_state *csp)
 
          /*
           * If this is an SSL connection or we're in the body
-          * of the server document, just write it to the client.
+          * of the server document, just write it to the client,
+          * unless we need to buffer the body for later content-filtering
           */
 
          if (server_body || http->ssl)
          {
-
             if (content_filter)
             {
-               add_to_iob(csp, buf, n); /* Buffer the body for filtering */
+               add_to_iob(csp, buf, n); 
             }
-
             else
             {
-               /* just write */
                if (write_socket(csp->cfd, buf, n) != n)
                {
                   log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
