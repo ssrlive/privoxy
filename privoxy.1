@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "18 April 2002" "Privoxy 2.9.14 beta" ""
+.TH "PRIVOXY" "1" "24 April 2002" "Privoxy 2.9.14 beta" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -164,7 +164,6 @@ might look like:
 
  # Block, and treat these URLs as 'images'.
  {+imageblock}
-  .adforce.imgis.com
   .ad.preferences.com/image.*
   .ads.web.aol.com
   .ad-adex3.flycast.com
@@ -208,9 +207,8 @@ configuration options.
  \fI/usr/sbin/privoxy\fR
  \fI/etc/privoxy/config\fR
  \fI/etc/privoxy/default.action\fR
- \fI/etc/privoxy/advanced.action\fR
- \fI/etc/privoxy/basic.action\fR
- \fI/etc/privoxy/intermediate.action\fR
+ \fI/etc/privoxy/standard.action\fR
+ \fI/etc/privoxy/user.action\fR
  \fI/etc/privoxy/default.filter\fR
  \fI/etc/privoxy/trust\fR
  \fI/etc/privoxy/templates/*\fR

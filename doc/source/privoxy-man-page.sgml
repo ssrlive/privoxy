@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.6 2002/04/12 01:55:43 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 1.7 2002/04/12 23:07:40 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -295,7 +295,6 @@
 
  # Block, and treat these URLs as 'images'.
  {+imageblock}
-  .adforce.imgis.com
   .ad.preferences.com/image.*
   .ads.web.aol.com
   .ad-adex3.flycast.com
@@ -346,9 +345,8 @@
  <filename>/usr/sbin/privoxy</filename>
  <filename>/etc/privoxy/config</filename>
  <filename>/etc/privoxy/default.action</filename>
- <filename>/etc/privoxy/advanced.action</filename>
- <filename>/etc/privoxy/basic.action</filename>
- <filename>/etc/privoxy/intermediate.action</filename>
+ <filename>/etc/privoxy/standard.action</filename>
+ <filename>/etc/privoxy/user.action</filename>
  <filename>/etc/privoxy/default.filter</filename>
  <filename>/etc/privoxy/trust</filename>
  <filename>/etc/privoxy/templates/*</filename>
