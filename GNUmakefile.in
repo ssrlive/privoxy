@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.31 2002/03/26 14:00:18 swa Exp $
+# $Id: GNUmakefile.in,v 1.32 2002/03/26 22:29:54 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -75,6 +75,7 @@ JADEBIN    = @JADEBIN@
 DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
+MAN2HTML   = @MAN2HTML@
 
 # Program to do LF->CRLF
 #
@@ -412,7 +413,7 @@ dok: doc/source/ldpOK.dsl
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
-redhat-dok: doc/source/ldpOK.dsl
+redhat-dok: doc/source/ldpOK.dsl man2html
 	mkdir -p doc/text doc/man doc/source/user-manual \
           doc/source/developer-manual doc/source/faq
 ##  user manual
@@ -440,6 +441,11 @@ doc/source/ldpOK.dsl:
 		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
 	else \
 		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
+	fi
+
+man2html:
+	if [ "$(MAN2HTML)" != "false" ]; then \
+		$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > doc/webserver/man-page/privoxy-man-page.html; \
 	fi
 
 #############################################################################
@@ -557,6 +563,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.32  2002/03/26 22:29:54  swa
+# we have a new homepage!
+#
 # Revision 1.31  2002/03/26 14:00:18  swa
 # fixed make tarball, tarball-dist, tarball-clean
 #
