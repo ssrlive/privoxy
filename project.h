@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.19 2001/06/29 13:33:36 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.20 2001/06/29 21:45:41 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.20  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.19  2001/06/29 13:33:36  oes
  *    - Improved comments
  *    - Introduced http_request.host_ip_addr_str
@@ -213,38 +216,37 @@
 
 /*
  * Include appropriate regular expression libraries.
- *
- * PCRS           ==> Include pcre
- * REGEX && PCRE  ==> Include pcre and pcreposix
- * REGEX && !PCRE ==> Include gnu_regex
- *
- * STATIC  ==> Use  #include "pcre.h"  (compiling at same time)
- * !STATIC ==> Use  #include <pcre.h>  (System library)
- *
+ * Note that pcrs and pcre (native) are needed for cgi
+ * and are included anyway.
  */
-#if (defined(REGEX) && defined(PCRE)) || defined(PCRS)
-#  ifdef STATIC
-#    include "pcre.h"
-#  else
-#    include <pcre.h>
-#  endif
-#endif /* (defined(REGEX) && defined(PCRE)) || defined(PCRS) */
 
-#if defined(REGEX) && defined(PCRE)
+#if defined(REGEX_PCRE) || defined (REGEX_GNU)
+# define REGEX
+#endif /* defined(REGEX_PCRE) || defined (REGEX_GNU) */
+
+#ifdef STATIC
+#  include "pcre.h"
+#else
+#  include <pcre.h>
+#endif
+
+#ifdef STATIC_PCRS
+#  include "pcrs.h" 
+#else
+#  include <pcrs.h> 
+#endif
+
+#if defined(REGEX_PCRE)
 #  ifdef STATIC
 #    include "pcreposix.h"
 #  else
 #    include <pcreposix.h>
 #  endif
-#endif /* defined(REGEX) && defined(PCRE) */
+#endif /* defined(REGEX_PCRE) */
 
-#if defined(REGEX) && !defined(PCRE)
+#if defined(REGEX_GNU)
 #  include "gnu_regex.h"
 #endif
-
-#ifdef PCRS
-#include "pcrs.h"
-#endif /* def PCRS */
 
 #ifdef AMIGA 
 #include "amiga.h" 
@@ -348,13 +350,16 @@ struct iob
 #define IOB_PEEK(CSP) ((CSP->iob->cur > CSP->iob->eod) ? (CSP->iob->eod - CSP->iob->cur) : 0)
 #define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
 
-
+/* Keys for csp->content_type */
+#define CT_TEXT 0x01U
+#define CT_GIF  0x02U
 
 #define ACTION_MASK_ALL        (~0U)
 
 #define ACTION_MOST_COMPATIBLE 0x0000U
 
 #define ACTION_BLOCK           0x0001U
+#define ACTION_DEANIMATE       0x2000U
 #define ACTION_FAST_REDIRECTS  0x0002U
 #define ACTION_FILTER          0x0004U
 #define ACTION_HIDE_FORWARDED  0x0008U
@@ -531,10 +536,8 @@ struct client_state
    /* List of all cookies for this request */
    struct list cookie_list[1];
 
-#if defined(PCRS) || defined(KILLPOPUPS)
-   /* Nonzero if this has a text MIME type */
-   int is_text;
-#endif /* defined(PCRS) || defined(KILLPOPUPS) */
+   /* MIME-Type bitmap, see CT_* above */
+   unsigned char content_type;
 
    /* The "X-Forwarded-For:" header sent by the client */
    char   *x_forwarded;
@@ -548,10 +551,8 @@ struct client_state
    /* files associated with this client */
    struct file_list *actions_list;
 
-#ifdef PCRS
-     struct file_list *rlist;   /* Perl re_filterfile */
-     size_t content_length;     /* Length after processing */ 
-#endif /* def PCRS */
+   struct file_list *rlist;   /* pcrs job file */
+   size_t content_length;     /* Length after content modification */ 
 
 #ifdef TRUST_FILES
    struct file_list *tlist;   /* trustfile */
@@ -651,15 +652,11 @@ struct forward_spec
    struct forward_spec *next;
 };
 
-
-#ifdef PCRS
 struct re_filterfile_spec
 {
    struct list patterns[1];
    pcrs_job *joblist;
 };
-#endif /* def PCRS */
-
 
 #ifdef ACL_FILES
 #define ACL_PERMIT   1  /* accept connection request */
@@ -708,9 +705,7 @@ struct configuration_spec
    /* A URL with info on this proxy */
    char *proxy_info_url;
 
-#ifdef PCRS
    const char *re_filterfile;
-#endif /* def PCRS */
 
 #ifdef JAR_FILES
    const char * jarfile;
