@@ -7,7 +7,7 @@
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $
+ $Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -79,7 +79,8 @@
 <para>
  You can find the latest version of the this manual at <ulink
  url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
- Please see the Contact section on how to contact the developers.
+ Please see <ulink url="contact.html">the Contact section</ulink> 
+ on how to contact the developers.
 </para>
 
 <!--        <para> -->
@@ -159,7 +160,7 @@
   <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="documentation"><title>Documentation Guidelines</title>
   <para>
-    All formal documents are maintained in docbook SGML and located in the
+    All formal documents are maintained in Docbook SGML and located in the
     <computeroutput>doc/source/*</computeroutput> directory. You will need
     <ulink url="http://www.docbook.org">Docbook</ulink>, the Docbook 
     DTD's and the Docbook modular stylesheets (or comparable alternatives),
@@ -181,7 +182,7 @@
     <para>
      Other, less formal documents (e.g. <filename>LICENSE</filename>,
      <filename>INSTALL</filename>) are maintained as plain text files in the
-     toplevel source directory. At least for the time being.
+     top-level source directory. At least for the time being.
     </para>
     <para>
      Packagers are encouraged to include this documentation. For those without
@@ -200,7 +201,7 @@
     </para>
     <para>
      Documentation writers should please make sure documents build
-     successfully before committing to CVS.
+     successfully before committing to CVS, if possible.
     </para>
     <para>
      How do you update the webserver (i.e. the pages on privoxy.org)?
@@ -217,6 +218,16 @@
         sourceforge webserver via scp.
       </para></listitem>
      </orderedlist>
+  </para>
+
+  <para>
+   Finished docs should be occasionally submitted to CVS
+   (<filename>doc/webserver/*/*.html</filename>) so that those without 
+   the ability to build them locally, have access to them if needed.
+   This is especially important just prior to a new release! Please
+   do this <emphasis>after</emphasis> the <literal>$VERSION</literal> and
+   other release specific data in <filename>configure.in</filename> has been
+   updated (this is done just prior to a new release).
   </para>
 
 
@@ -280,11 +291,11 @@
   <emphasis>&lt;command&gt;&lt;/command&gt;</emphasis>, command examples.
  </member>
  <member>
-  <emphasis>&lt;literallayout&gt;&lt;/literllayout&gt;</emphasis>, like 
+  <emphasis>&lt;literallayout&gt;&lt;/literallayout&gt;</emphasis>, like 
   <literal>&lt;pre&gt;</literal>, more or less.
  </member>
   <member>
-  <emphasis>&lt;itemizedlist&gt;&lt;/itemizdelist&gt;</emphasis>, list with bullets.
+  <emphasis>&lt;itemizedlist&gt;&lt;/itemizedlist&gt;</emphasis>, list with bullets.
  </member>
  <member>
   <emphasis>&lt;listitem&gt;&lt;/listitem&gt;</emphasis>, member of the above.
@@ -378,13 +389,14 @@
   <listitem>
    <para>
      We have an international audience. Refrain from slang, or English 
-     idiosyncrasies (too many to list :).
+     idiosyncrasies (too many to list :). Humor also does not translate 
+     well sometimes.
    </para>
   </listitem> 
   <listitem>
    <para>
     Try to keep overall line lengths in source files to 80 characters or less
-    for obvious reasons. This is not always possible, with lenghty URLs for
+    for obvious reasons. This is not always possible, with lengthy URLs for
     instance.
    </para>
   </listitem> 
@@ -452,7 +464,7 @@
   <itemizedlist>
   <listitem>
    <para>
-    Re-cyclable <quote>boilerplate</quote> text entities are defined like:
+    Re- <quote>boilerplate</quote> text entities are defined like:
    </para>
    <para>
     <literal>&lt;!entity supported SYSTEM "supported.sgml"&gt;</literal>
@@ -473,15 +485,15 @@
   <simplelist>
    <member>
     <emphasis>p-version</emphasis>: the <application>Privoxy</application> 
-    version string, e.g. <quote>2.9.13</quote>.
+    version string, e.g. <quote>&p-version;</quote>.
    </member>
    <member>
     <emphasis>p-status</emphasis>: the project status, either 
-    <quote>ALPHA</quote>, <quote>BETA</quote>, or <quote>STABLE</quote>.
+    <quote>alpha</quote>, <quote>beta</quote>, or <quote>stable</quote>.
    </member>
    <member>
     <emphasis>p-not-stable</emphasis>: use to conditionally include 
-    text in <quote>not stable</quote> releases (e.g. <quote>BETA</quote>).
+    text in <quote>not stable</quote> releases (e.g. <quote>beta</quote>).
    </member>
    <member>
     <emphasis>p-stable</emphasis>: just the opposite.
@@ -601,7 +613,7 @@ if ( thisVariable == thatVariable ) /* this may not either */
     <para><emphasis>Exception:</emphasis></para>
 
     <para>If you are trying to add a small logic comment and do not
-    wish to "disrubt" the flow of the code, feel free to use a 1
+    wish to "disrupt" the flow of the code, feel free to use a 1
     line comment which is NOT on the same line as the code.</para>
 
     
@@ -747,7 +759,7 @@ if ( 1 == X )
 
     <para><emphasis>Explanation:</emphasis></para>
 
-    <para>Use all lowercase, and seperate words via an underscore
+    <para>Use all lowercase, and separate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
@@ -774,7 +786,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
 
     <para><emphasis>Explanation:</emphasis></para>
 
-    <para>Use all lowercase, and seperate words via an underscore
+    <para>Use all lowercase, and separate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
@@ -916,11 +928,11 @@ if ( this == that )
 
     <para><emphasis>Note:</emphasis> In the special case that the if-statement is
     inside a loop, and it is trivial, i.e. it tests for a
-    condidtion that is obvious from the purpose of the block,
+    condition that is obvious from the purpose of the block,
     one-liners as above may optically preserve the loop structure
     and make it easier to read.</para>
 
-    <para><emphasis>Status:</emphasis> developer-discrection.</para>
+    <para><emphasis>Status:</emphasis> developer-discretion.</para>
 
     <para><emphasis>Example exception:</emphasis></para>
 <programlisting>
@@ -982,7 +994,7 @@ structure->flag = ( condition );</programlisting>
     <para>if ( condition ) { structure->flag = 1; } else {
     structure->flag = 0; }</para>
 
-    <para><emphasis>Note:</emphasis> The former is readable and consice. The later
+    <para><emphasis>Note:</emphasis> The former is readable and concise. The later
     is wordy and inefficient. Please assume that any developer new
     to the project has at least a "good" knowledge of C/C++. (Hope
     I do not offend by that last comment ... 8-)</para>
@@ -1063,14 +1075,14 @@ int function2( ... )
     function2( ... ) { }</para>
 
     <para><emphasis>Note:</emphasis> Use 1 blank line before the closing brace and 2
-    lines afterwards. This makes the end of function standout to
+    lines afterward. This makes the end of function standout to
     the most casual viewer. Although function comments help
-    seperate functions, this is still a good coding practice. In
+    separate functions, this is still a good coding practice. In
     fact, I follow these rules when using blocks in "for", "while",
     "do" loops, and long if {} statements too. After all whitespace
     is free!</para>
 
-    <para><emphasis>Status:</emphasis> developer-discrection on the number of blank
+    <para><emphasis>Status:</emphasis> developer-discretion on the number of blank
     lines. Enforced is the end of function comments.</para>
 
     
@@ -1138,7 +1150,7 @@ struct *ptr = NULL;</programlisting>
     and not 129FA012; or arrayPtr[20] causes a SIGSEV vs.
     arrayPtr[0].</para>
 
-    <para><emphasis>Status:</emphasis> developer-discrection if and only if the
+    <para><emphasis>Status:</emphasis> developer-discretion if and only if the
     variable is assigned a value "shortly after" declaration.</para>
 
   </sect3>
@@ -1291,7 +1303,7 @@ for ( size_t cnt = 0; cnt &lt; len; cnt ++ )
 
     <para><emphasis>Note:</emphasis> Please! do not add "-I." to the Makefile
     without a _very_ good reason. This duplicates the #include
-    "file.h" behaviour.</para>
+    "file.h" behavior.</para>
 
     
   </sect3>
@@ -1364,9 +1376,9 @@ extern file_list *xyz;</programlisting>
     <para><emphasis>Note:</emphasis> If you declare "file_list xyz;" (without the
     pointer), then including the proper header file is necessary.
     If you only want to prototype a pointer, however, the header
-    file is unneccessary.</para>
+    file is unnecessary.</para>
 
-    <para><emphasis>Status:</emphasis> Use with discrection.</para>
+    <para><emphasis>Status:</emphasis> Use with discretion.</para>
 
     
   </sect3>
@@ -1412,7 +1424,7 @@ switch( hash_string( cmd ) )
 
    default :
       log_error( ... );
-      ... anomly code goes here ...
+      ... anomaly code goes here ...
       continue; / break; / exit( 1 ); / etc ...
 
 } /* end switch( hash_string( cmd ) ) */</programlisting>
@@ -1423,7 +1435,7 @@ switch( hash_string( cmd ) )
     This API call *should* be included in a default statement.</para>
 
     <para><emphasis>Another Note:</emphasis> This is not so much a readability issue
-    as a robust programming issue. The "anomly code goes here" may
+    as a robust programming issue. The "anomaly code goes here" may
     be no more than a print to the STDERR stream (as in
     load_config). Or it may really be an ABEND condition.</para>
 
@@ -1520,7 +1532,7 @@ long c = 0;</programlisting>
     on 1 line. You should, although, provide a good comment on
     their functions.</para>
 
-    <para><emphasis>Status:</emphasis> developer-discrection.</para>
+    <para><emphasis>Status:</emphasis> developer-discretion.</para>
 
     
   </sect3>
@@ -1530,7 +1542,7 @@ long c = 0;</programlisting>
 
     <para><emphasis>Explanation:</emphasis></para>
 
-    <para>Create a local stuct (on the stack) if the variable will
+    <para>Create a local struct (on the stack) if the variable will
     live and die within the context of one function call.</para>
 
     <para>Only "malloc" a struct (on the heap) if the variable's life
@@ -1539,7 +1551,7 @@ long c = 0;</programlisting>
     <para><emphasis>Example:</emphasis></para>
 <programlisting>
 If a function creates a struct and stores a pointer to it in a
-list, then it should definately be allocated via `malloc'.
+list, then it should definitely be allocated via `malloc'.
 </programlisting>
   </sect3>
     
@@ -1555,7 +1567,7 @@ list, then it should definately be allocated via `malloc'.
     responsible for ensuring that deletion is timely (i.e. not too
     soon, not too late). This is known as "low-coupling" and is a
     "good thing (tm)". You may need to offer a
-    free/unload/destuctor type function to accomodate this.</para>
+    free/unload/destuctor type function to accommodate this.</para>
 
     <para><emphasis>Example:</emphasis></para>
 <programlisting>
@@ -1568,7 +1580,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     functions for C run-time library functions ... such as
     `strdup'.</para>
 
-    <para><emphasis>Status:</emphasis> developer-discrection. The "main" use of this
+    <para><emphasis>Status:</emphasis> developer-discretion. The "main" use of this
     standard is for allocating and freeing data structures (complex
     or nested).</para>
 
@@ -1595,16 +1607,16 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     
 
     <sect3 id="s45"><title>"Uncertain" new code and/or changes to
-    exitinst code, use FIXME</title>
+    existing code, use FIXME</title>
 
     <para><emphasis>Explanation:</emphasis></para>
 
     <para>If you have enough confidence in new code or confidence in
-    your changes, but are not *quite* sure of the reprocussions,
+    your changes, but are not *quite* sure of the repercussions,
     add this:</para>
 
     <para>/* FIXME: this code has a logic error on platform XYZ, *
-    attempthing to fix */ #ifdef PLATFORM ...changed code here...
+    attempting to fix */ #ifdef PLATFORM ...changed code here...
     #endif</para>
 
     <para>or:</para>
@@ -1619,7 +1631,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Note:</emphasis> If you make it clear that this may or may not
     be a "good thing (tm)", it will be easier to identify and
-    include in the project (or conversly exclude from the
+    include in the project (or conversely exclude from the
     project).</para>
 
     
@@ -1632,7 +1644,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1684,7 +1696,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 
     <para><emphasis>Note:</emphasis> The formfeed character that is present right
     after the comment flower box is handy for (X|GNU)Emacs users to
-    skip the verbige and get to the heart of the code (via
+    skip the verbiage and get to the heart of the code (via
     `forward-page' and `backward-page'). Please include it if you
     can.</para>
 
@@ -1692,7 +1704,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1853,7 +1865,7 @@ at sourceforge. Three simple steps:
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="newrelease"><title>Releasing a new version</title>
     <para>
-	To minimize trouble with distribution contents, webpage
+	To minimize trouble with distribution contents, web-page
 	errors and the like, we strongly encourage you
 	to follow this section if you prepare a new release of
 	code or new pages on the webserver.
@@ -1885,7 +1897,7 @@ at sourceforge. Three simple steps:
       <listitem>
        <para>
          Increment the version number in <filename>configure.in</filename> in
-         CVS. Also, inrease or reset the RPM release number in
+         CVS. Also, increase or reset the RPM release number in
          <filename>configure.in</filename> as appropriate. Do <emphasis>NOT</emphasis>
          touch version information after export from CVS.
          <emphasis>All packages</emphasis> will use the version and release data
@@ -1896,8 +1908,8 @@ at sourceforge. Three simple steps:
       </listitem> 
       <listitem>
        <para>
-        If the default actionsfile has changed since last release,
-        bump up its version info in this line:
+        If the default <filename>actionsfile</filename> has changed since last
+        release, bump up its version info in this line:
        </para>
        <para> 
         <programlisting>
@@ -1924,8 +1936,8 @@ at sourceforge. Three simple steps:
       <listitem>
        <para>
         The first package uploaded should be the official
-        <quote>tarball</quote> release. This is built with the
-        <quote><command>make tarball-dist</command></quote> Makefile 
+        <quote>tarball</quote> release, as required by the GPL. This is built
+        with the <quote><command>make tarball-dist</command></quote> Makefile
         target, and then can be uploaded with 
         <quote><command>make tarball-upload</command></quote> (see below).
        </para>
@@ -1937,8 +1949,8 @@ at sourceforge. Three simple steps:
     <sect2 id="newrelease-web"><title>Update the webserver</title>
       <para>
 	All files must be group-readable and group-writable (or no one else
-	will be able to change them). To update the webserver, create any
-	pages locally in the <filename>doc/webserver</filename> directory (or
+	will be able to change them)! To update the webserver, create any
+	pages locally in the <filename>doc/webserver/*</filename> directory (or
 	create new directories under <filename>doc/webserver</filename>), then do
 	</para>
 	<para>
@@ -1947,14 +1959,27 @@ at sourceforge. Three simple steps:
 	</programlisting>
 	</para>
 	<para>
+      This will do the upload to the webserver (www.privoxy.org).      
+     </para>
+     <para>
 	Note that <quote><command>make dok</command></quote> 
      (or <quote><command>make redhat-dok</command></quote>) creates
 	<filename>doc/webserver/user-manual</filename>,
 	<filename>doc/webserver/developer-manual</filename>,
 	<filename>doc/webserver/faq</filename> and
-	<filename>doc/webserver/man-page</filename> automatically.
+	<filename>doc/webserver/index.html</filename> automatically.
+     (<filename>doc/webserver/man-page/privoxy-man-page.html</filename>
+     is created by a separate Makefile target, <quote><command>make
+     man</command></quote>, due to dependencies on some obscure perl scripts. 
+     See comments in <filename>GNUmakefile</filename>.)
       </para>
-      <para>
+     <para> 
+      Someone should also commit these to CVS so that packagers without the
+      ability to build docs locally, have access to them. This is a separate
+      step, and should also be done before each official release.
+     </para>
+
+     <para>
       Please do NOT use any other means of transferring files to the
       webserver. <quote><command>make webserver</command></quote> not only
       uploads, but will make sure that the appropriate permissions are 
@@ -1994,7 +2019,7 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-  make suse-upload or make redhat-upload
+  make suse-upload (or make redhat-upload)
 	</programlisting>
 	</para>
 	<para>
@@ -2436,6 +2461,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.32  2002/04/11 21:29:58  jongfoster
+  Documenting Win32 release procedure
+
   Revision 1.31  2002/04/11 09:32:52  oes
   more nits
 
