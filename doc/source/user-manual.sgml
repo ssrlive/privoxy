@@ -1,4 +1,8 @@
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity % dummy "INCLUDE"> 
+<!entity supported SYSTEM "supported.sgml">
+<!entity newfeatures SYSTEM "newfeatures.sgml">
+]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
 
@@ -6,7 +10,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.61 2002/03/29 01:31:08 hal9 Exp $
+ $Id: user-manual.sgml,v 1.62 2002/03/30 04:15:53 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,7 +32,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.61 2002/03/29 01:31:08 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.62 2002/03/30 04:15:53 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -39,6 +43,16 @@ Hal Burgiss <hal@foobox.net>
 </authorgroup>
 
 <abstract>
+<![%dummy;[
+ <para>
+ <comment>
+  This is here to keep vim syntax file from breaking :/
+  If I knew enough to fix it, I would.
+  PLEASE DO NOT REMOVE! HB: hal@foobox.net
+ </comment>
+ </para>
+]]>
+
  <para>
   The user manual gives users information on how to install, configure and use
   <application>Privoxy</application>. <application>Privoxy</application> is a
@@ -119,113 +133,10 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 </para>
 
 <!--
- The section is in both user-manual and faq. Please keep in sync.
+ Include newfeatures.sgml here:
 -->
-<para>
- <itemizedlist>
 
- <listitem>
-  <para>
-   Integrated browser based configuration and control utility (<ulink
-   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
-   and filter effects.
-  </para>
- </listitem> 
-<!--
- <listitem>
-  <para>
-   Modularized configuration that will allow for system wide settings, and
-   individual user settings. (not implemented yet, probably a 3.1 feature)
-  </para>
- </listitem> 
--->
- <listitem>
-  <para>
-    Blocking of annoying pop-up browser windows.
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Support for Perl Compatible Regular Expressions in the configuration files, and 
-   generally a more sophisticated and flexible configuration syntax over
-   previous versions. 
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   GIF de-animation. 
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Web page content filtering (removes banners based on size,
-   invisible <quote>web-bugs</quote>, JavaScript, pop-ups, status bar abuse,
-   etc.)
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Bypass many click-tracking scripts (avoids script redirection).
- 
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Multi-threaded (POSIX and native threads).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Auto-detection and re-reading of config file changes.
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   User-customizable HTML templates (e.g. 404 error page).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Improved cookie management features (e.g. session based cookies).
-  </para>
-</listitem> 
- 
- <listitem>
-  <para>
-   Improved signal handling, and a true daemon mode (Unix).
-  </para>
-</listitem> 
-
- <listitem>
-  <para>
-   Builds from source on most UNIX-like systems. Packages available for: Linux
-   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
- 
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   In addition, the configuration is much more powerful and versatile over-all.
-  </para>
-</listitem> 
-
- </itemizedlist>
-</para>
+&newfeatures;
 
 </sect2>
 
@@ -3252,14 +3163,20 @@ please note:
  
   <listitem><para>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">Sourceforge bug
       forum</ulink>. 
-Make sure that the bug has not already been submitted.  Please try to
-verify that it is a <application>Privoxy</application> bug, and not
-a browser or site bug first. If you are using your own custom configuration,
-please try the stock configs to see if the problem is a configuration
-related bug.  And if not using the latest development snapshot, please
-try the latest one. Or even better, CVS sources.</para>
-</listitem>
-
+  </para>
+  <para>
+   Make sure that the bug has not already been submitted.  Please try to
+   verify that it is a <application>Privoxy</application> bug, and not a
+   browser or site bug first. If you are using your own custom configuration,
+   please try the stock configs to see if the problem is a configuration
+   related bug.  And if not using the latest development snapshot, please try
+   the latest one. Or even better, CVS sources. Please be sure to include the
+   <application>Privoxy</application>/<application>Junkbuster</application>
+   version, platform, browser, any pertinent log data, any other relevant
+   details (please be specific) and, if possible, some way to reproduce the
+   bug.
+  </para>
+ </listitem>
  
   <listitem><para>Submit feature requests only thru our <ulink
       url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse">Sourceforge feature request forum</ulink>.</para></listitem>
@@ -3818,12 +3735,12 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 <para>
  The way <application>Privoxy</application> applies <quote>actions</quote>
- to any given URL can be complex, and not always so easy to understand what 
- is happening. And sometimes we need to be able to <emphasis>see</emphasis>
- just what <application>Privoxy</application> is doing. Especially, 
- if something <application>Privoxy</application> is doing is causing 
- us a problem inadvertantly. It can be a little daunting to look at 
- the actions files themselves, since they tend to be filled with 
+ and <quote>filters</quote> to any given URL can be complex, and not always so
+ easy to understand what is happening. And sometimes we need to be able to
+ <emphasis>see</emphasis> just what <application>Privoxy</application> is
+ doing. Especially, if something <application>Privoxy</application> is doing
+ is causing us a problem inadvertantly. It can be a little daunting to look at
+ the actions and filters files themselves, since they tend to be filled with
  <quote>regular expressions</quote> whose consequences are not always 
  so obvious. <application>Privoxy</application> provides the 
  <ulink url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>
@@ -4106,6 +4023,11 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.62  2002/03/30 04:15:53  hal9
+ - Fix privoxy.org/config links.
+ - Paste in Bookmarklets from Toggle page.
+ - Move Quickstart nearer top, and minor rework.
+
  Revision 1.61  2002/03/29 01:31:08  hal9
  Minor update.
 
