@@ -19,7 +19,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.4 2002/04/08 20:42:07 swa Exp $
+ $Id: index.sgml,v 1.5 2002/04/12 02:05:19 david__schmidt Exp $
 
  Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -151,6 +151,11 @@ page</ulink> on Sourceforge
 	</listitem>
 	<listitem>
 	<literallayout>
+	<ulink url="team/index.html">Pictures of the Privoxy Team</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
 	<ulink url="developer-manual/index.html">Developer Manual</ulink>
 	</literallayout>
 	</listitem>
@@ -200,6 +205,10 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.5  2002/04/12 02:05:19  david__schmidt
+ Tiny English fix: infos -> info
+ Add copyright date 2002
+
  Revision 1.4  2002/04/08 20:42:07  swa
  fixed JB spelling
 
