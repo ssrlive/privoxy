@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.64 2002/04/22 16:32:31 morcego Exp $
+dnl $Id: configure.in,v 1.65 2002/04/25 19:13:57 morcego Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,12 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.65  2002/04/25 19:13:57  morcego
+dnl Removed RPM release number declaration on configure.in
+dnl Changed makefile to use given value for RPM_PACKAGEV when on uploading
+dnl targets (will produce an error, explaining who to do it, if no value
+dnl if provided).
+dnl
 dnl Revision 1.64  2002/04/22 16:32:31  morcego
 dnl configure.in, *.spec: Bumping release to 2 (2.9.14-2)
 dnl -rh.spec: uid and gid are now macros
@@ -353,7 +359,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.64 $)
+AC_REVISION($Revision: 1.65 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -399,7 +405,7 @@ dnl =================================================================
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=14
+VERSION_POINT=15
 CODE_STATUS="beta"
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
