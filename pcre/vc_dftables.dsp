@@ -103,18 +103,18 @@ SOURCE=..\config.h.win
 
 !IF  "$(CFG)" == "vc_dftables - Win32 Release"
 
-# Begin Custom Build
+# Begin Custom Build - Copying config.h.win
 WkspDir=.
 InputPath=..\config.h.win
 
-"$(WkspDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) $(WkspDir)\config.h
+"$(WkspDir)\..\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" "$(WkspDir)\..\config.h"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug"
 
-# Begin Custom Build
+# Begin Custom Build - Copying config.h.win
 WkspDir=.
 InputPath=..\config.h.win
 
@@ -146,15 +146,7 @@ SOURCE=.\internal.h
 # Begin Source File
 
 SOURCE=.\maketables.c
-
-!IF  "$(CFG)" == "vc_dftables - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
