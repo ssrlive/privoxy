@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.65 2002/04/06 05:16:39 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.66 2002/04/06 20:28:21 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -578,8 +578,11 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 man2html:
 	mkdir -p doc/webserver/man-page
 ifneq ($(MAN2HTML),false)
-	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > doc/webserver/man-page/privoxy-man-page.html
-	$(PERL) -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' doc/webserver/man-page/privoxy-man-page.html
+	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
+	$(PERL) -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
+	$(PERL) -pi -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
+# Get rid of spurious  from converion. (How to do this with perl?)
+	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && rm -f tmp.html
 else
 	$(MAKE) groff2html
 endif
@@ -608,6 +611,26 @@ man: doc/source/ldpOK.dsl
 	mv -f index.html privoxy-man-page.html
 	# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
+
+# Set doc entities for VERSION and CODE_STATUS. Toggle content 
+# exceptions accordingly. When 'make dok' gets stable, this 
+# needs to go before any doc building (doh).
+make dok-release:
+	@$(ECHO) Setting doc version and status to $(VERSION), $(CODE_STATUS)
+	@$(PERL) -pi -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
+     s/<!entity +p-status.*>/<!entity p-status "$(CODE_STATUS)">/' \
+     doc/source/*sgml
+ifeq ($(CODE_STATUS),stable)
+	@$(ECHO) Setting docs to stable $(VERSION)
+	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
+     s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
+     doc/source/*sgml
+else
+	@$(ECHO) Setting docs to not stable $(VERSION)
+	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
+     s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
+     doc/source/*sgml
+endif
 
 #############################################################################
 #
@@ -750,6 +773,13 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.66  2002/04/06 20:28:21  jongfoster
+# Prettifying groff2html.
+# Using GNU Make's conditional makefile feature rather than shell "if"s.
+# (The shell "if"s were hiding errors)
+# "perl" -> "$(PERL)"
+# Spaces->tabs in a couple of places.
+#
 # Revision 1.65  2002/04/06 05:16:39  hal9
 # -Add 'authors' and 'man' targets for AUTHORS and man-page (WIP).
 # -Both of these will soon be generated files.
