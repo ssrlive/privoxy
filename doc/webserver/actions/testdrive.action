@@ -51,7 +51,7 @@ shop        = -filter -no-cookies-keep
 #############################################################################
 # Needed for automatic feedback evaluation; Please don't delete!
 #############################################################################
-{+add-header{X-Actions-File-Version: 1.0} -filter -no-popups}
+{+add-header{X-Actions-File-Version: 1.1} -filter -no-popups}
 .privoxy.org/actions
 .oesterhelt.org/actions
 
