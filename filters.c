@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 11:03:48 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 19:12:00 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 11:03:48 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.15  2001/06/03 19:12:00  oes
+ *    extracted-CGI relevant stuff
+ *
  *    Revision 1.15  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -295,33 +298,31 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
 int block_acl(struct access_control_addr *dst,
               struct client_state *csp)
 {
-   struct file_list *fl;
-   struct access_control_list *a, *acl;
+   struct access_control_list *acl = csp->config->acl;
 
    /* if not using an access control list, then permit the connection */
-   if (((fl = csp->alist) == NULL) || 
-       ((acl = (struct access_control_list *) fl->f) == NULL))
+   if (acl == NULL)
    {
       return(0);
    }
 
    /* search the list */
-   for (a = acl->next ; a ; a = a->next)
+   while (acl != NULL)
    {
-      if ((csp->ip_addr_long & a->src->mask) == a->src->addr)
+      if ((csp->ip_addr_long & acl->src->mask) == acl->src->addr)
       {
          if (dst == NULL)
          {
             /* Just want to check if they have any access */
-            if (a->action == ACL_PERMIT)
+            if (acl->action == ACL_PERMIT)
             {
                return(0);
             }
          }
-         else if ( ((dst->addr & a->dst->mask) == a->dst->addr)
-           && ((dst->port == a->dst->port) || (a->dst->port == 0)))
+         else if ( ((dst->addr & acl->dst->mask) == acl->dst->addr)
+           && ((dst->port == acl->dst->port) || (acl->dst->port == 0)))
          {
-            if (a->action == ACL_PERMIT)
+            if (acl->action == ACL_PERMIT)
             {
                return(0);
             }
@@ -331,6 +332,7 @@ int block_acl(struct access_control_addr *dst,
             }
          }
       }
+      acl = acl->next;
    }
 
    return(1);
@@ -872,51 +874,55 @@ void apply_url_actions(struct current_action_spec *action,
  *          1  :  http = http_request request for current URL
  *          2  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  Return gw_default for no forward match,
- *                else a gateway pointer to a specific forwarding proxy.
+ * Returns     :  Pointer to forwarding information.
  *
  *********************************************************************/
-const struct gateway *forward_url(struct http_request *http, struct client_state *csp)
+const struct forward_spec * forward_url(struct http_request *http,
+                                        struct client_state *csp)
 {
-   struct file_list *fl;
-   struct forward_spec *b;
+   static const struct forward_spec fwd_default[1] = { 0 }; /* All zeroes */
+   struct forward_spec *fwd = csp->config->forward;
    struct url_spec url[1];
 
-   if (((fl = csp->flist) == NULL) || ((b = fl->f) == NULL))
+   if (fwd == NULL)
    {
-      return(gw_default);
+      return(fwd_default);
    }
 
    *url = dsplit(http->host);
 
    /* if splitting the domain fails, punt */
-   if (url->dbuf == NULL) return(gw_default);
-
-   for (b = b->next; b ; b = b->next)
+   if (url->dbuf == NULL)
    {
-      if ((b->url->port == 0) || (b->url->port == http->port))
+      return(fwd_default);
+   }
+
+   while (fwd != NULL)
+   {
+      if ((fwd->url->port == 0) || (fwd->url->port == http->port))
       {
-         if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
+         if ((fwd->url->domain[0] == '\0') || (domaincmp(fwd->url, url) == 0))
          {
-            if ((b->url->path == NULL) ||
+            if ((fwd->url->path == NULL) ||
 #ifdef REGEX
-               (regexec(b->url->preg, http->path, 0, NULL, 0) == 0)
+               (regexec(fwd->url->preg, http->path, 0, NULL, 0) == 0)
 #else
-               (strncmp(b->url->path, http->path, b->url->pathlen) == 0)
+               (strncmp(fwd->url->path, http->path, fwd->url->pathlen) == 0)
 #endif
             )
             {
                freez(url->dbuf);
                freez(url->dvec);
-               return(b->gw);
+               return(fwd);
             }
          }
       }
+      fwd = fwd->next;
    }
 
    freez(url->dbuf);
    freez(url->dvec);
-   return(gw_default);
+   return(fwd_default);
 
 }
 
@@ -983,6 +989,41 @@ struct url_spec dsplit(char *domain)
 
 /*********************************************************************
  *
+ * Function    :  simple_domaincmp
+ *
+ * Description :  Domain-wise Compare fqdn's.  The comparison is 
+ *                both left- and right-anchored.  The individual
+ *                domain names are compared with trivialmatch().
+ *                This is only used by domaincmp.
+ *
+ * Parameters  :
+ *          1  :  pv = array of patterns to compare
+ *          2  :  fv = array of domain components to compare
+ *          3  :  len = length of the arrays (both arrays are the
+ *                      same length - if they weren't, it couldn't
+ *                      possibly be a match).
+ *
+ * Returns     :  0 => domains are equivalent, else no match.
+ *
+ *********************************************************************/
+static int simple_domaincmp(char **pv, char **fv, int len)
+{
+   int n;
+
+   for (n = 0; n < len; n++)
+   {
+      if (simplematch(pv[n], fv[n]))
+      {
+         return 1;
+      }
+   }
+
+   return 0;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  domaincmp
  *
  * Description :  Domain-wise Compare fqdn's. Governed by the bimap in
@@ -1001,34 +1042,65 @@ struct url_spec dsplit(char *domain)
 int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
 {
    char **pv, **fv;  /* vectors  */
-   int    pn,   fn;  /* counters */
-   char  *p,   *f;   /* chars    */
+   int    plen, flen;
+   int unanchored = pattern->unanchored & (ANCHOR_RIGHT | ANCHOR_LEFT);
 
-   pv = pattern->dvec;
-   fv = fqdn->dvec;
-   fn = pn = 0;
+   plen = pattern->dcnt;
+   flen = fqdn->dcnt;
 
-   while (fn < fqdn->dcnt && pn < pattern->dcnt)
+   if (flen < plen)
    {
-      p = pv[pn];
-      f = fv[fn];
-
-      if (simplematch(p, f))
-      {
-		  if(pn || !(pattern->unanchored & ANCHOR_LEFT))
-         {
-            return 1;
-         }
-      }
-      else
-      {
-         pn++;
-      }
-      fn++;
+      /* fqdn is too short to match this pattern */
+      return 1;
    }
 
-   return ((pn < pattern->dcnt) || ((fn < fqdn->dcnt) && !(pattern->unanchored & ANCHOR_RIGHT)));
+   pv   = pattern->dvec;
+   fv   = fqdn->dvec;
 
+   if (unanchored == ANCHOR_LEFT)
+   {
+      /*
+       * Right anchored.
+       *
+       * Convert this into a fully anchored pattern with
+       * the fqdn and pattern the same length
+       */
+      fv += (flen - plen); /* flen - plen >= 0 due to check above */
+      return simple_domaincmp(pv, fv, plen);
+   }
+   else if (unanchored == 0)
+   {
+      /* Fully anchored, check length */
+      if (flen != plen)
+      {
+         return 1;
+      }
+      return simple_domaincmp(pv, fv, plen);
+   }
+   else if (unanchored == ANCHOR_RIGHT)
+   {
+      /* Left anchored, ignore all extra in fqdn */
+      return simple_domaincmp(pv, fv, plen);
+   }
+   else
+   {
+      /* Unanchored */
+      int n;
+      int maxn = flen - plen;
+      for (n = 0; n <= maxn; n++)
+      {
+         if (!simple_domaincmp(pv, fv, plen))
+         {
+            return 0;
+         }
+         /*
+          * Doesn't match from start of fqdn
+          * Try skipping first part of fqdn
+          */
+         fv++;
+      }
+      return 1;
+   }
 }
 
 
