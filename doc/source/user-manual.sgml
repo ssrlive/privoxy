@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.109 2002/05/14 17:23:11 oes Exp $
+ $Id: user-manual.sgml,v 1.110 2002/05/14 19:10:45 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.109 2002/05/14 17:23:11 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.110 2002/05/14 19:10:45 oes Exp $</pubdate>
 
 <!--
 
@@ -2808,7 +2808,7 @@ forward-socks4 and forward-socks4a</title>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="af-patterns">
 <title>Patterns</title>
 <para>
  Generally, a pattern has the form <literal>&lt;domain&gt;/&lt;path&gt;</literal>,
@@ -4115,10 +4115,11 @@ ad.doubleclick.net
   <term>Notes:</term>
   <listitem>
    <para>
-    Warning! This breaks many web sites that depend on this in order 
-    to customize their content for the different browser types by looking
-    at this header (which, btw, is <emphasis>NOT</emphasis> a smart way to
-    do that!).
+    Warning! This breaks many web sites that in order to customize their
+    content for the different browser types depend on looking
+    at this header (which, btw, is <emphasis>NOT</emphasis> a <ulink
+    url="http://www.javascriptkit.com/javaindex.shtml">smart way to
+    do that</ulink>!).
    </para>
    <para>
     Using this action in multi-user setups or wherever diffrerent types of
@@ -4770,7 +4771,7 @@ my-internal-testing-server.void</screen>
  There are two main reasons to use aliases: One is to save typing for frequently
  used combinations of actions, the other one is a gain in flexibility: If you
  decide once how you want to handle shops by defining an alias called
- <quote>shop</quote>, you can later chenge your policy on shops in
+ <quote>shop</quote>, you can later change your policy on shops in
  <emphasis>one</emphasis> place, and your changes will take effect everywhere
  in the actions file where the <quote>shop</quote> alias is used. Calling aliases
  by their purpose also makes your actions files more readable.
@@ -4780,7 +4781,8 @@ my-internal-testing-server.void</screen>
  <application>Privoxy</application>'s built-in web-based action file
  editor honors aliases when reading the actions files, but it expands
  them before writing. So the effects of your aliases are of course preserved,
- but the aliases themselves are lost when you edit the files this way.
+ but the aliases themselves are lost when you edit sections that use aliases
+ with it.
  This is likely to change in future versions of <application>Privoxy</application>.
 </para>
 
@@ -4857,7 +4859,7 @@ my-internal-testing-server.void</screen>
 <sect2 id="act-examples">
 <title>Sample Actions Files</title>
 <para>
- Remember that the meaning of any of the above references is reversed by preceding
+ Remember that the meaning of each action is reversed by preceding
  the action with a <quote>-</quote>, in place of the <quote>+</quote>. Also, 
  that some actions are turned on in the default section of the actions file, 
  and require little to no additional configuration. These are just <quote>on</quote>.
@@ -4898,29 +4900,39 @@ for-privoxy-version=3.0
 # defined they can be used just like any built-in action -- but within 
 # this file only! Aliases do not require a + or - sign.
 ##########################################################################
+{{alias}}
 
 # Some useful aliases.
 # Alias to turn off cookie handling, ie allow all cookies unmolested.
- -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
+#
+mercy-for-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
                     -session-cookies-only
 
 # Alias to both block and treat as if an image for ad blocking
 # purposes.
- +imageblock      = +block +handle-as-image
-
-# Fragile sites should have the minimum changes:
- fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -crunch-all-cookies -kill-popups
+#
++block-as-image   = +block +handle-as-image
 
 # Shops should be allowed to set persistent cookies
- shop        = -filter -crunch-all-cookies -session-cookies-only
+#
+shop        = -filter mercy-for-cookies
 
+# Fragile sites should receive minimum interference:
+#
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
+              mercy-for-cookies -kill-popups
 
 ##########################################################################
-# Begin default action settings. Anything in this section will match 
-# all URLs -- UNLESS we have exceptions that also match, defined below this 
-# section. We will show all potential actions here whether they are on 
-# or off. We could omit any disabled action if we wanted, since all 
+# Matching starts here. Remember that at this time, all actions are
+# disabled, so we need to explicitly enable the ones we want. 
+#
+# We begin with "default" action settings, i.e. we define a set of actions
+# for a pattern ("/") <link linkend="af-patterns">that matches all URLs</link>. This default set will be
+# applied to all requests as a start, and can be partly or wholly overridden
+# by later matches further down this file, or in user.action.
+#
+# We will show all potential actions here whether they are enabled
+# or not. We could omit any disabled action if we wanted, since all 
 # actions are 'off' by default anyway. Shown for completeness only.
 # Actions are enabled if preceded by a '+', otherwise they are disabled 
 # (unless an alias has been defined without this).
@@ -5100,7 +5112,7 @@ for-privoxy-version=3.0
 # Allow persistent cookies for a few regular sites that we 
 # trust via our above alias. These will be saved from one browser session 
 # to the next. We are explicity turning off any and all cookie handling, 
-# even though the cunch-*-cookies settings were disabled in our above 
+# even though the crunch-*-cookies settings were disabled in our above 
 # default.action anyway. So cookies from these domains will come through 
 # unmolested.
  { -crunch-all-cookies }
@@ -6241,6 +6253,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.110  2002/05/14 19:10:45  oes
+ Restored alphabetical order of actions
+
  Revision 1.109  2002/05/14 17:23:11  oes
  Renamed the prevent-*-cookies actions, extended aliases section and moved it before the example AFs
 
