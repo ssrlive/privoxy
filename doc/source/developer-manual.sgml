@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $
+ $Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -72,7 +72,8 @@
 
 <!-- Include privoxy.sgml boilerplate text: -->
 
- &p-intro;
+<!--  &p-intro; Someone interested enough in the project to contribute
+                will already know at this point what Privoxy is. -->
 
 <!-- end boilerplate -->
 
@@ -126,35 +127,105 @@
   <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>
       You'll need an account on <ulink
-      url="http://sourceforge.net">Sourceforge</ulink> to support our
-      development.  Mail your ID to the list and wait until a project
-      manager has added you.
+      url="http://sourceforge.net/">Sourceforge</ulink> to support our
+      development.  Mail your ID to <ulink
+      url="mailto:developers@privoxy.org">the list</ulink> and wait until a
+      project manager has added you.
     </para>
     <para>
       For the time being (read, this section is under construction), please
-      note the following guidelines for changing stuff in the code. If it is
-      <orderedlist numeration="arabic">
-        <listitem><para>
-          A bugfix / clean-up / cosmetic thing: shoot
-        </para></listitem>
-        <listitem><para>
-          A new feature that can be turned off: shoot
-        </para></listitem>
-        <listitem><para>
-          A clear improvement w/o side effects on other parts of the code: shoot
-        </para></listitem>
-        <listitem><para>
-          A matter of taste: ask the list
-        </para></listitem>
-        <listitem><para>
-          A major redesign of some part of the code: ask the list
-        </para></listitem>
-      </orderedlist>
+      refer to the extensive comments in the source code.
     </para>
+  </sect1>
+
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="cvs"><title>The CVS Repository</title>
     <para>
-      Note that near a major public release, we get a bit more cautious - if
-      unsure, it doesn't hurt to ask first.
+      If you intend to help us with programming, documentation or packaging
+      you will need write access to our holy grail, the CVS repository.
+      Please read this chapter completely before accessing via CVS.
     </para>
+
+    <sect2 id="cvsaccess"><title>Access to CVS</title>
+      <para>
+        The project's CVS repository is hosted on
+        <ulink url="http://sourceforge.net/">SourceForge.</ulink>
+        Please refer to the chapters 6 and 7 in
+        <ulink url="http://sourceforge.net/docman/?group_id=1">SF's site
+        documentation</ulink> for the technical access details for your
+        operating system. For historical reasons, the CVS server is
+        called <literal>cvs.ijbswa.sourceforge.net</literal>, the repository is
+        called <literal>ijbswa</literal>, and the source tree module is called
+        <literal>current</literal>.
+      </para>
+    </sect2>
+
+    <sect2 id="cvscommit"><title>CVS Commit Guideline</title>
+      <para>
+        The source tree is the heart of every software project. Every effort must
+        be made to ensure that it is readable, compilable and consistent at all
+        times. We therefore ask anyone with CVS access to strictly adhere to the
+        following guidelines:
+        <itemizedlist>
+          <listitem><para>
+            Never (read: <emphasis>never, ever</emphasis>) be tempted to commit
+            that small change without testing it thoroughly first. When we're
+            close to a public release, ask a fellow developer to review your 
+            changes.
+          </para></listitem>
+          <listitem><para>
+            Your commit message should give a concise overview of <emphasis>what you
+            changed</emphasis> (no big details) and <emphasis>why you changed it</emphasis>
+            Just check previous messages for good examples.
+          </para></listitem>
+          <listitem><para>
+            Don't use the same message on multiple files, unless it equally applies to
+            all those files.
+          </para></listitem>
+          <listitem><para>
+            If your changes span multiple files, and the code won't recompile unless
+            all changes are commited (e.g. when changing the signature of a function),
+            then commit all files one after another, without long delays in beween.
+            If necessary, prepare the commit messages in advance.
+          </para></listitem>
+          <listitem><para>
+            Before changing things on CVS, make sure that your changes are in line
+            with the team's general consensus on what should be done (see below).
+          </para></listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="cvswhenask"><title>Discussing Changes First</title>
+      <para>
+        We don't have a too formal policy on this, just use common sense. Hints: If it is..
+        <orderedlist numeration="arabic">
+          <listitem><para>
+            ..a bugfix / clean-up / cosmetic thing: shoot
+          </para></listitem>
+          <listitem><para>
+            ..a new feature that can be turned off: shoot
+          </para></listitem>
+          <listitem><para>
+            ..a clear improvement w/o side effects on other parts of the code: shoot
+          </para></listitem>
+          <listitem><para>
+            ..a matter of taste: <ulink url="mailto:developers@privoxy.org">ask the list</ulink>
+          </para></listitem>
+          <listitem><para>
+            ..a major redesign of some part of the code: <ulink url="mailto:developers@privoxy.org">ask
+            the list</ulink>
+          </para></listitem>
+        </orderedlist>
+      </para>
+      <para>
+        Note that near a major public release, we get a bit more cautious - if
+        unsure, it doesn't hurt to ask first. There is always the possibility
+        to submit a patch to the <ulink
+        url="http://sourceforge.net/tracker/?atid=311118&amp;group_id=11118&amp;func=browse">patches
+        tracker</ulink> instead.
+      </para>
+    </sect2>
   </sect1>
 	
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -230,7 +301,6 @@
    updated (this is done just prior to a new release).
   </para>
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="sgml">
 <title>Quickstart to Docbook and SGML</title>
@@ -275,50 +345,51 @@
  Some common elements that you likely will use: 
 </para>
 
-<simplelist>
- <member>
-  <emphasis>&lt;para&gt;&lt;/para&gt;</emphasis>, paragraph delimiter. Most 
-  text needs to be within paragraph elements (there are some exceptions).
- </member>
- <member>
-  <emphasis>&lt;emphasis&gt;&lt;/emphasis&gt;</emphasis>, the stylesheets make this
- italics.
- </member>
-  <member>
-  <emphasis>&lt;filename&gt;&lt;/filename&gt;</emphasis>, files and directories.
- </member>
- <member>
-  <emphasis>&lt;command&gt;&lt;/command&gt;</emphasis>, command examples.
- </member>
- <member>
-  <emphasis>&lt;literallayout&gt;&lt;/literallayout&gt;</emphasis>, like 
-  <literal>&lt;pre&gt;</literal>, more or less.
- </member>
-  <member>
-  <emphasis>&lt;itemizedlist&gt;&lt;/itemizedlist&gt;</emphasis>, list with bullets.
- </member>
- <member>
-  <emphasis>&lt;listitem&gt;&lt;/listitem&gt;</emphasis>, member of the above.
- </member>
-  <member>
-   <emphasis>&lt;screen&gt;&lt;/screen&gt;</emphasis>, screen output, implies 
-   <literal>&lt;literallayout&gt;</literal>.
- </member>
- <member>
-  <emphasis>&lt;ulink url="example.com"&gt;&lt;/ulink&gt;</emphasis>, like 
-  HTML <literal>&lt;a&gt;</literal> tag.
- </member>
-  <member>
-   <emphasis>&lt;quote&gt;&lt;/quote&gt;</emphasis>, for, doh, quoting text. 
- </member>
-</simplelist>
+<para>
+  <simplelist>
+    <member>
+      <emphasis>&lt;para&gt;&lt;/para&gt;</emphasis>, paragraph delimiter. Most 
+      text needs to be within paragraph elements (there are some exceptions).
+    </member>
+    <member>
+      <emphasis>&lt;emphasis&gt;&lt;/emphasis&gt;</emphasis>, the stylesheets
+      make this italics.
+    </member>
+    <member>
+      <emphasis>&lt;filename&gt;&lt;/filename&gt;</emphasis>, files and directories.
+    </member>
+    <member>
+      <emphasis>&lt;command&gt;&lt;/command&gt;</emphasis>, command examples.
+    </member>
+    <member>
+      <emphasis>&lt;literallayout&gt;&lt;/literallayout&gt;</emphasis>, like 
+      <literal>&lt;pre&gt;</literal>, more or less.
+    </member>
+    <member>
+      <emphasis>&lt;itemizedlist&gt;&lt;/itemizedlist&gt;</emphasis>, list with bullets.
+    </member>
+    <member>
+      <emphasis>&lt;listitem&gt;&lt;/listitem&gt;</emphasis>, member of the above.
+    </member>
+    <member>
+      <emphasis>&lt;screen&gt;&lt;/screen&gt;</emphasis>, screen output, implies 
+      <literal>&lt;literallayout&gt;</literal>.
+    </member>
+    <member>
+      <emphasis>&lt;ulink url="example.com"&gt;&lt;/ulink&gt;</emphasis>, like 
+      HTML <literal>&lt;a&gt;</literal> tag.
+    </member>
+    <member>
+      <emphasis>&lt;quote&gt;&lt;/quote&gt;</emphasis>, for, doh, quoting text. 
+    </member>
+  </simplelist>
+</para>
 
 <para>
  Look at any of the existing docs for examples of all these and more.
 </para>
 
 </sect2>
-
 
 <!--   ~~~~~       New section      ~~~~~     -->
   <sect2 id="docstyle">
@@ -1644,7 +1715,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1704,7 +1775,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.32 2002/04/11 21:29:58 jongfoster Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1801,13 +1872,6 @@ int FUNCTION_NAME( void *param1, const char *x )
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="cvs"><title>Version Control Guidelines</title>
-    <para>To be filled. note on cvs comments. Don't only comment what you did,
-    but also why you did it!
-</para>
-  </sect1>
-
-  <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="testing"><title>Testing Guidelines</title>
     <para>To be filled.
 </para>
@@ -1863,20 +1927,29 @@ at sourceforge. Three simple steps:
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="newrelease"><title>Releasing a new version</title>
+  <sect1 id="newrelease"><title>Releasing a New Version</title>
     <para>
-	To minimize trouble with distribution contents, web-page
-	errors and the like, we strongly encourage you
-	to follow this section if you prepare a new release of
-	code or new pages on the webserver.
+        When we release versions of <application>Privoxy</application>,
+        our work leaves our cozy secret lab and has to work in the cold
+        RealWorld[tm]. Once it is released, there is no way to call it
+        back, so it is very important that great care is taken to ensure
+        that everything runs fine, and not to introduce problems in the
+        very last minute.
     </para>
+    <para>
+        So when releasing a new version, please adhere exactly to the
+        procedure outlined in this chapter.
+    </para>
+
     <para>
 	The following programs are required to follow this process:
-	<filename>ncftpput</filename> (ncftp), <filename>scp</filename> (ssh),
-<filename>gmake</filename> (GNU's version of make), autoconf, cvs, ???.
+	<filename>ncftpput</filename> (ncftp), <filename>scp, ssh</filename> (ssh),
+        <filename>gmake</filename> (GNU's version of make), autoconf, cvs.
     </para>
+
     <para>
-        Replace X, Y and Z with the actual version number (X = major, Y = minor, Z = point):
+        In the following text, replace X, Y and Z with the actual version number
+        (X = major, Y = minor, Z = point):
     </para>
      
     <sect2 id="beforerelease">
@@ -1896,14 +1969,8 @@ at sourceforge. Three simple steps:
       </listitem> 
       <listitem>
        <para>
-         Increment the version number in <filename>configure.in</filename> in
-         CVS. Also, increase or reset the RPM release number in
-         <filename>configure.in</filename> as appropriate. Do <emphasis>NOT</emphasis>
-         touch version information after export from CVS.
-         <emphasis>All packages</emphasis> will use the version and release data
-         from <filename>configure.in</filename>.
-         Local files should not be changed, except prior to a CVS commit!!!
-         This way we are all on the same page!
+         Increment the version number and increase or reset the RPM release number
+         in <filename>configure.in</filename> as appropriate. 
        </para>
       </listitem> 
       <listitem>
@@ -1920,6 +1987,13 @@ at sourceforge. Three simple steps:
         Then change the version info in doc/webserver/actions/index.php,
         line: '$required_actions_file_version = "A.B";'
        </para>
+      </listitem>
+      <listitem>
+       <para>
+        If the HTML documentation is not in sync with the SGML sources
+        you need to regenerate it. (If in doubt, just do it.) See the
+        Section "Updating the webserver" in this manual for details.
+       </para>
       </listitem> 
       <listitem>
        <para>
@@ -1933,361 +2007,53 @@ at sourceforge. Three simple steps:
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
       </listitem> 
-      <listitem>
-       <para>
-        The first package uploaded should be the official
-        <quote>tarball</quote> release, as required by the GPL. This is built
-        with the <quote><command>make tarball-dist</command></quote> Makefile
-        target, and then can be uploaded with 
-        <quote><command>make tarball-upload</command></quote> (see below).
-       </para>
-      </listitem> 
       </itemizedlist>
      </para> 
     </sect2>
     
-    <sect2 id="newrelease-web"><title>Update the webserver</title>
-      <para>
-	All files must be group-readable and group-writable (or no one else
-	will be able to change them)! To update the webserver, create any
-	pages locally in the <filename>doc/webserver/*</filename> directory (or
-	create new directories under <filename>doc/webserver</filename>), then do
-	</para>
-	<para>
- 	<programlisting>
-  make webserver
-	</programlisting>
-	</para>
-	<para>
-      This will do the upload to the webserver (www.privoxy.org).      
-     </para>
+    <sect2 id="therelease">
+    <title>Building and Releasing the Packages</title>
      <para>
-	Note that <quote><command>make dok</command></quote> 
-     (or <quote><command>make redhat-dok</command></quote>) creates
-	<filename>doc/webserver/user-manual</filename>,
-	<filename>doc/webserver/developer-manual</filename>,
-	<filename>doc/webserver/faq</filename> and
-	<filename>doc/webserver/index.html</filename> automatically.
-     (<filename>doc/webserver/man-page/privoxy-man-page.html</filename>
-     is created by a separate Makefile target, <quote><command>make
-     man</command></quote>, due to dependencies on some obscure perl scripts. 
-     See comments in <filename>GNUmakefile</filename>.)
-      </para>
-     <para> 
-      Someone should also commit these to CVS so that packagers without the
-      ability to build docs locally, have access to them. This is a separate
-      step, and should also be done before each official release.
+      Now the individual packages can be built and released. Note that for
+      GPL reasons the first package to be released is always the source tarball.
      </para>
-
+ 
      <para>
-      Please do NOT use any other means of transferring files to the
-      webserver. <quote><command>make webserver</command></quote> not only
-      uploads, but will make sure that the appropriate permissions are 
-      preserved for shared group access.
-      </para>
-    </sect2>
-
-    <sect2 id="newrelease-rpm"><title>SuSE or Red Hat</title>
-      <para>
-	Ensure that you have the latest code version. Hence run:
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</programlisting>
-	</para>
-	<para>
-	 first. 
-	</para>
-	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	</para>
-	<para>
-	Then do
-	</para>
-	<para>
-	<programlisting>
-  make suse-dist or make redhat-dist
-	</programlisting>
-	</para>
-	<para>
-	To upload the package to Sourceforge, simply issue
-	</para>
-	<para>
-	<programlisting>
-  make suse-upload (or make redhat-upload)
-	</programlisting>
-	</para>
-	<para>
-	Go to the displayed URL and release the file publicly on Sourceforge.
-      </para>
-    </sect2>
-
-    <sect2 id="newrelease-os2"><title>OS/2</title>
-      <para>
-	Ensure that you have the latest code version. Hence run:
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd ..
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
-	</programlisting>
-	</para>
-	<para>
-	You will need a mix of development tools.
-	The main compilation takes place with IBM Visual Age C++.
-	Some ancillary work takes place with GNU tools, available from
-	various sources like hobbes.nmsu.edu.
-	Specificially, you will need <filename>autoheader</filename>,
-	<filename>autoconf</filename> and <filename>sh</filename> tools.
-	The packaging takes place with WarpIN, available from various sources, including
-	its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
-	</para>
-	<para>
-	Change directory to the <filename>os2setup</filename> directory.
-	Edit the os2build.cmd file to set the final executable filename.
-	For example, 
- 	<programlisting>
-  installExeName='privoxyos2_setup_X.Y.Z.exe'
-	</programlisting>
- 	Next, edit the <filename>IJB.wis</filename> file so the release number matches
- 	in the <filename>PACKAGEID</filename> section:
- 	<programlisting>
-  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
-	</programlisting>
-	You're now ready to build.  Run:
-	<programlisting>
-  os2build
-	</programlisting>
-     And in the <filename>./files</filename> directory you will have the
-     WarpIN-installable executable. 
-     Upload this anonymously to
-     <filename>uploads.sourceforge.net/incoming</filename>, create a release
-     for it, and you're done.
-	</para>
-    </sect2>
-
-    <sect2 id="newrelease-solaris"><title>Solaris</title>
-      <para>
-	Login to Sourceforge's compilefarm via ssh
-	</para>
-	<para>
-	<programlisting>
-  ssh cf.sourceforge.net
-	</programlisting>
-	</para>
-	<para>
-	Choose the right operating system (not the Debian one). If you have
-	downloaded <application>Privoxy</application> before,
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</programlisting>
-	</para>
-	<para>
-	If not, please <ulink
-	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
-	Privoxy via CVS first</ulink>. Run:
-	</para>
-	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	</para>
-	<para>
-	Then run
-	</para>
-	<para>
-	<programlisting>
-  gmake solaris-dist
-	</programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly.
-	</para>
-    </sect2>
-
-    <sect2 id="newrelease-windows"><title>Windows</title>
-      <para>
-        You should ensure you have the latest version of Cygwin (from
-        <ulink url="http://www.cygwin.com/">http://www.cygwin.com/</ulink>).
-        Run the following commands from within a Cygwin bash shell.
-      </para>
-      <para>
-        First check out a clean copy of the correct code version, by running:
-      </para>
-      <para>
+      For <emphasis>all</emphasis> types of packages, including the source tarball,
+      <emphasis>you must make sure that you build from clean sources by exporting
+      the right version from CVS into an empty directory:</emphasis>.
+     </para>
+      
+     <para>
       <programlisting>
-        mkdir dist
-        cd dist
-        cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z .
-      </programlisting>
-      </para>
-      <para>
-        (Note: It is important that this is a clean copy of the code,
-        do not re-use a working directory after you have manually compiled
-        there).
-      </para>
-      <para>
-        Then you can build the package.  This is fully automated, and is
-        controlled by <filename>winsetup/GNUmakefile</filename>.
-        All you need to do is:
-      </para>
-      <para>
-      <programlisting>
-        cd winsetup
-        make
-      </programlisting>
-      </para>
-      <para>
-        Now you can manually rename <filename>privoxy_setup.exe</filename> to
-        <filename>privoxy_setup_X_Y_Z.exe</filename>, and upload it to
-        SourceForge.
-      </para>
-    </sect2>
+  mkdir dist # delete or choose different name if it already exists
+  cd dist
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
+     </programlisting>
+    </para>
+  
+    <para>
+     <emphasis>Do NOT change</emphasis> a single bit, including, but not limited to
+     version information after export from CVS. This is to make sure that
+     all release packages, and with them, all future bug reports, are based
+     on exactly the same code.
+    </para>
+  
+    <para>
+     Please find additional instructions for the source tarball and the
+     individual platform dependent binary packages below.
+    </para>
 
-    <sect2 id="newrelease-debian"><title>Debian</title>
-      <para>
-	Ensure that you have the latest code version. Hence run:
+    <sect3 id="newrelease-tarball"><title>Source Tarball</title>
+        <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
 	</para>
 	<para>
 	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd current
-	</programlisting>
-	</para>
-	<para>
-	first. Run:
-	</para>
-	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	</para>
-	<para>
-	Then do FIXME.
-	</para>
-    </sect2>
-
-    <sect2 id="newrelease-macosx"><title>Mac OSX</title>
-      <para>
-	Ensure that you have the latest code version. Hence run:
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd ..
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
-	</programlisting>
-	</para>
-	<para>
-	From the osxsetup directory, run:
-	<programlisting>
-  build
-	</programlisting>
-	</para>
-	<para>
-	This will run <filename>autoheader</filename>, <filename>autoconf</filename> and
-	<filename>configure</filename> as well as <filename>make</filename>.
-	Finally, it will copy over the necessary files to the ./osxsetup/files directory
-	for further processing by <filename>PackageMaker</filename>.
-	</para>
-	<para>
-	Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the package
-	name to match the release, and hit the "Create package" button.
-	If you specify ./Privoxy.pkg as the output package name, you can then create
-	the distributable zip file with the command:
-	<programlisting>
-zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
-	</programlisting>
-	You can then upload <filename>privoxyosx_setup_x.y.z.zip</filename> anonymously to 
-	<filename>uploads.sourceforge.net/incoming</filename>,
-	create a release for it, and you're done.
-	</para>
-    </sect2>
-
-    <sect2 id="newrelease-freebsd"><title>FreeBSD</title>
-      <para>
-	Change the version number of <application>Privoxy</application> in the
-	configure.in file. Run:
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	Then ...
-      </para>
-      <para>
-	Login to Sourceforge's compilefarm via ssh:
-	</para>
-	<para>
-	<programlisting>
-  ssh cf.sourceforge.net
-	</programlisting>
-	</para>
-	<para>
-	Choose the right operating system.
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</programlisting>
-	</para>
-	<para>
-	Run:
-	</para>
-	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	</para>
-	<para>
-	Then run:
-	</para>
-	<para>
-	<programlisting>
-  gmake freebsd-dist
-	</programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	freebsd-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly.
-	</para>
-    </sect2>
-
-    <sect2 id="newrelease-tarball"><title>Tarball</title>
-      <para>
-	Ensure that you have the right code version. Hence run:
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</programlisting>
-	</para>
-	<para>
-	first. Run:
-	</para>
-	<para>
-	<programlisting>
   autoheader && autoconf && ./configure
 	</programlisting>
 	</para>
@@ -2308,59 +2074,104 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</programlisting>
 	</para>
 	<para>
-	Goto the displayed URL and release the file publicly on Sourceforge.
+	Go to the displayed URL and release the file publicly on Sourceforge.
+        For the change log field, use the relevant section of the
+        <filename>ChangeLog</filename> file.
       </para>
-    </sect2>
+    </sect3>
 
-    <sect2 id="newrelease-hpux"><title>HP-UX 11</title>
-      <para>
-	Ensure that you have the latest code version. Hence run:
+    <sect3 id="newrelease-rpm"><title>SuSE or Red Hat</title>
+        <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
 	</para>
 	<para>
 	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd current
-	</programlisting>
-	</para>
-	<para>
-	first. Run:
-	</para>
-	<para>
-	<programlisting>
   autoheader && autoconf && ./configure
 	</programlisting>
 	</para>
 	<para>
-	Then do FIXME.
+	Then do
 	</para>
-    </sect2>
+	<para>
+	<programlisting>
+  make suse-dist (or make redhat-dist)
+	</programlisting>
+	</para>
+	<para>
+	To upload the package to Sourceforge, simply issue
+	</para>
+	<para>
+	<programlisting>
+  make suse-upload (or make redhat-upload)
+	</programlisting>
+	</para>
+	<para>
+	Go to the displayed URL and release the file publicly on Sourceforge.
+        Use the release notes and çhange log from the source tarball package.
+      </para>
+    </sect3>
 
-    <sect2 id="newrelease-amiga"><title>Amiga OS</title>
+    <sect3 id="newrelease-os2"><title>OS/2</title>
       <para>
-	Ensure that you have the latest code version. Hence run:
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then get the OS/2 Setup module:
 	</para>
 	<para>
 	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
 	</programlisting>
 	</para>
 	<para>
-	first. Run:
+	You will need a mix of development tools.
+	The main compilation takes place with IBM Visual Age C++.
+	Some ancillary work takes place with GNU tools, available from
+	various sources like hobbes.nmsu.edu.
+	Specificially, you will need <filename>autoheader</filename>,
+	<filename>autoconf</filename> and <filename>sh</filename> tools.
+	The packaging takes place with WarpIN, available from various sources, including
+	its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
+	</para>
+	<para>
+	Change directory to the <filename>os2setup</filename> directory.
+	Edit the os2build.cmd file to set the final executable filename.
+	For example, 
+	</para>
+	<para>
+ 	<programlisting>
+  installExeName='privoxyos2_setup_X.Y.Z.exe'
+	</programlisting>
+	</para>
+	<para>
+ 	Next, edit the <filename>IJB.wis</filename> file so the release number matches
+ 	in the <filename>PACKAGEID</filename> section:
+ 	</para>
+	<para>
+	<programlisting>
+  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
+	</programlisting>
+	</para>
+	<para>
+	You're now ready to build.  Run:
 	</para>
 	<para>
 	<programlisting>
-  autoheader && autoconf && ./configure
+  os2build
 	</programlisting>
 	</para>
 	<para>
-	Then do FIXME.
+         You will find the  WarpIN-installable executable in the
+        <filename>./files</filename> directory. Upload this anonymously to
+         <filename>uploads.sourceforge.net/incoming</filename>, create a release
+         for it, and you're done. Use the release notes and Change Log from the
+         source tarball package.
 	</para>
-    </sect2>
+    </sect3>
 
-    <sect2 id="newrelease-aix"><title>AIX</title>
+    <sect3 id="newrelease-solaris"><title>Solaris</title>
       <para>
 	Login to Sourceforge's compilefarm via ssh:
 	</para>
@@ -2370,23 +2181,221 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	</programlisting>
 	</para>
 	<para>
-	Choose the right operating system. If you have downloaded Privoxy
-	before:
+	Choose the right operating system (not the Debian one).
+        When logged in, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
 	</para>
 	<para>
 	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
   cd current
+  autoheader && autoconf && ./configure
 	</programlisting>
 	</para>
 	<para>
-	If not, please <ulink
-	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
-	Privoxy via CVS first</ulink>. Run:
+	Then run
 	</para>
 	<para>
 	<programlisting>
+  gmake solaris-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
+	solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publicly. Use the release notes and Change Log from the
+        source tarball package.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-windows"><title>Windows</title>
+      <para>
+        You should ensure you have the latest version of Cygwin (from
+        <ulink url="http://www.cygwin.com/">http://www.cygwin.com/</ulink>).
+        Run the following commands from within a Cygwin bash shell.
+      </para>
+      <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then get the Windows setup module:
+      </para>
+      <para>
+      <programlisting>
+        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
+      </programlisting>
+      </para>
+      <para>
+        Then you can build the package.  This is fully automated, and is
+        controlled by <filename>winsetup/GNUmakefile</filename>.
+        All you need to do is:
+      </para>
+      <para>
+      <programlisting>
+        cd winsetup
+        make
+      </programlisting>
+      </para>
+      <para>
+        Now you can manually rename <filename>privoxy_setup.exe</filename> to
+        <filename>privoxy_setup_X_Y_Z.exe</filename>, and upload it to
+        SourceForge. When releasing the package on SourceForge, use the release notes
+        and Change Log from the source tarball package.
+      </para>
+    </sect3>
+
+    <sect3 id="newrelease-debian"><title>Debian</title>
+      <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then, run:
+	</para>
+	<para>
+	<programlisting>
+  cd current
+  autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-macosx"><title>Mac OSX</title>
+      <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then get the Mac OSX setup module:
+	</para>
+	<para>
+	<programlisting>
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
+	</programlisting>
+	</para>
+	<para>
+	Then run:
+	</para>
+	<para>
+	<programlisting>
+  cd osxsetup
+  build
+	</programlisting>
+	</para>
+	<para>
+	This will run <filename>autoheader</filename>, <filename>autoconf</filename> and
+	<filename>configure</filename> as well as <filename>make</filename>.
+	Finally, it will copy over the necessary files to the ./osxsetup/files directory
+	for further processing by <filename>PackageMaker</filename>.
+	</para>
+	<para>
+	Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the package
+	name to match the release, and hit the "Create package" button.
+	If you specify ./Privoxy.pkg as the output package name, you can then create
+	the distributable zip file with the command:
+	</para>
+	<para>
+	<programlisting>
+zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
+	</programlisting>
+	</para>
+	<para>
+	You can then upload <filename>privoxyosx_setup_x.y.z.zip</filename> anonymously to 
+	<filename>uploads.sourceforge.net/incoming</filename>,
+	create a release for it, and you're done. Use the release notes
+        and Change Log from the source tarball package.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-freebsd"><title>FreeBSD</title>
+      <para>
+	Login to Sourceforge's compilefarm via ssh:
+	</para>
+	<para>
+	<programlisting>
+  ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system.
+        When logged in, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
+	</para>
+	<para>
+	<programlisting>
+  cd current
+  autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then run:
+	</para>
+	<para>
+	<programlisting>
+  gmake freebsd-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
+	freebsd-upload</command> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publicly. Use the release notes and Change Log from the
+        source tarball package.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-hpux"><title>HP-UX 11</title>
+      <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
+	</para>
+	<para>
+	<programlisting>
+  cd current
+  autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-amiga"><title>Amiga OS</title>
+      <para>
+	First, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
+	</para>
+	<para>
+	<programlisting>
+  cd current
+  autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect3>
+
+    <sect3 id="newrelease-aix"><title>AIX</title>
+      <para>
+	Login to Sourceforge's compilefarm via ssh:
+	</para>
+	<para>
+	<programlisting>
+  ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system.
+        When logged in, <emphasis>make sure that you have freshly exported the right
+        version into an empty directory</emphasis>. (See "Building and releasing
+        packages" above). Then run:
+	</para>
+	<para>
+	<programlisting>
+  cd current
   autoheader && autoconf && ./configure
 	</programlisting>
 	</para>
@@ -2402,12 +2411,79 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
 	aix-upload</command> on the Sourceforge machine (no ncftpput). You now have
 	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly.
+	the file publicly. Use the release notes and Change Log from the
+        source tarball package.
 	</para>
-    </sect2>
+    </sect3>
+   </sect2>
+
+    <sect2 id="afterrelease">
+    <title>After the Release</title>
+     <para>
+      When all (or: most of the) packages have been uploaded and made available,
+      send an email to the <ulink url="mailto:ijbswa-announce@lists.sourceforge.net">announce
+      mailing list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
+      include the
+      <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">download
+      location</ulink>, the release notes and the change log.
+     </para>
+   </sect2>
 
   </sect1>
   
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="webserver-update"><title>Update the Webserver</title>
+   <para>
+    When updating the webserver, please follow these steps to make
+    sure that no broken links, incosistent contents or permission
+    problems will occur:
+   </para>
+   <para>
+    If you have changed anything in the documentation source SGML files,
+    do:
+   </para>
+   <para>
+    <programlisting>
+  make dok # (or make redkat-dok if make dok doesn't work for you)
+    </programlisting>
+   </para>
+   <para>
+    That will generate <filename>doc/webserver/user-manual</filename>,
+    <filename>doc/webserver/developer-manual</filename>,
+    <filename>doc/webserver/faq</filename> and
+    <filename>doc/webserver/index.html</filename> automatically.
+   </para>
+   <para>
+    If you changed the manual page source, generate
+    <filename>doc/webserver/man-page/privoxy-man-page.html</filename>
+    by running <quote><command>make man</command></quote>. (This is
+    a separate target due to dependencies on some obscure perl scripts. 
+    See comments in <filename>GNUmakefile</filename>.)
+   </para>
+   <para>
+    If you want to add new files to the webserver, create them locally in
+    the <filename>doc/webserver/*</filename> directory (or
+    create new directories under <filename>doc/webserver</filename>).
+   </para>
+   <para>
+    Next, commit any changes from the above steps to CVS. All set? Then do
+   </para>
+   <para>
+    <programlisting>
+  make webserver
+    </programlisting>
+   </para>
+   <para>
+    This will do the upload to <ulink url="http://www.privoxy.org/">the
+    webserver</ulink> (www.privoxy.org) and ensure all files and directories
+    there are group writable.
+   </para>
+   <para>
+    Please do <emphasis>NOT</emphasis> use any other means of transferring
+    files to the webserver to avoid permission problems.
+   </para>
+  </sect1>
+
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
 <!-- Include contacting.sgml  -->
@@ -2461,6 +2537,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.33  2002/04/12 03:49:53  hal9
+  Spell checked. Clarification on where docs are kept.
+
   Revision 1.32  2002/04/11 21:29:58  jongfoster
   Documenting Win32 release procedure
 
