@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.134 2002/10/28 06:01:39 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.135 2002/11/04 05:11:05 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -226,6 +226,10 @@ PCRE_SRC     = @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/get.c $(DIR_PRIVOXY_SRC
 PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:$(DIR_PRIVOXY_SRC_PCRE)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
 PCRE_HDRS    = @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/chartables.c $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
 
+ACTIVITY_SRC  = @ACTIVITY_ONLY@$(DIR_PRIVOXY_SRC)/stats.c
+ACTIVITY_OBJS = @ACTIVITY_ONLY@$(ACTIVITY_SRC:$(DIR_PRIVOXY_SRC)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
+ACTIVITY_HDRS = @ACTIVITY_ONLY@$(ACTIVITY_SRC:.c=.h) $(DIR_PRIVOXY_SRC)/ipc.h
+
 # No REGEX (maybe because dynamically linked pcreposix):
 REGEX_SRC    =
 @STATIC_PCRE_ONLY@REGEX_SRC = $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.c
@@ -242,9 +246,9 @@ SOCKET_LIB   = @SOCKET_LIB@
 # PThreads library, if needed.
 PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
 
-SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
-OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
-HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
+SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)  $(ACTIVITY_SRC)
+OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS) $(ACTIVITY_OBJS)
+HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS) $(ACTIVITY_HDRS)
 LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
 
 
@@ -1141,6 +1145,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.135  2002/11/04 05:11:05  hal9
+# Just a clean up of overly verbose output from install/uninstall.
+#
 # Revision 1.134  2002/10/28 06:01:39  hal9
 # Make uninstall: cp -v problems on SF Solaris.
 #

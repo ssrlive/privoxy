@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.85 2002/11/27 12:40:54 oes Exp $
+dnl $Id: configure.in,v 1.86 2002/12/13 23:47:10 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.86  2002/12/13 23:47:10  hal9
+dnl Add openbsd special flags per gunner at styx2002.no-ip.org
+dnl
 dnl Revision 1.85  2002/11/27 12:40:54  oes
 dnl Fixed broken handling of pre-set CFLAGS
 dnl
@@ -433,7 +436,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.85 $)
+AC_REVISION($Revision: 1.86 $)
 AC_INIT(src/jcc.c)
 if test ! -f src/config.h.in; then
    echo "You need to run autoheader first. "
@@ -551,7 +554,7 @@ AC_ARG_WITH(user,
         [
                 if test "x$withval" != "xyes"; then
                   if test $ID = no ; then
-                    AC_MSG_ERROR(There is no 'id' program on this system)
+                    AC_MSG_WARN(There is no 'id' program on this system)
                   else
                     AC_MSG_RESULT($with_user)
                     $ID $with_user 2>/dev/null >/dev/null
@@ -567,7 +570,7 @@ AC_ARG_WITH(user,
         ],
         [
           if test $ID = no ; then
-            AC_MSG_ERROR(There is no 'id' programm on this system)
+            AC_MSG_WARN(There is no 'id' program on this system)
           else
             AC_MSG_RESULT(none specified)
             USER=$with_user
@@ -604,7 +607,7 @@ AC_ARG_WITH(group,
         ],
         [
           if test $BGROUPS = no ; then
-            AC_MSG_ERROR(There is no 'groups' programm on this system)
+            AC_MSG_WARN(There is no 'groups' program on this system)
           else
             AC_MSG_RESULT(none specified)
             GROUP=$with_group;
@@ -1079,6 +1082,20 @@ if test $enableval2 = yes; then
     [ Enables statistics function. ])
 fi
 
+AC_ARG_ENABLE(activity-console,
+[  --enable-activity-console    Gather and send extended statistics to the activity console],
+[enableval2=$enableval],
+[enableval2=no])
+if test $enableval2 = yes; then
+  ACTIVITY_ONLY=
+  AC_DEFINE(FEATURE_ACTIVITY_CONSOLE,1,
+    [ Enables sending statistics to the activity console. This is currently
+      experimental, and will require some porting work for a few more platforms. ])
+  else
+    ACTIVITY_ONLY=#
+fi
+AC_SUBST(ACTIVITY_ONLY)
+
 AC_ARG_ENABLE(ie-images,
 [  --enable-ie-images      Don't auto-detect whether a request from MS Internet
                            Explorer is for an image or HTML.],
@@ -1172,7 +1189,7 @@ AC_ARG_ENABLE(no-gifs,
 [enableval2=no])
 if test $enableval2 = yes; then
   AC_DEFINE(FEATURE_NO_GIFS,1,
-    [ Deine to 1 to use PNG instead of GIF for built-in images. ])
+    [ Define to 1 to use PNG instead of GIF for built-in images. ])
 fi
 
 dnl pcre/pcrs is needed for CGI anyway, so
