@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.46 2002/03/29 20:09:01 swa Exp $
+# $Id: GNUmakefile.in,v 1.47 2002/03/30 09:05:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -463,24 +463,43 @@ tarball-clean:
 # converts doc/source/*.sgml into html, text and man pages
 #
 #############################################################################
-dok: doc/source/ldpOK.dsl man2html-swa
-	mkdir -p doc/text doc/man
-#  user manual
-	rm -rf doc/webserver/user-manual
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+
+# our style file
+doc/source/ldpOK.dsl:
+	if [ "$(DKPREFIX)" != "none" ]; then \
+		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
+	else \
+		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
+	fi
+
+# Otherwise we get plain groff conversion.
+groff2html:
+	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
+
 ##  developer manual
+dok-devel: doc/source/ldpOK.dsl
+	mkdir -p doc/text
 	rm -rf doc/webserver/developer-manual
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+
+##  user manual
+dok-user: doc/source/ldpOK.dsl
+	mkdir -p doc/text
+	rm -rf doc/webserver/user-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+
 ##  faq
+dok-faq: doc/source/ldpOK.dsl
+	mkdir -p doc/text
 	rm -rf doc/webserver/faq
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-## kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
 
-man2html-swa:
+## man page
+dok-man: doc/source/ldpOK.dsl
+	mkdir -p doc/man
 	mkdir -p doc/webserver/man-page
 	if [ "$(MAN2HTML)" != "false" ]; then \
 		$(ECHO) "<html><head><title>Privoxy|Doc/Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html; \
@@ -491,6 +510,14 @@ man2html-swa:
           $(MAKE) groff2html; \
 	fi
 
+dok: dok-devel dok-user dok-faq dok-man
+## kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
+	@$(ECHO) Documentation created.
+
+#
+# an alternative to the above dok
+#
 redhat-dok: doc/source/ldpOK.dsl man2html
 	mkdir -p doc/text doc/man doc/source/user-manual \
           doc/source/developer-manual doc/source/faq
@@ -516,14 +543,6 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 ## kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
-
-doc/source/ldpOK.dsl:
-	if [ "$(DKPREFIX)" != "none" ]; then \
-		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
-	else \
-		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
-	fi
-
 # For those with man2html ala RH7's.
 man2html:
 	mkdir -p doc/webserver/man-page
@@ -533,11 +552,6 @@ man2html:
      else \
           $(MAKE) groff2html; \
 	fi
-
-# Otherwise we get plain groff conversion.
-groff2html:
-	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
-
 
 #############################################################################
 #
@@ -666,6 +680,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.47  2002/03/30 09:05:21  swa
+# better packaging. better rpm building.
+# tar failed on sun (no exclude there).
+#
 # Revision 1.46  2002/03/29 20:09:01  swa
 # al's patch
 #

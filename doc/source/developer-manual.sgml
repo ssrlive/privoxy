@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.12 2002/03/27 01:02:51 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.13 2002/03/27 01:16:41 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.12 2002/03/27 01:02:51 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.13 2002/03/27 01:16:41 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1256,7 +1256,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.12 2002/03/27 01:02:51 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.13 2002/03/27 01:16:41 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1316,7 +1316,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.12 2002/03/27 01:02:51 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.13 2002/03/27 01:16:41 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1473,6 +1473,442 @@ at sourceforge. Three simple steps:
     </sect2>
     
   </sect1>
+
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="newrelease"><title>Releasing a new version</title>
+    <para>
+	To minimize trouble with distribution contents, webpage
+	errors and the like, I (Stefan) strongly encourage you
+	to follow this section if you prepare a new release of
+	code or new pages on the webserver.
+    </para>
+    <para>
+	The following programs are required to follow this process:
+	<filename>ncftpput</filename> (ncftp), <filename>scp</filename> (ssh),
+<filename>gmake</filename> (GNU's version of make), ???.
+    </para>
+    <sect2 id="newrelease-web"><title>Update the webserver</title>
+      <para>
+	All files must be group-readable and group-writable (or no one else
+	will be able to change them). To update the webserver, create any
+	pages locally in the <filename>doc/webserver</filename> directory (or
+	create new directories under <filename>doc/webserver</filename>), then do
+	</para>
+	<para>
+	<programlisting>
+	make webserver
+	</programlisting>
+	</para>
+	<para>
+	Note that <filename>make dok</filename> creates
+	<filename>doc/webserver/user-manual</filename>,
+	<filename>doc/webserver/developer-manual</filename>,
+	<filename>doc/webserver/faq</filename> and
+	<filename>doc/webserver/man-page</filename> automatically.
+      </para>
+      <para>
+	 Verify on the webserver that the permissions are set correctly.  Do
+	 NOT use any other means of transferring files to the webserver.
+      </para>
+    </sect2>
+
+    <sect2 id="newrelease-rpm"><title>SuSE or RedHat</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Update the release number
+	directly in the specific spec file (particularly, set the release
+	number to <filename>1</filename> if you have increased the version
+	number before). Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do
+	</para>
+	<para>
+	<programlisting>
+	make suse-dist or make redhat-dist
+	</programlisting>
+	</para>
+	<para>
+	To upload the package to Sourceforge, simply issue
+	</para>
+	<para>
+	<programlisting>
+	make suse-upload or make redhat-upload
+	</programlisting>
+	</para>
+	<para>
+	Goto the displayed URL and release the file publically on Sourceforge.
+      </para>
+    </sect2>
+
+    <sect2 id="newrelease-os2"><title>OS/2</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-solaris"><title>Solaris</title>
+      <para>
+	Login to Sourceforge's compilefarm via ssh
+	</para>
+	<para>
+	<programlisting>
+	ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system (not the Debian one). If you have
+	downloaded Privoxy before,
+	</para>
+	<para>
+	<programlisting>
+	cd current && cvs update .
+	</programlisting>
+	</para>
+	<para>
+	If not, please <ulink
+	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
+	Privoxy via CVS first</ulink>. Verify the version number in
+	<filename>configure.in</filename>. If necessary, change the version
+	number. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then run
+	</para>
+	<para>
+	<programlisting>
+	gmake solaris-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <filename>make
+	solaris-upload</filename> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publically
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-windows"><title>Windows</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-debian"><title>Debian</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-macosx"><title>Mac OSX</title>
+      <para>
+	Login to Sourceforge's compilefarm via ssh
+	</para>
+	<para>
+	<programlisting>
+	ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system. If you have downloaded Privoxy
+	before,
+	</para>
+	<para>
+	<programlisting>
+	cd current && cvs update .
+	</programlisting>
+	</para>
+	<para>
+	If not, please <ulink
+	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
+	Privoxy via CVS first</ulink>. Verify the version number in
+	<filename>configure.in</filename>. If necessary, change the version
+	number. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then run
+	</para>
+	<para>
+	<programlisting>
+	make macosx-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <filename>make
+	macosx-upload</filename> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publically
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-freebsd"><title>FreeBSD</title>
+      <para>
+	Change the version number of <application>Privoxy</application> in the
+	configure.in file. Run
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	Then ...
+      </para>
+      <para>
+	Login to Sourceforge's compilefarm via ssh
+	</para>
+	<para>
+	<programlisting>
+	ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system. If you have downloaded Privoxy
+	before,
+	</para>
+	<para>
+	<programlisting>
+	cd current && cvs update .
+	</programlisting>
+	</para>
+	<para>
+	If not, please <ulink
+	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
+	Privoxy via CVS first</ulink>. Verify the version number in
+	<filename>configure.in</filename>. If necessary, change the version
+	number. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then run
+	</para>
+	<para>
+	<programlisting>
+	make freebsd-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <filename>make
+	freebsd-upload</filename> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publically
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-tarball"><title>Tarball</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	make clobber
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do
+	</para>
+	<para>
+	<programlisting>
+	make tarball-dist
+	</programlisting>
+	</para>
+	<para>
+	To upload the package to Sourceforge, simply issue
+	</para>
+	<para>
+	<programlisting>
+	make tarball-upload
+	</programlisting>
+	</para>
+	<para>
+	Goto the displayed URL and release the file publically on Sourceforge.
+      </para>
+    </sect2>
+
+    <sect2 id="newrelease-hpux"><title>HP-UX 11</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-amiga"><title>Amiga OS</title>
+      <para>
+	Ensure that you have the latest code version. Hence run
+	</para>
+	<para>
+	<programlisting>
+	cvs update .
+	</programlisting>
+	</para>
+	<para>
+	first. If necessary, change the version number of
+	<application>Privoxy</application> in the
+	<filename>configure.in</filename> file. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then do FIXME.
+	</para>
+    </sect2>
+
+    <sect2 id="newrelease-aix"><title>AIX</title>
+      <para>
+	Login to Sourceforge's compilefarm via ssh
+	</para>
+	<para>
+	<programlisting>
+	ssh cf.sourceforge.net
+	</programlisting>
+	</para>
+	<para>
+	Choose the right operating system. If you have downloaded Privoxy
+	before,
+	</para>
+	<para>
+	<programlisting>
+	cd current && cvs update .
+	</programlisting>
+	</para>
+	<para>
+	If not, please <ulink
+	url="http://www.privoxy.org/user-manual/user-manual/installation.html#INSTALLATION-SOURCE">checkout
+	Privoxy via CVS first</ulink>. Verify the version number in
+	<filename>configure.in</filename>. If necessary, change the version
+	number. Run
+	</para>
+	<para>
+	<programlisting>
+	autoheader && autoconf && ./configure
+	</programlisting>
+	</para>
+	<para>
+	Then run
+	</para>
+	<para>
+	<programlisting>
+	make aix-dist
+	</programlisting>
+	</para>
+	<para>
+	which creates a gzip'ed tar archive. Sadly, you cannot use <filename>make
+	aix-upload</filename> on the Sourceforge machine (no ncftpput). You now have
+	to manually upload the archive to Sourceforge's ftp server and release
+	the file publically
+	</para>
+    </sect2>
+
+  </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="contact"><title>Contact the developers</title>
@@ -1513,6 +1949,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.13  2002/03/27 01:16:41  hal9
+  ditto
+
   Revision 1.12  2002/03/27 01:02:51  hal9
   Touch up on name change...
 
