@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.28 2002/04/22 18:51:33 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.29 2002/04/24 03:13:51 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,10 +38,10 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.14
-Release: 2
+Release: 3
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
-Vendor: http://www.privoxy.org
+Vendor: Privoxy.Org
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
@@ -293,6 +293,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Fri Apr 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.14-3
+- Changing Vendor to Privoxy.Org
+
 * Tue Apr 23 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.14-2
 - Adjust for new *actions files.
@@ -620,6 +624,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.29  2002/04/24 03:13:51  hal9
+# New actions files changes.
+#
 # Revision 1.28  2002/04/22 18:51:33  morcego
 # user and group now get removed on rh too.
 #
