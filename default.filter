@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.9 2002/04/11 07:36:35 oes Exp $
+#  $Id: default.filter,v 1.10 2002/04/18 10:14:19 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -80,11 +80,6 @@ s/(<a\s+href[^>]+)menubar=['"]?(no|0)['"]?(.*>)/$1menubar="1"$3/igU
 #
 s*<blink>|</blink>**ig
 
-# Is this evil? 
-#
-#s/margin(height|width)=[0-9]*//gi
-#s/noresize/yesresize/igU
-
 
 #################################################################################
 #
@@ -156,7 +151,7 @@ s/(<frame [^>]+)scrolling=['"]?(no)['"]?(.*>)/$1$3/igU
 #################################################################################
 FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
 
-s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D[^>]*?)?>/<!-- Squished WebBug -->/sig
+s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1(\D[^>]*?)?>/<!-- Squished WebBug -->/siUg
 
 
 #################################################################################
@@ -267,6 +262,9 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.10  2002/04/18 10:14:19  oes
+#     renamed some filters
+#
 #     Revision 1.9  2002/04/11 07:36:35  oes
 #     Generalized js-popup filter
 #
