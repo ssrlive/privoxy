@@ -1,5 +1,5 @@
 /* vim:ts=3: */
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.9 2001/06/07 14:43:17 swa Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.10 2001/06/07 14:51:38 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -37,6 +37,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.9 2001/06/07 14:43:17 swa Exp $
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.10  2001/06/07 14:51:38  joergs
+ *    make_path() no longer adds '/' if the dir already ends in '/'.
+ *
  *    Revision 1.9  2001/06/07 14:43:17  swa
  *    slight mistake in make_path, unix path style is /.
  *
@@ -486,14 +489,14 @@ char *strsav(char *old, const char *text_to_append)
  *********************************************************************/
 int simplematch(char *pattern, char *text)
 {
-  char *fallback; 
-  char *pat = pattern;
-  char *txt = text;
-  int wildcard = 0;
+   char *fallback; 
+   char *pat = pattern;
+   char *txt = text;
+   int wildcard = 0;
   
-  char lastchar = 'a';
-  unsigned i;
-  unsigned char charmap[32];
+   char lastchar = 'a';
+   unsigned i;
+   unsigned char charmap[32];
   
   
    while (*txt)
