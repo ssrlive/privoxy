@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.5 2001/06/29 13:26:27 oes Exp $
+dnl $Id: configure.in,v 1.6 2001/06/29 21:56:40 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.6  2001/06/29 21:56:40  oes
+dnl Version -> 2.9.5
+dnl
 dnl Revision 1.5  2001/06/29 13:26:27  oes
 dnl Introduced #define CODE_STATUS
 dnl
@@ -120,7 +123,7 @@ AC_CONFIG_HEADER(config.h)
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=5
+VERSION_POINT=6
 
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
@@ -152,8 +155,9 @@ AC_EXEEXT
 AC_OBJEXT
 
 dnl Checks for libraries.
-dnl AC_CHECK_LIB(pcre, pcre_compile)
-dnl AC_CHECK_LIB(pcreposix, regcomp, pcre)
+AC_CHECK_LIB(pcre, pcre_compile, [have_pcre=yes], [have_pcre=no])
+AC_CHECK_LIB(pcreposix, regcomp, [have_pcreposix=yes], [have_pcreposix=no], -lpcre)
+AC_CHECK_LIB(pcrs, pcrs_compile, [have_pcrs=yes], [have_pcrs=no])
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -211,56 +215,17 @@ AC_SUBST(SOLARIS_ONLY)
 
 dnl Features
 
-dnl Regex engine:
-
-GNU_REGEX_ONLY=
-PCRE_REGEX_ONLY=
-NO_REGEX_ONLY=#
-
-AC_ARG_ENABLE(regex,
-[  --disable-regex         Don't allow regular expressions in the blockfile],
-[if test $enableval = yes; then
-  AC_DEFINE(REGEX)
-else
-  NO_REGEX_ONLY=
-  GNU_REGEX_ONLY=#
-  PCRE_REGEX_ONLY=#
-fi],AC_DEFINE(REGEX))
-
-AC_ARG_ENABLE(pcre-regex,
-[  --disable-pcre-regex    Use old, slow GNU Regex instead of PCRE.],
-[if test $enableval = yes; then
-  AC_DEFINE(PCRE)
-  GNU_REGEX_ONLY=#
-else
-  PCRE_REGEX_ONLY=#
-fi],[AC_DEFINE(PCRE)
-  GNU_REGEX_ONLY=#
-])
-
-AC_SUBST(GNU_REGEX_ONLY)
-AC_SUBST(PCRE_REGEX_ONLY)
-AC_SUBST(NO_REGEX_ONLY)
-
-
-dnl Other features:
-
 AC_ARG_ENABLE(toggle,
 [  --disable-toggle        Don't support temporary disable],
 [if test $enableval = yes; then
   AC_DEFINE(TOGGLE)
 fi],AC_DEFINE(TOGGLE))
 
-PCRS_ONLY=
-AC_ARG_ENABLE(pcrs,
-[  --disable-pcrs          Don't support arbitrary content modification],
-[if test $enableval = yes; then
-  AC_DEFINE(PCRS)
+AC_ARG_ENABLE(gzip,
+[  --enable-gzip           Allow gzip'ed transfer of documents. Note that this will make content modification impossible.],
+[if test $enableval = "no"; then
   AC_DEFINE(DENY_GZIP)
-else
-  PCRS_ONLY=#
-fi],[AC_DEFINE(PCRS) AC_DEFINE(DENY_GZIP)])
-AC_SUBST(PCRS_ONLY)
+fi])
 
 AC_ARG_ENABLE(force,
 [  --disable-force         Don't allow blockfle to be bypassed],
@@ -338,17 +303,91 @@ AC_ARG_ENABLE(jar-files,
 fi],
 AC_DEFINE(JAR_FILES))
 
-LIBRARY_PCRE_ONLY=#
-STATIC_PCRE_ONLY=
-AC_ARG_ENABLE(static-pcre,
-[  --disable-static-pcre   Link dynamically with the pcre and pcreposix
-                          libraries.  You must build the libraries seperately.],
-[if test $enableval = no; then
-  LIBRARY_PCRE_ONLY=
+dnl pcre/pcrs is needed for CGI anyway, so
+dnl the choice is only between static and
+dnl dynamic:
+
+AC_ARG_ENABLE(regex-matching,
+[  --enable-regex-matching=pcre     Use perl-compatible regex for actionsfile pattern matching (default)
+  --enable-regex-matching=gnu      Use gnu style regex for actionsfile pattern matching (-> bigger binary)
+  --disable-regex-matching         Don't use regex matching, compare URL prefix instead (won't shrink birary)],
+[ regex_matching=$enableval ],
+[ regex_matching=pcre ])
+
+AC_ARG_ENABLE(dynamic-pcre,
+[  --disable-dynamic-pcre           Use the built-in, static pcre, even if libpcre is available],
+[ if test $enableval = "no"; then have_pcre=no; fi ])
+
+AC_ARG_ENABLE(dynamic-pcrs,
+[  --disable-dynamic-pcrs           Use the built-in, static pcrs, even if libpcrs is available],
+[ if test $enableval = "no"; then have_pcrs=no; fi ])
+
+
+# Is the regex URL matching based on libpcreposix, but we
+# don't have that library?
+#
+if test $have_pcreposix = "yes" -o $regex_matching != "pcre"; then
+  dont_miss_pcreposix=yes
+else
+  dont_miss_pcreposix=no
+fi
+
+# If we have libpcre and either we also have pcreposix or
+# we don't need pcreposix, then link pcre dynamically; else
+# build it and link statically
+#
+if test $have_pcre = "yes" -a $dont_miss_pcreposix = "yes"; then
+  echo "using libpcre"
+  pcre_dyn=yes
   STATIC_PCRE_ONLY=#
-fi])
-AC_SUBST(LIBRARY_PCRE_ONLY)
+  LIBS="$LIBS -lpcre"
+else
+  echo "using built-in static pcre"
+  pcre_dyn=no
+  AC_DEFINE(STATIC)
+  STATIC_PCRE_ONLY=
+fi
+
+# If we have libpcrs and pcre is linked dynamically
+# then also link pcrs dynamically, else build and link
+# pcrs statically
+#
+if test $have_pcrs = "yes" -a $pcre_dyn = "yes"; then
+  echo "using libpcrs"
+  STATIC_PCRS_ONLY=#
+  LIBS="$LIBS -lpcrs"
+else
+  echo "using built-in static pcrs"
+  AC_DEFINE(STATIC_PCRS)
+  STATIC_PCRS_ONLY=
+fi
+
+# Which method should be used for URL matching?
+# pcre, gnu regex or prefix matching?
+#
+if test $regex_matching = "gnu"; then
+  echo "using gnu regex for URL matching"
+  AC_DEFINE(REGEX_GNU)
+  GNU_REGEX_ONLY=
+  PCRE_REGEX_ONLY=#
+elif test $regex_matching = "pcre"; then
+  echo "using pcre regex for URL matching"
+  AC_DEFINE(REGEX_PCRE)
+  GNU_REGEX_ONLY=#
+  PCRE_REGEX_ONLY=
+  if test $pcre_dyn = "yes"; then
+    LIBS="$LIBS -lpcreposix"
+  fi
+else
+  echo -e "using prefix matching for URLs\nHint: This does NOT make the executable any smaller!"
+  GNU_REGEX_ONLY=#
+  PCRE_REGEX_ONLY=#
+fi
+
+AC_SUBST(GNU_REGEX_ONLY)
+AC_SUBST(PCRE_REGEX_ONLY)
 AC_SUBST(STATIC_PCRE_ONLY)
+AC_SUBST(STATIC_PCRS_ONLY)
 
 AC_OUTPUT(Makefile)
 
