@@ -1,7 +1,7 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.91 2002/04/08 20:35:58 swa Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and
  *                the main connection-handling function.
@@ -33,22 +33,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
- *    Revision 2.0  2002/06/04 14:34:21  jongfoster
- *    Moving source files to src/
- *
- *    Revision 1.92  2002/05/08 16:00:46  oes
- *    Chat's buffer handling:
- *     - Fixed bug with unchecked out-of-mem conditions
- *       while reading client request & server headers
- *     - No longer predict if the buffer limit will be exceeded
- *       in the next read -- check add_to_iob's new
- *       return code. If buffer couldn't be extended
- *       (policy or out-of-mem) while
- *       - reading from client: abort
- *       - reading server headers: send error page
- *       - buffering server body for filter: flush,
- *         and if that fails: send error page
- *
  *    Revision 1.91  2002/04/08 20:35:58  swa
  *    fixed JB spelling
  *
@@ -642,6 +626,15 @@ int g_terminate = 0;
 
 static void listen_loop(void);
 static void chat(struct client_state *csp);
+static jb_err relay_server_traffic( struct client_state *csp ) ;
+static jb_err read_client_headers( struct client_state *csp, struct http_request *http ) ;
+static jb_err process_client_headers( struct client_state *csp, struct http_request *http ) ;
+static jb_err intercept_page( struct client_state *csp, struct http_request *http );
+static jb_err open_forwarding_connection( struct client_state *csp );
+static jb_err send_client_headers_to_server( struct client_state *csp, struct http_request *http,  char* hdr );
+static jb_err is_connect_request_allowed( struct client_state *csp ) ;
+
+
 #ifdef AMIGA
 void serve(struct client_state *csp);
 #else /* ifndef AMIGA */
@@ -666,9 +659,7 @@ const char *pidfile = NULL;
 int received_hup_signal = 0;
 #endif /* defined unix */
 
-/**
- * The vanilla wafer.
- */
+/* The vanilla wafer. */
 static const char VANILLA_WAFER[] =
    "NOTICE=TO_WHOM_IT_MAY_CONCERN_"
    "Do_not_send_me_any_copyrighted_information_other_than_the_"
@@ -677,7 +668,6 @@ static const char VANILLA_WAFER[] =
    "are_subject_to_a_claim_of_copyright_by_anybody._"
    "Take_notice_that_I_refuse_to_be_bound_by_any_license_condition_"
    "(copyright_or_otherwise)_applying_to_any_cookie._";
-
 
 /**
  * HTTP header sent when doing HTTPS tunnelling ("CONNECT" method).
@@ -700,7 +690,6 @@ static const char CHEADER[] =
  */
 static const char CFORBIDDEN[] =
    "HTTP/1.0 403 Connection not allowable\r\nX-Hint: If you read this message interactively, then you know why this happens ,-)\r\n\r\n";
-
 
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
@@ -762,415 +751,52 @@ static void sig_handler(int the_signal)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  On success, the number of bytes written are returned (zero
- *                indicates nothing was written).  On error, -1 is returned,
- *                and errno is set appropriately.  If count is zero and the
- *                file descriptor refers to a regular file, 0 will be
- *                returned without causing any other effect.  For a special
- *                file, the results are not portable.
+ * Returns     :  void
  *
  *********************************************************************/
 static void chat(struct client_state *csp)
 {
-/*
- * This next lines are a little ugly, but they simplifies the if statements
- * below.  Basically if TOGGLE, then we want the if to test if the
- * CSP_FLAG_TOGGLED_ON flag ist set, else we don't.  And if FEATURE_FORCE_LOAD,
- * then we want the if to test for CSP_FLAG_FORCED , else we don't
- */
-#ifdef FEATURE_TOGGLE
-#   define IS_TOGGLED_ON_AND (csp->flags & CSP_FLAG_TOGGLED_ON) &&
-#else /* ifndef FEATURE_TOGGLE */
-#   define IS_TOGGLED_ON_AND
-#endif /* ndef FEATURE_TOGGLE */
-#ifdef FEATURE_FORCE_LOAD
-#   define IS_NOT_FORCED_AND !(csp->flags & CSP_FLAG_FORCED) &&
-#else /* ifndef FEATURE_FORCE_LOAD */
-#   define IS_NOT_FORCED_AND
-#endif /* def FEATURE_FORCE_LOAD */
 
-#define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
    char buf[BUFFER_SIZE];
-   char *hdr;
-   char *p;
-   char *req;
+   int len; /* for buffer sizes */
+   char *hdr; 
    fd_set rfds;
    int n;
    jb_socket maxfd;
-   int server_body;
-   int ms_iis5_hack = 0;
    int byte_count = 0;
-   const struct forward_spec * fwd;
    struct http_request *http;
-   int len; /* for buffer sizes */
-#ifdef FEATURE_KILL_POPUPS
-   int block_popups;         /* bool, 1==will block popups */
-   int block_popups_now = 0; /* bool, 1==currently blocking popups */
-#endif /* def FEATURE_KILL_POPUPS */
-
-   int pcrs_filter;        /* bool, 1==will filter through pcrs */
-   int gif_deanimate;      /* bool, 1==will deanimate gifs */
-
-   /* Function that does the content filtering for the current request */
-   char *(*content_filter)() = NULL;
-
-   /* Skeleton for HTTP response, if we should intercept the request */
-   struct http_response *rsp;
 
    http = csp->http;
 
-   /*
-    * Read the client's request.  Note that since we're not using select() we
-    * could get blocked here if a client connected, then didn't say anything!
-    */
-
-   for (;;)
-   {
-      len = read_socket(csp->cfd, buf, sizeof(buf));
-
-      if (len <= 0) break;      /* error! */
-      
-      /*
-       * If there is no memory left for buffering the
-       * request, there is nothing we can do but hang up
-       */
-      if (add_to_iob(csp, buf, len))
-      {
-         return;
-      }
-
-      req = get_header(csp);
-
-      if (req == NULL)
-      {
-         break;    /* no HTTP request! */
-      }
-
-      if (*req == '\0')
-      {
-         continue;   /* more to come! */
-      }
-
-#ifdef FEATURE_FORCE_LOAD
-      /* If this request contains the FORCE_PREFIX,
-       * better get rid of it now and set the force flag --oes
-       */
-
-      if (strstr(req, FORCE_PREFIX))
-      {
-         strclean(req, FORCE_PREFIX);
-         log_error(LOG_LEVEL_FORCE, "Enforcing request \"%s\".\n", req);
-         csp->flags |= CSP_FLAG_FORCED;
-      }
-
-#endif /* def FEATURE_FORCE_LOAD */
-
-      parse_http_request(req, http, csp);
-      freez(req);
-      break;
-   }
-
-   if (http->cmd == NULL)
-   {
-      strcpy(buf, CHEADER);
-      write_socket(csp->cfd, buf, strlen(buf));
-
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 400 0", csp->ip_addr_str);
-
+   if (read_client_headers(csp, http ) != JB_ERR_OK )
       return;
-   }
+   
 
-   /* decide how to route the HTTP request */
+   /* Process the client headers */
+   if (process_client_headers(csp, http) != JB_ERR_OK)
+      return;
+   
 
-   if ((fwd = forward_url(http, csp)) == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-   }
-
-   /* build the http request to send to the server
-    * we have to do one of the following:
-    *
-    * create = use the original HTTP request to create a new
-    *          HTTP request that has either the path component
-    *          without the http://domainspec (w/path) or the
-    *          full orininal URL (w/url)
-    *          Note that the path and/or the HTTP version may
-    *          have been altered by now.
-    *
-    * connect = Open a socket to the host:port of the server
-    *           and short-circuit server and client socket.
-    *
-    * pass =  Pass the request unchanged if forwarding a CONNECT
-    *         request to a parent proxy. Note that we'll be sending
-    *         the CFAIL message ourselves if connecting to the parent
-    *         fails, but we won't send a CSUCCEED message if it works,
-    *         since that would result in a double message (ours and the
-    *         parent's). After sending the request to the parent, we simply
-    *         tunnel.
-    *
-    * here's the matrix:
-    *                        SSL
-    *                    0        1
-    *                +--------+--------+
-    *                |        |        |
-    *             0  | create | connect|
-    *                | w/path |        |
-    *  Forwarding    +--------+--------+
-    *                |        |        |
-    *             1  | create | pass   |
-    *                | w/url  |        |
-    *                +--------+--------+
-    *
-    */
+   /* Check if this connection request is permitted */
+   if (is_connect_request_allowed(csp) != JB_ERR_OK)
+      return ;
 
    /*
-    * Determine the actions for this URL
+    * We have a valid and legit request. Now, check to see if we need to
+    * intercept it.
     */
-#ifdef FEATURE_TOGGLE
-   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
-   {
-      /* Most compatible set of actions (i.e. none) */
-      init_current_action(csp->action);
-   }
-   else
-#endif /* ndef FEATURE_TOGGLE */
-   {
-      url_actions(http, csp);
-   }
-
-
-   /*
-    * Check if a CONNECT request is allowable:
-    * In the absence of a +limit-connect action, allow only port 443.
-    * If there is an action, allow whatever matches the specificaton.
-    */
-   if(http->ssl)
-   {
-      if(  ( !(csp->action->flags & ACTION_LIMIT_CONNECT) && csp->http->port != 443)
-           || (csp->action->flags & ACTION_LIMIT_CONNECT
-              && !match_portlist(csp->action->string[ACTION_STRING_LIMIT_CONNECT], csp->http->port)) )
-      {
-         strcpy(buf, CFORBIDDEN);
-         write_socket(csp->cfd, buf, strlen(buf));
-
-         log_error(LOG_LEVEL_CONNECT, "Denying suspicious CONNECT request from %s", csp->ip_addr_str);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 403 0", csp->ip_addr_str);
-
-         return;
-      }
-   }
-
-
-   /*
-    * Downgrade http version from 1.1 to 1.0 if +downgrade
-    * action applies
-    */
-   if ( (http->ssl == 0)
-     && (!strcmpic(http->ver, "HTTP/1.1"))
-     && (csp->action->flags & ACTION_DOWNGRADE))
-   {
-      freez(http->ver);
-      http->ver = strdup("HTTP/1.0");
-
-      if (http->ver == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory downgrading HTTP version");
-      }
-   }
-
+   if (intercept_page(csp, http) != JB_ERR_OK)
+      return;
+  
    /* 
-    * Save a copy of the original request for logging
-    */
-   http->ocmd = strdup(http->cmd);
-
-   if (http->ocmd == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "Out of memory copying HTTP request line");
-   }
-
-   /*
-    * (Re)build the HTTP request for non-SSL requests.
-    * If forwarding, use the whole URL, else, use only the path.
-    */
-   if (http->ssl == 0)
-   {
-      freez(http->cmd);
-
-      http->cmd = strdup(http->gpc);
-      string_append(&http->cmd, " ");
-
-      if (fwd->forward_host)
-      {
-         string_append(&http->cmd, http->url);
-      }
-      else
-      {
-         string_append(&http->cmd, http->path);
-      }
-
-      string_append(&http->cmd, " ");
-      string_append(&http->cmd, http->ver);
-
-      if (http->cmd == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory rewiting SSL command");
-      }
-   }
-   enlist(csp->headers, http->cmd);
+    * The page passed the intercept routine, so open a forwarding
+    * connection for conversation
+	*/
+   if (open_forwarding_connection(csp) != JB_ERR_OK )
+      return ;
 
 
-   /*
-    * If the user has not supplied any wafers, and the user has not
-    * told us to suppress the vanilla wafer, then send the vanilla wafer.
-    */
-   if (list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
-       && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
-   {
-      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
-   }
-
-
-#ifdef FEATURE_KILL_POPUPS
-   block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
-#endif /* def FEATURE_KILL_POPUPS */
-
-   pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
-                                (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]));
-
-   gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
-
-   /* grab the rest of the client's headers */
-
-   for (;;)
-   {
-      if ( ( ( p = get_header(csp) ) != NULL) && ( *p == '\0' ) )
-      {
-         len = read_socket(csp->cfd, buf, sizeof(buf));
-         if (len <= 0)
-         {
-            log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
-            return;
-         }
-         
-         /*
-          * If there is no memory left for buffering the
-          * request, there is nothing we can do but hang up
-          */
-         if (add_to_iob(csp, buf, len))
-         {
-            return;
-         }
-         continue;
-      }
-
-      if (p == NULL) break;
-
-      enlist(csp->headers, p);
-      freez(p);
-   }
-   /*
-    * We have a request. Now, check to see if we need to
-    * intercept it, i.e. If ..
-    */
-
-   if (
-       /* a CGI call was detected and answered */
-       (NULL != (rsp = dispatch_cgi(csp)))
-
-       /* or we are enabled and... */
-       || (IS_ENABLED_AND (
-
-            /* ..the request was blocked */
-          ( NULL != (rsp = block_url(csp)))
-
-          /* ..or untrusted */
-#ifdef FEATURE_TRUST
-          || ( NULL != (rsp = trust_url(csp)))
-#endif /* def FEATURE_TRUST */
-
-          /* ..or a fast redirect kicked in */
-#ifdef FEATURE_FAST_REDIRECTS
-          || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) &&
-                (NULL != (rsp = redirect_url(csp))))
-#endif /* def FEATURE_FAST_REDIRECTS */
-          ))
-      )
-   {
-      /* Write the answer to the client */
-      if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-       || write_socket(csp->cfd, rsp->body, rsp->content_length))
-      {
-         log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-      }
-
-#ifdef FEATURE_STATISTICS
-      /* Count as a rejected request */
-      csp->flags |= CSP_FLAG_REJECTED;
-#endif /* def FEATURE_STATISTICS */
-
-      /* Log (FIXME: All intercept reasons apprear as "crunch" with Status 200) */
-      log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", csp->ip_addr_str, http->ocmd);
-
-      /* Clean up and return */
-      free_http_response(rsp);
-      return;
-   }
-
-   log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
-
-   if (fwd->forward_host)
-   {
-      log_error(LOG_LEVEL_CONNECT, "via %s:%d to: %s",
-               fwd->forward_host, fwd->forward_port, http->hostport);
-   }
-   else
-   {
-      log_error(LOG_LEVEL_CONNECT, "to %s", http->hostport);
-   }
-
-   /* here we connect to the server, gateway, or the forwarder */
-
-   csp->sfd = forwarded_connect(fwd, http, csp);
-
-   if (csp->sfd == JB_INVALID_SOCKET)
-   {
-      log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
-                http->hostport);
-
-      if (errno == EINVAL)
-      {
-         rsp = error_response(csp, "no-such-domain", errno);
-
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 404 0",
-                   csp->ip_addr_str, http->ocmd);
-      }
-      else
-      {
-         rsp = error_response(csp, "connect-failed", errno);
-
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                   csp->ip_addr_str, http->ocmd);
-      }
-
-
-      /* Write the answer to the client */
-      if(rsp)
-      {
-         if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-          || write_socket(csp->cfd, rsp->body, rsp->content_length))
-         {
-            log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-         }
-      }
-
-      free_http_response(rsp);
-      return;
-   }
-
-   log_error(LOG_LEVEL_CONNECT, "OK");
 
    hdr = sed(client_patterns, add_client_headers, csp);
    if (hdr == NULL)
@@ -1179,56 +805,13 @@ static void chat(struct client_state *csp)
       log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
    }
 
+   /* FIXME - where should this go, logically ? */
    list_remove_all(csp->headers);
 
-   if (fwd->forward_host || (http->ssl == 0))
-   {
-      /* write the client's (modified) header to the server
-       * (along with anything else that may be in the buffer)
-       */
 
-      if (write_socket(csp->sfd, hdr, strlen(hdr))
-       || (flush_socket(csp->sfd, csp) <  0))
-      {
-         log_error(LOG_LEVEL_CONNECT, "write header to: %s failed: %E",
-                    http->hostport);
+   if (send_client_headers_to_server(csp, http, hdr) != JB_ERR_OK)
+      return ;
 
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                   csp->ip_addr_str, http->ocmd);
-
-         rsp = error_response(csp, "connect-failed", errno);
-
-         if(rsp)
-         {
-            if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-             || write_socket(csp->cfd, rsp->body, rsp->content_length))
-            {
-               log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-            }
-         }
-
-         free_http_response(rsp);
-         freez(hdr);
-         return;
-      }
-   }
-   else
-   {
-      /*
-       * We're running an SSL tunnel and we're not forwarding,
-       * so just send the "connect succeeded" message to the
-       * client, flush the rest, and get out of the way.
-       */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 2\n",
-                csp->ip_addr_str, http->ocmd);
-
-      if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
-      {
-         freez(hdr);
-         return;
-      }
-      IOB_RESET(csp);
-   }
 
    /* we're finished with the client's header */
    freez(hdr);
@@ -1239,10 +822,14 @@ static void chat(struct client_state *csp)
     * until one or the other shuts down the connection.
     */
 
-   server_body = 0;
+   /* Set the flag for reading headers to False */
+   /* This is used in relay_server_traffic */
+   csp->all_headers_read = 0 ;
 
    for (;;)
    {
+      jb_err tmp_ret_val = JB_ERR_GENERIC ;
+
 #ifdef __OS2__
       /*
        * FD_ZERO here seems to point to an errant macro which crashes.
@@ -1273,7 +860,9 @@ static void chat(struct client_state *csp)
 
          if (len <= 0)
          {
-            break; /* "game over, man" */
+            log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
+             csp->ip_addr_str, http->ocmd, byte_count);
+            return ;
          }
 
          if (write_socket(csp->sfd, buf, (size_t)len))
@@ -1285,362 +874,21 @@ static void chat(struct client_state *csp)
       }
 
       /*
-       * The server wants to talk.  It could be the header or the body.
-       * If `hdr' is null, then it's the header otherwise it's the body.
-       * FIXME: Does `hdr' really mean `host'? No.
+       * Check if the server wants to talk, and if so, converse.
        */
 
-
       if (FD_ISSET(csp->sfd, &rfds))
-      {
-         fflush( 0 );
-         len = read_socket(csp->sfd, buf, sizeof(buf) - 1);
+         tmp_ret_val = relay_server_traffic(csp) ;
 
-         if (len < 0)
-         {
-            log_error(LOG_LEVEL_ERROR, "read from: %s failed: %E", http->host);
-
-            log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                      csp->ip_addr_str, http->ocmd);
-
-            rsp = error_response(csp, "connect-failed", errno);
-
-            if(rsp)
-            {
-               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                || write_socket(csp->cfd, rsp->body, rsp->content_length))
-               {
-                  log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-               }
-            }
-
-            free_http_response(rsp);
-            return;
-         }
-
-         /* Add a trailing zero.  This lets filter_popups
-          * use string operations.
-          */
-         buf[len] = '\0';
-
-#ifdef FEATURE_KILL_POPUPS
-         /* Filter the popups on this read. */
-         if (block_popups_now)
-         {
-            filter_popups(buf, csp);
-         }
-#endif /* def FEATURE_KILL_POPUPS */
-
-         /* Normally, this would indicate that we've read
-          * as much as the server has sent us and we can
-          * close the client connection.  However, Microsoft
-          * in its wisdom has released IIS/5 with a bug that
-          * prevents it from sending the trailing \r\n in
-          * a 302 redirect header (and possibly other headers).
-          * To work around this if we've haven't parsed
-          * a full header we'll append a trailing \r\n
-          * and see if this now generates a valid one.
-          *
-          * This hack shouldn't have any impacts.  If we've
-          * already transmitted the header or if this is a
-          * SSL connection, then we won't bother with this
-          * hack.  So we only work on partially received
-          * headers.  If we append a \r\n and this still
-          * doesn't generate a valid header, then we won't
-          * transmit anything to the client.
-          */
-         if (len == 0)
-         {
-
-            if (server_body || http->ssl)
-            {
-               /*
-                * If we have been buffering up the document,
-                * now is the time to apply content modification
-                * and send the result to the client.
-                */
-               if (content_filter)
-               {
-                  /*
-                   * If the content filter fails, use the original
-                   * buffer and length.
-                   * (see p != NULL ? p : csp->iob->cur below)
-                   */
-                  if (NULL == (p = (*content_filter)(csp)))
-                  {
-                     csp->content_length = csp->iob->eod - csp->iob->cur;
-                  }
-
-                  hdr = sed(server_patterns, add_server_headers, csp);
-                  if (hdr == NULL)
-                  {
-                     /* FIXME Should handle error properly */
-                     log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
-                  }
-
-                  if (write_socket(csp->cfd, hdr, strlen(hdr))
-                   || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))
-                  {
-                     log_error(LOG_LEVEL_ERROR, "write modified content to client failed: %E");
-                     return;
-                  }
-
-                  freez(hdr);
-                  if (NULL != p) {
-                     freez(p);
-                  }
-               }
-
-               break; /* "game over, man" */
-            }
-
-            /*
-             * This is NOT the body, so
-             * Let's pretend the server just sent us a blank line.
-             */
-            len = sprintf(buf, "\r\n");
-
-            /*
-             * Now, let the normal header parsing algorithm below do its
-             * job.  If it fails, we'll exit instead of continuing.
-             */
-
-            ms_iis5_hack = 1;
-         }
-
-         /*
-          * If this is an SSL connection or we're in the body
-          * of the server document, just write it to the client,
-          * unless we need to buffer the body for later content-filtering
-          */
-
-         if (server_body || http->ssl)
-         {
-            if (content_filter)
-            {
-               /*
-                * If there is no memory left for buffering the content, or the buffer limit
-                * has been reached, switch to non-filtering mode, i.e. make & write the
-                * header, flush the iob and buf, and get out of the way.
-                */
-               if (add_to_iob(csp, buf, len))
-               {
-                  size_t hdrlen;
-                  int flushed;
-
-                  log_error(LOG_LEVEL_ERROR, "Flushing header and buffers. Stepping back from filtering.");
-
-                  hdr = sed(server_patterns, add_server_headers, csp);
-                  if (hdr == NULL)
-                  {
-                     /* 
-                      * Memory is too tight to even generate the header.
-                      * Send our static "Out-of-memory" page.
-                      */
-                     log_error(LOG_LEVEL_ERROR, "Out of memory while trying to flush.");
-                     rsp = cgi_error_memory();
-
-                     if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                         || write_socket(csp->cfd, rsp->body, rsp->content_length))
-                     {
-                        log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-                     }
-                     return;
-                  }
-
-                  hdrlen = strlen(hdr);
-
-                  if (write_socket(csp->cfd, hdr, hdrlen)
-                   || ((flushed = flush_socket(csp->cfd, csp)) < 0)
-                   || (write_socket(csp->cfd, buf, len)))
-                  {
-                     log_error(LOG_LEVEL_CONNECT, "Flush header and buffers to client failed: %E");
-
-                     freez(hdr);
-                     return;
-                  }
-
-                  byte_count += hdrlen + flushed + len;
-                  freez(hdr);
-                  content_filter = NULL;
-                  server_body = 1;
-
-               }
-            }
-            else
-            {
-               if (write_socket(csp->cfd, buf, (size_t)len))
-               {
-                  log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
-                  return;
-               }
-            }
-            byte_count += len;
-            continue;
-         }
-         else
-         {
-            /* we're still looking for the end of the
-             * server's header ... (does that make header
-             * parsing an "out of body experience" ?
-             */
-
-            /* 
-             * buffer up the data we just read.  If that fails, 
-             * there's little we can do but send our static
-             * out-of-memory page.
-             */
-            if (add_to_iob(csp, buf, len))
-            {
-               log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
-               rsp = cgi_error_memory();
-               
-               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                   || write_socket(csp->cfd, rsp->body, rsp->content_length))
-               {
-                  log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-               }
-               return;
-            }
-
-            /* get header lines from the iob */
-
-            while ((p = get_header(csp)) != NULL)
-            {
-               if (*p == '\0')
-               {
-                  /* see following note */
-                  break;
-               }
-               enlist(csp->headers, p);
-               freez(p);
-            }
-
-            /* NOTE: there are no "empty" headers so
-             * if the pointer `p' is not NULL we must
-             * assume that we reached the end of the
-             * buffer before we hit the end of the header.
-             */
-
-            if (p)
-            {
-               if (ms_iis5_hack)
-               {
-                  /* Well, we tried our MS IIS/5
-                   * hack and it didn't work.
-                   * The header is incomplete
-                   * and there isn't anything
-                   * we can do about it.
-                   */
-                  break;
-               }
-               else
-               {
-                  /* Since we have to wait for
-                   * more from the server before
-                   * we can parse the headers
-                   * we just continue here.
-                   */
-                  continue;
-               }
-            }
-
-            /* we have now received the entire header.
-             * filter it and send the result to the client
-             */
-
-            hdr = sed(server_patterns, add_server_headers, csp);
-            if (hdr == NULL)
-            {
-               /* FIXME Should handle error properly */
-               log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
-            }
-
-#ifdef FEATURE_KILL_POPUPS
-            /* Start blocking popups if appropriate. */
-
-            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                block_popups)                     /* Policy allows */
-            {
-               block_popups_now = 1;
-               /*
-                * Filter the part of the body that came in the same read
-                * as the last headers:
-                */
-               filter_popups(csp->iob->cur, csp);
-            }
-
-#endif /* def FEATURE_KILL_POPUPS */
-
-            /* Buffer and pcrs filter this if appropriate. */
-
-            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                pcrs_filter)                      /* Policy allows */
-            {
-               content_filter = pcrs_filter_response;
-            }
-
-            /* Buffer and gif_deanimate this if appropriate. */
-
-            if ((csp->content_type & CT_GIF)  &&  /* It's a image/gif MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                gif_deanimate)                    /* Policy allows */
-            {
-               content_filter = gif_deanimate_response;
-            }
-
-            /*
-             * Only write if we're not buffering for content modification
-             */
-            if (!content_filter)
-            {
-               /* write the server's (modified) header to
-                * the client (along with anything else that
-                * may be in the buffer)
-                */
-
-               if (write_socket(csp->cfd, hdr, strlen(hdr))
-                || ((len = flush_socket(csp->cfd, csp)) < 0))
-               {
-                  log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
-
-                  /* the write failed, so don't bother
-                   * mentioning it to the client...
-                   * it probably can't hear us anyway.
-                   */
-                  freez(hdr);
-                  return;
-               }
-
-               byte_count += len;
-            }
-
-            /* we're finished with the server's header */
-
-            freez(hdr);
-            server_body = 1;
-
-            /* If this was a MS IIS/5 hack then it means
-             * the server has already closed the
-             * connection.  Nothing more to read.  Time
-             * to bail.
-             */
-            if (ms_iis5_hack)
-            {
-               break;
-            }
-         }
-         continue;
-      }
-
-      return; /* huh? we should never get here */
+	  
+      if (tmp_ret_val == JB_ERR_OK)
+         continue ;
+      else
+         return; 
    }
-
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
-             csp->ip_addr_str, http->ocmd, byte_count);
-}
+   /* We should never get here! */
+   log_error(LOG_LEVEL_FATAL, "chat() : logic error in for() loop" ) ;
+} /* END chat() */
 
 
 /*********************************************************************
@@ -2384,6 +1632,933 @@ static void listen_loop(void)
 
 }
 
+/*********************************************************************
+ *
+ * Function    :  relay_server_traffic
+ *
+ * Description :  receive traffic from the server and relay it
+ *                to the client, with some processing
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *                         
+ *
+ * Returns     :  JB_ERR_OK if there may be more work
+ *             :  other values for errors
+ *
+ **********************************************************************/
+
+static jb_err relay_server_traffic( struct client_state *csp )
+{
+#ifdef FEATURE_KILL_POPUPS
+   int block_popups;         /* bool, 1==will block popups */
+   int block_popups_now = 0; /* bool, 1==currently blocking popups */
+#endif /* def FEATURE_KILL_POPUPS */
+   
+  char buf[BUFFER_SIZE];
+  int len; /* for buffer sizes */
+  int ms_iis5_hack = 0;
+  int byte_count = 0;
+  char *hdr;
+  char *p;
+
+  /* Skeleton for HTTP response, if we should intercept the request */
+  struct http_response *rsp;
+
+  int pcrs_filter;        /* bool, 1==will filter through pcrs */
+  int gif_deanimate;      /* bool, 1==will deanimate gifs */
+
+#ifdef FEATURE_KILL_POPUPS
+   block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
+#endif /* def FEATURE_KILL_POPUPS */
+
+   pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
+                                (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]));
+
+   gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
+
+
+  fflush (0);
+  len = read_socket (csp->sfd, buf, sizeof (buf) - 1);
+
+  if (len < 0)
+    {
+      log_error (LOG_LEVEL_ERROR, "read from: %s failed: %E", csp->http->host);
+
+      log_error (LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
+		 csp->ip_addr_str, csp->http->ocmd);
+
+      rsp = error_response (csp, "connect-failed", errno);
+
+      if (rsp)
+      {
+         if (write_socket (csp->cfd, rsp->head, rsp->head_length)
+            || write_socket (csp->cfd, rsp->body, rsp->content_length))
+         {
+            log_error (LOG_LEVEL_ERROR, "write to: %s failed: %E",
+                       csp->http->host);
+         }
+      }
+
+      free_http_response (rsp);
+      return JB_ERR_GENERIC;
+    }
+
+  /* Add a trailing zero.  This lets filter_popups
+   * use string operations.
+   */
+  buf[len] = '\0';
+
+#ifdef FEATURE_KILL_POPUPS
+  /* Filter the popups on this read. */
+  if (block_popups_now)
+    {
+      filter_popups (buf, csp);
+    }
+#endif /* def FEATURE_KILL_POPUPS */
+
+
+  /* Normally, this would indicate that we've read
+   * as much as the server has sent us and we can
+   * close the client connection.  However, Microsoft
+   * in its wisdom has released IIS/5 with a bug that
+   * prevents it from sending the trailing \r\n in
+   * a 302 redirect header (and possibly other headers).
+   * To work around this if we've haven't parsed
+   * a full header we'll append a trailing \r\n
+   * and see if this now generates a valid one.
+   *
+   * This hack shouldn't have any impacts.  If we've
+   * already transmitted the header or if this is a
+   * SSL connection, then we won't bother with this
+   * hack.  So we only work on partially received
+   * headers.  If we append a \r\n and this still
+   * doesn't generate a valid header, then we won't
+   * transmit anything to the client.
+   */
+  if (len == 0)
+    {
+
+      if (csp->all_headers_read || csp->http->ssl)
+      {
+         /*
+          * If we have been buffering up the document,
+          * now is the time to apply content modification
+          * and send the result to the client.
+          */
+         if (csp->content_filter)
+         {
+            /*
+             * If the content filter fails, use the original
+             * buffer and length.
+             * (see p != NULL ? p : csp->iob->cur below)
+             */
+            if (NULL == (p = (*csp->content_filter) (csp)))
+            {
+               csp->content_length = csp->iob->eod - csp->iob->cur;
+            }
+
+            hdr = sed (server_patterns, add_server_headers, csp);
+            if (hdr == NULL)
+            {
+               /* FIXME Should handle error properly */
+               log_error (LOG_LEVEL_FATAL,
+                  "Out of memory parsing server header");
+
+            }
+
+            if (write_socket (csp->cfd, hdr, strlen (hdr))
+               || write_socket (csp->cfd, p != NULL ? p : csp->iob->cur,
+               	       csp->content_length))
+            {
+               log_error (LOG_LEVEL_ERROR,
+                  "write modified content to client failed: %E");
+               return JB_ERR_GENERIC;
+            }
+
+            freez (hdr);
+            if (NULL != p)
+            {
+               freez (p);
+            }
+         }
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
+            csp->ip_addr_str, csp->http->ocmd, byte_count);
+         return JB_ERR_GENERIC;
+      }
+
+      /*
+       * This is NOT the body, so
+       * Let's pretend the server just sent us a blank line.
+       */
+      len = sprintf (buf, "\r\n");
+
+      /*
+       * Now, let the normal header parsing algorithm below do its
+       * job.  If it fails, we'll exit instead of continuing.
+       */
+
+      ms_iis5_hack = 1;
+    }
+
+  /*
+   * If this is an SSL connection or we're in the body
+   * of the server document, just write it to the client,
+   * unless we need to buffer the body for later content-filtering
+   */
+
+  if (csp->all_headers_read || csp->http->ssl)
+    {
+      if (csp->content_filter)
+      {
+         add_to_iob (csp, buf, len);
+
+         /*
+          * If the buffer limit will be reached on the next read,
+          * switch to non-filtering mode, i.e. make & write the
+          * header, flush the socket and get out of the way.
+          */
+         if (((size_t) (csp->iob->eod - csp->iob->buf)) +
+              (size_t) BUFFER_SIZE > csp->config->buffer_limit)
+         {
+            size_t hdrlen;
+
+            log_error (LOG_LEVEL_ERROR,
+                        "Buffer size limit reached! Flushing and stepping back.");
+
+            hdr = sed (server_patterns, add_server_headers, csp);
+            if (hdr == NULL)
+            {
+               /* FIXME Should handle error properly */
+               log_error (LOG_LEVEL_FATAL,
+                  "Out of memory parsing server header");
+            }
+
+            hdrlen = strlen (hdr);
+            byte_count += hdrlen;
+
+            if (write_socket (csp->cfd, hdr, hdrlen)
+               || ((len = flush_socket (csp->cfd, csp)) < 0))
+            {
+               log_error (LOG_LEVEL_CONNECT,
+                  "write header to client failed: %E");
+
+               freez (hdr);
+               return JB_ERR_GENERIC;
+            }
+
+            freez (hdr);
+            byte_count += len;
+
+            csp->content_filter = NULL;
+            csp->all_headers_read = 1;
+
+         }
+      }
+      else
+      {
+         if (write_socket (csp->cfd, buf, (size_t) len))
+         {
+            log_error (LOG_LEVEL_ERROR, "write to client failed: %E");
+            return JB_ERR_GENERIC;
+         }
+      }
+      byte_count += len;
+      return JB_ERR_OK ;
+    }
+  else
+    {
+      /* we're still looking for the end of the
+       * server's header ... (does that make header
+       * parsing an "out of body experience" ?
+       */
+
+      /* buffer up the data we just read */
+      add_to_iob (csp, buf, len);
+
+      /* get header lines from the iob */
+
+      while ((p = get_header (csp)) != NULL)
+      {
+         if (*p == '\0')
+         {
+            /* see following note */
+            log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
+               csp->ip_addr_str, csp->http->ocmd, byte_count);
+            return JB_ERR_GENERIC;
+         }
+         enlist (csp->headers, p);
+         freez (p);
+      }
+
+      /* NOTE: there are no "empty" headers so
+       * if the pointer `p' is not NULL we must
+       * assume that we reached the end of the
+       * buffer before we hit the end of the header.
+       */
+
+      if (p)
+      {
+         if (ms_iis5_hack)
+         {
+            /* Well, we tried our MS IIS/5
+             * hack and it didn't work.
+             * The header is incomplete
+             * and there isn't anything
+             * we can do about it.
+             */
+            log_error(LOG_LEVEL_CLF, "Incomplete Server Header: %s - - [%T] \"%s\" 200 %d",
+                csp->ip_addr_str, csp->http->ocmd, byte_count);
+            return JB_ERR_GENERIC;
+         }
+         else
+         {
+            /* Since we have to wait for
+             * more from the server before
+             * we can parse the headers
+             * we just continue here.
+             */
+            return JB_ERR_OK;
+         }
+      }      
+      
+      /* we have now received the entire header.
+       * filter it and send the result to the client
+       */
+
+      hdr = sed (server_patterns, add_server_headers, csp);
+      if (hdr == NULL)
+      {
+         /* FIXME Should handle error properly */
+         log_error (LOG_LEVEL_FATAL, "Out of memory parsing server header");
+      }
+
+	  
+
+#ifdef FEATURE_KILL_POPUPS
+      /* Start blocking popups if appropriate. */
+
+      if ((csp->content_type & CT_TEXT) &&   /* It's a text / * MIME-Type */
+          !csp->http->ssl &&                 /* We talk plaintext */
+          block_popups)                      /* Policy allows */
+      {
+         block_popups_now = 1;
+         /*
+          * Filter the part of the body that came in the same read
+          * as the last headers:
+          */
+         filter_popups (csp->iob->cur, csp);
+      }
+
+#endif /* def FEATURE_KILL_POPUPS */
+
+        /* Buffer and pcrs filter this if appropriate. */
+
+      if ((csp->content_type & CT_TEXT) &&       /* It's a text / * MIME-Type */
+          !csp->http->ssl &&                     /* We talk plaintext */
+          pcrs_filter)                           /* Policy allows */
+      {
+         csp->content_filter = pcrs_filter_response;
+      }
+
+      /* Buffer and gif_deanimate this if appropriate. */
+
+      if ((csp->content_type & CT_GIF) &&        /* It's a image/gif MIME-Type */
+          !csp->http->ssl &&                     /* We talk plaintext */
+          gif_deanimate)	                        /* Policy allows */
+      {
+         csp->content_filter = gif_deanimate_response;
+      }
+      /*
+       * Only write if we're not buffering for content modification
+       */
+      if (!csp->content_filter)
+      {
+         /* write the server's (modified) header to
+          * the client (along with anything else that
+          * may be in the buffer)
+          */
+         if (write_socket (csp->cfd, hdr, strlen (hdr))
+             || ((len = flush_socket (csp->cfd, csp)) < 0))
+         {
+            log_error (LOG_LEVEL_CONNECT,
+               "write header to client failed: %E");
+
+            /* the write failed, so don't bother
+             * mentioning it to the client...
+             * it probably can't hear us anyway.
+             */
+            freez (hdr);
+            return JB_ERR_GENERIC;
+         }
+
+         byte_count += len;
+      }
+
+      /* we're finished with the server's header */
+
+      freez (hdr);
+      csp->all_headers_read = 1;
+
+      /* If this was a MS IIS/5 hack then it means
+       * the server has already closed the
+       * connection.  Nothing more to read.  Time
+       * to bail.
+       */
+      if (ms_iis5_hack)
+      {
+         return JB_ERR_GENERIC ;
+      }
+    }
+   return JB_ERR_OK ;
+} /* END relay_server_traffic() */
+
+
+/*********************************************************************
+ *
+ * Function    :  read_client_headers
+ *
+ * Description :  read all the client headers, and fill in the
+ *                http* structure
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *          2  :  http_request structure
+ *                         
+ *
+ * Returns     :  JB_ERR_OK  - headers read and parsed ok
+ *             :  other values - an error occurred.
+ *********************************************************************/
+
+static jb_err read_client_headers( struct client_state *csp, struct http_request *http )
+{
+
+   char *p;
+   char *req;
+   char buf[BUFFER_SIZE];
+   int len; /* for buffer sizes */
+
+   /*
+    * Read the client's request.  Note that since we're not using select() we
+    * could get blocked here if a client connected, then didn't say anything!
+    *
+    * This will read all the client headers.
+   */
+
+   req = NULL ;
+   for (;;)
+   {
+      len = read_socket(csp->cfd, buf, sizeof(buf));
+
+      if (len <= 0) break;      /* error! */
+
+      add_to_iob(csp, buf, len);
+
+      req = get_header(csp);
+
+      if (req == NULL)
+      {
+         break;    /* no HTTP request! */
+      }
+
+      if (*req == '\0')
+      {
+         continue;   /* more to come! */
+      }
+
+      /* When we get here we have read one header which is enough */
+      /* to check whether the connection is allowed */
+      break; 
+   }
+
+
+   for(;;) 
+   {
+
+     if ( ( ( p = get_header(csp) ) != NULL) && ( *p == '\0' ) )
+      {
+         len = read_socket(csp->cfd, buf, sizeof(buf));
+         if (len <= 0)
+         {
+            log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
+            return JB_ERR_GENERIC;
+         }
+         add_to_iob(csp, buf, len);
+         continue;
+      }
+
+      if (p == NULL) break;
+
+      enlist(csp->headers, p);
+      freez(p);
+
+   }
+
+   parse_http_request(req, http, csp);
+   freez(req);
+
+   if (http->cmd == NULL)
+   {
+      strcpy(buf, CHEADER);
+      write_socket(csp->cfd, buf, strlen(buf));
+
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 400 0", csp->ip_addr_str);
+
+      return JB_ERR_GENERIC;
+   }
+
+   return JB_ERR_OK ;
+
+
+} /* END read_client_headers */
+
+
+/*********************************************************************
+ *
+ * Function    :  process_client_headers
+ *
+ * Description :  Process client headers
+ * FIXME: Add description of what we do here!
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *          2  :  http_request structure
+ *                         
+ *
+ * Returns     :  JB_ERR_OK  - headers processed ok
+ *             :  other values - an error occurred.
+ *********************************************************************/
+
+static jb_err process_client_headers( struct client_state *csp, struct http_request *http )
+{
+
+
+#ifdef FEATURE_FORCE_LOAD
+      /* If this request contains the FORCE_PREFIX,
+       * better get rid of it now and set the force flag --oes
+       * Changed to use the http structure rather than the req field --jaa
+       */
+
+      if (strstr(http->url, FORCE_PREFIX))
+      {
+         strclean(http->url, FORCE_PREFIX);
+         log_error(LOG_LEVEL_FORCE, "Enforcing request \"%s\".\n", http->url);
+         csp->flags |= CSP_FLAG_FORCED;
+      }
+
+#endif /* def FEATURE_FORCE_LOAD */
+
+
+   /* decide how to route the HTTP request */
+
+   if ((http->fwd = forward_url(http, csp)) == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
+   }
+
+   /* build the http request to send to the server
+    * we have to do one of the following:
+    *
+    * create = use the original HTTP request to create a new
+    *          HTTP request that has either the path component
+    *          without the http://domainspec (w/path) or the
+    *          full orininal URL (w/url)
+    *          Note that the path and/or the HTTP version may
+    *          have been altered by now.
+    *
+    * connect = Open a socket to the host:port of the server
+    *           and short-circuit server and client socket.
+    *
+    * pass =  Pass the request unchanged if forwarding a CONNECT
+    *         request to a parent proxy. Note that we'll be sending
+    *         the CFAIL message ourselves if connecting to the parent
+    *         fails, but we won't send a CSUCCEED message if it works,
+    *         since that would result in a double message (ours and the
+    *         parent's). After sending the request to the parent, we simply
+    *         tunnel.
+    *
+    * here's the matrix:
+    *                        SSL
+    *                    0        1
+    *                +--------+--------+
+    *                |        |        |
+    *             0  | create | connect|
+    *                | w/path |        |
+    *  Forwarding    +--------+--------+
+    *                |        |        |
+    *             1  | create | pass   |
+    *                | w/url  |        |
+    *                +--------+--------+
+    *
+    */
+
+   /*
+    * Determine the actions for this URL
+    */
+#ifdef FEATURE_TOGGLE
+   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
+   {
+      /* Most compatible set of actions (i.e. none) */
+      init_current_action(csp->action);
+   }
+   else
+#endif /* ndef FEATURE_TOGGLE */
+   {
+      url_actions(http, csp);
+   }
+
+
+
+
+
+   /*
+    * Downgrade http version from 1.1 to 1.0 if +downgrade
+    * action applies
+    */
+   if ( (http->ssl == 0)
+     && (!strcmpic(http->ver, "HTTP/1.1"))
+     && (csp->action->flags & ACTION_DOWNGRADE))
+   {
+      freez(http->ver);
+      http->ver = strdup("HTTP/1.0");
+
+      if (http->ver == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory downgrading HTTP version");
+      }
+   }
+
+   /* 
+    * Save a copy of the original request for logging
+    */
+   http->ocmd = strdup(http->cmd);
+
+   if (http->ocmd == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory copying HTTP request line");
+   }
+
+   /*
+    * (Re)build the HTTP request for non-SSL requests.
+    * If forwarding, use the whole URL, else, use only the path.
+    */
+   if (http->ssl == 0)
+   {
+      freez(http->cmd);
+
+      http->cmd = strdup(http->gpc);
+      string_append(&http->cmd, " ");
+
+      if (http->fwd->forward_host)
+      {
+         string_append(&http->cmd, http->url);
+      }
+      else
+      {
+         string_append(&http->cmd, http->path);
+      }
+
+      string_append(&http->cmd, " ");
+      string_append(&http->cmd, http->ver);
+
+      if (http->cmd == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory rewiting SSL command");
+      }
+   }
+   enlist_first(csp->headers, http->cmd);
+
+
+   /*
+    * If the user has not supplied any wafers, and the user has not
+    * told us to suppress the vanilla wafer, then send the vanilla wafer.
+    */
+   if (list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
+       && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
+   {
+      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
+   }
+
+   return JB_ERR_OK ;
+} /* process_client_headers */
+
+/*********************************************************************
+ *
+ * Function    :  intercept_page
+ *
+ * Description :  Check whether to intercept page
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *          2  :  http_request structure
+ *                         
+ *
+ * Returns     :  JB_ERR_OK  - Do NOT intercept this page
+ *             :  JB_ERR_INTERCEPT - intercept this page
+ *             :  all other values - an error occurred.  
+ *********************************************************************/
+static jb_err intercept_page( struct client_state *csp, struct http_request *http )
+{
+
+   /* Skeleton for HTTP response, if we should intercept the request */
+   struct http_response *rsp;
+
+
+/*
+ * These next lines are a little ugly, but they simplifies the if statements
+ * below.  Basically if TOGGLE, then we want the if to test if the
+ * CSP_FLAG_TOGGLED_ON flag ist set, else we don't.  And if FEATURE_FORCE_LOAD,
+ * then we want the if to test for CSP_FLAG_FORCED , else we don't
+ */
+#ifdef FEATURE_TOGGLE
+#   define IS_TOGGLED_ON_AND (csp->flags & CSP_FLAG_TOGGLED_ON) &&
+#else /* ifndef FEATURE_TOGGLE */
+#   define IS_TOGGLED_ON_AND
+#endif /* ndef FEATURE_TOGGLE */
+#ifdef FEATURE_FORCE_LOAD
+#   define IS_NOT_FORCED_AND !(csp->flags & CSP_FLAG_FORCED) &&
+#else /* ifndef FEATURE_FORCE_LOAD */
+#   define IS_NOT_FORCED_AND
+#endif /* def FEATURE_FORCE_LOAD */
+
+#define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
+
+   if (
+       /* a CGI call was detected and answered */
+       (NULL != (rsp = dispatch_cgi(csp)))
+
+       /* or we are enabled and... */
+       || (IS_ENABLED_AND (
+
+            /* ..the request was blocked */
+          ( NULL != (rsp = block_url(csp)))
+
+          /* ..or untrusted */
+#ifdef FEATURE_TRUST
+          || ( NULL != (rsp = trust_url(csp)))
+#endif /* def FEATURE_TRUST */
+
+          /* ..or a fast redirect kicked in */
+#ifdef FEATURE_FAST_REDIRECTS
+          || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) &&
+                (NULL != (rsp = redirect_url(csp))))
+#endif /* def FEATURE_FAST_REDIRECTS */
+          ))
+      )
+   {
+      /* Write the answer to the client */
+      if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+       || write_socket(csp->cfd, rsp->body, rsp->content_length))
+      {
+         log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
+      }
+
+#ifdef FEATURE_STATISTICS
+      /* Count as a rejected request */
+      csp->flags |= CSP_FLAG_REJECTED;
+#endif /* def FEATURE_STATISTICS */
+
+      /* Log (FIXME: All intercept reasons apprear as "crunch" with Status 200) */
+      log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", csp->ip_addr_str, http->ocmd);
+
+      /* Clean up and return */
+      free_http_response(rsp);
+      return JB_ERR_INTERCEPT;
+   }
+
+   /* When we get here the request doesn't need to be intercepted */
+   return JB_ERR_OK ;
+}
+
+/*********************************************************************
+ *
+ * Function    :  open_forwarding_connection
+ *
+ * Description :  Check whether to intercept page
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *          2  :  http_request structure
+ *                         
+ * Returns     :  JB_ERR_OK  - Connection opened ok
+ *             :  all other values - an error occurred.  
+ *********************************************************************/
+static jb_err open_forwarding_connection(struct client_state *csp )
+{
+   struct http_response *rsp;
+   
+   log_error(LOG_LEVEL_GPC, "%s%s", csp->http->hostport, csp->http->path);
+
+   if (csp->http->fwd->forward_host)
+   {
+      log_error(LOG_LEVEL_CONNECT, "via %s:%d to: %s",
+               csp->http->fwd->forward_host, csp->http->fwd->forward_port, 
+               csp->http->hostport);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_CONNECT, "to %s", csp->http->hostport);
+   }
+
+   /* here we connect to the server, gateway, or the forwarder */
+
+   csp->sfd = forwarded_connect(csp->http->fwd, csp->http, csp);
+
+   if (csp->sfd == JB_INVALID_SOCKET)
+   {
+      log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
+                csp->http->hostport);
+
+      if (errno == EINVAL)
+      {
+         rsp = error_response(csp, "no-such-domain", errno);
+
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 404 0",
+                   csp->ip_addr_str, csp->http->ocmd);
+      }
+      else
+      {
+         rsp = error_response(csp, "connect-failed", errno);
+
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
+                   csp->ip_addr_str, csp->http->ocmd);
+      }
+
+
+      /* Write the answer to the client */
+      if(rsp)
+      {
+         if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+          || write_socket(csp->cfd, rsp->body, rsp->content_length))
+         {
+            log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", csp->http->host);
+         }
+      }
+
+      free_http_response(rsp);
+      return JB_ERR_GENERIC;
+   }
+
+   log_error(LOG_LEVEL_CONNECT, "OK");
+   return JB_ERR_OK ;
+
+} /* END open_forwarding_connection() */
+
+
+/*********************************************************************
+ *
+ * Function    :  send_client_headers_to_server
+ *
+ * Description :  send the client headers (possibly modified) to the server
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *          2  :  http_request structure
+ *                         
+ *
+ * Returns     :  JB_ERR_OK  - headers sent ok
+ *             :  other values - an error occurred.
+ *********************************************************************/
+
+static jb_err send_client_headers_to_server( struct client_state *csp, struct http_request *http, char *hdr )
+{
+
+   struct http_response *rsp;
+
+   if (http->fwd->forward_host || (http->ssl == 0))
+   {
+      /* write the client's (modified) header to the server
+       * (along with anything else that may be in the buffer)
+       */
+
+      if (write_socket(csp->sfd, hdr, strlen(hdr))
+       || (flush_socket(csp->sfd, csp) <  0))
+      {
+         log_error(LOG_LEVEL_CONNECT, "write header to: %s failed: %E",
+                    http->hostport);
+
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
+                   csp->ip_addr_str, http->ocmd);
+
+         rsp = error_response(csp, "connect-failed", errno);
+
+         if(rsp)
+         {
+            if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+             || write_socket(csp->cfd, rsp->body, rsp->content_length))
+            {
+               log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
+            }
+         }
+
+         free_http_response(rsp);
+         return JB_ERR_GENERIC;
+      }
+   }
+   else
+   {
+      /*
+       * We're running an SSL tunnel and we're not forwarding,
+       * so just send the "connect succeeded" message to the
+       * client, flush the rest, and get out of the way.
+       */
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 2\n",
+                csp->ip_addr_str, http->ocmd);
+
+      if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
+      {
+         return JB_ERR_OK;
+      }
+      IOB_RESET(csp);
+   }
+
+   return JB_ERR_OK ;
+} /* END send_client_headers_to_server */
+
+
+/*********************************************************************
+ *
+ * Function    :  is_connect_request_allowed
+ *
+ * Description :  send the client headers (possibly modified) to the server
+ *
+ * Parameters  :
+ *          1  :  client_state structure
+ *
+ *                         
+ *
+ * Returns     :  JB_ERR_OK  - connect request allowed
+ *             :  other values - connect request not allowed
+ *********************************************************************/
+static jb_err is_connect_request_allowed( struct client_state *csp )
+{
+   /*
+    * Check if a CONNECT request is allowable:
+    * In the absence of a +limit-connect action, allow only port 443.
+    * If there is an action, allow whatever matches the specificaton.
+   */
+
+   if(csp->http->ssl)
+   {
+      if(  ( !(csp->action->flags & ACTION_LIMIT_CONNECT) && csp->http->port != 443)
+           || (csp->action->flags & ACTION_LIMIT_CONNECT
+              && !match_portlist(csp->action->string[ACTION_STRING_LIMIT_CONNECT], csp->http->port)) )
+      {
+         char buf[BUFFER_SIZE];
+         strcpy(buf, CFORBIDDEN);
+         write_socket(csp->cfd, buf, strlen(buf));
+
+         log_error(LOG_LEVEL_CONNECT, "Denying suspicious CONNECT request from %s", csp->ip_addr_str);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 403 0", csp->ip_addr_str);
+
+         return JB_ERR_GENERIC;
+      }
+   }
+
+   return JB_ERR_OK ;
+} /* END is_connect_request_allowed */
 
 /*
   Local Variables:

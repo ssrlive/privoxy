@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 2.1 2002/06/04 16:35:56 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 2.1  2002/06/04 16:35:56  jongfoster
+ *    Moving three variable declarations to jcc.c from project.h
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -531,6 +534,7 @@ typedef int jb_socket;
  */
 typedef int jb_err;
 
+#define JB_ERR_GENERIC   -1 /* General error return value */
 #define JB_ERR_OK         0 /**< Success, no error                        */
 #define JB_ERR_MEMORY     1 /**< Out of memory                            */
 #define JB_ERR_CGI_PARAMS 2 /**< Missing or corrupt CGI parameters        */
@@ -538,7 +542,7 @@ typedef int jb_err;
 #define JB_ERR_PARSE      4 /**< Error parsing file                       */
 #define JB_ERR_MODIFIED   5 /**< File has been modified outside of the  
                                  CGI actions editor.                      */
-
+#define JB_ERR_INTERCEPT  6 /* This page should be intercepted */
 
 /**
  * This macro is used to free a pointer that may be NULL.
@@ -700,6 +704,9 @@ struct http_request
    char  *dbuffer; /**< Buffer with '\0'-delimited domain name.           */
    char **dvec;    /**< List of pointers to the strings in dbuffer.       */
    int    dcount;  /**< How many parts to this domain? (length of dvec)   */
+
+   const struct forward_spec *fwd ;
+
 };
 
 
@@ -1049,6 +1056,10 @@ struct client_state
 
    /** Next thread in linked list. Only read or modify from the main thread! */
    struct client_state *next;
+
+   char *(*content_filter)() ;
+   int all_headers_read ;
+
 };
 
 
