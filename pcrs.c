@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.2 2001/05/22 18:46:04 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.3 2001/05/25 11:03:55 oes Exp $";
 
 /*********************************************************************
  *
@@ -43,6 +43,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.2 2001/05/22 18:46:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.3  2001/05/25 11:03:55  oes
+ *    Added sanity check for NULL jobs to pcrs_exec_substitution
+ *
  *    Revision 1.2  2001/05/22 18:46:04  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -387,7 +390,7 @@ pcrs_job *pcrs_make_job(char *command, int *errptr)
    {
       switch (i)
       {
-  /* We don't care about the command and assume 's' */
+         /* We don't care about the command and assume 's' */
          case 0:
             break;
 
@@ -398,13 +401,15 @@ pcrs_job *pcrs_make_job(char *command, int *errptr)
 
          /* The substitute */
          case 2:
-            newjob->substitute = pcrs_compile_replacement(token, errptr);
-            if (newjob->substitute == NULL)
+            if ((newjob->substitute = pcrs_compile_replacement(token, errptr)) == NULL)
             {
                pcrs_free_job(newjob);
                return NULL;
             }
-            break;
+            else
+            {
+               break;
+            }
 
          /* The options */
          case 3:
@@ -421,6 +426,14 @@ pcrs_job *pcrs_make_job(char *command, int *errptr)
       i++;
    }
    free(token);
+
+   /* We have a valid substitute? */
+   if (newjob->substitute == NULL)
+   {
+      *errptr = PCRS_ERR_CMDSYNTAX;
+      pcrs_free_job(newjob);
+      return NULL;
+   }
 
    /* Compile the pattern */
    newjob->pattern = pcre_compile(dummy, newjob->options, &error, errptr, NULL);
