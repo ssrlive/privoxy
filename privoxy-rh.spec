@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.15 2002/03/26 17:39:54 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.16 2002/03/26 22:29:55 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -55,9 +55,8 @@ Privoxy is a web proxy with advanced filtering capabilities for
 protecting privacy, filtering web page content, managing cookies,
 controlling access, and removing ads, banners, pop-ups and other
 obnoxious Internet junk. Privoxy has a very flexible configuration and
-can be customized to suit individual needs and tastes. Internet
-Privoxy has application for both stand-alone systems and multi-user
-networks.
+can be customized to suit individual needs and tastes. Privoxy has application
+for both stand-alone systems and multi-user networks.
 
 Privoxy is based on the code of the Internet Junkbuster. Junkbuster
 was originally written by JunkBusters Corporation, and was released as
@@ -265,6 +264,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Mar 25 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-3
+- Fix typo in Description.
+
 * Tue Mar 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.13-3
 - Added commentary asking to update the release value on the configure
@@ -541,6 +544,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.16  2002/03/26 22:29:55  swa
+# we have a new homepage!
+#
 # Revision 1.15  2002/03/26 17:39:54  morcego
 # Adding comment on the specfile to remember the packager to update
 # the release number on the configure script
