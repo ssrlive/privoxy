@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.5 2001/06/09 09:13:29 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.6 2001/09/10 16:29:23 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,13 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.6  2001/09/10 16:29:23  swa
+# binary contained debug info.
+# buildroot definition fucks up the build process under suse.
+# program needs to write in varlogjunkbuster
+# install all templates
+# create varlogjunkbuster
+#
 # Revision 1.5  2001/06/09 09:13:29  swa
 # description shorter
 #
@@ -93,11 +100,12 @@ strip junkbuster
 #
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,share/man/man1},etc/{junkbuster,junkbuster/templates,init.d}}
+mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,share/man/man1,share/doc/packages/junkbuster},etc/{junkbuster,junkbuster/templates,init.d}}
 
 # make sure that we can write in the log directory
 chown nobody.nogroup $RPM_BUILD_ROOT/var/log/junkbuster
 install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT/etc/init.d/junkbuster
+# next line might require an additional rpm_build_root
 ln -sf /etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
 
 install -m 755 junkbuster $RPM_BUILD_ROOT/usr/sbin
@@ -123,6 +131,9 @@ install -m 644 config $RPM_BUILD_ROOT/etc/junkbuster
 install -m 644 trust $RPM_BUILD_ROOT/etc/junkbuster
 install -m 644 templates/* $RPM_BUILD_ROOT/etc/junkbuster/templates
 install -m 644 junkbuster.1 $RPM_BUILD_ROOT/usr/share/man/man1
+install -m 644 doc/webserver/user-manual.html $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
+install -m 644 doc/webserver/developer-manual.html $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
+install -m 644 doc/webserver/faq.html $RPM_BUILD_ROOT/usr/share/doc/packages/junkbuster
 %{?suse_check}
 
 #
@@ -141,7 +152,9 @@ sbin/insserv etc/init.d/
 # -----------------------------------------------------------------------------
 #
 %files
-#%doc README *.html
+%doc /usr/share/doc/packages/junkbuster/faq.html
+%doc /usr/share/doc/packages/junkbuster/user-manual.html
+%doc /usr/share/doc/packages/junkbuster/developer-manual.html
 /usr/sbin/junkbuster
 /usr/share/man/man1/junkbuster.1.gz
 %config(noreplace) /etc/junkbuster
