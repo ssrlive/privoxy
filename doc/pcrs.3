@@ -20,7 +20,7 @@
 .\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
 .\" USA.
 .\"
-.TH PCRS 3 "6 September 2001"
+.TH PCRS 3 "4 March 2002"
 .SH NAME
 pcrs - Perl-compatible regular substitution.
 .SH SYNOPSIS
@@ -276,9 +276,9 @@ were made, which is limited to 0 or 1 for non-global searches.
 .SH FREEING JOBS
 .RB "It is not sufficient to call " free() " on a " pcrs_job ", because it "
 contains pointers to other dynamically allocated structures.
-.RB "Use " pcrs_free() " instead. It is safe to pass " NULL " pointers "
+.RB "Use " pcrs_free_job() " instead. It is safe to pass " NULL " pointers "
 .RB "(or pointers to invalid " pcrs_job "s that contain " NULL " pointers"
-.RB "to dependant structures) to " pcrs_free() "."
+.RB "to dependant structures) to " pcrs_free_job() "."
 
 .SS Return value
 .RB "The value of the job's " next " pointer."
@@ -310,7 +310,7 @@ The quote character is (surprise!) '\fB\\\fR'. It quotes the delimiter in a
 .IR command ", the"
 .RB ' $ "' in  a"
 .IR substitute ", and, of course, itself. Note that the"
-.RB ' $ "'doesn't need to be quoted if it isn't followed by " [0-9+'`&] "."
+.RB ' $ "' doesn't need to be quoted if it isn't followed by " [0-9+'`&] "."
 
 .RI "For quoting in the " pattern ", please refer to"
 .BR PCRE(3) .
@@ -439,7 +439,7 @@ int main(int Argc, char **Argv)
 .SH LIMITATIONS
 The number of matches that a global job can have is only limited by the
 available memory. An initial storage for 40 matches is reserved, which
-is dynamically resized by the factor 1.6 if exhausted.
+is dynamically resized by the factor 1.6 whenever it is exhausted.
 
 The number of capturing subpatterns is currently limited to 33, which
 is a Bad Thing[tm]. It should be dynamically expanded until it reaches the
