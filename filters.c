@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.46 2002/03/12 01:42:49 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.47 2002/03/13 00:30:52 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.46 2002/03/12 01:42:49 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.47  2002/03/13 00:30:52  jongfoster
+ *    Killing warnings
+ *    Added option of always sending redirect for imageblock,
+ *    currently disabled with #if 0.
+ *
  *    Revision 1.46  2002/03/12 01:42:49  oes
  *    Introduced modular filters
  *
@@ -1292,6 +1297,8 @@ char *pcrs_filter_response(struct client_state *csp)
       {
          if (strcmp(b->filtername, filtername->str) == 0)
          {
+            int current_hits = 0;
+
             if ( NULL == b->joblist )
             {
                log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->filtername);
@@ -1304,12 +1311,13 @@ char *pcrs_filter_response(struct client_state *csp)
             /* Apply all jobs from the joblist */
             for (job = b->joblist; NULL != job; job = job->next)
             {
-               hits += pcrs_execute(job, old, size, &new, &size);
+               current_hits += pcrs_execute(job, old, size, &new, &size);
                if (old != csp->iob->cur) free(old);
                old=new;
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", hits, size);
+            log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
+            hits += current_hits;
          }
       }
    }
@@ -1388,7 +1396,14 @@ char *gif_deanimate_response(struct client_state *csp)
    }
    else
    {
-      log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
+      if ((int)size == out->offset)
+      {
+         log_error(LOG_LEVEL_DEANIMATE, "GIF not changed.");
+      }
+      else
+      {
+         log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
+      }
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
       p = out->buffer;
