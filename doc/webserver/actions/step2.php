@@ -10,9 +10,12 @@ error_reporting(E_NONE);
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: step2.php,v 1.1 2002/03/30 03:20:30 oes Exp $
+//  $Id: step2.php,v 1.2 2002/03/30 19:49:34 swa Exp $
 //
 //  $Log: step2.php,v $
+//  Revision 1.2  2002/03/30 19:49:34  swa
+//  have consistent look and feel
+//
 //  Revision 1.1  2002/03/30 03:20:30  oes
 //  Added Feedback mechanism for actions file
 //
@@ -49,6 +52,7 @@ error_reporting(E_NONE);
  */
 #$base_url = "http://www.oesterhelt.org/actions";
 $base_url = "http://www.privoxy.org/actions";
+#$base_url = "http://localhost/actions";
 
 /* 
  * Cannot start with step 2:

@@ -9,9 +9,12 @@ error_reporting(E_NONE);
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.2 2002/03/30 03:35:48 oes Exp $
+//  $Id: index.php,v 1.3 2002/03/30 19:49:34 swa Exp $
 //
 //  $Log: index.php,v $
+//  Revision 1.3  2002/03/30 19:49:34  swa
+//  have consistent look and feel
+//
 //  Revision 1.2  2002/03/30 03:35:48  oes
 //  Updated bookmarklet
 //
@@ -56,6 +59,7 @@ $current_actions_file_version = "1.0";
  */
 #$base_url = "http://www.oesterhelt.org/actions";
 $base_url = "http://www.privoxy.org/actions";
+#$base_url = "http://localhost/actions";
 
 
 /* 
@@ -144,8 +148,15 @@ proceed to Step 2.
 </form>
 </p>
 
-<p>To faciliate your feedback, you can bookmark <a href="javascript:void(window.open('http://privoxy.org/actions/?url='+escape(location.href),'Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">this bookmarklet</a><br><i>To save them, right-click the link and choose "Add to Favorites" (IE) or "Add Bookmark" (Netscape). You will get a warning that the bookmark "may not be safe" - just click OK. Then you can run the Bookmarklet directly from your favourites/bookmarks. For even faster access, you can put them on the "Links" bar (IE) or the "Personal Toolbar" (Netscape), and run them with a single click.</i>.
-<br>Used on a page that you want to report on, it will take you here and pre-fill the URL field.
+<p> 
+This special page helps the Privoxy team to improve the filters. Once
+you have bookmarked the page, surf to a troubled page and click on the
+bookmark, which will take you here and pre-fill the URL field.</p>
+
+<p>Use the following link as a bookmark:
+<a href="javascript:void(window.open('http://privoxy.org/actions/?url='+escape(location.href),'Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy-Submit</a>.
+
+Right-click the link and choose "Add to Favorites" (IE) or "Add Bookmark" (Netscape). You will get a warning that the bookmark "may not be safe" - just click OK.  For even faster access, you can put them on the "Links" bar (IE) or the "Personal Toolbar" (Netscape), and submit feedback with a single click.
 </p>
 
 </body>
