@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.71 2002/03/05 18:13:56 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.72 2002/03/05 21:33:45 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.71 2002/03/05 18:13:56 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.72  2002/03/05 21:33:45  david__schmidt
+ *    - Re-enable OS/2 building after new parms were added
+ *    - Fix false out of memory report when resolving CGI templates when no IP
+ *      address is available of failed attempt (a la no such domain)
+ *
  *    Revision 1.71  2002/03/05 18:13:56  oes
  *    Added --user option
  *
@@ -1609,7 +1614,7 @@ int main(int argc, const char *argv[])
       {
          if (++argc_pos == argc) usage(argv[0]);
          pw = getpwnam(argv[argc_pos]);
-                   s
+                   
          if (pw == NULL)
          {
             log_error(LOG_LEVEL_FATAL, "User %s not found.", argv[argc_pos]);
