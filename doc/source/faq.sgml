@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.17 2002/03/18 03:53:53 hal9 Exp $
+ $Id: faq.sgml,v 1.18 2002/03/18 16:40:31 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.17 2002/03/18 03:53:53 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.18 2002/03/18 16:40:31 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -44,7 +44,8 @@ multi-user networks.
  </para>
  <para>
 You can find the latest version of the document at <ulink url="http://ijbswa.sourceforge.net/faq/">http://ijbswa.sourceforge.net/faq/</ulink>.
-Please see the Contact section in the user-manual if you want to contact the developers.
+Please see the Contact section in the 
+<ulink url="http://ijbswa.sourceforge.net/user-manual/contact.html">user-manual</ulink> if you want to contact the developers.
  </para>
 
 <!--   <para> -->
@@ -222,7 +223,6 @@ Please see the Contact section in the user-manual if you want to contact the dev
   back to <application>Junkbuster</application>, where
   <application>Junkbuster</application> can work its magic before it 
   relays this data back to your web browser.
-
  </para>
 
  <para>
@@ -232,8 +232,13 @@ Please see the Contact section in the user-manual if you want to contact the dev
   <application>Junkbuster</application> uses various programming methods to do
   this, all of which is under your control via the various configuration
   files and options.
-
  </para>
+
+ <para>
+  There are many kinds of proxies. <application>Junkbuster</application> best 
+  fits the <quote>filtering proxy</quote> category.
+ </para>
+
 </sect3>
 
 <sect3 id="browsers2"><title>My browser does the same things as 
@@ -290,8 +295,10 @@ warranty? Registration?</title>
    is substantially changed.
  </para>
  <para>
-  See the user-manual for platform specific installation instructions.
-  [FIXME: This is meant for after the name change for 3.0!]
+  See the <ulink
+  url="http://ijbswa.sourceforge.net/user-manual/">user-manual</ulink> for
+  platform specific installation instructions. [FIXME: This is meant for after
+  the name change for 3.0!]
  </para>
  
 </sect3>
@@ -409,6 +416,16 @@ All the ads are there. What's wrong?</title>
 
 </sect3>
 
+<sect3 id="actionss">
+<title>The <quote>actions</quote>concept confuses me. Please list 
+some of these <quote>actions</quote>.</title>
+<para>
+ These are all explained in the 
+ <ulink url="http://ijbswa.sourceforge.net/user-manual/configuration.html#ACTIONSFILE">user-manual</ulink>.
+ Please refer to that.
+</para>
+</sect3>
+
 
 <sect3>
 <title id="actconfig">How are actions files configured? What is the easiest
@@ -424,8 +441,11 @@ way to do this?</title>
 </para>
 
 <para>
- Please see the user-manual for a detailed explanation of these and other
- configuration files, and their various options and syntax.
+ Please see the 
+ <ulink
+ url="http://ijbswa.sourceforge.net/user-manual/configuration.html#ACTIONSFILE">user-manual</ulink> for a
+ detailed explanation of these and other configuration files, and their
+ various options and syntax.
 </para>
 </sect3>
 
@@ -662,7 +682,7 @@ checkerboard]. I don't want to see anything.</title>
 
 <para>
  If you want to see nothing, then change the <quote>+image-blocker</quote> 
- action to <quote>+image-blocker{blank}</quote>. This can done from the 
+ action to <quote>+image-blocker{blank}</quote>. This can be done from the 
  <quote>Edit Actions List</quote> selection at <ulink
  url="http://i.j.b/">http://i.j.b/</ulink>. Or by hand editing the appropriate 
  actions file. This will only effect what is defined as <quote>images</quote>
@@ -689,17 +709,17 @@ checkerboard]. I don't want to see anything.</title>
 <title id="blockedisugly">I see large red banners on some pages that say 
 <quote>Blocked</quote>. How do I get rid of this?</title>
 <para>
- These are URLs that match something on
- <application>Junkbuster's</application> block list. It is meant to be a
- warning, and they are handled differently than what has been defined as
- <quote>images</quote> (e.g. ad banners). If you want them to be treated as
- images, so that they can be invisible, then move the offending URL from the
- <quote>+block</quote> section to the <quote>+image-blocker</quote> section of
- your actions file. Alternately, you could modify the
- <quote><filename>block</filename></quote> HTML template that is used by
- <application>Junkbuster</application> to display this, and make it something
- more to your liking.
-
+ These are URLs that match something in one of 
+ <application>Junkbuster's</application> block actions (+block). It is meant
+ to be a warning so that you know something has been blocked and an easy way
+ for you to see why. These are handled differently than what has been defined
+ as <quote>images</quote> (e.g. ad banners). If you want them to be treated
+ as if they were images, so that they can be invisible, then move the
+ offending URL from the <quote>+block</quote> section to the
+ <quote>+imageblock</quote> section of your actions file. Alternately, you
+ could modify the <quote><filename>block</filename></quote> HTML template that
+ is used by <application>Junkbuster</application> to display this, and make it
+ something more to your liking.
 </para>
 
 </sect3>
@@ -709,6 +729,28 @@ checkerboard]. I don't want to see anything.</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2 id="misc"><title>Misc</title>
+
+<sect3>
+<title id="slowsme">How much does Junkbuster slow my browsing down? This 
+has to add extra time to browsing.</title>
+<para>
+ It should not slow you down any in real terms, and may actually help 
+ speed things up since ads, banners and other junk are not being displayed.
+ The actual processing time required by <application>Junkbuster</application> 
+ itself for each page, is relatively small in the overall scheme of things,
+ and happens very quickly. This is typically more than offset by time saved
+ not downloading and rendering ad images.
+</para>
+
+<para>
+ <quote>Filtering</quote> via the <filename>re_filterfile</filename> 
+ mechanism may cause a perceived slowdown, since the entire page is buffered
+ before displaying. See below.
+</para>
+
+</sect3>
+
+
 
 <sect3 id="loadingtimes"><title>I noticed considerable
 delays in page requests compared to the old IJB. What's wrong?</title>
@@ -764,6 +806,8 @@ should really consider upgrading to 2.9.x).
 </para>
 </sect3>
 
+<!--
+FIXME: commented out until we have data. HB 03/18/02.
 
 <sect3 id="badfiledesc"><title>I get the message 'Bad File Descriptor', why?</title>
 <para>
@@ -777,6 +821,7 @@ should really consider upgrading to 2.9.x).
    Fillme.
 </para>
 </sect3>
+-->
 
 <sect3 id="jointeam"><title>I would like to help you, what do I do?</title>
 <para>
@@ -918,6 +963,15 @@ speed up web browsing?</title>
 </para>
 </sect3>
 
+<sect3>
+<title id="firewall">What about as a firewall? Can Junkbuster protect me?</title>
+<para>
+ Not in the way you mean, or in the way a true firewall can, or a proxy that
+ has this specific capability. <application>Junkbuster</application> can help
+ protect your privacy, but not really protect you from intrusion attempts.
+</para>
+</sect3>
+
 
 <sect3>
 <title id="logo">The Junkbuster logo that replaces ads is very blocky 
@@ -929,10 +983,9 @@ and ugly looking. Can't a better font be used?</title>
  memory, the image is rather small. The blockiness comes when the 
  image is scaled to fill a largish area. There is not much to be done 
  about this, other than to use one of the other
- <quote>imageblocker</quote> directives: <emphasis>pattern</emphasis>, 
+ <quote>imageblock</quote> directives: <emphasis>pattern</emphasis>, 
  <emphasis>blank</emphasis>, or a URL of your chosing.
 </para>
-
 </sect3>
 
 
@@ -945,24 +998,21 @@ Why does Junkbuster leave these large gaps?</title>
  that use the overall size of the ad to help organize the page layout and
  position the various components of the page where they were intended to be.
  It is best left this way.
-
 </para>
 
 </sect3>
 
-
 <sect3>
-<title id="ssl">How can Junkbuster filter HTTPS URLs?</title>
+<title id="ssl">How can Junkbuster filter Secure (HTTPS) URLs?</title>
 <para>
  This is a limitation since HTTPS transactions are encrypted SSL sessions
  between your browser and the secure site, and are meant to be reliably 
  <emphasis>secure</emphasis> and private. This means that all cookies and HTTP
  header information are also encrypted from the time they leave your browser,
- or the site. <application>Junkbuster</application> does not try to unencrypt
- this information, so it just passes through as is.
+ to the site, and vice versa. <application>Junkbuster</application> does not
+ try to unencrypt this information, so it just passes through as is.
  <application>Junkbuster</application> can still catch images and ads that
  are embedded in the SSL stream though.
-
 </para>
 
 </sect3>
@@ -986,7 +1036,6 @@ secure is it? Do I need to take any special precautions?</title>
  this as their proxy address in the browser proxy configuration. In this way, 
  <application>Junkbuster</application> will not listen on any external ports.
  Of course, a firewall is always good too. Better safe than sorry.
-
 </para>
 
 </sect3>
@@ -999,19 +1048,16 @@ secure is it? Do I need to take any special precautions?</title>
  or change <emphasis>anything</emphasis> on the page, including HTML tags, and
  JavaScript. Regular expressions are used to accomplish this. This is
  potentially a very powerful feature, but requires some expertise.
-
 </para>
 
 <para>
  If you are familiar with regular expressions, and HTML, you can look at 
  the provided <filename>re_filterfile</filename> with a text editor and see
  some of things it can be used for.
-
 </para>
 
 <para>
  Presently, there is no GUI editor option for this part of the configuration.
-
 </para>
 
 </sect3>
@@ -1050,8 +1096,9 @@ still getting through. How?</title>
 <para>
  If the ad had been displayed before you added its URL, it will probably be
  held in the browser's cache for some time, so it will be displayed without
- the need for any request to the server. The best thing to do is try flusing
- the browser's caches. And then try again.
+ the need for any request to the server, and <application>Junkbuster</application>
+ will not be in the picture. The best thing to do is try flusing the browser's
+ caches. And then try again.
 </para>
 
 <para>
@@ -1059,7 +1106,6 @@ still getting through. How?</title>
  applied. Try pasting the full URL of the offending ad into <ulink
  url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
  and see if any actions match your new rule.
-
 </para>
 
 </sect3>
@@ -1087,14 +1133,14 @@ What can I do?</title>
  <quote>-</quote> (minus sign) in front of them. Add your problem page 
  URL to one of these sections that looks like it is disabling the feature that
  is causing the problem. Re-try the page. There might be some trial and error
- involved.
+ involved. This is discussed in a little more detail in 
+ the <ulink url="http://ijbswa.sourceforge.net/user-manual/appenix.html#ACTIONSANAT">user-manual appendix</ulink>.
 
 </para>
 
 <para>
  Alternately, if you are comfortable with a text editor, you can accomplish 
  the same thing by editing the appropriate <quote>actions</quote> file.
-
 </para>
 
 </sect3>
@@ -1163,6 +1209,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.18  2002/03/18 16:40:31  hal9
+More additions.
+
 Revision 1.17  2002/03/18 03:53:53  hal9
 Some new additions.
 
