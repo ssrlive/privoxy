@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.2  2002/03/24 13:02:18  swa
+#     name change related issues.
+#
 #     Revision 1.1  2002/03/24 11:37:39  jongfoster
 #     Name change
 #
@@ -270,32 +273,31 @@ s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null
 #
 # Standard banner sizes taken from http://www.iab.net/iab_banner_standards/bannersizes.html
 #
-# Note: Use http://ijbswa.sourceforge.net/config/send-banner?type=trans for a transparent 1x1 image
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for the logo image
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=logo  for a grey/white pattern image
-#       Use http://ijbswa.sourceforge.net/config/send-banner?type=auto  to auto-select.
+# Note: Use http://config.privoxy.org/send-banner?type=trans for a transparent 1x1 image
+#       Use http://config.privoxy.org/send-banner?type=pattern for a grey/white pattern image
+#       Use http://config.privoxy.org/send-banner?type=auto  to auto-select.
 #
 #################################################################################
 FILTER: banners-by-size Kill banners by size
 
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
 
 # One more. (Where is 200x50 from?)
 #
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://ijbswa.sourceforge.net/config/send-banner?type=auto $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://config.privoxy.org/send-banner?type=auto $1 $2>|sig
 
 
 #################################################################################
