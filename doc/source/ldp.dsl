@@ -88,8 +88,6 @@
   "gif")
 
 (define %section-autolabel% #t)
-  ;; Privoxy READ! leave the above on one line. It is re-written by 
-  ;; GNUmakefile for FAQ !!!!!!!!
   ;; For enumerated sections (1.1, 1.1.1, 1.2, etc.)
   
 ;; HB changed TOC depth to 3 levels.
