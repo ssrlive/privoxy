@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.19 2002/03/24 13:25:43 swa Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.20 2002/03/26 22:29:55 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.20  2002/03/26 22:29:55  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.19  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -158,6 +161,7 @@ extern char *strsav(char *old, const char *text_to_append);
 extern jb_err string_append(char **target_string, const char *text_to_append);
 extern jb_err string_join  (char **target_string,       char *text_to_append);
 
+extern char *string_toupper(const char *string);
 extern char *chomp(char *string);
 extern int simplematch(char *pattern, char *text);
 
