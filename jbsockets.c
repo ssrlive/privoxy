@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.1.1.1 2001/05/15 13:58:54 oes
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.2  2001/05/17 23:01:01  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -347,7 +350,15 @@ int bind_port(const char *hostnam, int portnum)
       return(-1);
    }
 
+#ifndef _WIN32
+   /*
+    * FIXME: This is not needed for Win32 - in fact, it stops
+    * duplicate instances of JunkBuster from being caught.
+    * Is this really needed under UNIX, or should it be taked out?
+    * -- Jon
+    */
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
+#endif /* ndef _WIN32 */
 
    if (bind (fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
    {
