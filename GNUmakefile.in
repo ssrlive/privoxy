@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.106 2002/05/26 04:55:11 mal0rd Exp $
+# $Id: GNUmakefile.in,v 1.107 2002/05/27 23:26:33 mal0rd Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -607,17 +607,29 @@ dok-readme: ensure-dkprefix ensure-jadebin ensure-wdump
 	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
-# webserver files
-dok-webserver: ensure-dkprefix ensure-jadebin
-	cd doc/source/webserver && $(DB)-notoc -V nochunks index.sgml > ../../webserver/index.html
+# index.sgml is used to create both the Home Page, and a local index
+# for documentation, etc.
+#
+# index.html for webserver:
+dok-webserver: 
+	cd doc/source/webserver && $(DB)-notoc -ip-homepage -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
 	s/\.\d\. //'\
-     doc/webserver/index.html && $(RM) doc/source/webserver/*.bak
+     doc/webserver/index.html && $(RM) doc/webserver/*.bak
+
+# privoxy-index.html for local documentation:
+dok-index: 
+	cd doc/source/webserver && $(DB)-notoc -ip-index -V nochunks index.sgml > ../../webserver/privoxy-index.html
+	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
+     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
+	s/\.\d\. //'\
+     doc/webserver/privoxy-index.html && $(RM) doc/webserver/*.bak
 
 # Main documentation target.
-dok: dok-devel dok-release dok-user dok-faq dok-readme dok-webserver dok-authors
+dok: dok-devel dok-release dok-user dok-faq dok-readme dok-webserver dok-authors dok-index
 	@$(ECHO) Documentation created.
 
 #
@@ -871,6 +883,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.107  2002/05/27 23:26:33  mal0rd
+# Made doc-generation configuration automatic.
+# References to DB2HTML were removed, not used.
+# --with-docbook now only needed if in odd path.
+#
 # Revision 1.106  2002/05/26 04:55:11  mal0rd
 # Added debian-dist and debian-upload targets.  Also documented usage.
 #
