@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.53 2002/03/24 11:51:00 swa Exp $
+ $Id: user-manual.sgml,v 1.54 2002/03/24 15:46:20 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.53 2002/03/24 11:51:00 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.54 2002/03/24 15:46:20 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -712,16 +712,16 @@ Please choose from the following options:
 </para>
 
 <para>
- The <quote>default.action</quote> file contains patterns to specify the actions
- to apply to requests for each site. Default: Cookies to and from all
+ The <quote>default.action</quote> file contains patterns to specify the
+ actions to apply to requests for each site. Default: Cookies to and from all
  destinations are kept only during the current browser session (i.e. they are
  not saved to disk). Pop-ups are disabled for all sites. All sites are
  filtered through selected sections of <quote>default.filter</quote>. No sites
- are blocked. The <application>Privoxy</application> logo is displayed for
- filtered ads and other images. The syntax of this file is explained in detail
- <link linkend="actionsfile">below</link>. Other <quote>actions</quote> files
- are included, and you are free to use any of them. They have varying degrees
- of aggressiveness.
+ are blocked. <application>Privoxy</application> displays a checkboard type
+ pattern for filtered ads and other images. The syntax of this file is
+ explained in detail <link linkend="actionsfile">below</link>. Other
+ <quote>actions</quote> files are included, and you are free to use any of
+ them. They have varying degrees of aggressiveness.
 </para>
 
 <para>
@@ -2448,21 +2448,23 @@ Removed references to Win32. HB 09/23/01
   +image}</quote>, e.g an advertizement. There are five options.
   <quote>-image-blocker</quote> will send a HTML <quote>blocked</quote> page,
   usually resulting in a <quote>broken image</quote> icon.
-  <quote>+image-blocker{logo}</quote> will send a
-  <application>Privoxy</application> logo
-  image. <quote>+image-blocker{blank}</quote> will send a 1x1 transparent GIF
-  image. And finally, <quote>+image-blocker{http://xyz.com}</quote> will send
-  a HTTP temporary redirect to the specified image. This has the advantage of
-  the icon being being cached by the browser, which will speed up the display.
-  <quote>+image-blocker{pattern}</quote> will send a checkboard type pattern,
-  which scales better than the logo (which can get blocky if the browser
-  enlarges it too much).
+<!--   <quote>+image-blocker{logo}</quote> will send a -->
+<!--   <application>Privoxy</application> logo -->
+<!--   image. -->
+<quote>+image-blocker{blank}</quote> will send a 1x1 transparent GIF
+image. And finally, <quote>+image-blocker{http://xyz.com}</quote> will send a
+HTTP temporary redirect to the specified image. This has the advantage of the
+icon being being cached by the browser, which will speed up the display.
+<quote>+image-blocker{pattern}</quote> will send a checkboard type pattern
+<!-- , -->
+<!-- which scales better than the logo (which can get blocky if the browser -->
+<!-- enlarges it too much). -->
   </para>
   <para>
    <literal>
     <msgtext> 
      <literallayout>
-  <emphasis>+image-blocker{logo}</emphasis>
+<!--   <emphasis>+image-blocker{logo}</emphasis> -->
   <emphasis>+image-blocker{blank}</emphasis>
   <emphasis>+image-blocker{pattern}</emphasis>
   <emphasis>+image-blocker{http://p.p/send-banner}</emphasis>
@@ -3943,6 +3945,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.54  2002/03/24 15:46:20  swa
+ name change related issue.
+
  Revision 1.53  2002/03/24 11:51:00  swa
  name change. changed filenames.
 

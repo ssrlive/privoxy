@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.23 2002/03/24 12:33:01 swa Exp $
+ $Id: faq.sgml,v 1.24 2002/03/24 15:46:20 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.23 2002/03/24 12:33:01 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.24 2002/03/24 15:46:20 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -698,13 +698,13 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 
 <sect3>
-<title id="noseeum">Instead of ads, now I get a Privoxy logo [or 
-checkerboard]. I don't want to see anything.</title>
+<title id="noseeum">Instead of ads, now I get a checkboard pattern. I don't want to see anything.</title>
 <para>
  This is a configuration option for images that
- <application>Privoxy</application> is stopping. You have the choice of the
- <application>Privoxy</application> logo, a checkerboard pattern (this
- scales better), a transparent 1x1 GIF image, or a custom URL or your choice.
+ <application>Privoxy</application> is stopping. You have the choice <!-- of
+ the --> <!-- <application>Privoxy</application> logo, --> a checkerboard
+ pattern (this scales better), a transparent 1x1 GIF image, or a custom URL or
+ your choice.
 </para>
 
 <para>
@@ -721,7 +721,7 @@ checkerboard]. I don't want to see anything.</title>
 
 
 <sect3>
-<title id="whyseeum">Why would anybody want to see the logo or checkerboard?</title>
+<title id="whyseeum">Why would anybody want to see the checkerboard?</title>
 <para>
  This can be helpful for troubleshooting problems. It might also be good 
  for anyone new to <application>Privoxy</application> so that they can 
@@ -1003,6 +1003,9 @@ and ugly looking. Can't a better font be used?</title>
  <quote>imageblock</quote> directives: <emphasis>pattern</emphasis>, 
  <emphasis>blank</emphasis>, or a URL of your chosing.
 </para>
+<para>
+Given the above problem, we have decided to remove the logo option entirely.
+</para>
 </sect3>
 
 
@@ -1227,6 +1230,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.24  2002/03/24 15:46:20  swa
+name change related issue.
+
 Revision 1.23  2002/03/24 12:33:01  swa
 more additions.
 
