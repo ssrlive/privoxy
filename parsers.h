@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.15 2001/10/07 18:01:55 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.16 2001/10/07 18:50:16 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.16  2001/10/07 18:50:16  oes
+ *    Added server_content_encoding, renamed server_transfer_encoding
+ *
  *    Revision 1.15  2001/10/07 18:01:55  oes
  *    Changed server_http11 to server_http
  *
@@ -145,6 +148,7 @@ extern char *client_x_forwarded(const struct parsers *v, const char *s, struct c
 extern char *client_accept_encoding(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *client_te(const struct parsers *v, const char *s, struct client_state *csp);
 
+extern void client_host_adder(struct client_state *csp);
 extern void client_cookie_adder(struct client_state *csp);
 extern void client_xtra_adder(struct client_state *csp);
 extern void client_accept_encoding_adder(struct client_state *csp);
@@ -161,7 +165,6 @@ extern char *server_transfer_coding(const struct parsers *v, const char *s, stru
 extern char *server_http(const struct parsers *v, const char *s, struct client_state *csp);
 
 #ifdef FEATURE_FORCE_LOAD
-extern char *client_host(const struct parsers *v, const char *s, struct client_state *csp);
 extern int strclean(const char *string, const char *substring);
 #endif /* def FEATURE_FORCE_LOAD */
 
