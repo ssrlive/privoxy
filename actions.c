@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.30 2002/04/30 11:14:52 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.31 2002/05/06 07:56:50 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.30 2002/04/30 11:14:52 oes Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.31  2002/05/06 07:56:50  oes
+ *    Made actions_to_html independent of FEATURE_CGI_EDIT_ACTIONS
+ *
  *    Revision 1.30  2002/04/30 11:14:52  oes
  *    Made csp the first parameter in *action_to_html
  *
@@ -262,11 +265,11 @@ static int load_one_actions_file(struct client_state *csp, int fileid);
  * Function    :  merge_actions
  *
  * Description :  Merge two actions together.
- *                Similar to "cur_action += new_action".
+ *                Similar to "dest += src".
  *
  * Parameters  :
- *          1  :  cur_action = Current actions, to modify.
- *          2  :  new_action = Action to add.
+ *          1  :  dest = Actions to modify.
+ *          2  :  src = Action to add.
  *
  * Returns     :  JB_ERR_OK or JB_ERR_MEMORY
  *
@@ -337,7 +340,7 @@ jb_err merge_actions (struct action_spec *dest,
  * Function    :  copy_action
  *
  * Description :  Copy an action_specs.
- *                Similar to "cur_action = new_action".
+ *                Similar to "dest = src".
  *
  * Parameters  :
  *          1  :  dest = Destination of copy.
@@ -543,7 +546,7 @@ jb_err get_action_token(char **line, char **name, char **value)
  * Parameters  :
  *          1  :  line = The string containing the actions.
  *                       Will be written to by this function.
- *          2  :  aliases = Custom alias list, or NULL for none.
+ *          2  :  alias_list = Custom alias list, or NULL for none.
  *          3  :  cur_action = Where to store the action.  Caller
  *                             allocates memory.
  *
@@ -1378,13 +1381,12 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
  *
  * Function    :  actions_to_text
  *
- * Description :  Converts a actionsfile entry from numeric form
- *                ("mask" and "add") to a text line which is split
+ * Description :  Converts a actionsfile entry from the internal
+ *                structurt into a text line.  The output is split
  *                into one line for each action with line continuation. 
  *
  * Parameters  :
- *          1  :  mask = As from struct url_actions
- *          2  :  add  = As from struct url_actions
+ *          1  :  action = The action to format.
  *
  * Returns     :  A string.  Caller must free it.
  *                NULL on out-of-memory error.

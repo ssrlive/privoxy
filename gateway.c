@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.14 2002/03/24 13:25:43 swa Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.15 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.14 2002/03/24 13:25:43 swa Exp $"
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.15  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.14  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -186,11 +189,11 @@ static const char socks_userid[] = "anonymous";
  *                a HTTP proxy and/or a SOCKS proxy.
  *
  * Parameters  :
- *          1  :  gw = pointer to a gateway structure (such as gw_default)
+ *          1  :  fwd = the proxies to use when connecting.
  *          2  :  http = the http request and apropos headers
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  -1 => failure, else it is the socket file descriptor.
+ * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket file descriptor.
  *
  *********************************************************************/
 jb_socket forwarded_connect(const struct forward_spec * fwd,
@@ -244,11 +247,12 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
  *                normal (non-SOCKS) socket.
  *
  * Parameters  :
- *          1  :  gw = pointer to a gateway structure (such as gw_default)
- *          2  :  http = the http request and apropos headers
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  fwd = Specifies the SOCKS proxy to use.
+ *          2  :  target_host = The final server to connect to.
+ *          3  :  target_port = The final port to connect to.
+ *          4  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  -1 => failure, else a socket file descriptor.
+ * Returns     :  JB_INVALID_SOCKET => failure, else a socket file descriptor.
  *
  *********************************************************************/
 static jb_socket socks4_connect(const struct forward_spec * fwd,

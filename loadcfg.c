@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.45 2002/04/24 02:11:54 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.46 2002/04/26 12:55:14 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.45 2002/04/24 02:11:54 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.46  2002/04/26 12:55:14  oes
+ *     - New option "user-manual", defaults to our site
+ *       via project.h #define
+ *     - savearg now embeds option names in help links
+ *
  *    Revision 1.45  2002/04/24 02:11:54  oes
  *    Jon's multiple AF patch: Allow up to MAX_ACTION_FILES actionsfile options
  *
@@ -530,11 +535,9 @@ void unload_current_config_file(void)
  *
  * Description :  Load the config file and all parameters.
  *
- * Parameters  :
- *          1  :  csp = Client state (the config member will be
- *                filled in by this function).
+ * Parameters  :  None
  *
- * Returns     :  0 => Ok, everything else is an error.
+ * Returns     :  The configuration_spec, or NULL on error.
  *
  *********************************************************************/
 struct configuration_spec * load_config(void)
@@ -1520,6 +1523,7 @@ struct configuration_spec * load_config(void)
  * Parameters  :
  *          1  :  command = config setting that was found
  *          2  :  argument = the setting's argument (if any)
+ *          3  :  config = Configuration to save into.
  *
  * Returns     :  N/A
  *

@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.10 2002/03/24 13:25:43 swa Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.11 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.10 2002/03/24 13:25:43 swa Ex
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.11  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.10  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -207,7 +210,7 @@ int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
  *                given offset
  *
  * Parameters  :
- *          1  :  buf = Pointer to the source binbuffer
+ *          1  :  src = Pointer to the source binbuffer
  *          2  :  offset = Offset to the desired byte
  *
  * Returns     :  The byte on success, or 0 on failiure
