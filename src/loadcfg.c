@@ -1,7 +1,7 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.48 2002/05/14 21:30:38 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/loadcfg.c,v $
  *
  * Purpose     :  Loads settings from the configuration file into
  *                global variables.  This file contains both the
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.48 2002/05/14 21:30:38 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.48  2002/05/14 21:30:38  oes
  *    savearg now uses own linking code instead of (now special-cased) add_help_link
  *
@@ -369,20 +372,32 @@ const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
 #ifdef FEATURE_TOGGLE
-/* by haroon - indicates if ijb is enabled */
+/**
+ * Indicates if Privoxy is currently enabled.
+ */
 int g_bToggleIJB        = 1;   /* Privoxy is enabled by default. */
 #endif /* def FEATURE_TOGGLE */
 
-/* The filename of the configfile */
+/**
+ * The filename of the config file
+ */
 const char *configfile  = NULL;
 
-/*
- * CGI functions will later need access to the invocation args,
- * so we will make argc and argv global.
+/**
+ * Global argument count, so that CGI functions can access the
+ * command line.
  */
 int Argc = 0;
+
+/**
+ * Global argument list, so that CGI functions can access the
+ * command line.
+ */
 const char **Argv = NULL;
 
+/**
+ * The configuration file which is currently loaded.
+ */
 static struct file_list *current_configfile = NULL;
 
 
@@ -398,40 +413,41 @@ static struct file_list *current_configfile = NULL;
  * console and GUI specific options last).
  */
 
-#define hash_actions_file              1196306641ul /* "actionsfile" */
-#define hash_admin_address             4112573064ul /* "admin-address" */
-#define hash_buffer_limit              1881726070ul /* "buffer-limit */
-#define hash_confdir                      1978389ul /* "confdir" */
-#define hash_debug                          78263ul /* "debug" */
-#define hash_deny_access               1227333715ul /* "deny-access" */
-#define hash_enable_edit_actions       2517097536ul /* "enable-edit-actions" */
-#define hash_enable_remote_toggle      2979744683ul /* "enable-remote-toggle" */
-#define hash_filterfile                 250887266ul /* "filterfile" */
-#define hash_forward                      2029845ul /* "forward" */
-#define hash_forward_socks4            3963965521ul /* "forward-socks4" */
-#define hash_forward_socks4a           2639958518ul /* "forward-socks4a" */
-#define hash_jarfile                      2046641ul /* "jarfile" */
-#define hash_listen_address            1255650842ul /* "listen-address" */
-#define hash_logdir                        422889ul /* "logdir" */
-#define hash_logfile                      2114766ul /* "logfile" */
-#define hash_permit_access             3587953268ul /* "permit-access" */
-#define hash_proxy_info_url            3903079059ul /* "proxy-info-url" */
-#define hash_single_threaded           4250084780ul /* "single-threaded" */
-#define hash_suppress_blocklists       1948693308ul /* "suppress-blocklists" */
-#define hash_toggle                        447966ul /* "toggle" */
-#define hash_trust_info_url             430331967ul /* "trust-info-url" */
-#define hash_trustfile                   56494766ul /* "trustfile" */
-#define hash_usermanual                1416668518ul /* "user-manual" */
-#define hash_activity_animation        1817904738ul /* "activity-animation" */
-#define hash_close_button_minimizes    3651284693ul /* "close-button-minimizes" */
-#define hash_hide_console              2048809870ul /* "hide-console" */
-#define hash_log_buffer_size           2918070425ul /* "log-buffer-size" */
-#define hash_log_font_name             2866730124ul /* "log-font-name" */
-#define hash_log_font_size             2866731014ul /* "log-font-size" */
-#define hash_log_highlight_messages    4032101240ul /* "log-highlight-messages" */
-#define hash_log_max_lines             2868344173ul /* "log-max-lines" */
-#define hash_log_messages              2291744899ul /* "log-messages" */
-#define hash_show_on_task_bar           215410365ul /* "show-on-task-bar" */
+#define hash_actions_file              1196306641ul /**< "actionsfile" */
+#define hash_admin_address             4112573064ul /**< "admin-address" */
+#define hash_buffer_limit              1881726070ul /**< "buffer-limit */
+#define hash_confdir                      1978389ul /**< "confdir" */
+#define hash_debug                          78263ul /**< "debug" */
+#define hash_deny_access               1227333715ul /**< "deny-access" */
+#define hash_enable_edit_actions       2517097536ul /**< "enable-edit-actions" */
+#define hash_enable_remote_toggle      2979744683ul /**< "enable-remote-toggle" */
+#define hash_filterfile                 250887266ul /**< "filterfile" */
+#define hash_forward                      2029845ul /**< "forward" */
+#define hash_forward_socks4            3963965521ul /**< "forward-socks4" */
+#define hash_forward_socks4a           2639958518ul /**< "forward-socks4a" */
+#define hash_jarfile                      2046641ul /**< "jarfile" */
+#define hash_listen_address            1255650842ul /**< "listen-address" */
+#define hash_logdir                        422889ul /**< "logdir" */
+#define hash_logfile                      2114766ul /**< "logfile" */
+#define hash_permit_access             3587953268ul /**< "permit-access" */
+#define hash_proxy_info_url            3903079059ul /**< "proxy-info-url" */
+#define hash_single_threaded           4250084780ul /**< "single-threaded" */
+#define hash_suppress_blocklists       1948693308ul /**< "suppress-blocklists" */
+#define hash_toggle                        447966ul /**< "toggle" */
+#define hash_trust_info_url             430331967ul /**< "trust-info-url" */
+#define hash_trustfile                   56494766ul /**< "trustfile" */
+#define hash_usermanual                1416668518ul /**< "user-manual" */
+
+#define hash_activity_animation        1817904738ul /**< "activity-animation" */
+#define hash_close_button_minimizes    3651284693ul /**< "close-button-minimizes" */
+#define hash_hide_console              2048809870ul /**< "hide-console" */
+#define hash_log_buffer_size           2918070425ul /**< "log-buffer-size" */
+#define hash_log_font_name             2866730124ul /**< "log-font-name" */
+#define hash_log_font_size             2866731014ul /**< "log-font-size" */
+#define hash_log_highlight_messages    4032101240ul /**< "log-highlight-messages" */
+#define hash_log_max_lines             2868344173ul /**< "log-max-lines" */
+#define hash_log_messages              2291744899ul /**< "log-messages" */
+#define hash_show_on_task_bar           215410365ul /**< "show-on-task-bar" */
 
 
 static void savearg(char *command, char *argument, struct configuration_spec * config);

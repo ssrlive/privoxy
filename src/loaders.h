@@ -1,9 +1,9 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.19 2002/03/26 22:29:55 swa Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/loaders.h,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.19  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -186,12 +189,12 @@ extern jb_err simple_read_line(FILE *fp, char **dest, int *newline);
 /*
  * Various types of newlines that a file may contain.
  */
-#define NEWLINE_UNKNOWN 0  /* Newline convention in file is unknown */
-#define NEWLINE_UNIX    1  /* Newline convention in file is '\n'   (ASCII 10) */
-#define NEWLINE_DOS     2  /* Newline convention in file is '\r\n' (ASCII 13,10) */
-#define NEWLINE_MAC     3  /* Newline convention in file is '\r'   (ASCII 13) */
+#define NEWLINE_UNKNOWN 0  /**< Newline convention in file is unknown */
+#define NEWLINE_UNIX    1  /**< Newline convention in file is '\n'   (ASCII 10) */
+#define NEWLINE_DOS     2  /**< Newline convention in file is '\r\n' (ASCII 13,10) */
+#define NEWLINE_MAC     3  /**< Newline convention in file is '\r'   (ASCII 13) */
 
-/*
+/**
  * Types of newlines that a file may contain, as strings.  If you have an
  * extremely wierd compiler that does not have '\r' == CR == ASCII 13 and
  * '\n' == LF == ASCII 10), then fix CHAR_CR and CHAR_LF in loaders.c as

@@ -1,9 +1,9 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.13 2002/03/26 22:29:54 swa Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/errlog.h,v $
  *
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.13  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -133,31 +136,57 @@ extern "C" {
 
 /* Debug level for errors */
 
-#define LOG_LEVEL_GPC        0x0001
+/** Log GET/POST/CONNECT requests. */
+#define LOG_LEVEL_GPC        0x0001 
+
+/** Log connecting to the server. */
 #define LOG_LEVEL_CONNECT    0x0002
+
+/** Log ... what? FIXME. */
 #define LOG_LEVEL_IO         0x0004
+
+/** Log header parsing and modifying. */
 #define LOG_LEVEL_HEADER     0x0008
+
+/** Log ... what? FIXME. */
 #define LOG_LEVEL_LOG        0x0010
+
 #ifdef FEATURE_FORCE_LOAD
+/** Log forced page load feature. */
 #define LOG_LEVEL_FORCE      0x0020
 #endif /* def FEATURE_FORCE_LOAD */
+
+/** Log PCRS feature. */
 #define LOG_LEVEL_RE_FILTER  0x0040
+
 #ifdef FEATURE_FAST_REDIRECTS
+/** Log fast redirects feature. */
 #define LOG_LEVEL_REDIRECTS  0x0080
 #endif /* def FEATURE_FAST_REDIRECTS */
+
+/** Log GIF deanimation. */
 #define LOG_LEVEL_DEANIMATE  0x0100
 
-#define LOG_LEVEL_CLF        0x0200 /* Common Log File format */
+/** Log in Common Log File format. Note that for properly formatted log files
+    you should disable all the other log settings. */
+#define LOG_LEVEL_CLF        0x0200
+
+/** Log popup-killing feature */
 #ifdef FEATURE_KILL_POPUPS
-#define LOG_LEVEL_POPUPS     0x0400 /* Kill Popups */
+#define LOG_LEVEL_POPUPS     0x0400
 #endif /* def FEATURE_KILL_POPUPS */
 
-#define LOG_LEVEL_CGI   0x0800 /* CGI / templates */
+/** Log CGI and template handling features */
+#define LOG_LEVEL_CGI   0x0800
 
-/* Following are always on: */
+/** Log informative messages (program version etc). */
 #define LOG_LEVEL_INFO    0x1000
+
+/** Log error messages. */
 #define LOG_LEVEL_ERROR   0x2000
-#define LOG_LEVEL_FATAL   0x4000 /* Exits after writing log */
+
+/** Write a message to the log and exit the program. */
+#define LOG_LEVEL_FATAL   0x4000
 
 extern void init_error_log(const char *prog_name, const char *logfname, int debuglevel);
 extern void log_error(int loglevel, char *fmt, ...);

@@ -1,7 +1,7 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.37 2002/04/26 18:29:43 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/miscutil.c,v $
  *
  * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
  *                strncmpic, chomp, and MinGW32 strdup
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.37 2002/04/26 18:29:43 jongfost
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.37  2002/04/26 18:29:43  jongfoster
  *    Fixing this Visual C++ warning:
  *    miscutil.c(710) : warning C4090: '=' : different 'const' qualifiers
@@ -296,7 +299,7 @@ void write_pid_file(void)
  *                to "switch" a string the one of my favorites.
  *
  * Parameters  :
- *          1  :  s : string to be hashed.
+ *          1  :  s = string to be hashed.
  *
  * Returns     :  an unsigned long variable with the hashed value.
  *
@@ -454,7 +457,7 @@ int strncmpic(const char *s1, const char *s2, size_t n)
  *                from a string.
  *
  * Parameters  :
- *          1  :  s : string to be chomped.
+ *          1  :  string = string to be chomped.
  *
  * Returns     :  chomped string
  *
@@ -884,8 +887,8 @@ char *bindup(const char *string, size_t len)
  *                the filename. 
  *
  * Parameters  :
- *          1  :  dir: Name of directory or NULL for none.
- *          2  :  file: Name of file.  Should not be NULL or empty.
+ *          1  :  dir = Name of directory or NULL for none.
+ *          2  :  file = Name of file.  Should not be NULL or empty.
  *
  * Returns     :  "dir/file" (Or on windows, "dir\file").
  *                It allocates the string on the heap.  Caller frees.

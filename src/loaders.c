@@ -1,7 +1,7 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.50 2002/04/24 02:12:16 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/loaders.c,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.50 2002/04/24 02:12:16 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.50  2002/04/24 02:12:16  oes
  *    Jon's multiple AF patch: Sweep now takes care of all AFs
  *
@@ -296,16 +299,37 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.50 2002/04/24 02:12:16 oes Exp $"
 
 const char loaders_h_rcs[] = LOADERS_H_VERSION;
 
-/*
- * Currently active files.
- * These are also entered in the main linked list of files.
- */
 
 #ifdef FEATURE_TRUST
+/**
+ * Currently active trust file.
+ * This is also entered in the main linked list of files.
+ */
 static struct file_list *current_trustfile      = NULL;
 #endif /* def FEATURE_TRUST */
 
+
+/**
+ * Currently active re_filter file.
+ * This is also entered in the main linked list of files.
+ */
 static struct file_list *current_re_filterfile  = NULL;
+
+
+/**
+ * Character code for CR (ASCII 13).
+ * If you have a wierd compiler and this definition is
+ * incorrect, you also need to fix NEWLINE() in loaders.h
+ */
+#define CHAR_CR '\r' /* ASCII 13 */
+
+
+/**
+ * Character code for LF (ASCII 10).
+ * If you have a wierd compiler and this definition is
+ * incorrect, you also need to fix NEWLINE() in loaders.h
+ */
+#define CHAR_LF '\n' /* ASCII 10 */
 
 
 
@@ -549,13 +573,6 @@ jb_err simple_read_line(FILE *fp, char **dest, int *newline)
    }
 
    p = buf;
-
-/*
- * Character codes.  If you have a wierd compiler and the following are
- * incorrect, you also need to fix NEWLINE() in loaders.h
- */
-#define CHAR_CR '\r' /* ASCII 13 */
-#define CHAR_LF '\n' /* ASCII 10 */
 
    for (;;)
    {
