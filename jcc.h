@@ -1,6 +1,6 @@
-#ifndef _JCC_H
-#define _JCC_H
-#define JCC_H_VERSION "$Id: jcc.h,v 1.2 2001/05/31 21:24:47 jongfoster Exp $"
+#ifndef JCC_H_INCLUDED
+#define JCC_H_INCLUDED
+#define JCC_H_VERSION "$Id: jcc.h,v 1.3 2001/07/18 12:31:58 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.3  2001/07/18 12:31:58  oes
+ *    moved #define freez from jcc.h to project.h
+ *
  *    Revision 1.2  2001/05/31 21:24:47  jongfoster
  *    Changed "permission" to "action" throughout.
  *    Removed DEFAULT_USER_AGENT - it must now be specified manually.
@@ -48,17 +51,13 @@
  *********************************************************************/
 
 
-/* Declare struct FILE for vars and funcs. */
-#include <stdio.h>
-
-/* All of our project's data types. */
-#include "project.h"
-
-#include "loadcfg.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct client_state;
+struct file_list;
+
 
 /* Global variables */
 
@@ -88,7 +87,7 @@ extern const char jcc_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _JCC_H */
+#endif /* ndef JCC_H_INCLUDED */
 
 /*
   Local Variables:

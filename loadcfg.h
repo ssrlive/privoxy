@@ -1,6 +1,6 @@
-#ifndef _LOADCFG_H
-#define _LOADCFG_H
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.4 2001/05/22 18:46:04 oes Exp $"
+#ifndef LOADCFG_H_INCLUDED
+#define LOADCFG_H_INCLUDED
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.5 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -37,6 +37,13 @@
  *
  * Revisions   :
  *    $Log: loadcfg.h,v $
+ *    Revision 1.5  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.4  2001/05/22 18:46:04  oes
  *
  *    - Enabled filtering banners by size rather than URL
@@ -104,15 +111,12 @@
  *********************************************************************/
 
 
-/* Declare struct FILE for vars and funcs. */
-#include <stdio.h>
-
-/* All of our project's data types. */
-#include "project.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Don't need project.h, only this: */
+struct configuration_spec;
 
 /* Global variables */
 
@@ -144,7 +148,7 @@ extern const char loadcfg_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _JCC_H */
+#endif /* ndef LOADCFG_H_INCLUDED */
 
 /*
   Local Variables:

@@ -1,6 +1,6 @@
-#ifndef _LOADERS_H
-#define _LOADERS_H
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.6 2001/06/07 23:14:38 jongfoster Exp $"
+#ifndef LOADERS_H_INCLUDED
+#define LOADERS_H_INCLUDED
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.7 2001/07/13 14:01:54 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.7  2001/07/13 14:01:54  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.6  2001/06/07 23:14:38  jongfoster
  *    Removing ACL and forward file loaders - these files have
  *    been merged into the config file.
@@ -95,11 +98,15 @@
  *********************************************************************/
 
 
-#include "project.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Structures taken from project.h */
+struct client_state;
+struct file_list;
+struct configuration_spec;
+struct url_spec;
 
 extern void sweep(void);
 extern char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs);
@@ -131,7 +138,7 @@ extern const char loaders_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _LOADERS_H */
+#endif /* ndef LOADERS_H_INCLUDED */
 
 /*
   Local Variables:

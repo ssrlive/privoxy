@@ -1,6 +1,6 @@
-#ifndef _GATEWAY_H
-#define _GATEWAY_H
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $"
+#ifndef GATEWAY_H_INCLUDED
+#define GATEWAY_H_INCLUDED
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.2 2001/06/07 23:12:14 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,14 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.2  2001/06/07 23:12:14  jongfoster
+ *    Removing gateways[] list - no longer used.
+ *    Replacing function pointer in struct gateway with a directly
+ *    called function forwarded_connect(), which can do the common
+ *    task of deciding whether to connect to the web server or HTTP
+ *    proxy.
+ *    Replacing struct gateway with struct forward_spec
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -43,11 +51,13 @@
  *********************************************************************/
 
 
-#include "project.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct forward_spec;
+struct http_request;
+struct client_state;
 
 extern int forwarded_connect(const struct forward_spec * fwd, 
                              struct http_request *http, 
@@ -61,7 +71,7 @@ extern const char gateway_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _GATEWAY_H */
+#endif /* ndef GATEWAY_H_INCLUDED */
 
 /*
   Local Variables:
