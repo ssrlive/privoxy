@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.117 2002/05/17 13:56:16 oes Exp $
+ $Id: user-manual.sgml,v 1.118 2002/05/21 04:54:55 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.117 2002/05/17 13:56:16 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.118 2002/05/21 04:54:55 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2106,8 +2106,16 @@ actionsfile
    <para>
     If you leave out the IP address, <application>Privoxy</application> will
     bind to all interfaces (addresses) on your machine and may become reachable
-    from the Internet. In that case, consider using access control lists (ACL's)
-    (see <quote>ACLs</quote> below), or a firewall.
+    from the Internet. In that case, consider using <link
+    linkend="acls">access control lists</link> (ACL's, see below), and/or
+    a firewall.
+   </para>
+   <para>
+    If you open <application>Privoxy</application> to untrusted users, you will
+    also want to turn off the <literal><link
+    linkend="enable-edit-actions">enable-edit-actions</link></literal> and
+    <literal><link linkend="enable-remote-toggle">enable-remote-toggle</link></literal>
+    options!
    </para>
   </listitem>
  </varlistentry>
@@ -2293,8 +2301,8 @@ actionsfile
 
 <sect3 renderas="sect4" id="acls"><title>
 ACLs: permit-access and deny-access</title>
-<anchor id="permit-acces">
-<anchor id="deny-acces">
+<anchor id="permit-access">
+<anchor id="deny-access">
 
 <variablelist>
  <varlistentry>
@@ -7108,6 +7116,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.118  2002/05/21 04:54:55  hal9
+ -New Section: Quickstart to Ad Blocking
+ -Reformat Actions Anatomy to match new CGI layout
+
  Revision 1.117  2002/05/17 13:56:16  oes
   - Reworked & extended Templates chapter
   - Small changes to Regex appendix
