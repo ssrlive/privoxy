@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.13 2001/07/15 13:56:57 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.14 2001/07/18 13:47:59 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.13 2001/07/15 13:56:57 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.14  2001/07/18 13:47:59  oes
+ *    Eliminated dirty hack for getsockbyname()
+ *
  *    Revision 1.13  2001/07/15 13:56:57  jongfoster
  *    Removing unused local variable.
  *
@@ -471,7 +474,8 @@ int accept_connection(struct client_state * csp, int fd)
    {
       csp->my_ip_addr_str = strdup(inet_ntoa(server.sin_addr));
 
-      host = gethostbyaddr(&server.sin_addr, sizeof(server.sin_addr), AF_INET);
+      host = gethostbyaddr((const char *)&server.sin_addr, 
+                           sizeof(server.sin_addr), AF_INET);
       if (host == NULL)
       {
          log_error(LOG_LEVEL_ERROR, "Unable to get my own hostname: %E\n");
