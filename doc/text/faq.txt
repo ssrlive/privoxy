@@ -2,7 +2,7 @@ Junkbuster Frequently Asked Questions
 
 By: Junkbuster Developers
 
-$Id: faq.sgml,v 1.17 2002/03/18 03:53:53 hal9 Exp $
+$Id: faq.sgml,v 1.18 2002/03/18 16:40:31 hal9 Exp $
 
 The FAQ document gives users and developers alike answers to frequently asked
 questions about the Internet Junkbuster. Internet Junkbuster is a web proxy
@@ -46,40 +46,43 @@ Table of Contents
        
         1.3.1. Can I use my old config files?
         1.3.2. What is an "actions" file?
-        1.3.3. How are actions files configured? What is the easiest way to do
+        1.3.3. The "actions"concept confuses me. Please list some of these
+            "actions".
+        1.3.4. How are actions files configured? What is the easiest way to do
             this?
-        1.3.4. What are the differences between ijb-intermediate.action,
+        1.3.5. What are the differences between ijb-intermediate.action,
             ijb-basic.action, etc.?
-        1.3.5. Why can I change the configuration with a browser? Does that not
+        1.3.6. Why can I change the configuration with a browser? Does that not
             raise security issues?
-        1.3.6. How can I set up Junkbuster to act as a proxy for my LAN?
-        1.3.7. Instead of ads, now I get a Junkbuster logo [or checkerboard]. I
+        1.3.7. How can I set up Junkbuster to act as a proxy for my LAN?
+        1.3.8. Instead of ads, now I get a Junkbuster logo [or checkerboard]. I
             don't want to see anything.
-        1.3.8. Why would anybody want to see the logo or checkerboard?
-        1.3.9. I see large red banners on some pages that say "Blocked". How do
-            I get rid of this?
+        1.3.9. Why would anybody want to see the logo or checkerboard?
+        1.3.10. I see large red banners on some pages that say "Blocked". How
+            do I get rid of this?
        
     1.4. Misc
        
-        1.4.1. I noticed considerable delays in page requests compared to the
+        1.4.1. How much does Junkbuster slow my browsing down? This has to add
+            extra time to browsing.
+        1.4.2. I noticed considerable delays in page requests compared to the
             old IJB. What's wrong?
-        1.4.2. What is the "http://i.j.b/"?
-        1.4.3. I get the message 'Bad File Descriptor', why?
-        1.4.4. How do I chain Junkbuster with other proxies (e.g. squid)?
-        1.4.5. I would like to help you, what do I do?
-        1.4.6. Do you still maintain the blocklists?
-        1.4.7. How can I submit new ads?
-        1.4.8. How can I hide my IP address?
-        1.4.9. Can Junkbuster guarantee I am anonymous?
-        1.4.10. Might some things break because header information is being
+        1.4.3. What is the "http://i.j.b/"?
+        1.4.4. I would like to help you, what do I do?
+        1.4.5. Do you still maintain the blocklists?
+        1.4.6. How can I submit new ads?
+        1.4.7. How can I hide my IP address?
+        1.4.8. Can Junkbuster guarantee I am anonymous?
+        1.4.9. Might some things break because header information is being
             altered?
-        1.4.11. Can Junkbuster act as a "caching" proxy to speed up web
+        1.4.10. Can Junkbuster act as a "caching" proxy to speed up web
             browsing?
+        1.4.11. What about as a firewall? Can Junkbuster protect me?
         1.4.12. The Junkbuster logo that replaces ads is very blocky and ugly
             looking. Can't a better font be used?
         1.4.13. I have large empty spaces now where ads used to be. Why does
             Junkbuster leave these large gaps?
-        1.4.14. How can Junkbuster filter HTTPS URLs?
+        1.4.14. How can Junkbuster filter Secure (HTTPS) URLs?
         1.4.15. Junkbuster runs as a "server". How secure is it? Do I need to
             take any special precautions?
         1.4.16. What is a "re_filterfile"?
@@ -177,6 +180,9 @@ Since Junkbuster sits between you and the WWW, it is in a position to intercept
 and completely manage all web traffic and HTTP content before it gets to your
 browser. Junkbuster uses various programming methods to do this, all of which
 is under your control via the various configuration files and options.
+
+There are many kinds of proxies. Junkbuster best fits the "filtering proxy"
+category.
 
 -------------------------------------------------------------------------------
 
@@ -292,7 +298,13 @@ below).
 
 -------------------------------------------------------------------------------
 
-1.3.3. How are actions files configured? What is the easiest way to do this?
+1.3.3. The "actions"concept confuses me. Please list some of these "actions".
+
+These are all explained in the user-manual. Please refer to that.
+
+-------------------------------------------------------------------------------
+
+1.3.4. How are actions files configured? What is the easiest way to do this?
 
 The easiest way to do this, is to access Junkbuster with your web browser at 
 http://i.j.b/, and then select "Edit the actions list" from the selection list.
@@ -303,7 +315,7 @@ configuration files, and their various options and syntax.
 
 -------------------------------------------------------------------------------
 
-1.3.4. What are the differences between ijb-intermediate.action,
+1.3.5. What are the differences between ijb-intermediate.action,
 ijb-basic.action, etc.?
 
 Configuring the Internet Junkbuster is not easy. To help you get started, we
@@ -347,7 +359,7 @@ Table 1. Default Configurations
 
 -------------------------------------------------------------------------------
 
-1.3.5. Why can I change the configuration with a browser? Does that not raise
+1.3.6. Why can I change the configuration with a browser? Does that not raise
 security issues?
 
 What I don't understand, is how I can browser edit the config file as a regular
@@ -368,7 +380,7 @@ Note that normally only local users can connect to JunkBuster, so this is not
 
 -------------------------------------------------------------------------------
 
-1.3.6. How can I set up Junkbuster to act as a proxy for my LAN?
+1.3.7. How can I set up Junkbuster to act as a proxy for my LAN?
 
 By default, Junkbuster only responds to requests from localhost. To have it act
 as a server for a network, this needs to be changed in the main config file
@@ -385,7 +397,7 @@ then to use this address and port number.
 
 -------------------------------------------------------------------------------
 
-1.3.7. Instead of ads, now I get a Junkbuster logo [or checkerboard]. I don't
+1.3.8. Instead of ads, now I get a Junkbuster logo [or checkerboard]. I don't
 want to see anything.
 
 This is a configuration option for images that Junkbuster is stopping. You have
@@ -393,13 +405,13 @@ the choice of the Junkbuster logo, a checkerboard pattern (this scales better),
 a transparent 1x1 GIF image, or a custom URL or your choice.
 
 If you want to see nothing, then change the "+image-blocker" action to
-"+image-blocker{blank}". This can done from the "Edit Actions List" selection
-at http://i.j.b/. Or by hand editing the appropriate actions file. This will
-only effect what is defined as "images" though.  
+"+image-blocker{blank}". This can be done from the "Edit Actions List"
+selection at http://i.j.b/. Or by hand editing the appropriate actions file.
+This will only effect what is defined as "images" though.  
 
 -------------------------------------------------------------------------------
 
-1.3.8. Why would anybody want to see the logo or checkerboard?
+1.3.9. Why would anybody want to see the logo or checkerboard?
 
 This can be helpful for troubleshooting problems. It might also be good for
 anyone new to Junkbuster so that they can see if their favorite pages are
@@ -408,22 +420,38 @@ important.
 
 -------------------------------------------------------------------------------
 
-1.3.9. I see large red banners on some pages that say "Blocked". How do I get
+1.3.10. I see large red banners on some pages that say "Blocked". How do I get
 rid of this?
 
-These are URLs that match something on "Junkbusters" block list. It is meant to
-be a warning, and they are handled differently than what has been defined as
-"images" (e.g. ad banners). If you want them to be treated as images, so that
-they can be invisible, then move the offending URL from the "+block" section to
-the "+image-block" section of your actions file. Alternately, you could modify
-the "block" HTML template that is used by Junkbuster to display this, and make
-it something more to your liking. 
+These are URLs that match something in one of Junkbuster's block actions
+(+block). It is meant to be a warning so that you know something has been
+blocked and an easy way for you to see why. These are handled differently than
+what has been defined as "images" (e.g. ad banners). If you want them to be
+treated as if they were images, so that they can be invisible, then move the
+offending URL from the "+block" section to the "+imageblock" section of your
+actions file. Alternately, you could modify the "block" HTML template that is
+used by Junkbuster to display this, and make it something more to your liking.
 
 -------------------------------------------------------------------------------
 
 1.4. Misc
 
-1.4.1. I noticed considerable delays in page requests compared to the old IJB.
+1.4.1. How much does Junkbuster slow my browsing down? This has to add extra
+time to browsing.
+
+It should not slow you down any in real terms, and may actually help speed
+things up since ads, banners and other junk are not being displayed. The actual
+processing time required by Junkbuster itself for each page, is relatively
+small in the overall scheme of things, and happens very quickly. This is
+typically more than offset by time saved not downloading and rendering ad
+images.
+
+"Filtering" via the re_filterfile mechanism may cause a perceived slowdown,
+since the entire page is buffered before displaying. See below.
+
+-------------------------------------------------------------------------------
+
+1.4.2. I noticed considerable delays in page requests compared to the old IJB.
 What's wrong?
 
 Using the default filtering configuration, I noticed considerable delays in
@@ -441,7 +469,7 @@ first, do its content magic and then send the page to the browser.
 
 -------------------------------------------------------------------------------
 
-1.4.2. What is the "http://i.j.b/"?
+1.4.3. What is the "http://i.j.b/"?
 
 Since JunkBuster sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.
@@ -464,19 +492,7 @@ consider upgrading to 2.9.x).
 
 -------------------------------------------------------------------------------
 
-1.4.3. I get the message 'Bad File Descriptor', why?
-
-Fillme.
-
--------------------------------------------------------------------------------
-
-1.4.4. How do I chain Junkbuster with other proxies (e.g. squid)?
-
-Fillme.
-
--------------------------------------------------------------------------------
-
-1.4.5. I would like to help you, what do I do?
+1.4.4. I would like to help you, what do I do?
 
 Well, helping the team is always a good idea. We welcome new developers, RPM
 gurus or documentation makers. Simply get an account on sourceforge.net and
@@ -486,7 +502,7 @@ suitable task for you.
 
 -------------------------------------------------------------------------------
 
-1.4.6. Do you still maintain the blocklists?
+1.4.5. Do you still maintain the blocklists?
 
 No. The format of the blocklists has changed significantly in the versions
 2.9.x. Once we have released the new version, there will again be blocklists
@@ -494,7 +510,7 @@ that you can update automatically.
 
 -------------------------------------------------------------------------------
 
-1.4.7. How can I submit new ads?
+1.4.6. How can I submit new ads?
 
 As of now, please discontinue to submit new ad blocking infos. Once we have
 released the new version, there will again be a form on the website, which you
@@ -502,7 +518,7 @@ can use to contribute new ads.
 
 -------------------------------------------------------------------------------
 
-1.4.8. How can I hide my IP address?
+1.4.7. How can I hide my IP address?
 
 You cannot hide your IP address with Junkbuster or any other software, since
 the server needs to know your IP address to send the answer to you.
@@ -522,7 +538,7 @@ through Google.
 
 -------------------------------------------------------------------------------
 
-1.4.9. Can Junkbuster guarantee I am anonymous?
+1.4.8. Can Junkbuster guarantee I am anonymous?
 
 No. Your chances of remaining anonymous are greatly improved, but unless you
 are an expert on Internet security it would be safest to assume that everything
@@ -546,7 +562,7 @@ Luke!
 
 -------------------------------------------------------------------------------
 
-1.4.10. Might some things break because header information is being altered?
+1.4.9. Might some things break because header information is being altered?
 
 Definitely. More and more sites use HTTP header content to decide what to
 display and how to display it. There is many ways that this can be handled, so
@@ -572,11 +588,19 @@ required, but by no means the only one.
 
 -------------------------------------------------------------------------------
 
-1.4.11. Can Junkbuster act as a "caching" proxy to speed up web browsing?
+1.4.10. Can Junkbuster act as a "caching" proxy to speed up web browsing?
 
 No, it does not have this ability at all. You want something like Squid for
 this. And, yes, before you ask, Junkbuster can co-exist with other kinds of
 proxies like "Squid".
+
+-------------------------------------------------------------------------------
+
+1.4.11. What about as a firewall? Can Junkbuster protect me?
+
+Not in the way you mean, or in the way a true firewall can, or a proxy that has
+this specific capability. Junkbuster can help protect your privacy, but not
+really protect you from intrusion attempts.
 
 -------------------------------------------------------------------------------
 
@@ -586,7 +610,7 @@ Can't a better font be used?
 This is not a font problem. The logo is an image that is created by Junkbuster
 on the fly. So as to not waste memory, the image is rather small. The
 blockiness comes when the image is scaled to fill a largish area. There is not
-much to be done about this, other than to use one of the other "imageblocker"
+much to be done about this, other than to use one of the other "imageblock"
 directives: pattern, blank, or a URL of your chosing.
 
 -------------------------------------------------------------------------------
@@ -598,19 +622,19 @@ It would be easy enough to just eliminate this space altogether, rather than
 fill it with blank space. But, this would create problems with many pages that
 use the overall size of the ad to help organize the page layout and position
 the various components of the page where they were intended to be. It is best
-left this way. 
+left this way.
 
 -------------------------------------------------------------------------------
 
-1.4.14. How can Junkbuster filter HTTPS URLs?
+1.4.14. How can Junkbuster filter Secure (HTTPS) URLs?
 
 This is a limitation since HTTPS transactions are encrypted SSL sessions
 between your browser and the secure site, and are meant to be reliably secure
 and private. This means that all cookies and HTTP header information are also
-encrypted from the time they leave your browser, or the site. Junkbuster does
-not try to unencrypt this information, so it just passes through as is.
-Junkbuster can still catch images and ads that are embedded in the SSL stream
-though. 
+encrypted from the time they leave your browser, to the site, and vice versa.
+Junkbuster does not try to unencrypt this information, so it just passes
+through as is. Junkbuster can still catch images and ads that are embedded in
+the SSL stream though.
 
 -------------------------------------------------------------------------------
 
@@ -626,7 +650,7 @@ allow for LAN requests. In this case, we'd recommend you specify only the LAN
 gateway address, e.g. 192.168.1.1 in the main Junkbuster config file. All LAN
 hosts can then use this as their proxy address in the browser proxy
 configuration. In this way, Junkbuster will not listen on any external ports.
-Of course, a firewall is always good too. Better safe than sorry. 
+Of course, a firewall is always good too. Better safe than sorry.
 
 -------------------------------------------------------------------------------
 
@@ -635,13 +659,13 @@ Of course, a firewall is always good too. Better safe than sorry.
 The "re_filterfile" is used to "filter" any page content. By "filtering" we
 mean it can modify, remove, or change anything on the page, including HTML
 tags, and JavaScript. Regular expressions are used to accomplish this. This is
-potentially a very powerful feature, but requires some expertise. 
+potentially a very powerful feature, but requires some expertise.
 
 If you are familiar with regular expressions, and HTML, you can look at the
 provided re_filterfile with a text editor and see some of things it can be used
-for. 
+for.
 
-Presently, there is no GUI editor option for this part of the configuration. 
+Presently, there is no GUI editor option for this part of the configuration.
 
 -------------------------------------------------------------------------------
 
@@ -665,12 +689,12 @@ How?
 
 If the ad had been displayed before you added its URL, it will probably be held
 in the browser's cache for some time, so it will be displayed without the need
-for any request to the server. The best thing to do is try flusing the
-browser's caches. And then try again.
+for any request to the server, and Junkbuster will not be in the picture. The
+best thing to do is try flusing the browser's caches. And then try again.
 
 If this doesn't help, you probably have an error in the rule you applied. Try
 pasting the full URL of the offending ad into http://ijbswa.sourceforge.net/
-config/show-url-info and see if any actions match your new rule. 
+config/show-url-info and see if any actions match your new rule.
 
 -------------------------------------------------------------------------------
 
@@ -688,10 +712,11 @@ sections that have various "Junkbuster" features disabled for specific sites.
 Disabled "actions" will have a "-" (minus sign) in front of them. Add your
 problem page URL to one of these sections that looks like it is disabling the
 feature that is causing the problem. Re-try the page. There might be some trial
-and error involved. 
+and error involved. This is discussed in a little more detail in the 
+user-manual appendix. 
 
 Alternately, if you are comfortable with a text editor, you can accomplish the
-same thing by editing the appropriate "actions" file. 
+same thing by editing the appropriate "actions" file.
 
 -------------------------------------------------------------------------------
 
