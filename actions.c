@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.31 2002/05/06 07:56:50 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.32 2002/05/12 21:36:29 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.31 2002/05/06 07:56:50 oes Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.32  2002/05/12 21:36:29  jongfoster
+ *    Correcting function comments
+ *
  *    Revision 1.31  2002/05/06 07:56:50  oes
  *    Made actions_to_html independent of FEATURE_CGI_EDIT_ACTIONS
  *
@@ -218,10 +221,10 @@ const char actions_h_rcs[] = ACTIONS_H_VERSION;
 struct action_name
 {
    const char * name;
-   unsigned mask;   /* a bit set to "0" = remove action */
-   unsigned add;    /* a bit set to "1" = add action */
-   int takes_value; /* an AV_... constant */
-   int index;       /* index into strings[] or multi[] */
+   unsigned long mask;   /* a bit set to "0" = remove action */
+   unsigned long add;    /* a bit set to "1" = add action */
+   int takes_value;      /* an AV_... constant */
+   int index;            /* index into strings[] or multi[] */
 };
 
 /*
