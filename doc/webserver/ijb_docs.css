@@ -1,0 +1,11 @@
+hr {  width: 95% }
+body { background: #EEEEEE}
+h1, h2, h3, h4 { font-family: arial, helvetica, sans-serif }
+code { color: green }
+pre { margin-left: 2% }
+h1 { color: #404; 
+  font-size: 175% 
+}
+h2 { color: #606 }
+h3, h4 { color: #806 }
+ul { list-style-type: square }
