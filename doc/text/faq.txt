@@ -3,7 +3,7 @@ Junkbuster Frequently Asked Questions
 
    By: Junkbuster Developers
    
-   $Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $
+   $Id: faq.sgml,v 1.7 2002/03/07 18:16:55 swa Exp $
    
    The FAQ document gives users and developers alike answers to
    frequently asked questions about the Internet Junkbuster. The Internet
@@ -24,11 +24,32 @@ Junkbuster Frequently Asked Questions
           
         2.1. [5]Installation
         2.2. [6]Configuration
-        2.3. [7]Misc
                 
-   3. [8]Contact the developers
-   4. [9]Copyright and History
-   5. [10]See also
+              2.2.1. [7]How can I make my Yahoo account work?
+              2.2.2. [8]How can I make my Hotmail account work?
+              2.2.3. [9]How can I make my GMX account work?
+              2.2.4. [10]Why can I change the configuration with a
+                      browser? Does that not raise security issues?
+                      
+        2.3. [11]Misc
+                
+              2.3.1. [12]I noticed considerable delays in page requests
+                      compared to the old IJB. What's wrong?
+                      
+              2.3.2. [13]What is the "http://i.j.b/"?
+              2.3.3. [14]I get the message 'Bad File Descriptor', why?
+              2.3.4. [15]How do I chain Junkbuster with other proxies
+                      (e.g. squid)?
+                      
+              2.3.5. [16]I would like to help you, what do I do?
+              2.3.6. [17]Do you still maintain the blocklists?
+              2.3.7. [18]How can I submit new ads?
+              2.3.8. [19]How can I hide my IP address?
+              2.3.9. [20]What is the imagefile (simage.ini, etc.) for?
+                      
+   3. [21]Contact the developers
+   4. [22]Copyright and History
+   5. [23]See also
           
 1. Introduction
 
@@ -59,19 +80,83 @@ Junkbuster Frequently Asked Questions
    Fillme.
      _________________________________________________________________
    
+2.2.4. Why can I change the configuration with a browser? Does that not
+raise security issues?
+
+   What I don't understand, is how I can browser edit the config file as
+   a regular user, while the whole /etc/junkbuster hierarchy belongs to
+   the user "junkbuster", with only 644 perms.
+   
+   When you use the browser-based editor, JunkBuster itself is writing to
+   the config files. Because JunkBuster is running as the user
+   "junkbuster", it can update the config files.
+   
+   If you don't like this, setting "enable-edit-actions 0" in the config
+   file will disable the browser-based editor. If you're that paranoid,
+   you should also consider setting "enable-remote-toggle 0" to prevent
+   browser-based enabling/disabling of JunkBuster.
+   
+   Note that normally only local users can connect to JunkBuster, so this
+   is not (normally) a security problem.
+     _________________________________________________________________
+   
 2.3. Misc
 
-2.3.1. I get the message 'Bad File Descriptor', why?
+2.3.1. I noticed considerable delays in page requests compared to the old
+IJB. What's wrong?
+
+   Using the default filtering configuration, I noticed considerable
+   delays in page requests compared to the old IJB. Loading pages with
+   large contents seemed to take forever, then suddenly delivering all
+   the content at once.
+   
+   The whole content must be loaded in order to filter, and nothing is is
+   sent to the browser during this time. The loading time does not really
+   change in real numbers, but the feeling is different, because most
+   browsers are able to start rendering incomplete content, giving the
+   user a feeling of "it works".
+   
+   To modify the content of a page (i.e. make frames resizeable again,
+   etc.) and not just replace ads, the Internet Junkbuster needs to
+   download the entire page first, do its content magic and then send the
+   page to the browser.
+     _________________________________________________________________
+   
+2.3.2. What is the "http://i.j.b/"?
+
+   Since JunkBuster sits between your web browser and the Internet, it
+   can be programmed to handle certain pages specially.
+   
+   With recent versions of JunkBuster (version 2.9.x), you can get some
+   information about JunkBuster and change some settings by going to
+   http://i.j.b/ or, equivalently, http://ijbswa.sourceforge.net/config/
+   (Note that i.j.b is far easier to type but may not work in some
+   configurations).
+   
+   These pages are *not* forwarded to a server on the internet - instead
+   they are handled by a special web server which is built in to
+   JunkBuster.
+   
+   If you are not running JunkBuster, then http://i.j.b/ will fail, and
+   http://ijbswa.sourceforge.net/config/ will return a web page telling
+   you you're not running JunkBuster.
+   
+   If you have version 2.0.2, then the equivalent is
+   http://example.com/show-proxy-args (but you get far less information,
+   and you should really consider upgrading to 2.9.x).
+     _________________________________________________________________
+   
+2.3.3. I get the message 'Bad File Descriptor', why?
 
    Fillme.
      _________________________________________________________________
    
-2.3.2. How do I chain Junkbuster with other proxies (e.g. squid)?
+2.3.4. How do I chain Junkbuster with other proxies (e.g. squid)?
 
    Fillme.
      _________________________________________________________________
    
-2.3.3. I would like to help you, what do I do?
+2.3.5. I would like to help you, what do I do?
 
    Well, helping the team is always a good idea. We welcome new
    developers, RPM gurus or documentation makers. Simply get an account
@@ -80,26 +165,26 @@ Junkbuster Frequently Asked Questions
    CVS repository, and we'll find a suitable task for you together.
      _________________________________________________________________
    
-2.3.4. Do you still maintain the blocklists?
+2.3.6. Do you still maintain the blocklists?
 
    No. The format of the blocklists has changed significantly in the
    versions 2.9.x. Once we have released the new version, there will
    again be blocklists that you can update automatically.
      _________________________________________________________________
    
-2.3.5. How can I submit new ads?
+2.3.7. How can I submit new ads?
 
    As of now, please discontinue to submit new ad blocking infos. Once we
    have released the new version, there will again be a form on the
    website, which you can use to contribute new ads.
      _________________________________________________________________
    
-2.3.6. How can I hide my IP address?
+2.3.8. How can I hide my IP address?
 
    You cannot hide your IP address with Junkbuster.
      _________________________________________________________________
    
-2.3.7. What is the imagefile (simage.ini, etc.) for?
+2.3.9. What is the imagefile (simage.ini, etc.) for?
 
    Anytime the Junkbuster determines (with the help of the blocklist)
    that a URL contains an advertisement, it has to decide whether this
@@ -130,7 +215,20 @@ References
    4. file://localhost/home/swa/sf/current/doc/source/tmp.html#QUESTIONS
    5. file://localhost/home/swa/sf/current/doc/source/tmp.html#INSTALLATION
    6. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONFIGURATION
-   7. file://localhost/home/swa/sf/current/doc/source/tmp.html#MISC
-   8. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONTACT
-   9. file://localhost/home/swa/sf/current/doc/source/tmp.html#COPYRIGHT
-  10. file://localhost/home/swa/sf/current/doc/source/tmp.html#SEEALSO
+   7. file://localhost/home/swa/sf/current/doc/source/tmp.html#YAHOO
+   8. file://localhost/home/swa/sf/current/doc/source/tmp.html#HOTMAIL
+   9. file://localhost/home/swa/sf/current/doc/source/tmp.html#GMX
+  10. file://localhost/home/swa/sf/current/doc/source/tmp.html#BROWSECONFIG
+  11. file://localhost/home/swa/sf/current/doc/source/tmp.html#MISC
+  12. file://localhost/home/swa/sf/current/doc/source/tmp.html#LOADINGTIMES
+  13. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONFIGURL
+  14. file://localhost/home/swa/sf/current/doc/source/tmp.html#BADFILEDESC
+  15. file://localhost/home/swa/sf/current/doc/source/tmp.html#PROXY-CHAINING
+  16. file://localhost/home/swa/sf/current/doc/source/tmp.html#JOINTEAM
+  17. file://localhost/home/swa/sf/current/doc/source/tmp.html#BLOCKLIST
+  18. file://localhost/home/swa/sf/current/doc/source/tmp.html#NEWADS
+  19. file://localhost/home/swa/sf/current/doc/source/tmp.html#IP
+  20. file://localhost/home/swa/sf/current/doc/source/tmp.html#IMAGE
+  21. file://localhost/home/swa/sf/current/doc/source/tmp.html#CONTACT
+  22. file://localhost/home/swa/sf/current/doc/source/tmp.html#COPYRIGHT
+  23. file://localhost/home/swa/sf/current/doc/source/tmp.html#SEEALSO
