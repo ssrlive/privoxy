@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.3 2001/05/20 16:44:47 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.4 2001/05/22 18:46:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,50 @@ const char filters_rcs[] = "$Id: filters.c,v 1.3 2001/05/20 16:44:47 jongfoster 
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.4  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.3  2001/05/20 16:44:47  jongfoster
  *    Removing last hardcoded JunkBusters.com URLs.
  *
@@ -828,27 +872,27 @@ char *redirect_url(struct http_request *http, struct client_state *csp)
    char *p, *q;
 
    p = q = csp->http->path;
-	log_error(LOG_LEVEL_REDIRECTS, "checking path: %s", p);
+   log_error(LOG_LEVEL_REDIRECTS, "checking path: %s", p);
 
    /* find the last URL encoded in the request */
    while (p = strstr(p, "http://"))
-		{
-		  q = p++;
-		}
+   {
+      q = p++;
+   }
 
    /* if there was any, generate and return a HTTP redirect */
-	if (q != csp->http->path)
-	{
-	  log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
+   if (q != csp->http->path)
+   {
+      log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
 
-	  p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(q));
-	  sprintf(p, HTTP_REDIRECT_TEMPLATE, q);
-	  return(p);
+      p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(q));
+      sprintf(p, HTTP_REDIRECT_TEMPLATE, q);
+      return(p);
    }
-	else
+   else
    {
       return(NULL);
-	}
+   }
 
 }
 #endif /* def FAST_REDIRECTS */
@@ -1546,11 +1590,11 @@ char *add_stats(char *s)
     * Need to alter the stats not to include the fetch of this
     * page.
     *
-	 * Can't do following thread safely! doh!
-	 *
+    * Can't do following thread safely! doh!
+    *
     * urls_read--;
     * urls_rejected--; * This will be incremented subsequently *
-	 */
+    */
 
    s = strsav(s,"<h2>Statistics for this " BANNER ":</h2>\n");
 
