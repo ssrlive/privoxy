@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.4 2001/05/31 21:18:45 jongfoster Exp $
+# $Id: Makefile.in,v 1.5 2001/06/03 13:57:26 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.5  2001/06/03 13:57:26  swa
+# compile cgi.c (for andreas' GUI)
+#
 # Revision 1.4  2001/05/31 21:18:45  jongfoster
 # Added files actions.[ch], actionlist.h, list.[ch] to Makefile
 #
@@ -99,7 +102,7 @@ STRIP   = strip
 
 C_SRC  = cgi.c actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
          jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
-         parsers.c showargs.c ssplit.c
+         parsers.c showargs.c ssplit.c cgi.c
          
 C_OBJS = $(C_SRC:.c=.$(OBJEXT))
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
@@ -228,7 +231,7 @@ errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY
 filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h showargs.h ssplit.h @WIN_ONLY@win32.h 
 gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
 jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
-jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h
+jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h cgi.h
 killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
 list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
 loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h
@@ -237,6 +240,7 @@ miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
 parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h showargs.h ssplit.h
 showargs.@OBJEXT@:  showargs.c  showargs.h  config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
+cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
