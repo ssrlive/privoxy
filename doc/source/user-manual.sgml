@@ -9,8 +9,10 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
+<!entity p-authors SYSTEM "p-authors.sgml">
 <!entity p-version "2.9.15">
 <!entity p-status "beta">
+<!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -28,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.115 2002/05/16 16:25:00 oes Exp $
+ $Id: user-manual.sgml,v 1.116 2002/05/17 03:23:46 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -54,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.115 2002/05/16 16:25:00 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.116 2002/05/17 03:23:46 hal9 Exp $</pubdate>
 
 <!--
 
@@ -5931,23 +5933,80 @@ s* industry[ -]leading \
 <sect1 id="templates">
 <title>Templates</title>
 <para>
- When <application>Privoxy</application> displays one of its internal 
- pages, such as a <ulink url="http://bogus_404_page.com">404 Not Found error page</ulink>
- (<application>Privoxy</application> must be running for link to work as
- intended), it uses the appropriate template. On Linux, BSD, and Unix, these
- are located in <filename>/etc/privoxy/templates</filename> by default. These
- may be customized, if desired. <filename>cgi-style.css</filename> is used to
- control the HTML attributes (fonts, etc).
+ All <application>Privoxy</application> built-in pages, i.e. error pages such as the 
+ <ulink url="http://show-the-404-error.page"><quote>404 - No Such Domain</quote>
+ error page</ulink>, the <ulink
+ url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"><quote>BLOCKED</quote>
+ page</ulink>
+ and all pages of its <ulink url="http://config.privoxy.org/">web-based
+ user interface</ulink>, are generated from <emphasis>templates</emphasis>. 
+ (<application>Privoxy</application> must be running for the above links to work as
+ intended)
 </para>
+
 <para>
- The default 
- <ulink
- url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Blocked
- </ulink> (<application>Privoxy</application> needs to be running for page to
- display) banner page with the bright red top banner, is called just
- <quote><filename>blocked</filename></quote>. This may be customized or
- replaced with something else if desired (not recommended for the casual
- user).
+ These templates are stored in a subdirectory of the <link linkend="confdir">configuration
+ directory</link> called <filename>templates</filename>. On unixish platforms,
+ this is typically
+ <ulink url="file:///etc/privoxy/templates/"><filename>/etc/privoxy/templates/</filename></ulink>.
+</para>
+
+<para>
+ The templates are basically normal HTML files, but with place-holders (called symbols
+ or exports), which <application>Privoxy</application> fills at run time. You can
+ edit the templates with a normal text editor, should you want to customize them.
+ (<emphasis>Not recommended for the casual user</emphasis>). Note that
+ just like in configuration files, lines starting with <literal>#</literal> are
+ ignored when the templates are filled in.
+</para>
+
+<para>
+ The place-holders are of the form <literal>@name@</literal>, and you will
+ find a list of available symbols, which vary from template to template,
+ in the comments at the start of each file. Note that these comments are not
+ always accurate, and that it's probably best to look at the existing HTML
+ code to find out which symbols are supported and what they are filled in with.
+</para>
+
+<para>
+ A special application of this substitution mechanism is to make whole
+ blocks of HTML code disappear when a specific symbol is set. We use this
+ for many purposes, one of them being to include the beta warning in all
+ our user interface (CGI) pages when <application>Privoxy</application>
+ in in an alpha or beta development stage:
+</para>
+
+<para>
+ <screen>
+&lt;!-- @if-unstable-start --&gt;
+
+  ... beta warning HTML code goes here ...
+
+&lt;!-- if-unstable-end@ --&gt;</screen>
+</para>
+
+<para>
+ If the "unstable" symbol is set, everything in between and including
+ <literal>@if-unstable-start</literal> and <literal>if-unstable-end@</literal>
+ will disappear, leaving nothing but an empty comment:
+</para>
+
+<para>
+ <screen>&lt;!--  --&gt;</screen>
+</para>
+
+<para>
+ There's also an if-then-else construct and an <literal>#include</literal>
+ mechanism, but you'll sure find out if you are inclined to edit the
+ templates ;-)
+</para>
+
+<para>
+ All templates refer to a style located at
+ <ulink url="http://config.privoxy.org/send-stylesheet"><literal>http://config.privoxy.org/send-stylesheet</literal></ulink>.
+ This is, of course, locally served by <application>Privoxy</application>
+ and the source for it can be found and edited in the
+ <filename>cgi-style.css</filename> template.
 </para>
 
 </sect1>
@@ -5993,6 +6052,13 @@ Requests</title>
  &history;
 <!-- end history -->
 </sect2>
+
+<sect2 id="authors"><title>Authors</title>
+<!-- Include p-authors.sgml: -->
+ &p-authors;
+<!-- end authors -->
+</sect2>
+
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -6015,30 +6081,29 @@ Requests</title>
 <sect2 id="regex">
 <title>Regular Expressions</title>
 <para>
- <application>Privoxy</application> can use <quote>regular expressions</quote> 
- in various config files. Assuming support for <quote>pcre</quote> (Perl
- Compatible Regular Expressions) is compiled in, which is the default. Such
- configuration directives do not require regular expressions, but they can be
- used to increase flexibility by matching a pattern with wild-cards against
- URLs.
+ <application>Privoxy</application> uses Perl-style <quote>regular
+ expressions</quote> in its <link linkend="actions-file">actions
+ files</link> and <link linkend="filter-file">filter file</link>,
+ through the <ulink url="http://www.pcre.org/">PCRE</ulink> and
+ <ulink url="http://www.oesterhelt.org/pcrs/">PCRS</ulink> libraries.
 </para>
 
 <para>
  If you are reading this, you probably don't understand what <quote>regular
  expressions</quote> are, or what they can do. So this will be a very brief
- introduction only. A full explanation would require a book ;-)
+ introduction only. A full explanation would require a <ulink
+ url="http://www.oreilly.com/catalog/regex/">book</ulink> ;-)
 </para>
 
 <para>
- <quote>Regular expressions</quote> is a way of matching one character
- expression against another to see if it matches or not. One of the
- <quote>expressions</quote> is a literal string of readable characters
- (letter, numbers, etc), and the other is a complex string of literal
- characters combined with wild-cards, and other special characters, called
- meta-characters. The <quote>meta-characters</quote> have special meanings and
- are used to build the complex pattern to be matched against. Perl Compatible
- Regular Expressions is an enhanced form of the regular expression language
- with backward compatibility.
+ Regular expressions provide a language to describe patterns that can be
+ run against strings of characters (letter, numbers, etc), to see if they
+ match the string or not. The  patterns are themselves (sometimes complex)
+ strings of literal characters, combined with  wild-cards, and other special
+ characters, called meta-characters. The <quote>meta-characters</quote> have
+ special meanings and are used to build complex patterns to be matched against.
+ Perl Compatible Regular Expressions are an especially convenient
+ <quote>dialect</quote> of the regular expression language.
 </para>
 
 <para>
@@ -6122,14 +6187,6 @@ Requests</title>
   <quote>/(this|that) example/</quote> uses grouping and the bar character 
   and would match either <quote>this example</quote> or <quote>that
   example</quote>, and nothing else.
- </member>
-</simplelist></para>
-
-<para><simplelist>
- <member>
-  <emphasis>s/string1/string2/g</emphasis> - This is used to rewrite strings of text. 
-  <quote>string1</quote> is replaced by <quote>string2</quote> in this
-  example. There must of course be a match on <quote>string1</quote> first.
  </member>
 </simplelist></para>
 
@@ -6223,16 +6280,6 @@ Requests</title>
 </para>
 
 <para>
- <emphasis><literal>s/microsoft(?!.com)/MicroSuck/i</literal></emphasis> - This is 
- a substitution. <quote>MicroSuck</quote> will replace any occurrence of 
- <quote>microsoft</quote>.  The <quote>i</quote> at the end of the expression
- means ignore case. The <quote>(?!.com)</quote> means 
- the match should fail if <quote>microsoft</quote> is followed by
- <quote>.com</quote>. In other words, this acts like a <quote>NOT</quote>
- modifier. In case this is a hyperlink, we don't want to break it ;-).
-</para>
-
-<para>
  We are barely scratching the surface of regular expressions here so that you
  can understand the default <application>Privoxy</application>
  configuration files, and maybe use this knowledge to customize your own
@@ -6246,6 +6293,11 @@ Requests</title>
  <ulink url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>
 </para>
 
+<para>
+ For information on regular expression based substititions and their applications
+ in filters, please see the <link linkend="filter-file">filter file tutorial</link>
+ in this manual.
+</para>
 </sect2>
 
 <!--  ~  End section  ~  -->
@@ -6288,9 +6340,9 @@ Requests</title>
    </para>
   </blockquote>
   <para>
-   Alternately, this may be reached at <ulink
-   url="http://p.p/">http://p.p/</ulink>, but this
-   variation may not work as reliably as the above in some configurations.
+   There is a shortcut: <ulink url="http://p.p/">http://p.p/</ulink> (But it
+   doesn't provide a fallback to a real page, in case the request is not
+   sent through <application>Privoxy</application>)
   </para>
  </listitem>
 
@@ -6424,17 +6476,15 @@ Requests</title>
 
   <listitem>
    <para>
-    <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Filter Feedback</ulink>
+    <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions/index.php?url='+escape(location.href),'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Actions File Feedback</ulink>
    </para>
   </listitem> 
 
  </itemizedlist>
 </para>
 
-
-
 <para>
- Credit: The site which gave me the general idea for these bookmarklets is
+ Credit: The site which gave us the general idea for these bookmarklets is
  <ulink url="http://www.bookmarklets.com">www.bookmarklets.com</ulink>. They
  have more information about bookmarklets. 
 </para>
@@ -6574,16 +6624,15 @@ Requests</title>
 
 <para>
  The way <application>Privoxy</application> applies 
- <link linkend="ACTIONS"><quote>actions</quote></link>
- and <link linkend="FILTER"><quote>filters</quote></link>
+ <link linkend="ACTIONS">actions</link> and <link linkend="FILTER">filters</link>
  to any given URL can be complex, and not always so
  easy to understand what is happening. And sometimes we need to be able to
  <emphasis>see</emphasis> just what <application>Privoxy</application> is
  doing. Especially, if something <application>Privoxy</application> is doing
  is causing us a problem inadvertently. It can be a little daunting to look at
  the actions and filters files themselves, since they tend to be filled with
- <quote>regular expressions</quote> whose consequences are not always 
- so obvious. 
+ <link linkend="regex">regular expressions</link> whose consequences are not
+ always so obvious. 
 </para>
 
 <para>
@@ -6891,6 +6940,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.116  2002/05/17 03:23:46  hal9
+ Fixing merge conflict in Quickstart section.
+
  Revision 1.115  2002/05/16 16:25:00  oes
  Extended the Filter File chapter & minor fixes
 
