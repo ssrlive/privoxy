@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.6 2002/03/07 03:46:17 oes Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.7 2002/03/08 17:46:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.6 2002/03/07 03:46:17 oes Exp
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.7  2002/03/08 17:46:04  jongfoster
+ *    Fixing int/size_t warnings
+ *
  *    Revision 1.6  2002/03/07 03:46:17  oes
  *    Fixed compiler warnings
  *
@@ -120,7 +123,7 @@ int buf_extend(struct binbuffer *buf, size_t length)
 
    if (buf->offset + length > buf->size)
    {
-      buf->size = ((buf->size + length + 1023) & ~1023);
+      buf->size = ((buf->size + length + (size_t)1023) & ~(size_t)1023);
       newbuf = (char *)realloc(buf->buffer, buf->size);
 
       if (newbuf == NULL)
