@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win,v $
+ *    Revision 1.14  2001/11/30 21:35:54  jongfoster
+ *    Bumping version number to 2.9.10
+ *
  *    Revision 1.13  2001/10/23 21:24:09  jongfoster
  *    Support for FEATURE_CGI_EDIT_ACTIONS
  *
@@ -426,6 +429,25 @@
 #if (!defined(_MSC_VER)) && (!defined(RC_INVOKED))
 #error This file is only intended for MS VC++ on Win32.  For other compilers, please run configure.
 #endif /* (!defined(_MSC_VER)) && (!defined(RC_INVOKED)) */
+
+#pragma warning ( disable: 4100 4115 4201 4214 4514 )
+
+/*
+ * C4100 : unreferenced formal parameter
+ * Very common, not a bug
+ * 
+ * C4115 : named type definition in parentheses
+ * #include <windows.h> causes a warning about one of these.
+ *
+ * C4201 : nonstandard extension used : nameless struct/union
+ * Endemic in <windows.h>
+ *
+ * C4214 nonstandard extension used : bit field types other than int
+ * Endemic in <windows.h>
+ *
+ * C4514 unreferenced inline/local function has been removed
+ * Caused by #include <windows.h>
+ */
 
 #endif /* CONFIG_H_INCLUDED */
 
