@@ -45,13 +45,7 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
-originally written by Junkbusters Corporation, and was released as free
-open-source software under the GNU GPL. Stefan Waldherr made many improvements,
-and started the SourceForge project to continue development.
-
-Privoxy continues the Junkbuster tradition, but adds many refinements,
-enhancements and new features.
+Privoxy is based on Internet Junkbuster (tm).
 
 
  IMPORTANT CHANGES
@@ -71,17 +65,18 @@ change your browser if upgrading!!! And maybe firewall, etc.
  INSTALL
 --------
 
-There are several ways to install Privoxy.
+To build Privoxy from source, autoheader, autoconf, GNU make (gmake), and, of
+course, a C compiler are required.
 
-To build Privoxy from source, autoconf and GNU make (gmake) are required.
-Source is available as gzipped tar archives. For this, first unpack the source:
+When building from a source tarball (either release version or nightly CVS
+tarball), first unpack the source:
 
  tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]                           
  cd privoxy-2.9.14-beta                                                        
                                                                                
 
-For retrieving the current CVS sources, you'll need the CVS package installed
-first. Note CVS source is development quality, and may not be stable, or well
+For retrieving the current CVS sources, you'll need CVS installed. Note that
+sources from CVS are development quality, and may not be stable, or well
 tested. To download CVS source:
 
   cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
@@ -96,17 +91,24 @@ Then, in either case, to build from unpacked tarball or CVS source:
 
  autoheader                                                                    
  autoconf                                                                      
- ./configure      (--help to see options)                                      
- make             (the make from gnu, gmake for *BSD)                          
+ ./configure      # (--help to see options)                                    
+ make             # (the make from gnu, gmake for *BSD)                        
  su                                                                            
- make -n install  (to see where all the files will go)                         
- make install     (to really install)                                          
+ make -n install  # (to see where all the files will go)                       
+ make install     # (to really install)                                        
                                                                                
 
-Redhat and SuSE src and binary RPMs can be built with "make redhat-dist" or "
-make suse-dist" from unpacked sources. You will need to run "autoconf;
-autoheader; ./configure" beforehand. *BSD will require gmake (from http://
-www.gnu.org). See the user-manual for OS/2 build instructions.
+If you have gnu make, you can have the first four steps automatically done for
+you by just typing
+
+  make                                                                         
+                                                                               
+
+in the freshly downloaded or unpacked source directory.
+
+For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
+self-extracting installers, building on platforms with special requirements
+etc, please consult the developer manual.
 
 For binary RPM installation, and other platforms, see the user-manual as well.
 
@@ -131,21 +133,20 @@ Or for SuSE: /etc/rc.d/privoxy start
  CONFIGURATION
 -------------- 
 
-See: 'config', 'default.action', and 'default.filter'. There are several
-actions files included. These are all well commented. Most of the magic is in '
-*.action', and there are several of these included with varying degrees of
-aggressiveness. On Unix-like systems, these files are installed in /etc/
-privoxy. On Windows, then wherever the executable itself is installed. There
-are many significant changes and advances since Junkbuster v2.0.x. The
-user-manual has a run down of configuration options, and examples: http://
-www.privoxy.org/user-manual/.
+See: 'config', 'default.action', 'standard.action', 'user.action', and
+'default.filter'. 'user.action' is for personal configuration. These are all
+well commented. Most of the magic is in '*.action' files. On Unix-like systems,
+these files are installed in /etc/privoxy. On Windows, then wherever the
+executable itself is installed. There are many significant changes and advances
+since Junkbuster v2.0.x. The user-manual has a run down of configuration
+options, and examples: http://www.privoxy.org/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or whatever
 you specify in the config file under 'listen-address'. DEFAULT is localhost:
 8118.
 
-The default.action file can be configured via the web interface accessed via
-http://p.p/, as well other options.
+The actions list can be configured via the web interface accessed via http://
+p.p/, as well other options.
 
 All configuration files are subject to unannounced changes during the
 development process.
@@ -162,8 +163,7 @@ The most up to date source of information on the current development version,
 may still be either comments in the source code, or the included configuration
 files. The source and configuration files are all well commented. The main
 configuration files are: 'config', 'default.action', and 'default.filter' in
-the toplevel source directory. There are several *.action files included, with
-varying levels of aggressiveness.
+the toplevel source directory.
 
 Included documentation may vary according to platform and packager.
 
