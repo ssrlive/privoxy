@@ -279,6 +279,20 @@
   ;; If true, a Table of Contents will be generated for each 'Article'.
   #t)
 
+;; HB added next three statements 05/03/02.
+;;Do you want a separate page for the title?
+(define %generate-article-titlepage-on-separate-page%
+ #t)
+
+;;Do you want the article toc on the titlepage or separate?
+(define %generate-article-toc-on-titlepage%
+ #t)
+
+;;Titlepage Separate?
+;; This is the one that makes TOC only on first page!! hal.
+(define (chunk-skip-first-element-list)
+ '())
+
 (define %root-filename%
   ;; The filename of the root HTML document (e.g, "index").
   "index")
