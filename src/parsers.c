@@ -1,7 +1,7 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.56 2002/05/12 15:34:22 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/parsers.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.56 2002/05/12 15:34:22 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.56  2002/05/12 15:34:22  jongfoster
  *    Fixing typo in a comment
  *
@@ -1281,7 +1284,7 @@ jb_err client_send_cookie(struct client_state *csp, char **header)
    }
    else
    {
-      log_error(LOG_LEVEL_HEADER, " crunch!");
+      log_error(LOG_LEVEL_HEADER, "Crunched outgoing cookie -- yum!");
    }
 
    /*
@@ -1675,6 +1678,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
 
    if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
+      log_error(LOG_LEVEL_HEADER, "Crunched incoming cookie -- yum!");
       return crumble(csp, header);
    }
    else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
