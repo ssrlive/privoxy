@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.38 2002/03/08 14:13:50 morcego Exp $
+dnl $Id: configure.in,v 1.39 2002/03/08 16:46:13 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.39  2002/03/08 16:46:13  oes
+dnl Added --enable-no-gifs
+dnl
 dnl Revision 1.38  2002/03/08 14:13:50  morcego
 dnl Fixing configure, to remove a command not found error.
 dnl
@@ -264,7 +267,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.38 $)
+AC_REVISION($Revision: 1.39 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -460,10 +463,15 @@ AC_SUBST(JADEBIN)
 dnl Checking for the docbook.dsl stylesheet file
 if test $dodk = yes; then
   if test $DKPREFIX = none; then
-    AC_CHECK_FILE(/usr/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl,
-      DKPREFIX=/usr/share/sgml/docbook/dsssl-stylesheets,
-      AC_CHECK_FILE(/usr/share/sgml/docbkdsl/html/docbook.dsl,
-        DKPREFIX=/usr/share/sgml/docbkdsl))
+    for i in /usr/share/sgml/docbook/dsssl-stylesheets /usr/share/sgml/docbkdsl; do
+      echo -n "checking for $i/html/docbook.dsl..."
+      if test -f $i/html/docbook.dsl; then
+        echo "yes"
+        DKPREFIX=$i
+      else
+        echo "no"
+      fi
+    done
   fi
 fi
 AC_SUBST(DKPREFIX)
