@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.6 2001/09/10 10:41:16 oes Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.7 2001/09/12 17:58:26 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.6 2001/09/10 10:41:16 oes Exp $";
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.7  2001/09/12 17:58:26  steudten
+ *
+ *    add #include <string.h>
+ *
  *    Revision 1.6  2001/09/10 10:41:16  oes
  *    Added #include in.h
  *
@@ -68,7 +72,11 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.6 2001/09/10 10:41:16 oes Exp $";
 
 #include <stdio.h>
 #include <sys/types.h>
+
+#ifndef _WIN32
 #include <netinet/in.h>
+#endif
+
 #include <errno.h>
 #include <string.h>
 
