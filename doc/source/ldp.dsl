@@ -87,10 +87,11 @@
 (define %graphic-default-extension% 
   "gif")
 
-(define %section-autolabel%
+(define %section-autolabel% #t)
+  ;; Privoxy READ! leave the above on one line. It is re-written by 
+  ;; GNUmakefile for FAQ !!!!!!!!
   ;; For enumerated sections (1.1, 1.1.1, 1.2, etc.)
-  #t)
-
+  
 ;; HB changed TOC depth to 3 levels.
 (define (toc-depth nd)
   3)
