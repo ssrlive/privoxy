@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.27 2001/09/16 17:08:54 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.28 2001/09/19 18:00:37 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,15 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.27 2001/09/16 17:08:54 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.28  2001/09/19 18:00:37  oes
+ *     - Deletef time() FIXME (Can't fail under Linux either, if
+ *       the argument is guaranteed to be in out address space,
+ *       which it is.)
+ *     - Fixed comments
+ *     - Pointer notation cosmetics
+ *     - Fixed a minor bug in template_fill(): Failiure of
+ *       pcrs_execute() now secure.
+ *
  *    Revision 1.27  2001/09/16 17:08:54  jongfoster
  *    Moving simple CGI functions from cgi.c to new file cgisimple.c
  *
@@ -753,7 +762,7 @@ void template_fill(char **template_ptr, struct map *exports)
    char buf[BUFFER_SIZE];
    char *tmp_out_buffer;
    char *file_buffer;
-   int size;
+   size_t  size;
    int error;
    const char *flags;
 
