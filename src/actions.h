@@ -1,9 +1,9 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.12 2002/05/06 07:56:50 oes Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/actions.h,v $
  *
  * Purpose     :  Declares functions to work with actions files
  *                Functions declared include: FIXME
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.12  2002/05/06 07:56:50  oes
  *    Made actions_to_html independent of FEATURE_CGI_EDIT_ACTIONS
  *
@@ -104,12 +107,14 @@ struct client_state;
 
 
 
-/* This structure is used to hold user-defined aliases */
+/**
+ * This structure is used to hold user-defined aliases
+ */
 struct action_alias
 {
-   const char * name;
-   struct action_spec action[1];
-   struct action_alias * next;
+   const char * name;            /**< Alias name.  */
+   struct action_spec action[1]; /**< Alias value. */
+   struct action_alias * next;   /**< Next alias in list */
 };
 
 

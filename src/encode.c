@@ -1,7 +1,7 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.8 2002/03/26 22:29:54 swa Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/encode.c,v $
  *
  * Purpose     :  Functions to encode and decode URLs, and also to
  *                encode cookies and HTML text.
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.8 2002/03/26 22:29:54 swa Exp $";
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.8  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -74,7 +77,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.8 2002/03/26 22:29:54 swa Exp $";
 
 const char encode_h_rcs[] = ENCODE_H_VERSION;
 
-/* Maps special characters in a URL to their equivalent % codes. */
+/**
+ * Maps special characters in a URL to their equivalent % codes.
+ */
 static const char * const url_code_map[256] = {
    NULL, "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09",
    "%0A", "%0B", "%0C", "%0D", "%0E", "%0F", "%10", "%11", "%12", "%13",
@@ -104,7 +109,9 @@ static const char * const url_code_map[256] = {
    "%FA", "%FB", "%FC", "%FD", "%FE", "%FF"
 };
 
-/* Maps special characters in HTML to their equivalent entites. */
+/**
+ * Maps special characters in HTML to their equivalent entities.
+ */
 static const char * const html_code_map[256] = {
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -134,7 +141,9 @@ static const char * const html_code_map[256] = {
    NULL, NULL, NULL, NULL, NULL, NULL
 };
 
-/* Maps special characters in a cookie to their equivalent % codes. */
+/**
+ * Maps special characters in a cookie to their equivalent % codes.
+ */
 static const char * const cookie_code_map[256] = {
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,

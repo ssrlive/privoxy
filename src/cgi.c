@@ -1,7 +1,7 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.70 2002/05/19 11:33:20 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.70 2002/05/19 11:33:20 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.70  2002/05/19 11:33:20  jongfoster
  *    If a CGI error was not handled, and propogated back to
  *    dispatch_known_cgi(), then it was assumed to be "out of memory".
@@ -418,8 +421,8 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.70 2002/05/19 11:33:20 jongfoster Exp $";
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
-/*
- * List of CGI functions: name, handler, description
+/**
+ * List of CGI functions: name, handler, description.
  * Note: Do NOT use single quotes in the description;
  *       this will break the dynamic "blocked" template!
  */
@@ -533,7 +536,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
 
 
 /*
- * Bulit-in images for ad replacement
+ * Built-in images for ad replacement
  *
  * Hint: You can encode your own images like this:
  * cat your-image | perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o", unpack("C", $c)); }'
@@ -568,7 +571,7 @@ const char image_blank_data[] =
  "\000\000\000\000\111\105\116\104\256\102\140\202";
 #else
 
-/*
+/**
  * Checkerboard pattern, as a GIF.
  */
 const char image_pattern_data[] =
@@ -578,7 +581,7 @@ const char image_pattern_data[] =
    "\054\000\000\000\000\004\000\004\000\000\002\005\104\174\147"
    "\270\005\000\073";
 
-/*
+/**
  * 1x1 transparant GIF.
  */
 const char image_blank_data[] =
@@ -587,11 +590,26 @@ const char image_blank_data[] =
    "\000\001\000\000\002\002D\001\000;";
 #endif
 
+/**
+ * The size of the image_pattern, in bytes.
+ */
 const size_t image_pattern_length = sizeof(image_pattern_data) - 1;
+
+/**
+ * The size of the image_blank, in bytes.
+ */
 const size_t image_blank_length   = sizeof(image_blank_data) - 1;
 
 
+/**
+ * The "Out of memory" CGI response.  This is statically allocated
+ * and is initialized at startup, for obvious reasons.  It's
+ * read-only.  finish_http_response() and free_http_response()
+ * have been special-cased to do nothing if they are passed
+ * this structure.
+ */
 static struct http_response cgi_error_memory_response[1];
+
 
 static struct http_response *dispatch_known_cgi(struct client_state * csp,
                                                 const char * path);
