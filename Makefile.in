@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.31 2001/09/23 10:13:48 swa Exp $
+# $Id: Makefile.in,v 1.32 2001/10/09 22:38:19 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.32  2001/10/09 22:38:19  jongfoster
+# Correcting actionsfile filename for Win32 INI build
+#
 # Revision 1.31  2001/09/23 10:13:48  swa
 # upload process established. run make webserver and
 # the documentation is moved to the webserver. documents
@@ -468,15 +471,21 @@ tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 
 install: all
+	#
+	# FIXME: This is a dirty hack to have an install target
+	#        that works at least for some setups. This needs
+	#        to be fixed!
+	#
 	$(STRIP_PROG) $(PROGRAM)
 	$(INSTALL) $(PROGRAM) $(SBIN_DEST)
-	$(INSTALL) README README.TOO README.WIN README.re_filter README.cygwin $(DEST)
-	$(INSTALL) aclfile blocklist config cookiefile forward imagelist \
-		popup re_filterfile trust $(DEST)
-	# FIXME: On SuSE, these are not found.  Where do they go?
-	$(ECHO) junkbuster.logrotate junkbuster.monthly junkbuster.weekly
-	$(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
-	$(INSTALL) junkbuster.init /sbin/init.d/junkbuster
+	mkdir -p $(DEST)/user-manual
+	mkdir -p $(DEST)/templates
+	cp -r doc/webserver/user-manual $(DEST)
+	cp -r templates $(DEST)
+	$(INSTALL) config actionsfile re_filterfile trust $(DEST)
+	# FIXME $(ECHO) junkbuster.logrotate junkbuster.monthly junkbuster.weekly
+	# FIXME: Need new manual! $(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
+	$(INSTALL) junkbuster.init /etc/init.d/junkbuster
 
 
 #############################################################################
