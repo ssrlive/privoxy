@@ -46,7 +46,7 @@ systems and multi-user networks.
 JunkBuster was originally written by JunkBusters Corporation, and was
 released as free open-source software under the GNU GPL. Stefan
 Waldherr made many improvements, and started the SourceForge project
-to continue development.
+to continue development. Several other developers are now contributing.
 
 
  IMPORTANT CHANGE
@@ -91,15 +91,13 @@ build as above.
  RUN
 ----
 
- junkbuster /etc/junkbuster/config 
+junkbuster [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
+ [--user USER] [config_file]
 
 Or for RedHat: /etc/rc.d/init.d/junkbuster start
 Or for SuSE:   /etc/rc.d/junkbuster start
 
-The only command line option supported is the location of the 
-main configuration file. If none is specified, Junkbuster will 
-look for a file named 'config' for unix, config.txt for Win32 
-in the current directory.
+See the man page or user-manual for a brief explanation of each.
 
 
  CONFIGURATION
@@ -133,9 +131,11 @@ still be either comments in the source code, or the included configuration
 files, which are all well commented. These are 'config', 'ijb.action', and
 're_filterfile' in the toplevel source directory.
 
-Some legacy documentation is also included only to give an idea of
+Some legacy documentation may also be included only to give an idea of
 what Junkbuster can do under doc/obsolete/*. Much has changed since
 these docs were written, so beware.
+
+Included documentation may vary according to platform and packager.
 
 
  BUGS
@@ -151,4 +151,4 @@ addressed.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.13 2002/03/04 19:32:07 oes Exp $
+$Id: README,v 1.14 2002/03/05 01:18:45 hal9 Exp $
