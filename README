@@ -53,22 +53,23 @@ to continue development.
 
 For tarball, first unpack:
 
- tar zxvf ijb_source_*
+ tar xzvf ijb_source_* [.tgz or .tar.gz]
  cd ijb_source_2.9.9_alpha
 
  autoheader   [suggested for CVS source]
  autoconf     [suggested for CVS source]
- ./configure
- make         (gmake on BSD?)
- su
- make install
+ ./configure	(--help to see options)
+ gmake        	(the make from gnu) 
+ su 
+ make -n install	(to see where all the files will go)
+ make install		(to really install)
 
 Redhat and SuSE src and binary RPMs can be built with 'make
 redhat-dist' or 'make suse-dist' (run ./configure first). BSD
 will (probably?) require gmake (from http://gnu.org). See the 
 user-manual for OS/2 build instructions.
 
-Junkbuster is also availabe via anonymous CVS:
+Junkbuster is also available via anonymous CVS:
 
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
@@ -80,14 +81,15 @@ build as above.
  RUN
 ----
 
- junkbuster /etc/junkbuster/config &
+ junkbuster /etc/junkbuster/config 
 
 Or for RedHat: /etc/rc.d/init.d/junkbuster start
-Or for SuSE: /etc/rc.d/junkbuster start
+Or for SuSE:   /etc/rc.d/junkbuster start
 
 The only command line option supported is the location of the 
 main configuration file. If none is specified, Junkbuster will 
-look for a file named 'config' in the current directory.
+look for a file named 'config' for unix, junkbstr.txt for win
+in the current directory.
 
 
  CONFIGURATION
@@ -100,7 +102,9 @@ significant changes and advances since v2.0.x. The user-manual has a
 run down of configuration options, and examples: 
 http://ijbswa.sourceforge.net/user-manual/.
 
-Be sure to set your browser(s) for HTTP/HTTPS Proxy at localhost:8000.
+Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>,
+or whatever you specify in the config file under 'listen-address'.
+DEFAULT is localhost:8000.
 
 
  DOCUMENTATION
@@ -131,4 +135,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.6 2001/10/24 18:47:54 hal9 Exp $
+$Id: README,v 1.7 2001/10/26 18:36:52 swa Exp $
