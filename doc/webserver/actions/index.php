@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.21 2002/04/10 13:44:07 oes Exp $
+  $Id: index.php,v 1.21 2002/04/10 13:51:19 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.21  2002/04/10 13:51:19  oes
+  Updated to new Bookmarklet
+
   Revision 1.20  2002/04/10 00:07:35  oes
   Moved window sizing and positioning code to Bookmarklet
 
@@ -111,7 +114,7 @@
 /*
  * Config:
  */
-$required_actions_file_version = "1.1";
+$required_actions_file_version = "1.2";
 $required_privoxy_version = "2.9.14";
 $actions_file_download = "http://www.privoxy.org/actions/testdrive.action";
 $submit_target = "http://www.oesterhelt.org/actions/step2.php";

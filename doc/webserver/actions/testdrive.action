@@ -46,11 +46,15 @@ shop        = -filter -no-cookies-keep
 }
 / # Match all URLs
 
+{+filter{noflash}}
+.moorhuhn.de
+[+filter{reorder}}
+.oesterhelt.org
 
 #############################################################################
 # Needed for automatic feedback evaluation; Please don't delete!
 #############################################################################
-{+add-header{X-Actions-File-Version: 1.1} -filter -no-popups}
+{+add-header{X-Actions-File-Version: 1.2} -filter -no-popups}
 .privoxy.org/actions
 .oesterhelt.org/actions
 
@@ -111,6 +115,9 @@ edit.europe.yahoo.com
 #BLOCK-REFERRER: http://www.cnn.com/
 #BLOCK-REFERRER: http://www.aol.com/
 ar.atwola.com 
+
+#BLOCK-REFERRER: http://www.altavista.com/
+.ad.doubleclick.net
 
 #BLOCK-REFERRER: 
 bs*.gsanet.com
