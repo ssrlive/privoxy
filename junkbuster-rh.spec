@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.36 2002/03/07 05:06:54 morcego Exp $
+# $Id: junkbuster-rh.spec,v 1.37 2002/03/07 19:23:49 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -33,7 +33,7 @@ Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.11
-Release: 6
+Release: 7
 Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -42,7 +42,7 @@ URL: http://ijbswa.sourceforge.net/
 Obsoletes: junkbuster-raw junkbuster-blank
 # Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 Prereq: shadow-utils, chkconfig, initscripts, sh-utils
-BuildRequires: perl gzip sed docbook-utils
+BuildRequires: perl gzip sed docbook-utils libtool
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
@@ -219,6 +219,10 @@ fi
 %{_mandir}/man8/%{name}.8*
 
 %changelog
+* Fri Mar 08 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ junkbuster-2.9.11-7
+- Added BuildRequires to libtool.
+
 * Tue Mar 06 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + junkbuster-2.9.11-6
 - Changed the routined that handle the junkbust and junkbuster users on
@@ -420,6 +424,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.37  2002/03/07 19:23:49  swa
+# i hate to scroll. suse: wrong configdir.
+#
 # Revision 1.36  2002/03/07 05:06:54  morcego
 # Fixed %pre scriptlet. And, as a bonus, you can even understand it now. :-)
 #
