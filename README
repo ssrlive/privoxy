@@ -50,8 +50,16 @@ improvements, and started the SourceForge project to continue
 development. Several other developers are now contributing.
 
 
- IMPORTANT CHANGE
------------------
+ IMPORTANT CHANGES
+------------------
+
+NEWS! As of 03/24/02, the name of this project has been changed 
+from Junkbuster to Privoxy. This is reflected in many of the 
+included files. 
+
+WARNING! If upgrading from earlier versions of this project via 
+RPM packages, the new package will delete any previously installed 
+'Junkbuster' packages.
 
 IMPORTANT! READ! Configuration Change as of 03/04/02: The default
 listening port is now 8118 due to conflicts with port 8000 assignment.
@@ -64,8 +72,8 @@ firewall, etc.
 
 For tarball, first unpack:
 
- tar xzvf ijb-2.9.11-beta-src.tar.gz
- cd ijb-2.9.11-beta
+ tar xzvf privoxy-2.9.13-beta-src.tar.gz
+ cd privoxy-2.9.13-beta
 
  autoheader
  autoconf
@@ -104,12 +112,13 @@ See the man page or user-manual for a brief explanation of each.
  CONFIGURATION
 --------------
 
-See: 'config', 'ijb.action', and 're_filterfile'. These are all well
-commented. On Unix-like systems, these files are installed in
-/etc/privoxy.  On Windows, then wherever the executable itself is
-installed. There are many significant changes and advances since
-v2.0.x. The user-manual has a run down of configuration options, and
-examples: http://ijbswa.sourceforge.net/user-manual/.
+See: 'config', '*.action', and 'default.filter'. These are all well
+commented. Most of the magic is in '*.action', and there are several 
+of these included with varying degrees of aggressiveness. On Unix-like
+systems, these files are installed in /etc/privoxy.  On Windows, then wherever
+the executable itself is installed. There are many significant changes and
+advances since Junkbuster v2.0.x. The user-manual has a run down of
+configuration options, and examples: http://ijbswa.sourceforge.net/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or
 whatever you specify in the config file under 'listen-address'.
@@ -126,20 +135,20 @@ There is a growing amount of documentation in the 'doc' subdirectory,
 but it is not finished at this point. In particular, see the
 user-manual there, and developers should look at developer-manual.
 
-The best source of information on the current development version, may
-still be either comments in the source code, or the included
-configuration files, which are all well commented. These are 'config',
-'ijb.action', and 're_filterfile' in the toplevel source directory.
+The most up to date source of information on the current development version,
+may still be either comments in the source code, or the included configuration
+files, which are all well commented. These are 'config', '*.action', and
+'default.filter' in the toplevel source directory.
 
-Some legacy documentation may also be included only to give an idea of
-what Privoxy can do under doc/obsolete/*. Much has changed since
-these docs were written, so beware.
+Some legacy Junkbuster documentation may also be included only to give an idea
+of what Privoxy can do under doc/obsolete/*. Much has changed since these docs
+were written, so beware.
 
 Included documentation may vary according to platform and packager.
 
 
  CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
------
+--------------------------------------------------------------
 
 We value your feedback. However, to provide you with the best support,
 please note:
@@ -168,4 +177,4 @@ here too.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.18 2002/03/24 15:46:20 swa Exp $
+$Id: README,v 1.19 2002/03/24 16:15:18 swa Exp $
