@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.26 2001/11/05 21:31:09 steudten Exp $
+# $Id: config,v 1.27 2001/11/30 23:35:51 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -177,11 +177,11 @@ proxy-info-url http://www.your-site.com/proxy.html
 #
 #  Listen-address specifies the address and port where Junkbuster will
 #  listen for connections from your Web browser.  The default is to
-#  listen on the local host on port 8000, and this is suitable for
+#  listen on the local host on port 8118, and this is suitable for
 #  most users.  (In your web browser, under proxy configuration, list
-#  the proxy server as 'localhost' and the port as '8000').
+#  the proxy server as 'localhost' and the port as '8118').
 # 
-#  If you already have another service running on port 8000, or if you
+#  If you already have another service running on port 8118, or if you
 #  want to serve requests from other machines (e.g. on your local
 #  network) as well, you will need to override the default. The syntax
 #  is "listen-address [<ip-address>]:<port>" If you leave out the ip
@@ -194,20 +194,20 @@ proxy-info-url http://www.your-site.com/proxy.html
 #  (192.168.0.0) and has another outside connection with a different
 #  address. You want it to serve requests from inside only:
 #
-#     listen-address 192.168.0.1:8000
+#     listen-address 192.168.0.1:8118
 #
 #  If you want it to listen on all addresses (including the outside
 #  connection):
 #
-#     listen-address :8000
+#     listen-address :8118
 #
 #  If you do this, consider using acls (see "aclfile" above).
 #
 #  Note: you will need to point your browser(s) to the address
 #  and port that you have configured here.
 #
-#  Default:  listen-address    localhost:8000 
-#            listen-address    127.0.0.1:8000
+#  Default:  listen-address    localhost:8118 
+#            listen-address    127.0.0.1:8118
 #
 
 
@@ -516,11 +516,11 @@ enable-remote-toggle 1
 #
 # host-a can run an Internet Junkbuster proxy with forwarding like this:
 #   forward .* .
-#   forward isp-b.com host-b:8000
+#   forward isp-b.com host-b:8118
 #
 # host-b can run an Internet Junkbuster proxy with forwarding like this:
 #   forward .* .
-#   forward isp-a.com host-a:8000
+#   forward isp-a.com host-a:8118
 #
 # Now, *anyone* on the Internet (including users on host-a and host-b)
 # can set their browser's proxy to *either* host-a or host-b and
@@ -546,7 +546,7 @@ enable-remote-toggle 1
 #       Your squid configuration could then look like this:
 #
 #       # Define junkbuster as parent cache 
-#       cache_peer 127.0.0.1 8000 parent 0 no-query 
+#       cache_peer 127.0.0.1 8118 parent 0 no-query 
 #
 #       # Define ACL for protocol FTP 
 #       acl FTP proto FTP 

@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.48 2002/03/03 14:50:40 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.49 2002/03/04 18:28:55 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.49  2002/03/04 18:28:55  oes
+ *    Deleted PID_FILE_NAME
+ *
  *    Revision 1.48  2002/03/03 14:50:40  oes
  *    Fixed CLF logging: Added ocmd member for client's request to struct http_request
  *
@@ -458,7 +461,7 @@ typedef int jb_err;
 
 /* Default IP and port to listen on */
 #define HADDR_DEFAULT   "127.0.0.1"
-#define HADDR_PORT      8000
+#define HADDR_PORT      8118
 
 /* Forward defs for various structures */
 
@@ -938,7 +941,7 @@ struct configuration_spec
 
    /*
     * Port and IP to bind to.
-    * Defaults to HADDR_DEFAULT:HADDR_PORT == 127.0.0.1:8000
+    * Defaults to HADDR_DEFAULT:HADDR_PORT == 127.0.0.1:8118
     */
    const char *haddr;
    int         hport;

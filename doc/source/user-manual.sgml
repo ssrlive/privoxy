@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.32 2002/03/03 09:26:06 joergs Exp $
+ $Id: user-manual.sgml,v 1.33 2002/03/03 19:46:13 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.32 2002/03/03 09:26:06 joergs Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.33 2002/03/03 19:46:13 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -819,14 +819,14 @@ configuration section below. HB.)
 <para>
  <quote>Listen-address</quote> specifies the address and port where
  <application>Junkbuster</application> will listen for connections from your
- Web browser.  The default is to listen on the localhost port 8000, and
+ Web browser.  The default is to listen on the localhost port 8118, and
  this is suitable for most users.  (In your web browser, under proxy
  configuration, list the proxy server as <quote>localhost</quote> and the
- port as <quote>8000</quote>).
+ port as <quote>8118</quote>).
 </para>
 
 <para>
- If you already have another service running on port 8000, or if you want to
+ If you already have another service running on port 8118, or if you want to
  serve requests from other machines (e.g. on your local network) as well, you
  will need to override the default. The syntax is 
  <quote>listen-address [&lt;ip-address&gt;]:&lt;port&gt;</quote>. If you leave
@@ -847,7 +847,7 @@ configuration section below. HB.)
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>listen-address  192.168.0.1:8000</emphasis>
+  <emphasis>listen-address  192.168.0.1:8118</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -862,7 +862,7 @@ configuration section below. HB.)
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>listen-address  :8000</emphasis>
+  <emphasis>listen-address  :8118</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -871,7 +871,7 @@ configuration section below. HB.)
 <para>
  If you do this, consider using ACLs (see <quote>aclfile</quote> above). Note:
  you will need to point your browser(s) to the address and port that you have
- configured here. Default: localhost:8000 (127.0.0.1:8000).
+ configured here. Default: localhost:8118 (127.0.0.1:8118).
 </para>
 
 <para>
@@ -1510,7 +1510,7 @@ configuration section below. HB.)
   <msgtext> 
    <literallayout>
  <emphasis>forward    .*         .</emphasis>
- <emphasis>forward    isp-b.com  host-b:8000</emphasis>
+ <emphasis>forward    isp-b.com  host-b:8118</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1526,7 +1526,7 @@ configuration section below. HB.)
   <msgtext> 
    <literallayout>
  <emphasis>forward    .*          .</emphasis>
- <emphasis>forward    isp-a.com   host-a:8000</emphasis>
+ <emphasis>forward    isp-a.com   host-a:8118</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1576,9 +1576,9 @@ configuration section below. HB.)
    <literallayout>
   # Define junkbuster as parent cache 
  <!-- per feedback from user...
-  cache_peer 127.0.0.1 8000 parent 0 no-query 
+  cache_peer 127.0.0.1 8118 parent 0 no-query 
  --> 
-  cache_peer 127.0.0.1 parent 8000 0 no-query
+  cache_peer 127.0.0.1 parent 8118 0 no-query
   
   # Define ACL for protocol FTP 
   acl FTP proto FTP 
@@ -2829,13 +2829,13 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 
 <para>
  Be sure your browser is set to use the proxy which is by default at
- localhost, port 8000. With <application>Netscape</application> (and
+ localhost, port 8118. With <application>Netscape</application> (and
  <application>Mozilla</application>), this can be set under <literal>Edit
  -&gt; Preferences -&gt; Advanced -&gt; Proxies -&gt; HTTP Proxy</literal>.
  For <application>Internet Explorer</application>: <literal>Tools &gt;
  Internet Properties -&gt; Connections -&gt; LAN Setting</literal>. Then,
  check <quote>Use Proxy</quote> and fill in the appropriate info (Address:
- localhost, Port: 8000). Include if HTTPS proxy support too.
+ localhost, Port: 8118). Include if HTTPS proxy support too.
 </para>
 
 <para>
@@ -3288,6 +3288,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.33  2002/03/03 19:46:13  hal9
+ Emphasis on where/how to report bugs, etc
+
  Revision 1.32  2002/03/03 09:26:06  joergs
  AmigaOS changes, config is now loaded from PROGDIR: instead of
  AmiTCP:db/junkbuster/ if no configuration file is specified on the

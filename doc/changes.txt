@@ -113,7 +113,7 @@ browser to use the Junkbuster.
 
   Short instructions for the advanced user:
 
-   Configure Netscape to use 127.0.0.1 on port 8000 as 
+   Configure Netscape to use 127.0.0.1 on port 8118 as 
         a proxy server.
 
   Detailed instructions for the beginner:
@@ -174,7 +174,7 @@ Stefan.
 * Copied from old README.win                                                *
 *****************************************************************************
 
-$Id: README.WIN,v 1.1 2001/04/16 21:10:38 rodney Exp $
+$Id: changes.txt,v 1.1.1.1 2001/05/15 13:59:50 oes Exp $
 
 This is the README.WIN file for the Windows version of the Internet
 Junkbuster (from http://www.waldherr.org/junkbuster/).
@@ -197,7 +197,7 @@ browser to use the Junkbuster.
 
   Short instructions for the advanced user:
 
-   Configure Netscape to use 127.0.0.1 on port 8000 as 
+   Configure Netscape to use 127.0.0.1 on port 8118 as 
         a proxy server.
 
   Detailed instructions for the beginner:
