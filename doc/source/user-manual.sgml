@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.57 2002/03/24 20:33:30 hal9 Exp $
+ $Id: user-manual.sgml,v 1.58 2002/03/26 22:29:55 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.57 2002/03/24 20:33:30 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.58 2002/03/26 22:29:55 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -66,21 +66,28 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 
 <sect1 id="introduction"><title>Introduction</title>
 <para>
- <application>Privoxy</application> is a web proxy with advanced
- filtering capabilities for protecting privacy, filtering and modifying web
- page content, managing cookies, controlling access, and removing ads,
- banners, pop-ups and other obnoxious Internet Junk.
- <application>Privoxy</application> has a very flexible configuration and
- can be customized to suit individual needs and tastes. <application>Privoxy</application> has application for both stand-alone systems and
- multi-user networks.
+ <application>Privoxy</application> is a web proxy with advanced filtering
+ capabilities for protecting privacy, filtering web page content, managing
+ cookies, controlling access, and removing ads, banners, pop-ups and other
+ obnoxious Internet junk. <application>Privoxy</application> has a very
+ flexible configuration and can be customized to suit individual needs and
+ tastes. <application>Privoxy</application> has application for both
+ stand-alone systems and multi-user networks.
 </para>
 
 <para>
- <application>Privoxy</application> is derived from 
- <application>Internet Junkbuster</application> by Junkbusters Corporation, 
- which is no longer under development. Many enhancements and 
- new features have been added.
+ <application>Privoxy</application> is based on the code of the 
+ <application>Internet Junkbuster</application>.
+ <application>Junkbuster</application> was originally written by JunkBusters
+ Corporation, and was released as free open-source software under the GNU GPL.
+ Stefan Waldherr made many improvements, and started the SourceForge project
+ to continue development.
+</para>
 
+<para>
+ <application>Privoxy</application> continues the
+ <application>Junkbuster</application> tradition, but adds many 
+ refinements and enhancements.
 </para>
 
 <para>
@@ -1411,7 +1418,7 @@ Please choose from the following options:
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3>
+<sect3 id="forwarding">
 <title>Forwarding</title>
 
 <para>
@@ -3289,7 +3296,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <para>
  <application>Junkbuster</application> was originally written by Anonymous
  Coders and <ulink
- url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbuster's
+ url="http://www.junkbusters.com">Junkbuster's
  Corporation</ulink>, and was released as free open-source software under the
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
@@ -3960,6 +3967,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.58  2002/03/26 22:29:55  swa
+ we have a new homepage!
+
  Revision 1.57  2002/03/24 20:33:30  hal9
  A few minor catch ups with name change.
 
