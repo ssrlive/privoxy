@@ -48,6 +48,16 @@ released as free open-source software under the GNU GPL. Stefan
 Waldherr made many improvements, and started the SourceForge project
 to continue development.
 
+
+ IMPORTANT CHANGE
+-----------------
+
+IMPORTANT! READ! Configuration Change as of 03/04/02: The default 
+listening port is now 8118 due to conflicts with port 8000 assignment. 
+You will need to change your browser if upgrading!!! And maybe firewall, 
+etc.
+
+
  INSTALL
 --------
 
@@ -141,4 +151,4 @@ addressed.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.12 2002/03/03 19:32:42 hal9 Exp $
+$Id: README,v 1.13 2002/03/04 19:32:07 oes Exp $
