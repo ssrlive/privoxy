@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.4 2001/05/22 18:56:28 oes Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.5 2001/05/26 00:28:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,13 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.4 2001/05/22 18:56:28 oes Exp $";
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.5  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.4  2001/05/22 18:56:28  oes
  *    CRLF -> LF
  *
@@ -493,7 +500,7 @@ int LogPutString(const char *pszText)
                memset(pszBefore, 0, (match.rm_so + 1) * sizeof(char));
                strncpy(pszBefore, pszText, match.rm_so);
             }
-            if (match.rm_eo < strlen(pszText))
+            if (match.rm_eo < (regoff_t)strlen(pszText))
             {
                pszAfter = strdup(&pszText[match.rm_eo]);
             }
