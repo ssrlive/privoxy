@@ -1,6 +1,7 @@
+files
 privoxy
-debian/privoxy.postinst.debhelper
-debian/privoxy.postrm.debhelper
-debian/privoxy.prerm.debhelper
-debian/privoxy.substvars
+privoxy.postinst.debhelper
+privoxy.postrm.debhelper
+privoxy.prerm.debhelper
+privoxy.substvars
 
