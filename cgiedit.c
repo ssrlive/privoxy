@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.31 2002/04/18 19:21:08 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.32 2002/04/19 16:55:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.31 2002/04/18 19:21:08 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.32  2002/04/19 16:55:31  jongfoster
+ *    Fixing newline problems.  If we do our own text file newline
+ *    mangling, we don't want the library to do any, so we need to
+ *    open the files in *binary* mode.
+ *
  *    Revision 1.31  2002/04/18 19:21:08  jongfoster
  *    Added code to detect "conventional" action files, that start
  *    with a set of actions for all URLs (the pattern "/").
@@ -220,7 +225,6 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.31 2002/04/18 19:21:08 jongfoster
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
-#include <limits.h>
 #include <sys/stat.h>
 
 #ifdef _WIN32
@@ -317,8 +321,6 @@ struct editable_file
                                     * (Statically allocated) */
 };
 
-#define CGI_ACTION_PARAM_LEN_MAX 500
-
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
 
 /* Functions to read and write arbitrary config files */
@@ -366,17 +368,12 @@ static jb_err get_file_name_param(struct client_state *csp,
                                   const char *suffix,
                                   char **pfilename,
                                   const char **pparam);
-static jb_err get_number_param(struct client_state *csp,
-                               const struct map *parameters,
-                               char *name,
-                               unsigned *pvalue);
+
 static jb_err get_url_spec_param(struct client_state *csp,
                                  const struct map *parameters,
                                  const char *name,
                                  char **pvalue);
-static jb_err get_string_param(const struct map *parameters,
-                               const char *param_name,
-                               const char **pparam);
+
 
 /* Internal actionsfile <==> HTML conversion functions */
 static jb_err map_radio(struct map * exports,
@@ -449,7 +446,7 @@ static jb_err map_copy_parameter_html(struct map *out,
 #if 0 /* unused function */
 /*********************************************************************
  *
- * Function    :  map_copy_parameter_html
+ * Function    :  map_copy_parameter_url
  *
  * Description :  Copy a CGI parameter from one map to another, URL
  *                encoding it.
@@ -942,7 +939,7 @@ void edit_free_file(struct editable_file * file)
 
 /*********************************************************************
  *
- * Function    :  edit_free_file
+ * Function    :  edit_free_file_lines
  *
  * Description :  Free an entire linked list of file lines.
  *
@@ -1799,9 +1796,7 @@ static jb_err get_file_name_param(struct client_state *csp,
 {
    const char *param;
    const char *s;
-#if 0 /* Patch to make 3.0.0 work properly. */
    char *name;
-#endif /* 0 - Patch to make 3.0.0 work properly. */
    char *fullpath;
    char ch;
    int len;
@@ -1845,13 +1840,6 @@ static jb_err get_file_name_param(struct client_state *csp,
       }
    }
 
-   /*
-    * FIXME Following is a hack to make 3.0.0 work properly.
-    * Change "#if 0" --> "#if 1" below when we have modular action
-    * files.
-    *    -- Jon
-    */
-#if 0 /* Patch to make 3.0.0 work properly. */
    /* Append extension */
    name = malloc(len + strlen(suffix) + 1);
    if (name == NULL)
@@ -1864,16 +1852,7 @@ static jb_err get_file_name_param(struct client_state *csp,
    /* Prepend path */
    fullpath = make_path(csp->config->confdir, name);
    free(name);
-#else /* 1 - Patch to make 3.0.0 work properly. */
-   if ((csp->actions_list == NULL)
-    || (csp->actions_list->filename == NULL))
-   {
-      return JB_ERR_CGI_PARAMS;
-   }
 
-   fullpath = ( (csp->actions_list && csp->actions_list->filename)
-             ? strdup(csp->actions_list->filename) : NULL);
-#endif /* 1 - Patch to make 3.0.0 work properly. */
    if (fullpath == NULL)
    {
       return JB_ERR_MEMORY;
@@ -1883,188 +1862,6 @@ static jb_err get_file_name_param(struct client_state *csp,
    *pfilename = fullpath;
 
    return JB_ERR_OK;
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_char_param
- *
- * Description :  Get a single-character parameter passed to a CGI
- *                function.
- *
- * Parameters  :
- *          1  :  parameters = map of cgi parameters
- *          2  :  param_name = The name of the parameter to read
- *
- * Returns     :  Uppercase character on success, '\0' on error.
- *
- *********************************************************************/
-static char get_char_param(const struct map *parameters,
-                           const char *param_name)
-{
-   char ch;
-
-   assert(parameters);
-   assert(param_name);
-
-   ch = *(lookup(parameters, param_name));
-   if ((ch >= 'a') && (ch <= 'z'))
-   {
-      ch = ch - 'a' + 'A';
-   }
-
-   return ch;
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_string_param
- *
- * Description :  Get a string paramater, to be used as an
- *                ACTION_STRING or ACTION_MULTI paramater.
- *                Validates the input to prevent stupid/malicious
- *                users from corrupting their action file.
- *
- * Parameters  :
- *          1  :  parameters = map of cgi parameters
- *          2  :  param_name = The name of the parameter to read
- *          3  :  pparam = destination for paramater.  Allocated as
- *                part of the map "parameters", so don't free it.
- *                Set to NULL if not specified.
- *
- * Returns     :  JB_ERR_OK         on success, or if the paramater
- *                                  was not specified.
- *                JB_ERR_MEMORY     on out-of-memory.
- *                JB_ERR_CGI_PARAMS if the paramater is not valid.
- *
- *********************************************************************/
-static jb_err get_string_param(const struct map *parameters,
-                               const char *param_name,
-                               const char **pparam)
-{
-   const char *param;
-   const char *s;
-   char ch;
-
-   assert(parameters);
-   assert(param_name);
-   assert(pparam);
-
-   *pparam = NULL;
-
-   param = lookup(parameters, param_name);
-   if (!*param)
-   {
-      return JB_ERR_OK;
-   }
-
-   if (strlen(param) >= CGI_ACTION_PARAM_LEN_MAX)
-   {
-      /*
-       * Too long.
-       *
-       * Note that the length limit is arbitrary, it just seems
-       * sensible to limit it to *something*.  There's no
-       * technical reason for any limit at all.
-       */
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* Check every character to see if it's legal */
-   s = param;
-   while ((ch = *s++) != '\0')
-   {
-      if ( ((unsigned char)ch < (unsigned char)' ')
-        || (ch == '}') )
-      {
-         /* Probable hack attempt, or user accidentally used '}'. */
-         return JB_ERR_CGI_PARAMS;
-      }
-   }
-
-   /* Success */
-   *pparam = param;
-
-   return JB_ERR_OK;
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_number_param
- *
- * Description :  Get a non-negative integer from the parameters
- *                passed to a CGI function.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  parameters = map of cgi parameters
- *          3  :  name = Name of CGI parameter to read
- *          4  :  pvalue = destination for value.
- *                         Set to -1 on error.
- *
- * Returns     :  JB_ERR_OK         on success
- *                JB_ERR_MEMORY     on out-of-memory
- *                JB_ERR_CGI_PARAMS if the parameter was not specified
- *                                  or is not valid.
- *
- *********************************************************************/
-static jb_err get_number_param(struct client_state *csp,
-                               const struct map *parameters,
-                               char *name,
-                               unsigned *pvalue)
-{
-   const char *param;
-   char ch;
-   unsigned value;
-
-   assert(csp);
-   assert(parameters);
-   assert(name);
-   assert(pvalue);
-
-   *pvalue = 0; 
-
-   param = lookup(parameters, name);
-   if (!*param)
-   {
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* We don't use atoi because I want to check this carefully... */
-
-   value = 0;
-   while ((ch = *param++) != '\0')
-   {
-      if ((ch < '0') || (ch > '9'))
-      {
-         return JB_ERR_CGI_PARAMS;
-      }
-
-      ch -= '0';
-
-      /* Note:
-       *
-       * <limits.h> defines UINT_MAX
-       *
-       * (UINT_MAX - ch) / 10 is the largest number that
-       *     can be safely multiplied by 10 then have ch added.
-       */
-      if (value > ((UINT_MAX - (unsigned)ch) / 10U))
-      {
-         return JB_ERR_CGI_PARAMS;
-      }
-
-      value = value * 10 + ch;
-   }
-
-   /* Success */
-   *pvalue = value;
-
-   return JB_ERR_OK;
-
 }
 
 
@@ -2518,7 +2315,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    char * url_template;
    char * sections;
    char * urls;
-   char buf[50];
+   char buf[150];
    char * s;
    struct map * exports;
    struct map * section_exports;
@@ -2527,12 +2324,21 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    struct file_line * cur_line;
    unsigned line_number = 0;
    unsigned prev_section_line_number = ((unsigned) (-1));
-   int url_1_2;
+   int i, url_1_2;
+   struct file_list * fl;
+   struct url_actions * b;
+   char * buttons = NULL;
    jb_err err;
 
    if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
    {
       return cgi_error_disabled(csp, rsp);
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
    }
 
    /* Load actions file */
@@ -2541,24 +2347,6 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    {
       /* No filename specified, can't read file, or out of memory. */
       return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   /* Set up global exports */
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "f", 1, file->identifier, 1);
-   if (!err) err = map(exports, "v", 1, file->version_str, 1);
-
-   if (err)
-   {
-      edit_free_file(file);
-      free_map(exports);
-      return err;
    }
 
    /* Find start of actions in file */
@@ -2587,19 +2375,44 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       ) )
    {
       /*
+       * Generate string with buttons to set actions for "/" to
+       * any predefined set of actions (named standard.*, propably
+       * residing in standard.action).
+       * FIXME: Shouldn't include hardwired HTML here, use line template instead!
+       */
+
+      buttons = strdup(" ");
+      for (i = 0; i < MAX_ACTION_FILES; i++)
+      {
+         if (((fl = csp->actions_list[i]) != NULL) && ((b = fl->f) != NULL))
+         {
+            for (b = b->next; NULL != b; b = b->next)
+            {
+               if (!strncmp(b->url->spec, "standard.", 9) && *(b->url->spec + 9) != '\0')
+               {
+                  snprintf(buf, 150, "<p><a name=\"l@s@\" href=\"eas?f=@f@&amp;v=@v@&amp;s=@all-urls-s@&amp;p=%s\">Set"
+                                     " to %s</a></p>", b->url->spec + 9, b->url->spec + 9);
+                  if (!err) err = string_append(&buttons, buf);
+               }
+            }
+         }
+      }
+      if (!err) err = map(exports, "all-urls-buttons", 1, buttons, 0);
+
+      /*
        * Conventional actions file, supply extra editing help.
        * (e.g. don't allow them to make it an unconventional one).
        */
       err = map_conditional(exports, "all-urls-present", 1);
 
-      snprintf(buf, 50, "%d", line_number);
+      snprintf(buf, 150, "%d", line_number);
       if (!err) err = map(exports, "all-urls-s", 1, buf, 1);
-      snprintf(buf, 50, "%d", line_number + 2);
+      snprintf(buf, 150, "%d", line_number + 2);
       if (!err) err = map(exports, "all-urls-s-next", 1, buf, 1);
       if (!err) err = map(exports, "all-urls-actions", 1,
                           actions_to_html(cur_line->data.action), 0);
 
-      /* Skip the 2 lines */
+       /* Skip the 2 lines */
       cur_line = cur_line->next->next;
       line_number += 2;
 
@@ -2620,6 +2433,15 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       err = map_conditional(exports, "all-urls-present", 0);
    }
 
+   /* Set up global exports */
+
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "v", 1, file->version_str, 1);
+
+   /* Discourage private additions to default.action */
+
+   if (!err) err = map_conditional(exports, "default-action",
+                                   (strcmp("default", lookup(parameters, "f")) == 0));
    if (err)
    {
       edit_free_file(file);
@@ -2696,7 +2518,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      snprintf(buf, 50, "%d", line_number);
+      snprintf(buf, 150, "%d", line_number);
       err = map(section_exports, "s", 1, buf, 1);
       if (!err) err = map(section_exports, "actions", 1,
                           actions_to_html(cur_line->data.action), 0);
@@ -2716,7 +2538,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       if (prev_section_line_number != ((unsigned)(-1)))
       {
          /* Not last section */
-         snprintf(buf, 50, "%d", prev_section_line_number);
+         snprintf(buf, 150, "%d", prev_section_line_number);
          if (!err) err = map(section_exports, "s-prev", 1, buf, 1);
          if (!err) err = map_block_keep(section_exports, "s-prev-exists");
       }
@@ -2770,10 +2592,10 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             return JB_ERR_MEMORY;
          }
 
-         snprintf(buf, 50, "%d", line_number);
+         snprintf(buf, 150, "%d", line_number);
          err = map(url_exports, "p", 1, buf, 1);
 
-         snprintf(buf, 50, "%d", url_1_2);
+         snprintf(buf, 150, "%d", url_1_2);
          if (!err) err = map(url_exports, "url-1-2", 1, buf, 1);
 
          if (!err) err = map(url_exports, "url-html", 1,
@@ -2840,7 +2662,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
         && (cur_line->type == FILE_LINE_ACTION))
       {
          /* Not last section */
-         snprintf(buf, 50, "%d", line_number);
+         snprintf(buf, 150, "%d", line_number);
          if (!err) err = map(section_exports, "s-next", 1, buf, 1);
          if (!err) err = map_block_keep(section_exports, "s-next-exists");
       }
@@ -2908,7 +2730,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_edit_actions
+ * Function    :  cgi_edit_actions_for_url
  *
  * Description :  CGI function that edits the Actions list.
  *
@@ -3142,7 +2964,10 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    char * target;
    jb_err err;
    int index;
+   const char * action_set_name;
    char ch;
+   struct file_list * fl;
+   struct url_actions * b;
 
    if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
    {
@@ -3179,7 +3004,33 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       return JB_ERR_CGI_PARAMS;
    }
 
-   err = actions_from_radio(parameters, cur_line->data.action);
+   get_string_param(parameters, "p", &action_set_name);
+   if (action_set_name != NULL)
+   {
+      for (index = 0; index < MAX_ACTION_FILES; index++)
+      {
+         if (((fl = csp->actions_list[index]) != NULL) && ((b = fl->f) != NULL))
+         {
+            for (b = b->next; NULL != b; b = b->next)
+            {
+               if (!strncmp(b->url->spec, "standard.", 9) && !strcmp(b->url->spec + 9, action_set_name))
+               {
+                  copy_action(cur_line->data.action, b->action); 
+                  goto found;
+               }
+            }
+         }
+      }
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+
+      found: ;
+   }
+   else
+   {
+      err = actions_from_radio(parameters, cur_line->data.action);
+   }
+
    if(err)
    {
       /* Out of memory */
@@ -3220,7 +3071,6 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
          /* End of list */
          break;
       }
-
 
       value = get_char_param(parameters, key_value);
       if (value == 'Y')
