@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.13  2002/03/05 05:10:10  oes
+#     Changed pidfile path to conform with FHS
+#
 #     Revision 1.12  2002/03/04 20:44:36  oes
 #     Changed to new cmdline syntax
 #
@@ -99,30 +102,35 @@ JB_PRG="junkbuster"
 JB_BIN="/usr/sbin/$JB_PRG"
 JB_CONF="/etc/$JB_PRG/config"
 JB_USER="junkbuster"
-JB_PID="/var/run/$JB_PRG.pid"
+JB_PID=/var/run/$JB_PRG.pid
+JB_LOCK=/var/lock/subsys/$JB_PRG
+JB="$JB_BIN --user $JB_USER --pidfile $JB_PID $JB_CONF"
 
 # some checks for us
-[ -x $JB_BIN  ] || exit 0
-[ -f $JB_CONF ] || exit 0
+! [ -x $JB_BIN  ] && echo "Can't find $JB_BIN, exit." && exit 0
+! [ -f $JB_CONF ] && echo "Can't find $JB_CONF, exit." && exit 0
 
 # See how we were called.
-
-JB="$JB_BIN $JB_CONF"
 
 start () {
 	# start daemon
 	echo -n $"Starting $JB_PRG: "
-	daemon --user $JB_USER $JB --pidfile $JB_PID
+     if [ -f $JB_PID ]; then 
+        killproc $JB_PRG && rm -f $JB_LOCK $JB_PID
+        RETVAL=$?
+        [ $RETVAL != 0 ] && return $RETVAL
+     fi
+	daemon $JB 
 	RETVAL=$?
 	echo
-	[ $RETVAL = 0 ] && touch /var/lock/subsys/$JB_PRG
+	[ $RETVAL = 0 ] && touch $JB_LOCK
 	return $RETVAL
 }
 
 stop () {
 	# stop daemon
 	echo -n $"Stopping $JB_PRG: "
-	killproc $JB_PRG && rm -f /var/lock/subsys/$JB_PRG $JB_PID
+	killproc $JB_PRG && rm -f $JB_LOCK $JB_PID
 	RETVAL=$?
 	echo
 	return $RETVAL
@@ -133,13 +141,13 @@ case "$1" in
 	start	
 	;;
   stop)
-	stop	
+	stop
 	;;
   reload)
 	if [ -f $JB_PID ] ; then
-                kill -HUP `cat $JB_PID`
-	        RETVAL=$?
-        fi
+        kill -HUP `cat $JB_PID`
+        RETVAL=$?
+     fi
 	;;
   restart)
 	stop
@@ -149,9 +157,9 @@ case "$1" in
   condrestart)
 	# restart only if already running
 	if [ -f $JB_PID ] ; then
-		stop
-		start
-		RETVAL=$?
+        stop
+        start
+        RETVAL=$?
 	fi 
 	;;
   status)
@@ -159,13 +167,13 @@ case "$1" in
 	RETVAL=$?
 	;;
   top)
-	if [ -f $JB_PID ]; then
+     if [ -f $JB_PID ]; then
                 a=""
                 for i in `pidof $JB_PRG` ; do
                         a="$a -p $i"
                 done
                 top $a
-        fi
+     fi
 	;;
   *)
 	echo $"Usage: $JB_PRG {start|stop|reload|restart|condrestart|status|top}"
