@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.56 2002/03/24 17:50:46 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.57 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.56 2002/03/24 17:50:46 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.57  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.56  2002/03/24 17:50:46  jongfoster
  *    Fixing compile error if actions file editor disabled
  *
@@ -1102,7 +1105,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    }
    if (!err)
    {
-      sprintf(buf, "Content-Length: %d", rsp->content_length);
+      sprintf(buf, "Content-Length: %d", (int)rsp->content_length);
       err = enlist(rsp->headers, buf);
    }
 

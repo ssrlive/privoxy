@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.29 2002/03/26 22:29:54 swa Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.30 2002/03/27 14:32:43 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.29 2002/03/26 22:29:54 swa Ex
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.30  2002/03/27 14:32:43  david__schmidt
+ *    More compiler warning message maintenance
+ *
  *    Revision 1.29  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -619,7 +622,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
    jb_socket afd;
-#if defined(_WIN32) || defined(__OS2__)
+#if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__)
    /* Wierdness - fix a warning. */
    int c_length, s_length;
 #else
