@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.119 2002/05/22 17:17:05 oes Exp $
+ $Id: user-manual.sgml,v 1.120 2002/05/23 19:16:43 roro Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.119 2002/05/22 17:17:05 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.120 2002/05/23 19:16:43 roro Exp $</pubdate>
 
 <!--
 
@@ -570,15 +570,16 @@ automatically start Privoxy in the boot process.
  Actions are specified in <application>Privoxy's</application> configuration,
  followed by one or more URLs to which the action should apply. URLs 
  can actually be URL type <link linkend="af-patterns">patterns</link> that use
- wildcards so they can apply potentially to a range of similar URLs.
+ wildcards so they can apply potentially to a range of similar URLs. The
+ actions, together with the URL patterns are called a section.
 </para>
 <para>
- When you connect to a website, the full path of the URL will either match one 
- of the <quote>actions</quote> as defined in
- <application>Privoxy's</application> configuration, or not. If so, then
- <application>Privoxy</application> will perform the action accordingly. If
- not, then nothing special happens. Futhermore, web pages may contain
- embedded, secondary URLs that your web browser will display as it parses the
+ When you connect to a website, the full URL will either match one or more
+ of the sections as defined in <application>Privoxy's</application> configuration,
+ or not. If so, then <application>Privoxy</application> will perform the
+ respective actions. If not, then nothing special happens. Futhermore, web
+ pages may contain embedded, secondary URLs that your web browser will
+ use to load additional components of the page, as it parses the
  original page's HTML content. An ad image for instance, is just a URL
  embedded in the page somewhere. The image itself may be on the same server,
  or a server somewhere else on the Internet. Complex web pages will have many
@@ -586,10 +587,10 @@ automatically start Privoxy in the boot process.
 </para>
 
 <para>
- The actions we need to know about for ad blocking are:  <link
- linkend="block">block</link>, <link
- linkend="handle-as-image">handle-as-image</link>, and <link 
- linkend="set-image-blocker">set-image-blocker</link>:
+ The actions we need to know about for ad blocking are:  <literal><link
+ linkend="block">block</link></literal>, <literal><link
+ linkend="handle-as-image">handle-as-image</link></literal>, and
+ <literal><link linkend="set-image-blocker">set-image-blocker</link></literal>:
 </para>
 
 <para>
@@ -597,41 +598,39 @@ automatically start Privoxy in the boot process.
   
  <listitem>
   <para>
-   <link linkend="block"><emphasis>block</emphasis></link> - this action stops
+   <literal><link linkend="block">block</link></literal> - this action stops
    any contact between your browser and any URL patterns that match this
    action's configuration. It can be used for blocking ads, but also anything
    that is determined to be unwanted. By itself, it simply stops any
-   communication with the remote server. If this is the only action that 
-   matches for this particular URL, then <application>Privoxy</application> will 
-   display its own BLOCKED page to let you now what has happened.
+   communication with the remote server and sends <application>Privoxy</application>'s
+   own built-in BLOCKED page instead to let you now what has happened.
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   <link linkend="handle-as-image"><emphasis>handle-as-image</emphasis></link> - 
-   forces <application>Privoxy</application> to treat this URL as if it were 
-   an image. <application>Privoxy</application> knows about common image 
-   types (e.g. GIF), but there are many situations where this does not apply.
-   So we'll force it. This is particularly important for ad blocking, since 
-   once we can treat it as an image, we can make more intelligent decisisions 
-   on how to handle it. There are some limitations to this though. For
-   instance, you can't just force an image substituion for an entire HTML page 
+   <literal><link linkend="handle-as-image">handle-as-image</link></literal> - 
+   tells <application>Privoxy</application> to treat this URL as an image.
+   <application>Privoxy</application>'s default configuration already does this
+   for all common image types (e.g. GIF), but there are many situations where this
+   is not as easy to determine. So we'll force it in these cases. This is particularly
+   important for ad blocking, since  only if we know that it's an image, we can replace
+   it by an image instead of the BLOCKED page, which would only result in a
+   <quote>broken image</quote> icon. There are some limitations to this though. For
+   instance, you can't just brute-force an image substituion for an entire HTML page
    in most situations.
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   <link
-   linkend="set-image-blocker"><emphasis>set-image-blocker</emphasis></link> -
-   tells <application>Privoxy</application> what to display in place of 
-   an ad image that has hit a block rule. For this to come into play, 
-   the URL must match a block action somewhere in the configuration.
-   <emphasis>And</emphasis>, it must also either be of a known image type, or
-   match an <link
-   linkend="handle-as-image"><emphasis>handle-as-image</emphasis></link>
-   action.
+   <literal><link
+   linkend="set-image-blocker">set-image-blocker</link></literal> - tells
+   <application>Privoxy</application> what to display in place of an ad image that
+   has hit a block rule. For this to come into play, the URL must match a
+   <literal><link linkend="block">block</link></literal> action somewhere in the
+   configuration, <emphasis>and</emphasis>, it must also match an
+   <literal><link linkend="handle-as-image">handle-as-image</link></literal> action.
   </para>
   <para>
    The configuration options on what to display instead of the ad are:
@@ -650,8 +649,8 @@ automatically start Privoxy in the boot process.
   </simplelist>
   <simplelist>
    <member>
-    &nbsp;&nbsp;&nbsp;<emphasis>http://&lt;URL&gt;</emphasis> - A redirect to any URL of the
-    user's choosing (advanced usage).
+    &nbsp;&nbsp;&nbsp;<emphasis>http://&lt;URL&gt;</emphasis> - A redirect to any image anywhere
+    of the user's choosing (advanced usage).
    </member>
   </simplelist>
   </listitem> 
@@ -661,7 +660,7 @@ automatically start Privoxy in the boot process.
 
 <para>
  The quickest way to adjust any of these settings is with your browser through
- the special <application>Privoxy</application> editor  at <ulink
+ the special <application>Privoxy</application> editor at <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
  (shortcut: <ulink url="http://p.p/">http://p.p/show-status</ulink>). This 
  is an internal page, and does not require Internet access. Select the
@@ -718,22 +717,26 @@ automatically start Privoxy in the boot process.
  
  <listitem>
   <para>
-   You should have an Actions section labeled <emphasis>+block</emphasis>. 
-   If not, click the <quote><guibutton>Edit</guibutton></quote> button just
-   under the word <quote>Actions</quote>. This will bring up a list of all
-   actions. Find <emphasis>block</emphasis> near the top, and click in the
-   <quote>Enabled</quote> column, then
-   <quote><guibutton>Submit</guibutton></quote> just below the list.
+   You should have a section with only
+   <literal><link linkend="block">block</link></literal> listed under 
+   <quote>Actions:</quote>.
+   If not, click a <quote><guibutton>Insert new section below</guibutton></quote>
+   button, and in the new section that just appeared, click the 
+   <guibutton>Edit</guibutton> button right under the word <quote>Actions:</quote>.
+   This will bring up a list of all actions. Find
+   <literal><link linkend="block">block</link></literal> near the top, and click
+   in the <quote>Enabled</quote> column, then <quote><guibutton>Submit</guibutton></quote>
+   just below the list.
   </para>
  </listitem> 
  <listitem>
   <para>
-   Now, in the <emphasis>+block</emphasis> actions section, click the
-   <quote><guibutton>Add</guibutton></quote> button, and paste the URL the
-   browser got from <quote><guimenuitem>Copy Link
-   Location</guimenuitem></quote>. Remove the <literal>http://</literal> at
-   the beginning of the URL. Then, click
-   <quote><guibutton>Submit</guibutton></quote>.
+   Now, in the <literal><link linkend="block">block</link></literal> actions section,
+   click the <quote><guibutton>Add</guibutton></quote> button, and paste the URL the
+   browser got from <quote><guimenuitem>Copy Link Location</guimenuitem></quote>.
+   Remove the <literal>http://</literal> at the beginning of the URL. Then, click
+   <quote><guibutton>Submit</guibutton></quote> (or
+   <quote><guibutton>OK</guibutton></quote> if in a pop-up window).
   </para>
  </listitem> 
  <listitem>
@@ -757,6 +760,7 @@ automatically start Privoxy in the boot process.
 <para>
  For advanced users who want to hand edit their config files, you might want
  to now go to the <link linkend="act-examples">Actions Files Tutorial</link>.
+ The ideas explained thererin also apply to the web-based editor.
 </para>
 
 </sect2>
@@ -3093,11 +3097,11 @@ forward-socks4 and forward-socks4a</title>
 <title>How Actions are Applied to URLs</title>
 <para>
  Actions files are divided into sections. There are special sections,
- like the <quote><link linkend="aliases">alias</link></quote> sections which will be discussed later. For now
- let's concentrate on regular sections: They have a heading line (often split
- up to multiple lines for readability) which consist of a list of actions,
- separated by whitespace and enclosed in curly braces. Below that, there
- is a list of URL patterns, each on a separate line.
+ like the <quote><link linkend="aliases">alias</link></quote> sections which will
+ be discussed later. For now let's concentrate on regular sections: They have a
+ heading line (often split up to multiple lines for readability) which consist
+ of a list of actions, separated by whitespace and enclosed in curly braces.
+ Below that, there is a list of URL patterns, each on a separate line.
 </para>
 
 <para>
@@ -3106,10 +3110,12 @@ forward-socks4 and forward-socks4a</title>
  applicable actions for the URL is incrementally updated, using the heading
  of the section in which the pattern is located. If multiple matches for
  the same URL set the same action differently, the last match wins. If not, 
- the effects are aggregated (e.g. a URL might match both the 
- <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
- and <ulink url="actions-file.html#BLOCK"><quote>+block</quote></ulink> actions).
- 
+ the effects are aggregated. E.g. a URL might match a regular section with 
+ a heading line of <literal>{ 
+ +<ulink url="actions-file.html#HANDLE-AS-IMAGE">handle-as-image</ulink> }</literal>,
+ then later another one with just <literal>{
+ +<ulink url="actions-file.html#BLOCK">block</ulink> }</literal>, resulting
+ in <emphasis>both</emphasis> actions to apply.
 </para>
 
 <para>
@@ -3298,12 +3304,10 @@ forward-socks4 and forward-socks4a</title>
 </para>
 
 <para>
- Please also note that matching in the path is case
- <emphasis>INSENSITIVE</emphasis> by default, but you can switch to case
- sensitive at any point in the pattern by using the 
- <quote>(?-i)</quote> switch:
- <literal>www.example.com/(?-i)PaTtErN.*</literal> will match only
- documents whose path starts with <literal>PaTtErN</literal> in
+ Please also note that matching in the path is <emphasis>CASE INSENSITIVE</emphasis>
+ by default, but you can switch to case sensitive at any point in the pattern by using the 
+ <quote>(?-i)</quote> switch: <literal>www.example.com/(?-i)PaTtErN.*</literal> will match
+ only documents whose path starts with <literal>PaTtErN</literal> in
  <emphasis>exactly</emphasis> this capitalization.
 </para>
 </sect3>
@@ -3440,7 +3444,7 @@ forward-socks4 and forward-socks4a</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect3 renderas="sect4" id="add-header">
-<title><emphasis>add-header</emphasis></title>
+<title>add-header</title>
 
 <variablelist>
  <varlistentry>
@@ -3504,7 +3508,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="block">
-<title><emphasis>block</emphasis></title>
+<title>block</title>
 
 <variablelist>
  <varlistentry>
@@ -3598,7 +3602,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-incoming-cookies">
-<title><emphasis>crunch-incoming-cookies</emphasis></title>
+<title>crunch-incoming-cookies</title>
 
 <variablelist>
  <varlistentry>
@@ -3667,7 +3671,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-outgoing-cookies">
-<title><emphasis>crunch-outgoing-cookies</emphasis></title>
+<title>crunch-outgoing-cookies</title>
 
 <variablelist>
  <varlistentry>
@@ -3737,7 +3741,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="deanimate-gifs">
-<title><emphasis>deanimate-gifs</emphasis></title>
+<title>deanimate-gifs</title>
 
 <variablelist>
  <varlistentry>
@@ -3805,7 +3809,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="downgrade-http-version">
-<title><emphasis>downgrade-http-version</emphasis></title>
+<title>downgrade-http-version</title>
 
 <variablelist>
  <varlistentry>
@@ -3869,7 +3873,7 @@ problem-host.example.com</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="fast-redirects">
-<title><emphasis>fast-redirects</emphasis></title>
+<title>fast-redirects</title>
 
 <variablelist>
  <varlistentry>
@@ -3948,7 +3952,7 @@ problem-host.example.com</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="filter">
-<title><emphasis>filter</emphasis></title>
+<title>filter</title>
 
 <variablelist>
  <varlistentry>
@@ -4085,7 +4089,7 @@ problem-host.example.com</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="handle-as-image">
-<title><emphasis>handle-as-image</emphasis></title>
+<title>handle-as-image</title>
 
 <variablelist>
  <varlistentry>
@@ -4175,7 +4179,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-forwarded-for-headers">
-<title><emphasis>hide-forwarded-for-headers</emphasis></title>
+<title>hide-forwarded-for-headers</title>
 
 <variablelist>
  <varlistentry>
@@ -4241,7 +4245,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-from-header">
-<title><emphasis>hide-from-header</emphasis></title>
+<title>hide-from-header</title>
 
 <variablelist>
  <varlistentry>
@@ -4313,7 +4317,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-referrer">
-<title><emphasis>hide-referrer</emphasis></title>
+<title>hide-referrer</title>
 <anchor id="hide-referer">
 <variablelist>
  <varlistentry>
@@ -4392,7 +4396,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-user-agent">
-<title><emphasis>hide-user-agent</emphasis></title>
+<title>hide-user-agent</title>
 
 <variablelist>
  <varlistentry>
@@ -4474,7 +4478,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="kill-popups">
-<title><emphasis>kill-popups<anchor id="kill-popup"></emphasis></title>
+<title>kill-popups<anchor id="kill-popup"></title>
 
 <variablelist>
  <varlistentry>
@@ -4564,7 +4568,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="limit-connect">
-<title><emphasis>limit-connect</emphasis></title>
+<title>limit-connect</title>
 
 <variablelist>
  <varlistentry>
@@ -4645,7 +4649,7 @@ ad.doubleclick.net
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="prevent-compression">
-<title><emphasis>prevent-compression</emphasis></title>
+<title>prevent-compression</title>
 
 <variablelist>
  <varlistentry>
@@ -4734,7 +4738,7 @@ www.pclinuxonline.com</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="send-vanilla-wafer">
-<title><emphasis>send-vanilla-wafer</emphasis></title>
+<title>send-vanilla-wafer</title>
 
 <variablelist>
  <varlistentry>
@@ -4800,7 +4804,7 @@ www.pclinuxonline.com</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="send-wafer">
-<title><emphasis>send-wafer</emphasis></title>
+<title>send-wafer</title>
 
 <variablelist>
  <varlistentry>
@@ -4866,7 +4870,7 @@ my-internal-testing-server.void</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="session-cookies-only">
-<title><emphasis>session-cookies-only</emphasis></title>
+<title>session-cookies-only</title>
 
 <variablelist>
  <varlistentry>
@@ -4947,7 +4951,7 @@ my-internal-testing-server.void</screen>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="set-image-blocker">
-<title><emphasis>set-image-blocker</emphasis></title>
+<title>set-image-blocker</title>
 
 <variablelist>
  <varlistentry>
@@ -7134,6 +7138,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.120  2002/05/23 19:16:43  roro
+ Correct Debian specials (installation and startup).
+
  Revision 1.119  2002/05/22 17:17:05  oes
  Added Security hint
 
