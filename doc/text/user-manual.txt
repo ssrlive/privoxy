@@ -2,7 +2,7 @@ Junkbuster User Manual
 
 By: Junkbuster Developers
 
-$Id: user-manual.sgml,v 1.29 2002/03/02 20:34:07 david__schmidt Exp $
+$Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $
 
 The user manual gives the users information on how to install and configure
 Internet Junkbuster. Internet Junkbuster is an application that provides
@@ -64,11 +64,11 @@ Table of Contents
 1. Introduction
 
 Internet Junkbuster is a web proxy with advanced filtering capabilities for
-protecting privacy, filtering web page content, managing cookies, controlling
-access, and removing ads, banners, pop-ups and other obnoxious Internet Junk.
-Junkbuster has a very flexible configuration and can be customized to suit
-individual needs and tastes. Internet Junkbuster has application for both
-stand-alone systems and multi-user networks.
+protecting privacy, filtering and modifying web page content, managing cookies,
+controlling access, and removing ads, banners, pop-ups and other obnoxious
+Internet Junk. Junkbuster has a very flexible configuration and can be
+customized to suit individual needs and tastes. Internet Junkbuster has
+application for both stand-alone systems and multi-user networks.
 
 This documentation is included with the current BETA version of Internet
 Junkbuster and is incomplete at this point. The most up to date reference for
@@ -244,7 +244,6 @@ will want to extract the os2seutp directory from CVS:
 
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login           
  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup 
- cd current                                                                          
                                                                                      
 
 This will create a directory named os2setup/, which will contain the
