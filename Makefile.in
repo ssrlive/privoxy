@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.8 2001/06/04 10:44:57 swa Exp $
+# $Id: Makefile.in,v 1.9 2001/06/04 18:31:58 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.9  2001/06/04 18:31:58  swa
+# files are now prefixed with either `confdir' or `logdir'.
+# `make redhat-dist' replaces both entries confdir and logdir
+# with redhat values
+#
 # Revision 1.8  2001/06/04 10:44:57  swa
 # `make redhatr-dist' now works. Except for the paths
 # in the config file.
@@ -207,7 +212,8 @@ sregexp.txt: re_filterfile
 redhat-dist:
 	@make clobber
 # verify that i'm root needs to be done
-	tar  -cvzf ../ijbswa.tar.gz .
+	rm -f ../ijbswa.tar.gz
+	tar  --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
 	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
 # verify all files in their correct location needs to be done
@@ -216,7 +222,15 @@ redhat-dist:
 # -------------------------------------------------------------------------
 # suse distribution
 # -------------------------------------------------------------------------
-
+suse-dist:
+	@make clobber
+# verify that i'm root needs to be done
+	rm -f ../ijbswa.tar.gz
+	tar --exclude "junkbuster-rh.spec" -cvzf ../ijbswa.tar.gz .
+# verify all version strings, FLAGS, etc. in the spec file
+	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-suse.spec
+# verify all files in their correct location needs to be done
+	cd .. && rpm -ta ijbswa.tar.gz
 
 # -------------------------------------------------------------------------
 #
