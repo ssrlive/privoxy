@@ -1,6 +1,6 @@
 #ifndef _MISCUTIL_H
 #define _MISCUTIL_H
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.6 2001/06/03 11:03:48 oes Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.6 2001/06/03 19:12:30 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.6  2001/06/03 19:12:30  oes
+ *    introduced bindup()
+ *
  *    Revision 1.6  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -153,7 +156,9 @@ extern char *strsav(char *old, const char *text_to_append);
 extern char *chomp(char *string);
 extern int simplematch(char *pattern, char *text);
 
-char *bindup(const char *string, int n);
+extern char *bindup(const char *string, int n);
+
+extern char *make_path(const char * dir, const char * file);
 
 #ifdef __MINGW32__
 extern char *strdup(const char *s);
