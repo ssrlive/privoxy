@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init.suse,v $
+#     Revision 1.2  2001/09/10 16:25:46  swa
+#     jb did not start. none of the arguments worked. fixed.
+#
 #     Revision 1.1  2001/06/08 20:53:36  swa
 #     use buildroot, export init to separate file (better manageability)
 #
@@ -56,7 +59,7 @@ return=$rc_done
 case "$1" in
     start)
         echo -n "Starting The Internet Junkbuster"
-        su - nobody -c 'nohup /usr/sbin/junkbuster /etc/junkbuster/config < /dev/null > /dev/null &'
+        su - nobody -c 'nohup /usr/sbin/junkbuster --pidfile /var/run/junkbuster.pid /etc/junkbuster/config < /dev/null > /dev/null &'
         sleep 1
         echo -e "$return"
         ;;
