@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.8 2002/03/05 14:07:42 morcego Exp $
+# $Id: GNUmakefile.in,v 1.9 2002/03/05 17:31:11 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.9  2002/03/05 17:31:11  morcego
+# Search for docbook.dsl. Should solve portability problems for SuSe.
+#
 # Revision 1.8  2002/03/05 14:07:42  morcego
 # configure now detects rpm topdir, and change GNUmakefile acordingly
 #    (based on sugestion by Sarantis Paskalis)
@@ -417,9 +420,6 @@ redhat-dist:
 	$(CAT) junkbuster-rh.spec | \
 		$(SED) 's/^Version:.*/Version: $(RPM_VERSION)/g;s/^Release:.*/Release: $(RPM_PACKAGEV)/g' > abc && \
 		$(MV) -f abc junkbuster-rh.spec; \
-	$(CAT) junkbuster.init | \
-		$(SED) 's#JB_PID=.*/\(.*\.pid\).*#JB_PID=@PID_FILE_PATH@/\1#g' > abc && \
-		$(MV) -f abc junkbuster.init; \
 	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf $(TAR_ARCH) . ; \
 	$(RPM) --clean -ta  $(TAR_ARCH); \
 	[ -f $(TAR_ARCH) ] && $(RM) $(TAR_ARCH)
