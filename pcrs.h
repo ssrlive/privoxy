@@ -26,6 +26,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.2  2001/05/25 11:03:55  oes
+ *    Added sanity check for NULL jobs to pcrs_exec_substitution
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:02  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -43,7 +46,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.1.1.1 2001/05/15 13:59:02 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.2 2001/05/25 11:03:55 oes Exp $"
 
 
 
@@ -53,7 +56,6 @@
 #define TRUE 1
 #define PCRS_MAX_MATCHES 300
 #define PCRS_MAX_SUBMATCHES 33
-#define CHARBUFSIZ BUFSIZ * sizeof(char)
 
 #define PCRS_ERR_NOMEM     -10      /* Failed to acquire memory. */
 #define PCRS_ERR_CMDSYNTAX -11      /* Syntax of s///-command */
