@@ -1,7 +1,7 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 2.1 2002/06/04 16:37:48 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/w32log.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/w32log.c,v $
  *
  * Purpose     :  Functions for creating and destroying the log window,
  *                ouputting strings, processing messages and so on.
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 2.0 2002/06/04 14:34:21 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 2.1  2002/06/04 16:37:48  jongfoster
+ *    Adding Doxygen-style comments to variables
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -227,6 +230,9 @@ const char w32log_h_rcs[] = W32LOG_H_VERSION;
 /** Indicates whether task bar shows activity animation */
 BOOL g_bShowActivityAnimation = 1;
 
+/** Indicates whether the log window is shown */
+BOOL g_bShowLogWindow = 1;
+
 /** Indicates if the log window appears on the task bar */
 BOOL g_bShowOnTaskBar = 0;
 
@@ -254,8 +260,11 @@ int g_nFontSize = DEFAULT_LOG_FONT_SIZE;
 
 /* FIXME: this is a kludge */
 
-/** Actions file name. */
-const char * g_actions_file = NULL;
+/** Second (=default, hopefully) Actions file name. */
+const char * g_default_actions_file = NULL;
+
+/** Third (=user, hopefully) Actions file name. */
+const char * g_user_actions_file = NULL;
 
 /** Filter file name. */
 const char * g_re_filterfile = NULL;
@@ -994,6 +1003,7 @@ void ShowLogWindow(BOOL bShow)
    {
       SetForegroundWindow(g_hwndLogFrame);
       SetWindowPos(g_hwndLogFrame, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
+      
    }
    else if (g_bShowOnTaskBar)
    {
@@ -1003,7 +1013,6 @@ void ShowLogWindow(BOOL bShow)
    {
       ShowWindow(g_hwndLogFrame, SW_HIDE);
    }
-
 }
 
 
@@ -1093,8 +1102,10 @@ void OnLogCommand(int nCommand)
 {
    switch (nCommand)
    {
-      case ID_SHOWWINDOW:
-         ShowLogWindow(TRUE);
+      case ID_TOGGLE_SHOWWINDOW:
+         g_bShowLogWindow = !g_bShowLogWindow;
+
+         ShowLogWindow(g_bShowLogWindow);
          break;
 
       case ID_FILE_EXIT:
@@ -1148,8 +1159,12 @@ void OnLogCommand(int nCommand)
          EditFile(configfile);
          break;
 
-      case ID_TOOLS_EDITACTIONS:
-         EditFile(g_actions_file);
+      case ID_TOOLS_EDITDEFAULTACTIONS:
+         EditFile(g_default_actions_file);
+         break;
+
+      case ID_TOOLS_EDITUSERACTIONS:
+         EditFile(g_user_actions_file);
          break;
 
       case ID_TOOLS_EDITFILTERS:
@@ -1206,7 +1221,8 @@ void OnLogCommand(int nCommand)
 void OnLogInitMenu(HMENU hmenu)
 {
    /* Only enable editors if there is a file to edit */
-   EnableMenuItem(hmenu, ID_TOOLS_EDITACTIONS, MF_BYCOMMAND | (g_actions_file ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITDEFAULTACTIONS, MF_BYCOMMAND | (g_default_actions_file ? MF_ENABLED : MF_GRAYED));
+   EnableMenuItem(hmenu, ID_TOOLS_EDITUSERACTIONS, MF_BYCOMMAND | (g_user_actions_file ? MF_ENABLED : MF_GRAYED));
    EnableMenuItem(hmenu, ID_TOOLS_EDITFILTERS, MF_BYCOMMAND | (g_re_filterfile ? MF_ENABLED : MF_GRAYED));
 #ifdef FEATURE_TRUST
    EnableMenuItem(hmenu, ID_TOOLS_EDITTRUST, MF_BYCOMMAND | (g_trustfile ? MF_ENABLED : MF_GRAYED));
@@ -1221,6 +1237,7 @@ void OnLogInitMenu(HMENU hmenu)
    /* by haroon - menu item for Enable toggle on/off */
    CheckMenuItem(hmenu, ID_TOGGLE_ENABLED, MF_BYCOMMAND | (g_bToggleIJB ? MF_CHECKED : MF_UNCHECKED));
 #endif /* def FEATURE_TOGGLE */
+   CheckMenuItem(hmenu, ID_TOGGLE_SHOWWINDOW, MF_BYCOMMAND | (g_bShowLogWindow ? MF_CHECKED : MF_UNCHECKED));
 
 }
 
