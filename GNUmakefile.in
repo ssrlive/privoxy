@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.81 2002/04/11 14:40:27 oes Exp $
+# $Id: GNUmakefile.in,v 1.82 2002/04/11 21:07:11 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -263,7 +263,7 @@ dist-check:
            $(ECHO) "***                                             ***"; \
            $(ECHO) "***************************************************"; \
            $(ECHO) "Type \"yes i am sure\" if you are sure that you"; \
-           $(ECHO) -n "want to continue: "; \
+           $(ECHO) -n "really want to proceed: "; \
            read answer; \
            if [ "$$answer" != "yes i am sure" ]; then exit 1; fi \
          fi;
@@ -464,14 +464,15 @@ win-dist:
 
 
 #############################################################################
-# Tarball distribution. Only source files. No binaries.
+# Tarball distribution: No CVS dirs, dotfiles, debian build dir,
+# (FIXME:) only parts of the static / generated docs mix in doc/webserver
 #############################################################################
 
 tarball-dist: dist-check clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 
-	for i in `find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \
-	 -o -name ".cvsignore" -o -path "*/debian/*" \)`; do \
+	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
+	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" \)`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
@@ -785,6 +786,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.82  2002/04/11 21:07:11  oes
+# Excluding more files from tarball build
+#
 # Revision 1.81  2002/04/11 14:40:27  oes
 # Fixed typo -- Thanks, Moritz!
 #
