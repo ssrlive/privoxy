@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $
+ $Id: faq.sgml,v 1.28 2002/03/25 04:27:33 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.28 2002/03/25 04:27:33 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -690,6 +690,31 @@ Note that normally only local users can connect to <application>Privoxy</applica
  </para>
 </sect3>
 
+
+<sect3>
+<title id="filterfile">What is a <quote>default.filter</quote>?</title>
+<para>
+ The <quote>default.filter</quote> file is used to <quote>filter</quote> any
+ page content. By <quote>filtering</quote> we mean it can modify, remove, 
+ or change <emphasis>anything</emphasis> on the page, including HTML tags, and
+ JavaScript. Regular expressions are used to accomplish this. This is
+ potentially a very powerful feature, but requires some expertise. 
+</para>
+
+<para>
+ If you are familiar with regular expressions, and HTML, you can look at 
+ the provided <filename>default.filter</filename> with a text editor and see
+ some of things it can be used for.
+</para>
+
+<para>
+ Presently, there is no GUI editor option for this part of the configuration, 
+ but you can disable/enable various sections of the included default 
+ file with the Actions List Editor from your browser.
+</para>
+
+</sect3>
+
 <sect3>
 <title id="lanconfig">How can I set up <application>Privoxy</application> to act as a proxy for my 
  LAN?</title>
@@ -1080,27 +1105,6 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect3>
 
-<sect3>
-<title id="filterfile">What is a <quote>default.filter</quote>?</title>
-<para>
- The <quote>default.filter</quote> is used to <quote>filter</quote> any
- page content. By <quote>filtering</quote> we mean it can modify, remove, 
- or change <emphasis>anything</emphasis> on the page, including HTML tags, and
- JavaScript. Regular expressions are used to accomplish this. This is
- potentially a very powerful feature, but requires some expertise.
-</para>
-
-<para>
- If you are familiar with regular expressions, and HTML, you can look at 
- the provided <filename>default.filter</filename> with a text editor and see
- some of things it can be used for.
-</para>
-
-<para>
- Presently, there is no GUI editor option for this part of the configuration.
-</para>
-
-</sect3>
 </sect2>
 
 
@@ -1251,6 +1255,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.28  2002/03/25 04:27:33  hal9
+New section related to name change.
+
 Revision 1.25  2002/03/24 16:08:08  swa
 we are too lazy to make a block-built
 privoxy logo. hence removed the option.
