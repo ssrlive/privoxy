@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.3 2001/05/20 01:21:20 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.4 2001/05/22 18:56:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.3 2001/05/20 01:21:20 jongfoster 
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.4  2001/05/22 18:56:28  oes
+ *    CRLF -> LF
+ *
  *    Revision 1.3  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -709,8 +712,9 @@ static int check_file_changed(const struct file_list * current,
  * Function    :  read_config_line
  *
  * Description :  Read a single non-empty line from a file and return
- *                it.  Trims comments, leading and trailing whitespace.
- *                Also wites the file to fs->proxy_args.
+ *                it.  Trims comments, leading and trailing whitespace
+ *                and respects escaping of newline and comment char.
+ *                Also writes the file to fs->proxy_args.
  *
  * Parameters  :
  *          1  :  buf = Buffer to use.
@@ -727,6 +731,9 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 {
    char *p, *q;
    char linebuf[BUFSIZ];
+   int contflag = 0;
+
+	*buf = '\0';
 
    while (fgets(linebuf, sizeof(linebuf), fp))
    {
@@ -743,17 +750,40 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
       }
 #endif /* ndef SPLIT_PROXY_ARGS */
 
-      /* Trim off newline and any comment */
-      if ((p = strpbrk(linebuf, "\r\n#")) != NULL)
+      /* Trim off newline */
+      if ((p = strpbrk(linebuf, "\r\n")) != NULL)
       {
          *p = '\0';
       }
+
+      /* Line continuation? Trim escape and set flag. */
+		if ((p != linebuf) && (*--p == '\\'))
+		  {
+			 contflag = 1;
+			 *p = '\0';
+		  }
+
+      /* If there's a comment char.. */
+      if ((p = strpbrk(linebuf, "#")) != NULL)
+      {
+		  /* ..and it's escaped, left-shift the line over the escape. */
+		  if ((p != linebuf) && (*(p-1) == '\\'))
+			 {
+				q = p-1;
+				while ((*q++ = *p++) != '\0') /* nop */;
+			 }
+		  /* Else, chop off the rest of the line */
+		  else
+			 {
+				*p = '\0';
+			 }
+		}
       
       /* Trim leading whitespace */
       p = linebuf;
       while (*p && ijb_isspace(*p))
       {
-         *p++;
+         p++;
       }
 
       if (*p)
@@ -788,8 +818,16 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
          /* More paranoia.  This if statement is always true. */
          if (*linebuf)
          {
-            strcpy(buf, linebuf);
-            return buf;
+			  strncat(buf, linebuf, buflen - strlen(buf));
+			  if (contflag)
+				 {
+					contflag = 0;
+					continue;
+				 }
+			  else
+				 {
+					return buf;
+				 }
          }
       }
    }
