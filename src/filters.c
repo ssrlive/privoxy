@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 2.2 2002/09/04 15:38:24 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.3 2002/12/28 03:58:19 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
@@ -38,6 +38,10 @@ const char filters_rcs[] = "$Id: filters.c,v 2.2 2002/09/04 15:38:24 oes Exp $";
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.3  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *    Revision 2.2  2002/09/04 15:38:24  oes
  *    Synced with the stable branch:
  *        Revision 1.58.2.2  2002/08/01 17:18:28  oes
@@ -1290,7 +1294,7 @@ char *pcrs_filter_response(struct client_state *csp)
    int hits=0;
    size_t size;
 
-   char *old = csp->iob->cur, *new = NULL;
+   char *old_buf = csp->iob->cur, *new_buf = NULL;
    pcrs_job *job;
 
    struct file_list *fl;
@@ -1353,9 +1357,9 @@ char *pcrs_filter_response(struct client_state *csp)
             /* Apply all jobs from the joblist */
             for (job = b->joblist; NULL != job; job = job->next)
             {
-               current_hits += pcrs_execute(job, old, size, &new, &size);
-               if (old != csp->iob->cur) free(old);
-               old=new;
+               current_hits += pcrs_execute(job, old_buf, size, &new_buf, &size);
+               if (old_buf != csp->iob->cur) free(old_buf);
+               old_buf=new_buf;
             }
 
             log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
@@ -1370,7 +1374,7 @@ char *pcrs_filter_response(struct client_state *csp)
     */
    if (!hits)
    {
-      free(new);
+      free(new_buf);
       return(NULL);
    }
 #ifdef FEATURE_ACTIVITY_CONSOLE
@@ -1382,7 +1386,7 @@ char *pcrs_filter_response(struct client_state *csp)
    csp->content_length = size;
    IOB_RESET(csp);
 
-   return(new);
+   return(new_buf);
 
 }
 

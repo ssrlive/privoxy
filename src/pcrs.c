@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 2.2 2002/09/04 15:52:02 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 2.3 2002/10/08 16:25:30 oes Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 2.2 2002/09/04 15:52:02 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 2.3  2002/10/08 16:25:30  oes
+ *    Bugfix: Need to check validity of backreferences explicitly, because when max_matches are reached and matches is expanded, realloc() does not zero the memory. Fixes Bug # 606227
+ *
  *    Revision 2.2  2002/09/04 15:52:02  oes
  *    Synced with the stable branch:
  *        Revision 1.19.2.1  2002/08/10 11:23:40  oes
@@ -740,18 +743,18 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
 int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, char **result, size_t *result_length)
 {
    pcrs_job *job;
-   char *old, *new;
+   char *old_item, *new_item;
    int hits, total_hits;
  
-   old = subject;
+   old_item = subject;
    *result_length = subject_length;
    hits = total_hits = 0;
 
    for (job = joblist; job != NULL; job = job->next)
    {
-      hits = pcrs_execute(job, old, *result_length, &new, result_length);
+      hits = pcrs_execute(job, old_item, *result_length, &new_item, result_length);
 
-      if (old != subject) free(old);
+      if (old_item != subject) free(old_item);
 
       if (hits < 0)
       {
@@ -760,7 +763,7 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
       else
       {
          total_hits += hits;
-         old = new;
+         old_item = new_item;
       }
    }
 

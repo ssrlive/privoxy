@@ -1,7 +1,7 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.9 2002/03/26 22:29:54 swa Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/amiga.c,v $
  *
  * Purpose     :  Amiga-specific declarations.
  *
@@ -28,6 +28,9 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.9 2002/03/26 22:29:54 swa Exp $";
  *
  * Revisions   :
  *    $Log: amiga.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.9  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -229,7 +232,7 @@ void free (void *m)
 
 void *realloc (void *old, size_t ns)
 {
-   void *new;
+   void *new_buf;
    LONG osize, *o = old;
    LONG nsize = ns;
 
@@ -242,9 +245,9 @@ void *realloc (void *old, size_t ns)
    {
       return old;
    }
-   if ((new = malloc(nsize)))
+   if ((new_buf = malloc(nsize)))
    {
-      ULONG *n = new;
+      ULONG *n = new_buf;
 
       osize >>= 2;
       while(osize--)
@@ -253,7 +256,7 @@ void *realloc (void *old, size_t ns)
       }
       free(old);
    }
-   return new;
+   return new_buf;
 }
 
 void __memCleanUp (void)
