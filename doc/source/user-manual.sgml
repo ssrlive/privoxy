@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.110 2002/05/14 19:10:45 oes Exp $
+ $Id: user-manual.sgml,v 1.111 2002/05/14 23:01:36 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.110 2002/05/14 19:10:45 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.111 2002/05/14 23:01:36 oes Exp $</pubdate>
 
 <!--
 
@@ -170,12 +170,11 @@ Hal.
 <para>
  Note: If you have a previous <application>Junkbuster</application> or
  <application>Privoxy</application> installation on your system, you
- will need to remove it.  Some platforms do this for you as part 
- of their installation procedure. (See below for your platform).
- In any case <emphasis>be sure to backup your old configuration
- if it is valuable to you.</emphasis> See the
- <link linkend="upgradersnote">note to upgraders</link> section
- below.
+ will need to remove it.  On some platforms, this may be done for you as part
+ of their installation procedure. (See below for your platform). In any case
+ <emphasis>be sure to backup your old configuration if it is valuable to
+ you.</emphasis> See the <link linkend="upgradersnote">note to
+ upgraders</link> section below.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     --> 
@@ -185,7 +184,7 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-rpm"><title>Red Hat and SuSE RPMs</title>
+<sect3 id="installation-pack-rpm"><title>Red Hat, SuSE RPMs and Conectiva</title>
 
 <para>
  RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
@@ -525,7 +524,7 @@ automatically start Privoxy in the boot process.
 </para>
 
 <sect2 id="start-redhatdebian">
-<title>RedHat and Debian</title>
+<title>RedHat, Conectiva and Debian</title>
 <para>
 We use a script. Note that RedHat does not start Privoxy upon booting per
 default. It will use the file <filename>/etc/privoxy/config</filename> as its
@@ -899,7 +898,7 @@ must find a better place for this paragraph
     Multiple actions files may be defined in <filename>config</filename>. These 
     are processed in the order they are defined. Local customizations and locally 
     preferred exceptions to the default policies  as defined in
-    <filename>default.action</filename> (which you will most propably want
+    <filename>default.action</filename> (which you will most probably want
     to define sooner or later) are probably best applied in
     <filename>user.action</filename>, where you can preserve them across
     upgrades. <filename>standard.action</filename> is for
@@ -1405,8 +1404,8 @@ actionsfile
 
   <para>
     If you intend to operate <application>Privoxy</application> for more users
-    that just yourself, it might be a good idea to let them know how to reach
-    you, what you block and why you do that, your policies etc.
+    than just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies, etc.
    </para>
 
 <sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
@@ -1445,7 +1444,7 @@ actionsfile
   <listitem>
     <para>
     The User Manual URI is used for help links from some of the internal CGI pages. 
-    The manual itself is normally packaged with the binary distributions, so you propably want
+    The manual itself is normally packaged with the binary distributions, so you probably want
     to set this to a locally installed copy. For multi-user setups, you could provide a copy on
     a local webserver for all your users and use the corresponding URL here.
    </para>
@@ -1511,7 +1510,7 @@ actionsfile
   <listitem>
    <para>
     The value of this option only matters if the experimental trust mechanism has been
-    activated. (See <literal>trustfile</literal> above.)
+    activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> above.)
    </para>
    <para>
     If you use the trust mechanism, it is a good idea to write up some on-line
@@ -1641,7 +1640,8 @@ actionsfile
   <term>Specifies:</term>
   <listitem>
    <para>
-    Key values that determine what information gets logged.
+    Key values that determine what information gets logged to the 
+    <link linkend="logfile"><emphasis>logfile</emphasis></link>.
    </para>
   </listitem>
  </varlistentry>
@@ -1879,10 +1879,11 @@ actionsfile
    <para>
     If set to 0, <application>Privoxy</application> will start in
     <quote>toggled off</quote> mode, i.e. behave like a normal, content-neutral
-    proxy. See <literal>enable-remote-toggle</literal>
-    below. This is not really useful anymore, since toggling is much easier
-    via <ulink url="http://config.privoxy.org/toggle">the web
-    interface</ulink> than via editing the <filename>conf</filename> file.
+    proxy where all ad blocking, filtering, etc are disabled. See
+    <literal>enable-remote-toggle</literal> below. This is not really useful
+    anymore, since toggling is much easier via <ulink
+    url="http://config.privoxy.org/toggle">the web interface</ulink> than via
+    editing the <filename>conf</filename> file.
    </para>
    <para>
     The windows version will only display the toggle icon in the system tray
@@ -2056,7 +2057,8 @@ ACLs: permit-access and deny-access</title>
     For a typical home user, it will normally suffice to ensure that 
     <application>Privoxy</application> only listens on the localhost
     (127.0.0.1) or internal (home) network address by means of the
-    <literal>listen-address</literal> option.
+    <link linkend="listen-address"><emphasis>listen-address</emphasis></link>
+    option. 
    </para>
    <para>
     Please see the warnings in the FAQ that this proxy is not intended to be a substitute
@@ -3233,7 +3235,7 @@ forward-socks4 and forward-socks4a</title>
     for requests to blocked pages. This page contains links to find out why the request
     was blocked, and a click-through to the blocked content (the latter only if compiled with the
     force feature enabled). The <quote>BLOCKED</quote> page adapts to the available
-    screen space -- it displays full-blown if space allows, or minaturized and text-only
+    screen space -- it displays full-blown if space allows, or miniaturized and text-only
     if loaded into a small frame or window. If you are using <application>Privoxy</application>
     right now, you can take a look at the 
     <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"><quote>BLOCKED</quote>
@@ -3609,8 +3611,10 @@ problem-host.example.com</screen>
    </para>
    <para>
     This feature is currently not very smart and is scheduled for improvement.
-    It is likely to break some sites. There is a bunch of exceptions to this action in
-    <filename>default.action</filename>, should you decide to turn it on by default.
+    It is likely to break some sites. You should expect to need possibly 
+    many exceptions to this action, if it is enabled by default in
+    <filename>default.action</filename>. Some sites just don't work without 
+    it.
    </para>
   </listitem>
  </varlistentry>
@@ -3644,7 +3648,7 @@ problem-host.example.com</screen>
   <term>Effect:</term>
   <listitem>
    <para>
-    Text documents, including HTML and JavaScript, to which this action applies, are filterd on-the-fly
+    Text documents, including HTML and JavaScript, to which this action applies, are filtered on-the-fly
     through the specified regular expression based substitutions.    
    </para>
   </listitem>
@@ -3694,7 +3698,7 @@ problem-host.example.com</screen>
     documents. If you want filtering to work on all documents, even those that
     would normally be sent compressed, use the
     <literal><link linkend="prevent-compression">prevent-compression</link></literal>
-    action in conjuction with <literal>filter</literal>.
+    action in conjunction with <literal>filter</literal>.
    </para>
    <para>
     Filtering can achieve some of the effects as the 
@@ -3741,7 +3745,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-frameset-borders">
-    <screen>+filter{frameset-borders}    # Give frames a border and make them resizable</screen> 
+    <screen>+filter{frameset-borders}    # Give frames a border and make them resizeable</screen> 
    </para>
    <para>
     <anchor id="filter-refresh-tags">
@@ -4047,7 +4051,7 @@ ad.doubleclick.net
     <quote>forge</quote> is the preferred option here, since some servers will
     not send images back otherwise, in an attempt to prevent their valuable
     content from being embedded elsewhere (and hence, without being surrounded
-    by <emphasis>their</emphasis> banners.
+    by <emphasis>their</emphasis> banners).
    </para>
   <para>  
    <literal>hide-referer</literal> is an alternate spelling of
@@ -4114,20 +4118,27 @@ ad.doubleclick.net
  <varlistentry>
   <term>Notes:</term>
   <listitem>
+   <warning> 
+    <para>
+     This breaks many web sites that depend on looking at this header in order
+     to customize their content for different browsers (which, by the
+     way, is <emphasis>NOT</emphasis> a <ulink
+     url="http://www.javascriptkit.com/javaindex.shtml">smart way to do
+     that</ulink>!).
+    </para>
+   </warning>
    <para>
-    Warning! This breaks many web sites that in order to customize their
-    content for the different browser types depend on looking
-    at this header (which, btw, is <emphasis>NOT</emphasis> a <ulink
-    url="http://www.javascriptkit.com/javaindex.shtml">smart way to
-    do that</ulink>!).
-   </para>
-   <para>
-    Using this action in multi-user setups or wherever diffrerent types of
+    Using this action in multi-user setups or wherever different types of
     browsers will access the same <application>Privoxy</application> is
     <emphasis>not recommended</emphasis>. In single-user, single-browser
     setups, you might use it to delete your OS version information from
     the headers, because it is an invitation to exploit known bugs for your
-    OS.
+    OS. It is also occasionally useful to forge this in order to access 
+    sites that won't let you in otherwise (though there may be a good 
+    reason in some cases). Example of this: some MSN sites will not 
+    let <application>Mozilla</application> enter, yet forging to a 
+    <application>Netscape 6.1</application> user-agent works just fine.
+    (Must be just a silly MS goof, I'm sure :-).
    </para>
    <para>
     This action is scheduled for improvement.
@@ -4190,11 +4201,13 @@ ad.doubleclick.net
   <term>Notes:</term>
   <listitem>
    <para>
-    This action is easily confused with a built-in harwired <literal><link linkend="filter">filter</link></literal>
+    This action is easily confused with the built-in, hardwired <literal><link linkend="filter">filter</link></literal>
     action, but there are important differences: For <literal>kill-popups</literal>,
     the document need not be buffered, so it can be incrementally rendered while
     downloading. But <literal>kill-popups</literal> doesn't catch as many pop-ups as
-    <literal><link linkend="filter">filter</link>{popups}</literal> does.
+    <literal><link
+    linkend="filter">filter</link>{<replaceable>popups</replaceable>}</literal>
+    does. 
    </para>
    <para>
     Think of it as a fast and efficient replacement for a filter that you
@@ -4207,11 +4220,13 @@ ad.doubleclick.net
    <para>
     Killing all pop-ups is a dangerous business. Many shops and banks rely on
     pop-ups to display forms, shopping carts etc, and killing only the unwanted pop-ups 
-    would require artificial intelligance in <application>Privoxy</application>.
+    would require artificial intelligence in <application>Privoxy</application>.
     If the only kind of pop-ups that you want to kill are exit consoles (those
     <emphasis>really nasty</emphasis> windows that appear when you close an other
     one), you might want to use
-    <literal><link linkend="filter">filter</link>{js-annoyances}</literal> instead.
+    <literal><link
+    linkend="filter">filter</link>{<replaceable>js-annoyances</replaceable>}</literal>
+    instead. 
    </para>
 
   <!-- 
@@ -4241,7 +4256,7 @@ ad.doubleclick.net
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Prevent abuse of <application>Privoxy</application> as a TCP relay</para>
+   <para>Prevent abuse of <application>Privoxy</application> as a TCP proxy relay</para>
   </listitem>
  </varlistentry>
 
@@ -4953,7 +4968,7 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
  <ulink url="actions-file.html#FILTER-NIMDA">+filter{nimda}</ulink> \
  <ulink url="actions-file.html#FILTER-BANNERS-BY-SIZE">+filter{banners-by-size}</ulink> \
  <ulink url="actions-file.html#FILTER-SHOCKWAVE-FLASH">-filter{shockwave-flash}</ulink> \
- <ulink url="actions-file.html#FILTER-CRUDE-PARENTAL">-filter{crude-prental}</ulink> \
+ <ulink url="actions-file.html#FILTER-CRUDE-PARENTAL">-filter{crude-parental}</ulink> \
  <ulink url="actions-file.html#HIDE-FORWARDED-FOR-HEADERS">+hide-forwarded-for-headers</ulink> \
  <ulink url="actions-file.html#HIDE-FROM-HEADER">+hide-from-header{block}</ulink> \
  <ulink url="actions-file.html#HIDE-REFERER">-hide-referrer</ulink> \
@@ -4985,7 +5000,7 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
 
 # Shopping sites - not as fragile but require some special 
 # handling. We still want to block ads, and we will allow 
-# persistant cookies via the 'shop' alias:
+# persistent cookies via the 'shop' alias:
  { shop }
  .quietpc.com 
  .worldpay.com   # for quietpc.com
@@ -5046,7 +5061,7 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
  .hitbox.com 
 
 
-# The above block section will probably inadvertantly catch some 
+# The above block section will probably inadvertently catch some 
 # sites we DO NOT want blocked via the wildcards and regular expressions. 
 # Now let's set exceptions to the exceptions so the good guys get better 
 # treatment. Disable block action:
@@ -5111,7 +5126,7 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
 
 # Allow persistent cookies for a few regular sites that we 
 # trust via our above alias. These will be saved from one browser session 
-# to the next. We are explicity turning off any and all cookie handling, 
+# to the next. We are explicitly turning off any and all cookie handling, 
 # even though the crunch-*-cookies settings were disabled in our above 
 # default.action anyway. So cookies from these domains will come through 
 # unmolested.
@@ -5130,7 +5145,7 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
  www.my-isp-example.com/logo[0-9].gif
 
 
-# Say the site where you do your homebanking needs to open
+# Say the site where you do your home banking needs to open
 # popup windows, but you have chosen to kill popups by
 # default. This will allow it for your-example-bank.com:
 #
@@ -5278,8 +5293,9 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
 <para>
  This would activate that particular filter. Similarly, <quote>+filter</quote>
  can be turned off for selected sites as:
- <quote>-filter{html-annoyances}</quote>. Remember too, all actions are off by
- default, unless they are explicity enabled in one of the actions files.
+ <quote>-filter{<replaceable>html-annoyances</replaceable>}</quote>. Remember
+ too, all actions are off by default, unless they are explicitly enabled in one
+ of the actions files.
 </para>
 
 </sect2>
@@ -5305,13 +5321,15 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
 </para>
 <para>
  The default 
-<ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Blocked 
-(<application>Privoxy</application> needs to be running for page to display)</ulink>
- banner page with the bright red top 
- banner, is called just <quote><filename>blocked</filename></quote>. This 
- may be customized or replaced with something else if desired.
-
+ <ulink
+ url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Blocked
+ </ulink> (<application>Privoxy</application> needs to be running for page to
+ display) banner page with the bright red top banner, is called just
+ <quote><filename>blocked</filename></quote>. This may be customized or
+ replaced with something else if desired (not recommended for the casual
+ user).
 </para>
+
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -5877,7 +5895,7 @@ Requests</title>
   <para>
    First, the server headers are read and processed to determine, among other
    things, the MIME type (document type) and encoding. The headers are then
-   filtered as deterimed by the 
+   filtered as determined by the 
    <ulink url="actions-file.html#CRUNCH-INCOMING-COOKIES"><quote>+crunch-incoming-cookies</quote></ulink>,
    <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
    and <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
@@ -6253,6 +6271,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.111  2002/05/14 23:01:36  oes
+ Fixing the fixes
+
  Revision 1.110  2002/05/14 19:10:45  oes
  Restored alphabetical order of actions
 
