@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.25 2001/07/15 19:43:49 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.26 2001/07/18 12:31:36 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.25 2001/07/15 19:43:49 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.26  2001/07/18 12:31:36  oes
+ *    cosmetics
+ *
  *    Revision 1.25  2001/07/15 19:43:49  jongfoster
  *    Supports POSIX threads.
  *    Also removed some unused #includes.
@@ -988,6 +991,12 @@ static void chat(struct client_state *csp)
                 block_popups)                     /* Policy allows */
             {
                block_popups_now = 1;
+               /*
+                    * even though the header has been found, don't forget about the
+                    * left over portion of the buffer which will usually contain body text
+                    */
+               n = strlen(csp->iob->cur);
+               filter_popups(csp->iob->cur, n);
             }
 
 #endif /* def KILLPOPUPS */
