@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.6 2002/11/16 15:37:03 oes Exp $
+ $Id: p-authors.sgml,v 2.7 2002/11/30 02:35:16 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -24,43 +24,46 @@
 -->
 <![%p-authors-formal;[
 <para>
- Current Project Developers:
+ Current Developement Team:
 </para>
 ]]>
 
 <literallayout>
+ Hal Burgiss (docs)
  Jon Foster
  Andreas Oesterhelt
- Stefan Waldherr
+ David Schmidt (OS/2, Mac OSX ports)
 <![%p-authors-formal;[
  ]]>
- Thomas Steudten
- Rodney Stromlund
+
 <![%p-authors-formal;[
 </literallayout>
 
 <para>
- Current Project Contributors:
+ Current and Former Project Contributors:
 </para>
 
 <literallayout>
 ]]>
+ Johny Agotnes 
  Rodrigo Barbosa (RPM specfiles)
  Moritz Barsnick
- Hal Burgiss (docs)
- Mattes Dolak
+ Mattes Dolak 
  Karsten Hopp (Red Hat)
  Alexander Lazic
  Daniel Leite
  Gábor Lipták
+ Adam Lock (Win32)
  Guy Laroche
- Andrew Lock (Win32)
  Haroon Rafique
  Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
- David Schmidt (OS/2, Mac OSX ports)
+ Thomas Steudten
  Joerg Strohmayer (Amiga)
+ Rodney Stromlund
+ Sviatoslav Sviridov
  Sarantis Paskalis
+ Stefan Waldherr
 </literallayout>
 
 <![%p-authors-formal;[
@@ -79,7 +82,6 @@
 </para>
 
 <literallayout>
- Johny Agotnes 
  Ken Arromdee
  Devin Bayer
  Reiner Buehl
@@ -93,10 +95,10 @@
  Don Libes  
  Paul Lieverse
  David Mediavilla 
+ Oliver Stoeneberg
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
- Oliver Stoeneberg
  Darren Wiebe
  Jamie Zawinski
 </literallayout>
