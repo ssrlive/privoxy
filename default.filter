@@ -1,8 +1,8 @@
 # ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa//current/default.filter,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.14 2002/10/13 21:58:20 hal9 Exp $
+#  $Id: default.filter,v 1.15 2002/11/08 16:40:56 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -190,8 +190,7 @@ FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups)
 # Note: Only deactivates refreshes with more than 9 seconds delay to
 #       preserve monster-stupid but common redirections via meta tags.
 #
-s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s*url\s*=\s*([^>\2]*))?\2\s*>/<link rev="x-refresh" href="$4">/iU
-
+s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s*url\s*=\s*([^>\2]*))?\2/<link rev="x-refresh" href="$4"/iU
 
 #################################################################################
 #
@@ -396,6 +395,9 @@ s/\x9B/>/g                  # 155
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.15  2002/11/08 16:40:56  oes
+#     Made img-reorder more cautious. Fixes bug #632715
+#
 #     Revision 1.14  2002/10/13 21:58:20  hal9
 #     Add demoronizer filter to sync with 3.0.1.
 #
