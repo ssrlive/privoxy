@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.52 2002/04/03 02:56:18 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.53 2002/04/03 14:19:16 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -245,7 +245,7 @@ re_filterfile.txt: re_filterfile
 #############################################################################
 # RPM specifice stuff (SuSE or Redhat, ..)
 #############################################################################
-rpm-stuff:
+rpm-stuff: clean clobber
 	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
 			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
@@ -254,9 +254,6 @@ rpm-stuff:
 			exit 1; \
 		fi; \
 	done; \
-
-	$(MAKE) clobber
-	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
 
 #############################################################################
 # redhat distribution alpha and x86
@@ -438,7 +435,7 @@ win-dist:
 #############################################################################
 # Tarball distribution
 #############################################################################
-tarball-dist: clobber
+tarball-dist: clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 	cd .. && find privoxy-$(VERSION)-$(CODE_STATUS)
 #	cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
@@ -645,12 +642,14 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -iname TAGS`
 
-clobber: clean
-	$(RM) configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *~ *.tar.gz *.tar \#*\#
+clobber:
+	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *~ *.tar.gz *.tar \#*\#
 #
 # FIXME: What is all this? 
 #
 	$(RM) cscope.*  *.pdb *.lib *.exp 
+
+distclean: clobber
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
@@ -682,6 +681,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.53  2002/04/03 14:19:16  oes
+# Standard clean and clobber semantics
+#
 # Revision 1.52  2002/04/03 02:56:18  hal9
 # Revert previous FAQ numbering kludge.
 #
