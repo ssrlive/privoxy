@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.23 2001/07/02 02:28:25 iwanttokeepanon Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.24 2001/07/13 14:00:40 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,21 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.23 2001/07/02 02:28:25 iwanttokeepanon Ex
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.24  2001/07/13 14:00:40  oes
+ *     - Generic content modification scheme:
+ *       Each feature has its own applicability flag that is set
+ *       from csp->action->flags.
+ *       Replaced the "filtering" int flag , by a function pointer
+ *       "content_filter" to the function that will do the content
+ *       modification. If it is != NULL, the document will be buffered
+ *       and processed through *content_filter, which must set
+ *       csp->content_length and return a modified copy of the body
+ *       or return NULL (on failiure).
+ *     - Changed csp->is_text to the more generic bitmap csp->content_type
+ *       which can currently take the valued CT_TEXT or CT_GIF
+ *     - Reformatting etc
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.23  2001/07/02 02:28:25  iwanttokeepanon
  *    Added "#ifdef ACL_FILES" conditional compilation to line 1291 to exclude
  *    the `block_acl' call.  This prevents a compilation error when the user
@@ -225,15 +240,15 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.23 2001/07/02 02:28:25 iwanttokeepanon Ex
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef _WIN32
+#ifdef FEATURE_PTHREAD
+#include <pthread.h>
+#endif /* def FEATURE_PTHREAD */
 
-# include <sys/timeb.h>
-# include <windows.h>
-# include <io.h>
-# include <process.h>
-# ifdef TOGGLE
-#  include <time.h>
-# endif /* def TOGGLE */
+#ifdef _WIN32
+# ifndef FEATURE_PTHREAD
+#  include <windows.h>
+#  include <process.h>
+# endif /* ndef FEATURE_PTHREAD */
 
 # include "win32.h"
 # ifndef _WIN_CONSOLE
@@ -1229,12 +1244,12 @@ static void listen_loop(void)
 
    while (FOREVER)
    {
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
       while (waitpid(-1, NULL, WNOHANG) > 0)
       {
          /* zombie children */
       }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif /* !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
       sweep();
 
       if ( NULL == (csp = (struct client_state *) zalloc(sizeof(*csp))) )
@@ -1338,6 +1353,20 @@ static void listen_loop(void)
 /* this is a switch () statment in the C preprocessor - ugh */
 #undef SELECTED_ONE_OPTION
 
+/* Use Pthreads in preference to native code */
+#if defined(FEATURE_PTHREAD) && !defined(SELECTED_ONE_OPTION)
+#define SELECTED_ONE_OPTION
+         {
+            pthread_t the_thread;
+            pthread_attr_t attrs;
+
+            pthread_attr_init(&attrs);
+            child_id = (pthread_create(&the_thread, &attrs,
+               (void*)serve, csp) ? -1 : 0);
+            pthread_attr_destroy(&attrs);
+         }
+#endif
+
 #if defined(_WIN32) && !defined(_CYGWIN) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
          child_id = _beginthread(
@@ -1383,6 +1412,30 @@ static void listen_loop(void)
 
 #if !defined(SELECTED_ONE_OPTION)
          child_id = fork();
+
+         /* This block is only needed when using fork().
+          * When using threads, the server thread was
+          * created and run by the call to _beginthread().
+          */
+         if (child_id == 0)   /* child */
+         {
+            serve(csp);
+            _exit(0);
+
+         }
+         else if (child_id > 0) /* parent */
+         {
+            /* in a fork()'d environment, the parent's
+             * copy of the client socket and the CSP
+             * are not used.
+             */
+
+#if !defined(_WIN32) && defined(__CYGWIN__)
+            wait( NULL );
+#endif /* !defined(_WIN32) && defined(__CYGWIN__) */
+            close_socket(csp->cfd);
+            csp->active = 0;
+         }
 #endif
 
 #undef SELECTED_ONE_OPTION
@@ -1402,32 +1455,6 @@ static void listen_loop(void)
             sleep(5);
             continue;
          }
-
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
-         /* This block is only needed when using fork().
-          * When using threads, the server thread was
-          * created and run by the call to _beginthread().
-          */
-         if (child_id == 0)   /* child */
-         {
-            serve(csp);
-            _exit(0);
-
-         }
-         else  /* parent */
-         {
-            /* in a fork()'d environment, the parent's
-             * copy of the client socket and the CSP
-             * are not used.
-             */
-
-#if !defined(_WIN32) && defined(__CYGWIN__)
-            wait( NULL );
-#endif /* !defined(_WIN32) && defined(__CYGWIN__) */
-            close_socket(csp->cfd);
-            csp->active = 0;
-         }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
       }
       else
       {
