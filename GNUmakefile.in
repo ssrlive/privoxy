@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.135 2002/11/04 05:11:05 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.136 2002/12/28 04:10:21 david__schmidt Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -53,6 +53,7 @@ SNAPVERSION   = $(RPM_VERSION)-$(shell date "+%Y%m%d")
 DIR_PRIVOXY_ROOT     := .
 DIR_PRIVOXY_SRC      := $(DIR_PRIVOXY_ROOT)/src
 DIR_PRIVOXY_SRC_PCRE := $(DIR_PRIVOXY_ROOT)/pcre
+DIR_PRIVOXY_SRC_JAVA := $(DIR_PRIVOXY_ROOT)/src/java
 DIR_PRIVOXY_OBJ      := $(DIR_PRIVOXY_ROOT)/obj
 
 #############################################################################
@@ -287,7 +288,7 @@ all: $(PROGRAM) default.action
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
 install conectiva-spec conectiva-dist conectiva-upload debian-dist \
 debian-upload ensure-wdump ensure-jadebin ensure-dkprefix CONF_DEST LOG_DEST \
-PID_DEST check_doc install-strip uninstall GROUP_T
+PID_DEST check_doc install-strip uninstall GROUP_T java-activity-console
 
 
 #############################################################################
@@ -684,6 +685,13 @@ tarball-upload:
 
 tarball-clean:
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+
+#############################################################################
+# java Activity Console 
+#############################################################################
+java-activity-console:
+	javac -classpath $(DIR_PRIVOXY_SRC_JAVA):$(CLASSPATH) $(DIR_PRIVOXY_SRC)/java/org/privoxy/activityconsole/*.java
+	jar -cvfm ActivityConsole.jar $(DIR_PRIVOXY_SRC_JAVA)/org/privoxy/activityconsole/acon.manifest -C $(DIR_PRIVOXY_SRC_JAVA) org/privoxy/activityconsole
 
 #############################################################################
 #
@@ -1145,6 +1153,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.136  2002/12/28 04:10:21  david__schmidt
+# Initial drop of dashboard instrumentation - enabled with
+# --enable-activity-console
+#
 # Revision 1.135  2002/11/04 05:11:05  hal9
 # Just a clean up of overly verbose output from install/uninstall.
 #
