@@ -142,7 +142,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN42"
+NAME="AEN39"
 >1.2. Why <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
@@ -253,12 +253,6 @@ NAME="FEATURES"
 ><UL
 ><LI
 ><P
->  FIXME: complete the list of features. change the order: most important
-  features to the top of the list. prefix new features with "NEW".
-  </P
-></LI
-><LI
-><P
 >   Integrated browser based configuration and control utility at <A
 HREF="http://config.privoxy.org/"
 TARGET="_top"
@@ -274,7 +268,18 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
->    Blocking of annoying pop-up browser windows.
+>   Web page content filtering (removes banners based on size,
+   invisible <SPAN
+CLASS="QUOTE"
+>"web-bugs"</SPAN
+>, JavaScript and HTML annoyances, pop-up windows, etc.)
+  </P
+></LI
+><LI
+><P
+>   Modularized configuration that allows for standard settings and
+   user settings to reside in separate files, so that installing updated
+   actions files won't overwrite idividual user settings.
   </P
 ></LI
 ><LI
@@ -286,21 +291,17 @@ TARGET="_top"
 ><P
 >   Support for Perl Compatible Regular Expressions in the configuration files, and 
    generally a more sophisticated and flexible configuration syntax over
-   previous versions. 
+   previous versions.
+  </P
+></LI
+><LI
+><P
+>   Improved cookie management features (e.g. session based cookies).
   </P
 ></LI
 ><LI
 ><P
 >   GIF de-animation. 
-  </P
-></LI
-><LI
-><P
->   Web page content filtering (removes banners based on size,
-   invisible <SPAN
-CLASS="QUOTE"
->"web-bugs"</SPAN
->, JavaScript and HTML annoyances, pop-ups, etc.)
   </P
 ></LI
 ><LI
@@ -315,17 +316,12 @@ CLASS="QUOTE"
 ></LI
 ><LI
 ><P
+>   User-customizable HTML templates for all proxy-generated pages (e.g. "blocked" page).
+  </P
+></LI
+><LI
+><P
 >   Auto-detection and re-reading of config file changes.
-  </P
-></LI
-><LI
-><P
->   User-customizable HTML templates (e.g. 404 error page).
-  </P
-></LI
-><LI
-><P
->   Improved cookie management features (e.g. session based cookies).
   </P
 ></LI
 ><LI
@@ -420,7 +416,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN122"
+NAME="AEN117"
 >1.6. How does <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -474,7 +470,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN134"
+NAME="AEN129"
 >1.7. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -495,7 +491,7 @@ CLASS="APPLICATION"
  includes tools to help identify these types of situations so they can be
  addressed as needed, allowing you to customize your installation.
  (<A
-HREF="trouble.html#AEN570"
+HREF="trouble.html#AEN576"
 >See the Troubleshooting section below</A
 >.)</P
 ></DIV

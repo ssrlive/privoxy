@@ -71,7 +71,7 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONFIG"
->8. The Main Configuration File</A
+>7. The Main Configuration File</A
 ></H1
 ><P
 > Again, the main configuration file is named <TT
@@ -93,8 +93,7 @@ CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >confdir /etc/privoxy</I
-><br>
-&nbsp;&nbsp;&nbsp;</P
+></P
 >
  </TT
 > </P
@@ -134,7 +133,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONF-LOG-LOC"
->8.1. Configuration and Log File Locations</A
+>7.1. Configuration and Log File Locations</A
 ></H2
 ><P
 > <SPAN
@@ -147,13 +146,17 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >
  where to find those other files. </P
+><P
+> The user running Privoxy, must have read permission for all 
+ configuration files, and write permission to any files that would 
+ be modified, such as log files.</P
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
 NAME="CONFDIR"
->8.1.1. confdir</A
+>7.1.1. confdir</A
 ></H4
 ><P
 ></P
@@ -231,7 +234,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="LOGDIR"
->8.1.2. logdir</A
+>7.1.2. logdir</A
 ></H4
 ><P
 ></P
@@ -301,7 +304,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ACTIONSFILE"
->8.1.3. actionsfile</A
+>7.1.3. actionsfile</A
 ></H4
 ><A
 NAME="DEFAULT.ACTION"
@@ -322,9 +325,9 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    The <A
-HREF="actions-file.html#ACTIONS"
->actions</A
-> file(s) to use
+HREF="actions-file.html"
+>actions file(s)</A
+> to use
    </P
 ></DD
 ><DT
@@ -334,7 +337,10 @@ HREF="actions-file.html#ACTIONS"
 >File name, relative to <TT
 CLASS="LITERAL"
 >confdir</TT
-></P
+>, without the <TT
+CLASS="LITERAL"
+>.action</TT
+> suffix</P
 ></DD
 ><DT
 >Default value:</DT
@@ -348,7 +354,7 @@ BORDER="0"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;standard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;recommended&nbsp;not&nbsp;editing</P
+>&nbsp;&nbsp;standard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;no&nbsp;editing&nbsp;recommended</P
 >
     </TD
 ></TR
@@ -422,7 +428,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FILTERFILE"
->8.1.4. filterfile</A
+>7.1.4. filterfile</A
 ></H4
 ><A
 NAME="DEFAULT.FILTER"
@@ -474,7 +480,7 @@ CLASS="REPLACEABLE"
 ></TT
 >}</TT
 >
-    actions in the actions files are turned off
+    actions in the actions files are turned neutral.
    </P
 ></DD
 ><DT
@@ -510,7 +516,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="LOGFILE"
->8.1.5. logfile</A
+>7.1.5. logfile</A
 ></H4
 ><P
 ></P
@@ -595,6 +601,16 @@ CLASS="FILENAME"
     the effect that cron.daily will automatically archive, gzip, and empty the
     log, when it exceeds 1M size.
    </P
+><P
+>    Any log files must be writable by whatever user <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    is being run as (default on UNIX, user id is <SPAN
+CLASS="QUOTE"
+>"privoxy"</SPAN
+>).
+   </P
 ></DD
 ></DL
 ></DIV
@@ -605,7 +621,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="JARFILE"
->8.1.6. jarfile</A
+>7.1.6. jarfile</A
 ></H4
 ><P
 ></P
@@ -660,7 +676,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="TRUSTFILE"
->8.1.7. trustfile</A
+>7.1.7. trustfile</A
 ></H4
 ><P
 ></P
@@ -740,13 +756,30 @@ CLASS="LITERAL"
 ></DL
 ></DIV
 ></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="LOCAL-SET-UP"
+>7.2. Local Set-up Documentation</A
+></H2
+><P
+>    If you intend to operate <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> for more users
+    that just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies etc.
+   </P
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
 NAME="USER-MANUAL"
->8.1.8. user-manual</A
+>7.2.1. user-manual</A
 ></H4
 ><P
 ></P
@@ -773,65 +806,127 @@ CLASS="APPLICATION"
 >Default value:</DT
 ><DD
 ><P
-><A
-HREF="http://www.privoxy.org/user-manual/"
-TARGET="_top"
->http://www.privoxy.org/user-manual/</A
+><I
+CLASS="EMPHASIS"
+>Unset</I
 ></P
 ></DD
 ><DT
 >Effect if unset:</DT
 ><DD
 ><P
->    The default will be used.
+>    <A
+HREF="http://www.privoxy.org/user-manual/"
+TARGET="_top"
+>http://www.privoxy.org/<TT
+CLASS="REPLACEABLE"
+><I
+>version</I
+></TT
+>/user-manual/</A
+>
+    will be used, where <TT
+CLASS="REPLACEABLE"
+><I
+>version</I
+></TT
+> is the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version.
    </P
 ></DD
 ><DT
 >Notes:</DT
 ><DD
 ><P
->    The User Manual is used for help hints from some of the internal CGI pages. 
-    It is normally packaged with the binary distributions, and would make more 
-    sense to have this pointed at a locally installed copy.
+>    The User Manual URI is used for help links from some of the internal CGI pages. 
+    The manual itself is normally packaged with the binary distributions, so you propably want
+    to set this to a locally installed copy. For multi-user setups, you could provide a copy on
+    a local webserver for all your users and use the corresponding URL here.
    </P
 ><P
->    A more useful example (Unix):
+>    Examples:
    </P
 ><P
-> 
-     <I
-CLASS="EMPHASIS"
->user-manual  file:///usr/share/doc/privoxy-2.9.14/user-manual/</I
+>   Unix, in local filesystem:
+  </P
+><P
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>user-manual  file:///usr/share/doc/privoxy-2.9.15/user-manual/</PRE
+></TD
+></TR
+></TABLE
 >
   </P
+><P
+>   Any platform, on local webserver (called <SPAN
+CLASS="QUOTE"
+>"local-webserver"</SPAN
+>):
+  </P
+><P
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>user-manual  http://local-webserver/privoxy-user-manual/</PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="90%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>     If set, this option should be <I
+CLASS="EMPHASIS"
+>the first option in the config file</I
+>, because
+     it is used while the config file is being read.
+   </P
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ></DL
 ></DIV
 ></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="LOCAL-SET-UP"
->8.2. Local Set-up Documentation</A
-></H2
-><P
->    If you intend to operate <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> for more users
-    that just yourself, it might be a good idea to let them know how to reach
-    you, what you block and why you do that, your policies etc.
-   </P
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
 NAME="TRUST-INFO-URL"
->8.2.1. trust-info-url</A
+>7.2.2. trust-info-url</A
 ></H4
 ><P
 ></P
@@ -893,7 +988,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ADMIN-ADDRESS"
->8.2.2. admin-address</A
+>7.2.3. admin-address</A
 ></H4
 ><P
 ></P
@@ -953,7 +1048,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="PROXY-INFO-URL"
->8.2.3. proxy-info-url</A
+>7.2.4. proxy-info-url</A
 ></H4
 ><P
 ></P
@@ -1021,7 +1116,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="DEBUGGING"
->8.3. Debugging</A
+>7.3. Debugging</A
 ></H2
 ><P
 >  These options are mainly useful when tracing a problem.
@@ -1041,7 +1136,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DEBUG"
->8.3.1. debug</A
+>7.3.1. debug</A
 ></H4
 ><P
 ></P
@@ -1155,7 +1250,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SINGLE-THREADED"
->8.3.2. single-threaded</A
+>7.3.2. single-threaded</A
 ></H4
 ><P
 ></P
@@ -1216,7 +1311,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACCESS-CONTROL"
->8.4. Access Control and Security</A
+>7.4. Access Control and Security</A
 ></H2
 ><P
 >  This section of the config file controls the security-relevant aspects
@@ -1231,7 +1326,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="LISTEN-ADDRESS"
->8.4.1. listen-address</A
+>7.4.1. listen-address</A
 ></H4
 ><P
 ></P
@@ -1344,7 +1439,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="TOGGLE"
->8.4.2. toggle</A
+>7.4.2. toggle</A
 ></H4
 ><P
 ></P
@@ -1418,7 +1513,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ENABLE-REMOTE-TOGGLE"
->8.4.3. enable-remote-toggle</A
+>7.4.3. enable-remote-toggle</A
 ></H4
 ><P
 ></P
@@ -1510,7 +1605,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ENABLE-EDIT-ACTIONS"
->8.4.4. enable-edit-actions</A
+>7.4.4. enable-edit-actions</A
 ></H4
 ><P
 ></P
@@ -1594,7 +1689,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ACLS"
->8.4.5. ACLs: permit-access and deny-access</A
+>7.4.5. ACLs: permit-access and deny-access</A
 ></H4
 ><A
 NAME="PERMIT-ACCES"
@@ -1861,7 +1956,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BUFFER-LIMIT"
->8.4.6. buffer-limit</A
+>7.4.6. buffer-limit</A
 ></H4
 ><P
 ></P
@@ -1945,7 +2040,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="FORWARDING"
->8.5. Forwarding</A
+>7.5. Forwarding</A
 ></H2
 ><P
 > This feature allows routing of HTTP requests through a chain of
@@ -1975,7 +2070,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FORWARD"
->8.5.1. forward</A
+>7.5.1. forward</A
 ></H4
 ><P
 ></P
@@ -2137,7 +2232,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SOCKS"
->8.5.2. forward-socks4 and forward-socks4a</A
+>7.5.2. forward-socks4 and forward-socks4a</A
 ></H4
 ><A
 NAME="FORWARD-SOCKS4"
@@ -2341,7 +2436,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ADVANCED-FORWARDING-EXAMPLES"
->8.5.3. Advanced Forwarding Examples</A
+>7.5.3. Advanced Forwarding Examples</A
 ></H4
 ><P
 > If you have links to multiple ISPs that provide various special content 
@@ -2465,7 +2560,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="WINDOWS-GUI"
->8.6. Windows GUI Options</A
+>7.6. Windows GUI Options</A
 ></H2
 ><P
 > <SPAN

@@ -31,7 +31,7 @@
  *
  *********************************************************************/
 
-This README is included with the development version of Privoxy 2.9.14, which
+This README is included with the development version of Privoxy 2.9.15, which
 will eventually become Privoxy v3.0 (and soon we hope!). See http://
 www.privoxy.org/ for more information. The current code level is beta, and
 seems stable to us :).
@@ -63,14 +63,14 @@ change your browser if upgrading!!! And maybe firewall, etc.
  INSTALL
 --------
 
-To build Privoxy from source, autoheader, autoconf, GNU make (gmake), and, of
-course, a C compiler are required.
+To build Privoxy from source, autoconf, GNU make (gmake), and, of course, a C
+compiler like gcc are required.
 
 When building from a source tarball (either release version or nightly CVS
 tarball), first unpack the source:
 
- tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]                           
- cd privoxy-2.9.14-beta                                                        
+ tar xzvf privoxy-2.9.15-beta-src* [.tgz or .tar.gz]                           
+ cd privoxy-2.9.15-beta                                                        
 
 For retrieving the current CVS sources, you'll need CVS installed. Note that
 sources from CVS are development quality, and may not be stable, or well

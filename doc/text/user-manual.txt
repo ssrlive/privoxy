@@ -2,7 +2,7 @@ Privoxy User Manual
 
 By: Privoxy Developers
 
-$Id: user-manual.sgml,v 1.102 2002/05/03 17:46:00 oes Exp $
+$Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $
 
 The user manual gives users information on how to install, configure and use 
 Privoxy.
@@ -168,7 +168,7 @@ Table of Contents
 1. Introduction
 
 This documentation is included with the current beta version of Privoxy,
-v.2.9.14, and is mostly complete at this point. The most up to date reference
+v.2.9.15, and is mostly complete at this point. The most up to date reference
 for the time being is still the comments in the source files and in the
 individual configuration files. Development of version 3.0 is currently nearing
 completion, and includes many significant changes and enhancements over earlier
@@ -248,7 +248,7 @@ How to install the binary packages depends on your operating system:
 
 2.1.1. Red Hat and SuSE RPMs
 
-RPMs can be installed with rpm -Uvh privoxy-2.9.14-1.rpm, and will use /etc/
+RPMs can be installed with rpm -Uvh privoxy-2.9.15-1.rpm, and will use /etc/
 privoxy for the location of configuration files.
 
 Note that on Red Hat, Privoxy will not be automatically started on system boot.
@@ -256,7 +256,7 @@ You will need to enable that using chkconfig, ntsysv, or similar methods. Note
 that SuSE will automatically start Privoxy in the boot process.
 
 If you have problems with failed dependencies, try rebuilding the SRC RPM: rpm
---rebuild privoxy-2.9.14-1.src.rpm;. This will use your locally installed
+--rebuild privoxy-2.9.15-1.src.rpm;. This will use your locally installed
 libraries and RPM version.
 
 Also note that if you have a Junkbuster RPM installed on your system, you need
@@ -341,8 +341,8 @@ compiler like gcc are required.
 When building from a source tarball (either release version or nightly CVS
 tarball), first unpack the source:
 
- tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]                           
- cd privoxy-2.9.14-beta                                                        
+ tar xzvf privoxy-2.9.15-beta-src* [.tgz or .tar.gz]                           
+ cd privoxy-2.9.15-beta                                                        
 
 For retrieving the current CVS sources, you'll need CVS installed. Note that
 sources from CVS are development quality, and may not be stable, or well
@@ -582,11 +582,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ?  View & change the current configuration                             
-        ?  View the source code version numbers                                
-        ?  View the request headers.                                           
-        ?  Look up which actions apply to a URL and why                        
-        ?  Toggle Privoxy on or off                                            
+        ??  View & change the current configuration                            
+        ??  View the source code version numbers                               
+        ??  View the request headers.                                          
+        ??  Look up which actions apply to a URL and why                       
+        ??  Toggle Privoxy on or off                                           
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -958,7 +958,7 @@ Notes:
    
     Unix, in local filesystem:
    
-    user-manual  file:///usr/share/doc/privoxy-2.9.14/user-manual/     
+    user-manual  file:///usr/share/doc/privoxy-2.9.15/user-manual/     
    
     Any platform, on local webserver (called "local-webserver"):
    
@@ -3508,7 +3508,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
- Final results:                                                                    
+  Final results:                                                                   
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3523,7 +3523,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
- { +block +handle-as-image }                                                   
+  { +block +handle-as-image }                                                  
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3549,7 +3549,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
- Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
+  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3568,7 +3568,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
- { -block }                                                                    
+  { -block }                                                                   
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3577,7 +3577,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
- { +block +handle-as-image }                                                   
+  { +block +handle-as-image }                                                  
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3587,7 +3587,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
- {shop}                                                                        
+  {shop}                                                                       
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3597,7 +3597,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
- {-filter}                                                                     
+  {-filter}                                                                    
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site

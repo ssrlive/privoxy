@@ -71,14 +71,14 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="ACTIONS-FILE"
->9. Actions Files</A
+>8. Actions Files</A
 ></H1
 ><P
 > The actions files are used to define what actions
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> takes for which URLs, and thus determines
+> takes for which URLs, and thus determine
  how ad images, cookies and various other aspects of HTTP content and
  transactions are handled, and on which sites (or even parts thereof). There 
  are three such files included with <SPAN
@@ -102,7 +102,12 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >default.action</TT
 >. These have increasing levels of
-      aggressiveness. It is not recommend to edit this file.
+      aggressiveness <I
+CLASS="EMPHASIS"
+>and have no influence on your browsing unless
+      you select them explicitly in the editor</I
+>. It is not recommend
+      to edit this file.
     </P
 ></LI
 ><LI
@@ -145,31 +150,60 @@ TARGET="_top"
 >http://config.privoxy.org/show-status</A
 >.</P
 ><P
-> An actions file typically has sections. Near the top, <SPAN
+> An actions file typically has multiple sections. If you want to use
+ <SPAN
 CLASS="QUOTE"
 >"aliases"</SPAN
-> are 
- optionally defined (discussed <A
+> in an actions file, you have to place the (optional)
+ <A
 HREF="actions-file.html#ALIASES"
-TARGET="_top"
->below</A
->), then the default set of rules
- which will apply universally to all sites and pages. And then below that,
- exceptions to the defined universal policies. </P
+>alias section</A
+> at the top of that file.
+ Then comes the default set of rules which will apply universally to all
+ sites and pages (be <I
+CLASS="EMPHASIS"
+>very careful</I
+> with using such a
+ universal set in <TT
+CLASS="FILENAME"
+>user.action</TT
+> or any other actions file after 
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+>, because it will override the result
+ from consulting any previous file). And then below that,
+ exceptions to the defined universal policies. You can regard
+ <TT
+CLASS="FILENAME"
+>user.action</TT
+> as an appendix to <TT
+CLASS="FILENAME"
+>default.action</TT
+>,
+ with the advantage that is a separate file, which makes preserving your
+ personal settings across <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> upgrades easier.</P
 ><P
 > 
  Actions can be used to block anything you want, including ads, banners, or
  just some obnoxious URL that you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. not
  written to disk), content can be modified, JavaScripts tamed, user-tracking
- fooled, and much more. See below for a complete list of actions.</P
+ fooled, and much more. See below for a <A
+HREF="actions-file.html#ACTIONS"
+>complete list
+ of actions</A
+>.</P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1309"
->9.1. Finding the Right Mix</A
+NAME="AEN1378"
+>8.1. Finding the Right Mix</A
 ></H2
 ><P
 > Note that some <A
@@ -202,30 +236,43 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1316"
->9.2. How to Edit</A
+NAME="AEN1385"
+>8.2. How to Edit</A
 ></H2
 ><P
-> The easiest way to edit the <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> files is with a browser by
+> The easiest way to edit the actions files is with a browser by
  using our browser-based editor, which can be reached from <A
 HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >http://config.privoxy.org/show-status</A
+>.
+ The editor allows both fine-grained control over every single feature on a
+ per-URL basis, and easy choosing from wholesale sets of defaults like
+ <SPAN
+CLASS="QUOTE"
+>"Cautious"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"Medium"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"Advanced"</SPAN
 >.</P
 ><P
 > If you prefer plain text editing to GUIs, you can of course also directly edit the
- the actions files.</P
+ the actions files. Look at <TT
+CLASS="FILENAME"
+>default.action</TT
+> which is richly
+ commented.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1322"
->9.3. How Actions are Applied to URLs</A
+NAME="AEN1394"
+>8.3. How Actions are Applied to URLs</A
 ></H2
 ><P
 > Actions files are divided into sections. There are special sections,
@@ -242,7 +289,7 @@ HREF="actions-file.html#ALIASES"
  is a list of URL patterns, each on a separate line.</P
 ><P
 > To determine which actions apply to a request, the URL of the request is
- compared to all patterns in this file. Every time it matches, the list of
+ compared to all patterns in each action file file. Every time it matches, the list of
  applicable actions for the URL is incrementally updated, using the heading
  of the section in which the pattern is located. If multiple matches for
  the same URL set the same action differently, the last match wins. If not, 
@@ -265,7 +312,7 @@ CLASS="QUOTE"
 > actions).
  </P
 ><P
-> You can trace this process by visiting <A
+> You can trace this process for any given URL by visiting <A
 HREF="http://config.privoxy.org/show-url-info"
 TARGET="_top"
 >http://config.privoxy.org/show-url-info</A
@@ -281,8 +328,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1336"
->9.4. Patterns</A
+NAME="AEN1408"
+>8.4. Patterns</A
 ></H2
 ><P
 > Generally, a pattern has the form <TT
@@ -388,8 +435,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1376"
->9.4.1. The Domain Pattern</A
+NAME="AEN1448"
+>8.4.1. The Domain Pattern</A
 ></H3
 ><P
 > The matching of the domain part offers some flexible options: if the
@@ -562,8 +609,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1438"
->9.4.2. The Path Pattern</A
+NAME="AEN1510"
+>8.4.2. The Path Pattern</A
 ></H3
 ><P
 > <SPAN
@@ -637,7 +684,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACTIONS"
->9.5. Actions</A
+>8.5. Actions</A
 ></H2
 ><P
 > All actions are disabled by default, until they are explicitly enabled
@@ -649,26 +696,46 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"-"</SPAN
 >. So a
- <SPAN
-CLASS="QUOTE"
->"+action"</SPAN
+ <TT
+CLASS="LITERAL"
+>+action</TT
 > means <SPAN
 CLASS="QUOTE"
 >"do that action"</SPAN
 >, e.g.
- <SPAN
+ <TT
+CLASS="LITERAL"
+>+block</TT
+> means <SPAN
 CLASS="QUOTE"
->"+block"</SPAN
-> means please <SPAN
+>"please block URLs that match the
+ following patterns"</SPAN
+>, and <TT
+CLASS="LITERAL"
+>-block</TT
+> means <SPAN
 CLASS="QUOTE"
->"block the following URL
- patterns"</SPAN
->. </P
+>"don't
+ block URLs that match the following patterns, even if <TT
+CLASS="LITERAL"
+>+block</TT
+>
+ previously applied."</SPAN
+>&#13;</P
 ><P
 > 
- Actions are invoked by enclosing the action name in curly braces (e.g.
- {+some_action}), followed by a list of URLs (or patterns that match URLs) to
- which the action applies. There are three classes of actions: </P
+ Again, actions are invoked by placing them on a line, enclosed in curly braces and
+ separated by whitespace, like in 
+ <TT
+CLASS="LITERAL"
+>{+some-action -some-other-action{some-parameter}}</TT
+>,
+ followed by a list of URL patterns, one per line, to which they apply.
+ Together, the actions line and the following pattern lines make up a section
+ of the actions file. </P
+><P
+> 
+ There are three classes of actions:</P
 ><P
 > <P
 ></P
@@ -678,113 +745,190 @@ CLASS="QUOTE"
 >  
    Boolean, i.e the action can only be <SPAN
 CLASS="QUOTE"
->"on"</SPAN
+>"enabled"</SPAN
 > or
    <SPAN
 CLASS="QUOTE"
->"off"</SPAN
->. Examples: 
- </P
+>"disabled"</SPAN
+>. Syntax:
+  </P
 ><P
->   <TT
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  +<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>        # enable action <TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>
+  -<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>        # disable action <TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>  
+   Example: <TT
 CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{+name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;enable&nbsp;this&nbsp;action<br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{-name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;this&nbsp;action<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
+>+block</TT
 >
   </P
 ></LI
 ><LI
 ><P
 >  
-   Parameterized, e.g. <SPAN
-CLASS="QUOTE"
->"+/-hide-user-agent{ Mozilla 1.0 }"</SPAN
->, 
-   where some value is required in order to enable this type of action.
-   Examples:
+   Parameterized, where some value is required in order to enable this type of action.
+   Syntax:
   </P
 ><P
->   <TT
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  +<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>{<TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+>}  # enable action and set parameter to <TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+>,
+               # overwriting parameter from previous match if necessary
+  -<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>         # disable action. The parameter can be omitted</PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>   Note that if the URL matches multiple positive forms of a parameterized action,
+   the last match wins, i.e. the params from earlier matches are simply ignored.
+  </P
+><P
+>  
+   Example: <TT
 CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{+name{param}}</I
->&nbsp;&nbsp;#&nbsp;enable&nbsp;action&nbsp;and&nbsp;set&nbsp;parameter&nbsp;to&nbsp;<SPAN
-CLASS="QUOTE"
->"param"</SPAN
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{-name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;action&nbsp;(<SPAN
-CLASS="QUOTE"
->"parameter"</SPAN
->)&nbsp;can&nbsp;be&nbsp;omitted<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
+>+hide-user-agent{ Mozilla 1.0 }</TT
 >
   </P
 ></LI
 ><LI
 ><P
 >  
-  
-   Multi-value, e.g. <SPAN
-CLASS="QUOTE"
->"{+/-add-header{Name: value}}"</SPAN
-> or
-   <SPAN
-CLASS="QUOTE"
->"{+/-send-wafer{name=value}}"</SPAN
->), where some value needs to be defined
-   in addition to simply enabling the action. Examples:
+   Multi-value. These look exactly like parameterized actions,
+   but they behave differently: If the action applies multiple times to the
+   same URL, but with different parameters, <I
+CLASS="EMPHASIS"
+>all</I
+> the parameters
+   from <I
+CLASS="EMPHASIS"
+>all</I
+> matches are remembered. This is used for actions
+   that can be executed for the same request repeatedly, like adding multiple
+   headers, or filtering through multiple filters. Syntax:
   </P
 ><P
->   <TT
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  +<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>{<TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+>}   # enable action and add <TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+> to the list of parameters
+  -<TT
+CLASS="REPLACEABLE"
+><I
+>name</I
+></TT
+>{<TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+>}   # remove the parameter <TT
+CLASS="REPLACEABLE"
+><I
+>param</I
+></TT
+> from the list of parameters
+                # If it was the last one left, disable the action.
+  <TT
+CLASS="REPLACEABLE"
+><I
+>-name</I
+></TT
+>          # disable this action completely and remove all parameters from the list</PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>  
+   Examples: <TT
 CLASS="LITERAL"
->    <P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{+name{param=value}}</I
->&nbsp;&nbsp;&nbsp;#&nbsp;enable&nbsp;action&nbsp;and&nbsp;set&nbsp;<SPAN
-CLASS="QUOTE"
->"param"</SPAN
->&nbsp;to&nbsp;<SPAN
-CLASS="QUOTE"
->"value"</SPAN
-><br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{-name{param=value}}</I
->&nbsp;&nbsp;&nbsp;#&nbsp;remove&nbsp;the&nbsp;parameter&nbsp;<SPAN
-CLASS="QUOTE"
->"param"</SPAN
->&nbsp;completely<br>
-&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
->{-name}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;disable&nbsp;this&nbsp;action&nbsp;totally&nbsp;and&nbsp;remove&nbsp;<SPAN
-CLASS="APPLICATION"
->param</SPAN
->&nbsp;too<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-> 
-   </TT
+>+add-header{X-Fun-Header: Some text}</TT
+> and
+   <TT
+CLASS="LITERAL"
+>+filter{html-annoyances}</TT
 >
   </P
 ></LI
@@ -813,22 +957,19 @@ CLASS="FILENAME"
 >config</TT
 > (the default installation has three actions
  files). It also quite possible for any given URL pattern to match more than
- one action!</P
+ one pattern and thus more than one set of actions!</P
 ><P
 > The list of valid <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> are:</P
+> actions are:</P
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
 NAME="ADD-HEADER"
->9.5.1. <I
+>8.5.1. <I
 CLASS="EMPHASIS"
 >+add-header</I
 ></A
@@ -845,10 +986,10 @@ CLASS="VARIABLELIST"
 >Multi-value.</P
 ></DD
 ><DT
->Typical uses:</DT
+>Purpose and typical uses:</DT
 ><DD
 ><P
->    Send a user defined HTTP header to the web server.
+>    Send a user defined HTTP header to the web server. Can be used to confuse log analysis.
    </P
 ></DD
 ><DT
@@ -856,6 +997,14 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    Any value is possible. Validity of the defined HTTP headers is not checked.
+    It is recommended that you use the <SPAN
+CLASS="QUOTE"
+>"<TT
+CLASS="LITERAL"
+>X-</TT
+>"</SPAN
+> prefix
+    for custom headers.
    </P
 ></DD
 ><DT
@@ -870,8 +1019,7 @@ CLASS="EMPHASIS"
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >.example.com</I
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;</P
+></P
 ></DD
 ><DT
 >Notes:</DT
@@ -895,7 +1043,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BLOCK"
->9.5.2. <I
+>8.5.2. <I
 CLASS="EMPHASIS"
 >+block</I
 ></A
@@ -912,12 +1060,20 @@ CLASS="VARIABLELIST"
 >Boolean.</P
 ></DD
 ><DT
->Typical uses:</DT
+>Purpose and typical uses:</DT
 ><DD
 ><P
->    Used to block a URL from reaching your browser. The URL may be 
-    anything, but is typically used to block ads or other obnoxious 
-    content.    
+>    Requests for URLs to which this action applies are blocked, i.e. the requests are not
+    forwarded to the remote server, but answered locally with a substitute page or image,
+    as determined by the <A
+HREF="actions-file.html#HANDLE-AS-IMAGE"
+>handle-as-image</A
+> and  
+    <A
+HREF="actions-file.html#SET-IMAGE-BLOCKER"
+>set-image-blocker</A
+> actions.
+    It is typically used to block ads or other obnoxious content.    
    </P
 ></DD
 ><DT
@@ -1035,7 +1191,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DEANIMATE-GIFS"
->9.5.3. <I
+>8.5.3. <I
 CLASS="EMPHASIS"
 >+deanimate-gifs</I
 ></A
@@ -1114,7 +1270,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DOWNGRADE-HTTP-VERSION"
->9.5.4. <I
+>8.5.4. <I
 CLASS="EMPHASIS"
 >+downgrade-http-version</I
 ></A
@@ -1185,7 +1341,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FAST-REDIRECTS"
->9.5.5. <I
+>8.5.5. <I
 CLASS="EMPHASIS"
 >+fast-redirects</I
 ></A
@@ -1282,7 +1438,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FILTER"
->9.5.6. <I
+>8.5.6. <I
 CLASS="EMPHASIS"
 >+filter</I
 ></A
@@ -1646,7 +1802,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-FORWARDED-FOR-HEADERS"
->9.5.7. <I
+>8.5.7. <I
 CLASS="EMPHASIS"
 >+hide-forwarded-for-headers</I
 ></A
@@ -1707,7 +1863,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-FROM-HEADER"
->9.5.8. <I
+>8.5.8. <I
 CLASS="EMPHASIS"
 >+hide-from-header</I
 ></A
@@ -1788,7 +1944,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-REFERER"
->9.5.9. <I
+>8.5.9. <I
 CLASS="EMPHASIS"
 >+hide-referer</I
 ></A
@@ -1891,7 +2047,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-USER-AGENT"
->9.5.10. <I
+>8.5.10. <I
 CLASS="EMPHASIS"
 >+hide-user-agent</I
 ></A
@@ -1958,7 +2114,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-IMAGE"
->9.5.11. <I
+>8.5.11. <I
 CLASS="EMPHASIS"
 >+handle-as-image</I
 ></A
@@ -2059,7 +2215,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SET-IMAGE-BLOCKER"
->9.5.12. <I
+>8.5.12. <I
 CLASS="EMPHASIS"
 >+set-image-blocker</I
 ></A
@@ -2202,7 +2358,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="LIMIT-CONNECT"
->9.5.13. <I
+>8.5.13. <I
 CLASS="EMPHASIS"
 >+limit-connect</I
 ></A
@@ -2295,7 +2451,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="PREVENT-COMPRESSION"
->9.5.14. <I
+>8.5.14. <I
 CLASS="EMPHASIS"
 >+prevent-compression</I
 ></A
@@ -2390,7 +2546,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SESSION-COOKIES-ONLY"
->9.5.15. <I
+>8.5.15. <I
 CLASS="EMPHASIS"
 >+session-cookies-only</I
 ></A
@@ -2476,7 +2632,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="PREVENT-READING-COOKIES"
->9.5.16. <I
+>8.5.16. <I
 CLASS="EMPHASIS"
 >+prevent-reading-cookies</I
 ></A
@@ -2562,7 +2718,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="PREVENT-SETTING-COOKIES"
->9.5.17. <I
+>8.5.17. <I
 CLASS="EMPHASIS"
 >+prevent-setting-cookies</I
 ></A
@@ -2628,7 +2784,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="KILL-POPUP"
->9.5.18. <I
+>8.5.18. <I
 CLASS="EMPHASIS"
 >+kill-popups<A
 NAME="KILL-POPUPS"
@@ -2711,7 +2867,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SEND-VANILLA-WAFER"
->9.5.19. <I
+>8.5.19. <I
 CLASS="EMPHASIS"
 >+send-vanilla-wafer</I
 ></A
@@ -2778,7 +2934,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SEND-WAFER"
->9.5.20. <I
+>8.5.20. <I
 CLASS="EMPHASIS"
 >+send-wafer</I
 ></A
@@ -2839,8 +2995,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2206"
->9.5.21. Summary</A
+NAME="AEN2289"
+>8.5.21. Summary</A
 ></H3
 ><P
 > Note that many of these actions have the potential to cause a page to
@@ -2859,7 +3015,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ACT-EXAMPLES"
->9.5.22. Sample Actions Files</A
+>8.5.22. Sample Actions Files</A
 ></H2
 ><P
 > Remember that the meaning of any of the above references is reversed by preceding
@@ -3350,7 +3506,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ALIASES"
->9.6. Aliases</A
+>8.6. Aliases</A
 ></H2
 ><P
 > Custom <SPAN

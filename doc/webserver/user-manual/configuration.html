@@ -71,7 +71,7 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONFIGURATION"
->7. <SPAN
+>6. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > Configuration</A
@@ -93,8 +93,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN305"
->7.1. Controlling <SPAN
+NAME="AEN346"
+>6.1. Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > with Your Web Browser</A
@@ -187,11 +187,11 @@ TARGET="_top"
 ></TABLE
 ><P
 > This should be self-explanatory. Note the first item leads to an editor for the
- <SPAN
-CLASS="QUOTE"
->"actions list"</SPAN
->, which is where the ad, banner, cookie,
- and URL blocking magic is configured as well as other advanced features of
+ <A
+HREF="actions-file.html"
+>actions files</A
+>, which is where the ad, banner,
+ cookie, and URL blocking magic is configured as well as other advanced features of
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -215,7 +215,11 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > continues 
- to run as a proxy in this case, but all filtering is disabled. There
+ to run as a proxy in this case, but all manipulation is disabled, i.e.
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> acts like a normal forwarding proxy. There
  is even a toggle <A
 HREF="appendix.html#BOOKMARKLETS"
 >Bookmarklet</A
@@ -232,7 +236,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONFOVERVIEW"
->7.2. Configuration Files Overview</A
+>6.2. Configuration Files Overview</A
 ></H2
 ><P
 > For Unix, *BSD and Linux, all configuration files are located in
@@ -257,9 +261,12 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->     The main configuration file is named <A
+>     The <A
 HREF="config.html"
->config</A
+>main configuration file</A
+> is named <TT
+CLASS="FILENAME"
+>config</TT
 >
      on Linux, Unix, BSD, OS/2, and AmigaOS and <TT
 CLASS="FILENAME"
@@ -276,12 +283,18 @@ CLASS="FILENAME"
 > (the main <A
 HREF="actions-file.html"
 >actions file</A
->) is used to define
-    the default settings for various <SPAN
+>)
+    is used to define which <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> relating to images, banners, 
-    pop-ups, access restrictions, banners and cookies.
+> relating to banner-blocking, images, pop-ups,
+    content modification, cookie handling etc should be applied by default. It also defines many
+    exceptions (both positive and negative) from this default set of actions that enable 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to selectively eliminate the junk, and only the junk, on
+    as many websites as possible.
    </P
 ><P
 >    Multiple actions files may be defined in <TT
@@ -289,20 +302,21 @@ CLASS="FILENAME"
 >config</TT
 >. These 
     are processed in the order they are defined. Local customizations and locally 
-    preferred exceptions to the default policies as defined in
+    preferred exceptions to the default policies  as defined in
     <TT
 CLASS="FILENAME"
 >default.action</TT
-> are probably best applied in
+> (which you will most propably want
+    to define sooner or later) are probably best applied in
     <TT
 CLASS="FILENAME"
 >user.action</TT
->, which should be preserved across
+>, where you can preserve them across
     upgrades. <TT
 CLASS="FILENAME"
 >standard.action</TT
-> is also included. This is mostly 
-    for <SPAN
+> is for
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
 > internal use.
@@ -311,14 +325,14 @@ CLASS="APPLICATION"
 >    
     There is also a web based editor that can be accessed from
     <A
-HREF="http://config.privoxy.org/show-status/"
+HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
->http://config.privoxy.org/show-status/</A
+>http://config.privoxy.org/show-status</A
 >
     (Shortcut: <A
-HREF="http://p.p/show-status/"
+HREF="http://p.p/show-status"
 TARGET="_top"
->http://p.p/show-status/</A
+>http://p.p/show-status</A
 >) for the
     various actions files. 
    </P
@@ -348,7 +362,7 @@ CLASS="LITERAL"
 >#</TT
 >"</SPAN
 > character to denote a
- comment (the rest of the line will be ignored) angd understand line continuation
+ comment (the rest of the line will be ignored) and understand line continuation
  through placing a backslash ("<TT
 CLASS="LITERAL"
 >\</TT

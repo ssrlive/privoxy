@@ -71,7 +71,7 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="QUICKSTART"
->5. Quickstart to Using <SPAN
+>4. Quickstart to Using <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 ></A
@@ -82,23 +82,35 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
+>   If upgrading, please back up any configuration files. See 
+   the <A
+HREF="upgradersnote.html"
+>Note to Upgraders</A
+> Section.
+  </P
+></LI
+><LI
+><P
 >  Install <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->. See the section <A
+>. See the <A
 HREF="installation.html"
->Installing</A
->.
-  </P
+>Installation Section</A
+> for platform specific
+  information. 
+ </P
 ></LI
 ><LI
 ><P
 >  Start <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->. See the section <A
+>, if the installation program has
+  not done this already. See the section <A
 HREF="startup.html"
->Starting <SPAN
+>Starting
+  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 ></A
@@ -107,14 +119,26 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->  Change your browser's configuration to use the proxy <TT
-CLASS="LITERAL"
->localhost</TT
-> on port
+>  Set your browser to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as HTTP and HTTPS
+  proxy by setting the proxy configuration for address of
   <TT
 CLASS="LITERAL"
+>localhost</TT
+> and port <TT
+CLASS="LITERAL"
 >8118</TT
->. See the section <A
+>.
+  (<SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> and earlier versions of
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> used port 8000.) See the section <A
 HREF="startup.html"
 >Starting <SPAN
 CLASS="APPLICATION"
@@ -125,17 +149,47 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->  Enjoy surfing with enhanced comfort and privacy. Please see the section
+>    Flush your browser's caches, to remove any cached ad images.
+  </P
+></LI
+><LI
+><P
+>  Enjoy surfing with enhanced comfort and privacy.  You may want to customize the
   <A
-HREF="contact.html"
->Contacting the Developers</A
-> on how to report
-  bugs or problems with websites or to get help. You may want to change the
-  file <TT
+HREF="actions-file.html"
+><TT
 CLASS="FILENAME"
 >user.action</TT
-> to further tweak your new browsing
-  experience.
+></A
+> file to
+  personalize your new browsing experience. See the <A
+HREF="configuration.html"
+>Configuration section</A
+> for more configuration
+  options, and how to further customize your installation.
+  </P
+></LI
+><LI
+><P
+>   If you experience problems with sites that <SPAN
+CLASS="QUOTE"
+>"misbehave"</SPAN
+>, see
+   the <A
+HREF="appendix.html#ACTIONSANAT"
+>Anatomy of an Action</A
+> section in the
+   Appendix.
+  </P
+></LI
+><LI
+><P
+>   Please see the section <A
+HREF="contact.html"
+>Contacting the
+   Developers</A
+> on how to report bugs or problems with websites or to get
+   help. 
   </P
 ></LI
 ></UL
