@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.29 2002/04/24 03:13:51 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.30 2002/04/26 15:51:05 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -37,8 +37,8 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 2.9.14
-Release: 3
+Version: 2.9.15
+Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: Privoxy.Org
@@ -66,6 +66,19 @@ Privoxy is based on the Internet Junkbuster.
 %setup -q -c
 
 %build
+
+# We check to see if versions match
+VERSION_MAJOR=2
+VERSION_MINOR=9
+VERSION_POINT=15
+
+CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
+if [ "%{version}" != "${CONFIG_VERSION}" ]; then
+	echo "The version declared on the specfile does not match the version"
+	echo "declared on configure.in. This should not happen. The build will"
+	echo "be interrupted now, so you can fix it."
+	exit 1
+fi
 autoheader
 autoconf
 %configure --disable-dynamic-pcre
@@ -241,7 +254,7 @@ fi
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
 # WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
-%config %{privoxyconf}/config
+%config(noreplace) %{privoxyconf}/config
 %config %{privoxyconf}/standard.action
 %config(noreplace) %{privoxyconf}/user.action
 %config %{privoxyconf}/default.action
@@ -293,6 +306,13 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Fri May 03 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-1
+- Version bump
+- Adding noreplace for %%{privoxyconf}/config
+- Included a method to verify if the versions declared on the specfile and
+  configure.in match. Interrupt the build if they don't.
+
 * Fri Apr 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.14-3
 - Changing Vendor to Privoxy.Org
@@ -624,6 +644,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.30  2002/04/26 15:51:05  morcego
+# Changing Vendor value to Privoxy.Org
+#
 # Revision 1.29  2002/04/24 03:13:51  hal9
 # New actions files changes.
 #
