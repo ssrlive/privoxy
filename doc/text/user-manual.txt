@@ -479,15 +479,16 @@ Default: Multi-threaded mode.
 "toggle" allows you to temporarily disable all Junkbuster's filtering. Just set
 "toggle 0".
 
-The Windows version of Junkbuster puts an icon in the system tray, which allows
-you to change this option without having to edit this file. If you right-click
-on that icon (or select the "Options" menu), one choice is "Enable". Clicking
-on enable toggles Junkbuster on and off. This is useful if you want to
-temporarily disable Junkbuster, e.g., to access a site that requires cookies
-which you normally have blocked.
+The Windows version of Junkbuster puts an icon in the system tray, which also
+allows you to change this option. If you right-click on that icon (or select
+the "Options" menu), one choice is "Enable". Clicking on enable toggles
+Junkbuster on and off. This is useful if you want to temporarily disable
+Junkbuster, e.g., to access a site that requires cookies which you normally
+have blocked. This can also be toggled via a web browser at the Junkbuster
+internal address of http://i.j.b./ on any platform.
 
 "toggle 1" means Junkbuster runs normally, "toggle 0" means that Junkbuster
-becomes a non-anonymizing non-blocking proxy. Default: 1.
+becomes a non-anonymizing non-blocking proxy. Default: 1 (on).
 
   toggle 1
    
@@ -525,8 +526,8 @@ compiled JunkBuster with support for this feature, otherwise this option has no
 effect.
 
 Security note: If this is enabled, anyone who can use the proxy can toggle it
-on or off, and their changes will affect all users. For shared proxies, you
-probably want to disable this. Default: enabled.
+on or off (see http://i.j.b./), and their changes will affect all users. For
+shared proxies, you probably want to disable this. Default: enabled.
 
   enable-remote-toggle 1
    
