@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.12 2001/09/13 23:05:50 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.13 2001/09/29 12:56:03 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.13  2001/09/29 12:56:03  joergs
+ *    IJB now changes HTTP/1.1 to HTTP/1.0 in requests and answers.
+ *
  *    Revision 1.12  2001/09/13 23:05:50  jongfoster
  *    Changing the string paramater to the header parsers a "const".
  *
@@ -129,21 +132,26 @@ extern char *client_ua(const struct parsers *v, const char *s, struct client_sta
 extern char *client_from(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *client_send_cookie(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *client_x_forwarded(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_accept_encoding(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *client_te(const struct parsers *v, const char *s, struct client_state *csp);
 
 extern void client_cookie_adder(struct client_state *csp);
 extern void client_xtra_adder(struct client_state *csp);
-extern void connection_close_adder(struct client_state *csp); 
+extern void client_accept_encoding_adder(struct client_state *csp);
 extern void client_x_forwarded_adder(struct client_state *csp);
 
+extern void connection_close_adder(struct client_state *csp); 
+
 extern char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_content_type(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_content_length(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_content_md5(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_transfer_encoding(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *server_http11(const struct parsers *v, const char *s, struct client_state *csp);
 
-extern char *content_type(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *content_length(const struct parsers *v, const char *s, struct client_state *csp);
-
 #ifdef FEATURE_FORCE_LOAD
-char *client_host(const struct parsers *v, const char *s, struct client_state *csp);
-int strclean(const char *string, const char *substring);
+extern char *client_host(const struct parsers *v, const char *s, struct client_state *csp);
+extern int strclean(const char *string, const char *substring);
 #endif /* def FEATURE_FORCE_LOAD */
 
 #if defined(FEATURE_IMAGE_DETECT_MSIE)
