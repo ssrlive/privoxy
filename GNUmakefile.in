@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.51 2002/04/02 13:03:56 oes Exp $
+# $Id: GNUmakefile.in,v 1.52 2002/04/03 02:56:18 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -643,10 +643,14 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) junkbuster config.log
+	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -iname TAGS`
 
 clobber: clean
-	$(RM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz configure
+	$(RM) configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *~ *.tar.gz *.tar \#*\#
+#
+# FIXME: What is all this? 
+#
+	$(RM) cscope.*  *.pdb *.lib *.exp 
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
@@ -678,6 +682,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.52  2002/04/03 02:56:18  hal9
+# Revert previous FAQ numbering kludge.
+#
 # Revision 1.51  2002/04/02 13:03:56  oes
 # Added fix for webserver permissions
 #
