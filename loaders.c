@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.20 2001/07/17 13:07:01 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.21 2001/07/18 17:26:24 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.20 2001/07/17 13:07:01 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.21  2001/07/18 17:26:24  oes
+ *    Changed to conform to new pcrs interface
+ *
  *    Revision 1.20  2001/07/17 13:07:01  oes
  *    Fixed segv when last line in config files
  *     lacked a terminating (\r)\n
@@ -266,36 +269,43 @@ void sweep(void)
 
       }
       else
+      /* this client is not active, release its resources */
       {
-         /* this client one is not active, release its resources */
-         csp->next = ncsp->next;
-
-         freez(ncsp->ip_addr_str);
-         freez(ncsp->my_ip_addr_str);
-         freez(ncsp->my_hostname);
-
-#ifdef TRUST_FILES
-         freez(ncsp->referrer);
-#endif /* def TRUST_FILES */
-         freez(ncsp->x_forwarded);
-         freez(ncsp->iob->buf);
-
-         free_http_request(ncsp->http);
-
-         destroy_list(ncsp->headers);
-         destroy_list(ncsp->cookie_list);
-
-         free_current_action(ncsp->action);
-
-#ifdef STATISTICS
-         urls_read++;
-         if (ncsp->rejected)
+         while( !ncsp->active )
          {
-            urls_rejected++;
+            csp->next = ncsp->next;
+   
+            freez(ncsp->ip_addr_str);
+            freez(ncsp->my_ip_addr_str);
+            freez(ncsp->my_hostname);
+   
+   #ifdef TRUST_FILES
+            freez(ncsp->referrer);
+   #endif /* def TRUST_FILES */
+            freez(ncsp->x_forwarded);
+            freez(ncsp->iob->buf);
+   
+            free_http_request(ncsp->http);
+   
+            destroy_list(ncsp->headers);
+            destroy_list(ncsp->cookie_list);
+   
+            free_current_action(ncsp->action);
+   
+   #ifdef STATISTICS
+            urls_read++;
+            if (ncsp->rejected)
+            {
+               urls_rejected++;
+            }
+   #endif /* def STATISTICS */
+   
+            freez(ncsp);
+            
+            /* are there any more in sequence after it? */
+            if( !(ncsp = csp->next) )
+               break;
          }
-#endif /* def STATISTICS */
-
-         freez(ncsp);
       }
    }
 
