@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.106 2002/05/10 01:48:20 hal9 Exp $
+ $Id: user-manual.sgml,v 1.107 2002/05/12 03:20:41 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.106 2002/05/10 01:48:20 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.107 2002/05/12 03:20:41 hal9 Exp $</pubdate>
 
 <!--
 
@@ -3124,9 +3124,25 @@ forward-socks4 and forward-socks4a</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect3 renderas="sect4" id="add-header">
-<title><emphasis>+add-header</emphasis></title>
+<title><emphasis>add-header</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Confuse log analysis, custom applications</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Sends a user defined HTTP header to the web server.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3136,34 +3152,16 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Purpose and typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
-    Send a user defined HTTP header to the web server. Can be used to confuse log analysis.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    Any value is possible. Validity of the defined HTTP headers is not checked.
+    Any string value is possible. Validity of the defined HTTP headers is not checked.
     It is recommended that you use the <quote><literal>X-</literal></quote> prefix
     for custom headers.
    </para>
   </listitem>
  </varlistentry>
  
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+add-header{X-User-Tracking: sucks}}</emphasis>
-     <emphasis>.example.com</emphasis></literallayout>
-  </listitem>
- </varlistentry>
-
 <varlistentry>
   <term>Notes:</term>
   <listitem>
@@ -3175,15 +3173,43 @@ forward-socks4 and forward-socks4a</title>
    </para>
   </listitem>
  </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen>+add-header{X-User-Tracking: sucks}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="block">
-<title><emphasis>+block</emphasis></title>
+<title><emphasis>block</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Block ads or other obnoxious content</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Requests for URLs to which this action applies are blocked, i.e. the requests are not
+    forwarded to the remote server, but answered locally with a substitute page or image,
+    as determined by the <literal><link linkend="handle-as-image">handle-as-image</link></literal>
+    and <literal><link linkend="set-image-blocker">set-image-blocker</link></literal> actions.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3193,70 +3219,63 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Purpose and typical uses:</term>
-  <listitem>
-   <para>
-    Requests for URLs to which this action applies are blocked, i.e. the requests are not
-    forwarded to the remote server, but answered locally with a substitute page or image,
-    as determined by the <link linkend="handle-as-image">handle-as-image</link> and  
-    <link linkend="set-image-blocker">set-image-blocker</link> actions.
-    It is typically used to block ads or other obnoxious content.    
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>N/A</para>
   </listitem>
  </varlistentry>
  
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+block}</emphasis>
-     <emphasis>.banners.example.com</emphasis>
-     <emphasis>.ads.r.us</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
 <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    If a URL matches one of the blocked patterns, <application>Privoxy</application>
-    will intercept the URL and display its special <quote>BLOCKED</quote> page
-    instead. If there is sufficient space, a large red banner will appear with
-    a friendly message about why the page was blocked, and a way to go there
-    anyway. If there is insufficient space a smaller <quote>BLOCKED</quote>
-    page will appear without the red banner. 
-    <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Click here</ulink>
-    to view the default blocked HTML page (<application>Privoxy</application> must be running 
-    for this to work as intended!).
+    <application>Privoxy</application> sends a special <quote>BLOCKED</quote> page
+    for requests to blocked pages. This page contains links to find out why the request
+    was blocked, and a click-through to the blocked content (the latter only if compiled with the
+    force feature enabled). The <quote>BLOCKED</quote> page adapts to the available
+    screen space -- it displays full-blown if space allows, or minaturized and text-only
+    if loaded into a small frame or window. If you are using <application>Privoxy</application>
+    right now, you can take a look at the 
+    <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"><quote>BLOCKED</quote>
+    page</ulink>.
    </para>
-
    <para> 
-    A very important exception is if the URL <emphasis>matches both</emphasis>
-    <quote>+block</quote> and <ulink
-    url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
-    then it will be handled by 
-    <ulink url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
-    (see below). It is important to understand this process, in order 
-    to understand how <application>Privoxy</application> is able to deal with 
-    ads and other objectionable content.
+    A very important exception occurs if <emphasis>both</emphasis> 
+    <literal>block</literal> and <literal><link linkend="handle-as-image">handle-as-image</link></literal>,
+    apply to the same request: it will then be replaced by an image. If 
+    <literal><link linkend="set-image-blocker">set-image-blocker</link></literal>
+    (see below) also applies, the type of image will be determined by its parameter,
+    if not, the standard checkerboard pattern is sent.
    </para>
    <para>
-    The <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
-    action can also perform some of the 
-    same functionality as <quote>+block</quote>, but by virtue of very 
-    different programming techniques, and is most often used for different 
-    reasons.
+    It is important to understand this process, in order 
+    to understand how <application>Privoxy</application> deals with 
+    ads and other unwanted content.
+   </para>
+   <para>
+    The <literal><link linkend="filter">filter</link></literal>
+    action can perform a very similar task, by <quote>blocking</quote>
+    banner images and other content through rewriting the relevant URLs in the
+    document's HTML source, so they don't get requested in the first place.
+    Note that this is a totally different technique, and it's easy to confuse the two.
    </para>
   </listitem>
  </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>{+block}      # Block and replace with "blocked" page
+.nasty-stuff.example.com
+
+{+block +handle-as-image} # Block and replace with image
+.ad.doubleclick.net
+.ads.r.us</screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
 
 </variablelist>
 </sect3>
@@ -3264,9 +3283,25 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="deanimate-gifs">
-<title><emphasis>+deanimate-gifs</emphasis></title>
+<title><emphasis>deanimate-gifs</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Stop those annoying, distracting animated GIF images.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    De-animate GIF animations, i.e. reduce them to their first or last image.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3276,16 +3311,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    To stop those annoying, distracting animated GIF images.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     <quote>last</quote> or <quote>first</quote>
@@ -3294,20 +3320,9 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-      <emphasis>{+deanimate-gifs{last}}</emphasis>
-      <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    De-animate all animated GIF images, i.e. reduce them to their last frame.
     This will also shrink the images considerably (in bytes, not pixels!). If
     the option <quote>first</quote> is given, the first frame of the animation
     is used as the replacement. If <quote>last</quote> is given, the last
@@ -3315,17 +3330,46 @@ forward-socks4 and forward-socks4a</title>
     most banner animations, but also has the risk of not showing the entire
     last frame (if it is only a delta to an earlier frame).
    </para>
+   <para>
+    You can safely use this action with patterns that will also match non-GIF
+    objects, because no attempt will be made at anything that doesn't look like
+    a GIF.
+   </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+      <screen>+deanimate-gifs{last}</screen>
+    </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="downgrade-http-version">
-<title><emphasis>+downgrade-http-version</emphasis></title>
+<title><emphasis>downgrade-http-version</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Work around (very rare) problems with HTTP/1.1</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Downgrades HTTP/1.1 client requests and server replies to HTTP/1.0.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3335,17 +3379,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    <quote>+downgrade-http-version</quote> will downgrade HTTP/1.1 client requests to
-    HTTP/1.0 and downgrade the responses as well.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -3353,25 +3387,26 @@ forward-socks4 and forward-socks4a</title>
   </listitem>
  </varlistentry>
  
- <varlistentry>
-  <term>Example usage:</term>
+<varlistentry>
+  <term>Notes:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+downgrade-http-version}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para>
+    This is a left-over from the time when <application>Privoxy</application>
+    didn't support important HTTP/1.1 features well. It is left here for the
+    unlikely case that you experience HTTP/1.1 related problems with some server
+    out there. Not all (optional) HTTP/1.1 features are supported yet, so there
+    is a chance you might need this action.
+   </para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Notes:</term>
+  <term>Example usage (section):</term>
   <listitem>
-   <para>
-    Use this action for servers that use HTTP/1.1 protocol features that
-    <application>Privoxy</application> doesn't handle well yet. HTTP/1.1 is
-    only partially implemented. Default is not to downgrade requests. This is
-    an infrequently needed action, and is used to help with rare problem sites only.
-   </para>
+    <para>
+     <screen>{+downgrade-http-version}
+problem-host.example.com</screen>
+    </para>
   </listitem>
  </varlistentry>
 
@@ -3380,9 +3415,25 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="fast-redirects">
-<title><emphasis>+fast-redirects</emphasis></title>
+<title><emphasis>fast-redirects</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Fool some click-tracking scripts and speed up indirect links</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Cut off all but the last valid URL from requests.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3392,34 +3443,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    The <quote>+fast-redirects</quote> action enables interception of 
-    <quote>redirect</quote> requests from one server to another, which 
-    are used to track users.<application>Privoxy</application> can cut off
-    all but the last valid URL in a redirect request and send a local redirect
-    back to your browser without contacting the intermediate site(s).
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
    </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+fast-redirects}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
   </listitem>
  </varlistentry>
 
@@ -3428,10 +3456,10 @@ forward-socks4 and forward-socks4a</title>
   <listitem>
    <para>  
     Many sites, like yahoo.com, don't just link to other sites. Instead, they
-    will link to some script on their own server, giving the destination as a
+    will link to some script on their own servers, giving the destination as a
     parameter, which will then redirect you to the final target. URLs
     resulting from this scheme typically look like:
-    <emphasis>http://some.place/some_script?http://some.where-else</emphasis>.
+    <emphasis>http://some.place/click-tracker.cgi?target=http://some.where.else</emphasis>.
   </para>
    <para>
     Sometimes, there are even multiple consecutive redirects encoded in the
@@ -3442,9 +3470,19 @@ forward-socks4 and forward-socks4a</title>
     the advertisers.
    </para>
    <para>
-    This is a normally <quote>on</quote> feature, and often requires exceptions
-    for sites that are sensitive to defeating this mechanism.
+    This feature is currently not very smart and is scheduled for improvement.
+    It is likely to break some sites. There is a bunch of exceptions to this action in
+    <filename>default.action</filename>, should you decide to turn it on by default.
    </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen>{+fast-redirects}</screen>
+    </para>
   </listitem>
  </varlistentry>
 
@@ -3454,9 +3492,26 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="filter">
-<title><emphasis>+filter</emphasis></title>
+<title><emphasis>filter</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Get rid of HTML and JavaScript annoyances, banner advertisements (by size), do fun text replacements, etc.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Text documents, including HTML and JavaScript, to which this action applies, are filterd on-the-fly
+    through the specified regular expression based substitutions.    
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
@@ -3466,113 +3521,28 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
-    Apply page filtering as defined by named sections of the
-    <filename>default.filter</filename> file to the specified site(s). 
-    <quote>Filtering</quote> can be any modification of the raw 
-    page content, including re-writing or deletion of content.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    <quote>+filter</quote> must include the name of one of the section identifiers
-    from <filename>default.filter</filename> (or whatever
-    <emphasis>filterfile</emphasis> is specified in <filename>config</filename>).
+    The name of a filter, as defined in the <link linkend="filter-file">filter file</link>
+    (typically <filename>default.filter</filename>, set by the
+    <literal><link linkend="filterfile">filterfile</link></literal>
+    option in the <link linkend="config">config file</link>)
    </para>
   </listitem>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage (from the current <filename>default.filter</filename>):</term>
-  <listitem>
-   <simplelist>
-   <member>
-    <anchor id="filter-html-annoyances">
-    <emphasis>+filter{html-annoyances}</emphasis>:  Get rid of particularly annoying HTML abuse.
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-js-annoyances">
-    <emphasis>+filter{js-annoyances}</emphasis>:    Get rid of particularly annoying JavaScript abuse
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-content-cookies">
-    <emphasis>+filter{content-cookies}</emphasis>:   Kill cookies that come in the HTML or JS content 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-popups">
-    <emphasis>+filter{popups}</emphasis>:         Kill all popups in JS and HTML
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-frameset-borders">
-    <emphasis>+filter{frameset-borders}</emphasis>: Give frames a border and make them resizable 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-webbugs">
-    <emphasis>+filter{webbugs}</emphasis>:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-refresh-tags">
-    <emphasis>+filter{refresh-tags}</emphasis>:     Kill automatic refresh tags (for dial-on-demand setups) 
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-fun">
-    <emphasis>+filter{fun}</emphasis>:              Text replacements  for subversive browsing fun!
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-nimda">
-    <emphasis>+filter{nimda}</emphasis>:            Remove Nimda (virus) code.
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-banners-by-size">
-    <emphasis>+filter{banners-by-size}</emphasis>:  Kill banners by size (<emphasis>very</emphasis> efficient!)
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-shockwave-flash">
-    <emphasis>+filter{shockwave-flash}</emphasis>:   Kill embedded Shockwave Flash objects
-   </member>
-  </simplelist>
-  <simplelist>
-   <member>
-    <anchor id="filter-crude-parental">
-    <emphasis>+filter{crude-parental}</emphasis>:   Kill all web pages that contain the words "sex" or "warez"
-   </member>
-  </simplelist>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    This is potentially a very powerful feature! And requires a knowledge 
-    of regular expressions if you want to <quote>roll your own</quote>.
-    Filtering operates on a line by line basis throughout the entire page.
+    For your convenience, there are a bunch of pre-defined filters available 
+    in the distribution filter file that you can use. See the example below for
+    a list.
+   </para>
+   <para>
+    This is potentially a very powerful feature!  But <quote>rolling your own</quote>
+    filters requires a knowledge of regular expressions and HTML.
    </para>
    <para>
     Filtering requires buffering the page content, which may appear to
@@ -3582,25 +3552,107 @@ forward-socks4 and forward-socks4a</title>
     noticeable on slower connections.
    </para>
    <para>
+    At this time, <application>Privoxy</application> cannot (yet!) uncompress compressed
+    documents. If you want filtering to work on all documents, even those that
+    would normally be sent compressed, use the
+    <literal><link linkend="prevent-compression">prevent-compression</link></literal>
+    action in conjuction with <literal>filter</literal>.
+   </para>
+   <para>
     Filtering can achieve some of the effects as the 
-    <ulink url="actions-file#BLOCK"><quote>+block</quote></ulink>
-    action, i.e. it can be used to block ads and banners. In the overall 
-    scheme of things, filtering is one of the first things <quote>Privoxy</quote> 
-    does with a web page. So other most other actions are applied to the 
-    already <quote>filtered</quote> page.
+    <literal><link linkend="block">block</link></literal>
+    action, i.e. it can be used to block ads and banners. 
+   </para>
+   <para>
+    <link linkend="contact">Feedback</link> with suggestions for new or improved filters is particularly
+    welcome!
    </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage (with filters from the distribution <filename>default.filter</filename> file):</term>
+  <listitem>
+   <para>
+    <anchor id="filter-html-annoyances">
+    <screen>+filter{html-annoyances}     # Get rid of particularly annoying HTML abuse.</screen>
+   </para>
+   <para>
+    <anchor id="filter-js-annoyances">
+    <screen>+filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse</screen>
+   </para>
+   <para>
+    <anchor id="filter-banners-by-size">
+    <screen>+filter{banners-by-size}     # Kill banners by size (<emphasis>very</emphasis> efficient!)</screen>
+   </para>
+   <para>
+    <anchor id="filter-content-cookies">
+    <screen>+filter{content-cookies}     # Kill cookies that come sneaking in the HTML or JS content</screen>
+   </para>
+   <para>
+    <anchor id="filter-popups">
+    <screen>+filter{popups}              # Kill all popups in JS and HTML</screen>
+   </para>
+   <para>
+    <anchor id="filter-webbugs">
+    <screen>+filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking)</screen>
+   </para>
+   <para>
+    <anchor id="filter-fun">
+    <screen>+filter{fun}                 # Text replacements for subversive browsing fun!</screen>
+   </para>
+   <para>
+    <anchor id="filter-frameset-borders">
+    <screen>+filter{frameset-borders}    # Give frames a border and make them resizable</screen> 
+   </para>
+   <para>
+    <anchor id="filter-refresh-tags">
+    <screen>+filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups)</screen>
+   </para>
+   <para>
+    <anchor id="filter-nimda">
+    <screen>+filter{nimda}               # Remove Nimda (virus) code.</screen>
+   </para>
+   <para>
+    <anchor id="filter-shockwave-flash">
+    <screen>+filter{shockwave-flash}     # Kill embedded Shockwave Flash objects</screen>
+   </para>
+   <para>
+    <anchor id="filter-crude-parental">
+    <screen>+filter{crude-parental}      # Kill all web pages that contain the words "sex" or "warez"</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="hide-forwarded-for-headers">
-<title><emphasis>+hide-forwarded-for-headers</emphasis></title>
+<sect3 renderas="sect4" id="handle-as-image">
+<title><emphasis>handle-as-image</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Mark URLs as belonging to images (so they'll be replaced by images <emphasis>if they get blocked</emphasis>)</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    This action alone doesn't do anything noticeable. It just marks URLs as images.
+    If the <literal><link linkend="block">block</link></literal> action <emphasis>also applies</emphasis>,
+    the presence or absence of this mark decides whether an HTML <quote>blocked</quote>
+    page, or a replacement image (as determined by the <literal><link
+    linkend="set-image-blocker">set-image-blocker</link></literal> action) will be sent to the
+    client as a substitute for the blocked content.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3610,16 +3662,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Block any existing X-Forwarded-for HTTP header, and do not add a new one.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -3628,33 +3671,140 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+hide-forwarded-for-headers}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    It is fairly safe to leave this on. It does not seem to break many sites.
+    The below generic example section is actually part of <filename>default.action</filename>.
+    It marks all URLs with well-known image file name extensions as images and should
+    be left intact. 
+   </para>
+   <para>
+    Users will probably only want to use the handle-as-image action in conjunction with
+    <literal><link linkend="block">block</link></literal>, to block sources of banners, whose URLs don't
+    reflect the file type, like in the second example section.
+   </para>
+   <para>
+    Note that you cannot treat HTML pages as images in most cases. For instance, (inline) ad
+    frames require an HTML page to be sent, or they won't display properly.
+    Forcing <literal>handle-as-image</literal> in this situation will not replace the
+    ad frame with an image, but lead to error messages.
    </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage (sections):</term>
+  <listitem>
+   <para>
+     <screen># Generic image extensions:
+#
+{+handle-as-image}
+/.*\.(gif|jpg|jpeg|png|bmp|ico)$
+
+# These don't look like images, but they're banners and should be
+# blocked as images:
+#
+{+block +handle-as-image}
+some.nasty-banner-server.com/junk.cgi?output=trash
+
+# Banner source! Who cares if they also have non-image content?
+ad.doubleclick.net 
+</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="hide-forwarded-for-headers">
+<title><emphasis>hide-forwarded-for-headers</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Improve privacy by hiding the true source of the request</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any existing <quote>X-Forwarded-for:</quote> HTTP header from client requests,
+    and prevents adding a new one.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    It is fairly safe to leave this on.
+   </para>
+   <para>
+    This action is scheduled for improvement: It should be able to generate forged 
+    <quote>X-Forwarded-for:</quote> headers using random IP addresses from a specified network,
+    to make successive requests from the same client look like requests from a pool of different
+    users sharing the same proxy.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen>+hide-forwarded-for-headers</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-from-header">
-<title><emphasis>+hide-from-header</emphasis></title>
+<title><emphasis>hide-from-header</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Keep your (old and ill) browser from telling web servers your email address</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any existing <quote>From:</quote> HTTP header, or replaces it with the
+    specified string.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3664,17 +3814,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    To block the browser from sending your email address in a <quote>From:</quote>
-    header.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     Keyword: <quote>block</quote>, or any user defined value.
@@ -3683,37 +3823,60 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+hide-from-header{block}}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
     The keyword <quote>block</quote> will completely remove the header 
-    (not to be confused with the <ulink
-    url="actions-file.html#BLOCK"><quote>+block</quote></ulink> action).
-    Alternately, you can specify any value you prefer to send to the web
-    server.
+    (not to be confused with the <literal><link linkend="block">block</link></literal>
+    action).
+   </para>
+   <para>
+    Alternately, you can specify any value you prefer to be sent to the web
+    server. If you do, it is a matter of fairness not to use any address that
+    is actually used by a real person.
+   </para>
+   <para>
+    This action is rarely needed, as modern web browsers don't send
+    <quote>From:</quote> headers anymore.
    </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen>+hide-from-header{block}</screen> or
+    <screen>+hide-from-header{spam-me-senseless@sittingduck.example.com}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="hide-referer">
-<title><emphasis>+hide-referer</emphasis></title>
-<anchor id="hide-referrer">
+<sect3 renderas="sect4" id="hide-referrer">
+<title><emphasis>hide-referrer</emphasis></title>
+<anchor id="hide-referer">
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Conceal which link you followed to get to a particular site</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>Referer:</quote> (sic) HTTP header from the client request,
+    or replaces it with a forged one.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3723,62 +3886,76 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
-   <para>
-     Don't send the <quote>Referer:</quote> (sic) HTTP header to the web site.
-     Or, alternately send a forged header instead.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-     Prevent the header from being sent with the keyword, <quote>block</quote>.
-     Or, <quote>forge</quote> a URL to one from the same server as the request.
-     Or, set to user defined value of your choice.
-   </para>
+   <itemizedlist>
+    <listitem>
+     <para><quote>block</quote> to delete the header completely.</para>
+    </listitem>
+    <listitem>
+     <para><quote>forge</quote> to pretend to be coming from the homepage of the server we are talking to.</para>
+    </listitem>
+    <listitem>
+     <para>Any other string to set a user defined referrer.</para>
+    </listitem>
+   </itemizedlist>
   </listitem>
  </varlistentry>
  
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+hide-referer{forge}}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
  <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
     <quote>forge</quote> is the preferred option here, since some servers will
-    not send images back otherwise.
+    not send images back otherwise, in an attempt to prevent their valuable
+    content from being embedded elsewhere (and hence, without being surrounded
+    by <emphasis>their</emphasis> banners.
    </para>
   <para>  
-   <quote>+hide-referrer</quote> is an alternate spelling of
-   <quote>+hide-referer</quote>. It has the exact same parameters, and can be freely
-   mixed with, <quote>+hide-referer</quote>. (<quote>referrer</quote> is the
+   <literal>hide-referer</literal> is an alternate spelling of
+   <literal>hide-referrer</literal> and the two can be can be freely
+   substituted with each other. (<quote>referrer</quote> is the
    correct English spelling, however the HTTP specification has a bug - it
    requires it to be spelled as <quote>referer</quote>.) 
   </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+     <screen>+hide-referrer{forge}</screen> or
+     <screen>+hide-referrer{http://www.yahoo.com/}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-user-agent">
-<title><emphasis>+hide-user-agent</emphasis></title>
+<title><emphasis>hide-user-agent</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Conceal your type of browser and client operating system</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Replaces the value of the <quote>User-Agent:</quote> HTTP header
+    in client requests with the specified value.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3788,53 +3965,71 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
-    To change the <quote>User-Agent:</quote> header so web servers can't tell
-    your browser type. Who's business is it anyway?
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    Any user defined string.
+    Any user-defined string.
    </para>
   </listitem>
  </varlistentry>
  
  <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Warning! This breaks many web sites that depend on this in order 
+    to customize their content for the different browser types by looking
+    at this header (which, btw, is <emphasis>NOT</emphasis> a smart way to
+    do that!).
+   </para>
+   <para>
+    Using this action in multi-user setups or wherever diffrerent types of
+    browsers will access the same <application>Privoxy</application> is
+    <emphasis>not recommended</emphasis>. In single-user, single-browser
+    setups, you might use it to delete your OS version information from
+    the headers, because it is an invitation to exploit known bugs for your
+    OS.
+   </para>
+   <para>
+    This action is scheduled for improvement.
+   </para>
+   </listitem>
+ </varlistentry>
+
+ <varlistentry>
   <term>Example usage:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}}</emphasis>
-     <emphasis>.msn.com</emphasis>
-    </literallayout>
+   <para>
+     <screen>+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="kill-popups">
+<title><emphasis>kill-popups<anchor id="kill-popup"></emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Eliminate those annoying pop-up windows</para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Notes:</term>
+  <term>Effect:</term>
   <listitem>
    <para>
-     Warning! This breaks many web sites that depend on this in order 
-     to determine how the target browser will respond to various 
-     requests. Use with caution.
+    While loading the document, replace JavaScript code that opens
+    pop-up windows with (syntactically neutral) dummy code on the fly.
    </para>
   </listitem>
  </varlistentry>
 
-</variablelist>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="handle-as-image">
-<title><emphasis>+handle-as-image</emphasis></title>
-
-<variablelist>
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3844,18 +4039,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    To define what <application>Privoxy</application> should treat 
-    automatically as an image, and is an important ingredient of how 
-    ads are handled.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -3864,118 +4048,73 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+handle-as-image}</emphasis>
-     <emphasis>/.*\.(gif|jpg|jpeg|png|bmp|ico)</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    This only has meaning if the URL (or pattern) also is
-    <quote>+block</quote>ed, in which case a user definable image can
-    be sent rather than a HTML page. This is integral to the whole concept of
-    ad blocking: the URL must match <emphasis>both</emphasis> a <ulink
-    url="actions-file.html#BLOCK"><quote>+block</quote></ulink> rule,
-    <emphasis>and</emphasis> <quote>+handle-as-image</quote>.
-    (See <ulink
-    url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
-    below for control over what will actually be displayed by the browser.)
+    This action is easily confused with a built-in harwired <literal><link linkend="filter">filter</link></literal>
+    action, but there are important differences: For <literal>kill-popups</literal>,
+    the document need not be buffered, so it can be incrementally rendered while
+    downloading. But <literal>kill-popups</literal> doesn't catch as many pop-ups as
+    <literal><link linkend="filter">filter</link>{popups}</literal> does.
    </para>
    <para>
-    There is little reason to change the default definition for this action.
+    Think of it as a fast and efficient replacement for a filter that you
+    can use if you don't want any filtering at all. Note that it doesn't make
+    sense to combine it with any <literal><link linkend="filter">filter</link></literal> action,
+    since as soon as one <literal><link linkend="filter">filter</link></literal> applies,
+    the whole document needs to be buffered anyway, which destroys the advantage of
+    the <literal>kill-popups</literal> action over it's filter equivalent.
    </para>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="set-image-blocker">
-<title><emphasis>+set-image-blocker</emphasis></title>
-
-<variablelist>
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Parameterized.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
    <para>
-    Decide what to do with URLs that end up tagged with <emphasis>both</emphasis> 
-    <ulink url="actions-file.html#BLOCK"><quote>+block</quote></ulink>
-    and <ulink
-    url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
-    e.g an advertisement.
+    Killing all pop-ups is a dangerous business. Many shops and banks rely on
+    pop-ups to display forms, shopping carts etc, and killing only the unwanted pop-ups 
+    would require artificial intelligance in <application>Privoxy</application>.
+    If the only kind of pop-ups that you want to kill are exit consoles (those
+    <emphasis>really nasty</emphasis> windows that appear when you close an other
+    one), you might want to use
+    <literal><link linkend="filter">filter</link>{js-annoyances}</literal> instead.
    </para>
+
+  <!-- 
+   <para>
+    An alternate spelling is <literal>+kill-popup</literal>, which is 
+    interchangeable.
+   </para>
+ --> 
   </listitem>
  </varlistentry>
 
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    There are four available options: <quote>-set-image-blocker</quote> will send a HTML
-    <quote>blocked</quote> page, usually resulting in a <quote>broken
-    image</quote> icon.
-    <quote>+set-image-blocker{<emphasis>blank</emphasis>}</quote> will send a
-    1x1 transparent GIF image.
-    <quote>+set-image-blocker{<emphasis>pattern</emphasis>}</quote> will send a
-    checkerboard type pattern (the default). And finally,
-    <quote>+set-image-blocker{<emphasis>http://xyz.com</emphasis>}</quote> will
-    send a HTTP temporary redirect to the specified image. This has the
-    advantage of the icon being being cached by the browser, which will speed
-    up the display.
-   </para>
-  </listitem>
- </varlistentry>
- 
  <varlistentry>
   <term>Example usage:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+set-image-blocker{blank}}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para><screen>+kill-popups</screen></para>
   </listitem>
  </varlistentry>
-
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    If you want <emphasis>invisible</emphasis> ads, they need to meet 
-    criteria as matching both <emphasis>images</emphasis> and <emphasis>blocked</emphasis>
-    actions. And then, <quote>image-blocker</quote> should be set to
-    <quote>blank</quote> for invisibility. Note you cannot treat HTML pages as
-    images in most cases. For instance, frames require an HTML page to
-    display. So a frame that is an ad, typically cannot be treated as an image.
-    Forcing an <quote>image</quote> in this situation just will not work
-    reliably. 
-   </para>
-  </listitem>
- </varlistentry>
-
 </variablelist>
 </sect3>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="limit-connect">
-<title><emphasis>+limit-connect</emphasis></title>
+<title><emphasis>limit-connect</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Prevent abuse of <application>Privoxy</application> as a TCP relay</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Specifies to which ports HTTP CONNECT requests are allowable.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -3985,72 +4124,81 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
-    By default, <application>Privoxy</application> only allows HTTP CONNECT
-    requests to port 443 (the standard, secure HTTPS port). Use 
-    <quote>+limit-connect</quote> to disable this altogether, or to allow 
-    more ports.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    Any valid port number, or port number range.
+    A comma-separated list of ports or port ranges (the latter using dashes, with the minimum
+    defaulting to 0 and the maximum to 65K).
    </para>
   </listitem>
  </varlistentry>
  
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    By default, i.e. if no <literal>limit-connect</literal> action applies,
+    <application>Privoxy</application> only allows HTTP CONNECT
+    requests to port 443 (the standard, secure HTTPS port). Use 
+    <literal>limit-connect</literal> if more fine-grained control is desired
+    for some or all destinations.
+   </para>
+   <para>
+    The CONNECT methods exists in HTTP to allow access to secure websites
+    (<quote>https://</quote> URLs) through proxies. It works very simply:
+    the proxy connects to the server on the specified port, and then
+    short-circuits its connections to the client and to the remote server.
+    This can be a big security hole, since CONNECT-enabled proxies can be
+    abused as TCP relays very easily.
+  </para>
+  <para>
+   If you don't know what any of this means, there probably is no reason to 
+   change this one, since the default is already very restrictive.
+  </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Example usages:</term>
   <listitem>
    <!-- I had trouble getting the spacing to look right in my browser -->
    <!-- I probably have the wrong font setup, bollocks. -->
    <!-- Apparently the emphasis tag uses a proportional font no matter what -->
-    <literallayout>
-     <emphasis>+limit-connect{443}</emphasis>                       # This is the default and need not be specified.
-     <emphasis>+limit-connect{80,443}</emphasis>                  # Ports 80 and 443 are OK.
-     <emphasis>+limit-connect{-3, 7, 20-100, 500-}</emphasis>   # Port less than 3, 7, 20 to 100 and above 500 are OK.
-    </literallayout>
+    <para>
+     <screen>+limit-connect{443}                   # This is the default and need not be specified.
++limit-connect{80,443}                # Ports 80 and 443 are OK.
++limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
++limit-connect{-}                     # All ports are OK (gaping security hole!)</screen>
+   </para>
   </listitem>
  </varlistentry>
-
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    The CONNECT methods exists in HTTP to allow access to secure websites
-    (https:// URLs) through proxies. It works very simply: the proxy connects
-    to the server on the specified port, and then short-circuits its
-    connections to the client <emphasis>and</emphasis> to the remote proxy.
-    This can be a big security hole, since CONNECT-enabled proxies can be
-    abused as TCP relays very easily.
-  </para>
-  <para> 
-   If you want to allow CONNECT for more ports than this, or want to forbid
-   CONNECT altogether, you can specify a comma separated list of ports and
-   port ranges (the latter using dashes, with the minimum defaulting to 0 and
-   max to 65K).
-  </para>
-  <para>
-   If you don't know what any of this means, there probably is no reason to 
-   change this one.
-  </para>
-  </listitem>
- </varlistentry>
-
 </variablelist>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="prevent-compression">
-<title><emphasis>+prevent-compression</emphasis></title>
+<title><emphasis>prevent-compression</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Ensure that servers send the content uncompressed, so it can be
+    passed through <literal><link linkend="filter">filter</link></literal>s
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Adds a header to the request that asks for uncompressed transfer.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -4060,16 +4208,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Prevent the specified websites from compressing HTTP data.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -4078,91 +4217,45 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+prevent-compression}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    Some websites do this, which can be a problem for
-    <application>Privoxy</application>, since 
-    <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>,
-    <ulink url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
-    and <ulink
-    url="actions-file.html#GIF-DEANIMATE"><quote>+gif-deanimate</quote></ulink>
-    will not work on compressed data. This will slow down connections to those
-    websites, though. Default typically is to turn
-    <quote>prevent-compression</quote> on.
+    More and more websites send their content compressed by default, which
+    is generally a good idea and saves bandwidth. But for the <literal><link
+    linkend="filter">filter</link></literal>, <literal><link linkend="deanimate-gifs">deanimate-gifs</link></literal>
+    and <literal><link linkend="kill-popups">kill-popups</link></literal> actions to work,
+    <application>Privoxy</application> needs access to the  uncompressed data.
+    Unfortunately, <application>Privoxy</application> can't yet(!)  uncompress, filter, and
+    re-compress the content on the fly. So if you want to ensure that all websites, including
+    those that normally compress, can be filtered, you need to use this action.
    </para>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="session-cookies-only">
-<title><emphasis>+session-cookies-only</emphasis></title>
-
-<variablelist>
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
    <para>
-    Allow cookies for the current browser session <emphasis>only</emphasis>.
+    This will slow down transfers from those websites, though. If you use any of the above-mentioned
+    actions, you will typically want to use <literal>prevent-compression</literal> in conjunction
+    with them.
+   </para>
+   <para>
+    Note that some (rare) ill-configured sites don't handle requests for uncompressed
+    documents correctly (they send an empty document body). If you use <literal>prevent-compression</literal>
+    per default, you'll have to add exceptions for those sites. See the example for how to do that.
    </para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Possible values:</term>
+  <term>Example usage (sections):</term>
   <listitem>
    <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Example usage (disabling):</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{-session-cookies-only}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
+    <screen># Set default:
+#
+{+prevent-compression}
+/ # Match all sites
 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    If websites set cookies, <quote>+session-cookies-only</quote> will make sure
-    they are erased when you exit and restart your web browser. This makes
-    profiling cookies useless, but won't break sites which require cookies so
-    that you can log in for transactions. This is generally turned on for all 
-    sites, and is the recommended setting.
-   </para>
-   <para>
-    <quote>+prevent-*-cookies</quote> actions should be turned off as well (see
-    below), for <quote>+session-cookies-only</quote> to work. Or, else no cookies 
-    will get through at all. For, <quote>persistent</quote> cookies that survive 
-    across browser sessions, see below as well.
+# Make exceptions for ill sites:
+#
+{-prevent-compression}
+www.debianhelp.org
+www.pclinuxonline.com</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4173,9 +4266,27 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="prevent-reading-cookies">
-<title><emphasis>+prevent-reading-cookies</emphasis></title>
+<title><emphasis>prevent-reading-cookies</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Prevent the web server from reading any cookies from your system
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any <quote>Cookie:</quote> HTTP headers from client requests.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -4185,17 +4296,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Explicitly prevent the web server from reading any cookies on your 
-    system.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -4204,28 +4305,27 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Notes:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+prevent-reading-cookies}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para>
+    This action is only concerned with <emphasis>outgoing</emphasis> cookies. For
+    <emphasis>incoming</emphasis> cookies, use
+    <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal>.
+    Use <emphasis>both</emphasis> to disable cookies completely.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
+    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
+    since it would prevent the session cookies from being read.
+   </para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Notes:</term>
+  <term>Example usage:</term>
   <listitem>
    <para>
-    Often used in conjunction with <quote>+prevent-setting-cookies</quote> to 
-    disable cookies completely. Note that 
-    <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
-    requires these to both be disabled (or else it never gets any cookies to cache).
-   </para>
-   <para>
-    For <quote>persistent</quote> cookies to work (i.e. they survive across browser 
-    sessions and reboots), all three cookie settings should be <quote>off</quote> 
-    for the specified sites.
+    <screen>+prevent-reading-cookies</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4236,9 +4336,27 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="prevent-setting-cookies">
-<title><emphasis>+prevent-setting-cookies</emphasis></title>
+<title><emphasis>prevent-setting-cookies</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Prevent the web server from setting any cookies on your system
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any <quote>Set-Cookie:</quote> HTTP headers from server replies.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -4248,17 +4366,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Explicitly block the web server from storing cookies on your 
-    system.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -4267,34 +4375,59 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <literallayout>
-     <emphasis>{+prevent-setting-cookies}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
   <term>Notes:</term>
   <listitem>
    <para>
-    Often used in conjunction with <quote>+prevent-reading-cookies</quote> to 
-    disable cookies completely (see above).
+    This action is only concerned with <emphasis>incoming</emphasis> cookies. For
+    <emphasis>outgoing</emphasis> cookies, use
+    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal>.
+    Use <emphasis>both</emphasis> to disable cookies completely.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
+    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
+    since it would prevent the session cookies from being set.
    </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen>+prevent-setting-cookies</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="kill-popup">
-<title><emphasis>+kill-popups<anchor id="kill-popups"></emphasis></title>
+<sect3 renderas="sect4" id="session-cookies-only">
+<title><emphasis>session-cookies-only</emphasis></title>
+
 <variablelist>
  <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Allow only temporary <quote>session</quote> cookies (for the current browser session <emphasis>only</emphasis>).
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>expires</quote> field from <quote>Set-Cookie:</quote> server headers.
+    Most browsers will not store such cookies permanently and forget them in between sessions.
+   </para>
+  </listitem>
+ </varlistentry>
+
+<varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
   <listitem>
@@ -4303,16 +4436,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Stop those annoying JavaScript pop-up windows! 
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -4321,43 +4445,72 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Notes:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+kill-popups}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para>
+    This is less strict than <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal> / 
+    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal> and allows you to browse
+    websites that insist or rely on setting cookies, without compromising your privacy too badly.
+   </para>
+   <para>
+    Most browsers will not permanently store cookies that have been processed by
+    <literal>session-cookies-only</literal> and will forget about them between sessions.
+    This makes profiling cookies useless, but won't break sites which require cookies so
+    that you can log in for transactions. This is generally turned on for all 
+    sites, and is the recommended setting.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use <literal>session-cookies-only</literal>
+    together with <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal> or
+    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal>. If you do, cookies
+    will be plainly killed.
+   </para>
+   <para>
+    Note that it is up to the browser how it handles such cookies without an <quote>expires</quote>
+    field. If you use an exotic browser, you might want to try it out to be sure.
+   </para>
+   <para>
+    <literal>prevent-keeping-cookies</literal> is an alternate name for this action.
+   </para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Notes:</term>
+  <term>Example usage:</term>
   <listitem>
    <para>
-    <quote>+kill-popups</quote> uses a built in filter to disable pop-ups
-    that use the <literal>window.open()</literal> function, etc. This is 
-    one of the first actions processed by <application>Privoxy</application>
-    as it contacts the remote web server. This action is not always 100% reliable, 
-    and is supplemented by <quote>+filter{<emphasis>popups</emphasis>}</quote>.
-    </para>
-  <!-- 
-   <para>
-    An alternate spelling is <quote>+kill-popup</quote>, which is 
-    interchangeable.
+     <screen>+session-cookies-only</screen>
    </para>
- --> 
   </listitem>
  </varlistentry>
-
 </variablelist>
 </sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="send-vanilla-wafer">
-<title><emphasis>+send-vanilla-wafer</emphasis></title>
+<title><emphasis>send-vanilla-wafer</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Feed log analysis scripts with useless data.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Sends a cookie with each request stating that you do not accept any copyright
+    on cookies sent to you, and asking the site operator not to track you.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -4367,17 +4520,7 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
-  <listitem>
-   <para>
-    Sends a cookie for every site stating that you do not accept any copyright
-    on cookies sent to you, and asking them not to track you.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
     N/A
@@ -4386,22 +4529,22 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Notes:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+send-vanilla-wafer}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para>
+    The vanilla wafer is a (relatively) unique header and could conceivably be used to track you.
+   </para>
+   <para>
+    This action is rarely used and not enabled in the default configuration.
+   </para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
-  <term>Notes:</term>
+  <term>Example usage:</term>
   <listitem>
    <para>
-    This action only applies if you are using a <filename>jarfile</filename>
-    for saving cookies. Of course, this is a (relatively) unique header and 
-    could conceivably be used to track you.
+     <screen>+send-vanilla-wafer</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4412,9 +4555,27 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="send-wafer">
-<title><emphasis>+send-wafer</emphasis></title>
+<title><emphasis>send-wafer</emphasis></title>
 
 <variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Send custom cookies or feed log analysis scripts with even more useless data.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Sends a custom, user-defined cookie with each request.
+   </para>
+  </listitem>
+ </varlistentry>
+
  <varlistentry>
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
@@ -4424,30 +4585,107 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
  <varlistentry>
-  <term>Typical uses:</term>
+  <term>Parameter:</term>
   <listitem>
    <para>
-    This allows you to send an arbitrary, user definable cookie.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Possible values:</term>
-  <listitem>
-   <para>
-    User specified cookie name and corresponding value.
+    A string of the form <quote><replaceable class="option">name</replaceable>=<replaceable
+    class="parameter">value</replaceable></quote>.
    </para>
   </listitem>
  </varlistentry>
  
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Notes:</term>
   <listitem>
-    <literallayout>
-     <emphasis>{+send-wafer{name=value}}</emphasis>
-     <emphasis>.example.com</emphasis>
-    </literallayout>
+   <para>
+    Being multi-valued, multiple instances of this action can apply to the same request,
+    resulting in multiple cookies being sent.
+   </para>
+   <para>
+    This action is rarely used and not enabled in the default configuration.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+   <para>
+    <screen>{+send-wafer{UsingPrivoxy=true}}
+my-internal-testing-server.void</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="set-image-blocker">
+<title><emphasis>set-image-blocker</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Choose the replacement for blocked images</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+     This action alone doesn't do anything noticeable. If <emphasis>both</emphasis>
+     <literal><link linkend="block">block</link></literal> <emphasis>and</emphasis> <literal><link
+     linkend="handle-as-image">handle-as-image</link></literal> <emphasis>also</emphasis>
+     apply, i.e. if the request is to be blocked as an image,
+     <emphasis>then</emphasis> the parameter of this action decides what will be
+     sent as a replacement.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <quote>pattern</quote> to send a built-in checkerboard pattern image. The image is visually
+      decent, scales very well, and makes it obvious where banners were busted.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>blank</quote> to send a built-in transparent image. This makes banners disappear
+      completely, but makes it hard to detect where <application>Privoxy</application> has blocked
+      images on a given page and complicates troubleshooting if <application>Privoxy</application>
+      has blocked innocent images, like navigation icons.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote><replaceable class="parameter">target-url</replaceable></quote> to
+      send a redirect to <replaceable class="parameter">target-url</replaceable>. You can redirect
+      to any image anywhere, even in your local filesystem (via <quote>file:///</quote> URL).
+     </para>
+     <para>
+      A good application of redirects is to use special <application>Privoxy</application>-built-in
+      URLs, which send the built-in images, as <replaceable class="parameter">target-url</replaceable>.
+      This has the same visual effect as specifying <quote>blank</quote> or <quote>pattern</quote> in
+      the first place, but enables your browser to cache the replacement image, instead of requesting
+      it over and over again.
+     </para>
+    </listitem>
+   </itemizedlist>
   </listitem>
  </varlistentry>
 
@@ -4455,12 +4693,41 @@ forward-socks4 and forward-socks4a</title>
   <term>Notes:</term>
   <listitem>
    <para>
-    This can be specified multiple times in order to add as many cookies as you
-    like.
+    The URLs for the built-in images are <quote>http://config.privoxy.org/send-banner?type=<replaceable
+    class="parameter">type</replaceable></quote>, where <replaceable class="parameter">type</replaceable> is
+    either <quote>blank</quote> or <quote>pattern</quote>.
+   </para>
+   <para>
+    There is a third (advanced) type, called <quote>auto</quote>. It is <emphasis>NOT</emphasis> to be
+    used in <literal>set-image-blocker</literal>, but meant for use from <link linkend="filter-file">filters</link>.
+    Auto will select the type of image that would have applied to the referring page, had it been an image.
    </para>
   </listitem>
  </varlistentry>
 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    Built-in pattern:
+   </para>
+   <para>
+    <screen>+set-image-blocker{pattern}</screen>
+   </para>
+   <para>
+    Redirect to the BSD devil:
+   </para>
+   <para>
+    <screen>+set-image-blocker{http://www.freebsd.org/gifs/dae_up3.gif}</screen>
+   </para>
+   <para>
+    Redirect to the built-in pattern for better caching:
+   </para>
+   <para>
+    <screen>+set-image-blocker{http://config.privoxy.org/send-banner?type=pattern}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
 </sect3>
 
@@ -5954,6 +6221,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.107  2002/05/12 03:20:41  hal9
+ Small clarifications for 127.0.0.1 vs localhost for listen-address since this
+ apparently an important distinction for some OS's.
+
  Revision 1.106  2002/05/10 01:48:20  hal9
  This is mostly proposed copyright/licensing additions and changes. Docs
  are still GPL, but licensing and copyright are more visible. Also, copyright
