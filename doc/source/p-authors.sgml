@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 1.0 2002/04/02 01:48:33 hal9 Exp $
+ $Id: p-authors.sgml,v 1.1 2002/04/06 05:07:29 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,6 +60,7 @@
  Sarantis Paskalis
  Shamim Mohamed
  Gábor Lipták
+ Alexander Lazic
 </literallayout>
 
 <![%p-authors-formal;[
@@ -79,7 +80,6 @@
 
 <literallayout>
  Aaron Hamid
- Alexander Lazic  (FreeBSD patch)
  Andrew J. Caines
  Bart Schelstraete
  Clifford Caoile
