@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.62 2002/06/03 00:28:16 hal9 Exp $
+ $Id: faq.sgml,v 1.63 2002/06/05 00:31:55 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -70,7 +70,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.62 2002/06/03 00:28:16 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.63 2002/06/05 00:31:55 hal9 Exp $</pubdate>
 
 <!--
 
@@ -112,7 +112,7 @@ Hal.
  This FAQ gives quick answers to frequently asked  questions about
  <ulink url="http://www.privoxy.org/">Privoxy</ulink> 
  <![%p-stable;[ v.&p-version]]>. It can't and doesn't replace the
- <ulink url="../user-manual/index.html">user manual</ulink>.
+ <ulink url="../user-manual/index.html"><citetitle>User Manual</citetitle></ulink>.
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
@@ -122,7 +122,8 @@ Hal.
  <para>
   You can find the latest version of the document at <ulink
   url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
-  Please see the Contact section if you want to contact the developers.
+  Please see the <link linkend="contact">Contact section</link> if you want to
+  contact the developers. 
  </para>
 
 <!--   <para> -->
@@ -463,7 +464,7 @@ All the ads are there. What's wrong?</title>
  the browser's caches to force a full re-reading of pages. You can verify 
  that <application>Privoxy</application> is running, and your browser 
  is correctly configured by entering the special URL: 
- <ulink url="http:/config.privoxy.org/">http://config.privoxy.org/</ulink>.
+ <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>.
  This should take you to a page titled <quote>This is Privoxy..</quote> with
  access to <application>Privoxy's</application> internal configuration.
  If you see this, then you are good to go. If you receive a page saying 
@@ -600,7 +601,7 @@ the differences?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="configfiles"> <title>What's the difference between the
-<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Advenced</quote> defaults?</title>
+<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Advanced</quote> defaults?</title>
  <para>
   Configuring <application>Privoxy</application> is not entirely trivial. To help you get
   started, we provide you with three different default action <quote>packages</quote> in
@@ -761,19 +762,23 @@ with a browser? Does that not raise security issues?</title>
 <para>
  The <ulink url="../user-manual/filter-file.html"><filename>default.filter</filename></ulink>
  file is where <emphasis>filters</emphasis> are defined, which can be used to modify or
- remove, web page content on the fly. This applies to <emphasis>anything</emphasis>
+ remove, web page content on the fly. Filters apply to <emphasis>anything</emphasis>
  in the page source, including HTML tags, and JavaScript. Regular expressions are used
  to accomplish this. There are a number of pre-defined filters to deal with common
  annoyances. The filters are only defined here, to invoke them, you need to use the
- <ulink url="../user-manual/actions-file.html#FILTER"><literal>filter</literal> action</ulink>.
+ <ulink
+ url="../user-manual/actions-file.html#FILTER"><literal>filter</literal>
+ action</ulink> in one of the actions files. Filtering is automatically
+ disabled for inappropriate MIME types.
 </para>
 
 <para>
  If you are familiar with regular expressions, and HTML, you can look at 
  the provided <filename>default.filter</filename> with a text editor and define
  your own filters.  This is potentially a very powerful feature, but
- requires some expertise. 
+ requires some expertise in both regular expressions and HTML/HTTP. 
 </para>
+
 
 <para>
  Presently, there is no GUI editor option for this part of the configuration, 
@@ -1066,6 +1071,9 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  content, giving the user a feeling of "it works". This effect is especially
  noticeable on slow dialup connections.
  </para>
+<para>
+ Filtering is automatically disabled for inappropriate MIME types.
+</para>
 </sect2>
 
 
@@ -1358,14 +1366,31 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect2>
 
+
 <sect2 renderas="sect3" id="turnoff">
 <title>How can I temporarily disable <application>Privoxy</application>?</title>
 <para>
  The easiest way is to access <application>Privoxy</application> with your 
  browser by using the remote toggle URL: <ulink
  url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>.
+ See the <ulink url="../user-manual/appendix.html#BOOKMARKLETS">Bookmarklets section</ulink> 
+ of the <citetitle>User Manual</citetitle> for an easy way to access this 
+ feature.
 </para>
 </sect2>
+
+<sect2 renderas="sect3" id="reallyoff">
+<title>When <quote>disabled</quote> is <application>Privoxy</application> totally 
+out of the picture?</title>
+<para>
+ No, this just means all filtering and actions are disabled.
+ <application>Privoxy</application> is still acting as a proxy, but just not 
+ doing any of the things that <application>Privoxy</application> would
+ normally be expected to do. It is still a <quote>middle-man</quote> in 
+ the interaction between your browser and web sites.
+</para>
+</sect2>
+
 
 <sect2 renderas="sect3" id="seealso">
 <title>Where can I find more information about <application>Privoxy</application>
@@ -1483,6 +1508,57 @@ What can I do?</title>
 
 </sect2>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="dun">
+<title>After installing <application>Privoxy</application>, I have to log in
+every time I start IE. What gives?</title>
+
+<para>
+ This is a quirk that effects the installation of
+ <application>Privoxy</application>, in conjunction with Internet Explorer and
+ Internet Connection Sharing on Windows 2000 and Windows XP. The symptoms may
+ appear to be corrupted or invalid DUN settings, or passwords.
+</para>
+
+<para>
+ When setting up an NT based Windows system with
+ <application>Privoxy</application> you may find that things do not seem to be
+ doing what you expect. When you set your system up you will probably have set
+ up Internet Connection Sharing (ICS) with Dial up Networking (DUN) when
+ logged in with administrator privileges. You will probably have made this DUN
+ connection available to other accounts that you may have set-up on your
+ system. E.g. Mum or Dad sets up the system and makes accounts suitably
+ configured for the kids.
+</para>
+
+<para>
+ When setting up <application>Privoxy</application> in this environment you
+ will have to alter the proxy set-up of Internet Explorer (IE) for the
+ specific DUN connection on which you wish to use
+ <application>Privoxy</application>. When you do this the ICS DUN set-up
+ becomes user specific. In this instance you will see no difference if you
+ change the DUN connection under the account used to set-up the connection.
+ However when you do this from another user you will notice that the DUN
+ connection changes to make available to "Me only". You will also find that
+ you have to store the password under each different user!
+</para>
+
+<para>
+ The reason for this is that each user's set-up for IE is user specific. Each
+ set-up DUN connection and each LAN connection in IE store the settings for
+ each user individually. As such this enforces individual configurations
+ rather than common ones. Hence the first time you use a DUN connection after
+ re-booting your system it may not perform as you expect, and prompt you for 
+ the password. Just set and save the password again and all should be OK.
+</para>
+
+<para>
+[Thanks to Ray Griffith for this submission.]
+</para>
+</sect2>
+
+
 </sect1>
 <!--
 </sect1>
@@ -1575,6 +1651,11 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.63  2002/06/05 00:31:55  hal9
+Mass commit for new entities, most significantly so docs can read version
+and code status info from tmp files, so perl is no longer used. Also, docs can
+differentiate on alpha -> beta -> stable now.
+
 Revision 1.62  2002/06/03 00:28:16  hal9
 Sync with various changes from 3.0 branch. Add two new files for config stuff.
 

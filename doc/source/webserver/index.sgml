@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.19 2002/06/03 00:28:17 hal9 Exp $
+ $Id: index.sgml,v 1.20 2002/06/05 00:31:55 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -75,10 +75,11 @@
 
 <![%p-homepage;[
   <para>
-   The most recent version is &p-version; (&p-status;). (Odd numbered versions 
-   are available only through CVS.)
+  <!-- FIXME: Temporarily hard coding this. HB.  -->
+   The most recent release is 2.9.14 (&p-status;). 
   </para>
 ]]>
+
 
  </abstract>
 </artheader>
@@ -245,6 +246,11 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.20  2002/06/05 00:31:55  hal9
+ Mass commit for new entities, most significantly so docs can read version
+ and code status info from tmp files, so perl is no longer used. Also, docs can
+ differentiate on alpha -> beta -> stable now.
+
  Revision 1.19  2002/06/03 00:28:17  hal9
  Sync with various changes from 3.0 branch. Add two new files for config stuff.
 

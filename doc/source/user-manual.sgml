@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.125 2002/06/03 00:28:17 hal9 Exp $
+ $Id: user-manual.sgml,v 1.126 2002/06/05 00:31:55 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.125 2002/06/03 00:28:17 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.126 2002/06/05 00:31:55 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2352,7 +2352,8 @@ problem-host.example.com</screen>
     The name of a filter, as defined in the <link linkend="filter-file">filter file</link>
     (typically <filename>default.filter</filename>, set by the
     <literal><link linkend="filterfile">filterfile</link></literal>
-    option in the <link linkend="config">config file</link>)
+    option in the <link linkend="config">config file</link>). Filtering 
+    can be completely disabled without the use of parameters.
    </para>
   </listitem>
  </varlistentry>
@@ -2361,8 +2362,8 @@ problem-host.example.com</screen>
   <term>Notes:</term>
   <listitem>
    <para>
-    For your convenience, there are a bunch of pre-defined filters available 
-    in the distribution filter file that you can use. See the example below for
+    For your convenience, there are a number of pre-defined filters available 
+    in the distribution filter file that you can use. See the examples below for
     a list.
    </para>
    <para>
@@ -2377,6 +2378,14 @@ problem-host.example.com</screen>
     noticeable on slower connections.
    </para>
    <para>
+    The amount of data that can be filtered is limited to the 
+    <literal><link linkend="buffer-limit">buffer-limit</link></literal>
+    option in the main <link linkend="config">config file</link>. The 
+    default is 4096 KB (4 Megs). Once this limit is exceeded, the buffered
+    data, and all pending data, is passed through unfiltered. Inappropriate 
+    MIME types are not filtered.
+   </para>
+   <para>
     At this time, <application>Privoxy</application> cannot (yet!) uncompress compressed
     documents. If you want filtering to work on all documents, even those that
     would normally be sent compressed, use the
@@ -2384,13 +2393,16 @@ problem-host.example.com</screen>
     action in conjunction with <literal>filter</literal>.
    </para>
    <para>
-    Filtering can achieve some of the effects as the 
+    Filtering can achieve some of the same effects as the 
     <literal><link linkend="block">block</link></literal>
-    action, i.e. it can be used to block ads and banners. 
+    action, i.e. it can be used to block ads and banners. But the mechanism 
+    works quite differently. One effective use, is to block ad banners 
+    based on their size (see below), since many of these seem to be somewhat 
+    standardized.
    </para>
    <para>
-    <link linkend="contact">Feedback</link> with suggestions for new or improved filters is particularly
-    welcome!
+    <link linkend="contact">Feedback</link> with suggestions for new or
+    improved filters is particularly welcome!
    </para>
   </listitem>
  </varlistentry>
@@ -2408,7 +2420,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-banners-by-size">
-    <screen>+filter{banners-by-size}     # Kill banners by size (<emphasis>very</emphasis> efficient!)</screen>
+    <screen>+filter{banners-by-size}     # Kill banners based on their size for this page (<emphasis>very</emphasis> efficient!)</screen>
    </para>
    <para>
     <anchor id="filter-content-cookies">
@@ -4186,7 +4198,7 @@ another.popular.site.net/more/junk/here/</screen>
  in a syntax that imitates <ulink url="http://www.perl.org/">Perl</ulink>'s
  <literal>s///</literal> operator. If you are familiar with Perl, you
  will find this to be quite intuitive, and may want to look at the
- <ulink url="http://www.oesterhelt.org/pcrs/pcrs.1.html">PCRS man page</ulink>
+ <ulink url="http://www.oesterhelt.org/pcrs/pcrs.3.html">PCRS man page</ulink>
  for the subtle differences to Perl behaviour. Most notably, the non-standard
  option letter <literal>U</literal> is supported, which turns the default
  to ungreedy matching.
@@ -4393,7 +4405,7 @@ s/microsoft(?!\.com)/MicroSuck/ig</screen>
  Note the <literal>(?!\.com)</literal> part (a so-called negative lookahead)
  in the job's pattern, which means: Don't match, if the string 
  <quote>.com</quote> appears directly following <quote>microsoft</quote>
- in the page. This prevents links to microsoft.com from being messed, while
+ in the page. This prevents links to microsoft.com from being trashed, while
  still replacing the word everywhere else.
 </para>
 
@@ -5143,7 +5155,8 @@ Requests</title>
  One quick test to see if <application>Privoxy</application> is causing a problem 
  or not, is to disable it temporarily. This should be the first troubleshooting 
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
- and easy way to do this (be sure to flush caches afterward!).
+ and easy way to do this (be sure to flush caches afterward!). Looking at the
+ logs is a good idea too.
 </para>
 
 <para>
@@ -5439,8 +5452,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  was. If you don't get this kind of match, then it means one of the default 
  rules in the first section is causing the problem. This would require some 
  guesswork, and maybe a little trial and error to isolate the offending rule.
- One likely cause would be one of the <quote>{+filter}</quote> actions. Try 
- adding the URL for the site to one of aliases that turn off <quote>+filter</quote>:
+ One likely cause would be one of the <quote>{+filter}</quote> actions. These
+ tend to be harder to troubleshoot. Try adding the URL for the site to one of
+ aliases that turn off <quote>+filter</quote>:
 </para>
 
 <para>
@@ -5471,8 +5485,16 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- This would probably be most appropriately put in <filename>user.action</filename>, 
- for local site exceptions.
+ This would turn off all filtering for that site. This would probably be most
+ appropriately put in <filename>user.action</filename>, for local site
+ exceptions.
+</para>
+
+<para>
+ Images that are inexplicably being blocked, may well be hitting the 
+ <quote>+filter{banners-by-size}</quote> rule, which assumes 
+ that images of certain sizes are ad banners (works well most of the time 
+ since these tend to be standardized).
 </para>
 
 <para>
@@ -5507,6 +5529,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.126  2002/06/05 00:31:55  hal9
+ Mass commit for new entities, most significantly so docs can read version
+ and code status info from tmp files, so perl is no longer used. Also, docs can
+ differentiate on alpha -> beta -> stable now.
+
  Revision 1.125  2002/06/03 00:28:17  hal9
  Sync with various changes from 3.0 branch. Add two new files for config stuff.
 
