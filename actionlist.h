@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.13  2002/03/24 15:23:33  jongfoster
+ *    Name changes
+ *
  *    Revision 1.12  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -109,7 +112,6 @@ DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRI
 DEFINE_ACTION_BOOL       ("image",           ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)
-DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "logo", 0)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, CGI_PREFIX "show-banner?type=pattern")
 DEFINE_ACTION_STRING     ("limit-connect",   ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
