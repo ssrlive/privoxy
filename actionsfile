@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.7 2001/10/10 16:43:39 oes Exp $
+# $Id: actionsfile,v 1.8 2001/10/14 23:18:19 jongfoster Exp $
 #
 #############################################################################
 # Syntax
@@ -354,6 +354,11 @@ privacy.net
 .msdn.microsoft.com
 .sourceforge.net
 .sf.net
+www.nexgo.de
+.myrealbox.com
+mail.uni.de
+e-tools.freenet.de
+office.freenet.de
 
 # These sites are very complex and require
 # minimal interference.
@@ -377,6 +382,12 @@ privacy.net
 {-fast-redirects}
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 login.yahoo.com
+edit.europe.yahoo.com
+.translate.google.com
+images.google.com
+.altavista.com/.*(like|url|link):http
+.altavista.com/trans.*urltext=http
+.speedfind.de
 
 # Please don't re_filter code!
 {-filter}
@@ -420,13 +431,17 @@ www.carbuyer.com/cgi-carbuyer/getimage.cgi
 *.fxweb.com/v2-trackrun\.cgi
 195.63.104.61
 195.63.104.222
-213.165.64.3[89]
-213.165.64.4[1-4]
+213.165.64.3[4-9]
+213.165.64.4[0-4]
 194.221.183.22[1-7]
-a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
-/cgi-bin/ivw/CP/CGI
+a196.g.akamai.net/7/196/2670/000[1-3]/images\.gmx\.net/.*images/.*/.*/
+/cgi-bin/ivw/CP/
 151.189.8.213/Adimg
 151.189.8.193/Media
+.smartclicks.com/.*/smart(img|banner|host|bar|site)
+.linkexchange.com/.*/showl(ogo|e)
+MoneyBanner.de
+pixel.intares.net/cgi-bin/janus
 
 #############################################################################
 # Blocklist:
@@ -1279,6 +1294,7 @@ www.fair-ist-mehr.de/cgi-bin/bt.pl
 rstrip.namezero.com
 62.26.220.2
 .doubleclick.net
+.adserver.yahoo.com
 
 #############################################################################
 {-block}
