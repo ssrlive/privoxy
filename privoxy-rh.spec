@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.8 2002/03/24 21:13:01 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.9 2002/03/24 22:03:22 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -94,12 +94,6 @@ mkdir -p %{buildroot}%{_sbindir} \
 
 install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 
-## We need to change the man section internaly on the manpage
-## -- morcego (sugestion by Hal Burgiss)
-#cp -f %{name}.1 %{buildroot}%{_mandir}/man8/%{name}.8
-
-# do we need this???
-#sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
 cp -f %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 cp -f *.action %{buildroot}%{privoxyconf}/
 cp -f default.filter %{buildroot}%{privoxyconf}/default.filter
@@ -526,6 +520,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.9  2002/03/24 22:03:22  morcego
+# Should be working now. See %changelog for details
+#
 # Revision 1.8  2002/03/24 21:13:01  morcego
 # Tis broken.
 #
