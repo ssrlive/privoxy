@@ -10,7 +10,7 @@ Junkbuster User Manual
    that provides privacy and security to users of the World Wide Web.
    
    You can find the latest version of the user manual at
-   [1]http://ijbswa.sourceforge.net/doc/user-manual/.
+   [1]http://ijbswa.sourceforge.net/user-manual/.
    
    Feel free to send a note to the developers at
    <[2]ijbswa-developers@lists.sourceforge.net>.
@@ -1477,7 +1477,7 @@ rrent
 
 References
 
-   1. http://ijbswa.sourceforge.net/doc/user-manual/
+   1. http://ijbswa.sourceforge.net/user-manual/
    2. mailto:ijbswa-developers@lists.sourceforge.net
    3. file://localhost/home/swa/sf/current/doc/source/tmp.html#INTRODUCTION
    4. file://localhost/home/swa/sf/current/doc/source/tmp.html#AEN27

@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.13 2001/10/10 17:28:33 hal9 Exp $
+ $Id: user-manual.sgml,v 1.15 2001/10/14 23:46:24 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.13 2001/10/10 17:28:33 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.15 2001/10/14 23:46:24 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -48,7 +48,7 @@ Hal Burgiss <hal@foobox.net>
   security to users of the World Wide Web.
  </para>
  <para>
-You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/doc/user-manual/">http://ijbswa.sourceforge.net/doc/user-manual/</ulink>.
+You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
  </para>
 
  <para>
@@ -3044,6 +3044,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.15  2001/10/14 23:46:24  hal9
+ Various minor changes. Fleshed out SEE ALSO section.
+
  Revision 1.13  2001/10/10 17:28:33  hal9
  Very minor changes.
 
