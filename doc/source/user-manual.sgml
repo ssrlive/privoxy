@@ -19,6 +19,7 @@
 <!entity % p-config "IGNORE">
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 <!entity  my-copy "&copy;">         <!-- kludge for docbook2man           -->
+<!entity % draft "IGNORE">          <!-- WIP     -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -27,7 +28,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.114 2002/05/16 09:42:50 oes Exp $
+ $Id: user-manual.sgml,v 1.115 2002/05/16 16:25:00 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +54,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.114 2002/05/16 09:42:50 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.115 2002/05/16 16:25:00 oes Exp $</pubdate>
 
 <!--
 
@@ -426,9 +427,9 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-   Install <application>Privoxy</application>. See the <link
-   linkend="installation">Installation Section</link> for platform specific
-   information. 
+  Install <application>Privoxy</application>. See the <link
+  linkend="installation">Installation Section</link> below for platform specific
+  information. 
  </para>
  </listitem>  
 
@@ -437,54 +438,69 @@ automatically start Privoxy in the boot process.
    Advanced users and those who want to offer <application>Privoxy</application>
    service to more than just their local machine should check the <link
    linkend="config">main config file</link>, especially the <link
-   linkend="access-control">security-relevant</link> options.
+   linkend="access-control">security-relevant</link> options. These are 
+   off by default.
+  </para>
+ </listitem>  
+
+ <listitem>
+  <para>
+  Start <application>Privoxy</application>, if the installation program has
+  not done this already (may vary according to platform). See the section
+  <link linkend="startup">Starting <application>Privoxy</application></link>.
   </para>
  </listitem>
 
  <listitem>
   <para>
-   Start <application>Privoxy</application>, if the installation program has
-   not done this already. See the section <link linkend="startup">Starting
-   <application>Privoxy</application></link>.
-  </para>
- </listitem>  
-
- <listitem>
-  <para>
-   Set your browser to use <application>Privoxy</application> as HTTP and HTTPS
-   proxy by setting the proxy configuration for address of
+   Set your browser to use <application>Privoxy</application> as HTTP and
+   HTTPS proxy by setting the proxy configuration for address of
    <literal>127.0.0.1</literal> and port <literal>8118</literal>.
    (<application>Junkbuster</application> and earlier versions of
    <application>Privoxy</application> used port 8000.) See the section <link
-   linkend="startup">Starting <application>Privoxy</application></link>.
+   linkend="startup">Starting <application>Privoxy</application></link> below
+   for more details on this.
   </para>
  </listitem>  
 
  <listitem>
   <para>
-    Flush your browser's caches, to remove any cached ad images.
+    Flush your browser's disk and memory caches, to remove any cached ad images.
   </para>
-</listitem> 
+ </listitem> 
 
  <listitem>
   <para>
-   Enjoy surfing with enhanced comfort and privacy.
+   A default installation should provide a reasonable starting point for 
+   most. There will undoubtedly be occasions where you will want to adjust the
+   configuration, but that can be dealt with as the need arises. Little 
+   to no initial configuration is required in most cases.
+  </para>
+  <para>
+   See the <link linkend="configuration">Configuration section</link> for more
+   configuration options, and how to customize your installation.
+ <![%draft;[  You might also want to look at the <link
+   linkend="quickstart-ad-blocking">next section</link> for a quick
+   introduction to how <application>Privoxy</application> blocks ads and
+   banners.]]>
   </para>
  </listitem> 
- 
+
  <listitem>
   <para>
     If you experience ads that slipped through, innocent images that are
-    blocked, or otherwise feel the need to fine-tune <application>Privoxy's</application>
-    behaviour, take a look at the <link linkend="actions-file">actions files</link>.
-    As a quick start, you might find the <link linkend="act-examples">richly
-    commented examples</link> helpful. You can also view and edit the actions
-    files through the <ulink url="http://config.privoxy.org">web-based
-    user interface</ulink>. The Appendix <quote><link linkend="actionsanat">Anatomy of
-    an Action</link></quote> has hints how to debug actions that <quote>misbehave</quote>.
+    blocked, or otherwise feel the need to fine-tune
+    <application>Privoxy's</application> behaviour, take a look at the <link
+    linkend="actions-file">actions files</link>. As a quick start, you might
+    find the <link linkend="act-examples">richly commented examples</link>
+    helpful. You can also view and edit the actions files through the <ulink
+    url="http://config.privoxy.org">web-based user interface</ulink>. The
+    Appendix <quote><link linkend="actionsanat">Anatomy of an
+    Action</link></quote> has hints how to debug actions that
+    <quote>misbehave</quote>.
   </para>
  </listitem> 
- 
+
  <listitem>
   <para>
    Please see the section <link linkend="contact">Contacting the
@@ -492,10 +508,153 @@ automatically start Privoxy in the boot process.
    help. 
   </para>
  </listitem> 
+
+ <listitem>
+  <para>
+   Now enjoy surfing with enhanced comfort and privacy!
+  </para>
+ </listitem> 
+ 
  </itemizedlist>
 </para>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<![%draft;[
+
+<sect2 id="quickstart-ad-blocking">
+<title>Quickstart to Ad Blocking</title>
+<!--
+ FIXME: This is unfinished. Do not publish yet!
+-->
+<para>
+ Ad blocking is but one of <application>Privoxy's</application>
+ array of features. Many of these features are for the technically minded advanced 
+ user. But, ad blocking is surely common ground for everybody.
+</para>
+<para> 
+ This section will provide a quick overview of ad blocking so 
+ you can get up to speed quickly without having to read the more extensive
+ information provided below, though this is highly recommeneded.
+</para>
+<para>
+ First a bit of a warning ... blocking ads is much like blocking SPAM: the
+ more aggressive you are about it, the more likely you are to block a few
+ things that were not intended. So there is a trade off here. If you want
+ extreme ad free browsing, be prepared to deal with more
+ <quote>problem</quote> sites, and to spend more time adjusting the
+ configuration to solve these unintended consequences.
+</para>
+<para>
+ Secondly, a quick note on <application>Privoxy's </application>
+ <quote>actions</quote>. <quote>Actions</quote> in this context, are 
+ the directives we use to tell <application>Privoxy</application> to perform
+ some task relating to HTTP transactions (i.e. web browsing). We tell
+ <application>Privoxy</application> to take some <quote>action</quote>. Each
+ action has a unique name and function. While there are many potential
+ <application>actions</application> in <application>Privoxy's</application>
+ arsenal, only a few are used for ad blocking. <link
+ linkend="actions">Actions</link>, and <link linkend="actions-file">action
+ configuration files</link>, are explained in depth below.
+</para>
+<para>
+ Actions are specified in <application>Privoxy's</application> configuration,
+ followed by one or more URLs to which the action should apply. URLs 
+ can actually be URL type <link linkend="af-patterns">patterns</link> that use
+ wildcards so they can apply potentially to a range of similar URLs.
+</para>
+<para>
+ When you connect to a website, the full path of the URL will either match one 
+ of actions as defined in <application>Privoxy's</application> configuration,
+ or not. If so, then <application>Privoxy</application> will perform the
+ action accordingly. If not, then nothing special happens. Futhermore, web
+ pages may contain embedded, secondary URLs that your web browser will
+ display as it parses the original page's HTML content. An ad image for
+ instance, is just a URL embedded in the page somewhere. The image itself may
+ be on the same server, or a server somewhere else on the Internet. Complex
+ web pages will have many such embedded URLs.
+</para>
+
+<para>
+ The actions we need to know about for ad blocking are:  <link
+ linkend="block">block</link>, <link
+ linkend="handle-as-image">handle-as-image</link>, and <link 
+ linkend="set-image-blocker">set-image-blocker</link>.
+</para>
+
+<para>
+ <itemizedlist>
+  
+ <listitem>
+  <para>
+   <link linkend="block"><emphasis>block</emphasis></link> - this action stops
+   any contact between your browser and any URL patterns that match this
+   action's configuration. It can be used for blocking ads, but also anything
+   that is determined to be unwanted. By itself, it simply stops any
+   communication with the remote server. If this is the only action that 
+   matches for a particular URL, then <application>Privoxy</application> will 
+   display its own BLOCKED page to let you now what has happened.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   <link linkend="handle-as-image"><emphasis>handle-as-image</emphasis></link> - 
+   forces <application>Privoxy</application> to treat this URL as if it were 
+   an image. <application>Privoxy</application> knows about common image 
+   types (e.g. GIF), but there are many situations where this does not apply.
+   So we'll force it. This is particularly important for ad blocking, since 
+   once we can treat it as an image, we can make more intelligent decisisions 
+   on how to handle it. There are some limitations to this though. For
+   instance, you can't just force an image substituion for an entire HTML page 
+   in most situations.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   <link
+   linkend="set-image-blocker"><emphasis>set-image-blocker</emphasis></link> -
+   tells <application>Privoxy</application> what to display in place of 
+   an ad image that has hit a block rule. For this to come into play, 
+   the URL must match a block action somewhere in the configuration.
+   <emphasis>And</emphasis>, it must also either be of a known image type, or
+   match an <link
+   linkend="handle-as-image"><emphasis>handle-as-image</emphasis></link>
+   action.
+  </para>
+  <para>
+   The configuration options on what to display instead of the ad are:
+  </para>
+  <simplelist>
+   <member>
+    &nbsp;&nbsp;&nbsp;<emphasis>pattern</emphasis> - a checkboard pattern, so that an ad 
+    replacement is obvious. This is the default.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    &nbsp;&nbsp;&nbsp;<emphasis>blank</emphasis> - A very small empty GIF image is displayed.
+    This is the so-called <quote>invisible</quote> configuration option.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    &nbsp;&nbsp;&nbsp;<emphasis>http://&lt;URL&gt;</emphasis> - A redirect to any URL of the
+    user's choosing.
+   </member>
+  </simplelist>
+  </listitem> 
+
+</itemizedlist>
+</para>
+
+</sect2>
+]]>
+
 </sect1>
+
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="startup">
@@ -6732,6 +6891,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.115  2002/05/16 16:25:00  oes
+ Extended the Filter File chapter & minor fixes
+
  Revision 1.114  2002/05/16 09:42:50  oes
  More ulink->link, added some hints to Quickstart section
 
