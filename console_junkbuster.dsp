@@ -109,6 +109,14 @@ SOURCE=.\amiga.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cgi.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cgi.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\config.h
 # End Source File
 # Begin Source File
