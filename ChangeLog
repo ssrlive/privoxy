@@ -3,7 +3,8 @@ ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
 *** Version 2.2.11 Beta Changes (WIP) ***
-- Various spec file and init script cleanups and improvements.
+- Various spec file and init script cleanups and improvements (Redhat and
+SuSE).
 - CGI Editor works on OS/2 now.
 - Fix restart failure where sockets were in TIME_WAIT.
 - Fixes for actions cgi editor, make sure we have right file.
@@ -12,9 +13,10 @@ ChangeLog for Internet JunkBuster
 is.)
 - A --pidfile command line option now, in addition to --help, 
 --version, --no-daemon, --user and configfile. --no-daemon replaces
-the former -d option and _DEBUG define.
-- Signal handling cleanups (Unix).
-- CGI editor improvements and fixes.
+the former -d option and _DEBUG define. --user will drop privileges 
+to the specified user.
+- Signal handling cleanups (*nix).
+- CGI actions editor improvements and fixes.
 - Error handling improvements, especially out of memory.
 - Default re_filterfile fix that caused spurious IJB logos 
 (instead of 'blank').
