@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.7 2001/05/29 09:50:24 jongfoster Exp $
+# $Id: config,v 1.8 2001/05/31 21:52:16 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -183,35 +183,6 @@ forwardfile   ./forward
 #            listen-address    127.0.0.1:8000
 #
 
-#
-#  The 'tinygif' option lets you change how Junkbuster treats blocked
-#  images.  The default behavior is to send an HTML answer to requests
-#  for images, resulting in a "broken image icon" in place of the blocked
-#  image.  That's a little ugly, so several other options are available:
-#
-#     VALUE       EFFECT
-#     =====       ======
-#     0           Send HTML
-#     1           Send a GIF of one transparent pixel
-#     2           Send a GIF with the word "JUNKBUSTER"
-#     3 <url>     Send a redirect to the image indicated by the <url>
-#
-#  As an example of the last option:
-#
-#    tinygif 3 http://i.j.b/ijb-send-banner.gif
-#
-#  Will replace every blocked image with an image built into junkbuster.
-#
-#  There is one non-obvious benefit to using option "3".  If you use
-#  option 3, your Web browser will likely cache the image you specify
-#  on your local machine.  That means that after the first use, that
-#  image will load very quickly (and won't require a request to the
-#  junkbuster proxy)
-#
-#  Default: 0, i.e. send HTML
-#
-tinygif   2
-
 
 #
 #  The debug option sets the level of debugging information to log in
@@ -248,7 +219,8 @@ tinygif   2
 #
 #  Default: 0, i.e. log nothing but fatal errors
 #
-debug   1
+debug   1    # URLs
+debug   4096 # Info
 debug   8192 # Errors - *we highly recommended enabling this*
 
 #
