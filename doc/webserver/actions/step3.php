@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.1 2002/03/30 03:20:30 oes Exp $
+  $Id: step3.php,v 1.4 2002/04/01 19:13:47 oes Exp $
 
   $Log: step3.php,v $
+  Revision 1.4  2002/04/01 19:13:47  oes
+  Extended, fixed bugs, beefed up design, made IE-safe
+
   Revision 1.1  2002/03/30 03:20:30  oes
   Added Feedback mechanism for actions file
 
@@ -53,9 +56,10 @@
 /* 
  * For testing:
  */
-error_reporting(E_NONE);
-//error_reporting(E_ALL);
 //phpinfo();
+//error_reporting(E_ALL);
+error_reporting(E_NONE);
+
 
 
 /* 
