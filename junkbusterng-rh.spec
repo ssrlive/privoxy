@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.42 2002/03/12 13:41:18 sarantis Exp $
+# $Id: junkbuster-rh.spec,v 1.43 2002/03/21 16:04:10 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -27,31 +27,32 @@
 #
 
 # Defines should happen in the begining of the file
-%define ijbconf %{_sysconfdir}/%{name}
+%define oldname junkbuster
+%define jbngconf %{_sysconfdir}/%{oldname}
 
-Summary: The Internet Junkbuster
+Summary: JunkbusterNG (The Internet Junkbuster NextGeneration)
 Vendor: http://ijbswa.sourceforge.net
-Name: junkbuster
-Version: 2.9.11
-Release: 3
+Name: junkbusterng
+Version: 2.9.13
+Release: 1
 Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: Networking/Utilities
 URL: http://ijbswa.sourceforge.net/
-Obsoletes: junkbuster-raw junkbuster-blank
+Obsoletes: junkbuster-raw junkbuster-blank junkbuster
 # Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service 
 Prereq: shadow-utils, chkconfig, initscripts, sh-utils
 BuildRequires: perl gzip sed docbook-utils libtool
-Conflicts: junkbuster-raw junkbuster-blank
+Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 %description
-Internet Junkbuster is a web proxy with advanced filtering
+JunkbusterNG is a web proxy with advanced filtering
 capabilities for protecting privacy, filtering web page content,
 managing cookies, controlling access, and removing ads, banners,
-pop-ups and other obnoxious Internet Junk. Junkbuster has a very
+pop-ups and other obnoxious Internet Junk. JunkbusterNG has a very
 flexible configuration and can be customized to suit individual needs
-and tastes. Internet Junkbuster has application for both stand-alone
+and tastes. JunkbusterNG has application for both stand-alone
 systems and multi-user networks.
 
 %prep
@@ -72,7 +73,7 @@ make redhat-dok
 mkdir -p %{buildroot}%{_sbindir} \
          %{buildroot}%{_mandir}/man8 \
          %{buildroot}%{_localstatedir}/log/%{name} \
-         %{buildroot}%{ijbconf}/templates \
+         %{buildroot}%{jbngconf}/templates \
          %{buildroot}%{_sysconfdir}/logrotate.d \
          %{buildroot}%{_sysconfdir}/rc.d/init.d 
 
@@ -82,17 +83,17 @@ mkdir -p %{buildroot}%{_sbindir} \
 ## Gziping the documentation files is not recomended - morcego
 #gzip README AUTHORS ChangeLog %{name}.1 || /bin/true
 
-install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
+install -s -m 744 jbng %{buildroot}%{_sbindir}/jbng
 
 ## We need to change the man section internaly on the manpage
 ## -- morcego (sugestion by Hal Burgiss)
 #cp -f %{name}.1 %{buildroot}%{_mandir}/man8/%{name}.8
-sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{name}.1 > %{buildroot}%{_mandir}/man8/%{name}.8
-cp -f *.action %{buildroot}%{ijbconf}/
-cp -f re_filterfile %{buildroot}%{ijbconf}/re_filterfile
-cp -f trust %{buildroot}%{ijbconf}/trust
-cp -f templates/*  %{buildroot}%{ijbconf}/templates/
-cp -f %{name}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
+cp -f *.action %{buildroot}%{jbngconf}/
+cp -f re_filterfile %{buildroot}%{jbngconf}/re_filterfile
+cp -f trust %{buildroot}%{jbngconf}/trust
+cp -f templates/*  %{buildroot}%{jbngconf}/templates/
+cp -f %{oldname}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{oldname}
 install -m 755 %{name}.init %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}
 install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
 
@@ -101,7 +102,7 @@ install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
 ## Changing the sed paramter delimiter to @, so we don't have to
 ## escape the slashes
 cat config | \
-    sed 's@^confdir.*@confdir %{_sysconfdir}/%{name}@g' | \
+    sed 's@^confdir.*@confdir %{jbngconf}@g' | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/%{name}\/permissionsfile/g' | \
 #    sed 's/^re_filterfile.*/re_filterfile \/etc\/%{name}\/re_filterfile/g' | \
 #    sed 's/^logfile.*/logfile \%{_localstatedir}\/log\/%{name}\/logfile/g' | \
@@ -109,9 +110,9 @@ cat config | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' > \
-    %{buildroot}%{ijbconf}/config
+    %{buildroot}%{jbngconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' ijb.action >\
-    %{buildroot}%{ijbconf}/ijb.action
+    %{buildroot}%{jbngconf}/ijb.action
 
 ## Macros are expanded even on commentaries. So, we have to use %%
 ## -- morcego
@@ -135,12 +136,14 @@ fi
 
 %post
 # for upgrade from 2.0.x
+[ -f %{_localstatedir}/log/%{oldname}/logfile ] &&\
+ mv -f %{_localstatedir}/log/%{oldname}/logfile %{_localstatedir}/log/%{name}/logfile || /bin/true
 [ -f %{_localstatedir}/log/%{name}/%{name} ] &&\
  mv -f %{_localstatedir}/log/%{name}/%{name} %{_localstatedir}/log/%{name}/logfile || /bin/true
 chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null
 chown -R %{name}:%{name} /etc/%{name} 2>/dev/null
 if [ "$1" = "1" ]; then
-     /sbin/chkconfig --add %{name}
+#     /sbin/chkconfig --add %{name}
 	/sbin/service %{name} condrestart > /dev/null 2>&1
 fi
 # 01/09/02 HB, getting rid of any user=junkbust
@@ -148,9 +151,11 @@ fi
 id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
 
 %preun
+/sbin/service %{oldname} stop > /dev/null 2>&1 ||:
+/sbin/chkconfig --del %{oldname}
+
 if [ "$1" = "0" ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1 ||:
-	/sbin/chkconfig --del %{name}
 fi
 
 %postun
@@ -166,62 +171,91 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 %files
 %defattr(0644,root,root,0755)
 %doc README AUTHORS ChangeLog
-# Where are the webserver/{developer,user}-manual files ?
 %doc doc/text/developer-manual.txt doc/text/user-manual.txt
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/ijb_docs.css
 #%doc %{name}.weekly %{name}.monthly AUTHORS
 
-%dir %{ijbconf}
-%dir %{ijbconf}/templates
+%dir %{jbngconf}
+%dir %{jbngconf}/templates
 %attr(0744,junkbuster,junkbuster) %dir %{_localstatedir}/log/%{name}
 
-%attr(0744,junkbuster,junkbuster)%{_sbindir}/%{name}
+%attr(0744,junkbuster,junkbuster)%{_sbindir}/jbng
 
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
-%config %{ijbconf}/config
-%config %{ijbconf}/ijb-advanced.action
-%config %{ijbconf}/ijb-basic.action
-%config %{ijbconf}/ijb-intermediate.action
-%config %{ijbconf}/ijb.action
-%config %{ijbconf}/re_filterfile
-%config %{ijbconf}/trust
+%config %{jbngconf}/config
+%config %{jbngconf}/ijb-advanced.action
+%config %{jbngconf}/ijb-basic.action
+%config %{jbngconf}/ijb-intermediate.action
+%config %{jbngconf}/ijb.action
+%config %{jbngconf}/re_filterfile
+%config %{jbngconf}/trust
 
-%config %{ijbconf}/templates/blocked
-%config %{ijbconf}/templates/blocked-compact
-%config %{ijbconf}/templates/cgi-error-404
-%config %{ijbconf}/templates/cgi-error-bad-param
-%config %{ijbconf}/templates/cgi-error-disabled
-%config %{ijbconf}/templates/cgi-error-file
-%config %{ijbconf}/templates/cgi-error-modified
-%config %{ijbconf}/templates/cgi-error-parse
-%config %{ijbconf}/templates/connect-failed
-%config %{ijbconf}/templates/default
-%config %{ijbconf}/templates/edit-actions-add-url-form
-%config %{ijbconf}/templates/edit-actions-for-url
-%config %{ijbconf}/templates/edit-actions-list
-%config %{ijbconf}/templates/edit-actions-list-section
-%config %{ijbconf}/templates/edit-actions-list-url
-%config %{ijbconf}/templates/edit-actions-remove-url-form
-%config %{ijbconf}/templates/edit-actions-url-form
-%config %{ijbconf}/templates/no-such-domain
-%config %{ijbconf}/templates/show-request
-%config %{ijbconf}/templates/show-status
-%config %{ijbconf}/templates/show-status-file
-%config %{ijbconf}/templates/show-url-info
-%config %{ijbconf}/templates/show-version
-%config %{ijbconf}/templates/toggle
-%config %{ijbconf}/templates/toggle-mini
-%config %{ijbconf}/templates/untrusted
+%config %{jbngconf}/templates/blocked
+%config %{jbngconf}/templates/blocked-compact
+%config %{jbngconf}/templates/cgi-error-404
+%config %{jbngconf}/templates/cgi-error-bad-param
+%config %{jbngconf}/templates/cgi-error-disabled
+%config %{jbngconf}/templates/cgi-error-file
+%config %{jbngconf}/templates/cgi-error-modified
+%config %{jbngconf}/templates/cgi-error-parse
+%config %{jbngconf}/templates/connect-failed
+%config %{jbngconf}/templates/default
+%config %{jbngconf}/templates/edit-actions-add-url-form
+%config %{jbngconf}/templates/edit-actions-for-url
+%config %{jbngconf}/templates/edit-actions-list
+%config %{jbngconf}/templates/edit-actions-list-section
+%config %{jbngconf}/templates/edit-actions-list-url
+%config %{jbngconf}/templates/edit-actions-remove-url-form
+%config %{jbngconf}/templates/edit-actions-url-form
+%config %{jbngconf}/templates/no-such-domain
+%config %{jbngconf}/templates/show-request
+%config %{jbngconf}/templates/show-status
+%config %{jbngconf}/templates/show-status-file
+%config %{jbngconf}/templates/show-url-info
+%config %{jbngconf}/templates/show-version
+%config %{jbngconf}/templates/toggle
+%config %{jbngconf}/templates/toggle-mini
+%config %{jbngconf}/templates/untrusted
 
-%config %{_sysconfdir}/logrotate.d/%{name}
+%config %{_sysconfdir}/logrotate.d/%{oldname}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/S84%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
+%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/S84%{name}
 
-%{_mandir}/man8/%{name}.8*
+%{_mandir}/man8/%{oldname}.8*
 
 %changelog
+* Fri Mar 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ junkbusterng-2.9.13-1
+- References to the expression ijb where changed where possible
+- New package name: junkbusterng (all in lower case, acording to
+  the LSB recomendation)
+- Version changed to: 2.9.13
+- Release: 1
+- Added: junkbuster to obsoletes and conflicts (Not sure this is
+  right. If it obsoletes, why conflict ? Have to check it later)
+- Summary changed: Stefan, please check and aprove it
+- Changes description to use the new name
+- Sed string was NOT changed. Have to wait to the manpage to
+  change first
+- Keeping the user junkbuster for now. It will require some aditional
+  changes on the script (scheduled for the next specfile release)
+- Added post entry to move the old logfile to the new log directory
+- Removing "chkconfig --add" entry (not good to have it automaticaly
+  added to the startup list).
+- Added preun section to stop the service with the old name, as well
+  as remove it from the startup list
+- Removed the chkconfig --del entry from the conditional block on
+  the preun scriptlet (now handled on the %files section)
+
 * Thu Mar 21 2002 Hal Burgiss <hal@foobox.net>
 - added ijb_docs.css to docs.
 
@@ -438,6 +472,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 	additional "-r @" flag.
 
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.43  2002/03/21 16:04:10  hal9
+# added ijb_docs.css to %doc
+#
 # Revision 1.42  2002/03/12 13:41:18  sarantis
 # remove hard-coded "ijbswa" string in build phase
 #

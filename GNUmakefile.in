@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.17 2002/03/19 19:30:04 morcego Exp $
+# $Id: GNUmakefile.in,v 1.18 2002/03/21 23:00:00 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.18  2002/03/21 23:00:00  swa
+# want to autogenerate stuff.
+#
 # Revision 1.17  2002/03/19 19:30:04  morcego
 # - Fixing stylesheet checking on configure. If it is found, no further checks
 #   should be done
@@ -277,7 +280,7 @@ MAN_DEST    = @mandir@
 # Build tools
 #############################################################################
 
-PROGRAM    = junkbuster@EXEEXT@
+PROGRAM    = jbng@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
@@ -311,7 +314,7 @@ DOSFILTER  = perl -p -e 's/\n/\r\n/'
 # Setup for make distribution rh and suse for now 
 #############################################################################
 
-TAR_ARCH = /tmp/ijbswa-$(RPM_VERSION).tar.gz
+TAR_ARCH = /tmp/JunkbusterNG-$(RPM_VERSION).tar.gz
 RPM_BASE = @RPM_BASE@
 
 #############################################################################
@@ -453,8 +456,8 @@ redhat-dist:
 	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
 	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
              -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-              junkbuster-rh.spec > $$TMPFILE ; then \
-      $(MV) -f $$TMPFILE junkbuster-rh.spec; \
+              junkbusterng-rh.spec > $$TMPFILE ; then \
+      $(MV) -f $$TMPFILE junkbusterng-rh.spec; \
    else \
       $(ECHO) "Could not set version info in specfile."; \
       exit 1;\
@@ -468,9 +471,9 @@ redhat-dist:
 # anonymously ncftps the rpms to sourceforge
 #
 redhat-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/junkbusterng-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
 # better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/junkbuster-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/junkbusterng-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
@@ -554,8 +557,8 @@ tarball-dist:
 	@make clean
 	make $(PROGRAM) 
 #	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../ijb-distribution-$(VERSION).tar.gz ijb/
-	chmod a+r ../../ijb-distribution-$(VERSION).tar.gz
+	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../JunkbusterNG-distribution-$(VERSION).tar.gz ijb/
+	chmod a+r ../../JunkbusterNG-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
 
 #############################################################################
@@ -701,9 +704,9 @@ tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 
 tarball-src: clobber
-	$(LN) -s current ../ijb-$(VERSION)-$(CODE_STATUS)
-	$(TAR) -C.. -cvhzf ijb-$(VERSION)-$(CODE_STATUS)-src.tar.gz ijb-$(VERSION)-$(CODE_STATUS)
-	$(RM) ../ijb-$(VERSION)-$(CODE_STATUS)
+	$(LN) -s current ../JunkbusterNG-$(VERSION)-$(CODE_STATUS)
+	$(TAR) -C.. -cvhzf JunkbusterNG-$(VERSION)-$(CODE_STATUS)-src.tar.gz JunkbusterNG-$(VERSION)-$(CODE_STATUS)
+	$(RM) ../JunkbusterNG-$(VERSION)-$(CODE_STATUS)
 
 install: all
 	#
@@ -720,7 +723,7 @@ install: all
 	$(INSTALL) config ijb.action re_filterfile trust $(DEST)
 	# FIXME $(ECHO) junkbuster.logrotate junkbuster.monthly junkbuster.weekly
 	# FIXME: Need new manual! $(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
-	$(INSTALL) junkbuster.init /etc/init.d/junkbuster
+	$(INSTALL) junkbusterng.init /etc/init.d/junkbusterng
 
 
 #############################################################################
