@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.88 2002/04/25 19:13:57 morcego Exp $
+# $Id: GNUmakefile.in,v 1.89 2002/04/26 17:20:54 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -566,7 +566,7 @@ dok-webserver: doc/source/ldpOK.dsl
      doc/webserver/index.html && rm -f doc/source/webserver/*.bak
 
 # Main documentation target.
-dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver authors
+dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -574,7 +574,7 @@ dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver authors
 #
 # an alternative to the above dok. disabled man page creation for the moment
 #
-redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver authors
+redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver dok-authors
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -600,7 +600,7 @@ redhat-readme: doc/source/ldpOK.dsl
 	@rm -f doc/source/ldpOK.dsl
 
 ## Make AUTHORS file
-authors: doc/source/ldpOK.dsl
+dok-authors: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../AUTHORS && rm -f tmp.html
 	# kludge to force recreation on next run. Rodgrigo?
@@ -806,6 +806,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.89  2002/04/26 17:20:54  swa
+# just produce single html files to proces them later with Destiller or somesuch. looks prettier.
+#
 # Revision 1.88  2002/04/25 19:13:57  morcego
 # Removed RPM release number declaration on configure.in
 # Changed makefile to use given value for RPM_PACKAGEV when on uploading
