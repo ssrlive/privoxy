@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.13 2001/06/29 13:18:36 oes Exp $
+# $Id: Makefile.in,v 1.14 2001/07/01 16:27:44 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.14  2001/07/01 16:27:44  oes
+# Fixed misplaced dependancy
+#
 # Revision 1.13  2001/06/29 13:18:36  oes
 # - added depandancy of filters.o on cgi.h
 #
@@ -76,7 +79,6 @@
 #
 #
 
-
 # define version (will be wired into the rpm.)
 VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
@@ -103,10 +105,6 @@ MAN_DEST    = @mandir@
 # The flag "-mwindows -mno-cygwin" will cause Cygwin to use MingW32 for Win32 install.
 CYGWIN_FLAGS = @CYGWIN_FLAGS@
 
-# Need to define this in order to link PCRE statically under Win32
-# Also define under UNIX to use system PCRE headers.
-PCRE_WIN_FLAGS = @STATIC_PCRE_ONLY@-DSTATIC
-
 # Either/Or of these next two lines
 #DEBUG_CFLAGS = -g
 DEBUG_CFLAGS  = -O3
@@ -119,7 +117,7 @@ SOLARIS_FLAGS = @SOLARIS_ONLY@-D__EXTENSIONS__=1
 # Do we need  -DHAVE_STRING  ???
 CFLAGS = @CFLAGS@ @CPPFLAGS@ \
          -D__MT__=1 -D__STDC__=1 $(SOLARIS_FLAGS) -DHAVE_STRING $(DEBUG_CFLAGS) \
-         -Ipcre $(CYGWIN_FLAGS) $(PCRE_WIN_FLAGS)
+         $(CYGWIN_FLAGS) $(PCRE_WIN_FLAGS) @STATIC_PCRE_ONLY@ -Ipcre
 
 PROGRAM = junkbuster@EXEEXT@
 CC      = gcc
@@ -133,7 +131,7 @@ STRIP_PROG   = strip
 
 C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
          jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
-         parsers.c showargs.c ssplit.c cgi.c
+         parsers.c showargs.c ssplit.c cgi.c deanimate.c
          
 C_OBJS = $(C_SRC:.c=.$(OBJEXT))
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
@@ -146,21 +144,20 @@ W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
 W32_INIS  = @WIN_ONLY@junkbstr.txt saclfile.txt sblock.txt scookie.txt  \
             @WIN_ONLY@sforward.txt simage.txt spopup.txt strust.txt sregexp.txt
 
-PCRS_SRC     = @PCRS_ONLY@pcrs.c
-PCRS_OBJS    = $(PCRS_SRC:.c=.$(OBJEXT))
-PCRS_HDRS    = $(PCRS_SRC:.c=.h)
+PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
+PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.$(OBJEXT))
+PCRS_HDRS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.h)
 
 PCRE_SRC     = @STATIC_PCRE_ONLY@pcre/get.c pcre/maketables.c pcre/study.c pcre/pcre.c
 PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.$(OBJEXT))
 PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h pcre/pcre.h
-PCRE_LIB     = @LIBRARY_PCRE_ONLY@-lpcre
 
-# No REGEX:
-@NO_REGEX_ONLY@REGEX_SRC    =
-# Without PCRE:
+# No REGEX (Either because dynamically linked pcreposix, or no regex at all):
+REGEX_SRC    =
+# GNU REGEX:
 @GNU_REGEX_ONLY@REGEX_SRC    = gnu_regex.c
-# With PCRE:
-@PCRE_REGEX_ONLY@REGEX_SRC    = @STATIC_PCRE_ONLY@pcre/pcreposix.c
+# PCRE REGEX:
+@PCRE_REGEX_ONLY@@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
 
 REGEX_OBJS   = $(REGEX_SRC:.c=.$(OBJEXT))
 REGEX_HDRS   = $(REGEX_SRC:.c=.h)
@@ -172,7 +169,7 @@ PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcr
 # FIXME: This is always commented out
 SOCKET_LIB   = @SOLARIS_ONLY@-lsocket -lnsl
 
-LIBS         = $(PCRE_LIB) $(W32_LIB) $(SOCKET_LIB)
+LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB)
 
 SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
 OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
@@ -185,9 +182,7 @@ HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
 # -------------------------------------------------------------------------
 LDFLAGS = $(DEBUG_CFLAGS) $(CYGWIN_FLAGS)
 
-
 all: $(PROGRAM)
-
 
 SUFFIX     = .txt:o
 .SUFFIXES  : .txt
@@ -272,7 +267,7 @@ tarball-dist:
 actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
 encode.@OBJEXT@:    encode.c    encode.h    config.h
 errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
-filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h showargs.h ssplit.h cgi.h @WIN_ONLY@win32.h 
+filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h showargs.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
 gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
 jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
 jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h showargs.h @WIN_ONLY@w32log.h win32.h cgi.h
@@ -285,6 +280,7 @@ parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h 
 showargs.@OBJEXT@:  showargs.c  showargs.h  config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
 cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
