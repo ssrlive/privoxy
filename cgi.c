@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.35 2001/10/23 21:48:19 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.36 2001/10/26 17:33:27 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.35 2001/10/23 21:48:19 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.36  2001/10/26 17:33:27  oes
+ *    marginal bugfix
+ *
  *    Revision 1.35  2001/10/23 21:48:19  jongfoster
  *    Cleaning up error handling in CGI functions - they now send back
  *    a HTML error page and should never cause a FATAL error.  (Fixes one
@@ -53,7 +56,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.35 2001/10/23 21:48:19 jongfoster Exp $";
  *    Revision 1.34  2001/10/18 22:22:09  david__schmidt
  *    Only show "Local support" on templates conditionally:
  *      - if either 'admin-address' or 'proxy-info-url' are uncommented in config
- *      - if not, no Local support section appears are removed automatically
+ *      - if not, no Local support section appears
  *
  *    Revision 1.33  2001/10/14 22:28:41  jongfoster
  *    Fixing stupid typo.
@@ -262,6 +265,8 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.35 2001/10/23 21:48:19 jongfoster Exp $";
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 #include "cgiedit.h"
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
+#include "loadcfg.h"
+/* loadcfg.h is for g_bToggleIJB only */
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
@@ -1305,7 +1310,6 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       return NULL;
    }
 
-
    err = map(exports, "version", 1, VERSION, 1)
       || map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1)
       || map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1)
@@ -1313,6 +1317,8 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       || map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1)
       || map(exports, "menu", 1, make_menu(caller), 0)
       || map(exports, "code-status", 1, CODE_STATUS, 1);
+
+   err = err || map_conditional(exports, "enabled-display", g_bToggleIJB);
 
    snprintf(buf, 20, "%d", csp->config->hport);
    err = err || map(exports, "my-port", 1, buf, 1);
