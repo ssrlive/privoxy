@@ -53,8 +53,8 @@ to continue development.
 
 For tarball, first unpack:
 
- tar xzvf ijb_source_* [.tgz or .tar.gz]
- cd ijb_source_2.9.11_alpha
+ tar xzvf ijb-2.9.11-beta-src.tar.gz
+ cd ijb-2.9.11-beta
 
  autoheader   [suggested for CVS source]
  autoconf     [suggested for CVS source]
@@ -138,4 +138,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.9 2001/12/01 21:52:34 hal9 Exp $
+$Id: README,v 1.10 2002/02/24 05:20:35 hal9 Exp $
