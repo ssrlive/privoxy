@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: history.sgml,v 1.2 2002/04/06 05:07:28 hal9 Exp $
+ $Id: history.sgml,v 1.3 2002/04/07 08:10:12 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -37,7 +37,7 @@
 <para>
  <application>Junkbuster</application> was originally written by Anonymous
  Coders and <ulink
- url="http://www.junkbusters.com">Junkbuster's
+ url="http://www.junkbusters.com">Junkbusters
  Corporation</ulink>, and was released as free open-source software under the
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
