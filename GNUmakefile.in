@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.118 2002/09/11 08:22:37 oes Exp $
+# $Id: GNUmakefile.in,v 1.119 2002/09/23 03:42:41 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -762,9 +762,9 @@ $(DIR_PRIVOXY_OBJ)/dftables@EXEEXT@:       $(DIR_PRIVOXY_SRC_PCRE)/dftables.c $(
 		$(CC) -o $(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@ $(CFLAGS) $(DIR_PRIVOXY_SRC_PCRE)/dftables.c
 
 # Win32
-$(DIR_PRIVOXY_OBJ)/w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
-$(DIR_PRIVOXY_OBJ)/w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
-$(DIR_PRIVOXY_OBJ)/win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h pcrs.h project.h w32log.h win32.h
+$(DIR_PRIVOXY_OBJ)/w32log.@OBJEXT@:      $(DIR_PRIVOXY_SRC)/config.h  $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/jcc.h         $(DIR_PRIVOXY_SRC)/loadcfg.h    $(DIR_PRIVOXY_SRC)/miscutil.h  $(DIR_PRIVOXY_SRC)/pcrs.h    $(DIR_PRIVOXY_SRC)/project.h  $(DIR_PRIVOXY_SRC)/w32log.c  $(DIR_PRIVOXY_SRC)/w32log.h     $(DIR_PRIVOXY_SRC)/w32taskbar.h      $(DIR_PRIVOXY_SRC)/win32.h  $(DIR_PRIVOXY_SRC_PCRE)/pcre.h  $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h
+$(DIR_PRIVOXY_OBJ)/win32.@OBJEXT@:       $(DIR_PRIVOXY_SRC)/config.h  $(DIR_PRIVOXY_SRC)/jcc.h     $(DIR_PRIVOXY_SRC)/loadcfg.h     $(DIR_PRIVOXY_SRC)/pcrs.h       $(DIR_PRIVOXY_SRC)/project.h   $(DIR_PRIVOXY_SRC)/w32log.h  $(DIR_PRIVOXY_SRC)/win32.c    $(DIR_PRIVOXY_SRC)/win32.h   $(DIR_PRIVOXY_SRC_PCRE)/pcre.h  $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.h
+$(DIR_PRIVOXY_OBJ)/w32taskbar.@OBJEXT@:  $(DIR_PRIVOXY_SRC)/config.h  $(DIR_PRIVOXY_SRC)/w32log.h  $(DIR_PRIVOXY_SRC)/w32taskbar.c  $(DIR_PRIVOXY_SRC)/w32taskbar.h
 
 $(DIR_PRIVOXY_OBJ)/w32res.res: $(DIR_PRIVOXY_SRC)/w32res.rc \
                 $(DIR_PRIVOXY_SRC)/w32res.h \
@@ -982,6 +982,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.119  2002/09/23 03:42:41  hal9
+# This is higuita's make install/uninstall patch. Needs testing please!!!
+#
 # Revision 1.118  2002/09/11 08:22:37  oes
 # Fixed path (C_HDRS are in src/ now)
 #
