@@ -1,7 +1,7 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.1.1.1 2001/05/15 13:59:01 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/parsers.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.1 2001/05/13 21:57:06 administrat
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:01  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -787,11 +790,11 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
    }
 
    /*
-    * New option §: Forge a referer as http://[hostname:port of REQUEST]/
+    * New option § or L: Forge a referer as http://[hostname:port of REQUEST]/
     * to fool stupid checks for in-site links
     */
 
-   if (*referrer == '§')
+   if (*referrer == '§' || *referrer == 'L')
    {
       if (csp->send_user_cookie)
       {
