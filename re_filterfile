@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.20  2002/03/12 01:42:50  oes
+#     Introduced modular filters
+#
 #     Revision 1.19  2002/03/10 19:49:24  oes
 #     Added expression to kill referer tracking in JavaScripts
 #
@@ -205,9 +208,18 @@ FILTER: fun
 
 s/microsoft(?!.com)/MicroSuck/ig
 
-# Buzzword Bingo:
+# Buzzword Bingo (example for extended syntax)
 #
-s/industry-leading|cutting-edge|award-winning/<font color=red><b>BINGO!</b></font>/ig
+s* industry[ -]leading \
+|  cutting[ -]edge \
+|  award[ -]winning # Comments are OK, too!\
+|  high[ -]performance \
+|  solutions[ -]based \
+|  unmatched \
+|  unparalleled \
+|  unrivalled \
+*<font color=red><b>BINGO!</b></font> \
+*igx
 
 
 #################################################################################
