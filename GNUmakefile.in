@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.45 2002/03/29 19:45:45 swa Exp $
+# $Id: GNUmakefile.in,v 1.46 2002/03/29 20:09:01 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -109,6 +109,19 @@ TAR_ARCH = /tmp/privoxy-$(RPM_VERSION).tar.gz
 RPM_BASE = @RPM_BASE@
 
 #############################################################################
+# We include these files in our distributions
+#############################################################################
+# take care that no CVS .cvsignore or other crappy files
+# are included here
+CONFIG_FILES = config trust \
+		default.action \
+		basic.action intermediate.action advanced.action \
+		default.filter \
+		`find templates/ -type f | grep -v "CVS" | grep -v "\.#" | grep -v ".*~" | grep -v ".cvsignore" | grep - v "TAGS"` 
+DOC_FILES = AUTHORS LICENSE README ChangeLog \
+	`find doc/text/ -type f | grep -v "CVS" | grep -v "\.#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` privoxy.1
+
+#############################################################################
 # Filenames and libraries
 #############################################################################
 
@@ -119,14 +132,6 @@ C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
 
 C_OBJS = $(C_SRC:.c=.@OBJEXT@)
 C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
-
-CONFIG_FILES = config trust \
-		default.action \
-		basic.action intermediate.action advanced.action \
-		default.filter \
-		templates/*
-
-DOC_FILES = AUTHORS LICENSE README ChangeLog doc/text/* privoxy.1
 
 W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
 W32_FILES = @WIN_ONLY@w32.res
@@ -235,12 +240,10 @@ trust.txt: trust
 re_filterfile.txt: re_filterfile
 	$(DOSFILTER) < $< > $@ 
 
-
 #############################################################################
-# redhat distribution alpha and x86
+# RPM specifice stuff (SuSE or Redhat, ..)
 #############################################################################
-
-redhat-dist:
+rpm-stuff:
 	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
 			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
@@ -253,23 +256,25 @@ redhat-dist:
 	$(MAKE) clobber
 	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
 
+#############################################################################
+# redhat distribution alpha and x86
+#############################################################################
+redhat-dist: rpm-stuff
 	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
 	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
              -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
               privoxy-rh.spec > $$TMPFILE ; then \
-      $(MV) -f $$TMPFILE privoxy-rh.spec; \
-   else \
-      $(ECHO) "Could not set version info in specfile."; \
-      exit 1;\
-   fi
+	$(MV) -f $$TMPFILE privoxy-rh.spec; \
+	else \
+		$(ECHO) "Could not set version info in specfile."; \
+	exit 1;\
+	fi
 
 	$(TAR) --exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
-#
 # anonymously ncftps the rpms to sourceforge
-#
 redhat-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
 # better should use `arch` here instead of ix86 to support other platforms too
@@ -282,9 +287,58 @@ redhat-upload:
      # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 
 #############################################################################
+# suse distribution. works fine. no need to be root. 
+#############################################################################
+suse-dist: rpm-stuff
+	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
+              privoxy-suse.spec > $$TMPFILE ; then \
+	$(MV) -f $$TMPFILE privoxy-suse.spec; \
+	else \
+		$(ECHO) "Could not set version info in specfile."; \
+	exit 1;\
+	fi
+
+	$(TAR) --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+
+# anonymously ncftps the rpms to sourceforge
+suse-upload:
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+# better should use `arch` here instead of ix86 to support other platforms too
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
+
+# handle with care. use with root.
+suse-clean:
+	rpm -e junkbuster-suse || true
+	rm -rf /etc/junkbuster
+	rm -rf /etc/rc.d/junkbuster*
+	rm -rf /var/run/junkbuster.pid 
+	rm -rf /var/log/junkbuster
+	rm -f /etc/init.d/junkbuster
+	rm -f /usr/sbin/junkbuster
+	rm -f /usr/sbin/rcjunkbuster
+	rm -f /usr/share/man/man1/junkbuster.1.gz
+	rpm -e privoxy-suse || true
+	rm -rf /etc/privoxy
+	rm -rf /etc/rc.d/privoxy*
+	rm -rf /var/run/privoxy.pid 
+	rm -rf /var/log/privoxy
+	rm -f /etc/init.d/privoxy
+	rm -f /usr/sbin/privoxy
+	rm -f /usr/sbin/rcprivoxy
+	rm -f /usr/share/man/man1/privoxy.1.gz
+
+#############################################################################
 # generic distribution
 #############################################################################
-
 gen-dist:
 	@$(ECHO) ""
 	@$(ECHO) "You have run autoconf && autoheader && ./configure right?"
@@ -296,18 +350,18 @@ gen-dist:
 	cd .. && $(TAR) -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
 	$(GZIP_PROG) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Distribution with binary created.
 
-# anonymously ncftps the tarball to sourceforge
+# anonymously ncftps the package to sourceforge
 gen-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
@@ -325,7 +379,7 @@ gen-clean:
 #############################################################################
 solaris-dist: gen-dist
 	@$(ECHO) Done.
-# anonymously ncftps the tarball to sourceforge
+# anonymously ncftps the package to sourceforge
 solaris-upload: gen-upload
 	@$(ECHO) Done.
 # use with care
@@ -373,70 +427,6 @@ freebsd-upload:
 	@$(ECHO) coming soon. 
 
 #############################################################################
-# suse distribution. works fine. no need to be root. 
-#############################################################################
-suse-dist:
-	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
-		if [ ! -w $(RPM_BASE)/$$dir ]; then \
-			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
-			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
-			$(ECHO) "%_topdir /home/foo/rpm-build"; \
-			exit 1; \
-		fi; \
-	done; \
-
-	$(MAKE) clobber
-	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
-
-	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSIO)/g' \
-             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-              privoxy-suse.spec > $$TMPFILE ; then \
-      $(MV) -f $$TMPFILE privoxy-suse.spec; \
-   else \
-      $(ECHO) "Could not set version info in specfile."; \
-      exit 1;\
-   fi
-
-	$(TAR) --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-#
-# anonymously ncftps the rpms to sourceforge
-#
-suse-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-# better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
-	@$(ECHO) ... and release the files.
-	@$(ECHO) -------------------------------------------------------
-
-# handle with care. use with root.
-suse-clean:
-	rpm -e junkbuster-suse || true
-	rm -rf /etc/junkbuster
-	rm -rf /etc/rc.d/junkbuster*
-	rm -rf /var/run/junkbuster.pid 
-	rm -rf /var/log/junkbuster
-	rm -f /etc/init.d/junkbuster
-	rm -f /usr/sbin/junkbuster
-	rm -f /usr/sbin/rcjunkbuster
-	rm -f /usr/share/man/man1/junkbuster.1.gz
-	rpm -e privoxy-suse || true
-	rm -rf /etc/privoxy
-	rm -rf /etc/rc.d/privoxy*
-	rm -rf /var/run/privoxy.pid 
-	rm -rf /var/log/privoxy
-	rm -f /etc/init.d/privoxy
-	rm -f /usr/sbin/privoxy
-	rm -f /usr/sbin/rcprivoxy
-	rm -f /usr/share/man/man1/privoxy.1.gz
-
-#############################################################################
 # Windows distribution
 #############################################################################
 win-dist:
@@ -448,9 +438,10 @@ win-dist:
 #############################################################################
 tarball-dist: clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
-	cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
-	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
-	@$(ECHO) Tarball (without any binary) created.
+	cd .. && find privoxy-$(VERSION)-$(CODE_STATUS)
+#	cd .. && $(TAR) --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -cvhzf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz privoxy-$(VERSION)-$(CODE_STATUS)
+#	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
+	@$(ECHO) Tarball without any binary created.
 
 # anonymously ncftps the tarball to sourceforge
 tarball-upload:
@@ -675,6 +666,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.46  2002/03/29 20:09:01  swa
+# al's patch
+#
 # Revision 1.45  2002/03/29 19:45:45  swa
 # for lazy swa
 #
