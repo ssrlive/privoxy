@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# From configure.in Revision: 1.32 
+# From configure.in Revision: 1.33 
 # Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version 2.13 
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
@@ -1289,7 +1289,7 @@ fi
 fi
 if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  /usr/share/sgml/docbkdsl
+  DKPREFIX=/usr/share/sgml/docbkdsl
 else
   echo "$ac_t""no" 1>&6
 
