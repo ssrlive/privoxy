@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.13  2001/10/07 15:30:41  oes
+ *    Removed FEATURE_DENY_GZIP
+ *
  *    Revision 1.12  2001/09/13 19:56:37  jongfoster
  *    Reverting to revision 1.10 - previous checking was majorly broken.
  *
@@ -209,6 +212,12 @@
  * Allows the use of an ACL to control access to the proxy by IP address.
  */
 #undef FEATURE_ACL
+
+/*
+ * Enables the web-based configuration (actionsfile) editor.  If you
+ * have a shared proxy, you might want to turn this off.
+ */
+#undef FEATURE_CGI_EDIT_ACTIONS
 
 /*
  * Allows the use of jar files to capture cookies.

@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.7  2001/10/07 15:33:14  oes
+ *    Removed FEATURE_DENY_GZIP
+ *    Bumped up version number
+ *
  *    Revision 1.6  2001/09/16 16:59:34  jongfoster
  *    Bugfix - couldn't build resources with previous version.
  *
@@ -211,6 +215,12 @@
  * Allows the use of an ACL to control access to the proxy by IP address.
  */
 #define FEATURE_ACL 1
+
+/*
+ * Enables the web-based configuration (actionsfile) editor.  If you
+ * have a shared proxy, you might want to turn this off.
+ */
+#define FEATURE_CGI_EDIT_ACTIONS 1
 
 /*
  * Allows the use of jar files to capture cookies.
