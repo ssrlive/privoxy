@@ -1,7 +1,7 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 2.1 2002/06/04 17:55:24 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 2.2 2002/09/04 15:17:28 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/cgi.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 2.1 2002/06/04 17:55:24 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 2.2  2002/09/04 15:17:28  oes
+ *    Synced with the stable branch:
+ *        Revision 1.70.2.1  2002/08/05 11:17:46  oes
+ *        Fixed Bug #587820, i.e. added workaround for IE bug that includes fragment identifier in (cgi) query
+ *
  *    Revision 2.1  2002/06/04 17:55:24  jongfoster
  *    Adding comments
  *
@@ -1963,7 +1968,9 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
    if (!err) err = map(exports, "user-manual",   1, csp->config->usermanual ,1);
    if (!err) err = map(exports, "actions-help-prefix", 1, ACTIONS_HELP_PREFIX ,1);
+#ifdef FEATURE_TOGGLE
    if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
+#endif
 
    snprintf(buf, 20, "%d", csp->config->hport);
    if (!err) err = map(exports, "my-port", 1, buf, 1);
