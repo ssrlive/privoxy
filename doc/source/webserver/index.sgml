@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.13 2002/05/05 20:29:59 hal9 Exp $
+ $Id: index.sgml,v 1.14 2002/05/10 01:48:20 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -37,152 +37,131 @@
 -->
 
 <article id="index">
-
 <artheader>
-<title>Privoxy - Homepage</title>
+ <title>Privoxy - Homepage</title>
 
 <!-- copyright is at bottom of page -->
 
-<keywordset>
- <Keyword>stop, junk, privoxy, ad, advertisement, werbung, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out</Keyword>
-</keywordset>
+ <keywordset>
+  <keyword>privoxy</keyword> <keyword>HTTP</keyword> <keyword>proxy</keyword> <keyword>privacy</keyword>
+  <keyword>popups</keyword>  <keyword>po-ups</keyword> <keyword>HTML</keyword> <keyword>JavaScript</keyword>
+  <keyword>cleaning</keyword> <keyword>blocking</keyword> <keyword>cleaner</keyword> <keyword>blocker</keyword>
+  <keyword>filter</keyword> <keyword>proxy</keyword> <keyword>junk</keyword> <keyword>ad</keyword>
+  <keyword>advertisement</keyword> <keyword>banner</keyword> <keyword>webbugs</keyword>
+  <keyword>web-bugs</keyword> <keyword>werbung</keyword> <keyword>junkbusters</keyword>
+  <keyword>junkbuster</keyword>
+ </keywordset>
 
-<abstract>
+ <abstract>
+
 <![%dummy;[
- <para>
- <comment>
-  This is here to keep vim syntax file from breaking :/
-  If I knew enough to fix it, I would.
-  PLEASE DO NOT REMOVE! HB: hal@foobox.net
- </comment>
- </para>
+  <para>
+   <comment>
+    This is here to keep vim syntax file from breaking :/
+    If I knew enough to fix it, I would.
+    PLEASE DO NOT REMOVE! HB: hal@foobox.net
+   </comment>
+  </para>
 ]]>
 
-</abstract>
+<!-- Include privoxy.sgml boilerplate: -->
+  &p-intro;
+<!-- end boilerplate -->
 
+  <para>
+   The most recent release is &p-version; (&p-status;).
+  </para>
+
+ </abstract>
 </artheader>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="intro" label="">
-<title>Introduction</title>
-<!-- Include privoxy.sgml boilerplate: -->
- &p-intro;
-<!-- end boilerplate -->
-</sect1>
 
-<sect1 id="moreinfo" label="">
-<title>More info</title>
+
+<sect1 renderas="sect2" id="download" label=""><title>Download</title>
 <para>
-<itemizedlist>
-	<listitem>
-	<literallayout class="normal">
-	The <ulink url="http://sourceforge.net/projects/ijbswa/">project
-page</ulink> on Sourceforge
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout>
-	A list of <ulink url="user-manual/introduction.html#AEN37">features</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="http://www.waldherr.org/junkbuster/">Stefan Waldherr's site</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="http://www.junkbusters.com/ht/en/ijbfaq.html">Junkbusters Corporation</ulink>
-	</literallayout>
-	</listitem>
-<!-- 	<listitem> -->
-<!-- 	<literallayout class="normal"> -->
-<!-- 	Take a look at the <ulink url="team/">Privoxy team</ulink> -->
-<!-- 	</literallayout> -->
-<!-- 	</listitem> -->
+ <itemizedlist>
+  <listitem>
+   <para>
+    <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">Download recent releases</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.gz">Download the latest CVS snapshot (source tarball)</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="user-manual/quickstart.html">Quickstart after installation</ulink>
+   </para>
+  </listitem>
  </itemizedlist>
 </para>
 </sect1>
 
-<sect1 id="download" label="">
-<title>Download</title>
+<sect1 renderas="sect2" id="docs" label=""><title>Documentation</title>
 <para>
-<itemizedlist>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">Download recent releases</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="user-manual/quickstart.html">Quickstart after installation</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">Browse our CVS repository</ulink>
-	</literallayout>
-	</listitem>
+ <itemizedlist>
+  <listitem>
+   <para>
+    <ulink url="user-manual/index.html">User manual</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="faq/index.html">Frequently Asked Questions</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="developer-manual/index.html">Developer Manual</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="man-page/privoxy-man-page.html">Classic Man Page</ulink>
+   </para>
+  </listitem>
  </itemizedlist>
 </para>
 </sect1>
 
-<sect1 id="docs" label="">
-<title>Documentation</title>
+<sect1 renderas="sect2" id="moreinfo" label=""><title>More information</title>
 <para>
-<itemizedlist>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="user-manual/index.html">User manual</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="faq/index.html">Frequently Asked Questions</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="man-page/privoxy-man-page.html">Classic Man Page</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="team/index.html">Pictures of the Privoxy Team</ulink>
-	</literallayout>
-	</listitem>
-	<listitem>
-	<literallayout class="normal">
-	<ulink url="developer-manual/index.html">Developer Manual</ulink>
-<!--  	,alternatively as a pdf file: <ulink url="">developer-manual.pdf</ulink>. -->
-	</literallayout>
-	</listitem>
+ <itemizedlist>
+  <listitem>
+   <para>
+    <ulink url="user-manual/contact.html">Support &amp; Service</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="user-manual/copyright.html">Copyright, License, History & Authors</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="user-manual/introduction.html#FEATURES">List of (new) Features</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="http://sourceforge.net/projects/ijbswa/">The project page</ulink> at <ulink url="http://sourceforge.net/">SourceForge</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="user-manual/seealso.html">Related links</ulink>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <ulink url="team/index.html">Pictures of the Privoxy Team</ulink>
+   </para>
+  </listitem>
  </itemizedlist>
 </para>
-</sect1>
-
-<sect1 id="support" label="">
-<title>Support and Service via Sourceforge</title>
-<!-- Include contacting.sgml -->
- &contacting;
-<!-- end include -->
-</sect1>
-
-<sect1 label="">
-<title>License</title>
-<!-- Include copyright.sgml -->
- &copyright;
-<!-- end -->
-<!-- Include license.sgml -->
- &license;
-<!-- end -->
-</sect1>
-
-<sect1 label="">
-<title>History</title>
-<!-- Include history.sgml -->
- &history;
-<!-- end -->
 </sect1>
 
 
@@ -195,12 +174,15 @@ page</ulink> on Sourceforge
 <informaltable frame=none label="" pgwide="1">
  <tgroup cols=1 align="center" colsep=1 rowsep=1>
   <colspec colname=c1 align="center">
-   <tbody>
-    <row>
-     <entry align="center">
-      <ulink url="http://sourceforge.net/">
-       <inlinegraphic  fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1&#38;dummy=.gif"></inlinegraphic>
-      </ulink>
+  <tbody>
+   <row>
+    <entry align="center">Developed on:</entry>
+   </row>
+   <row>
+    <entry align="center">
+     <ulink url="http://sourceforge.net/">
+      <inlinegraphic  fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1&#38;dummy=.gif"></inlinegraphic>
+     </ulink>
     </entry>
    </row>
   </tbody>
@@ -247,6 +229,11 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.14  2002/05/10 01:48:20  hal9
+ This is mostly proposed copyright/licensing additions and changes. Docs
+ are still GPL, but licensing and copyright are more visible. Also, copyright
+ changed in doc header comments (eliminate references to JB except FAQ).
+
  Revision 1.13  2002/05/05 20:29:59  hal9
  Ooops, fixing an accidental delete of title element.
 
