@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.78 2002/03/08 21:35:04 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.79 2002/03/09 20:03:52 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,30 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.78 2002/03/08 21:35:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.79  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.78  2002/03/08 21:35:04  oes
  *    Added optional group supplement to --user option. Will now use default group of user if no group given
  *
@@ -571,7 +595,7 @@ static int32 server_thread(void *data);
 #define sleep(N)  DosSleep(((N) * 100))
 #endif
 
-#if defined(unix)
+#if defined(unix) || defined(__EMX__)
 const char *basedir;
 const char *pidfile = NULL;
 int received_hup_signal = 0;
@@ -1118,8 +1142,15 @@ static void chat(struct client_state *csp)
 
    while (FOREVER)
    {
+#ifdef __OS2__
+      /*
+       * FD_ZERO here seems to point to an errant macro which crashes.
+       * So do this by hand for now...
+       */
+      memset(&rfds,0x00,sizeof(fd_set));
+#else
       FD_ZERO(&rfds);
-
+#endif
       FD_SET(csp->cfd, &rfds);
       FD_SET(csp->sfd, &rfds);
 
