@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.15 2002/11/08 16:40:56 oes Exp $
+#  $Id: default.filter,v 1.16 2002/11/11 13:40:38 oes Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -82,7 +82,7 @@ s|document\.referrer|"Not Your Business!"|gisU
 
 # The status bar is for displaying link targets, not pointless blahblah
 #
-s/([\n =;{}]|window\.)(default)?status\s*=/$1dUmMy=/ig
+s/(([\n =;{}]|window\.)(default)?status)\s*=\s*((['"]).*?\5)/if(typeof(this.href) != 'undefined') $1 = $4 + ' URL: ' + this.href;else return false/ig
 
 # Kill OnUnload popups. Yummy.
 # Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
@@ -395,6 +395,9 @@ s/\x9B/>/g                  # 155
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.16  2002/11/11 13:40:38  oes
+#     Make refresh-tags filter work even on incorrect refresh tags like found on usatoday.com
+#
 #     Revision 1.15  2002/11/08 16:40:56  oes
 #     Made img-reorder more cautious. Fixes bug #632715
 #
