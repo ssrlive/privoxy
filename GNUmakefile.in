@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.24 2002/03/24 14:19:55 swa Exp $
+# $Id: GNUmakefile.in,v 1.25 2002/03/24 14:31:08 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -342,7 +342,7 @@ tarball-dist:
 	@make clean
 	make $(PROGRAM) 
 #	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../privoxy-distribution-$(VERSION).tar.gz ijb/
+	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../privoxy-distribution-$(VERSION).tar.gz current/
 	chmod a+r ../../privoxy-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
 
@@ -518,6 +518,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.25  2002/03/24 14:31:08  swa
+# remove more crappy files. set RPM
+# release version correctly.
+#
 # Revision 1.24  2002/03/24 14:19:55  swa
 # set rpm package release in configure.in. nowhere else.
 #
