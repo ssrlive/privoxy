@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.18 2001/06/29 13:27:38 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.19 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.18 2001/06/29 13:27:38 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.19  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.18  2001/06/29 13:27:38  oes
  *    - Cleaned up, renamed and reorderd functions
  *      and improved comments
@@ -724,11 +727,18 @@ int is_untrusted_url(struct client_state *csp)
    struct http_request rhttp[1];
    char *p, *h;
 
+   /*
+    * If we don't have a trustlist, we trust everybody
+    */
    if (((fl = csp->tlist) == NULL) || ((b  = fl->f) == NULL))
    {
       return(0);
    }
 
+
+   /*
+    * Do we trust the request URL itself?
+    */
    *url = dsplit(csp->http->host);
 
    /* if splitting the domain fails, punt */
@@ -787,6 +797,10 @@ int is_untrusted_url(struct client_state *csp)
       return(1);
    }
 
+
+   /*
+    * If not, do we maybe trust its referrer?
+    */
    *url = dsplit(rhttp->host);
 
    /* if splitting the domain fails, punt */
@@ -847,7 +861,7 @@ int is_untrusted_url(struct client_state *csp)
          }
       }
    }
-
+   return(1);
 }
 #endif /* def TRUST_FILES */
 
