@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 2.3 2002/10/08 16:25:30 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 2.4 2003/01/21 02:49:27 david__schmidt Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,13 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 2.3 2002/10/08 16:25:30 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 2.4  2003/01/21 02:49:27  david__schmidt
+ *    Developer TODO 612294: src: C++ keyword as variable name
+ *    I changed all ocurrences of 'new' to 'new_something' wherever I found
+ *    one.  I also brought up all the source files in MSDEV to see if I could
+ *    spot any highlighted keywords that really were variables.  Non-scientific,
+ *    but at least I tried. :-)
+ *
  *    Revision 2.3  2002/10/08 16:25:30  oes
  *    Bugfix: Need to check validity of backreferences explicitly, because when max_matches are reached and matches is expanded, realloc() does not zero the memory. Fixes Bug # 606227
  *
@@ -767,7 +774,7 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
       }
    }
 
-   *result = new;
+   *result = new_item;
    return(total_hits);
 
 }
