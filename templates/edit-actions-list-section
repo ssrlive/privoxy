@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-section,v $
+#    Revision 1.10  2002/04/17 21:27:26  jongfoster
+#    Adding #linenumber to the URLs which affect blocks, to make
+#    editing in long files easier.
+#
 #    Revision 1.9  2002/04/17 15:51:47  oes
 #    Args! Restoring CVS history
 #
@@ -77,14 +81,14 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
 <tr class="actions" valign="top">
  <td class="header" align="right">Actions:</td>
- <td align="center"><a name="l@s@" href="eas?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td>
+ <td align="center"><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td>
  <td class="action" align="left">@actions@</td>
 </tr>
 <tr class="rule">
  <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
 </tr>
 <tr class="url1" valign="top">
- <td class="header" align="right">URLs:</td>
+ <td class="header" align="right">URL patterns:</td>
  <td align="center"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@">Add</a></td>
  <td align="left">&nbsp;</td>
 </tr>
