@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-for-url,v $
 #
 # Purpose     :  Template used to edit the actions associated with a
 #                particular section in an actions file.
@@ -31,7 +31,10 @@
 #                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # Revisions   :
-#    $Log$
+#    $Log: edit-actions-for-url,v $
+#    Revision 1.4  2001/11/13 00:58:18  jongfoster
+#    New version of actions file editor templates
+#
 #
 ##############################################################################
 #
@@ -243,6 +246,18 @@ function show_image_blocker_opts(tf)
     target.style.display = (tf ? "" : "none");
 }
 
+function show_limit_connect_opts(tf)
+{
+    if (document.getElementById) {
+        target = document.getElementById("limit_connect_opts");
+    } else if (document.all) {
+        target = document.limit_connect_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
+}
+
 function show_wafer_opts(tf)
 {
     if (document.getElementById) {
@@ -325,10 +340,9 @@ function show_wafer_opts(tf)
     </tr>
     <tr class="bg1" align="left" valign="top" id="add_header_opts">
       <td>&nbsp;</td>
-      <td colspan="4">To edit the settings for this option, <input
-        type="checkbox" name="add_header_edit" id="add_header_edit"
-        value="ON"><label for="add_header_edit">check here</label> and then
-        click &quot;Submit&quot;.</td>
+      <td colspan="4">Editing the settings for this option, or turning
+        it on if it was off, is not yet supported using this web-based
+        editor.</td>
     </tr>
     <tr class="bg2" align="left" valign="top">
       <td class="action">+block</td>
@@ -379,46 +393,57 @@ function show_wafer_opts(tf)
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
+      <td class="action">+downgrade</td>
+      <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
+        what you're doing!</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="downgrade" value="Y" @downgrade-y@></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="downgrade" value="N" @downgrade-n@></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="downgrade" value="X" @downgrade-x@></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+filter</td>
       <td>Filter the website through the re_filterfile</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="filter" value="Y" @filter-y@
         ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="filter" value="N" @filter-n@ 
         ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="filter" value="X" @filter-x@
          ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+hide-forwarded</td>
       <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded" value="Y" @hide-forwarded-y@
         ></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded" value="N" @hide-forwarded-n@
         ></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded" value="X" @hide-forwarded-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+hide-from</td>
       <td>Stop old web browsers from sending the user's e-mail address with
         every request.</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="hide_from" id="hide_from_y" value="Y" @hide-from-y@
         onclick="show_hide_from_opts(true)"></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="hide_from" value="N" @hide-from-n@
         onclick="show_hide_from_opts(false)"></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="hide_from" value="X" @hide-from-x@
         onclick="show_hide_from_opts(false)"></td>
     </tr>
-    <tr class="bg1" align="left" valign="top" id="hide_from_opts">
+    <tr class="bg2" align="left" valign="top" id="hide_from_opts">
       <td>&nbsp;</td>
       <td colspan="4"><input type="radio" name="hide_from_mode" value="block"
         onclick="hide_from_param_disable(true);"
@@ -431,22 +456,22 @@ function show_wafer_opts(tf)
         <input type="text" name="hide_from_param" id="hide_from_param"
         size="40" value="@hide-from-param@"></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+hide-referer</td>
       <td>Helps prevent tracking by not sending the URL of the previous web
         page.&nbsp;</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_referer" id="hide_referer_y" value="Y" @hide-referer-y@
         onclick="show_hide_referer_opts(true)"></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="hide_referer" id="hide_referer_n" value="N" @hide-referer-n@
         onclick="show_hide_referer_opts(false)"></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_referer" id="hide_referer_x" value="X" @hide-referer-x@
         onclick="show_hide_referer_opts(false)"
         ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top" id="hide_referer_opts">
+    <tr class="bg1" align="left" valign="top" id="hide_referer_opts">
       <td>&nbsp;</td>
       <td colspan="4"><input type="radio" name="hide_referer_mode" value="block"
         onclick="hide_referer_param_disable(true)"
@@ -466,55 +491,55 @@ function show_wafer_opts(tf)
         id="hide_referer_param" size="40"
         value="@hide-referer-param@"></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+hide-user-agent</td>
       <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
         sites).</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" id="hide_user_agent_y" value="Y" @hide-user-agent-y@
         onclick="show_user_agent_opts(true)"></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" value="N" @hide-user-agent-n@
         onclick="show_user_agent_opts(false)"></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" value="X" @hide-user-agent-x@
         onclick="show_user_agent_opts(false)"></td>
     </tr>
-    <tr class="bg1" align="left" valign="top" id="user_agent_opts">
+    <tr class="bg2" align="left" valign="top" id="user_agent_opts">
       <td>&nbsp;</td>
       <td colspan="4">User Agent string to send:<br>
         <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+image</td>
       <td>Request is for an image (only useful in conjunction with the <i><b>+block</b></i>
         and <i><b>+image-blocker</b></i> options).</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="image" value="Y" @image-y@
         ></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="image" value="N" @image-n@
         ></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="image" value="X" @image-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+image-blocker</td>
       <td>Specifies how to block images.&nbsp; Disable to always send a HTML
         &quot;blocked&quot; page.</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="image_blocker" id="image_blocker_y" value="Y" @image-blocker-y@
         onclick="show_image_blocker_opts(true)"></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="image_blocker" value="N" @image-blocker-n@
         onclick="show_image_blocker_opts(false)"></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="image_blocker" value="X" @image-blocker-x@
         onclick="show_image_blocker_opts(false)"></td>
     </tr>
-    <tr class="bg1" align="left" valign="top" id="image_blocker_opts">
+    <tr class="bg2" align="left" valign="top" id="image_blocker_opts">
       <td>&nbsp;</td>
       <td colspan="4"><input type="radio" name="image_blocker_mode"
         onclick="image_blocker_param_disable(true)"
@@ -532,78 +557,114 @@ function show_wafer_opts(tf)
         <input type="text" name="image_blocker_param" id="image_blocker_param"
         size="40" value="@image-blocker-param@"></td>
     </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+limit-connect</td>
+      <td>Specify which ports are allowed for SSL (HTTP CONNECT) access.
+        Note that this allows arbitrary tunnelling, so opening all
+        ports would be a security hole.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="limit_connect" id="limit_connect_y" value="Y" @limit-connect-y@
+        onclick="show_limit_connect_opts(true)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="limit_connect" value="N" @limit-connect-n@
+        onclick="show_limit_connect_opts(false)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="limit_connect" value="X" @limit-connect-x@
+        onclick="show_limit_connect_opts(false)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="limit_connect_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">Legal SSL ports (comma separated, ranges allowed):<br>
+        <input type="text" name="limit_connect_mode" size="40"
+        value="@limit-connect-param@"></td>
+    </tr>
     <tr class="bg2" align="left" valign="top">
-      <td class="action">+no-cookies-read</td>
-      <td>Prevent the website from reading cookies</td>
+      <td class="action">+no-compression</td>
+      <td>Disables compression.  Compressed web pages are faster to
+        download, but cannot be filtered with +filter or +no-popups.
+        This setting only affects the few web sites which support
+        compression.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="no_cookies_read" value="Y" @no-cookies-read-y@
+        name="no_compression" value="Y" @no-compression-y@
         ></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="no_cookies_read" value="N" @no-cookies-read-n@
+        name="no_compression" value="N" @no-compression-n@
         ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="no_compression" value="X" @no-compression-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+no-cookies-read</td>
+      <td>Prevent the website from reading cookies</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="no_cookies_read" value="Y" @no-cookies-read-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="no_cookies_read" value="N" @no-cookies-read-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="no_cookies_read" value="X" @no-cookies-read-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+no-cookies-set</td>
       <td>Prevent the website from setting cookies</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="Y" @no-cookies-set-y@
         ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="N" @no-cookies-set-n@
         ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="X" @no-cookies-set-x@
         ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+no-popups</td>
       <td>Filter the website through a built-in filter to disable JavaScript
         pop-up windows.</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="no_popups" value="Y" @no-popups-y@
         ></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="no_popups" value="N" @no-popups-n@
         ></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="no_popups" value="X" @no-popups-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+vanilla-wafer</td>
       <td>If you use a jarfile, automatically adds a special wafer.</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="Y" @vanilla-wafer-y@
         ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="N" @vanilla-wafer-n@
         ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="X" @vanilla-wafer-x@
         ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+wafer</td>
       <td>Adds user-specified cookies.</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_y" value="Y" @wafer-y@
         onclick="show_wafer_opts(true)"></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_n" value="N" @wafer-n@
         onclick="show_wafer_opts(false)"></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_x" value="X" @wafer-x@
         onclick="show_wafer_opts(false)"></td>
     </tr>
-    <tr class="bg2" align="left" valign="top" id="wafer_opts">
+    <tr class="bg1" align="left" valign="top" id="wafer_opts">
       <td>&nbsp;</td>
-      <td colspan="4">To edit the settings for this option, <input
-        type="checkbox" name="wafer_edit" id="wafer_edit" value="ON"><label
-        for="wafer_edit">check here</label> and then click
-        &quot;Submit&quot;.</td>
+      <td colspan="4">Editing the settings for this option, or turning
+        it on if it was off, is not yet supported using this web-based
+        editor.</td>
     </tr>
   </table>
 
@@ -623,6 +684,7 @@ if (document.getElementById) {
     show_hide_referer_opts  (document.getElementById("hide_referer_y").checked);
     show_user_agent_opts    (document.getElementById("hide_user_agent_y").checked);
     show_image_blocker_opts (document.getElementById("image_blocker_y").checked);
+    show_limit_connect_opts (document.getElementById("limit_connect_y").checked);
     show_wafer_opts         (document.getElementById("wafer_y").checked);
 } else if (document.all) {
     // alert("IE4");
@@ -636,6 +698,7 @@ if (document.getElementById) {
     show_hide_referer_opts  (document.myform.hide_referer_y.checked);
     show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
     show_image_blocker_opts (document.myform.image_blocker_y.checked);
+    show_limit_connect_opts (document.myform.limit_connect_y.checked);
     show_wafer_opts         (document.myform.wafer_y.checked);
 } else if (document.layers) {
     // alert("Netscape 4");
