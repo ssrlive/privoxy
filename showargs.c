@@ -356,6 +356,8 @@ char *end_proxy_args(struct configuration_spec * config)
    /* In alphabetical order */
    SHOW_RCS(actions_h_rcs)
    SHOW_RCS(actions_rcs)
+   SHOW_RCS(cgi_h_rcs)
+   SHOW_RCS(cgi_rcs)
 #ifdef __MINGW32__
    SHOW_RCS(cygwin_h_rcs)
 #endif

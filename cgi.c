@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.1 2001/06/03 11:03:48 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.3 2001/06/03 19:12:16 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.1 2001/06/03 11:03:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.3  2001/06/03 19:12:16  oes
+ *    introduced new cgi handling
+ *
  *    Revision 1.1  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -116,6 +119,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.1 2001/06/03 11:03:48 oes Exp $";
 #include "miscutil.h"
 #include "showargs.h"
 
+const char cgi_h_rcs[] = CGI_H_VERSION;
 
 const struct cgi_dispatcher cgi_dispatchers[] = {
    { "show-status", 
