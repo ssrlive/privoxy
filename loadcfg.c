@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.43 2002/04/08 20:36:50 swa Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.44 2002/04/08 20:37:13 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.43 2002/04/08 20:36:50 swa Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.44  2002/04/08 20:37:13  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.43  2002/04/08 20:36:50  swa
  *    fixed JB spelling
  *
@@ -436,6 +439,7 @@ void unload_configfile (void * data)
    struct forward_spec *cur_fwd = config->forward;
 #ifdef FEATURE_ACL
    struct access_control_list *cur_acl = config->acl;
+   int i;
 
    while (cur_acl != NULL)
    {
@@ -472,7 +476,12 @@ void unload_configfile (void * data)
    freez(config->haddr);
    freez(config->logfile);
 
-   freez(config->actions_file);
+   for (i = 0; i < MAX_ACTION_FILES; i++)
+   {
+      freez(config->actions_file_short[i]);
+      freez(config->actions_file[i]);
+   }
+
    freez(config->admin_address);
    freez(config->proxy_info_url);
    freez(config->proxy_args);
@@ -532,6 +541,7 @@ struct configuration_spec * load_config(void)
    struct client_state * fake_csp;
    struct file_list *fs;
    unsigned long linenum = 0;
+   int i;
 
    if ( !check_file_changed(current_configfile, configfile, &fs))
    {
@@ -645,8 +655,28 @@ struct configuration_spec * load_config(void)
  * In confdir by default
  * *************************************************************************/
          case hash_actions_file :
-            freez(config->actions_file);
-            config->actions_file = make_path(config->confdir, arg);
+            i = 0;
+            while ((i < MAX_ACTION_FILES) && (NULL != config->actions_file[i]))
+            {
+               i++;
+            }
+
+            if (i >= MAX_ACTION_FILES)
+            {
+               log_error(LOG_LEVEL_FATAL, "Too many 'actionsfile' directives in config file - limit is %d.\n"
+                  "(You can increase this limit by changing MAX_ACTION_FILES in project.h and recompiling).",
+                  MAX_ACTION_FILES);
+            }
+            config->actions_file_short[i] = strdup(arg);
+            p = malloc(strlen(arg) + sizeof(".action"));
+            if (p == NULL)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory");
+            }
+            strcpy(p, arg);
+            strcat(p, ".action");
+            config->actions_file[i] = make_path(config->confdir, p);
+            free(p);
             continue;
 
 /* *************************************************************************
@@ -1332,7 +1362,7 @@ struct configuration_spec * load_config(void)
 
    init_error_log(Argv[0], config->logfile, config->debug);
 
-   if (config->actions_file)
+   if (config->actions_file[0])
    {
       add_loader(load_actions_file, config);
    }
@@ -1408,7 +1438,7 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_actions_file     = config->actions_file;
+   g_actions_file     = config->actions_file[0]; /* FIXME only works for first action file */
    g_re_filterfile    = config->re_filterfile;
 
 #ifdef FEATURE_TRUST
