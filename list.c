@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.1 2001/05/31 21:11:53 jongfoster Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.3 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,64 @@ const char list_rcs[] = "$Id: list.c,v 1.1 2001/05/31 21:11:53 jongfoster Exp $"
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.3  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.2  2001/06/01 18:49:17  jongfoster
+ *    Replaced "list_share" with "list" - the tiny memory gain was not
+ *    worth the extra complexity.
+ *
  *    Revision 1.1  2001/05/31 21:11:53  jongfoster
  *    - Moved linked list support to new "list.c" file.
  *      Structure definitions are still in project.h,
@@ -110,10 +168,10 @@ void enlist(struct list *header, const char *str)
 
 /*********************************************************************
  *
- * Function    :  enlist_unique
+ * Function    :  enlist_first
  *
- * Description :  Append a string into a specified string list,
- *                if & only if it's not there already.
+ * Description :  Append a string as first element into a specified
+ *                string list.
  *
  * Parameters  :
  *          1  :  header = pointer to list 'dummy' header
@@ -122,14 +180,52 @@ void enlist(struct list *header, const char *str)
  * Returns     :  N/A
  *
  *********************************************************************/
-void enlist_unique(struct list *header, const char *str)
+void enlist_first(struct list *header, const char *str)
+{
+   struct list *cur = (struct list *)malloc(sizeof(*cur));
+
+   if (cur)
+   {
+      cur->str  = (str ? strdup(str) : NULL);
+      cur->next = header->next;
+
+      header->next = cur;
+      if (header->last == NULL)
+      {
+         header->last = cur;
+      }
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  enlist_unique
+ *
+ * Description :  Append a string into a specified string list,
+ *                if & only if it's not there already.
+ *                If the n argument is nonzero, only compare up to
+ *                the nth character. 
+ *
+ * Parameters  :
+ *          1  :  header = pointer to list 'dummy' header
+ *          2  :  str = string to add to the list (maybe NULL)
+ *          3  :  n = number of chars to use for uniqueness test
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void enlist_unique(struct list *header, const char *str, int n)
 {
    struct list *last;
    struct list *cur = header->next;
 
    while (cur != NULL)
    {
-      if ((cur->str != NULL) && (0 == strcmp(str, cur->str)))
+      if ((cur->str != NULL) && (
+         (n && (0 == strncmp(str, cur->str, n))) || 
+         (!n && (0 == strcmp(str, cur->str)))))
       {
          /* Already there */
          return;
@@ -367,10 +463,106 @@ void list_append_list_unique(struct list *dest, const struct list *src)
 
    while (cur)
    {
-      enlist_unique(dest, cur->str);
+      enlist_unique(dest, cur->str, 0);
       cur = cur->next;
    }
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  map
+ *
+ * Description :  Add a mapping from given name to given value to a
+ *                given map.
+ *
+ * Parameters  :
+ *          1  :  map = map to add to
+ *          2  :  name = name to add
+ *          3  :  nc = flag set if name is string constant, and
+ *                must be strdup()d, so it can later be free()d (FIXME!)
+ *          4  :  value = value to add
+ *          5  :  vc = flag set if value is string constant
+ *
+ * Returns     :  pointer to extended map, or NULL if failiure
+ *
+ *********************************************************************/
+struct map *map(struct map *map, char *name, int nc, char *value, int vc)
+{
+   struct map *cur;
+
+   if (NULL == (cur = zalloc(sizeof(*cur))))
+   {
+      return(NULL);
+   }
+
+   cur->name  = nc ? strdup(name) : name;
+   cur->value = vc ? strdup(value) : value;
+   cur->next = map;
+
+   return(cur);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  lookup
+ *
+ * Description :  Look up an item with a given name in a map, and
+ *                return its value
+ *
+ * Parameters  :
+ *          1  :  name = name parameter to look for
+ *
+ * Returns     :  the value if found, else the empty string
+ *
+ *********************************************************************/
+char *lookup(struct map *map, char *name)
+{
+   struct map *p = map;
+
+   while (p)
+   {
+      if (!strcmp(name, p->name))
+      {
+         return p->value;
+      }
+      p = p->next;
+   }
+   return "";
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  free_map
+ *
+ * Description :  Free the memory occupied by a map and its
+ *                depandant strings
+ *
+ * Parameters  :
+ *          1  :  list = list to bee freed
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void free_map(struct map *map)
+{
+   struct map *p = map;
+
+   while (p)
+   {
+      free(p->name);
+      free(p->value);
+
+      map = p->next;
+      free(p);
+      p = map;
+   }
+
+}
+
 
 /*
   Local Variables:
