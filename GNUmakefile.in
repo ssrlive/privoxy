@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.136 2002/12/28 04:10:21 david__schmidt Exp $
+# $Id: GNUmakefile.in,v 1.137 2003/01/18 19:04:58 david__schmidt Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -278,7 +278,7 @@ LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
 #
 # There should NOT be any targets above this line.
 #############################################################################
-all: $(PROGRAM) default.action
+all: user-warned-once $(PROGRAM) default.action
 
 
 #############################################################################
@@ -353,6 +353,41 @@ dist-check:
            read answer; \
            if [ "$$answer" != "yes i am sure" ]; then exit 1; fi \
          fi;
+
+#############################################################################
+# One-time warning for unstable trunk version
+#############################################################################
+user-warned-once:
+	@if [ ! -f .user-has-been-warned ]; then \
+           $(ECHO) "****************************************************"; \
+           $(ECHO) "***                                              ***"; \
+           $(ECHO) "***       WARNING: LOTS OF TROUBLE AHEAD!        ***"; \
+           $(ECHO) "***       -------------------------------        ***"; \
+           $(ECHO) "***                                              ***"; \
+           $(ECHO) "*** You are about to compile the trunk (aka CVS  ***"; \
+           $(ECHO) "*** HEAD) version of Privoxy which contains a    ***"; \
+           $(ECHO) "*** zillion known bugs that are already fixed    ***"; \
+           $(ECHO) "*** in the stable branch, along with unfinished  ***"; \
+           $(ECHO) "*** features which will annoy you to death.      ***"; \
+           $(ECHO) "***                                              ***"; \
+           $(ECHO) "*** Unless you are developing or alpha-testing   ***"; \
+           $(ECHO) "*** Privoxy, THIS VERSION IS NOT FOR YOU! It is  ***"; \
+           $(ECHO) "*** UNSTABLE, LEAKY, UNDOCUMENTED, UNSUPPORTED!  ***"; \
+           $(ECHO) "***                                              ***"; \
+           $(ECHO) "*** If the latest release from www.privoxy.org   ***"; \
+           $(ECHO) "*** doesn't satisfy your bleeding-edge fetish,   ***"; \
+           $(ECHO) "*** check out the stable branch from CVS using   ***"; \
+           $(ECHO) "*** -r v_3_0_branch or use a snapshot from       ***"; \
+           $(ECHO) "*** http://www.oesterhelt.org/privoxy-snapshots/ ***"; \
+           $(ECHO) "***                                              ***"; \
+           $(ECHO) "*****************************************************"; \
+           $(ECHO) "Type \"yes i am sure\" if you are sure that you"; \
+           $(ECHO) -n "really want to proceed: "; \
+           read answer; \
+           if [ "$$answer" != "yes i am sure" ]; then exit 1; fi; \
+           touch .user-has-been-warned; \
+         fi;
+
 
 #############################################################################
 # create tar.gz from CVS:
@@ -1153,6 +1188,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.137  2003/01/18 19:04:58  david__schmidt
+# Build support for the Java Activity Console - build with 'make java-activity-console', run with 'java -jar ActivityConsole.jar'
+#
 # Revision 1.136  2002/12/28 04:10:21  david__schmidt
 # Initial drop of dashboard instrumentation - enabled with
 # --enable-activity-console
