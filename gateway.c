@@ -1,11 +1,11 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/gateway.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
- *                using a "gateway" (i.e. HTTP proxy and/or SOCKS4
- *                proxy).  Also contains the list of gateway types.
+ *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
+ *                proxy).
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.1 2001/05/13 21:57:06 administrat
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -55,20 +58,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.1 2001/05/13 21:57:06 administrat
 
 const char gateway_h_rcs[] = GATEWAY_H_VERSION;
 
-#define SOCKS_4      40    /* original SOCKS 4 protocol */
-#define SOCKS_4A     41    /* as modified for hosts w/o external DNS */
-
-const struct gateway gateways[] = {
-   /* type        function          gw type/host/port, fw host/port */
-   { "direct",    direct_connect,   0,          NULL, 0,    NULL, 0 },
-   { ".",         direct_connect,   0,          NULL, 0,    NULL, 0 },
-   { "socks",     socks4_connect,   SOCKS_4,    NULL, 1080, NULL, 0 },
-   { "socks4",    socks4_connect,   SOCKS_4,    NULL, 1080, NULL, 0 },
-   { "socks4a",   socks4_connect,   SOCKS_4A,   NULL, 1080, NULL, 0 },
-   { NULL,        NULL,             0,          NULL, 0,    NULL, 0 }
-};
-
-const struct gateway *gw_default = gateways; /* direct */
+static int socks4_connect(const struct forward_spec * fwd, 
+                          const char * target_host,
+                          int target_port,
+                          struct client_state *csp);
 
 
 #define SOCKS_REQUEST_GRANTED          90
@@ -99,11 +92,10 @@ static const char socks_userid[] = "anonymous";
 
 /*********************************************************************
  *
- * Function    :  direct_connect
+ * Function    :  forwarded_connect
  *
- * Description :  Direct how we connect to the web.  This can be:
- *                directly    : no forwarding, or
- *                indirectly  : through another proxy such as squid.
+ * Description :  Connect to a specified web server, possibly via
+ *                a HTTP proxy and/or a SOCKS proxy.
  *
  * Parameters  :
  *          1  :  gw = pointer to a gateway structure (such as gw_default)
@@ -113,17 +105,43 @@ static const char socks_userid[] = "anonymous";
  * Returns     :  -1 => failure, else it is the socket file descriptor.
  *
  *********************************************************************/
-int direct_connect(const struct gateway *gw, struct http_request *http, struct client_state *csp)
+int forwarded_connect(const struct forward_spec * fwd, 
+                      struct http_request *http, 
+                      struct client_state *csp)
 {
-   if (gw->forward_host)
+   const char * dest_host;
+   int dest_port;
+
+   /* Figure out if we need to connect to the web server or a HTTP proxy. */
+   if (fwd->forward_host)
    {
-      return(connect_to(gw->forward_host, gw->forward_port, csp));
+      /* HTTP proxy */
+      dest_host = fwd->forward_host;
+      dest_port = fwd->forward_port;
    }
    else
    {
-      return(connect_to(http->host, http->port, csp));
+      /* Web server */
+      dest_host = http->host;
+      dest_port = http->port;
    }
 
+   /* Connect, maybe using a SOCKS proxy */
+   switch (fwd->type)
+   {
+      case SOCKS_NONE:
+         return (connect_to(dest_host, dest_port, csp));
+
+      case SOCKS_4:
+      case SOCKS_4A:
+         return (socks4_connect(fwd, dest_host, dest_port, csp));
+
+      default:
+         /* Should never get here */
+         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
+         errno = EINVAL;
+         return(-1);
+   }
 }
 
 
@@ -132,7 +150,7 @@ int direct_connect(const struct gateway *gw, struct http_request *http, struct c
  * Function    :  socks4_connect
  *
  * Description :  Connect to the SOCKS server, and connect through
- *                it to the web server or web proxy.   This handles
+ *                it to the specified server.   This handles
  *                all the SOCKS negotiation, and returns a file
  *                descriptor for a socket which can be treated as a
  *                normal (non-SOCKS) socket.
@@ -145,24 +163,29 @@ int direct_connect(const struct gateway *gw, struct http_request *http, struct c
  * Returns     :  -1 => failure, else a socket file descriptor.
  *
  *********************************************************************/
-int socks4_connect(const struct gateway *gw, struct http_request *http, struct client_state *csp)
+static int socks4_connect(const struct forward_spec * fwd, 
+                          const char * target_host,
+                          int target_port,
+                          struct client_state *csp)
 {
    int web_server_addr;
    unsigned char cbuf[BUFSIZ];
    unsigned char sbuf[BUFSIZ];
    struct socks_op    *c = (struct socks_op    *)cbuf;
    struct socks_reply *s = (struct socks_reply *)sbuf;
-   int n, csiz, sfd, target_port;
+   int n;
+   int csiz;
+   int sfd;
    int err = 0;
-   char *errstr, *target_host;
+   char *errstr;
 
-   if ((gw->gateway_host == NULL) || (*gw->gateway_host == '\0'))
+   if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
    {
       log_error(LOG_LEVEL_CONNECT, "socks4_connect: NULL gateway host specified");
       err = 1;
    }
 
-   if (gw->gateway_port <= 0)
+   if (fwd->gateway_port <= 0)
    {
       log_error(LOG_LEVEL_CONNECT, "socks4_connect: invalid gateway port specified");
       err = 1;
@@ -174,24 +197,13 @@ int socks4_connect(const struct gateway *gw, struct http_request *http, struct c
       return(-1);
    }
 
-   if (gw->forward_host)
-   {
-      target_host = gw->forward_host;
-      target_port = gw->forward_port;
-   }
-   else
-   {
-      target_host = http->host;
-      target_port = http->port;
-   }
-
    /* build a socks request for connection to the web server */
 
    strcpy((char *)&(c->userid), socks_userid);
 
    csiz = sizeof(*c) + sizeof(socks_userid) - 1;
 
-   switch (gw->type)
+   switch (fwd->type)
    {
       case SOCKS_4:
          web_server_addr = htonl(resolve_hostname_to_ip(target_host));
@@ -204,12 +216,12 @@ int socks4_connect(const struct gateway *gw, struct http_request *http, struct c
             errno = EINVAL;
             return(-1);
          }
-         strcpy(((char *)cbuf) + csiz, http->host);
+         strcpy(((char *)cbuf) + csiz, target_host);
          csiz = n;
          break;
       default:
          /* Should never get here */
-         log_error(LOG_LEVEL_ERROR, "SOCKS4 impossible internal error - bad SOCKS type.");
+         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
          errno = EINVAL;
          return(-1);
    }
@@ -224,7 +236,7 @@ int socks4_connect(const struct gateway *gw, struct http_request *http, struct c
    c->dstip[3]    = (web_server_addr         ) & 0xff;
 
    /* pass the request to the socks server */
-   sfd = connect_to(gw->gateway_host, gw->gateway_port, csp);
+   sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
 
    if (sfd < 0)
    {
