@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.35 2002/05/28 03:56:59 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.36 2002/05/30 07:52:34 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 2
+Release: 3
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: Privoxy.Org
@@ -182,12 +182,12 @@ userdel %{oldname} > /dev/null 2>&1 ||:
 userdel %{veryoldname} > /dev/null 2>&1 ||:
 
 # Doublecheck to see if the group exist, and that it has the correct gid
-/bin/grep -E '^%{name}:' /etc/group > /dev/null 2>&1
+/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null 2>&1
 if [ $? -eq 1 ]; then
 	# Looks like it does not exist. Create it
 	groupadd -g %{privoxy_gid} %{name} > /dev/null 2>&1
 else
-	/bin/grep -E '^%{name}:[^:]*:%{privoxy_gid}:' /etc/group > /dev/null 2>&1
+	/bin/grep -E '^%{name}:[^:]*:%{privoxy_gid}:' %{_sysconfdir}/group > /dev/null 2>&1
 	if [ $? -eq 1 ]; then
 		# The group exists, but does not have the correct gid
 		groupmod -g %{privoxy_gid} %{name} > /dev/null 2>&1
@@ -198,19 +198,19 @@ fi
 # exist
 id %{name} > /dev/null 2>&1
 if [ $? -eq 1 ]; then
-	/usr/sbin/useradd -u %{privoxy_uid} -g %{privoxy_gid} -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
+	%{_sbindir}/useradd -u %{privoxy_uid} -g %{privoxy_gid} -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
 fi
 
 # Double check that the group has the correct uid
 P_UID=`id -u %{name} 2>/dev/null`
 if [ $P_UID -ne %{privoxy_uid} ]; then
-	/usr/sbin/usermod -u %{privoxy_uid} %{name}
+	%{_sbindir}/usermod -u %{privoxy_uid} %{name}
 fi
 
 # The same for the gid
 P_GID=`id -g %{name} 2>/dev/null`
 if [ $P_GID -ne %{privoxy_gid} ]; then
-	/usr/sbin/usermod -g %{privoxy_gid} %{name}
+	%{_sbindir}/usermod -g %{privoxy_gid} %{name}
 fi
 
 %post
@@ -220,7 +220,7 @@ fi
 [ -f %{_localstatedir}/log/%{name}/%{name} ] &&\
  mv -f %{_localstatedir}/log/%{name}/%{name} %{_localstatedir}/log/%{name}/logfile || /bin/true
 chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null
-chown -R %{name}:%{name} /etc/%{name} 2>/dev/null
+chown -R %{name}:%{name} %{_sysconfdir}/%{name} 2>/dev/null
 if [ "$1" = "1" ]; then
 	/sbin/service %{name} condrestart > /dev/null 2>&1
 fi
@@ -240,8 +240,8 @@ fi
 #fi
 # We only remove it we this is not an upgrade
 if [ "$1" = "0" ]; then
-	/bin/grep -E '^%{name}:' /etc/group > /dev/null && /usr/sbin/groupdel %{name} || /bin/true
-	id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+	/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null && %{_sbindir}/groupdel %{name} || /bin/true
+	id privoxy > /dev/null 2>&1 && %{_sbindir}/userdel privoxy || /bin/true
 fi
 
 %clean
@@ -258,8 +258,8 @@ fi
 %doc doc/webserver/images
 %doc doc/webserver/man-page
 
-%dir %{privoxyconf}
-%dir %{privoxyconf}/templates
+%attr(0755,%{name},%{name}) %dir %{privoxyconf}
+%attr(0755,%{name},%{name}) %dir %{privoxyconf}/templates
 %attr(0744,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
 
 %attr(0744,%{name},%{name})%{_sbindir}/%{name}
@@ -268,48 +268,48 @@ fi
 # We should not use wildchars here. This could mask missing files problems
 # -- morcego
 # WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
-%config(noreplace) %{privoxyconf}/config
-%config %{privoxyconf}/standard.action
-%config(noreplace) %{privoxyconf}/user.action
-%config %{privoxyconf}/default.action
-%config %{privoxyconf}/default.filter
-%config %{privoxyconf}/trust
+%attr(0644,%{name},%{name}) %config(noreplace) %{privoxyconf}/config
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/standard.action
+%attr(0644,%{name},%{name}) %config(noreplace) %{privoxyconf}/user.action
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/default.action
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/default.filter
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/trust
 
 # Please keep these alphabetized so its easier to find one that 
 # is not included.
-%config %{privoxyconf}/templates/blocked
-%config %{privoxyconf}/templates/cgi-error-404
-%config %{privoxyconf}/templates/cgi-error-bad-param
-%config %{privoxyconf}/templates/cgi-error-disabled
-%config %{privoxyconf}/templates/cgi-error-file
-%config %{privoxyconf}/templates/cgi-error-file-read-only
-%config %{privoxyconf}/templates/cgi-error-modified
-%config %{privoxyconf}/templates/cgi-error-parse
-%config %{privoxyconf}/templates/cgi-style.css
-%config %{privoxyconf}/templates/connect-failed
-%config %{privoxyconf}/templates/default
-%config %{privoxyconf}/templates/edit-actions-add-url-form
-%config %{privoxyconf}/templates/edit-actions-for-url
-%config %{privoxyconf}/templates/edit-actions-for-url-filter
-%config %{privoxyconf}/templates/edit-actions-list
-%config %{privoxyconf}/templates/edit-actions-list-button
-%config %{privoxyconf}/templates/edit-actions-list-section
-%config %{privoxyconf}/templates/edit-actions-list-url
-%config %{privoxyconf}/templates/edit-actions-remove-url-form
-%config %{privoxyconf}/templates/edit-actions-url-form
-%config %{privoxyconf}/templates/mod-local-help
-%config %{privoxyconf}/templates/mod-support-and-service
-%config %{privoxyconf}/templates/mod-title
-%config %{privoxyconf}/templates/mod-unstable-warning
-%config %{privoxyconf}/templates/no-such-domain
-%config %{privoxyconf}/templates/show-request
-%config %{privoxyconf}/templates/show-status
-%config %{privoxyconf}/templates/show-status-file
-%config %{privoxyconf}/templates/show-url-info
-%config %{privoxyconf}/templates/show-version
-%config %{privoxyconf}/templates/toggle
-%config %{privoxyconf}/templates/toggle-mini
-%config %{privoxyconf}/templates/untrusted
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/blocked
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-404
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-bad-param
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-disabled
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-file
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-file-read-only
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-modified
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-error-parse
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/cgi-style.css
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/connect-failed
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/default
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-add-url-form
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-for-url
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-for-url-filter
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-list
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-list-button
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-list-section
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-list-url
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-remove-url-form
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/edit-actions-url-form
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/mod-local-help
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/mod-support-and-service
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/mod-title
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/mod-unstable-warning
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/no-such-domain
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/show-request
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/show-status
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/show-status-file
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/show-url-info
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/show-version
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/toggle
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/toggle-mini
+%attr(0644,%{name},%{name}) %config %{privoxyconf}/templates/untrusted
 
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
@@ -324,6 +324,11 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sat Jun 15 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-3
+- Changing remaining absolute paths to rpm macros
+- Fixing files ownership on the %%files section, so verify can work
+
 * Thu May 30 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-2
 - Using sed to convert files from DOS to UNIX format (BUG: #562174)
@@ -461,7 +466,7 @@ fi
 - Added preun section to stop the service with the old name, as well
   as remove it from the startup list
 - Removed the chkconfig --del entry from the conditional block on
-  the preun scriptlet (now handled on the %files section)
+  the preun scriptlet (now handled on the %%files section)
 
 * Thu Mar 21 2002 Hal Burgiss <hal@foobox.net>
 - added ijb_docs.css to docs.
@@ -679,6 +684,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.36  2002/05/30 07:52:34  morcego
+# Using sed to confert from DOS to UNIX formats (BUG: #562174)
+#
 # Revision 1.35  2002/05/28 03:56:59  hal9
 # Index.html re-vamped as privoxy-index.html for docs.
 #
