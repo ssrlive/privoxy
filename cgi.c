@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.60 2002/04/08 20:50:25 swa Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.61 2002/04/10 13:37:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.60 2002/04/08 20:50:25 swa Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.61  2002/04/10 13:37:48  oes
+ *    Made templates modular: template_load now recursive with max depth 1
+ *
  *    Revision 1.60  2002/04/08 20:50:25  swa
  *    fixed JB spelling
  *
@@ -1275,6 +1278,7 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
    char *full_path;
    char *file_buffer;
    char *included_module;
+   const char *p;
    FILE *fp;
    char buf[BUFFER_SIZE];
 
@@ -1284,9 +1288,21 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
 
    *template_ptr = NULL;
 
-   /*
-    * Open template file or fail
-    */
+   /* Validate template name.  Paranoia. */
+   for (p = templatename; *p != 0; p++)
+   {
+      if ( ((*p < 'a') || (*p > 'z'))
+        && ((*p < 'A') || (*p > 'Z'))
+        && ((*p < '0') || (*p > '9'))
+        && (*p != '-')
+        && (*p != '.'))
+      {
+         /* Illegal character */
+         return JB_ERR_FILE;
+      }
+   }
+
+   /* Generate full path */
 
    templates_dir_path = make_path(csp->config->confdir, "templates");
    if (templates_dir_path == NULL)
@@ -1301,12 +1317,16 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
       return JB_ERR_MEMORY;
    }
 
+   /* Allocate buffer */
+
    file_buffer = strdup("");
    if (file_buffer == NULL)
    {
       free(full_path);
       return JB_ERR_MEMORY;
    }
+
+   /* Open template file */
 
    if (NULL == (fp = fopen(full_path, "r")))
    {
@@ -1318,7 +1338,7 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
    free(full_path);
 
    /* 
-    * Read the file, ignoring comments, and honring #include
+    * Read the file, ignoring comments, and honoring #include
     * statements, unless we're already called recursively.
     *
     * FIXME: The comment handling could break with lines >BUFFER_SIZE long.
@@ -1331,17 +1351,16 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
          if (JB_ERR_OK != (err = template_load(csp, &included_module, chomp(buf + 9), 1)))
          {
             free(file_buffer);
+            fclose(fp);
             return err;
          }
 
-         if (string_append(&file_buffer, included_module))
+         if (string_join(&file_buffer, included_module))
          {
             fclose(fp);
-            free(included_module);
             return JB_ERR_MEMORY;
          }
 
-         free(included_module);
          continue;
       }
 
