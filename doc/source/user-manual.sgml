@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.86 2002/04/21 01:46:32 hal9 Exp $
+ $Id: user-manual.sgml,v 1.87 2002/04/23 02:53:15 david__schmidt Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.86 2002/04/21 01:46:32 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.87 2002/04/23 02:53:15 david__schmidt Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -189,9 +189,16 @@
 <sect3 id="installation-pack-rpm"><title>Red Hat and SuSE RPMs</title>
 
 <para>
- RPMs can be installed with <literal>rpm -Uvh &lt;name-of-rpm.rpm&gt;</literal>,
+ RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
  and will use <filename>/etc/privoxy</filename> for the location 
  of configuration files.
+</para>
+
+<para>
+ If you have problems with failed dependencies, try rebuilding the SRC RPM: 
+ <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm;</literal>. This 
+ will use your locally installed libraries and RPM version. 
+
 </para>
 
 <para>
@@ -235,8 +242,7 @@
  First, make sure that no previous installations of
  <application>Junkbuster</application> and / or 
  <application>Privoxy</application> are left on your
- system.
- You can do this by 
+ system. You can do this by 
 </para>
 
 <para>
@@ -270,7 +276,19 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-amiga"><title>AmigaOS</title>
 <para>
- Unpack the <literal>.lha</literal> archive, then FIXME.
+ Copy and then unpack the <filename>lha</filename> archive to a suitable location. 
+ All necessary files will be installed into <application>Privoxy</application>
+ directory, including all configuration and log files. To uninstall, just 
+ remove this directory.
+</para>
+<para>
+ Start <application>Privoxy</application> (with RUN &lt;&gt;NIL:) in your
+ <filename>startnet</filename> script (AmiTCP), in
+ <filename>s:user-startup</filename> (RoadShow), as startup program in your
+ startup script (Genesis), or as startup action (Miami and MiamiDx). 
+ <application>Privoxy</application> will automatically quit when you quit your
+ TCP/IP stack (just ignore the harmless warning your TCP/IP stack may display that
+ <application>Privoxy</application> is still running).
 </para>
 </sect3>
 </sect2>
@@ -429,7 +447,7 @@
 </para>
 
 <para>
- For Red Hat: <command>/etc/rc.d/init.d/privoxy start</command>
+ For Red Hat and Debian: <command>/etc/rc.d/init.d/privoxy start</command>
 </para>
 
 
@@ -4917,7 +4935,7 @@ Requests</title>
  One quick test to see if <application>Privoxy</application> is causing a problem 
  or not, is to disable it temporarily. This should be the first troubleshooting 
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
- and easy way to do this.
+ and easy way to do this (be sure to flush caches afterwards!).
 </para>
 
 <para>
@@ -5208,6 +5226,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.87  2002/04/23 02:53:15  david__schmidt
+ Updated OSX installation section
+ Added a few English tweaks here an there
+
  Revision 1.86  2002/04/21 01:46:32  hal9
  Re-write actions section.
 
