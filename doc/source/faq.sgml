@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.12 2002/03/11 20:13:21 swa Exp $
+ $Id: faq.sgml,v 1.13 2002/03/17 00:22:20 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.12 2002/03/11 20:13:21 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.13 2002/03/17 00:22:20 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -236,7 +236,7 @@ Junkbuster. Why should I use Junkbuster at all?</title>
   Modern browsers do indeed have <emphasis>some</emphasis> of the same
   functionality as <application>Junkbuster</application>. Maybe this is
   adequate for you. But <application>Junkbuster</application> is much more
-  verstatile and flexible, and can do some things that browsers just can't.
+  verstatile and powerful, and can do a number of things that browsers just can't.
  </para>
  <para>
   In addition, a proxy is good choice if you use multiple browsers, or 
@@ -265,8 +265,8 @@ warranty? Registration?</title>
  </para>
 </sect3>
 
-
 </sect2>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -276,11 +276,12 @@ warranty? Registration?</title>
  <para>
    We recommend you uninstall the old <application>Junkbuster</application>
    first to minimize conflicts and confusion. You may want to 
-   save your old configuration files for future reference.
+   save your old configuration files for future reference. The configuration
+   is substantially changed.
  </para>
  <para>
   See the user-manual for platform specific installation instructions.
-
+  [FIXME: This is meant for after the name change!]
  </para>
  
 </sect3>
@@ -296,7 +297,7 @@ warranty? Registration?</title>
   <emphasis>listen-address</emphasis> config option). 
  </para>
  <para>
-  So you when configuring your browser's proxy settings you typically enter
+  When configuring your browser's proxy settings you typically enter
   the word <quote>localhost</quote> in the boxes next to <quote>HTTP</quote>
   and <quote>Secure</quote> (HTTPS) and then the number <quote>8118</quote>
   for <quote>port</quote>.  
@@ -316,6 +317,7 @@ warranty? Registration?</title>
 </sect3>
 
 </sect2>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -650,6 +652,137 @@ more through Google.
 <!--  </para> -->
 <!--  </sect3> -->
 
+<sect3>
+<title id="anonforsure">Can Junkbuster guarantee I am anonymous?</title>
+<para>
+ No. Your chances of remaining anonymous are greatly improved, but unless you
+ are an expert on Internet security it would be safest to assume that
+ everything you do on the Web can be traced back to you.
+</para>
+<para>
+ <application>Junkbuster</application> can remove various information about you,
+ and allows <emphasis>you</emphasis> more freedom  to decide which sites 
+ you can trust. But it's still possible that web sites can find out who you
+ are. Here's one way this can happen.
+</para>
+<para>
+ A few browsers disclose the user's email address in certain situations, such
+ as when transferring a file by FTP. <application>Junkbuster</application>
+ does not filter FTP. If you need this feature, or are concerned about the
+ mail handler of your browser disclosing your email address, you might
+ consider products such as <application>NSClean</application>.
+</para>
+<para>
+ Browsers available only as binaries could use non-standard headers to give
+ out any information they can have access to: see the manufacturer's license
+ agreement. It's impossible to anticipate and prevent every breach of privacy
+ that might occur. The professionally paranoid prefer browsers available as
+ source code, because anticipating their behavior is easier. Trust the source,
+ Luke!
+</para>
+
+</sect3>
+
+<sect3>
+<title id="sitebreak">Might some things break because header information is
+changed?</title>
+
+<para>
+ Definitely. More and more sites use HTTP header content to decide what to
+ display and how to display it. There is many ways that this can be handled, 
+ so having hard and fast rules, is tricky.
+</para>
+
+<para>
+ <quote>USER AGENT</quote> in particular is often used in this way to identify
+ the browser, and adjust content accordingly. Changing this now is not
+ recommended, since so many sites do look for this. You may get undesirable 
+ results by changing this.
+</para>
+
+<para>
+ For instance, different browsers use different encodings of Russian and Czech
+ characters, certain web servers convert pages on-the-fly according to the
+ User Agent header. Giving a <quote>User Agent</quote> with the wrong
+ operating system or browser manufacturer causes some sites in these languages
+ to be garbled; Surfers to Eastern European sites should change it to
+ something closer. Some page access counters work by looking at the
+ <quote>REFERER</quote> header; they may fail or break if deprived. The
+ weather maps of Intellicast have been blocked by their server when no
+ <quote>REFERER</quote> or cookie is provided, is another example. There 
+ are many, many other ways things can go wrong when trying to fool a 
+ web server.
+</para>
+
+<para>
+ If you have problems with a site, you will have to adjust your configuration 
+ accordingly. Cookies are probably the most likely adjustment that may 
+ be required, but by no means the only one.
+
+</para>
+
+</sect3>
+
+<sect3>
+<title id="caching">Can Junkbuster act as a <quote>caching</quote> proxy?</title>
+<para>
+ No, it does not have this ability at all. You want something like 
+ <ulink url="http://www.squid-cache.org/">Squid</ulink> for this. And, yes, 
+ before you ask, <application>Junkbuster</application> can co-exist 
+ with other kinds of proxies like <quote>Squid</quote>.
+</para>
+</sect3>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title id="trouble">Troubleshooting</title>
+
+<sect3>
+<title id="refused">I just upgraded and am getting <quote>connection refused</quote>
+with every web page?</title>
+<para>
+ Either <application>Junkbuster</application> is not running, or your 
+ browser is configured for a different port than what
+ <application>Junkbuster</application> is using.
+
+</para>
+
+<para>
+ The old <application>Junkbuster</application> used port 8000 by 
+ default. This has been changed to port 8118 now, due to a conflict 
+ with NAS (Network Audio Service), which uses port 8000. If you haven't, 
+ you need to change your browser to the new port number, or alternately 
+ change <application>Junkbuster's</application> <quote>listen-address</quote>
+ setting in the default <filename>config</filename> file.
+
+</para>
+
+</sect3>
+
+<sect3>
+<title id="flushit">I just added a new rule, but the steenkin ad is 
+still getting through. How?</title>
+<para>
+ If the ad had been displayed before you added its URL, it
+ will probably be held in cache for some time, so it will be displayed without
+ the need for any request to the server. The best thing to do is try 
+ flusing the browser's caches.
+</para>
+
+<para>
+ If this doesn't help, you probably don't have the configuration applied 
+ incorrectly. Try pasting the full URL of the offending ad into
+ <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+ and see if any actions match.
+
+</para>
+
+</sect3>
+
 </sect2>
 
 </sect1>
@@ -704,6 +837,9 @@ more through Google.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.13  2002/03/17 00:22:20  hal9
+Adding new stuff, and trying to incorporate stuff from old faq.
+
 Revision 1.12  2002/03/11 20:13:21  swa
 typo
 
