@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.35 2001/10/09 22:39:21 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.36 2001/10/13 12:51:51 joergs Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.35 2001/10/09 22:39:21 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.36  2001/10/13 12:51:51  joergs
+ *    Removed client_host, (was only required for the old 2.0.2-11 http://noijb.
+ *    force-load), instead crumble Host: and add it (again) in client_host_adder
+ *    (in case we get a HTTP/1.0 request without Host: header and forward it to
+ *    a HTTP/1.1 server/proxy).
+ *
  *    Revision 1.35  2001/10/09 22:39:21  jongfoster
  *    assert.h is also required under Win32, so moving out of #ifndef _WIN32
  *    block.
@@ -555,7 +561,8 @@ char *get_header(struct client_state *csp)
  *                headers (client or server)
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  Single pointer to a fully formed header.
+ * Returns     :  Single pointer to a fully formed header, or NULL
+ *                on out-of-memory error.
  *
  *********************************************************************/
 char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp)
@@ -591,7 +598,7 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
 
    hdr = list_to_text(csp->headers);
 
-   return(hdr);
+   return hdr;
 
 }
 
