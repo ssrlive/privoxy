@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.45 2002/01/09 14:33:27 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.46 2002/01/17 21:06:09 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,14 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.46  2002/01/17 21:06:09  jongfoster
+ *    Now #defining the URLs of the config interface
+ *
+ *    Minor changes to struct http_request and struct url_spec due to
+ *    standardizing that struct http_request is used to represent a URL, and
+ *    struct url_spec is used to represent a URL pattern.  (Before, URLs were
+ *    represented as seperate variables and a partially-filled-in url_spec).
+ *
  *    Revision 1.45  2002/01/09 14:33:27  oes
  *    Added HOSTENT_BUFFER_SIZE
  *
@@ -751,13 +759,23 @@ struct client_state
 
 
 /*
+ * A function to add a header
+ */
+typedef jb_err (*add_header_func_ptr)(struct client_state *);
+
+/*
+ * A function to process a header
+ */
+typedef jb_err (*parser_func_ptr    )(struct client_state *, char **);
+
+/*
  * List of functions to run on a list of headers
  */
 struct parsers
 {
    char *str;
    char  len;
-   char *(*parser)(const struct parsers *, const char *, struct client_state *);
+   parser_func_ptr parser;
 };
 
 

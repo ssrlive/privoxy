@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.18 2001/10/26 17:40:23 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.19 2002/01/17 21:03:47 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.19  2002/01/17 21:03:47  jongfoster
+ *    Moving all our URL and URL pattern parsing code to urlmatch.c.
+ *
  *    Revision 1.18  2001/10/26 17:40:23  oes
  *    Introduced get_header_value()
  *    Removed client_accept()
@@ -132,41 +135,40 @@ extern "C" {
 extern const struct parsers client_patterns[];
 extern const struct parsers server_patterns[];
 
-extern void (* const add_client_headers[])(struct client_state *);
-extern void (* const add_server_headers[])(struct client_state *);
+extern const add_header_func_ptr add_client_headers[];
+extern const add_header_func_ptr add_server_headers[];
 
 extern int flush_socket(int fd, struct client_state *csp);
 extern int add_to_iob(struct client_state *csp, char *buf, int n);
 extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
-extern char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp);
+extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 
-extern char *crumble(const struct parsers *v, const char *s, struct client_state *csp);
+extern jb_err crumble                (struct client_state *csp, char **header);
+extern jb_err client_referrer        (struct client_state *csp, char **header);
+extern jb_err client_uagent          (struct client_state *csp, char **header);
+extern jb_err client_ua              (struct client_state *csp, char **header);
+extern jb_err client_from            (struct client_state *csp, char **header);
+extern jb_err client_send_cookie     (struct client_state *csp, char **header);
+extern jb_err client_x_forwarded     (struct client_state *csp, char **header);
+extern jb_err client_accept_encoding (struct client_state *csp, char **header);
+extern jb_err client_te              (struct client_state *csp, char **header);
 
-extern char *client_referrer(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_uagent(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_ua(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_from(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_send_cookie(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_x_forwarded(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_accept_encoding(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *client_te(const struct parsers *v, const char *s, struct client_state *csp);
+extern jb_err client_host_adder           (struct client_state *csp);
+extern jb_err client_cookie_adder         (struct client_state *csp);
+extern jb_err client_xtra_adder           (struct client_state *csp);
+extern jb_err client_accept_encoding_adder(struct client_state *csp);
+extern jb_err client_x_forwarded_adder    (struct client_state *csp);
 
-extern void client_host_adder(struct client_state *csp);
-extern void client_cookie_adder(struct client_state *csp);
-extern void client_xtra_adder(struct client_state *csp);
-extern void client_accept_encoding_adder(struct client_state *csp);
-extern void client_x_forwarded_adder(struct client_state *csp);
+extern jb_err connection_close_adder      (struct client_state *csp); 
 
-extern void connection_close_adder(struct client_state *csp); 
-
-extern char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_content_type(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_content_length(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_content_md5(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_content_encoding(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_transfer_coding(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_http(const struct parsers *v, const char *s, struct client_state *csp);
+extern jb_err server_set_cookie      (struct client_state *csp, char **header);
+extern jb_err server_content_type    (struct client_state *csp, char **header);
+extern jb_err server_content_length  (struct client_state *csp, char **header);
+extern jb_err server_content_md5     (struct client_state *csp, char **header);
+extern jb_err server_content_encoding(struct client_state *csp, char **header);
+extern jb_err server_transfer_coding (struct client_state *csp, char **header);
+extern jb_err server_http            (struct client_state *csp, char **header);
 
 #ifdef FEATURE_FORCE_LOAD
 extern int strclean(const char *string, const char *substring);

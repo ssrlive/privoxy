@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.45 2002/01/09 14:33:03 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.46 2002/01/17 21:03:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.45 2002/01/09 14:33:03 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.46  2002/01/17 21:03:47  jongfoster
+ *    Moving all our URL and URL pattern parsing code to urlmatch.c.
+ *
  *    Revision 1.45  2002/01/09 14:33:03  oes
  *    Added support for localtime_r.
  *
@@ -400,7 +403,7 @@ const struct parsers server_patterns[] = {
 };
 
 
-void (* const add_client_headers[])(struct client_state *) = {
+const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
    client_cookie_adder,
    client_x_forwarded_adder,
@@ -411,7 +414,7 @@ void (* const add_client_headers[])(struct client_state *) = {
 };
 
 
-void (* const add_server_headers[])(struct client_state *) = {
+const add_header_func_ptr add_server_headers[] = {
    connection_close_adder,
    NULL
 };
@@ -556,6 +559,11 @@ char *get_header(struct client_state *csp)
    *p = '\0';
 
    ret = strdup(iob->cur);
+   if (ret == NULL)
+   {
+      /* FIXME No way to handle error properly */
+      log_error(LOG_LEVEL_FATAL, "Out of memory in get_header()");
+   }
 
    iob->cur = p+1;
 
@@ -645,16 +653,18 @@ char *get_header_value(const struct list *header_list, const char *header_name)
  *                on out-of-memory error.
  *
  *********************************************************************/
-char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp)
+char *sed(const struct parsers pats[],
+          const add_header_func_ptr more_headers[],
+          struct client_state *csp)
 {
    struct list_entry *p;
    const struct parsers *v;
-   char *hdr;
-   void (* const *f)();
+   const add_header_func_ptr *f;
+   jb_err err = JB_ERR_OK;
 
-   for (v = pats; v->str ; v++)
+   for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
    {
-      for (p = csp->headers->first; p ; p = p->next)
+      for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
       {
          /* Header crunch()ed in previous run? -> ignore */
          if (p->str == NULL) continue;
@@ -663,23 +673,23 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
 
          if (strncmpic(p->str, v->str, v->len) == 0)
          {
-            hdr = v->parser(v, p->str, csp);
-            freez(p->str); /* FIXME: Yuck! patching a list...*/
-            p->str = hdr;
+            err = v->parser(csp, (char **)&(p->str));
          }
       }
    }
 
    /* place any additional headers on the csp->headers list */
-   for (f = more_headers; *f ; f++)
+   for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
    {
-      (*f)(csp);
+      err = (*f)(csp);
    }
 
-   hdr = list_to_text(csp->headers);
+   if (err != JB_ERR_OK)
+   {
+      return NULL;
+   }
 
-   return hdr;
-
+   return list_to_text(csp->headers);
 }
 
 
@@ -693,19 +703,21 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
  * Description :  This is called if a header matches a pattern to "crunch"
  *
  * Parameters  :
- *          1  :  v = Pointer to parsers structure, which basically holds
- *                headers (client or server) that we want to "crunch"
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  Always NULL.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *crumble(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err crumble(struct client_state *csp, char **header)
 {
    log_error(LOG_LEVEL_HEADER, "crunch!");
-   return(NULL);
-
+   freez(*header);
+   return JB_ERR_OK;
 }
 
 
@@ -718,27 +730,30 @@ char *crumble(const struct parsers *v, const char *s, struct client_state *csp)
  *                forbidden (CT_TABOO) while parsing earlier headers.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_content_type(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_content_type(struct client_state *csp, char **header)
 {
    if (csp->content_type != CT_TABOO)
    {
-      if (strstr(s, " text/") || strstr(s, "application/x-javascript"))
+      if (strstr(*header, " text/")
+       || strstr(*header, "application/x-javascript"))
          csp->content_type = CT_TEXT;
-      else if (strstr(s, " image/gif"))
+      else if (strstr(*header, " image/gif"))
          csp->content_type = CT_GIF;
       else
          csp->content_type = 0;
    }
 
-   return(strdup(s));
-
+   return JB_ERR_OK;
 }
 
 
@@ -752,19 +767,22 @@ char *server_content_type(const struct parsers *v, const char *s, struct client_
  *                  but has been de-chunked for filtering.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_transfer_coding(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_transfer_coding(struct client_state *csp, char **header)
 {
    /*
     * Turn off pcrs and gif filtering if body compressed
     */
-   if (strstr(s, "gzip") || strstr(s, "compress") || strstr(s, "deflate"))
+   if (strstr(*header, "gzip") || strstr(*header, "compress") || strstr(*header, "deflate"))
    {
       csp->content_type = CT_TABOO;
    }
@@ -772,7 +790,7 @@ char *server_transfer_coding(const struct parsers *v, const char *s, struct clie
    /*
     * Raise flag if body chunked
     */
-   if (strstr(s, "chunked"))
+   if (strstr(*header, "chunked"))
    {
       csp->flags |= CSP_FLAG_CHUNKED;
 
@@ -782,12 +800,13 @@ char *server_transfer_coding(const struct parsers *v, const char *s, struct clie
        */
       if (csp->flags & CSP_FLAG_MODIFIED)
       {
-         return(strdup("Transfer-Encoding: identity"));
+         freez(*header);
+         *header = strdup("Transfer-Encoding: identity");
+         return (header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
       }
    }
 
-   return(strdup(s));
-
+   return JB_ERR_OK;
 }
 
 
@@ -798,24 +817,27 @@ char *server_transfer_coding(const struct parsers *v, const char *s, struct clie
  * Description :  Prohibit filtering (CT_TABOO) if content encoding compresses
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_content_encoding(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_content_encoding(struct client_state *csp, char **header)
 {
    /*
     * Turn off pcrs and gif filtering if body compressed
     */
-   if (strstr(s, "gzip") || strstr(s, "compress") || strstr(s, "deflate"))
+   if (strstr(*header, "gzip") || strstr(*header, "compress") || strstr(*header, "deflate"))
    {
       csp->content_type = CT_TABOO;
    }
 
-   return(strdup(s));
+   return JB_ERR_OK;
 
 }
 
@@ -828,28 +850,33 @@ char *server_content_encoding(const struct parsers *v, const char *s, struct cli
  *                the body.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_content_length(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_content_length(struct client_state *csp, char **header)
 {
    if (csp->content_length != 0) /* Content length has been modified */
    {
-      char * s2 = (char *) zalloc(100);
-      sprintf(s2, "Content-Length: %d", (int) csp->content_length);
+      freez(*header);
+      *header = (char *) zalloc(100);
+      if (*header == NULL)
+      {
+         return JB_ERR_MEMORY;
+      }
+
+      sprintf(*header, "Content-Length: %d", (int) csp->content_length);
 
       log_error(LOG_LEVEL_HEADER, "Adjust Content-Length to %d", (int) csp->content_length);
-      return(s2);
-   }
-   else
-   {
-      return(strdup(s));
    }
 
+   return JB_ERR_OK;
 }
 
 
@@ -861,25 +888,25 @@ char *server_content_length(const struct parsers *v, const char *s, struct clien
  *                modified. FIXME: Should we re-compute instead?
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A duplicate string pointer to this header (ie. pass thru)
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_content_md5(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_content_md5(struct client_state *csp, char **header)
 {
    if (csp->flags & CSP_FLAG_MODIFIED)
    {
       log_error(LOG_LEVEL_HEADER, "Crunching Content-MD5");
-      return(NULL);
-   }
-   else
-   {
-      return(strdup(s));
+      freez(*header);
    }
 
+   return JB_ERR_OK;
 }
 
 
@@ -892,33 +919,34 @@ char *server_content_md5(const struct parsers *v, const char *s, struct client_s
  *                Note: For HTTP/1.0 the absence of the header is enough.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A copy of the client's original or the modified header.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_accept_encoding(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_accept_encoding(struct client_state *csp, char **header)
 {
-   if ((csp->action->flags & ACTION_NO_COMPRESSION) == 0)
-   {
-      return(strdup(s));
-   }
-   else
+   if ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
    {
       log_error(LOG_LEVEL_HEADER, "Supressed offer to compress content");
 
+      freez(*header);
       if (!strcmpic(csp->http->ver, "HTTP/1.1"))
       {
-         return(strdup("Accept-Encoding: identity;q=1.0, *;q=0"));
-      }
-      else
-      {
-         return(NULL);
+         *header = strdup("Accept-Encoding: identity;q=1.0, *;q=0");
+         if (*header == NULL)
+         {
+            return JB_ERR_MEMORY;
+         }
       }
    }
 
+   return JB_ERR_OK;
 }
 
 
@@ -930,25 +958,25 @@ char *client_accept_encoding(const struct parsers *v, const char *s, struct clie
  *                if doesn't allow compression, if the action applies.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header string we are "considering"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A copy of the client's original or the modified header.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_te(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_te(struct client_state *csp, char **header)
 {
-   if ((csp->action->flags & ACTION_NO_COMPRESSION) == 0)
+   if ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
    {
-      return(strdup(s));
-   }
-   else
-   {
+      freez(*header);
       log_error(LOG_LEVEL_HEADER, "Supressed offer to compress transfer");
-      return(NULL);
    }
 
+   return JB_ERR_OK;
 }
 
 /*********************************************************************
@@ -959,24 +987,26 @@ char *client_te(const struct parsers *v, const char *s, struct client_state *csp
  *                Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  NULL if crunched, or a malloc'ed string with the original
- *                or modified header
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_referrer(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_referrer(struct client_state *csp, char **header)
 {
    const char * newval;
-   char * s2;
+
 #ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
     * even if the request itself is non-forced, we must
     * clean it unconditionally
     */
-   strclean(s, FORCE_PREFIX);
+   strclean(*header, FORCE_PREFIX);
 #endif /* def FEATURE_FORCE_LOAD */
 
    /*
@@ -984,69 +1014,54 @@ char *client_referrer(const struct parsers *v, const char *s, struct client_stat
     */
    if ((csp->action->flags & ACTION_HIDE_REFERER) == 0)
    {
-      return(strdup(s));
+      return JB_ERR_OK;
    }
+
+   freez(*header);
 
    newval = csp->action->string[ACTION_STRING_REFERER];
 
-   /*
-    * Are we blocking referer?
-    */
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
+      /*
+       * Blocking referer
+       */
       log_error(LOG_LEVEL_HEADER, "crunch!");
-      return(NULL);
+      return JB_ERR_OK;
    }
+   else if (0 == strncmpic(newval, "http://", 7))
+   {
+      /*
+       * We have a specific (fixed) referer we want to send.
+       */
+      log_error(LOG_LEVEL_HEADER, "modified");
 
-   /*
-    * Are we forging referer?
-    */
-   if (0 == strcmpic(newval, "forge"))
+      *header = strdup("Referer: ");
+      string_append(header, newval);
+
+      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+   }
+   else
    {
       /*
        * Forge a referer as http://[hostname:port of REQUEST]/
        * to fool stupid checks for in-site links
        */
+      if (0 != strcmpic(newval, "forge"))
+      {
+         /*
+          * Invalid choice - but forge is probably the best default.
+          */
+         log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
+      }
+
       log_error(LOG_LEVEL_HEADER, "crunch+forge!");
-      s2 = strsav(NULL, "Referer: ");
-      s2 = strsav(s2, "http://");
-      s2 = strsav(s2, csp->http->hostport);
-      s2 = strsav(s2, "/");
-      return(s2);
+      *header = strdup("Referer: http://");
+      string_append(header, csp->http->hostport);
+      string_append(header, "/");
+
+      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
    }
-
-   /*
-    * Have we got a fixed referer?
-    */
-   if (0 == strncmpic(newval, "http://", 7))
-   {
-      /*
-       * We have a specific (fixed) referer we want to send.
-       */
-      char * s3;
-
-      log_error(LOG_LEVEL_HEADER, "modified");
-
-      s3 = strsav( NULL, "Referer: " );
-      s3 = strsav( s3, newval );
-      return(s3);
-   }
-
-   /* Should never get here! */
-   log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
-
-   /*
-    * Forge is probably the best default.
-    *
-    * Forge a referer as http://[hostname:port of REQUEST]/
-    * to fool stupid checks for in-site links
-    */
-   log_error(LOG_LEVEL_HEADER, "crunch+forge!");
-   s2 = strsav(NULL, "Referer: ");
-   s2 = strsav(s2, "http://");
-   s2 = strsav(s2, csp->http->hostport);
-   s2 = strsav(s2, "/");
-   return(s2);
 }
 
 
@@ -1059,36 +1074,38 @@ char *client_referrer(const struct parsers *v, const char *s, struct client_stat
  *                bug workarounds. Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  A malloc'ed pointer to the default agent, or
- *                a malloc'ed string pointer to this header (ie. pass thru).
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_uagent(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_uagent(struct client_state *csp, char **header)
 {
    const char * newval;
-   char * s2;
 
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
    {
-      return(strdup(s));
+      return JB_ERR_OK;
    }
 
    newval = csp->action->string[ACTION_STRING_USER_AGENT];
    if (newval == NULL)
    {
-      return(strdup(s));
+      return JB_ERR_OK;
    }
 
    log_error(LOG_LEVEL_HEADER, "modified");
 
-   s2 = strsav( NULL, "User-Agent: " );
-   s2 = strsav( s2, newval );
-   return(s2);
+   freez(*header);
+   *header = strdup("User-Agent: ");
+   string_append(header, newval);
 
+   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
 }
 
 
@@ -1099,24 +1116,25 @@ char *client_uagent(const struct parsers *v, const char *s, struct client_state 
  * Description :  Handle "ua-" headers properly.  Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  NULL if crunched, or a malloc'ed string to original header
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_ua(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_ua(struct client_state *csp, char **header)
 {
-   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
-   {
-      return(strdup(s));
-   }
-   else
+   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) != 0)
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
-      return(NULL);
+      freez(*header);
    }
+
+   return JB_ERR_OK;
 }
 
 
@@ -1128,41 +1146,44 @@ char *client_ua(const struct parsers *v, const char *s, struct client_state *csp
  *                Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  NULL if crunched, or a malloc'ed string to
- *                modified/original header.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_from(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_from(struct client_state *csp, char **header)
 {
    const char * newval;
-   char * s2;
 
    if ((csp->action->flags & ACTION_HIDE_FROM) == 0)
    {
-      return(strdup(s));
+      return JB_ERR_OK;
    }
+
+   freez(*header);
 
    newval = csp->action->string[ACTION_STRING_FROM];
 
    /*
-    * Are we blocking referer?
+    * Are we blocking the e-mail address?
     */
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
-      return(NULL);
+      return JB_ERR_OK;
    }
 
    log_error(LOG_LEVEL_HEADER, " modified");
 
-   s2 = strsav( NULL, "From: " );
-   s2 = strsav( s2, newval );
-   return(s2);
+   *header = strdup("From: ");
+   string_append(header, newval);
 
+   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
 }
 
 
@@ -1175,18 +1196,24 @@ char *client_from(const struct parsers *v, const char *s, struct client_state *c
  *                else we crunch it.  Mmmmmmmmmmm ... cookie ......
  *
  * Parameters  :
- *          1  :  v = pattern of cookie `sed' found matching
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  Always NULL.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_send_cookie(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_send_cookie(struct client_state *csp, char **header)
 {
+   jb_err result = JB_ERR_OK;
+
    if ((csp->action->flags & ACTION_NO_COOKIE_READ) == 0)
    {
-      enlist(csp->cookie_list, s + v->len + 1);
+      /* strlen("cookie: ") == 8 */
+      result = enlist(csp->cookie_list, *header + 8);
    }
    else
    {
@@ -1194,11 +1221,12 @@ char *client_send_cookie(const struct parsers *v, const char *s, struct client_s
    }
 
    /*
-    * Always return NULL here.  The cookie header
+    * Always remove the cookie here.  The cookie header
     * will be sent at the end of the header.
     */
-   return(NULL);
+   freez(*header);
 
+   return result;
 }
 
 
@@ -1210,28 +1238,37 @@ char *client_send_cookie(const struct parsers *v, const char *s, struct client_s
  *                also used in the add_client_headers list.  Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = ignored
- *          2  :  s = header (from sed) to "crunch"
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  Always NULL.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *client_x_forwarded(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err client_x_forwarded(struct client_state *csp, char **header)
 {
    if ((csp->action->flags & ACTION_HIDE_FORWARDED) == 0)
    {
       /* Save it so we can re-add it later */
-      csp->x_forwarded = strdup(s);
+      freez(csp->x_forwarded);
+      csp->x_forwarded = *header;
+
+      /*
+       * Always set *header = NULL, since this information
+       * will be sent at the end of the header.
+       */
+      *header = NULL;
+   }
+   else
+   {
+      freez(*header);
+      log_error(LOG_LEVEL_HEADER, " crunch!");
    }
 
-   /*
-    * Always return NULL, since this information
-    * will be sent at the end of the header.
-    */
-
-   return(NULL);
-
+   return JB_ERR_OK;
 }
 
 /* the following functions add headers directly to the header list */
@@ -1245,31 +1282,46 @@ char *client_x_forwarded(const struct parsers *v, const char *s, struct client_s
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void client_host_adder(struct client_state *csp)
+jb_err client_host_adder(struct client_state *csp)
 {
-   char *p = NULL,
-        *pos = NULL;
+   char *p;
+   char *pos;
+   jb_err err;
 
-   if ( !csp->http->hostport || !*(csp->http->hostport)) return;
-   p = strsav(p, "Host: ");
+   if ( !csp->http->hostport || !*(csp->http->hostport))
+   {
+      return JB_ERR_OK;
+   }
+
+   p = strdup("Host: ");
    /*
    ** remove 'user:pass@' from 'proto://user:pass@host'
    */
    if ( (pos = strchr( csp->http->hostport, '@')) != NULL )
    {
-       p = strsav(p, pos+1);
+       string_append(&p, pos+1);
    }
    else
    {
-      p = strsav(p, csp->http->hostport);
+      string_append(&p, csp->http->hostport);
    }
+
+   if (p == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
    log_error(LOG_LEVEL_HEADER, "addh: %s", p);
-   enlist(csp->headers, p);
+
+   err = enlist(csp->headers, p);
 
    freez(p);
+
+   return err;
 }
 
 
@@ -1282,50 +1334,62 @@ void client_host_adder(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void client_cookie_adder(struct client_state *csp)
+jb_err client_cookie_adder(struct client_state *csp)
 {
    struct list_entry *lst;
-   char *tmp = NULL;
-   char *e;
+   char *tmp;
+   struct list_entry *list1 = csp->cookie_list->first;
+   struct list_entry *list2 = csp->action->multi[ACTION_MULTI_WAFER]->first;
+   int first_cookie = 1;
+   jb_err err;
 
-   for (lst = csp->cookie_list->first; lst ; lst = lst->next)
+   if ((list1 == NULL) && (list2 == NULL))
    {
-      if (tmp)
-      {
-         tmp = strsav(tmp, "; ");
-      }
-      tmp = strsav(tmp, lst->str);
+      /* Nothing to do */
+      return JB_ERR_OK;
    }
 
-   for (lst = csp->action->multi[ACTION_MULTI_WAFER]->first;  lst ; lst = lst->next)
-   {
-      if (tmp)
-      {
-         tmp = strsav(tmp, "; ");
-      }
+   tmp = strdup("Cookie: ");
 
-      if ((e = cookie_encode(lst->str)))
+   for (lst = list1; lst ; lst = lst->next)
+   {
+      if (first_cookie)
       {
-         tmp = strsav(tmp, e);
-         freez(e);
+         first_cookie = 0;
       }
+      else
+      {
+         string_append(&tmp, "; ");
+      }
+      string_append(&tmp, lst->str);
    }
 
-   if (tmp)
+   for (lst = list2;  lst ; lst = lst->next)
    {
-      char *ret;
-
-      ret = strdup("Cookie: ");
-      ret = strsav(ret, tmp);
-      log_error(LOG_LEVEL_HEADER, "addh: %s", ret);
-      enlist(csp->headers, ret);
-      freez(tmp);
-      freez(ret);
+      if (first_cookie)
+      {
+         first_cookie = 0;
+      }
+      else
+      {
+         string_append(&tmp, "; ");
+      }
+      string_join(&tmp, cookie_encode(lst->str));
    }
 
+   if (tmp == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "addh: %s", tmp);
+   err = enlist(csp->headers, tmp);
+   free(tmp);
+   return err;
 }
 
 
@@ -1341,17 +1405,19 @@ void client_cookie_adder(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void client_accept_encoding_adder(struct client_state *csp)
+jb_err client_accept_encoding_adder(struct client_state *csp)
 {
    if (   ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
        && (!strcmpic(csp->http->ver, "HTTP/1.1")) )
    {
-      enlist_unique(csp->headers, "Accept-Encoding: identity;q=1.0, *;q=0", 16);
+      return enlist_unique(csp->headers, "Accept-Encoding: identity;q=1.0, *;q=0", 16);
    }
 
+   return JB_ERR_OK;
 }
 
 
@@ -1364,20 +1430,28 @@ void client_accept_encoding_adder(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void client_xtra_adder(struct client_state *csp)
+jb_err client_xtra_adder(struct client_state *csp)
 {
    struct list_entry *lst;
+   jb_err err;
 
    for (lst = csp->action->multi[ACTION_MULTI_ADD_HEADER]->first;
         lst ; lst = lst->next)
    {
       log_error(LOG_LEVEL_HEADER, "addh: %s", lst->str);
-      enlist(csp->headers, lst->str);
+      err = enlist(csp->headers, lst->str);
+      if (err)
+      {
+         return err;
+      }
+
    }
 
+   return JB_ERR_OK;
 }
 
 
@@ -1390,34 +1464,41 @@ void client_xtra_adder(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void client_x_forwarded_adder(struct client_state *csp)
+jb_err client_x_forwarded_adder(struct client_state *csp)
 {
    char *p = NULL;
+   jb_err err;
 
    if ((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
    {
-      return;
+      return JB_ERR_OK;
    }
 
    if (csp->x_forwarded)
    {
-      p = strsav(p, csp->x_forwarded);
-      p = strsav(p, ", ");
-      p = strsav(p, csp->ip_addr_str);
+      p = strdup(csp->x_forwarded);
+      string_append(&p, ", ");
    }
    else
    {
-      p = strsav(p, "X-Forwarded-For: ");
-      p = strsav(p, csp->ip_addr_str);
+      p = strdup("X-Forwarded-For: ");
+   }
+   string_append(&p, csp->ip_addr_str);
+
+   if (p == NULL)
+   {
+      return JB_ERR_MEMORY;
    }
 
    log_error(LOG_LEVEL_HEADER, "addh: %s", p);
-   enlist(csp->headers, p);
+   err = enlist(csp->headers, p);
+   free(p);
 
-   freez(p);
+   return err;
 }
 
 
@@ -1433,12 +1514,13 @@ void client_x_forwarded_adder(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-void connection_close_adder(struct client_state *csp)
+jb_err connection_close_adder(struct client_state *csp)
 {
-   enlist(csp->headers, "Connection: close");
+   return enlist(csp->headers, "Connection: close");
 }
 
 
@@ -1453,18 +1535,19 @@ void connection_close_adder(struct client_state *csp)
  *                  action applies.
  *
  * Parameters  :
- *          1  :  v = parser pattern that matched this header
- *          2  :  s = header that matched this pattern
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  Copy of changed  or original answer.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_http(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_http(struct client_state *csp, char **header)
 {
-   char *ret = strdup(s);
-
-   sscanf(ret, "HTTP/%*d.%*d %d", &(csp->http->status));
+   sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
    if (csp->http->status == 206)
    {
       csp->content_type = CT_TABOO;
@@ -1472,11 +1555,11 @@ char *server_http(const struct parsers *v, const char *s, struct client_state *c
 
    if ((csp->action->flags & ACTION_DOWNGRADE) != 0)
    {
-      ret[7] = '0';
+      (*header)[7] = '0';
       log_error(LOG_LEVEL_HEADER, "Downgraded answer to HTTP/1.0");
    }
-   return(ret);
 
+   return JB_ERR_OK;
 }
 
 
@@ -1489,14 +1572,17 @@ char *server_http(const struct parsers *v, const char *s, struct client_state *c
  *                or accept it.  Called from `sed'.
  *
  * Parameters  :
- *          1  :  v = parser pattern that matched this header
- *          2  :  s = header that matched this pattern
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
  *
- * Returns     :  `crumble' or a newly malloc'ed string.
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp)
+jb_err server_set_cookie(struct client_state *csp, char **header)
 {
 #ifdef FEATURE_COOKIE_JAR
    if (csp->config->jar)
@@ -1512,19 +1598,20 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
       struct tm tm_now; 
       time (&now); 
 #ifdef HAVE_LOCALTIME_R
-       tm_now = *localtime_r(&now, &tm_now);
+      tm_now = *localtime_r(&now, &tm_now);
 #else
-       tm_now = *localtime (&now); 
+      tm_now = *localtime (&now); 
 #endif
       strftime(tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", &tm_now); 
 
-      fprintf(csp->config->jar, "%s %s\t%s\n", tempbuf, csp->http->host, (s + v->len + 1));
+      /* strlen("set-cookie: ") = 12 */
+      fprintf(csp->config->jar, "%s %s\t%s\n", tempbuf, csp->http->host, *header + 12);
    }
 #endif /* def FEATURE_COOKIE_JAR */
 
    if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
-      return(crumble(v, s, csp));
+      return crumble(csp, header);
    }
    else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
    {
@@ -1534,16 +1621,8 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
       /* A variable to store the tag we're working on */
       char * cur_tag;
 
-      /* Make a copy of the header we can write to */
-      char * result = strdup(s);
-      if (result == NULL)
-      {
-         /* FIXME: This error handling is incorrect */
-         return NULL;
-      }
-
       /* Skip "Set-Cookie:" (11 characters) in header */
-      cur_tag = result + 11;
+      cur_tag = *header + 11;
 
       /* skip whitespace between "Set-Cookie:" and value */
       while (*cur_tag && ijb_isspace(*cur_tag))
@@ -1601,11 +1680,9 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
       {
          log_error(LOG_LEVEL_HEADER, "Changed cookie to a temporary one.");
       }
-
-      return result;
    }
 
-   return(strdup(s));
+   return JB_ERR_OK;
 }
 
 
