@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.11 2001/10/23 21:21:03 jongfoster Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.12 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,12 @@ const char list_rcs[] = "$Id: list.c,v 1.11 2001/10/23 21:21:03 jongfoster Exp $
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.12  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.11  2001/10/23 21:21:03  jongfoster
  *    New error handling - error codes are now jb_errs, not ints.
  *    Changed the way map() handles out-of-memory, to dramatically
@@ -396,7 +402,7 @@ jb_err enlist_first(struct list *the_list, const char *str)
  *
  *********************************************************************/
 jb_err enlist_unique(struct list *the_list, const char *str,
-                     int num_significant_chars)
+                     size_t num_significant_chars)
 {
    struct list_entry *cur_entry;
 
@@ -404,7 +410,7 @@ jb_err enlist_unique(struct list *the_list, const char *str,
    assert(list_is_valid(the_list));
    assert(str);
    assert(num_significant_chars >= 0);
-   assert((size_t)num_significant_chars <= strlen(str));
+   assert(num_significant_chars <= strlen(str));
 
    if (num_significant_chars > 0)
    {
@@ -458,7 +464,7 @@ jb_err enlist_unique(struct list *the_list, const char *str,
 jb_err enlist_unique_header(struct list *the_list, const char *name,
                             const char *value)
 {
-   int length;
+   size_t length;
    jb_err result;
    char *str;
 
@@ -484,6 +490,7 @@ jb_err enlist_unique_header(struct list *the_list, const char *name,
    assert(list_is_valid(the_list));
 
    return result;
+
 }
 
 
@@ -544,7 +551,7 @@ char *list_to_text(const struct list *the_list)
    struct list_entry *cur_entry;
    char *ret = NULL;
    char *s;
-   int size = 2;
+   size_t size = 2;
 
    assert(the_list);
    assert(list_is_valid(the_list));

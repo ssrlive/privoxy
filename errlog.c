@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.30 2002/03/05 22:43:45 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.31 2002/03/06 23:02:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.30 2002/03/05 22:43:45 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.31  2002/03/06 23:02:57  jongfoster
+ *    Removing tabs
+ *
  *    Revision 1.30  2002/03/05 22:43:45  david__schmidt
  *    - Better error reporting on OS/2
  *    - Fix double-slash comment (oops)
@@ -600,7 +603,7 @@ void log_error(int loglevel, char *fmt, ...)
             outc += ival;
             if (outc < BUFFER_SIZE-1)
             {
-               memcpy(outbuf + oldoutc, sval, ival);
+               memcpy(outbuf + oldoutc, sval, (size_t) ival);
             }
             else
             {

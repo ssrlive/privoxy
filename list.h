@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.8 2001/09/16 17:30:24 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.9 2001/10/23 21:21:03 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.9  2001/10/23 21:21:03  jongfoster
+ *    New error handling - error codes are now jb_errs, not ints.
+ *    Changed the way map() handles out-of-memory, to dramatically
+ *    reduce the amount of error-checking clutter needed.
+ *
  *    Revision 1.8  2001/09/16 17:30:24  jongfoster
  *    Fixing a compiler warning.
  *
@@ -103,7 +108,7 @@ extern void init_list    (struct list *the_list);
 extern void destroy_list (struct list *the_list);
 
 extern jb_err enlist                 (struct list *the_list, const char *str);
-extern jb_err enlist_unique          (struct list *the_list, const char *str, int num_significant_chars);
+extern jb_err enlist_unique          (struct list *the_list, const char *str, size_t num_significant_chars);
 extern jb_err enlist_unique_header   (struct list *the_list, const char *name, const char *value);
 extern jb_err enlist_first           (struct list *the_list, const char *str);
 extern jb_err list_append_list_unique(struct list *dest,     const struct list *src);

@@ -1,6 +1,6 @@
 #ifndef DEANIMATE_H_INCLUDED
 #define DEANIMATE_H_INCLUDED
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.3 2001/07/18 12:29:05 oes Exp $"
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.4 2001/07/29 18:50:04 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 1.4  2001/07/29 18:50:04  jongfoster
+ *    Fixing "extern C" block, and renaming #define _DEANIMATE_H
+ *
  *    Revision 1.3  2001/07/18 12:29:05  oes
  *    Updated prototype for gif_deanimate
  *
@@ -62,7 +65,7 @@ struct binbuffer
 {
    char *buffer; 
    int offset;   
-   int size;    
+   size_t size;    
 };
 
 /*

@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.19 2002/01/17 21:03:47 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.20 2002/02/20 23:15:13 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.20  2002/02/20 23:15:13  jongfoster
+ *    Parsing functions now handle out-of-memory gracefully by returning
+ *    an error code.
+ *
  *    Revision 1.19  2002/01/17 21:03:47  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -138,8 +142,8 @@ extern const struct parsers server_patterns[];
 extern const add_header_func_ptr add_client_headers[];
 extern const add_header_func_ptr add_server_headers[];
 
-extern int flush_socket(int fd, struct client_state *csp);
-extern int add_to_iob(struct client_state *csp, char *buf, int n);
+extern size_t flush_socket(int fd, struct client_state *csp);
+extern size_t add_to_iob(struct client_state *csp, char *buf, size_t n);
 extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);

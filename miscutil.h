@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.16 2002/01/21 00:53:36 jongfoster Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.17 2002/03/04 18:28:32 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.17  2002/03/04 18:28:32  oes
+ *    Deleted deletePidFile, played syleguide police
+ *
  *    Revision 1.16  2002/01/21 00:53:36  jongfoster
  *    Adding string_join()
  *
@@ -132,7 +135,7 @@ extern "C" {
 #endif
 
 extern const char *basedir;
-extern void *zalloc(int size);
+extern void *zalloc(size_t size);
 
 #if defined(unix)
 extern void write_pid_file(void);
@@ -152,7 +155,7 @@ extern jb_err string_join  (char **target_string,       char *text_to_append);
 extern char *chomp(char *string);
 extern int simplematch(char *pattern, char *text);
 
-extern char *bindup(const char *string, int n);
+extern char *bindup(const char *string, size_t len);
 
 extern char *make_path(const char * dir, const char * file);
 

@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.4 2001/07/18 12:28:49 oes Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.5 2001/09/10 10:16:06 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.4 2001/07/18 12:28:49 oes Exp
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.5  2001/09/10 10:16:06  oes
+ *    Silenced compiler warnings
+ *
  *    Revision 1.4  2001/07/18 12:28:49  oes
  *    - Added feature for extracting the first frame
  *      to gif_deanimate
@@ -108,7 +111,7 @@ void buf_free(struct binbuffer *buf)
  * Returns     :  0 on success, 1 on failiure.
  *
  *********************************************************************/
-int buf_extend(struct binbuffer *buf, int length)
+int buf_extend(struct binbuffer *buf, size_t length)
 {
    char *newbuf;
 
@@ -149,7 +152,7 @@ int buf_extend(struct binbuffer *buf, int length)
  * Returns     :  0 on success, 1 on failiure.
  *
  *********************************************************************/
-int buf_copy(struct binbuffer *src, struct binbuffer *dst, int length)
+int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
 {
 
    /*
@@ -281,7 +284,7 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
     */
    if (c & 0x80)
    {
-      if (buf_copy(src, dst, 3 * (1 << ((c & 0x07) + 1))))
+      if (buf_copy(src, dst, (size_t) 3 * (1 << ((c & 0x07) + 1))))
       {
          return 1;
       }           
@@ -293,14 +296,14 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
     */
    while((c = buf_getbyte(src, 0)))
    {
-      if (buf_copy(src, dst, c + 1)) return 1;
+      if (buf_copy(src, dst, (size_t) c + 1)) return 1;
    }
    if (buf_copy(src, dst, 1)) return 1;
 
    /*
     * Trim and rewind the dst buffer
     */
-   if (NULL == (dst->buffer = (char *)realloc(dst->buffer, dst->offset))) return 1;
+   if (NULL == (dst->buffer = (char *)realloc(dst->buffer, (size_t) dst->offset))) return 1;
    dst->size = dst->offset;
    dst->offset = 0;
 
@@ -360,7 +363,7 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
     */
    if(c & 0x80)
    {
-      if (buf_copy(src, dst, 3 * (1 << ((c & 0x07) + 1))))
+      if (buf_copy(src, dst, (size_t) 3 * (1 << ((c & 0x07) + 1))))
       {
          return 1;
       }

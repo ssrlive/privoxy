@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.37 2002/03/03 15:07:49 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.38 2002/03/06 22:54:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.37 2002/03/03 15:07:49 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.38  2002/03/06 22:54:35  jongfoster
+ *    Automated function-comment nitpicking.
+ *
  *    Revision 1.37  2002/03/03 15:07:49  oes
  *    Re-enabled automatic config reloading
  *
@@ -490,7 +493,7 @@ int check_file_changed(const struct file_list * current,
 jb_err simple_read_line(FILE *fp, char **dest, int *newline)
 {
    int len = 0;
-   int buflen = BUFFER_SIZE;
+   size_t buflen = BUFFER_SIZE;
    char * buf;
    char * p;
    int ch;
@@ -890,7 +893,7 @@ jb_err edit_read_line(FILE *fp,
  *                Otherwise, returns buf.
  *
  *********************************************************************/
-char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum)
+char *read_config_line(char *buf, size_t buflen, FILE *fp, unsigned long *linenum)
 {
    jb_err err;
    char *buf2 = NULL;
@@ -906,7 +909,7 @@ char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum)
    else
    {
       assert(buf2);
-      assert(strlen(buf2) + 1U < (unsigned)buflen);
+      assert(strlen(buf2) + 1U < buflen);
       strncpy(buf, buf2, buflen - 1);
       free(buf2);
       buf[buflen - 1] = '\0';

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.14 2002/03/05 00:24:51 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.15 2002/03/06 22:54:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.14 2002/03/05 00:24:51 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.15  2002/03/06 22:54:35  jongfoster
+ *    Automated function-comment nitpicking.
+ *
  *    Revision 1.14  2002/03/05 00:24:51  jongfoster
  *    Patch to always edit the current actions file.
  *
@@ -321,7 +324,7 @@ static jb_err get_url_spec_param(struct client_state *csp,
 static jb_err map_radio(struct map * exports,
                         const char * optionname,
                         const char * values,
-                        char value);
+                        int value);
 static jb_err actions_to_radio(struct map * exports,
                                const struct action_spec *action);
 static jb_err actions_from_radio(const struct map * parameters,
@@ -768,7 +771,7 @@ jb_err edit_write_file(struct editable_file * file)
 
                /* Allocate new memory for string */
                len = strlen(cur_line->unprocessed);
-               if (NULL == (str = malloc(len + 1 + numhash)))
+               if (NULL == (str = malloc((size_t) len + 1 + numhash)))
                {
                   /* Uh oh, just trashed file! */
                   fclose(fp);
@@ -955,7 +958,7 @@ static void edit_free_file_lines(struct file_line * first_line)
  *********************************************************************/
 static int match_actions_file_header_line(const char * line, const char * name)
 {
-   int len;
+   size_t len;
 
    assert(line);
    assert(name);
@@ -1021,7 +1024,7 @@ static jb_err split_line_on_equals(const char * line, char ** pname, char ** pva
 {
    const char * name_end;
    const char * value_start;
-   int name_len;
+   size_t name_len;
 
    assert(line);
    assert(pname);
@@ -1101,7 +1104,7 @@ static jb_err split_line_on_equals(const char * line, char ** pname, char ** pva
 jb_err edit_parse_actions_file(struct editable_file * file)
 {
    struct file_line * cur_line;
-   int len;
+   size_t len;
    const char * text; /* Text from a line */
    char * name;  /* For lines of the form name=value */
    char * value; /* For lines of the form name=value */
@@ -1867,7 +1870,7 @@ static jb_err get_number_param(struct client_state *csp,
    assert(name);
    assert(pvalue);
 
-   *pvalue = -1;
+   *pvalue = 0; 
 
    param = lookup(parameters, name);
    if (!*param)
@@ -1906,6 +1909,7 @@ static jb_err get_number_param(struct client_state *csp,
    *pvalue = value;
 
    return JB_ERR_OK;
+
 }
 
 
@@ -2065,9 +2069,9 @@ static jb_err get_url_spec_param(struct client_state *csp,
 static jb_err map_radio(struct map * exports,
                         const char * optionname,
                         const char * values,
-                        char value)
+                        int value)
 {
-   int len;
+   size_t len;
    char * buf;
    char * p;
    char c;
@@ -2807,7 +2811,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    unsigned sectionid;
    char * actiontext;
    char * newtext;
-   int len;
+   size_t len;
    struct editable_file * file;
    struct file_line * cur_line;
    unsigned line_number;

@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.14 2002/01/17 21:03:08 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.15 2002/01/22 23:46:18 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,16 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.15  2002/01/22 23:46:18  jongfoster
+ *    Moving edit_read_line() and simple_read_line() to loaders.c, and
+ *    extending them to support reading MS-DOS, Mac and UNIX style files
+ *    on all platforms.
+ *
+ *    Modifying read_config_line() (without changing it's prototype) to
+ *    be a trivial wrapper for edit_read_line().  This means that we have
+ *    one function to read a line and handle comments, which is common
+ *    between the initialization code and the edit interface.
+ *
  *    Revision 1.14  2002/01/17 21:03:08  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -143,7 +153,7 @@ struct configuration_spec;
 struct url_spec;
 
 extern void sweep(void);
-extern char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum);
+extern char *read_config_line(char *buf, size_t buflen, FILE *fp, unsigned long *linenum);
 extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);
