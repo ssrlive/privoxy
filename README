@@ -46,16 +46,17 @@ systems and multi-user networks.
 JunkBuster was originally written by JunkBusters Corporation, and was
 released as free open-source software under the GNU GPL. Stefan
 Waldherr made many improvements, and started the SourceForge project
-to continue development. Several other developers are now contributing.
+to continue development. Several other developers are now
+contributing.
 
 
  IMPORTANT CHANGE
 -----------------
 
-IMPORTANT! READ! Configuration Change as of 03/04/02: The default 
-listening port is now 8118 due to conflicts with port 8000 assignment. 
-You will need to change your browser if upgrading!!! And maybe firewall, 
-etc.
+IMPORTANT! READ! Configuration Change as of 03/04/02: The default
+listening port is now 8118 due to conflicts with port 8000 assignment.
+You will need to change your browser if upgrading!!! And maybe
+firewall, etc.
 
 
  INSTALL
@@ -76,16 +77,16 @@ For tarball, first unpack:
 
 Redhat and SuSE src and binary RPMs can be built with 'make
 redhat-dist' or 'make suse-dist' (run ./configure first) from unpacked
-sources. BSD will (probably?) require gmake (from http://gnu.org). See the
-user-manual for OS/2 build instructions.
+sources. BSD will (probably?) require gmake (from http://gnu.org). See
+the user-manual for OS/2 build instructions.
 
 Junkbuster is also available via anonymous CVS:
 
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
 
-This will create a directory named 'current'. Then, 'cd current', and then
-build as above.
+This will create a directory named 'current'. Then, 'cd current', and
+then build as above.
 
 
  RUN
@@ -104,32 +105,31 @@ See the man page or user-manual for a brief explanation of each.
 --------------
 
 See: 'config', 'ijb.action', and 're_filterfile'. These are all well
-commented. On Unix-like systems, these files are installed in /etc/junkbuster.
-On Windows, then wherever the executable itself is installed. There are many
-significant changes and advances since v2.0.x. The user-manual has a 
-run down of configuration options, and examples: 
-http://ijbswa.sourceforge.net/user-manual/.
+commented. On Unix-like systems, these files are installed in
+/etc/junkbuster.  On Windows, then wherever the executable itself is
+installed. There are many significant changes and advances since
+v2.0.x. The user-manual has a run down of configuration options, and
+examples: http://ijbswa.sourceforge.net/user-manual/.
 
-Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>,
-or whatever you specify in the config file under 'listen-address'.
+Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or
+whatever you specify in the config file under 'listen-address'.
 DEFAULT is localhost:8118.
 
-The ijb.action file can be configured via the web interface accessed via
-http://i.j.b/, as well other options.
+The ijb.action file can be configured via the web interface accessed
+via http://i.j.b/, as well other options.
 
 
  DOCUMENTATION
 --------------
 
-There is a growing amount of documentation in the 'doc'
-subdirectory, but it is not finished at this point. In particular, see 
-the user-manual there, and developers should look at 
-developer-manual.
+There is a growing amount of documentation in the 'doc' subdirectory,
+but it is not finished at this point. In particular, see the
+user-manual there, and developers should look at developer-manual.
 
-The best source of information on the current development version, may 
-still be either comments in the source code, or the included configuration
-files, which are all well commented. These are 'config', 'ijb.action', and
-'re_filterfile' in the toplevel source directory.
+The best source of information on the current development version, may
+still be either comments in the source code, or the included
+configuration files, which are all well commented. These are 'config',
+'ijb.action', and 're_filterfile' in the toplevel source directory.
 
 Some legacy documentation may also be included only to give an idea of
 what Junkbuster can do under doc/obsolete/*. Much has changed since
@@ -138,17 +138,34 @@ these docs were written, so beware.
 Included documentation may vary according to platform and packager.
 
 
- BUGS
+ CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
 -----
 
-Use the form at
-http://sourceforge.net/tracker/index.php?group_id=11118&atid=111118 to
-report bugs. Please read the exising bug reports before submitting
-anything new. We ask that these not be reported on the mailing lists, 
-since this is harder to track, and to make sure all reports are 
-addressed.
+We value your feedback. However, to provide you with the best support,
+please note:
+   
+ * Use the support forum to get help:
+   http://sourceforge.net/tracker/?group_id=11118&atid=211118
+ * Submit bugs only thru our bug forum:
+   http://sourceforge.net/tracker/?group_id=11118&atid=111118 
+   Make sure that the bug has not already been submitted. Please try
+   to verify that it is a Junkbuster bug, and not a browser or site
+   bug first. If you are using your own custom configuration, please
+   try the stock configs to see if the problem is a configuration
+   related bug. And if not using the latest development snapshot,
+   please try the latest one. Or even better, CVS sources.
+ * Submit feature requests only thru our feature request forum:
+   http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+     
+For any other issues, feel free to use the mailing lists:
+http://sourceforge.net/mail/?group_id=11118
+   
+Anyone interested in actively participating in development and related
+discussions can join the appropriate mailing list here:
+http://sourceforge.net/mail/?group_id=11118. Archives are available
+here too.
 
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.14 2002/03/05 01:18:45 hal9 Exp $
+$Id: README,v 1.15 2002/03/06 16:31:16 hal9 Exp $
