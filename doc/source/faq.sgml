@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $
+ $Id: faq.sgml,v 1.26 2002/03/25 02:54:39 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.26 2002/03/25 02:54:39 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -76,7 +76,7 @@ Please see the Contact section in the
 <sect3 id="newjb"><title>What is this new version of <application>Privoxy</application>?</title>
  <para>
   The original <application>Internet Junkbuster</application> (tm) is a 
-  coyrighted product of <ulink url="http://www.junkbusters.com">Junkbusters
+  copyrighted product of <ulink url="http://www.junkbusters.com">Junkbusters
   Corporation</ulink>. Development of this effort stopped some time ago as of
   version 2.0.2. Stefan Waldherr started the ijbswa project on <ulink
   url="http://ijbswa.sourceforge.net">Sourceforge</ulink> to rekindle
@@ -249,7 +249,7 @@ Please see the Contact section in the
   Modern browsers do indeed have <emphasis>some</emphasis> of the same
   functionality as <application>Privoxy</application>. Maybe this is
   adequate for you. But <application>Privoxy</application> is much more
-  verstatile and powerful, and can do a number of things that browsers just can't.
+  versatile and powerful, and can do a number of things that browsers just can't.
  </para>
  <para>
   In addition, a proxy is good choice if you use multiple browsers, or 
@@ -359,7 +359,7 @@ special I have to do now?</title>
   and <quote>Secure</quote> (HTTPS) and then the number <quote>8118</quote>
   for <quote>port</quote>.  This tells your browser to send all web 
   requests to <application>Privoxy</application> instead of directly to the 
-  Interenet.
+  Internet.
  </para>
  <para>
   <application>Privoxy</application> can also be used to proxy for 
@@ -698,7 +698,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 
 <sect3>
-<title id="noseeum">Instead of ads, now I get a checkboard pattern. I don't want to see anything.</title>
+<title id="noseeum">Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</title>
 <para>
  This is a configuration option for images that
  <application>Privoxy</application> is stopping. You have the choice <!-- of
@@ -726,7 +726,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
  This can be helpful for troubleshooting problems. It might also be good 
  for anyone new to <application>Privoxy</application> so that they can 
  see if their favorite pages are displaying correctly, and
- <application>Privoxy</application> is not inadvertantly removing something 
+ <application>Privoxy</application> is not inadvertently removing something 
  important.
 </para>
 
@@ -794,7 +794,7 @@ browsers are able to start rendering incomplete content, giving the
 user a feeling of "it works". 
  </para>
 <para>
-To modify the content of a page (i.e. make frames resizeable again, etc.) and
+To modify the content of a page (i.e. make frames resize-able again, etc.) and
 not just replace ads, <application>Privoxy</application> needs to download the
 entire page first, do its content magic and then send the page to the browser.
 </para>
@@ -816,7 +816,7 @@ configurations).
 </para>
 
 <para>
-These pages are *not* forwarded to a server on the internet - instead they are
+These pages are *not* forwarded to a server on the Internet - instead they are
 handled by a special web server which is built in to <application>Privoxy</application>.
 </para>
 
@@ -1001,7 +1001,7 @@ and ugly looking. Can't a better font be used?</title>
  image is scaled to fill a largish area. There is not much to be done 
  about this, other than to use one of the other
  <quote>imageblock</quote> directives: <emphasis>pattern</emphasis>, 
- <emphasis>blank</emphasis>, or a URL of your chosing.
+ <emphasis>blank</emphasis>, or a URL of your choosing.
 </para>
 <para>
 Given the above problem, we have decided to remove the logo option entirely.
@@ -1118,7 +1118,7 @@ still getting through. How?</title>
  If the ad had been displayed before you added its URL, it will probably be
  held in the browser's cache for some time, so it will be displayed without
  the need for any request to the server, and <application>Privoxy</application>
- will not be in the picture. The best thing to do is try flusing the browser's
+ will not be in the picture. The best thing to do is try flushing the browser's
  caches. And then try again.
 </para>
 
@@ -1231,6 +1231,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.26  2002/03/25 02:54:39  hal9
+Fix typo in link.
+
 Revision 1.25  2002/03/24 16:08:08  swa
 we are too lazy to make a block-built
 privoxy logo. hence removed the option.
