@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.29 2002/03/02 20:34:07 david__schmidt Exp $
+ $Id: user-manual.sgml,v 1.30 2002/03/02 22:00:14 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.29 2002/03/02 20:34:07 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.30 2002/03/02 22:00:14 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -398,7 +398,6 @@ Thanx David Schmidt!
  <screen>
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
- cd current                                                                         
  </screen>
  This will create a directory named os2setup/, which will contain the
  <filename>Makefile.vac</filename> makefile and <filename>os2build.cmd</filename>
@@ -3281,6 +3280,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.30  2002/03/02 22:00:14  hal9
+ Updated 'New Features' list. Ran through spell-checker.
+
  Revision 1.29  2002/03/02 20:34:07  david__schmidt
  Update OS/2 build section
 
