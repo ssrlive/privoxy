@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.9 2002/04/02 19:32:45 oes Exp $
+  $Id: index.php,v 1.10 2002/04/03 19:36:04 swa Exp $
 
   $Log: index.php,v $
+  Revision 1.10  2002/04/03 19:36:04  swa
+  consistent look
+
   Revision 1.9  2002/04/02 19:32:45  oes
   Adding temporary fix for missing curl support on SF (step 2 + 3 on oesterhelt.org)
 
@@ -54,7 +57,7 @@
  -->
 
  <head>
-    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
+  <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 <?php
 
 /*
@@ -77,7 +80,7 @@ error_reporting(E_NONE);
  * Bookmarklet that leads here:
  */
 $my_address = "http://" . $HTTP_SERVER_VARS["HTTP_HOST"] . $PHP_SELF;
-$bookmarklet = "javascript:void(window.open('$my_address?url='+escape(location.href), 'Feedback', " .
+$bookmarklet = "javascript:void(window.open('$my_address?url='+escape(location.href),'Feedback'," .
                "'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());";
 
 
@@ -99,8 +102,7 @@ $headers = getallheaders();
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] < $required_actions_file_version)
 {
    echo ("<title>Invalid Privoxy Action List Feedback</title>
-    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
-	</head>
+          </head>
           <body><div class=\"title\">Invalid Feedback Submission</div>
            <div align=\"center\">
             <div class=\"errorbox\" align=\"left\"><p>As much as we welcome your feedback, please note that
@@ -120,7 +122,6 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
 ?>
 
   <title>Privoxy Action List Feedback - Step 1 of 2</title>
-    <link rel="stylesheet" type="text/css" href="../p_feedback.css">
  </head>
 
  <body>
