@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.73 2002/04/10 18:45:15 swa Exp $
+ $Id: user-manual.sgml,v 1.74 2002/04/11 00:54:38 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.73 2002/04/10 18:45:15 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.74 2002/04/11 00:54:38 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -289,40 +289,6 @@ Thanx David Schmidt!
 <para>
  The directory you choose to install <application>Privoxy</application>
  into will contain all of the configuration files.
-</para>
-
-<para>
- If you would like to build binary images on OS/2 yourself, you will need
- a few Unix-like tools: autoconf, autoheader and sh.  These tools will be
- used to create the required config.h file, which is not part of the 
- source distribution because it differs based on platform.  You will also
- need a compiler.
- The distribution has been created using IBM VisualAge compilers, but you
- can use any compiler you like. GCC/EMX has the disadvantage of needing 
- to be single-threaded due to a limitation of EMX's implementation of the
- <function>select()</function> socket call.
-</para>
-
-<para>
- In addition to needing the source code distribution as outlined earlier,
- you will want to extract the <filename>os2seutp</filename> directory from CVS:
- <screen>
- cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
- cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
- </screen>
- This will create a directory named os2setup/, which will contain the
- <filename>Makefile.vac</filename> makefile and <filename>os2build.cmd</filename>
- which is used to completely create the binary distribution.  The sequence
- of events for building the executable for yourself goes something like this:
- <screen>
- cd current
- autoheader
- autoconf
- sh configure
- cd ..\os2setup
- nmake -f Makefile.vac
- </screen>
- You will see this sequence laid out in <filename>os2build.cmd</filename>.
 </para>
 
 </sect3>
@@ -3985,6 +3951,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.74  2002/04/11 00:54:38  hal9
+ Add small section on submitting actions.
+
  Revision 1.73  2002/04/10 18:45:15  swa
  generated
 
