@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.26 2001/09/12 23:44:54 david__schmidt Exp $
+# $Id: Makefile.in,v 1.27 2001/09/13 13:11:37 steudten Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.27  2001/09/13 13:11:37  steudten
+#
+# Replace DEBUG_CFLAGS with OTHER_CFLAGS
+#
 # Revision 1.26  2001/09/12 23:44:54  david__schmidt
 # Mac OSX (Darwin) support added.
 #
@@ -349,12 +353,16 @@ dok:
 #  user manual
 	rm -rf doc/webserver/user-manual
 	cd doc/source && db2html -s ldp.dsl user-manual.sgml && mv user-manual ../webserver
-#  developer manual
+	cd doc/source && db2html -s ldp.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+##  developer manual
 	rm -rf doc/webserver/developer-manual
 	cd doc/source && db2html -s ldp.dsl developer-manual.sgml && mv developer-manual ../webserver
-#  faq
+	cd doc/source && db2html -s ldp.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+##  faq
 	rm -rf doc/webserver/faq
 	cd doc/source && db2html -s ldp.dsl faq.sgml && mv faq ../webserver
+	cd doc/source && db2html -s ldp.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+
 
 #############################################################################
 # Source file dependencies
