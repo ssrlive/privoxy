@@ -1,0 +1,28 @@
+# http://ijbswa.sourceforge.net/config/.htaccess
+#
+# By Jon Foster
+#
+# Redirects any request for any file in this directory tree
+# to an error page.
+#
+# Uses Apache's mod_rewrite
+# See http://httpd.apache.org/docs/mod/mod_rewrite.html
+#
+
+# Enable mod_rewrite
+RewriteEngine on
+
+# we are reached via /config/ prefix
+RewriteBase   /config/
+
+# The only file which really exists is index.php - allow this
+RewriteRule  index.php - [L]
+
+# Silently redirect the config dir to index.php
+RewriteRule  ^$      index.php [L]
+
+# anything else gets redirected to the config dir, and we update
+# the browser's location bar.
+RewriteRule  ^(.*)$  /config/  [R]
+
+
