@@ -119,7 +119,8 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
 
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
-cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
+# Out temporarily
+#cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
 cp -f actionsfile $RPM_BUILD_ROOT%{ijbconf}/actionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
@@ -147,6 +148,7 @@ if [ "$1" = "1" ]; then
 fi
 # for upgrade from 2.0.x
 chown junkbust:junkbust /var/log/junkbuster/* 2>/dev/null
+chown junkbust:junkbust /etc/junkbuster 2>/dev/null
 [ -f /var/log/junkbuster/junkbuster ] &&\
  mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || true
 
@@ -166,18 +168,23 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc faq.html user-manual.html developer-manual.html
+%doc doc/webserver/developer-manual doc/webserver/user-manual README
 %doc junkbuster.weekly junkbuster.monthly
 %dir %{ijbconf}
 %config %{ijbconf}/*
 %attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
 %config %{_sysconfdir}/logrotate.d/junkbuster
 %attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
-%{_mandir}/man8/*
+#temporarily out until it is updated.
+#%{_mandir}/man8/*
 %config %{_sysconfdir}/rc.d/init.d/junkbuster
 
 
 %changelog
+* Sun Sep 23 2001 Hal Burgiss <hal@foobox.net>
+- Change of $RPM_OPT_FLAGS handling. Added new HTML doc files.
+- Changed owner of /etc/junkbuster to shut up PAM/xauth log noise.
+
 * Thu Sep 13 2001 Hal Burgiss <hal@foobox.net>
 - Added $RPM_OPT_FLAGS support, renaming of old logfile, and 
 - made sure no default shell exists for user junkbust.
