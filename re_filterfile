@@ -27,6 +27,11 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.8  2001/06/29 13:34:00  oes
+#     - Added explanation for U and T options
+#     - Added hint on image replacement by CGI call
+#     - Fixed bug in banner-by-size jobs
+#
 #     Revision 1.7  2001/06/19 14:21:56  oes
 #     Fixed microsuck line
 #
@@ -108,23 +113,23 @@ s/status='.*?';*//ig
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
 # Note: Use http://i.j.b/send-banner?type=trans for a transparent 1x1 gif
 # ********************************************************************/
-s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
-s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
 # Where is that from?
-s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50)[^>]*?>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50[^>]*?)>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
 # ********************************************************************/
 #
