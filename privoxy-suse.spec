@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.10 2002/04/08 20:24:13 swa Exp $
+# $Id: privoxy-suse.spec,v 1.11 2002/04/09 03:12:37 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@ URL:          http://www.privoxy.org/
 Provides:     privoxy
 Obsoletes:    privoxy
 Autoreqprov:  on
-BuildRequires: perl gzip docbktls libtool autoconf
+BuildRequires: perl gzip libtool autoconf
 Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 #
@@ -85,7 +85,7 @@ autoheader
 autoconf
 ./configure
 make
-make dok
+
 
 ## Explicitily stripping is not recomended.
 ## This is handled altomaticaly by RPM, and can couse troubles if
@@ -199,7 +199,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/index.html
+%doc doc/webserver/p_doc.css
+%doc doc/webserver/p_web.css
+%doc doc/webserver/index.html
 #%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
@@ -299,6 +301,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.11  2002/04/09 03:12:37  hal9
+# Add LICENSE, p_web.css and index.html. Add autoconf to buildrequires.
+#
 # Revision 1.10  2002/04/08 20:24:13  swa
 # fixed JB spelling
 #
