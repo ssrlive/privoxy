@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.19 2001/10/25 03:40:47 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.20 2001/11/16 00:48:48 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.19 2001/10/25 03:40:47 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.20  2001/11/16 00:48:48  jongfoster
+ *    Enabling duplicate-socket detection for all platforms, not
+ *    just Win32.
+ *
  *    Revision 1.19  2001/10/25 03:40:47  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -509,6 +513,15 @@ int accept_connection(struct client_state * csp, int fd)
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
    int afd, c_length, s_length;
+#if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
+   struct hostent result;
+#if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
+   struct hostent_data hdata;
+#else
+   char hbuf[HOSTENT_BUFFER_SIZE];
+   int thd_err;
+#endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
+#endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
 
    c_length = s_length = sizeof(client);
 
@@ -529,9 +542,30 @@ int accept_connection(struct client_state * csp, int fd)
    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
    {
       csp->my_ip_addr_str = strdup(inet_ntoa(server.sin_addr));
-
+#if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
+      gethostbyaddr_r((const char *)&server.sin_addr,
+                      sizeof(server.sin_addr), AF_INET,
+                      &result, hbuf, HOSTENT_BUFFER_SIZE,
+                      &host, &thd_err);
+#elif defined(HAVE_GETHOSTBYADDR_R_7_ARGS)
+      host = gethostbyaddr_r((const char *)&server.sin_addr,
+                      sizeof(server.sin_addr), AF_INET,
+                      &result, hbuf, HOSTENT_BUFFER_SIZE, &thd_err);
+#elif defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
+      if (0 == gethostbyaddr_r((const char *)&server.sin_addr,
+                               sizeof(server.sin_addr), AF_INET,
+                               &result, &hdata))
+      {
+         host = &result;
+      }
+      else
+      {
+         host = NULL;
+      }
+#else
       host = gethostbyaddr((const char *)&server.sin_addr, 
                            sizeof(server.sin_addr), AF_INET);
+#endif
       if (host == NULL)
       {
          log_error(LOG_LEVEL_ERROR, "Unable to get my own hostname: %E\n");
@@ -568,6 +602,15 @@ int resolve_hostname_to_ip(const char *host)
 {
    struct sockaddr_in inaddr;
    struct hostent *hostp;
+#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS) || defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
+   struct hostent result;
+#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
+   char hbuf[HOSTENT_BUFFER_SIZE];
+   int thd_err;
+#else /* defined(HAVE_GETHOSTBYNAME_R_3_ARGS) */
+   struct hostent_data hdata;
+#endif /* def HAVE_GETHOSTBYNAME_R_(6|5)_ARGS */
+#endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
 
    if ((host == NULL) || (*host == '\0'))
    {
@@ -578,7 +621,25 @@ int resolve_hostname_to_ip(const char *host)
 
    if ((inaddr.sin_addr.s_addr = inet_addr(host)) == -1)
    {
-      if ((hostp = gethostbyname(host)) == NULL)
+#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS)
+      gethostbyname_r(host, &result, hbuf,
+                      HOSTENT_BUFFER_SIZE, &hostp, &thd_err);
+#elif defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
+      hostp = gethostbyname_r(host, &result, hbuf,
+                      HOSTENT_BUFFER_SIZE, &thd_err);
+#elif defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
+      if (0 == gethostbyname_r(host, &result, &hdata))
+      {
+         hostp = &result;
+      }
+      else
+      {
+         hostp = NULL;
+      }
+#else
+      hostp = gethostbyname(host);
+#endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
+      if (hostp == NULL)
       {
          errno = EINVAL;
          return(-1);
@@ -589,7 +650,7 @@ int resolve_hostname_to_ip(const char *host)
          errno = WSAEPROTOTYPE;
 #else
          errno = EPROTOTYPE;
-#endif
+#endif 
          return(-1);
       }
       memcpy(
