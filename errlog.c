@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.24 2001/12/30 14:07:32 steudten Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.25 2002/01/09 14:32:08 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.24 2001/12/30 14:07:32 steudten Exp
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.25  2002/01/09 14:32:08  oes
+ *    Added support for gmtime_r and localtime_r.
+ *
  *    Revision 1.24  2001/12/30 14:07:32  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -332,7 +335,7 @@ void log_error(int loglevel, char *fmt, ...)
 {
    va_list ap;
    char *outbuf= NULL;
-   char *outbuf_save = NULL;
+   static char *outbuf_save = NULL;
    char * src = fmt;
    int outc = 0;
    long this_thread = 1;  /* was: pthread_t this_thread;*/
@@ -369,8 +372,12 @@ void log_error(int loglevel, char *fmt, ...)
      this_thread = ptib -> tib_ptib2 -> tib2_ultid;
 #endif /* def FEATURE_PTHREAD */
 
-   outbuf_save = outbuf = (char*)malloc(BUFFER_SIZE);
-   assert(outbuf);
+   if ( !outbuf_save ) 
+   {
+      outbuf_save = outbuf = (char*)malloc(BUFFER_SIZE);
+      assert(outbuf);
+   }
+   outbuf = outbuf_save;
 
     {
        /*
