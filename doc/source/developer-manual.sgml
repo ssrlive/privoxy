@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.4 2002/09/26 05:57:14 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.5 2002/09/26 21:50:39 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -48,7 +48,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.4 2002/09/26 05:57:14 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.5 2002/09/26 21:50:39 hal9 Exp $</pubdate>
 
 <!--
 
@@ -132,6 +132,7 @@ Hal.
 
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect2 id="quickstart"><title>Quickstart to Privoxy Development</title>
+   <!-- 
     <para>
       You'll need an account on <ulink
       url="http://sourceforge.net/">Sourceforge</ulink> to support our
@@ -139,6 +140,14 @@ Hal.
       url="mailto:developers@privoxy.org">the list</ulink> and wait until a
       project manager has added you.
     </para>
+   --> 
+   <para>
+    The first step is to join the <ulink
+      url="mailto:developers@privoxy.org">developer's mailing list</ulink>.
+    You can submit your ideas, or even better patches. Patches are best 
+    submitted to the Sourceforge tracker set up for this purpose, but 
+    can be sent to the list for review too.
+   </para>
     <para>
      You will also need to have a cvs package installed, which will 
      entail having ssh installed as well (which seems to be a requirement of
@@ -146,8 +155,9 @@ Hal.
      tools is also going to be important (particularly, autoconf and gmake).
     </para>
     <para>
-      For the time being (read, this section is under construction), please
-      refer to the extensive comments in the source code.
+      For the time being (read, this section is under construction), you can 
+      also refer to the extensive comments in the source code. In fact, 
+      reading the code is recommended in any case.
     </para>
    </sect2>
   </sect1>
@@ -155,9 +165,10 @@ Hal.
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="cvs"><title>The CVS Repository</title>
     <para>
-      If you intend to help us with programming, documentation or packaging
-      you will need write access to our holy grail, the CVS repository.
-      Please read this chapter completely before accessing via CVS.
+      If you become part of the active development team, you will eventually
+      need write access to our holy grail, the CVS repository. One of the 
+      team members will need to set this up for you. Please read
+      this chapter completely before accessing via CVS.
     </para>
 
     <sect2 id="cvsaccess"><title>Access to CVS</title>
@@ -1846,7 +1857,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.4 2002/09/26 05:57:14 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.5 2002/09/26 21:50:39 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1906,7 +1917,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.4 2002/09/26 05:57:14 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.5 2002/09/26 21:50:39 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -3018,6 +3029,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.5  2002/09/26 21:50:39  hal9
+  Changes to reflect recent change in stable branch commit policy (hopefully
+  clearer now).
+
   Revision 2.4  2002/09/26 05:57:14  hal9
   Conditionally exclude 'this doc is evolving' comment in intro for non release
   situations.
