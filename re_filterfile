@@ -1,56 +1,106 @@
-# Filterfile for the Regular Substitution Module
+#  ********************************************************************
+# 
+#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init,v $
+# 
+#  Purpose     :  Rules to process the content of web pages
+# 
+#  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#                 IJBSWA team.  http://ijbswa.sourceforge.net
+# 
+#                 Based on the Internet Junkbuster originally written
+#                 by and Copyright (C) 1997 Anonymous Coders and
+#                 Junkbusters Corporation.  http://www.junkbusters.com
+# 
+#                 This program is free software; you can redistribute it
+#                 and/or modify it under the terms of the GNU General
+#                 Public License as published by the Free Software
+#                 Foundation; either version 2 of the License, or (at
+#                 your option) any later version.
+# 
+#                 This program is distributed in the hope that it will
+#                 be useful, but WITHOUT ANY WARRANTY; without even the
+#                 implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                 PARTICULAR PURPOSE.  See the GNU General Public
+#                 License for more details.
+# 
+#                 The GNU General Public License should be included with
+#                 this file.  If not, you can view it at
+#                 http://www.gnu.org/copyleft/gpl.html
+#                 or write to the Free Software Foundation, Inc., 59
+#                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# 
+#  Revisions   :
+#     $Log: junkbuster.init,v $
+#
+# 
+# ********************************************************************/
 #
 # Syntax: One Perl-Style substitution per line.
 # For Details see the perlre, perlop and pcre manpages.
-# Note that you are free to choose the delimter as you
-# see fit.
+# Note that you are free to choose the delimter as you see fit.
 #
 # Note: in addidion to the Perl-options egimosx, U is supported
 # and turns the default to ungreedy matching. Add ? to quantifiers
 # to switch back to greedy.
 #
 
+# ********************************************************************/
+#
 # Kill OnUnload popups. Yummy.
 # check it out on http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
 #
+# ********************************************************************/
 s/(<body .*?)onunload(.*?>)/$1never$2/i
 
+# ********************************************************************/
+#
 # Kill refresh tags. I like to refresh myself. Manually.
 # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
 #
+# ********************************************************************/
 s/<meta[^>]*http-equiv[^>]*refresh.*URL=([^>]*?)"?>/<link rev="x-refresh" href=$1>/i
 s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!--no page enter for me-->/i
 
-# If I allow popups, I want them to be rezizable and have a location and status bar:
-# check it out on http://www.airport-cgn.de/ and go to the arrivals page.
+# ********************************************************************/
 #
-s/resizable="?(no|0)"?/resizable=1/ig
-s/noresize/yesresize/ig
-s/location="?(no|0)"?/location=1/ig
-s/status="?(no|0)"?/status=1/ig
-s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
-s/menubar="?(no|0)"?/menubar=1/ig
-#s/framespacing="?(no|0)"?//ig
-#s/margin(height|width)=[0-9]*//gi
+# If I allow popups, I want them to be resizeable and have a location
+# and status bar: check it out on http://www.airport-cgn.de/ and go to
+# the arrivals page.
+#
+# ********************************************************************/
+# s/resizable="?(no|0)"?/resizable=1/ig s/noresize/yesresize/ig
+# s/location="?(no|0)"?/location=1/ig s/status="?(no|0)"?/status=1/ig
+# s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
+# s/menubar="?(no|0)"?/menubar=1/ig #s/framespacing="?(no|0)"?//ig
+# #s/margin(height|width)=[0-9]*//gi
 
+# ********************************************************************/
+#
 # Remove frameborder=0 and border=0 from framesets
 #
+# ********************************************************************/
 s/(<frameset[^>]+?)border=['"]?(no|0)['"]?/$1/ig
 s/(<frameset[^>]+?)frameborder=['"]?(no|0)['"]?/$1/ig
 
+# ********************************************************************/
+#
 # The status bar is for displaying link targets, not pointless buzzwords.
 # Again, check it out on http://www.airport-cgn.de/
 #
+# ********************************************************************/
 s/status='.*?';*//ig
 
+# ********************************************************************/
+#
 # Kill *all* popups a la popup.c. (But for *all* sites, so I wouldn't do that.)
 #
 # JavaScript: s/window\.open\(/who_wants_this_to.open(/ig
 # HTML      : s/target=['"]?_blank['"]?/target_who/g
-
+#
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
 #
+# ********************************************************************/
 s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
 s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
 s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
@@ -68,14 +118,22 @@ s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280\D)[^>]*>|<img src=http://
 
 s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
+# ********************************************************************/
+#
 # Squish WebBugs:
 #
+# ********************************************************************/
 s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*>/<!-- Squished WebBug -->/sig
 
-# Fun stuff:
+# ********************************************************************/
 #
-s/microsoft(?!.com)/<b>MicroSuck<\/b>/ig
+# Fun stuff
+#
+# ********************************************************************/
+#s/microsoft(?!.com)/<b>MicroSuck<\/b>/ig
 
+# ********************************************************************/
+#
 # Crude parental filtering?  (Use along with a suitable blocklist).
 # Shows how to deny access to whole page based on a keyword.
 #
@@ -85,8 +143,9 @@ s/microsoft(?!.com)/<b>MicroSuck<\/b>/ig
 #s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
 #s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
 
+# ********************************************************************/
+#
 # http://www.farscapezone.com/wwwboard/messages/1451.html
+#
+# ********************************************************************/
 s/(\w+) was tired/<b>$1 needed more coffee<\/b>/ig
-
-# I'm sure you'll find more uses.
-# Please send your cool additions to junkbuster-users@yahoogroups.com
