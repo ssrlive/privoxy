@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.22 2002/03/24 11:51:00 swa Exp $
+ $Id: faq.sgml,v 1.23 2002/03/24 12:33:01 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.22 2002/03/24 11:51:00 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.23 2002/03/24 12:33:01 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -117,7 +117,7 @@ Please see the Contact section in the
  <listitem>
   <para>
    Integrated browser based configuration and control utility (<ulink
-   url="http://i.j.b">http://i.j.b</ulink>). Browser-based tracing of rule
+   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
    and filter effects.
   </para>
  </listitem> 
@@ -385,7 +385,7 @@ All the ads are there. What's wrong?</title>
  the browser's caches to force a full re-reading of pages. You can verify 
  that <application>Privoxy</application> is running, and your browser 
  is correctly configured by entering the special URL: 
- <ulink url="http://i.j.b/">http://i.j.b/</ulink>. This should give you 
+ <ulink url="http://p.p/">http://p.p/</ulink>. This should give you 
  a banner that says <quote>This is Privoxy</quote> and 
  access to <application>Privoxy's</application> internal configuration. 
  If you see this, then you are good to go. If not, the browser or 
@@ -459,7 +459,7 @@ way to do this?</title>
 
 <para>
  The easiest way to do this, is to access <application>Privoxy</application>
- with your web browser at <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
+ with your web browser at <ulink url="http://p.p/">http://p.p/</ulink>, 
  and then select 
  "<ulink url="http://ijbswa.sourceforge.net/config/edit-actions">Edit the actions list</ulink>"
  from the selection list. You can also do this by editing the appropriate 
@@ -711,7 +711,7 @@ checkerboard]. I don't want to see anything.</title>
  If you want to see nothing, then change the <quote>+image-blocker</quote> 
  action to <quote>+image-blocker{blank}</quote>. This can be done from the 
  <quote>Edit Actions List</quote> selection at <ulink
- url="http://i.j.b/">http://i.j.b/</ulink>. Or by hand editing the appropriate 
+ url="http://p.p/">http://p.p/</ulink>. Or by hand editing the appropriate 
  actions file. This will only effect what is defined as <quote>images</quote>
  though. 
 
@@ -801,7 +801,7 @@ entire page first, do its content magic and then send the page to the browser.
 </sect3>
 
 
-<sect3 id="configurl"><title>What is the "http://i.j.b/"?</title>
+<sect3 id="configurl"><title>What is the "http://p.p/"?</title>
 <para>
 Since <application>Privoxy</application> sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.
@@ -810,8 +810,8 @@ programmed to handle certain pages specially.
 <para>
 With recent versions of <application>Privoxy</application> (version 2.9.x), you can get some
 information about <application>Privoxy</application> and change some settings by going to
-http://i.j.b/ or, equivalently, http://ijbswa.sourceforge.net/config/
-(Note that i.j.b is far easier to type but may not work in some
+http://p.p/ or, equivalently, http://ijbswa.sourceforge.net/config/
+(Note that p.p is far easier to type but may not work in some
 configurations).
 </para>
 
@@ -821,7 +821,7 @@ handled by a special web server which is built in to <application>Privoxy</appli
 </para>
 
 <para>
-If you are not running <application>Privoxy</application>, then http://i.j.b/ will fail, and
+If you are not running <application>Privoxy</application>, then http://p.p/ will fail, and
 http://ijbswa.sourceforge.net/config/ will return a web page telling you
 you're not running <application>Privoxy</application>.
 </para>
@@ -1134,14 +1134,14 @@ What can I do?</title>
 <para>
  First verify that it is indeed a <application>Privoxy</application> problem, 
  by disabling <application>Privoxy</application> filtering and blocking. 
- Go to <ulink url="http://i.j.b/">http://i.j.b/</ulink> and click on 
+ Go to <ulink url="http://p.p/">http://p.p/</ulink> and click on 
  <quote>Toggle Privoxy On or Off</quote>, then disable it. Now try that 
  page again.
 </para>
 
 <para>
  If still a problem, go to <quote>Show which actions apply to a URL and
- why</quote> from <ulink url="http://i.j.b/">http://i.j.b/</ulink> and paste
+ why</quote> from <ulink url="http://p.p/">http://p.p/</ulink> and paste
  the full URL of the page in question into the prompt. See which actions are
  being applied to the URL. Now, armed with this information, go to <quote>Edit
  the actions list</quote>. Here you should see various sections that have
@@ -1227,6 +1227,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.23  2002/03/24 12:33:01  swa
+more additions.
+
 Revision 1.22  2002/03/24 11:51:00  swa
 name change. changed filenames.
 

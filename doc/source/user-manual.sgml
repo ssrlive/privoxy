@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.52 2002/03/24 11:01:06 swa Exp $
+ $Id: user-manual.sgml,v 1.53 2002/03/24 11:51:00 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.52 2002/03/24 11:01:06 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.53 2002/03/24 11:51:00 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -112,7 +112,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <listitem>
   <para>
    Integrated browser based configuration and control utility (<ulink
-   url="http://i.j.b">http://i.j.b</ulink>). Browser-based tracing of rule
+   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
    and filter effects.
   </para>
  </listitem> 
@@ -471,7 +471,7 @@ configuration section below. HB.)
 <title>Controlling <application>Privoxy</application> with Your Web Browser</title>
 <para>
  <application>Privoxy</application> can be reached by the special 
- URL <ulink url="http://i.j.b/">http://i.j.b/</ulink> (or alternately
+ URL <ulink url="http://p.p/">http://p.p/</ulink> (or alternately
  <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>), 
  which is an internal page. You will see the following section:
 
@@ -555,7 +555,7 @@ Please choose from the following options:
     <quote>actions</quote> relating to images, banners, pop-ups, access
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
-    url="http://i.j.b">http://i.j.b</ulink>. (Other actions 
+    url="http://p.p">http://p.p</ulink>. (Other actions 
     files are included as well with differing levels of filtering 
     and blocking, e.g. <filename>ijb-basic.action</filename>.)
    </para>
@@ -1075,7 +1075,7 @@ Please choose from the following options:
  to temporarily disable <application>Privoxy</application>, e.g., to access
  a site that requires cookies which you would otherwise have blocked. This can also
  be toggled via a web browser at the <application>Privoxy</application>
- internal address of <ulink url="http://i.j.b">http://i.j.b</ulink> on 
+ internal address of <ulink url="http://p.p">http://p.p</ulink> on 
  any platform.
 </para>
 
@@ -1130,7 +1130,7 @@ Please choose from the following options:
  that you must have compiled <application>Privoxy</application> with
  support for this feature, otherwise this option has no effect. This 
  internal page can be reached at <ulink
- url="http://i.j.b">http://i.j.b</ulink>.
+ url="http://p.p">http://p.p</ulink>.
  </para>
 
 <para>
@@ -1159,7 +1159,7 @@ Please choose from the following options:
 
 <para>
  Security note:  If this is enabled, anyone who can use the proxy can toggle
- it on or off (see <ulink url="http://i.j.b">http://i.j.b</ulink>), and
+ it on or off (see <ulink url="http://p.p">http://p.p</ulink>), and
  their changes will affect all users. For shared proxies, you probably want to
  disable this. Default: enabled.
 </para>
@@ -1892,7 +1892,7 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The easiest way to edit <quote>actions</quote> file is with a browser by
- loading <ulink url="http://i.j.b/">http://i.j.b/</ulink>, and then select
+ loading <ulink url="http://p.p/">http://p.p/</ulink>, and then select
  <quote>Edit Actions List</quote>. A text editor can also be used.
 </para>
 
@@ -1901,7 +1901,7 @@ Removed references to Win32. HB 09/23/01
  compared to all patterns in this file. Every time it matches, the list of
  applicable actions for the URL is incrementally updated. You can trace
  this process by visiting <ulink
- url="http://i.j.b/show-url-info">http://i.j.b/show-url-info</ulink>. 
+ url="http://p.p/show-url-info">http://p.p/show-url-info</ulink>. 
 </para>
 
 
@@ -2465,7 +2465,7 @@ Removed references to Win32. HB 09/23/01
   <emphasis>+image-blocker{logo}</emphasis>
   <emphasis>+image-blocker{blank}</emphasis>
   <emphasis>+image-blocker{pattern}</emphasis>
-  <emphasis>+image-blocker{http://i.j.b/send-banner}</emphasis>
+  <emphasis>+image-blocker{http://p.p/send-banner}</emphasis>
      </literallayout>
     </msgtext> 
    </literal>
@@ -3082,7 +3082,7 @@ For RedHat: /etc/rc.d/init.d/privoxy start
  preferences and requirements. There are many, many aspects that can 
  be customized. <quote>Actions</quote> (as specified in <filename>default.action</filename>) 
  can be adjusted by pointing your browser to 
- <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
+ <ulink url="http://p.p/">http://p.p/</ulink>, 
  and then follow the link to <quote>edit the actions list</quote>. 
  (This is an internal page and does not require Internet access.)
 </para>
@@ -3303,7 +3303,7 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  </simplelist>
  <simplelist>
   <member>
-   &nbsp; <ulink url="http://i.j.b/">http://i.j.b/</ulink>
+   &nbsp; <ulink url="http://p.p/">http://p.p/</ulink>
   </member>
  </simplelist>
  <simplelist>
@@ -3606,9 +3606,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
    </para>
   </blockquote>
   <para>
-   Alternately, this may be reached at <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
-   but this variation may not work as reliably as the above in some
-   configurations.
+   Alternately, this may be reached at <ulink
+   url="http://p.p/">http://p.p/</ulink>, but this
+   variation may not work as reliably as the above in some configurations.
   </para>
  </listitem>
 
@@ -3943,6 +3943,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.53  2002/03/24 11:51:00  swa
+ name change. changed filenames.
+
  Revision 1.52  2002/03/24 11:01:06  swa
  name change
 
