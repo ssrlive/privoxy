@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.22 2001/09/16 11:00:10 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.23 2001/09/16 11:16:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.22 2001/09/16 11:00:10 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.23  2001/09/16 11:16:05  jongfoster
+ *    Better error handling in dispatch_cgi() and parse_cgi_parameters()
+ *
  *    Revision 1.22  2001/09/16 11:00:10  jongfoster
  *    New function alloc_http_response, for symmetry with free_http_response
  *
@@ -334,7 +337,6 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    /* Can't get here, since cgi_default will match all requests */
    free_http_response(rsp);
    return(NULL);
-
 }
 
 
@@ -427,7 +429,8 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
       map(exports, "cgi-parameters", 1, "", 1);
    }
 
-   rsp->body = fill_template(csp, "default", exports);
+   rsp->body = template_load(csp, "default");
+   template_fill(&rsp->body, exports);
    free_map(exports);
    return(0);
 
@@ -500,7 +503,8 @@ int cgi_show_version(struct client_state *csp, struct http_response *rsp,
 
    map(exports, "sourceversions", 1, show_rcs(), 0);  
 
-   rsp->body = fill_template(csp, "show-version", exports);
+   rsp->body = template_load(csp, "show-version");
+   template_fill(&rsp->body, exports);
    free_map(exports);
    return(0);
 
@@ -593,7 +597,8 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
          fclose(fp);
          map(exports, "contents", 1, s, 0);
       }
-      rsp->body = fill_template(csp, "show-status-file", exports);
+      rsp->body = template_load(csp, "show-status-file");
+      template_fill(&rsp->body, exports);
       free_map(exports);
       return(0);
 
@@ -649,14 +654,15 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
    map_block_killer(exports, "trust-support");
 #endif /* ndef FEATURE_TRUST */
 
-   rsp->body = fill_template(csp, "show-status", exports);
+   rsp->body = template_load(csp, "show-status");
+   template_fill(&rsp->body, exports);
    free_map(exports);
    return(0);
 
 }
 
  
- /*********************************************************************
+/*********************************************************************
  *
  * Function    :  cgi_show_url_info
  *
@@ -721,7 +727,8 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
          freez(url_param);
          free_current_action(action);
 
-         rsp->body = fill_template(csp, "show-url-info", exports);
+         rsp->body = template_load(csp, "show-url-info");
+         template_fill(&rsp->body, exports);
          free_map(exports);
 
          return 0;
@@ -757,7 +764,8 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
          freez(path);
          free_current_action(action);
 
-         rsp->body = fill_template(csp, "show-url-info", exports);
+         rsp->body = template_load(csp, "show-url-info");
+         template_fill(&rsp->body, exports);
          free_map(exports);
 
          return 0;
@@ -815,7 +823,8 @@ int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
       free_current_action(action);
    }
 
-   rsp->body = fill_template(csp, "show-url-info", exports);
+   rsp->body = template_load(csp, "show-url-info");
+   template_fill(&rsp->body, exports);
    free_map(exports);
    return 0;
 
@@ -845,7 +854,7 @@ struct http_response *error_response(struct client_state *csp, const char *templ
    if (NULL == (rsp = alloc_http_response()))
    {
       return NULL;
-   }  
+   }
 
    map(exports, "host-html", 1, html_encode(csp->http->host), 0);
    map(exports, "hostport", 1, csp->http->hostport, 1);
@@ -855,9 +864,10 @@ struct http_response *error_response(struct client_state *csp, const char *templ
    map(exports, "error", 1, safe_strerror(err), 0);
    map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
 
-   rsp->body = fill_template(csp, templatename, exports);
+   rsp->body = template_load(csp, templatename);
+   template_fill(&rsp->body, exports);
    free_map(exports);
-  
+
    if (!strcmp(templatename, "no-such-domain"))
    {
       rsp->status = strdup("404 No such domain"); 
@@ -1020,7 +1030,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    return(rsp);
 
 }
-
+  
 
 /*********************************************************************
  *
@@ -1054,13 +1064,13 @@ struct http_response * alloc_http_response(void)
  *********************************************************************/
 void free_http_response(struct http_response *rsp)
 {
-   if(rsp)
+   if (rsp)
    {
       freez(rsp->status);
       freez(rsp->head);
       freez(rsp->body);
       destroy_list(rsp->headers);
-      freez(rsp);
+      free(rsp);
    }
 
 }
@@ -1078,22 +1088,15 @@ void free_http_response(struct http_response *rsp)
  * Parameters  :
  *           1 :  csp = Current client state (buffers, headers, etc...)
  *           3 :  template = name of the HTML template to be used
- *           2 :  exports = map with fill in symbol -> name pairs
  *
- * Returns     :  char * with filled out form, or NULL if failiure
+ * Returns     :  char * with loaded template, or NULL if failure
  *
  *********************************************************************/
-char *fill_template(struct client_state *csp, const char *templatename, struct map *exports)
+char *template_load(struct client_state *csp, const char *templatename)
 {
-   struct map_entry *m;
-   pcrs_job *job;
    char buf[BUFFER_SIZE];
-   char *tmp_out_buffer;
    char *file_buffer = NULL;
-   int size;
-   int error;
    FILE *fp;
-
 
    /*
     * Open template file or fail
@@ -1113,16 +1116,54 @@ char *fill_template(struct client_state *csp, const char *templatename, struct m
    while (fgets(buf, BUFFER_SIZE, fp))
    {
       /* skip lines starting with '#' */
-      if(*buf == '#') continue;
+      if(*buf == '#')
+      {
+         continue;
+      }
    
       file_buffer = strsav(file_buffer, buf);
    }
    fclose(fp);
 
+   return(file_buffer);
+}
 
-   /*
-    * Execute the jobs
-    */
+
+/*********************************************************************
+ *
+ * Function    :  fill_template
+ *
+ * Description :  CGI support function that loads a given HTML
+ *                template from the confdir, and fills it in
+ *                by replacing @name@ with value using pcrs,
+ *                for each item in the output map.
+ *
+ * Parameters  :
+ *           1 :  template_ptr = IN: Template to be filled out.
+ *                                   Will be free()d.
+ *                               OUT: Filled out template.
+ *                                    Caller must free().
+ *           2 :  exports = map with fill in symbol -> name pairs
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void template_fill(char ** template_ptr, struct map *exports)
+{
+   struct map_entry *m;
+   pcrs_job *job;
+   char buf[BUFFER_SIZE];
+   char *tmp_out_buffer;
+   char *file_buffer;
+   int size;
+   int error;
+   const char * flags;
+
+   assert(template_ptr);
+   assert(*template_ptr);
+   assert(exports);
+
+   file_buffer = *template_ptr;
    size = strlen(file_buffer) + 1;
 
    /* 
@@ -1130,11 +1171,34 @@ char *fill_template(struct client_state *csp, const char *templatename, struct m
     */
    for (m = exports->first; m != NULL; m = m->next)
    {
-      /* Enclose name in @@ */
-      snprintf(buf, BUFFER_SIZE, "@%s@", m->name);
+      if (*m->name == '$')
+      {
+         /*
+          * First character of name is '$', so remove this flag
+          * character and allow backreferences ($1 etc) in the
+          * "replace with" text.
+          */
+         snprintf(buf, BUFFER_SIZE, "%s", m->name + 1);
+         flags = "sigU";
+      }
+      else
+      {
+         /*
+          * Treat the "replace with" text as a literal string - 
+          * no quoting needed, no backreferences allowed.
+          * ("Trivial" ['T'] flag).
+          */
+         flags = "sigTU";
+
+         /* Enclose name in @@ */
+         snprintf(buf, BUFFER_SIZE, "@%s@", m->name);
+      }
+
+
+      log_error(LOG_LEVEL_CGI, "Substituting: s/%s/%s/%s", buf, m->value, flags);
 
       /* Make and run job. */
-      job = pcrs_compile(buf, m->value, "sigTU",  &error);
+      job = pcrs_compile(buf, m->value, flags,  &error);
       if (job == NULL) 
       {
          log_error(LOG_LEVEL_ERROR, "Error compiling template fill job %s: %d", m->name, error);
@@ -1151,12 +1215,10 @@ char *fill_template(struct client_state *csp, const char *templatename, struct m
       }
    }
 
-
    /*
     * Return
     */
-   return(file_buffer);
-
+   *template_ptr = file_buffer;
 }
 
 
@@ -1405,6 +1467,7 @@ struct map *add_stats(struct map *exports)
 
 }
 #endif /* def FEATURE_STATISTICS */
+
 
 /*
   Local Variables:

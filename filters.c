@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.29 2001/09/13 23:32:40 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.30 2001/09/16 11:00:10 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.29 2001/09/13 23:32:40 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.30  2001/09/16 11:00:10  jongfoster
+ *    New function alloc_http_response, for symmetry with free_http_response
+ *
  *    Revision 1.29  2001/09/13 23:32:40  jongfoster
  *    Moving image data to cgi.c rather than cgi.h
  *    Fixing a GPF under Win32 (and any other OS that protects global
@@ -533,7 +536,8 @@ struct http_response *block_url(struct client_state *csp)
       map(exports, "path", 1, csp->http->path, 1);
       map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
-      rsp->body = fill_template(csp, "blocked", exports);
+      rsp->body = template_load(csp, "blocked");
+      template_fill(&rsp->body, exports);
       free_map(exports);
   
       /*
@@ -661,7 +665,8 @@ struct http_response *trust_url(struct client_state *csp)
    /*
     * Build the response
     */
-   rsp->body = fill_template(csp, "untrusted", exports);
+   rsp->body = template_load(csp, "untrusted");
+   template_fill(&rsp->body, exports);
    free_map(exports);
 
    return(finish_http_response(rsp));

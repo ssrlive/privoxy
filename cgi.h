@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.12 2001/09/13 23:31:25 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.13 2001/09/16 11:00:10 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.13  2001/09/16 11:00:10  jongfoster
+ *    New function alloc_http_response, for symmetry with free_http_response
+ *
  *    Revision 1.12  2001/09/13 23:31:25  jongfoster
  *    Moving image data to cgi.c rather than cgi.h.
  *
@@ -127,7 +130,9 @@ extern struct http_response *finish_http_response(struct http_response *rsp);
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
 extern void map_block_killer(struct map *map, const char *name);
 extern void map_conditional(struct map *exports, const char *name, int choose_first);
-extern char *fill_template(struct client_state *csp, const char *templatename, struct map *exports);
+
+extern char *template_load(struct client_state *csp, const char *templatename);
+extern void template_fill(char ** template_ptr, struct map *exports);
 
 
 /*
