@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.137 2003/01/18 19:04:58 david__schmidt Exp $
+# $Id: GNUmakefile.in,v 1.138 2003/10/17 17:51:58 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -133,7 +133,8 @@ SED	      = sed
 GREP       = grep
 CAT        = cat
 RPM        = rpm
-MV	      = mv
+RPMBUILD   = rpm
+MV	   = mv
 TAR        = tar
 LN         = ln
 TOUCH      = touch
@@ -423,10 +424,10 @@ create-snapshot:
 	fi; \
 	$(RM) $(TMPFILE); \
 	cd $(TMPDIR)/current; \
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude \
-		"privoxy-suse.spec" -czf $(TMPDIR)/$(PROGRAM)-rh-$(VERSION).tar.gz .; \
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude \
-		"privoxy-rh.spec" -czf $(TMPDIR)/$(PROGRAM)-suse-$(VERSION).tar.gz .
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-suse.spec" \
+                -czf $(TMPDIR)/$(PROGRAM)-rh-$(VERSION).tar.gz .; \
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-rh.spec" \
+                -czf $(TMPDIR)/$(PROGRAM)-suse-$(VERSION).tar.gz .
 	@$(MV) -f $(TMPDIR)/$(PROGRAM)-rh-$(VERSION).tar.gz .
 	@$(MV) -f $(TMPDIR)/$(PROGRAM)-suse-$(VERSION).tar.gz .
 	@$(RM) -rf $(TMPDIR)
@@ -492,7 +493,7 @@ conectiva-spec:
 #############################################################################
 conectiva-dist: rpm-stuff conectiva-spec
 
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-rh.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-suse.spec" --exclude="privoxy-rh.spec" --exclude="PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -504,14 +505,14 @@ conectiva-upload: check-release
 #############################################################################
 redhat-dist: rpm-stuff
 	echo $(CONFIG_FILES)
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-suse.spec" --exclude="privoxy-cl.spec" --exclude="PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
 # For testing build issues only! Use redhat-dist for official releases.
 redhat-test: 
 	echo $(CONFIG_FILES)
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-suse.spec" --exclude="privoxy-cl.spec" --exclude="PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPMBUILD) --clean -tb  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 	@echo "WARNING: This target is only for testing. Use redhat-dist for releases!!!"
@@ -542,7 +543,7 @@ suse-dist: rpm-stuff
 # 	exit 1;\
 # 	fi
 
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(TAR) --exclude=".cvsignore" --exclude="CVS" --exclude="privoxy-rh.spec" --exclude="privoxy-cl.spec" --exclude="PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -590,14 +591,14 @@ gen-dist: dist-check
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	(cd .. && $(TAR) -cvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
+	(cd .. && $(TAR) --exclude="PACKAGERS" -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) --exclude="PACKAGERS" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) --exclude="PACKAGERS" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done;
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
@@ -928,7 +929,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 # 	if [ -n "$(GROUP_T)" ] && [ -n "$(USER)" ] && ! $(GROUPS) $(USER) | $(GREP) "\<$(GROUP_T)\>" >/dev/null; then \
 # 		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
 # 	fi
-	
+
 	@$(ECHO) "Creating directories, and preparing $(PROGRAM_V) installation"
 	$(CHMOD) $(DIR_MODE) $(MKDIR)
 	@$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
@@ -1114,7 +1115,7 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	done
 	-@test -d $(CONF_DEST)/templates && $(RM) -r $(CONF_DEST)/templates &&\
 	$(ECHO) "Removing $(CONF_DEST)/templates/*"
-	
+
 	@# man page and docs
 	@$(ECHO) Removing $(PROGRAM) docs
 	-$(RM) $(MAN_DEST)/privoxy.1*
@@ -1188,6 +1189,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.138  2003/10/17 17:51:58  oes
+# Added a one-time warning for compiling CVS HEAD
+#
 # Revision 1.137  2003/01/18 19:04:58  david__schmidt
 # Build support for the Java Activity Console - build with 'make java-activity-console', run with 'java -jar ActivityConsole.jar'
 #
