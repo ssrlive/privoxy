@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.17  2002/03/04 17:52:44  oes
+ *    Deleted PID_FILE_PATH
+ *
  *    Revision 1.16  2002/01/10 12:36:18  oes
  *    Moved HAVE_*_R to acconfig.h, where they belong.
  *
@@ -292,6 +295,11 @@
  * Kills JavaScript popups - window.open, onunload, etc.
  */
 #undef FEATURE_KILL_POPUPS
+
+/*
+ * Use PNG instead of GIF for built-in images
+ */
+#undef FEATURE_NO_GIFS
 
 /*
  * Use POSIX threads instead of native threads.
