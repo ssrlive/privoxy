@@ -11,11 +11,30 @@
   $Id: step2.php,v 1.6 2002/04/02 07:22:19 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.10  2002/04/06 15:19:35  oes
+  Cosmetics   Clean-up, smarter handling of unreachable URLs
+
+  Revision 1.9  2002/04/06 11:34:44  oes
+  Reactivating the scripts ,-)   Cosmetics
+
+  Revision 1.7  2002/04/03 19:36:04  swa
+  consistent look
+
   Revision 1.6  2002/04/02 07:22:19  oes
   Elimnating duplicate images; using relative link for step3
 
-  Revision 1.4  2002/04/01 19:13:47  oes
+  Revision 1.5  2002/04/02 06:14:47  oes
+  Follow redirects  
+
+  Revision 1.4  2002/04/01 19:13:47  oes (based on 1.2)
   Extended, fixed bugs, beefed up design, made IE-safe
+
+  Revision 1.3  2002/03/30 20:44:46  swa
+  have consistent look and feel. part 2.
+  use correct urls. 
+
+  Revision 1.2  2002/03/30 19:49:34  swa
+  have consistent look and feel
 
   Revision 1.1  2002/03/30 03:20:30  oes
   Added Feedback mechanism for actions file
@@ -55,7 +74,7 @@
   <!--
    //
    // Could be as easy as style="max-wdith: 300px; max-height..." inside the
-   // <img> tag, but IE doesn't do that. Setting the values directly also
+   // <img> tag, but IE doesn't understand that. Setting the values directly also
    // screws IE for some weird reason. All praise MS.
    //
 
@@ -97,19 +116,18 @@
   //-->
   </script>
 
-
 <?php
 
 /*
  * For testing: 
  */
 //phpinfo();
-error_reporting(E_ALL);
-//error_reporting(E_NONE);
+//error_reporting(E_ALL);
+error_reporting(E_NONE);
 
 /*
  * Function: link_to_absolute
- * Purpose:  Make links from $base absolute
+ * Purpose:  Make $link from $base absolute
  */
 function link_to_absolute($base, $link)
 {
@@ -140,11 +158,84 @@ function link_to_absolute($base, $link)
        */
       if (strpos($base, '/') != strlen($base))
       {
-         $base = substr($base, 0, -strpos(strrev($base), '/'));
+         preg_match('|(.*/)|i', $base, $results);
+         $base = $results[1];
       }
    }
    return $base.$link;
 }
+
+
+/*
+ * Function: slurp_page
+ *
+ * Purpose:  Retrieve a URL with curl, and return the contents
+ *           or "FAILED" if it fails.
+ */
+
+function slurp_page($url)
+{
+   $ch = curl_init ($url);
+
+   curl_setopt ($ch, CURLOPT_HEADER, 0);
+   curl_setopt ($ch, CURLOPT_FAILONERROR, 1);
+   curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+   curl_setopt ($ch, CURLOPT_TIMEOUT, 20);            
+
+   ob_start();
+   $success = curl_exec ($ch);
+   $page = ob_get_contents();
+   ob_end_clean();
+
+   curl_close ($ch);
+
+   return $success ? $page : "FAILED";
+}
+
+/*
+ * Function: get_image_urls_sp
+ * 
+ * Purpose:  Return the image URLs from a single page
+ */
+function get_image_urls_sp($page, $url)
+{
+   preg_match_all('|<img\s+[^>]*?src=[\'"]?(.*?)[\'" >]|i', $page, $matches);
+   
+   foreach (array_unique($matches[1]) as $image_link)
+   {
+      $result[] = link_to_absolute($url, $image_link); 
+   }
+
+   return count($result) ? $result : 0;
+}
+
+/*
+ * Function: get_image_urls
+ * 
+ * Purpose:  If the page is a frameset, rerurn the image URLs from all
+ *           its frame SRCes, else from the page itself.
+ */
+function get_image_urls($page, $url)
+{
+
+   preg_match_all('|<frame\s+[^>]*?src=[\'"]?(.*?)[\'" >]|i', $page, $matches);
+
+   if (count($matches[1]))
+   {
+      foreach(array_unique($matches[1]) as $frame_link)
+      {
+         $framebuf = slurp_page(link_to_absolute($url, $frame_link));
+         $result = array_merge($result, get_image_urls_sp($framebuf, link_to_absolute($url, $frame_link)));
+      }
+   }
+   else
+   {
+      $result = get_image_urls_sp($page, $url);
+   }
+
+   return array_values(array_unique($result));
+}
+
 
 /*
  * Function: error_abort
@@ -207,33 +298,8 @@ if (strncmp("http://", $referrer_url, 7))
 
 /*
  * Check if URL really exists and buffer its contents:
- *
- * FIXME: Curl is not installed on SF; Filed as Alexandria
- *        Feature Request #537014. 
- *        PHP's fopen() supports URLs, but it seems that
- *        curls options for Timeouts and HTTP error handling
- *        are not supported by fopen().
  */
-
-
-/*
- * Slurp the page in:
- */
-$ch = curl_init ($referrer_url);
-
-curl_setopt ($ch, CURLOPT_HEADER, 0);
-curl_setopt ($ch, CURLOPT_FAILONERROR, 1);
-curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
-curl_setopt ($ch, CURLOPT_TIMEOUT, 20);            
-
-ob_start();
-$success = curl_exec ($ch);
-$page = ob_get_contents();
-ob_end_clean();
-
-curl_close ($ch);
-
-if (!$success)
+if (($page = slurp_page($referrer_url)) == "FAILED")
 {
    $url_confirm = "
      <dt>
@@ -316,14 +382,7 @@ if ($problem != "P1")
 }
 else
 {
-   /*
-    * Extract all image links from page, make them
-    * absolute, and present them (scaled to reasonable size)
-    * in a table for the user to select
-    */
-
-   preg_match_all('|<img\s+[^>]*?src=[\'"]?(.*?)[\'" >]|i', $page, $matches);
-   $image_urls = array_values(array_unique($matches[1]));
+   $image_urls = get_image_urls($page, $referrer_url);
    $count = count($image_urls);
 
    if ($count > 0)
