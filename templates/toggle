@@ -82,7 +82,7 @@
     <tr>
       <td bgcolor=#dddddd width=100%>
         <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
-          <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
+          <font size=+2><b> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</b></font></p>
       </td>
     </tr>
 
@@ -106,7 +106,7 @@
       <td bgcolor=#eeeeee>
         <h2>JunkBuster is @if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</h2>
           <blockquote>
-            <p>When enabled, JunkBuster performs it's magic - blocking
+            <p>When enabled, JunkBuster performs its magic - blocking
                adverts, filtering cookies, regex-filtering, etc.</p>
             <p>When disabled, JunkBuster behaves as a normal HTTP proxy,
                and will not affect your web browsing.</p>

@@ -96,7 +96,7 @@
     <tr>
       <td bgcolor=#dddddd>
         <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
-          <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
+          <font size=+2><b> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></font></p>
       </td>
     </tr>
 
@@ -119,7 +119,7 @@
     <tr>
       <td bgcolor=#eeeeee>
         <h2>Source code versions:</h2>
-        <p><i>(Note: This information is only relevent if you checked out JunkBuster from CVS
+        <p><i>(Note: This information is only relevant if you checked out JunkBuster from CVS
            and compiled it yourself.  If you downloaded a binary, .exe, RPM, or a .tgz file, 
            then when you ask for support just mention the version number <b>@version@</b> 
            and the type of download you got.)</i></p>
