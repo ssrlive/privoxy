@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.38 2002/03/08 13:45:27 morcego Exp $
+# $Id: junkbuster-rh.spec,v 1.39 2002/03/08 18:57:29 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -33,7 +33,7 @@ Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
 Version: 2.9.11
-Release: 7
+Release: 8
 Source0: http://www.waldherr.org/%{name}/ijbswa-%{version}.tar.gz
 License: GPL
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -58,7 +58,7 @@ systems and multi-user networks.
 %setup -q -c -n ijbswa
 
 %build
-%configure
+%configure --enable-no-gifs 
 make 
 make redhat-dok
 
@@ -221,6 +221,10 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 %{_mandir}/man8/%{name}.8*
 
 %changelog
+* Sun Mar 10 2002 Hal Burgiss <hal@foobox.net>
++ junkbuster-2.9.11-8 
+- Add --enable-no-gifs to configure.
+
 * Fri Mar 08 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + junkbuster-2.9.11-7
 - Added BuildRequires to libtool.
@@ -426,6 +430,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 	additional "-r @" flag.
 
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.39  2002/03/08 18:57:29  swa
+# remove user junkbuster after de-installation.
+#
 # Revision 1.38  2002/03/08 13:45:27  morcego
 # Adding libtool to Buildrequires
 #
