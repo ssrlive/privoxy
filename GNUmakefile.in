@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.76 2002/04/08 22:43:41 oes Exp $
+# $Id: GNUmakefile.in,v 1.77 2002/04/09 13:28:53 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -296,7 +296,7 @@ redhat-dist: rpm-stuff
 	exit 1;\
 	fi
 
-	$(TAR) ---exclude ".cvsignore" -exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
@@ -800,6 +800,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.77  2002/04/09 13:28:53  swa
+# build suse and gen-dist with html docs
+#
 # Revision 1.76  2002/04/08 22:43:41  oes
 # Fix: Include dotfiles in fixing webserver permissions
 #
