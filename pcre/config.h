@@ -1,5 +1,5 @@
 
-/* For JunkBuster, we just use JunkBuster's config.h */
+/* For Privoxy, we just use Privoxy's config.h */
 
 #include "../config.h"
 

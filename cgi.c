@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.50 2002/03/16 23:54:06 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.51 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.50 2002/03/16 23:54:06 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.51  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.50  2002/03/16 23:54:06  jongfoster
  *    Adding graceful termination feature, to help look for memory leaks.
  *    If you enable this (which, by design, has to be done by hand
@@ -359,7 +362,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          "Show which actions apply to a URL and why"  },
    { "toggle",
          cgi_toggle, 
-         "Toggle JunkBuster on or off" },
+         "Toggle Privoxy on or off" },
 #ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions",
          cgi_edit_actions, 
@@ -856,15 +859,15 @@ void cgi_init_error_messages(void)
 {
    memset(cgi_error_memory_response, '\0', sizeof(*cgi_error_memory_response));
    cgi_error_memory_response->head =
-      "HTTP/1.0 500 Internal JunkBuster Proxy Error\r\n"
+      "HTTP/1.0 500 Internal Privoxy Error\r\n"
       "Content-Type: text/html\r\n"
       "\r\n";
    cgi_error_memory_response->body =
       "<html>\r\n"
-      "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
+      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
       "<body>\r\n"
-      "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
-      "<p>JunkBuster <b>ran out of memory</b> while processing your request.</p>\r\n"
+      "<h1>500 Internal Privoxy Error</h1>\r\n"
+      "<p>Privoxy <b>ran out of memory</b> while processing your request.</p>\r\n"
       "<p>Please contact your proxy administrator, or try again later</p>\r\n"
       "</body>\r\n"
       "</html>\r\n";
@@ -926,13 +929,13 @@ jb_err cgi_error_no_template(struct client_state *csp,
                              const char *template_name)
 {
    static const char status[] =
-      "500 Internal JunkBuster Proxy Error";
+      "500 Internal Privoxy Error";
    static const char body_prefix[] =
       "<html>\r\n"
-      "<head><title>500 Internal JunkBuster Proxy Error</title></head>\r\n"
+      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
       "<body>\r\n"
-      "<h1>500 Internal JunkBuster Proxy Error</h1>\r\n"
-      "<p>JunkBuster encountered an error while processing your request:</p>\r\n"
+      "<h1>500 Internal Privoxy Error</h1>\r\n"
+      "<p>Privoxy encountered an error while processing your request:</p>\r\n"
       "<p><b>Could not load template file <code>";
    static const char body_suffix[] =
       "</code></b></p>\r\n"
@@ -940,10 +943,10 @@ jb_err cgi_error_no_template(struct client_state *csp,
       "<p>If you are the proxy administrator, please put the required file "
       "in the <code><i>(confdir)</i>/templates</code> directory.  The "
       "location of the <code><i>(confdir)</i></code> directory "
-      "is specified in the main JunkBuster <code>config</code> "
-      "file.  (It's typically the JunkBuster install directory"
+      "is specified in the main Privoxy <code>config</code> "
+      "file.  (It's typically the Privoxy install directory"
 #ifndef _WIN32
-      ", or <code>/etc/junkbuster/</code>"
+      ", or <code>/etc/privoxy/</code>"
 #endif /* ndef _WIN32 */
       ").</p>\r\n"
       "</body>\r\n"
@@ -1136,7 +1139,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    {
       /*
        * Set Expires to about 10 min into the future so it'll get reloaded
-       * occasionally, e.g. if IJB gets upgraded.
+       * occasionally, e.g. if Privoxy gets upgraded.
        */
 
       if (!err)

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.49 2002/03/16 20:29:14 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.50 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.49 2002/03/16 20:29:14 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.50  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.49  2002/03/16 20:29:14  oes
  *    Cosmetics
  *
@@ -740,7 +743,7 @@ struct http_response *block_url(struct client_state *csp)
 
       else
       {
-         rsp->status = strdup("302 Local Redirect from Junkbuster");
+         rsp->status = strdup("302 Local Redirect from Privoxy");
          if (rsp->status == NULL)
          {
             free_http_response(rsp);
@@ -769,7 +772,7 @@ struct http_response *block_url(struct client_state *csp)
       {
          p = CGI_PREFIX "send-banner?type=pattern";
       }
-      rsp->status = strdup("302 Local Redirect from Junkbuster");
+      rsp->status = strdup("302 Local Redirect from Privoxy");
       if (rsp->status == NULL)
       {
          free_http_response(rsp);
@@ -1042,7 +1045,7 @@ struct http_response *redirect_url(struct client_state *csp)
       }
 
       if ( enlist_unique_header(rsp->headers, "Location", q)
-        || (NULL == (rsp->status = strdup("302 Local Redirect from Junkbuster"))) )
+        || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))) )
       {
          free_http_response(rsp);
          return cgi_error_memory();

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.33 2002/03/13 00:27:04 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.34 2002/03/24 13:25:43 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.33 2002/03/13 00:27:04 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.34  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.33  2002/03/13 00:27:04  jongfoster
  *    Killing warnings
  *
@@ -269,7 +272,7 @@ static char *w32_socket_strerr(int errcode, char *tmp_buf);
 static void fatal_error(const char * error_message)
 {
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
-   MessageBox(g_hwndLogFrame, error_message, "Internet JunkBuster Error", 
+   MessageBox(g_hwndLogFrame, error_message, "Privoxy Error", 
       MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
 
    /* Cleanup - remove taskbar icon etc. */
@@ -332,7 +335,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
       logfp = fp;
    }
 
-   log_error(LOG_LEVEL_INFO, "Internet JunkBuster version " VERSION);
+   log_error(LOG_LEVEL_INFO, "Privoxy version " VERSION);
    if (prog_name != NULL)
    {
       log_error(LOG_LEVEL_INFO, "Program name: %s", prog_name);
@@ -427,41 +430,41 @@ void log_error(int loglevel, char *fmt, ...)
    switch (loglevel)
    {
       case LOG_LEVEL_ERROR:
-         outc = sprintf(outbuf, "IJB(%ld) Error: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Error: ", this_thread);
          break;
       case LOG_LEVEL_FATAL:
-         outc = sprintf(outbuf, "IJB(%ld) Fatal error: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Fatal error: ", this_thread);
          break;
       case LOG_LEVEL_GPC:
-         outc = sprintf(outbuf, "IJB(%ld) Request: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Request: ", this_thread);
          break;
       case LOG_LEVEL_CONNECT:
-         outc = sprintf(outbuf, "IJB(%ld) Connect: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Connect: ", this_thread);
          break;
       case LOG_LEVEL_LOG:
-         outc = sprintf(outbuf, "IJB(%ld) Writing: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Writing: ", this_thread);
          break;
       case LOG_LEVEL_HEADER:
-         outc = sprintf(outbuf, "IJB(%ld) Header: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Header: ", this_thread);
          break;
       case LOG_LEVEL_INFO:
-         outc = sprintf(outbuf, "IJB(%ld) Info: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Info: ", this_thread);
          break;
       case LOG_LEVEL_RE_FILTER:
-         outc = sprintf(outbuf, "IJB(%ld) Re-Filter: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Re-Filter: ", this_thread);
          break;
 #ifdef FEATURE_FORCE_LOAD
       case LOG_LEVEL_FORCE:
-         outc = sprintf(outbuf, "IJB(%ld) Force: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Force: ", this_thread);
          break;
 #endif /* def FEATURE_FORCE_LOAD */
 #ifdef FEATURE_FAST_REDIRECTS
       case LOG_LEVEL_REDIRECTS:
-         outc = sprintf(outbuf, "IJB(%ld) Redirect: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Redirect: ", this_thread);
          break;
 #endif /* def FEATURE_FAST_REDIRECTS */
       case LOG_LEVEL_DEANIMATE:
-         outc = sprintf(outbuf, "IJB(%ld) Gif-Deanimate: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Gif-Deanimate: ", this_thread);
          break;
       case LOG_LEVEL_CLF:
          outbuf = outbuf_save;
@@ -470,14 +473,14 @@ void log_error(int loglevel, char *fmt, ...)
          break;
 #ifdef FEATURE_KILL_POPUPS
       case LOG_LEVEL_POPUPS:
-         outc = sprintf(outbuf, "IJB(%ld) Kill-Popups: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) Kill-Popups: ", this_thread);
          break;
 #endif /* def FEATURE_KILL_POPUPS */
       case LOG_LEVEL_CGI:
-         outc = sprintf(outbuf, "IJB(%ld) CGI: ", this_thread);
+         outc = sprintf(outbuf, "Privoxy(%ld) CGI: ", this_thread);
          break;
       default:
-         outc = sprintf(outbuf, "IJB(%ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
+         outc = sprintf(outbuf, "Privoxy(%ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
    }
    
@@ -552,7 +555,7 @@ void log_error(int loglevel, char *fmt, ...)
             else
             {
                /* Error */
-               sprintf(outbuf, "IJB(%ld) Error: log_error(): Bad format string:\n"
+               sprintf(outbuf, "Privoxy(%ld) Error: log_error(): Bad format string:\n"
                                "Format = \"%s\"\n"
                                "Exiting.", this_thread, fmt);
                /* FIXME RACE HAZARD: should start critical section error_log_use here */
@@ -695,7 +698,7 @@ void log_error(int loglevel, char *fmt, ...)
             }
             break;
          default:
-            sprintf(outbuf, "IJB(%ld) Error: log_error(): Bad format string:\n"
+            sprintf(outbuf, "Privoxy(%ld) Error: log_error(): Bad format string:\n"
                             "Format = \"%s\"\n"
                             "Exiting.", this_thread, fmt);
             /* FIXME RACE HAZARD: should start critical section error_log_use here */

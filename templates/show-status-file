@@ -87,8 +87,7 @@
   <table cellpadding=20 cellspacing=10 border=0 width=100%>
     <tr>
       <td bgcolor=#dddddd>
-        <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
-          <font size=+2><b> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></font></p>
+        <p><big><big><b>This is Privoxy (privacy enhancing proxy) @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></big></big></p>
       </td>
     </tr>
 

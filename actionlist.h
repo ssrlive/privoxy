@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.12  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.11  2002/03/12 01:42:49  oes
  *    Introduced modular filters
  *
@@ -102,7 +105,7 @@ DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRI
 DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
 DEFINE_ACTION_STRING     ("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
-DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "JunkBuster/3.0 (Anonymized)")
+DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy/3.0 (Anonymous)")
 DEFINE_ACTION_BOOL       ("image",           ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.22 2002/03/24 13:25:43 swa Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.23 2002/03/24 13:32:41 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.22 2002/03/24 13:25:43 swa Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.23  2002/03/24 13:32:41  swa
+ *    name change related issues
+ *
  *    Revision 1.22  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -266,7 +269,7 @@ struct file_line
 struct editable_file
 {
    struct file_line * lines;
-   const char * filename;     /* Full pathname - e.g. "/etc/junkbuster/wibble.action" */
+   const char * filename;     /* Full pathname - e.g. "/etc/privoxy/wibble.action" */
    const char * identifier;   /* Filename stub - e.g. "wibble".  Use for CGI param. */
                               /* Pre-encoded with url_encode() for ease of use. */
    const char * version_str;  /* Last modification time, as a string.  For CGI param */
@@ -2455,7 +2458,7 @@ jb_err cgi_edit_actions(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
    if (enlist_unique_header(rsp->headers, "Location",
-      CGI_PREFIX "edit-actions-list?f=ijb"))
+      CGI_PREFIX "edit-actions-list?f=default"))
    {
       free(rsp->status);
       rsp->status = NULL;
