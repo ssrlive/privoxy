@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.33.2.3 2002/06/24 12:13:34 kick_ Exp $
+# $Id: privoxy-rh.spec,v 1.38 2002/06/24 21:44:44 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 1
+Release: 4
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -107,11 +107,25 @@ mkdir -p %{buildroot}%{_sbindir} \
 
 install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 
+# Using sed to "convert" from DOS format to UNIX
+# This is important behaviour, and should not be removed without some
+# other assurance that these files don't get packed in the the
+# wrong format
+for i in `ls *.action`
+do
+       cat $i | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/$i
+done
+cat default.filter | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/default.filter
+cat trust | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/trust
+(
+cd templates
+for i in `ls`
+do
+	cat $i | sed -e 's/\r$//' > buildroot}%{privoxyconf}/templates/$i
+done
+)
+
 cp -f %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-cp -f *.action %{buildroot}%{privoxyconf}/
-cp -f default.filter %{buildroot}%{privoxyconf}/default.filter
-cp -f trust %{buildroot}%{privoxyconf}/trust
-cp -f templates/*  %{buildroot}%{privoxyconf}/templates/
 cp -f %{name}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -m 755 %{name}.init %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}
 install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
@@ -128,7 +142,8 @@ cat config | \
 #    sed 's/^jarfile.*/jarfile \%{_localstatedir}\/log\/%{name}\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
-    sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' > \
+    sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' | \
+    sed -e 's/\r$//' > \
     %{buildroot}%{privoxyconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
     %{buildroot}%{privoxyconf}/default.action
@@ -169,12 +184,12 @@ userdel %{oldname} > /dev/null 2>&1 ||:
 userdel %{veryoldname} > /dev/null 2>&1 ||:
 
 # Doublecheck to see if the group exist, and that it has the correct gid
-/bin/grep -E '^%{name}:' /etc/group > /dev/null 2>&1
+/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null 2>&1
 if [ $? -eq 1 ]; then
 	# Looks like it does not exist. Create it
 	groupadd -g %{privoxy_gid} %{name} > /dev/null 2>&1
 else
-	/bin/grep -E '^%{name}:[^:]*:%{privoxy_gid}:' /etc/group > /dev/null 2>&1
+	/bin/grep -E '^%{name}:[^:]*:%{privoxy_gid}:' %{_sysconfdir}/group > /dev/null 2>&1
 	if [ $? -eq 1 ]; then
 		# The group exists, but does not have the correct gid
 		groupmod -g %{privoxy_gid} %{name} > /dev/null 2>&1
@@ -185,19 +200,19 @@ fi
 # exist
 id %{name} > /dev/null 2>&1
 if [ $? -eq 1 ]; then
-	/usr/sbin/useradd -u %{privoxy_uid} -g %{privoxy_gid} -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
+	%{_sbindir}/useradd -u %{privoxy_uid} -g %{privoxy_gid} -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
 fi
 
 # Double check that the group has the correct uid
 P_UID=`id -u %{name} 2>/dev/null`
 if [ $P_UID -ne %{privoxy_uid} ]; then
-	/usr/sbin/usermod -u %{privoxy_uid} %{name}
+	%{_sbindir}/usermod -u %{privoxy_uid} %{name}
 fi
 
 # The same for the gid
 P_GID=`id -g %{name} 2>/dev/null`
 if [ $P_GID -ne %{privoxy_gid} ]; then
-	/usr/sbin/usermod -g %{privoxy_gid} %{name}
+	%{_sbindir}/usermod -g %{privoxy_gid} %{name}
 fi
 
 %post
@@ -207,7 +222,7 @@ fi
 [ -f %{_localstatedir}/log/%{name}/%{name} ] &&\
  mv -f %{_localstatedir}/log/%{name}/%{name} %{_localstatedir}/log/%{name}/logfile || /bin/true
 chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null
-chown -R %{name}:%{name} /etc/%{name} 2>/dev/null
+chown -R %{name}:%{name} %{_sysconfdir}/%{name} 2>/dev/null
 if [ "$1" = "1" ]; then
 	/sbin/service %{name} condrestart > /dev/null 2>&1
 fi
@@ -227,8 +242,8 @@ fi
 #fi
 # We only remove it we this is not an upgrade
 if [ "$1" = "0" ]; then
-	/bin/grep -E '^%{name}:' /etc/group > /dev/null && /usr/sbin/groupdel %{name} || /bin/true
-	id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+	/bin/grep -E '^%{name}:' %{_sysconfdir}/group > /dev/null && %{_sbindir}/groupdel %{name} || /bin/true
+	id privoxy > /dev/null 2>&1 && %{_sbindir}/userdel privoxy || /bin/true
 fi
 
 %clean
@@ -245,9 +260,12 @@ fi
 %doc doc/webserver/images
 %doc doc/webserver/man-page
 
+# ATTENTION FOR defattr change here !
+%defattr(0755,%{name},%{name},0644)
+
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
-%attr(0755,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
+%dir %{_localstatedir}/log/%{name}
 
 %attr(0744,%{name},%{name})%{_sbindir}/%{name}
 
@@ -298,6 +316,9 @@ fi
 %config %{privoxyconf}/templates/toggle-mini
 %config %{privoxyconf}/templates/untrusted
 
+# Attention, new defattr change here !
+%defattr(0755,root,root,0644)
+
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
 %ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
@@ -311,6 +332,15 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Wed Jun 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-4
+- Fixing issues created by specfile sync between branches
+  - Correcting the release number (WARNING)
+  - Reintroducing text file conversion (dos -> unix)
+  - Reconverting hardcoded directories to macros
+  - Refixing ownership of privoxy files (now using multiple defattr
+    definitions)
+
 * Thu Jun 20 2002 Karsten Hopp <karsten@redhat.de>
 - fix several .spec file issues to shut up rpmlint
   - non-standard-dir-perm /var/log/privoxy 0744
@@ -674,6 +704,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.38  2002/06/24 21:44:44  hal9
+# Sync with Karsten's update in 3.0 branch. See changelog.
+#
 # Revision 1.33.2.3  2002/06/24 12:13:34  kick_
 # shut up rpmlint. btw: The vendor tag should be set in you .rpmmacros file, not in the spec file!
 #
