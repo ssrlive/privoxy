@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.12 2002/04/03 19:49:52 swa Exp $
+#  $Id: default.action,v 1.13 2002/04/08 20:34:59 swa Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -210,7 +210,7 @@
 #    after the other. Plus, it feeds the advertisers.
 #
 #    The +fast-redirects option enables interception of these requests
-#    by junkbuster, who will cut off all but the last valid URL in the
+#    by Privoxy, who will cut off all but the last valid URL in the
 #    request and send a local redirect back to your browser without
 #    contacting the intermediate sites.
 #
@@ -304,7 +304,7 @@
 #
 # +no-compression
 #    Prevent the website from compressing the data. Some websites do
-#    that, which is a problem for junkbuster, since +filter, +no-popup
+#    that, which is a problem for Privoxy, since +filter, +no-popup
 #    and +gif-deanimate will not work on compressed data. Will slow down
 #    connections to those websites, though.
 #
