@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.3 2001/05/22 18:56:28 oes Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.4 2001/11/16 00:46:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -6,8 +6,8 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.3 2001/05/22 18:56:28 oes E
  * Purpose     :  Functions for creating, setting and destroying the
  *                workspace tray icon
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ * Copyright   :  Written by and Copyright (C) 2001-2002 members of
+ *                the Privoxy team.  http://privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.3 2001/05/22 18:56:28 oes E
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.4  2001/11/16 00:46:31  jongfoster
+ *    Fixing compiler warnings
+ *
  *    Revision 1.3  2001/05/22 18:56:28  oes
  *    CRLF -> LF
  *
@@ -71,7 +74,8 @@ static LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
  *
  * Function    :  CreateTrayWindow
  *
- * Description :  Creates and returns the invisible window responsible for processing tray messages.
+ * Description :  Creates and returns the invisible window responsible
+ *                for processing tray messages.
  *
  * Parameters  :
  *          1  :  hInstance = instance handle of this application
@@ -82,7 +86,7 @@ static LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 HWND CreateTrayWindow(HINSTANCE hInstance)
 {
    WNDCLASS wc;
-   static const char *szWndName = "JunkbusterTrayWindow";
+   static const char *szWndName = "PrivoxyTrayWindow";
 
    wc.style          = 0;
    wc.lpfnWndProc    = TrayProc;

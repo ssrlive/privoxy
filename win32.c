@@ -1,12 +1,12 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.5 2002/03/04 23:47:30 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.6 2002/03/16 21:53:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                IJBSWA team.  http://ijbswa.sourceforge.net
+ * Copyright   :  Written by and Copyright (C) 2001-2002 members of
+ *                the Privoxy team.  http://privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.5 2002/03/04 23:47:30 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.6  2002/03/16 21:53:28  jongfoster
+ *    VC++ Heap debug option
+ *
  *    Revision 1.5  2002/03/04 23:47:30  jongfoster
  *    - Rewritten, simpler command-line pre-parser
  *    - not using raise(SIGINT) any more
@@ -79,16 +82,16 @@ const char win32_rcs[] = "$Id: win32.c,v 1.5 2002/03/04 23:47:30 jongfoster Exp 
 const char win32_h_rcs[] = WIN32_H_VERSION;
 
 const char win32_blurb[] =
-"Internet Junkbuster Proxy(TM) Version " VERSION " for Windows is Copyright (C) 1997-8\n"
-"by Junkbusters Corp.  This is free software; it may be used and copied under\n"
-"the GNU General Public License: http://www.gnu.org/copyleft/gpl.html .\n"
+"Privoxy version " VERSION " for Windows\n"
+"Copyright (C) 2000-2002 by members of the Privoxy Team\n"
+"Copyright (C) 1997-8 by Junkbusters Corp.\n"
+"This is free software; it may be used and copied under the\n"
+"GNU General Public License: http://www.gnu.org/copyleft/gpl.html .\n"
 "This program comes with ABSOLUTELY NO WARRANTY OF ANY KIND.\n"
 "\n"
 "For information about how to to configure the proxy and your browser, see\n"
-"        " REDIRECT_URL "win\n"
-"\n"
-"The Internet Junkbuster Proxy(TM) is running and ready to serve!\n"
-"";
+"        " HOME_PAGE_URL "\n"
+"\n";
 
 #ifdef _WIN_CONSOLE
 
@@ -111,12 +114,12 @@ static void  __cdecl UserInterfaceThread(void *);
  * Description :  M$ Windows "main" routine:
  *                parse the `lpCmdLine' param into main's argc and argv variables,
  *                start the user interface thread (for the systray window), and
- *                call main (i.e. patch execution into normal IJB startup).
+ *                call main (i.e. patch execution into normal startup).
  *
  * Parameters  :
- *          1  :  hInstance = instance handle of this IJB execution
- *          2  :  hPrevInstance = instance handle of previous IJB execution
- *          3  :  lpCmdLine = command line string which started IJB
+ *          1  :  hInstance = instance handle of this execution
+ *          2  :  hPrevInstance = instance handle of previous execution
+ *          3  :  lpCmdLine = command line string which started us
  *          4  :  nCmdShow = window show value (MIN, MAX, NORMAL, etc...)
  *
  * Returns     :  `main' never returns, so WinMain will also never return.
@@ -232,7 +235,7 @@ void InitWin32(void)
    if (WSAStartup(wVersionRequested, &wsaData) != 0)
    {
 #ifndef _WIN_CONSOLE
-      MessageBox(NULL, "Cannot initialize WinSock library", "Internet JunkBuster Error", 
+      MessageBox(NULL, "Cannot initialize WinSock library", "Privoxy Error", 
          MB_OK | MB_ICONERROR | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);  
 #endif
       exit(1);
@@ -256,7 +259,7 @@ void InitWin32(void)
  * Description :  User interface thread.  WinMain will wait for us to set
  *                the hInitCompleteEvent before patching over to `main'.
  *                This ensures the systray window is active before beginning
- *                IJB operations.
+ *                operations.
  *
  * Parameters  :
  *          1  :  pData = pointer to `hInitCompleteEvent'.
