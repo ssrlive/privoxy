@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.73 2002/04/08 14:03:24 oes Exp $
+# $Id: GNUmakefile.in,v 1.74 2002/04/08 15:22:44 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -669,7 +669,7 @@ webserver: tidy
 	@$(ECHO) Uploading 
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xv'
+          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm'
 
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/* -type d | xargs chmod 775 2>/dev/null'
@@ -680,7 +680,7 @@ web-actions: tidy
 	@$(ECHO) Uploading 
 	@cd doc/webserver/actions; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xv'
+          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
 
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/* -type f | xargs chmod 664 2>/dev/null'
@@ -795,6 +795,12 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.74  2002/04/08 15:22:44  hal9
+# This has finishing touches for dok building. Should be ready to go.
+# -The main doc build is now 'make dok', should work on Redhat too.
+# -Removed man page from main doc build. It is built separately due to
+#  perl scripts that most aren't likely to have.
+#
 # Revision 1.73  2002/04/08 14:03:24  oes
 # oes for al: Fix install target
 #
