@@ -52,11 +52,10 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # Begin Special Build Tool
-InputDir=".\vc_dftables"
 OutDir=.\vc_dftables
 SOURCE=$(InputPath)
 PostBuild_Desc=Running program to generate chartables.c
-PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(InputDir)\chartables.c
+PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(OutDir)\..\chartables.c
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "vc_dftables - Win32 Debug"
@@ -83,11 +82,10 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # Begin Special Build Tool
-InputDir=".\vc_dftables_dbg"
 OutDir=.\vc_dftables_dbg
 SOURCE=$(InputPath)
 PostBuild_Desc=Running program to generate chartables.c
-PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(InputDir)\chartables.c
+PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(OutDir)\..\chartables.c
 # End Special Build Tool
 
 !ENDIF 
@@ -96,6 +94,14 @@ PostBuild_Cmds=$(OutDir)\vc_dftables.exe >$(InputDir)\chartables.c
 
 # Name "vc_dftables - Win32 Release"
 # Name "vc_dftables - Win32 Debug"
+# Begin Group "File Copy"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\config.h.win
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\config.h
