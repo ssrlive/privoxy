@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $
+ $Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $</pubdate>
 
 <!--
 
@@ -1727,7 +1727,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1787,7 +1787,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.46 2002/05/22 17:15:00 oes Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2446,15 +2446,29 @@ at sourceforge. Three simple steps:
 
     <sect3 id="newrelease-debian"><title>Debian</title>
       <para>
-	First, <emphasis>make sure that you have freshly exported the right
-        version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then, run:
+        First, <emphasis>make sure that you have freshly exported the
+        right version into an empty directory</emphasis>. (See
+        "Building and releasing packages" above).  Then add a log
+        entry to <filename>debian/changelog</filename>, if it is not
+        already there, for example by running:
       </para>
       <para>
-	<programlisting>
-  cd current
-  autoheader && autoconf && ./configure
-</programlisting>
+        <programlisting>
+        debchange -v &p-version;-&p-status;-1 "New upstream version"
+        </programlisting>
+      </para>
+      <para>
+        After this simply run 
+      </para>
+      <para>
+        <programlisting>
+        dpkg-buildpackage -rfakeroot -us -uc -b
+        </programlisting>
+      </para>
+      <para>
+        This will create
+        <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
+        which can be uploaded.
       </para>
       <para>
         Then, run:
@@ -2814,6 +2828,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.47  2002/05/26 04:55:11  mal0rd
+  Added debian-dist and debian-upload targets.  Also documented usage.
+
   Revision 1.46  2002/05/22 17:15:00  oes
   Updated intro
 
