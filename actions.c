@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.6 2001/06/07 23:04:34 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.7 2001/06/09 10:55:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,65 +33,14 @@ const char actions_rcs[] = "$Id: actions.c,v 1.6 2001/06/07 23:04:34 jongfoster 
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.7  2001/06/09 10:55:28  jongfoster
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.6  2001/06/07 23:04:34  jongfoster
  *    Made get_actions() static.
  *
  *    Revision 1.5  2001/06/03 19:11:48  oes
  *    adapted to new enlist_unique arg format
- *
- *    Revision 1.5  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.4  2001/06/01 20:03:42  jongfoster
  *    Better memory management - current_action->strings[] now
