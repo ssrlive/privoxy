@@ -33,7 +33,7 @@
  *********************************************************************/
    
 
-This README is included with the development version of Privoxy 2.9.13, which
+This README is included with the development version of Privoxy 2.9.14, which
 will eventually become Privoxy v3.0 (and soon we hope!). See http://
 www.privoxy.org/ for more information. The current code level is beta, and
 seems stable to us :).
@@ -76,8 +76,8 @@ There are several ways to install Privoxy.
 To build Privoxy from source, autoconf and GNU make (gmake) are required.
 Source is available as gzipped tar archives. For this, first unpack the source:
 
- tar xzvf privoxy-2.9.13-beta-src* [.tgz or .tar.gz]                           
- cd privoxy-2.9.13-beta                                                        
+ tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]                           
+ cd privoxy-2.9.14-beta                                                        
                                                                                
 
 For retrieving the current CVS sources, you'll need the CVS package installed
@@ -174,12 +174,12 @@ Included documentation may vary according to platform and packager.
 We value your feedback. However, to provide you with the best support, please
 note:
 
-  *  Use the Sourceforge Support Forum to get help:
+  * Use the Sourceforge Support Forum to get help:
        
         http://sourceforge.net/tracker/?group_id=11118&atid=211118
        
    
-  *  Submit bugs only through our Sourceforge Bug Forum:
+  * Submit bugs only through our Sourceforge Bug Forum:
      
         http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
         
@@ -193,30 +193,29 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request forum:
+  * Submit feature requests only through our Sourceforge feature request forum:
      
         http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
        
    
-  *  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
-          
-        http://p.p/, and select "actions file feedback system"
+  * You can also send feedback on websites that Privoxy has problems with. Please bookmark
+    the following link: "Privoxy - Submit Filter Feedback"
+    . Once you surf to a page with problems, use the
+    bookmark to send us feedback. We will look into the issue as soon as possible.
        
    
-    This page can also be reached from many of the internal CGI pages.
-   
-  *  For any other issues, feel free to use the mailing lists:
+  * For any other issues, feel free to use the mailing lists:
      
         http://sourceforge.net/mail/?group_id=11118.
      
    
     Anyone interested in actively participating in development and related
     discussions can also join the appropriate mailing list. Archives are
-    available too.
+    available, too.
    
  -------------------------------------------------------------------------
  ijbswa-developers@lists.sourceforge.net
  
 
-$Id: readme.sgml,v 1.6 2002/04/08 22:59:26 hal9 Exp $
+$Id: readme.sgml,v 1.8 2002/04/12 10:09:50 swa Exp $
 

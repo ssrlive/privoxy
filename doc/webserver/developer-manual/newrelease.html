@@ -666,10 +666,19 @@ NAME="NEWRELEASE-WINDOWS"
 >8.6. Windows</A
 ></H2
 ><P
->	Ensure that you have the latest code version. Hence run
-	</P
+>        You should ensure you have the latest version of Cygwin (from
+        <A
+HREF="http://www.cygwin.com/"
+TARGET="_top"
+>http://www.cygwin.com/</A
+>).
+        Run the following commands from within a Cygwin bash shell.
+      </P
 ><P
->	<TABLE
+>        First check out a clean copy of the correct code version, by running:
+      </P
+><P
+>      <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -677,20 +686,31 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</PRE
+>        mkdir dist
+        cd dist
+        cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z .
+      </PRE
 ></TD
 ></TR
 ></TABLE
 >
-	</P
+      </P
 ><P
->	 Run:
-	</P
+>        (Note: It is important that this is a clean copy of the code,
+        do not re-use a working directory after you have manually compiled
+        there).
+      </P
 ><P
->	<TABLE
+>        Then you can build the package.  This is fully automated, and is
+        controlled by <TT
+CLASS="FILENAME"
+>winsetup/GNUmakefile</TT
+>.
+        All you need to do is:
+      </P
+><P
+>      <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -698,16 +718,25 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  autoheader &#38;&#38; autoconf &#38;&#38; ./configure
-	</PRE
+>        cd winsetup
+        make
+      </PRE
 ></TD
 ></TR
 ></TABLE
 >
-	</P
+      </P
 ><P
->	Then do FIXME.
-	</P
+>        Now you can manually rename <TT
+CLASS="FILENAME"
+>privoxy_setup.exe</TT
+> to
+        <TT
+CLASS="FILENAME"
+>privoxy_setup_X_Y_Z.exe</TT
+>, and upload it to
+        SourceForge.
+      </P
 ></DIV
 ><DIV
 CLASS="SECT2"

@@ -2,7 +2,7 @@ Privoxy User Manual
 
 By: Privoxy Developers
 
-$Id: user-manual.sgml,v 1.73 2002/04/10 18:45:15 swa Exp $
+$Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $
 
 The user manual gives users information on how to install, configure and use
 Privoxy.
@@ -270,37 +270,6 @@ start automatically whenever OS/2 starts.
 The directory you choose to install Privoxy into will contain all of the
 configuration files.
 
-If you would like to build binary images on OS/2 yourself, you will need a few
-Unix-like tools: autoconf, autoheader and sh. These tools will be used to
-create the required config.h file, which is not part of the source distribution
-because it differs based on platform. You will also need a compiler. The
-distribution has been created using IBM VisualAge compilers, but you can use
-any compiler you like. GCC/EMX has the disadvantage of needing to be
-single-threaded due to a limitation of EMX's implementation of the select()
-socket call.
-
-In addition to needing the source code distribution as outlined earlier, you
-will want to extract the os2seutp directory from CVS:
-
- cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login           
- cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup 
-                                                                                     
-
-This will create a directory named os2setup/, which will contain the
-Makefile.vac makefile and os2build.cmd which is used to completely create the
-binary distribution. The sequence of events for building the executable for
-yourself goes something like this:
-
- cd current                                                                    
- autoheader                                                                    
- autoconf                                                                      
- sh configure                                                                  
- cd ..\os2setup                                                                
- nmake -f Makefile.vac                                                         
-                                                                               
-
-You will see this sequence laid out in os2build.cmd.
-
 -------------------------------------------------------------------------------
 
 3.1.4. Windows
@@ -452,7 +421,7 @@ Privoxy can be reached by the special URL http://p.p/ (or alternately http://
 config.privoxy.org/), which is an internal page. You will see the following
 section: 
 
-Please choose from the following options:                                      
+ Please choose from the following options:                                     
                                                                                
     * Show information about the current configuration                         
     * Show the source code version numbers                                     
@@ -1743,12 +1712,12 @@ desired.
 We value your feedback. However, to provide you with the best support, please
 note:
 
-  *  Use the Sourceforge Support Forum to get help:
+  * Use the Sourceforge Support Forum to get help:
        
         http://sourceforge.net/tracker/?group_id=11118&atid=211118
        
    
-  *  Submit bugs only through our Sourceforge Bug Forum:
+  * Submit bugs only through our Sourceforge Bug Forum:
      
         http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
         
@@ -1762,26 +1731,25 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request forum:
+  * Submit feature requests only through our Sourceforge feature request forum:
      
         http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
        
    
-  *  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
-          
-        http://p.p/, and select "actions file feedback system"
+  * You can also send feedback on websites that Privoxy has problems with. Please bookmark
+    the following link: "Privoxy - Submit Filter Feedback"
+    . Once you surf to a page with problems, use the
+    bookmark to send us feedback. We will look into the issue as soon as possible.
        
    
-    This page can also be reached from many of the internal CGI pages.
-   
-  *  For any other issues, feel free to use the mailing lists:
+  * For any other issues, feel free to use the mailing lists:
      
         http://sourceforge.net/mail/?group_id=11118.
      
    
     Anyone interested in actively participating in development and related
     discussions can also join the appropriate mailing list. Archives are
-    available too.
+    available, too.
    
 -------------------------------------------------------------------------------
 
@@ -2120,7 +2088,7 @@ basically what Privoxy would do if there were not any "actions" defined, i.e.
 it does nothing. Every action is disabled. This is not particularly informative
 for our purposes here. OK, next section:
 
- Matches for http://google.com:                                                
+  Matches for http://google.com:                                               
                                                                                
  { -add-header -block +deanimate-gifs -downgrade +fast-redirects               
    +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}          
@@ -2160,7 +2128,7 @@ referenced in these sections.
 And now we pull it altogether in the bottom section and summarize how Privoxy
 is appying all its "actions" to "google.com": 
 
- Final results:                                                                
+  Final results:                                                               
                                                                                
  -add-header -block -deanimate-gifs -downgrade -fast-redirects                 
  +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}            
@@ -2174,7 +2142,7 @@ is appying all its "actions" to "google.com":
 
 Now another example, "ad.doubleclick.net":
 
- { +block +image }                                                             
+  { +block +image }                                                            
   .ad.doubleclick.net                                                          
                                                                                
  { +block +image }                                                             
@@ -2201,7 +2169,7 @@ defined as "ad.doubleclick.net" is done here -- as both a "+block" and an
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
- Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                             
+  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                            
                                                                                
  { -add-header -block +deanimate-gifs -downgrade +fast-redirects               
    +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}          
@@ -2222,7 +2190,7 @@ see why we get the blank page. We could now add a new action below this that
 explictly does not block (-block) pages with "adsl". There are various ways to
 handle such exceptions. Example:
 
- { -block }                                                                    
+  { -block }                                                                   
   /adsl                                                                        
                                                                                
                                                                                
@@ -2233,7 +2201,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
- { -block }                                                                    
+  { -block }                                                                   
   /adsl                                                                        
                                                                                
                                                                                
@@ -2245,7 +2213,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
- {shop}                                                                        
+  {shop}                                                                       
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -2257,7 +2225,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -no-cookies -no-cookies-keep
 }". Or you could do your own exception to negate filtering: 
 
- {-filter}                                                                     
+  {-filter}                                                                    
  .forbes.com                                                                   
                                                                                
                                                                                

@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.47 2002/04/10 04:05:32 hal9 Exp $
+$Id: faq.sgml,v 1.49 2002/04/12 10:10:18 swa Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -687,7 +687,7 @@ Privoxy.
 
 If you have version 2.0.2, then the equivalent is http://example.com/
 show-proxy-args (but you get far less information, and you should really
-consider upgrading to 2.9.13).
+consider upgrading to 2.9.14).
 
 -------------------------------------------------------------------------------
 
@@ -959,12 +959,12 @@ Time for you to go!
 We value your feedback. However, to provide you with the best support, please
 note:
 
-  *  Use the Sourceforge Support Forum to get help:
+  * Use the Sourceforge Support Forum to get help:
        
         http://sourceforge.net/tracker/?group_id=11118&atid=211118
        
    
-  *  Submit bugs only through our Sourceforge Bug Forum:
+  * Submit bugs only through our Sourceforge Bug Forum:
      
         http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
         
@@ -978,26 +978,25 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request forum:
+  * Submit feature requests only through our Sourceforge feature request forum:
      
         http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
        
    
-  *  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
-          
-        http://p.p/, and select "actions file feedback system"
+  * You can also send feedback on websites that Privoxy has problems with. Please bookmark
+    the following link: "Privoxy - Submit Filter Feedback"
+    . Once you surf to a page with problems, use the
+    bookmark to send us feedback. We will look into the issue as soon as possible.
        
    
-    This page can also be reached from many of the internal CGI pages.
-   
-  *  For any other issues, feel free to use the mailing lists:
+  * For any other issues, feel free to use the mailing lists:
      
         http://sourceforge.net/mail/?group_id=11118.
      
    
     Anyone interested in actively participating in development and related
     discussions can also join the appropriate mailing list. Archives are
-    available too.
+    available, too.
    
 -------------------------------------------------------------------------------
 
