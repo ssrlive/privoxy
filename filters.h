@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.9 2001/06/07 23:10:53 jongfoster Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.10 2001/06/29 13:29:01 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.10  2001/06/29 13:29:01  oes
+ *    Cleaned up and updated to reflect the changesin
+ *    filters.c
+ *
  *    Revision 1.9  2001/06/07 23:10:53  jongfoster
  *    Replacing struct gateway with struct forward_spec
  *
@@ -208,11 +212,12 @@ extern int domaincmp(struct url_spec *pattern, struct url_spec *fqdn);
 /*
  * Content modification
  */
-#ifdef PCRS
-extern char *re_process_buffer(struct client_state *csp);
-#endif /* def PCRS */
+extern char *pcrs_filter_response(struct client_state *csp);
+extern char *gif_deanimate_response(struct client_state *csp);
 
-/* Revision control strings from this header and associated .c file */
+/* 
+ * Revision control strings from this header and associated .c file
+ */
 extern const char filters_rcs[];
 extern const char filters_h_rcs[];
 
