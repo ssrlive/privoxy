@@ -2,17 +2,18 @@ Junkbuster User Manual
 
 By: Junkbuster Developers
 
-$Id: user-manual.sgml,v 1.43 2002/03/08 00:47:32 hal9 Exp $
+$Id: user-manual.sgml,v 1.47 2002/03/11 13:13:27 swa Exp $
 
 The user manual gives users information on how to install, configure and use
-Internet Junkbuster. Internet Junkbuster is an application that provides
-privacy and security to users of the World Wide Web.
+Internet Junkbuster. Internet Junkbuster is a web proxy with advanced filtering
+capabilities for protecting privacy, filtering web page content, managing
+cookies, controlling access, and removing ads, banners, pop-ups and other
+obnoxious Internet Junk. Junkbuster has a very flexible configuration and can
+be customized to suit individual needs and tastes. Internet Junkbuster has
+application for both stand-alone systems and multi-user networks.
 
 You can find the latest version of the user manual at http://
 ijbswa.sourceforge.net/user-manual/.
-
-Feel free to send a note to the developers at <
-ijbswa-developers@lists.sourceforge.net>.
 
 -------------------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ Table of Contents
 8. Appendix
    
     8.1. Regular Expressions
+    8.2. JunkBuster's Internal Pages
    
 1. Introduction
 
@@ -123,7 +125,8 @@ cookie management, this is a list of new features currently under development:
   * Improved cookie management features (e.g. session based cookies).
    
   * Builds from source on most UNIX-like systems. Packages available for: Linux
-    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2.
+    (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11
+    and AmigaOS.
    
   * In addition, the configuration is much more powerful and versatile
     over-all.
@@ -345,8 +348,9 @@ configuration files (this will change in time):
     actions files are included as well with differing levels of filtering and
     blocking, e.g. ijb-basic.action.)
    
-  * The re_filterfile file can be used to rewrite the raw page content,
-    including text as well as embedded HTML and JavaScript.
+  * The re_filterfile file can be used to re-write the raw page content,
+    including viewable text as well as embedded HTML and JavaScript, and
+    whatever else lurks on any given web page.
    
 ijb.action and re_filterfile can use Perl style regular expressions for maximum
 flexibility. All files use the "#" character to denote a comment. Such lines
@@ -422,20 +426,20 @@ directories!
 The "ijb.action" file contains patterns to specify the actions to apply to
 requests for each site. Default: Cookies to and from all destinations are kept
 only during the current browser session (i.e. they are not saved to disk).
-Pop-ups are disabled for all sites. All sites are filtered if "re_filterfile"
-specified according to the contents of "re_filterfile". No sites are blocked.
-The JunkBuster logo is displayed for filtered ads and other images . The syntax
-of this file is explained in detail below.
+Pop-ups are disabled for all sites. All sites are filtered through selected
+sections of "re_filterfile". No sites are blocked. The JunkBuster logo is
+displayed for filtered ads and other images . The syntax of this file is
+explained in detail below.
 
   actionsfile ijb.action
    
 
-The "re_filterfile" file contains content modification rules. These rules
-permit powerful changes on the content of Web pages, e.g., you could disable
-your favorite JavaScript annoyances, rewrite the actual content, or just have
-some fun replacing "Microsoft" with "MicroSuck" wherever it appears on a Web
-page. Default: No content modification, or whatever the developers are playing
-with :-/
+The "re_filterfile" file contains content modification rules that use "regular
+expressions". These rules permit powerful changes on the content of Web pages,
+e.g., you could disable your favorite JavaScript annoyances, re-write the
+actual displayed text, or just have some fun replacing "Microsoft" with
+"MicroSuck" wherever it appears on a Web page. Default: whatever the developers
+are playing with :-/
 
 Filtering requires buffering the page content, which may appear to slow down
 page rendering since nothing is displayed until all content has passed the
@@ -1146,11 +1150,36 @@ The list of valid Junkbuster "actions" are:
       +fast-redirects
          
    
-  * Filter the website through the re_filterfile:
+  * Apply the filters in the section_header section of the re_filterfile file
+    to the site(s). Re_filterfile sections are grouped according to like
+    functionality.
    
-     +filter{filename}
+     +filter{section_header}
          
    
+    Filter sections that are pre-defined in the supplied re_filterfile include:
+   
+        html-annoyances: Get rid of particularly annoying HTML abuse.
+       
+        js-annoyances: Get rid of particularly annoying JavaScript abuse
+       
+        no-poups: Kill all popups in JS and HTML
+       
+        frameset-borders: Give frames a border
+       
+        webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
+       
+        no-refresh: Automatic refresh sucks on auto-dialup lines
+       
+        fun: Text replacements for subversive browsing fun!
+       
+        nimda: Remove (virus) Nimda code.
+       
+        banners-by-size: Kill banners by size
+       
+        crude-parental: Kill all web pages that contain the words "sex" or     
+        "warez"                                                                
+       
   * Block any existing X-Forwarded-for header, and do not add a new one:
    
       +hide-forwarded
@@ -1209,6 +1238,7 @@ The list of valid Junkbuster "actions" are:
    
       +image-blocker{logo}
       +image-blocker{blank}
+      +image-blocker{pattern}
       +image-blocker{http://i.j.b/send-banner}
          
    
@@ -1323,12 +1353,15 @@ Now turn off "fast redirects", and then we allow two exceptions:
  login.yahoo.com
    
 
-Turn on page filtering, with one exception for sourceforge:
+Turn on page filtering according to rules in the defined sections of
+refilterfile, and make one exception for sourceforge:
 
- # Run everything through the default filter file (re_filterfile):
- {+filter}
- 
- # But please don't re_filter code from sourceforge!
+ # Run everything through the filter file, using only the
+ # specified sections:
+ +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
+ +filter{webbugs} +filter{nimda} +filter{banners-by-size}
+              
+ # Then disable filtering of code from sourceforge!
  {-filter}
  .cvs.sourceforge.net
    
@@ -1439,36 +1472,63 @@ Some examples using our "shop" and "fragile" aliases from above:
 
 3.5. The Filter File
 
-The filter file defines what filtering of web pages Junkbuster does. The
-default filter file is re_filterfile, located in the config directory. In this
-file, any document content, whether viewable text or embedded non-visible
-content, can be changed.
+Any web page can be dynamically modified with the filter file. This
+modification can be removal, or re-writing, of any web page content, including
+tags and non-visible content. The default filter file is re_filterfile, located
+in the config directory.
+
+The included example file is divided into sections. Each section begins with
+the FILTER keyword, followed by the identifier for that section, e.g. "FILTER:
+webbugs". Each section performs a similar type of filtering, such as
+"html-annoyances". 
 
 This file uses regular expressions to alter or remove any string in the target
-page. Some examples from the included default re_filterfile:
+page. The expressions can only operate on one line at a time. Some examples
+from the included default re_filterfile:
 
 Stop web pages from displaying annoying messages in the status bar by deleting
 such references:
 
- # The status bar is for displaying link targets, not pointless buzzwords.
- # Again, check it out on http://www.airport-cgn.de/.
- s/status='.*?';*//ig
+ FILTER: html-annoyances
+
+ # New browser windows should be resizeable and have a location and status
+ # bar. Make it so.
+ #
+ s/resizable="?(no|0)"?/resizable=1/ig s/noresize/yesresize/ig
+ s/location="?(no|0)"?/location=1/ig s/status="?(no|0)"?/status=1/ig
+ s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
+ s/menubar="?(no|0)"?/menubar=1/ig 
+
+ # The <BLINK> tag was a crime!
+ #
+ s*<blink>|</blink>**ig
+
+ # Is this evil? 
+ #
+ #s/framespacing="?(no|0)"?//ig
+ #s/margin(height|width)=[0-9]*//gi
    
 
-Just for kicks, replace any occurrence of "Microsoft" with "MicroSuck":
+Just for kicks, replace any occurrence of "Microsoft" with "MicroSuck", and
+have a little fun with topical buzzwords:
+
+ FILTER: fun
 
  s/microsoft(?!.com)/MicroSuck/ig
+
+ # Buzzword Bingo:
+ #
+ s/industry-leading|cutting-edge|award-winning/<font color=red><b>BINGO!</b></
+font>/ig
    
 
-Kill those auto-refresh tags:
+Kill those pesky little web-bugs:
 
- # Kill refresh tags. I like to refresh myself. Manually.
- # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
- #
- s/<meta[^>]*http-equiv[^>]*refresh.*URL=([^>]*?)"?>/<link rev="x-refresh" href
-=$1>/i
- s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!
---no page enter for me-->/i
+ # webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
+ FILTER: webbugs
+
+ s/<img\s+[^>]*?(width|height)\s*=\s*['"]?1\D[^>]*?(width|height)\s*=\s*['"]?1
+(\D[^>]*?)?>/<!-- Squished WebBug -->/sig
    
 
 -------------------------------------------------------------------------------
@@ -1793,4 +1853,57 @@ can learn more on your own :/
 
 More reading on Perl Compatible Regular expressions: http://www.perldoc.com/
 perl5.6/pod/perlre.html
+
+-------------------------------------------------------------------------------
+
+8.2. JunkBuster's Internal Pages
+
+Since JunkBuster proxies each requested web page, it is easy for JunkBuster to
+trap certain URLs. In this way, we can talk directly to JunkBuster, and see how
+it is configured, see how our rules are being applied, change these rules and
+other configuration options, and even turn JunkBuster's filtering off, all with
+a web browser. 
+
+The URLs listed below are the special ones that allow direct access to
+JunkBuster. Of course, JunkBuster must be running to access these. If not, you
+will get a friendly error message. 
+
+  * Junkbuster main page:
+   
+        http://ijbswa.sourceforge.net/config/
+       
+    Alternately, this may be reached at http://i.j.b/, but this variation may
+    not work as reliably as the above in some configurations.
+   
+  * Show information about the current configuration:
+   
+        http://ijbswa.sourceforge.net/config/show-status
+       
+  * Show the source code version numbers:
+   
+        http://ijbswa.sourceforge.net/config/show-version
+       
+  * Show the client's request headers:
+   
+        http://ijbswa.sourceforge.net/config/show-request
+       
+  * Show which actions apply to a URL and why:
+   
+        http://ijbswa.sourceforge.net/config/show-url-info
+       
+  * Toggle JunkBuster on or off:
+   
+        http://ijbswa.sourceforge.net/config/toggle
+       
+    Short cuts. Turn off, then on:
+   
+        http://ijbswa.sourceforge.net/config/toggle?set=disable
+       
+        http://ijbswa.sourceforge.net/config/toggle?set=enable
+       
+  * Edit the actions list file:
+   
+        http://ijbswa.sourceforge.net/config/edit-actions
+       
+These may be bookmarked for quick reference. 
 
