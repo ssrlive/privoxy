@@ -1,6 +1,6 @@
-#ifndef _DEANIMATE_H
-#define _DEANIMATE_H
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.2 2001/07/13 13:46:20 oes Exp $"
+#ifndef DEANIMATE_H_INCLUDED
+#define DEANIMATE_H_INCLUDED
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.3 2001/07/18 12:29:05 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
@@ -40,12 +40,19 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 1.3  2001/07/18 12:29:05  oes
+ *    Updated prototype for gif_deanimate
+ *
  *    Revision 1.2  2001/07/13 13:46:20  oes
  *    Introduced GIF deanimation feature
  *
  *
  *********************************************************************/
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * A struct that holds a buffer, a read/write offset,
@@ -74,7 +81,7 @@ extern const char deanimate_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _DEANIMATE_H */
+#endif /* ndef DEANIMATE_H_INCLUDED */
 
 /*
   Local Variables:
