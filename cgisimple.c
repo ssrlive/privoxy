@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.14 2002/03/02 04:14:50 david__schmidt Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.15 2002/03/06 22:54:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.14 2002/03/02 04:14:50 david_
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.15  2002/03/06 22:54:35  jongfoster
+ *    Automated function-comment nitpicking.
+ *
  *    Revision 1.14  2002/03/02 04:14:50  david__schmidt
  *    Clean up a little CRLF unpleasantness that suddenly appeared
  *
@@ -345,21 +348,31 @@ jb_err cgi_send_banner(struct client_state *csp,
          /* and handle accordingly: */
          if ((p != NULL) && (0 == strcmpic(p, "blank")))
          {
-            imagetype = 't';
+            imagetype = 'b';
+         }
+         else if ((p != NULL) && (0 == strcmpic(p, "pattern")))
+         {
+            imagetype = 'p';
          }
       }
 #endif /* def FEATURE_IMAGE_BLOCKING */
    }
       
-   if ((imagetype != 't') && (imagetype != 'b')) /* transparant/blank */
+   if ((imagetype == 'b') || (imagetype == 't')) /* blank / transparent */
    {
-      rsp->body = bindup(image_junkbuster_gif_data, image_junkbuster_gif_length);
-      rsp->content_length = image_junkbuster_gif_length;
+      rsp->body = bindup(image_blank_data, image_blank_length);
+      rsp->content_length = image_blank_length;
+
    }
-   else
+   else if (imagetype == 'p') /* pattern */
    {
-      rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
-      rsp->content_length = image_blank_gif_length;
+      rsp->body = bindup(image_pattern_data, image_pattern_length);
+      rsp->content_length = image_pattern_length;
+   }   
+   else /* logo */
+   {
+      rsp->body = bindup(image_logo_data, image_logo_length);
+      rsp->content_length = image_logo_length;
    }   
 
    if (rsp->body == NULL)
@@ -367,7 +380,7 @@ jb_err cgi_send_banner(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (enlist(rsp->headers, "Content-Type: image/gif"))
+   if (enlist(rsp->headers, "Content-Type: image/png"))
    {
       return JB_ERR_MEMORY;
    }
@@ -381,9 +394,9 @@ jb_err cgi_send_banner(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_transparent_gif
+ * Function    :  cgi_transparent_png
  *
- * Description :  CGI function that sends a 1x1 transparent GIF.
+ * Description :  CGI function that sends a 1x1 transparent PNG.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -396,19 +409,19 @@ jb_err cgi_send_banner(struct client_state *csp,
  *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-jb_err cgi_transparent_gif(struct client_state *csp,
+jb_err cgi_transparent_png(struct client_state *csp,
                            struct http_response *rsp,
                            const struct map *parameters)
 {
-   rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
-   rsp->content_length = image_blank_gif_length;
+   rsp->body = bindup(image_blank_data, image_blank_length);
+   rsp->content_length = image_blank_length;
 
    if (rsp->body == NULL)
    {
       return JB_ERR_MEMORY;
    }
 
-   if (enlist(rsp->headers, "Content-Type: image/gif"))
+   if (enlist(rsp->headers, "Content-Type: image/png"))
    {
       return JB_ERR_MEMORY;
    }

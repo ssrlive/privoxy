@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.19 2002/01/21 00:33:52 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.20 2002/03/04 17:53:22 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.20  2002/03/04 17:53:22  oes
+ *    Fixed compiled warning
+ *
  *    Revision 1.19  2002/01/21 00:33:52  jongfoster
  *    Adding map_block_keep() to save a few bytes in the edit-actions-list HTML.
  *
@@ -177,13 +180,14 @@ extern char *make_menu(const char *self);
 extern char *dump_map(const struct map *the_map);
 
 /*
- * Some images.
+ * Ad replacement images.
  */
-extern const char image_junkbuster_gif_data[];
-extern const int  image_junkbuster_gif_length;
-extern const char image_blank_gif_data[];
-extern const int  image_blank_gif_length;
-
+extern const char image_logo_data[];
+extern const size_t  image_logo_length;
+extern const char image_pattern_data[];
+extern const size_t  image_pattern_length;
+extern const char image_blank_data[];
+extern const size_t  image_blank_length;
 
 /* Revision control strings from this header and associated .c file */
 extern const char cgi_rcs[];

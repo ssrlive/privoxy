@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.44 2002/03/05 22:43:45 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.45 2002/03/06 22:54:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.44 2002/03/05 22:43:45 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.45  2002/03/06 22:54:35  jongfoster
+ *    Automated function-comment nitpicking.
+ *
  *    Revision 1.44  2002/03/05 22:43:45  david__schmidt
  *    - Better error reporting on OS/2
  *    - Fix double-slash comment (oops)
@@ -399,10 +402,10 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          NULL /* Sends a robots.txt file to tell robots to go away. */ }, 
    { "send-banner",
          cgi_send_banner, 
-         NULL /* Send the transparent or \"Junkbuster\" gif */ },
+         NULL /* Send a built-in png image */ },
    { "t",
-         cgi_transparent_gif, 
-         NULL /* Send a transparent gif (short name) */ },
+         cgi_transparent_png, 
+         NULL /* Send a transparent png (short name) */ },
    { NULL, /* NULL Indicates end of list and default page */
          cgi_error_404,
          NULL /* Unknown CGI page */ }
@@ -410,35 +413,53 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
 
 
 /*
- * Some images
+ * Bulit-in images for ad replacement
  *
- * Hint: You can encode your own GIFs like this:
- * perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o,", unpack("C", $c)); }'
+ * Hint: You can encode your own PNGs like this:
+ * cat yourfile.png | perl -e 'while (read STDIN, $c, 1) { printf("\\%.3o", unpack("C", $c)); }'
  */
+const char image_logo_data[] =
+   "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104"
+   "\122\000\000\000\104\000\000\000\013\001\003\000\000\000\374"
+   "\323\271\110\000\000\000\004\147\101\115\101\000\000\261\217"
+   "\013\374\141\005\000\000\000\006\120\114\124\105\310\310\310"
+   "\000\000\000\062\100\100\345\000\000\000\001\164\122\116\123"
+   "\000\100\346\330\146\000\000\000\001\142\113\107\104\000\210"
+   "\005\035\110\000\000\000\126\111\104\101\124\170\332\143\140"
+   "\200\003\066\006\146\066\006\006\011\124\326\331\315\146\147"
+   "\316\333\174\116\000\262\156\247\347\334\234\071\373\001\220"
+   "\065\373\130\316\035\311\331\015\020\326\161\311\337\014\014"
+   "\151\147\147\247\345\034\236\331\014\144\335\235\155\236\173"
+   "\163\366\154\006\006\233\334\331\162\307\316\363\174\106\330"
+   "\300\000\000\002\127\040\324\250\204\044\102\000\000\000\000"
+   "\111\105\116\104\256\102\140\202";
 
-const char image_junkbuster_gif_data[] =
-   "GIF89aD\000\013\000\360\000\000\000\000\000\377\377\377!"
-   "\371\004\001\000\000\001\000,\000\000\000\000D\000\013\000"
-   "\000\002a\214\217\251\313\355\277\000\200G&K\025\316hC\037"
-   "\200\234\230Y\2309\235S\230\266\206\372J\253<\3131\253\271"
-   "\270\215\342\254\013\203\371\202\264\334P\207\332\020o\266"
-   "N\215I\332=\211\312\3513\266:\026AK)\364\370\365aobr\305"
-   "\372\003S\275\274k2\354\254z\347?\335\274x\306^9\374\276"
-   "\037Q\000\000;";
+const size_t image_logo_length = sizeof(image_logo_data) - 1;
 
-const int image_junkbuster_gif_length = sizeof(image_junkbuster_gif_data) - 1;
+const char image_pattern_data[] =
+   "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104"
+   "\122\000\000\000\004\000\000\000\004\010\002\000\000\000\046"
+   "\223\011\051\000\000\000\006\142\113\107\104\000\310\000\310"
+   "\000\310\052\045\225\037\000\000\000\032\111\104\101\124\170"
+   "\332\143\070\161\342\304\377\377\377\041\044\003\234\165\342"
+   "\304\011\006\234\062\000\125\200\052\251\125\174\360\223\000"
+   "\000\000\000\111\105\116\104\256\102\140\202";
 
+const size_t image_pattern_length = sizeof(image_pattern_data) - 1;
 
-const char image_blank_gif_data[] =
-   "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
-   "\000!\371\004\001\000\000\000\000,\000\000\000\000\001"
-   "\000\001\000\000\002\002D\001\000;";
+const char image_blank_data[] =
+   "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104"
+   "\122\000\000\000\002\000\000\000\002\010\002\000\000\000\375"
+   "\324\232\163\000\000\000\006\142\113\107\104\000\310\000\310"
+   "\000\310\052\045\225\037\000\000\000\027\111\104\101\124\170"
+   "\332\143\374\377\377\377\311\223\047\031\116\234\070\361\377"
+   "\377\177\000\112\335\012\257\162\103\306\335\000\000\000\000"
+   "\111\105\116\104\256\102\140\202o";
 
-const int image_blank_gif_length = sizeof(image_blank_gif_data) - 1;
+const size_t image_blank_length = sizeof(image_blank_data) - 1;
 
 
 static struct http_response cgi_error_memory_response[1];
-
 
 static struct http_response *dispatch_known_cgi(struct client_state * csp,
                                                 const char * path);
