@@ -36,6 +36,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.5  2001/06/11 11:37:40  sarantis
+#     Minor editing changes.
+#
 #     Revision 1.4  2001/06/09 09:14:11  swa
 #     shamelessly adapted RPM stuff from the newest rpm that
 #     RedHat provided for the JB.
@@ -93,25 +96,33 @@ stop () {
 }
 
 case "$1" in
-start)
+  start)
 	start	
 	;;
-stop)
+  stop)
 	stop	
 	;;
-restart)
+  reload|restart)
 	stop
 	start
+	RETVAL=$?
 	;;
-condrestart)
-	[ -f /var/lock/subsys/junkbuster ] && restart || : 
+  condrestart)
+	# restart only if already running
+	if [ -f /var/lock/subsys/junkbuster ] ; then
+		stop
+		start
+		RETVAL=$?
+		;;
+	fi 
 	;;
-status)
+  status)
 	status junkbuster
+	RETVAL=$?
 	;;
-*)
-	echo $"Usage: junkbuster {start|stop|restart|condrestart|status}"
+  *)
+	echo $"Usage: junkbuster {start|stop|reload|restart|condrestart|status}"
 	exit 1
 esac
 
-exit 0
+exit $RETVAL
