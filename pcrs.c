@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.1.1.1 2001/05/15 13:59:02 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.2 2001/05/22 18:46:04 oes Exp $";
 
 /*********************************************************************
  *
@@ -43,6 +43,50 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.1.1.1 2001/05/15 13:59:02 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.2  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:02  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -474,6 +518,13 @@ int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, cha
       offset = 0, i=0, k, matches_found, newsize, submatches;
    pcrs_match matches[PCRS_MAX_MATCHES];
    char *result_offset;
+
+   /* Sanity first */
+   if (job == NULL || job->pattern == NULL || job->substitute == NULL)
+   {
+      *result = NULL;
+      return(PCRS_ERR_BADJOB);
+   }
 
    newsize=subject_length;
 

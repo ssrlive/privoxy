@@ -3,7 +3,7 @@
 
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/pcrs.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/pcrs.h,v $
  *
  * Purpose     :  This is the pre-pre-alpha realease of libpcrs. It is only
  *                published at this (ugly) stage of development, because it is
@@ -26,6 +26,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:02  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *    Revision 1.4  2001/05/11 01:57:02  rodney
  *    Added new file header standard w/RCS control tags.
  *
@@ -40,7 +43,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.1.1.1 2001/05/15 13:59:02 oes Exp $"
 
 
 
@@ -55,6 +58,7 @@
 #define PCRS_ERR_NOMEM     -10      /* Failed to acquire memory. */
 #define PCRS_ERR_CMDSYNTAX -11      /* Syntax of s///-command */
 #define PCRS_ERR_STUDY     -12      /* pcre error while studying the pattern */
+#define PCRS_ERR_BADJOB    -13      /* NULL job pointer, pattern or substitute */
 
 typedef struct S_PCRS_SUBSTITUTE {
   char *text;
