@@ -1,13 +1,13 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $ Id: $
+ * $Id: $
  */
 
 /*
  * General rules: Font, Color, Headings, Margins, Links
  */
-body,td,th { font-family: helvetica, helv, arial, sans-serif; }
+body,td,th { font-family: arial, helvetica, helv, sans-serif; }
 body { background-color: #ffffff; color: #000000; }
 
 h1 { font-size: 140%; margin: 0px; }
@@ -15,10 +15,12 @@ h2 { font-size: 120%; margin: 0px; }
 h3 { font-size: 110%; margin: 0px; }
 
 p,pre  { margin-left: 15px; }
-li { margin: 5px 15px; }
-dl { margin: 5px 15px; }
+li { margin: 2px 15px; }
+dl { margin: 2px 15px; }
 
-:link { text-decoration: none; }
+a:link    { color: #0000dd; text-decoration: none; }
+a:visited { color: #330099; text-decoration: none; }
+a:active  { color: #3333ff; text-decoration: none; }
 
 /*
  * Boxen as Table elements:
