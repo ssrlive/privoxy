@@ -11,6 +11,9 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.10  2002/03/08 13:44:48  oes
+ *    Hiding internal functions, preventing double inclusion of pcre.h
+ *
  *    Revision 1.9  2001/08/18 11:35:29  oes
  *    - Introduced pcrs_strerror()
  *    - added pcrs_execute_list()
@@ -56,7 +59,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.9 2001/08/18 11:35:29 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.10 2002/03/08 13:44:48 oes Exp $"
 
 
 #ifndef _PCRE_H
@@ -99,12 +102,12 @@ extern "C" {
 /* A compiled substitute */
 
 typedef struct {
-  char *text;                                 /* The plaintext part of the substitute, with all backreferences stripped */
-  int backrefs;                               /* The number of backreferences */
-  int block_offset[PCRS_MAX_SUBMATCHES];      /* Array with the offsets of all plaintext blocks in text */
-  int block_length[PCRS_MAX_SUBMATCHES];      /* Array with the lengths of all plaintext blocks in text */
-  int backref[PCRS_MAX_SUBMATCHES];           /* Array with the backref number for all plaintext block borders */
-  int backref_count[PCRS_MAX_SUBMATCHES + 2]; /* Array with the number of references to each backref index */
+  char  *text;                                   /* The plaintext part of the substitute, with all backreferences stripped */
+  int    backrefs;                               /* The number of backreferences */
+  int    block_offset[PCRS_MAX_SUBMATCHES];      /* Array with the offsets of all plaintext blocks in text */
+  size_t block_length[PCRS_MAX_SUBMATCHES];      /* Array with the lengths of all plaintext blocks in text */
+  int    backref[PCRS_MAX_SUBMATCHES];           /* Array with the backref number for all plaintext block borders */
+  int    backref_count[PCRS_MAX_SUBMATCHES + 2]; /* Array with the number of references to each backref index */
 } pcrs_substitute;
 
 
@@ -116,9 +119,9 @@ typedef struct {
  */
 
 typedef struct {
-  int submatches;                               /* Number of captured subpatterns */
-  int submatch_offset[PCRS_MAX_SUBMATCHES + 2]; /* Offset for each submatch in the subject */
-  int submatch_length[PCRS_MAX_SUBMATCHES + 2]; /* Length of each submatch in the subject */
+  int    submatches;                               /* Number of captured subpatterns */
+  int    submatch_offset[PCRS_MAX_SUBMATCHES + 2]; /* Offset for each submatch in the subject */
+  size_t submatch_length[PCRS_MAX_SUBMATCHES + 2]; /* Length of each submatch in the subject */
 } pcrs_match;
 
 

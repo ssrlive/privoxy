@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.16 2001/11/30 21:32:14 jongfoster Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.17 2002/03/08 13:45:48 oes Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.16 2001/11/30 21:32:14 jongfoster Exp $
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.17  2002/03/08 13:45:48  oes
+ *    Hiding internal functions
+ *
  *    Revision 1.16  2001/11/30 21:32:14  jongfoster
  *    Fixing signed/unsigned comparison (Andreas please check this!)
  *    One tab->space
@@ -258,7 +261,8 @@ static int pcrs_parse_perl_options(const char *optstring, int *flags)
  *********************************************************************/
 static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int capturecount, int *errptr)
 {
-   int length, i, k, l, quoted;
+   int i, k, l, quoted;
+   size_t length;
    char *text;
    pcrs_substitute *r;
 
@@ -515,7 +519,8 @@ void pcrs_free_joblist(pcrs_job *joblist)
  *********************************************************************/
 pcrs_job *pcrs_compile_command(const char *command, int *errptr)
 {
-   int i, k, l, limit, quoted = FALSE;
+   int i, k, l, quoted = FALSE;
+   size_t limit;
    char delimiter;
    char *tokens[4];   
    pcrs_job *newjob;
@@ -772,9 +777,9 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
        offset,
        i, k,
        matches_found,
-       newsize,
        submatches,
        max_matches = PCRS_MAX_MATCH_INIT;
+   size_t newsize;
    pcrs_match *matches, *dummy;
    char *result_offset;
 
@@ -801,9 +806,9 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
     * Find the pattern and calculate the space
     * requirements for the result
     */
-   newsize=subject_length;
+   newsize = subject_length;
 
-   while ((submatches = pcre_exec(job->pattern, job->hints, subject, subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
+   while ((submatches = pcre_exec(job->pattern, job->hints, subject, (int) subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
    {
       job->flags |= PCRS_SUCCESS;
       matches[i].submatches = submatches;
@@ -888,7 +893,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
    for (i=0; i < matches_found; i++)
    {
       /* copy the chunk preceding the match */
-      memcpy(result_offset, subject + offset, matches[i].submatch_offset[0] - offset); 
+      memcpy(result_offset, subject + offset, (size_t) matches[i].submatch_offset[0] - offset); 
       result_offset += matches[i].submatch_offset[0] - offset;
 
       /* For every segment of the substitute.. */
