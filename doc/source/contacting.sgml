@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.8 2002/04/12 10:20:58 swa Exp $
+ $Id: contacting.sgml,v 1.9 2002/04/26 05:25:23 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -56,10 +56,9 @@ Submit bugs only through our Sourceforge Bug Forum:
    please try the stock configs to see if the problem is a configuration
    related bug.  And if not using the latest development snapshot, please try
    the latest one. Or even better, CVS sources. Please be sure to include the
-   <application>Privoxy</application>/<application>Junkbuster</application>
-   version, platform, browser, any pertinent log data, any other relevant
-   details (please be specific) and, if possible, some way to reproduce the
-   bug.
+   <application>Privoxy</application> version, platform, browser, any
+   pertinent log data, any other relevant details (please be specific) and,
+   if possible, some way to reproduce the bug.
   </para>
  </listitem>
  
