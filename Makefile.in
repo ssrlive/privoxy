@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.33 2001/10/10 12:43:33 oes Exp $
+# $Id: Makefile.in,v 1.34 2001/10/15 18:28:06 steudten Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.34  2001/10/15 18:28:06  steudten
+# remove config.cache for target clobber.
+# Cleanup make dist for RH and S.u.S.E.
+#
 # Revision 1.33  2001/10/10 12:43:33  oes
 # Added ugly hack to make install target work at least for some setups.
 #
@@ -455,7 +459,7 @@ w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ic
 
 # AmigaOS
 @AMIGAOS_ONLY@OBJS += amiga.o
-@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -Wall -m68020 -Os -noixemul -fbaserel -msmall-code
+@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -m68020 -noixemul -fbaserel -msmall-code
 @AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
 @AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
 @AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
