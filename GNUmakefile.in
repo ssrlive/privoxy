@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.79 2002/04/11 06:49:28 oes Exp $
+# $Id: GNUmakefile.in,v 1.80 2002/04/11 12:50:00 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -489,9 +489,8 @@ tarball-upload:
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
 
-# handle with care
 tarball-clean:
-	$(RM) ../rivoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 
 #############################################################################
 #
@@ -785,6 +784,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.80  2002/04/11 12:50:00  oes
+# Fixed tarball-dist target
+#
 # Revision 1.79  2002/04/11 06:49:28  oes
 # webserver target: silenced timestamp warnings resulting from uploading westwards, made permissions fixing independant of screwed local dir permissions, suppress (false alarm) make error if not owner of feedback log
 #
