@@ -1,9 +1,3 @@
-
-   output  is  user-manual Using catalogs: /etc/sgml/sgml-docbook-3.1.cat
-   Using stylesheet:
-   /usr/share/sgml/docbook/utils-0.6/docbook-utils.dsl#html  Working  on:
-   /home/hal/junkbuster/current/doc/source/user-manual.sgml
-
 Junkbuster User Manual
 
    By: Junkbuster Developers
