@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.19 2001/11/13 00:14:07 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.20 2001/11/22 21:56:49 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,11 @@ const char actions_rcs[] = "$Id: actions.c,v 1.19 2001/11/13 00:14:07 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.20  2001/11/22 21:56:49  jongfoster
+ *    Making action_spec->flags into an unsigned long rather than just an
+ *    unsigned int.
+ *    Fixing a bug in the display of -add-header and -wafer
+ *
  *    Revision 1.19  2001/11/13 00:14:07  jongfoster
  *    Fixing stupid bug now I've figured out what || means.
  *    (It always returns 0 or 1, not one of it's paramaters.)
@@ -132,6 +137,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.19 2001/11/13 00:14:07 jongfoster
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 #include "encode.h"
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
+#include "urlmatch.h"
 
 const char actions_h_rcs[] = ACTIONS_H_VERSION;
 
@@ -1091,7 +1097,7 @@ void unload_actions_file(void *file_data)
    while (cur != NULL)
    {
       next = cur->next;
-      free_url(cur->url);
+      free_url_spec(cur->url);
       free_action(cur->action);
       freez(cur);
       cur = next;
