@@ -17,6 +17,15 @@
  Junkbusters Corporation.  http://www.junkbusters.com
 -->
 
+<!--
+Sun 09/23/01 08:53:31 PM 
+
+This is an unfinished, rough draft. Anyone reading this, believe let me 
+know errors!!!!! Stefan, especially you!
+
+Hal Burgiss <hal@foobox.net>
+-->
+
 <article id="index">
 <artheader>
 <title>Junkbuster User Manual</title>
@@ -33,24 +42,2366 @@
 
 <abstract>
  <para>
-    The user manual gives the users information on how to install and
-configure the Internet Junkbuster. The Internet Junkbuster is an application
-that provides privacy and security to the user of the world wide web.
+  The user manual gives the users information on how to install and configure
+  <application>Internet Junkbuster</application>. <application>Internet
+  Junkbuster</application> is an application that provides privacy and
+  security to users of the World Wide Web.
  </para>
  <para>
-You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
+You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/doc/user-manual/">http://ijbswa.sourceforge.net/doc/user-manual/</ulink>.
  </para>
 
  <para>
   Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>.
  </para>
 </abstract>
+
 </artheader>
 
+
 <!--   ~~~~~       New section      ~~~~~     -->
+
 <sect1 id="introduction"><title>Introduction</title>
-<para>To be filled.
+<para>
+ <application>Internet Junkbuster</application> is a web proxy with advanced
+ filtering capabilities for protecting privacy, filtering web page content,
+ managing cookies and removing ads, banners, pop-ups and other obnoxious
+ Internet Junk. <application>Junkbuster</application> has a very flexible
+ configuration and can be customized to suit individual needs and tastes.
+ <application>Internet Junkbuster</application> has application for both 
+ stand-alone systems and multi-user networks.
 </para>
+
+<para>
+ This documentation is included with the current development version of
+ <application>Internet Junkbuster</application> and is incomplete at this
+ point. The most up to date reference for the time being is still the comments
+ in the source files and in the individual configuration files. Development
+ of version 3.0 is currently underway, and includes significant changes and
+ enhancements over earlier verions.
+</para>
+
+<para>
+ Since this is a development version, there <emphasis>are</emphasis> bugs!
+</para>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>License</title>
+<para>
+ <application>Internet Junkbuster</application> is free software; you can
+ redistribute it and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation; either version 2 of the
+ License, or (at your option) any later version.
+</para>
+
+<para>
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ details, which is available from <ulink
+ url="http://www.gnu.org/copyleft/gpl.html">the Free Software Foundation,
+ Inc</ulink>, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+</para>
+
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>History</title>
+<para>
+ <application>Junkbuster</application> was originally written by <ulink
+ url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBusters
+ Corporation</ulink>, and was released as free open-source software under the
+ GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
+ Waldherr</ulink> made many improvements, and started the <ulink
+ url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
+ rekindle development. 
+</para>
+
+</sect2>
+
+</sect1>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="installation"><title>Installation</title>
+<para>
+ <application>Junkbuster</application> is available as raw source code, or
+ pre-compiled binaries. See the <ulink
+ url="http://sourceforge.net/projects/ijbswa/">Junkbuster Home Page</ulink>
+ for current releases. <application>Junkbuster</application> is also available
+ via <ulink
+ url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
+ This is the recommended approach at this time.
+</para>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-source"><title>Source</title>
+<para>
+ For gzipped tar archives, unpack the source:
+</para>
+
+<para>
+ <screen>
+ tar zxvf ijb_source_2.9*
+ cd ijb_source_2.9*
+ </screen>
+</para>
+
+<para>
+ For retrieving the current CVS sources, you'll need the CVS 
+ package installed first. To download CVS source:
+</para>
+
+<para>
+ <screen>
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
+  cd current
+ </screen>
+</para>
+
+<para>
+ This will create a directory named <filename>current/</filename>, which will 
+ contain the source tree.
+</para>
+
+<para>
+ Then, in either case, to build from source:
+</para>
+
+<para>
+ <screen>
+ ./configure
+ make
+ su
+ make install
+ </screen>
+</para>
+
+<para>
+ For Redhat and SuSE Linux RPM packages, see below.
+</para>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-rh"><title>Red Hat</title>
+<para>
+ To build Redhat RPM packages, install source as above. Then:
+</para>
+
+<para>
+ <screen>
+ ./configure
+ make redhat-dist
+ </screen>
+</para>
+
+<para>
+ This will create both binary and src RPMs in the usual places. Example:
+</para>
+
+<para>
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+</para>
+<para>
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.8-1.src.rpm
+</para>
+
+<para>
+ To install, of course:
+</para>
+
+<para>
+ <screen>
+ rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ </screen>
+</para>
+
+<para>
+ This will place the <application>Junkbuster</application> configuration 
+ files in <filename>/etc/junkbuster/</filename>, and log files in 
+ <filename>/var/log/junkbuster/</filename>.
+</para>
+
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-suse"><title>SuSE</title>
+<para>
+ To build SuSE RPM packages, install source as above. Then:
+</para>
+
+<para>
+ <screen>
+ ./configure
+ make suse-dist
+ </screen>
+</para>
+
+<para>
+ This will create both binary and src RPMs in the usual places. Example:
+</para>
+
+<para>
+ &nbsp;&nbsp;&nbsp;/usr/src/suse/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+</para>
+<para>
+ &nbsp;&nbsp;&nbsp;/usr/src/suse/SRPMS/junkbuster-2.9.8-1.src.rpm
+</para>
+
+<para>
+ To install, of course:
+</para>
+
+<para>
+ <screen>
+ rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+ </screen>
+</para>
+
+<para>
+ This will place the <application>Junkbuster</application> configuration 
+ files in <filename>/etc/junkbuster/</filename>, and log files in 
+ <filename>/var/log/junkbuster/</filename>.
+</para>
+
+</sect2>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-win"><title>Windows</title>
+<para>I need help on this. Not a clue here. Also for 
+configuration section below.
+</para>
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-other"><title>Other</title>
+<para>I need help on this too. OS/2? What others?
+</para>
+</sect2>
+
+</sect1>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="configuration"><title>Junkbuster Configuration</title>
+<para>
+ For Unix and Linux, all configuraton files are located in
+ <filename>/etc/junkbuster/</filename> by default. For MS Windows, these 
+ are all in the same directory as the <application>Junkbuster</application>
+ executable. The name and number of configuration files has changed from
+ previous versions, and is subject to change as development progresses.
+</para>
+
+<para>
+ The installed defaults provide a reasonable starting point. For the
+ time being, there are only three default configuration files (this will
+ change in time):
+</para>
+
+<para>
+ <itemizedlist>
+
+  <listitem>
+   <para>
+     The main configuration file is named <filename>config</filename>
+     on Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    The <filename>actionsfile</filename> file is used  to define various 
+    actions relating to images, banners, pop-ups, banners and cookies.
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    The <filename>re_filterfile</filename> file can be used to rewrite the raw
+    page content, including text as well as embedded HTML and JavaScript.
+   </para>
+  </listitem> 
+
+ </itemizedlist>
+</para>
+
+<para>
+ <filename>actionsfile</filename> and <filename>re_filterfile</filename> 
+ can use Perl style regular expressions for maximum flexibility. All files use
+ the <quote><literal>#</literal></quote> character to denote a comment. Such
+ lines are not processed by <application>Junkbuster</application>. After
+ making any changes, restart <application>Junkbuster</application> in order
+ for the changes to take effect.
+</para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>The Main Configuration File</title>
+<para>
+ Again, the main configuration file is named <filename>config</filename> on
+ Linux and Unix, and <filename>junkbustr.txt</filename> on Windows.
+ Configuration lines consist of an initial keyword followed by a list of
+ values, all separated by whitespace (any number of spaces or tabs). For
+ example:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>blockfile blocklist.ini</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Indicates that the blockfile is named <quote>blocklist.ini</quote>.
+</para>
+
+<para>
+ The <quote><literal>#</literal></quote> indicates a comment.  Any part of a
+ line following a <quote><literal>#</literal></quote> is ignored, except if
+ the <quote><literal>#</literal></quote> is preceded by a
+ <quote><literal>\</literal></quote>.
+</para>
+
+<para>
+ Thus, by placing a <quote><literal>#</literal></quote> at the start of an
+ existing configuration line, you can make it a comment and it will be treated
+ as if it weren't there. This is called <quote>commenting out</quote> an
+ option and can be useful to turn off features: If you comment out the
+ <quote>logfile</quote> line, <application>junkbuster</application> will not
+ log to a file at all. Watch for the <quote>default:</quote> section in each
+ explanation to see what happens if the option is left unset (or commented
+ out). 
+</para>
+
+<para>
+ Long lines can be continued on the next line by using a
+ <quote><literal>\</literal></quote> as the very last character.
+</para>
+
+<para>
+ There are various aspects of <application>Junkbuster</application> behavior 
+ that can be adjusted.
+</para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Defining Other Configuration Files</title>
+
+<para>
+ <application>Junkbuster</application> can use a number of other files to tell it
+ what ads to block, what cookies to accept, etc.  This section of the
+ configuration file tells <application>Junkbuster</application> where to find
+ all those other files. 
+</para>
+
+<para>
+ On <application>Windows</application>, <application>Junkbuster</application>
+ looks for these files in the same directory as the executable.  On Unix,
+ <application>Junkbuster</application> looks for these files in the current
+ working directory.  In either case, an absolute path name can be used to
+ avoid problems.
+</para>
+
+<para>
+ When development goes modular and multiuser, the blocker, filter, and
+ per-user config will be stored in subdirectories of <quote>confdir</quote>.
+ For now, only <filename>confdir/templates</filename> is used for storing HTML
+ templates for CGI results. 
+</para>
+
+<para>
+ The location of the configuration files:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>confdir  /etc/junkbuster</emphasis>       # No trailing /, please.
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The directory where all logging (i.e. <filename>logfile</filename> and 
+ <filename>jarfile</filename>) takes place. No trailing
+ <quote><literal>/</literal></quote>, please: 
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>logdir  /var/log/junkbuster</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Note that all file specifications below are relative to 
+ the above two directories!
+</para>
+
+<para>
+ The <quote>actionsfile</quote> contains patterns to specify the actions to
+ apply to requests for each site. Default: Cookies to and from all
+ destinations are filtered. Popups are disabled for all sites. All sites are
+ filtered if re_filterfile specified. No sites are blocked. An empty image is
+ displayed for filtered ads and other images (formerly
+ <quote>tinygif</quote>). The syntax of this file is explained in detail 
+ <link linkend="actionsfile">below</link>.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>actionsfile  actionsfile</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The <quote>re_filterfile</quote> file contains content modification rules.
+ These rules permit powerful changes on the content of Web pages, e.g., you
+ could disable your favourite JavaScript annoyances, rewrite the actual
+ content, or just have some fun replacing <quote>Microsoft</quote> with
+ <quote>MicroSuck</quote> wherever it appears on a Web page. Default: No
+ content modification, or whatever the developers are playing with :-/
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>re_filterfile  re_filterfile</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The logfile is where all logging and error messages are written. The logfile
+ can be useful for tracking down a problem with
+ <application>Junkbuster</application> (e.g., it's not blocking an ad you
+ think it should block) but in most cases you probably will never look at it.
+</para>
+
+<para>
+ Your logfile will grow indefinitely, and you will probably want to
+ periodically remove it.  On Unix systems, you can do this with a cron job
+ (see <quote>man cron</quote>). For Redhat, a <command>logrotate</command> 
+ script has been included.
+</para>
+
+<para>
+ On SuSE Linux systems, you can place a line like <quote>/var/log/junkbuster.*
+ +1024k 644 nobody.nogroup</quote> in <filename>/etc/logfiles</filename>, with
+ the effect that cron.daily will automatically archive, gzip, and empty the
+ log, when it exceeds 1M size.
+</para>
+
+<para>
+ Default: Log to the a file named <filename>logfile</filename>. 
+ Comment out to disable logging.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>logfile  logfile</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The <quote>jarfile</quote> defines where
+ <application>Junkbuster</application> stores the cookies it intercepts.  Note
+ that if you use a <quote>jarfile</quote>, it may grow quite large. Default:
+ Don't store intercepted cookies.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>#jarfile  jarfile</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If you specify a <quote>trustfile</quote>,
+ <application>Junkbuster</application> will only allow access to sites that
+ are named in the trustfile. You can also mark sites as trusted referrers,
+ with the effect that access to untrusted sites will be granted, if a link
+ from a trusted referrer was used. The link target will then be added to the
+ <quote>trustfile</quote>. This is a very restrictive feature that typical
+ users most propably want to leave disabled. Default: Disabled, don't use the
+ trust mechanism.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>#trustfile  trust</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+ 
+<para>
+ If you use the trust mechanism, it is a good idea to write up some online
+ documentation about your blocking policy and to specify the URL(s) here. They
+ will appear on the page that your users receive when they try to access
+ untrusted content. Use multiple times for multiple URLs. Default: Don't
+ display links on the <quote>untrusted</quote> info page.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>trust-info-url http://www.your-site.com/why_we_block.html</emphasis>
+  <emphasis>trust-info-url http://www.your-site.com/what_we_allow.html</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Other Configuration Options</title>
+
+<para>
+ This part of the configuration file contains options that control how
+ <application>Junkbuster</application> operates.
+</para>
+
+<para>
+ <quote>Admin-address</quote> should be set to the email address of the proxy
+ administrator. It is used in many of the proxy-generated pages. Default:
+ fill@me.in.please.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>#admin-address  fill@me.in.please</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ <quote>Proxy-info-url</quote> can be set to a URL that contains more info
+ about this <application>Junkbuster</application> installation, it's
+ configuration and policies. It is used in many of the proxy-generated pages
+ and its use is highly recommended in multi-user installations, since your
+ users will want to know why certain content is blocked or modified. Default:
+ Don't show a link to online documentation.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>proxy-info-url  http://www.your-site.com/proxy.html</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ <quote>Listen-address</quote> specifies the address and port where
+ <application>Junkbuster</application> will listen for connections from your
+ Web browser.  The default is to listen on the localhost port 8000, and
+ this is suitable for most users.  (In your web browser, under proxy
+ configuration, list the proxy server as <quote>localhost</quote> and the
+ port as <quote>8000</quote>).
+</para>
+
+<para>
+ If you already have another service running on port 8000, or if you want to
+ serve requests from other machines (e.g. on your local network) as well, you
+ will need to override the default. The syntax is 
+ <quote>listen-address [&lt;ip-address&gt;]:&lt;port&gt;</quote>. If you leave
+ out the IP adress, <application>junkbuster</application> will bind to all
+ interfaces (addresses) on your machine and may become reachable from the
+ internet. In that case, consider using access control lists (acl's) (see
+ <quote>aclfile</quote> above).
+</para>
+
+<para>
+ For example, suppose you are running <application>Junkbuster</application> on
+ a machine which has the address 192.168.0.1 on your local private network
+ (192.168.0.0) and has another outside connection with a different address.
+ You want it to serve requests from inside only:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>listen-address  192.168.0.1:8000</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If you want it to listen on all addresses (including the outside
+ connection):
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>listen-address  :8000</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If you do this, consider using ACLs (see <quote>aclfile</quote> above). Note:
+ you will need to point your browser(s) to the address and port that you have
+ configured here. Default: localhost:8000 (127.0.0.1:8000).
+</para>
+
+<para>
+ The debug option sets the level of debugging information to log in the
+ logfile (and to the console in the Windows version).  A debug level of 1 is
+ informative because it will show you each request as it happens.  Higher
+ levels of debug are probably only of interest to developers.
+</para>
+
+<Para>
+ <Literal>
+  <MSGText> 
+   <LiteralLayout>
+  debug         1 # GPC   = show each GET/POST/CONNECT request
+  debug         2 # CONN  = show each connection status
+  debug         4 # IO    = show I/O status
+  debug         8 # HDR   = show header parsing
+  debug        16 # LOG   = log all data into the logfile
+  debug        32 # FRC   = debug force feature
+  debug        64 # REF   = debug regular expression filter 
+  debug       128 #       = debug fast redirects
+  debug       256 #       = debug GIF deanimation
+  debug       512 # CLF   = Common Log Format
+  debug      1024 #       = debug kill popups
+  debug      4096 # INFO  = Startup banner and warnings.
+  debug      8192 # ERROR = Non-fatal errors
+    </LiteralLayout>
+  </MSGText>
+ </Literal>
+</Para>
+
+<para>
+ It is <emphasis>highly recommended</emphasis> that you enable ERROR
+ reporting (debug 8192), at least until the next stable release.
+</para>
+
+<para>
+ The reporting of FATAL errors (i.e. ones which crash 
+ <application>JunkBuster</application>) is always on and cannot be disabled.
+</para>
+
+<para>
+ If you want to use CLF (Common Log Format), you should set <quote>debug
+ 512</quote> ONLY, do not enable anything else.
+</para>
+
+<para>
+ Multiple <quote>debug</quote> directives, are OK - they're logical-OR'd
+ together. 
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>debug    15     # same as setting the first 4 listed above</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Default:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>debug   1     # URLs</emphasis>
+  <emphasis>debug   4096  # Info</emphasis>
+  <emphasis>debug   8192  # Errors - *we highly recommended enabling this*</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ <application>Junkbuster</application> normally uses
+ <quote>multi-threading</quote>, a software technique that permits it to
+ handle many different requests simultaneously. In some cases you may wish to
+ disable this -- particularly if you're trying to debug a problem.  The
+ <quote>single-threaded</quote> option forces
+ <application>Junkbuster</application> to handle requests sequentially.
+ Default: Multi-threaded mode.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>#single-threaded</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ <quote>toggle</quote> allows you to temporarily disable all
+ <application>Junkbuster's</application>  filtering. Just set <quote>toggle
+ 0</quote>.
+</para>
+
+<para>
+ The Windows version of <application>Junkbuster</application> puts an icon in
+ the system tray, which allows you to change this option without having to
+ edit this file.  If you right-click on that icon (or select the
+ <quote>Options</quote> menu), one choice is <quote>Enable</quote>. Clicking
+ on enable toggles <application>Junkbuster</application> on and off. This is
+ useful if you want to temporarily disable
+ <application>Junkbuster</application>, e.g., to access a site that requires
+ cookies which you normally have blocked.
+</para>
+
+<para>
+ <quote>toggle 1</quote> means <application>Junkbuster</application> runs
+ normally, <quote>toggle 0</quote> means that
+ <application>Junkbuster</application> becomes a non-anonymizing non-blocking
+ proxy. Default: 1.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>toggle    1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Access Control List (ACL)</title>
+<para>
+ Access controls are included at the request of some ISPs and systems
+ administrators, and are not usually needed by individual users. Please note
+ the warnings in the FAQ that this proxy is not intended to be a substitute
+ for a firewall or to encourage anyone to defer addressing basic security
+ weaknesses.
+</para>
+
+<para>
+ If no access settings are specified, the proxy talks to anyone that
+ connects. If any access settings file are specified, then the proxy
+ talks only to IP addresses permitted somewhere in this file and not
+ denied later in this file.
+</para>
+
+<para>
+ Summary -- if using an ACL:
+</para>
+
+ <simplelist>
+  <member>
+   Client must have permission to receive service.
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   LAST match in ACL wins.
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   Default behavior is to deny service.
+  </member>
+ </simplelist>
+
+<para>
+ The syntax for an entry in the Access Control List is:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Where the individual fields are:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>ACTION</emphasis>      = <quote>permit-access</quote> or <quote>deny-access</quote>
+
+ <emphasis>SRC_ADDR</emphasis>    = client hostname or dotted IP address
+ <emphasis>SRC_MASKLEN</emphasis> = number of bits in the subnet mask for the source
+
+ <emphasis>DST_ADDR</emphasis>    = server or forwarder hostname or dotted IP address
+ <emphasis>DST_MASKLEN</emphasis> = number of bits in the subnet mask for the target
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+
+<para> 
+ The field separator (FS) is whitespace (space or tab).
+</para>
+
+<para>
+ IMPORTANT NOTE: If the <application>junkbuster</application> is using a
+ forwarder (see below) or a gateway for a particular destination URL, the
+ <literal>DST_ADDR</literal> that is examined is the address of the forwarder
+ or the gateway and <emphasis>NOT</emphasis> the address of the ultimate
+ target. This is necessary because it may be impossible for the local
+ <application>Junkbuster</application> to determine the address of the
+ ultimate target (that's often what gateways are used for).
+</para>
+
+<para>
+ Here are a few examples to show how the ACL features work:
+</para>
+
+<para>
+ <quote>localhost</quote> is OK -- no DST_ADDR implies that
+ <emphasis>ALL</emphasis> destination addresses are OK:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>permit-access  localhost</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ A silly example to illustrate permitting any host on the class-C subnet with
+ <application>Junkbuster</application> to go anywhere:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>permit-access    www.junkbusters.com/24</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Except deny one particular IP address from using it at all:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>deny-access      ident.junkbusters.com</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ You can also specify an explicit network address and subnet mask.
+ Explicit addresses do not have to be resolved to be used.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>permit-access    207.153.200.0/24</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ A subnet mask of 0 matches anything, so the next line permits everyone.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>permit-access    0.0.0.0/0</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Note, you <emphasis>cannot</emphasis> say:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>permit-access    .org</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ to allow all *.org domains. Every IP address listed must resolve fully.
+</para>
+
+<para>
+ An ISP may want to provide a <application>Junkbuster</application> that is
+ accessible by <quote>the world</quote> and yet restrict use of some of their
+ private content to hosts on its internal network (i.e. its own subscribers).
+ Say, for instance the ISP owns the Class-B IP address block 123.124.0.0 (a 16
+ bit netmask). This is how they could do it:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>permit-access 0.0.0.0/0   0.0.0.0/0</emphasis>   # other clients can go anywhere 
+                                       # with the following exceptions:
+ 
+ <emphasis>deny-access</emphasis>   0.0.0.0/0   123.124.0.0/16 # block all external requests for
+                                          # sites on the ISP's network
+
+ <emphasis>permit 0.0.0.0/0   www.my_isp.com</emphasis>        # except for the ISP's main 
+                                          # web site
+
+ <emphasis>permit 123.124.0.0/16 0.0.0.0/0</emphasis>          # the ISP's clients can go 
+                                          # anywhere
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Note that if some hostnames are listed with multiple IP addresses, 
+ the primary value returned by DNS (via gethostbyname()) is used. Default:
+ Anyone can access the proxy.
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Forwarding</title>
+
+<para>
+ This feature allows routing of HTTP requests via multiple proxies.
+ It can be used to better protect privacy and confidentiality when
+ accessing specific domains by routing requests to those domains
+ to a special purpose filtering proxy such as lpwa.com.
+</para>
+
+<para>
+ It can also be used in an environment with multiple networks to route
+ requests via multiple gateways allowing transparent access to multiple
+ networks without having to modify browser configurations.
+</para>
+
+<para>
+ Also specified here are SOCKS proxies. <application>Junkbuster</application>
+ SOCKS 4 and SOCKS 4A. The difference is that SOCKS 4A will resolve the target
+ hostname using DNS on the SOCKS server, not our local DNS client.
+</para>
+
+<para>
+ The syntax of each line is:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward target_domain[:port] http_proxy_host[:port]</emphasis>
+ <emphasis>forward-socks4  target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
+ <emphasis>forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If http_proxy_host is <quote>.</quote>, then requests are not forwarded to a
+ HTTP proxy but are made directly to the web servers.
+</para>
+
+<para>
+ Lines are checked in sequence, and the last match wins.
+</para>
+
+<para>
+ There is an implicit line equivalent to the following, which specifies that
+ anything not finding a match on the list is to go out without forwarding
+ or gateway protocol, like so:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>forward   .*   .       </emphasis># implicit
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ In the following common configuration, everything goes to Lucent's LPWA,
+ except SSL on port 443 (which it doesn't handle):
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward   .*     lpwa.com:8000</emphasis>
+ <emphasis>forward   :443   .</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ See the FAQ for instructions on how to automate the login procedure for LPWA.
+ Some users have reported difficulties related to LPWA's use of
+ <quote>.</quote> as the last element of the domain, and have said that this
+ can be fixed with this:
+</para>
+   
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>forward   lpwa.  lpwa.com:8000</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+ 
+<para>
+ (NOTE: the syntax for specifiying target_domain has changed since the
+ previous paragraph was written -- it will not work now.  More information
+ is welcome.)
+</para>
+
+<para>
+ In this fictitious example, everything goes via an ISP's caching proxy,
+ except requests to that ISP:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward    .*         caching.myisp.net:8000</emphasis>
+ <emphasis>forward    myisp.net  .</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ For the @home network, we're told the forwarding configuration is this:
+</para>
+
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>forward    .*    proxy:8080</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Also, we're told they insist on getting cookies and JavaScript, so you need
+ to add home.com to the cookie file. We consider JavaScript a security risk.
+ Java need not be enabled.
+</para>
+
+<para>
+ In this example direct connections are made to all <quote>internal</quote>
+ domains, but everything else goes through Lucent's LPWA by way of the
+ company's SOCKS gateway to the Internet.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward_socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</emphasis>
+ <emphasis>forward    my_company.com  .</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ This is how you could set up a site that always uses SOCKS but no forwarders:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>forward_socks4a   .*  .  firewall.my_company.com:1080</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ An advanced example for network administrators:
+</para>
+
+<para>
+ If you have links to multiple ISPs that provide various special content to
+ their subscribers, you can configure forwarding to pass requests to the
+ specific host that's connected to that ISP so that everybody can see all
+ of the content on all of the ISPs.
+</para>
+
+<para>
+ This is a bit tricky, but here's an example:
+</para>
+
+
+<para>
+ host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
+ isp-b.com. host-a can run a <application>Junkbuster</application> proxy with
+ forwarding like this: 
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward    .*         .</emphasis>
+ <emphasis>forward    isp-b.com  host-b:8000</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ host-b can run a <application>Junkbuster</application> proxy with forwarding
+ like this: 
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward    .*          .</emphasis>
+ <emphasis>forward    isp-a.com   host-a:8000</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Now, <emphasis>anyone</emphasis> on the Internet (including users on host-a
+ and host-b) can set their browser's proxy to <emphasis>either</emphasis>
+ host-a or host-b and be able to browse the content on isp-a or isp-b.
+</para>
+
+<para>
+ Here's another practical example, for University of Kent at
+ Canterbury students with a network connection in their room, who
+ need to use the University's Squid web cache.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ <emphasis>forward  *. ssbcache.ukc.ac.uk:3128</emphasis>  # Use the proxy, except for:
+ <emphasis>forward  .ukc.ac.uk            .    </emphasis> # Anything on the same domain as us
+ <emphasis>forward  *                     .    </emphasis> # Host with no domain specified
+ <emphasis>forward  129.12.*.*            .    </emphasis> # A dotted IP on our /16 network.
+ <emphasis>forward  127.*.*.*             .    </emphasis> # Loopback address
+ <emphasis>forward  localhost.localdomain .    </emphasis> # Loopback address
+ <emphasis>forward  www.ukc.mirror.ac.uk  .    </emphasis> # Specific host
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If you intend to chain <application>Junkbuster</application> and 
+ <application>squid</application> locally, then chain as 
+ <literal>browser -> squid -> junkbuster</literal> is the recommended way. 
+</para>
+
+<para>
+ Your squid configuration could then look like this:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  # Define junkbuster as parent cache 
+  cache_peer 127.0.0.1 8000 parent 0 no-query 
+
+  # Define ACL for protocol FTP 
+  acl FTP proto FTP 
+
+  # Do not forward ACL FTP to junkbuster 
+  always_direct allow FTP 
+
+  # Do not forward ACL CONNECT (https) to junkbuster 
+  always_direct allow CONNECT 
+
+  # Forward the rest to junkbuster 
+  never_direct allow all 
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Windows GUI Options</title>
+<!--
+Removed references to Win32. HB 09/23/01
+-->
+<para>
+ <application>Junkbuster</application> has a number of options specific to the
+ Windows GUI interface:
+</para>
+
+<para>
+ If <quote>activity-animation</quote> is set to 1, the
+ <application>Junkbuster</application> icon will animate when
+ <quote>Junkbuster</quote> is active. To turn off, set to 0.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>activity-animation   1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If <quote>log-messages</quote> is set to 1,
+ <application>Junkbuster</application> will log messages to the console
+ window:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-messages       1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para> 
+ If <quote>log-buffer-size</quote> is set to 1, the size of the log buffer,
+ i.e. the amount of memory used for the log messages displayed in the
+ console window, will be limited to <quote>log-max-lines</quote> (see below).
+</para>
+
+<para>
+ Warning: Setting this to 0 will result in the buffer to grow infinitely and
+ eat up all your memory!
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-buffer-size      1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ <application>log-max-lines</application> is the maximum number of lines held
+ in the log buffer. See above.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-max-lines      200</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If <quote>log-highlight-messages</quote> is set to 1,
+ <application>Junkbuster</application> will highlight portions of the log
+ messages with a bold-faced font:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-highlight-messages   1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The font used in the console window:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-font-name        Comic Sans MS</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Font size used in the console window:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>log-font-size        8</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>  
+ <quote>show-on-task-bar</quote> controls whether or not
+ <application>Junkbuster</application> will appear as a button on the Task bar
+ when minimized:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>show-on-task-bar     0</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ If <quote>close-button-minimizes</quote> is set to 1, the Windows close
+ button will minimize <application>Junkbuster</application> instead of closing
+ the program (close with the exit option on the File menu).
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>close-button-minimizes  1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ The <quote>hide-console</quote> option is specific to the MS-Win console
+ version of <application>JunkBuster</application>. If this option is used,
+ <application>Junkbuster</application> will disconnect from and hide  the
+ command console.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  #hide-console
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="actionsfile">
+<title>The Actions File</title>
+
+<para>
+ The <quote>actionsfile</quote> is used to define what actions
+ <application>Junkbuster</application> takes, and thus determines how images,
+ cookies and various other aspects of HTTP content and transactions are
+ handled. Images can be anything you want, including ads, banners, or just
+ some obnoxious image that you would rather not see. Cookies can be accepted
+ or rejected. The default file is in fact named <filename>actionsfile</filename>.
+</para>
+
+<para>
+ To determine which actions apply to a request, the URL of the request is
+ compared to all patterns in this file. Every time it matches, the list of
+ applicable actions for the URL is incrementally updated. You can trace
+ this process by visiting <ulink
+ url="http://i.j.b/show-url-info">http://i.j.b/show-url-info</ulink>. 
+</para>
+
+<para>
+ There are four types of lines in this file: comments (begin with a 
+ <quote>#</quote> character), actions, aliases and patterns, all of which are
+ explained below.
+</para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3>
+<title>URL Domain and Path Syntax</title>
+<para>
+ Generally, a pattern has the form &lt;domain&gt;/&lt;path&gt;, where both the
+ &lt;domain&gt; and &lt;path&gt; part are optional. If you only specify a
+ domain part, the <quote>/</quote> can be left out:
+</para>
+
+<para>
+ <emphasis>www.example.com</emphasis> - is a domain only pattern and will match any request to
+ <quote>www.example.com</quote>.
+</para>
+
+<para>
+ <emphasis>www.example.com/</emphasis> - means exactly the same.
+</para>
+
+<para>
+ <emphasis>www.example.com/index.html</emphasis> - matches only the single
+ document <quote>/index.html</quote> on <quote>www.example.com</quote>.
+</para>
+
+<para>
+ <emphasis>/index.html</emphasis> - matches the document <quote>/index.html</quote>, regardless of
+ the domain.
+</para>
+
+<para>
+ <emphasis>index.html</emphasis> - matches nothing, since it would be
+ interpreted as a domain name and there is no top-level domain called
+ <quote>.html</quote>.
+</para>
+
+<para>
+ The matching of the domain part offers some flexible options: if the
+ domain starts or ends with a dot, it becomes unanchored at that end. 
+ For example:
+</para>
+
+<para>
+ <emphasis>.example.com</emphasis> - matches any domain that <emphasis>ENDS</emphasis> in 
+ <quote>.example.com</quote>.
+</para>
+
+<para>
+ <emphasis>www.</emphasis> - matches any domain that <emphasis>STARTS</emphasis> with
+ <quote>www</quote>.
+</para>
+
+<para>
+ Additionally, there are wildcards that you can use in the domain names
+ themselves. They work pretty similar to shell wildcards: <quote>*</quote>
+ stands for zero or more arbitrary characters, <quote>?</quote> stands for
+ any single character. And you can define charachter classes in square
+ brackets and they can be freely mixed:
+</para>
+
+<para>
+ <emphasis>ad*.example.com</emphasis> - matches <quote>adserver.example.com</quote>, 
+ <quote>ads.example.com</quote>, etc but not <quote>sfads.example.com</quote>.
+</para>
+
+<para>
+ <emphasis>*ad*.example.com</emphasis> - matches all of the above, and then some.
+</para>
+
+<para>
+ <emphasis>.?pix.com</emphasis> - matches <quote>www.ipix.com</quote>,
+ <quote>pictures.epix.com</quote>, <quote>a.b.c.d.e.upix.com</quote>, etc. 
+</para>
+
+<para>
+ <emphasis>www[1-9a-ez].example.com</emphasis> - matches <quote>www1.example.com</quote>, 
+ <quote>www4.example.com</quote>, <quote>wwwd.example.com</quote>, 
+ <quote>wwwz.example.com</quote>, etc., but <emphasis>not</emphasis> 
+ <quote>wwww.example.com</quote>.
+</para>
+
+<para>
+ If <application>Junkbuster</application> was compiled with
+ <quote>pcre</quote> support (default), Perl compatible regular expressions
+ can be used. See the <filename>pcre/docs/</filename> direcory or <quote>man
+ perlre</quote> (also available on  <ulink
+ url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>)
+ for details. A brief discussion of regular expressions is in the 
+ <link linkend="regex">Appendix</link>. For instance:
+</para>
+
+<para>
+ <emphasis>/.*/advert[0-9]+\.jpe?g</emphasis>  - would match a URL from any
+ domain, with any path that includes <quote>advert</quote> followed
+ immediately by one or more digits, then a <quote>.</quote> and ending in
+ either <quote>jpeg</quote> or <quote>jpg</quote>. So we match
+ <quote>example.com/ads/advert2.jpg</quote>, and
+ <quote>www.example.com/ads/banners/advert39.jpeg</quote>, but not
+ <quote>www.example.com/ads/banners/advert39.gif</quote> (no gifs in the
+ example pattern).
+</para>
+
+<para>
+ Please note that matching in the path is case
+ <emphasis>INSENSITIVE</emphasis> by default, but you can switch to case
+ sensitive at any point in the pattern by using the 
+ <quote>(?-i)</quote> switch:
+</para>
+
+<para>
+ <emphasis>www.example.com/(?-i)PaTtErN.*</emphasis> - will match only
+ documents whose path starts with <quote>PaTtErN</quote> in
+ <emphasis>exactly</emphasis> this capitalization.
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3>
+<title>Actions</title>
+<para>
+ Actions are enabled if preceded with a <quote>+</quote>, and disabled if 
+ preceded with a <quote>-</quote>. Actions are invoked by enclosing the 
+ action name in curly braces (e.g. {+some_action}), followed by a list of 
+ URLs to which the action applies. There are three classes of actions:
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>  
+   Boolean (e.g. <quote>+/-block</quote>):
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>{+name}</emphasis>        # enable this action
+  <emphasis>{-name}</emphasis>        # disable this action
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+
+ <listitem>
+  <para>  
+   Parameterized (e.g. <quote>+/-hide-user-agent</quote>):
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>{+name{param}}</emphasis>  # enable action and set parameter to <quote>param</quote>
+  <emphasis>{-name}</emphasis>         # disable action
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Multi-value (e.g. <quote>{+/-add-header{Name: value}}</quote>, <quote>{+/-wafer{name=value}}</quote>):
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>{+name{param}}</emphasis>   # enable action and add parameter <quote>param</quote>
+  <emphasis>{-name{param}}</emphasis>   # remove the parameter <quote>param</quote>
+  <emphasis>{-name}</emphasis>          # disable this action totally
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ </itemizedlist>
+</para>
+
+<para>
+ If nothing is specified in this file, no <quote>actions</quote> are taken.
+ So in this case <application>JunkBuster</application> would just be a
+ normal, non-blocking, non-anonymizing proxy. You must specifically
+ enable the privacy and blocking features you need (although the 
+ provided default <filename>actionsfile</filename> file will 
+ give a good starting point).
+</para>
+
+<para>
+ Later defined actions always over-ride earlier ones.  For multi-valued
+ actions, the actions are applied in the order they are specified.
+</para>
+
+<para>
+ The list of valid <application>Junkbuster</application> <quote>actions</quote> are:
+</para>
+
+<para>
+ <itemizedlist>
+ 
+ <listitem>
+  <para>  
+   Add the specified HTTP header, which is not checked for validity.
+   You may specify this many times to specify many different headers:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+add-header{Name: value}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ 
+ <listitem>
+  <para>  
+   Block this URL totally.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+block</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ 
+ <listitem>
+  <para>  
+   De-animate all animated GIF images, i.e. reduce them to their last frame.
+   This will also shrink the images considerably (in bytes, not pixels!). If
+   the option <quote>first</quote> is given, the first frame of the animation
+   is used as the replacement. If <quote>last</quote> is given, the last frame
+   of the animation is used instead, which propably makes more sense for most
+   banner animations, but also has the risk of not showing the entire last
+   frame (if it is only a delta to an earlier frame).
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+deanimate-gifs{last}</emphasis>
+  <emphasis>+deanimate-gifs{first}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+   
+ <listitem>
+  <para>  
+   Many sites, like yahoo.com, don't just link to other sites. Instead, they
+   will link to some script on their own server, giving the destination as a
+   parameter, which will then redirect you to the final target. URLs resulting
+   from this scheme typically look like:
+   http://some.place/some_script?http://some.where-else.
+  </para>
+  <para>
+   Sometimes, there are even multiple consecutive redirects encoded in the
+   URL. These redirections via scripts make your web browing more traceable,
+   since the server from which you follow such a link can see where you go to.
+   Apart from that, valuable bandwidth and time is wasted, while your browser
+   ask the server for one redirect after the other. Plus, it feeds the
+   advertisers.
+  </para>
+  <para>
+   The <quote>+fast-redirects</quote> option enables interception of these
+   requests by <application>Junkbuster</application>, who will cut off all but
+   the last valid URL in the request and send a local redirect back to your
+   browser without contacting the remote site.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+fast-redirects</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>  
+   Filter the website through the re_filterfile:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+ <emphasis>+filter{filename}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>  
+   Block any existing X-Forwarded-for header, and do not add a new one:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-forwarded</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>  
+   If the browser sends a <quote>From:</quote> header containing your e-mail
+   address, this either completely removes the header (<quote>block</quote>), or
+   changes it to the specified e-mail address.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-from{block}</emphasis>
+  <emphasis>+hide-from{spam@sittingduck.xqq}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Don't send the <quote>Referer:</quote> (sic) header to the web site.  You
+   can block it, forge a URL to the same server as the request (which is
+   preferred because some sites will not send images otherwise) or set it to a
+   constant string of your choice.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-referer{block}</emphasis>
+  <emphasis>+hide-referer{forge}</emphasis>
+  <emphasis>+hide-referer{http://nowhere.com}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Alternative spelling of <quote>+hide-referer</quote>.  It has the same
+   parameters, and can be freely mixed with, <quote>+hide-referer</quote>.
+   (<quote>referrer</quote> is the correct English spelling, however the HTTP
+   specification has a bug - it requires it to be spelled <quote>referer</quote>.) 
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-referrer{...}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>  
+   Change the <quote>User-Agent:</quote> header so web servers can't tell your
+   browser type.  Warning! This breaks many web sites.  Specify the
+   user-agent value you want. Example, pretend to be using Netscape on
+   Linux:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ <!-- 
+  <para>
+   Or to identify yourself explicitly as a <quote>Junkbuster</quote> user:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-user-agent{JunkBuster/1.0}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+   (Don't change the version number from 1.0 - after all, why tell them?)
+  <para>
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+hide-user-agent{browser-type}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+-->
+ </listitem>
+
+ <listitem>
+  <para>  
+   Treat this URL as an image.  This only matters if it's also <quote>+block</quote>ed,
+    in which case a <quote>blocked</quote> image can be sent rather than a HTML page.
+    See <quote>+image-blocker{}</quote> below for the control over what is actually sent.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+image</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Decides what to do with URLs that end up tagged with <quote>{+block
+   +image}</quote>. There are 4 options.  <quote>-image-blocker</quote> will
+   send a HTML <quote>blocked</quote> page, usually resulting in a
+   <quote>broken image</quote> icon.  <quote>+image-blocker{logo}</quote> will
+   send a <quote>JunkBuster</quote> image.
+   <quote>+image-blocker{blank}</quote> will send a 1x1 transparent GIF image.
+   And finally, <quote>+image-blocker{http://xyz.com}</quote> will send a HTTP
+   temporary redirect to the specified image. This has the advantage of the
+   icon being being cached by the browser, which will speed up the display.  
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+image-blocker{logo}</emphasis>
+  <emphasis>+image-blocker{blank}</emphasis>
+  <emphasis>+image-blocker{http://i.j.b/send-banner}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Prevent the website from reading cookies:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+no-cookies-read</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Prevent the website from setting cookies:
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+no-cookies-set</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   Filter the website through a built-in filter to disable those obnoxious 
+   JavaScript pop-up windows via window.open(), etc. The two alternative
+   spellings are equivalent.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+no-popup</emphasis>
+  <emphasis>+no-popups</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   This action only applies if you are using a <filename>jarfile</filename>
+   for saving cookies. It sends a cookie to every site stating that you do not
+   accept any copyright on cookies sent to you, and asking them not to track
+   you.  Of course, this is a (relatively) unique header they could use to
+   track you.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+vanilla-wafer</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
+   This allows you to add an arbitrary cookie. It can be specified multiple
+   times in order to add as many cookies as you like.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+wafer{name=value}</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+
+ </itemizedlist>
+</para>
+
+<para>
+ The meaning of any of the above is reversed by preceding the action with a 
+ <quote>-</quote>, in place of the <quote>+</quote>.
+</para>
+
+<para>
+ Some examples:
+</para>
+
+<para>
+ Turn off cookies by default, then allow a few through for specified sites:
+</para>
+  
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # Turn off all cookies
+ { +no-cookies-read }
+ { +no-cookies-set }
+
+ # Execeptions to the above, sites that need cookies
+ { -no-cookies-read }
+ { -no-cookies-set }
+ .javasoft.com
+ .sun.com
+ .yahoo.com
+ .msdn.microsoft.com
+ .redhat.com
+
+ # Alternative way of saying the same thing
+ {-no-cookies-set -no-cookies-read}
+ .sourceforge.net
+ .sf.net
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Now turn off <quote>fast redirects</quote>, and then we allow two exceptions:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # Turn them off!
+ {+fast-redirects}
+ 
+ # Reverse it for these two sites, which don't work right without it.
+ {-fast-redirects}
+ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+ login.yahoo.com
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Turn on page filtering, with one exception for sourceforge:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # Run everything through the default filter file (<filename>re_filterfile</filename>):
+ {+filter}
+ 
+ # But please don't re_filter code from sourceforge!
+ {-filter}
+ .cvs.sourceforge.net
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Now some URLs that we want <quote>blocked</quote>, ie we won't see them.
+ Many of these use regular expressions that will expand to match multiple 
+ URLs:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  # Blocklist:
+  {+block}
+  /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
+  /.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
+  /.*/(ng)?adclient\.cgi
+  /.*/(plain|live|rotate)[-_.]?ads?/
+  /.*/(sponsor)s?[0-9]?/
+  /.*/_?(plain|live)?ads?(-banners)?/
+  /.*/abanners/
+  /.*/ad(sdna_image|gifs?)/
+  /.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+  /.*/adbanners/
+  /.*/adserver
+  /.*/adstream\.cgi
+  /.*/adv((er)?ts?|ertis(ing|ements?))?/
+  /.*/banner_?ads/
+  /.*/banners?/
+  /.*/banners?\.cgi/
+  /.*/cgi-bin/centralad/getimage
+  /.*/images/addver\.gif
+  /.*/images/marketing/.*\.(gif|jpe?g)
+  /.*/popupads/
+  /.*/siteads/
+  /.*/sponsor.*\.gif
+  /.*/sponsors?[0-9]?/
+  /.*/advert[0-9]+\.jpg
+  /Media/Images/Adds/
+  /ad_images/
+  /adimages/
+  /.*/ads/
+  /bannerfarm/
+  /grafikk/annonse/
+  /graphics/defaultAd/
+  /image\.ng/AdType
+  /image\.ng/transactionID
+  /images/.*/.*_anim\.gif # alvin brattli
+  /ip_img/.*\.(gif|jpe?g)
+  /rotateads/
+  /rotations/ 
+  /worldnet/ad\.cgi
+  /cgi-bin/nph-adclick.exe/
+  /.*/Image/BannerAdvertising/
+  /.*/ad-bin/
+  /.*/adlib/server\.cgi
+  /autoads/
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3>
+<title>Aliases</title>
+<para>
+ Custom <quote>actions</quote>, known to <application>Junkbuster</application>
+ as <quote>aliases</quote>, can be defined by combing other <quote>actions</quote>.
+ These can in turn be invoked just like the built-in <quote>actions</quote>.
+ Currently, an alias can contain any character except space, tab, <quote>=</quote>,
+ <quote>{</quote> or <quote>}</quote>. But please use only <quote>a</quote>-
+ <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
+ <quote>-</quote>. Alias names are not case sensitive, and must be defined 
+ before they are used.
+</para>
+
+<para>
+ Now let's define a few aliases:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # Aliases
+ {{alias}}
+
+ # Useful aliases
+ +no-cookies = +no-cookies-set +no-cookies-read
+ -no-cookies = -no-cookies-set -no-cookies-read
+ fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
+ shop        = -no-cookies -filter -fast-redirects
+ +imageblock = +block +image
+
+ #For people who don't like to type too much:  ;-)
+ c0 = +no-cookies
+ c1 = -no-cookies
+ c2 = -no-cookies-set +no-cookies-read
+ c3 = +no-cookies-set -no-cookies-read
+ #... etc.  Customize to your heart's content.
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Some examples using our <quote>shop</quote> and <quote>fragile</quote>
+ aliases from above:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # These sites are very complex and require
+ # minimal interference.
+ {fragile}
+ .office.microsoft.com
+ .windowsupdate.microsoft.com
+
+ # Shopping sites - still want to block ads.
+ {shop}
+ .quietpc.com
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+
+ # These shops require pop-ups
+ {shop -no-popups}
+ .dabs.com
+ .overclockers.co.uk
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect3>
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="filterfile">
+<title>The Filter File</title>
+<para>
+ The filter file defines what filtering of web pages
+ <application>Junkbuster</application> does. The default filter file is 
+ <filename>re_filterfile</filename>, located in the config directory. In this 
+ file, <emphasis>any document content</emphasis>, whether viewable text or
+ embedded non-visible content, can be changed. 
+</para>
+
+<para>
+ This file uses regular expressions to alter or remove any string in the
+ target page. Some examples from the included default <filename>re_filterfile</filename>:
+</para>
+
+<para>
+ Stop web pages from displaying annoying messages in the status bar by
+ deleting such references:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # The status bar is for displaying link targets, not pointless buzzwords.
+ # Again, check it out on http://www.airport-cgn.de/.
+ s/status='.*?';*//ig
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Just for kicks, replace any occurrence of <quote>Microsoft</quote> with
+ <quote>MicroSuck</quote>: 
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ s/microsoft(?!.com)/MicroSuck/ig
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Kill those auto-refresh tags:
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+ # Kill refresh tags. I like to refresh myself. Manually.
+ # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
+ #
+ s/&lt;meta[^&gt;]*http-equiv[^&gt;]*refresh.*URL=([^&gt;]*?)"?&gt;/&lt;link rev="x-refresh" href=$1&gt;/i
+ s/&lt;meta[^&gt;]*http-equiv="?page-enter"?[^&gt;]*content=[^&gt;]*&gt;/&lt;!--no page enter for me--&gt;/i
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+</sect2>
+
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -59,42 +2410,6 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 </sect1>
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="installation"><title>Installation</title>
-<para>To be filled.
-</para>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-rh"><title>Red Hat</title>
-<para>To be filled.
-</para>
-</sect2>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-suse"><title>SuSE</title>
-<para>To be filled.
-</para>
-</sect2>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-win"><title>Windows</title>
-<para>To be filled.
-</para>
-</sect2>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-other"><title>Other</title>
-<para>To be filled.
-</para>
-</sect2>
-
-</sect1>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="configuration"><title>Configuration</title>
-<para>To be filled.
-</para>
-</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="contact"><title>Contact the developers</title>
@@ -113,6 +2428,23 @@ communication (bugs, feature requests, etc.)
 <sect1 id="seealso"><title>See also</title>
 <para>To be filled.
 </para>
+</sect1>
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="appendix"><title>Appendix</title>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="regex">
+<title>Regular Expressions</title>
+<para>
+ WIP
+</para>
+
+</sect2>
+
 </sect1>
 
  <!--
