@@ -1,6 +1,6 @@
 #ifndef _W32LOG_H
 #define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.2 2001/05/26 00:28:36 jongfoster Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.3 2001/05/29 09:50:24 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,29 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.3  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.2  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -84,7 +107,7 @@ extern int g_nFontSize;
 
 /* FIXME: this is a kludge */
 
-extern const char * g_permissions_file;
+extern const char * g_actions_file;
 extern const char * g_forwardfile;
 #ifdef ACL_FILES
 extern const char * g_aclfile;
