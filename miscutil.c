@@ -1,5 +1,4 @@
-/* vim:ts=3: */
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.13 2001/06/29 13:32:14 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.14 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -37,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.13 2001/06/29 13:32:14 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.14  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.13  2001/06/29 13:32:14  oes
  *    Removed logentry from cancelled commit
  *
