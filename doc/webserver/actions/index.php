@@ -3,15 +3,18 @@
 error_reporting(E_NONE);
 #error_reporting(E_ALL);
 
-//  File :  $Source: $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/index.php,v $
 //
 //  Purpose  :  Submit form for actions file feedback (step 1)
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: $
+//  $Id: index.php,v 1.1 2002/03/30 03:20:30 oes Exp $
 //
-//  $Log: $
+//  $Log: index.php,v $
+//  Revision 1.1  2002/03/30 03:20:30  oes
+//  Added Feedback mechanism for actions file
+//
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -137,7 +140,7 @@ proceed to Step 2.
 </form>
 </p>
 
-<p>To faciliate your feedback, you can bookmark <a href="javascript:void(window.open('$base_url/index.php?url='+escape(location.href),'Feedback', 'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">this bookmarklet</a><br><i>(right-click and select "File Bookmark for link")</i>.
+<p>To faciliate your feedback, you can bookmark <a href="javascript:void(window.open('http://privoxy.org/actions/?url='+escape(location.href),'Feedback', 'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">this bookmarklet</a><br><i>(right-click and select "File Bookmark for link")</i>.
 <br>Used on a page that you want to report on, it will take you here and pre-fill the URL field.
 </p>
 
