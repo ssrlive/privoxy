@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.26 2002/03/26 22:29:54 swa Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.27 2002/04/24 02:10:31 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,13 @@ const char actions_rcs[] = "$Id: actions.c,v 1.26 2002/03/26 22:29:54 swa Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.27  2002/04/24 02:10:31  oes
+ *     - Jon's patch for multiple AFs:
+ *       - split load_actions_file, add load_one_actions_file
+ *       - make csp->actions_list files an array
+ *       - remember file id with each action
+ *     - Copy_action now frees dest action before copying
+ *
  *    Revision 1.26  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -163,6 +170,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.26 2002/03/26 22:29:54 swa Exp $"
 #include "encode.h"
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
 #include "urlmatch.h"
+#include "cgi.h"
 
 const char actions_h_rcs[] = ACTIONS_H_VERSION;
 
@@ -1354,7 +1362,8 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
  * Function    :  actions_to_text
  *
  * Description :  Converts a actionsfile entry from numeric form
- *                ("mask" and "add") to text.
+ *                ("mask" and "add") to a text line which is split
+ *                into one line for each action with line continuation. 
  *
  * Parameters  :
  *          1  :  mask = As from struct url_actions
@@ -1375,32 +1384,32 @@ char * actions_to_text(struct action_spec *action)
    mask |= add;
 
 
-#define DEFINE_ACTION_BOOL(__name, __bit)    \
-   if (!(mask & __bit))                      \
-   {                                         \
-      string_append(&result, " -" __name);   \
-   }                                         \
-   else if (add & __bit)                     \
-   {                                         \
-      string_append(&result, " +" __name);   \
+#define DEFINE_ACTION_BOOL(__name, __bit)          \
+   if (!(mask & __bit))                            \
+   {                                               \
+      string_append(&result, " -" __name " \\\n"); \
+   }                                               \
+   else if (add & __bit)                           \
+   {                                               \
+      string_append(&result, " +" __name " \\\n"); \
    }
 
 #define DEFINE_ACTION_STRING(__name, __bit, __index)   \
    if (!(mask & __bit))                                \
    {                                                   \
-      string_append(&result, " -" __name);             \
+      string_append(&result, " -" __name " \\\n");     \
    }                                                   \
    else if (add & __bit)                               \
    {                                                   \
       string_append(&result, " +" __name "{");         \
       string_append(&result, action->string[__index]); \
-      string_append(&result, "}");                     \
+      string_append(&result, "} \\\n");                \
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)         \
    if (action->multi_remove_all[__index])            \
    {                                                 \
-      string_append(&result, " -" __name);           \
+      string_append(&result, " -" __name " \\\n");   \
    }                                                 \
    else                                              \
    {                                                 \
@@ -1409,7 +1418,7 @@ char * actions_to_text(struct action_spec *action)
       {                                              \
          string_append(&result, " -" __name "{");    \
          string_append(&result, lst->str);           \
-         string_append(&result, "}");                \
+         string_append(&result, "} \\\n");           \
          lst = lst->next;                            \
       }                                              \
    }                                                 \
@@ -1418,7 +1427,7 @@ char * actions_to_text(struct action_spec *action)
    {                                                 \
       string_append(&result, " +" __name "{");       \
       string_append(&result, lst->str);              \
-      string_append(&result, "}");                   \
+      string_append(&result, "} \\\n");              \
       lst = lst->next;                               \
    }
 
@@ -1441,7 +1450,9 @@ char * actions_to_text(struct action_spec *action)
  * Function    :  actions_to_html
  *
  * Description :  Converts a actionsfile entry from numeric form
- *                ("mask" and "add") to a <br>-seperated HTML string.
+ *                ("mask" and "add") to a <br>-seperated HTML string
+ *                in which each action is linked to its chapter in
+ *                the user manual.
  *
  * Parameters  :
  *          1  :  mask = As from struct url_actions
@@ -1451,7 +1462,8 @@ char * actions_to_text(struct action_spec *action)
  *                NULL on out-of-memory error.
  *
  *********************************************************************/
-char * actions_to_html(struct action_spec *action)
+char * actions_to_html(struct action_spec *action,
+                       struct client_state *csp)
 {
    unsigned mask = action->mask;
    unsigned add  = action->add;
@@ -1466,21 +1478,26 @@ char * actions_to_html(struct action_spec *action)
 #define DEFINE_ACTION_BOOL(__name, __bit)       \
    if (!(mask & __bit))                         \
    {                                            \
-      string_append(&result, "\n<br>-" __name); \
+      string_append(&result, "\n<br>-");        \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }                                            \
    else if (add & __bit)                        \
    {                                            \
-      string_append(&result, "\n<br>+" __name); \
+      string_append(&result, "\n<br>+");        \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }
 
 #define DEFINE_ACTION_STRING(__name, __bit, __index) \
    if (!(mask & __bit))                              \
    {                                                 \
-      string_append(&result, "\n<br>-" __name);      \
+      string_append(&result, "\n<br>-");             \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }                                                 \
    else if (add & __bit)                             \
    {                                                 \
-      string_append(&result, "\n<br>+" __name "{");  \
+      string_append(&result, "\n<br>+");             \
+      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&result, "{");                   \
       if (NULL == result)                            \
       {                                              \
          return NULL;                                \
@@ -1499,14 +1516,17 @@ char * actions_to_html(struct action_spec *action)
 #define DEFINE_ACTION_MULTI(__name, __index)          \
    if (action->multi_remove_all[__index])             \
    {                                                  \
-      string_append(&result, "\n<br>-" __name);       \
+      string_append(&result, "\n<br>-");       \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }                                                  \
    else                                               \
    {                                                  \
       lst = action->multi_remove[__index]->first;     \
       while (lst)                                     \
       {                                               \
-         string_append(&result, "\n<br>-" __name "{");\
+         string_append(&result, "\n<br>-");           \
+         string_join(&result, add_help_link(__name, csp->config)); \
+         string_append(&result, "{");                 \
          if (NULL == result)                          \
          {                                            \
             return NULL;                              \
@@ -1526,7 +1546,9 @@ char * actions_to_html(struct action_spec *action)
    lst = action->multi_add[__index]->first;           \
    while (lst)                                        \
    {                                                  \
-      string_append(&result, "\n<br>+" __name "{");   \
+      string_append(&result, "\n<br>+");              \
+      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&result, "{");                    \
       if (NULL == result)                             \
       {                                               \
          return NULL;                                 \
@@ -1567,9 +1589,11 @@ char * actions_to_html(struct action_spec *action)
 
 /*********************************************************************
  *
- * Function    :  current_actions_to_text
+ * Function    :  current_actions_to_html
  *
- * Description :  Converts a actionsfile entry to text.
+ * Description :  Converts a curren action spec to a <br> seperated HTML
+ *                text in which each action is linked to its chapter in
+ *                the user manual.
  *
  * Parameters  :
  *          1  :  action = Action
@@ -1578,46 +1602,69 @@ char * actions_to_html(struct action_spec *action)
  *                NULL on out-of-memory error.
  *
  *********************************************************************/
-char * current_action_to_text(struct current_action_spec *action)
+char *current_action_to_html(struct current_action_spec *action,
+                             struct client_state *csp)
 {
    unsigned long flags  = action->flags;
    char * result = strdup("");
+   char * enc_str;
    struct list_entry * lst;
 
 #define DEFINE_ACTION_BOOL(__name, __bit)  \
    if (flags & __bit)                      \
    {                                       \
-      string_append(&result, " +" __name); \
+      string_append(&result, "\n<br>+");   \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }                                       \
    else                                    \
    {                                       \
-      string_append(&result, " -" __name); \
+      string_append(&result, "\n<br>-");   \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }
 
 #define DEFINE_ACTION_STRING(__name, __bit, __index)   \
    if (flags & __bit)                                  \
    {                                                   \
-      string_append(&result, " +" __name "{");         \
-      string_append(&result, action->string[__index]); \
+      string_append(&result, "\n<br>+");               \
+      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&result, "{");                     \
+      enc_str = html_encode(action->string[__index]);  \
+      if (NULL == enc_str)                             \
+      {                                                \
+         free(result);                                 \
+         return NULL;                                  \
+      }                                                \
+      string_append(&result, enc_str);                 \
+      free(enc_str);                                   \
       string_append(&result, "}");                     \
    }                                                   \
    else                                                \
    {                                                   \
-      string_append(&result, " -" __name);             \
+      string_append(&result, "\n<br>-" __name);        \
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)           \
    lst = action->multi[__index]->first;                \
    if (lst == NULL)                                    \
    {                                                   \
-      string_append(&result, " -" __name);             \
+      string_append(&result, "\n<br> -");              \
+      string_join(&result, add_help_link(__name, csp->config)); \
    }                                                   \
    else                                                \
    {                                                   \
       while (lst)                                      \
       {                                                \
-         string_append(&result, " +" __name "{");      \
-         string_append(&result, lst->str);             \
+         string_append(&result, "\n<br> +");           \
+         string_join(&result, add_help_link(__name, csp->config)); \
+         string_append(&result, "{");                  \
+         enc_str = html_encode(lst->str);              \
+         if (NULL == enc_str)                          \
+         {                                             \
+            free(result);                              \
+            return NULL;                               \
+         }                                             \
+         string_append(&result, enc_str);              \
+         free(enc_str);                                \
          string_append(&result, "}");                  \
          lst = lst->next;                              \
       }                                                \
