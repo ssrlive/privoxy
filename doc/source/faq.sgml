@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.9 2002/03/10 23:34:04 swa Exp $
+ $Id: faq.sgml,v 1.10 2002/03/11 13:13:27 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.9 2002/03/10 23:34:04 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.10 2002/03/11 13:13:27 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -403,6 +403,13 @@ more through Google.
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="knownissues"><title>Known Issues</title>
+<para>
+   Fillme.
+</para>
+</sect1>
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="contact"><title>Contact the developers</title>
 <para>Please see the user manual for information on how to contact the developers.
 </para>
@@ -445,6 +452,9 @@ more through Google.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.10  2002/03/11 13:13:27  swa
+correct feedback channels
+
 Revision 1.9  2002/03/10 23:34:04  swa
 more info on not hiding ip address
 
