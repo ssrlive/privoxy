@@ -1,6 +1,6 @@
 #ifndef _LOADERS_H
 #define _LOADERS_H
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.4 2001/05/29 09:50:24 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.5 2001/05/31 21:28:49 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.5  2001/05/31 21:28:49  jongfoster
+ *    Removed all permissionsfile code - it's now called the actions
+ *    file, and (almost) all the code is in actions.c
+ *
  *    Revision 1.4  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -100,12 +104,7 @@ extern int check_file_changed(const struct file_list * current,
                               struct file_list ** newfl);
 
 extern int load_actions_file(struct client_state *csp);
-extern int load_forwardfile(struct client_state *csp);
   
-#ifdef ACL_FILES
-extern int load_aclfile(struct client_state *csp);
-#endif /* def ACL_FILES */
-
 #ifdef TRUST_FILES
 extern int load_trustfile(struct client_state *csp);
 #endif /* def TRUST_FILES */
@@ -120,10 +119,6 @@ extern void free_url(struct url_spec *url);
 extern void add_loader(int (*loader)(struct client_state *), 
                        struct configuration_spec * config);
 extern int run_loader(struct client_state *csp);
-
-#ifdef PCRS
-extern int load_re_filterfile(struct client_state *csp);
-#endif /* def PCRS */
 
 /* Revision control strings from this header and associated .c file */
 extern const char loaders_rcs[];
