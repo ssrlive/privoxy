@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $
+ $Id: faq.sgml,v 1.6 2002/03/07 13:16:31 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.6 2002/03/07 13:16:31 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -95,16 +95,19 @@ browser? Does that not raise security issues?</title>
 What I don't understand, is how I can browser edit the config file as a
 regular user, while the whole /etc/junkbuster hierarchy belongs to the user
 "junkbuster", with only 644 perms.
-
+ </para>
+ <para>
 When you use the browser-based editor, JunkBuster itself is writing to the
 config files.  Because JunkBuster is running as the user "junkbuster", it can
 update the config files.
-
+ </para>
+ <para>
 If you don't like this, setting "enable-edit-actions 0" in the config file
 will disable the browser-based editor.  If you're that paranoid, you should
 also consider setting "enable-remote-toggle 0" to prevent browser-based
 enabling/disabling of JunkBuster.
-
+ </para>
+ <para>
 Note that normally only local users can connect to JunkBuster, so this is not
 (normally) a security problem.
  </para>
@@ -122,13 +125,15 @@ delays in page requests compared to the old IJB. What's wrong?</title>
 Using the default filtering configuration, I noticed considerable delays in
 page requests compared to the old IJB. Loading pages with large contents
 seemed to take forever, then suddenly delivering all the content at once.
-
+ </para>
+<para>
 The whole content must be loaded in order to filter, and nothing is is
 sent to the browser during this time. The loading time does not really
 change in real numbers, but the feeling is different, because most
 browsers are able to start rendering incomplete content, giving the
 user a feeling of "it works". 
-
+ </para>
+<para>
 To modify the content of a page (i.e. make frames resizeable again, etc.) and
 not just replace ads, the Internet Junkbuster needs to download the entire
 page first, do its content magic and then send the page to the browser.
@@ -140,20 +145,28 @@ page first, do its content magic and then send the page to the browser.
 <para>
 Since JunkBuster sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.
+</para>
 
+<para>
 With recent versions of JunkBuster (version 2.9.x), you can get some
 information about JunkBuster and change some settings by going to
 http://i.j.b/ or, equivalently, http://ijbswa.sourceforge.net/config/
 (Note that i.j.b is far easier to type but may not work in some
 configurations).
+</para>
 
+<para>
 These pages are *not* forwarded to a server on the internet - instead they are
 handled by a special web server which is built in to JunkBuster.
+</para>
 
+<para>
 If you are not running JunkBuster, then http://i.j.b/ will fail, and
 http://ijbswa.sourceforge.net/config/ will return a web page telling you
 you're not running JunkBuster.
+</para>
 
+<para>
 If you have version 2.0.2, then the equivalent is
 http://example.com/show-proxy-args (but you get far less information, and you
 should really consider upgrading to 2.9.x).
@@ -261,6 +274,9 @@ should really consider upgrading to 2.9.x).
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.6  2002/03/07 13:16:31  oes
+Committing changes by Stefan
+
 Revision 1.5  2002/03/02 15:50:04  swa
 2.9.11 version. more input for docs.
 
