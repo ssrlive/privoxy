@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.24 2002/04/11 10:09:20 oes Exp $
+# $Id: privoxy-rh.spec,v 1.25 2002/04/17 01:59:12 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -143,22 +143,47 @@ done
 # Doing it by brute force. Much cleaner (no more Mr. Nice Guy) -- morcego
 
 # Change the group name. Remove anything left behind.
-groupmod -n %{name} %{oldname} > /dev/null 2>&1 ||:
-groupmod -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
+groupmod -g 73 -n %{name} %{oldname} > /dev/null 2>&1 ||:
+groupmod -g 73 -n %{name} %{veryoldname} > /dev/null 2>&1 ||:
 groupdel %{oldname} > /dev/null 2>&1 ||:
 groupdel %{veryoldname} > /dev/null 2>&1 ||:
 
 # Same for username
-usermod -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
-usermod -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
+usermod -u 73 -g 73 -l %{name} -d %{_sysconfdir}/%{name} -s "" %{oldname} > /dev/null 2>&1 || :
+usermod -u 73 -g 73 -l %{name} -d %{_sysconfdir}/%{name} -s "" %{veryoldname} > /dev/null 2>&1 || :
 userdel %{oldname} > /dev/null 2>&1 ||:
 userdel %{veryoldname} > /dev/null 2>&1 ||:
+
+# Doublecheck to see if the group exist, and that it has the correct gid
+/bin/grep -E '^%{name}:' /etc/group > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+	# Looks like it does not exist. Create it
+	groupadd -g 73 %{name} > /dev/null 2>&1
+else
+	/bin/grep -E '^%{name}:[^:]*:73:' /etc/group > /dev/null 2>&1
+	if [ $? -eq 1 ]; then
+		# The group exists, but does not have the correct gid
+		groupmod -g 73 %{name} > /dev/null 2>&1
+	fi
+fi
 
 # Check to see if everything is okey. Create user if it still does not
 # exist
 id %{name} > /dev/null 2>&1
 if [ $? -eq 1 ]; then
-	/usr/sbin/useradd -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
+	/usr/sbin/useradd -u 73 -g 73 -d %{_sysconfdir}/%{name} -r -s "" %{name} > /dev/null 2>&1 
+fi
+
+# Double check that the group has the correct uid
+P_UID=`id -u %{name} 2>/dev/null`
+if [ $P_UID -ne 73 ]; then
+	/usr/sbin/usermod -u 73 %{name}
+fi
+
+# The same for the gid
+P_GID=`id -g %{name} 2>/dev/null`
+if [ $P_GID -ne 73 ]; then
+	/usr/sbin/usermod -g 73 %{name}
 fi
 
 %post
@@ -188,7 +213,13 @@ fi
 #fi
 # We only remove it we this is not an upgrade
 if [ "$1" = "0" ]; then
-	id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+	# And only if this is not redhat, once redhat likes to have
+	# the uid and gid allocated even if the package is not
+	# installed
+	if [ ! -r /etc/redhat-release ]; then
+		/bin/grep -E '^%{name}:' /etc/group > /dev/null && /usr/sbin/groupdel %{name} || /bin/true
+		id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
+	fi
 fi
 
 %clean
@@ -266,6 +297,16 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.14-1
+- Changes to fixate the uid and gid values as (both) 73. This is a 
+  value we hope to standarize for all distributions. RedHat already
+  uses it, and Conectiva should start as soon as I find where the heck
+  I left my cluebat :-)
+- Only remove the user and group on uninstall if this is not redhat, once
+  redhat likes to have the values allocated even if the package is not 
+  installed
+
 * Tue Apr 16 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-6
 - Add --disable-dynamic-pcre to configure.
@@ -568,6 +609,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.25  2002/04/17 01:59:12  hal9
+# Add --disable-dynamic-pcre.
+#
 # Revision 1.24  2002/04/11 10:09:20  oes
 # Version 2.9.14
 #
