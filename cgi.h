@@ -1,6 +1,6 @@
 #ifndef _CGI_H
 #define _CGI_H
-#define CGI_H_VERSION "$Id: cgi.h,v 1.1 2001/06/03 11:04:49 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.3 2001/06/03 19:12:16 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.3  2001/06/03 19:12:16  oes
+ *    introduced new cgi handling
+ *
  *    Revision 1.1  2001/06/03 11:04:49  oes
  *    Makefile/in
  *
@@ -108,14 +111,15 @@ extern int make_http_response(struct http_response *rsp);
 extern void free_http_response(struct http_response *rsp);
 
 extern struct map *parse_cgi(char *argstring);
-char *dump_map(struct map *map);
+extern char *dump_map(struct map *map);
 
 extern int cgi_default(struct client_state *csp, struct http_response *rsp,
 		       struct map *parameters);
-int cgi_show_status(struct client_state *csp, struct http_response *rsp,
+extern int cgi_show_status(struct client_state *csp, struct http_response *rsp,
                     struct map *parameters);
 
-extern char *ijb_show_url_info(struct http_request *http, struct client_state *csp);
+extern int cgi_show_url_info(struct client_state *csp, struct http_response *rsp,
+                    struct map *parameters);
 
 extern char *redirect_url(struct http_request *http, struct client_state *csp);
 extern int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
