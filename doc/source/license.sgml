@@ -1,0 +1,72 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/license.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: license.sgml,v 1.0 2002/04/26 05:25:23 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
+
+ If you make changes to this file, please verify the finished 
+ docs all display as intended.
+
+ This file is included into:
+
+  privoxy-man-page
+  user-manual
+  developer-manual
+  faq
+  webserver/index.sgml
+
+-->
+
+<para>
+ <application>Privoxy</application> is free software; you can
+ redistribute it and/or modify it under the terms of the GNU General Public
+<!-- 
+ <informalfigure pgwide="1" float="1">
+    <mediaobject>
+       <imageobject>
+          <imagedata align="left" fileref="../gnu.jpg" format="jpg">
+       </imageobject>
+       <textobject>
+          <phrase>GNU's Pet GNU</phrase>
+       </textobject>
+    </mediaobject>
+ </informalfigure>
+ or better:
+ <inlinegraphic depth="1" align="left" fileref="../gnu.png"></inlinegraphic> 
+--> 
+
+ License as published by the Free Software Foundation; either version 2 of the
+ License, or (at your option) any later version.
+</para>
+
+<para>
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+<!--
+<figure pgwide="0"><title>The Pythagorean Theorum Illustrated</title>
+</figure>
+--> 
+ more details, which is available from the Free Software Foundation, Inc, 59
+ Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+</para>
+
+<para>
+ You should have received a copy of the <ulink
+ url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</ulink>
+ along with this program; if not, write to the Free Software Foundation, Inc.,
+ 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+</para>
+
