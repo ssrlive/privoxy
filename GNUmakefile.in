@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.123 2002/10/12 06:05:41 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.124 2002/10/13 19:58:09 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -860,9 +860,8 @@ install-strip:
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(ECHO) "Creating directories, and preparing Privoxy installation"
 	$(CHMOD) 0755 $(MKDIR)
-	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(SHARE_DEST) $(MAN_DEST) $(LOG_DEST) $(PID_DEST)
-	$(INSTALL) $(INSTALL_D) $(CONF_DEST)
-	$(INSTALL) $(INSTALL_D) $(CONF_DEST)/templates
+	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
+          $(MAN_DEST) $(LOG_DEST) $(PID_DEST)
 		
 	# Install the executable binary
 	$(ECHO) Installing $(PROGRAM) executable to $(SBIN_DEST)
@@ -874,12 +873,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	else \
 		DOC=$(prefix)/doc/privoxy ;\
 	fi;\
-	$(INSTALL) $(INSTALL_D) $$DOC ;\
-	$(INSTALL) $(INSTALL_D) $$DOC/user-manual ;\
-	$(INSTALL) $(INSTALL_D) $$DOC/faq ;\
-	$(INSTALL) $(INSTALL_D) $$DOC/developer-manual ;\
-	$(INSTALL) $(INSTALL_D) $$DOC/man-page ;\
-	$(INSTALL) $(INSTALL_D) $$DOC/images ;\
+	$(MKDIR) $$DOC $$DOC/user-manual $$DOC/faq $$DOC/developer-manual \
+	     $$DOC/man-page $$DOC/images ;\
 	if [ -d "$(DOK_WEB)" ]; then \
 		$(ECHO) Installing FAQ, Manual, and other docs to $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/user-manual/*html $$DOC/user-manual;\
@@ -887,12 +882,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/man-page/*html $$DOC/man-page;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/developer-manual/*html $$DOC/developer-manual;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/images/*jpg $$DOC/images;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/privoxy-index.html $$DOC/index.html;\
-		$(INSTALL) $(INSTALL_T) AUTHORS $$DOC;\
-		$(INSTALL) $(INSTALL_T) LICENSE $$DOC;\
-		$(INSTALL) $(INSTALL_T) README $$DOC;\
-		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
+		$(INSTALL) $(INSTALL_T) AUTHORS LICENSE README ChangeLog $(DOK_WEB)/p_doc.css $$DOC;\
 	fi
 	$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1.gz
 	-$(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
@@ -957,30 +948,34 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
 
 	# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
-	# Install if dest is writable.
-	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
-		$(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
-		$(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
-		$(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
-		$(SED) 's+%USER%+$(USER)+' | \
-		$(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
-		$(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
-		$(ECHO) "Installing for Slackware." ;\
-		$(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
-	elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
-		$(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
-		$(INSTALL) $(INSTALL_P) privoxy.init /etc/rc.d/init.d/privoxy ;\
-		$(MKDIR) /etc/logrotate.d/ ;\
-		$(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
-	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
-		$(ECHO) "Installing generic init script to /etc/init.d/privoxy" ;\
-		$(INSTALL) $(INSTALL_P) privoxy-generic.init /etc/init.d/privoxy ;\
-	else \
-		$(ECHO) "No init script installed, install it manually if needed" ;\
-	fi
+	# Install if dest is writable and its a system install.
+	if [ "$(prefix)" = "/usr/local" ]; then \
+		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
+               $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
+               $(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
+               $(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
+               $(SED) 's+%USER%+$(USER)+' | \
+               $(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
+               $(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
+               $(ECHO) "Installing for Slackware." ;\
+               $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
+          elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
+               $(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
+               $(INSTALL) $(INSTALL_P) privoxy.init /etc/rc.d/init.d/privoxy ;\
+               $(MKDIR) /etc/logrotate.d/ ;\
+               $(ECHO) "Installing logrotate script to /etc/logrotate.d/" ;\
+               $(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
+          elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
+               $(ECHO) "Installing generic init script to /etc/init.d/privoxy" ;\
+               $(INSTALL) $(INSTALL_P) privoxy-generic.init /etc/init.d/privoxy ;\
+          fi ;\
+     else \
+          $(ECHO) "No init script installed, install it manually if needed" ;\
+     fi
 	# mmmmm, good.
 	@$(ECHO) "Privoxy installation succeeded!"
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
+
 
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(ECHO) Starting Privoxy uninstallation
@@ -1014,36 +1009,43 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	# Final clean up of unused directories. Special handling of CONF and LOG
      # destinations.
 	$(ECHO) Removing $(PROGRAM) directories
-	$(RMDIR) $(LOG_DEST)  || $(ECHO) "$(LOG_DEST) is not empty, not removed" ;\
-	$(RMDIR) $(CONF_DEST) || $(ECHO) "$(CONF_DEST) is not empty, not removed" ;\
+	for i in $(LOG_DEST) $(CONF_DEST); do \
+          if test -d $$i; then \
+               $(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
+          fi;\
+     done
 	if [  ! "$(prefix)" = "/usr/local" ] ;then \
-		$(RMDIR) $(MAN_DEST) || $(ECHO) "$(MAN_DEST) is not empty, not removed" ;\
-		$(RMDIR) $(MAN_DIR)  || $(ECHO) "$(MAN_DIR) is not empty, not removed" ;\
-		$(RMDIR) $(SHARE_DEST)/doc || $(ECHO) "$(SHARE_DEST)/doc is not empty, not removed" ;\
-		$(RMDIR) $(SHARE_DEST) || $(ECHO) "$(SHARE_DEST) is not empty, not removed" ;\
-		$(RMDIR) $(SBIN_DEST)  || $(ECHO) "$(SBIN_DEST) is not empty, not removed" ;\
-          if test $(LOG_DEST) != /var/log/privoxy ; then \
+          for i in $(MAN_DEST) $(MAN_DIR) $(SHARE_DEST)/doc $(SHARE_DEST) $(SBIN_DEST); do \
+               if test -d $$i; then \
+                    $(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
+               fi;\
+          done;\
+          if test $(LOG_DEST) != /var/log/privoxy && test -d $(prefix)/var/log; then \
                $(RMDIR) $(prefix)/var/log || $(ECHO) "$(prefix)/var/log is not empty, not removed";\
           fi ;\
-          if test $(PID_DEST) != /var/run ;then \
+          if test $(PID_DEST) != /var/run && test -d $(prefix)/var/run; then \
                $(RMDIR) $(prefix)/var/run || $(ECHO) "$(prefix)/var/run is not empty, not removed";\
           fi ;\
-          if test -d $(prefix)/var ; then \
+          if test -d $(prefix)/var && test -d $(prefix)/var; then \
                $(RMDIR) $(prefix)/var || $(ECHO) "$(prefix)/var is not empty, not removed" ;\
           fi ;\
-		$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
+          if test -d $(prefix); then \
+			$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
+          fi;\
 	fi
 
 	# init scripts and logrotate
-	$(ECHO) Removing $(PROGRAM) init script
-	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
-		$(RM) /etc/rc.d/rc.privoxy ;\
-	elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ]  && [ -w /etc/rc.d/init.d/ ] ; then \
-		$(RM) /etc/rc.d/init.d/privoxy /etc/logrotate.d/privoxy;\
-	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
-		$(RM) /etc/init.d/privoxy ;\
-	else \
-		$(ECHO) "Unable to remove privoxy init script, not installed or permission denied" ;\
+	if [ "$(prefix)" = "/usr/local" ]; then \
+          $(ECHO) Removing $(PROGRAM) init script ;\
+          if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
+               $(RM) /etc/rc.d/rc.privoxy ;\
+          elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ]  && [ -w /etc/rc.d/init.d/ ] ; then \
+               $(RM) /etc/rc.d/init.d/privoxy /etc/logrotate.d/privoxy;\
+          elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
+               $(RM) /etc/init.d/privoxy ;\
+          else \
+               $(ECHO) "Unable to remove privoxy init script, not installed or permission denied" ;\
+          fi ;\
 	fi
 	$(ECHO) Privoxy uninstalled, bye
 
@@ -1061,6 +1063,17 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.124  2002/10/13 19:58:09  hal9
+# Hopefully, this is final updates for install and uninstall targets.
+# - Fix typo in chown syntax
+# - chmod on mkinstalldirs to make it executable (is there a better way?).
+# - Cleanup comments, and revert most of previous output cleanup changes.
+# - Include all HTML docs, since there are cross links between these.
+# - Improved group handling (still some potential problems, see FIXME).
+# - Update PHONY targets.
+# - Uninstall was not removing CONF and LOG destinations in some situations.
+# - Various other minor cleanups.
+#
 # Revision 1.123  2002/10/12 06:05:41  hal9
 # WIP: This is mostly to fix various problems encountered on SF CF Solaris
 # servers for the install target only. This did not handle /[^C]*, test -e, not
