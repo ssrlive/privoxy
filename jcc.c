@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.52 2001/10/26 20:11:20 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.53 2001/11/05 21:41:43 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,15 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.52 2001/10/26 20:11:20 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.53  2001/11/05 21:41:43  steudten
+ *    Add changes to be a real daemon just for unix os.
+ *    (change cwd to /, detach from controlling tty, set
+ *    process group and session leader to the own process.
+ *    Add DBG() Macro.
+ *    Add some fatal-error log message for failed malloc().
+ *    Add '-d' if compiled with 'configure --with-debug' to
+ *    enable debug output.
+ *
  *    Revision 1.52  2001/10/26 20:11:20  jongfoster
  *    Fixing type mismatch
  *
@@ -1417,7 +1426,8 @@ int main(int argc, const char *argv[])
 		/* make config-filename absolute here */	
 		if ( !(basedir = getcwd( NULL, 1024 )))
 		{
-			perror("get working dir");
+			perror("get working dir failed");
+			exit( 1 );
 		}
 		DBG(1, ("working dir '%s'\n",basedir) );
 		if ( !(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 )))
@@ -1480,6 +1490,18 @@ int main(int argc, const char *argv[])
 	} 
 	else if ( pid != 0 ) /* parent */
 	{
+		int	status;
+		pid_t	wpid;
+		/*
+		** must check for errors 
+		** child died due to missing files aso
+		*/
+		sleep( 1 );
+		wpid = waitpid( pid, &status, WNOHANG );
+		if ( wpid != 0 )
+		{
+			exit( 1 );
+		}
 		exit( 0 );
 	}
 	/* child */
@@ -1552,7 +1574,6 @@ static void listen_loop(void)
    }
 
    config->need_bind = 0;
-
 
    while (FOREVER)
    {
