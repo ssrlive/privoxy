@@ -26,8 +26,8 @@
  Purpose     :  user manual
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-                
- $Id: user-manual.sgml,v 1.111 2002/05/14 23:01:36 oes Exp $
+
+ $Id: user-manual.sgml,v 1.112 2002/05/15 03:57:14 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.111 2002/05/14 23:01:36 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.112 2002/05/15 03:57:14 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2670,16 +2670,6 @@ forward-socks4 and forward-socks4a</title>
   <itemizedlist>
    <listitem>
     <para>
-      <filename>standard.action</filename> - is used by the web based editor, 
-      to set various pre-defined sets of rules for the default actions section
-      in <filename>default.action</filename>. These have increasing levels of
-      aggressiveness <emphasis>and have no influence on your browsing unless
-      you select them explicitly in the editor</emphasis>. It is not recommend
-      to edit this file.
-    </para>
-   </listitem> 
-   <listitem>
-    <para>
      <filename>default.action</filename> - is the primary action file 
      that sets the initial values for all actions. It is intended to 
      provide a base level of functionality for
@@ -2697,6 +2687,16 @@ forward-socks4 and forward-socks4a</title>
      thing should go here. This file will not be upgraded.
     </para>
   </listitem> 
+   <listitem>
+    <para>
+     <filename>standard.action</filename> - is used by the web based editor, 
+     to set various pre-defined sets of rules for the default actions section
+     in <filename>default.action</filename>. These have increasing levels of
+     aggressiveness <emphasis>and have no influence on your browsing unless
+     you select them explicitly in the editor</emphasis>. It is not recommend
+     to edit this file.
+    </para>
+   </listitem> 
   </itemizedlist>
  </para> 
 
@@ -2775,7 +2775,7 @@ forward-socks4 and forward-socks4a</title>
 </sect2>
 
 
-<sect2>
+<sect2 id="actions-apply">
 <title>How Actions are Applied to URLs</title>
 <para>
  Actions files are divided into sections. There are special sections,
@@ -4815,18 +4815,20 @@ my-internal-testing-server.void</screen>
  {{alias}}
 
  # These aliases just save typing later:
+ # (Note that some already use other aliases!)
  #
  +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
  -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
- +imageblock = +block +handle-as-image
+ block-as-image      = +block +handle-as-image
+ mercy-for-cookies   = -crunch-all-cookies -session-cookies-only
 
  # These aliases define combinations of actions
  # that are useful for certain types of sites:
  #
  fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
- shop        = -crunch-all-cookies -fast-redirects
+ shop        = -crunch-all-cookies -filter{popups} -kill-popups
 
- # Aliases defined from other aliases, for really lazy people ;-)
+ # Short names for other aliases, for really lazy people ;-)
  #
  c0 = +crunch-all-cookies
  c1 = -crunch-all-cookies</screen>
@@ -4874,304 +4876,542 @@ my-internal-testing-server.void</screen>
 <sect2 id="act-examples">
 <title>Sample Actions Files</title>
 <para>
- Remember that the meaning of each action is reversed by preceding
- the action with a <quote>-</quote>, in place of the <quote>+</quote>. Also, 
- that some actions are turned on in the default section of the actions file, 
- and require little to no additional configuration. These are just <quote>on</quote>.
+ The above chapters have shown <link linkend="actions-file">which actions files
+ there are and how they are organized</link>, how actions are <link
+ linkend="actions">specified</link> and <link linkend="actions-apply">applied
+ to URLs</link>, how <link linkend="af-patterns">patterns</link> work, and how to
+ define and use <link linkend="aliases">aliases</link>. Now, let's look at an
+ example <filename>default.action</filename> and <filename>user.action</filename>
+ file and see how all these pieces come together:
+</para>
+
+<sect3><title>default.action</title>
+
+<para>
+Every config file should start with a short comment stating it's purpose:
 </para>
 
 <para>
- But, other actions that are turned on in the default section <emphasis>do
- typically require</emphasis> exceptions to be listed in the latter sections of 
- one of our actions file. For instance, by default no URLs are
- <quote>blocked</quote> (i.e. in the default definitions of
- <filename>default.action</filename>). We need exceptions to this in order to
- <emphasis>enable</emphasis> ad blocking in the lower sections. But we need to
- be very selective about what we do block. Thus, the default is <quote>off</quote>
- for blocking.
+ <screen># Sample default.action file &lt;developers@privoxy.org&gt;</screen>
 </para>
 
 <para>
- Below is a liberally commented sample <filename>default.action</filename> file
- to demonstrate how all the pieces come together. And to show how exceptions
- to the default policies can be handled. This is followed by a brief 
- <filename>user.action</filename> with similar examples.
+Then, since this is the <filename>default.action</filename> file, the
+first section is a special section for internal use that you needn't
+change or worry about:
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
-# Sample default.action file &lt;developers@privoxy.org&gt;
-
-# Settings -- Don't change! For internal Privoxy use ONLY.
-{{settings}}
-for-privoxy-version=3.0
-
-
+ <screen>
 ##########################################################################
-# <ulink url="actions-file.html#ALIASES">Aliases</ulink> must be defined *before* they are used. These are
-# easier to remember, and can combine several actions into one. Once 
-# defined they can be used just like any built-in action -- but within 
-# this file only! Aliases do not require a + or - sign.
+# Settings -- Don't change! For internal Privoxy use ONLY.
+##########################################################################
+
+{{settings}}
+for-privoxy-version=3.0</screen>
+</para>
+
+<para>
+After that comes the (optional) alias section. We'll use the example
+section from the above <link linkend="aliases">chapter on aliases</link>,
+that also explains why and how aliases are used:
+</para>
+
+<para>
+ <screen>
+##########################################################################
+# Aliases
 ##########################################################################
 {{alias}}
 
-# Some useful aliases.
-# Alias to turn off cookie handling, ie allow all cookies unmolested.
+# These aliases just save typing later:
+# (Note that some already use other aliases!)
 #
-mercy-for-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
-                    -session-cookies-only
++crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
+-crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+block-as-image      = +block +handle-as-image
+mercy-for-cookies   = -crunch-all-cookies -session-cookies-only
 
-# Alias to both block and treat as if an image for ad blocking
-# purposes.
+# These aliases define combinations of actions
+# that are useful for certain types of sites:
 #
-+block-as-image   = +block +handle-as-image
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
+shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
+</para>
 
-# Shops should be allowed to set persistent cookies
-#
-shop        = -filter mercy-for-cookies
+<para>
+ Now come the regular sections, i.e. sets of actions, accompanied
+ by URL patterns to which they apply. Remember <emphasis>all actions
+ are disabled when matching starts</emphasis>, so we have to explicitly
+ enable the ones we want.
+</para>
 
-# Fragile sites should receive minimum interference:
-#
-fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-              mercy-for-cookies -kill-popups
+<para>
+ The first regular section is probably the most important. It has only
+ one pattern, <quote><literal>/</literal></quote>, but this pattern
+ <link linkend="af-patterns">matches all URLs.</link>. Therefore, the
+ set of actions used in this <quote>default</quote> section <emphasis>will
+ be applied to all requests as a start</emphasis>. It can  be partly or
+ wholly overridden by later matches further down this file, or in user.action,
+ but it will still be largely responsible for your overall browsing
+ experience.
+</para>
 
+<para>
+ Again, at the start of matching, all actions are disabled, so there is
+ no real need to disable any actions here, but we will do that nonetheless,
+ to have a complete listing for your reference. (Remember: A <quote>+</quote>
+ preceding the action name enables the action, a <quote>-</quote> disables!).
+ Also note how this long line has been made more readable by splitting it into
+ multiple lines with line continuation.
+</para> 
+
+<para>
+ <screen>
 ##########################################################################
-# Matching starts here. Remember that at this time, all actions are
-# disabled, so we need to explicitly enable the ones we want. 
-#
-# We begin with "default" action settings, i.e. we define a set of actions
-# for a pattern ("/") <link linkend="af-patterns">that matches all URLs</link>. This default set will be
-# applied to all requests as a start, and can be partly or wholly overridden
-# by later matches further down this file, or in user.action.
-#
-# We will show all potential actions here whether they are enabled
-# or not. We could omit any disabled action if we wanted, since all 
-# actions are 'off' by default anyway. Shown for completeness only.
-# Actions are enabled if preceded by a '+', otherwise they are disabled 
-# (unless an alias has been defined without this).
+# "Defaults" section:
 ##########################################################################
  { \
- <ulink url="actions-file.html#ADD-HEADER">-add-header</ulink> \
- <ulink url="actions-file.html#BLOCK">-block</ulink> \
- <ulink url="actions-file.html#DEANIMATE-GIFS">-deanimate-gifs</ulink> \
- <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION">-downgrade-http-version</ulink> \
- <ulink url="actions-file.html#FAST-REDIRECTS">+fast-redirects</ulink> \
- <ulink url="actions-file.html#FILTER-HTML-ANNOYANCES">+filter{html-annoyances}</ulink> \
- <ulink url="actions-file.html#FILTER-JS-ANNOYANCES">+filter{js-annoyances}</ulink> \
- <ulink url="actions-file.html#FILTER-CONTENT-COOKIES">-filter{content-cookies}</ulink> \
- <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> \
- <ulink url="actions-file.html#FILTER-WEBBUGS">+filter{webbugs}</ulink> \
- <ulink url="actions-file.html#FILTER-REFRESH-TAGS">-filter{refresh-tags}</ulink> \
- <ulink url="actions-file.html#FILTER-FUN">-filter{fun}</ulink> \
- <ulink url="actions-file.html#FILTER-NIMDA">+filter{nimda}</ulink> \
- <ulink url="actions-file.html#FILTER-BANNERS-BY-SIZE">+filter{banners-by-size}</ulink> \
- <ulink url="actions-file.html#FILTER-SHOCKWAVE-FLASH">-filter{shockwave-flash}</ulink> \
- <ulink url="actions-file.html#FILTER-CRUDE-PARENTAL">-filter{crude-parental}</ulink> \
- <ulink url="actions-file.html#HIDE-FORWARDED-FOR-HEADERS">+hide-forwarded-for-headers</ulink> \
- <ulink url="actions-file.html#HIDE-FROM-HEADER">+hide-from-header{block}</ulink> \
- <ulink url="actions-file.html#HIDE-REFERER">-hide-referrer</ulink> \
- <ulink url="actions-file.html#HIDE-USER-AGENT">-hide-user-agent</ulink> \
- <ulink url="actions-file.html#HANDLE-AS-IMAGE">-handle-as-image</ulink> \
- <ulink url="actions-file.html#SET-IMAGE-BLOCKER">+set-image-blocker{pattern}</ulink> \
- <ulink url="actions-file.html#LIMIT-CONNECT">-limit-connect</ulink> \
- <ulink url="actions-file.html#PREVENT-COMPRESSION">+prevent-compression</ulink> \
- <ulink url="actions-file.html#SESSION-COOKIES-ONLY">-session-cookies-only</ulink> \
- <ulink url="actions-file.html#CRUNCH-OUTGOING-COOKIES">-crunch-outgoing-cookies</ulink> \
- <ulink url="actions-file.html#CRUNCH-INCOMING-COOKIES">-crunch-incoming-cookies</ulink> \
- <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> \
- <ulink url="actions-file.html#SEND-VANILLA-WAFER">-send-vanilla-wafer</ulink> \
- <ulink url="actions-file.html#SEND-WAFER">-send-wafer</ulink> \
+ -<link linkend="ADD-HEADER">add-header</link> \
+ -<link linkend="BLOCK">block</link> \
+ -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> \
+ -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link> \
+ +<link linkend="DEANIMATE-GIFS">deanimate-gifs</link> \
+ -<link linkend="DOWNGRADE-HTTP-VERSION">downgrade-http-version</link> \
+ +<link linkend="FAST-REDIRECTS">fast-redirects</link> \
+ +<link linkend="FILTER-HTML-ANNOYANCES">filter{html-annoyances}</link> \
+ +<link linkend="FILTER-JS-ANNOYANCES">filter{js-annoyances}</link> \
+ -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link> \
+ +<link linkend="FILTER-POPUPS">filter{popups}</link> \
+ +<link linkend="FILTER-WEBBUGS">filter{webbugs}</link> \
+ -<link linkend="FILTER-REFRESH-TAGS">filter{refresh-tags}</link> \
+ -<link linkend="FILTER-FUN">filter{fun}</link> \
+ +<link linkend="FILTER-NIMDA">filter{nimda}</link> \
+ +<link linkend="FILTER-BANNERS-BY-SIZE">filter{banners-by-size}</link> \
+ -<link linkend="FILTER-SHOCKWAVE-FLASH">filter{shockwave-flash}</link> \
+ -<link linkend="FILTER-CRUDE-PARENTAL">filter{crude-parental}</link> \
+ -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
+ +<link linkend="HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</link> \
+ +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
+ +<link linkend="HIDE-REFERER">hide-referrer{forge}</link> \
+ -<link linkend="HIDE-USER-AGENT">hide-user-agent</link> \
+ -<link linkend="KILL-POPUPS">kill-popups</link> \
+ -<link linkend="LIMIT-CONNECT">limit-connect</link> \
+ +<link linkend="PREVENT-COMPRESSION">prevent-compression</link> \
+ -<link linkend="SEND-VANILLA-WAFER">send-vanilla-wafer</link> \
+ -<link linkend="SEND-WAFER">send-wafer</link> \
+ +<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> \
+ +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
  }
- / # forward slash will match *all* potential URL patterns. 
-
-##########################################################################
-# Default behavior is now set. Now we will define some exceptions to our 
-# default action policies.
-##########################################################################
-
-# These sites are very complex and require very minimal interference.
-# We'll disable most actions with our 'fragile' alias:
- { fragile }
- .office.microsoft.com           # surprise, surprise!
- .windowsupdate.microsoft.com
-
-
-# Shopping sites - not as fragile but require some special 
-# handling. We still want to block ads, and we will allow 
-# persistent cookies via the 'shop' alias:
- { shop }
- .quietpc.com 
- .worldpay.com   # for quietpc.com
- .jungle.com
- .scan.co.uk
-
-
-# These sites require pop-ups too :(  We'll combine our 'shop' 
-# alias with two other actions into one rule to allow all popups.
- { shop <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> }
- .dabs.com
- .overclockers.co.uk
-
-
-# The 'Fast-redirects' action breaks some sites. Disable this action
-# for these known sensitive sites:
- { <ulink url="actions-file.html#FAST-REDIRECTS">-fast-redirects</ulink> }
- login.yahoo.com
- edit.europe.yahoo.com
- .google.com
- .altavista.com/.*(like|url|link):http
- .altavista.com/trans.*urltext=http
- .nytimes.com
-
-
-# Define which file types will be treated as images. Important
-# for ad blocking.
- { <ulink url="actions-file.html#HANDLE-AS-IMAGE">+handle-as-image</ulink> }
- /.*\.(gif|jpe?g|png|bmp|ico)
-
-
-# Now lets list some domains that are known ad generators. And
-# our alias that we use here will block these as well as force 
-# them to be treated as images. This combination of actions is 
-# important for ad blocking. What the browser will show instead is 
-# determined by the setting of <ulink url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
- { +imageblock }
- ar.atwola.com 
- .ad.doubleclick.net
- .a.yimg.com/(?:(?!/i/).)*$
- .a[0-9].yimg.com/(?:(?!/i/).)*$
- bs*.gsanet.com
- bs*.einets.com
- .qkimg.net
- ad.*.doubleclick.net
-
-
-# These will just simply be blocked. They will generate the BLOCKED
-# banner page, if matched. Heavy use of wildcards and regular 
-# expressions in this example. Enable block action:
- { <ulink url="actions-file.html#BLOCK">+block</ulink> }
- ad*.
- .*ads.
- banner?.
- count*.
- /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
- /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
- .hitbox.com 
-
-
-# The above block section will probably inadvertently catch some 
-# sites we DO NOT want blocked via the wildcards and regular expressions. 
-# Now let's set exceptions to the exceptions so the good guys get better 
-# treatment. Disable block action:
- { <ulink url="actions-file.html#BLOCK">-block</ulink> }
- advogato.org
- adsl.
- ad[ud]*.
- advice.
-# Let's just trust all .edu top level domains.
- .edu
- www.ugu.com/sui/ugu/adv
-# We'll need to access to path names containing 'download' 
- .*downloads.
- /downloads/
-# 'adv' is for globalintersec and means advanced, not advertisement
- www.globalintersec.com/adv
-
-
-# Don't filter *anything* from our friends at sourceforge.
-# Notice we don't have to name the individual filter 
-# identifiers -- we just turn them all off in one fell swoop.
-# Disable all filters for this one site:
- { <ulink url="actions-file.html#FILTER">-filter</ulink> }
- .sourceforge.net
-   </literallayout>
-  </msgtext> 
- </literal>
+ / # forward slash will match *all* potential URL patterns.</screen>
 </para>
 
 <para>
- So far we are painting with a broad brush by setting general policies. 
- The above would be a reasonable starting point for many situations. Now, 
- we want to be more specific and have customized rules that are more suitable
- to our personal habits and preferences. These would be for narrowly defined 
- situations like your ISP or your bank, and should be placed in 
- <filename>user.action</filename>, which is parsed after all other 
- actions files and should not be clobbered by upgrades. So any settings here,
- will have the last word and over-ride any previously defined actions.
+ The default behavior is now set. Note that some actions, like not hiding
+ the user agent, are part of a <quote>general policy</quote> that applies
+ universally and won't get any exceptions defined later. Other choices,
+ like not blocking (which is <emphasis>understandably</emphasis> the
+ default!) need exceptions, i.e. we need to specify explicitly what we
+ want to block in later sections.
+ We will also want to make exceptions from our general pop-up-killing,
+ and use our defined aliases for that.
 </para>
 
 <para>
- Now a few examples of some things that one might do with a
- <filename>user.action</filename> file. 
+ The first of our specialized sections is concerned with <quote>fragile</quote>
+ sites, i.e. sites that require minimum interference, because they are either
+ very complex or very keen on tracking you (and have mechanisms in place that
+ make them unusable for people who avoid being tracked). We will simply use
+ our pre-defined <literal>fragile</literal> alias instead of stating the list
+ of actions explicitly:
 </para>
+
+<para>
+ <screen>
+##########################################################################
+# Exceptions for sites that'll break under the default action set:
+##########################################################################
+
+# "Fragile" Use a minimum set of actions for these sites (see alias above):
+#
+{ fragile }
+.office.microsoft.com           # surprise, surprise!
+.windowsupdate.microsoft.com</screen>
+</para>
+
+<para>
+ Shopping sites are not as fragile, but they typically
+ require cookies to log in, and pop-up windows for shopping
+ carts or item details. Again, we'll use a pre-defined alias:
+</para>
+ 
+<para>
+ <screen>
+# Shopping sites:
+#
+{ shop }
+.quietpc.com 
+.worldpay.com   # for quietpc.com
+.jungle.com
+.scan.co.uk</screen>
+</para>
+
+<para>
+ Then, there are sites which rely on pop-up windows (yuck!) to work.
+ Since we made pop-up-killing our default above, we need to make exceptions
+ now. <ulink url="http://www.mozilla.org/">Mozilla</ulink> users, who
+ can turn on smart handling of unwanted pop-ups in their browsers, can
+ safely choose
+ -<literal><link linkend="FILTER-POPUPS">filter{popups}</link></literal> (and
+ -<literal><link linkend="KILL-POPUPS">kill-popups</link></literal>) above
+ and hence don't need this section. Anyway, disabling an already disabled
+ action doesn't hurt, so we'll define our exceptions regardless of what was
+ chosen in the defaults section:
+</para>
+
+<para>
+ <screen>
+# These sites require pop-ups too :( 
+#
+{ -<link linkend="KILL-POPUPS">kill-popups</link> -<link linkend="FILTER-POPUPS">filter{popups}</link> }
+.dabs.com
+.overclockers.co.uk
+.deutsche-bank-24.de</screen>
+</para>
+
+<para>
+ The <literal><link linkend="FAST-REDIRECTS">fast-redirects</link></literal>
+ action, which we enabled per default above,  breaks some sites. So disable
+ it for popular sites where we know it misbehaves:
+</para>
+
+<para>
+ <screen>
+{ -<link linkend="FAST-REDIRECTS">fast-redirects</link> }
+login.yahoo.com
+edit.*.yahoo.com
+.google.com
+.altavista.com/.*(like|url|link):http
+.altavista.com/trans.*urltext=http
+.nytimes.com</screen>
+</para>
+
+<para>
+ It is important that <application>Privoxy</application> knows which
+ URLs belong to images, so that <emphasis>if</emphasis> they are to
+ be blocked, a substitute image can be sent, rather than an HTML page.
+ Contacting the remote site to find out is not an option, since it
+ would destroy the loading time advantage of banner blocking, and it
+ would feed the advertisers (in terms of money <emphasis>and</emphasis>
+ information). We can mark any URL as an image with the <literal><link
+ linkend="handle-as-image">handle-as-image</link></literal> action,
+ and marking all URLs that end in a known image file extension is a
+ good start:
+</para>
+
+<para>
+ <screen>
+##########################################################################
+# Images:
+##########################################################################
+
+# Define which file types will be treated as images, in case they get
+# blocked further down this file:
+#
+{ +<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> }
+/.*\.(gif|jpe?g|png|bmp|ico)$</screen>
+</para>
+
+<para>
+ And then there are known banner sources. They often use scripts to
+ generate the banners, so it won't be visible from the URL that the
+ request is for an image. Hence we block them <emphasis>and</emphasis>
+ mark them as images in one go, with the help of our
+ <literal>block-as-image</literal> alias defined above. (We could of
+ course just as well use <literal>+<link linkend="block">block</link>
+ +<link linkend="handle-as-image">handle-as-image</link></literal> here.)
+ Remember that the type of the replacement image is chosen by the
+ <literal><link linkend="set-image-blocker">set-image-blocker</link></literal>
+ action. Since all URLs have matched the default section with its
+ <literal>+<link linkend="set-image-blocker">set-image-blocker</link>{pattern}</literal>
+ action before, it still applies and needn't be repeated:
+</para>
+
+<para>
+ <screen>
+# Known ad generators:
+#
+{ block-as-image }
+ar.atwola.com 
+.ad.doubleclick.net
+.ad.*.doubleclick.net
+.a.yimg.com/(?:(?!/i/).)*$
+.a[0-9].yimg.com/(?:(?!/i/).)*$
+bs*.gsanet.com
+bs*.einets.com
+.qkimg.net</screen>
+</para>
+
+<para>
+ One of the most important jobs of <application>Privoxy</application>
+ is to block banners. A huge bunch of them are already <quote>blocked</quote>
+ by the <literal><link linkend="filter">filter</link>{banners-by-size}</literal>
+ action, which we enabled above, and which deletes the references to banner
+ images from the pages while they are loaded, so the browser doesn't request
+ them anymore, and hence they don't need to be blocked here. But this naturally
+ doesn't catch all banners, and some people choose not to use filters, so we
+ need a comprehensive list of patterns for banner URLs here, and apply the
+ <literal><link linkend="block">block</link></literal> action to them.
+</para>
+<para>
+ First comes a bunch of generic patterns, which do most of the work, by
+ matching typical domain and path name components of banners. Then comes
+ a list of individual patterns for specific sites, which is omitted here
+ to keep the example short:
+</para>
+
+<para>
+ <screen>
+##########################################################################
+# Block these fine banners:
+##########################################################################
+{ <link linkend="BLOCK">+block</link> }
+
+# Generic patterns:
+# 
+ad*.
+.*ads.
+banner?.
+count*.
+/.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+/(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
+
+# Site-specific patterns (abbreviated):
+#
+.hitbox.com</screen>
+</para>
+
+<para>
+ You wouldn't believe how many advertisers actually call their banner
+ servers ads.<replaceable>company</replaceable>.com, or call the directory
+ in which the banners are stored simply <quote>banners</quote>. So the above
+ generic patterns are surprisingly effective.
+</para>
+<para>
+ But being very generic, they necessarily also catch URLs that we don't want
+ to block. The pattern <literal>.*ads.</literal> e.g. catches 
+ <quote>nasty-<emphasis>ads</emphasis>.nasty-corp.com</quote> as intended,
+ but also <quote>downlo<emphasis>ads</emphasis>.sourcefroge.net</quote> or
+ <quote><emphasis>ads</emphasis>l.some-provider.net.</quote> So here come some
+ well-known exceptions to the <literal>+<link linkend="BLOCK">block</link></literal>
+ section above.
+</para>
+<para>
+ Note that these are exceptions to exceptions from the default! Consider the URL
+ <quote>downloads.sourcefroge.net</quote>: Initially, all actions are deactivated,
+ so it wouldn't get blocked. Then comes the defaults section, which matches the
+ URL, but just deactivates the <literal><link linkend="BLOCK">block</link></literal>
+ action once again. Then it matches <literal>.*ads.</literal>, an exception to the
+ general non-blocking policy, and suddenly
+ <literal><link linkend="BLOCK">+block</link></literal> applies. And now, it'll match
+ <literal>.*loads.</literal>, where <literal><link linkend="BLOCK">-block</link></literal>
+ applies, so (unless it matches <emphasis>again</emphasis> further down) it ends up
+ with no <literal><link linkend="BLOCK">block</link></literal> action applying.
+</para>
+
+<para>
+ <screen>
+##########################################################################
+# Save some innocent victims of the above generic block patterns:
+##########################################################################
+
+# By domain:
+# 
+{ -<link linkend="BLOCK">block</link> }
+adv[io]*.  # (for advogato.org and advice.*)
+adsl.  
+ad[ud]*.   # (adult.* and add.*)
+.edu       # Universities
+.*loads.   # (downloads, uploads etc)
+
+# By path:
+#
+/.*loads/
+
+# Site-specific:
+#
+www.globalintersec.com/adv # (adv = advanced)
+www.ugu.com/sui/ugu/adv</screen>
+</para>
+
+<para>
+ Filtering source code can have nasty side effects,
+ so make an exception for our friends at sourceforge.net,
+ and all paths with <quote>cvs</quote> in them. Note that
+ <literal>-<link linkend="FILTER">filter</link></literal>
+ disables <emphasis>all</emphasis> filters in one fell swoop!
+</para>
+
+<para>
+ <screen>
+# Don't filter code!
+#
+{ -<link linkend="FILTER">filter</link> }
+/.*cvs
+.sourceforge.net</screen>
+</para>
+
+<para>
+ The actual <filename>default.action</filename> is of course more
+ comprehensive, but we hope this example made clear how it works.
+</para>
+
+</sect3>
+
+<sect3><title>user.action</title>
+
+<para>
+ So far we are painting with a broad brush by setting general policies,
+ which would be a reasonable starting point for many people. Now, 
+ you'd maybe want to be more specific and have customized rules that
+ are more suitable to your personal habits and preferences. These would
+ be for narrowly defined situations like your ISP or your bank, and should
+ be placed in <filename>user.action</filename>, which is parsed after all other 
+ actions files and hence has the last word, over-riding any previously
+ defined actions. <filename>user.action</filename> is also a 
+ <emphasis>safe</emphasis> place for your personal settings, since
+ <filename>default.action</filename> is actively maintained by the
+ <application>Privoxy</application> developers and you'll probably want
+ to install updated versions from time to time.
+</para>
+
+<para>
+ So let's look at a few examples of things that one might typically do in
+ <filename>user.action</filename>: 
+</para>
+
 
 <!-- brief sample user.action here -->
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
-# Sample user.action file.
-
-# Any aliases you want to use need to be re-defined here.
-# Alias to turn off cookie handling, ie allow all cookies unmolested.
- -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
-                       -session-cookies-only
-
-# Fragile sites should have the minimum changes:
- fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -crunch-all-cookies -kill-popups
-
-# Allow persistent cookies for a few regular sites that we 
-# trust via our above alias. These will be saved from one browser session 
-# to the next. We are explicitly turning off any and all cookie handling, 
-# even though the crunch-*-cookies settings were disabled in our above 
-# default.action anyway. So cookies from these domains will come through 
-# unmolested.
- { -crunch-all-cookies }
- .sun.com
- .yahoo.com
- .msdn.microsoft.com
- .redhat.com
-
-
-# My ISP uses obnoxious self promoting images on many pages.
-# Nuke them :) Note that <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> need not be specified,
-# since all URLs ending in .gif will be tagged as images by the
-# general rules in default.action anyway.
- { <ulink url="actions-file.html#BLOCK">+block</ulink> }
- www.my-isp-example.com/logo[0-9].gif
-
-
-# Say the site where you do your home banking needs to open
-# popup windows, but you have chosen to kill popups by
-# default. This will allow it for your-example-bank.com:
-#
- { <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> }
- .my-example-bank.com
-
-
-# This site is delicate, and requires kid-glove 
-# treatment.
- { fragile }
- .forbes.com
-   </literallayout>
-  </msgtext> 
- </literal>
+ <screen>
+# My user.action file. &lt;fred@foobar.com&gt;</screen>
 </para>
+
+<para>
+ As <link linkend="aliases">aliases</link> are local to the actions
+ file that they are defined in, you can't use the ones from
+ <filename>default.action</filename>, unless you repeat them here:
+</para>
+
+<para>
+ <screen>
+# (Re-)define aliases for this file:
+#
+{{alias}}
+-crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+mercy-for-cookies   = -crunch-all-cookies -session-cookies-only
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
+shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
+</para>
+
+<para>
+ Say you have accounts on some sites that you visit regularly, and
+ you don't want to have to log in manually each time. So you'd like
+ to allow persistent cookies for these sites. The
+ <literal>mercy-for-cookies</literal> alias defined above does exactly
+ that, i.e. it disables crunching of cookies in any direction, and
+ processing of cookies to make them temporary.
+</para>
+
+<para>
+ <screen>
+{ mercy-for-cookies }
+sunsolve.sun.com
+slashdot.org
+.yahoo.com
+.msdn.microsoft.com
+.redhat.com</screen>
+</para>
+
+<para>
+ Your bank needs popups and is allergic to some filter, but you don't
+ know which, so you disable them all:
+</para>
+
+<para>
+ <screen>
+{ -<link linkend="FILTER">filter</link> -<link linkend="KILL-POPUPS">kill-popups</link> }
+.your-home-banking-site.com</screen>
+</para>
+
+<para>
+ While browsing the web with <application>Privoxy</application> you
+ noticed some ads that sneaked through, but you were too lazy to
+ report them through our fine and easy <link linkend="contact">feedback</link>
+ system, so you have added them here:
+</para>
+
+<para>
+ <screen>
+{ +<link linkend="BLOCK">block</link> }
+www.a-popular-site.com/some/unobvious/path
+another.popular.site.net/more/junk/here/</screen>
+</para>
+
+<para>
+ Note that, assuming the banners in the above example have regular image
+ extensions (most do),
+ <literal>+<link linkend="HANDLE-AS-IMAGE">handle-as-image</link></literal>
+ need not be specified, since all URLs ending in these extensions will
+ already have been tagged as images in the relevant section of 
+ <filename>default.action</filename> by now.
+</para>
+
+<para>
+ Then you noticed that the default configuration breaks Forbes Magazine,
+ but you were too lazy to find out which action is the culprit, and you
+ were again too lazy to give <link linkend="contact">feedback</link>, so
+ you just used the <literal>fragile</literal> alias on the site, and
+ -- whoa! -- it worked:
+</para>
+
+<para>
+<screen>
+{ fragile }
+.forbes.com</screen>
+</para>
+
+<para>
+ You like the <quote>fun</quote> text replacements in <filename>default.filter</filename>,
+ but it is disabled in the distributed actions file. (My colleagues on the team just
+ don't have a sense of humour, that's why! ;-). So you'd like to turn it on in your private,
+ update-safe config, once and for all:
+</para>
+
+<para>
+<screen>
+{ +<link linkend="filter-fun">filter{fun}</link> }
+/ # For ALL sites!</screen>
+</para>
+
+<para>
+ Note that the above is not really a good idea: There are exceptions
+ to the filters in <filename>default.action</filename> for things that
+ really shouldn't be filtered, like code on CVS->Web interfaces. Since
+ <filename>user.action</filename> has the last word, these exceptions
+ won't be valid for the <quote>fun</quote> filtering specified here.
+ But you're the boss.
+</para>
+
+</sect3>
 </sect2>
 
 <!--  ~  End section  ~  -->
 
-
-
 </sect1>
 
 <!--  ~  End section  ~  -->
-
-
 
 <!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 
@@ -5280,8 +5520,8 @@ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
 <sect2>
 <title>The <emphasis>+filter</emphasis> Action</title>
 <para>
- Filters are enabled with the <ulink
- url="actions-file.html#FILTER"><quote>+filter</quote></ulink> action from within 
+ Filters are enabled with the <link
+ linkend="FILTER"><quote>+filter</quote></link> action from within 
  one of the actions files. <quote>+filter</quote> requires one parameter, which 
  should match one of the section identifiers in the filter file itself. Example:
 </para>
@@ -5852,14 +6092,14 @@ Requests</title>
  <listitem>
   <para>
    Next, <application>Privoxy</application> checks to see if the URL 
-   matches any <ulink
-   url="actions-file.html#BLOCK"><quote>+block</quote></ulink> patterns. If
+   matches any <link
+   linkend="BLOCK"><quote>+block</quote></link> patterns. If
    so, the URL is then blocked, and the remote web server will not be contacted.
-   <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> 
+   <link linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link> 
    is then checked and if it does not match, an 
    HTML <quote>BLOCKED</quote> page is sent back. Otherwise, if it does match,
-   an image is returned. The type of image depends on the setting of <ulink
-   url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+   an image is returned. The type of image depends on the setting of <link
+   linkend="SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></link>
    (blank, checkerboard pattern, or an HTTP redirect to an image elsewhere).
   </para>
  </listitem> 
@@ -5871,16 +6111,16 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   If the URL pattern matches the <ulink
-   url="actions-file.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink> action,
+   If the URL pattern matches the <link
+   linkend="FAST-REDIRECTS"><quote>+fast-redirects</quote></link> action,
    it is then processed. Unwanted parts of the requested URL are stripped.
   </para>
  </listitem> 
  <listitem>
   <para>
    Now the rest of the client browser's request headers are processed. If any
-   of these match any of the relevant actions (e.g. <ulink
-   url="actions-file.html#HIDE-USER-AGENT"><quote>+hide-user-agent</quote></ulink>,
+   of these match any of the relevant actions (e.g. <link
+   linkend="HIDE-USER-AGENT"><quote>+hide-user-agent</quote></link>,
    etc.), headers are suppressed or forged as determined by these actions and
    their parameters.
   </para>
@@ -5895,25 +6135,25 @@ Requests</title>
   <para>
    First, the server headers are read and processed to determine, among other
    things, the MIME type (document type) and encoding. The headers are then
-   filtered as determined by the 
-   <ulink url="actions-file.html#CRUNCH-INCOMING-COOKIES"><quote>+crunch-incoming-cookies</quote></ulink>,
-   <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
-   and <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
+   filtered as deterimed by the 
+   <link linkend="CRUNCH-INCOMING-COOKIES"><quote>+crunch-incoming-cookies</quote></link>,
+   <link linkend="SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></link>,
+   and <link linkend="DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></link>
    actions.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If the <ulink url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+   If the <link linkend="KILL-POPUPS"><quote>+kill-popups</quote></link>
    action applies, and it is an HTML or JavaScript document, the popup-code in the
    response is filtered on-the-fly as it is received.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If a <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
-   or <ulink
-   url="actions-file.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   If a <link linkend="FILTER"><quote>+filter</quote></link>
+   or <link
+   linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
    action applies (and the document type fits the action), the rest of the page is
    read into memory (up to a configurable limit). Then the filter rules (from
    <filename>default.filter</filename>) are processed against the buffered
@@ -5924,9 +6164,9 @@ Requests</title>
    <application>Privoxy</application> back to your browser. 
   </para>
   <para>
-   If neither <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
-   or <ulink
-   url="actions-file.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   If neither <link linkend="FILTER"><quote>+filter</quote></link>
+   or <link
+   linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
    matches, then <application>Privoxy</application> passes the raw data through 
    to the client browser as it becomes available.
   </para>
@@ -5954,8 +6194,8 @@ Requests</title>
 
 <para>
  The way <application>Privoxy</application> applies 
- <ulink url="actions-file.html#ACTIONS"><quote>actions</quote></ulink>
- and <ulink url="actions-file.html#FILTER"><quote>filters</quote></ulink>
+ <link linkend="ACTIONS"><quote>actions</quote></link>
+ and <link linkend="FILTER"><quote>filters</quote></link>
  to any given URL can be complex, and not always so
  easy to understand what is happening. And sometimes we need to be able to
  <emphasis>see</emphasis> just what <application>Privoxy</application> is
@@ -5984,8 +6224,8 @@ Requests</title>
  First, enter one URL (or partial URL) at the prompt, and then
  <application>Privoxy</application> will tell us 
  how the current configuration will handle it. This will not
- help with filtering effects (i.e. the <ulink
- url="actions-file.html#FILTER"><quote>+filter</quote></ulink> action) from
+ help with filtering effects (i.e. the <link
+ linkend="FILTER"><quote>+filter</quote></link> action) from
  the <filename>default.filter</filename> file since this is handled very
  differently and not so easy to trap! It also will not tell you about any other
  URLs that may be embedded within the URL you are testing. For instance, images
@@ -6034,7 +6274,7 @@ Requests</title>
 
 <para>
  This tells us how we have defined our 
- <ulink url="actions-file.html#ACTIONS"><quote>actions</quote></ulink>, and
+ <link linkend="ACTIONS"><quote>actions</quote></link>, and
  which ones match for our example, <quote>google.com</quote>. The first listing
  is any matches for the <filename>standard.action</filename> file. No hits at
  all here on <quote>standard</quote>. Then next is <quote>default</quote>, or
@@ -6051,12 +6291,12 @@ Requests</title>
  rules, and then list specific URLs (or patterns) that these exceptions would
  apply to. Last match wins. Just below this then are two explicit matches for
  <quote>.google.com</quote>. The first is negating our previous cookie setting, 
- which was for <ulink
- url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
+ which was for <link
+ linkend="SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></link>
  (i.e. not persistent). So we will allow persistent cookies for google. The
  second turns <emphasis>off</emphasis> any 
- <ulink
- url="actions-file.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
+ <link
+ linkend="FAST-REDIRECTS"><quote>+fast-redirects</quote></link>
  action, allowing this to take place unmolested. Note that there is a leading
  dot here -- <quote>.google.com</quote>. This will match any hosts and
  sub-domains, in the google.com domain also, such as
@@ -6119,8 +6359,8 @@ Requests</title>
  We'll just show the interesting part here, the explicit matches. It is 
  matched three different times. Each as an <quote>+block +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
- <quote>+imageblock</quote>. (<ulink
- url="actions-file.html#ALIASES"><quote>Aliases</quote></ulink> are defined in
+ <quote>+imageblock</quote>. (<link
+ linkend="ALIASES"><quote>Aliases</quote></link> are defined in
  the first section of the actions file and typically used to combine more 
  than one action.)
 </para>
@@ -6131,11 +6371,11 @@ Requests</title>
  would also cover the first. No point in taking chances with these guys 
  though ;-) Note that if you want an ad or obnoxious 
  URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
- is done here -- as both a <ulink
- url="actions-file.html#BLOCK"><quote>+block</quote></ulink>
+ is done here -- as both a <link
+ linkend="BLOCK"><quote>+block</quote></link>
  <emphasis>and</emphasis> an 
- <ulink
- url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>.
+ <link
+ linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link>.
  The custom alias <quote>+imageblock</quote> just simplifies the process and make 
  it more readable.
 </para>
@@ -6271,8 +6511,12 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.112  2002/05/15 03:57:14  hal9
+ Spell check. A few minor edits here and there for better syntax and
+ clarification.
+
  Revision 1.111  2002/05/14 23:01:36  oes
- Fixing the fixes
+ Fixing the fixes   
 
  Revision 1.110  2002/05/14 19:10:45  oes
  Restored alphabetical order of actions
