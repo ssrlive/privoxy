@@ -31,6 +31,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.18  2002/04/18 19:21:09  jongfoster
+#    Added code to detect "conventional" action files, that start
+#    with a set of actions for all URLs (the pattern "/").
+#    These are special-cased in the "edit-actions-list" CGI, so
+#    that a special UI can be written for them.
+#
 #    Revision 1.17  2002/04/10 13:32:53  oes
 #    Made templates modular
 #
@@ -97,7 +103,7 @@
 #
 # All browsers should work, you just might not get the pretty CSS buttons.
 #
-# If you're favorite browser isn't listed/tested, please test and add it.
+# If your favorite browser isn't listed/tested, please test and add it.
 #
 #
 #############################################################################
@@ -128,7 +134,7 @@
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
 
-  <title>Privoxy: Edit actions file</title>
+  <title>Privoxy: Edit actions file @f@.action</title>
 
   <style type="text/css">
 
@@ -238,11 +244,40 @@ function rm_p(pattern,curtext)
     </tr>
 <!-- if-unstable-end@ -->
 
+    <tr>
+      <td class="info">
+	<h2>What is all this?</h2>
+        <p>
+         If you haven't already done so, it is <b>strongly recommended</b> that you at 
+         least skim <a href="http://www.privoxy.org/user-manual/configuration.html#ACTIONSFILE">the
+         chapter on the actions file</a> in the <a href="http://www.privoxy.org/user-manual/">user manual</a>
+         before making any changes. You will also find a comprehensive list of all available actions
+         there.
+        </p>
+         <!-- @if-all-urls-present-then@ -->
+        <p>
+         Please note that <b>the first section has special importance</b>. It sets the default actions for
+         all URLs. The resulting actions for a particular URL may differ from these defaults if that
+         URL matches again further down, but this section is largely responsible for your browsing
+         experience. Edit manually with great care, or choose from the predefined sets of actions.
+        </p>
+        <!-- @else-not-all-urls-present@@endif-all-urls-present@ -->
+        <!-- @if-default-action-then@ -->
+        <p>
+         This is the default action file. Updates for it are available from
+         <a href="http://www.privoxy.org/">Privoxy.org</a> on a regular basis. 
+         It is therefore <b>not recommended</b> that you add your private
+         rules here, since they will be lost if you install an update in the future.
+         Put your rules in a separate actions file, like user.action instead.
+        </p>
+        <!-- @else-not-default-action@@endif-default-action@ -->
+      </td>
+    </tr>
 
     <tr>
       <td class="box">
         <div class="buttons">
-          <h2>Editing Actions File</h2>
+          <h2>Editing Actions File @f@.action</h2>
           <!-- @if-all-urls-present-then@@else-not-all-urls-present@ -->
           <p><a class="cmd" href="edit-actions-section-add?f=@f@&amp;v=@v@&amp;s=0">Insert new section at top</a></p>
           <!-- @endif-all-urls-present@ -->
@@ -254,40 +289,42 @@ function rm_p(pattern,curtext)
     <tr>
       <td class="container">
         <div class="buttons">
-<table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
-<tr class="actions" valign="top">
- <td class="header" align="right">Actions:</td>
- <td align="center"><a name="l@s@" href="eas?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></td>
- <td class="action" align="left">@all-urls-actions@</td>
-</tr>
-<tr class="rule">
- <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
-</tr>
-<tr class="url1" valign="top">
- <td class="header" align="right">URLs:</td>
- <td align="center">&nbsp;</td>
- <td align="left"><b>These actions affect all URLs</b></td>
-</tr>
-<tr class="rule">
- <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
-</tr>
-<tr class="adv" valign="top">
- <td class="header" align="right"><b>Advanced:</b></td>
- <td colspan="2">
-  <table border="0" cellspacing="0" cellpadding="4">
-   <tr valign="middle" align="center">
-    <td class="nbr"> &nbsp; </td>
-    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert new section below</a> &nbsp; </td>
-   </tr>
-   <tr valign="middle" align="center">
-    <td class="nbr"> &nbsp; </td>
-    <td class="nbr"> &nbsp; </td>
-   </tr>
-  </table>
- </td>
-</tr>
-</table>
-</div>
+          <table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
+            <tr class="actions" valign="top">
+              <td class="header" align="right">Actions:</td>
+              <td align="center"><p><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></p>@all-urls-buttons@</td>
+              <td class="action" align="left">@all-urls-actions@</td>
+            </tr>
+            <tr class="rule">
+              <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
+            </tr>
+            <tr class="url1" valign="top">
+              <td class="header" align="right">URL pattern:</td>
+              <td align="center">&nbsp;</td>
+              <td align="left"><b>/ (Matches all URLs!)</b></td>
+            </tr>
+            <tr class="rule">
+              <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
+            </tr>
+            <tr class="adv" valign="top">
+              <td class="header" align="right"><b>Advanced:</b></td>
+              <td colspan="2">
+                <table border="0" cellspacing="0" cellpadding="4">
+                  <tr valign="middle" align="center">
+                    <td class="nbr"> &nbsp; </td>
+                    <td class="nbr"> &nbsp; <a href="eafua?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert
+                      new section below</a> &nbsp;
+                    </td>
+                  </tr>
+                  <tr valign="middle" align="center">
+                    <td class="nbr"> &nbsp; </td>
+                    <td class="nbr"> &nbsp; </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
       </td>
     </tr>
     <!-- @else-not-all-urls-present@@endif-all-urls-present@ -->
