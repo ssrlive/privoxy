@@ -1,7 +1,16 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Current CVS *** 
+
+- Actions files are changed to: default.action, standard.action, and 
+  user.action. user.action is for personal/local configuration.
+- Major overhaul of the CGI editor.
+- Multiple actions files can now be specified in config.
+
+
 *** Version 2.9.14 Beta *** 
+
 - Fix Solaris compile problem (gateway.h and filters.h)
 - Makefile fixes for Solaris, FreeBSD (?)
 - Fix build failure where certain features were disabled.
