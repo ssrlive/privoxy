@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.26 2002/03/26 22:59:17 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.27 2002/03/26 23:06:04 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.26 2002/03/26 22:59:17 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.27  2002/03/26 23:06:04  jongfoster
+ *    Removing duplicate @ifs on the toggle page
+ *
  *    Revision 1.26  2002/03/26 22:59:17  jongfoster
  *    Fixing /toggle to display status consistently.
  *
@@ -4156,7 +4159,6 @@ jb_err cgi_toggle(struct client_state *csp,
    struct map *exports;
    char mode;
    const char *template_name;
-   jb_err err;
 
    assert(csp);
    assert(rsp);
