@@ -18,7 +18,7 @@ s/(<body .*?)onunload(.*?>)/$1never$2/i
 # Kill refresh tags. I like to refresh myself. Manually.
 # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
 #
-s/<meta[^>]*http-equiv[^>]*refresh[^>]*>/<!--no refresh for me-->/i
+s/<meta[^>]*http-equiv[^>]*refresh.*URL=([^>]*?)"?>/<link rev="x-refresh" href=$1>/i
 s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!--no page enter for me-->/i
 
 # If I allow popups, I want them to be rezizable and have a location and status bar:
@@ -51,24 +51,26 @@ s/status='.*?';*//ig
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
 #
-s|<img [^>]*?(width=['"]?468\D)[^>]*(height=['"]?60\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?234\D)[^>]*(height=['"]?60\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?88\D)[^>]*(height=['"]?31\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?90\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?60\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?160\D)[^>]*(height=['"]?600\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?600\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?125\D)[^>]*(height=['"]?125\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?120\D)[^>]*(height=['"]?240\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?180\D)[^>]*(height=['"]?150\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?300\D)[^>]*(height=['"]?250\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?250\D)[^>]*(height=['"]?250\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?240\D)[^>]*(height=['"]?400\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
-s|<img [^>]*?(width=['"]?336\D)[^>]*(height=['"]?280\D).*?>|<img src=http://i.j.b/ijb-send-banner $1 $2>|ig
+s|<img\s+[^>]*?(width=['"]?468\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?234\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?88\D)[^>]*(height=['"]?31\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?90\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?60\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?160\D)[^>]*(height=['"]?600\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?600\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?125\D)[^>]*(height=['"]?125\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?120\D)[^>]*(height=['"]?240\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?180\D)[^>]*(height=['"]?150\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?300\D)[^>]*(height=['"]?250\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?250\D)[^>]*(height=['"]?250\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?240\D)[^>]*(height=['"]?400\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+s|<img\s+[^>]*?(width=['"]?336\D)[^>]*(height=['"]?280\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
+
+s|<img\s+[^>]*?(width=['"]?200\D)[^>]*(height=['"]?50\D)[^>]*>|<img src=http://i.j.b/send-banner $1 $2>|sig
 
 # Squish WebBugs:
 #
-s/<img [^>]*?(width|height) *= *['"]?1\D[^>]*?(width|height) *= *['"]?1\D.*?>/<!-- Squished WebBug -->/ig
+s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*>/<!-- Squished WebBug -->/sig
 
 # Fun stuff:
 #
