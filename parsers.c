@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.19 2001/07/25 17:21:54 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.20 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.19 2001/07/25 17:21:54 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.20  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.19  2001/07/25 17:21:54  oes
  *    client_uagent now saves copy of User-Agent: header value
  *
@@ -250,7 +256,6 @@ const struct parsers client_patterns[] = {
    { "from:",                    5,    client_from },
    { "cookie:",                  7,    client_send_cookie },
    { "x-forwarded-for:",         16,   client_x_forwarded },
-   { "proxy-connection:",        17,   crumble },
 #ifdef FEATURE_DENY_GZIP
    { "Accept-Encoding: gzip",    21,   crumble },
 #endif /* def FEATURE_DENY_GZIP */
@@ -261,6 +266,9 @@ const struct parsers client_patterns[] = {
    { "Host:",                     5,   client_host },
 #endif /* def FEATURE_FORCE_LOAD */
 /* { "if-modified-since:",       18,   crumble }, */
+   { "Keep-Alive:",              11,   crumble },
+   { "connection:",              11,   crumble },
+   { "proxy-connection:",        17,   crumble },        
    { NULL,                       0,    NULL }
 };
 
@@ -278,11 +286,13 @@ void (* const add_client_headers[])(struct client_state *) = {
    client_cookie_adder,
    client_x_forwarded_adder,
    client_xtra_adder,
+   connection_close_adder,   
    NULL
 };
 
 
 void (* const add_server_headers[])(struct client_state *) = {
+   connection_close_adder, 
    NULL
 };
 
@@ -493,14 +503,6 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
    for (f = more_headers; *f ; f++)
    {
       (*f)(csp);
-   }
-
-   /* add the blank line at the end of the header, if necessary */
-   if ( (csp->headers->last == NULL)
-     || (csp->headers->last->str == NULL)
-     || (*csp->headers->last->str != '\0') )
-   {
-      enlist(csp->headers, "");
    }
 
    hdr = list_to_text(csp->headers);
@@ -1230,6 +1232,28 @@ void client_x_forwarded_adder(struct client_state *csp)
 
    log_error(LOG_LEVEL_HEADER, "addh: %s", p);
    enlist(csp->headers, p);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  connection_close_adder
+ *
+ * Description :  Adds a "Connection: close" header to csp->headers
+ *                as a temporary fix for the needed but missing HTTP/1.1
+ *                support. Called from `sed'.
+ *                FIXME: This whole function shouldn't be neccessary!
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void connection_close_adder(struct client_state *csp)
+{
+   enlist(csp->headers, strdup("Connection: close"));
 
 }
 
