@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.8 2001/05/26 17:25:14 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.9 2001/05/28 16:15:17 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.8 2001/05/26 17:25:14 jongfoster Ex
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.9  2001/05/28 16:15:17  jongfoster
+ *    Improved reporting of errors under Win32.
+ *
  *    Revision 1.8  2001/05/26 17:25:14  jongfoster
  *    Added support for CLF (Common Log Format) and fixed LOG_LEVEL_LOG
  *
@@ -599,6 +602,7 @@ void log_error(int loglevel, char *fmt, ...)
 }
 
 
+#ifdef _WIN32
 /*********************************************************************
  *
  * Function    :  w32_socket_strerr
@@ -685,6 +689,7 @@ static char * w32_socket_strerr(int errcode, char * tmp_buf)
    sprintf(tmp_buf, "(error number %d)", errcode);
    return tmp_buf;
 }
+#endif /* def _WIN32 */
 
 
 /*
