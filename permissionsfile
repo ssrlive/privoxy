@@ -158,6 +158,30 @@ connect.247media.ads.link4ads.com
 ln.doubleclick.net
 mojofarm.mediaplex.com/ad/
 www.carbuyer.com/cgi-carbuyer/getimage.cgi
+/phpAds(New)?/viewbanner\.php
+ad.de.doubleclick.net
+/.*/count\.cgi\?.*df=
+*.fxweb.com/v2-trackrun\.cgi
+195.63.104.61
+195.63.104.222
+213.165.64.38
+213.165.64.39
+213.165.64.40
+213.165.64.41
+213.165.64.42
+213.165.64.43
+213.165.64.44
+194.221.183.221
+194.221.183.222
+194.221.183.223
+194.221.183.224
+194.221.183.225
+194.221.183.226
+194.221.183.227
+a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
+/cgi-bin/ivw/CP/CGI
+151.189.8.213/Adimg
+151.189.8.193/Media
 
 #############################################################################
 # Blocklist:
@@ -376,12 +400,6 @@ netdirect.nl/nd_servlet/___
 193.158.37.3/cgi-bin/impact
 193.210.156.114
 193.98.1.160/img
-194.221.183.222/mailsentlu
-194.221.183.223
-194.221.183.224
-194.221.183.225
-194.221.183.226
-194.221.183.227
 194.231.79.38
 195.124.124.56
 195.27.70.69
@@ -454,7 +472,6 @@ ICDirect.com/cgi-bin
 Shannon.Austria.Eu.net/\.cgi/
 WebSiteSponsor.de
 207.181.220.145
-213.165.64.42
 
 #
 # generic hosts (probably most effective)
@@ -494,7 +511,6 @@ imagine-inc.com
 commonwealth.riddler.com/Commonwealth/bin/statdeploy\?[0-9]+
 customad.cnn.com
 dagbladet.no/ann-gif
-deja.com/jump/
 digits.com/wc/
 dino.mainz.ibm.de
 dn.adzerver.com/image.ad
@@ -505,7 +521,7 @@ eur.yimg.com/a/
 eur.a1.yimg.com/eur.yimg.com/a/
 us.a1.yimg.com/us.yimg.com/a/
 eurosponsor.de
-fastcounter.linkexchange.com
+#fastcounter.linkexchange.com
 flycast.com
 focalink.com/SmartBanner
 freepage.de/cgi-bin/feets/freepage_ext/.*/rw_banner
@@ -515,9 +531,6 @@ gaia.occ.com/click.*
 globaltrack.com
 globaltrak.net
 go.com/cimages\?SEEK_
-gp.dejanews.com/gtplacer
-gtp.dejanews.com/gtplacer
-deja.com/gifs/onsale/
 hitbox.com 
 home.miningco.com/event.ng/.*AdID
 hurra.de
@@ -525,7 +538,7 @@ hyperbanner.net
 icount.com/.*count
 image*.narrative.com/news/.*\.(gif|jpe?g)
 image.click2net.com
-image.linkexchange.com
+#image.linkexchange.com
 images.nytimes.com
 images.yahoo.com/adv/
 images.yahoo.com/promotions/
@@ -536,7 +549,7 @@ informer2.comdirect.de:6004/cd/banner2
 infoseek.go.com/cimages
 ins.at/asp/images/
 kaufwas.com/cgi-bin/zentralbanner\.cgi
-leader.linkexchange.com
+#leader.linkexchange.com
 link4ads.com
 link4link.com
 linktrader.com/cgi-bin/
@@ -544,7 +557,7 @@ logiclink.nl/cgi-bin/
 lucky.theonion.com/cgi-bin/oniondirectin\.cgi
 lucky.theonion.com/cgi-bin/onionimp\.cgi
 lucky.theonion.com/cgi-bin/onionimpin\.cgi
-m.doubleclick.net
+#m.doubleclick.net
 mailorderbrides.com/mlbrd2\.gif
 media.priceline.com
 mediaplex.com
@@ -657,7 +670,7 @@ www.isys.net/customer/images
 www.javaworld.com/javaworld/jw-ad
 www.kron.com/place-ads/
 www.leo.org/leoclick/
-www.linkexchange.ru/cgi-bin/erle\.cgi
+#www.linkexchange.ru/cgi-bin/erle\.cgi
 www.linkstation.de/cgi-bin/zeige
 www.linux.org/graphic/miniature/
 www.linux.org/graphic/square/
@@ -730,7 +743,7 @@ pathfinder.com/shopping/marketplace/images/
 /*.*/adgraphic*
 static.wired.com/images
 perso.estat.com/cgi-bin/perso/
-dinoadserver1.roka.net
+#dinoadserver1.roka.net
 fooladclient*.fool.com
 affiliate.aol.com/static/
 cybereps.com:8000
@@ -743,14 +756,9 @@ smartage.com
 # www.sunday-times.co.uk
 www.sunday-times.co.uk/standing/newsint/ticker
 
-# Für Germany.Net-User: Germany.Net (fast) banner- u. grafikfrei!
-germany.net/gebu-frei\.gif
-germany.net/bilder/menue/leiste\.gif
-germany.net/bilder/gn_logos/*
-germany.net/bilder/90x90/*
-germany.net/banner-homepage/*
-germany.net/downloadshop/*
-germany.net/bilder/action/promopoly/germanynet/basisdienste/hilfe/*
+#NeXgo (ex Germany.Net)
+151.189.8.193
+151.189.8.213
 
 # Block as much of GeoCities as possible
 # All geocities-owned images
@@ -855,8 +863,6 @@ images.cnn.com/SHOP/
 /.*microdell\.gif
 /.*secureit\.gif
 
-g.deja.com/gifs/(q|us)west_120x120\.gif
-
 #
 /gif/buttons/banner_.*
 /gif/buttons/cd_shop_.*
@@ -957,7 +963,7 @@ nasdaq-amex.com/images/bn_ticker\.gif
 # wayne@staff.msen.com
 #
 a*.*.*.yimg.com/([0-9]*|\/)*us.yimg.com/*
-ad.doubleclick.net
+#ad.doubleclick.net
 www.dnps.com/ads
 www.realtop50.com/cgi-bin/ad
 
@@ -981,8 +987,8 @@ www.travelocity.com/images/promos/
 # wonder that that does...
 p01.com/1x1.dyn
 
-/*.*/phpAds/viewbanner.php
-/*.*/phpAds/phpads.php
+#/*.*/phpAds/viewbanner.php
+#/*.*/phpAds/phpads.php
 
 www.linux-magazin.de/banner    
 comtrack.comclick.com
@@ -1055,6 +1061,31 @@ webhideout.com
 www.qksrv.net
 mirror.qkimg.net
 
+#js
+dinoadserver*.roka.net
+logout.gmx.net
+logout.tvspielfilm.de
+gmx.tvspielfilm.de
+www.freenet.de/customerindex\.html
+/*.*/phpAds
+*.fxweb.com/v2-trackrun\.cgi
+rtldating.peopleunited.de
+*.advertising.com
+www.zdnet.com/fcgi-bin/
+service.bfast.com/bfast/serve
+199.172.144.25
+fourohfour.nbci.com/Members404Error.php3
+*.adtech.de
+*.adlink.de
+www.fair-ist-mehr.de/cgi-bin/bt.pl
+*.linkexchange.*
+/.*/adpage.asp
+/ADS
+*.net-on.net
+rstrip.namezero.com
+62.26.220.2
+*.doubleclick.net
+
 #############################################################################
 {-block}
 #############################################################################
@@ -1072,7 +1103,7 @@ cpan.valueclick.com
 #
 #
 adamwhone.co.uk
-adsl.tin.it
+#adsl.tin.it
 stsci.edu
 tgs.com
 sun.com
@@ -1080,10 +1111,10 @@ povray.org
 admin.*.*
 admin.*.*.*
 ad.siemens.de             # SIEMENS Automation & Drives
-add-url.altavista.com
+#add-url.altavista.com
 adis.on.ca
-address*.*.*
-address*.*.*.*
+#address*.*.*
+#address*.*.*.*
 add*.*.*
 add*.*.*.*
 adu*.*.*
@@ -1171,6 +1202,12 @@ teledata.de
 
 msdn.microsoft.com
 
+#js
+adbusters.com
+freemail*.web.de/online/ordner/anzeigen
+foggy.sda.t-online.de
+us.i1.yimg.com/us.yimg.com/i/pim/ad2.gif
+www.nexgo.de/.*/bg_banner.jpg
 
 # End of file
 
