@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.47 2002/03/26 22:29:55 swa Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.48 2002/04/05 00:56:09 gliptak Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.47 2002/03/26 22:29:55 swa Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.48  2002/04/05 00:56:09  gliptak
+ *    Correcting typo to clean up on realloc failure
+ *
  *    Revision 1.47  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -546,7 +549,7 @@ jb_err simple_read_line(FILE *fp, char **dest, int *newline)
 
    for (;;)
    {
-      ch = fgetc(fp);
+      ch = getc(fp);
       if (ch == EOF)
       {
          if (len > 0)
