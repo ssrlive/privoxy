@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.16 2002/03/26 22:29:55 swa Exp $
+# $Id: privoxy-rh.spec,v 1.17 2002/03/27 00:48:23 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -264,7 +264,7 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
-* Tue Mar 25 2002 Hal Burgiss <hal@foobox.net>
+* Tue Mar 26 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.13-3
 - Fix typo in Description.
 
@@ -544,6 +544,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.17  2002/03/27 00:48:23  hal9
+# Fix up descrition.
+#
 # Revision 1.16  2002/03/26 22:29:55  swa
 # we have a new homepage!
 #
