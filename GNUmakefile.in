@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.68 2002/04/07 07:58:11 swa Exp $
+# $Id: GNUmakefile.in,v 1.69 2002/04/07 08:10:47 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -503,29 +503,31 @@ groff2html:
 
 # developer manual
 dok-devel: doc/source/ldpOK.dsl
-	rm -rf doc/webserver/developer-manual doc/source/developer-manual
+	rm -f doc/webserver/developer-manual/*.html
+	rm -rf doc/source/developer-manual
 	mkdir -p doc/text doc/source/developer-manual
-	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml && cd .. && mv developer-manual ../webserver
+	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml && cd .. && cp developer-manual/*.html ../webserver/developer-manual/
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
 
 # user manual
 dok-user: doc/source/ldpOK.dsl
-	rm -rf doc/webserver/user-manual doc/source/user-manual
+	rm -f doc/webserver/user-manual/*.html
+	rm -rf doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
-	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. && mv user-manual ../webserver
+	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/
 	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
 
 # faq
 dok-faq: doc/source/ldpOK.dsl
-	rm -rf doc/webserver/faq doc/source/faq
+	rm -f doc/webserver/faq/*.html
+	rm -rf doc/source/faq
 	mkdir -p doc/text doc/source/faq
-	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
+	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && cp faq/*.html ../webserver/faq/
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
 # man page
 dok-man: doc/source/ldpOK.dsl
-	rm -rf doc/man doc/webserver/man-page
-	mkdir -p doc/man -p doc/webserver/man-page
+	rm -f doc/man/* doc/webserver/man-page/*.html
 ifneq ($(MAN2HTML),false)
 	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
 	man ./privoxy.1 | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
@@ -549,34 +551,12 @@ dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
 	@$(ECHO) Documentation created.
 
 #
-# an alternative to the above dok
+# an alternative to the above dok. disabled man page creation for the moment
 #
-redhat-dok: doc/source/ldpOK.dsl man2html
-	mkdir -p doc/text doc/man doc/source/user-manual \
-          doc/source/developer-manual doc/source/faq
-##  user manual
-	rm -rf doc/webserver/user-manual
-	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. &&\
-          mv user-manual ../webserver
-	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && \
-          $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
-          user-manual
-##  developer manual
-	rm -rf doc/webserver/developer-manual
-	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml &&\
-          cd .. && mv developer-manual ../webserver
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && \
-          $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
-          developer-manual
-##  faq
-	rm -rf doc/webserver/faq
-	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
-	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
-          tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-## readme
-	$(MAKE) redhat-readme
+redhat-dok: dok-devel dok-user dok-faq redhat-readme dok-webserver
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
+	@$(ECHO) Documentation created.
 
 # For those with man2html ala RH7's.
 man2html:
@@ -777,6 +757,13 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.69  2002/04/07 08:10:47  swa
+# create some of the webserver docs
+# automatically (in particular if
+# those docs recycle other documentation
+# fragments). Now committed webserver's
+# index file.
+#
 # Revision 1.68  2002/04/07 07:58:11  swa
 # create some of the webserver docs
 # automatically (in particular if
