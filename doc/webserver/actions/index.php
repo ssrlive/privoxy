@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.16 2002/04/08 08:11:04 oes Exp $
+  $Id: index.php,v 1.17 2002/04/08 10:32:00 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.17  2002/04/08 10:32:00  oes
+  cosmetics again
+
   Revision 1.16  2002/04/08 08:11:04  oes
   Bumped up actions file number
 
@@ -89,6 +92,7 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <link rel="stylesheet" type="text/css" href="../privoxy.css">
   <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
 <?php
@@ -97,7 +101,7 @@
  * Config:
  */
 $required_actions_file_version = "1.1";
-$required_privoxy_version = "2.9.13";
+$required_privoxy_version = "2.9.14";
 $actions_file_download = "http://www.privoxy.org/actions/testdrive.action";
 $submit_target = "http://www.oesterhelt.org/actions/step2.php";
 
@@ -129,7 +133,7 @@ function error_abort($title, $message)
               </h1>
              </div>
             <center>
-             <div class=\"errorbox\">
+             <div class=\"warning\">
               $message
              </div>
             </center>
@@ -155,7 +159,10 @@ if (!isset($url))
 {
    $url = "http://www.example.com/";
 }
-
+else
+{
+   $url = strtr($url, " ", "+");
+}
 
 /* 
  * Deny feedback which is not based on our latest
@@ -239,7 +246,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   </div>
 
   <center>
-   <div class="infobox">
+   <div class="info">
     <h2>Using <a href="http://www.bookmarklets.com" target="_blank">Bookmarklets</a> for Feedback</h2>
     <p>
      To make it even easier for you, we provide a bookmarklet which will not only take you here from
