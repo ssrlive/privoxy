@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.38 2001/09/16 13:01:46 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.39 2001/09/16 13:21:27 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.38 2001/09/16 13:01:46 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.39  2001/09/16 13:21:27  jongfoster
+ *    Changes to use new list functions.
+ *
  *    Revision 1.38  2001/09/16 13:01:46  jongfoster
  *    Removing redundant function call that zeroed zalloc()'d memory.
  *
@@ -919,7 +922,7 @@ static void chat(struct client_state *csp)
                   n = strlen(hdr);
 
                   if ((write_socket(csp->cfd, hdr, n) != n)
-                      || (write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length) != csp->content_length))
+                      || (write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length) != (int)csp->content_length))
                   {
                      log_error(LOG_LEVEL_CONNECT, "write modified content to client failed: %E");
                      return;
