@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.38 2001/10/25 03:40:48 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.39 2001/10/26 17:40:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.38 2001/10/25 03:40:48 david__sch
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.39  2001/10/26 17:40:04  oes
+ *    Introduced get_header_value()
+ *    Removed http->user_agent, csp->referrer and csp->accept_types
+ *    Removed client_accept()
+ *
  *    Revision 1.38  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -308,10 +313,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.38 2001/10/25 03:40:48 david__sch
 #ifndef _WIN32
 #include <stdio.h>
 #include <sys/types.h>
-#include <stdlib.h>
-#include <ctype.h>
 #endif
 
+#include <stdlib.h>
+#include <ctype.h>
 #include <assert.h>
 #include <string.h>
 
