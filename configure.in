@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.6 2001/06/29 21:56:40 oes Exp $
+dnl $Id: configure.in,v 1.7 2001/07/13 13:58:05 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,23 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.7  2001/07/13 13:58:05  oes
+dnl    Completely reorganized the selection scheme for
+dnl    pcre, pcreposix, pcrs and gnu_regex:
+dnl
+dnl    The presence of shared pcre, pcreposix or pcrs
+dnl    libraried is now autodetected. Additionally, the
+dnl    user can enforce using the built-in static variants
+dnl    by specifying --disable-dynamic-(pcre|pcrs).
+dnl    Care is taken to avoid that pcre is dyn, while pcreposix
+dnl    is static, if both are used and that pcrs is static if
+dnl    pcrs is.
+dnl
+dnl    The choice between pcre, gnu or no regex for actionsfile
+dnl    URL matching is now via
+dnl    --(enable|disable)-regex-matching[=(gnu|pcre|no)] with the
+dnl    default being pcre.
+dnl
 dnl Revision 1.6  2001/06/29 21:56:40  oes
 dnl Version -> 2.9.5
 dnl
@@ -221,6 +238,12 @@ AC_ARG_ENABLE(toggle,
   AC_DEFINE(TOGGLE)
 fi],AC_DEFINE(TOGGLE))
 
+AC_ARG_ENABLE(pthread,
+[  --disable-pthread       Don't use POSIX threads (pthreads)],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_PTHREAD)
+fi],AC_DEFINE(FEATURE_PTHREAD))
+
 AC_ARG_ENABLE(gzip,
 [  --enable-gzip           Allow gzip'ed transfer of documents. Note that this will make content modification impossible.],
 [if test $enableval = "no"; then
@@ -344,7 +367,7 @@ if test $have_pcre = "yes" -a $dont_miss_pcreposix = "yes"; then
 else
   echo "using built-in static pcre"
   pcre_dyn=no
-  AC_DEFINE(STATIC)
+  AC_DEFINE(STATIC_PCRE)
   STATIC_PCRE_ONLY=
 fi
 

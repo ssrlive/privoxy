@@ -37,6 +37,16 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.5  2001/07/13 13:48:37  oes
+ *     - (Fix:) Copied CODE_STATUS #define from config.h.in
+ *     - split REGEX #define into REGEX_GNU and REGEX_PCRE
+ *       and removed PCRE.
+ *       (REGEX = REGEX_GNU || REGEX_PCRE per project.h)
+ *     - Moved STATIC (for pcre) here from Makefile.in
+ *     - Introduced STATIC_PCRS #define to allow for dynaimc linking with
+ *       libpcrs
+ *     - Removed PCRS #define, since pcrs is now needed for CGI anyway
+ *
  *    Revision 1.4  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -143,8 +153,8 @@
 #undef CODE_STATUS
 
 /*
- * Regular expression matching for URLs.  (Highly recommended).  If none of these 
- * is defined then you can ony use prefix matching.
+ * Regular expression matching for URLs.  (Highly recommended).
+ * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
 #undef REGEX_GNU
@@ -156,7 +166,7 @@
  * libpcre and user preferences). The name is ugly, but pcre needs it.
  * Don't bother to change this here! Use configure instead.
  */
-#undef STATIC
+#undef STATIC_PCRE
 
 /* 
  * Should pcrs be statically built in instead of linkling with libpcrs?
@@ -274,6 +284,19 @@
  */
 #undef WIN_GUI_EDIT
 
+/*
+ * Use POSIX threads instead of native threads.
+ */
+#undef FEATURE_PTHREAD
+
 @BOTTOM@
+
+/*
+ * Need to set up this define only for the Pthreads library for
+ * Win32, available from http://sources.redhat.com/pthreads-win32/
+ */
+#if defined(FEATURE_PTHREAD) && defined(_WIN32)
+#define __CLEANUP_C
+#endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
 
 #endif /* _CONFIG_H */

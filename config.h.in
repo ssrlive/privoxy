@@ -162,8 +162,8 @@
 #undef CODE_STATUS
 
 /*
- * Regular expression matching for URLs.  (Highly recommended).  If none of these 
- * is defined then you can ony use prefix matching.
+ * Regular expression matching for URLs.  (Highly recommended).
+ * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
 #undef REGEX_GNU
@@ -175,7 +175,7 @@
  * libpcre and user preferences). The name is ugly, but pcre needs it.
  * Don't bother to change this here! Use configure instead.
  */
-#undef STATIC
+#undef STATIC_PCRE
 
 /* 
  * Should pcrs be statically built in instead of linkling with libpcrs?
@@ -286,6 +286,11 @@
  */
 #undef JAR_FILES
 
+/*
+ * Use POSIX threads instead of native threads.
+ */
+#undef FEATURE_PTHREAD
+
 /* Define if you have the bcopy function.  */
 #undef HAVE_BCOPY
 
@@ -294,5 +299,13 @@
 
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
+
+/*
+ * Need to set up this define only for the Pthreads library for
+ * Win32, available from http://sources.redhat.com/pthreads-win32/
+ */
+#if defined(FEATURE_PTHREAD) && defined(_WIN32)
+#define __CLEANUP_C
+#endif /* defined(FEATURE_PTHREAD) && defined(_WIN32) */
 
 #endif /* _CONFIG_H */
