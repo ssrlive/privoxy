@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.3 2001/09/14 00:17:32 jongfoster Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.4 2001/09/16 15:47:37 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,12 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.4  2001/09/16 15:47:37  jongfoster
+ *    First version of CGI-based edit interface.  This is very much a
+ *    work-in-progress, and you can't actually use it to edit anything
+ *    yet.  You must #define FEATURE_CGI_EDIT_ACTIONS for these changes
+ *    to have any effect.
+ *
  *    Revision 1.3  2001/09/14 00:17:32  jongfoster
  *    Tidying up memory allocation. New function init_action().
  *
@@ -58,6 +64,22 @@ struct action_spec;
 struct current_action_spec;
 struct client_state;
 
+
+
+/* This structure is used to hold user-defined aliases */
+struct action_alias
+{
+   const char * name;
+   struct action_spec action[1];
+   struct action_alias * next;
+};
+
+
+extern int get_actions (char *line, 
+                        struct action_alias * alias_list,
+                        struct action_spec *cur_action);
+extern void free_alias_list(struct action_alias *alias_list);
+
 extern void init_action(struct action_spec *dest);
 extern void free_action(struct action_spec *src);
 extern void merge_actions (struct action_spec *dest, 
@@ -78,6 +100,7 @@ extern char * current_action_to_text(struct current_action_spec *action);
 extern int get_action_token(char **line, char **name, char **value);
 extern void unload_actions_file(void *file_data);
 extern int load_actions_file(struct client_state *csp);
+
 
 
 /* Revision control strings from this header and associated .c file */
