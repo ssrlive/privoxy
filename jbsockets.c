@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.8 2001/06/03 11:03:48 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.8 2001/06/03 19:12:07 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.8 2001/06/03 11:03:48 oes Exp
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.8  2001/06/03 19:12:07  oes
+ *    filled comment
+ *
  *    Revision 1.8  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -173,7 +176,7 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  * Returns     :  -1 => failure, else it is the socket file descriptor.
  *
  *********************************************************************/
-int connect_to(char *host, int portnum, struct client_state *csp)
+int connect_to(const char *host, int portnum, struct client_state *csp)
 {
    struct sockaddr_in inaddr;
    int   fd, addr;

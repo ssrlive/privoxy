@@ -1,9 +1,9 @@
 #ifndef _JBSOCKETS_H
 #define _JBSOCKETS_H
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/jbsockets.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
  *
  * Purpose     :  Contains wrappers for system-specific sockets code,
  *                so that the rest of JunkBuster can be more
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -45,7 +48,7 @@
 extern "C" {
 #endif
 
-extern int connect_to(char *host, int portnum, struct client_state *csp);
+extern int connect_to(const char *host, int portnum, struct client_state *csp);
 extern int write_socket(int fd, const char *buf, int n);
 extern int read_socket(int fd, char *buf, int n);
 extern void close_socket(int fd);
