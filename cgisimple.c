@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.29 2002/04/10 13:38:35 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.30 2002/04/24 02:18:08 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,17 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.29 2002/04/10 13:38:35 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.30  2002/04/24 02:18:08  oes
+ *     - show-status is now the starting point for editing
+ *       the actions files, generate list of all AFs with buttons
+ *       for viewing and editing, new look for file list (Jon:
+ *       buttons now aligned ;-P ), view mode now supports multiple
+ *       AFs, name changes, no view links for unspecified files,
+ *       no edit link for standard.action.
+ *
+ *     - Jon's multiple AF patch: cgi_show_url_info now uses all
+ *       AFs and marks the output accordingly
+ *
  *    Revision 1.29  2002/04/10 13:38:35  oes
  *    load_template signature changed
  *
@@ -672,7 +683,7 @@ jb_err cgi_show_status(struct client_state *csp,
 #endif /* ndef FEATURE_STATISTICS */
    struct file_list * fl;
    struct url_actions * b;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
    struct map *exports;
 
@@ -750,26 +761,22 @@ jb_err cgi_show_status(struct client_state *csp,
       return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
    }
 
-   if (map(exports, "redirect-url", 1, html_encode(REDIRECT_URL), 0))
-   {
-      free_map(exports);
-      return JB_ERR_MEMORY;
-   }
-   
    s = strdup("");
    for (i = 0; (s != NULL) && (i < Argc); i++)
    {
-      string_join  (&s, html_encode(Argv[i]));
-      string_append(&s, " ");
+      if (!err) err = string_join  (&s, html_encode(Argv[i]));
+      if (!err) err = string_append(&s, " ");
    }
-   if (map(exports, "invocation", 1, s, 0))
+   if (!err) err = map(exports, "invocation", 1, s, 0);
+
+   if (!err) err = map(exports, "options", 1, csp->config->proxy_args, 1);
+   if (!err) err = show_defines(exports);
+
+   if (err) 
    {
       free_map(exports);
       return JB_ERR_MEMORY;
    }
-
-   err = map(exports, "options", 1, csp->config->proxy_args, 1);
-   if (!err) err = show_defines(exports);
 
 #ifdef FEATURE_STATISTICS
    local_urls_read     = urls_read;
@@ -823,7 +830,7 @@ jb_err cgi_show_status(struct client_state *csp,
       {
          if (!err) err = string_append(&s, "<tr><td>");
          if (!err) err = string_join(&s, html_encode(csp->actions_list[i]->filename));
-         snprintf(buf, 100, "</td><td class=\"cmd\"><a href=\"/show-status?file=actions&index=%d\">View</a> ", i);
+         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=actions&index=%d\">View</a> ", i);
          if (!err) err = string_append(&s, buf);
 
          if (NULL == strstr(csp->actions_list[i]->filename, "standard.action") && NULL != csp->config->actions_file_short[i])
@@ -907,6 +914,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 {
    char *url_param;
    struct map *exports;
+   char buf[150];
 
    assert(csp);
    assert(rsp);
@@ -1012,15 +1020,13 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       init_current_action(action);
 
-      if (map(exports, "default", 1, html_encode_and_free_original(
-         current_action_to_text(action)), 0))
+      if (map(exports, "default", 1, current_action_to_html(action, csp), 0))
       {
          free_current_action(action);
          free(url_param);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
-
 
       err = parse_http_url(url_param, url_to_query, csp);
 
@@ -1063,21 +1069,27 @@ jb_err cgi_show_url_info(struct client_state *csp,
          }
       }
 
-      matches = strdup("");
+      matches = strdup("<table class=\"transparent\">");
 
       for (i = 0; i < MAX_ACTION_FILES; i++)
       {
+         if (NULL == csp->config->actions_file_short[i]
+             || !strcmp(csp->config->actions_file_short[i], "standard")) continue;
+
          b = NULL;
          hits = 1;
          if ((fl = csp->actions_list[i]) != NULL)
          {
             if ((b = fl->f) != NULL)
             {
-               string_append(&matches, "<b>--- <a href=\"edit-actions-list?f=");
+               /* FIXME: Hardcoded HTML! */
+               string_append(&matches, "<tr><th>In file: ");
                string_join  (&matches, html_encode(csp->config->actions_file_short[i]));
-               string_append(&matches, "\">File ");
+               snprintf(buf, 150, ".action <a class=\"cmd\" href=\"/show-status?file=actions&index=%d\">", i);
+               string_append(&matches, buf);
+               string_append(&matches, "View</a> <a class=\"cmd\" href=\"/edit-actions-list?f=");
                string_join  (&matches, html_encode(csp->config->actions_file_short[i]));
-               string_append(&matches, "</a> ---</b><br>\n<br>\n");
+               string_append(&matches, "\">Edit</a></th></tr>\n");
 
                hits = 0;
                b = b->next;
@@ -1088,12 +1100,11 @@ jb_err cgi_show_url_info(struct client_state *csp,
          {
             if (url_match(b->url, url_to_query))
             {
-               string_append(&matches, "<b>{");
-               string_join  (&matches, html_encode_and_free_original(
-                                       actions_to_text(b->action)));
+               string_append(&matches, "<tr><td>{");
+               string_join  (&matches, actions_to_html(b->action, csp));
                string_append(&matches, " }</b><br>\n<code>");
                string_join  (&matches, html_encode(b->url->spec));
-               string_append(&matches, "</code><br>\n<br>\n");
+               string_append(&matches, "</code></td></tr>\n");
 
                if (merge_current_action(action, b->action))
                {
@@ -1109,9 +1120,10 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
          if (!hits)
          {
-            string_append(&matches, "(no matches in this file)\n<br>\n");
+            string_append(&matches, "<tr><td>(no matches in this file)</td></tr>\n");
          }
       }
+      string_append(&matches, "</table>\n");
 
       free_http_request(url_to_query);
 
@@ -1129,7 +1141,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      s = html_encode_and_free_original(current_action_to_text(action));
+      s = current_action_to_html(action, csp);
 
       free_current_action(action);
 
