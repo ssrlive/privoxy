@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.12 2001/05/31 17:35:20 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.13 2001/05/31 21:21:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,12 @@ const char filters_rcs[] = "$Id: filters.c,v 1.12 2001/05/31 17:35:20 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.13  2001/05/31 21:21:30  jongfoster
+ *    Permissionsfile / actions file changes:
+ *    - Changed "permission" to "action" throughout
+ *    - changes to file format to allow string parameters
+ *    - Moved helper functions to actions.c
+ *
  *    Revision 1.12  2001/05/31 17:35:20  oes
  *
  *     - Enhanced domain part globbing with infix and prefix asterisk
@@ -1081,7 +1087,14 @@ struct url_spec dsplit(char *domain)
 
    memset(ret, '\0', sizeof(*ret));
 
-   ret->unanchored = (domain[strlen(domain) - 1] == '.');
+   if (domain[strlen(domain) - 1] == '.')
+   {
+	  ret->unanchored |= ANCHOR_RIGHT;
+	}
+	if (domain[0] == '.')
+   {
+	  ret->unanchored |= ANCHOR_LEFT;
+	}
 
    ret->dbuf = strdup(domain);
 
@@ -1115,18 +1128,11 @@ struct url_spec dsplit(char *domain)
  *
  * Function    :  domaincmp
  *
- * Description :  Compare domain names.
- *                domaincmp("a.b.c",  "a.b.c")  => 0 (MATCH)
- *                domaincmp("a*.b.c", "a.b.c")  => 0 (MATCH)
- *                domaincmp("a*.b.c", "abc.b.c")  => 0 (MATCH)
- *                domaincmp("a*c.b.c","abbc.b.c")  => 0 (MATCH)
- *                domaincmp("*a.b.c", "dabc.b.c")  => 0 (MATCH)
- *                domaincmp("b.c"   , "a.b.c")  => 0 (MATCH)
- *                domaincmp("a.b"   , "a.b.c")  => 1 (DIFF)
- *                domaincmp("a.b."  , "a.b.c")  => 0 (MATCH)
- *                domaincmp(""      , "a.b.c")  => 0 (MATCH)
- *                
- * FIXME: I need a definition!
+ * Description :  Domain-wise Compare fqdn's. Governed by the bimap in
+ *                pattern->unachored, the comparison is un-, left-,
+ *                right-anchored, or both.
+ *                The individual domain names are compared with
+ *                trivialmatch().
  *
  * Parameters  :
  *          1  :  pattern = a domain that may contain a '*' as a wildcard.
@@ -1150,9 +1156,9 @@ int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
       p = pv[pn];
       f = fv[fn];
 
-      if (trivimatch(p, f))
+      if (simplematch(p, f))
       {
-         if(pn)
+		  if(pn || !(pattern->unanchored & ANCHOR_LEFT))
          {
             return 1;
          }
@@ -1164,9 +1170,7 @@ int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
       fn++;
    }
 
-   return ((pn < pattern->dcnt) || ((fn < fqdn->dcnt) && !pattern->unanchored));
-
-   return(0);
+   return ((pn < pattern->dcnt) || ((fn < fqdn->dcnt) && !(pattern->unanchored & ANCHOR_RIGHT)));
 
 }
 
