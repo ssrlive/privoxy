@@ -1,24 +1,19 @@
         <h2>Support and Service via Sourceforge:</h2>
         <p>
-          We value your feedback. To provide you with the best support,
-          we ask that you:
+         We value your feedback. However, to provide you with the best support, please note:
         </p>
         <ul>
           <li>
-            use the <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a> or (better) the
-            <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.
+	Use the support forum to get help: <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a>.
           </li>
           <li>
-            submit banners and all problems with the actions file only through the
-            <a href="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">actions
-            file feedback system</a>.
+	You can also send feedback on websites that Privoxy has problems with. Please bookmark the following link:
+            <a href="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Filter Feedback</a>. Once you surf to a page with problems, use the bookmark to send us feedback.
           </li>
           <li>
-            submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>.
-            Make sure that the bug has not yet been submitted.
+	Submit bugs only through our bug tracker: <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>. Make sure that the bug has not yet been submitted.
           </li>
           <li>
-            submit feature requests only through our <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature
-            request tracker</a>.
+	Submit feature requests only through our feature request tracker: <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature request tracker</a>.
           </li>
         </ul>
