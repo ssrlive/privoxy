@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.15 2001/06/03 11:03:48 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.15 2001/06/03 19:12:38 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,59 +41,8 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.15 2001/06/03 11:03:48 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
- *    Revision 1.15  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
+ *    Revision 1.15  2001/06/03 19:12:38  oes
  *    deleted const struct interceptors
- *
- *    pcrs.c
- *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.14  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
@@ -566,6 +515,7 @@ void free_http_request(struct http_request *http)
    freez(http->hostport);
    freez(http->path);
    freez(http->ver);
+   freez(http->host_ip_addr_str);
 
 }
 
@@ -777,8 +727,8 @@ char *content_type(const struct parsers *v, char *s, struct client_state *csp)
  *
  * Function    :  content_length
  *
- * Description :  Crunch Content-Length header if & only if we are
- *                filtering this page through PCRS.
+ * Description :  Adjust Content-Length header if we have 
+ *                filtered this page through PCRS.
  *
  * Parameters  :
  *          1  :  v = ignored
