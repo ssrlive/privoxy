@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.32 2002/04/26 18:29:13 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.33 2002/04/30 11:14:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.32 2002/04/26 18:29:13 jongfo
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.33  2002/04/30 11:14:52  oes
+ *    Made csp the first parameter in *action_to_html
+ *
  *    Revision 1.32  2002/04/26 18:29:13  jongfoster
  *    Fixing this Visual C++ warning:
  *    cgisimple.c(775) : warning C4018: '<' : signed/unsigned mismatch
@@ -213,8 +216,9 @@ static jb_err show_defines(struct map *exports);
  *
  * Function    :  cgi_default
  *
- * Description :  CGI function that is called if no action was given.
- *                Lists menu of available unhidden CGIs.
+ * Description :  CGI function that is called for the CGI_SITE_1_HOST
+ *                and CGI_SITE_2_HOST/CGI_SITE_2_PATH base URLs.
+ *                Boring - only exports the default exports.
  *               
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -225,55 +229,24 @@ static jb_err show_defines(struct map *exports);
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
- *                (Problems other than out-of-memory should be
- *                handled by this routine - it should set the
- *                rsp appropriately and return "success")
  *
  *********************************************************************/
 jb_err cgi_default(struct client_state *csp,
                    struct http_response *rsp,
                    const struct map *parameters)
 {
-   char *tmp;
    struct map *exports;
 
    assert(csp);
    assert(rsp);
-   assert(parameters);
 
    if (NULL == (exports = default_exports(csp, "")))
    {
       return JB_ERR_MEMORY;
    }
 
-   /* If there were other parameters, export a dump as "cgi-parameters" */
-   if (parameters->first)
-   {
-      tmp = strdup("<p>What made you think this cgi takes parameters?\n"
-                   "Anyway, here they are, in case you're interested:</p>\n");
-      string_join(&tmp, dump_map(parameters));
-      if (tmp == NULL)
-      {
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
-      if (map(exports, "cgi-parameters", 1, tmp, 0))
-      {
-         return JB_ERR_MEMORY;
-      }
-   }
-   else
-   {
-      if (map(exports, "cgi-parameters", 1, "", 1))
-      {
-         return JB_ERR_MEMORY;
-      }
-   }
-
    return template_fill_for_cgi(csp, "default", exports, rsp);
 }
-
-
 
 
 /*********************************************************************
