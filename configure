@@ -467,7 +467,7 @@ do
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
-  *" "*|*"   "*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?]*)
+  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?]*)
   ac_configure_args="$ac_configure_args '$ac_arg'" ;;
   *) ac_configure_args="$ac_configure_args $ac_arg" ;;
   esac
@@ -551,7 +551,7 @@ if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
     ac_n= ac_c='
-' ac_t='   '
+' ac_t='	'
   else
     ac_n=-n ac_c= ac_t=
   fi
@@ -564,7 +564,7 @@ fi
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=4
+VERSION_POINT=5
 
 
 
@@ -602,7 +602,7 @@ else
   if test -n "$CC"; then
   ac_cv_prog_CC="$CC" # Let the user override the test.
 else
-  IFS="${IFS=    }"; ac_save_ifs="$IFS"; IFS=":"
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
@@ -632,7 +632,7 @@ else
   if test -n "$CC"; then
   ac_cv_prog_CC="$CC" # Let the user override the test.
 else
-  IFS="${IFS=    }"; ac_save_ifs="$IFS"; IFS=":"
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
   ac_prog_rejected=no
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
@@ -640,7 +640,7 @@ else
     if test -f $ac_dir/$ac_word; then
       if test "$ac_dir/$ac_word" = "/usr/ucb/cc"; then
         ac_prog_rejected=yes
-   continue
+	continue
       fi
       ac_cv_prog_CC="cc"
       break
@@ -683,7 +683,7 @@ else
   if test -n "$CC"; then
   ac_cv_prog_CC="$CC" # Let the user override the test.
 else
-  IFS="${IFS=    }"; ac_save_ifs="$IFS"; IFS=":"
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
@@ -1685,7 +1685,7 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # the first set of double-colon rules, so remove it if not needed.
 # If there is a colon in the path, we need to keep it.
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[    ]*VPATH[ 	]*=[^:]*$/d'
+  ac_vpsub='/^[ 	]*VPATH[ 	]*=[^:]*$/d'
 fi
 
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
@@ -1874,17 +1874,17 @@ rm -f conftest.s*
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
-ac_dA='s%^\([    ]*\)#\([ 	]*define[ 	][ 	]*\)'
-ac_dB='\([    ][ 	]*\)[^ 	]*%\1#\2'
+ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
 ac_dC='\3'
 ac_dD='%g'
 # ac_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
-ac_uA='s%^\([    ]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_uB='\([    ]\)%\1#\2define\3'
+ac_uA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_uB='\([ 	]\)%\1#\2define\3'
 ac_uC=' '
 ac_uD='\4%g'
 # ac_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_eA='s%^\([    ]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_eA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
 ac_eB='$%\1#\2define\3'
 ac_eC=' '
 ac_eD='%g'
@@ -1931,7 +1931,7 @@ rm -f conftest.hdr
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
 cat >> conftest.vals <<\EOF
-s%^[    ]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
+s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
 EOF
 
 # Break up conftest.vals because some shells have a limit on
