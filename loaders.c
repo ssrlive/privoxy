@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.19 2001/07/13 14:01:54 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.20 2001/07/17 13:07:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.19 2001/07/13 14:01:54 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.20  2001/07/17 13:07:01  oes
+ *    Fixed segv when last line in config files
+ *     lacked a terminating (\r)\n
+ *
  *    Revision 1.19  2001/07/13 14:01:54  oes
  *    Removed all #ifdef PCRS
  *
@@ -917,7 +921,7 @@ int load_re_filterfile(struct client_state *csp)
       enlist( bl->patterns, buf );
 
       /* We have a meaningful line -> make it a job */
-      if ((dummy = pcrs_compile(buf, &error)) == NULL)
+      if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
       {
          log_error(LOG_LEVEL_RE_FILTER, 
                "Adding re_filter job %s failed with error %d.", buf, error);
