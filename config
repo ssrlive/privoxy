@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.27 2001/11/30 23:35:51 jongfoster Exp $
+# $Id: config,v 1.28 2002/03/04 19:32:07 oes Exp $
 #
 
 #  Table of Contents
@@ -468,13 +468,13 @@ enable-remote-toggle 1
 #
 # In the following common configuration, everything goes to Lucent's LPWA,
 # except SSL on port 443 (which it doesn't handle)
-#    forward .*    lpwa.com:8000
+#    forward .*    lpwa.com:8118
 #    forward :443 .
 #
 # See the FAQ for instructions on how to automate the login procedure for LPWA.
 # Some users have reported difficulties related to LPWA's use of . as the
 # last element of the domain, and have said that this can be fixed with this:
-#    forward lpwa.  lpwa.com:8000
+#    forward lpwa.  lpwa.com:8118
 # (NOTE: the syntax for specifiying target_domain has changed since the
 # previous paragraph weas written - it will not work now.  More information
 # is welcome.)
@@ -482,7 +482,7 @@ enable-remote-toggle 1
 # In this fictitious example, everything goes via an ISP's caching proxy,
 # except requests to that ISP:
 #
-# forward .* caching.myisp.net:8000
+# forward .* caching.myisp.net:8118
 # forward myisp.net .
 #
 # For the @home network, we're told the forwarding configuration is this:
@@ -495,12 +495,12 @@ enable-remote-toggle 1
 # but everything else goes through Lucent's LPWA by way of the company's
 # SOCKS gateway to the Internet.
 #
-# forward_socks4 .* lpwa.com:8000 firewall.my_company.com:1080
+# forward-socks4 .* lpwa.com:8118 firewall.my_company.com:1080
 # forward my_company.com .
 #
 # This is how you could set up a site that always uses SOCKS but no forwarders
 #
-# forward_socks4a .* . firewall.my_company.com:1080
+# forward-socks4a .* . firewall.my_company.com:1080
 #
 # An advanced example for network administrators:
 #
