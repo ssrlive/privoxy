@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.26  2002/04/11 11:00:21  oes
+ *    Applied Moritz' fix for socklen_t on Solaris
+ *
  *    Revision 1.25  2002/04/06 20:38:01  jongfoster
  *    Renaming VC++ versions of config.h
  *
@@ -215,11 +218,6 @@
  * Version number - Point (_._.X)
  */
 #undef VERSION_POINT
-
-/*
- * Version number - RPM-release
- */
-#undef VERSION_RPM_PACKAGE
 
 /*
  * Version number, as a string
