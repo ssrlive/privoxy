@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.19 2001/09/13 23:31:25 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.20 2001/09/13 23:40:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.19 2001/09/13 23:31:25 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.20  2001/09/13 23:40:36  jongfoster
+ *    (Cosmetic only) Indentation correction
+ *
  *    Revision 1.19  2001/09/13 23:31:25  jongfoster
  *    Moving image data to cgi.c rather than cgi.h.
  *
@@ -161,6 +164,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.19 2001/09/13 23:31:25 jongfoster Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <assert.h>
 
 #ifdef _WIN32
 #define snprintf _snprintf
@@ -439,6 +443,7 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
    }   
 
    enlist(rsp->headers, "Content-Type: image/gif");
+   rsp->is_static = 1;
 
    return(0);
 
@@ -844,6 +849,65 @@ struct http_response *error_response(struct client_state *csp, const char *templ
 
 /*********************************************************************
  *
+ * Function    :  get_http_time
+ *
+ * Description :  Get the time in a format suitable for use in a
+ *                HTTP header - e.g.:
+ *                "Sun, 06 Nov 1994 08:49:37 GMT"
+ *
+ * Parameters  :  
+ *          1  :  time_offset = Time returned will be current time
+ *                              plus this number of seconds.
+ *          2  :  buf = Destination for result.  Must be long enough
+ *                      to hold 29 characters plus a trailing zero.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void get_http_time(int time_offset, char * buf)
+{
+   static const char day_names[7][4] =
+      { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+   static const char month_names[12][4] =
+      { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+   struct tm *t;
+   time_t current_time;
+
+   assert(buf);
+
+   time(&current_time); /* get current time */
+
+/* FIXME: is this needed?  time() can't fail on Win32.  What about Linux?
+   if(current_time <= 0)
+   {
+      return NULL;
+   }
+*/
+
+   current_time += time_offset;
+
+   /* get and save the gmt */
+   t = gmtime(&current_time);
+
+   /* Format: "Sun, 06 Nov 1994 08:49:37 GMT" */
+   snprintf(buf, 30,
+      "%s, %02d %s %4d %02d:%02d:%02d GMT",
+      day_names[t->tm_wday],
+      t->tm_mday,
+      month_names[t->tm_mon],
+      t->tm_year + 1900,
+      t->tm_hour,
+      t->tm_min,
+      t->tm_sec
+      );
+   buf[32] = '\0';
+}
+
+
+/*********************************************************************
+ *
  * Function    :  finish_http_response
  *
  * Description :  Fill in the missing headers in an http response,
@@ -876,20 +940,47 @@ struct http_response *finish_http_response(struct http_response *rsp)
    enlist(rsp->headers, buf);
 
    /* 
-    * Fill in the default headers FIXME: Are these correct? sequence OK? check rfc!
-    * FIXME: Should have:
-    *   "JunkBuster" GIF: Last-Modified: any *fixed* date in the past (as now).
-    *                     Expires: 5 minutes after the time when reply sent
-    *   CGI, "blocked", & all other requests:
-    *        Last-Modified: Time when reply sent
-    *        Expires:       Time when reply sent
-    *       "Cache-Control: no-cache"
-    *        
+    * Fill in the default headers:
+    *
+    * Content-Type: default to text/html if not already specified.
+    * Date: set to current date/time.
+    * Last-Modified: set to date/time the page was last changed.
+    * Expires: set to date/time page next needs reloading.
+    * Cache-Control: set to "no-cache" if applicable.
+    * 
     * See http://www.w3.org/Protocols/rfc2068/rfc2068
     */
-   enlist_unique(rsp->headers, "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT", 14);
-   enlist_unique(rsp->headers, "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT", 8);
    enlist_unique(rsp->headers, "Content-Type: text/html", 13);
+
+   if (rsp->is_static)
+   {
+      /*
+       * Set Expires to about 10 min into the future so it'll get reloaded
+       * occasionally, e.g. if IJB gets upgraded.
+       */
+
+      get_http_time(0, buf);
+      enlist_unique_header(rsp->headers, "Date", buf);
+
+      /* Some date in the past. */
+      enlist_unique_header(rsp->headers, "Last-Modified", "Sat, 17 Jun 2000 12:00:00 GMT");
+
+      get_http_time(10 * 60, buf); /* 10 * 60sec = 10 minutes */
+      enlist_unique_header(rsp->headers, "Expires", buf);
+   }
+   else
+   {
+      /*
+       * Compliant browsers should not cache this due to the "Cache-Control"
+       * setting.  However, to be certain, we also set both "Last-Modified"
+       * and "Expires" to the current time.
+       */
+      enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
+      get_http_time(0, buf);
+      enlist_unique_header(rsp->headers, "Date", buf);
+      enlist_unique_header(rsp->headers, "Last-Modified", buf);
+      enlist_unique_header(rsp->headers, "Expires", buf);
+   }
 
 
    /* 
@@ -905,7 +996,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    return(rsp);
 
 }
-  
+
 
 /*********************************************************************
  *
