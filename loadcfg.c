@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.17 2001/06/29 13:31:03 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.18 2001/07/13 14:01:14 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.17 2001/06/29 13:31:03 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.18  2001/07/13 14:01:14  oes
+ *     - Removed all #ifdef PCRS
+ *     - Removed vim-settings
+ *
  *    Revision 1.17  2001/06/29 13:31:03  oes
  *    - Improved comments
  *    - Fixed (actionsfile) and sorted hashes
@@ -194,13 +198,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.17 2001/06/29 13:31:03 oes Exp $"
 
 #ifdef _WIN32
 
-# include <sys/timeb.h>
 # include <windows.h>
-# include <io.h>
-# include <process.h>
-# ifdef TOGGLE
-#  include <time.h>
-# endif /* def TOGGLE */
 
 # include "win32.h"
 # ifndef _WIN_CONSOLE
