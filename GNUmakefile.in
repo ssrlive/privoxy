@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.5 2002/02/27 15:30:39 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.6 2002/03/05 13:10:51 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.6  2002/03/05 13:10:51  morcego
+# Changes to implement redhat-dok (Hal Burgiss)
+# Changes to make it work on other distros and out-of-the-shelf configurations
+#
 # Revision 1.5  2002/02/27 15:30:39  hal9
 # Reset $(RPM_PACKAGEV) to 1 (was 2)
 #
@@ -250,6 +254,7 @@ MV	        = mv
 TAR        = tar
 MAKE       = make
 LN         = ln
+WDUMP      = @WDUMP@ -dump
 DB         = jade -t sgml -ihtml -D.. -d ldp.dsl\#html
 
 # Program to do LF->CRLF
@@ -518,20 +523,20 @@ redhat-dok:
 	rm -rf doc/webserver/user-manual
 	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. &&\
           mv user-manual ../webserver
-	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && w3m \
-          -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && \
+          $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
           user-manual
 ##  developer manual
 	rm -rf doc/webserver/developer-manual
 	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml &&\
           cd .. && mv developer-manual ../webserver
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && \
-          w3m -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
+          $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
           developer-manual
 ##  faq
 	rm -rf doc/webserver/faq
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
-	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && w3m -dump \
+	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
 #############################################################################
