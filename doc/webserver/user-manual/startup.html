@@ -4,8 +4,7 @@
 >Starting Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -146,8 +145,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="START-REDHATDEBIAN"
->5.1. RedHat, Conectiva and Debian</A
+NAME="START-REDHAT"
+>5.1. RedHat and Conectiva</A
 ></H2
 ><P
 >We use a script. Note that RedHat does not start Privoxy upon booting per
@@ -155,7 +154,7 @@ default. It will use the file <TT
 CLASS="FILENAME"
 >/etc/privoxy/config</TT
 > as its
-main configuration file. FIXME: Debian??</P
+main configuration file.</P
 ><P
 > <TABLE
 BORDER="0"
@@ -176,8 +175,39 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
+NAME="START-DEBIAN"
+>5.2. Debian</A
+></H2
+><P
+> We use a script. Note that Debian starts Privoxy upon booting per
+ default.  It will use the file
+ <TT
+CLASS="FILENAME"
+>/etc/privoxy/config</TT
+> as its main configuration
+ file.</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> # /etc/init.d/privoxy start</PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
 NAME="START-SUSE"
->5.2. SuSE</A
+>5.3. SuSE</A
 ></H2
 ><P
 >We use a script. It will use the file <TT
@@ -207,7 +237,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-WINDOWS"
->5.3. Windows</A
+>5.4. Windows</A
 ></H2
 ><P
 >Click on the Privoxy Icon to start Privoxy. If no configuration file is
@@ -227,7 +257,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-UNICES"
->5.4. Solaris, NetBSD, FreeBSD, HP-UX and others</A
+>5.5. Solaris, NetBSD, FreeBSD, HP-UX and others</A
 ></H2
 ><P
 >Example Unix startup command:</P
@@ -252,7 +282,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-OS2"
->5.5. OS/2</A
+>5.6. OS/2</A
 ></H2
 ><P
 >FIXME.</P
@@ -263,7 +293,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-MACOSX"
->5.6. MAX OSX</A
+>5.7. MAX OSX</A
 ></H2
 ><P
 >FIXME.</P
@@ -274,7 +304,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="START-AMIGAOS"
->5.7. AmigaOS</A
+>5.8. AmigaOS</A
 ></H2
 ><P
 >FIXME.</P
@@ -285,7 +315,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CMDOPTIONS"
->5.8. Command Line Options</A
+>5.9. Command Line Options</A
 ></H2
 ><P
 > <SPAN

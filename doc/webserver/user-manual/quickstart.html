@@ -4,8 +4,7 @@
 >Quickstart to Using Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -326,37 +325,45 @@ CLASS="APPLICATION"
 HREF="actions-file.html#AF-PATTERNS"
 >patterns</A
 > that use
- wildcards so they can apply potentially to a range of similar URLs.</P
+ wildcards so they can apply potentially to a range of similar URLs. The
+ actions, together with the URL patterns are called a section.</P
 ><P
-> When you connect to a website, the full path of the URL will either match one 
- of the <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> as defined in
- <SPAN
+> When you connect to a website, the full URL will either match one or more
+ of the sections as defined in <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
-> configuration, or not. If so, then
- <SPAN
+> configuration,
+ or not. If so, then <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will perform the action accordingly. If
- not, then nothing special happens. Futhermore, web pages may contain
- embedded, secondary URLs that your web browser will display as it parses the
+> will perform the
+ respective actions. If not, then nothing special happens. Futhermore, web
+ pages may contain embedded, secondary URLs that your web browser will
+ use to load additional components of the page, as it parses the
  original page's HTML content. An ad image for instance, is just a URL
  embedded in the page somewhere. The image itself may be on the same server,
  or a server somewhere else on the Internet. Complex web pages will have many
  such embedded URLs.</P
 ><P
-> The actions we need to know about for ad blocking are:  <A
+> The actions we need to know about for ad blocking are:  <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#BLOCK"
 >block</A
->, <A
+></TT
+>, <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
 >handle-as-image</A
->, and <A
+></TT
+>, and
+ <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
 >set-image-blocker</A
+></TT
 >:</P
 ><P
 > <P
@@ -364,76 +371,84 @@ HREF="actions-file.html#SET-IMAGE-BLOCKER"
 ><UL
 ><LI
 ><P
->   <A
+>   <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#BLOCK"
-><I
-CLASS="EMPHASIS"
->block</I
-></A
+>block</A
+></TT
 > - this action stops
    any contact between your browser and any URL patterns that match this
    action's configuration. It can be used for blocking ads, but also anything
    that is determined to be unwanted. By itself, it simply stops any
-   communication with the remote server. If this is the only action that 
-   matches for this particular URL, then <SPAN
+   communication with the remote server and sends <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will 
-   display its own BLOCKED page to let you now what has happened.
+>'s
+   own built-in BLOCKED page instead to let you now what has happened.
   </P
 ></LI
 ><LI
 ><P
->   <A
+>   <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
-><I
-CLASS="EMPHASIS"
->handle-as-image</I
-></A
+>handle-as-image</A
+></TT
 > - 
-   forces <SPAN
+   tells <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> to treat this URL as if it were 
-   an image. <SPAN
+> to treat this URL as an image.
+   <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> knows about common image 
-   types (e.g. GIF), but there are many situations where this does not apply.
-   So we'll force it. This is particularly important for ad blocking, since 
-   once we can treat it as an image, we can make more intelligent decisisions 
-   on how to handle it. There are some limitations to this though. For
-   instance, you can't just force an image substituion for an entire HTML page 
+>'s default configuration already does this
+   for all common image types (e.g. GIF), but there are many situations where this
+   is not as easy to determine. So we'll force it in these cases. This is particularly
+   important for ad blocking, since  only if we know that it's an image, we can replace
+   it by an image instead of the BLOCKED page, which would only result in a
+   <SPAN
+CLASS="QUOTE"
+>"broken image"</SPAN
+> icon. There are some limitations to this though. For
+   instance, you can't just brute-force an image substituion for an entire HTML page
    in most situations.
   </P
 ></LI
 ><LI
 ><P
->   <A
+>   <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
-><I
-CLASS="EMPHASIS"
->set-image-blocker</I
-></A
-> -
-   tells <SPAN
+>set-image-blocker</A
+></TT
+> - tells
+   <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> what to display in place of 
-   an ad image that has hit a block rule. For this to come into play, 
-   the URL must match a block action somewhere in the configuration.
-   <I
+> what to display in place of an ad image that
+   has hit a block rule. For this to come into play, the URL must match a
+   <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#BLOCK"
+>block</A
+></TT
+> action somewhere in the
+   configuration, <I
 CLASS="EMPHASIS"
->And</I
->, it must also either be of a known image type, or
-   match an <A
+>and</I
+>, it must also match an
+   <TT
+CLASS="LITERAL"
+><A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
-><I
-CLASS="EMPHASIS"
->handle-as-image</I
-></A
->
-   action.
+>handle-as-image</A
+></TT
+> action.
   </P
 ><P
 >   The configuration options on what to display instead of the ad are:
@@ -487,8 +502,8 @@ BORDER="0"
 >       <I
 CLASS="EMPHASIS"
 >http://&#60;URL&#62;</I
-> - A redirect to any URL of the
-    user's choosing (advanced usage).
+> - A redirect to any image anywhere
+    of the user's choosing (advanced usage).
    </TD
 ></TR
 ></TBODY
@@ -503,7 +518,7 @@ CLASS="EMPHASIS"
  the special <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> editor  at <A
+> editor at <A
 HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >http://config.privoxy.org/show-status</A
@@ -586,7 +601,7 @@ CLASS="GUIBUTTON"
 >  <DIV
 CLASS="FIGURE"
 ><A
-NAME="AEN349"
+NAME="AEN356"
 ></A
 ><P
 ><B
@@ -607,45 +622,64 @@ ALT="Screenshot of Files in Use"
 ></LI
 ><LI
 ><P
->   You should have an Actions section labeled <I
-CLASS="EMPHASIS"
->+block</I
->. 
-   If not, click the <SPAN
+>   You should have a section with only
+   <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#BLOCK"
+>block</A
+></TT
+> listed under 
+   <SPAN
+CLASS="QUOTE"
+>"Actions:"</SPAN
+>.
+   If not, click a <SPAN
 CLASS="QUOTE"
 >"<SPAN
 CLASS="GUIBUTTON"
->Edit</SPAN
+>Insert new section below</SPAN
 >"</SPAN
-> button just
-   under the word <SPAN
-CLASS="QUOTE"
->"Actions"</SPAN
->. This will bring up a list of all
-   actions. Find <I
-CLASS="EMPHASIS"
->block</I
-> near the top, and click in the
+>
+   button, and in the new section that just appeared, click the 
    <SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+> button right under the word <SPAN
+CLASS="QUOTE"
+>"Actions:"</SPAN
+>.
+   This will bring up a list of all actions. Find
+   <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#BLOCK"
+>block</A
+></TT
+> near the top, and click
+   in the <SPAN
 CLASS="QUOTE"
 >"Enabled"</SPAN
-> column, then
-   <SPAN
+> column, then <SPAN
 CLASS="QUOTE"
 >"<SPAN
 CLASS="GUIBUTTON"
 >Submit</SPAN
 >"</SPAN
-> just below the list.
+>
+   just below the list.
   </P
 ></LI
 ><LI
 ><P
->   Now, in the <I
-CLASS="EMPHASIS"
->+block</I
-> actions section, click the
-   <SPAN
+>   Now, in the <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#BLOCK"
+>block</A
+></TT
+> actions section,
+   click the <SPAN
 CLASS="QUOTE"
 >"<SPAN
 CLASS="GUIBUTTON"
@@ -656,21 +690,27 @@ CLASS="GUIBUTTON"
 CLASS="QUOTE"
 >"<SPAN
 CLASS="GUIMENUITEM"
->Copy Link
-   Location</SPAN
+>Copy Link Location</SPAN
 >"</SPAN
->. Remove the <TT
+>.
+   Remove the <TT
 CLASS="LITERAL"
 >http://</TT
-> at
-   the beginning of the URL. Then, click
+> at the beginning of the URL. Then, click
    <SPAN
 CLASS="QUOTE"
 >"<SPAN
 CLASS="GUIBUTTON"
 >Submit</SPAN
 >"</SPAN
->.
+> (or
+   <SPAN
+CLASS="QUOTE"
+>"<SPAN
+CLASS="GUIBUTTON"
+>OK</SPAN
+>"</SPAN
+> if in a pop-up window).
   </P
 ></LI
 ><LI
@@ -701,7 +741,8 @@ HREF="actions-file.html"
  to now go to the <A
 HREF="actions-file.html#ACT-EXAMPLES"
 >Actions Files Tutorial</A
->.</P
+>.
+ The ideas explained thererin also apply to the web-based editor.</P
 ></DIV
 ></DIV
 ><DIV

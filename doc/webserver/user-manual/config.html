@@ -4,8 +4,7 @@
 >The Main Configuration File</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -1445,11 +1444,32 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > will
     bind to all interfaces (addresses) on your machine and may become reachable
-    from the Internet. In that case, consider using access control lists (ACL's)
-    (see <SPAN
-CLASS="QUOTE"
->"ACLs"</SPAN
-> below), or a firewall.
+    from the Internet. In that case, consider using <A
+HREF="config.html#ACLS"
+>access control lists</A
+> (ACL's, see below), and/or
+    a firewall.
+   </P
+><P
+>    If you open <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to untrusted users, you will
+    also want to turn off the <TT
+CLASS="LITERAL"
+><A
+HREF="config.html#ENABLE-EDIT-ACTIONS"
+>enable-edit-actions</A
+></TT
+> and
+    <TT
+CLASS="LITERAL"
+><A
+HREF="config.html#ENABLE-REMOTE-TOGGLE"
+>enable-remote-toggle</A
+></TT
+>
+    options!
    </P
 ></DD
 ><DT
@@ -1742,10 +1762,10 @@ NAME="ACLS"
 >7.4.5. ACLs: permit-access and deny-access</A
 ></H4
 ><A
-NAME="PERMIT-ACCES"
+NAME="PERMIT-ACCESS"
 ></A
 ><A
-NAME="DENY-ACCES"
+NAME="DENY-ACCESS"
 ></A
 ><P
 ></P

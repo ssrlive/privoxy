@@ -4,8 +4,7 @@
 >Privoxy User Manual</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="NEXT"
 TITLE="Introduction"
 HREF="introduction.html"><LINK
@@ -45,7 +44,7 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 1.118 2002/05/21 04:54:55 hal9 Exp $<BR></P
+>$Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -147,7 +146,7 @@ HREF="installation.html#INSTALLATION-PACKAGES"
 ><DT
 >2.1.1. <A
 HREF="installation.html#INSTALLATION-PACK-RPM"
->Red Hat, SuSE and Conectiva RPMs</A
+>Red Hat, SuSE RPMs and Conectiva</A
 ></DT
 ><DT
 >2.1.2. <A
@@ -222,41 +221,46 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >5.1. <A
-HREF="startup.html#START-REDHATDEBIAN"
->RedHat, Conectiva and Debian</A
+HREF="startup.html#START-REDHAT"
+>RedHat and Conectiva</A
 ></DT
 ><DT
 >5.2. <A
+HREF="startup.html#START-DEBIAN"
+>Debian</A
+></DT
+><DT
+>5.3. <A
 HREF="startup.html#START-SUSE"
 >SuSE</A
 ></DT
 ><DT
->5.3. <A
+>5.4. <A
 HREF="startup.html#START-WINDOWS"
 >Windows</A
 ></DT
 ><DT
->5.4. <A
+>5.5. <A
 HREF="startup.html#START-UNICES"
 >Solaris, NetBSD, FreeBSD, HP-UX and others</A
 ></DT
 ><DT
->5.5. <A
+>5.6. <A
 HREF="startup.html#START-OS2"
 >OS/2</A
 ></DT
 ><DT
->5.6. <A
+>5.7. <A
 HREF="startup.html#START-MACOSX"
 >MAX OSX</A
 ></DT
 ><DT
->5.7. <A
+>5.8. <A
 HREF="startup.html#START-AMIGAOS"
 >AmigaOS</A
 ></DT
 ><DT
->5.8. <A
+>5.9. <A
 HREF="startup.html#CMDOPTIONS"
 >Command Line Options</A
 ></DT
@@ -274,7 +278,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >6.1. <A
-HREF="configuration.html#AEN481"
+HREF="configuration.html#AEN501"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -465,12 +469,12 @@ HREF="actions-file.html"
 ><DL
 ><DT
 >8.1. <A
-HREF="actions-file.html#AEN1527"
+HREF="actions-file.html#AEN1553"
 >Finding the Right Mix</A
 ></DT
 ><DT
 >8.2. <A
-HREF="actions-file.html#AEN1534"
+HREF="actions-file.html#AEN1560"
 >How to Edit</A
 ></DT
 ><DT
@@ -486,13 +490,18 @@ HREF="actions-file.html#AF-PATTERNS"
 ><DD
 ><DL
 ><DT
+>22<A
+HREF="actions-file.html#AEN1591"
+></A
+></DT
+><DT
 >8.4.1. <A
-HREF="actions-file.html#AEN1597"
+HREF="actions-file.html#AEN1624"
 >The Domain Pattern</A
 ></DT
 ><DT
 >8.4.2. <A
-HREF="actions-file.html#AEN1659"
+HREF="actions-file.html#AEN1686"
 >The Path Pattern</A
 ></DT
 ></DL
@@ -507,169 +516,109 @@ HREF="actions-file.html#ACTIONS"
 ><DT
 >8.5.1. <A
 HREF="actions-file.html#ADD-HEADER"
-><I
-CLASS="EMPHASIS"
->add-header</I
-></A
+>add-header</A
 ></DT
 ><DT
 >8.5.2. <A
 HREF="actions-file.html#BLOCK"
-><I
-CLASS="EMPHASIS"
->block</I
-></A
+>block</A
 ></DT
 ><DT
 >8.5.3. <A
 HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
-><I
-CLASS="EMPHASIS"
->crunch-incoming-cookies</I
-></A
+>crunch-incoming-cookies</A
 ></DT
 ><DT
 >8.5.4. <A
 HREF="actions-file.html#CRUNCH-OUTGOING-COOKIES"
-><I
-CLASS="EMPHASIS"
->crunch-outgoing-cookies</I
-></A
+>crunch-outgoing-cookies</A
 ></DT
 ><DT
 >8.5.5. <A
 HREF="actions-file.html#DEANIMATE-GIFS"
-><I
-CLASS="EMPHASIS"
->deanimate-gifs</I
-></A
+>deanimate-gifs</A
 ></DT
 ><DT
 >8.5.6. <A
 HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
-><I
-CLASS="EMPHASIS"
->downgrade-http-version</I
-></A
+>downgrade-http-version</A
 ></DT
 ><DT
 >8.5.7. <A
 HREF="actions-file.html#FAST-REDIRECTS"
-><I
-CLASS="EMPHASIS"
->fast-redirects</I
-></A
+>fast-redirects</A
 ></DT
 ><DT
 >8.5.8. <A
 HREF="actions-file.html#FILTER"
-><I
-CLASS="EMPHASIS"
->filter</I
-></A
+>filter</A
 ></DT
 ><DT
 >8.5.9. <A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
-><I
-CLASS="EMPHASIS"
->handle-as-image</I
-></A
+>handle-as-image</A
 ></DT
 ><DT
 >8.5.10. <A
 HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
-><I
-CLASS="EMPHASIS"
->hide-forwarded-for-headers</I
-></A
+>hide-forwarded-for-headers</A
 ></DT
 ><DT
 >8.5.11. <A
 HREF="actions-file.html#HIDE-FROM-HEADER"
-><I
-CLASS="EMPHASIS"
->hide-from-header</I
-></A
+>hide-from-header</A
 ></DT
 ><DT
 >8.5.12. <A
 HREF="actions-file.html#HIDE-REFERRER"
-><I
-CLASS="EMPHASIS"
->hide-referrer</I
-></A
+>hide-referrer</A
 ></DT
 ><DT
 >8.5.13. <A
 HREF="actions-file.html#HIDE-USER-AGENT"
-><I
-CLASS="EMPHASIS"
->hide-user-agent</I
-></A
+>hide-user-agent</A
 ></DT
 ><DT
 >8.5.14. <A
 HREF="actions-file.html#KILL-POPUPS"
-><I
-CLASS="EMPHASIS"
 >kill-popups<A
 NAME="KILL-POPUP"
 ></A
-></I
 ></A
 ></DT
 ><DT
 >8.5.15. <A
 HREF="actions-file.html#LIMIT-CONNECT"
-><I
-CLASS="EMPHASIS"
->limit-connect</I
-></A
+>limit-connect</A
 ></DT
 ><DT
 >8.5.16. <A
 HREF="actions-file.html#PREVENT-COMPRESSION"
-><I
-CLASS="EMPHASIS"
->prevent-compression</I
-></A
+>prevent-compression</A
 ></DT
 ><DT
 >8.5.17. <A
 HREF="actions-file.html#SEND-VANILLA-WAFER"
-><I
-CLASS="EMPHASIS"
->send-vanilla-wafer</I
-></A
+>send-vanilla-wafer</A
 ></DT
 ><DT
 >8.5.18. <A
 HREF="actions-file.html#SEND-WAFER"
-><I
-CLASS="EMPHASIS"
->send-wafer</I
-></A
+>send-wafer</A
 ></DT
 ><DT
 >8.5.19. <A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
-><I
-CLASS="EMPHASIS"
->session-cookies-only</I
-></A
+>session-cookies-only</A
 ></DT
 ><DT
 >8.5.20. <A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
-><I
-CLASS="EMPHASIS"
->set-image-blocker</I
-></A
+>set-image-blocker</A
 ></DT
 ><DT
 >8.5.21. <A
-HREF="actions-file.html#AEN2593"
+HREF="actions-file.html#AEN2600"
 >Summary</A
 ></DT
 ></DL
@@ -688,12 +637,12 @@ HREF="actions-file.html#ACT-EXAMPLES"
 ><DL
 ><DT
 >8.7.1. <A
-HREF="actions-file.html#AEN2645"
+HREF="actions-file.html#AEN2652"
 >default.action</A
 ></DT
 ><DT
 >8.7.2. <A
-HREF="actions-file.html#AEN2799"
+HREF="actions-file.html#AEN2806"
 >user.action</A
 ></DT
 ></DL
@@ -709,7 +658,7 @@ HREF="filter-file.html"
 ><DL
 ><DT
 >9.1. <A
-HREF="filter-file.html#AEN2902"
+HREF="filter-file.html#AEN2909"
 >Filter File Tutorial</A
 ></DT
 ></DL
@@ -766,7 +715,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >12.1. <A
-HREF="copyright.html#AEN3096"
+HREF="copyright.html#AEN3103"
 >License</A
 ></DT
 ><DT
@@ -800,7 +749,7 @@ HREF="appendix.html#REGEX"
 ></DT
 ><DT
 >14.2. <A
-HREF="appendix.html#AEN3346"
+HREF="appendix.html#AEN3353"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN

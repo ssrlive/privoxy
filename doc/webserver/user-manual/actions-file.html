@@ -4,8 +4,7 @@
 >Actions Files</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
 REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
@@ -202,7 +201,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1527"
+NAME="AEN1553"
 >8.1. Finding the Right Mix</A
 ></H2
 ><P
@@ -236,7 +235,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1534"
+NAME="AEN1560"
 >8.2. How to Edit</A
 ></H2
 ><P
@@ -282,35 +281,40 @@ CLASS="QUOTE"
 HREF="actions-file.html#ALIASES"
 >alias</A
 >"</SPAN
-> sections which will be discussed later. For now
- let's concentrate on regular sections: They have a heading line (often split
- up to multiple lines for readability) which consist of a list of actions,
- separated by whitespace and enclosed in curly braces. Below that, there
- is a list of URL patterns, each on a separate line.</P
+> sections which will
+ be discussed later. For now let's concentrate on regular sections: They have a
+ heading line (often split up to multiple lines for readability) which consist
+ of a list of actions, separated by whitespace and enclosed in curly braces.
+ Below that, there is a list of URL patterns, each on a separate line.</P
 ><P
 > To determine which actions apply to a request, the URL of the request is
  compared to all patterns in each action file file. Every time it matches, the list of
  applicable actions for the URL is incrementally updated, using the heading
  of the section in which the pattern is located. If multiple matches for
  the same URL set the same action differently, the last match wins. If not, 
- the effects are aggregated (e.g. a URL might match both the 
- <A
+ the effects are aggregated. E.g. a URL might match a regular section with 
+ a heading line of <TT
+CLASS="LITERAL"
+>{ 
+ +<A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
 TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"+handle-as-image"</SPAN
-></A
->
- and <A
+>handle-as-image</A
+> }</TT
+>,
+ then later another one with just <TT
+CLASS="LITERAL"
+>{
+ +<A
 HREF="actions-file.html#BLOCK"
 TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"+block"</SPAN
-></A
-> actions).
- </P
+>block</A
+> }</TT
+>, resulting
+ in <I
+CLASS="EMPHASIS"
+>both</I
+> actions to apply.</P
 ><P
 > You can trace this process for any given URL by visiting <A
 HREF="http://config.privoxy.org/show-url-info"
@@ -435,7 +439,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1597"
+NAME="AEN1624"
 >8.4.1. The Domain Pattern</A
 ></H3
 ><P
@@ -609,7 +613,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1659"
+NAME="AEN1686"
 >8.4.2. The Path Pattern</A
 ></H3
 ><P
@@ -654,21 +658,19 @@ CLASS="QUOTE"
 > (regular expression speak 
  for the beginning of a line).</P
 ><P
-> Please also note that matching in the path is case
- <I
+> Please also note that matching in the path is <I
 CLASS="EMPHASIS"
->INSENSITIVE</I
-> by default, but you can switch to case
- sensitive at any point in the pattern by using the 
+>CASE INSENSITIVE</I
+>
+ by default, but you can switch to case sensitive at any point in the pattern by using the 
  <SPAN
 CLASS="QUOTE"
 >"(?-i)"</SPAN
-> switch:
- <TT
+> switch: <TT
 CLASS="LITERAL"
 >www.example.com/(?-i)PaTtErN.*</TT
-> will match only
- documents whose path starts with <TT
+> will match
+ only documents whose path starts with <TT
 CLASS="LITERAL"
 >PaTtErN</TT
 > in
@@ -969,10 +971,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ADD-HEADER"
->8.5.1. <I
-CLASS="EMPHASIS"
->add-header</I
-></A
+>8.5.1. add-header</A
 ></H4
 ><P
 ></P
@@ -1054,10 +1053,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BLOCK"
->8.5.2. <I
-CLASS="EMPHASIS"
->block</I
-></A
+>8.5.2. block</A
 ></H4
 ><P
 ></P
@@ -1222,10 +1218,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-INCOMING-COOKIES"
->8.5.3. <I
-CLASS="EMPHASIS"
->crunch-incoming-cookies</I
-></A
+>8.5.3. crunch-incoming-cookies</A
 ></H4
 ><P
 ></P
@@ -1329,10 +1322,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-OUTGOING-COOKIES"
->8.5.4. <I
-CLASS="EMPHASIS"
->crunch-outgoing-cookies</I
-></A
+>8.5.4. crunch-outgoing-cookies</A
 ></H4
 ><P
 ></P
@@ -1436,10 +1426,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DEANIMATE-GIFS"
->8.5.5. <I
-CLASS="EMPHASIS"
->deanimate-gifs</I
-></A
+>8.5.5. deanimate-gifs</A
 ></H4
 ><P
 ></P
@@ -1529,10 +1516,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DOWNGRADE-HTTP-VERSION"
->8.5.6. <I
-CLASS="EMPHASIS"
->downgrade-http-version</I
-></A
+>8.5.6. downgrade-http-version</A
 ></H4
 ><P
 ></P
@@ -1608,10 +1592,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FAST-REDIRECTS"
->8.5.7. <I
-CLASS="EMPHASIS"
->fast-redirects</I
-></A
+>8.5.7. fast-redirects</A
 ></H4
 ><P
 ></P
@@ -1705,10 +1686,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FILTER"
->8.5.8. <I
-CLASS="EMPHASIS"
->filter</I
-></A
+>8.5.8. filter</A
 ></H4
 ><P
 ></P
@@ -2067,10 +2045,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-IMAGE"
->8.5.9. <I
-CLASS="EMPHASIS"
->handle-as-image</I
-></A
+>8.5.9. handle-as-image</A
 ></H4
 ><P
 ></P
@@ -2200,10 +2175,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-FORWARDED-FOR-HEADERS"
->8.5.10. <I
-CLASS="EMPHASIS"
->hide-forwarded-for-headers</I
-></A
+>8.5.10. hide-forwarded-for-headers</A
 ></H4
 ><P
 ></P
@@ -2284,10 +2256,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-FROM-HEADER"
->8.5.11. <I
-CLASS="EMPHASIS"
->hide-from-header</I
-></A
+>8.5.11. hide-from-header</A
 ></H4
 ><P
 ></P
@@ -2398,10 +2367,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-REFERRER"
->8.5.12. <I
-CLASS="EMPHASIS"
->hide-referrer</I
-></A
+>8.5.12. hide-referrer</A
 ></H4
 ><A
 NAME="HIDE-REFERER"
@@ -2537,10 +2503,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-USER-AGENT"
->8.5.13. <I
-CLASS="EMPHASIS"
->hide-user-agent</I
-></A
+>8.5.13. hide-user-agent</A
 ></H4
 ><P
 ></P
@@ -2672,12 +2635,9 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="KILL-POPUPS"
->8.5.14. <I
-CLASS="EMPHASIS"
->kill-popups<A
+>8.5.14. kill-popups<A
 NAME="KILL-POPUP"
 ></A
-></I
 ></A
 ></H4
 ><P
@@ -2824,10 +2784,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="LIMIT-CONNECT"
->8.5.15. <I
-CLASS="EMPHASIS"
->limit-connect</I
-></A
+>8.5.15. limit-connect</A
 ></H4
 ><P
 ></P
@@ -2930,10 +2887,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="PREVENT-COMPRESSION"
->8.5.16. <I
-CLASS="EMPHASIS"
->prevent-compression</I
-></A
+>8.5.16. prevent-compression</A
 ></H4
 ><P
 ></P
@@ -3064,10 +3018,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SEND-VANILLA-WAFER"
->8.5.17. <I
-CLASS="EMPHASIS"
->send-vanilla-wafer</I
-></A
+>8.5.17. send-vanilla-wafer</A
 ></H4
 ><P
 ></P
@@ -3140,10 +3091,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SEND-WAFER"
->8.5.18. <I
-CLASS="EMPHASIS"
->send-wafer</I
-></A
+>8.5.18. send-wafer</A
 ></H4
 ><P
 ></P
@@ -3230,10 +3178,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SESSION-COOKIES-ONLY"
->8.5.19. <I
-CLASS="EMPHASIS"
->session-cookies-only</I
-></A
+>8.5.19. session-cookies-only</A
 ></H4
 ><P
 ></P
@@ -3370,10 +3315,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SET-IMAGE-BLOCKER"
->8.5.20. <I
-CLASS="EMPHASIS"
->set-image-blocker</I
-></A
+>8.5.20. set-image-blocker</A
 ></H4
 ><P
 ></P
@@ -3615,7 +3557,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2593"
+NAME="AEN2600"
 >8.5.21. Summary</A
 ></H3
 ><P
@@ -3871,7 +3813,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2645"
+NAME="AEN2652"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -4660,7 +4602,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2799"
+NAME="AEN2806"
 >8.7.2. user.action</A
 ></H3
 ><P
