@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.46 2002/04/26 12:55:14 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.47 2002/05/12 21:36:29 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.46 2002/04/26 12:55:14 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.47  2002/05/12 21:36:29  jongfoster
+ *    Correcting function comments
+ *
  *    Revision 1.46  2002/04/26 12:55:14  oes
  *     - New option "user-manual", defaults to our site
  *       via project.h #define
@@ -1537,8 +1540,17 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
    assert(*command);
    assert(argument);
 
-   buf = strdup("");
-   string_join(&buf, add_help_link(command, config));
+   /*
+    * Add config option name embedded in
+    * link to it's section in the user-manual
+    */
+   buf = strdup("<a href=\"");
+   string_append(&buf, config->usermanual);
+   string_append(&buf, CONFIG_HELP_PREFIX);
+   string_join  (&buf, string_toupper(command));
+   string_append(&buf, "\">");
+   string_append(&buf, command);
+   string_append(&buf, "</a> ");
 
    if (NULL == buf)
    {
