@@ -1,7 +1,7 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 2.1 2002/06/04 17:22:37 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/loaders.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/loaders.c,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 2.0 2002/06/04 14:34:21 jongfoster 
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 2.1  2002/06/04 17:22:37  jongfoster
+ *    Adding comments
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -1256,7 +1259,7 @@ int load_re_filterfile(struct client_state *csp)
    char  buf[BUFFER_SIZE];
    int error;
    unsigned long linenum = 0;
-   pcrs_job *dummy;
+   pcrs_job *dummy, *lastjob = NULL;
 
    /*
     * No need to reload if unchanged
@@ -1343,14 +1346,21 @@ int load_re_filterfile(struct client_state *csp)
 
          if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
          {
-            log_error(LOG_LEVEL_RE_FILTER,
+            log_error(LOG_LEVEL_ERROR,
                       "Adding re_filter job %s to filter %s failed with error %d.", buf, bl->name, error);
             continue;
          }
          else
          {
-            dummy->next = bl->joblist;
-            bl->joblist = dummy;
+            if (bl->joblist == NULL)
+            {
+               bl->joblist = dummy;
+            }
+            else
+            {
+               lastjob->next = dummy;
+            }
+            lastjob = dummy;
             log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s to filter %s succeeded.", buf, bl->name);
          }
       }
