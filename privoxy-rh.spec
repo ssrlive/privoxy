@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.26 2002/04/22 16:24:36 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.27 2002/04/22 16:32:31 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -215,13 +215,8 @@ fi
 #fi
 # We only remove it we this is not an upgrade
 if [ "$1" = "0" ]; then
-	# And only if this is not redhat, once redhat likes to have
-	# the uid and gid allocated even if the package is not
-	# installed
-	if [ ! -r /etc/redhat-release ]; then
-		/bin/grep -E '^%{name}:' /etc/group > /dev/null && /usr/sbin/groupdel %{name} || /bin/true
-		id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
-	fi
+	/bin/grep -E '^%{name}:' /etc/group > /dev/null && /usr/sbin/groupdel %{name} || /bin/true
+	id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 fi
 
 %clean
@@ -299,6 +294,12 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.14-2
+- Removed the redhat hack that prevented the user and group from
+  being dealocated. That was a misundestanding of my part regarding
+  redhat policy.
+
 * Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.14-2
 - Using macros to define uid and gid values
@@ -616,6 +617,12 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.27  2002/04/22 16:32:31  morcego
+# configure.in, *.spec: Bumping release to 2 (2.9.14-2)
+# -rh.spec: uid and gid are now macros
+# -suse.spec: Changing the header Copyright to License (Copyright is
+#             deprecable)
+#
 # Revision 1.26  2002/04/22 16:24:36  morcego
 # - Changes to fixate the uid and gid values as (both) 73. This is a
 #   value we hope to standarize for all distributions. RedHat already
