@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.2 2001/06/04 18:31:58 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.2 2001/06/07 17:18:44 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -25,7 +25,10 @@
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# $Log: junkbuster-rh.spec,v $
+# $Log: junkbuster-suse.spec,v $
+# Revision 1.2  2001/06/07 17:18:44  swa
+# header fixed
+#
 #
 # neededforbuild  -ijb
 # usedforbuild    -ijb aaa_base aaa_dir autoconf automake base bash bindutil binutils bison bzip compress cpio cracklib db devs diffutils e2fsprogs file fileutils findutils flex gawk gcc gdbm gdbm-devel gettext glibc glibc-devel gpm gppshare groff gzip kbd less libtool libz lx_suse make mktemp modutils ncurses ncurses-devel net-tools netcfg nkitb pam pam-devel patch perl pgp ps rcs rpm sendmail sh-utils shadow strace syslogd sysvinit texinfo textutils timezone unzip util-linux vim xdevel xf86 xshared
@@ -40,12 +43,15 @@ Group:        Networking/Utilities
 Provides:     ijb
 Obsoletes:    ijb
 Autoreqprov:  on
-Version:      2.0
-Release:      14
+Version: 2.9
+Release: 4
 Summary:      The Internet Junkbuster
 Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 atch:   ijb20.dif
 
+#
+# -----------------------------------------------------------------------------
+#
 %description
 The Internet Junkbuster (TM) blocks unwanted banner ads and protects
 your privacy from cookies and other threats. It's free under the GPL
@@ -61,10 +67,16 @@ Authors:
 
 SuSE series: n
 
+#
+# -----------------------------------------------------------------------------
+#
 %prep
 %setup -n ijb20
 %patch
 
+#
+# -----------------------------------------------------------------------------
+#
 %build
 make
 cat > /etc/init.d/junkbuster << EOT
@@ -117,6 +129,9 @@ EOT
 chmod 755 /etc/init.d/junkbuster
 ln -sf /etc/init.d/junkbuster /usr/sbin/rcjunkbuster
 
+#
+# -----------------------------------------------------------------------------
+#
 %install
 install -m 755 junkbuster /usr/sbin
 install -d /etc/ijb
@@ -124,12 +139,21 @@ install -m 644 *.ini /etc/ijb
 install -m 644 junkbuster.1 /usr/share/man/man1
 %{?suse_check}
 
+#
+# -----------------------------------------------------------------------------
+#
 %post
 sbin/insserv etc/init.d/junkbuster
 
+#
+# -----------------------------------------------------------------------------
+#
 %postun
 sbin/insserv etc/init.d/
 
+#
+# -----------------------------------------------------------------------------
+#
 %files
 %doc README *.html
 /usr/sbin/junkbuster
@@ -138,6 +162,9 @@ sbin/insserv etc/init.d/
 /etc/init.d/junkbuster
 /usr/sbin/rcjunkbuster
 
+#
+# -----------------------------------------------------------------------------
+#
 %changelog -n junkbuster
 * Wed Feb 14 2001 - uli@suse.de
 - fixed init script
