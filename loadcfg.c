@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.6 2001/05/26 00:28:36 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.7 2001/05/29 09:50:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,29 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.6 2001/05/26 00:28:36 jongfoster 
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.7  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.6  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -149,6 +172,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.6 2001/05/26 00:28:36 jongfoster 
 #endif
 
 #include "loadcfg.h"
+#include "list.h"
 #include "jcc.h"
 #include "filters.h"
 #include "loaders.h"
@@ -172,15 +196,6 @@ const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
  */
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
-
-static const char VANILLA_WAFER[] =
-   "NOTICE=TO_WHOM_IT_MAY_CONCERN_"
-   "Do_not_send_me_any_copyrighted_information_other_than_the_"
-   "document_that_I_am_requesting_or_any_of_its_necessary_components._"
-   "In_particular_do_not_send_me_any_cookies_that_"
-   "are_subject_to_a_claim_of_copyright_by_anybody._"
-   "Take_notice_that_I_refuse_to_be_bound_by_any_license_condition_"
-   "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 #ifdef TOGGLE
 /* by haroon - indicates if ijb is enabled */
@@ -210,43 +225,33 @@ static struct file_list *current_configfile = NULL;
  * config file and read the number from the error message in the log).
  */
 
-#define hash_trustfile                 56494766ul
-#define hash_trust_info_url            449869467ul
-#define hash_debug                     78263ul
-#define hash_tinygif                   2227702ul
-#define hash_add_forwarded_header      3191044770ul
-#define hash_single_threaded           4250084780ul
-#define hash_suppress_vanilla_wafer    3121233547ul
-#define hash_wafer                     89669ul
-#define hash_add_header                237434619ul
-#define hash_permissions_file          3825730796lu /* "permissionsfile" */
-#define hash_logfile                   2114766ul
-#define hash_blockfile                 48845391ul
-#define hash_imagefile                 51447891ul
-#define hash_jarfile                   2046641ul
-#define hash_listen_address            1255650842ul
+
+#define hash_aclfile                      1908516ul
+#define hash_actions_file              3825730796ul /* FIXME "permissionsfile" */
+#define hash_debug                          78263ul
 #define hash_forwardfile               1268669141ul
-#define hash_aclfile                   1908516ul
+#define hash_jarfile                      2046641ul
+#define hash_listen_address            1255650842ul
+#define hash_logfile                      2114766ul
 #define hash_re_filterfile             3877522444ul
-#define hash_user_agent                283326691ul
-#define hash_referrer                  10883969ul
-#define hash_referer                   2176719ul
-#define hash_from                      16264ul
-#define hash_fast_redirects            464873764lu
-#define hash_hide_console              2048809870ul
-#define hash_include_stats             2174146548ul
+#define hash_single_threaded           4250084780ul
 #define hash_suppress_blocklists       1948693308ul
-#define hash_toggle                    447966ul
+#define hash_tinygif                      2227702ul /* FIXME should be in actions file */
+#define hash_toggle                        447966ul
+#define hash_trust_info_url             449869467ul
+#define hash_trustfile                   56494766ul
+
+#define hash_hide_console              2048809870ul
 
 #define hash_activity_animation        1817904738ul
-#define hash_log_messages              2291744899ul
-#define hash_log_highlight_messages    4032101240ul
+#define hash_close_button_minimizes    3651284693ul
 #define hash_log_buffer_size           2918070425ul
-#define hash_log_max_lines             2868344173ul
 #define hash_log_font_name             2866730124ul
 #define hash_log_font_size             2866731014ul
-#define hash_show_on_task_bar          215410365ul
-#define hash_close_button_minimizes    3651284693ul
+#define hash_log_highlight_messages    4032101240ul
+#define hash_log_max_lines             2868344173ul
+#define hash_log_messages              2291744899ul
+#define hash_show_on_task_bar           215410365ul
 
 
 
@@ -277,13 +282,10 @@ void unload_configfile (void * data)
    freez((char *)config->tinygifurl);
 #endif /* def IMAGE_BLOCKING */
 
-   freez((char *)config->from);
    freez((char *)config->haddr);
-   freez((char *)config->uagent);
-   freez((char *)config->referrer);
    freez((char *)config->logfile);
 
-   freez((char *)config->permissions_file);
+   freez((char *)config->actions_file);
    freez((char *)config->forwardfile);
 
 #ifdef ACL_FILES
@@ -324,7 +326,6 @@ struct configuration_spec * load_config(void)
    char *p, *q;
    FILE *configfp = NULL;
    struct configuration_spec * config = NULL;
-   int suppress_vanilla_wafer;
    struct client_state * fake_csp;
 
    struct file_list *fs;
@@ -374,7 +375,6 @@ struct configuration_spec * load_config(void)
     */
 
    config->multi_threaded    = 1;
-   config->default_permissions = PERMIT_RE_FILTER | PERMIT_FAST_REDIRECTS;
    config->hport             = HADDR_PORT;
 
    if ((configfp = fopen(configfile, "r")) == NULL)
@@ -481,29 +481,13 @@ struct configuration_spec * load_config(void)
             continue;
 #endif /* def IMAGE_BLOCKING */
 
-         case hash_add_forwarded_header :
-            config->add_forwarded = 1;
-            continue;
-
          case hash_single_threaded :
             config->multi_threaded = 0;
             continue;
 
-         case hash_suppress_vanilla_wafer :
-            suppress_vanilla_wafer = 1;
-            continue;
-
-         case hash_wafer :
-            enlist(config->wafer_list, arg);
-            continue;
-
-         case hash_add_header :
-            enlist(config->xtra_list, arg);
-            continue;
-
-         case hash_permissions_file :
-            freez((char *)config->permissions_file);
-            config->permissions_file = strdup(arg);
+         case hash_actions_file :
+            freez((char *)config->actions_file);
+            config->actions_file = strdup(arg);
             continue;
 
          case hash_logfile :
@@ -542,25 +526,6 @@ struct configuration_spec * load_config(void)
             continue;
 #endif /* def PCRS */
 
-         case hash_user_agent :
-            freez((char *)config->uagent);
-            config->uagent = strdup(arg);
-            continue;
-
-            /*
-             * Offer choice of correct spelling according to dictionary,
-             * or the misspelling used in the HTTP spec.
-             */
-         case hash_referrer :
-         case hash_referer :
-            freez((char *)config->referrer);
-            config->referrer = strdup(arg);
-            continue;
-
-         case hash_from :
-            freez((char *)config->from);
-            config->from = strdup(arg);
-            continue;
 #ifdef _WIN_CONSOLE
          case hash_hide_console :
             hideConsole = 1;
@@ -629,9 +594,6 @@ struct configuration_spec * load_config(void)
 
          /* Warnings about unsupported features */
 
-         case hash_blockfile :
-         case hash_imagefile :
-         case hash_fast_redirects :
 #ifndef PCRS
          case hash_re_filterfile :
 #endif /* ndef PCRS */
@@ -690,9 +652,9 @@ struct configuration_spec * load_config(void)
 
    init_error_log(Argv[0], config->logfile, config->debug);
 
-   if (config->permissions_file)
+   if (config->actions_file)
    {
-      add_loader(load_permissions_file, config);
+      add_loader(load_actions_file, config);
    }
 
    if (config->forwardfile)
@@ -777,20 +739,6 @@ struct configuration_spec * load_config(void)
    }
    freez(fake_csp);
 
-#ifdef JAR_FILES
-   /*
-    * If we're logging cookies in a cookie jar, and the user has not
-    * supplied any wafers, and the user has not told us to suppress the
-    * vanilla wafer, then send the vanilla wafer.
-    */
-   if ((config->jarfile != NULL)
-       && (config->wafer_list->next == NULL)
-       && (suppress_vanilla_wafer == 0))
-   {
-      enlist(config->wafer_list, VANILLA_WAFER);
-   }
-#endif /* def JAR_FILES */
-
    end_proxy_args(config);
 
 #ifndef SPLIT_PROXY_ARGS
@@ -803,7 +751,7 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_permissions_file = config->permissions_file;
+   g_actions_file     = config->actions_file;
    g_forwardfile      = config->forwardfile;
 #ifdef ACL_FILES
    g_aclfile          = config->aclfile;
