@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: history.sgml,v 1.7 2002/05/17 13:47:33 oes Exp $
+ $Id: history.sgml,v 1.7.2.1 2002/06/05 23:10:43 hal9 Exp $
 
   Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
   See LICENSE.
@@ -20,6 +20,7 @@
   user-manual
   developer-manual
   faq
+  webserver/index.sgml
 
 -->
 
@@ -66,6 +67,6 @@
 
 <para>
  The result of this is <application>Privoxy</application>, whose first
- stable release, 3.0, is due in May 2002.
+ stable release, 3.0, is due in June 2002.
 </para>
 

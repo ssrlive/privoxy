@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/Attic/p-config.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-config.sgml,v $
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 1.1 2002/05/31 02:56:25 hal9 Exp $
+ $Id: p-config.sgml,v 1.1.2.3 2002/05/31 02:56:25 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.

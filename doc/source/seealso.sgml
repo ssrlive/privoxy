@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa//current/doc/source/seealso.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/seealso.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 1.8 2002/05/17 13:49:30 oes Exp $
+ $Id: seealso.sgml,v 1.9 2002/05/17 14:16:26 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.

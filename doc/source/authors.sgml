@@ -26,9 +26,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity % dummy "IGNORE"> 
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version SYSTEM "doc_version.tmp">
-<!entity p-status SYSTEM "doc_status.tmp">
-<!entity % p-not-stable "IGNORE">
+<!entity p-version "2.9.15">
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "INCLUDE">           <!-- define we are a text only doc -->
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->

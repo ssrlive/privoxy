@@ -8,9 +8,9 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version SYSTEM "doc_version.tmp">
-<!entity p-status SYSTEM "doc_status.tmp">
-<!entity % p-not-stable "IGNORE">
+<!entity p-version "2.9.15">
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
@@ -23,14 +23,16 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
  ========================================================================
 
 -->
@@ -48,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $</pubdate>
 
 <!--
 
@@ -67,7 +69,7 @@ Hal.
 
 -->
 
-<abstract>
+    <abstract>
 
 <![%dummy;[
  <para>
@@ -247,29 +249,14 @@ Hal.
     <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and, of
     course this, the <citetitle>developer-manual</citetitle> in this format.
     The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle>
-    <citetitle>privoxy.1</citetitle> (man page), and
-    <citetitle>config</citetitle> files are also now maintained as Docbook
-    SGML. These files, when built, in the top-level source directory are
-    generated files! Also, the <application>Privoxy</application> <filename>index.html</filename> (and a 
-    variation on this file, <filename>privoxy-index.html</filename>, 
-    meant for inclusion with doc packages), are maintained as SGML as well.
+    <citetitle>privoxy.1</citetitle> (man page) files are also now maintained
+    as Docbook SGML. The finished files are all in the top-level source
+    directory are generated files! Also, <filename>index.html</filename>, the
+    <application>Privoxy</application> home page, is maintained as SGML.
     <emphasis>DO NOT edit these directly</emphasis>. Edit the SGML source, or
     contact someone involved in the documentation (at present Stefan and
     Hal).
     </para> 
-    <para>
-     <filename>config</filename> requires some special handling. The reason it
-     is maintained this way is so that the extensive comments in the file
-     mirror those in <citetitle>user-manual</citetitle>. But the conversion 
-     process requires going from SGML to HTML to text to special formatting 
-     required for the embedded comments. Some of this does not survive so
-     well. Especially some of the examples that are longer than 80 characters.
-     The build process for this file outputs to <filename>config.new</filename>, 
-     which should be reviewed for errors and mis-formatting. Once satisfied
-     that it is correct, then it should be hand copied to
-     <filename>config</filename>.
-
-    </para>
     <para>
      Other, less formal documents (e.g. <filename>LICENSE</filename>,
      <filename>INSTALL</filename>) are maintained as plain text files in the
@@ -1740,7 +1727,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1800,7 +1787,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2835,16 +2822,13 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
-  Revision 1.49  2002/06/03 00:28:16  hal9
-  Sync with various changes from 3.0 branch. Add two new files for config stuff.
-
-  Revision 1.51 2002/05/29 00:30:59  mal0rd
+  Revision 1.46.2.4  2002/05/29 00:30:59  mal0rd
   Fixed a little formatting.  Clarified debian section.
 
-  Revision 1.50  2002/05/28 04:32:45  hal9
+  Revision 1.46.2.3  2002/05/28 04:32:45  hal9
   Change hints on bundling index.html to privoxy-index.html
 
-  Revision 1.49  2002/05/26 17:04:24  hal9
+  Revision 1.46.2.2  2002/05/26 17:04:24  hal9
   -Spellcheck, very minor edits, and sync across branches
 
   Revision 1.48  2002/05/26 12:48:31  roro

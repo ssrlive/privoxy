@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.8 2002/05/03 17:41:41 oes Exp $
+ $Id: buildsource.sgml,v 1.9 2002/05/10 01:48:19 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.

@@ -8,9 +8,9 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version SYSTEM "doc_version.tmp">
-<!entity p-status SYSTEM "doc_status.tmp">
-<!entity % p-not-stable "IGNORE">
+<!entity p-version "2.9.16">
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.64 2002/06/09 16:37:31 hal9 Exp $
+ $Id: faq.sgml,v 1.61.2.5 2002/07/26 15:22:58 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,9 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation.
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
  ========================================================================
 
 
@@ -70,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.64 2002/06/09 16:37:31 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.61.2.5 2002/07/26 15:22:58 oes Exp $</pubdate>
 
 <!--
 
@@ -487,6 +489,23 @@ All the ads are there. What's wrong?</title>
 
 <sect1 id="configuration"><title>Configuration</title>
 
+<sect2 renderas="sect3" id="getupdates"><title>Where can I get updated Actions Files?</title>
+ <para>
+   Based on your feedback and the continuing development, updated actions files will be
+   made available on the <ulink
+  url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
+  our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
+ </para>
+
+ <para>
+  If you wish to receive an email notification whenever we release updates of
+  <application>Privoxy</application> or the actions file, <ulink
+  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
+  to our announce  mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
+ </para>
+
+</sect2>
+
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
    The syntax, number, and purpose of configuration files has substantially
@@ -673,7 +692,7 @@ the differences?</title>
 <row>
   <entry>Pop-up killing</entry>
   <entry>no</entry>
-  <entry>no</entry>
+  <entry>yes</entry>
   <entry>yes</entry>
 </row>
 
@@ -711,6 +730,21 @@ the differences?</title>
   <entry>no</entry>
   <entry>yes</entry>
 </row>
+
+<row>
+  <entry>Image tag reordering</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>yes</entry>
+</row>
+
+<row>
+  <entry>Ad-filtering by link</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>yes</entry>
+</row>
+
 
 </tbody>
 </tgroup>
@@ -758,7 +792,7 @@ with a browser? Does that not raise security issues?</title>
 
 
 <sect2 renderas="sect3">
-<title id="filterfile">What is the <filename>default.filter</filename> file?</title>
+<title id="filterfile">What is the <filename>default.filter</filename> file? What is a <quote>filter</quote>?</title>
 <para>
  The <ulink url="../user-manual/filter-file.html"><filename>default.filter</filename></ulink>
  file is where <emphasis>filters</emphasis> are defined, which can be used to modify or
@@ -778,7 +812,6 @@ with a browser? Does that not raise security issues?</title>
  your own filters.  This is potentially a very powerful feature, but
  requires some expertise in both regular expressions and HTML/HTTP. 
 </para>
-
 
 <para>
  Presently, there is no GUI editor option for this part of the configuration, 
@@ -1073,6 +1106,7 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  </para>
 <para>
  Filtering is automatically disabled for inappropriate MIME types.
+
 </para>
 </sect2>
 
@@ -1366,7 +1400,6 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect2>
 
-
 <sect2 renderas="sect3" id="turnoff">
 <title>How can I temporarily disable <application>Privoxy</application>?</title>
 <para>
@@ -1390,7 +1423,6 @@ out of the picture?</title>
  the interaction between your browser and web sites.
 </para>
 </sect2>
-
 
 <sect2 renderas="sect3" id="seealso">
 <title>Where can I find more information about <application>Privoxy</application>
@@ -1662,16 +1694,21 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
-Revision 1.64  2002/06/09 16:37:31  hal9
-Sync with filtering clarifications in 3.0 branch.
+Revision 1.61.2.5  2002/07/26 15:22:58  oes
+- Updated to reflect changes in standard.action
+- Added info on where to get updated actions files
 
-Revision 1.63  2002/06/05 00:31:55  hal9
-Mass commit for new entities, most significantly so docs can read version
-and code status info from tmp files, so perl is no longer used. Also, docs can
-differentiate on alpha -> beta -> stable now.
+Revision 1.61.2.4  2002/07/25 21:42:29  hal9
+Add brief notes on not proxying non-HTTP protocols.
 
-Revision 1.62  2002/06/03 00:28:16  hal9
-Sync with various changes from 3.0 branch. Add two new files for config stuff.
+Revision 1.61.2.3  2002/06/09 16:36:33  hal9
+Clarifications on filtering and MIME. Hardcode 'latest release' in index.html.
+
+Revision 1.61.2.2  2002/06/06 02:51:34  hal9
+Fix typo in URL http:/config.privoxy.org
+
+Revision 1.61.2.1  2002/06/05 23:10:43  hal9
+Add new FAQ re: DUN/IE. Change release date from May to June :)
 
 Revision 1.61  2002/05/25 12:37:25  hal9
 Various minor changes and edits.
