@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.63 2002/04/15 19:06:43 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.64 2002/04/24 02:17:21 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,12 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.63 2002/04/15 19:06:43 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.64  2002/04/24 02:17:21  oes
+ *     - Better descriptions for CGIs
+ *     - Hide edit-actions, more shortcuts
+ *     - Moved get_char_param, get_string_param and get_number_param here
+ *       from cgiedit.c
+ *
  *    Revision 1.63  2002/04/15 19:06:43  jongfoster
  *    Typos
  *
@@ -1224,6 +1230,43 @@ jb_err cgi_error_bad_param(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  add_help_link
+ *
+ * Description :  Produce a copy of the string given as item,
+ *                embedded in an HTML link to its corresponding
+ *                section (item name in uppercase) in the configuration
+ *                chapter of the user manual, (whose URL is given in
+ *                the config and defaults to our web site).
+ *
+ * Parameters  :  
+ *          1  :  item = item (will NOT be free()d.) 
+ *                       It is assumed to be HTML-safe.
+ *
+ * Returns     :  String with item embedded in link, or NULL on
+ *                out-of-memory
+ *
+ *********************************************************************/
+char *add_help_link(const char *item, 
+                    struct configuration_spec *config)
+{
+   char *result = strdup("");
+
+   if (!item) return NULL;
+   
+   string_append(&result, "<a href=\"");
+   string_append(&result, config->usermanual);
+   string_append(&result, HELP_LINK_PREFIX);
+   string_join  (&result, string_toupper(item));
+   string_append(&result, "\">");
+   string_append(&result, item);
+   string_append(&result, "</a> ");
+
+   return result;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  get_http_time
  *
  * Description :  Get the time in a format suitable for use in a
@@ -1772,6 +1815,8 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
    if (!err) err = map(exports, "menu",          1, make_menu(caller), 0);
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
+   if (!err) err = map(exports, "user-manual",   1, csp->config->usermanual ,1);
+   if (!err) err = map(exports, "helplink",      1, HELP_LINK_PREFIX ,1);
    if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
 
    snprintf(buf, 20, "%d", csp->config->hport);
@@ -1941,9 +1986,10 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  * Function    :  make_menu
  *
  * Description :  Returns an HTML-formatted menu of the available 
- *                unhidden CGIs, excluding the one given in <self>.
+ *                unhidden CGIs, excluding the one given in <self>
  *
- * Parameters  :  self = name of CGI to leave out, can be NULL
+ * Parameters  :  self = name of CGI to leave out, can be NULL for
+ *                complete listing.
  *
  * Returns     :  menu string, or NULL on out-of-memory error.
  *
@@ -1979,7 +2025,7 @@ char *make_menu(const char *self)
  *
  * Function    :  dump_map
  *
- * Description :  HTML-dump a map for debugging
+ * Description :  HTML-dump a map for debugging (as table)
  *
  * Parameters  :
  *          1  :  the_map = map to dump
