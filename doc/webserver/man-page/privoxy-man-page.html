@@ -2,7 +2,7 @@
 <HTML><HEAD><TITLE>Manpage of PRIVOXY</TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></HEAD><BODY>
 <H1>PRIVOXY</H1>
-Section:  (1)<BR>Updated: 09 May 2002<BR><A HREF="#index">Index</A>
+Section:  (1)<BR>Updated: 14 May 2002<BR><A HREF="#index">Index</A>
 <HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -115,11 +115,11 @@ The name and number of configuration files has changed from previous
 versions, and is subject to change as development progresses. In fact, the
 configuration itself is changed  and  much more sophisticated. See the
 user-manual for a
-brief explanation of all configuration options. 
+complete explanation of all configuration options and general usage.
 <P>
 
 The actions list (ad blocks, etc) can also be configured with your
-web browser at <A HREF="http://ijbswa.sourceforge.net/config.">http://ijbswa.sourceforge.net/config.</A>
+web browser at <A HREF="http://config.privoxy.org/.">http://config.privoxy.org/.</A>
 <B>Privoxy's</B> configuration parameters  can also  be viewed at
 the same page. In addition, <B>Privoxy</B> can be toggled on/off.
 This is an internal page.
@@ -136,8 +136,8 @@ configuration might look like:
  {{alias}}
 
  # Useful aliases
- +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
+ +crunch-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
+ -crunch-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  +imageblock      = +block +handle-as-image
 
  # Fragile sites should have the minimum changes
@@ -165,13 +165,13 @@ configuration might look like:
  -limit-connect \
  +prevent-compression \
  +session-cookies-only \
- +prevent-reading-cookies \
- +prevent-setting-cookies \
+ -crunch-cookies \
  -kill-popups \
  }
- /   # Match all URLs
+ /   # '/' Matches *all* URL patterns
  
  # Block, and treat these URL patterns as if they were 'images'.
+ # We would expect these to be ads.
  {+imageblock}
   .ad.doubleclick.net
   .a[0-9].yimg.com/(?:(?!/i/).)*$
@@ -183,11 +183,10 @@ configuration might look like:
   .*ads.
   banner?.
   /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
-  /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|maino(kset|nta|s)?)/
   .hitbox.com 
 
  # Make exceptions for these harmless ones that would be 
- # caught by +block above.
+ # caught by our +block patterns just above.
  {-block}
   adsl.
   advice.
@@ -200,14 +199,21 @@ Then for a <I>user.action</I>, we would put local,
 narrowly defined exceptions:
 <P>
 <PRE>
+ # Re-define aliases as needed here
+ {{alias}}
+
+ # Useful aliases
+ -crunch-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+ 
  # Set personal exceptions to the policies in default.action #######
 
- # Sites where we want persistant cookies
- {-prevent-reading-cookies -prevent-setting-cookies -session-cookies-only}
+ # Sites where we want persistant cookies, so allow *all* cookies
+ {-crunch-cookies -session-cookies-only}
   .redhat.com
   .sun.com
   .msdn.microsoft.com
  
+ # This site breaks easily.
  {-block -fast-redirects}
   .forbes.com
 </PRE>
@@ -239,7 +245,7 @@ configuration options.
 
 Various other files should be included, but may vary depending on platform
 and build configuration. More documentation should be included in the local
-documentation directory, though is not complete at this time.
+documentation directory.
 <A NAME="lbAJ">&nbsp;</A>
 <H2>SIGNALS</H2>
 
@@ -380,6 +386,6 @@ USA
 This document was created by
 man2html,
 using the manual pages.<BR>
-Time: 20:47:35 GMT, May 09, 2002
+Time: 00:10:58 GMT, May 15, 2002
 </BODY>
 </HTML>
