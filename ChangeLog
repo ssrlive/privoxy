@@ -2,7 +2,13 @@
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
-*** Version 2.2.10 CVS Current ***
+*** Version 2.2.11 Beta Changes ***
+- CGI editor improvements and fixes.
+- Error handling improvements, especially out of memory.
+- Various other minor fixes.
+
+
+*** Version 2.2.10 Beta Changes ***
 
 - Add "session" cookie concept where cookies exist for the life 
 of that browser session only (ie never goes to disk). 
