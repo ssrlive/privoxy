@@ -11,14 +11,39 @@
   $Id: index.php,v 1.8 2002/04/02 08:45:22 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.13  2002/04/06 15:19:35  oes
+  Clean-up, smarter handling of unreachable URLs
+
+  Revision 1.12  2002/04/06 11:34:44  oes
+  Cosmetics
+
+  Revision 1.11  2002/04/04 19:48:11  oes
+  Reactivating the scripts ,-)
+
+  Revision 1.10  2002/04/03 19:36:04  swa
+  consistent look
+
+  Revision 1.9  2002/04/02 19:32:45  oes
+  Adding temporary fix for missing curl support on SF (step 2 + 3 on oesterhelt.org)
+
   Revision 1.8  2002/04/02 08:45:22  oes
   Made script location indepandant
 
   Revision 1.7  2002/04/02 07:21:34  oes
   Using relative link for step2
 
-  Revision 1.5  2002/04/01 19:13:47  oes
+  Revision 1.6  2002/04/02 06:14:22  oes
+  Fixed bookmarklet
+
+  Revision 1.5  2002/04/01 19:13:47  oes (based on 1.2)
   Extended, fixed bugs, beefed up design, made IE-safe
+
+  Revision 1.4  2002/03/30 20:44:44  swa
+  have consistent look and feel. part 2.
+  use correct urls.
+
+  Revision 1.3  2002/03/30 19:49:34  swa
+  have consistent look and feel
 
   Revision 1.2  2002/03/30 03:35:48  oes
   Updated bookmarklet
@@ -27,8 +52,10 @@
   Added Feedback mechanism for actions file
 
 
-  Written by and Copyright (C) 2002 the SourceForge
-  Privoxy team. http://www.privoxy.org/
+  Copyright (C) 2002 the SourceForge Privoxy team. 
+  http://www.privoxy.org/
+
+  Written by Andreas Oesterhelt
 
   This program is free software; you can redistribute it
   and/or modify it under the terms of the GNU General
