@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.44 2002/04/07 21:24:29 hal9 Exp $
+$Id: faq.sgml,v 1.45 2002/04/08 22:59:26 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -672,11 +672,11 @@ content magic and then send the page to the browser.
 Since Privoxy sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.
 
-With recent versions of Privoxy (version 2.9.x), you can get some information
-about Privoxy and change some settings by going to http://p.p/ or,
+With recent versions of Privoxy (version 2.9.x and greater), you can get some
+information about Privoxy and change some settings by going to http://p.p/ or,
 equivalently, http://config.privoxy.org/ (Note that p.p is far easier to type
 but may not work in some configurations. With the name change to Privoxy, this
-is changed from the previous http://i.j.b/ or earlier 2.9.x versions).
+is changed from the previous http://i.j.b/ and earlier 2.9.x versions).
 
 These pages are not forwarded to a server on the Internet - instead they are
 handled by a special web server which is built in to Privoxy.
@@ -693,24 +693,29 @@ consider upgrading to 2.9.14).
 
 4.4. Do you still maintain the blocklists?
 
-No. The format of the blocklists has changed significantly in versions 2.9.x
-and later. Once we have released the new stable version, v3.0, there will again
-be blocklists that you can update automatically.
+No, not by this name. The format of the blocklists has changed significantly in
+versions 2.9.x and later. This functionality is done by the "actions" file now.
+See next question ...
 
 -------------------------------------------------------------------------------
 
 4.5. How can I submit new ads?
 
-As of now, please discontinue to submit new ad blocking infos. Once we have
-released the new version, there will again be a form on the website, which you
-can use to contribute new ads.
+Beginning with Privoxy v2.9.14, missed ads and banners and other actions file
+problems, can be submitted by accessing "actions file feedback system" from 
+http://p.p/
+
+This process does not work with earlier versions of Privoxy or Junkbuster.
+
+There will soon be regularly updated actions files posted. These will be
+announced on the ijbswa-announce list.
 
 -------------------------------------------------------------------------------
 
 4.6. How can I hide my IP address?
 
 You cannot hide your IP address with Privoxy or any other software, since the
-server needs to know your IP address to send the answer to you.
+server needs to know your IP address to send the answers back to you.
 
 Fortunately there are many publicly usable anonymous proxies out there, which
 solve the problem by providing a further level of indirection between you and
@@ -866,6 +871,9 @@ Sourceforge.
 http://p.p/, access Privoxy from your browser. Alternately, http://            
 config.privoxy.org may work in some situations where the first does not.       
 
+http://p.p/, and select "actions file feedback system" to submit "misses" to   
+the developers.                                                                
+
 http://www.junkbusters.com/ht/en/cookies.html
 
 http://www.waldherr.org/junkbuster/
@@ -953,12 +961,12 @@ note:
 
   *  Use the Sourceforge Support Forum to get help:
        
-     http://sourceforge.net/tracker/?group_id=11118&atid=211118
+        http://sourceforge.net/tracker/?group_id=11118&atid=211118
        
    
   *  Submit bugs only through our Sourceforge Bug Forum:
      
-     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+        http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
         
    
     Make sure that the bug has not already been submitted. Please try to verify
@@ -970,19 +978,21 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request 
-     forum:
+  *  Submit feature requests only through our Sourceforge feature request forum:
      
-     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+        http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
        
    
-  * We will soon have an automated way to submit advertisements, incorrectly
-    blocked images, popups and the like. Check back.
+  *  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
+          
+        http://p.p/, and select "actions file feedback system"
        
+   
+    This page can also be reached from many of the internal CGI pages.
    
   *  For any other issues, feel free to use the mailing lists:
      
-     http://sourceforge.net/mail/?group_id=11118.
+        http://sourceforge.net/mail/?group_id=11118.
      
    
     Anyone interested in actively participating in development and related
@@ -1017,7 +1027,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
 
-Junkbuster was originally written by Anonymous Coders and Junkbuster's
+Junkbuster was originally written by Anonymous Coders and Junkbusters
 Corporation, and was released as free open-source software under the GNU GPL. 
 Stefan Waldherr made many improvements, and started the SourceForge project
 Privoxy to rekindle development. There are now several active developers
