@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.6 2001/08/05 16:06:20 jongfoster Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.7 2001/09/16 13:20:29 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.7  2001/09/16 13:20:29  jongfoster
+ *    Rewrite of list library.  Now has seperate header and list_entry
+ *    structures.  Also added a large sprinking of assert()s to the list
+ *    code.
+ *
  *    Revision 1.6  2001/08/05 16:06:20  jongfoster
  *    Modifiying "struct map" so that there are now separate header and
  *    "map_entry" structures.  This means that functions which modify a
@@ -93,8 +98,6 @@ extern "C" {
 
 extern void init_list    (struct list *the_list);
 extern void destroy_list (struct list *the_list);
-
-extern int  list_is_valid(const struct list *the_list);
 
 extern int  enlist                 (struct list *the_list, const char *str);
 extern int  enlist_unique          (struct list *the_list, const char *str, int num_significant_chars);

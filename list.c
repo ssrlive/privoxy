@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.8 2001/08/07 14:00:20 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.9 2001/09/16 13:20:29 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,11 @@ const char list_rcs[] = "$Id: list.c,v 1.8 2001/08/07 14:00:20 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.9  2001/09/16 13:20:29  jongfoster
+ *    Rewrite of list library.  Now has seperate header and list_entry
+ *    structures.  Also added a large sprinking of assert()s to the list
+ *    code.
+ *
  *    Revision 1.8  2001/08/07 14:00:20  oes
  *    Fixed comment
  *
@@ -86,10 +91,15 @@ const char list_rcs[] = "$Id: list.c,v 1.8 2001/08/07 14:00:20 oes Exp $";
 
 #include "config.h"
 
+#ifndef _WIN32
+/* FIXME: The following headers are not needed for Win32.  Are they
+ * needed on other platforms?
+ */
 #include <stdio.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <ctype.h>
+#endif
 #include <string.h>
 
 #ifndef _WIN32
@@ -99,11 +109,13 @@ const char list_rcs[] = "$Id: list.c,v 1.8 2001/08/07 14:00:20 oes Exp $";
 #include <assert.h>
 
 #include "project.h"
-#include "jcc.h"
 #include "list.h"
 #include "miscutil.h"
 
 const char list_h_rcs[] = LIST_H_VERSION;
+
+
+static int list_is_valid (const struct list *the_list);
 
 
 /*********************************************************************
