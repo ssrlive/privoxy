@@ -145,11 +145,11 @@
         <p>
           <table class="transparent">
             <tr>
-              <th colspan="2">Actions Files:</th>
+              <th colspan="2"><a href="@user-manual@@actions-help-prefix@ACTIONS-FILE">Actions Files:</a></th>
             </tr>
               @actions-filenames@
            <tr>
-              <th colspan="2">Filter File:</th>
+              <th colspan="2"><a href="@user-manual@filter-file.html">Filter File:</a></th>
            </tr>
            <tr>
              <td>
@@ -163,7 +163,7 @@
            </tr>
 <!-- @if-trust-support-start -->
            <tr>
-              <th colspan="2">Trust File:</th>
+              <th colspan="2"><a href="@user-manual@config.html#TRUSTFILE">Trust File:</a></th>
            </tr>
             <td>
                @trust-filename@
@@ -182,14 +182,14 @@
 
     <tr>
       <td class="box">
-        <h2>Privoxy was invoked as follows:</h2>
+        <h2>Privoxy was <a href="@user-manual@startup.html#CMDOPTIONS">invoked</a> as follows:</h2>
         <p>@invocation@</p>
       </td>
     </tr>
 
     <tr>
       <td class="box">
-        <h2>The following options were given in the config file:</h2>
+        <h2>The following options were given in the <a href="@user-manual@config.html">config file</a>:</h2>
         <p>@options@</p>
       </td>
     </tr>
