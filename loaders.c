@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.12 2001/05/31 17:32:31 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.13 2001/05/31 21:28:49 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.12 2001/05/31 17:32:31 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.13  2001/05/31 21:28:49  jongfoster
+ *    Removed all permissionsfile code - it's now called the actions
+ *    file, and (almost) all the code is in actions.c
+ *
  *    Revision 1.12  2001/05/31 17:32:31  oes
  *
  *     - Enhanced domain part globbing with infix and prefix asterisk
@@ -741,24 +745,29 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
             *p = '\0';
          }
       }
-      
-      /* Remove leading and trailing whitespace */
-      chomp(linebuf);
 
+      /* Write to the buffer */
       if (*linebuf)
       {
          strncat(buf, linebuf, buflen - strlen(buf));
-         if (contflag)
-         {
-            contflag = 0;
-            continue;
-         }
-         else
-         {
-            return buf;
-         }
+      }
+
+      /* Continue? */
+      if (contflag)
+      {
+         contflag = 0;
+			continue;
+      }
+
+      /* Remove leading and trailing whitespace */         
+      chomp(buf);
+
+      if (*buf)
+      {
+         return buf;
       }
    }
+
    /* EOF */
    return NULL;
 

@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id$
+# $Id: permissionsfile,v 1.5 2001/05/31 21:32:15 jongfoster Exp $
 #
 #############################################################################
 # Syntax
@@ -173,20 +173,19 @@ c3 = +no-cookies-set -no-cookies-read
 #############################################################################
 # Defaults
 #############################################################################
-#FIXME: Line continuation is broken - can't split a line at whitespace.
-{ -\
-block +\
-fast-redirects +\
-filter +\
-hide-forwarded +\
-hide-from{block} +\
-hide-referer{forge} -\
-hide-user-agent -\
-image +\
-no-cookies-read +\
-no-cookies-set +\
-no-popups +\
-vanilla-wafer \
+{\
+-block \
++fast-redirects \
++filter \
++hide-forwarded \
++hide-from{block} \
++hide-referer{forge} \
+-hide-user-agent \
+-image \
++no-cookies-read \
++no-cookies-set \
++no-popups \
++vanilla-wafer \
 }
 / # Match all URLs
 
@@ -194,8 +193,8 @@ vanilla-wafer \
 # A useful site for testing - shows all headers:
 # http://privacy.net/analyze/
 #############################################################################
-{+add-header{X-Privacy: Yes please} +#-add-header{*} +\
-add-header{X-User-Tracking: No thanks!} -filter}
+{+add-header{X-Privacy: Yes please} #-add-header{*} \
++add-header{X-User-Tracking: No thanks!} -filter}
 privacy.net
 
 #############################################################################
