@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.16 2002/03/08 18:40:44 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.17 2002/03/08 19:30:23 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -77,7 +77,7 @@ SuSE series: n
 %build
 autoheader
 autoconf
-./configure
+./configure --enable-no-gifs 
 make
 make dok
 
@@ -272,6 +272,11 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.17  2002/03/08 19:30:23  swa
+# remove user junkbuster after de-installation.
+# synced suse with rh-specfile. installation
+# and de-installation seem to work.
+#
 # Revision 1.16  2002/03/08 18:40:44  swa
 # build requires tools. useradd and del works
 # now.
