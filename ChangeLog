@@ -4,6 +4,9 @@ ChangeLog for Privoxy
 *** Version 3.1.1  ***
 - Major re-write of make install target. Add uninstall and
   install-strip targets. Add user and group testing to configure.
+- Add an INSTALL file, and remove these instructions from README.
+- Add a demoronizer filter, which fixes MS's abuse of std charsets
+  (common cases anyway).
 
 *** Version 3.0  ***
 
