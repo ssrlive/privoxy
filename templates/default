@@ -1,38 +1,119 @@
 ##########################################################
 #
-# CGI-Output template for the junkbuster.
+# Default-CGI Output template for junkbuster 2.9.x.
 #
-# Lines *starting* with '#' are ignored.
-# Symbols are enclosed in @ characters.
 #
-# Usable Symbols in this file: 
+# USING HTML TEMPLATES:
+# ---------------------
 #
-#   other-cgis: List of <li> elements linking to the other
-#     available CGIs
+# Template files are written win plain HTML, with a few
+# additions:
 # 
-#   cgi-parameters: If parameters were present (this CGI needs
-#     none, they are dumped in a HTML table.
+# - Lines that start with a '#' character like this one
+#   are ignored
+#
+# - Each item in the below list of exported symbols will
+#   be replaced by dynamically generated text, if they
+#   are enclosed in '@'-characters. E.g. The string @version@
+#   will be replaced by the version number of Junkbuster.
+#
+# - One special application of this is to make whole blocks
+#   of the HTML template disappear if the condition <name>
+#   is not given. Simply enclose the block between the two
+#   strings @if-<name>start and if-<name>-end@. The strings
+#   should be placed in HTML comments (<!-- -->), so the
+#   html structure won't be messed when the magic happens.
+#   
+# USABLE SYMBOLS IN THIS TEMPLATE:
+# --------------------------------
+#
+#  my-ip-addr:
+#    The IP-address that the client used to reach this proxy
+#  my-hostname:
+#    The hostname associated with my-ip-addr
+#  admin-address:
+#    The email address of the pxoxy's administrator, as configured
+#    in the config file
+#  default-cgi:
+#    The URL for the "main menu" builtin CGI of this proxy
+#  menu:
+#    List of <li> elements linking to the other available CGIs
+#  version:
+#    The version number of the proxy software
+#  code-status:
+#    The development status of the proxy software: "alpha", "beta",
+#    or "stable".
+#  homepage:
+#    The URL of the SourceForge ijbswa project, who maintains this
+#    software.
+#
+# CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
+# ------------------------------------------------------------------
+#
+#  unstable:
+#    this is an alpha or beta release of the proxy software
+#  have-proxy-info:
+#    A URL for online documentation about this proxy has been
+#    specified and is available through the "proxy-info-url"
+#    symbol
 #
 <html>
 
 <head>
-  <title>Internet Junkbuster Configuration</title>
+  <title>Junkbuster@@my-hostname@</title>
+  <style type="text/css">
+    BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+  </style>
 </head>
 
 <body bgcolor="#ffffff">
 
-  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small></h1>
+  <table cellpadding=20 cellspacing=10 border=0 width=100%>
+    <tr>
+      <td bgcolor=#dddddd>
+        <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
+          <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
+      </td>
+    </tr>
 
-  <p>Thank you for using the internet Junkbuster.</p>
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
+    <tr>
+      <td bgcolor=#ffdddd>
+        <p><b>Please note that this is a <font color=red>@code-status@</font> release,
+          of the proxy software, not intended for production systems!
+          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+        </p>
 
-  <p>The following CGI functions are currently implemented:</p>
+        <p>Feel free to <a href=mailto:ijbswa-developers@lists.sourceforge.net>mail the developers</a>
+          with any problems you might have
+        </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
 
-  @other-cgis@
+    <tr>
+      <td bgcolor=#eeeeee>
+        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Internet Junkbuster!</b></p>
+        <p>Please choose from the following options:</p>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
 
-  @cgi-parameters@
+    <tr>
+      <td bgcolor=#dddddd>
+        <p>If you have any questions about this service,
 
-  <p>Please feel free to mail <a href=mailto:ijbswa-developers@lists.sourceforge.net>the developers</a>
-     with any problems you might have</p>
+<!-- @if-have-proxy-info-start -->
+          consult the <a href="@proxy-info-url@">online documentation</a> or
+<!-- if-have-proxy-info-end@ -->
+
+          <a href=mailto:@admin-address@>send mail to <code>@admin-address@</code></a>
+          who will be glad to help you.
+        </p>
+      </td>
+    </tr>
+  </table>
 
 </body>
 </html>

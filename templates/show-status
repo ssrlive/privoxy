@@ -1,65 +1,263 @@
 ##########################################################
 #
-# CGI-Output template for the junkbuster.
+# Show-Status-CGI Output template for junkbuster 2.9.x
 #
-# Lines *starting* with '#' are ignored.
-# Symbols are enclosed in @ characters.
+# USING HTML TEMPLATES:
+# ---------------------
 #
-# Usable symbols in this file: 
-# redirect-url, version, home-page,
-# invocation-args, options, gateway-protocols
-# statistics,
+# Template files are written win plain HTML, with a few
+# additions:
+# 
+# - Lines that start with a '#' character like this one
+#   are ignored
+#
+# - Each item in the below list of exported symbols will
+#   be replaced by dynamically generated text, if they
+#   are enclosed in '@'-characters. E.g. The string @version@
+#   will be replaced by the version number of Junkbuster.
+#
+# - One special application of this is to make whole blocks
+#   of the HTML template disappear if the condition <name>
+#   is not given. Simply enclose the block between the two
+#   strings @if-<name>start and if-<name>-end@. The strings
+#   should be placed in HTML comments (<!-- -->), so the
+#   html structure won't be messed when the magic happens.
+#   
+# USABLE SYMBOLS IN THIS TEMPLATE:
+# --------------------------------
+#
+#  my-ip-addr:
+#    The IP-address that the client used to reach this proxy
+#  my-hostname:
+#    The hostname associated with my-ip-addr
+#  admin-address:
+#    The email address of the pxoxy's administrator, as configured
+#    in the config file
+#  default-cgi:
+#    The URL for the "main menu" builtin CGI of this proxy
+#  menu:
+#    List of <li> elements linking to the other available CGIs
+#  version:
+#    The version number of the proxy software
+#  code-status:
+#    The development status of the proxy software: "alpha", "beta",
+#    or "stable".
+#  homepage:
+#    The URL of the SourceForge ijbswa project, who maintains this
+#    software.
+#
+#  redirect-url:
+#    The URL to a script that will redirect to the junkbuster
+#    documentation for a given item  
+#  invocation:
+#    The command line with whitch junkbuster was invoked
+#  options:
+#    The options read from the configfile, linked to their
+#    explanations, plus warnings if parsing acl or forward
+#    statements produced errors.
+#  sourceversions:
+#    A HTML-formatted list of the individual source file cvs versions
+#  defines:
+#    A HTML-formatted list of all conditional #defines used when
+#    junkbuster was compiled
+#
+#  
+# CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
+# ------------------------------------------------------------------
+#
+#  unstable:
+#    This is an alpha or beta release of the proxy software
+#  have-proxy-info:
+#    A URL for online documentation about this proxy has been
+#    specified and is available through the "proxy-info-url"
+#    symbol
+#  statistics:
+#    Junkbuster was compiled with statistics support
+#  have-stats:
+#    There have been previous requests and statistics have
+#    been collected. In this case, the following symbols
+#    are available:
+#    requests-received:
+#      The number of requests received so far
+#    requests-blocked:
+#      The number of request blocked so far
+#    percent-blocked:
+#      The percentage of blocked requests
+#  have-no-stats:
+#    There haven't any statistics been collected yet
+#  pcrs-support:
+#    Junkbuster was compiled with pcrs support
+#  trust-support:
+#    Junkbuster was compiled with trust support
+#  split-args:
+#    Junkbuster was compiled with #define SPLIT_PROXY_ARGS
+#    In this case, the following symbols are available:
+#    actions-filename:
+#      The path to the actions file.
+#    re-filter-filename:
+#      The path to the re_filter file. Only available if
+#      pcrs-support is set
+#    trust-filename:
+#      The path to the trust file.Only available if
+#      trust-support is set
+#  no-split-args:
+#    Junkbuster was not compiled with #define SPLIT_PROXY_ARGS
+#    In this case, the following symbols are available:
+#    alist:
+#      The contents of the actionsfile
+#    rlist:
+#      The contents of the re_filterfile. Only available if
+#      pcrs-support is set    
+#    tlist:
+#      The contents of the trustfile. Only available if
+#      trust-support is set
 #
 <html>
 
 <head>
-  <title>Internet Junkbuster Status</title>
+  <title>Junkbuster@@my-hostname@: Proxy Status</title>
+  <style type="text/css">
+    BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+  </style>
 </head>
 
 <body bgcolor="#ffffff">
 
-  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small>
-      version @version@ <a href="@redirect-url@faq#show">Proxy Status</a></h1>
+  <table cellpadding=20 cellspacing=10 border=0 width=100%>
+    <tr>
+      <td bgcolor=#dddddd>
+        <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
+          <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
+      </td>
+    </tr>
 
-  <p>Homepage: <a href="@home-page@">@home-page@</a></p>
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
+    <tr>
+      <td bgcolor=#ffdddd>
+        <p><b>Please note that this is a <font color=red>@code-status@</font> release,
+          of the proxy software, not intended for production systems!
+          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+        </p>
 
-  <h2>The program was invoked as follows</h2>
-  @invocation-args@<br>
+        <p>Feel free to <a href=mailto:ijbswa-developers@lists.sourceforge.net>mail the developers</a>
+          with any problems you might have
+        </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
 
-  <h2>And the following options were givem in the config file:</h2>
-  <BLINK>FIXME: Which?</BLINK>
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>The program was invoked as follows</h2>
+        <blockquote><p>@invocation@</p></blockquote>
+      </td>
+    </tr>
 
-  @statistics@
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>The following options were given in the config file:</h2>
+        <blockquote><p>@options@</p></blockquote>
+      </td>
+    </tr>
 
-  <h2>The following files are in use:</h2>
+<!-- @if-statistics-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Blocking Statistics:</h2>
+        <blockquote>
+<!-- @if-have-stats-start -->
+        @requests-blocked@ out of @requests-received@ requests have been blocked,
+        which equals a block rate of @percent-blocked@.
+<!-- if-have-stats-end@ -->
+<!-- @if-have-no-stats-start -->
+        There haven't been any requests so far.
+<!-- if-have-no-stats-end@ -->
+      </td>
+    </tr>
+<!-- if-statistics-end@ -->
 
-  <!-- The block following this comment will magically disappear, #ifndef SPLIT_PROXY_ARGS -->
-  <!-- @magic-eliminator-start -->
+<!-- @if-split-args-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>The following files are in use:</h2>
+        <blockquote><p>Click a filename to browse</p></blockquote>
+        <ul>
+          <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
+<!-- @if-pcrs-support-start -->
+          <li>Regex Filter List: <a href="show-status?file=re">@re-filter-filename@</a></li>
+<!-- if-pcrs-support-end@ -->
+<!-- @if-trust-support-start -->
+          <li>Trust List: <a href="show-status?file=trust">@trust-filename@</a></li>
+<!-- if-trust-support-end@ -->
+        </ul>
+      </td>
+    </tr>
+<!-- if-split-args-end@ -->
 
-  <p>(Click filenames to view)</p>
-  <ul>
-  <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
+<!-- @if-no-split-args-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Actions List:</h2>
+        <blockquote><pre>@alist@</pre></blockquote>
+      </td>
+    </tr>
 
-  <!-- @re-filter-killer-start -->
-  <li>Regex Filter List: <a href="show-status?file=re">@re-filter-filename@</a></li>
-  <!-- re-filter-killer-end@ -->
+<!-- @if-pcrs-support-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Regex Filter List:</h2>
+        <blockquote><pre>@rlist@</pre></blockquote>
+      </td>
+    </tr>
+<!-- if-pcrs-support-end@ -->
 
-  <!-- @trust-killer-start -->
-  <li>Access Control List: <a href="show-status?file=trust">@trust-filename@</a></li>
-  <!-- trust-killer-end@ -->
+<!-- @if-trust-support-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Trust List:</h2>
+        <blockquote><pre>@tlist@</pre></blockquote>
+      </td>
+    </tr>
+<!-- if-trust-support-end@ -->
+<!-- if-no-split-args-end@ -->
 
-  </ul>
-  <!-- magic-eliminator-end@ -->
-  <!-- The block above this comment will magically disappear, #ifndef SPLIT_PROXY_ARGS -->
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Source code versions:</h2>
+        <blockquote><pre>@sourceversions@</pre></blockquote>
+      </td>
+    </tr>
 
-  @clist@ @flist@ @alist@ @rlist@ @tlist@
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Conditional #defines:</h2>
+        <ul>@defines@</ul>
+      </td>
+    </tr>
 
-  @rcs-and-defines@
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
 
-  <p>Please feel free to mail <a href=mailto:ijbswa-developers@lists.sourceforge.net>the developers</a>
-     with any problems you might have</p>
+    <tr>
+      <td bgcolor=#dddddd>
+        <p>If you have any questions about this service,
 
+<!-- @if-have-proxy-info-start -->
+          consult the <a href="@proxy-info-url@">online documentation</a> or
+<!-- if-have-proxy-info-end@ -->
 
-  
+          <a href=mailto:@admin-address@>send mail to <code>@admin-address@</code></a>
+          who will be glad to help you.
+        </p>
+      </td>
+    </tr>
+
+  </table>
+
 </body>
 </html>
