@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-url-form,v $
 #
 # Purpose     :  Template used to edit a URL pattern in an actions file.
 #
@@ -30,7 +30,10 @@
 #                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # Revisions   :
-#    $Log$
+#    $Log: edit-actions-url-form,v $
+#    Revision 1.1  2001/11/13 00:58:18  jongfoster
+#    New version of actions file editor templates
+#
 #
 ##############################################################################
 #

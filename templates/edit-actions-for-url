@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.6  2001/11/22 21:58:41  jongfoster
+#    Adding action +no-cookies-keep
+#
 #    Revision 1.5  2001/11/13 21:12:17  jongfoster
 #    Added support for the following actions:
 #    +downgrade, +limit-connect, +no-compression
