@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.14 2001/07/01 16:27:44 oes Exp $
+# $Id: Makefile.in,v 1.15 2001/07/13 13:48:07 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,15 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.15  2001/07/13 13:48:07  oes
+#  - Moved STATIC #define for pcre to (ac)config.h
+#  - Made -Ipcre depandant on static pcre compilation to
+#    avoid version conflicts
+#  - Included compilation and depandancies for new deanimate.c
+#  - Made changes to the pcre/pcreposix/pcrs build process
+#    as required by the new library autodetection in
+#    configure.in
+#
 # Revision 1.14  2001/07/01 16:27:44  oes
 # Fixed misplaced dependancy
 #
@@ -169,7 +178,10 @@ PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcr
 # FIXME: This is always commented out
 SOCKET_LIB   = @SOLARIS_ONLY@-lsocket -lnsl
 
-LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB)
+# PThreads library, if needed.
+PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
+
+LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
 
 SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
 OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)

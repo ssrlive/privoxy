@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.7 2001/07/13 13:58:05 oes Exp $
+dnl $Id: configure.in,v 1.8 2001/07/15 17:54:29 jongfoster Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,11 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.8  2001/07/15 17:54:29  jongfoster
+dnl Renaming #define STATIC to STATIC_PCRE
+dnl Adding new #define FEATURE_PTHREAD that will be used to enable
+dnl POSIX threads support.
+dnl
 dnl Revision 1.7  2001/07/13 13:58:05  oes
 dnl    Completely reorganized the selection scheme for
 dnl    pcre, pcreposix, pcrs and gnu_regex:
@@ -172,9 +177,11 @@ AC_EXEEXT
 AC_OBJEXT
 
 dnl Checks for libraries.
-AC_CHECK_LIB(pcre, pcre_compile, [have_pcre=yes], [have_pcre=no])
-AC_CHECK_LIB(pcreposix, regcomp, [have_pcreposix=yes], [have_pcreposix=no], -lpcre)
-AC_CHECK_LIB(pcrs, pcrs_compile, [have_pcrs=yes], [have_pcrs=no])
+dnl Note: Some systems have the library but not the system header file,
+dnl       so we must check for both.
+AC_CHECK_LIB(pcre, pcre_compile, [AC_CHECK_HEADER(pcre.h, [have_pcre=yes], [have_pcre=no])], [have_pcre=no])
+AC_CHECK_LIB(pcreposix, regcomp, [AC_CHECK_HEADER(pcreposix.h, [have_pcreposix=yes], [have_pcreposix=no])], [have_pcreposix=no], -lpcre)
+AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcre=no])], [have_pcrs=no])
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -195,37 +202,46 @@ AC_CHECK_FUNCS(strerror bcopy memmove)
 
 dnl Build type
 
+dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
+
 AC_ARG_ENABLE(mingw32,
 [  --enable-mingw32        Use mingw32 for a Windows GUI],
 [if test $enableval = yes; then
     WIN_ONLY=
     CYGWIN_FLAGS="-mwindows -mno-cygwin"
+    PTHREAD_LIB=-lpthreadGC
     echo "Using mingw32 (Win32 GUI)"
   else
     WIN_ONLY=#
     if test "$CYGWIN" = "yes"; then
       CYGWIN_FLAGS="-mno-win32"
+      PTHREAD_LIB=
       echo "Using Cygnus (Win32 command line)"
     else
       CYGWIN_FLAGS=
+      PTHREAD_LIB=-lpthread
     fi
   fi],
 [if test "$MINGW32" = "yes"; then
     WIN_ONLY=
     CYGWIN_FLAGS="-mwindows -mno-cygwin"
+    PTHREAD_LIB=-lpthreadGC
     echo "Using mingw32 (Win32 GUI)"
   else
     WIN_ONLY=#
     if test "$CYGWIN" = "yes"; then
       CYGWIN_FLAGS="-mno-win32"
+      PTHREAD_LIB=
       echo "Using Cygnus (Win32 command line)"
     else
       CYGWIN_FLAGS=
+      PTHREAD_LIB=-lpthread
     fi
   fi])
 
 AC_SUBST(WIN_ONLY)
 AC_SUBST(CYGWIN_FLAGS)
+AC_SUBST(PTHREAD_LIB)
 
 SOLARIS_ONLY=#
 AC_SUBST(SOLARIS_ONLY)
@@ -241,8 +257,14 @@ fi],AC_DEFINE(TOGGLE))
 AC_ARG_ENABLE(pthread,
 [  --disable-pthread       Don't use POSIX threads (pthreads)],
 [if test $enableval = yes; then
+  PTHREAD_ONLY=
   AC_DEFINE(FEATURE_PTHREAD)
-fi],AC_DEFINE(FEATURE_PTHREAD))
+else
+  PTHREAD_ONLY=#
+fi],[AC_DEFINE(FEATURE_PTHREAD)
+  PTHREAD_ONLY=
+])
+AC_SUBST(PTHREAD_ONLY)
 
 AC_ARG_ENABLE(gzip,
 [  --enable-gzip           Allow gzip'ed transfer of documents. Note that this will make content modification impossible.],
