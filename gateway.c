@@ -1,7 +1,7 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.2 2001/06/07 23:11:38 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.3 2001/06/09 10:55:28 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/gateway.c,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.2 2001/06/07 23:11:38 jongfoster 
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.3  2001/06/09 10:55:28  jongfoster
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.2  2001/06/07 23:11:38  jongfoster
  *    Removing gateways[] list - no longer used.
  *    Replacing function pointer in struct gateway with a directly
@@ -61,6 +64,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.2 2001/06/07 23:11:38 jongfoster 
 #ifdef _WIN32
 #include <winsock2.h>
 #endif /* def _WIN32 */
+
+#ifdef __BEOS__
+#include <netdb.h>
+#endif /* def __BEOS__ */
 
 #include "jcc.h"
 #include "errlog.h"

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.27 2001/07/19 19:09:47 haroon Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.28 2001/07/23 13:26:12 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.27 2001/07/19 19:09:47 haroon Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.28  2001/07/23 13:26:12  oes
+ *    Fixed bug in popup-killing for the first read that caused binary garbage to be sent between headers and body
+ *
  *    Revision 1.27  2001/07/19 19:09:47  haroon
  *    - Added code to take care of the situation where while processing the first
  *      server response (which includes the server header), after finding the end
@@ -258,9 +261,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.27 2001/07/19 19:09:47 haroon Exp $";
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef FEATURE_PTHREAD
+#if defined(FEATURE_PTHREAD) && !defined(__BEOS__)
 #include <pthread.h>
-#endif /* def FEATURE_PTHREAD */
+#endif /* def FEATURE_PTHREAD && ndef __BEOS__ */
 
 #ifdef _WIN32
 # ifndef FEATURE_PTHREAD
