@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.33 2002/04/30 11:14:52 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.34 2002/04/30 12:06:12 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.33 2002/04/30 11:14:52 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.34  2002/04/30 12:06:12  oes
+ *    Deleted unused code from default_cgi
+ *
  *    Revision 1.33  2002/04/30 11:14:52  oes
  *    Made csp the first parameter in *action_to_html
  *
@@ -1337,6 +1340,10 @@ static char *show_rcs(void)
    /* In alphabetical order */
    SHOW_RCS(actions_h_rcs)
    SHOW_RCS(actions_rcs)
+#ifdef AMIGA
+   SHOW_RCS(amiga_h_rcs)
+   SHOW_RCS(amiga_rcs)
+#endif /* def AMIGA */
    SHOW_RCS(cgi_h_rcs)
    SHOW_RCS(cgi_rcs)
 #ifdef FEATURE_CGI_EDIT_ACTIONS
