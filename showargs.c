@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.9 2001/05/29 23:11:38 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.11 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,63 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.9 2001/05/29 23:11:38 oes Exp $
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.11  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.10  2001/05/31 21:36:07  jongfoster
+ *    Added RCS for actions.[ch] and list.[ch]
+ *
  *    Revision 1.9  2001/05/29 23:11:38  oes
  *
  *     - Moved strsav() from showargs to miscutil
@@ -232,67 +289,26 @@ void savearg(char *c, char *o, struct configuration_spec * config)
 void init_proxy_args(int argc, const char *argv[], struct configuration_spec * config)
 {
    const struct gateway *g;
-   char * b;
+   char * b = NULL;
    int i;
 
    freez(config->proxy_args_header);
-   freez(config->proxy_args_invocation);
    freez(config->proxy_args_gateways);
-   freez(config->proxy_args_trailer);
+ 
    
-
-   b = NULL;
-   b = strsav(b,
-      "HTTP/1.0 200 OK\n"
-      "Server: IJ/" VERSION "\n"
-      "Content-type: text/html\n\n"
-
-      "<html>"
-      "<head>"
-      "<title>Internet Junkbuster Proxy Status</title>"
-      "</head>\n"
-      "<body bgcolor=\"#f8f8f0\" link=\"#000078\" alink=\"#ff0022\" vlink=\"#787878\">\n"
-      "<center>\n"
-      "<h1>" BANNER "\n"
-      "<a href=\"" REDIRECT_URL "faq#show\">Proxy Status</a>\n"
-      "</h1></center>\n"
-      "<h2>You are using the " BANNER " <sup><small><small>TM</small></small></sup></h2>\n"
-      "Version: " VERSION "\n"
-      "<br>Home page: <a href=\"" HOME_PAGE_URL "\">" HOME_PAGE_URL "</a>\n"
-      "<p>\n"
-   );
-
-   b = strsav(b,
-      "<h2>The program was invoked as follows</h2>\n");
-
    for (i=0; i < argc; i++)
    {
       b = strsav(b, argv[i]);
       b = strsav(b, " ");
    }
-   b = strsav(b, "<br>\n");
-
    config->proxy_args_header = b;
-
-   config->proxy_args_invocation = strsav(
-      config->proxy_args_invocation,
-      "<br>\n"
-      "and the following options were set in the configuration file"
-      "<br><br>\n"
-   );
-
+ 
    b = NULL;
-
-   b = strsav(b,
-      "<h2>It supports the following gateway protocols:</h2>\n");
-
    for (g = gateways; g->name; g++)
    {
       b = strsav(b, g->name);
       b = strsav(b, " ");
    }
-   b = strsav(b, "<br>\n");
-
    config->proxy_args_gateways = b;
 }
 
@@ -305,10 +321,10 @@ void init_proxy_args(int argc, const char *argv[], struct configuration_spec * c
  *
  * Parameters  :  None
  *
- * Returns     :  N/A
+ * Returns     :  string with that bottom
  *
  *********************************************************************/
-void end_proxy_args(struct configuration_spec * config)
+char *end_proxy_args(struct configuration_spec * config)
 {
    char *b = NULL;
    char buf[BUFSIZ];
@@ -499,18 +515,6 @@ void end_proxy_args(struct configuration_spec * config)
 #endif  ndef /* FAST_REDIRECTS */
 
    b = strsav(b, "</ul>\n<br>\n");
-
-   b = strsav(b,
-      "<small><small><p>\n"
-      "The " BANNER " Proxy - \n"
-      "<a href=\"" HOME_PAGE_URL "\">" HOME_PAGE_URL "</a><p>\n"
-      "Copyright &#169; 2001 <a href=\"" HOME_PAGE_URL "\">the SourceForge IJBSWA team</a><br>\n"
-      "Copyright &#169; 1997 <a href=\"http://www.junkbusters.com/\">\n" "Junkbusters Corporation</a><br>\n"
-      "Copying and distribution permitted under the "
-      "<a href=\"http://www.gnu.org/copyleft/gpl.html\">GNU General Public License.</a>\n"
-      "</small></small>"
-      "</body></html>\n"
-   );
 
    config->proxy_args_trailer = b;
 
