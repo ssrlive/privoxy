@@ -31,6 +31,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.19  2002/04/24 02:19:16  oes
+#     - Show name of actions file being edited
+#     - Show context sensitive help
+#     - Add buttons for easy changing of defaults
+#     - Cosmetics and clarifications
+#
 #    Revision 1.18  2002/04/18 19:21:09  jongfoster
 #    Added code to detect "conventional" action files, that start
 #    with a set of actions for all URLs (the pattern "/").
@@ -173,31 +179,9 @@ td.action {
   font-weight: bold;
   font-style: italic;
 }
-td.nbr {
+td.nbr, td.buttons {
   white-space: nowrap;
 }
-a.cmd, div.buttons a {
-  white-space: nowrap;
-  width: auto;
-  padding: 2px;
-  background-color: #dddddd;
-  color:            #000000;
-  text-decoration: none;
-  border-top:    1px solid #ffffff;
-  border-left:   1px solid #ffffff;
-  border-bottom: 1px solid #000000;
-  border-right:  1px solid #000000;
-}
-a.cmd:hover, div.buttons a:hover {
-  background-color: #eeeeee;
-}
-a.cmd:active, div.buttons a:active {
-  border-top:    1px solid #000000;
-  border-left:   1px solid #000000;
-  border-bottom: 1px solid #ffffff;
-  border-right:  1px solid #ffffff;
-}
-
 </style>
 
 <script type="text/javascript">
@@ -249,8 +233,8 @@ function rm_p(pattern,curtext)
 	<h2>What is all this?</h2>
         <p>
          If you haven't already done so, it is <b>strongly recommended</b> that you at 
-         least skim <a href="http://www.privoxy.org/user-manual/configuration.html#ACTIONSFILE">the
-         chapter on the actions file</a> in the <a href="http://www.privoxy.org/user-manual/">user manual</a>
+         least skim <a href="@user-manual@@helplink@ACTIONS-FILE">the
+         chapter on the actions file</a> in the <a href="@user-manual@">user manual</a>
          before making any changes. You will also find a comprehensive list of all available actions
          there.
         </p>
@@ -292,7 +276,10 @@ function rm_p(pattern,curtext)
           <table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
             <tr class="actions" valign="top">
               <td class="header" align="right">Actions:</td>
-              <td align="center"><p><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></p>@all-urls-buttons@</td>
+              <td class="buttons" align="center">
+                <p><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></p>
+                @all-urls-buttons@
+              </td>
               <td class="action" align="left">@all-urls-actions@</td>
             </tr>
             <tr class="rule">
@@ -308,7 +295,7 @@ function rm_p(pattern,curtext)
             </tr>
             <tr class="adv" valign="top">
               <td class="header" align="right"><b>Advanced:</b></td>
-              <td colspan="2">
+              <td colspan="2" class="buttons">
                 <table border="0" cellspacing="0" cellpadding="4">
                   <tr valign="middle" align="center">
                     <td class="nbr"> &nbsp; </td>
