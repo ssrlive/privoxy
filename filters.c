@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.55 2002/04/02 16:13:51 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.56 2002/04/05 15:51:24 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.55 2002/04/02 16:13:51 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.56  2002/04/05 15:51:24  oes
+ *     - bugfix: error-pages now get correct request protocol
+ *     - fix for invalid HTML in trust info
+ *
  *    Revision 1.55  2002/04/02 16:13:51  oes
  *    Fix: No "Go there anyway" for SSL
  *
@@ -366,7 +370,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.55 2002/04/02 16:13:51 oes Exp $"
  *      a lot! ;-)
  *
  *    Revision 1.3  2001/05/20 16:44:47  jongfoster
- *    Removing last hardcoded JunkBusters.com URLs.
+ *    Removing last hardcoded Junkbusters.com URLs.
  *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
