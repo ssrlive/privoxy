@@ -1,7 +1,7 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.3 2001/06/09 10:55:28 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.4 2001/07/24 12:47:06 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/gateway.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.3 2001/06/09 10:55:28 jongfoster 
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.4  2001/07/24 12:47:06  oes
+ *    Applied BeOS support update by Eugenia
+ *
  *    Revision 1.3  2001/06/09 10:55:28  jongfoster
  *    Changing BUFSIZ ==> BUFFER_SIZE
  *
@@ -69,6 +72,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.3 2001/06/09 10:55:28 jongfoster 
 #include <netdb.h>
 #endif /* def __BEOS__ */
 
+#include "project.h"
 #include "jcc.h"
 #include "errlog.h"
 #include "jbsockets.h"
