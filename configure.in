@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.72 2002/06/04 15:52:25 jongfoster Exp $
+dnl $Id: configure.in,v 1.73 2002/06/05 00:26:21 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,11 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.73  2002/06/05 00:26:21  hal9
+dnl Move all doc build stuff to doc/source/GNUmakefile, leaving a 'make dok'
+dnl target only in toplevel. Add DOC_STATUS variable so docs can be built without
+dnl touching sgml source.
+dnl
 dnl Revision 1.72  2002/06/04 15:52:25  jongfoster
 dnl Removing need for acconfig.h (apparently using acconfig.h is an
 dnl obsolete coding style).
@@ -389,7 +394,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.72 $)
+AC_REVISION($Revision: 1.73 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
@@ -443,6 +448,10 @@ AC_DEFINE_UNQUOTED(CODE_STATUS,"${CODE_STATUS}",
 dnl =================================================================
 dnl Checks for programs needed to build.
 dnl =================================================================
+
+dnl Keep AC_PROG_CC from setting its own defaults:
+CFLAGS=" "
+
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
