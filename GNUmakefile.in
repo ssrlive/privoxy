@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.1 2001/12/01 11:22:57 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.3 2002/01/04 14:45:48 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,14 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.2  2001/12/30 14:07:31  steudten
+# - Add signal handling (unix)
+# - Add SIGHUP handler (unix)
+# - Add creation of pidfile (unix)
+# - Add action 'top' in rc file (RH)
+# - Add entry 'SIGNALS' to manpage
+# - Add exit message to logfile (unix)
+#
 # Revision 1.1  2001/12/01 11:22:57  jongfoster
 # Renaming Makefile.in to GNUmakefile.in so that non-GNU versions of
 # make break in a more obvious way.
@@ -198,6 +206,7 @@
 VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
+CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 # will automatically be postfixed with -$(RPM_PACKAGEV) in the SPECfile
 RPM_VERSION   = $(VERSION)
@@ -225,12 +234,13 @@ INSTALL    = cp -f
 LD         = @CC@
 RM         = rm -f
 STRIP_PROG = strip
-SED	   = sed
+SED	     = sed
 CAT        = cat
 RPM        = rpm
-MV	   = mv
+MV	        = mv
 TAR        = tar
 MAKE       = make
+LN         = ln
 
 # Program to do LF->CRLF
 #
@@ -573,10 +583,15 @@ clean:
 	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
 
 clobber: clean
-	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` TAGS junkbuster.log config.cache
+	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` TAGS junkbuster.log config.cache *~ *.tar.gz
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
+
+tarball-src: clobber
+	$(LN) -s current ../ijb-$(VERSION)-$(CODE_STATUS)
+	$(TAR) -C.. -cvhzf ijb-$(VERSION)-$(CODE_STATUS)-src.tar.gz ijb-$(VERSION)-$(CODE_STATUS)
+	$(RM) ../ijb-$(VERSION)-$(CODE_STATUS)
 
 install: all
 	#
