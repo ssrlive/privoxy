@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.32 2002/04/19 16:55:31 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.33 2002/04/24 02:17:47 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,17 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.32 2002/04/19 16:55:31 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.33  2002/04/24 02:17:47  oes
+ *     - Moved get_char_param, get_string_param and get_number_param to cgi.c
+ *     - Comments
+ *     - Activated Jon's code for editing multiple AFs
+ *     - cgi_edit_list_actions now provides context-sensitive
+ *       help, looks up all action sets from standard.action and
+ *       makes buttons for them in the catchall section
+ *     - cgi_edit_action_submit now honors a p parameter, looks up
+ *       the corresponding action set, and sets the catchall pattern's
+ *       actions accordingly.
+ *
  *    Revision 1.32  2002/04/19 16:55:31  jongfoster
  *    Fixing newline problems.  If we do our own text file newline
  *    mangling, we don't want the library to do any, so we need to
@@ -798,9 +809,6 @@ jb_err edit_write_file(struct editable_file * file)
          }
          if (cur_line->unprocessed)
          {
-            /* This should be a single line - sanity check. */
-            assert(NULL == strchr(cur_line->unprocessed, '\r'));
-            assert(NULL == strchr(cur_line->unprocessed, '\n'));
 
             if (NULL != strchr(cur_line->unprocessed, '#'))
             {
@@ -2410,7 +2418,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       snprintf(buf, 150, "%d", line_number + 2);
       if (!err) err = map(exports, "all-urls-s-next", 1, buf, 1);
       if (!err) err = map(exports, "all-urls-actions", 1,
-                          actions_to_html(cur_line->data.action), 0);
+                          actions_to_html(cur_line->data.action, csp), 0);
 
        /* Skip the 2 lines */
       cur_line = cur_line->next->next;
@@ -2521,7 +2529,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       snprintf(buf, 150, "%d", line_number);
       err = map(section_exports, "s", 1, buf, 1);
       if (!err) err = map(section_exports, "actions", 1,
-                          actions_to_html(cur_line->data.action), 0);
+                          actions_to_html(cur_line->data.action, csp), 0);
 
       if ( (!err)
         && (cur_line->next != NULL)
