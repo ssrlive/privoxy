@@ -1,12 +1,19 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.8 2001/11/30 23:35:51 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.9 2002/01/17 20:56:22 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
  *
  * Purpose     :  CGI-based actionsfile editor.
  *
- *                Functions declared include:
+ *                Functions declared include: cgi_edit_*
  *
+ *                NOTE: The CGIs in this file use parameter names
+ *                such as "f" and "s" which are really *BAD* choices.
+ *                However, I'm trying to save bytes in the
+ *                edit-actions-list HTML page - the standard actions
+ *                file generated a 550kbyte page, which is ridiculous.
+ *
+ *                Stick to the short names in this file for consistency.
  *
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                IJBSWA team.  http://ijbswa.sourceforge.net
@@ -35,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.8 2001/11/30 23:35:51 jongfoster 
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.9  2002/01/17 20:56:22  jongfoster
+ *    Replacing hard references to the URL of the config interface
+ *    with #defines from project.h
+ *
  *    Revision 1.8  2001/11/30 23:35:51  jongfoster
  *    Renaming actionsfile to ijb.action
  *
@@ -125,6 +136,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.8 2001/11/30 23:35:51 jongfoster 
 #include "actions.h"
 #include "miscutil.h"
 #include "errlog.h"
+#include "loaders.h"
 #include "loadcfg.h"
 /* loadcfg.h is for g_bToggleIJB only */
 #include "urlmatch.h"
@@ -186,13 +198,19 @@ struct editable_file
    struct file_line * lines;
    const char * filename;     /* Full pathname - e.g. "/etc/junkbuster/wibble.action" */
    const char * identifier;   /* Filename stub - e.g. "wibble".  Use for CGI param. */
+                              /* Pre-encoded with url_encode() for ease of use. */
    const char * version_str;  /* Last modification time, as a string.  For CGI param */
+                              /* Can be used in URL without using url_param(). */
    unsigned version;          /* Last modification time - prevents chaos with
                                * the browser's "back" button.  Note that this is a
                                * time_t cast to an unsigned.  When comparing, always
                                * cast the time_t to an unsigned, and *NOT* vice-versa.
                                * This may lose the top few bits, but they're not
                                * significant anyway.
+                               */
+   int newline;               /* Newline convention - one of the NEWLINE_xxx constants.
+                               * Note that changing this after the file has been
+                               * read in will cause a mess.
                                */
    struct file_line * parse_error; /* On parse error, this is the offending line. */
    const char * parse_error_text;  /* On parse error, this is the problem.
@@ -232,10 +250,8 @@ jb_err cgi_error_disabled(struct client_state *csp,
                           struct http_response *rsp);
 
 /* Internal arbitrary config file support functions */
-static jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile);
+static jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile, int *newline);
 static void edit_free_file_lines(struct file_line * first_line);
-static jb_err simple_read_line(char **dest, FILE *fp);
-static jb_err edit_read_line(FILE *fp, char **raw_out, char **prefix_out, char **data_out);
 
 /* Internal actions file support functions */
 static int match_actions_file_header_line(const char * line, const char * name);
@@ -252,6 +268,10 @@ static jb_err get_number_param(struct client_state *csp,
                                const struct map *parameters,
                                char *name,
                                unsigned *pvalue);
+static jb_err get_url_spec_param(struct client_state *csp,
+                                 const struct map *parameters,
+                                 const char *name,
+                                 char **pvalue);
 
 /* Internal actionsfile <==> HTML conversion functions */
 static jb_err map_radio(struct map * exports,
@@ -381,11 +401,9 @@ static jb_err map_copy_parameter_url(struct map *out,
  *           3 :  parameters = map of cgi parameters
  *
  * CGI Parameters
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *     pattern : Line number of pattern to edit
- *      oldval : Current value for pattern
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           p : (pattern) Line number of pattern to edit
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -397,7 +415,11 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
                                  struct http_response *rsp,
                                  const struct map *parameters)
 {
-   struct map *exports;
+   struct map * exports;
+   unsigned patternid;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
    jb_err err;
 
    assert(csp);
@@ -409,16 +431,48 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
       return cgi_error_disabled(csp, rsp);
    }
 
+   err = get_number_param(csp, parameters, "p", &patternid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   cur_line = file->lines;
+
+   for (line_number = 1; (cur_line != NULL) && (line_number < patternid); line_number++)
+   {
+      cur_line = cur_line->next;
+   }
+
+   if ( (cur_line == NULL)
+     || (line_number != patternid)
+     || (patternid < 1)
+     || (cur_line->type != FILE_LINE_URL))
+   {
+      /* Invalid "patternid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
    if (NULL == (exports = default_exports(csp, NULL)))
    {
+      edit_free_file(file);
       return JB_ERR_MEMORY;
    }
 
-   err = map_copy_parameter_html(exports, parameters, "section");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "pattern");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "ver");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "filename");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "oldval");
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "v", 1, file->version_str, 1);
+   if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
+   if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
+
+   edit_free_file(file);
 
    if (err)
    {
@@ -443,9 +497,9 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
  *           3 :  parameters = map of cgi parameters
  *
  * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           s : (section) Line number of section to edit
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -474,9 +528,9 @@ jb_err cgi_edit_actions_add_url_form(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   err = map_copy_parameter_html(exports, parameters, "section");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "ver");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "filename");
+   err = map_copy_parameter_html(exports, parameters, "f");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "v");
+   if (!err) err = map_copy_parameter_html(exports, parameters, "s");
 
    if (err)
    {
@@ -501,11 +555,9 @@ jb_err cgi_edit_actions_add_url_form(struct client_state *csp,
  *           3 :  parameters = map of cgi parameters
  *
  * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *     pattern : Line number of pattern to edit
- *      oldval : Current value for pattern
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           p : (pattern) Line number of pattern to edit
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -517,7 +569,11 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
                                      struct http_response *rsp,
                                      const struct map *parameters)
 {
-   struct map *exports;
+   struct map * exports;
+   unsigned patternid;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
    jb_err err;
 
    assert(csp);
@@ -529,16 +585,48 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
       return cgi_error_disabled(csp, rsp);
    }
 
+   err = get_number_param(csp, parameters, "p", &patternid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   cur_line = file->lines;
+
+   for (line_number = 1; (cur_line != NULL) && (line_number < patternid); line_number++)
+   {
+      cur_line = cur_line->next;
+   }
+
+   if ( (cur_line == NULL)
+     || (line_number != patternid)
+     || (patternid < 1)
+     || (cur_line->type != FILE_LINE_URL))
+   {
+      /* Invalid "patternid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
    if (NULL == (exports = default_exports(csp, NULL)))
    {
+      edit_free_file(file);
       return JB_ERR_MEMORY;
    }
 
-   err = map_copy_parameter_url(exports, parameters, "section");
-   if (!err) err = map_copy_parameter_url(exports, parameters, "pattern");
-   if (!err) err = map_copy_parameter_url(exports, parameters, "ver");
-   if (!err) err = map_copy_parameter_url(exports, parameters, "filename");
-   if (!err) err = map_copy_parameter_html(exports, parameters, "oldval");
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "v", 1, file->version_str, 1);
+   if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
+   if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
+
+   edit_free_file(file);
 
    if (err)
    {
@@ -547,323 +635,6 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
    }
 
    return template_fill_for_cgi(csp, "edit-actions-remove-url-form", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  simple_read_line
- *
- * Description :  Read a single line from a file and return it.
- *                This is basically a version of fgets() that malloc()s
- *                it's own line buffer.  Note that the buffer will
- *                always be a multiple of BUFFER_SIZE bytes long.
- *                Therefore if you are going to keep the string for
- *                an extended period of time, you should probably
- *                strdup() it and free() the original, to save memory.
- *
- *
- * Parameters  :
- *          1  :  dest = destination for newly malloc'd pointer to
- *                line data.  Will be set to NULL on error.
- *          2  :  fp = File to read from
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_FILE   on EOF.
- *
- *********************************************************************/
-static jb_err simple_read_line(char **dest, FILE *fp)
-{
-   int len;
-   char * buf;
-   char * newbuf;
-
-   assert(fp);
-   assert(dest);
-
-   *dest = NULL;
-
-   if (NULL == (buf = malloc(BUFFER_SIZE)))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   *buf = '\0';
-   len = 0;
-
-   while (FOREVER)
-   {
-      newbuf = buf + len;
-      if ((!fgets(newbuf, BUFFER_SIZE, fp)) || (*newbuf == '\0'))
-      {
-         /* (*newbuf == '\0') should never happen unless fgets fails */
-         if (*buf == '\0')
-         {
-            free(buf);
-            return JB_ERR_FILE;
-         }
-         else
-         {
-            *dest = buf;
-            return JB_ERR_OK;
-         }
-      }
-      len = strlen(buf);
-      if ((buf[len - 1] == '\n') || (buf[len - 1] == '\r'))
-      {
-         *dest = buf;
-         return JB_ERR_OK;
-      }
-
-      if (NULL == (newbuf = realloc(buf, len + BUFFER_SIZE)))
-      {
-         free(buf);
-         return JB_ERR_MEMORY;
-      }
-      buf = newbuf;
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  edit_read_line
- *
- * Description :  Read a single non-empty line from a file and return
- *                it.  Trims comments, leading and trailing whitespace
- *                and respects escaping of newline and comment char.
- *                Provides the line in 2 alternative forms: raw and
- *                preprocessed.
- *                - raw is the raw data read from the file.  If the
- *                  line is not modified, then this should be written
- *                  to the new file.
- *                - prefix is any comments and blank lines that were
- *                  read from the file.  If the line is modified, then
- *                  this should be written out to the file followed
- *                  by the modified data.  (If this string is non-empty
- *                  then it will have a newline at the end).
- *                - data is the actual data that will be parsed
- *                  further by appropriate routines.
- *                On EOF, the 3 strings will all be set to NULL and
- *                0 will be returned.
- *
- * Parameters  :
- *          1  :  fp = File to read from
- *          2  :  raw_out = destination for newly malloc'd pointer to
- *                raw line data.  May be NULL if you don't want it.
- *          3  :  prefix_out = destination for newly malloc'd pointer to
- *                comments.  May be NULL if you don't want it.
- *          4  :  data_out = destination for newly malloc'd pointer to
- *                line data with comments and leading/trailing spaces
- *                removed, and line continuation performed.  May be
- *                NULL if you don't want it.
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_FILE   on EOF.
- *
- *********************************************************************/
-static jb_err edit_read_line(FILE *fp, char **raw_out, char **prefix_out, char **data_out)
-{
-   char *p;          /* Temporary pointer   */
-   char *linebuf;    /* Line read from file */
-   char *linestart;  /* Start of linebuf, usually first non-whitespace char */
-   char newline[3];  /* Used to store the newline - "\n", "\r", or "\r\n"   */
-   int contflag = 0; /* Nonzero for line continuation - i.e. line ends '\'  */
-   char *raw;        /* String to be stored in raw_out    */
-   char *prefix;     /* String to be stored in prefix_out */
-   char *data;       /* String to be stored in data_out   */
-   jb_err rval = JB_ERR_OK;
-
-   assert(fp);
-
-   /* Set output parameters to NULL */
-   if (raw_out)
-   {
-      *raw_out    = NULL;
-   }
-   if (prefix_out)
-   {
-      *prefix_out = NULL;
-   }
-   if (data_out)
-   {
-      *data_out   = NULL;
-   }
-
-   /* Set string variables to new, empty strings. */
-
-   raw    = malloc(1);
-   prefix = malloc(1);
-   data   = malloc(1);
-
-   if ((raw == NULL) || (prefix == NULL) || (data == NULL))
-   {
-      freez(raw);
-      freez(prefix);
-      freez(data);
-      return JB_ERR_MEMORY;
-   }
-
-   *raw    = '\0';
-   *prefix = '\0';
-   *data   = '\0';
-
-   /* Main loop.  Loop while we need more data & it's not EOF. */
-
-   while ( (contflag || (*data == '\0'))
-        && (JB_ERR_OK == (rval = simple_read_line(&linebuf, fp))))
-   {
-      if (string_append(&raw,linebuf))
-      {
-         free(prefix);
-         free(data);
-         free(linebuf);
-         return JB_ERR_MEMORY;
-      }
-
-      /* Trim off newline */
-      p = linebuf + strlen(linebuf);
-      if ((p != linebuf) && ((p[-1] == '\r') || (p[-1] == '\n')))
-      {
-         p--;
-         if ((p != linebuf) && ((p[-1] == '\r') || (p[-1] == '\n')))
-         {
-            p--;
-         }
-      }
-      strcpy(newline, p);
-      *p = '\0';
-
-      /* Line continuation? Trim escape and set flag. */
-      contflag = ((p != linebuf) && (*--p == '\\'));
-      if (contflag)
-      {
-         *p = '\0';
-      }
-
-      /* Trim leading spaces if we're at the start of the line */
-      linestart = linebuf;
-      if (*data == '\0')
-      {
-         /* Trim leading spaces */
-         while (*linestart && isspace((int)(unsigned char)*linestart))
-         {
-            linestart++;
-         }
-      }
-
-      /* Handle comment characters. */
-      p = linestart;
-      while ((p = strchr(p, '#')) != NULL)
-      {
-         /* Found a comment char.. */
-         if ((p != linebuf) && (*(p-1) == '\\'))
-         {
-            /* ..and it's escaped, left-shift the line over the escape. */
-            char *q = p - 1;
-            while ((*q = *(q + 1)) != '\0')
-            {
-               q++;
-            }
-            /* Now scan from just after the "#". */
-         }
-         else
-         {
-            /* Real comment.  Save it... */
-            if (p == linestart)
-            {
-               /* Special case:  Line only contains a comment, so all the
-                * previous whitespace is considered part of the comment.
-                * Undo the whitespace skipping, if any.
-                */
-               linestart = linebuf;
-               p = linestart;
-            }
-            string_append(&prefix,p);
-            if (string_append(&prefix,newline))
-            {
-               free(raw);
-               free(data);
-               free(linebuf);
-               return JB_ERR_MEMORY;
-            }
-            *newline = '\0';
-
-            /* ... and chop off the rest of the line */
-            *p = '\0';
-         }
-      } /* END while (there's a # character) */
-
-      /* Write to the buffer */
-      if (*linestart)
-      {
-         if (string_append(&data, linestart))
-         {
-            free(raw);
-            free(prefix);
-            free(linebuf);
-            return JB_ERR_MEMORY;
-         }
-      }
-
-      free(linebuf);
-   } /* END while(we need more data) */
-
-   /* Handle simple_read_line() errors - ignore EOF */
-   if ((rval != JB_ERR_OK) && (rval != JB_ERR_FILE))
-   {
-      free(raw);
-      free(prefix);
-      free(data);
-      return rval;
-   }
-
-
-   if (*raw)
-   {
-      /* Got at least some data */
-
-      /* Remove trailing whitespace */
-      chomp(data);
-
-      if (raw_out)
-      {
-         *raw_out    = raw;
-      }
-      else
-      {
-         free(raw);
-      }
-      if (prefix_out)
-      {
-         *prefix_out = prefix;
-      }
-      else
-      {
-         free(prefix);
-      }
-      if (data_out)
-      {
-         *data_out   = data;
-      }
-      else
-      {
-         free(data);
-      }
-      return JB_ERR_OK;
-   }
-   else
-   {
-      /* EOF and no data there. */
-
-      free(raw);
-      free(prefix);
-      free(data);
-
-      return JB_ERR_FILE;
-   }
 }
 
 
@@ -923,12 +694,72 @@ jb_err edit_write_file(struct editable_file * file)
          }
          if (cur_line->unprocessed)
          {
-            if (fputs(cur_line->unprocessed, fp) < 0)
+            /* This should be a single line - sanity check. */
+            assert(NULL == strchr(cur_line->unprocessed, '\r'));
+            assert(NULL == strchr(cur_line->unprocessed, '\n'));
+
+            if (NULL != strchr(cur_line->unprocessed, '#'))
             {
-               fclose(fp);
-               return JB_ERR_FILE;
+               /* Must quote '#' characters */
+               int numhash = 0;
+               int len;
+               char * src;
+               char * dest;
+               char * str;
+
+               /* Count number of # characters, so we know length of output string */
+               src = cur_line->unprocessed;
+               while (NULL != (src = strchr(src, '#')))
+               {
+                  numhash++;
+                  src++;
+               }
+               assert(numhash > 0);
+
+               /* Allocate new memory for string */
+               len = strlen(cur_line->unprocessed);
+               if (NULL == (str = malloc(len + 1 + numhash)))
+               {
+                  /* Uh oh, just trashed file! */
+                  fclose(fp);
+                  return JB_ERR_MEMORY;
+               }
+
+               /* Loop through string from end */
+               src  = cur_line->unprocessed + len;
+               dest = str + len + numhash;
+               for ( ; len >= 0; len--)
+               {
+                  if ((*dest-- = *src--) == '#')
+                  {
+                     *dest-- = '\\';
+                     numhash--;
+                     assert(numhash >= 0);
+                  }
+               }
+               assert(numhash == 0);
+               assert(src  + 1 == cur_line->unprocessed);
+               assert(dest + 1 == str);
+
+               if (fputs(str, fp) < 0)
+               {
+                  free(str);
+                  fclose(fp);
+                  return JB_ERR_FILE;
+               }
+
+               free(str);
             }
-            if (fputs("\n", fp) < 0)
+            else
+            {
+               /* Can write without quoting '#' characters. */
+               if (fputs(cur_line->unprocessed, fp) < 0)
+               {
+                  fclose(fp);
+                  return JB_ERR_FILE;
+               }
+            }
+            if (fputs(NEWLINE(file->newline), fp) < 0)
             {
                fclose(fp);
                return JB_ERR_FILE;
@@ -1510,7 +1341,7 @@ jb_err edit_parse_actions_file(struct editable_file * file)
  *                JB_ERR_MEMORY on out-of-memory
  *
  *********************************************************************/
-jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile)
+jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile, int *newline)
 {
    struct file_line * first_line; /* Keep for return value or to free */
    struct file_line * cur_line;   /* Current line */
@@ -1530,7 +1361,7 @@ jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile)
 
    cur_line->type = FILE_LINE_UNPROCESSED;
 
-   rval = edit_read_line(fp, &cur_line->raw, &cur_line->prefix, &cur_line->unprocessed);
+   rval = edit_read_line(fp, &cur_line->raw, &cur_line->prefix, &cur_line->unprocessed, newline, NULL);
    if (rval)
    {
       /* Out of memory or empty file. */
@@ -1552,7 +1383,7 @@ jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile)
 
       cur_line->type = FILE_LINE_UNPROCESSED;
 
-      rval = edit_read_line(fp, &cur_line->raw, &cur_line->prefix, &cur_line->unprocessed);
+      rval = edit_read_line(fp, &cur_line->raw, &cur_line->prefix, &cur_line->unprocessed, newline, NULL);
       if ((rval != JB_ERR_OK) && (rval != JB_ERR_FILE))
       {
          /* Out of memory */
@@ -1623,6 +1454,7 @@ jb_err edit_read_file(struct client_state *csp,
    unsigned version = 0;
    struct stat statbuf[1];
    char version_buf[22];
+   int newline = NEWLINE_UNKNOWN;
 
    assert(csp);
    assert(parameters);
@@ -1630,7 +1462,7 @@ jb_err edit_read_file(struct client_state *csp,
 
    *pfile = NULL;
 
-   err = get_file_name_param(csp, parameters, "filename", suffix,
+   err = get_file_name_param(csp, parameters, "f", suffix,
                              &filename, &identifier);
    if (err)
    {
@@ -1648,7 +1480,7 @@ jb_err edit_read_file(struct client_state *csp,
    if (require_version)
    {
       unsigned specified_version;
-      err = get_number_param(csp, parameters, "ver", &specified_version);
+      err = get_number_param(csp, parameters, "v", &specified_version);
       if (err)
       {
          free(filename);
@@ -1667,7 +1499,7 @@ jb_err edit_read_file(struct client_state *csp,
       return JB_ERR_FILE;
    }
 
-   err = edit_read_file_lines(fp, &lines);
+   err = edit_read_file_lines(fp, &lines, &newline);
 
    fclose(fp);
 
@@ -1686,9 +1518,10 @@ jb_err edit_read_file(struct client_state *csp,
    }
 
    file->lines = lines;
+   file->newline = newline;
    file->filename = filename;
    file->version = version;
-   file->identifier = strdup(identifier);
+   file->identifier = url_encode(identifier);
 
    if (file->identifier == NULL)
    {
@@ -1771,11 +1604,11 @@ jb_err edit_read_actions_file(struct client_state *csp,
       /* Try to handle if possible */
       if (err == JB_ERR_FILE)
       {
-         err = cgi_error_file(csp, rsp, lookup(parameters, "filename"));
+         err = cgi_error_file(csp, rsp, lookup(parameters, "f"));
       }
       else if (err == JB_ERR_MODIFIED)
       {
-         err = cgi_error_modified(csp, rsp, lookup(parameters, "filename"));
+         err = cgi_error_modified(csp, rsp, lookup(parameters, "f"));
       }
       if (err == JB_ERR_OK)
       {
@@ -1835,10 +1668,11 @@ jb_err edit_read_actions_file(struct client_state *csp,
  * Parameters  :
  *           1 :  csp = Current client state (buffers, headers, etc...)
  *           2 :  parameters = map of cgi parameters
- *           3 :  suffix = File extension, e.g. ".actions"
- *           4 :  pfilename = destination for full filename.  Caller
+ *           3 :  param_name = The name of the parameter to read
+ *           4 :  suffix = File extension, e.g. ".actions"
+ *           5 :  pfilename = destination for full filename.  Caller
  *                free()s.  Set to NULL on error.
- *           5 :  pparam = destination for partial filename,
+ *           6 :  pparam = destination for partial filename,
  *                suitable for use in another URL.  Allocated as part
  *                of the map "parameters", so don't free it.
  *                Set to NULL if not specified.
@@ -2004,6 +1838,133 @@ static jb_err get_number_param(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  get_url_spec_param
+ *
+ * Description :  Get a URL pattern from the parameters
+ *                passed to a CGI function.  Removes leading/trailing
+ *                spaces and validates it.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  parameters = map of cgi parameters
+ *           3 :  name = Name of CGI parameter to read
+ *           4 :  pvalue = destination for value.  Will be malloc()'d.
+ *                         Set to NULL on error.
+ *
+ * Returns     :  JB_ERR_OK         on success
+ *                JB_ERR_MEMORY     on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the parameter was not specified
+ *                                  or is not valid.
+ *
+ *********************************************************************/
+static jb_err get_url_spec_param(struct client_state *csp,
+                                 const struct map *parameters,
+                                 const char *name,
+                                 char **pvalue)
+{
+   const char *orig_param;
+   char *param;
+   char *s;
+   struct url_spec compiled[1];
+   jb_err err;
+
+   assert(csp);
+   assert(parameters);
+   assert(name);
+   assert(pvalue);
+
+   *pvalue = NULL;
+
+   orig_param = lookup(parameters, name);
+   if (!*orig_param)
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* Copy and trim whitespace */
+   param = strdup(orig_param);
+   if (param == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+   chomp(param);
+
+   /* Must be non-empty, and can't allow 1st character to be '{' */
+   if (param[0] == '\0' || param[0] == '{')
+   {
+      free(param);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* Check for embedded newlines */
+   for (s = param; *s != '\0'; s++)
+   {
+      if ((*s == '\r') || (*s == '\n'))
+      {
+         free(param);
+         return JB_ERR_CGI_PARAMS;
+      }
+   }
+
+   /* Check that regex is valid */
+   s = strdup(param);
+   if (s == NULL)
+   {
+      free(param);
+      return JB_ERR_MEMORY;
+   }
+   err = create_url_spec(compiled, s);
+   free(s);
+   if (err)
+   {
+      free(param);
+      return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
+   }
+   free_url_spec(compiled);
+
+   if (param[strlen(param) - 1] == '\\')
+   {
+      /*
+       * Must protect trailing '\\' from becoming line continuation character.
+       * Two methods: 1) If it's a domain only, add a trailing '/'.
+       * 2) For path, add the do-nothing PCRE expression (?:) to the end
+       */
+      if (strchr(param, '/') == NULL)
+      {
+         err = string_append(&param, "/");
+      }
+      else
+      {
+         err = string_append(&param, "(?:)");
+      }
+      if (err)
+      {
+         return err;
+      }
+
+      /* Check that the modified regex is valid */
+      s = strdup(param);
+      if (s == NULL)
+      {
+         free(param);
+         return JB_ERR_MEMORY;
+      }
+      err = create_url_spec(compiled, s);
+      free(s);
+      if (err)
+      {
+         free(param);
+         return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
+      }
+      free_url_spec(compiled);
+   }
+
+   *pvalue = param;
+   return JB_ERR_OK;
+}
+
+/*********************************************************************
+ *
  * Function    :  map_radio
  *
  * Description :  Map a set of radio button values.  E.g. if you have
@@ -2075,6 +2036,1776 @@ static jb_err map_radio(struct map * exports,
    }
 
    return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_modified
+ *
+ * Description :  CGI function that is called when a file is modified
+ *                outside the CGI editor.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  filename = The file that was modified.
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_error_modified(struct client_state *csp,
+                          struct http_response *rsp,
+                          const char *filename)
+{
+   struct map *exports;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(filename);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map(exports, "f", 1, html_encode(filename), 0);
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-modified", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_parse
+ *
+ * Description :  CGI function that is called when a file cannot
+ *                be parsed by the CGI editor.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  file = The file that was modified.
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_error_parse(struct client_state *csp,
+                       struct http_response *rsp,
+                       struct editable_file *file)
+{
+   struct map *exports;
+   jb_err err;
+   struct file_line *cur_line;
+
+   assert(csp);
+   assert(rsp);
+   assert(file);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "parse-error", 1, html_encode(file->parse_error_text), 0);
+
+   cur_line = file->parse_error;
+   assert(cur_line);
+
+   if (!err) err = map(exports, "line-raw", 1, html_encode(cur_line->raw), 0);
+   if (!err) err = map(exports, "line-data", 1, html_encode(cur_line->unprocessed), 0);
+
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-parse", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_file
+ *
+ * Description :  CGI function that is called when a file cannot be
+ *                opened by the CGI editor.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  filename = The file that was modified.
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_error_file(struct client_state *csp,
+                      struct http_response *rsp,
+                      const char *filename)
+{
+   struct map *exports;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(filename);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   err = map(exports, "f", 1, html_encode(filename), 0);
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-file", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_error_bad_param
+ *
+ * Description :  CGI function that is called if the parameters
+ *                (query string) for a CGI were wrong.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_error_disabled(struct client_state *csp,
+                          struct http_response *rsp)
+{
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return template_fill_for_cgi(csp, "cgi-error-disabled", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions
+ *
+ * Description :  CGI function that allows the user to choose which
+ *                actions file to edit.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions(struct client_state *csp,
+                        struct http_response *rsp,
+                        const struct map *parameters)
+{
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   /* FIXME: Incomplete */
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+   if (enlist_unique_header(rsp->headers, "Location",
+      CGI_PREFIX "edit-actions-list?f=ijb"))
+   {
+      free(rsp->status);
+      rsp->status = NULL;
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_list
+ *
+ * Description :  CGI function that edits the actions list.
+ *                FIXME: This function shouldn't FATAL ever.
+ *                FIXME: This function doesn't check the retval of map()
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : filename
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_FILE   if the file cannot be opened or
+ *                              contains no data
+ *                JB_ERR_CGI_PARAMS if "filename" was not specified
+ *                                  or is not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_list(struct client_state *csp,
+                             struct http_response *rsp,
+                             const struct map *parameters)
+{
+   char * section_template;
+   char * url_template;
+   char * sections;
+   char * urls;
+   char buf[50];
+   char * s;
+   struct map * exports;
+   struct map * section_exports;
+   struct map * url_exports;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number = 0;
+   unsigned prev_section_line_number = ((unsigned) (-1));
+   int url_1_2;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 0, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "v", 1, file->version_str, 1);
+
+   if (err)
+   {
+      edit_free_file(file);
+      free_map(exports);
+      return err;
+   }
+
+   /* Should do all global exports above this point */
+
+   err = template_load(csp, &section_template, "edit-actions-list-section");
+   if (err)
+   {
+      edit_free_file(file);
+      free_map(exports);
+      if (err == JB_ERR_FILE)
+      {
+         return cgi_error_no_template(csp, rsp, "edit-actions-list-section");
+      }
+      return err;
+   }
+
+   err = template_load(csp, &url_template, "edit-actions-list-url");
+   if (err)
+   {
+      free(section_template);
+      edit_free_file(file);
+      free_map(exports);
+      if (err == JB_ERR_FILE)
+      {
+         return cgi_error_no_template(csp, rsp, "edit-actions-list-url");
+      }
+      return err;
+   }
+
+   err = template_fill(&section_template, exports);
+   if (err)
+   {
+      free(url_template);
+      edit_free_file(file);
+      free_map(exports);
+      free(url_template);
+      return err;
+   }
+
+   err = template_fill(&url_template, exports);
+   if (err)
+   {
+      free(section_template);
+      edit_free_file(file);
+      free_map(exports);
+      return err;
+   }
+
+   /* Find start of actions in file */
+   cur_line = file->lines;
+   line_number = 1;
+   while ((cur_line != NULL) && (cur_line->type != FILE_LINE_ACTION))
+   {
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if (NULL == (sections = strdup("")))
+   {
+      free(section_template);
+      free(url_template);
+      edit_free_file(file);
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   while ((cur_line != NULL) && (cur_line->type == FILE_LINE_ACTION))
+   {
+      if (NULL == (section_exports = new_map()))
+      {
+         free(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+
+      snprintf(buf, 50, "%d", line_number);
+      err = map(section_exports, "s", 1, buf, 1);
+      if (!err) err = map(section_exports, "actions", 1,
+                          actions_to_html(cur_line->data.action), 0);
+
+      if ( (!err)
+        && (cur_line->next != NULL)
+        && (cur_line->next->type == FILE_LINE_URL))
+      {
+         /* This section contains at least one URL, don't allow delete */
+         err = map_block_killer(section_exports, "empty-section");
+      }
+      else
+      {
+         if (!err) err = map_block_keep(section_exports, "empty-section");
+      }
+
+      if (prev_section_line_number != ((unsigned)(-1)))
+      {
+         /* Not last section */
+         snprintf(buf, 50, "%d", prev_section_line_number);
+         if (!err) err = map(section_exports, "s-prev", 1, buf, 1);
+         if (!err) err = map_block_keep(section_exports, "s-prev-exists");
+      }
+      else
+      {
+         /* Last section */
+         if (!err) err = map_block_killer(section_exports, "s-prev-exists");
+      }
+      prev_section_line_number = line_number;
+
+      if (err)
+      {
+         free(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         free_map(section_exports);
+         return err;
+      }
+
+      /* Should do all section-specific exports above this point */
+
+      if (NULL == (urls = strdup("")))
+      {
+         free(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         free_map(section_exports);
+         return JB_ERR_MEMORY;
+      }
+
+      url_1_2 = 2;
+
+      cur_line = cur_line->next;
+      line_number++;
+
+      while ((cur_line != NULL) && (cur_line->type == FILE_LINE_URL))
+      {
+         if (NULL == (url_exports = new_map()))
+         {
+            free(urls);
+            free(sections);
+            free(section_template);
+            free(url_template);
+            edit_free_file(file);
+            free_map(exports);
+            free_map(section_exports);
+            return JB_ERR_MEMORY;
+         }
+
+         snprintf(buf, 50, "%d", line_number);
+         err = map(url_exports, "p", 1, buf, 1);
+
+         snprintf(buf, 50, "%d", url_1_2);
+         if (!err) err = map(url_exports, "url-1-2", 1, buf, 1);
+
+         if (!err) err = map(url_exports, "url-html", 1,
+                             html_encode(cur_line->unprocessed), 0);
+         if (!err) err = map(url_exports, "url", 1,
+                             url_encode(cur_line->unprocessed), 0);
+
+         if (err)
+         {
+            free(urls);
+            free(sections);
+            free(section_template);
+            free(url_template);
+            edit_free_file(file);
+            free_map(exports);
+            free_map(section_exports);
+            free_map(url_exports);
+            return err;
+         }
+
+         if (NULL == (s = strdup(url_template)))
+         {
+            free(urls);
+            free(sections);
+            free(section_template);
+            free(url_template);
+            edit_free_file(file);
+            free_map(exports);
+            free_map(section_exports);
+            free_map(url_exports);
+            return JB_ERR_MEMORY;
+         }
+
+         err = template_fill(&s, section_exports);
+         if (!err) err = template_fill(&s, url_exports);
+         if (!err) err = string_append(&urls, s);
+
+         free_map(url_exports);
+         freez(s);
+
+         if (err)
+         {
+            freez(urls);
+            free(sections);
+            free(section_template);
+            free(url_template);
+            edit_free_file(file);
+            free_map(exports);
+            free_map(section_exports);
+            return err;
+         }
+
+         url_1_2 = 3 - url_1_2;
+
+         cur_line = cur_line->next;
+         line_number++;
+      }
+
+      err = map(section_exports, "urls", 1, urls, 0);
+
+      /* Could also do section-specific exports here, but it wouldn't be as fast */
+
+      if ( (cur_line != NULL)
+        && (cur_line->type == FILE_LINE_ACTION))
+      {
+         /* Not last section */
+         snprintf(buf, 50, "%d", line_number);
+         if (!err) err = map(section_exports, "s-next", 1, buf, 1);
+         if (!err) err = map_block_keep(section_exports, "s-next-exists");
+      }
+      else
+      {
+         /* Last section */
+         if (!err) err = map_block_killer(section_exports, "s-next-exists");
+      }
+
+      if (err)
+      {
+         free(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         free_map(section_exports);
+         return err;
+      }
+
+      if (NULL == (s = strdup(section_template)))
+      {
+         free(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         free_map(section_exports);
+         return JB_ERR_MEMORY;
+      }
+
+      err = template_fill(&s, section_exports);
+      if (!err) err = string_append(&sections, s);
+
+      freez(s);
+      free_map(section_exports);
+
+      if (err)
+      {
+         freez(sections);
+         free(section_template);
+         free(url_template);
+         edit_free_file(file);
+         free_map(exports);
+         return err;
+      }
+   }
+
+   edit_free_file(file);
+   free(section_template);
+   free(url_template);
+
+   err = map(exports, "sections", 1, sections, 0);
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   /* Could also do global exports here, but it wouldn't be as fast */
+
+   return template_fill_for_cgi(csp, "edit-actions-list", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions
+ *
+ * Description :  CGI function that edits the Actions list.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_for_url(struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters)
+{
+   struct map * exports;
+   unsigned sectionid;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s", &sectionid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   cur_line = file->lines;
+
+   for (line_number = 1; (cur_line != NULL) && (line_number < sectionid); line_number++)
+   {
+      cur_line = cur_line->next;
+   }
+
+   if ( (cur_line == NULL)
+     || (line_number != sectionid)
+     || (sectionid < 1)
+     || (cur_line->type != FILE_LINE_ACTION))
+   {
+      /* Invalid "sectionid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "v", 1, file->version_str, 1);
+   if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
+
+   if (!err) err = actions_to_radio(exports, cur_line->data.action);
+
+   edit_free_file(file);
+
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   return template_fill_for_cgi(csp, "edit-actions-for-url", exports, rsp);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_submit
+ *
+ * Description :  CGI function that actually edits the Actions list.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_submit(struct client_state *csp,
+                               struct http_response *rsp,
+                               const struct map *parameters)
+{
+   unsigned sectionid;
+   char * actiontext;
+   char * newtext;
+   int len;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s", &sectionid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   cur_line = file->lines;
+
+   for (line_number = 1; (cur_line != NULL) && (line_number < sectionid); line_number++)
+   {
+      cur_line = cur_line->next;
+   }
+
+   if ( (cur_line == NULL)
+     || (line_number != sectionid)
+     || (sectionid < 1)
+     || (cur_line->type != FILE_LINE_ACTION))
+   {
+      /* Invalid "sectionid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   err = actions_from_radio(parameters, cur_line->data.action);
+   if(err)
+   {
+      /* Out of memory */
+      edit_free_file(file);
+      return err;
+   }
+
+   if (NULL == (actiontext = actions_to_text(cur_line->data.action)))
+   {
+      /* Out of memory */
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   len = strlen(actiontext);
+   if (len == 0)
+   {
+      /*
+       * Empty action - must special-case this.
+       * Simply setting len to 1 is sufficient...
+       */
+      len = 1;
+   }
+
+   if (NULL == (newtext = malloc(len + 2)))
+   {
+      /* Out of memory */
+      free(actiontext);
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+   strcpy(newtext, actiontext);
+   free(actiontext);
+   newtext[0]       = '{';
+   newtext[len]     = '}';
+   newtext[len + 1] = '\0';
+
+   freez(cur_line->raw);
+   freez(cur_line->unprocessed);
+   cur_line->unprocessed = newtext;
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_url
+ *
+ * Description :  CGI function that actually edits a URL pattern in
+ *                an actions file.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *    filename : Identifies the file to edit
+ *         ver : File's last-modified time
+ *     section : Line number of section to edit
+ *     pattern : Line number of pattern to edit
+ *      newval : New value for pattern
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_url(struct client_state *csp,
+                            struct http_response *rsp,
+                            const struct map *parameters)
+{
+   unsigned patternid;
+   char * new_pattern;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "p", &patternid);
+   if (err)
+   {
+      return err;
+   }
+   if (patternid < 1U)
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   err = get_url_spec_param(csp, parameters, "u", &new_pattern);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      free(new_pattern);
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   line_number = 1;
+   cur_line = file->lines;
+
+   while ((cur_line != NULL) && (line_number < patternid))
+   {
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if ( (cur_line == NULL)
+     || (cur_line->type != FILE_LINE_URL))
+   {
+      /* Invalid "patternid" parameter */
+      free(new_pattern);
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* At this point, the line to edit is in cur_line */
+
+   freez(cur_line->raw);
+   freez(cur_line->unprocessed);
+   cur_line->unprocessed = new_pattern;
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_add_url
+ *
+ * Description :  CGI function that actually adds a URL pattern to
+ *                an actions file.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *    filename : Identifies the file to edit
+ *         ver : File's last-modified time
+ *     section : Line number of section to edit
+ *      newval : New pattern
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_add_url(struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters)
+{
+   unsigned sectionid;
+   char * new_pattern;
+   struct file_line * new_line;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s", &sectionid);
+   if (err)
+   {
+      return err;
+   }
+   if (sectionid < 1U)
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   err = get_url_spec_param(csp, parameters, "u", &new_pattern);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      free(new_pattern);
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   line_number = 1;
+   cur_line = file->lines;
+
+   while ((cur_line != NULL) && (line_number < sectionid))
+   {
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if ( (cur_line == NULL)
+     || (cur_line->type != FILE_LINE_ACTION))
+   {
+      /* Invalid "sectionid" parameter */
+      free(new_pattern);
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* At this point, the section header is in cur_line - add after this. */
+
+   /* Allocate the new line */
+   new_line = (struct file_line *)zalloc(sizeof(*new_line));
+   if (new_line == NULL)
+   {
+      free(new_pattern);
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   /* Fill in the data members of the new line */
+   new_line->raw = NULL;
+   new_line->prefix = NULL;
+   new_line->unprocessed = new_pattern;
+   new_line->type = FILE_LINE_URL;
+
+   /* Link new_line into the list, after cur_line */
+   new_line->next = cur_line->next;
+   cur_line->next = new_line;
+
+   /* Done making changes, now commit */
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_remove_url
+ *
+ * Description :  CGI function that actually removes a URL pattern from
+ *                the actions file.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           p : (pattern) Line number of pattern to remove
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_remove_url(struct client_state *csp,
+                                   struct http_response *rsp,
+                                   const struct map *parameters)
+{
+   unsigned patternid;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   struct file_line * prev_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "p", &patternid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   line_number = 1;
+   prev_line = NULL;
+   cur_line = file->lines;
+
+   while ((cur_line != NULL) && (line_number < patternid))
+   {
+      prev_line = cur_line;
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if ( (cur_line == NULL)
+     || (prev_line == NULL)
+     || (cur_line->type != FILE_LINE_URL))
+   {
+      /* Invalid "patternid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* At this point, the line to remove is in cur_line, and the previous
+    * one is in prev_line
+    */
+
+   /* Unlink cur_line */
+   prev_line->next = cur_line->next;
+   cur_line->next = NULL;
+
+   /* Free cur_line */
+   edit_free_file_lines(cur_line);
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_section_remove
+ *
+ * Description :  CGI function that actually removes a whole section from
+ *                the actions file.  The section must be empty first
+ *                (else JB_ERR_CGI_PARAMS).
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           s : (section) Line number of section to edit
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_section_remove(struct client_state *csp,
+                                       struct http_response *rsp,
+                                       const struct map *parameters)
+{
+   unsigned sectionid;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   struct file_line * prev_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s", &sectionid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   line_number = 1;
+   cur_line = file->lines;
+
+   prev_line = NULL;
+   while ((cur_line != NULL) && (line_number < sectionid))
+   {
+      prev_line = cur_line;
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if ( (cur_line == NULL)
+     || (cur_line->type != FILE_LINE_ACTION) )
+   {
+      /* Invalid "sectionid" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   if ( (cur_line->next != NULL)
+     && (cur_line->next->type == FILE_LINE_URL) )
+   {
+      /* Section not empty. */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* At this point, the line to remove is in cur_line, and the previous
+    * one is in prev_line
+    */
+
+   /* Unlink cur_line */
+   if (prev_line == NULL)
+   {
+      /* Removing the first line from the file */
+      file->lines = cur_line->next;
+   }
+   else
+   {
+      prev_line->next = cur_line->next;
+   }
+   cur_line->next = NULL;
+
+   /* Free cur_line */
+   edit_free_file_lines(cur_line);
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_section_add
+ *
+ * Description :  CGI function that adds a new empty section to
+ *                an actions file.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *           s : (section) Line number of section to add after, 0 for
+ *               start of file.
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_section_add(struct client_state *csp,
+                                    struct http_response *rsp,
+                                    const struct map *parameters)
+{
+   unsigned sectionid;
+   struct file_line * new_line;
+   char * new_text;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s", &sectionid);
+   if (err)
+   {
+      return err;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   line_number = 1;
+   cur_line = file->lines;
+
+   if (sectionid < 1U)
+   {
+      /* Add to start of file */
+      if (cur_line != NULL)
+      {
+         /* There's something in the file, find the line before the first
+          * action.
+          */
+         while ( (cur_line->next != NULL)
+              && (cur_line->next->type != FILE_LINE_ACTION) )
+         {
+            cur_line = cur_line->next;
+            line_number++;
+         }
+      }
+   }
+   else
+   {
+      /* Add after stated section. */
+      while ((cur_line != NULL) && (line_number < sectionid))
+      {
+         cur_line = cur_line->next;
+         line_number++;
+      }
+
+      if ( (cur_line == NULL)
+        || (cur_line->type != FILE_LINE_ACTION))
+      {
+         /* Invalid "sectionid" parameter */
+         edit_free_file(file);
+         return JB_ERR_CGI_PARAMS;
+      }
+
+      /* Skip through the section to find the last line in it. */
+      while ( (cur_line->next != NULL)
+           && (cur_line->next->type != FILE_LINE_ACTION) )
+      {
+         cur_line = cur_line->next;
+         line_number++;
+      }
+   }
+
+   /* At this point, the last line in the previous section is in cur_line
+    * - add after this.  (Or if we need to add as the first line, cur_line
+    * will be NULL).
+    */
+
+   new_text = strdup("{}");
+   if (NULL == new_text)
+   {
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   /* Allocate the new line */
+   new_line = (struct file_line *)zalloc(sizeof(*new_line));
+   if (new_line == NULL)
+   {
+      free(new_text);
+      edit_free_file(file);
+      return JB_ERR_MEMORY;
+   }
+
+   /* Fill in the data members of the new line */
+   new_line->raw = NULL;
+   new_line->prefix = NULL;
+   new_line->unprocessed = new_text;
+   new_line->type = FILE_LINE_ACTION;
+
+   if (cur_line != NULL)
+   {
+      /* Link new_line into the list, after cur_line */
+      new_line->next = cur_line->next;
+      cur_line->next = new_line;
+   }
+   else
+   {
+      /* Link new_line into the list, as first line */
+      new_line->next = file->lines;
+      file->lines = new_line;
+   }
+
+   /* Done making changes, now commit */
+
+   err = edit_write_file(file);
+   if (err)
+   {
+      /* Error writing file */
+      edit_free_file(file);
+      return err;
+   }
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_edit_actions_section_swap
+ *
+ * Description :  CGI function that swaps the order of two sections
+ *                in the actions file.  Note that this CGI can actually
+ *                swap any two arbitrary sections, but the GUI interface
+ *                currently only allows consecutive sections to be
+ *                specified.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *           f : (filename) Identifies the file to edit
+ *           v : (version) File's last-modified time
+ *          s1 : (section1) Line number of first section to swap
+ *          s2 : (section2) Line number of second section to swap
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the CGI parameters are not
+ *                                  specified or not valid.
+ *
+ *********************************************************************/
+jb_err cgi_edit_actions_section_swap(struct client_state *csp,
+                                     struct http_response *rsp,
+                                     const struct map *parameters)
+{
+   unsigned section1;
+   unsigned section2;
+   struct editable_file * file;
+   struct file_line * cur_line;
+   struct file_line * prev_line;
+   struct file_line * line_before_section1;
+   struct file_line * line_start_section1;
+   struct file_line * line_end_section1;
+   struct file_line * line_after_section1;
+   struct file_line * line_before_section2;
+   struct file_line * line_start_section2;
+   struct file_line * line_end_section2;
+   struct file_line * line_after_section2;
+   unsigned line_number;
+   char * target;
+   jb_err err;
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   err = get_number_param(csp, parameters, "s1", &section1);
+   if (!err) err = get_number_param(csp, parameters, "s2", &section2);
+   if (err)
+   {
+      return err;
+   }
+
+   if (section1 > section2)
+   {
+      unsigned temp = section2;
+      section2 = section1;
+      section1 = temp;
+   }
+
+   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
+   if (err)
+   {
+      /* No filename specified, can't read file, modified, or out of memory. */
+      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
+   }
+
+   /* Start at the beginning... */
+   line_number = 1;
+   cur_line = file->lines;
+   prev_line = NULL;
+
+   /* ... find section1 ... */
+   while ((cur_line != NULL) && (line_number < section1))
+   {
+      prev_line = cur_line;
+      cur_line = cur_line->next;
+      line_number++;
+   }
+
+   if ( (cur_line == NULL)
+     || (cur_line->type != FILE_LINE_ACTION) )
+   {
+      /* Invalid "section1" parameter */
+      edit_free_file(file);
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* If no-op, we've validated params and can skip the rest. */
+   if (section1 != section2)
+   {
+      /* ... find the end of section1 ... */
+      line_before_section1 = prev_line;
+      line_start_section1 = cur_line;
+      do
+      {
+         prev_line = cur_line;
+         cur_line = cur_line->next;
+         line_number++;
+      }
+      while ((cur_line != NULL) && (cur_line->type == FILE_LINE_URL));
+      line_end_section1 = prev_line;
+      line_after_section1 = cur_line;
+
+      /* ... find section2 ... */
+      while ((cur_line != NULL) && (line_number < section2))
+      {
+         prev_line = cur_line;
+         cur_line = cur_line->next;
+         line_number++;
+      }
+
+      if ( (cur_line == NULL)
+        || (cur_line->type != FILE_LINE_ACTION) )
+      {
+         /* Invalid "section2" parameter */
+         edit_free_file(file);
+         return JB_ERR_CGI_PARAMS;
+      }
+
+      /* ... find the end of section2 ... */
+      line_before_section2 = prev_line;
+      line_start_section2 = cur_line;
+      do
+      {
+         prev_line = cur_line;
+         cur_line = cur_line->next;
+         line_number++;
+      }
+      while ((cur_line != NULL) && (cur_line->type == FILE_LINE_URL));
+      line_end_section2 = prev_line;
+      line_after_section2 = cur_line;
+
+      /* Now have all the pointers we need. Do the swap. */
+
+      /* Change the pointer to section1 to point to section2 instead */
+      if (line_before_section1 == NULL)
+      {
+         file->lines = line_start_section2;
+      }
+      else
+      {
+         line_before_section1->next = line_start_section2;
+      }
+
+      if (line_before_section2 == line_end_section1)
+      {
+         /* Consecutive sections */
+         line_end_section2->next = line_start_section1;
+      }
+      else
+      {
+         line_end_section2->next = line_after_section1;
+         line_before_section2->next = line_start_section1;
+      }
+
+      /* Set the pointer from the end of section1 to the rest of the file */
+      line_end_section1->next = line_after_section2;
+
+      err = edit_write_file(file);
+      if (err)
+      {
+         /* Error writing file */
+         edit_free_file(file);
+         return err;
+      }
+   } /* END if (section1 != section2) */
+
+   target = strdup(CGI_PREFIX "edit-actions-list?f=");
+   string_append(&target, file->identifier);
+
+   edit_free_file(file);
+
+   if (target == NULL)
+   {
+      /* Out of memory */
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->status = strdup("302 Local Redirect from Junkbuster");
+   if (rsp->status == NULL)
+   {
+      free(target);
+      return JB_ERR_MEMORY;
+   }
+   err = enlist_unique_header(rsp->headers, "Location", target);
+   free(target);
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_toggle
+ *
+ * Description :  CGI function that adds a new empty section to
+ *                an actions file.
+ *
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *         set : If present, how to change toggle setting:
+ *               "enable", "disable", "toggle", or none (default).
+ *        mini : If present, use mini reply template.
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *
+ *********************************************************************/
+jb_err cgi_toggle(struct client_state *csp,
+                  struct http_response *rsp,
+                  const struct map *parameters)
+{
+   struct map *exports;
+   char mode;
+   const char *template_name;
+   jb_err err;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_TOGGLE))
+   {
+      return cgi_error_disabled(csp, rsp);
+   }
+
+   if (NULL == (exports = default_exports(csp, "toggle")))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   mode = *(lookup(parameters, "set"));
+
+   if (mode == 'e')
+   {
+      /* Enable */
+      g_bToggleIJB = 1;
+   }
+   else if (mode == 'd')
+   {
+      /* Disable */
+      g_bToggleIJB = 0;
+   }
+   else if (mode == 't')
+   {
+      /* Toggle */
+      g_bToggleIJB = !g_bToggleIJB;
+   }
+
+   err = map_conditional(exports, "enabled", g_bToggleIJB);
+   if (err)
+   {
+      free_map(exports);
+      return err;
+   }
+
+   template_name = (*(lookup(parameters, "mini"))
+                 ? "toggle-mini"
+                 : "toggle");
+
+   return template_fill_for_cgi(csp, template_name, exports, rsp);
 }
 
 
@@ -2388,1621 +4119,6 @@ static jb_err actions_from_radio(const struct map * parameters,
    first_time = 0;
 
    return JB_ERR_OK;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_error_modified
- *
- * Description :  CGI function that is called when a file is modified
- *                outside the CGI editor.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  filename = The file that was modified.
- *
- * CGI Parameters : none
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err cgi_error_modified(struct client_state *csp,
-                          struct http_response *rsp,
-                          const char *filename)
-{
-   struct map *exports;
-   jb_err err;
-
-   assert(csp);
-   assert(rsp);
-   assert(filename);
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "filename", 1, filename, 1);
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   return template_fill_for_cgi(csp, "cgi-error-modified", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_error_parse
- *
- * Description :  CGI function that is called when a file cannot
- *                be parsed by the CGI editor.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  file = The file that was modified.
- *
- * CGI Parameters : none
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err cgi_error_parse(struct client_state *csp,
-                       struct http_response *rsp,
-                       struct editable_file *file)
-{
-   struct map *exports;
-   jb_err err;
-   struct file_line *cur_line;
-
-   assert(csp);
-   assert(rsp);
-   assert(file);
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "filename", 1, file->identifier, 1);
-   if (!err) err = map(exports, "parse-error", 1, file->parse_error_text, 1);
-
-   cur_line = file->parse_error;
-   assert(cur_line);
-
-   if (!err) err = map(exports, "line-raw", 1, html_encode(cur_line->raw), 0);
-   if (!err) err = map(exports, "line-data", 1, html_encode(cur_line->unprocessed), 0);
-
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   return template_fill_for_cgi(csp, "cgi-error-parse", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_error_file
- *
- * Description :  CGI function that is called when a file cannot be
- *                opened by the CGI editor.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  filename = The file that was modified.
- *
- * CGI Parameters : none
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err cgi_error_file(struct client_state *csp,
-                      struct http_response *rsp,
-                      const char *filename)
-{
-   struct map *exports;
-   jb_err err;
-
-   assert(csp);
-   assert(rsp);
-   assert(filename);
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "filename", 1, filename, 1);
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   return template_fill_for_cgi(csp, "cgi-error-file", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_error_bad_param
- *
- * Description :  CGI function that is called if the parameters
- *                (query string) for a CGI were wrong.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *
- * CGI Parameters : none
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err cgi_error_disabled(struct client_state *csp,
-                          struct http_response *rsp)
-{
-   struct map *exports;
-
-   assert(csp);
-   assert(rsp);
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   return template_fill_for_cgi(csp, "cgi-error-disabled", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions
- *
- * Description :  CGI function that allows the user to choose which
- *                actions file to edit.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters : None
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error
- *
- *********************************************************************/
-jb_err cgi_edit_actions(struct client_state *csp,
-                        struct http_response *rsp,
-                        const struct map *parameters)
-{
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   /* FIXME: Incomplete */
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
-   if (enlist_unique_header(rsp->headers, "Location",
-      CGI_PREFIX "edit-actions-list?filename=ijb"))
-   {
-      free(rsp->status);
-      rsp->status = NULL;
-      return JB_ERR_MEMORY;
-   }
-
-   return JB_ERR_OK;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_list
- *
- * Description :  CGI function that edits the actions list.
- *                FIXME: This function shouldn't FATAL ever.
- *                FIXME: This function doesn't check the retval of map()
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters : filename
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_FILE   if the file cannot be opened or
- *                              contains no data
- *                JB_ERR_CGI_PARAMS if "filename" was not specified
- *                                  or is not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_list(struct client_state *csp,
-                             struct http_response *rsp,
-                             const struct map *parameters)
-{
-   char * section_template;
-   char * url_template;
-   char * sections;
-   char * urls;
-   char buf[50];
-   char * s;
-   struct map * exports;
-   struct map * section_exports;
-   struct map * url_exports;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number = 0;
-   int url_1_2;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 0, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "filename", 1, file->identifier, 1);
-   if (!err) err = map(exports, "ver", 1, file->version_str, 1);
-
-   if (err)
-   {
-      edit_free_file(file);
-      free_map(exports);
-      return err;
-   }
-
-   /* Should do all global exports above this point */
-
-   err = template_load(csp, &section_template, "edit-actions-list-section");
-   if (err)
-   {
-      edit_free_file(file);
-      free_map(exports);
-      if (err == JB_ERR_FILE)
-      {
-         return cgi_error_no_template(csp, rsp, "edit-actions-list-section");
-      }
-      return err;
-   }
-
-   err = template_load(csp, &url_template, "edit-actions-list-url");
-   if (err)
-   {
-      free(section_template);
-      edit_free_file(file);
-      free_map(exports);
-      if (err == JB_ERR_FILE)
-      {
-         return cgi_error_no_template(csp, rsp, "edit-actions-list-url");
-      }
-      return err;
-   }
-
-   err = template_fill(&section_template, exports);
-   if (err)
-   {
-      free(url_template);
-      edit_free_file(file);
-      free_map(exports);
-      free(url_template);
-      return err;
-   }
-
-   err = template_fill(&url_template, exports);
-   if (err)
-   {
-      free(section_template);
-      edit_free_file(file);
-      free_map(exports);
-      return err;
-   }
-
-   /* Find start of actions in file */
-   cur_line = file->lines;
-   line_number = 1;
-   while ((cur_line != NULL) && (cur_line->type != FILE_LINE_ACTION))
-   {
-      cur_line = cur_line->next;
-      line_number++;
-   }
-
-   if (NULL == (sections = strdup("")))
-   {
-      free(section_template);
-      free(url_template);
-      edit_free_file(file);
-      free_map(exports);
-      return JB_ERR_MEMORY;
-   }
-
-   while ((cur_line != NULL) && (cur_line->type == FILE_LINE_ACTION))
-   {
-      if (NULL == (section_exports = new_map()))
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
-
-      snprintf(buf, 50, "%d", line_number);
-      err = map(section_exports, "sectionid", 1, buf, 1);
-      if (!err) err = map(section_exports, "actions", 1,
-                          actions_to_html(cur_line->data.action), 0);
-
-      if ( (!err)
-        && (cur_line->next != NULL)
-        && (cur_line->next->type == FILE_LINE_URL))
-      {
-         /* This section contains at least one URL, don't allow delete */
-         err = map_block_killer(section_exports, "empty-section");
-      }
-
-      if (err)
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         free_map(section_exports);
-         return err;
-      }
-
-      /* Should do all section-specific exports above this point */
-
-      if (NULL == (urls = strdup("")))
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         free_map(section_exports);
-         return JB_ERR_MEMORY;
-      }
-
-      url_1_2 = 2;
-
-      cur_line = cur_line->next;
-      line_number++;
-
-      while ((cur_line != NULL) && (cur_line->type == FILE_LINE_URL))
-      {
-         if (NULL == (url_exports = new_map()))
-         {
-            free(urls);
-            free(sections);
-            free(section_template);
-            free(url_template);
-            edit_free_file(file);
-            free_map(exports);
-            free_map(section_exports);
-            return JB_ERR_MEMORY;
-         }
-
-         snprintf(buf, 50, "%d", line_number);
-         err = map(url_exports, "urlid", 1, buf, 1);
-
-         snprintf(buf, 50, "%d", url_1_2);
-         if (!err) err = map(url_exports, "url-1-2", 1, buf, 1);
-
-         if (!err) err = map(url_exports, "url-html", 1,
-                             html_encode(cur_line->unprocessed), 0);
-         if (!err) err = map(url_exports, "url", 1,
-                             url_encode(cur_line->unprocessed), 0);
-
-         if (err)
-         {
-            free(urls);
-            free(sections);
-            free(section_template);
-            free(url_template);
-            edit_free_file(file);
-            free_map(exports);
-            free_map(section_exports);
-            free_map(url_exports);
-            return err;
-         }
-
-         if (NULL == (s = strdup(url_template)))
-         {
-            free(urls);
-            free(sections);
-            free(section_template);
-            free(url_template);
-            edit_free_file(file);
-            free_map(exports);
-            free_map(section_exports);
-            free_map(url_exports);
-            return JB_ERR_MEMORY;
-         }
-
-         err = template_fill(&s, section_exports);
-         if (!err) err = template_fill(&s, url_exports);
-         if (!err) err = string_append(&urls, s);
-
-         free_map(url_exports);
-         freez(s);
-
-         if (err)
-         {
-            freez(urls);
-            free(sections);
-            free(section_template);
-            free(url_template);
-            edit_free_file(file);
-            free_map(exports);
-            free_map(section_exports);
-            return err;
-         }
-
-         url_1_2 = 3 - url_1_2;
-
-         cur_line = cur_line->next;
-         line_number++;
-      }
-
-      err = map(section_exports, "urls", 1, urls, 0);
-
-      if (err)
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         free_map(section_exports);
-         return err;
-      }
-
-      /* Could also do section-specific exports here, but it wouldn't be as fast */
-
-      if (NULL == (s = strdup(section_template)))
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         free_map(section_exports);
-         return JB_ERR_MEMORY;
-      }
-
-      err = template_fill(&s, section_exports);
-      if (!err) err = string_append(&sections, s);
-
-      freez(s);
-      free_map(section_exports);
-
-      if (err)
-      {
-         freez(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         return err;
-      }
-   }
-
-   edit_free_file(file);
-   free(section_template);
-   free(url_template);
-
-   err = map(exports, "sections", 1, sections, 0);
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   /* Could also do global exports here, but it wouldn't be as fast */
-
-   return template_fill_for_cgi(csp, "edit-actions-list", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions
- *
- * Description :  CGI function that edits the Actions list.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters : None
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_for_url(struct client_state *csp,
-                                struct http_response *rsp,
-                                const struct map *parameters)
-{
-   struct map * exports;
-   unsigned sectionid;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   cur_line = file->lines;
-
-   for (line_number = 1; (cur_line != NULL) && (line_number < sectionid); line_number++)
-   {
-      cur_line = cur_line->next;
-   }
-
-   if ( (cur_line == NULL)
-     || (line_number != sectionid)
-     || (sectionid < 1)
-     || (cur_line->type != FILE_LINE_ACTION))
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   if (NULL == (exports = default_exports(csp, NULL)))
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   err = map(exports, "filename", 1, file->identifier, 1);
-   if (!err) err = map(exports, "ver", 1, file->version_str, 1);
-   if (!err) err = map(exports, "section", 1, lookup(parameters, "section"), 1);
-
-   if (!err) err = actions_to_radio(exports, cur_line->data.action);
-
-   edit_free_file(file);
-
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   return template_fill_for_cgi(csp, "edit-actions-for-url", exports, rsp);
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_submit
- *
- * Description :  CGI function that actually edits the Actions list.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters : None
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_submit(struct client_state *csp,
-                               struct http_response *rsp,
-                               const struct map *parameters)
-{
-   unsigned sectionid;
-   char * actiontext;
-   char * newtext;
-   int len;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   cur_line = file->lines;
-
-   for (line_number = 1; (cur_line != NULL) && (line_number < sectionid); line_number++)
-   {
-      cur_line = cur_line->next;
-   }
-
-   if ( (cur_line == NULL)
-     || (line_number != sectionid)
-     || (sectionid < 1)
-     || (cur_line->type != FILE_LINE_ACTION))
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   err = actions_from_radio(parameters, cur_line->data.action);
-   if(err)
-   {
-      /* Out of memory */
-      edit_free_file(file);
-      return err;
-   }
-
-   if (NULL == (actiontext = actions_to_text(cur_line->data.action)))
-   {
-      /* Out of memory */
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   len = strlen(actiontext);
-   if (len == 0)
-   {
-      /*
-       * Empty action - must special-case this.
-       * Simply setting len to 1 is sufficient...
-       */
-      len = 1;
-   }
-
-   if (NULL == (newtext = malloc(len + 2)))
-   {
-      /* Out of memory */
-      free(actiontext);
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-   strcpy(newtext, actiontext);
-   free(actiontext);
-   newtext[0]       = '{';
-   newtext[len]     = '}';
-   newtext[len + 1] = '\0';
-
-   freez(cur_line->raw);
-   freez(cur_line->unprocessed);
-   cur_line->unprocessed = newtext;
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_url
- *
- * Description :  CGI function that actually edits a URL pattern in
- *                an actions file.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *     pattern : Line number of pattern to edit
- *      newval : New value for pattern
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_url(struct client_state *csp,
-                            struct http_response *rsp,
-                            const struct map *parameters)
-{
-   unsigned sectionid;
-   unsigned patternid;
-   const char * newval;
-   char * new_pattern;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = get_number_param(csp, parameters, "pattern", &patternid);
-   if (err)
-   {
-      return err;
-   }
-
-   newval = lookup(parameters, "newval");
-
-   if ((*newval == '\0') || (sectionid < 1U) || (patternid < 1U))
-   {
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   line_number = 1;
-   cur_line = file->lines;
-
-   while ((cur_line != NULL) && (line_number < sectionid))
-   {
-      cur_line = cur_line->next;
-      line_number++;
-   }
-
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION))
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   while (line_number < patternid)
-   {
-      cur_line = cur_line->next;
-      line_number++;
-
-      if ( (cur_line == NULL)
-        || ( (cur_line->type != FILE_LINE_URL)
-          && (cur_line->type != FILE_LINE_BLANK) ) )
-      {
-         /* Invalid "patternid" parameter */
-         edit_free_file(file);
-         return JB_ERR_CGI_PARAMS;
-      }
-   }
-
-   if (cur_line->type != FILE_LINE_URL)
-   {
-      /* Invalid "patternid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* At this point, the line to edit is in cur_line */
-
-   new_pattern = strdup(newval);
-   if (NULL == new_pattern)
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   freez(cur_line->raw);
-   freez(cur_line->unprocessed);
-   cur_line->unprocessed = new_pattern;
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_add_url
- *
- * Description :  CGI function that actually adds a URL pattern to
- *                an actions file.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *      newval : New pattern
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_add_url(struct client_state *csp,
-                                struct http_response *rsp,
-                                const struct map *parameters)
-{
-   unsigned sectionid;
-   const char * newval;
-   char * new_pattern;
-   struct file_line * new_line;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-   struct url_spec compiled[1];
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   newval = lookup(parameters, "newval");
-
-   if ((*newval == '\0') || (sectionid < 1U))
-   {
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* Check that regex is valid */
-   err = create_url_spec(compiled, newval);
-   if (err)
-   {
-      return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
-   }
-   free_url_spec(compiled);
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   line_number = 1;
-   cur_line = file->lines;
-
-   while ((cur_line != NULL) && (line_number < sectionid))
-   {
-      cur_line = cur_line->next;
-      line_number++;
-   }
-
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION))
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* At this point, the section header is in cur_line - add after this. */
-
-   new_pattern = strdup(newval);
-   if (NULL == new_pattern)
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   /* Allocate the new line */
-   new_line = (struct file_line *)zalloc(sizeof(*new_line));
-   if (new_line == NULL)
-   {
-      free(new_pattern);
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   /* Fill in the data members of the new line */
-   new_line->raw = NULL;
-   new_line->prefix = NULL;
-   new_line->unprocessed = new_pattern;
-   new_line->type = FILE_LINE_URL;
-
-   /* Link new_line into the list, after cur_line */
-   new_line->next = cur_line->next;
-   cur_line->next = new_line;
-
-   /* Done making changes, now commit */
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_remove_url
- *
- * Description :  CGI function that actually removes a URL pattern from
- *                the actions file.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *     pattern : Line number of pattern to edit
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_remove_url(struct client_state *csp,
-                                   struct http_response *rsp,
-                                   const struct map *parameters)
-{
-   unsigned sectionid;
-   unsigned patternid;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   struct file_line * prev_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = get_number_param(csp, parameters, "pattern", &patternid);
-   if (err)
-   {
-      return err;
-   }
-
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   line_number = 1;
-   cur_line = file->lines;
-
-   while ((cur_line != NULL) && (line_number < sectionid))
-   {
-      cur_line = cur_line->next;
-      line_number++;
-   }
-
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION))
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   prev_line = NULL;
-   while (line_number < patternid)
-   {
-      prev_line = cur_line;
-      cur_line = cur_line->next;
-      line_number++;
-
-      if ( (cur_line == NULL)
-        || ( (cur_line->type != FILE_LINE_URL)
-          && (cur_line->type != FILE_LINE_BLANK) ) )
-      {
-         /* Invalid "patternid" parameter */
-         edit_free_file(file);
-         return JB_ERR_CGI_PARAMS;
-      }
-   }
-
-   if (cur_line->type != FILE_LINE_URL)
-   {
-      /* Invalid "patternid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   assert(prev_line);
-
-   /* At this point, the line to remove is in cur_line, and the previous
-    * one is in prev_line
-    */
-
-   /* Unlink cur_line */
-   prev_line->next = cur_line->next;
-   cur_line->next = NULL;
-
-   /* Free cur_line */
-   edit_free_file_lines(cur_line);
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_section_remove
- *
- * Description :  CGI function that actually removes a whole section from
- *                the actions file.  The section must be empty first
- *                (else JB_ERR_CGI_PARAMS).
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to edit
- *     pattern : Line number of pattern to edit
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_section_remove(struct client_state *csp,
-                                       struct http_response *rsp,
-                                       const struct map *parameters)
-{
-   unsigned sectionid;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   struct file_line * prev_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   line_number = 1;
-   cur_line = file->lines;
-
-   prev_line = NULL;
-   while ((cur_line != NULL) && (line_number < sectionid))
-   {
-      prev_line = cur_line;
-      cur_line = cur_line->next;
-      line_number++;
-   }
-
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION) )
-   {
-      /* Invalid "sectionid" parameter */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   if ( (cur_line->next != NULL)
-     && (cur_line->next->type == FILE_LINE_URL) )
-   {
-      /* Section not empty. */
-      edit_free_file(file);
-      return JB_ERR_CGI_PARAMS;
-   }
-
-   /* At this point, the line to remove is in cur_line, and the previous
-    * one is in prev_line
-    */
-
-   /* Unlink cur_line */
-   if (prev_line == NULL)
-   {
-      /* Removing the first line from the file */
-      file->lines = cur_line->next;
-   }
-   else
-   {
-      prev_line->next = cur_line->next;
-   }
-   cur_line->next = NULL;
-
-   /* Free cur_line */
-   edit_free_file_lines(cur_line);
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_edit_actions_section_add
- *
- * Description :  CGI function that adds a new empty section to
- *                an actions file.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *    filename : Identifies the file to edit
- *         ver : File's last-modified time
- *     section : Line number of section to add after, 0 for start
- *               of file.
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the CGI parameters are not
- *                                  specified or not valid.
- *
- *********************************************************************/
-jb_err cgi_edit_actions_section_add(struct client_state *csp,
-                                    struct http_response *rsp,
-                                    const struct map *parameters)
-{
-   unsigned sectionid;
-   struct file_line * new_line;
-   char * new_text;
-   struct editable_file * file;
-   struct file_line * cur_line;
-   unsigned line_number;
-   char * target;
-   jb_err err;
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   err = get_number_param(csp, parameters, "section", &sectionid);
-   if (err)
-   {
-      return err;
-   }
-
-   err = edit_read_actions_file(csp, rsp, parameters, 1, &file);
-   if (err)
-   {
-      /* No filename specified, can't read file, modified, or out of memory. */
-      return (err == JB_ERR_FILE ? JB_ERR_OK : err);
-   }
-
-   line_number = 1;
-   cur_line = file->lines;
-
-   if (sectionid < 1U)
-   {
-      /* Add to start of file */
-      if (cur_line != NULL)
-      {
-         /* There's something in the file, find the line before the first
-          * action.
-          */
-         while ( (cur_line->next != NULL)
-              && (cur_line->next->type != FILE_LINE_ACTION) )
-         {
-            cur_line = cur_line->next;
-            line_number++;
-         }
-      }
-   }
-   else
-   {
-      /* Add after stated section. */
-      while ((cur_line != NULL) && (line_number < sectionid))
-      {
-         cur_line = cur_line->next;
-         line_number++;
-      }
-
-      if ( (cur_line == NULL)
-        || (cur_line->type != FILE_LINE_ACTION))
-      {
-         /* Invalid "sectionid" parameter */
-         edit_free_file(file);
-         return JB_ERR_CGI_PARAMS;
-      }
-
-      /* Skip through the section to find the last line in it. */
-      while ( (cur_line->next != NULL)
-           && (cur_line->next->type != FILE_LINE_ACTION) )
-      {
-         cur_line = cur_line->next;
-         line_number++;
-      }
-   }
-
-   /* At this point, the last line in the previous section is in cur_line
-    * - add after this.  (Or if we need to add as the first line, cur_line
-    * will be NULL).
-    */
-
-   new_text = strdup("{}");
-   if (NULL == new_text)
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   /* Allocate the new line */
-   new_line = (struct file_line *)zalloc(sizeof(*new_line));
-   if (new_line == NULL)
-   {
-      free(new_text);
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
-
-   /* Fill in the data members of the new line */
-   new_line->raw = NULL;
-   new_line->prefix = NULL;
-   new_line->unprocessed = new_text;
-   new_line->type = FILE_LINE_ACTION;
-
-   if (cur_line != NULL)
-   {
-      /* Link new_line into the list, after cur_line */
-      new_line->next = cur_line->next;
-      cur_line->next = new_line;
-   }
-   else
-   {
-      /* Link new_line into the list, as first line */
-      new_line->next = file->lines;
-      file->lines = new_line;
-   }
-
-   /* Done making changes, now commit */
-
-   err = edit_write_file(file);
-   if (err)
-   {
-      /* Error writing file */
-      edit_free_file(file);
-      return err;
-   }
-
-   target = strdup(CGI_PREFIX "edit-actions-list?filename=");
-   string_append(&target, file->identifier);
-
-   edit_free_file(file);
-
-   if (target == NULL)
-   {
-      /* Out of memory */
-      return JB_ERR_MEMORY;
-   }
-
-   rsp->status = strdup("302 Local Redirect from Junkbuster");
-   if (rsp->status == NULL)
-   {
-      free(target);
-      return JB_ERR_MEMORY;
-   }
-   err = enlist_unique_header(rsp->headers, "Location", target);
-   free(target);
-
-   return err;
-}
-
-
-/*********************************************************************
- *
- * Function    :  cgi_toggle
- *
- * Description :  CGI function that adds a new empty section to
- *                an actions file.
- *
- * Parameters  :
- *           1 :  csp = Current client state (buffers, headers, etc...)
- *           2 :  rsp = http_response data structure for output
- *           3 :  parameters = map of cgi parameters
- *
- * CGI Parameters :
- *         set : If present, how to change toggle setting:
- *               "enable", "disable", "toggle", or none (default).
- *        mini : If present, use mini reply template.
- *
- * Returns     :  JB_ERR_OK     on success
- *                JB_ERR_MEMORY on out-of-memory
- *
- *********************************************************************/
-jb_err cgi_toggle(struct client_state *csp,
-                  struct http_response *rsp,
-                  const struct map *parameters)
-{
-   struct map *exports;
-   char mode;
-   const char *template_name;
-   jb_err err;
-
-   assert(csp);
-   assert(rsp);
-   assert(parameters);
-
-   if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_TOGGLE))
-   {
-      return cgi_error_disabled(csp, rsp);
-   }
-
-   if (NULL == (exports = default_exports(csp, "toggle")))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   mode = *(lookup(parameters, "set"));
-
-   if (mode == 'e')
-   {
-      /* Enable */
-      g_bToggleIJB = 1;
-   }
-   else if (mode == 'd')
-   {
-      /* Disable */
-      g_bToggleIJB = 0;
-   }
-   else if (mode == 't')
-   {
-      /* Toggle */
-      g_bToggleIJB = !g_bToggleIJB;
-   }
-
-   err = map_conditional(exports, "enabled", g_bToggleIJB);
-   if (err)
-   {
-      free_map(exports);
-      return err;
-   }
-
-   template_name = (*(lookup(parameters, "mini"))
-                 ? "toggle-mini"
-                 : "toggle");
-
-   return template_fill_for_cgi(csp, template_name, exports, rsp);
 }
 
 
