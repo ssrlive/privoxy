@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.5 2002/10/10 03:50:38 hal9 Exp $
+ $Id: user-manual.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.5 2002/10/10 03:50:38 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2590,6 +2590,10 @@ problem-host.example.com</screen>
    <para>
     <anchor id="filter-js-events">
     <screen>+filter{js-events}           # Kill all JS event bindings (<emphasis>Radically destructive!</emphasis> Only for extra nasty sites) </screen>
+   </para>
+   <para>
+    <anchor id="filter-demoronizer">
+    <screen>+filter{demoronizer}         # Fix non-standard MS font extensions for non-MS browsers</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5685,6 +5689,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.6  2002/10/10 04:10:38  hal9
+ s/Advanced/Radical/ for standard.action change.
+
  Revision 2.5  2002/10/10 03:50:38  hal9
  Update cookie sections for pre-existing condition, and content cookies not
  effected by session-cookies setting.

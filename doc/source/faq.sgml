@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.5 2002/09/26 05:57:14 hal9 Exp $
+ $Id: faq.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.5 2002/09/26 05:57:14 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.6 2002/10/10 04:10:38 hal9 Exp $</pubdate>
 
 <!--
 
@@ -627,12 +627,12 @@ the differences?</title>
 <sect2 renderas="sect3" id="configfiles"> <title>What's the difference between the
 <quote>Cautious</quote>, <quote>Medium</quote> and <quote>Radical</quote> defaults?</title>
  <para>
-  Configuring <application>Privoxy</application> is not entirely trivial. To help you get
-  started, we provide you with three different default action <quote>packages</quote> in
-  the web based actions file editor at <ulink
+  Configuring <application>Privoxy</application> is not entirely trivial. To
+  help you get started, we provide you with three different default action
+  <quote>profiles</quote> in the web based actions file editor at <ulink
   url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
-  The following table shows you, which of the most important features are enabled in each
-  configuration:
+  The following table shows you, which of the most important features are
+  enabled in each configuration:
  </para>
  <para>
 <table frame=all><title>Default Configurations</title>
@@ -750,6 +750,12 @@ the differences?</title>
   <entry>yes</entry>
 </row>
 
+<row>
+  <entry>Demoronizer</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>yes</entry>
+</row>
 
 </tbody>
 </tgroup>
@@ -762,6 +768,11 @@ the differences?</title>
  exceptions you will have to make later. See the <ulink
  url="../user-manual/index.html">user manual</ulink> for a more
  deatiled discussion.
+</para>
+<para>
+ It should be noted that the <quote>Radical</quote> profile is not only more
+ aggressive, but also includes fun and, extreme usage of most of
+ <application>Privoxy's</application> features. Use at your own risk!
 </para>
 
 </sect2>
@@ -1034,19 +1045,15 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 on Win2K/NT?</title>
 <para>
  Yes, it can run as a system service using <command>srvany.exe</command>.
- The only catch is that this will effectively disable the
- <application>Privoxy</application> icon (and its menu!) in the taskbar. You can have 
- one or the other, but not both at this time :( 
+ See the discussion at <ulink
+ url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
+ for details, and a sample configuration.
 </para>
 <para>
- There is a pending feature request for this functionality. See the discussion
- at <ulink
- url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>, 
- for details, and a sample configuration.
-
+ Version 3.0.1 fixes the problem where the icon and menu where not available
+ in the taskbar for this usage.
 </para>
 </sect2>
-
 
 <sect2 renderas="sect3" id="otherproxy">
 <title>How can I make <application>Privoxy</application> work with other 
@@ -1874,6 +1881,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.6  2002/10/10 04:10:38  hal9
+s/Advanced/Radical/ for standard.action change.
+
 Revision 2.5  2002/09/26 05:57:14  hal9
 Conditionally exclude 'this doc is evolving' comment in intro for non release
 situations.
