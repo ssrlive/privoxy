@@ -1,7 +1,7 @@
 #! /bin/sh
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init.suse,v $
 # 
 #  Purpose     :  This shell script takes care of starting and stopping
 #                 junkbuster.
@@ -32,7 +32,10 @@
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # 
 #  Revisions   :
-#     $Log: junkbuster.init,v $
+#     $Log: junkbuster.init.suse,v $
+#     Revision 1.1  2001/06/08 20:53:36  swa
+#     use buildroot, export init to separate file (better manageability)
+#
 #
 # 
 # ********************************************************************/
@@ -49,28 +52,28 @@ base=\${0##*/}
 link=\${base#*[SK][0-9][0-9]}
 #test \$link = \$base && START_IJB=yes
 #test "\$START_IJB" = "yes" || exit 0
-return=\$rc_done
-case "\$1" in
+return=$rc_done
+case "$1" in
     start)
         echo -n "Starting The Internet Junkbuster"
         su - nobody -c 'nohup /usr/sbin/junkbuster /etc/junkbuster/config < /dev/null > /dev/null &'
         sleep 1
-        echo -e "\$return"
+        echo -e "$return"
         ;;
     stop)
         echo -n "Shutting down The Internet Junkbuster"
-        killproc -TERM /usr/sbin/junkbuster || return=\$rc_failed
-        echo -e "\$return"
+        killproc -TERM /usr/sbin/junkbuster || return=$rc_failed
+        echo -e "$return"
         ;;
     restart|reload)
-        \$0 stop && \$0 start || return=\$rc_failed
+        $0 stop && $0 start || return=$rc_failed
         ;;
     status)
         checkproc /usr/sbin/junkbuster && echo OK || echo No process
         ;;
     *)
-        echo "Usage: \$0 {start|restart|status|stop}"
+        echo "Usage: $0 {start|restart|status|stop}"
         exit 1
 esac
-test "\$return" = "\$rc_done" || exit 1
+test "$return" = "$rc_done" || exit 1
 exit 0
