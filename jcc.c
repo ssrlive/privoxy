@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.54 2001/11/07 00:03:14 steudten Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.55 2001/11/13 20:14:53 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.54 2001/11/07 00:03:14 steudten Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.55  2001/11/13 20:14:53  jongfoster
+ *    Patch for FreeBSD setpgrp() as suggested by Alexander Lazic
+ *
  *    Revision 1.54  2001/11/07 00:03:14  steudten
  *    Give reliable return value if an error
  *    occurs not just 0 with new daemon mode.
@@ -780,13 +783,13 @@ static void chat(struct client_state *csp)
 
    if (
        /* a CGI call was detected and answered */
-   	 (NULL != (rsp = dispatch_cgi(csp)))
+       (NULL != (rsp = dispatch_cgi(csp)))
 
        /* or we are enabled and... */
        || (IS_ENABLED_AND (
 
             /* ..the request was blocked */
-   	    ( NULL != (rsp = block_url(csp)))
+          ( NULL != (rsp = block_url(csp)))
 
           /* ..or untrusted */
 #ifdef FEATURE_TRUST
@@ -796,14 +799,14 @@ static void chat(struct client_state *csp)
           /* ..or a fast redirect kicked in */
 #ifdef FEATURE_FAST_REDIRECTS
           || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) &&
-   		     (NULL != (rsp = redirect_url(csp))))
+                (NULL != (rsp = redirect_url(csp))))
 #endif /* def FEATURE_FAST_REDIRECTS */
-   		 ))
-   	)
+          ))
+      )
    {
       /* Write the answer to the client */
       if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-   	     || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+           || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
       {
          log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
       }
@@ -845,14 +848,14 @@ static void chat(struct client_state *csp)
 
       if (errno == EINVAL)
       {
-   	   rsp = error_response(csp, "no-such-domain", errno);
+         rsp = error_response(csp, "no-such-domain", errno);
 
          log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 404 0",
                    csp->ip_addr_str, http->cmd);
       }
       else
       {
-   	   rsp = error_response(csp, "connect-failed", errno);
+         rsp = error_response(csp, "connect-failed", errno);
 
          log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
                    csp->ip_addr_str, http->cmd);
@@ -860,9 +863,9 @@ static void chat(struct client_state *csp)
 
       /* Write the answer to the client */
       if(rsp)
-   	{
+      {
          if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-   	        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+          || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
          }
@@ -899,7 +902,7 @@ static void chat(struct client_state *csp)
          if(rsp)
          {
             if ((write_socket(csp->cfd, rsp->head, n) != n)
-   	        || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+             || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
             }
@@ -999,11 +1002,11 @@ static void chat(struct client_state *csp)
             if(rsp)
             {
                if ((write_socket(csp->cfd, rsp->head, rsp->head_length) != rsp->head_length)
-   	            || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
+                || (write_socket(csp->cfd, rsp->body, rsp->content_length) != rsp->content_length))
                {
                   log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-   			   }
-   			}
+               }
+            }
 
             free_http_response(rsp);
             return;
@@ -1375,7 +1378,7 @@ int real_main(int argc, const char *argv[])
 int main(int argc, const char *argv[])
 #endif
 {
-   int 	argc_pos = 1;
+   int argc_pos = 1;
 
    configfile =
 #ifdef AMIGA
@@ -1405,9 +1408,9 @@ int main(int argc, const char *argv[])
 #ifdef _DEBUG
    if ((argc >= 2) && (strcmp(argv[1], "-d")==0))
    {
-	ldebug++;
-	argc_pos++;
-	fprintf(stderr,"debugging enabled..\n");
+      ldebug++;
+      argc_pos++;
+      fprintf(stderr,"debugging enabled..\n");
    }
 #endif /* _DEBUG */
 #endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
@@ -1421,30 +1424,30 @@ int main(int argc, const char *argv[])
    }
 
 #if defined(unix)
-	if ( *configfile != '/' )
-	{
-		char	*abs_file;
+   if ( *configfile != '/' )
+   {
+      char *abs_file;
 
-		DBG(1, ("configfile before '%s'\n",configfile) );
+      DBG(1, ("configfile before '%s'\n",configfile) );
 
-		/* make config-filename absolute here */	
-		if ( !(basedir = getcwd( NULL, 1024 )))
-		{
-			perror("get working dir failed");
-			exit( 1 );
-		}
-		DBG(1, ("working dir '%s'\n",basedir) );
-		if ( !(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 )))
-		{
-			perror("malloc failed");
-			exit( 1 );
-		}
-		strcpy( abs_file, basedir );
-		strcat( abs_file, "/" );
-		strcat( abs_file, configfile );
-		configfile = abs_file;
-		DBG(1, ("configfile after '%s'\n",configfile) );
-	}
+      /* make config-filename absolute here */
+      if ( !(basedir = getcwd( NULL, 1024 )))
+      {
+         perror("get working dir failed");
+         exit( 1 );
+      }
+      DBG(1, ("working dir '%s'\n",basedir) );
+      if ( !(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 )))
+      {
+         perror("malloc failed");
+         exit( 1 );
+      }
+      strcpy( abs_file, basedir );
+      strcat( abs_file, "/" );
+      strcat( abs_file, configfile );
+      configfile = abs_file;
+      DBG(1, ("configfile after '%s'\n",configfile) );
+   }
 #endif /* defined unix */
 
 
@@ -1477,61 +1480,65 @@ int main(int argc, const char *argv[])
 
 #if defined(unix)
 {
-	pid_t	pid = 0;
-	int	fd;
+   pid_t pid = 0;
+   int   fd;
 
-	/*
-	** we make us a real daemon
-	*/
+   /*
+    * we make us a real daemon
+    */
 #ifdef _DEBUG
-	if ( !ldebug) 
+   if ( !ldebug)
 #endif
-		pid  = fork();
-	if ( pid < 0 )	/* error */
-	{
-		perror("fork");
-	 	exit( 3 );
-	} 
-	else if ( pid != 0 ) /* parent */
-	{
-		int	status;
-		pid_t	wpid;
-		/*
-		** must check for errors 
-		** child died due to missing files aso
-		*/
-		sleep( 1 );
-		wpid = waitpid( pid, &status, WNOHANG );
-		if ( wpid != 0 )
-		{
-			exit( 1 );
-		}
-		exit( 0 );
-	}
-	/* child */
+   pid  = fork();
+   if ( pid < 0 ) /* error */
+   {
+      perror("fork");
+      exit( 3 );
+   }
+   else if ( pid != 0 ) /* parent */
+   {
+      int status;
+      pid_t wpid;
+      /*
+       * must check for errors
+       * child died due to missing files aso
+       */
+      sleep( 1 );
+      wpid = waitpid( pid, &status, WNOHANG );
+      if ( wpid != 0 )
+      {
+         exit( 1 );
+      }
+      exit( 0 );
+   }
+   /* child */
 #ifdef __FreeBSD__
    setpgrp(0,0);
 #else
    setpgrp();
 #endif
-	fd = open("/dev/tty", O_RDONLY);
-	if ( fd ) 
-	{
-		/* no error check here */
-		ioctl( fd, TIOCNOTTY,0 );
-		close ( fd );
-	}
-	/* should close stderr (fd 2) here too, but the test for existence
-	** and load config file is done in listen_loop() and puts
-	** some messages on stderr there.
-	*/
+   fd = open("/dev/tty", O_RDONLY);
+   if ( fd )
+   {
+      /* no error check here */
+      ioctl( fd, TIOCNOTTY,0 );
+      close ( fd );
+   }
+   /* should close stderr (fd 2) here too, but the test for existence
+   ** and load config file is done in listen_loop() and puts
+   ** some messages on stderr there.
+   */
 #ifdef _DEBUG
-	if ( !ldebug ) 
-		close( 0 ); close( 1 ); 
+   if ( !ldebug )
+   {
+      close( 0 );
+      close( 1 );
+   }
 #else
-	close( 0 ); close( 1 ); 
+   close( 0 );
+   close( 1 );
 #endif /* _DEBUG */
-	chdir("/");
+   chdir("/");
 
 }
 #endif /* defined unix */
