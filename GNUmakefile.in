@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.54 2002/04/03 14:54:07 oes Exp $
+# $Id: GNUmakefile.in,v 1.55 2002/04/03 19:54:29 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -152,8 +152,6 @@ PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h
 
 # No REGEX (Either because dynamically linked pcreposix, or no regex at all):
 REGEX_SRC    =
-# GNU REGEX:
-@GNU_REGEX_ONLY@REGEX_SRC    = gnu_regex.c
 # PCRE REGEX:
 @PCRE_REGEX_ONLY@@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
 
@@ -702,6 +700,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.55  2002/04/03 19:54:29  swa
+# freebsd tested to work. attempt to move tarball dist target forward
+#
 # Revision 1.54  2002/04/03 14:54:07  oes
 # Standard clean and clobber semantics II
 #

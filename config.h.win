@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win,v $
+ *    Revision 1.19  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.18  2002/03/24 17:08:12  jongfoster
  *    Version number bump
  *
@@ -210,7 +213,6 @@
  * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
-/* #define REGEX_GNU 1 */
 #define REGEX_PCRE 1
 
 /* 

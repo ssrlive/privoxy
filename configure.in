@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.54 2002/04/01 00:54:24 gliptak Exp $
+dnl $Id: configure.in,v 1.55 2002/04/03 03:54:38 gliptak Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.55  2002/04/03 03:54:38  gliptak
+dnl Checking pcre version
+dnl
 dnl Revision 1.54  2002/04/01 00:54:24  gliptak
 dnl More changes needed around regex support.
 dnl
@@ -318,7 +321,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.54 $)
+AC_REVISION($Revision: 1.55 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
@@ -965,8 +968,6 @@ dnl dynamic:
 AC_ARG_ENABLE(regex-matching,
 [  --enable-regex-matching=pcre  Use perl-compatible regex for actionsfile
                                 pattern matching (default)
-  --enable-regex-matching=gnu   Use gnu style regex for actionsfile pattern
-                                matching (-> bigger binary)
   --disable-regex-matching      Don't use regex matching, compare URL
                                 prefix instead (won't shrink birary)],
 [ regex_matching=$enableval ],
@@ -1023,28 +1024,20 @@ else
 fi
 
 # Which method should be used for URL matching?
-# pcre, gnu regex or prefix matching?
+# pcre or prefix matching?
 #
-if test $regex_matching = "gnu"; then
-  echo "using gnu regex for URL matching"
-  AC_DEFINE(REGEX_GNU)
-  GNU_REGEX_ONLY=
-  PCRE_REGEX_ONLY=#
-elif test $regex_matching = "pcre"; then
+if test $regex_matching = "pcre"; then
   echo "using pcre regex for URL matching"
   AC_DEFINE(REGEX_PCRE)
-  GNU_REGEX_ONLY=#
   PCRE_REGEX_ONLY=
   if test $pcre_dyn = "yes"; then
     LIBS="$LIBS -lpcreposix"
   fi
 else
   echo -e "using prefix matching for URLs\nHint: This does NOT make the executable any smaller!"
-  GNU_REGEX_ONLY=#
   PCRE_REGEX_ONLY=#
 fi
 
-AC_SUBST(GNU_REGEX_ONLY)
 AC_SUBST(PCRE_REGEX_ONLY)
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)

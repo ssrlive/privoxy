@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.23 2002/03/26 22:29:54 swa Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.24 2002/04/02 16:12:47 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.23 2002/03/26 22:29:54 swa Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.24  2002/04/02 16:12:47  oes
+ *    Fix: moving misplaced lines into #ifdef FEATURE_FORCE
+ *
  *    Revision 1.23  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -1171,12 +1174,6 @@ static jb_err show_defines(struct map *exports)
    if (!err) err = map_conditional(exports, "FEATURE_TRUST", 0);
 #endif /* ndef FEATURE_TRUST */
 
-#ifdef REGEX_GNU
-   if (!err) err = map_conditional(exports, "REGEX_GNU", 1);
-#else /* ifndef REGEX_GNU */
-   if (!err) err = map_conditional(exports, "REGEX_GNU", 0);
-#endif /* def REGEX_GNU */
-
 #ifdef REGEX_PCRE
    if (!err) err = map_conditional(exports, "REGEX_PCRE", 1);
 #else /* ifndef REGEX_PCRE */
@@ -1251,10 +1248,6 @@ static char *show_rcs(void)
    SHOW_RCS(filters_rcs)
    SHOW_RCS(gateway_h_rcs)
    SHOW_RCS(gateway_rcs)
-#ifdef GNU_REGEX
-   SHOW_RCS(gnu_regex_h_rcs)
-   SHOW_RCS(gnu_regex_rcs)
-#endif /* def GNU_REGEX */
    SHOW_RCS(jbsockets_h_rcs)
    SHOW_RCS(jbsockets_rcs)
    SHOW_RCS(jcc_h_rcs)

@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.62 2002/03/26 22:48:49 swa Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.63 2002/03/31 17:19:00 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.63  2002/03/31 17:19:00  jongfoster
+ *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
+ *
  *    Revision 1.62  2002/03/26 22:48:49  swa
  *    new homepage url
  *
@@ -420,9 +423,9 @@
  * and are included anyway.
  */
 
-#if defined(REGEX_PCRE) || defined (REGEX_GNU)
+#if defined(REGEX_PCRE)
 # define REGEX
-#endif /* defined(REGEX_PCRE) || defined (REGEX_GNU) */
+#endif /* defined(REGEX_PCRE) */
 
 #ifdef STATIC_PCRE
 #  include "pcre.h"
@@ -443,10 +446,6 @@
 #    include <pcreposix.h>
 #  endif
 #endif /* defined(REGEX_PCRE) */
-
-#if defined(REGEX_GNU)
-#  include "gnu_regex.h"
-#endif
 
 #ifdef AMIGA
 #include "amiga.h"

@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.22  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.21  2002/03/24 14:31:08  swa
  *    remove more crappy files. set RPM
  *    release version correctly.
@@ -224,7 +227,6 @@
  * If neither of these are defined then you can ony use prefix matching.
  * Don't bother to change this here! Use configure instead.
  */
-#undef REGEX_GNU
 #undef REGEX_PCRE
 
 /* 
