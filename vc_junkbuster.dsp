@@ -91,6 +91,14 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\actions.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\actions.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\amiga.c
 # End Source File
 # Begin Source File
@@ -365,6 +373,14 @@ SOURCE=.\encode.c
 # Begin Source File
 
 SOURCE=.\encode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\list.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\list.h
 # End Source File
 # Begin Source File
 
