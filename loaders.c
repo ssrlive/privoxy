@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.18 2001/06/29 21:45:41 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.19 2001/07/13 14:01:54 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.18 2001/06/29 21:45:41 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.19  2001/07/13 14:01:54  oes
+ *    Removed all #ifdef PCRS
+ *
  *    Revision 1.18  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -604,6 +607,10 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
       if ((p = strpbrk(linebuf, "\r\n")) != NULL)
       {
          *p = '\0';
+      }
+      else
+      {
+         p = linebuf + strlen(linebuf);
       }
 
       /* Line continuation? Trim escape and set flag. */
