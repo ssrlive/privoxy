@@ -1,7 +1,7 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/errlog.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
  *
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.1 2001/05/13 21:57:06 administrator
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -61,7 +64,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.1 2001/05/13 21:57:06 administrator
 
 const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
-/* LOG_LEVEL_ERROR and LOG_LEVEL_INFO cannot be turned off */
+/* LOG_LEVEL_ERROR and LOG_LEVEL_INFO cannot be turned off. FIXME: Why?*/
 #define LOG_LEVEL_MINIMUM  (LOG_LEVEL_ERROR | LOG_LEVEL_INFO)
 
 /* where to log (default: stderr) */
@@ -159,7 +162,7 @@ void log_error(int loglevel, char *fmt, ...)
    /* verify if loglevel applies to current settings and bail out if negative */
    if(!(loglevel & debug))
    {
-      return;
+		return;
    }
 
    /* FIXME get current thread id */
@@ -181,6 +184,12 @@ void log_error(int loglevel, char *fmt, ...)
          break;
       case LOG_LEVEL_INFO:
          outc = sprintf(outbuf, "IJB(%d) Info: ", this_thread);
+         break;
+      case LOG_LEVEL_REF:
+         outc = sprintf(outbuf, "IJB(%d) Re-Filter: ", this_thread);
+         break;
+      case LOG_LEVEL_FRC:
+         outc = sprintf(outbuf, "IJB(%d) Force: ", this_thread);
          break;
       default:
          outc = sprintf(outbuf, "IJB(%d) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
