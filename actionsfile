@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.4 2001/07/18 12:27:33 oes Exp $
+# $Id: actionsfile,v 1.5 2001/07/26 21:09:18 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -149,6 +149,11 @@
 #    most banner animations, but also has the risk of not showing the
 #    entire last frame (if it is only a delta to an earlier frame).
 #
+# +downgrade
+#    Downgrade HTTP/1.1 client requests to HTTP/1.0 and downgrade the
+#    responses as well. Use this action for servers that use HTTP/1.1
+#    protocol features that Junkbuster currently can't handle yet.
+#
 # +fast-redirects
 #    Many sites, like yahoo.com, don't just link to other sites.
 #    Instead, they will link to some script on their own server,
@@ -223,6 +228,12 @@
 #    has the advantage of the icon being beeing cached by the browser,
 #    which will speed up the display.  
 #
+# +no-compression
+#    Prevent the website from compressing the data. Some websites do
+#    that, which is a problem for junkbuster, since +filter, +no-popup
+#    and +gif-deanimate will not work on compressed data. Will slow down
+#    connections to those websites, though.
+#
 # +no-cookies-read
 #    Prevent the website from reading cookies
 #
@@ -278,6 +289,7 @@
 fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
 shop        = -no-cookies -filter -fast-redirects
 +imageblock = +block +image
++filter-all = +filter +no-compression
 
 #For people who don't like to type too much:  ;-)
 c0 = +no-cookies
@@ -291,8 +303,10 @@ c3 = +no-cookies-set -no-cookies-read
 #############################################################################
 {\
 -block \
+-downgrade \
 +fast-redirects \
 +filter \
++no-compression \
 +hide-forwarded \
 +hide-from{block} \
 +hide-referer{forge} \

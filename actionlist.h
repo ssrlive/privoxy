@@ -39,6 +39,12 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.6  2001/09/16 15:47:37  jongfoster
+ *    First version of CGI-based edit interface.  This is very much a
+ *    work-in-progress, and you can't actually use it to edit anything
+ *    yet.  You must #define FEATURE_CGI_EDIT_ACTIONS for these changes
+ *    to have any effect.
+ *
  *    Revision 1.5  2001/07/18 12:27:03  oes
  *    Changed deanimate-gifs to string action
  *
@@ -68,6 +74,7 @@ DEFINE_ACTION_BOOL       ("block",           ACTION_BLOCK)
 DEFINE_ACTION_STRING     ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
 DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "first", 0)
 DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
+DEFINE_ACTION_BOOL       ("downgrade",       ACTION_DOWNGRADE)
 DEFINE_ACTION_BOOL       ("fast-redirects",  ACTION_FAST_REDIRECTS)
 DEFINE_ACTION_BOOL       ("filter",          ACTION_FILTER)
 DEFINE_ACTION_BOOL       ("hide-forwarded",  ACTION_HIDE_FORWARDED)
@@ -85,6 +92,7 @@ DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRI
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "logo", 1)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "http://")
+DEFINE_ACTION_BOOL       ("no-compression",  ACTION_NO_COMPRESSION)
 DEFINE_ACTION_BOOL       ("no-cookies-read", ACTION_NO_COOKIE_READ)
 DEFINE_ACTION_BOOL       ("no-cookies-set",  ACTION_NO_COOKIE_SET)
 DEFINE_ACTION_BOOL       ("no-popups",       ACTION_NO_POPUPS)
