@@ -1,6 +1,10 @@
 --------------------------------------------------------------------
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
+*** Current CVS *** 
+- Fix Solaris compile problem (gateway.h and filters.h)
+- Makefile fixes for Solaris, FreeBSD (?)
+
 
 *** Version 2.9.13 Beta *** 
 
@@ -11,6 +15,7 @@ default.filter.
 - http://i.j.b/ is now http://p.p/
 - The 'logo' option for replacing ad iamges is removed now. 'Pattern' 
 (checkerboard) is now the default.
+- RPM spec file make over.
 
 
 *** Version 2.9.12 Beta *** 
