@@ -32,6 +32,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.28  2002/05/14 21:36:38  oes
+#     - Renamed prevent-(setting/reading)-cookies to
+#       crunch-(incoming/outgoing)-cookies
+#     - Renamed helplink export to actions-help-prefix
+#     - Restored alphabetical order of actions
+#
 #    Revision 1.27  2002/04/26 22:55:26  jongfoster
 #    Removing the alternating colors because they've been wrong
 #    since the actions renames, they're high maintenance, they
@@ -846,7 +852,7 @@ if (document.getElementById) {
     show_user_agent_opts    (document.getElementById("hide_user_agent_y").checked);
     show_set_image_blocker_opts (document.getElementById("set_image_blocker_y").checked);
     show_limit_connect_opts (document.getElementById("limit_connect_y").checked);
-    show_wafer_opts         (document.getElementById("wafer_y").checked);
+    show_send_wafer_opts    (document.getElementById("wafer_y").checked);
 } else if (document.all) {
     // alert("IE4");
     document.myform.hide_from_header_param.disabled = !(document.myform.hide_from_header_mode_set.checked);
@@ -860,7 +866,7 @@ if (document.getElementById) {
     show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
     show_set_image_blocker_opts (document.myform.set_image_blocker_y.checked);
     show_limit_connect_opts (document.myform.limit_connect_y.checked);
-    show_wafer_opts         (document.myform.wafer_y.checked);
+    show_send_wafer_opts    (document.myform.wafer_y.checked);
 } else if (document.layers) {
     // alert("Netscape 4");
 }
