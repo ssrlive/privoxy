@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.65 2002/04/26 12:53:51 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.66 2002/04/26 18:32:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.65 2002/04/26 12:53:51 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.66  2002/04/26 18:32:57  jongfoster
+ *    Fixing a memory leak on error
+ *
  *    Revision 1.65  2002/04/26 12:53:51  oes
  *     - New function add_help_link
  *     - default_exports now exports links to the user manual
@@ -579,7 +582,7 @@ static struct map *parse_cgi_parameters(char *argstring);
  * Description :  Checks if a request URL has either the magical
  *                hostname CGI_SITE_1_HOST (usually http://p.p/) or
  *                matches CGI_SITE_2_HOST CGI_SITE_2_PATH (usually
- *                http://ijbswa.sourceforge.net/config). If so, it passes
+ *                http://config.privoxy.org/). If so, it passes
  *                the (rest of the) path onto dispatch_known_cgi, which
  *                calls the relevant CGI handler function.
  *
