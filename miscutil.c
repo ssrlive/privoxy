@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.18 2001/09/20 13:33:43 steudten Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.19 2001/10/14 22:02:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.18 2001/09/20 13:33:43 steudten
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.19  2001/10/14 22:02:57  jongfoster
+ *    New function string_append() which is like strsav(), but running
+ *    out of memory isn't automatically FATAL.
+ *
  *    Revision 1.18  2001/09/20 13:33:43  steudten
  *
  *    change long to int as return value in hash_string(). Remember the wraparound
@@ -410,7 +414,7 @@ char *chomp(char *string)
  *********************************************************************/
 char *strsav(char *old, const char *text_to_append)
 {
-   int old_len, new_len;
+   int old_len, new_len = 0;
    char *p;
 
    if (( text_to_append == NULL) || (*text_to_append == '\0'))

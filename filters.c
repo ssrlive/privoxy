@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.35 2001/10/07 15:41:23 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.36 2001/10/10 16:44:16 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.35 2001/10/07 15:41:23 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.36  2001/10/10 16:44:16  oes
+ *    Added match_portlist function
+ *
  *    Revision 1.35  2001/10/07 15:41:23  oes
  *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
  *
@@ -647,7 +650,19 @@ struct http_response *block_url(struct client_state *csp)
       rsp->body = template_load(csp, "blocked");
       template_fill(&rsp->body, exports);
       free_map(exports);
-  
+
+      /* FIXME */
+#ifdef __EMX__
+      /*
+       * The entire OS/2 community will hit the stupid Netscape bug
+       * (all three of us! :-) so we'll just keep ourselves out
+       * of this contentious debate and special-case ourselves.
+       * The problem is... a this point in parsing, we don't know
+       * what the csp->http->user_agent is (yet).  So we can't use
+       * it to decide if we should work around the NS bug or not.
+       */
+      rsp->status = strdup("200 Request for blocked URL"); 
+#else
       /*
        * Workaround for stupid Netscape bug which prevents
        * pages from being displayed if loading a referenced
@@ -665,7 +680,7 @@ struct http_response *block_url(struct client_state *csp)
       {
          rsp->status = strdup("404 Request for blocked URL"); 
       }
-
+#endif /* __EMX__ */
    }
 
    return(finish_http_response(rsp));
