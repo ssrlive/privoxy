@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.124 2002/10/13 19:58:09 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.125 2002/10/15 05:53:34 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -877,13 +877,21 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	     $$DOC/man-page $$DOC/images ;\
 	if [ -d "$(DOK_WEB)" ]; then \
 		$(ECHO) Installing FAQ, Manual, and other docs to $$DOC;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/user-manual/*html $$DOC/user-manual;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/faq/*html $$DOC/faq;\
+          for i in user-manual developer-manual faq; do \
+               for ii in $(DOK_WEB)/$$i/*html; do \
+                    $(INSTALL) $(INSTALL_T) $$ii $$DOC/$$i;\
+               done ;\
+          done ;\
+          for i in $(DOK_WEB)/images/*jpg; do \
+               $(INSTALL) $(INSTALL_T) $$i $$DOC/images;\
+          done ;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/man-page/*html $$DOC/man-page;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/developer-manual/*html $$DOC/developer-manual;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/images/*jpg $$DOC/images;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/privoxy-index.html $$DOC/index.html;\
-		$(INSTALL) $(INSTALL_T) AUTHORS LICENSE README ChangeLog $(DOK_WEB)/p_doc.css $$DOC;\
+		$(INSTALL) $(INSTALL_T) AUTHORS $$DOC;\
+		$(INSTALL) $(INSTALL_T) LICENSE $$DOC;\
+		$(INSTALL) $(INSTALL_T) README $$DOC;\
+		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
 	fi
 	$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1.gz
 	-$(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
@@ -903,12 +911,14 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# if there is no privoxy user, and no other user was enabled during 
 	# configure.
 	$(ECHO) Installing templates to $(CONF_DEST)/templates
-	$(INSTALL) $(INSTALL_T) `find templates -type f` $(CONF_DEST)/templates
+	for i in `find templates -type f`; do \
+	 $(INSTALL) $(INSTALL_T) $$i $(CONF_DEST)/templates ;\
+     done
 	if [ "`id |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
 		if [ x$(USER) = x ]; then \
 			if [ "`id privoxy`" ]; then \
 				$(ECHO) "Setting user and group to privoxy";\
-				INSTALL_CONF="$(INSTALL_T) -b -g privoxy -o privoxy" ;\
+				INSTALL_CONF="$(INSTALL_T) -g privoxy -o privoxy" ;\
 			else \
 				$(ECHO)  "******************************************************************" ;\
 				$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
@@ -920,17 +930,22 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			fi ;\
 		else \
 			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
-			INSTALL_CONF="$(INSTALL_T) -b -o $(USER) -g $(GROUP_T)" ;\
+			INSTALL_CONF="$(INSTALL_T) -o $(USER) -g $(GROUP_T)" ;\
 		fi ;\
 	else \
 		if [ ! "`id $(USER)`" = "`id`" ] ;then \
 			$(ECHO) "** WARNING ** current install user different from configured user!!" ;\
 			$(ECHO) "Edit may fail." ;\
 		fi ;\
-		INSTALL_CONF="$(INSTALL_T) -b " ;\
+		INSTALL_CONF="$(INSTALL_T)" ;\
 	fi ;\
 	$(ECHO) Installing config files to $(CONF_DEST);\
-	$(INSTALL) $$INSTALL_CONF config default.action default.filter standard.action $(CONF_DEST) ;\
+     for i in config default.action default.filter standard.action; do \
+	    	if [ -s "$(CONF_DEST)/$$i" ] ; then \
+	     	$(INSTALL) $(CONF_DEST)/$$i $(CONF_DEST)/$$i.save ;\
+     	fi ;\
+	$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) ;\
+     done ;\
 	if [ ! -s "$(CONF_DEST)/user.action" ] ; then \
 		$(INSTALL) $$INSTALL_CONF user.action  $(CONF_DEST) ;\
 	fi ;\
@@ -948,7 +963,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
 
 	# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
-	# Install if dest is writable and its a system install.
+	# Install if dest is writable and its a system install. Hardcode 755 mode
+     # to avoid problems with install-strip target.
 	if [ "$(prefix)" = "/usr/local" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
@@ -956,18 +972,18 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
                $(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
                $(SED) 's+%USER%+$(USER)+' | \
                $(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
-               $(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
+               $(INSTALL) -m 755 slackware/rc.privoxy /etc/rc.d/ ;\
                $(ECHO) "Installing for Slackware." ;\
                $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
           elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
                $(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
-               $(INSTALL) $(INSTALL_P) privoxy.init /etc/rc.d/init.d/privoxy ;\
+               $(INSTALL) -m 755 privoxy.init /etc/rc.d/init.d/privoxy ;\
                $(MKDIR) /etc/logrotate.d/ ;\
                $(ECHO) "Installing logrotate script to /etc/logrotate.d/" ;\
-               $(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
+               $(INSTALL) -m 755 privoxy.logrotate /etc/logrotate.d/privoxy ;\
           elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
                $(ECHO) "Installing generic init script to /etc/init.d/privoxy" ;\
-               $(INSTALL) $(INSTALL_P) privoxy-generic.init /etc/init.d/privoxy ;\
+               $(INSTALL) -m 755 privoxy-generic.init /etc/init.d/privoxy ;\
           fi ;\
      else \
           $(ECHO) "No init script installed, install it manually if needed" ;\
@@ -975,7 +991,6 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# mmmmm, good.
 	@$(ECHO) "Privoxy installation succeeded!"
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
-
 
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(ECHO) Starting Privoxy uninstallation
@@ -994,7 +1009,9 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(RM) $(CONF_DEST)/config $(CONF_DEST)/default.action $(CONF_DEST)/default.filter \
 		$(CONF_DEST)/trust $(CONF_DEST)/standard.action $(CONF_DEST)/user.action \
 		$(CONF_DEST)/config~ $(CONF_DEST)/default.action~ $(CONF_DEST)/default.filter~ \
-		$(CONF_DEST)/trust~ $(CONF_DEST)/standard.action~ $(CONF_DEST)/user.action~
+		$(CONF_DEST)/trust~ $(CONF_DEST)/standard.action~ $(CONF_DEST)/user.action~ \
+		$(CONF_DEST)/config.save $(CONF_DEST)/default.action.save \
+          $(CONF_DEST)/default.filter.save $(CONF_DEST)/standard.action.save 
 	$(RM) -r $(CONF_DEST)/templates
 	
 	# man page and docs
@@ -1030,7 +1047,7 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
                $(RMDIR) $(prefix)/var || $(ECHO) "$(prefix)/var is not empty, not removed" ;\
           fi ;\
           if test -d $(prefix); then \
-			$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
+     		$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
           fi;\
 	fi
 
@@ -1063,6 +1080,14 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.125  2002/10/15 05:53:34  hal9
+# A few more cleanups:
+# -use mkinstalldirs consistently.
+# -Install init script and logrotate only is prefix=/usr/local (installed to
+#  system dir /etc instead of /usr/local...)
+# -Test for directory existence before removing to avoid misleading error
+#  messages.
+#
 # Revision 1.124  2002/10/13 19:58:09  hal9
 # Hopefully, this is final updates for install and uninstall targets.
 # - Fix typo in chown syntax
