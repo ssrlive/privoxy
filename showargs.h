@@ -1,6 +1,6 @@
 #ifndef SHOWARGS_H_INCLUDED
 #define SHOWARGS_H_INCLUDED
-#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.5 2001/06/29 13:35:41 oes Exp $"
+#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.6 2001/07/29 18:51:02 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: showargs.h,v $
+ *    Revision 1.6  2001/07/29 18:51:02  jongfoster
+ *    Adding editor control block, and renaming _SHOWARGS_H
+ *
  *    Revision 1.5  2001/06/29 13:35:41  oes
  *    adapted to reflect the changes in showargs.c
  *
@@ -65,7 +68,7 @@ extern "C" {
 
 extern void savearg(char *c, char *o, struct configuration_spec * config);
 extern char *show_rcs(void);
-extern char *show_defines(void);
+struct map * show_defines(struct map *exports);
 
 /* Revision control strings from this header and associated .c file */
 extern const char showargs_rcs[];
