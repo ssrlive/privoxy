@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.128 2002/07/25 21:51:24 hal9 Exp $
+ $Id: user-manual.sgml,v 1.123.2.18 2002/08/22 23:47:58 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -47,18 +47,18 @@
 <article id="index">
 <artheader>
 
-<title>Privoxy User Manual</title>
+<title>Privoxy &p-version; User Manual</title>
 
 <pubdate>
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
  <link linkend="copyright">Copyright</link> &my-copy; 2001, 2002 by 
- <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
+ <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.128 2002/07/25 21:51:24 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.123.2.18 2002/08/22 23:47:58 hal9 Exp $</pubdate>
 
 <!--
 
@@ -109,7 +109,7 @@ Hal.
  <para>
   You can find the latest version of the <citetitle>User Manual</citetitle> at  <ulink
   url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
-  Please see the <ulink url="contact.html">Contact section</ulink> on how to
+  Please see the <link linkend="contact">Contact section</link> on how to
   contact the developers.
  </para>
 
@@ -277,17 +277,32 @@ automatically start Privoxy in the boot process.
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-mac"><title>Max OSX</title>
+<sect3 id="installation-mac"><title>Mac OSX</title>
 <para>
- Unzip the downloaded package (you can either double-click on the file
- in the finder, or on the desktop if you downloaded it there).  Then,
- double-click on the package installer icon and follow the installation
- process.
- <application>Privoxy</application> will be installed in the subdirectory
- <literal>/Applications/Privoxy.app</literal>.
- <application>Privoxy</application> will set itself up to start 
- automatically on system bring-up via
- <literal>/System/Library/StartupItems/Privoxy</literal>.
+ Unzip the downloaded file (you can either double-click on the file
+ from the finder, or from the desktop if you downloaded it there).
+ Then, double-click on the package installer icon named
+ <literal>Privoxy.pkg</literal>
+ and follow the installation process.
+ <application>Privoxy</application> will be installed in the folder
+ <literal>/Library/Privoxy</literal>.
+ It will start automatically whenever you start up.  To prevent it from
+ starting automatically, remove or rename the folder
+ <literal>/Library/StartupItems/Privoxy</literal>. 
+</para>
+<para>
+ To start Privoxy by hand, double-click on 
+ <literal>StartPrivoxy.command</literal> in the
+ <literal>/Library/Privoxy</literal> folder.
+ Or, type this command in the Terminal:
+</para>
+<para>
+  <screen>
+  /Library/Privoxy/StartPrivoxy.command
+  </screen>
+</para>
+<para>
+ You will be prompted for the administrator password.
 </para>
 </sect3>
 
@@ -300,6 +315,28 @@ automatically start Privoxy in the boot process.
  remove this directory.
 </para>
 </sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="installattion-gentoo"><title>Gentoo</title>
+<para>
+ Gentoo source packages (Ebuilds) for <application>Privoxy</application> are 
+ contained in the Gentoo  Portage Tree (they are not on the download page, 
+ but there is a Gentoo section, where you can see when a new 
+ <application>Privoxy</application> Version is added to the  Portage Tree).
+</para>
+<para>
+ Before installing <application>Privoxy</application> under Gentoo just do 
+ first <literal>emerge rsync</literal> to get the latest changes from the 
+ Portage tree. With <literal>emerge privoxy</literal> you install the latest 
+ version.
+</para>
+<para>
+ Configuration files are in <filename>/etc/privoxy</filename>, the 
+ documentation is in <filename>/usr/share/doc/privoxy-&p-version;</filename>
+ and the Log directory is in <filename>/var/log/privoxy</filename>.
+</para>
+</sect3>
+
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -325,6 +362,33 @@ automatically start Privoxy in the boot process.
 <!-- end boilerplate -->
 
 </sect2>
+<!--   ~~~~~       New section      ~~~~~     --> 
+<sect2 id="installation-keepupdated"><title>Keeping your Installation Up-to-Date</title>
+<para>
+ As user feedback comes in and development continues, we will make updated versions
+ of both the main <link linkend="actions-file">actions file</link> (as a <ulink
+ url="http://sourceforge.net/project/showfiles.php?group_id=11118&amp;release_id=103670">separate
+ package</ulink>) and the software itself (including the actions file) available for
+ download.
+</para>
+
+<para>
+ If you wish to receive an email notification whenever we release updates of
+ <application>Privoxy</application> or the actions file, <ulink
+ url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
+ to our announce  mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
+</para>
+
+<para>
+ In order not to loose your personal changes and adjustments when updating
+ to the latest <literal>default.action</literal> file we <emphasis>strongly
+ recommend</emphasis> that you use <literal>user.action</literal> for your
+ customization of <application>Privoxy</application>. See the <link
+ linkend="actions-file">Chapter on actions files</link> for details.
+</para>
+
+</sect2>
+
 
 </sect1>
 
@@ -928,16 +992,21 @@ Example Unix startup command:
 </sect2>
 
 <sect2 id="start-macosx">
-<title>MAX OSX</title>
+<title>Mac OSX</title>
 <para>
  During installation, <application>Privoxy</application> is configured to
- start automatically when the system restarts. You can start it manually
- through the Terminal with these commands:
+ start automatically when the system restarts.  To start Privoxy by hand,
+ double-click on the <literal>StartPrivoxy.command</literal> icon in the
+ <literal>/Library/Privoxy</literal> folder.  Or, type this command
+ in the Terminal:
 </para>
 <para>
   <screen>
-  cd /Applications/Privoxy.app
-  ./privoxy</screen>
+  /Library/Privoxy/StartPrivoxy.command
+  </screen>
+</para>
+<para>
+ You will be prompted for the administrator password.
 </para>
 </sect2>
 
@@ -952,6 +1021,29 @@ Example Unix startup command:
  <application>Privoxy</application> will automatically quit when you quit your
  TCP/IP stack (just ignore the harmless warning your TCP/IP stack may display that
  <application>Privoxy</application> is still running).
+</para>
+</sect2>
+
+<sect2 id="start-gentoo">
+<title>Gentoo</title>
+<para>
+ A script is again used. It will use the file <filename>/etc/privoxy/config 
+ </filename> as its main configuration file.
+</para>
+<para>
+ <screen>
+ /etc/init.d/privoxy start
+ </screen>
+</para>
+<para>
+ Note that <application>Privoxy</application> is not automatically started at 
+ boot time by default. You can change this with the <literal>rc-update</literal> 
+ command.
+</para>
+<para> 
+ <screen>
+ rc-update add privoxy default
+ </screen>
 </para>
 </sect2>
 
@@ -1040,17 +1132,17 @@ must find a better place for this paragraph
 </para>
 
 <para>
- If the above paragraph sounds gibberish to you, you might want to <ulink
- url="actions-file.html#ACTIONSFILE">read more about the actions concept</ulink>
- or even dive deep into the <ulink url="appendix.html#ACTIONSANAT">Appendix
- on actions</ulink>.
+ If the above paragraph sounds gibberish to you, you might want to <link
+ linkend="actions-file">read more about the actions concept</link>
+ or even dive deep into the <link linkend="actionsanat">Appendix
+ on actions</link>.
 </para>
 
 <para>
  If you can't get rid of the problem at all, think you've found a bug in
  Privoxy, want to propose a new feature or smarter rules, please see the 
- section <ulink url="contact.html"><quote>Contacting the
- Developers</quote></ulink> below. 
+ section <link linkend="contact"><quote>Contacting the
+ Developers</quote></link> below. 
 </para>
 
 -->
@@ -1181,6 +1273,9 @@ must find a better place for this paragraph
  </member>
  <member>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/toggle">Toggle Privoxy on or off</ulink>
+ </member>
+ <member>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://www.privoxy.org/&p-version;/user-manual/">Documentation</ulink>
  </member>
  </simplelist>
  </msgtext>
@@ -1362,8 +1457,8 @@ must find a better place for this paragraph
      provide a base level of functionality for
      <application>Privoxy's</application> array of features. So it is 
      a set of broad rules that should work reasonably well for users everywhere.
-     This is the file that the developers are keeping updated, and making 
-     available to users.
+     This is the file that the developers are keeping updated, and <link
+     linkend="installation-keepupdated">making available to users</link>.
     </para>
    </listitem> 
    <listitem>
@@ -1481,9 +1576,9 @@ must find a better place for this paragraph
  the same URL set the same action differently, the last match wins. If not, 
  the effects are aggregated. E.g. a URL might match a regular section with 
  a heading line of <literal>{ 
- +<ulink url="actions-file.html#HANDLE-AS-IMAGE">handle-as-image</ulink> }</literal>,
+ +<link linkend="handle-as-image">handle-as-image</link> }</literal>,
  then later another one with just <literal>{
- +<ulink url="actions-file.html#BLOCK">block</ulink> }</literal>, resulting
+ +<link linkend="block">block</link> }</literal>, resulting
  in <emphasis>both</emphasis> actions to apply.
 </para>
 
@@ -2335,8 +2430,9 @@ problem-host.example.com</screen>
   <term>Effect:</term>
   <listitem>
    <para>
-    Text documents, including HTML and JavaScript, to which this action applies, are filtered on-the-fly
-    through the specified regular expression based substitutions.    
+    Text documents, including HTML and JavaScript, to which this action
+    applies, are filtered on-the-fly through the specified regular expression
+    based substitutions.
    </para>
   </listitem>
  </varlistentry>
@@ -2427,6 +2523,14 @@ problem-host.example.com</screen>
     <screen>+filter{banners-by-size}     # Kill banners based on their size for this page (<emphasis>very</emphasis> efficient!)</screen>
    </para>
    <para>
+    <anchor id="filter-banners-by-link">
+    <screen>+filter{banners-by-link}     # Kill banners based on the link they are contained in (experimental)</screen>
+   </para>
+   <para>
+    <anchor id="filter-img-reorder">
+    <screen>+filter{img-reorder}         # Reorder attributes in &lt;img&gt; tags to make the banners-by-* filters more effective</screen>
+   </para>
+   <para>
     <anchor id="filter-content-cookies">
     <screen>+filter{content-cookies}     # Kill cookies that come sneaking in the HTML or JS content</screen>
    </para>
@@ -2461,6 +2565,10 @@ problem-host.example.com</screen>
    <para>
     <anchor id="filter-crude-parental">
     <screen>+filter{crude-parental}      # Kill all web pages that contain the words "sex" or "warez"</screen>
+   </para>
+   <para>
+    <anchor id="filter-js-events">
+    <screen>+filter{js-events}           # Kill all JS event bindings (<emphasis>Radically destructive!</emphasis> Only for extra nasty sites) </screen>
    </para>
   </listitem>
  </varlistentry>
@@ -3687,8 +3795,11 @@ shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
  -<link linkend="FILTER-FUN">filter{fun}</link> \
  +<link linkend="FILTER-NIMDA">filter{nimda}</link> \
  +<link linkend="FILTER-BANNERS-BY-SIZE">filter{banners-by-size}</link> \
+ -<link linkend="FILTER-BANNERS-BY-LINK">filter{banners-by-link}</link> \
+ -<link linkend="FILTER-IMG-REORDER">filter{img-reorder}</link> \
  -<link linkend="FILTER-SHOCKWAVE-FLASH">filter{shockwave-flash}</link> \
  -<link linkend="FILTER-CRUDE-PARENTAL">filter{crude-parental}</link> \
+ -<link linkend="FILTER-JS-EVENTS">filter{js-events}</link> \
  -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
  +<link linkend="HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</link> \
  +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
@@ -4353,7 +4464,7 @@ s|(&lt;script.*)document\.referrer(.*&lt;/script&gt;)|$1"Not Your Business!"$2|U
  <screen>
 # The status bar is for displaying link targets, not pointless blahblah
 #
-s/window\.status\s*=\s*['"].*?['"]/dUmMy=1/ig</screen>
+s/window\.status\s*=\s*(['"]).*?\1/dUmMy=1/ig</screen>
 </para>
 
 <para>
@@ -4362,7 +4473,10 @@ s/window\.status\s*=\s*['"].*?['"]/dUmMy=1/ig</screen>
  or more whitespace</quote>. The <literal>?</literal> in <literal>.*?</literal>
  makes this matching of arbitrary text ungreedy. (Note that the <literal>U</literal>
  option is not set). The <literal>['"]</literal> construct means: <quote>a single
- <emphasis>or</emphasis> a double quote</quote>.
+ <emphasis>or</emphasis> a double quote</quote>. Finally, <literal>\1</literal> is
+ a backreference to the first parenthesis just like <literal>$1</literal> above,
+ with the difference that in the <emphasis>pattern</emphasis>, a backslash indicates
+ a backreference, whereas in the <emphasis>substitute</emphasis>, it's the dollar.
 </para>
 
 <para>
@@ -4378,7 +4492,7 @@ s/window\.status\s*=\s*['"].*?['"]/dUmMy=1/ig</screen>
  <screen>
 # Kill OnUnload popups. Yummy. Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
 #
-s/(&lt;body .*)onunload(.*&gt;)/$1never$2/iU</screen>
+s/(&lt;body [^&gt;]*)onunload(.*&gt;)/$1never$2/iU</screen>
 </para>
 
 <para>
@@ -4389,7 +4503,11 @@ s/(&lt;body .*)onunload(.*&gt;)/$1never$2/iU</screen>
  This job replaces the <quote>onunload</quote> attribute in
  <quote>&lt;body&gt</quote> tags with the dummy word <literal>never</literal>.
  Note that the <literal>i</literal> option makes the pattern matching
- case-insensitive.
+ case-insensitive. Also note that ungreedy matching alone doesn't always guarantee
+ a minimal match: In the first parenthesis, we had to use <literal>[^&gt;]*</literal>
+ instead of <literal>.*</literal> to prevent the match from exceeding the 
+ &lt;body&gt tag if it doesn't contain <quote>OnUnload</quote>, but the page's
+ content does.
 </para>
 
 <para>
@@ -4419,6 +4537,8 @@ s/microsoft(?!\.com)/MicroSuck/ig</screen>
 #
 s* industry[ -]leading \
 |  cutting[ -]edge \
+|  customer[ -]focused \
+|  market[ -]driven \
 |  award[ -]winning # Comments are OK, too! \
 |  high[ -]performance \
 |  solutions[ -]based \
@@ -4431,7 +4551,7 @@ s* industry[ -]leading \
 
 <para>
  The <literal>x</literal> option in this job turns on extended syntax, and allows for
- e.g. the liberal use of (non-interpreted!) whitespace for nicer formatting.
+ e.g. the liberal use of (non-interpreted!) whitespace for nicer formatting. 
 </para>
 
 <para>
@@ -5005,7 +5125,7 @@ Requests</title>
 
 <para>
  Credit: The site which gave us the general idea for these bookmarklets is
- <ulink url="http://www.bookmarklets.com">www.bookmarklets.com</ulink>. They
+ <ulink url="http://www.bookmarklets.com/">www.bookmarklets.com</ulink>. They
  have more information about bookmarklets. 
 </para>
 
@@ -5085,7 +5205,7 @@ Requests</title>
   <para>
    First, the server headers are read and processed to determine, among other
    things, the MIME type (document type) and encoding. The headers are then
-   filtered as deterimined by the 
+   filtered as determined by the 
    <link linkend="CRUNCH-INCOMING-COOKIES"><quote>+crunch-incoming-cookies</quote></link>,
    <link linkend="SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></link>,
    and <link linkend="DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></link>
@@ -5159,7 +5279,7 @@ Requests</title>
  One quick test to see if <application>Privoxy</application> is causing a problem 
  or not, is to disable it temporarily. This should be the first troubleshooting 
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
- and easy way to do this (be sure to flush caches afterward!). Looking at the
+ and easy way to do this (be sure to flush caches afterward!). Looking at the 
  logs is a good idea too.
 </para>
 
@@ -5456,7 +5576,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  was. If you don't get this kind of match, then it means one of the default 
  rules in the first section is causing the problem. This would require some 
  guesswork, and maybe a little trial and error to isolate the offending rule.
- One likely cause would be one of the <quote>{+filter}</quote> actions. These
+ One likely cause would be one of the <quote>{+filter}</quote> actions. These 
  tend to be harder to troubleshoot. Try adding the URL for the site to one of
  aliases that turn off <quote>+filter</quote>:
 </para>
@@ -5533,19 +5653,49 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
- Revision 1.128  2002/07/25 21:51:24  hal9
- Warnings on non-HTTP traffic.
+ Revision 1.123.2.18  2002/08/22 23:47:58  hal9
+ Add 'Documentation' to Privoxy Menu shot in Configuration section to match
+ CGIs.
 
- Revision 1.127  2002/06/09 16:37:31  hal9
- Sync with filtering clarifications in 3.0 branch.
+ Revision 1.123.2.17  2002/08/18 01:13:05  hal9
+ Spell checked (only one typo this time!).
 
- Revision 1.126  2002/06/05 00:31:55  hal9
- Mass commit for new entities, most significantly so docs can read version
- and code status info from tmp files, so perl is no longer used. Also, docs can
- differentiate on alpha -> beta -> stable now.
+ Revision 1.123.2.16  2002/08/09 19:20:54  david__schmidt
+ Update to Mac OSX startup script name
 
- Revision 1.125  2002/06/03 00:28:17  hal9
- Sync with various changes from 3.0 branch. Add two new files for config stuff.
+ Revision 1.123.2.15  2002/08/07 17:32:11  oes
+ Converted some internal links from ulink to link for PDF creation; no content changed
+
+ Revision 1.123.2.14  2002/08/06 09:16:13  oes
+ Nits re: actions file download
+
+ Revision 1.123.2.13  2002/08/02 18:23:19  g_sauthoff
+ Just 2 small corrections to the Gentoo sections
+
+ Revision 1.123.2.12  2002/08/02 18:17:21  g_sauthoff
+ Added 2 Gentoo sections
+
+ Revision 1.123.2.11  2002/07/26 15:20:31  oes
+ - Added version info to title
+ - Added info on new filters
+ - Revised parts of the filter file tutorial
+ - Added info on where to get updated actions files
+
+ Revision 1.123.2.10  2002/07/25 21:42:29  hal9
+ Add brief notes on not proxying non-HTTP protocols.
+
+ Revision 1.123.2.9  2002/07/11 03:40:28  david__schmidt
+
+ Updated Mac OSX sections due to installation location change
+
+ Revision 1.123.2.8  2002/06/09 16:36:32  hal9
+ Clarifications on filtering and MIME. Hardcode 'latest release' in index.html.
+
+ Revision 1.123.2.7  2002/06/09 00:29:34  hal9
+ Touch ups on filtering, in actions section and Anatomy.
+
+ Revision 1.123.2.6  2002/06/06 23:11:03  hal9
+ Fix broken link. Linkchecked all docs.
 
  Revision 1.123.2.5  2002/05/29 02:01:02  hal9
  This is break out of the entire config section from u-m, so it can

@@ -19,7 +19,7 @@
 
  Purpose     :  Announcement text
                 
- $Id: announce.sgml,v 1.3 2002/06/05 00:31:55 hal9 Exp $
+ $Id: announce.sgml,v 1.1.2.2 2002/08/30 02:52:11 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -38,7 +38,7 @@
  press release packages can contain both formats for those that might 
  prefer HTML ready announce text.
 
- This will probably require some hand editing before and after processing. 
+ This may require a small bit of hand editing before processing. 
  The intention is to minimize this as much as possible.
 
  To create: make announce
@@ -58,9 +58,15 @@
 
 <para>
  Announcing <application>Privoxy</application> 
- v.&p-version;<![%p-not-stable;[-&p-status;]]>, and release candidate for 
- v3.0 stable.
+ v.&p-version;<![%p-not-stable;[-&p-status;, and release candidate for 
+ v3.0 stable]]>.
 </para>
+<para>
+ <![%p-stable;[
+ This is the first stable release of Privoxy.
+ ]]>
+</para>
+
 
 <!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
@@ -91,7 +97,7 @@
 
 <para> 
  <literallayout>Download location: 
-   <ulink url="http://sourceforge.net/projects/ijbswa/">http://sourceforge.net/projects/ijbswa/</ulink>
+   <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">http://sourceforge.net/project/showfiles.php?group_id=11118</ulink>
  </literallayout>
 </para>
 
@@ -102,6 +108,6 @@
 </para>
 
 
-<epigraph><attribution>Privoxy Developers</attribution><para></para></epigraph>
+<epigraph><attribution>Privoxy Developers <email>developers@privoxy.org</email></attribution><para></para></epigraph>
 
 </article>

@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.1 2002/07/29 22:08:41 jongfoster Exp $
+ $Id: privoxy-man-page.sgml,v 1.13.2.4 2002/08/26 16:26:58 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -79,13 +79,13 @@
   <arg><option>--pidfile </option><replaceable class="parameter">pidfile</replaceable></arg>  
   <arg><option>--user </option><replaceable class="parameter">user[.group]</replaceable></arg> 
   <arg><replaceable class="parameter">configfile</replaceable></arg>        
-  <command>(UNIX)</command>
+  <command>&nbsp;(UNIX)</command>
  </cmdsynopsis>
 
  <cmdsynopsis> 
   <command>privoxy.exe</command>              
   <arg><replaceable class="parameter">configfile</replaceable></arg>
-  <command>(Windows)</command>
+  <command>&nbsp;(Windows)</command>
  </cmdsynopsis>                                      
 </refsynopsisdiv>
 
@@ -196,6 +196,7 @@
  https: URLs will not be proxied. Note: <command>Privoxy</command> can only
  proxy HTTP and HTTPS traffic. Do not try it with FTP or other protocols.
 </para>
+
 <para>
  For other browsers, check the documentation.
 </para>
@@ -385,12 +386,9 @@
 <refsect1><title>Notes</title>
 <![%p-not-stable;[
 <para>
- This is a &p-status; version of <command>Privoxy</command>. Buyer beware! Do 
- not use in production situations.]]> 
-<![%p-beta;[ Not all features are well tested. </para>]]>
-<![%p-alpha;[ Various features may be partially implemented, and 
-other stages of brokenness may well exist. Documentation may also be out of 
-sync with current code.</para>]]>
+ This is a &p-status; version of <command>Privoxy</command>. Not 
+ all features are well tested.
+</para>]]>
 <para>
  Please see the <citetitle>User Manual</citetitle> on how to contact the
  developers for feature requests, reporting problems, and other questions.

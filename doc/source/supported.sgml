@@ -25,8 +25,8 @@
 -->
 <para>
  At present, <application>Privoxy</application> is known to run on
- Windows(95, 98, ME, 2000, XP), Linux (RedHat, SuSE, Debian, Conectiva, Gentoo),
- Mac OSX, OS/2, AmigaOS, BeOS, FreeBSD, NetBSD, Solaris,  and many more 
+ Windows(95, 98, ME, 2000, XP), Linux (RedHat, SuSE, Debian, Conectiva, Gentoo,
+ Slackware), Mac OSX, OS/2, AmigaOS, BeOS, FreeBSD, NetBSD, Solaris, and more 
  flavors of Unix.
 </para>
 

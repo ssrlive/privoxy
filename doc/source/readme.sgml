@@ -19,14 +19,16 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.19 2002/07/25 21:51:25 hal9 Exp $
+ $Id: readme.sgml,v 1.16.2.4 2002/08/25 17:12:20 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
  ========================================================================
 
  ===================================================================
@@ -44,6 +46,18 @@
  the para tag forces a linebreak. Tags need to be carefully placed as a result
  to avoid extra blank lines, etc. 
  ======================================================================
+
+ For stable releases, change 
+ 
+  entity % p-not-stable "INCLUDE" 
+ 
+ to 
+ 
+  entity % p-not-stable "IGNORE" 
+  
+ in the DTD at the top. This will toggle various text 'off'. BOTH
+ MUST be toggled in this case or you will get both text referencing 
+ stable and unstable versions. You only want one or the other!
 
 -->
 <article id="index">
@@ -102,13 +116,10 @@
 <para>
  <!-- include some conditional text -->
  This README is included with <![%p-not-stable;[ the development version of]]>
- Privoxy &p-version;<![%p-not-stable;[, which will eventually become Privoxy v3.2]]><![%p-beta;[ (and soon we hope!)]]>. 
- See http://www.privoxy.org/ for more information. The current code
- level is &p-status;<![%p-beta;[, but seems stable to us :)]]><![%p-alpha;[,
- and may break in mysterious ways :) There may be features only partially 
- implemented, or worse, not functional. If you are interested in participating 
- in Privoxy development, please see the Links at the bottom of this page]]>. 
- </para>
+ Privoxy &p-version;<![%p-not-stable;[, which will eventually become Privoxy v3.0 (and soon we
+ hope!)]]>. See http://www.privoxy.org/ for more information. The current code
+ level is &p-status;<![%p-not-stable;[, and seems stable to us :)]]>.
+</para>
 </abstract>
 </artheader>
 
@@ -118,6 +129,11 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
+<para>
+ REALLY BIG NEWS! August 2002: The long-awaited, oft-delayed  stable version
+ of Privoxy 3.0 is finally released! This is way behind schedule, but better
+ late than never. The developers all hope the wait was worth it.
+</para>
 <para>
  NEWS! As of 03/24/02, the name of this project has been changed from
  ijbswa/Junkbuster to Privoxy. This is reflected in many of the included
@@ -202,21 +218,23 @@
 <sect1 id="documentation"><title>DOCUMENTATION</title>
 <para>
  There should be documentation in the 'doc' subdirectory<![%p-not-stable;[, but it
- may not be in sync with current code]]>. In particular, see the User Manual there,
+ is not completed at this point]]>. In particular, see the User Manual there,
  the FAQ, and those interested in Privoxy development, should look at
  developer-manual. 
 </para>
 <para>
  <![%p-not-stable;[
  The most up to date source of information on the current development version,
- may  be either comments in the source code, or the included
+ may still be either comments in the source code, or the included
  configuration files. ]]>The source and configuration files are all well
  commented. The main configuration files are: 'config', 'default.action', and
  'default.filter'<![%p-not-stable;[ in the toplevel source directory]]>. 
 </para>
 
 <para>
- Included documentation may vary according to platform and packager.
+ Included documentation may vary according to platform and packager. All 
+ documentation is posted on http://www.privoxy.org, in case you don't have it, 
+ or can't find it.
 </para>
 </sect1>
 
@@ -234,7 +252,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 1.19 2002/07/25 21:51:25 hal9 Exp $ -->
+<!--  $Id: readme.sgml,v 1.16.2.4 2002/08/25 17:12:20 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>
