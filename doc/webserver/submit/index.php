@@ -5,7 +5,7 @@
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.3 2002/03/29 09:39:48 swa Exp $
+//  $Id: index.php,v 1.4 2002/03/29 09:55:21 swa Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -54,8 +54,53 @@ incorrectly blocked, please use the forms below to report this.</p>
 
 <h2>New Advertisement</h2>
 
+<!-- testing mail sending
+// <?
+//$ret_val=mail("stefan@waldherr.org", "Subject", "Message"); echo $ret_val;
+?>
+-->
+
+
+<?
+$cfile  = "counter-data.inc";
+$localip = "127.0.0.1";
+$serverip = "127.0.0.1";
+# Enter information on the next line, but only after you read
+# the "c-readme.txt" file.
+$browser_id = "";
+if (file_exists ($cfile)) {
+	$fp = fopen ($cfile,"r+");
+	$data = fgets ($fp,25);
+	$ip = chop (substr($data,0,15));
+	$count = substr($data,15);
+# Unremark the second "if" statement and remark the first one if
+# your site is on a hosted server and you have a dynamic IP, but
+# only after you read "c-readme.txt" file.
+	if ($REMOTE_ADDR == $localip or $REMOTE_ADDR == $serverip)
+#       if ($REMOTE_ADDR == substr_count($HTTP_USER_AGENT,$browser_id) > 0)
+        	$np = $ip;
+	else
+		$np = $REMOTE_ADDR;
+    	if ($np != $ip)
+        	$count += 1;
+	rewind ($fp);
+	fputs ($fp,substr($np."        ",0,15).$count);
+	fclose ($fp);
+	echo $count;
+}
+else {
+	$fp = fopen($cfile,"w");
+	$np = $REMOTE_ADDR;
+	$count = "1";
+	fputs ($fp,substr($np."        ",0,15).$count);
+	fclose ($fp);
+	echo $count;
+}
+?>
+
+
 <p>
-<form action="http://privoxy.org/submit/confirmad.php" method="post">
+<form action="http://privox.org/submit/confirmad.php" method="post">
 <table border="0" cellpadding="0" cellspacing="4">
 
 <tr>
@@ -153,6 +198,9 @@ default action file was too agressive.</p>
 
 <!--
 	$Log: index.php,v $
+	Revision 1.4  2002/03/29 09:55:21  swa
+	.
+	
 	Revision 1.3  2002/03/29 09:39:48  swa
 	added form
 	
