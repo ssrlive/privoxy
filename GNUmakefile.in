@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.130 2002/10/22 05:49:14 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.131 2002/10/23 07:00:21 agotneja Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -56,7 +56,7 @@ DIR_PRIVOXY_SRC_PCRE := $(DIR_PRIVOXY_ROOT)/pcre
 DIR_PRIVOXY_OBJ      := $(DIR_PRIVOXY_ROOT)/obj
 
 #############################################################################
-# Directories for "make install"
+# "make install" directories and variables
 #############################################################################
 
 prefix       = @prefix@
@@ -95,10 +95,19 @@ ECHO       = echo
 GZIP_PROG  = gzip
 # Install usage should be compatible with install-sh.
 INSTALL    = @INSTALL@
-INSTALL_P  = -m 0755  
-INSTALL_T  = -m 0664 
-INSTALL_D  = -m 0755 -d
-INSTALL_R  = 0660
+# Binaries
+BIN_MODE	 = 0755
+# Support files, docs, etc.
+RA_MODE   = 0664
+# Directory
+DIR_MODE   = 0755
+# Files daemon writes to.
+RWD_MODE   = 0660
+INSTALL_P  = -m $(BIN_MODE)  
+INSTALL_T  = -m $(RA_MODE)
+INSTALL_D  = -m $(DIR_MODE) -d
+INSTALL_R  = -m $(RWD_MODE)
+
 # install options for superuser install
 #INSTALL_S  = -g @GROUP@ -o @USER@ 
 # id -u is not universal. FIXME: need to set from configure. Breaks on
@@ -277,7 +286,7 @@ $(DIR_PRIVOXY_OBJ)/%.o: $(DIR_PRIVOXY_SRC_PCRE)/%.c $(DIR_PRIVOXY_OBJ)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 $(DIR_PRIVOXY_OBJ):
-	$(CHMOD) 0755 $(MKDIR)
+	$(CHMOD) $(DIR_MODE) $(MKDIR)
 	$(MKDIR) obj
 
 #############################################################################
@@ -851,6 +860,7 @@ install-strip:
 # FIXME: id handling needs help, probably via configure, since 'id -u' is not 
 # universally reliable (eg Solaris). Group handling could be better. 
 # Perhaps the whole user/group validation should be done here.
+PROGRAM_V = Privoxy $(VERSION)
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# Quick test for valid USER.
 	if [ -n "$(USER)" ]; then \
@@ -861,8 +871,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
 	fi
 	
-	$(ECHO) "Creating directories, and preparing Privoxy installation"
-	$(CHMOD) 0755 $(MKDIR)
+	$(ECHO) "Creating directories, and preparing $(PROGRAM_V) installation"
+	$(CHMOD) $(DIR_MODE) $(MKDIR)
 	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(CONF_DEST)/templates $(SHARE_DEST) \
 		$(LOG_DEST) $(PID_DEST)
 	# Install the executable binary, strip if invoked as install-strip
@@ -951,18 +961,18 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	for i in $(CONFIGS); do \
 		if [ -s "$(CONF_DEST)/$$i" ] ; then \
 			$(ECHO) Installing $$i as $$i.new ;\
-			$(INSTALL) -m $(INSTALL_R) $$i $(CONF_DEST)/$$i.new || exit 1;\
+			$(INSTALL) $(INSTALL_R) $$i $(CONF_DEST)/$$i.new || exit 1;\
 			NEW=1;\
 		else \
 			if test "$$i" = "config" || test "$$i" = "default.filter"; then \
-				$(INSTALL) -m $(INSTALL_R) $$i $(CONF_DEST) || exit 1;\
+				$(INSTALL) $(INSTALL_R) $$i $(CONF_DEST) || exit 1;\
 			else \
-				$(INSTALL) -m $(INSTALL_R) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
+				$(INSTALL) $(INSTALL_R) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
 			fi;\
 		fi ;\
 	done ;\
 	if [ -n "$$NEW" ]; then \
-		$(CHMOD) $(INSTALL_R) $(CONF_DEST)/*.new || exit 1 ;\
+		$(CHMOD) $(RWD_MODE) $(CONF_DEST)/*.new || exit 1 ;\
 		$(ECHO) "Warning: Older config files are preserved. Check new versions for changes!" ;\
 	fi ;\
 	[ ! -f $(LOG_DEST)/logfile ] && $(ECHO) Creating logfiles in $(LOG_DEST) || \
@@ -972,7 +982,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(CHOWN) $$USER:$$GROUP_T $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
-	$(CHMOD) $(INSTALL_R) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
+	$(CHMOD) $(RWD_MODE) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
 	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
@@ -1001,7 +1011,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(ECHO) "No init script installed, install it manually if needed" ;\
 	fi
 	# mmmmm, good.
-	@$(ECHO) "Privoxy installation succeeded!"
+	@$(ECHO) "$(PROGRAM_V) installation succeeded!"
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
 
 # rmdir is used as a precaution since it will not remove non-empty
@@ -1096,6 +1106,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.131  2002/10/23 07:00:21  agotneja
+# added a chmod on mkinstalldirs just before using it, otherwise it
+# will fail when running make for the first time.
+#
 # Revision 1.130  2002/10/22 05:49:14  hal9
 # Make install:
 # - /bin/sh on Solaris does not handle: ! test.
