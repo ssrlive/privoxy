@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.33 2002/03/03 19:46:13 hal9 Exp $
+ $Id: user-manual.sgml,v 1.34 2002/03/04 19:32:07 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.33 2002/03/03 19:46:13 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.34 2002/03/04 19:32:07 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -289,10 +289,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.10-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/junkbuster-2.9.11-1.src.rpm
 </para>
 
 <para>
@@ -301,7 +301,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
  </screen>
 </para>
 
@@ -333,10 +333,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
 </para>
 <para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.10-1.src.rpm
+ &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/junkbuster-2.9.11-1.src.rpm
 </para>
 
 <para>
@@ -345,7 +345,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.10-1.i686.rpm
+ rpm -Uvv /usr/src/packages/RPMS/i686/junkbuster-2.9.11-1.i686.rpm
  </screen>
 </para>
 
@@ -446,7 +446,7 @@ configuration section below. HB.)
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="configuration"><title>Junkbuster Configuration</title>
+<sect1 id="configuration"><title>Invoking and Configuring Junkbuster</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
  <filename>/etc/junkbuster/</filename> by default. For MS Windows, OS/2, and
@@ -513,6 +513,79 @@ configuration section below. HB.)
  Also, what constitutes a <quote>default</quote> setting, may change, so 
  please check all your configuration files on important issues.
 </para>
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>Command Line Options</title>
+<para>
+ <application>JunkBuster</application> may be invoked with the following
+ command-line options:
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+    <emphasis>--version</emphasis>
+  </para>
+  <para>
+     Print version info and exit, Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+    <emphasis>--help</emphasis>
+  </para>
+  <para>
+   Print a short usage info and exit, Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <emphasis>--no-daemon</emphasis>
+  </para>
+  <para>
+   Don't become a daemon, i.e. don't fork and become process group
+   leader, don't detach from controlling tty. Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   <emphasis>--pidfile FILE</emphasis>
+  
+  </para>
+  <para>
+   On startup, write the process ID to <emphasis>FILE</emphasis>. Delete the
+   <emphasis>FILE</emphasis> on exit. Failiure to create or delete the
+   <emphasis>FILE</emphasis> is non-fatal. If no <emphasis>FILE</emphasis>
+   option is given, no PID file will be used. Unix only.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+    <emphasis>configfile</emphasis>
+  </para>
+  <para>
+    If no <emphasis>configfile</emphasis> is included on the command line, 
+    <application>JunkBuster</application> will look for a file named 
+    <quote>config</quote> in the current directory (except on Win32 
+    where it will look for <quote>config.txt</quote> instead). Specify 
+    full path to avoid confusion.
+  </para>
+ </listitem> 
+
+
+ </itemizedlist>
+</para>
+
+</sect2>
+
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -2859,11 +2932,12 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 </para>
 
 <para>
- HTTP/1.1 support is not fully implemented. If browsers that
- support HTTP/1.1 (like <application>Mozilla</application> or recent versions
- of I.E.) experience problems, you might try to force HTTP/1.0 compatibility.
- For Mozilla, look under <literal>Edit -&gt; Preferences -&gt; Debug -&gt;
- Networking</literal>. Or set the <quote>+downgrade</quote> config option in
+ <application>Junkbuster</application> is HTTP/1.1 compliant,  but not all 1.1
+ features are as yet implemented. If browsers that support HTTP/1.1 (like
+ <application>Mozilla</application> or recent versions of I.E.) experience
+ problems, you might try to force HTTP/1.0 compatibility. For Mozilla, look
+ under <literal>Edit -&gt; Preferences -&gt; Debug -&gt; Networking</literal>.
+ Or set the <quote>+downgrade</quote> config option in
  <filename>ijb.action</filename>.
 </para>
 
@@ -3288,6 +3362,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.34  2002/03/04 19:32:07  oes
+ Changed default port to 8118
+
  Revision 1.33  2002/03/03 19:46:13  hal9
  Emphasis on where/how to report bugs, etc
 
