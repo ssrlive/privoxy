@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.35 2001/10/07 18:06:43 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.36 2001/10/10 16:45:15 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.36  2001/10/10 16:45:15  oes
+ *    Added LIMIT_CONNECT action and string
+ *    Fixed HTTP message line termination
+ *    Added CFORBIDDEN HTTP message
+ *
  *    Revision 1.35  2001/10/07 18:06:43  oes
  *    Added status member to struct http_request
  *
@@ -680,7 +685,6 @@ struct parsers
 struct cgi_dispatcher
 {
    const char *name;
-   int         name_length;
    int         (*handler)(struct client_state *csp, struct http_response *rsp, struct map *parameters);
    const char *description;
 };
