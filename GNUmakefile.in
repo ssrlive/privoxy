@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.96 2002/04/27 17:44:32 morcego Exp $
+# $Id: GNUmakefile.in,v 1.97 2002/04/27 20:27:43 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -80,9 +80,8 @@ LN         = ln
 WDUMP      = @WDUMP@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
-DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldpOK.dsl\#html
+DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
 DB2HTML    = @DB2HTML@
-DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
@@ -503,10 +502,10 @@ tarball-dist: dist-check clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
-	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" \)`; do \
+	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o -name "PACKAGERS" \)`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
-	cd .. && $(TAR) -cvhf --exclude "PACKAGERS" privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
+	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
 
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS) 
@@ -533,22 +532,8 @@ tarball-clean:
 #
 #############################################################################
 
-# now works for swa
-# our style file
-doc/source/ldpOK.dsl:
-#	if [ "$(DKPREFIX)" != "none" ]; then \
-#		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
-#	else \
-#		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
-#	fi
-	cp doc/source/ldp.dsl doc/source/ldpOK.dsl;
-
-# Otherwise we get plain groff conversion.
-groff2html:
-	$(G2H_CMD) ./privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
-
 # developer manual
-dok-devel: doc/source/ldpOK.dsl
+dok-devel: 
 	$(RM) doc/webserver/developer-manual/*.html
 	$(RM) -r doc/source/developer-manual
 	mkdir -p doc/text doc/source/developer-manual
@@ -556,7 +541,7 @@ dok-devel: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && $(RM) -r tmp.html developer-manual
 
 # user manual
-dok-user: doc/source/ldpOK.dsl
+dok-user: 
 	$(RM) doc/webserver/user-manual/*.html
 	$(RM) -r doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
@@ -564,7 +549,7 @@ dok-user: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
 # faq
-dok-faq: doc/source/ldpOK.dsl
+dok-faq: 
 	$(RM) doc/webserver/faq/*.html
 	$(RM) -r doc/source/faq
 	mkdir -p doc/text doc/source/faq
@@ -572,7 +557,7 @@ dok-faq: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && $(RM) -r tmp.html faq
 
 # man page
-dok-man: doc/source/ldpOK.dsl
+dok-man: 
 	$(RM) doc/man/* doc/webserver/man-page/*.html
 ifneq ($(MAN2HTML),false)
 	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
@@ -583,12 +568,12 @@ else
 endif
 
 # readme page
-dok-readme: doc/source/ldpOK.dsl
+dok-readme: 
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
 # webserver files
-dok-webserver: doc/source/ldpOK.dsl
+dok-webserver: 
 	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
@@ -597,18 +582,12 @@ dok-webserver: doc/source/ldpOK.dsl
 
 # Main documentation target.
 dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
-# kludge to force recreation on next run. Rodrigo? -swa
-# I see no need for it, but no problem either. Let it stay. -morcego
-	@$(RM) doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
 
 #
 # an alternative to the above dok. disabled man page creation for the moment
 #
 redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver dok-authors
-# kludge to force recreation on next run. Rodrigo? -swa
-# I see no need for it, but no problem either. Let it stay. -morcego
-	@$(RM) doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
 
 # For those with man2html ala RH7's.
@@ -624,25 +603,25 @@ else
 	$(MAKE) groff2html
 endif
 
+# Otherwise we get plain groff conversion.
+groff2html:
+	$(G2H_CMD) ./privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
+
 ## Make README
-redhat-readme: doc/source/ldpOK.dsl
+redhat-readme: 
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../README && $(RM) -r tmp.html
-	# kludge to force recreation on next run. Rodgrigo?
-	@$(RM) doc/source/ldpOK.dsl
 
 ## Make AUTHORS file
-dok-authors: doc/source/ldpOK.dsl
+dok-authors: 
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../AUTHORS && $(RM) tmp.html
-	# kludge to force recreation on next run. Rodgrigo?
-	@$(RM) doc/source/ldpOK.dsl
 
 # make a man page, and then (lousy) HTML version.
 # Requires docbook2man (short perl script), see comments 
 # in privoxy-man-page.sgml. This target is not invoked from other dok targets.
 # It is built separately due to dependencies on perl scripts.
-man: doc/source/ldpOK.dsl
+man: 
 	mkdir -p doc/source/man
 	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
 	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
@@ -651,8 +630,6 @@ man: doc/source/ldpOK.dsl
      # This html is not used. See make man2html.
 	mv -f doc/source/man/privoxy.1 privoxy.1
 	$(MAKE) man2html
-     # kludge to force recreation on next run. Rodgrigo?
-	@$(RM) -r doc/source/ldpOK.dsl doc/source/man
 
 # Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
 # exceptions accordingly. This needs to go before any doc building (doh).
@@ -676,26 +653,23 @@ else
 	$(RM) -r doc/source/*bak doc/source/*/*bak
 endif
 
-dok-pdf: doc/source/ldpOK.dsl dok-release 
+dok-pdf: dok-release 
 	$(RM) doc/pdf/*.pdf
 	cp -f doc/source/*.sgml doc/pdf
 	cp -f doc/source/*.dsl doc/pdf
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
-	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
+	cd doc/pdf && db2pdf --pdf -s ldp.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
+	cd doc/pdf && db2pdf --pdf -s ldp.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
+	cd doc/pdf && db2pdf --pdf -s ldp.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
 	$(RM) doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
-	# kludge to force recreation on next run. Rodgrigo?
-	@$(RM) doc/source/ldpOK.dsl
 
 # the layout and style with db2pdf sucks, here is an alternative
-dok-pdf2: doc/source/ldpOK.dsl dok-release 
+dok-pdf2: dok-release 
 	mkdir -p doc/source/temp # this directory not in cvs
 	cd doc/source && $(DB) -V nochunks user-manual.sgml > temp/privoxy-user-manual.html
 	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
 	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
 # one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
-	# kludge to force recreation on next run. Rodgrigo?
-	@$(RM) doc/source/ldpOK.dsl
+
 
 #############################################################################
 #
@@ -805,7 +779,8 @@ tidy:
 	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
-	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldpOK.dsl
+	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
+              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl
 
 #
 # FIXME: What is all this? 
@@ -844,6 +819,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.97  2002/04/27 20:27:43  swa
+# no longer needed due to new
+# PACKAGE_VERSION process
+#
 # Revision 1.96  2002/04/27 17:44:32  morcego
 # - Correcting typo in my name (Rodrigo, not Rodgrigo) :-)
 # - Using the RM macro everywhere rm is called (either we use, or don't)
