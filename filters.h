@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.13 2001/07/30 22:08:36 jongfoster Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.14 2001/10/07 15:41:40 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.14  2001/10/07 15:41:40  oes
+ *    Added prototype for remove_chunked_transfer_coding
+ *
  *    Revision 1.13  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -198,6 +201,7 @@ struct url_spec;
 extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
 extern int acl_addr(char *aspec, struct access_control_addr *aca);
 #endif /* def FEATURE_ACL */
+extern int match_portlist(const char *portlist, int port);
 
 /*
  * Interceptors
