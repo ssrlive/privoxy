@@ -1,6 +1,6 @@
 #  ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/re_filterfile,v $
 # 
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -30,7 +30,10 @@
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # 
 #  Revisions   :
-#     $Log: junkbuster.init,v $
+#     $Log: re_filterfile,v $
+#     Revision 1.6  2001/06/09 14:01:57  swa
+#     header. cosmetics. default: no messing ala microsuck.
+#
 #
 # 
 # ********************************************************************/
@@ -130,7 +133,7 @@ s/<img\s+[^>]*?(width|height)\s+=\s+['"]?1\D[^>]*?(width|height)\s+=\s+['"]?1\D[
 # Fun stuff
 #
 # ********************************************************************/
-#s/microsoft(?!.com)/<b>MicroSuck<\/b>/ig
+s/microsoft(?!.com)/MicroSuck/ig
 
 # ********************************************************************/
 #
