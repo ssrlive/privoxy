@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.43 2002/03/08 00:47:32 hal9 Exp $
+ $Id: user-manual.sgml,v 1.44 2002/03/09 17:08:48 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.43 2002/03/08 00:47:32 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.44 2002/03/09 17:08:48 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -184,7 +184,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <listitem>
   <para>
    Builds from source on most UNIX-like systems. Packages available for: Linux
-   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2.
+   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
  
   </para>
  </listitem> 
@@ -3463,6 +3463,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.44  2002/03/09 17:08:48  hal9
+ New section on Jon's actions file editor, and move some stuff around.
+
  Revision 1.43  2002/03/08 00:47:32  hal9
  Added imageblock{pattern}.
 
