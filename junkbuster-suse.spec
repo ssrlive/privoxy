@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.2 2001/06/07 17:18:44 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.3 2001/06/07 17:28:10 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.3  2001/06/07 17:28:10  swa
+# cosmetics
+#
 # Revision 1.2  2001/06/07 17:18:44  swa
 # header fixed
 #
@@ -39,6 +42,7 @@ Name:         junkbuster
 Packager:     Stefan Waldherr <stefan@waldherr.org>
 
 Copyright:    GPL
+BuildRoot: /tmp/junkbuster-rpmbuild
 Group:        Networking/Utilities
 Provides:     ijb
 Obsoletes:    ijb
@@ -47,7 +51,6 @@ Version: 2.9
 Release: 4
 Summary:      The Internet Junkbuster
 Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
-atch:   ijb20.dif
 
 #
 # -----------------------------------------------------------------------------
@@ -71,72 +74,50 @@ SuSE series: n
 # -----------------------------------------------------------------------------
 #
 %prep
-%setup -n ijb20
-%patch
+%setup -c -n ijbswa
 
 #
 # -----------------------------------------------------------------------------
 #
 %build
+./configure
 make
-cat > /etc/init.d/junkbuster << EOT
-#! /bin/sh
-# Copyright (c) 1999 SuSE GmbH Nuremberg, Germany.  All rights reserved.
-#
-# Author: Daniel Bischof <daniel@suse.de>, 1999
-#
-# /sbin/init.d/junkbuster
-#
-### BEGIN INIT INFO
-# Provides:       junkbuster ijb
-# Required-Start: $network syslog
-# Required-Stop:
-# Default-Start:  3 5
-# Default-Stop:
-# Description:    Starts the Internet Junkbuster
-### END INIT INFO
-. /etc/rc.config
-base=\${0##*/}
-link=\${base#*[SK][0-9][0-9]}
-#test \$link = \$base && START_IJB=yes
-#test "\$START_IJB" = "yes" || exit 0
-return=\$rc_done
-case "\$1" in
-    start)
-        echo -n "Starting The Internet Junkbuster"
-        su - nobody -c 'nohup /usr/sbin/junkbuster /etc/ijb/junkbstr.ini < /dev/null > /dev/null &'
-        sleep 1
-        echo -e "\$return"
-        ;;
-    stop)
-        echo -n "Shutting down The Internet Junkbuster"
-        killproc -TERM /usr/sbin/junkbuster || return=\$rc_failed
-        echo -e "\$return"
-        ;;
-    restart|reload)
-        \$0 stop && \$0 start || return=\$rc_failed
-        ;;
-    status)
-        checkproc /usr/sbin/junkbuster && echo OK || echo No process
-        ;;
-    *)
-        echo "Usage: \$0 {start|restart|status|stop}"
-        exit 1
-esac
-test "\$return" = "\$rc_done" || exit 1
-exit 0
-EOT
-chmod 755 /etc/init.d/junkbuster
-ln -sf /etc/init.d/junkbuster /usr/sbin/rcjunkbuster
 
 #
 # -----------------------------------------------------------------------------
 #
 %install
-install -m 755 junkbuster /usr/sbin
-install -d /etc/ijb
-install -m 644 *.ini /etc/ijb
-install -m 644 junkbuster.1 /usr/share/man/man1
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/{var/log/junkbuster,usr/{sbin,share/man/man1},etc/{junkbuster,junkbuster/templates,init.d}}
+
+install -m 755 junkbuster.init.suse $RPM_BUILD_ROOT/etc/init.d/junkbuster
+ln -sf $RPM_BUILD_ROOT/etc/init.d/junkbuster $RPM_BUILD_ROOT/usr/sbin/rcjunkbuster
+
+install -m 755 junkbuster $RPM_BUILD_ROOT/usr/sbin
+install -d $RPM_BUILD_ROOT/etc/junkbuster
+install -d $RPM_BUILD_ROOT/etc/junkbuster/templates
+install -m 644 permissionsfile $RPM_BUILD_ROOT/etc/junkbuster
+install -m 644 re_filterfile $RPM_BUILD_ROOT/etc/junkbuster
+# verify all file locations, etc. in the config file
+# don't start with ^ or commented lines are not replaced
+cat config | \
+    sed 's/^confdir.*/confdir \/etc\/junkbuster/g' | \
+#    sed 's/^permissionsfile.*/permissionsfile \/etc\/junkbuster\/permissionsfile/g' | \
+#    sed 's/^re_filterfile.*/re_filterfile \/etc\/junkbuster\/re_filterfile/g' | \
+#    sed 's/^logfile.*/logfile \/var\/log\/junkbuster\/logfile/g' | \
+#    sed 's/^jarfile.*/jarfile \/var\/log\/junkbuster\/jarfile/g' | \
+#    sed 's/^forward.*/forward \/etc\/junkbuster\/forward/g' | \
+#    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
+    sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
+    config.tmp
+cp -f config.tmp config
+install -m 644 config $RPM_BUILD_ROOT/etc/junkbuster
+#install -m 644 forward $RPM_BUILD_ROOT/etc/junkbuster
+install -m 644 trust $RPM_BUILD_ROOT/etc/junkbuster
+install -m 644 templates/default $RPM_BUILD_ROOT/etc/junkbuster/templates
+install -m 644 templates/show-status $RPM_BUILD_ROOT/etc/junkbuster/templates
+install -m 644 templates/show-status-file $RPM_BUILD_ROOT/etc/junkbuster/templates
+install -m 644 junkbuster.1 $RPM_BUILD_ROOT/usr/share/man/man1
 %{?suse_check}
 
 #
@@ -155,10 +136,10 @@ sbin/insserv etc/init.d/
 # -----------------------------------------------------------------------------
 #
 %files
-%doc README *.html
+#%doc README *.html
 /usr/sbin/junkbuster
 /usr/share/man/man1/junkbuster.1.gz
-%config(noreplace) /etc/ijb
+%config(noreplace) /etc/junkbuster
 /etc/init.d/junkbuster
 /usr/sbin/rcjunkbuster
 
@@ -166,6 +147,8 @@ sbin/insserv etc/init.d/
 # -----------------------------------------------------------------------------
 #
 %changelog -n junkbuster
+* Sun Jun  3 2001 Stefan Waldherr <stefan@waldherr.org>
+- rework of RPM
 * Wed Feb 14 2001 - uli@suse.de
 - fixed init script
 * Wed Dec 06 2000 - bjacke@suse.de

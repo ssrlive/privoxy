@@ -1,0 +1,76 @@
+#! /bin/sh
+#  ********************************************************************
+# 
+#  File        :  $Source: /cvsroot/ijbswa/current/junkbuster.init,v $
+# 
+#  Purpose     :  This shell script takes care of starting and stopping
+#                 junkbuster.
+# 
+#  Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#                 IJBSWA team.  http://ijbswa.sourceforge.net
+# 
+#                 Based on the Internet Junkbuster originally written
+#                 by and Copyright (C) 1997 Anonymous Coders and
+#                 Junkbusters Corporation.  http://www.junkbusters.com
+# 
+#                 This program is free software; you can redistribute it
+#                 and/or modify it under the terms of the GNU General
+#                 Public License as published by the Free Software
+#                 Foundation; either version 2 of the License, or (at
+#                 your option) any later version.
+# 
+#                 This program is distributed in the hope that it will
+#                 be useful, but WITHOUT ANY WARRANTY; without even the
+#                 implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                 PARTICULAR PURPOSE.  See the GNU General Public
+#                 License for more details.
+# 
+#                 The GNU General Public License should be included with
+#                 this file.  If not, you can view it at
+#                 http://www.gnu.org/copyleft/gpl.html
+#                 or write to the Free Software Foundation, Inc., 59
+#                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# 
+#  Revisions   :
+#     $Log: junkbuster.init,v $
+#
+# 
+# ********************************************************************/
+### BEGIN INIT INFO
+# Provides:       junkbuster ijb
+# Required-Start: $network syslog
+# Required-Stop:
+# Default-Start:  3 5
+# Default-Stop:
+# Description:    Starts the Internet Junkbuster
+### END INIT INFO
+. /etc/rc.config
+base=\${0##*/}
+link=\${base#*[SK][0-9][0-9]}
+#test \$link = \$base && START_IJB=yes
+#test "\$START_IJB" = "yes" || exit 0
+return=\$rc_done
+case "\$1" in
+    start)
+        echo -n "Starting The Internet Junkbuster"
+        su - nobody -c 'nohup /usr/sbin/junkbuster /etc/junkbuster/config < /dev/null > /dev/null &'
+        sleep 1
+        echo -e "\$return"
+        ;;
+    stop)
+        echo -n "Shutting down The Internet Junkbuster"
+        killproc -TERM /usr/sbin/junkbuster || return=\$rc_failed
+        echo -e "\$return"
+        ;;
+    restart|reload)
+        \$0 stop && \$0 start || return=\$rc_failed
+        ;;
+    status)
+        checkproc /usr/sbin/junkbuster && echo OK || echo No process
+        ;;
+    *)
+        echo "Usage: \$0 {start|restart|status|stop}"
+        exit 1
+esac
+test "\$return" = "\$rc_done" || exit 1
+exit 0
