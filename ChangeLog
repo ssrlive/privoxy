@@ -5,6 +5,9 @@ ChangeLog for Internet JunkBuster
 *** Version 2.2.11 Beta Changes ***
 - CGI editor improvements and fixes.
 - Error handling improvements, especially out of memory.
+- Default re_filterfile fix that caused spurious IJB logos 
+(instead of 'blank').
+- configure.in threading fixes for Solaris.
 - Various other minor fixes.
 
 
