@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.7 2001/06/03 17:09:09 swa Exp $
+# $Id: Makefile.in,v 1.8 2001/06/04 10:44:57 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.8  2001/06/04 10:44:57  swa
+# `make redhatr-dist' now works. Except for the paths
+# in the config file.
+#
 # Revision 1.7  2001/06/03 17:09:09  swa
 # swa for oes: reversed my earlier change
 #
@@ -203,7 +207,7 @@ sregexp.txt: re_filterfile
 redhat-dist:
 	@make clobber
 # verify that i'm root needs to be done
-	tar --exclude "ijb/CVS" -cvzf ../ijbswa.tar.gz .
+	tar  -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
 	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
 # verify all files in their correct location needs to be done

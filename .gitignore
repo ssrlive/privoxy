@@ -34,5 +34,6 @@ config.log
 config.status
 junkbuster
 junkbuster.log
+logfile
 permissionsfile
 re_filterfile

@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.14 2001/06/03 11:03:48 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.15 2001/06/04 11:28:53 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.15  2001/06/04 11:28:53  swa
+ *    redirect did not work due to missing /
+ *
  *    Revision 1.14  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -701,6 +704,7 @@ struct configuration_spec
    const char *logfile;
 
    const char *confdir;
+   const char *logdir;
    const char *actions_file;
    const char *forwardfile;
 

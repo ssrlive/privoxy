@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.11 2001/06/03 18:38:11 oes Exp $
+# $Id: config,v 1.12 2001/06/04 10:44:57 swa Exp $
 #
 
 #  Table of Contents
@@ -66,7 +66,19 @@
 # Now, only confdir/templates is used for storing HTML templates
 # for CGI results.
 #
-confdir /home/swa/sourceforge/current
+# No trailing /, please.
+confdir .
+
+#
+# The directory where all logging (i.e. logfile and jarfile) takes place
+# No trailing /, please.
+#
+logdir .
+
+#
+# Note that all file specifications below are relative to 
+# the above two directories!!!
+#
 
 #  The permissions file contains patterns to specify the
 #  filtering rules to apply to each site.
@@ -76,7 +88,7 @@ confdir /home/swa/sourceforge/current
 #           All sites are filtered if re_filterfile specified.
 #           No sites are blocked.  Nothing is an image.
 #
-permissionsfile ./permissionsfile
+permissionsfile permissionsfile
 
 #
 #  The re_filterfile contains content modification rules.  These rules
@@ -87,7 +99,7 @@ permissionsfile ./permissionsfile
 #
 #  Default: No content modification.
 #
-re_filterfile   ./re_filterfile
+re_filterfile   re_filterfile
 
 #
 #  The logfile is where all logging and error messages are written.
@@ -106,7 +118,7 @@ re_filterfile   ./re_filterfile
 #
 #  Default: Log to the standard error channel, not to a file
 #
-logfile      ./junkbuster.log
+logfile      logfile
 
 #
 #  The jarfile defines where Junkbuster stores the cookies it
@@ -115,7 +127,7 @@ logfile      ./junkbuster.log
 #
 #  Default: Don't store intercepted cookies
 #
-#jarfile     ./jarfile
+#jarfile     jarfile
 
 #
 #  The forwardfile defines domain-specific forwarding of HTTP
@@ -126,7 +138,7 @@ logfile      ./junkbuster.log
 #
 #  Default: Make all connections directly.
 #
-forwardfile   ./forward
+forwardfile   forward
 
 #
 #  Generally, Junkbuster is used as a personal proxy.  The default
@@ -144,7 +156,7 @@ forwardfile   ./forward
 #  Default: No access control. Everybody that can reach junkbuster
 #           will be served.
 #
-#aclfile   ./aclfile
+#aclfile   aclfile
 
 #
 #  4. OPTIONS
