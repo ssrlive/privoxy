@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.6 2001/05/27 22:17:04 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.7 2001/05/29 09:50:24 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,29 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.7  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.6  2001/05/27 22:17:04  oes
  *
  *    - re_process_buffer no longer writes the modified buffer
@@ -710,7 +733,7 @@ static const char HTTP_REDIRECT_TEMPLATE[] =
       "Pragma: no-cache\r\n"
       "Last-Modified: Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
       "Expires:       Thu Jul 31, 1997 07:42:22 pm GMT\r\n"
-      "Location: %s\r\n";
+      "Location: %s\r\n\r\n";
 
 #endif /*  defined(FAST_REDIRECTS) || defined(IMAGE_BLOCKING) */
 
