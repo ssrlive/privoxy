@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 2.4 2003/01/26 20:24:26 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 2.5 2003/09/25 01:44:33 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/parsers.c,v $
@@ -40,6 +40,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 2.4 2003/01/26 20:24:26 david__schm
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 2.5  2003/09/25 01:44:33  david__schmidt
+ *    Resyncing HEAD with v_3_0_branch for two OSX fixes:
+ *    Making thread IDs look sane in the logfile for Mach kernels,
+ *    and fixing multithreading crashes due to thread-unsafe
+ *    system calls.
+ *    and
+ *
  *    Revision 2.4  2003/01/26 20:24:26  david__schmidt
  *    Updated activity console instrumentation locations
  *
@@ -803,7 +810,7 @@ char *sed(const struct parsers pats[],
  *********************************************************************/
 jb_err crumble(struct client_state *csp, char **header)
 {
-   log_error(LOG_LEVEL_HEADER, "crunch!");
+   log_error(LOG_LEVEL_HEADER, "crunch: %s",*header);
    freez(*header);
    return JB_ERR_OK;
 }
@@ -990,7 +997,7 @@ jb_err server_content_md5(struct client_state *csp, char **header)
 {
    if (csp->flags & CSP_FLAG_MODIFIED)
    {
-      log_error(LOG_LEVEL_HEADER, "Crunching Content-MD5");
+      log_error(LOG_LEVEL_HEADER, "Crunching Content-MD5: %s", *header);
       freez(*header);
    }
 
@@ -1088,6 +1095,7 @@ jb_err client_te(struct client_state *csp, char **header)
 jb_err client_referrer(struct client_state *csp, char **header)
 {
    const char *newval;
+   jb_err err = JB_ERR_OK;
 
 #ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
@@ -1098,63 +1106,74 @@ jb_err client_referrer(struct client_state *csp, char **header)
 #endif /* def FEATURE_FORCE_LOAD */
 
    /*
-    * Are we sending referer?
+    * As long as we're not blocking the referer...
     */
-   if ((csp->action->flags & ACTION_HIDE_REFERER) == 0)
+   if ((csp->action->flags & ACTION_HIDE_REFERER) != 0)
    {
-      return JB_ERR_OK;
-   }
 
-   freez(*header);
-
-   newval = csp->action->string[ACTION_STRING_REFERER];
+      newval = csp->action->string[ACTION_STRING_REFERER];
 
 #ifdef FEATURE_ACTIVITY_CONSOLE
-   /* Otherwise, we're doing something with the referer. */
-   accumulate_stats(STATS_REFERER, 1);
+      /* We are doing something with the referer. */
+      accumulate_stats(STATS_REFERER, 1);
 #endif /* def FEATURE_ACTIVITY_CONSOLE */
 
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
-   {
       /*
-       * Blocking referer
+       * Note that each clause needs to freez the header pointer;
+       * but everybody needs to use it for logging purposes before
+       * it gets freed, so always free it just after logging it.
        */
-      log_error(LOG_LEVEL_HEADER, "crunch!");
-      return JB_ERR_OK;
-   }
-   else if (0 == strncmpic(newval, "http://", 7))
-   {
-      /*
-       * We have a specific (fixed) referer we want to send.
-       */
-      log_error(LOG_LEVEL_HEADER, "modified");
-
-      *header = strdup("Referer: ");
-      string_append(header, newval);
-
-      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
-   }
-   else
-   {
-      /*
-       * Forge a referer as http://[hostname:port of REQUEST]/
-       * to fool stupid checks for in-site links
-       */
-      if (0 != strcmpic(newval, "forge"))
+      if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
       {
          /*
-          * Invalid choice - but forge is probably the best default.
+          * Blocking referer
           */
-         log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
+         log_error(LOG_LEVEL_HEADER, "crunch: %s", *header);
+         freez(*header);
+         err = JB_ERR_OK;
       }
+      else if (0 == strncmpic(newval, "http://", 7))
+      {
+         /*
+          * We have a specific (fixed) referer we want to send.
+          */
+         log_error(LOG_LEVEL_HEADER, "modified: %s", *header);
+         freez(*header);
+         *header = strdup("Referer: ");
+         if (NULL == *header)
+            err = JB_ERR_MEMORY;
+         else
+            err = string_append(header, newval);
+      }
+      else
+      {
+         /*
+          * Forge a referer as http://[hostname:port of REQUEST]/
+          * to fool stupid checks for in-site links
+          */
+         if (0 != strcmpic(newval, "forge"))
+         {
+            /*
+             * Invalid choice - but forge is probably the best default.
+             */
+            log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
+         }
 
-      *header = strdup("Referer: http://");
-      string_append(header, csp->http->hostport);
-      string_append(header, "/");
-      log_error(LOG_LEVEL_HEADER, "crunch+forge to %s", *header);
-      
-      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+         log_error(LOG_LEVEL_HEADER, "crunch+forge: %s", *header);
+         freez(*header);
+         *header = strdup("Referer: http://");
+         if (NULL == *header)
+            err = JB_ERR_MEMORY;
+         else
+         {
+            err = string_append(header, csp->http->hostport);
+            err = string_append(header, "/");
+            if (JB_ERR_OK == err)
+               log_error(LOG_LEVEL_HEADER, "crunch+forged to: %s", *header);
+         }
+      }
    }
+   return err;
 }
 
 
@@ -1180,25 +1199,25 @@ jb_err client_referrer(struct client_state *csp, char **header)
 jb_err client_uagent(struct client_state *csp, char **header)
 {
    const char *newval;
+   jb_err err = JB_ERR_OK;
 
-   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
+   /*
+    * As long as we don't want to hide user-agent...
+    */
+   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) != 0)
    {
-      return JB_ERR_OK;
+      newval = csp->action->string[ACTION_STRING_USER_AGENT];
+      if (NULL != newval)
+      {
+         log_error(LOG_LEVEL_HEADER, "modified: %s", *header);
+
+         freez(*header);
+         *header = strdup("User-Agent: ");
+         err = string_append(header, newval);
+      }
    }
 
-   newval = csp->action->string[ACTION_STRING_USER_AGENT];
-   if (newval == NULL)
-   {
-      return JB_ERR_OK;
-   }
-
-   log_error(LOG_LEVEL_HEADER, "modified");
-
-   freez(*header);
-   *header = strdup("User-Agent: ");
-   string_append(header, newval);
-
-   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+   return err;
 }
 
 
@@ -1226,7 +1245,7 @@ jb_err client_ua(struct client_state *csp, char **header)
 #ifdef FEATURE_ACTIVITY_CONSOLE
       accumulate_stats(STATS_CLIENT_UA, 1);
 #endif /* def FEATURE_ACTIVITY_CONSOLE */
-      log_error(LOG_LEVEL_HEADER, "crunch!");
+      log_error(LOG_LEVEL_HEADER, "crunch: %s", *header);
       freez(*header);
    }
 
@@ -1255,35 +1274,37 @@ jb_err client_ua(struct client_state *csp, char **header)
 jb_err client_from(struct client_state *csp, char **header)
 {
    const char *newval;
+   jb_err err = JB_ERR_OK;
 
-   if ((csp->action->flags & ACTION_HIDE_FROM) == 0)
-   {
-      return JB_ERR_OK;
-   }
-
-#ifdef FEATURE_ACTIVITY_CONSOLE
-   /* Otherwise, we're doing something with it. */
-   accumulate_stats(STATS_CLIENT_FROM, 1);
-#endif /* def FEATURE_ACTIVITY_CONSOLE */
-   freez(*header);
-
-   newval = csp->action->string[ACTION_STRING_FROM];
-
-   /*
-    * Are we blocking the e-mail address?
+   /* 
+    * As long as we should handle the "from" setting...
     */
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   if ((csp->action->flags & ACTION_HIDE_FROM) != 0)
    {
-      log_error(LOG_LEVEL_HEADER, "crunch!");
-      return JB_ERR_OK;
+#ifdef FEATURE_ACTIVITY_CONSOLE
+      /* We're doing something with it. */
+      accumulate_stats(STATS_CLIENT_FROM, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
+
+      newval = csp->action->string[ACTION_STRING_FROM];
+
+      /*
+       * Are we blocking the e-mail address?
+       */
+      if ((NULL == newval) || (0 == strcmpic(newval, "block")) )
+      {
+         log_error(LOG_LEVEL_HEADER, "crunch: %s", *header);
+         err = JB_ERR_OK;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "modified: %s", *header);
+         freez(*header);
+         *header = strdup("From: ");
+         err = string_append(header, newval);
+      }
    }
-
-   log_error(LOG_LEVEL_HEADER, " modified");
-
-   *header = strdup("From: ");
-   string_append(header, newval);
-
-   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+   return err;
 }
 
 
@@ -1308,16 +1329,16 @@ jb_err client_from(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_send_cookie(struct client_state *csp, char **header)
 {
-   jb_err result = JB_ERR_OK;
+   jb_err err = JB_ERR_OK;
 
    if ((csp->action->flags & ACTION_NO_COOKIE_READ) == 0)
    {
       /* strlen("cookie: ") == 8 */
-      result = enlist(csp->cookie_list, *header + 8);
+      err = enlist(csp->cookie_list, *header + 8);
    }
    else
    {
-      log_error(LOG_LEVEL_HEADER, "Crunched outgoing cookie -- yum!");
+      log_error(LOG_LEVEL_HEADER, "Crunched cookie: %s", *header);
    }
 
    /*
@@ -1326,7 +1347,7 @@ jb_err client_send_cookie(struct client_state *csp, char **header)
     */
    freez(*header);
 
-   return result;
+   return err;
 }
 
 
@@ -1364,11 +1385,11 @@ jb_err client_x_forwarded(struct client_state *csp, char **header)
    }
    else
    {
-      freez(*header);
 #ifdef FEATURE_ACTIVITY_CONSOLE
       accumulate_stats(STATS_CLIENT_X_FORWARDED, 1);
 #endif /* def FEATURE_ACTIVITY_CONSOLE */
-      log_error(LOG_LEVEL_HEADER, " crunch!");
+      log_error(LOG_LEVEL_HEADER, "crunch: %s", *header);
+      freez(*header);
    }
 
    return JB_ERR_OK;
@@ -1393,37 +1414,36 @@ jb_err client_host_adder(struct client_state *csp)
 {
    char *p;
    char *pos;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
-   if ( !csp->http->hostport || !*(csp->http->hostport))
+   if ( csp->http->hostport && *(csp->http->hostport))
    {
-      return JB_ERR_OK;
+      p = strdup("Host: ");
+      if (NULL != p)
+      {
+         /*
+          * remove 'user:pass@' from 'proto://user:pass@host'
+          */
+         if ( (pos = strchr( csp->http->hostport, '@')) != NULL )
+         {
+             string_append(&p, pos+1);
+         }
+         else
+         {
+            string_append(&p, csp->http->hostport);
+         }
+
+         log_error(LOG_LEVEL_HEADER, "addh: %s", p);
+
+         err = enlist(csp->headers, p);
+
+         freez(p);
+      }
+      else
+      {
+         err = JB_ERR_MEMORY;
+      }
    }
-
-   p = strdup("Host: ");
-   /*
-   ** remove 'user:pass@' from 'proto://user:pass@host'
-   */
-   if ( (pos = strchr( csp->http->hostport, '@')) != NULL )
-   {
-       string_append(&p, pos+1);
-   }
-   else
-   {
-      string_append(&p, csp->http->hostport);
-   }
-
-   if (p == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   log_error(LOG_LEVEL_HEADER, "addh: %s", p);
-
-   err = enlist(csp->headers, p);
-
-   freez(p);
-
    return err;
 }
 
@@ -1448,50 +1468,47 @@ jb_err client_cookie_adder(struct client_state *csp)
    struct list_entry *list1 = csp->cookie_list->first;
    struct list_entry *list2 = csp->action->multi[ACTION_MULTI_WAFER]->first;
    int first_cookie = 1;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
-   if ((list1 == NULL) && (list2 == NULL))
+   if ((list1 != NULL) || (list2 != NULL))
    {
-      /* Nothing to do */
-      return JB_ERR_OK;
-   }
-
-   tmp = strdup("Cookie: ");
-
-   for (lst = list1; lst ; lst = lst->next)
-   {
-      if (first_cookie)
+      tmp = strdup("Cookie: ");
+      if (NULL != tmp)
       {
-         first_cookie = 0;
+         for (lst = list1; lst ; lst = lst->next)
+         {
+            if (first_cookie)
+            {
+               first_cookie = 0;
+            }
+            else
+            {
+               string_append(&tmp, "; ");
+            }
+            string_append(&tmp, lst->str);
+         }
+
+         for (lst = list2;  lst ; lst = lst->next)
+         {
+            if (first_cookie)
+            {
+               first_cookie = 0;
+            }
+            else
+            {
+               string_append(&tmp, "; ");
+            }
+            string_join(&tmp, cookie_encode(lst->str));
+         }
+         log_error(LOG_LEVEL_HEADER, "addh: %s", tmp);
+         err = enlist(csp->headers, tmp);
+         free(tmp);
       }
       else
       {
-         string_append(&tmp, "; ");
+         err = JB_ERR_MEMORY;
       }
-      string_append(&tmp, lst->str);
    }
-
-   for (lst = list2;  lst ; lst = lst->next)
-   {
-      if (first_cookie)
-      {
-         first_cookie = 0;
-      }
-      else
-      {
-         string_append(&tmp, "; ");
-      }
-      string_join(&tmp, cookie_encode(lst->str));
-   }
-
-   if (tmp == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   log_error(LOG_LEVEL_HEADER, "addh: %s", tmp);
-   err = enlist(csp->headers, tmp);
-   free(tmp);
    return err;
 }
 
@@ -1574,33 +1591,29 @@ jb_err client_xtra_adder(struct client_state *csp)
 jb_err client_x_forwarded_adder(struct client_state *csp)
 {
    char *p = NULL;
-   jb_err err;
+   jb_err err = JB_ERR_OK;
 
-   if ((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
+   if (0 == (csp->action->flags & ACTION_HIDE_FORWARDED))
    {
-      return JB_ERR_OK;
-   }
 
-   if (csp->x_forwarded)
-   {
-      p = strdup(csp->x_forwarded);
-      string_append(&p, ", ");
-   }
-   else
-   {
-      p = strdup("X-Forwarded-For: ");
-   }
-   string_append(&p, csp->ip_addr_str);
+      if (csp->x_forwarded)
+      {
+         p = strdup(csp->x_forwarded);
+         err = string_append(&p, ", ");
+      }
+      else
+      {
+         p = strdup("X-Forwarded-For: ");
+      }
+      err = string_append(&p, csp->ip_addr_str);
 
-   if (p == NULL)
-   {
-      return JB_ERR_MEMORY;
+      if (NULL != p)
+      {
+         log_error(LOG_LEVEL_HEADER, "addh: %s", p);
+         err = enlist(csp->headers, p);
+         freez(p);
+      }
    }
-
-   log_error(LOG_LEVEL_HEADER, "addh: %s", p);
-   err = enlist(csp->headers, p);
-   free(p);
-
    return err;
 }
 
@@ -1687,6 +1700,8 @@ jb_err server_http(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_set_cookie(struct client_state *csp, char **header)
 {
+   jb_err err = JB_ERR_OK;
+
 #ifdef FEATURE_COOKIE_JAR
    if (csp->config->jar)
    {
@@ -1722,7 +1737,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
 #ifdef FEATURE_ACTIVITY_CONSOLE
       accumulate_stats(STATS_COOKIE, 1);
 #endif /* def FEATURE_ACTIVITY_CONSOLE */
-      return crumble(csp, header);
+      err = crumble(csp, header);
    }
    else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
    {
@@ -1793,7 +1808,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
       }
    }
 
-   return JB_ERR_OK;
+   return err;
 }
 
 

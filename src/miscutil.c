@@ -1,7 +1,7 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 2.3 2002/09/25 13:00:41 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 2.4 2002/11/12 14:30:04 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/miscutil.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/miscutil.c,v $
  *
  * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
  *                strncmpic, chomp, and MinGW32 strdup
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 2.3 2002/09/25 13:00:41 oes Exp $
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 2.4  2002/11/12 14:30:04  oes
+ *    Proper backtracking in simplematch; fixes bug #632888
+ *
  *    Revision 2.3  2002/09/25 13:00:41  oes
  *    Made strcmpic and strncmpic safe against NULL arguments
  *    (which are now treated as empty strings).
@@ -640,9 +643,8 @@ jb_err string_append(char **target_string, const char *text_to_append)
    if (NULL == (new_string = realloc(*target_string,
           strlen(text_to_append) + old_len + 1)))
    {
-      free(*target_string);
+      freez(*target_string);
 
-      *target_string = NULL;
       return JB_ERR_MEMORY;
    }
 

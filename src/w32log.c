@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 2.2 2002/09/05 08:43:11 oes Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 2.3 2002/09/12 14:30:32 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 2.2 2002/09/05 08:43:11 oes Exp $";
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 2.3  2002/09/12 14:30:32  oes
+ *    Uncheck the "Show Privoxy Window" taskbar menu item when window gets minimized. Fixes bug #606804
+ *
  *    Revision 2.2  2002/09/05 08:43:11  oes
  *    Synced with the stable branch:
  *        Revision 1.25.2.1  2002/08/21 17:59:05  oes
@@ -304,6 +307,7 @@ static struct _Pattern
 /* { "[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[^ \n\r]*", STYLE_LINK }, */
    /* interesting text to highlight */
    { "crunch!",           STYLE_HIGHLIGHT },
+   { "crunch:",           STYLE_HIGHLIGHT },
    /* http headers */
    { "referer:",            STYLE_HEADER },
    { "proxy-connection:",   STYLE_HEADER },
