@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.5 2002/03/27 15:30:26 swa Exp $
+#  $Id: default.action,v 1.6 2002/03/28 16:03:56 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -414,6 +414,13 @@ myfilters \
 {+add-header{X-Privacy: Yes please} \
 +add-header{X-User-Tracking: No thanks!} -filter}
 privacy.net
+
+
+#############################################################################
+# Needed for automatic feedback evaluation; Please don't delete!
+#############################################################################
+{+add-header{X-Actions-File-Version: 1.0}}
+.privoxy.org/actions
 
 
 #############################################################################
