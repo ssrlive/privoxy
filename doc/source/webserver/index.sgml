@@ -1,0 +1,209 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity % dummy "INCLUDE"> 
+<!entity p-intro SYSTEM "privoxy.sgml">
+<!entity contacting SYSTEM "contacting.sgml">
+<!entity history SYSTEM "history.sgml">
+<!entity copyright SYSTEM "copyright.sgml">
+<!entity p-version "2.9.13">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
+<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
+<!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
+<!entity % p-readme "IGNORE">
+]>
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
+
+ Purpose     :  Index file of the project's homepage
+                This file belongs into
+                ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
+                
+ $Id: user-manual.sgml,v 1.69 2002/04/06 05:07:29 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+
+
+ ========================================================================
+ NOTE: Please read developer-manual/documentation.html before touching 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
+ ========================================================================
+
+-->
+
+<article id="index">
+
+<artheader>
+
+<title>Privoxy - Homepage</title>
+
+<!-- FIXME -->
+<!-- <meta name="description" content="Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies."> -->
+<!-- <meta name="keywords" content="stop, junk, privoxy, ad, advertisement, werbung, busters, junkbusters, junkbuster, mail, email, e-mail, direct, spam, spamoff, declare, telemarketing, telemarketers, privacy, sharing, names, renting, direct, marketing, database, databases, junk mail, lists, environment, conservation, recycling, catalogs, consumer, sending, opt out "> -->
+<!-- <meta name="MSSmartTagsPreventParsing" content="TRUE"> -->
+
+<abstract>
+<![%dummy;[
+ <para>
+ <comment>
+  This is here to keep vim syntax file from breaking :/
+  If I knew enough to fix it, I would.
+  PLEASE DO NOT REMOVE! HB: hal@foobox.net
+ </comment>
+ </para>
+]]>
+
+</abstract>
+
+</artheader>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="intro" label="">
+<title>Introduction</title>
+<!-- dummy section to force TOC on page by itself -->
+<!-- DO NOT REMOVE! please ;) -->
+<!--
+ Include privoxy.sgml boilerplate:
+-->
+ &p-intro;
+</sect1>
+
+<sect1 id="moreinfos" label="">
+<title>More infos</title>
+<para>
+<itemizedlist>
+	<listitem>
+	<literallayout>
+	The <ulink url="http://sourceforge.net/projects/ijbswa/">project
+page</ulink> on Sourceforge
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	A list of <ulink url="user-manual/introduction.html#AEN37">new features</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="http://www.waldherr.org/junkbuster/">Stefan Waldherr's site</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBuster Corporation</ulink>
+	</literallayout>
+	</listitem>
+<!-- 	<listitem> -->
+<!-- 	<literallayout> -->
+<!-- 	Take a look at the <ulink url="team/">Privoxy team</ulink> -->
+<!-- 	</literallayout> -->
+<!-- 	</listitem> -->
+ </itemizedlist>
+</para>
+</sect1>
+
+<sect1 id="download" label="">
+<title>Download</title>
+<para>
+<itemizedlist>
+	<listitem>
+	<literallayout>
+	<ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">Download recent releases</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="user-manual/quickstart.html">Quickstart after installation</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">Browse our CVS repository</ulink>
+	</literallayout>
+	</listitem>
+ </itemizedlist>
+</para>
+</sect1>
+
+<sect1 id="docs" label="">
+<title>Documentation</title>
+<para>
+<itemizedlist>
+	<listitem>
+	<literallayout>
+	<ulink url="user-manual/">User manual</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="faq/">Frequently Asked Questions</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="man-page/privoxy-man-page.html">Classic Man Page</ulink>
+	</literallayout>
+	</listitem>
+	<listitem>
+	<literallayout>
+	<ulink url="developer-manual/">Developer Manual</ulink>
+	</literallayout>
+	</listitem>
+ </itemizedlist>
+</para>
+</sect1>
+
+<sect1 id="support" label="">
+<title>Support and Service via Sourceforge</title>
+<!--
+ Include file
+-->
+ &contacting;
+</sect1>
+
+<sect1 label="">
+<title>Copyright</title>
+<!-- Include copyright.sgml -->
+ &copyright;
+<!-- end -->
+</sect1>
+
+<sect1 label="">
+<title>History</title>
+<!-- Include history.sgml -->
+ &history;
+<!-- end -->
+</sect1>
+
+ <!--
+
+ This program is free software; you can redistribute it 
+ and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software
+ Foundation; either version 2 of the License, or (at
+ your option) any later version.
+
+ This program is distributed in the hope that it will
+ be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A
+ PARTICULAR PURPOSE.  See the GNU General Public
+ License for more details.
+
+ The GNU General Public License should be included with
+ this file.  If not, you can view it at
+ http://www.gnu.org/copyleft/gpl.html
+ or write to the Free Software Foundation, Inc., 59
+ Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+ $Log$
+
+ -->
+
+</article>

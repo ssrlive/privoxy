@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.67 2002/04/07 05:31:42 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.68 2002/04/07 07:58:11 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -541,7 +541,7 @@ dok-readme: doc/source/ldpOK.dsl
 
 # webserver files
 dok-webserver: doc/source/ldpOK.dsl
-	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index2.html
+	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
 
 dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
 # kludge to force recreation on next run. Rodgrigo?
@@ -777,6 +777,12 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.68  2002/04/07 07:58:11  swa
+# create some of the webserver docs
+# automatically (in particular if
+# those docs recycle other documentation
+# fragments)
+#
 # Revision 1.67  2002/04/07 05:31:42  hal9
 # Add 'dok-release' target:
 # -Set doc entities to VERSION and CODE_STATUS during make.
