@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.1 2002/06/05 00:28:28 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.2 2002/06/05 04:17:19 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -222,14 +222,18 @@ dok-man-test: ensure-dkprefix ensure-jadebin dok-release
 	$(MAKE) man2html
 	$(MAKE) clean
 
-# For those with man2html ala RH7's.
+# For those with man2html ala RH7s.
 man2html: ensure-dkprefix ensure-jadebin ensure-wdump
+	mkdir -p doc/webserver/man-page
 ifneq ($(MAN2HTML),false)
-	$(MAN2HTML) $(ROOT)/privoxy.1 |grep -v "^Content-type" > tmp.html
+	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
 	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
 	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
+# Twice because my version of man2html is pulling in commas and periods in URLs.
+	$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html
+	$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html
 # Get rid of spurious  from conversion. (How to do this with perl?)
-	$(SED) -e 's///g' tmp.html > ../webserver/man-page/privoxy-man-page.html
+	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
 else
 	$(MAKE) groff2html
 endif
@@ -342,6 +346,10 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.2  2002/06/05 04:17:19  hal9
+# Add dok-man-test target as temp workaround for docbook2man ignoring -i command
+# line option.
+#
 # Revision 1.1  2002/06/05 00:28:28  hal9
 # Moving all doc building to doc/source. Rewrite all targets (not well tested).
 # Docs are now built without touching sgml source.
