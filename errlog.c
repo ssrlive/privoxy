@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.2 2001/05/17 22:42:01 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.3 2001/05/20 01:11:40 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.2 2001/05/17 22:42:01 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.3  2001/05/20 01:11:40  jongfoster
+ *    Added support for LOG_LEVEL_FATAL
+ *    Renamed LOG_LEVEL_FRC to LOG_LEVEL_FORCE,
+ *    and LOG_LEVEL_REF to LOG_LEVEL_RE_FILTER
+ *
  *    Revision 1.2  2001/05/17 22:42:01  oes
  *     - Cleaned CRLF's from the sources and related files
  *     - Repaired logging for REF and FRC
@@ -60,7 +65,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.2 2001/05/17 22:42:01 oes Exp $";
 
 #ifdef _WIN32
 #include <windows.h>
+#ifndef _WIN_CONSOLE
 #include "w32log.h"
+#endif /* ndef _WIN_CONSOLE */
 #endif /* def _WIN32 */
 
 #include "errlog.h"
