@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.18  2002/03/08 17:14:12  oes
+#     PNG -> image in comments
+#
 #     Revision 1.17  2002/03/07 03:50:54  oes
 #     Adapted comments to new built-in images
 #
@@ -141,6 +144,14 @@ s/status='.*?';*//ig
 # ********************************************************************/
 
 s|(document\.cookie)([ \t\r\n]*=)|documenZapCooky$2|g
+
+# ********************************************************************/
+#
+# Get rid of Javascript referrer tracking: (http://www.randomoddness.com/untitled.htm)
+#
+# ********************************************************************/
+
+s|(<script.*)document\.referrer(.*</script>)|$1"NotYourBusiness!"$2|Usg
 
 # ********************************************************************/
 #
