@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.36 2002/04/26 21:53:30 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.37 2002/04/30 11:14:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.36 2002/04/26 21:53:30 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.37  2002/04/30 11:14:52  oes
+ *    Made csp the first parameter in *action_to_html
+ *
  *    Revision 1.36  2002/04/26 21:53:30  jongfoster
  *    Fixing a memory leak.  (Near, but not caused by, my earlier commit).
  *
@@ -2393,12 +2396,31 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    {
       /*
        * Generate string with buttons to set actions for "/" to
-       * any predefined set of actions (named standard.*, propably
+       * any predefined set of actions (named standard.*, probably
        * residing in standard.action).
-       * FIXME: Shouldn't include hardwired HTML here, use line template instead!
        */
 
-      buttons = strdup(" ");
+      err = template_load(csp, &section_template, "edit-actions-list-button", 0);
+      if (err)
+      {
+         edit_free_file(file);
+         free_map(exports);
+         if (err == JB_ERR_FILE)
+         {
+            return cgi_error_no_template(csp, rsp, "edit-actions-list-button");
+         }
+         return err;
+      }
+
+      err = template_fill(&section_template, exports);
+      if (err)
+      {
+         edit_free_file(file);
+         free_map(exports);
+         return err;
+      }
+
+      buttons = strdup("");
       for (i = 0; i < MAX_ACTION_FILES; i++)
       {
          if (((fl = csp->actions_list[i]) != NULL) && ((b = fl->f) != NULL))
@@ -2407,20 +2429,42 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             {
                if (!strncmp(b->url->spec, "standard.", 9) && *(b->url->spec + 9) != '\0')
                {
-                  snprintf(buf, 150, "<p><a name=\"l@s@\" href=\"eas?f=@f@&amp;v=@v@&amp;s=@all-urls-s@&amp;p=%s\">Set"
-                                     " to %s</a></p>", b->url->spec + 9, b->url->spec + 9);
-                  if (!err) err = string_append(&buttons, buf);
+                  if (err || (NULL == (section_exports = new_map())))
+                  {
+                     freez(buttons);
+                     free(section_template);
+                     edit_free_file(file);
+                     free_map(exports);
+                     return JB_ERR_MEMORY;
+                  }
+
+                  err = map(section_exports, "button-name", 1, b->url->spec + 9, 1);
+
+                  if (err || (NULL == (s = strdup(section_template))))
+                  {
+                     free_map(section_exports);
+                     freez(buttons);
+                     free(section_template);
+                     edit_free_file(file);
+                     free_map(exports);
+                     return JB_ERR_MEMORY;
+                  }
+
+                  if (!err) err = template_fill(&s, section_exports);
+                  free_map(section_exports);
+                  if (!err) err = string_join(&buttons, s);
                }
             }
          }
       }
+      freez(section_template);
       if (!err) err = map(exports, "all-urls-buttons", 1, buttons, 0);
 
       /*
        * Conventional actions file, supply extra editing help.
        * (e.g. don't allow them to make it an unconventional one).
        */
-      err = map_conditional(exports, "all-urls-present", 1);
+      if (!err) err = map_conditional(exports, "all-urls-present", 1);
 
       snprintf(buf, 150, "%d", line_number);
       if (!err) err = map(exports, "all-urls-s", 1, buf, 1);
@@ -2447,12 +2491,12 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
        * Non-standard actions file - does not begin with
        * the "All URLs" section.
        */
-      err = map_conditional(exports, "all-urls-present", 0);
+      if (!err) err = map_conditional(exports, "all-urls-present", 0);
    }
 
    /* Set up global exports */
 
-   err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "f", 1, file->identifier, 1);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
 
    /* Discourage private additions to default.action */
