@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.7 2002/09/16 06:04:34 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.8 2002/09/26 22:51:16 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -344,7 +344,7 @@ config-file: $(DOC_DIR)/doc_version.tmp
 				 s/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;\
                      s/^.*$$// if $$hit_option;\
                      $$hit_option=0;\
-                     s/^\n//;  s/^#\s*-{20,}//;\
+                     s/^\n//;  s/^#\s*-{20,}//; s/ *$$//;\
                      $$hit_option=1 if s/^#\s+@@//;'   $(ROOT)/config.new
 	$(RM) $(ROOT)/*.bak *.tmp tmp.* $(DOC_TMP)
 	@$(ECHO)  "****************************************************"
@@ -387,6 +387,9 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.8  2002/09/26 22:51:16  hal9
+# New user-manual examples in config-file are wrapping now. Add warning.
+#
 # Revision 1.7  2002/09/16 06:04:34  hal9
 # Improved $(VERSION) handling, and related cleanups, with minor changes to most
 # targets. Renamed all dok-* targets to doc-*, and added some backward
