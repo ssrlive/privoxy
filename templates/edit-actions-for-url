@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.5  2001/11/13 21:12:17  jongfoster
+#    Added support for the following actions:
+#    +downgrade, +limit-connect, +no-compression
+#
 #    Revision 1.4  2001/11/13 00:58:18  jongfoster
 #    New version of actions file editor templates
 #
@@ -595,72 +599,90 @@ function show_wafer_opts(tf)
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
-      <td class="action">+no-cookies-read</td>
-      <td>Prevent the website from reading cookies</td>
+      <td class="action">+no-cookies-keep</td>
+      <td>Any cookies set by the website are changed to temporary
+        ("per-session") ones, which only last until you close your web
+        browser.  This will allow you to use sites that require cookies, but
+        sites will not be able to track you across sessions.  For this to
+        be useful, you should disable <b><i>no-cookies-read</i></b> and
+        <b><i>no-cookies-set</i></b>.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="no_cookies_read" value="Y" @no-cookies-read-y@
+        name="no_cookies_keep" value="Y" @no-cookies-keep-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="no_cookies_read" value="N" @no-cookies-read-n@
+        name="no_cookies_keep" value="N" @no-cookies-keep-n@
         ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="no_cookies_keep" value="X" @no-cookies-keep-x@
+        ></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+no-cookies-read</td>
+      <td>Prevent the website from reading cookies.</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="no_cookies_read" value="Y" @no-cookies-read-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="no_cookies_read" value="N" @no-cookies-read-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_cookies_read" value="X" @no-cookies-read-x@
         ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+no-cookies-set</td>
-      <td>Prevent the website from setting cookies</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td>Prevent the website from setting cookies.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="Y" @no-cookies-set-y@
         ></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="N" @no-cookies-set-n@
         ></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="no_cookies_set" value="X" @no-cookies-set-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+no-popups</td>
       <td>Filter the website through a built-in filter to disable JavaScript
         pop-up windows.</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="no_popups" value="Y" @no-popups-y@
         ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="no_popups" value="N" @no-popups-n@
         ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="no_popups" value="X" @no-popups-x@
         ></td>
     </tr>
-    <tr class="bg2" align="left" valign="top">
+    <tr class="bg1" align="left" valign="top">
       <td class="action">+vanilla-wafer</td>
       <td>If you use a jarfile, automatically adds a special wafer.</td>
-      <td class="en2" align="center" valign="middle"><input type="radio"
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="Y" @vanilla-wafer-y@
         ></td>
-      <td class="dis2" align="center" valign="middle"><input type="radio"
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="N" @vanilla-wafer-n@
         ></td>
-      <td class="noc2" align="center" valign="middle"><input type="radio"
+      <td class="noc1" align="center" valign="middle"><input type="radio"
         name="vanilla_wafer" value="X" @vanilla-wafer-x@
         ></td>
     </tr>
-    <tr class="bg1" align="left" valign="top">
+    <tr class="bg2" align="left" valign="top">
       <td class="action">+wafer</td>
       <td>Adds user-specified cookies.</td>
-      <td class="en1" align="center" valign="middle"><input type="radio"
+      <td class="en2" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_y" value="Y" @wafer-y@
         onclick="show_wafer_opts(true)"></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
+      <td class="dis2" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_n" value="N" @wafer-n@
         onclick="show_wafer_opts(false)"></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
+      <td class="noc2" align="center" valign="middle"><input type="radio"
         name="wafer" id="wafer_x" value="X" @wafer-x@
         onclick="show_wafer_opts(false)"></td>
     </tr>
-    <tr class="bg1" align="left" valign="top" id="wafer_opts">
+    <tr class="bg2" align="left" valign="top" id="wafer_opts">
       <td>&nbsp;</td>
       <td colspan="4">Editing the settings for this option, or turning
         it on if it was off, is not yet supported using this web-based
