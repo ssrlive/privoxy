@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.1 2001/06/29 13:17:24 oes Exp $
+# $Id: actionsfile,v 1.2 2001/06/29 21:45:41 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -137,6 +137,11 @@
 #
 # +block
 #    Block this URL
+#
+# +deanimate-gifs
+#    Deanimate all animated GIF images, i.e. reduce them to their last
+#    frame. This will also shrink the images considerably. (In bytes,
+#    not pixels!)
 #
 # +fast-redirects
 #    Many sites, like yahoo.com, don't just link to other sites.
@@ -646,7 +651,7 @@ www.mtv3.fi/mainoskuvat
 # generic hosts (probably most effective)
 #
 ad*.
-.*ads.
+#.*ads.
 banner.
 
 .admaximize.com
@@ -1196,7 +1201,7 @@ members.tripod.com/adm/popup/
 .exitexchange.com
 
 #SourceForge ads.
-sfads.osdn.com
+#sfads.osdn.com
 
 #This site traps the browser
 .webhideout.com
@@ -1236,7 +1241,7 @@ rstrip.namezero.com
 #############################################################################
 {-block}
 #############################################################################
-
+include.ebay.com
 cpan.valueclick.com
 www.userfriendly.org/images/banners/banner_dp_heart\.gif
 
@@ -1353,5 +1358,11 @@ www.iez-auktion.de
 foggy.sda.t-online.de
 .us.i1.yimg.com/us.yimg.com/i/pim/ad2.gif
 www.nexgo.de/.*/bg_banner.jpg
+
+# New GIF deanimation feature. Just try http://www.oesterhelt.org/deanimate-demo
+# with and without it.
+#
+{+deanimate-gifs}
+www.oesterhelt.org/deanimate-demo
 
 # End of file
