@@ -26,6 +26,8 @@ _$*
 *.ln
 core
 # CVS default ignores end
+*.txt
+GNUmakefile
 Makefile
 config
 config.cache
@@ -48,4 +50,3 @@ vc_release
 vc_release_winthr
 w32.aps
 w32.res
-*.txt
