@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-section,v $
+#    Revision 1.4  2002/01/17 21:33:00  jongfoster
+#    Replacing all references to the URL of the config interface
+#    with @default-cgi@
+#
 #    Revision 1.3  2001/11/13 00:58:18  jongfoster
 #    New version of actions file editor templates
 #
@@ -45,51 +49,47 @@
 # urls
 #
 #############################################################################
+#
+# ** Important note: **
+#
+# It is important to keep this file small.  That's why all the
+# identifiers in the HTML are short and cryptic.  Currently, the main
+# edit-actions page is ~300k.  Before it was optimized, it was ~550k.
+#
+#############################################################################
 <table border="0" width="100%" cellspacing="0" cellpadding="3" class="wide">
 <tr class="actions" valign="top">
-  <td class="header" align="right"><a name="s@sectionid@"></a>Actions:</td>
-  <td align="center"><a class="cmd" href="@default-cgi@edit-actions-for-url?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
-    >Edit</a></td>
-  <td class="action" align="left">@actions@</td>
+ <td class="header" align="right">Actions:</td>
+ <td align="center"><a name="l@s@" href="eas?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td>
+ <td class="action" align="left">@actions@</td>
 </tr>
 <tr class="rule">
-  <td colspan="3"><img src="@default-cgi@send-banner?type=trans" width="2"
-    height="1" alt="----"></td>
+ <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
 </tr>
 <tr class="url1" valign="top">
-  <td class="header" align="right"><a name="s@sectionid@urls">URLs:</a></td>
-  <td align="center"><a class="cmd" href="@default-cgi@edit-actions-add-url-form?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
-  >Add</a></td>
-  <td align="left">&nbsp;</td>
+ <td class="header" align="right">URLs:</a></td>
+ <td align="center"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@">Add</a></td>
+ <td align="left">&nbsp;</td>
 </tr>
-
 @urls@
-
 <tr class="rule">
-  <td colspan="3"><img src="@default-cgi@send-banner?type=trans" width="2"
-    height="1" alt="-"></td>
+ <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
 </tr>
 <tr class="adv" valign="top">
-  <td class="header" align="right"><b>Advanced:</b></td>
-  <td colspan="2">
-    <table border="0" cellspacing="0" cellpadding="4">
-      <tr valign="middle" align="center">
-        <td class="nobreak"> &nbsp; <a class="cmd" href="javascript:not_yet()">Move section up</a> &nbsp; </td>
-        <td class="nobreak"> &nbsp; 
-        <a class="cmd" href="@default-cgi@edit-actions-section-add?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
-        >Insert new section below</a> &nbsp; </td>
-      </tr>
-      <tr valign="middle" align="center">
-        <td class="nobreak"> &nbsp; <a class="cmd" href="javascript:not_yet()">Move section down</a> &nbsp; </td>
-        <td class="nobreak"><!-- @if-empty-section-start --> &nbsp; 
-        <a class="cmd" href="@default-cgi@edit-actions-section-remove?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
-        >Delete whole section</a><!-- if-empty-section-end@ --> &nbsp; </td>
-      </tr>
-    </table>
-  </td>
+ <td class="header" align="right"><b>Advanced:</b></td>
+ <td colspan="2">
+  <table border="0" cellspacing="0" cellpadding="4">
+   <tr valign="middle" align="center">
+    <td class="nbr"> &nbsp; @if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@">Move section up</a> &nbsp; @if-s-prev-exists-end@</td>
+    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@s@">Insert new section below</a> &nbsp; </td>
+   </tr>
+   <tr valign="middle" align="center">
+    <td class="nbr"> &nbsp; @if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@">Move section down</a> &nbsp; @if-s-next-exists-end@</td>
+    <td class="nbr"> &nbsp; @if-empty-section-start@<a href="easr?f=@f@&amp;v=@v@&amp;s=@s@">Delete whole section</a>&nbsp; @if-empty-section-end@</td>
+   </tr>
+  </table>
+ </td>
 </tr>
 </table>
 <p>&nbsp;</p>
-
-
 

@@ -112,8 +112,7 @@
              badly using the web-based editor, please file a bug report!</p>
           <p>When you've fixed the problem, you can go back into the edit
              interface using the menu below, or by clicking <a 
-             href="@default-cgi@edit-actions-list?filename=@filename@"
-             >here</a>.</p>
+             href="edit-actions-list?f=@f@">here</a>.</p>
         </blockquote>
       </td>
     </tr>

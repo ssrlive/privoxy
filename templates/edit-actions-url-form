@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-url-form,v $
+#    Revision 1.3  2002/01/17 21:33:00  jongfoster
+#    Replacing all references to the URL of the config interface
+#    with @default-cgi@
+#
 #    Revision 1.2  2002/01/17 21:21:05  jongfoster
 #    DOS->Unix line endings
 #
@@ -51,11 +55,11 @@
 #
 # Available variables include:
 #
-# filename
-# ver
-# section
-# pattern
-# oldval
+# f - filename
+# v - version
+# s - section
+# p - pattern
+# u - old value of URL
 #
 #############################################################################
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -126,17 +130,16 @@ function validate(text)
   <tr>
     <td class="light">
       <h2>Edit URL Pattern</h2>
-      <form method="GET" action="@default-cgi@edit-actions-url"
-            onSubmit="return validate(newval.value);">
+      <form method="GET" action="edit-actions-url"
+            onSubmit="return validate(u.value);">
         <p>
-          <input type="hidden" name="filename" value="@filename@">
-          <input type="hidden" name="ver" value="@ver@">
-          <input type="hidden" name="section" value="@section@">
-          <input type="hidden" name="pattern" value="@pattern@">
-          <input type="text" name="newval" value="@oldval@" size="78"><br>
+          <input type="hidden" name="f" value="@f@">
+          <input type="hidden" name="v" value="@v@">
+          <input type="hidden" name="p" value="@p@">
+          <input type="text" name="u" value="@u@" size="78"><br>
           <input type="submit" value="Submit"> &nbsp;
           <input type="reset" value="Reset"> &nbsp;
-          <a href="@default-cgi@edit-actions-list?filename=@filename@">Cancel</a>
+          <a href="edit-actions-list?f=@f@">Cancel</a>
         </p>
       </form>
     </td>

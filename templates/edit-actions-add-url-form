@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-add-url-form,v $
+#    Revision 1.3  2002/01/17 21:33:00  jongfoster
+#    Replacing all references to the URL of the config interface
+#    with @default-cgi@
+#
 #    Revision 1.2  2002/01/17 21:21:03  jongfoster
 #    DOS->Unix line endings
 #
@@ -124,16 +128,16 @@ function validate(text)
   <tr>
     <td class="light">
       <h2>Add URL Pattern</h2>
-      <form method="GET" action="@default-cgi@edit-actions-add-url"
-            onSubmit="return validate(newval.value);">
+      <form method="GET" action="edit-actions-add-url"
+            onSubmit="return validate(u.value);">
         <p>
-          <input type="hidden" name="filename" value="@filename@">
-          <input type="hidden" name="ver" value="@ver@">
-          <input type="hidden" name="section" value="@section@">
-          <input type="text" name="newval" value="" size="78"><br>
+          <input type="hidden" name="f" value="@f@">
+          <input type="hidden" name="v" value="@v@">
+          <input type="hidden" name="s" value="@s@">
+          <input type="text" name="u" value="" size="78"><br>
           <input type="submit" value="Submit"> &nbsp;
           <input type="reset" value="Reset"> &nbsp;
-          <a href="@default-cgi@edit-actions-list?filename=@filename@">Cancel</a>
+          <a href="edit-actions-list?f=@f@">Cancel</a>
         </p>
       </form>
     </td>

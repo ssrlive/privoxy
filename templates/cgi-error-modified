@@ -123,7 +123,7 @@
           </ul>
           <p>You can go back into the edit interface using the menu below,
              or by clicking <a 
-             href="@default-cgi@edit-actions-list?filename=@filename@"
+             href="edit-actions-list?f=@f@"
              >here</a>.</p>
         </blockquote>
       </td>
