@@ -1,6 +1,6 @@
-#ifndef _ACTIONS_H
-#define _ACTIONS_H
-#define ACTIONS_H_VERSION "$Id: actions.h,v ??? $"
+#ifndef ACTIONS_H_INCLUDED
+#define ACTIONS_H_INCLUDED
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.1 2001/05/31 21:16:46 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.1  2001/05/31 21:16:46  jongfoster
+ *    Moved functions to process the action list into this new file.
+ *
  *
  *********************************************************************/
 
@@ -42,6 +45,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+struct action_spec;
+struct current_action_spec;
+struct client_state;
 
 
 extern void merge_actions (struct action_spec *dest, 
@@ -70,7 +78,7 @@ extern const char actions_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _ERRLOG_H */
+#endif /* ndef ACTIONS_H_INCLUDED */
 
 /*
   Local Variables:

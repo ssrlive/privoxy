@@ -1,6 +1,6 @@
-#ifndef _FILTERS_H
-#define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.10 2001/06/29 13:29:01 oes Exp $"
+#ifndef FILTERS_H_INCLUDED
+#define FILTERS_H_INCLUDED
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.11 2001/07/13 14:00:18 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,11 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.11  2001/07/13 14:00:18  oes
+ *     - Introduced gif_deanimate_response
+ *     - Renamed re_process_buffer to pcrs_filter_response
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.10  2001/06/29 13:29:01  oes
  *    Cleaned up and updated to reflect the changesin
  *    filters.c
@@ -166,6 +171,16 @@
 extern "C" {
 #endif
 
+
+struct access_control_addr;
+struct client_state;
+struct http_request;
+struct http_response;
+struct current_action_spec;
+struct url_actions;
+struct url_spec;
+
+
 /*
  * ACL checking
  */
@@ -225,7 +240,7 @@ extern const char filters_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _FILTERS_H */
+#endif /* ndef FILTERS_H_INCLUDED */
 
 /*
   Local Variables:

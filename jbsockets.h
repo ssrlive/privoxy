@@ -1,6 +1,6 @@
-#ifndef _JBSOCKETS_H
-#define _JBSOCKETS_H
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $"
+#ifndef JBSOCKETS_H_INCLUDED
+#define JBSOCKETS_H_INCLUDED
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.2 2001/06/07 23:06:09 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.2  2001/06/07 23:06:09  jongfoster
+ *    The host parameter to connect_to() is now const.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -47,6 +50,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct client_state;
 
 extern int connect_to(const char *host, int portnum, struct client_state *csp);
 extern int write_socket(int fd, const char *buf, int n);
@@ -66,7 +71,7 @@ extern const char jbsockets_h_rcs[];
 } /* extern "C" */
 #endif
 
-#endif /* ndef _JBSOCKETS_H */
+#endif /* ndef JBSOCKETS_H_INCLUDED */
 
 /*
   Local Variables:
