@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.54 2002/03/24 16:18:15 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.55 2002/03/24 16:55:06 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.54 2002/03/24 16:18:15 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.55  2002/03/24 16:55:06  oes
+ *    Making GIF checkerboard transparent
+ *
  *    Revision 1.54  2002/03/24 16:18:15  jongfoster
  *    Removing old logo
  *
@@ -369,10 +372,10 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "show-url-info",
          cgi_show_url_info, 
          "Show which actions apply to a URL and why"  },
+#ifdef FEATURE_CGI_EDIT_ACTIONS
    { "toggle",
          cgi_toggle, 
          "Toggle Privoxy on or off" },
-#ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions",
          cgi_edit_actions, 
          "Edit the actions list" },
