@@ -10,7 +10,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.18 2002/04/16 13:34:51 oes Exp $
+#  $Id: default.action,v 1.19 2002/04/18 10:14:19 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -231,7 +231,7 @@
 #     html-annoyances:  Get rid of particularly annoying HTML abuse
 #     js-annoyances:    Get rid of particularly annoying JavaScript abuse
 #     content-cookies:  Kill cookies that come in the HTML or JS content
-#     poups:            Kill all popups in JS and HTML
+#     popups:           Kill all popups in JS and HTML
 #     frameset-borders: Give frames a border
 #     webbugs:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
 #     refresh-tags:     Kill automatic refresh tags (for dial-on-demand setups)
@@ -386,7 +386,7 @@ shop        = -filter -no-cookies -no-cookies-keep
 
 # Your favourite blend of filters:
 #
-myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
+myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{popups}\
               +filter{webbugs} +filter{nimda} +filter{banners-by-size} #+filter{fun}
 
 #... etc.  Customize to your heart's content.
@@ -451,7 +451,7 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}
 #############################################################################
 # These shops require pop-ups
 #############################################################################
-{shop -no-popups -filter{poups}}
+{shop -no-popups -filter{popups}}
 .dabs.com
 .overclockers.co.uk
 
