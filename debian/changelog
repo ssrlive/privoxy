@@ -5,8 +5,9 @@ privoxy (2.9.15-beta-0) unstable; urgency=low
   * Force usage of w3m -dump to convert HTML to ASCII (build depend on it).
   * Exclude CVS files from dh_installdocs (when compiling from CVS).
   * Add user.action and standard.action to /etc/privoxy.
+  * Install images for html version of documentation.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 20:47:33 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 23:30:39 +0200
 
 privoxy (2.9.14-beta-3) unstable; urgency=low
 
