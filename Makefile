@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.6 2002/09/05 14:35:17 oes Exp $
+# $Id: Makefile,v 1.7 2002/10/22 02:22:18 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile,v $
+# Revision 1.7  2002/10/22 02:22:18  hal9
+# Look for gmake first, and fall back to make. More Solaris trouble.
+#
 # Revision 1.6  2002/09/05 14:35:17  oes
 # Change make to gmake to fix auto-build on Solaris
 #
@@ -48,6 +51,18 @@
 
 #############################################################################
 
+# This script will first try to use the GNU make command, then the standard
+# make command, checking whether the command returns 'GNU' as part of its
+# version string. Amend this to point to your GNU make command if it is
+# not in your path.
+# Further tests; Solaris 'make' sets the HOST_ARCH variable, GNU  'make'
+# sets the MAKE_VERSION variable, so a test is made that the former is
+# non-zero and the latter is zero, if so we bail out with an error message.
+
+
+GNU_MAKE_CMD = gmake
+MAKE_CMD     = make
+
 error:
 	@if [ -f GNUmakefile ]; then \
 	    echo "***"; \
@@ -55,6 +70,12 @@ error:
 	    echo "*** or it's in a different directory?"; \
 	    echo "***"; \
 	    exit 1; \
+	 elif test -n "$(HOST_ARCH)"  && test -z "$(MAKE_VERSION)" ; then \
+	    echo "***"; \
+	    echo "*** You are not using GNU Make on Solaris, please make sure you do" ; \
+	    echo "*** and re-run 'make' "; \
+	    echo "***"; \
+	    exit 1 ; \
 	 else \
 	    echo "***"; \
 	    echo "*** To build this program, you must run"; \
@@ -63,16 +84,20 @@ error:
 	    echo -n "*** Shall I do this for you now? (y/n) "; \
 	    read answer; \
 	    if [ $$answer = "y" ]; then \
-	       autoheader && autoconf && ./configure || exit 1; \
-		  	if which gmake >/dev/null 2>/dev/null ; then \
-			   gmake ;\
-			else \
-			   make ;\
-			fi ;\
+		autoheader && autoconf && ./configure || exit 1; \
+	  	if $(GNU_MAKE_CMD) -v |grep GNU >/dev/null 2>/dev/null; then \
+		   $(GNU_MAKE_CMD) ;\
+		elif $(MAKE_CMD) -v |grep GNU >/dev/null 2>/dev/null; then \
+		   $(MAKE_CMD) ;\
+		else \
+		   echo "Neither 'make' nor 'gmake' are GNU compatible!" ; \
+		   exit 1 ; \
+		fi ;\
 	    fi; \
 	 fi
 
 .PHONY: error
+
 
 #############################################################################
 
