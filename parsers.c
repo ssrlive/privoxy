@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.52 2002/03/24 13:25:43 swa Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.53 2002/03/26 22:29:55 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.52 2002/03/24 13:25:43 swa Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.53  2002/03/26 22:29:55  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.52  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -1041,7 +1044,7 @@ jb_err client_te(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_referrer(struct client_state *csp, char **header)
 {
-   const char * newval;
+   const char *newval;
 
 #ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
@@ -1128,7 +1131,7 @@ jb_err client_referrer(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_uagent(struct client_state *csp, char **header)
 {
-   const char * newval;
+   const char *newval;
 
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
    {
@@ -1200,7 +1203,7 @@ jb_err client_ua(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_from(struct client_state *csp, char **header)
 {
-   const char * newval;
+   const char *newval;
 
    if ((csp->action->flags & ACTION_HIDE_FROM) == 0)
    {
@@ -1661,7 +1664,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
       int changed = 0;
 
       /* A variable to store the tag we're working on */
-      char * cur_tag;
+      char *cur_tag;
 
       /* Skip "Set-Cookie:" (11 characters) in header */
       cur_tag = *header + 11;
@@ -1676,7 +1679,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
       while (*cur_tag)
       {
          /* Find next tag */
-         char * next_tag = strchr(cur_tag, ';');
+         char *next_tag = strchr(cur_tag, ';');
          if (next_tag != NULL)
          {
             /* Skip the ';' character itself */
