@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.100 2002/05/08 13:48:18 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.101 2002/05/15 12:28:46 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -86,6 +86,9 @@ MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
 PERL       = perl
+DOC_DIR	 = doc/source
+DOC_TMP    = $(DOC_DIR)/tmp
+
 
 #User Group paras
 USER       = @USER@
@@ -671,6 +674,16 @@ dok-pdf2: dok-release
 	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
 # one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
 
+# Create release announcement in text and html, with short and long versions.
+# This is a standalone target, and must be invoked directly.
+announce: dok-release
+	mkdir -p $(DOC_TMP)
+	cd $(DOC_TMP) && cp -f ../announce.sgml . && $(DB) -iannounce-big announce.sgml &&\
+	mv -f index.html announce.html && $(WDUMP) announce.html > announce.txt
+	cd $(DOC_TMP) && $(DB) announce.sgml &&\
+	mv -f index.html announce-mini.html && $(WDUMP) announce-mini.html > announce-mini.txt &&\
+	mv -f *html *txt ../../.. 
+	rm -fr $(DOC_TMP)
 
 #############################################################################
 #
@@ -826,6 +839,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.101  2002/05/15 12:28:46  oes
+# Trying to keep Hal happy :)
+#
 # Revision 1.100  2002/05/08 13:48:18  hal9
 # Ooops, that trashed JB v2.0.2 comment. Fixed.
 #
