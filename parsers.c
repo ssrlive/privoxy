@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.49 2002/03/09 20:03:52 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.50 2002/03/12 01:45:35 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.49 2002/03/09 20:03:52 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.50  2002/03/12 01:45:35  oes
+ *    More verbose logging
+ *
  *    Revision 1.49  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -479,7 +482,7 @@ int flush_socket(jb_socket fd, struct client_state *csp)
       return(0);
    }
 
-   if (write_socket(fd, iob->cur, len))
+   if (write_socket(fd, iob->cur, (size_t)len))
    {
       return(-1);
    }
@@ -500,10 +503,10 @@ int flush_socket(jb_socket fd, struct client_state *csp)
  *          2  :  buf = holds the content to be added to the page
  *          3  :  n = number of bytes to be added
  *
- * Returns     :  Number of bytes in the content buffer.
+ * Returns     :  None
  *
  *********************************************************************/
-size_t add_to_iob(struct client_state *csp, char *buf, size_t n)
+void add_to_iob(struct client_state *csp, char *buf, int n)
 {
    struct iob *iob = csp->iob;
    size_t have, need;
@@ -513,7 +516,7 @@ size_t add_to_iob(struct client_state *csp, char *buf, size_t n)
 
    if (n <= 0)
    {
-      return(have);
+      return;
    }
 
    need = have + n;
@@ -543,7 +546,7 @@ size_t add_to_iob(struct client_state *csp, char *buf, size_t n)
    }
 
    /* copy the new data into the iob buffer */
-   memcpy(p, buf, n);
+   memcpy(p, buf, (size_t)n);
 
    /* point to the end of the data */
    p += n;
@@ -555,7 +558,7 @@ size_t add_to_iob(struct client_state *csp, char *buf, size_t n)
    iob->cur = iob->buf;
    iob->eod = p;
 
-   return(need);
+   return;
 
 }
 
@@ -600,7 +603,7 @@ char *get_header(struct client_state *csp)
 
    iob->cur = p+1;
 
-   if ((q = strchr(ret, '\r'))) *q = '\0';
+   if ((q = strchr(ret, '\r')) != NULL) *q = '\0';
 
    /* is this a blank linke (i.e. the end of the header) ? */
    if (*ret == '\0')
@@ -1739,7 +1742,7 @@ int strclean(const char *string, const char *substring)
    int hits = 0, len = strlen(substring);
    char *pos, *p;
 
-   while((pos = strstr(string, substring)))
+   while((pos = strstr(string, substring)) != NULL)
    {
       p = pos + len;
       do

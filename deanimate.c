@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.7 2002/03/08 17:46:04 jongfoster Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.8 2002/03/09 19:42:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.7 2002/03/08 17:46:04 jongfos
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.8  2002/03/09 19:42:47  jongfoster
+ *    Fixing more warnings
+ *
  *    Revision 1.7  2002/03/08 17:46:04  jongfoster
  *    Fixing int/size_t warnings
  *
@@ -242,7 +245,7 @@ int gif_skip_data_block(struct binbuffer *buf)
     * by a one-byte length field, with the last chunk having
     * zero length.
     */
-   while((c = buf_getbyte(buf, 0)))
+   while((c = buf_getbyte(buf, 0)) != '\0')
    {
       if ((buf->offset += c + 1) >= buf->size - 1)
       {
@@ -300,7 +303,7 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
    /*
     * Copy the image chunk by chunk.
     */
-   while((c = buf_getbyte(src, 0)))
+   while((c = buf_getbyte(src, 0)) != '\0')
    {
       if (buf_copy(src, dst, 1 + (size_t) c)) return 1;
    }

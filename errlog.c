@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.31 2002/03/06 23:02:57 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.32 2002/03/07 03:46:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.31 2002/03/06 23:02:57 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.32  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.31  2002/03/06 23:02:57  jongfoster
  *    Removing tabs
  *
@@ -315,7 +318,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
    /* set the designated log file */
    if( logfname )
    {
-      if( !(fp = fopen(logfname, "a")) )
+      if( NULL == (fp = fopen(logfname, "a")) )
       {
          log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: %s", logfname);
       }

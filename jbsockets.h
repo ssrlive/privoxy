@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.4 2002/03/07 03:51:36 oes Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.5 2002/03/09 20:03:52 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -37,6 +37,30 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.5  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.4  2002/03/07 03:51:36  oes
  *     - Improved handling of failed DNS lookups
  *     - Fixed compiler warnings etc
@@ -64,7 +88,7 @@ extern "C" {
 struct client_state;
 
 extern jb_socket connect_to(const char *host, int portnum, struct client_state *csp);
-extern int write_socket(jb_socket fd, const char *buf, int n);
+extern int write_socket(jb_socket fd, const char *buf, size_t n);
 extern int read_socket(jb_socket fd, char *buf, int n);
 extern void close_socket(jb_socket fd);
 

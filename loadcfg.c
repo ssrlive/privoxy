@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.34 2002/03/06 23:14:35 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.35 2002/03/07 03:52:44 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.34 2002/03/06 23:14:35 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.35  2002/03/07 03:52:44  oes
+ *    Set logging to tty for --no-daemon mode
+ *
  *    Revision 1.34  2002/03/06 23:14:35  jongfoster
  *    Trivial cosmetic changes to make function comments easier to find.
  *
@@ -774,7 +777,7 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if ((p = strchr(cur_fwd->forward_host, ':')))
+               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -837,7 +840,7 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->gateway_host = strdup(p);
 
-               if ((p = strchr(cur_fwd->gateway_host, ':')))
+               if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->gateway_port = atoi(p);
@@ -855,7 +858,7 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if ((p = strchr(cur_fwd->forward_host, ':')))
+               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -916,7 +919,7 @@ struct configuration_spec * load_config(void)
 
             cur_fwd->gateway_host = strdup(p);
 
-            if ((p = strchr(cur_fwd->gateway_host, ':')))
+            if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
             {
                *p++ = '\0';
                cur_fwd->gateway_port = atoi(p);
@@ -933,7 +936,7 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if ((p = strchr(cur_fwd->forward_host, ':')))
+               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -1310,7 +1313,7 @@ struct configuration_spec * load_config(void)
 
    if ( NULL != config->haddr )
    {
-      if ((p = strchr(config->haddr, ':')))
+      if (NULL != (p = strchr(config->haddr, ':')))
       {
          *p++ = '\0';
          if (*p)

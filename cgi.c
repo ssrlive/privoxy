@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.47 2002/03/08 16:41:33 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.48 2002/03/08 17:47:07 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.47 2002/03/08 16:41:33 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.48  2002/03/08 17:47:07  jongfoster
+ *    Adding comments
+ *
  *    Revision 1.47  2002/03/08 16:41:33  oes
  *    Added GIF images again
  *
@@ -660,7 +663,8 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
                             csp->ip_addr_str, csp->http->cmd); 
 
    /* Find and start the right CGI function*/
-   for (d = cgi_dispatchers; FOREVER; d++)
+   d = cgi_dispatchers;
+   for (;;)
    {
       if ((d->name == NULL) || (strcmp(path_copy, d->name) == 0))
       {
@@ -683,6 +687,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
             return cgi_error_memory();
          }
       }
+      d++;
    }
 }
 

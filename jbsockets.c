@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.25 2002/03/09 20:03:52 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.26 2002/03/11 22:07:02 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,12 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.25 2002/03/09 20:03:52 jongfo
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.26  2002/03/11 22:07:02  david__schmidt
+ *    OS/2 port maintenance:
+ *    - Fixed EMX build - it had decayed a little
+ *    - Fixed inexplicable crash during FD_ZERO - must be due to a bad macro.
+ *      substituted a memset for now.
+ *
  *    Revision 1.25  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -360,7 +366,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
  *                nonzero on error.
  *
  *********************************************************************/
-int write_socket(jb_socket fd, const char *buf, int len)
+int write_socket(jb_socket fd, const char *buf, size_t len)
 {
    if (len == 0)
    {
@@ -374,7 +380,9 @@ int write_socket(jb_socket fd, const char *buf, int len)
 
    log_error(LOG_LEVEL_LOG, "%N", len, buf);
 
-#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
+#if defined(_WIN32)
+   return (send(fd, buf, (int)len, 0) != (int)len);
+#elif defined(__BEOS__) || defined(AMIGA)
    return (send(fd, buf, len, 0) != len);
 #elif defined(__OS2__)
    /*
@@ -436,10 +444,12 @@ int read_socket(jb_socket fd, char *buf, int len)
       return(0);
    }
 
-#if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
+#if defined(_WIN32)
    return(recv(fd, buf, len, 0));
+#elif defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
+   return(recv(fd, buf, (size_t)len, 0));
 #else
-   return(read(fd, buf, len));
+   return(read(fd, buf, (size_t)len));
 #endif
 }
 
@@ -600,7 +610,12 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    struct sockaddr_in client, server;
    struct hostent *host = NULL;
    jb_socket afd;
+#ifdef _WIN32
+   /* Microsoft wierdness - fix a warning. */
+   int c_length, s_length;
+#else
    size_t c_length, s_length;
+#endif
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
 #if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)

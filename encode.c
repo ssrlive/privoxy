@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.4 2002/01/22 23:28:07 jongfoster Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.5 2002/03/07 03:46:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.4 2002/01/22 23:28:07 jongfoster Ex
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.5  2002/03/07 03:46:53  oes
+ *    Fixed compiler warnings etc
+ *
  *    Revision 1.4  2002/01/22 23:28:07  jongfoster
  *    Adding convenience function html_encode_and_free_original()
  *    Making all functions accept NULL paramaters - in this case, they
@@ -442,7 +445,7 @@ char *url_decode(const char * s)
                break;
 
             case '%':
-               if ((*q = xtoi(s + 1)))
+               if ((*q = xtoi(s + 1)) != '\0')
                {
                   s += 3;
                   q++;

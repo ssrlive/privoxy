@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.3 2002/03/03 14:51:11 oes Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.4 2002/03/07 03:46:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.3 2002/03/03 14:51:11 oes Exp $
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.4  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.3  2002/03/03 14:51:11  oes
  *    Fixed CLF logging: Added ocmd member for client's request to struct http_request
  *
@@ -608,7 +611,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
       return JB_ERR_MEMORY;
    }
 
-   if ((p = strchr(buf, '/')))
+   if ((p = strchr(buf, '/')) != NULL)
    {
       if (NULL == (url->path = strdup(p)))
       {

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.80 2002/03/11 22:07:05 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.81 2002/03/12 01:42:50 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.80 2002/03/11 22:07:05 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.81  2002/03/12 01:42:50  oes
+ *    Introduced modular filters
+ *
  *    Revision 1.80  2002/03/11 22:07:05  david__schmidt
  *    OS/2 port maintenance:
  *    - Fixed EMX build - it had decayed a little
@@ -741,7 +744,7 @@ static void chat(struct client_state *csp)
     * could get blocked here if a client connected, then didn't say anything!
     */
 
-   while (FOREVER)
+   for (;;)
    {
       len = read_socket(csp->cfd, buf, sizeof(buf));
 
@@ -956,9 +959,9 @@ static void chat(struct client_state *csp)
 
    /* grab the rest of the client's headers */
 
-   while (FOREVER)
+   for (;;)
    {
-      if ( ( p = get_header(csp) ) && ( *p == '\0' ) )
+      if ( ( ( p = get_header(csp) ) != NULL) && ( *p == '\0' ) )
       {
          len = read_socket(csp->cfd, buf, sizeof(buf));
          if (len <= 0)
@@ -1146,7 +1149,7 @@ static void chat(struct client_state *csp)
 
    server_body = 0;
 
-   while (FOREVER)
+   for (;;)
    {
 #ifdef __OS2__
       /*
@@ -1160,7 +1163,7 @@ static void chat(struct client_state *csp)
       FD_SET(csp->cfd, &rfds);
       FD_SET(csp->sfd, &rfds);
 
-      n = select(maxfd+1, &rfds, NULL, NULL, NULL);
+      n = select((int)maxfd+1, &rfds, NULL, NULL, NULL);
 
       if (n < 0)
       {
@@ -1181,7 +1184,7 @@ static void chat(struct client_state *csp)
             break; /* "game over, man" */
          }
 
-         if (write_socket(csp->sfd, buf, len))
+         if (write_socket(csp->sfd, buf, (size_t)len))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
             return;
@@ -1332,6 +1335,8 @@ static void chat(struct client_state *csp)
                 */
                if (((size_t)(csp->iob->eod - csp->iob->buf)) + (size_t)BUFFER_SIZE > csp->config->buffer_limit)
                {
+                  size_t hdrlen;
+
                   log_error(LOG_LEVEL_ERROR, "Buffer size limit reached! Flushing and stepping back.");
 
                   hdr = sed(server_patterns, add_server_headers, csp);
@@ -1341,11 +1346,11 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
                   }
 
-                  len = strlen(hdr);
-                  byte_count += len;
+                  hdrlen = strlen(hdr);
+                  byte_count += hdrlen;
 
-                  if (write_socket(csp->cfd, hdr, len)
-                   || (len = flush_socket(csp->cfd, csp) < 0))
+                  if (write_socket(csp->cfd, hdr, hdrlen)
+                   || ((len = flush_socket(csp->cfd, csp)) < 0))
                   {
                      log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
@@ -1363,7 +1368,7 @@ static void chat(struct client_state *csp)
             }
             else
             {
-               if (write_socket(csp->cfd, buf, len))
+               if (write_socket(csp->cfd, buf, (size_t)len))
                {
                   log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                   return;
@@ -1384,7 +1389,7 @@ static void chat(struct client_state *csp)
 
             /* get header lines from the iob */
 
-            while ((p = get_header(csp)))
+            while ((p = get_header(csp)) != NULL)
             {
                if (*p == '\0')
                {
@@ -1480,10 +1485,8 @@ static void chat(struct client_state *csp)
                 * may be in the buffer)
                 */
 
-               len = strlen(hdr);
-
-               if (write_socket(csp->cfd, hdr, len)
-                || (len = flush_socket(csp->cfd, csp) < 0))
+               if (write_socket(csp->cfd, hdr, strlen(hdr))
+                || ((len = flush_socket(csp->cfd, csp)) < 0))
                {
                   log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
@@ -1971,7 +1974,7 @@ static void listen_loop(void)
 
    bfd = bind_port_helper(config);
 
-   while (FOREVER)
+   for (;;)
    {
 #if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
       while (waitpid(-1, NULL, WNOHANG) > 0)
@@ -2099,7 +2102,7 @@ static void listen_loop(void)
 #if defined(_WIN32) && !defined(_CYGWIN) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
          child_id = _beginthread(
-            (void*)serve,
+            (void (*)(void *))serve,
             64 * 1024,
             csp);
 #endif

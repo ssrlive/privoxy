@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.11 2002/03/08 17:46:04 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.12 2002/03/09 20:03:52 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,30 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.11 2002/03/08 17:46:04 jongfoster
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.12  2002/03/09 20:03:52  jongfoster
+ *    - Making various functions return int rather than size_t.
+ *      (Undoing a recent change).  Since size_t is unsigned on
+ *      Windows, functions like read_socket that return -1 on
+ *      error cannot return a size_t.
+ *
+ *      THIS WAS A MAJOR BUG - it caused frequent, unpredictable
+ *      crashes, and also frequently caused JB to jump to 100%
+ *      CPU and stay there.  (Because it thought it had just
+ *      read ((unsigned)-1) == 4Gb of data...)
+ *
+ *    - The signature of write_socket has changed, it now simply
+ *      returns success=0/failure=nonzero.
+ *
+ *    - Trying to get rid of a few warnings --with-debug on
+ *      Windows, I've introduced a new type "jb_socket".  This is
+ *      used for the socket file descriptors.  On Windows, this
+ *      is SOCKET (a typedef for unsigned).  Everywhere else, it's
+ *      an int.  The error value can't be -1 any more, so it's
+ *      now JB_INVALID_SOCKET (which is -1 on UNIX, and in
+ *      Windows it maps to the #define INVALID_SOCKET.)
+ *
+ *    - The signature of bind_port has changed.
+ *
  *    Revision 1.11  2002/03/08 17:46:04  jongfoster
  *    Fixing int/size_t warnings
  *
@@ -306,7 +330,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
       return(JB_INVALID_SOCKET);
    }
 
-   if (write_socket(sfd, (char *)c, (int)csiz))
+   if (write_socket(sfd, (char *)c, csiz))
    {
       log_error(LOG_LEVEL_CONNECT, "SOCKS4 negotiation write failed...");
       close_socket(sfd);
