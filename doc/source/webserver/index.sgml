@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.20 2002/06/05 00:31:55 hal9 Exp $
+ $Id: index.sgml,v 1.21 2002/06/09 16:37:31 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -187,7 +187,7 @@
   <colspec colname=c1 align="center">
   <tbody>
    <row>
-    <entry align="center">Prixoxy is developed on:</entry>
+    <entry align="center">Privoxy is developed on:</entry>
    </row>
    <row>
     <entry align="center">
@@ -246,6 +246,9 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.21  2002/06/09 16:37:31  hal9
+ Sync with filtering clarifications in 3.0 branch.
+
  Revision 1.20  2002/06/05 00:31:55  hal9
  Mass commit for new entities, most significantly so docs can read version
  and code status info from tmp files, so perl is no longer used. Also, docs can
