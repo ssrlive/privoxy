@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.30 2002/03/27 14:32:43 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.31 2002/03/29 03:33:13 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.30 2002/03/27 14:32:43 david_
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.31  2002/03/29 03:33:13  david__schmidt
+ *    Fix Mac OSX compiler warnings
+ *
  *    Revision 1.30  2002/03/27 14:32:43  david__schmidt
  *    More compiler warning message maintenance
  *
@@ -176,6 +179,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.30 2002/03/27 14:32:43 david_
 
 #ifdef _WIN32
 
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 #include <sys/timeb.h>
 #include <io.h>

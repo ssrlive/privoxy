@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.7 2002/03/24 12:03:47 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.8 2002/03/26 22:57:10 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.7 2002/03/24 12:03:47 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.8  2002/03/26 22:57:10  jongfoster
+ *    Web server name should begin www.
+ *
  *    Revision 1.7  2002/03/24 12:03:47  jongfoster
  *    Name change
  *
@@ -70,6 +73,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.7 2002/03/24 12:03:47 jongfoster Exp 
 /* Uncomment this if you want to build Win32 as a console app */
 /* #define _WIN_CONSOLE */
 
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 
 #include <stdarg.h>

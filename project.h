@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.61 2002/03/26 22:29:55 swa Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.62 2002/03/26 22:48:49 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.62  2002/03/26 22:48:49  swa
+ *    new homepage url
+ *
  *    Revision 1.61  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -454,6 +457,9 @@
  * I don't want to have to #include all this just for the declaration
  * of SOCKET.  However, it looks like we have to...
  */
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 #endif
 

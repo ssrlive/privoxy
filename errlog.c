@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.36 2002/03/26 22:29:54 swa Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.37 2002/03/27 14:32:43 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.36 2002/03/26 22:29:54 swa Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.37  2002/03/27 14:32:43  david__schmidt
+ *    More compiler warning message maintenance
+ *
  *    Revision 1.36  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -224,6 +227,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.36 2002/03/26 22:29:54 swa Exp $";
 #endif /* def FEATURE_PTHREAD */
 
 #ifdef _WIN32
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 #ifndef _WIN_CONSOLE
 #include "w32log.h"

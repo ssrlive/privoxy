@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.87 2002/03/26 22:29:54 swa Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.88 2002/03/27 14:32:43 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.87 2002/03/26 22:29:54 swa Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.88  2002/03/27 14:32:43  david__schmidt
+ *    More compiler warning message maintenance
+ *
  *    Revision 1.87  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -527,6 +530,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.87 2002/03/26 22:29:54 swa Exp $";
 
 #ifdef _WIN32
 # ifndef FEATURE_PTHREAD
+#  ifndef STRICT
+#   define STRICT
+#  endif
 #  include <windows.h>
 #  include <process.h>
 # endif /* ndef FEATURE_PTHREAD */

@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.5 2002/03/24 12:03:47 jongfoster Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.6 2002/03/26 22:57:10 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -32,6 +32,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.5 2002/03/24 12:03:47 jongf
  *
  * Revisions   :
  *    $Log: w32taskbar.c,v $
+ *    Revision 1.6  2002/03/26 22:57:10  jongfoster
+ *    Web server name should begin www.
+ *
  *    Revision 1.5  2002/03/24 12:03:47  jongfoster
  *    Name change
  *
@@ -55,6 +58,9 @@ const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.5 2002/03/24 12:03:47 jongf
 
 #include <stdio.h>
 
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 
 #include "w32taskbar.h"

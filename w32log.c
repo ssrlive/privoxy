@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.22 2002/03/24 12:48:23 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.23 2002/03/26 22:57:10 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.22 2002/03/24 12:48:23 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.23  2002/03/26 22:57:10  jongfoster
+ *    Web server name should begin www.
+ *
  *    Revision 1.22  2002/03/24 12:48:23  jongfoster
  *    Fixing doc links
  *
@@ -150,6 +153,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.22 2002/03/24 12:48:23 jongfoster E
 #include <assert.h>
 #include <stdio.h>
 
+#ifndef STRICT
+#define STRICT
+#endif
 #include <windows.h>
 #include <richedit.h>
 

@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.16  2002/03/26 22:57:44  jongfoster
+ *    Web server name should begin www.
+ *
  *    Revision 1.15  2002/03/24 14:29:25  jongfoster
  *    Renaming icon file
  *
@@ -120,8 +123,13 @@
  *
  *********************************************************************/
 
-#include <windows.h>
 #include "config.h"
+
+#ifndef STRICT
+#define STRICT
+#endif
+#include <windows.h>
+
 #include "w32res.h"
 
 #ifdef __MINGW32__

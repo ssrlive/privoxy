@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.39 2002/03/24 13:25:43 swa Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.40 2002/03/26 22:29:55 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.39 2002/03/24 13:25:43 swa Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.40  2002/03/26 22:29:55  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.39  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -289,6 +292,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.39 2002/03/24 13:25:43 swa Exp $"
 
 #ifdef _WIN32
 
+# ifndef STRICT
+#  define STRICT
+# endif
 # include <windows.h>
 
 # include "win32.h"
