@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.21 2001/10/31 21:11:03 hal9 Exp $
+ $Id: user-manual.sgml,v 1.22 2001/11/05 23:57:51 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.21 2001/10/31 21:11:03 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.22 2001/11/05 23:57:51 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -418,7 +418,7 @@ configuration section below. HB.)
   <listitem>
    <para>
      The main configuration file is named <filename>config</filename>
-     on Linux, Unix, BSD, and OS/2, and <filename>junkbustr.txt</filename> on
+     on Linux, Unix, BSD, and OS/2, and <filename>config.txt</filename> on
      Windows. On Amiga, it is
      <filename>AmiTCP:db/junkbuster/config</filename>.
    </para>
@@ -426,7 +426,7 @@ configuration section below. HB.)
 
   <listitem>
    <para>
-    The <filename>actionsfile</filename> file is used  to define various 
+    The <filename>ijb.action</filename> file is used  to define various 
     <quote>actions</quote> relating to images, banners, pop-ups, access
     restrictions, banners and cookies. There is a CGI based editor for this
     file that can be accessed via <ulink
@@ -446,7 +446,7 @@ configuration section below. HB.)
 </para>
 
 <para>
- <filename>actionsfile</filename> and <filename>re_filterfile</filename> 
+ <filename>ijb.action</filename> and <filename>re_filterfile</filename> 
  can use Perl style regular expressions for maximum flexibility. All files use
  the <quote><literal>#</literal></quote> character to denote a comment. Such
  lines are not processed by <application>Junkbuster</application>. After
@@ -467,7 +467,7 @@ configuration section below. HB.)
 <title>The Main Configuration File</title>
 <para>
  Again, the main configuration file is named <filename>config</filename> on
- Linux/Unix/BSD and OS/2, and <filename>junkbustr.txt</filename> on Windows.
+ Linux/Unix/BSD and OS/2, and <filename>config.txt</filename> on Windows.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:
@@ -579,20 +579,21 @@ configuration section below. HB.)
 </para>
 
 <para>
- The <quote>actionsfile</quote> contains patterns to specify the actions to
+ The <quote>ijb.action</quote> file contains patterns to specify the actions to
  apply to requests for each site. Default: Cookies to and from all
- destinations are filtered. Popups are disabled for all sites. All sites are
- filtered if re_filterfile specified. No sites are blocked. An empty image is
- displayed for filtered ads and other images (formerly
- <quote>tinygif</quote>). The syntax of this file is explained in detail 
- <link linkend="actionsfile">below</link>.
+ destinations are kept only during the current browser session (i.e. they 
+ are not saved to disk). Popups are disabled for all sites. All sites are
+ filtered if <quote>re_filterfile</quote> specified. No sites are blocked. An
+ empty image is displayed for filtered ads and other images (formerly
+ <quote>tinygif</quote>). The syntax of this file is explained in detail <link
+ linkend="actionsfile">below</link>.
 </para>
 
 <para>
  <literal>
   <MSGText> 
    <literallayout>
-  <emphasis>actionsfile  actionsfile</emphasis>
+  <emphasis>actionsfile  ijb.action</emphasis>
    </literallayout>
   </MSGText> 
  </literal>
@@ -927,7 +928,7 @@ configuration section below. HB.)
  choice is <quote>Enable</quote>. Clicking on enable toggles
  <application>Junkbuster</application> on and off. This is useful if you want
  to temporarily disable <application>Junkbuster</application>, e.g., to access
- a site that requires cookies which you normally have blocked. This can also
+ a site that requires cookies which you would otherwise have blocked. This can also
  be toggled via a web browser at the <application>Junkbuster</application>
  internal address of <ulink url="http://i.j.b./">http://i.j.b./</ulink> on 
  any platform.
@@ -979,7 +980,7 @@ configuration section below. HB.)
 </para>
 
 <para>
- To enable the web-based actionsfile editor set
+ To enable the web-based <filename>ijb.action</filename> file editor set
  <application>enable-edit-actions</application> to 1, or 0 to disable.  Note
  that you must have compiled <application>JunkBuster</application> with
  support for this feature, otherwise this option has no effect. This 
@@ -1392,8 +1393,8 @@ configuration section below. HB.)
 </para>
 
 <para>
- Also, we're told they insist on getting cookies and JavaScript, so you need
- to add home.com to the cookie file. We consider JavaScript a security risk.
+ Also, we're told they insist on getting cookies and JavaScript, so you should 
+ add home.com to the cookie file. We consider JavaScript a security risk.
  Java need not be enabled.
 </para>
 
@@ -1730,12 +1731,14 @@ Removed references to Win32. HB 09/23/01
 <title>The Actions File</title>
 
 <para>
- The <quote>actionsfile</quote> is used to define what actions
+ The <quote>ijb.action</quote> file (formerly
+ <filename>actionsfile</filename>) is used to define what actions
  <application>Junkbuster</application> takes, and thus determines how images,
  cookies and various other aspects of HTTP content and transactions are
  handled. Images can be anything you want, including ads, banners, or just
  some obnoxious image that you would rather not see. Cookies can be accepted
- or rejected. The default file is in fact named <filename>actionsfile</filename>.
+ or rejected, or accepted only during the current browser session (i.e. 
+ not written to disk). 
 </para>
 
 <para>
@@ -1952,7 +1955,7 @@ Removed references to Win32. HB 09/23/01
  So in this case <application>JunkBuster</application> would just be a
  normal, non-blocking, non-anonymizing proxy. You must specifically
  enable the privacy and blocking features you need (although the 
- provided default <filename>actionsfile</filename> file will 
+ provided default <filename>ijb.action</filename> file will 
  give a good starting point).
 </para>
 
@@ -2309,6 +2312,24 @@ Removed references to Win32. HB 09/23/01
  
  <listitem>
   <para>  
+   If the website sets cookies, <quote>no-cookies-keep</quote> will make sure
+   they are erased when you exit and restart your web browser. This makes
+   profiling cookies useless, but won't break sites which require cookies so
+   that you can log in for transactions. Default: on.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+no-cookies-keep</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem>
+ 
+ <listitem>
+  <para>  
    Prevent the website from reading cookies:
   </para>
   <para>
@@ -2410,13 +2431,16 @@ Removed references to Win32. HB 09/23/01
  <literal>
   <MSGText> 
    <literallayout>
- # Turn off all cookies
+ # Turn off all persistant cookies
  { +no-cookies-read }
  { +no-cookies-set }
+ # Allow cookies for this browser session ONLY
+ { +no-cookies-keep }
 
- # Execeptions to the above, sites that need cookies
+ # Execeptions to the above, sites that benefit from persistant cookies
  { -no-cookies-read }
  { -no-cookies-set }
+ { -no-cookies-keep }
  .javasoft.com
  .sun.com
  .yahoo.com
@@ -2424,7 +2448,7 @@ Removed references to Win32. HB 09/23/01
  .redhat.com
 
  # Alternative way of saying the same thing
- {-no-cookies-set -no-cookies-read}
+ {-no-cookies-set -no-cookies-read -no-cookies-keep}
  .sourceforge.net
  .sf.net
    </literallayout>
@@ -2547,8 +2571,8 @@ Removed references to Win32. HB 09/23/01
  <quote>{</quote> or <quote>}</quote>. But please use only <quote>a</quote>-
  <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
  <quote>-</quote>. Alias names are not case sensitive, and 
- <emphasis>must be defined  before anything</emphasis> else in
- <filename>actionsfile</filename>! And there can only be one set of
+ <emphasis>must be defined  before anything</emphasis> else in the
+ <filename>ijb.action</filename>file ! And there can only be one set of
  <quote>aliases</quote> defined.
 </para>
 
@@ -2721,7 +2745,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  <application>Junkbuster</application> will look for a file named
  <filename>config</filename> in the current directory. Except on Amiga where
  it will look for <filename>AmiTCP:db/junkbuster/config</filename> and Win32
- where it will try <filename>junkbstr.txt</filename>. If no file is specified 
+ where it will try <filename>config.txt</filename>. If no file is specified 
  on the command line and no default configuration file can be found, 
  <application>Junkbuster</application> will fail to start.
 </para>
@@ -2740,12 +2764,12 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <para>
  The included default configuration files should give a reasonable starting
  point, though may be somewhat aggressive in blocking junk. You will probably
- want to keep an eye out for sites that require cookies, and add these to
- <filename>actionsfile</filename> as needed. By default, most of these will
- be blocked until you add them to the configuration. If you want the browser
- to handle this instead, you will need to edit
- <filename>actionsfile</filename> and disable this feature. If you use more
- than one browser, it would make more sense to let
+ want to keep an eye out for sites that require persistant cookies, and add these to
+ <filename>ijb.action</filename> as needed. By default, most of these will
+ be accepted only during the current browser session, until you add them to
+ the configuration. If you want the browser to handle this instead, you will
+ need to edit <filename>ijb.action</filename> and disable this feature. If you
+ use more than one browser, it would make more sense to let
  <application>Junkbuster</application> handle this. In which case, the
  browser(s) should be set to accept all cookies.
 </para>
@@ -2753,7 +2777,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <para>
  If a particular site shows problems loading properly, try adding it 
  to the <literal>{fragile}</literal> section of
- <filename>actionsfile</filename>. This will turn off most actions for 
+ <filename>ijb.action</filename>. This will turn off most actions for 
  this site.
 </para>
 
@@ -2763,14 +2787,14 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  of I.E.) experience problems, you might try to force HTTP/1.0 compatiblity.
  For Mozilla, look under <literal>Edit -&gt; Preferences -&gt; Debug -&gt;
  Networking</literal>. Or set the <quote>+downgrade</quote> config option in
- <filename>actionsfile</filename>.
+ <filename>ijb.action</filename>.
 </para>
 
 <para>
  After running <application>Junkbuster</application> for a while, you can 
  start to fine tune the configuration to suit your personal, or site, 
  preferences and requirements. There are many, many aspects that can 
- be customized. <quote>Actions</quote> (from <filename>actionsfile</filename>) 
+ be customized. <quote>Actions</quote> (as specified in <filename>ijb.action</filename>) 
  can be adjusted by pointing your browser to 
  <ulink url="http://i.j.b./">http://i.j.b./</ulink>, 
  and then follow the link to <quote>edit the actions list</quote>. 
@@ -2782,7 +2806,7 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
  configuration can be viewed from this page, including 
  current configuration parameters, source code version numbers, 
  the browser's request headers, and <quote>actions</quote> that apply 
- to a given URL. In addition to the <filename>actionsfile</filename> 
+ to a given URL. In addition to the <filename>ijb.action</filename> file 
  editor mentioned above, <application>Junkbuster</application> can also 
  be turned <quote>on</quote> and <quote>off</quote> from this page.
 </para>
@@ -3179,6 +3203,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.22  2001/11/05 23:57:51  hal9
+ Minor update for startup now daemon mode.
+
  Revision 1.21  2001/10/31 21:11:03  hal9
  Correct 2 minor errors
 
