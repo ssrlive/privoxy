@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: junkbuster.monthly,v 1.1 2001/04/16 21:10:38 rodney Exp $
+# $Id: junkbuster.monthly,v 1.1.1.1 2001/05/15 13:58:57 oes Exp $
 #
 # bug fixed, which downloaded all three files to the file blocklist
 #
@@ -42,3 +42,4 @@ if [ -f /etc/junkbuster/imagelist.local ] ; then
    cat /etc/junkbuster/imagelist.local >> /etc/junkbuster/imagelist
 fi
 chmod 644 /etc/junkbuster/imagelist
+
