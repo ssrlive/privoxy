@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.11 2001/05/29 11:53:23 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.12 2001/05/31 17:35:20 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -6,7 +6,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.11 2001/05/29 11:53:23 oes Exp $"
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
- *                   `block_url', `url_permissions', `domaincmp', `dsplit',
+ *                   `block_url', `url_actions', `domaincmp', `dsplit',
  *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
  *                   `show_proxy_args', 'ijb_send_banner', and `trust_url'
@@ -38,6 +38,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.11 2001/05/29 11:53:23 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.12  2001/05/31 17:35:20  oes
+ *
+ *     - Enhanced domain part globbing with infix and prefix asterisk
+ *       matching and optional unanchored operation
+ *
  *    Revision 1.11  2001/05/29 11:53:23  oes
  *    "See why" link added to "blocked" page
  *
@@ -188,6 +193,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.11 2001/05/29 11:53:23 oes Exp $"
 #include "errlog.h"
 #include "jbsockets.h"
 #include "miscutil.h"
+#include "actions.h"
 
 #ifdef _WIN32
 #include "win32.h"
@@ -417,7 +423,7 @@ char *block_url(struct http_request *http, struct client_state *csp)
    int n;
    int factor = 2;
 
-   if ((csp->permissions & PERMIT_BLOCK) == 0)
+   if ((csp->action->flags & ACTION_BLOCK) == 0)
    {
       return(NULL);
    }
@@ -478,7 +484,7 @@ int block_imageurl(struct http_request *http, struct client_state *csp)
    }
 #endif
 
-   return ((csp->permissions & PERMIT_IMAGE) != 0);
+   return ((csp->action->flags & ACTION_IMAGE) != 0);
 }
 #endif /* def IMAGE_BLOCKING */
 
@@ -906,28 +912,58 @@ char *redirect_url(struct http_request *http, struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  url_permissions
+ * Function    :  url_actions
  *
- * Description :  Gets the permissions for this URL.
+ * Description :  Gets the actions for this URL.
  *
  * Parameters  :
  *          1  :  http = http_request request for blocked URLs
  *          2  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  permissions bitmask specifiying what this URL can do.
- *                If not on list, will be default_permissions.
+ * Returns     :  N/A
  *
  *********************************************************************/
-int url_permissions(struct http_request *http, struct client_state *csp)
+void url_actions(struct http_request *http, 
+                 struct client_state *csp)
 {
    struct file_list *fl;
-   struct permissions_spec *b;
-   struct url_spec url[1];
-   int permissions = csp->config->default_permissions;
+   struct url_actions *b;
 
-   if (((fl = csp->permissions_list) == NULL) || ((b = fl->f) == NULL))
+   init_current_action(csp->action);
+
+   if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
    {
-      return(permissions);
+      return;
+   }
+
+   apply_url_actions(csp->action, http, b);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  apply_url_actions
+ *
+ * Description :  Applies a list of URL actions.
+ *
+ * Parameters  :
+ *          1  :  action = Destination.
+ *          2  :  http = Current URL
+ *          3  :  b = list of URL actions to apply
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void apply_url_actions(struct current_action_spec *action, 
+                       struct http_request *http, 
+                       struct url_actions *b)
+{
+   struct url_spec url[1];
+
+   if (b == NULL)
+   {
+      /* Should never happen */
+      return;
    }
 
    *url = dsplit(http->host);
@@ -935,7 +971,7 @@ int url_permissions(struct http_request *http, struct client_state *csp)
    /* if splitting the domain fails, punt */
    if (url->dbuf == NULL)
    {
-      return(permissions);
+      return;
    }
 
    for (b = b->next; NULL != b; b = b->next)
@@ -952,8 +988,7 @@ int url_permissions(struct http_request *http, struct client_state *csp)
 #endif
             )
             {
-               permissions &= b->mask;
-               permissions |= b->add;
+               merge_current_action(action, b->action);
             }
          }
       }
@@ -961,8 +996,6 @@ int url_permissions(struct http_request *http, struct client_state *csp)
 
    freez(url->dbuf);
    freez(url->dvec);
-   return(permissions);
-
 }
 
 
@@ -1133,6 +1166,8 @@ int domaincmp(struct url_spec *pattern, struct url_spec *fqdn)
 
    return ((pn < pattern->dcnt) || ((fn < fqdn->dcnt) && !pattern->unanchored));
 
+   return(0);
+
 }
 
 
@@ -1174,10 +1209,10 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
    switch (which_file)
    {
    case 'p':
-      if (csp->permissions_list)
+      if (csp->actions_list)
       {
-         filename = csp->permissions_list->filename;
-         file_description = "Permissions List";
+         filename = csp->actions_list->filename;
+         file_description = "Actions List";
       }
       break;
    case 'f':
@@ -1305,10 +1340,10 @@ char *show_proxy_args(struct http_request *http, struct client_state *csp)
       "<p>(Click a filename to view it)</p>\n"
       "<ul>\n");
 
-   if (csp->permissions_list)
+   if (csp->actions_list)
    {
-      s = strsav(s, "<li>Permissions List: <a href=\"show-proxy-args?permit\"><code>");
-      s = strsav(s, csp->permissions_list->filename);
+      s = strsav(s, "<li>Actions List: <a href=\"show-proxy-args?permit\"><code>");
+      s = strsav(s, csp->actions_list->filename);
       s = strsav(s, "</code></a></li>\n");
    }
 
@@ -1430,50 +1465,6 @@ static const char C_URL_INFO_FORM[] =
    "</html>\n";
 
 
-/*********************************************************************
- *
- * Function    :  permissions_to_text
- *
- * Description :  Converts a permissionsfil entry from numeric form
- *                ("mask" and "add") to text.
- *
- * Parameters  :
- *          1  :  mask = As from struct permissions_spec
- *          2  :  add  = As from struct permissions_spec
- *
- * Returns     :  A string.  Caller must free it.
- *
- *********************************************************************/
-char * permissions_to_text(unsigned mask, unsigned add)
-{
-   char * result = strdup("");
-
-   /* sanity - prevents "-feature +feature" */
-   mask |= add;
-
-#define PERMISSION_TO_TEXT(__bit, __name)   \
-   if (!(mask & __bit))                     \
-   {                                        \
-      result = strsav(result, " -" __name); \
-   }                                        \
-   else if (add & __bit)                    \
-   {                                        \
-      result = strsav(result, " +" __name); \
-   }
-
-   PERMISSION_TO_TEXT(PERMIT_COOKIE_SET, "cookies-set");
-   PERMISSION_TO_TEXT(PERMIT_COOKIE_READ, "cookies-read");
-   PERMISSION_TO_TEXT(PERMIT_RE_FILTER, "filter");
-   PERMISSION_TO_TEXT(PERMIT_POPUPS, "popup");
-   PERMISSION_TO_TEXT(PERMIT_REFERER, "referer");
-   PERMISSION_TO_TEXT(PERMIT_FAST_REDIRECTS, "fast-redirects");
-   PERMISSION_TO_TEXT(PERMIT_BLOCK, "block");
-   PERMISSION_TO_TEXT(PERMIT_IMAGE, "image");
-
-   return result;
-}
-
-
  /*********************************************************************
  *
  * Function    :  ijb_show_url_info
@@ -1508,14 +1499,16 @@ char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
       char * s;
       int port = 80;
       struct file_list *fl;
-      struct permissions_spec *b;
+      struct url_actions *b;
       struct url_spec url[1];
-      int permissions = csp->config->default_permissions;
+      struct current_action_spec action[1];
+
+      init_current_action(action);
 
       result = (char *)malloc(sizeof(C_URL_INFO_HEADER) + 2 * strlen(host));
       sprintf(result, C_URL_INFO_HEADER, host, host);
 
-      s = permissions_to_text(permissions, permissions);
+      s = current_action_to_text(action);
       result = strsav(result, "<h3>Defaults:</h3>\n<p><b>{");
       result = strsav(result, s);
       result = strsav(result, " }</b></p>\n<h3>Patterns affecting the URL:</h3>\n<p>\n");
@@ -1538,7 +1531,7 @@ char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
          port = atoi(s);
       }
 
-      if (((fl = csp->permissions_list) == NULL) || ((b = fl->f) == NULL))
+      if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
       {
          freez(host);
          freez(path);
@@ -1571,15 +1564,15 @@ char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
 #endif
                )
                {
-                  s = permissions_to_text(b->mask, b->add);
+                  s = actions_to_text(b->action);
                   result = strsav(result, "<b>{");
                   result = strsav(result, s);
                   result = strsav(result, " }</b><br>\n<code>");
                   result = strsav(result, b->url->spec);
                   result = strsav(result, "</code><br>\n<br>\n");
                   freez(s);
-                  permissions &= b->mask;
-                  permissions |= b->add;
+
+                  merge_current_action(action, b->action);
                }
             }
          }
@@ -1591,11 +1584,13 @@ char *ijb_show_url_info(struct http_request *http, struct client_state *csp)
       freez(host);
       freez(path);
 
-      s = permissions_to_text(permissions, permissions);
+      s = current_action_to_text(action);
       result = strsav(result, "</p>\n<h2>Final Results:</h2>\n<p><b>{");
       result = strsav(result, s);
       result = strsav(result, " }</b><br>\n<br>\n");
       freez(s);
+
+      free_current_action(action);
 
       result = strsav(result, C_URL_INFO_FOOTER);
       return result;

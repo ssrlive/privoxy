@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.5 2001/05/27 22:17:04 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.6 2001/05/29 09:50:24 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
  *                   `acl_addr', `add_stats', `block_acl', `block_imageurl',
- *                   `block_url', `url_permissions', `domaincmp', `dsplit',
+ *                   `block_url', `url_actions', `domaincmp', `dsplit',
  *                   `filter_popups', `forward_url'
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
  *                   `show_proxy_args', and `trust_url'
@@ -40,6 +40,29 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.6  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.5  2001/05/27 22:17:04  oes
  *
  *    - re_process_buffer no longer writes the modified buffer
@@ -143,7 +166,12 @@ extern char *redirect_url(struct http_request *http, struct client_state *csp);
 extern int block_imageurl(struct http_request *http, struct client_state *csp);
 #endif /* def IMAGE_BLOCKING */
 
-extern int url_permissions(struct http_request *http, struct client_state *csp);
+extern void url_actions(struct http_request *http, 
+                        struct client_state *csp);
+extern void apply_url_actions(struct current_action_spec *action, 
+                              struct http_request *http, 
+                              struct url_actions *b);
+
 extern const struct gateway *forward_url(struct http_request *http, struct client_state *csp);
 
 extern struct url_spec dsplit(char *domain);
