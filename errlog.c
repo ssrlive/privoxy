@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.7 2001/05/26 15:21:28 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.8 2001/05/26 17:25:14 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.7 2001/05/26 15:21:28 jongfoster Ex
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.8  2001/05/26 17:25:14  jongfoster
+ *    Added support for CLF (Common Log Format) and fixed LOG_LEVEL_LOG
+ *
  *    Revision 1.7  2001/05/26 15:21:28  jongfoster
  *    Activity animation in Win32 GUI now works even if debug==0
  *
@@ -145,7 +148,9 @@ static char * logfilename = NULL;
 /* logging detail level.  */
 static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
 
+/* static functions */
 static void fatal_error(const char * error_message);
+static char * w32_socket_strerr(int errcode, char * tmp_buf);
 
 
 /*********************************************************************
@@ -461,17 +466,22 @@ void log_error(int loglevel, char *fmt, ...)
             break;
          case 'E':
             /* Non-standard: Print error code from errno */
-            ival = errno;
+#ifdef _WIN32
+            ival = WSAGetLastError();
+            sval = w32_socket_strerr(ival, tempbuf);
+#else /* ifndef _WIN32 */
+            ival = errno; 
 #ifndef NOSTRERROR
             sval = strerror(ival);
 #else /* def NOSTRERROR */
-            sval = NULL
+            sval = NULL;
 #endif /* def NOSTRERROR */
             if (sval == NULL)
             {
                sprintf(tempbuf, "(errno = %d)", ival);
                sval = tempbuf;
             }
+#endif /* ndef _WIN32 */
             oldoutc = outc;
             outc += strlen(sval);
             if (outc < BUFSIZ-1) 
@@ -586,6 +596,94 @@ void log_error(int loglevel, char *fmt, ...)
    LogPutString(outbuf);
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  w32_socket_strerr
+ *
+ * Description :  Translate the return value from WSAGetLastError()
+ *                into a string.
+ *
+ * Parameters  :
+ *          1  :  errcode = The return value from WSAGetLastError().
+ *          2  :  tmp_buf = A temporary buffer that might be used to
+ *                          store the string.
+ *
+ * Returns     :  String representing the error code.  This may be
+ *                a global string constant or a string stored in
+ *                tmp_buf.
+ *
+ *********************************************************************/
+static char * w32_socket_strerr(int errcode, char * tmp_buf)
+{
+#define TEXT_FOR_ERROR(code,text) \
+   if (errcode == code)           \
+   {                              \
+      return #code " - " text;    \
+   }
+
+   TEXT_FOR_ERROR(WSAEACCES, "Permission denied")
+   TEXT_FOR_ERROR(WSAEADDRINUSE, "Address already in use.")
+   TEXT_FOR_ERROR(WSAEADDRNOTAVAIL, "Cannot assign requested address.");
+   TEXT_FOR_ERROR(WSAEAFNOSUPPORT, "Address family not supported by protocol family.");
+   TEXT_FOR_ERROR(WSAEALREADY, "Operation already in progress.");
+   TEXT_FOR_ERROR(WSAECONNABORTED, "Software caused connection abort.");
+   TEXT_FOR_ERROR(WSAECONNREFUSED, "Connection refused.");
+   TEXT_FOR_ERROR(WSAECONNRESET, "Connection reset by peer.");
+   TEXT_FOR_ERROR(WSAEDESTADDRREQ, "Destination address required.");
+   TEXT_FOR_ERROR(WSAEFAULT, "Bad address.");
+   TEXT_FOR_ERROR(WSAEHOSTDOWN, "Host is down.");
+   TEXT_FOR_ERROR(WSAEHOSTUNREACH, "No route to host.");
+   TEXT_FOR_ERROR(WSAEINPROGRESS, "Operation now in progress.");
+   TEXT_FOR_ERROR(WSAEINTR, "Interrupted function call.");
+   TEXT_FOR_ERROR(WSAEINVAL, "Invalid argument.");
+   TEXT_FOR_ERROR(WSAEISCONN, "Socket is already connected.");
+   TEXT_FOR_ERROR(WSAEMFILE, "Too many open sockets.");
+   TEXT_FOR_ERROR(WSAEMSGSIZE, "Message too long.");
+   TEXT_FOR_ERROR(WSAENETDOWN, "Network is down.");
+   TEXT_FOR_ERROR(WSAENETRESET, "Network dropped connection on reset.");
+   TEXT_FOR_ERROR(WSAENETUNREACH, "Network is unreachable.");
+   TEXT_FOR_ERROR(WSAENOBUFS, "No buffer space available.");
+   TEXT_FOR_ERROR(WSAENOPROTOOPT, "Bad protocol option.");
+   TEXT_FOR_ERROR(WSAENOTCONN, "Socket is not connected.");
+   TEXT_FOR_ERROR(WSAENOTSOCK, "Socket operation on non-socket.");
+   TEXT_FOR_ERROR(WSAEOPNOTSUPP, "Operation not supported.");
+   TEXT_FOR_ERROR(WSAEPFNOSUPPORT, "Protocol family not supported.");
+   TEXT_FOR_ERROR(WSAEPROCLIM, "Too many processes.");
+   TEXT_FOR_ERROR(WSAEPROTONOSUPPORT, "Protocol not supported.");
+   TEXT_FOR_ERROR(WSAEPROTOTYPE, "Protocol wrong type for socket.");
+   TEXT_FOR_ERROR(WSAESHUTDOWN, "Cannot send after socket shutdown.");
+   TEXT_FOR_ERROR(WSAESOCKTNOSUPPORT, "Socket type not supported.");
+   TEXT_FOR_ERROR(WSAETIMEDOUT, "Connection timed out.");
+   TEXT_FOR_ERROR(WSAEWOULDBLOCK, "Resource temporarily unavailable.");
+   TEXT_FOR_ERROR(WSAHOST_NOT_FOUND, "Host not found.");
+   TEXT_FOR_ERROR(WSANOTINITIALISED, "Successful WSAStartup not yet performed.");
+   TEXT_FOR_ERROR(WSANO_DATA, "Valid name, no data record of requested type.");
+   TEXT_FOR_ERROR(WSANO_RECOVERY, "This is a non-recoverable error.");
+   TEXT_FOR_ERROR(WSASYSNOTREADY, "Network subsystem is unavailable.");
+   TEXT_FOR_ERROR(WSATRY_AGAIN, "Non-authoritative host not found.");
+   TEXT_FOR_ERROR(WSAVERNOTSUPPORTED, "WINSOCK.DLL version out of range.");
+   TEXT_FOR_ERROR(WSAEDISCON, "Graceful shutdown in progress.");
+   /*
+    * The following error codes are documented in the Microsoft WinSock
+    * reference guide, but don't actually exist.
+    *
+    * TEXT_FOR_ERROR(WSA_INVALID_HANDLE, "Specified event object handle is invalid.");
+    * TEXT_FOR_ERROR(WSA_INVALID_PARAMETER, "One or more parameters are invalid.");
+    * TEXT_FOR_ERROR(WSAINVALIDPROCTABLE, "Invalid procedure table from service provider.");
+    * TEXT_FOR_ERROR(WSAINVALIDPROVIDER, "Invalid service provider version number.");
+    * TEXT_FOR_ERROR(WSA_IO_PENDING, "Overlapped operations will complete later.");
+    * TEXT_FOR_ERROR(WSA_IO_INCOMPLETE, "Overlapped I/O event object not in signaled state.");
+    * TEXT_FOR_ERROR(WSA_NOT_ENOUGH_MEMORY, "Insufficient memory available.");
+    * TEXT_FOR_ERROR(WSAPROVIDERFAILEDINIT, "Unable to initialize a service provider.");
+    * TEXT_FOR_ERROR(WSASYSCALLFAILURE, "System call failure.");
+    * TEXT_FOR_ERROR(WSA_OPERATION_ABORTED, "Overlapped operation aborted.");
+    */
+
+   sprintf(tmp_buf, "(error number %d)", errcode);
+   return tmp_buf;
 }
 
 
