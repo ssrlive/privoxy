@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.70 2002/04/08 20:53:56 swa Exp $
+ $Id: user-manual.sgml,v 1.71 2002/04/08 22:59:26 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.70 2002/04/08 20:53:56 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.71 2002/04/08 22:59:26 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -80,7 +80,9 @@
 
  <para>
   You can find the latest version of the user manual at  <ulink
-  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>. Please see the Contact section on how to contact the developers.
+  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
+  Please see the <ulink url="contact.html">Contact section</ulink> on how to
+  contact the developers.
   </para>
 
 <!--   <para> -->
@@ -214,7 +216,7 @@
  This will place the <application>Privoxy</application> configuration 
  files in <filename>/etc/privoxy/</filename>, and log files in 
  <filename>/var/log/privoxy/</filename>. Run 
- <command>chkconfig privoxy on</command> to have
+ <quote><command>chkconfig privoxy on</command></quote> to have
  <application>Privoxy</application> start automatically during init.
 
 </para>
@@ -3157,7 +3159,8 @@ icon being being cached by the browser, which will speed up the display.
  pages, such as a 404 Not Found error page, it uses the appropriate template.
  On Linux, BSD, and Unix, these are located in
  <filename>/etc/privoxy/templates</filename> by default. These may be
- customized, if desired.
+ customized, if desired. <filename>cgi-style.css</filename> is 
+ used to control the HTML attributes (fonts, etc).
 </para>
 <para>
  The default <quote>Blocked</quote> banner page with the bright red top 
@@ -3588,12 +3591,12 @@ Requests</title>
 <sect3 id="bookmarklets">
 <title>Bookmarklets</title>
 <para>
- Here are some bookmarklets to allow you to easily access a
- <quote>mini</quote> version of this page. They are designed for MS Internet
- Explorer, but should work equally well in Netscape, Mozilla, and other
- browsers which support JavaScript. They are designed to run directly from
- your bookmarks - not by clicking the links below (although that will work for
- testing).
+ Below are some <quote>bookmarklets</quote> to allow you to easily access a
+ <quote>mini</quote> version of some of <application>Privoxy's</application>
+ special pages. They are designed for MS Internet Explorer, but should work
+ equally well in Netscape, Mozilla, and other browsers which support
+ JavaScript. They are designed to run directly from your bookmarks - not by
+ clicking the links below (although that should work for testing).
 </para>
 <para>
  To save them, right-click the link and choose <quote>Add to Favorites</quote>
@@ -3631,8 +3634,16 @@ Requests</title>
    </para>
   </listitem> 
 
+  <listitem>
+   <para>
+    <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Actions file feedback system</ulink>
+   </para>
+  </listitem> 
+
  </itemizedlist>
 </para>
+
+
 
 <para>
  Credit: The site which gave me the general idea for these bookmarklets is
@@ -3946,6 +3957,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.71  2002/04/08 22:59:26  hal9
+ Version update. Spell chkconfig correctly :)
+
  Revision 1.70  2002/04/08 20:53:56  swa
  ?
 
