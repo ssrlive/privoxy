@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.23 2001/08/02 22:03:23 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.24 2001/08/05 16:06:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,13 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.23 2001/08/02 22:03:23 jongfost
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.24  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.23  2001/08/02 22:03:23  jongfoster
  *    Fixing an unterminated character constant.
  *
@@ -307,6 +314,10 @@ char *show_rcs(void)
    SHOW_RCS(actions_rcs)
    SHOW_RCS(cgi_h_rcs)
    SHOW_RCS(cgi_rcs)
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+   SHOW_RCS(cgiedit_rcs)
+   SHOW_RCS(cgiedit_h_rcs)
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 #ifdef __MINGW32__
    SHOW_RCS(cygwin_h_rcs)
 #endif

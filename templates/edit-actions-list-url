@@ -1,0 +1,8 @@
+    <tr class="url@url-1-2@" valign="top">
+      <td align="left">&nbsp;</td>
+      <td align="center"><a name="s@sectionid@url@urlid@"></a><input type="button"
+        onclick="edit_pattern(@sectionid@,@urlid@,'@url@');"
+        value="Edit"></td>
+      <td class="url" align="left">@url@</td>
+    </tr>
+

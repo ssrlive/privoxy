@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.5  2001/07/18 12:27:03  oes
+ *    Changed deanimate-gifs to string action
+ *
  *    Revision 1.4  2001/07/13 13:52:12  oes
  *     - Formatting
  *     - Introduced new action ACTION_DEANIMATE
@@ -50,23 +53,53 @@
  *********************************************************************/
 
 
-DEFINE_ACTION_MULTI ("add-header",      ACTION_MULTI_ADD_HEADER)
-DEFINE_ACTION_BOOL  ("block",           ACTION_BLOCK)
-DEFINE_ACTION_STRING("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
-DEFINE_ACTION_BOOL  ("fast-redirects",  ACTION_FAST_REDIRECTS)
-DEFINE_ACTION_BOOL  ("filter",          ACTION_FILTER)
-DEFINE_ACTION_BOOL  ("hide-forwarded",  ACTION_HIDE_FORWARDED)
-DEFINE_ACTION_STRING("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM)
-DEFINE_ACTION_STRING("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
-DEFINE_ACTION_STRING("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
-DEFINE_ACTION_BOOL  ("image",           ACTION_IMAGE)
-DEFINE_ACTION_STRING("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
-DEFINE_ACTION_BOOL  ("no-cookies-read", ACTION_NO_COOKIE_READ)
-DEFINE_ACTION_BOOL  ("no-cookies-set",  ACTION_NO_COOKIE_SET)
-DEFINE_ACTION_BOOL  ("no-popups",       ACTION_NO_POPUPS)
-DEFINE_ACTION_BOOL  ("vanilla-wafer",   ACTION_VANILLA_WAFER)
-DEFINE_ACTION_MULTI ("wafer",           ACTION_MULTI_WAFER)
+#if !(defined(DEFINE_ACTION_BOOL) && defined(DEFINE_ACTION_MULTI) && defined(DEFINE_ACTION_STRING))
+#error Please define lots of macros before including "actionlist.h".
+#endif /* !defined(all the DEFINE_ACTION_xxx macros) */
+
+#ifndef DEFINE_CGI_PARAM_RADIO
+#define DEFINE_CGI_PARAM_RADIO(name, bit, index, value, is_default)
+#define DEFINE_CGI_PARAM_CUSTOM(name, bit, index, default_val)
+#define DEFINE_CGI_PARAM_NO_RADIO(name, bit, index, default_val)
+#endif /* ndef DEFINE_CGI_PARAM_RADIO */
+
+DEFINE_ACTION_MULTI      ("add-header",      ACTION_MULTI_ADD_HEADER)
+DEFINE_ACTION_BOOL       ("block",           ACTION_BLOCK)
+DEFINE_ACTION_STRING     ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
+DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "first", 0)
+DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
+DEFINE_ACTION_BOOL       ("fast-redirects",  ACTION_FAST_REDIRECTS)
+DEFINE_ACTION_BOOL       ("filter",          ACTION_FILTER)
+DEFINE_ACTION_BOOL       ("hide-forwarded",  ACTION_HIDE_FORWARDED)
+DEFINE_ACTION_STRING     ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM)
+DEFINE_CGI_PARAM_RADIO   ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "block", 1)
+DEFINE_CGI_PARAM_CUSTOM  ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "spam_me_senseless@sittingduck.xyz")
+DEFINE_ACTION_STRING     ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "forge", 1)
+DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
+DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
+DEFINE_ACTION_STRING     ("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
+DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_FROM,          "JunkBuster/3.0 (Anonymized)")
+DEFINE_ACTION_BOOL       ("image",           ACTION_IMAGE)
+DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
+DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "logo", 1)
+DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
+DEFINE_CGI_PARAM_CUSTOM  ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "http://")
+DEFINE_ACTION_BOOL       ("no-cookies-read", ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("no-cookies-set",  ACTION_NO_COOKIE_SET)
+DEFINE_ACTION_BOOL       ("no-popups",       ACTION_NO_POPUPS)
+DEFINE_ACTION_BOOL       ("vanilla-wafer",   ACTION_VANILLA_WAFER)
+DEFINE_ACTION_MULTI      ("wafer",           ACTION_MULTI_WAFER)
 #if DEFINE_ACTION_ALIAS
-DEFINE_ACTION_BOOL  ("no-popup",        ACTION_NO_POPUPS)
-DEFINE_ACTION_STRING("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_ACTION_BOOL       ("no-popup",        ACTION_NO_POPUPS)
+DEFINE_ACTION_STRING     ("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
 #endif /* if DEFINE_ACTION_ALIAS */
+
+#undef DEFINE_ACTION_MULTI
+#undef DEFINE_ACTION_STRING
+#undef DEFINE_ACTION_BOOL
+#undef DEFINE_ACTION_ALIAS
+#undef DEFINE_CGI_PARAM_CUSTOM
+#undef DEFINE_CGI_PARAM_RADIO
+#undef DEFINE_CGI_PARAM_NO_RADIO
+

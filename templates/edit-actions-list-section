@@ -1,0 +1,51 @@
+<form action="http://i.j.b/">
+  <table border="0" width="100%" cellspacing="0">
+    <tr class="actions" valign="top">
+      <td class="header" align="right"><a name="s@sectionid@"></a>Actions:</td>
+      <td align="center"><input type="button" onclick="edit_actions(@sectionid@)"
+        value="Edit"></td>
+      <td class="action" align="left">@actions@</td>
+    </tr>
+    <tr class="rule">
+      <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
+        height="1" alt="----"></td>
+    </tr>
+    <tr class="url1" valign="top">
+      <td class="header" align="right"><a name="s@sectionid@urls">URLs:</a></td>
+      <td align="center"><input type="button" onclick="add_pattern(@sectionid@)"
+        value="Add"></td>
+      <td align="left">&nbsp;</td>
+    </tr>
+
+@urls@
+
+    <tr class="rule">
+      <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
+        height="1" alt="----"></td>
+    </tr>
+    <tr class="adv" valign="top">
+      <td class="header" align="right"><b>Advanced:</b></td>
+      <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="4">
+          <tr valign="middle" align="center">
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+              value="Move section up">&nbsp;&nbsp;&nbsp;</td>
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+              value="Split section">&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+          <tr valign="middle" align="center">
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+              value="Move section down">&nbsp;&nbsp;&nbsp;</td>
+            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="not_yet()"
+              value="Merge with next">&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</form>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+

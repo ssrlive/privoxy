@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="robots" content="noindex,nofollow">
+
+<title>JunkBuster: Edit actions list</title>
+
+<style type="text/css">
+body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+tr.actions   { background-color: #EEFFEE }
+tr.url1      { background-color: #D0D0FF }
+tr.url2      { background-color: #EEEEFF }
+tr.rule      { background-color: #C0C0C0; height: 3 }
+tr.adv       { background-color: #FFFFD0 }
+td.header    { font-weight: bold }
+td.url       { font-weight: bold }
+td.action    { font-weight: bold; font-style: italic }
+</style>
+
+<script type="text/javascript">
+<!--
+function edit_pattern(b,p,ct)
+{
+   ct=unescape(ct);
+	nt=window.prompt("Edit this URL pattern:",ct);
+	if ((nt!=null)&&(nt!=ct)&&(nt!=""))
+	{ window.location.href="http://i.j.b/change-pattern?section="+b+"&pattern="+p+"&newval="+escape(nt)+"#s"+b+"url"+p; }
+}
+
+function add_pattern(b)
+{
+	nt=window.prompt("Enter URL pattern to add:", "");
+	if ((nt!=null)&&(nt!=""))
+	{ window.location.href="http://i.j.b/change-pattern?section="+b+"&pattern=new&newval="+escape(nt)+"#s"+b+"urls"; }
+}
+
+function edit_actions(b)
+{
+	window.location.href="http://i.j.b/edit-actions?section="+b;
+}
+
+function not_yet()
+{
+	window.alert("The feature you are trying to use has not been implemented yet.");
+}
+//-->
+</script>
+</head>
+
+<body>
+
+@sections@
+
+</body>
+
+</html>

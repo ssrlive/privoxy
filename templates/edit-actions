@@ -1,0 +1,397 @@
+#
+#
+# Available variables:
+#
+# deanimate-gifs-param-first
+# deanimate-gifs-param-last
+# hide-from-param-block
+# hide-from-param-custom
+# hide-from-param
+# hide-referer-param-forge
+# hide-referer-param-block
+# hide-referer-param-custom
+# hide-referer-param
+# hide-user-agent-param
+# image-blocker-param-logo
+# image-blocker-param-blank
+# image-blocker-param-custom
+# image-blocker-param-logo
+#
+#
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="robots" content="noindex,nofollow">
+
+<title>JunkBuster: Edit actions</title>
+
+<style type="text/css">
+body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+td.action    { font-weight: bold; font-style: italic; white-space: nowrap }
+th           { font-weight: bold; background-color: #999999 }
+# This is the key to the color names below:
+# bg=background, en="Enable", dis="Disable", noc="No Change"
+# 1=odd rows, 2=even rows, h=Table header
+tr.bg1       { background-color: #EEEEEE }
+td.en1       { background-color: #EEFFEE }
+td.dis1      { background-color: #FFEEEE }
+td.noc1      { background-color: #EEEEFF }
+tr.bg2       { background-color: #DDDDDD }
+td.en2       { background-color: #DDFFDD }
+td.dis2      { background-color: #FFDDDD }
+td.noc2      { background-color: #DDDDFF }
+th.enh       { background-color: #99FF99 }
+th.dish      { background-color: #FF9999 }
+th.noch      { background-color: #9999FF }
+</style>
+
+<script type="text/javascript">
+<!--
+function show_more(target, checkbox)
+{
+   if (checkbox.checked)
+   { target.style.display = ""; }
+   else
+   { target.style.display = "none"; }
+}
+
+function disable_unless(target, checkbox)
+{
+   target.disabled = !(checkbox.checked);
+}
+//-->
+</script>
+</head>
+
+<body>
+
+<p>&nbsp;</p>
+<form method="GET" action="http://i.j.b/edit-actions-submit" id="myform">
+  <table border="0" width="100%" cellspacing="0">
+    <tr align="left">
+      <th>Action</th>
+      <th>Description</th>
+      <th class="enh" align="center">Enable</th>
+      <th class="dish" align="center">Disable</th>
+      <th class="noch" align="center">No Change</th>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+add-header</td>
+      <td>Adds HTTP headers.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="add-header" id="add_header_y" value="Y" @add-header-y@
+        onclick="show_more(add_header_opts,add_header_y)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="add-header" value="N" @add-header-n@
+        onclick="show_more(add_header_opts,add_header_y)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="add-header" value="X" @add-header-x@
+        onclick="show_more(add_header_opts,add_header_y)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="add_header_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">To edit the settings for this option, <input
+        type="checkbox" name="add-header-edit" id="add_header_edit"
+        value="ON"><label for="add_header_edit">check here</label> and then
+        click &quot;Submit&quot;.</td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+block</td>
+      <td>Block the request</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="block" value="Y" @block-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="block" value="N" @block-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="block" value="X" @block-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+deanimate-gifs</td>
+      <td>Replace animated GIFs with their (first/last) frame.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="deanimate-gifs" id="deanimate_gifs_y" value="Y" @deanimate-gifs-y@
+        onclick="show_more(deanimate_opts,deanimate_gifs_y)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="deanimate-gifs" value="N" @deanimate-gifs-n@
+        onclick="show_more(deanimate_opts,deanimate_gifs_y)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="deanimate-gifs" value="X" @deanimate-gifs-x@
+        onclick="show_more(deanimate_opts,deanimate_gifs_y)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="deanimate_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">Use the <input type="radio" name="deanimate-gifs-mode"
+        value="first" id="deanimate_first" @deanimate-gifs-param-first@><label
+        for="deanimate_first">first frame</label>&nbsp;&nbsp; <input
+        type="radio" name="deanimate-gifs-mode" value="last" 
+        id="deanimate_last" @deanimate-gifs-param-last@><label
+        for="deanimate_last">last frame</label></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+fast-redirects</td>
+      <td>Bypass some tracking URLs.</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="fast-redirects" value="Y" @fast-redirects-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="fast-redirects" value="N" @fast-redirects-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="fast-redirects" value="X" @fast-redirects-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+filter</td>
+      <td>Filter the website through the re_filterfile</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="filter" value="Y" @filter-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="filter" value="N" @filter-n@ 
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="filter" value="X" @filter-x@
+         ></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+hide-forwarded</td>
+      <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="hide-forwarded" value="Y" @hide-forwarded-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="hide-forwarded" value="N" @hide-forwarded-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="hide-forwarded" value="X" @hide-forwarded-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+hide-from</td>
+      <td>Stop old web browsers from sending the user's e-mail address with
+        every request.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="hide-from" id="hide_from_y" value="Y" @hide-from-y@
+        onclick="show_more(hide_from_opts,hide_from_y)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="hide-from" value="N" @hide-from-n@
+        onclick="show_more(hide_from_opts,hide_from_y)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="hide-from" value="X" @hide-from-x@
+        onclick="show_more(hide_from_opts,hide_from_y)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="hide_from_opts">
+      <td>&nbsp;</td>
+      <td colspan="4"><input type="radio" name="from-mode" value="block"
+        onclick="disable_unless(from_param, from_mode_set)"
+        @hide-from-param-block@ id="from_mode_block"><label
+        for="from_mode_block">Remove completely</label><br>
+        <input type="radio" name="from-mode" value="CUSTOM" 
+        onclick="disable_unless(from_param, from_mode_set)"
+        @hide-from-param-custom@ id="from_mode_set"><label
+        for="from_mode_set">Fake e-mail address:</label><br>
+        <input type="text" name="from-param" id="from_param" size="40"
+        value="@hide-from-param@"></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+hide-referer</td>
+      <td>Helps prevent tracking by not sending the URL of the previous web
+        page.&nbsp;</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="hide-referer" id="hide_referer_y" value="Y" @hide-referer-y@
+        onclick="show_more(hide_referer_opts,hide_referer_y)"></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="hide-referer" id="hide_referer_n" value="N" @hide-referer-n@
+        onclick="show_more(hide_referer_opts,hide_referer_y)"></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="hide-referer" id="hide_referer_x" value="X" @hide-referer-x@
+        onclick="show_more(hide_referer_opts,hide_referer_y)"
+        ></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top" id="hide_referer_opts">
+      <td>&nbsp;</td>
+      <td colspan="4"><input type="radio" name="hide-referer-mode" value="block"
+        onclick="disable_unless(hide_referer_param, referer_mode_set)"
+        @hide-referer-param-block@ id="referer_mode_block"><label
+        for="referer_mode_block">Remove completely</label> (breaks images
+        on some free web hosts).<br>
+        <input type="radio" name="hide-referer-mode" value="forge"
+        onclick="disable_unless(hide_referer_param, referer_mode_set)"
+        @hide-referer-param-forge@ id="referer_mode_forge"><label
+        for="referer_mode_forge">Fake as the root directory of the
+        site</label> (fools checks for in-site links.)<br>
+        <input type="radio" name="hide-referer-mode" value="CUSTOM"
+        onclick="disable_unless(hide_referer_param, referer_mode_set)"
+        @hide-referer-param-custom@ id="referer_mode_set"><label
+        for="referer_mode_set">Fake as this web address:</label><br>
+        <input type="text" name="hide-referer-param" 
+        id="hide_referer_param" size="40"
+        value="@hide-referer-param@"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+hide-user-agent</td>
+      <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
+        sites).</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="hide-user-agent" id="hide_user_agent_y" value="Y" @hide-user-agent-y@
+        onclick="show_more(user_agent_opts,hide_user_agent_y)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="hide-user-agent" value="N" @hide-user-agent-n@
+        onclick="show_more(user_agent_opts,hide_user_agent_y)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="hide-user-agent" value="X" @hide-user-agent-x@
+        onclick="show_more(user_agent_opts,hide_user_agent_y)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="user_agent_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">User Agent string to send:<br>
+        <input type="text" name="hide-user-agent-mode" size="40"
+        value="@hide-user-agent-param@"></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+image</td>
+      <td>Request is for an image (only useful in conjunction with the <i><b>+block</b></i>
+        and <i><b>+image-blocker</b></i> options).</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="image" value="Y" @image-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="image" value="N" @image-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="image" value="X" @image-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+image-blocker</td>
+      <td>Specifies how to block images.&nbsp; Disable to always send a HTML
+        &quot;blocked&quot; page.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="image-blocker" id="image_blocker_y" value="Y" @image-blocker-y@
+        onclick="show_more(image_blocker_opts,image_blocker_y)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="image-blocker" value="N" @image-blocker-n@
+        onclick="show_more(image_blocker_opts,image_blocker_y)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="image-blocker" value="X" @image-blocker-x@
+        onclick="show_more(image_blocker_opts,image_blocker_y)"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="image_blocker_opts">
+      <td>&nbsp;</td>
+      <td colspan="4"><input type="radio" name="image-blocker-mode"
+        onclick="disable_unless(image_blocker_param, image_blocker_mode_set)"
+        value="logo" id="image_blocker_mode_logo" @image-blocker-param-logo@><label
+        for="image_blocker_mode_logo">Send Junkbuster logo</label><br>
+        <input type="radio" name="image-blocker-mode" value="blank"
+        onclick="disable_unless(image_blocker_param, image_blocker_mode_set)"
+        id="image_blocker_mode_blank" @image-blocker-param-blank@><label 
+        for="image_blocker_mode_blank">Send a 1x1 transparent GIF</label><br>
+        <input type="radio" name="image-blocker-mode" value="CUSTOM"
+        onclick="disable_unless(image_blocker_param, image_blocker_mode_set)"
+        id="image_blocker_mode_set" @image-blocker-param-custom@><label
+        for="image_blocker_mode_set">Redirect
+        the browser to this image URL:</label><br>
+        <input type="text" name="image-blocker-param" id="image_blocker_param"
+        size="40" value="@image-blocker-param@"></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+no-cookies-read</td>
+      <td>Prevent the website from reading cookies</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="no-cookies-read" value="Y" @no-cookies-read-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="no-cookies-read" value="N" @no-cookies-read-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="no-cookies-read" value="X" @no-cookies-read-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+no-cookies-set</td>
+      <td>Prevent the website from setting cookies</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="no-cookies-set" value="Y" @no-cookies-set-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="no-cookies-set" value="N" @no-cookies-set-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="no-cookies-set" value="X" @no-cookies-set-x@
+        ></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+no-popups</td>
+      <td>Filter the website through a built-in filter to disable JavaScript
+        pop-up windows.</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="no-popups" value="Y" @no-popups-y@
+        ></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="no-popups" value="N" @no-popups-n@
+        ></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="no-popups" value="X" @no-popups-x@
+        ></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="action">+vanilla-wafer</td>
+      <td>If you use a jarfile, automatically adds a special wafer.</td>
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="vanilla-wafer" value="Y" @vanilla-wafer-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="vanilla-wafer" value="N" @vanilla-wafer-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="vanilla-wafer" value="X" @vanilla-wafer-x@
+        ></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top">
+      <td class="action">+wafer</td>
+      <td>Adds user-specified cookies.</td>
+      <td class="en2" align="center" valign="middle"><input type="radio"
+        name="wafer" id="wafer_y" value="Y" @wafer-y@
+        onclick="show_more(wafer_opts,wafer_y)"></td>
+      <td class="dis2" align="center" valign="middle"><input type="radio"
+        name="wafer" id="wafer_n" value="N" @wafer-n@
+        onclick="show_more(wafer_opts,wafer_y)"></td>
+      <td class="noc2" align="center" valign="middle"><input type="radio"
+        name="wafer" id="wafer_x" value="X" @wafer-x@
+        onclick="show_more(wafer_opts,wafer_y)"></td>
+    </tr>
+    <tr class="bg2" align="left" valign="top" id="wafer_opts">
+      <td>&nbsp;</td>
+      <td colspan="4">To edit the settings for this option, <input
+        type="checkbox" name="wafer-edit" id="wafer_edit" value="ON"><label
+        for="wafer_edit">check here</label> and then click
+        &quot;Submit&quot;.</td>
+    </tr>
+  </table>
+<script type="text/javascript">
+<!--
+disable_unless(myform.from_param,          myform.from_mode_set);
+disable_unless(myform.hide_referer_param,  myform.referer_mode_set);
+disable_unless(myform.image_blocker_param, myform.image_blocker_mode_set);
+show_more(add_header_opts,    myform.add_header_y);
+show_more(deanimate_opts,     myform.deanimate_gifs_y);
+show_more(hide_from_opts,     myform.hide_from_y);
+show_more(hide_referer_opts,  myform.hide_referer_y);
+show_more(user_agent_opts,    myform.hide_user_agent_y);
+show_more(image_blocker_opts, myform.image_blocker_y);
+show_more(wafer_opts,         myform.wafer_y);
+//-->
+</script>
+  <p><input type="submit" value="Submit" name="Submit"></p>
+</form>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

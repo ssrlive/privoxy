@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.2 2001/07/29 19:01:11 jongfoster Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.3 2001/09/14 00:17:32 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.3  2001/09/14 00:17:32  jongfoster
+ *    Tidying up memory allocation. New function init_action().
+ *
  *    Revision 1.2  2001/07/29 19:01:11  jongfoster
  *    Changed _FILENAME_H to FILENAME_H_INCLUDED.
  *    Added forward declarations for needed structures.
@@ -62,6 +65,9 @@ extern void merge_actions (struct action_spec *dest,
 extern void copy_action (struct action_spec *dest, 
                          const struct action_spec *src);
 extern char * actions_to_text     (struct action_spec *action);
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+extern char * actions_to_html     (struct action_spec *action);
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 extern void init_current_action     (struct current_action_spec *dest);
 extern void free_current_action     (struct current_action_spec *src);

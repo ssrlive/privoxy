@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.24 2001/09/16 11:38:01 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.25 2001/09/16 15:02:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.24 2001/09/16 11:38:01 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.25  2001/09/16 15:02:35  jongfoster
+ *    Adding i.j.b/robots.txt.
+ *    Inlining add_stats() since it's only ever called from one place.
+ *
  *    Revision 1.24  2001/09/16 11:38:01  jongfoster
  *    Splitting fill_template() into 2 functions:
  *    template_load() loads the file
@@ -200,6 +204,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.24 2001/09/16 11:38:01 jongfoster Exp $";
 #include "miscutil.h"
 #include "showargs.h"
 #include "loadcfg.h"
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+#include "cgiedit.h"
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
@@ -219,6 +226,17 @@ const struct cgi_dispatcher cgi_dispatcher[] = {
    { "send-banner",
          11, cgi_send_banner, 
          "HIDE Send the transparent or \"Junkbuster\" gif" },
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+   { "edit-actions-list",
+         17, cgi_edit_actions_list, 
+         "Edit the actions list" },
+   { "edit-actions-submit",
+         19, cgi_edit_actions_submit, 
+         "HIDE Change the actions for (a) specified URL(s)" },
+   { "edit-actions",
+         12, cgi_edit_actions, 
+         "HIDE Edit the actions for (a) specified URL(s)" },
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
    { "",
          0, cgi_default,
          "Junkbuster main page" },
@@ -310,6 +328,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    {
       return NULL;
    }
+
 
    /* Remove leading slash */
    if (*argstring == '/')
