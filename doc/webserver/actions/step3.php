@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.13 2002/04/07 17:11:40 oes Exp $
+  $Id: step3.php,v 1.14 2002/04/08 17:04:05 oes Exp $
 
   $Log: step3.php,v $
+  Revision 1.14  2002/04/08 17:04:05  oes
+  Adapt to unified stylesheet
+
   Revision 1.13  2002/04/07 17:11:40  oes
   Tracker submit via curl (no need for user to see), fixing problems, removing monster comments
 
@@ -318,7 +321,7 @@ curl_close ($ch);
    </p>
 
    <p>
-    It will be reviewed by the developers and used to improve the
+    The developers will review and use your submission to improve the
     distribution actions file.
    </p>
    
