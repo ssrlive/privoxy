@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.23 2002/03/24 13:06:49 swa Exp $
+# $Id: GNUmakefile.in,v 1.24 2002/03/24 14:19:55 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -483,7 +483,7 @@ clean:
 	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
 
 clobber: clean
-	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` TAGS junkbuster.log privoxy.log config.cache *~ *.tar.gz
+	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` `find . -name TAGS` config.status config.h.in config.log junkbuster.log privoxy.log config.cache *~ *.tar.gz
 
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
@@ -518,6 +518,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.24  2002/03/24 14:19:55  swa
+# set rpm package release in configure.in. nowhere else.
+#
 # Revision 1.23  2002/03/24 13:06:49  swa
 # suse-clean now runs fine
 #

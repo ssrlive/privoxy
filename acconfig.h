@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.20  2002/03/24 13:46:44  swa
+ *    name change related issue.
+ *
  *    Revision 1.19  2002/03/24 13:25:42  swa
  *    name change related issues
  *
@@ -196,6 +199,11 @@
  * Version number - Point (_._.X)
  */
 #undef VERSION_POINT
+
+/*
+ * Version number - RPM-release
+ */
+#undef VERSION_RPM_PACKAGE
 
 /*
  * Version number, as a string
