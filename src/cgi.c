@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 2.1 2002/06/04 17:55:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 2.1  2002/06/04 17:55:24  jongfoster
+ *    Adding comments
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -816,6 +819,16 @@ static struct map *parse_cgi_parameters(char *argstring)
    if (NULL == (cgi_params = new_map()))
    {
       return NULL;
+   }
+
+   /* 
+    * IE 5 does, of course, violate RFC 2316 Sect 4.1 and sends
+    * the fragment identifier along with the request, so we must
+    * cut it off here, so it won't pollute the CGI params:
+    */
+   if (NULL != (p = strchr(argstring, '#')))
+   {
+      *p = '\0';
    }
 
    pairs = ssplit(argstring, "&", vector, SZ(vector), 1, 1);
