@@ -103,14 +103,15 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-   Modularized configuration that will allow for system wide settings, and
-   individual user settings. 
+   A browser based configuration utility (WIP at 
+   <ulink url="http://i.j.b">http://i.j.b</ulink>).
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   A browser based GUI configuration utility (not finished).
+   Modularized configuration that will allow for system wide settings, and
+   individual user settings. (not implemented yet)
   </para>
  </listitem> 
 
@@ -123,7 +124,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-   Partial support for HTTP/1.1.
+   Support for HTTP/1.1 (partially implemented at this point).
   </para>
  </listitem> 
 
@@ -147,6 +148,10 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  </listitem> 
 
  </itemizedlist>
+</para>
+
+<para>
+ In addition, the configuration is more versatile overall.
 </para>
 
 </sect2>
@@ -206,7 +211,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- autoconf       #recommended for CVS source
+ autoconf           #recommended for CVS source
  ./configure
  make
  su
@@ -229,7 +234,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- autoconf       #recommended for CVS source
+ autoconf              #recommended for CVS source
  ./configure
  make redhat-dist
  </screen>
@@ -272,7 +277,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- autoconf       #recommended for CVS source
+ autoconf             #recommended for CVS source
  ./configure
  make suse-dist
  </screen>
@@ -420,10 +425,11 @@ configuration section below. HB.)
   <listitem>
    <para>
     The <filename>actionsfile</filename> file is used  to define various 
-    actions relating to images, banners, pop-ups, banners and cookies.
-    There is a CGI based editor for this file that can be accessed 
-    via <ulink url="http://i.j.b./">http://i.j.b./</ulink>.
-    (Still under active development.)
+    <quote>actions</quote> relating to images, banners, pop-ups, access
+    restrictions, banners and cookies. There is a CGI based editor for this
+    file that can be accessed via <ulink
+    url="http://i.j.b./">http://i.j.b./</ulink>. This is the easiest method of
+    configuring actions. (Still under active development.)
    </para>
   </listitem> 
 
@@ -446,6 +452,12 @@ configuration section below. HB.)
  for the changes to take effect.
 </para>
 
+<para>
+ While under development, the configuration content is subject to change. 
+ The below documentation may not be accurate by the time you read this. 
+ Also, what constitutes a <quote>default</quote> setting, may change, so 
+ please check all your configuration files on important issues.
+</para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -761,10 +773,10 @@ configuration section below. HB.)
  serve requests from other machines (e.g. on your local network) as well, you
  will need to override the default. The syntax is 
  <quote>listen-address [&lt;ip-address&gt;]:&lt;port&gt;</quote>. If you leave
- out the IP adress, <application>junkbuster</application> will bind to all
+ out the IP address, <application>junkbuster</application> will bind to all
  interfaces (addresses) on your machine and may become reachable from the
- internet. In that case, consider using access control lists (acl's) (see
- <quote>aclfile</quote> above).
+ Internet. In that case, consider using access control lists (acl's) (see
+ <quote>aclfile</quote> above), or a firewall.
 </para>
 
 <para>
@@ -939,9 +951,9 @@ configuration section below. HB.)
 <para>
  For content filtering, i.e. the <quote>+filter</quote> and
  <quote>+deanimate-gif</quote> actions, it is neccessary that 
- <application>Junkbuster</application> buffers up the entire document body.
+ <application>Junkbuster</application> buffers the entire document body.
  This can be potentially dangerous, since a server could just keep sending
- data indefinitely and wait for your RAM to exhaust.
+ data indefinitely and wait for your RAM to exhaust. With nasty consequences.
 </para>
 
 <para>
@@ -1733,9 +1745,17 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
+ The actions file can be edited with a browser by loading 
+ <ulink url="http://i.j.b">http://i.j.b</ulink>, and then select 
+ <quote>Edit Actions</quote>.
+</para>
+
+<para>
  There are four types of lines in this file: comments (begin with a 
  <quote>#</quote> character), actions, aliases and patterns, all of which are
- explained below.
+ explained below, as well as the configuration file syntax that 
+ <application>Junkbuster</application> understands.
+
 </para>
 
 

@@ -59,15 +59,15 @@ New Features
 In addition to Junkbuster's traditional features of ad and banner blocking and
 cookie management, this is a list of new features currently under development:
 
-  * Modularized configuration that will allow for system wide settings, and
-    individual user settings.
+  * A browser based configuration utility (WIP at http://i.j.b).
    
-  * A browser based GUI configuration utility (not finished).
+  * Modularized configuration that will allow for system wide settings, and
+    individual user settings. (not implemented yet)
    
   * Blocking of annoying pop-up browser windows (previously available as a
     patch).
    
-  * Partial support for HTTP/1.1.
+  * Support for HTTP/1.1 (partially implemented at this point).
    
   * Support for Perl Compatible Regular Expressions in the configuration files,
     and generally a more sophisticated configuration syntax over previous
@@ -77,6 +77,8 @@ cookie management, this is a list of new features currently under development:
    
   * Multi-threaded.
    
+In addition, the configuration is more versatile overall.
+
 -------------------------------------------------------------------------------
 
 Installation
@@ -109,7 +111,7 @@ tree.
 
 Then, in either case, to build from source:
 
- autoconf       #recommended for CVS source                                    
+ autoconf           #recommended for CVS source                                
  ./configure                                                                   
  make                                                                          
  su                                                                            
@@ -124,7 +126,7 @@ Red Hat
 
 To build Redhat RPM packages, install source as above. Then:
 
- autoconf       #recommended for CVS source                                    
+ autoconf              #recommended for CVS source                             
  ./configure                                                                   
  make redhat-dist                                                              
                                                                                
@@ -149,7 +151,7 @@ SuSE
 
 To build SuSE RPM packages, install source as above. Then:
 
- autoconf       #recommended for CVS source                                    
+ autoconf             #recommended for CVS source                              
  ./configure                                                                   
  make suse-dist                                                                
                                                                                
@@ -234,9 +236,10 @@ there are only three default configuration files (this will change in time):
   * The main configuration file is named config on Linux, Unix, BSD, and OS/2,
     and junkbustr.txt on Windows. On Amiga, it is AmiTCP:db/junkbuster/config.
    
-  * The actionsfile file is used to define various actions relating to images,
-    banners, pop-ups, banners and cookies. There is a CGI based editor for this
-    file that can be accessed via http://i.j.b./. (Still under active
+  * The actionsfile file is used to define various "actions" relating to
+    images, banners, pop-ups, access restrictions, banners and cookies. There
+    is a CGI based editor for this file that can be accessed via http://i.j.b./
+    . This is the easiest method of configuring actions. (Still under active
     development.)
    
   * The re_filterfile file can be used to rewrite the raw page content,
@@ -246,6 +249,11 @@ actionsfile and re_filterfile can use Perl style regular expressions for
 maximum flexibility. All files use the "#" character to denote a comment. Such
 lines are not processed by Junkbuster. After making any changes, restart
 Junkbuster in order for the changes to take effect.
+
+While under development, the configuration content is subject to change. The
+below documentation may not be accurate by the time you read this. Also, what
+constitutes a "default" setting, may change, so please check all your
+configuration files on important issues.
 
 -------------------------------------------------------------------------------
 
@@ -404,10 +412,10 @@ under proxy configuration, list the proxy server as "localhost" and the port as
 If you already have another service running on port 8000, or if you want to
 serve requests from other machines (e.g. on your local network) as well, you
 will need to override the default. The syntax is "listen-address
-[<ip-address>]:<port>". If you leave out the IP adress, junkbuster will bind to
-all interfaces (addresses) on your machine and may become reachable from the
-internet. In that case, consider using access control lists (acl's) (see
-"aclfile" above).
+[<ip-address>]:<port>". If you leave out the IP address, junkbuster will bind
+to all interfaces (addresses) on your machine and may become reachable from the
+Internet. In that case, consider using access control lists (acl's) (see
+"aclfile" above), or a firewall.
 
 For example, suppose you are running Junkbuster on a machine which has the
 address 192.168.0.1 on your local private network (192.168.0.0) and has another
@@ -494,9 +502,9 @@ becomes a non-anonymizing non-blocking proxy. Default: 1 (on).
    
 
 For content filtering, i.e. the "+filter" and "+deanimate-gif" actions, it is
-neccessary that Junkbuster buffers up the entire document body. This can be
+neccessary that Junkbuster buffers the entire document body. This can be
 potentially dangerous, since a server could just keep sending data indefinitely
-and wait for your RAM to exhaust.
+and wait for your RAM to exhaust. With nasty consequences.
 
 The buffer-limit option lets you set the maximum size in Kbytes that each
 buffer may use. When the documents buffer exceeds this size, it is flushed to
@@ -865,8 +873,12 @@ compared to all patterns in this file. Every time it matches, the list of
 applicable actions for the URL is incrementally updated. You can trace this
 process by visiting http://i.j.b/show-url-info.
 
+The actions file can be edited with a browser by loading http://i.j.b, and then
+select "Edit Actions".
+
 There are four types of lines in this file: comments (begin with a "#"
-character), actions, aliases and patterns, all of which are explained below.
+character), actions, aliases and patterns, all of which are explained below, as
+well as the configuration file syntax that Junkbuster understands. 
 
 -------------------------------------------------------------------------------
 
