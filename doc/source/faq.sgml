@@ -1019,14 +1019,23 @@ FIXME: commented out until we have data. HB 03/18/02.
 <para>
  Beginning with <application>Privoxy v2.9.14</application>, missed ads and 
  banners and other actions file problems, can be submitted by accessing
- <ulink url="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
+ <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
  from <ulink url="http://p.p/">http://p.p/</ulink>
- There will soon be an easy way to update your actions file as well.
 </para>
+
 <para>
- This does not work with earlier versions of <application>Privoxy</application>
+ This process does not work with earlier versions of <application>Privoxy</application>
  or <application>Junkbuster</application>.
 </para>
+
+<para> 
+ There will soon be regularly updated actions files posted. These 
+ will be announced on the 
+ <ulink
+ url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
+ list.
+</para>
+
 </sect2>
 
 <sect2 renderas="sect3" id="ip"><title>How can I hide my IP address?</title>
