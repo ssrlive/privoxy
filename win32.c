@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.3 2001/11/16 00:46:31 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.4 2001/11/30 21:29:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.3 2001/11/16 00:46:31 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.4  2001/11/30 21:29:33  jongfoster
+ *    Fixing a warning
+ *
  *    Revision 1.3  2001/11/16 00:46:31  jongfoster
  *    Fixing compiler warnings
  *
@@ -52,6 +55,7 @@ const char win32_rcs[] = "$Id: win32.c,v 1.3 2001/11/16 00:46:31 jongfoster Exp 
 
 #include "project.h"
 #include "jcc.h"
+#include "miscutil.h"
 
 /* Uncomment this if you want to build Win32 as a console app */
 /* #define _WIN_CONSOLE */
@@ -111,56 +115,45 @@ static void  __cdecl UserInterfaceThread(void *);
  *********************************************************************/
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-   int argc = 0;
    int i;
    int res;
-   const char **argv = NULL;
-   char *pszArgs = NULL;
-   char *pszLastTok;
+   int argc = 1;
+   const char *argv[3];
    char szModule[MAX_PATH+1];
 #ifndef _WIN_CONSOLE
    HANDLE hInitCompleteEvent = NULL;
 #endif
 
-   /* Split command line into arguments */
-   pszArgs = (char *)malloc(strlen(lpCmdLine) + 1);
-   strcpy(pszArgs, lpCmdLine);
+   /*
+    * Cheat in parsing the command line.  We only ever have at most one
+    * paramater, which may optionally be specified inside double quotes.
+    */
 
-   GetModuleFileName(hInstance, szModule, MAX_PATH);
-
-   /* Count number of spaces */
-   argc = 1;
-   if (strlen(pszArgs) > 0)
+   if (lpCmdLine != NULL)
    {
-      pszLastTok = pszArgs;
-      do
+      /* Make writable copy */
+      lpCmdLine = strdup(lpCmdLine);
+   }
+   if (lpCmdLine != NULL)
+   {
+      chomp(lpCmdLine);
+      i = strlen(lpCmdLine);
+      if ((i >= 2) && (lpCmdLine[0] == '\"') && (lpCmdLine[i - 1] == '\"'))
       {
-         argc++;
-         pszLastTok = strchr(pszLastTok+1, ' ');
-      } while (pszLastTok);
+         lpCmdLine[i - 1] = '\0';
+         lpCmdLine++;
+      }
+      if (lpCmdLine[0] == '\0')
+      {
+         lpCmdLine = NULL;
+      }
    }
 
-   /* Allocate array of strings */
-   argv = (const char **)malloc(sizeof(const char *) * argc);
-
-   /* step through command line replacing spaces with zeros, initialise array */
+   GetModuleFileName(hInstance, szModule, MAX_PATH);
    argv[0] = szModule;
-   i = 1;
-   pszLastTok = pszArgs;
-   do
-   {
-      argv[i] = pszLastTok;
-      pszLastTok = strchr(pszLastTok+1, ' ');
-      if (pszLastTok)
-      {
-         while (*pszLastTok != '\0' && *pszLastTok == ' ')
-         {
-            *pszLastTok = '\0';
-            pszLastTok++;
-         }
-      }
-      i++;
-   } while (pszLastTok && *pszLastTok != '\0');
+   argv[1] = lpCmdLine;
+   argv[2] = NULL;
+   argc = ((lpCmdLine != NULL) ? 2 : 1);
 
 #ifndef _WIN_CONSOLE
    /* Create a user-interface thread and wait for it to initialise */
@@ -177,10 +170,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #else
    res = main( argc, argv );
 #endif
-
-   /* Cleanup */
-   free((void *)argv);
-   free(pszArgs);
 
    return res;
 
@@ -267,7 +256,7 @@ static void __cdecl UserInterfaceThread(void *pData)
    TermLogWindow();
 
    /* Time to die... */
-   raise(SIGINT);
+   exit(0);
 
 }
 
