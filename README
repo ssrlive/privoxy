@@ -36,6 +36,22 @@ will eventually become Privoxy v3.0 (and soon we hope!). See http://
 www.privoxy.org/ for more information. The current code level is beta, and
 seems stable to us :).
 
+-------------------------------------------------------------------------------
+
+Table of Contents
+1. IMPORTANT CHANGES
+2. INSTALL
+3. RUN
+4. CONFIGURATION
+5. DOCUMENTATION
+6. CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
+   
+    6.1. Get Support
+    6.2. Report bugs
+    6.3. Request new features
+    6.4. Report ads or other filter problems
+    6.5. Other
+   
 Privoxy is a web proxy with advanced filtering capabilities for protecting
 privacy, filtering web page content, managing cookies, controlling access, and
 removing ads, banners, pop-ups and other obnoxious Internet junk. Privoxy has a
@@ -45,9 +61,9 @@ networks.
 
 Privoxy is based on Internet Junkbuster (tm).
 
+-------------------------------------------------------------------------------
 
- IMPORTANT CHANGES
-------------------
+1. IMPORTANT CHANGES
 
 NEWS! As of 03/24/02, the name of this project has been changed from ijbswa/
 Junkbuster to Privoxy. This is reflected in many of the included files.
@@ -59,9 +75,9 @@ IMPORTANT! READ! Configuration Change as of 17 Mar 2002: The default listening
 port is now 8118 due to conflicts with port 8000 assignment. You will need to
 change your browser if upgrading!!! And maybe firewall, etc.
 
+-------------------------------------------------------------------------------
 
- INSTALL
---------
+2. INSTALL
 
 To build Privoxy from source, autoconf, GNU make (gmake), and, of course, a C
 compiler like gcc are required.
@@ -106,9 +122,9 @@ etc, please consult the developer manual.
 
 For binary RPM installation, and other platforms, see the user-manual as well.
 
+-------------------------------------------------------------------------------
 
- RUN
----- 
+3. RUN
 
 privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] [--user USER
 [.GROUP]] [config_file]
@@ -123,9 +139,9 @@ Or for Red Hat: /etc/rc.d/init.d/privoxy start
 
 Or for SuSE: /etc/rc.d/privoxy start
 
+-------------------------------------------------------------------------------
 
- CONFIGURATION
--------------- 
+4. CONFIGURATION
 
 See: 'config', 'default.action', 'user.action', and 'default.filter'.
 'user.action' is for personal configuration. These are all well commented. Most
@@ -146,9 +162,9 @@ p.p/, as well other options.
 All configuration files are subject to unannounced changes during the
 development process.
 
+-------------------------------------------------------------------------------
 
- DOCUMENTATION
---------------
+5. DOCUMENTATION
 
 There should be documentation in the 'doc' subdirectory, but it is not
 completed at this point. In particular, see the user-manual there, the faq, and
@@ -162,12 +178,67 @@ the toplevel source directory.
 
 Included documentation may vary according to platform and packager.
 
+-------------------------------------------------------------------------------
 
- CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
---------------------------------------------------------------
+6. CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
 
- -------------------------------------------------------------------------
- ijbswa-developers@lists.sourceforge.net
+We value your feedback. However, to provide you with the best support, please
+note the following sections.
 
-$Id: readme.sgml,v 1.12 2002/04/26 17:45:36 swa Exp $
+-------------------------------------------------------------------------------
+
+6.1. Get Support
+
+To get support, use the Sourceforge Support Forum:
+
+    http://sourceforge.net/tracker/?group_id=11118&atid=211118
+
+-------------------------------------------------------------------------------
+
+6.2. Report bugs
+
+To submit bugs, use the Sourceforge Bug Forum:
+
+    http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+
+Make sure that the bug has not already been submitted. Please try to verify
+that it is a Privoxy bug, and not a browser or site bug first. If you are using
+your own custom configuration, please try the stock configs to see if the
+problem is a configuration related bug. And if not using the latest development
+snapshot, please try the latest one. Or even better, CVS sources. Please be
+sure to include the Privoxy version, platform, browser, any pertinent log data,
+any other relevant details (please be specific) and, if possible, some way to
+reproduce the bug.
+
+-------------------------------------------------------------------------------
+
+6.3. Request new features
+
+To submit ideas on new features, use the Sourceforge feature request forum:
+
+    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+
+-------------------------------------------------------------------------------
+
+6.4. Report ads or other filter problems
+
+You can also send feedback on websites that Privoxy has problems with. Please
+bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
+to a page with problems, use the bookmark to send us feedback. We will look
+into the issue as soon as possible.
+
+New, improved default.action files will occasionally be made available based on
+your feedback. These will be announced on the ijbswa-announce list.
+
+-------------------------------------------------------------------------------
+
+6.5. Other
+
+For any other issues, feel free to use the mailing lists:
+ 
+    http://sourceforge.net/mail/?group_id=11118.
+
+Anyone interested in actively participating in development and related
+discussions can also join the appropriate mailing list. Archives are available,
+too. See the page on Sourceforge.
 
