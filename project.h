@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.39 2001/10/25 03:45:02 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.40 2001/10/26 17:40:47 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.40  2001/10/26 17:40:47  oes
+ *    Moved ijb_isspace and ijb_tolower to project.h
+ *    Removed http->user_agent, csp->referrer and csp->accept_types
+ *
  *    Revision 1.39  2001/10/25 03:45:02  david__schmidt
  *    Adding a (void*) cast to freez() because Visual Age C++ won't expand the
  *    macro when called with a cast; so moving the cast to the macro def'n
@@ -378,7 +382,10 @@ typedef int jb_err;
  * as an array index.  Therefore we need to make sure that high-bit
  * characters generate +ve values, and ideally we also want to make
  * the argument match the declared parameter type of "int".
+ *
+ * Note: Remember to #include <ctype.h> if you use these macros.
  */
+#define ijb_toupper(__X) toupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 #define ijb_isspace(__X) isspace((int)(unsigned char)(__X))  
 
