@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step2.php,v 1.12 2002/04/08 17:04:05 oes Exp $
+  $Id: step2.php,v 1.13 2002/04/09 13:08:21 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.13  2002/04/09 13:08:21  oes
+  declare script type
+
   Revision 1.12  2002/04/08 17:04:05  oes
   Adapt to unified stylesheet
 
@@ -298,7 +301,7 @@ if (!isset($problem) || $problem == "INVALID")
 /*
  * If the protocol is missing from $referrer_url, prepend "http://"
  */
-if (strncmp("http://", $referrer_url, 7))
+if (!preg_match('|^https?://|i', $referrer_url, $dummy))
 {
    $referrer_url = "http://" . $referrer_url;
 }
