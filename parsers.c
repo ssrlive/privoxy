@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.41 2001/11/05 23:43:05 steudten Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.42 2001/11/22 21:59:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.41 2001/11/05 23:43:05 steudten E
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.42  2001/11/22 21:59:30  jongfoster
+ *    Adding code to handle +no-cookies-keep
+ *
  *    Revision 1.41  2001/11/05 23:43:05  steudten
  *    Add time+date to log files.
  *
@@ -1726,7 +1729,7 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
              * since the behaviour of strcpy is undefined for overlapping
              * strings.)
              */
-            memmove(cur_tag, next_tag, strlen(next_tag));
+            memmove(cur_tag, next_tag, strlen(next_tag) + 1);
 
             /* That changed the header, need to issue a log message */
             changed = 1;
@@ -1742,7 +1745,10 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
          }
       }
 
-      log_error(LOG_LEVEL_HEADER, "Changed cookie to a temporary one.");
+      if (changed)
+      {
+         log_error(LOG_LEVEL_HEADER, "Changed cookie to a temporary one.");
+      }
 
       return result;
    }
