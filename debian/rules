@@ -22,6 +22,12 @@ ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
 	WITHDEBUG="--with-debug"
 endif
 
+# hppa doesn't support -pthread option, so we complety disable pthread
+# on hppa until there is a better solution in configure.
+ifeq "$(DEB_HOST_GNU_TYPE)" "hppa-linux"
+	WITHOUTPTHREAD="--disable-pthread"
+endif
+
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
@@ -30,7 +36,9 @@ configure-stamp:
 	autoconf
 	env CFLAGS=$(CFLAGS) \
 		./configure --prefix=/usr --sysconfdir=/etc \
-		--mandir=/usr/share/man	$(WITHDEBUG)
+		--mandir=/usr/share/man	$(WITHDEBUG) $(WITHOUTPTHREAD) \
+		--with-docbook=no
+
 	touch configure-stamp
 
 build: build-stamp
@@ -38,6 +46,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	$(MAKE)
+
 	touch build-stamp
 
 clean:
@@ -65,6 +74,8 @@ install: build
 	    -e 's/^\(enable-\(edit-actions\|remote-toggle\)\)/#\1/' \
 	    -e 's#^confdir \.#confdir /etc/privoxy#' \
 	    -e 's#^logdir \.#logdir /var/log/privoxy#' \
+	    -e 's/\(Sample Configuration File for Privoxy\).*/\1/' \
+	    -e 's/Id: config,v.*/Id: config,v $$/' \
 		< config > $(DEBDIR)/etc/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
 	install -m 0644 standard.action $(DEBDIR)/etc/privoxy/standard.action
@@ -111,9 +122,5 @@ binary-arch: build install
 	dh_md5sums
 	dh_builddeb
 
-# Single step doc building on debian
-debian-dok: configure-stamp
-	$(MAKE) dok
-
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure debian-dok
+.PHONY: build clean binary-indep binary-arch binary install configure
