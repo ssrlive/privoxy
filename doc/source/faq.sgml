@@ -7,7 +7,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.14">
+<!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.54 2002/05/03 05:06:44 hal9 Exp $
+ $Id: faq.sgml,v 1.55 2002/05/04 00:41:56 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -61,7 +61,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.54 2002/05/03 05:06:44 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.55 2002/05/04 00:41:56 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1467,6 +1467,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.55  2002/05/04 00:41:56  hal9
+-Remove TOC/first page kludge in favor of proper handling via dsl file.
+
 Revision 1.54  2002/05/03 05:06:44  hal9
 Add brief Q/A on transparent proxies.
 

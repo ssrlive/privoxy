@@ -4,7 +4,7 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity buildsource SYSTEM "buildsource.sgml">
-<!entity p-version "2.9.14">
+<!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.11 2002/04/26 17:24:31 swa Exp $
+ $Id: readme.sgml,v 1.12 2002/04/26 17:45:36 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -262,7 +262,7 @@
 </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.11 2002/04/26 17:24:31 swa Exp $
+ $Id: readme.sgml,v 1.12 2002/04/26 17:45:36 swa Exp $
 </para>
 
 </article>

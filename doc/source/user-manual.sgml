@@ -8,7 +8,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.14">
+<!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.102 2002/05/03 17:46:00 oes Exp $
+ $Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.102 2002/05/03 17:46:00 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.103 2002/05/04 00:40:53 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -5922,6 +5922,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.103  2002/05/04 00:40:53  hal9
+ -Remove the TOC first page kludge. It's fixed proper now in ldp.dsl.in.
+ -Some minor additions to Quickstart.
+
  Revision 1.102  2002/05/03 17:46:00  oes
  Further proofread & reactivated short build instructions
 

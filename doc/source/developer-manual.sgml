@@ -7,7 +7,7 @@
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.14">
+<!entity p-version "2.9.15">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $
+ $Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1711,7 +1711,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1771,7 +1771,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.39 2002/05/02 15:08:25 oes Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.40 2002/05/04 00:43:43 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2673,6 +2673,10 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.40  2002/05/04 00:43:43  hal9
+  -Remove TOC/first page kludge with proper stylesheet fix.
+  -Combined the two very brief sections: Intro and Quickstart.
+
   Revision 1.39  2002/05/02 15:08:25  oes
   Added explanation about version numbers and RPM package revisions
 
