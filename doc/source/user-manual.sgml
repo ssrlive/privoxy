@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $
+ $Id: user-manual.sgml,v 2.8 2002/10/21 02:46:09 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.7 2002/10/12 01:14:42 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.8 2002/10/21 02:46:09 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1375,7 +1375,8 @@ must find a better place for this paragraph
     file</link>) can be used to re-write the raw page content, including
     viewable text as well as embedded HTML and JavaScript, and whatever else
     lurks on any given web page. The filtering jobs are only pre-defined here;
-    whether to apply them or not is up to the actions files.
+    whether to apply them or not is up to the actions files. Only one filter 
+    file may be defined.
    </para>
   </listitem> 
 
@@ -5764,6 +5765,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.8  2002/10/21 02:46:09  hal9
+ Port changes to user.action examples section from 3.0.
+
  Revision 2.7  2002/10/12 01:14:42  hal9
  Updates for demoronizer filter, Radical profile, and the srvany.exe/icon
  win32 fix.
