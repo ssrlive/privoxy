@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.87 2002/04/23 02:53:15 david__schmidt Exp $
+ $Id: user-manual.sgml,v 1.88 2002/04/23 05:37:54 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.87 2002/04/23 02:53:15 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.88 2002/04/23 05:37:54 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -195,14 +195,18 @@
 </para>
 
 <para>
- If you have problems with failed dependencies, try rebuilding the SRC RPM: 
- <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm;</literal>. This 
- will use your locally installed libraries and RPM version. 
-
+ Note that on Red Hat, Privoxy will not be automatically started on system
+ boot. You will need to enable that using linuxconf.
 </para>
 
 <para>
- Note that if you have a <application>Junkbuster</application> RPM installed
+ If you have problems with failed dependencies, try rebuilding the SRC RPM: 
+ <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm;</literal>. This 
+ will use your locally installed libraries and RPM version. 
+</para>
+
+<para>
+ Also note that if you have a <application>Junkbuster</application> RPM installed
  on your system, you need to remove it first, because the packages conflict.
  Otherwise, RPM will try to remove <application>Junkbuster</application>
  automatically, before installing <application>Privoxy</application>.
@@ -5226,6 +5230,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.88  2002/04/23 05:37:54  hal9
+ Add AmigaOS install stuff.
+
  Revision 1.87  2002/04/23 02:53:15  david__schmidt
  Updated OSX installation section
  Added a few English tweaks here an there
