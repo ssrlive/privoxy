@@ -65,6 +65,7 @@
 #    true, have-help-info is true.  Used to conditionally include
 #    a grey box for any and all help info.
 #
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
@@ -95,31 +96,34 @@
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
       <td bgcolor=#ffdddd>
+        <h2><font color=red>@code-status@</font> Warning:</h2>
         <p><b>Please note that this <font color=red>@code-status@</font> release
           of the proxy software is not intended for production systems!
           <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
         </p>
- 	<p>
-<h2>Support and Service via Sourceforge</h2>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
+
+    <tr>
+      <td bgcolor=#dddddd>
+<h2>Support and Service via Sourceforge:</h2>
 <p>
 We value your feedback. However, to provide you with the best support,
 please note:
 <ul>
-  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
-  help.</li>
-  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
-      forum</a>. Make sure that the bug has not yet been submitted.</li>
-  <li>Submit feature requests only thru our <a
-      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
+  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> or (better) the
+      <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.</li>
+  <li>Submit banners and all problems with the actions file only through the <a href="http://www.privoxy.org/actions/">actions file
+      feedback system</a>.
+  <li>Submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+      tracker</a>. Make sure that the bug has not yet been submitted.</li>
+  <li>Submit feature requests only through our <a
+      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request tracker</a>.</li>
 </ul>
-</p>
-<p>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 </p>
       </td>
     </tr>
-<!-- if-unstable-end@ -->
 
 <!-- @if-have-help-info-start -->
     <tr>
