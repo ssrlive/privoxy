@@ -65,10 +65,10 @@ Junkbusters Corporation, which is no longer being developed. Many
 new features and enhancements have been added.
 
 .SH INSTALLATION AND USE
-Browsers must be configured to use 
-\fBPrivoxy\fP
-(the default is localhost, 
-port 8118).
+Browsers must be individually configured to use 
+\fBPrivoxy\fP as a HTTP proxy.
+The default setting is for localhost, 
+on port 8118 (configurable in the main config file).
 To set the 
 \s-2HTTP\s0
 proxy in Netscape and Mozilla,
@@ -79,23 +79,22 @@ go through:
 \fB\&Proxies\fP;
 \fB\&Manual Proxy Configuration\fP;
 \fB\&View\fP.
-.P
+.PP
 For Internet Explorer,
 go through:
 \fB\&Tools\fP;
 \fB\&Internet Properties\fP;
 \fB\&Connections\fP;
 \fB\&LAN Settings\fP.
-.P
-Set the HTTP proxy location for localhost, port 8118.
+.PP
 The
-Secure (SSL) Proxy\" ijbfaq.html#security
+Secure (SSL) Proxy \" ijbfaq.html#security
 should also be set to the same values,
 otherwise
 \fB\&https:\fP
 \s-2URL\s0s
-won't be proxied.
-.P
+will not be proxied.
+.PP
 For other browsers, check the documentation.
 
 .SH CONFIGURATION
@@ -105,12 +104,12 @@ files. The default configuration files are: \fIconfig\fP,
 On Unix and Unix-like systems, these are located in \fI/etc/privoxy/\fP 
 by default. On Windows, OS/2 and AmigaOS, these files are in the same directory 
 as the \fBPrivoxy\fP executable. 
-.P
+.PP
 The name and number of configuration files has changed from previous versions,
 and is subject to change as development progresses. In fact, the configuration
 itself is changed and much more sophisticated. See the user-manual for a brief
 explanation of all configuration options.
-.P
+.PP
 The actions list (ad blocks, etc) can also be configured with your 
 web browser at \fIhttp://ijbswa.sourceforge.net/config\fP.
 \fBPrivoxy's\fP configuration parameters can also be viewed 
@@ -119,7 +118,7 @@ This is an internal page.
 
 .SH "SAMPLE CONFIGURATION"
 .PP
-A brief example of what an \fIdefault.action\fP configuration might look like:
+A brief example of what a \fIdefault.action\fP configuration might look like:
 .PP
 .nf
 
@@ -241,7 +240,7 @@ options.
 .br
 \fI/var/log/privoxy/logfile\fP
 
-.P
+.PP
 Various other files should be included, but may vary depending on platform 
 and build configuration. More documentation should be included in the local
 documentation directory, though is not complete at this time.
@@ -255,8 +254,8 @@ detect them automatically.
  
 .SH NOTES
 This is a \fBBETA\fP version of \fBPrivoxy\fP. Not all features are  
-complete.
-.br
+complete or well tested.
+.PP
 Please see the user-maual on how to contact the developers for 
 feature requests, reporting problems, and other questions.
 
@@ -314,23 +313,23 @@ http://linuxalpha.ch/packages/
 .SH COPYRIGHT AND LICENSE
 Orginally written by, and copyrighted by, the Anonymous Coders and Junkbusters
 Corporation. 
-.P
+.PP
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
-.P
+.PP
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-.P
+.PP
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-.P
+.PP
 Internet Junkbuster
 Proxy
 is a
-trademark\" legal.html#marks
+trademark \" legal.html#marks
 of Junkbusters Corporation.
