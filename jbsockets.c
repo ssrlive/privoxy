@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.5 2001/05/26 15:26:15 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.6 2001/05/26 17:28:32 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.5 2001/05/26 15:26:15 jongfos
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.6  2001/05/26 17:28:32  jongfoster
+ *    Fixed LOG_LEVEL_LOG
+ *
  *    Revision 1.5  2001/05/26 15:26:15  jongfoster
  *    ACL feature now provides more security by immediately dropping
  *    connections from untrusted hosts.
@@ -244,7 +247,7 @@ int write_socket(int fd, const char *buf, int len)
       return(0);
    }
 
-   log_error(LOG_LEVEL_LOG, "%n", len, buf);
+   log_error(LOG_LEVEL_LOG, "%N", len, buf);
 
 #if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
    return( send(fd, buf, len, 0));
