@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.3 2001/06/07 17:28:10 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.4 2001/06/08 20:53:36 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.4  2001/06/08 20:53:36  swa
+# use buildroot, export init to separate file (better manageability)
+#
 # Revision 1.3  2001/06/07 17:28:10  swa
 # cosmetics
 #
@@ -56,13 +59,10 @@ Source:  http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 # -----------------------------------------------------------------------------
 #
 %description
-The Internet Junkbuster (TM) blocks unwanted banner ads and protects
-your privacy from cookies and other threats. It's free under the GPL
-(no warranty), runs under *NIX and works with almost any browser. You
-need to clear you browser's cache and specify the proxy-server,
-described in /usr/doc/junkbuster.  This is a modified version which
-returns a blank GIF for blocked images by default.  But you can
-configure this via /etc/junkbuster/config.
+The Internet Junkbuster stops your browser from displaying the
+advertisement images that pervade many commercial web pages.  Since
+your browser has to download fewer images, surfing the web should be
+faster.
 
 Authors:
 --------
