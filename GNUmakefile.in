@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.84 2002/04/13 22:43:25 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.85 2002/04/14 01:05:34 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -581,10 +581,10 @@ man2html:
 	mkdir -p doc/webserver/man-page
 ifneq ($(MAN2HTML),false)
 	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
-	$(PERL) -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
-	$(PERL) -pi -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
+	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
+	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
 # Get rid of spurious  from conversion. (How to do this with perl?)
-	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && rm -f tmp.html
+	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && rm -f tmp.*
 else
 	$(MAKE) groff2html
 endif
@@ -610,7 +610,7 @@ authors: doc/source/ldpOK.dsl
 man: doc/source/ldpOK.dsl
 	mkdir -p doc/source/man
 	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
-	perl -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
 	cd doc/source/man && $(DB) ../privoxy-man-page.sgml &&\
 	mv -f index.html privoxy-man-page.html
      # This html is not used. See make man2html.
@@ -787,6 +787,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.85  2002/04/14 01:05:34  hal9
+# Revert dok-webserver change for SF logo.
+#
 # Revision 1.84  2002/04/13 22:43:25  hal9
 # -Fix dok-webserver for SF logo (more perl).
 # -Change all perl -pi to perl -pi.bak for Cygwin problem.
