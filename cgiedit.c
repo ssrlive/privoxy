@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.35 2002/04/26 21:50:02 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.36 2002/04/26 21:53:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.35 2002/04/26 21:50:02 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.36  2002/04/26 21:53:30  jongfoster
+ *    Fixing a memory leak.  (Near, but not caused by, my earlier commit).
+ *
  *    Revision 1.35  2002/04/26 21:50:02  jongfoster
  *    Honouring default exports in edit-actions-for-url-filter template.
  *
@@ -2424,7 +2427,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       snprintf(buf, 150, "%d", line_number + 2);
       if (!err) err = map(exports, "all-urls-s-next", 1, buf, 1);
       if (!err) err = map(exports, "all-urls-actions", 1,
-                          actions_to_html(cur_line->data.action, csp), 0);
+                          actions_to_html(csp, cur_line->data.action), 0);
 
        /* Skip the 2 lines */
       cur_line = cur_line->next->next;
@@ -2535,7 +2538,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       snprintf(buf, 150, "%d", line_number);
       err = map(section_exports, "s", 1, buf, 1);
       if (!err) err = map(section_exports, "actions", 1,
-                          actions_to_html(cur_line->data.action, csp), 0);
+                          actions_to_html(csp, cur_line->data.action), 0);
 
       if ( (!err)
         && (cur_line->next != NULL)

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.31 2002/04/26 12:54:36 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.32 2002/04/26 18:29:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.31 2002/04/26 12:54:36 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.32  2002/04/26 18:29:13  jongfoster
+ *    Fixing this Visual C++ warning:
+ *    cgisimple.c(775) : warning C4018: '<' : signed/unsigned mismatch
+ *
  *    Revision 1.31  2002/04/26 12:54:36  oes
  *     - Kill obsolete REDIRECT_URL code
  *     - Error handling fixes
@@ -1031,7 +1035,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       init_current_action(action);
 
-      if (map(exports, "default", 1, current_action_to_html(action, csp), 0))
+      if (map(exports, "default", 1, current_action_to_html(csp, action), 0))
       {
          free_current_action(action);
          free(url_param);
@@ -1112,7 +1116,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
             if (url_match(b->url, url_to_query))
             {
                string_append(&matches, "<tr><td>{");
-               string_join  (&matches, actions_to_html(b->action, csp));
+               string_join  (&matches, actions_to_html(csp, b->action));
                string_append(&matches, " }</b><br>\n<code>");
                string_join  (&matches, html_encode(b->url->spec));
                string_append(&matches, "</code></td></tr>\n");
@@ -1152,7 +1156,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      s = current_action_to_html(action, csp);
+      s = current_action_to_html(csp, action);
 
       free_current_action(action);
 
