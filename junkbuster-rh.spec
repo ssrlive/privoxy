@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.8 2001/06/12 17:15:56 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.9 2001/06/12 18:15:29 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.9  2001/06/12 18:15:29  swa
+# the % in front of configure (see tag below) confused
+# the rpm build process on 7.1.
+#
 # Revision 1.8  2001/06/12 17:15:56  swa
 # fixes, because a clean build on rh6.1 was impossible.
 # GZIP confuses make, % configure confuses rpm, etc.
@@ -60,7 +64,7 @@
 Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
-Version: 2.9.4
+Version: 2.9.5
 Release: 1
 Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 Copyright: GPL
