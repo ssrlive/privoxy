@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.26 2002/04/26 17:41:49 morcego Exp $
+#  $Id: default.action,v 1.27 2002/05/03 04:18:49 morcego Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -317,10 +317,10 @@
 #    but won't break sites which require cookies so that you can log in
 #    or for transactions.
 #
-# +prevent-reading-cookies
+# +crunch-outgoing-cookies
 #    Prevent the website from reading cookies
 #
-# +prevent-setting-cookies
+# +crunch-incoming-cookies
 #    Prevent the website from setting cookies
 #
 # +kill-popups
@@ -355,7 +355,7 @@ for-privoxy-version=3.0
 #############################################################################
 #
 # You can define a short form for a list of permissions - e.g., instead
-# of "-prevent-setting-cookies -prevent-reading-cookies -filter -fast-redirects",
+# of "-crunch-incoming-cookies -crunch-outgoing-cookies -filter -fast-redirects",
 # you can just write "shop". This is called an alias.
 #
 # Currently, an alias can contain any character except space, tab, '=', '{'
@@ -366,21 +366,21 @@ for-privoxy-version=3.0
 #
 # Aliases beginning with '+' or '-' may be used for system permission names 
 # in future releases - so try to avoid alias names like this.  (e.g. 
-# "+prevent-cookies" below is not a good name)
+# "+crunch-all-cookies" below is not a good name)
 #
 # Aliases must be defined before they are used.
 # 
 
 # Useful aliases
-+prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
--prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
++crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
+-crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
 +imageblock      = +block +handle-as-image
 
 # Fragile sites should have the minimum changes
-fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -prevent-cookies -kill-popups
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -crunch-all-cookies -kill-popups
 
 # Shops should be allowed to set persistent cookies
-shop        = -filter -prevent-cookies -prevent-keeping-cookies
+shop        = -filter -crunch-all-cookies -prevent-keeping-cookies
 
 # Your favourite blend of filters:
 #
@@ -390,7 +390,37 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{popups}\
 #############################################################################
 # Defaults
 #############################################################################
-{-add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-prental} +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect +prevent-compression +session-cookies-only -prevent-reading-cookies -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer}
+{-add-header \
+ -block \
+ -crunch-incoming-cookies \
+ -crunch-outgoing-cookies \
+ +deanimate-gifs{last} \
+ -downgrade-http-version \
+ -fast-redirects \
+ -filter{popups} \
+ -filter{fun} \
+ -filter{shockwave-flash} \
+ -filter{crude-prental} \
+ +filter{html-annoyances} \
+ +filter{js-annoyances} \
+ +filter{content-cookies} \
+ +filter{webbugs} \
+ +filter{refresh-tags} \
+ +filter{nimda} \
+ +filter{banners-by-size} \
+ -handle-as-image \
+ +hide-forwarded-for-headers \
+ +hide-from-header{block} \
+ +hide-referer{forge} \
+ -hide-user-agent \
+ -kill-popups \
+ -limit-connect \
+ +prevent-compression \
+ -send-vanilla-wafer \
+ -send-wafer \
+ +session-cookies-only \
+ +set-image-blocker{pattern} \
+}
 / # Match all URLs
 
 
@@ -446,11 +476,11 @@ edit.europe.yahoo.com
 .cvs.sourceforge.net
 
 #############################################################################
-# Imagelist:
+# These are images:
 #############################################################################
 {+handle-as-image}
 #############################################################################
-/.*\.(gif|jpe?g|png|bmp|ico)
+/.*\.(gif|jpe?g|png|bmp|ico)$
 
 #############################################################################
 {+imageblock}
