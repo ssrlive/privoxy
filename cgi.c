@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.18 2001/08/05 16:06:20 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.19 2001/09/13 23:31:25 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.18 2001/08/05 16:06:20 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.19  2001/09/13 23:31:25  jongfoster
+ *    Moving image data to cgi.c rather than cgi.h.
+ *
  *    Revision 1.18  2001/08/05 16:06:20  jongfoster
  *    Modifiying "struct map" so that there are now separate header and
  *    "map_entry" structures.  This means that functions which modify a
@@ -815,27 +818,27 @@ struct http_response *error_response(struct client_state *csp, const char *templ
       return NULL;
    }  
 
-      map(exports, "host-html", 1, html_encode(csp->http->host), 0);
-      map(exports, "hostport", 1, csp->http->hostport, 1);
-      map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-      map(exports, "path", 1, csp->http->path, 1);
-      map(exports, "path-html", 1, html_encode(csp->http->path), 0);
-      map(exports, "error", 1, safe_strerror(err), 0);
-      map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
+   map(exports, "host-html", 1, html_encode(csp->http->host), 0);
+   map(exports, "hostport", 1, csp->http->hostport, 1);
+   map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+   map(exports, "path", 1, csp->http->path, 1);
+   map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+   map(exports, "error", 1, safe_strerror(err), 0);
+   map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
 
-      rsp->body = fill_template(csp, templatename, exports);
-      free_map(exports);
-      
-      if (!strcmp(templatename, "no-such-domain"))
-      {
-         rsp->status = strdup("404 No such domain"); 
-      }
-      else if (!strcmp(templatename, "connect-failed"))
-      {
-         rsp->status = strdup("503 Connect failed");
-      }
+   rsp->body = fill_template(csp, templatename, exports);
+   free_map(exports);
+  
+   if (!strcmp(templatename, "no-such-domain"))
+   {
+      rsp->status = strdup("404 No such domain"); 
+   }
+   else if (!strcmp(templatename, "connect-failed"))
+   {
+      rsp->status = strdup("503 Connect failed");
+   }
 
-      return(finish_http_response(rsp));
+   return(finish_http_response(rsp));
 }
 
 
