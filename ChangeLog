@@ -2,6 +2,17 @@
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
+*** Version 2.2.10 CVS Current ***
+
+- Add "session" cookie concept where cookies exist for the life 
+of that browser session only (ie never goes to disk). 
+- Checks for correct header length.
+- Fix user:pass@host.domain.com auth bug.
+- Better signal handling on *nix.
+- Fix CFLAGS hard-coded in configure.in
+- Fix threading bug re: gethostbyname() that caused random 
+URLs to fail in some cases.
+
 
 *** Version 2.2.10 Alpha Changes ***
 
