@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.12 2001/09/10 16:25:04 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.13 2001/09/10 17:44:43 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.13  2001/09/10 17:44:43  swa
+# integrate three pieces of documentation. needs work.
+# will not build cleanly under redhat.
+#
 # Revision 1.12  2001/09/10 16:25:04  swa
 # copy all templates. version updated.
 #
@@ -86,10 +90,10 @@ Prereq: /usr/sbin/useradd , /sbin/chkconfig , /sbin/service
 Conflicts: junkbuster-raw junkbuster-blank
 
 %description
-The Internet Junkbuster stops your browser from displaying the
-advertisement images that pervade many commercial web pages.  Since
-your browser has to download fewer images, surfing the web should be
-faster.
+The Internet Junkbuster is an application that provides privacy and
+security to the user of the world wide web. It controls cookies,
+removes advertisements or pop-up windows. You can actually modify the
+content of web pages on-the-fly.
 
 %define ijbconf %{_sysconfdir}/junkbuster
 
@@ -114,7 +118,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
 
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
-cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
+# cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
 cp -f actionsfile $RPM_BUILD_ROOT%{ijbconf}/actionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
@@ -164,7 +168,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
 %config %{_sysconfdir}/logrotate.d/junkbuster
 %attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
-%{_mandir}/man8/*
+# %{_mandir}/man8/*
 %config %{_sysconfdir}/rc.d/init.d/junkbuster
 
 
