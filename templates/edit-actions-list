@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.17  2002/04/10 13:32:53  oes
+#    Made templates modular
+#
 #    Revision 1.16  2002/04/08 17:08:14  oes
 #    Cosmetic: make status in title lowercase
 #
@@ -240,10 +243,54 @@ function rm_p(pattern,curtext)
       <td class="box">
         <div class="buttons">
           <h2>Editing Actions File</h2>
+          <!-- @if-all-urls-present-then@@else-not-all-urls-present@ -->
           <p><a class="cmd" href="edit-actions-section-add?f=@f@&amp;v=@v@&amp;s=0">Insert new section at top</a></p>
+          <!-- @endif-all-urls-present@ -->
         </div>
       </td>
     </tr>
+
+    <!-- @if-all-urls-present-then@ -->
+    <tr>
+      <td class="container">
+        <div class="buttons">
+<table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
+<tr class="actions" valign="top">
+ <td class="header" align="right">Actions:</td>
+ <td align="center"><a name="l@s@" href="eas?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></td>
+ <td class="action" align="left">@all-urls-actions@</td>
+</tr>
+<tr class="rule">
+ <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
+</tr>
+<tr class="url1" valign="top">
+ <td class="header" align="right">URLs:</td>
+ <td align="center">&nbsp;</td>
+ <td align="left"><b>These actions affect all URLs</b></td>
+</tr>
+<tr class="rule">
+ <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
+</tr>
+<tr class="adv" valign="top">
+ <td class="header" align="right"><b>Advanced:</b></td>
+ <td colspan="2">
+  <table border="0" cellspacing="0" cellpadding="4">
+   <tr valign="middle" align="center">
+    <td class="nbr"> &nbsp; </td>
+    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert new section below</a> &nbsp; </td>
+   </tr>
+   <tr valign="middle" align="center">
+    <td class="nbr"> &nbsp; </td>
+    <td class="nbr"> &nbsp; </td>
+   </tr>
+  </table>
+ </td>
+</tr>
+</table>
+</div>
+      </td>
+    </tr>
+    <!-- @else-not-all-urls-present@@endif-all-urls-present@ -->
 
     <tr>
       <td class="container">
