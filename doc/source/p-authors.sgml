@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 1.1 2002/04/06 05:07:29 hal9 Exp $
+ $Id: p-authors.sgml,v 1.2 2002/04/06 13:49:43 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -84,7 +84,6 @@
  Bart Schelstraete
  Clifford Caoile
  Darren Wiebe
- Gabor Liptak
  Guy
  Ken Arromdee
  Magnus Holmgren
