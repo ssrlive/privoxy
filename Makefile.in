@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.9 2001/06/04 18:31:58 swa Exp $
+# $Id: Makefile.in,v 1.10 2001/06/07 17:27:45 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.10  2001/06/07 17:27:45  swa
+# added suse build section
+#
 # Revision 1.9  2001/06/04 18:31:58  swa
 # files are now prefixed with either `confdir' or `logdir'.
 # `make redhat-dist' replaces both entries confdir and logdir
@@ -68,7 +71,7 @@ VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
-RPM_VERSION   = $(VERSION_MAJOR).$(VERSION_MINOR)
+RPM_VERSION   = $(VERSION)
 
 # The version is currently specified in config.h, which is
 # written by "configure".
@@ -215,7 +218,7 @@ redhat-dist:
 	rm -f ../ijbswa.tar.gz
 	tar  --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
-	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
+#	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
