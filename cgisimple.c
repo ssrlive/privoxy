@@ -1,7 +1,7 @@
-const char cgisimple_rcs[] = "$Id: cgi.c,v 1.26 2001/09/16 15:47:37 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.1 2001/09/16 17:08:54 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
  *
  * Purpose     :  Simple CGIs to get information about JunkBuster's
  *                status.
@@ -35,7 +35,10 @@ const char cgisimple_rcs[] = "$Id: cgi.c,v 1.26 2001/09/16 15:47:37 jongfoster E
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: cgi.c,v $
+ *    $Log: cgisimple.c,v $
+ *    Revision 1.1  2001/09/16 17:08:54  jongfoster
+ *    Moving simple CGI functions from cgi.c to new file cgisimple.c
+ *
  *
  **********************************************************************/
 
@@ -170,9 +173,7 @@ int cgi_send_banner(struct client_state *csp, struct http_response *rsp,
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * CGI Parameters :
- *           type : Selects the type of banner between "trans" and "jb".
- *                  Defaults to "jb" if absent or != "trans".
+ * CGI Parameters : none
  *
  * Returns     :  0
  *
@@ -187,6 +188,7 @@ int cgi_show_version(struct client_state *csp, struct http_response *rsp,
    rsp->body = template_load(csp, "show-version");
    template_fill(&rsp->body, exports);
    free_map(exports);
+
    return(0);
 
 }
@@ -204,9 +206,7 @@ int cgi_show_version(struct client_state *csp, struct http_response *rsp,
  *           2 :  rsp = http_response data structure for output
  *           3 :  parameters = map of cgi parameters
  *
- * CGI Parameters :
- *           type : Selects the type of banner between "trans" and "jb".
- *                  Defaults to "jb" if absent or != "trans".
+ * CGI Parameters : none
  *
  * Returns     :  0
  *
@@ -588,6 +588,7 @@ int cgi_robots_txt(struct client_state *csp, struct http_response *rsp,
    enlist_unique_header(rsp->headers, "Expires", buf);
 
    return 0;
+
 }
 
 
@@ -703,6 +704,7 @@ static void show_defines(struct map *exports)
 #endif /* ndef STATIC_PCRS */
 
    map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
+
 }
 
 
@@ -800,6 +802,7 @@ static char *show_rcs(void)
 #undef SHOW_RCS
 
    return(b);
+
 }
 
 
