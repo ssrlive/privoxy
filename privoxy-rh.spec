@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.40 2002/07/02 17:37:24 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.41 2002/07/02 18:16:28 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 6
+Release: 7
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -113,15 +113,15 @@ install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 # wrong format
 for i in `ls *.action`
 do
-       cat $i | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/$i
+       cat $i | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/$i
 done
-cat default.filter | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/default.filter
-cat trust | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/trust
+cat default.filter | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/default.filter
+cat trust | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/trust
 (
 cd templates
 for i in `ls`
 do
-	cat $i | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/templates/$i
+	cat $i | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/templates/$i
 done
 )
 
@@ -143,7 +143,7 @@ cat config | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' | \
-    sed -e 's/\r$//' > \
+    sed -e 's/[[:cntrl:]]*$//' > \
     %{buildroot}%{privoxyconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
     %{buildroot}%{privoxyconf}/default.action
@@ -332,6 +332,12 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Wed Jul 03 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-7
+- Changing sed expression that removed CR from the end of the lines. This
+  new one removes any control caracter, and should work with older versions
+  of sed
+
 * Tue Jul 02 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-6
 - Fixing defattr values. File and directory modes where swapped
@@ -712,6 +718,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.41  2002/07/02 18:16:28  morcego
+# - Fixing defattr values. File and directory modes where swapped
+#
 # Revision 1.40  2002/07/02 17:37:24  morcego
 # Fix typo in templates creation.
 #
