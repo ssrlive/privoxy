@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.76 2002/03/06 22:54:35 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.77 2002/03/07 03:52:06 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.76 2002/03/06 22:54:35 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.77  2002/03/07 03:52:06  oes
+ *     - Fixed compiler warnings etc
+ *     - Improved handling of failed DNS lookups
+ *
  *    Revision 1.76  2002/03/06 22:54:35  jongfoster
  *    Automated function-comment nitpicking.
  *
@@ -490,6 +494,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.76 2002/03/06 22:54:35 jongfoster Exp $";
 
 #ifdef unix
 #include <pwd.h>
+#include <grp.h>
 #endif
 
 # include <signal.h>
@@ -1545,7 +1550,7 @@ static int32 server_thread(void *data)
 void usage(const char *myname)
 {
    printf("JunkBuster proxy version " VERSION " (" HOME_PAGE_URL ")\n"
-           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [--user user] [configfile]\n"
+           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [--user user[.group]] [configfile]\n"
            "Aborting.\n", myname);
  
    exit(2);
@@ -1585,6 +1590,8 @@ int main(int argc, const char *argv[])
    int argc_pos = 0;
 #ifdef unix
    struct passwd *pw = NULL;
+   struct group *grp = NULL;
+   char *p;
 #endif
 
    Argc = argc;
@@ -1629,13 +1636,23 @@ int main(int argc, const char *argv[])
 
       else if (strcmp(argv[argc_pos], "--user" ) == 0)
       {
-         if (++argc_pos == argc) usage(argv[0]);
-         pw = getpwnam(argv[argc_pos]);
-                   
-         if (pw == NULL)
+         if (++argc_pos == argc) usage(argv[argc_pos]);
+
+         if ((NULL != (p = strchr(argv[argc_pos], '.'))) && *(p + 1) != '0')
+         {
+            *p++ = '\0';
+            if (NULL == (grp = getgrnam(p)))
+            {
+               log_error(LOG_LEVEL_FATAL, "Group %s not found.", p);
+            }
+         }
+
+         if (NULL == (pw = getpwnam(argv[argc_pos])))
          {
             log_error(LOG_LEVEL_FATAL, "User %s not found.", argv[argc_pos]);
          }
+
+         if (p != NULL) *--p = '\0';
       }
 #endif /* defined(unix) */
       else
@@ -1793,15 +1810,21 @@ int main(int argc, const char *argv[])
 
    /*
     * As soon as we have written the PID file, we can switch
-    * to the user ID indicated by the --user option
+    * to the user and group ID indicated by the --user option
     */
    write_pid_file();
    
-   if ((NULL != pw) && setuid(pw->pw_uid))
+   if (NULL != pw)
    {
-      log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
+      if (((NULL != grp) && setgid(grp->gr_gid)) || (setgid(pw->pw_gid)))
+      {
+         log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
+      }
+      if (setuid(pw->pw_uid))
+      {
+         log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
+      }
    }
-
 }
 #endif /* defined unix */
 
