@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.28 2001/09/19 18:00:37 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.29 2001/09/20 15:47:44 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.28 2001/09/19 18:00:37 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.29  2001/09/20 15:47:44  steudten
+ *
+ *    Fix BUG: Modify int size to size_t size in fill_template()
+ *     - removes big trouble on machines where sizeof(int) != sizeof(size_t).
+ *
  *    Revision 1.28  2001/09/19 18:00:37  oes
  *     - Deletef time() FIXME (Can't fail under Linux either, if
  *       the argument is guaranteed to be in out address space,
@@ -253,6 +258,9 @@ const struct cgi_dispatcher cgi_dispatcher[] = {
          12, cgi_edit_actions, 
          "HIDE Edit the actions for (a) specified URL(s)" },
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
+   { "show-request", 
+         12, cgi_show_request,  
+         "Show the client's request headers." }, 
    { "",
          0, cgi_default,
          "Junkbuster main page" },

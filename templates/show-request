@@ -1,0 +1,144 @@
+##########################################################
+#
+# Show-Request-CGI Output template for junkbuster 2.9.x.
+#
+#
+# USING HTML TEMPLATES:
+# ---------------------
+#
+# Template files are written win plain HTML, with a few
+# additions:
+# 
+# - Lines that start with a '#' character like this one
+#   are ignored
+#
+# - Each item in the below list of exported symbols will
+#   be replaced by dynamically generated text, if they
+#   are enclosed in '@'-characters. E.g. The string @version@
+#   will be replaced by the version number of Junkbuster.
+#
+# - One special application of this is to make whole blocks
+#   of the HTML template disappear if the condition <name>
+#   is not given. Simply enclose the block between the two
+#   strings @if-<name>start and if-<name>-end@. The strings
+#   should be placed in HTML comments (<!-- -->), so the
+#   html structure won't be messed when the magic happens.
+#   
+# USABLE SYMBOLS IN THIS TEMPLATE:
+# --------------------------------
+#
+#  my-ip-addr:
+#    The IP-address that the client used to reach this proxy
+#  my-hostname:
+#    The hostname associated with my-ip-addr
+#  admin-address:
+#    The email address of the pxoxy's administrator, as configured
+#    in the config file
+#  default-cgi:
+#    The URL for the "main menu" builtin CGI of this proxy
+#  menu:
+#    List of <li> elements linking to the other available CGIs
+#  version:
+#    The version number of the proxy software
+#  code-status:
+#    The development status of the proxy software: "alpha", "beta",
+#    or "stable".
+#  homepage:
+#    The URL of the SourceForge ijbswa project, who maintains this
+#    software.
+#  client-request:
+#    The request and headers that the client sent.
+#  processed-request:
+#    What we would have rewritten this request to, if this had not
+#    been intercepted.
+#
+# CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
+# ------------------------------------------------------------------
+#
+#  unstable:
+#    this is an alpha or beta release of the proxy software
+#  have-proxy-info:
+#    A URL for online documentation about this proxy has been
+#    specified and is available through the "proxy-info-url"
+#    symbol
+#
+<html>
+
+<head>
+  <title>Junkbuster@@my-hostname@</title>
+  <style type="text/css">
+    BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+  </style>
+</head>
+
+<body bgcolor="#ffffff">
+
+  <table cellpadding=20 cellspacing=10 border=0 width=100%>
+    <tr>
+      <td bgcolor=#dddddd>
+        <p><font size=+2><b>This is the Internet J</b></font><font size=+1><b>UNK<i></font><font color="red">BUSTER</font></i></b>
+          <font size=+2><b>@version@ on @my-hostname@ (@my-ip-address@), port @my-port@</b></font></p>
+      </td>
+    </tr>
+
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
+    <tr>
+      <td bgcolor=#ffdddd>
+        <p><b>Please note that this <font color=red>@code-status@</font> release
+          of the proxy software is not intended for production systems!
+          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+        </p>
+
+        <p>Feel free to <a href=mailto:ijbswa-developers@lists.sourceforge.net>mail the developers</a>
+          with any problems you encounter.
+        </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
+
+    <tr>
+      <td bgcolor=#eeeeee>
+	<h2>Show-Request</h2>
+          <blockquote>
+            Here you see the original headers that your client sent when requesting this page, along with
+            the headers that JunkBuster would have sent to the remote server if this request hadn't been
+            intercepted. 
+          </blockquote>
+
+        <h3>Original Client Request:</h3>
+          <blockquote>
+	    <pre>@client-request@</pre>
+          </blockquote>
+
+        <h3>Processed Request:</h3>
+          <blockquote>
+	    <pre>@processed-request@</pre>
+          </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <p>If you have any questions about this service,
+
+<!-- @if-have-proxy-info-start -->
+          consult the <a href="@proxy-info-url@">online documentation</a> or
+<!-- if-have-proxy-info-end@ -->
+
+          <a href=mailto:@admin-address@>send mail to <code>@admin-address@</code></a>
+          who will be glad to help you.
+        </p>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

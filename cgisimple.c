@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.2 2001/09/19 18:01:11 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.3 2001/09/22 16:34:44 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.2 2001/09/19 18:01:11 oes Exp
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.3  2001/09/22 16:34:44  jongfoster
+ *    Removing unneeded #includes
+ *
  *    Revision 1.2  2001/09/19 18:01:11  oes
  *    Fixed comments; cosmetics
  *
@@ -69,6 +72,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.2 2001/09/19 18:01:11 oes Exp
 #include "actions.h"
 #include "miscutil.h"
 #include "loadcfg.h"
+#include "parsers.h"
 
 const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
@@ -97,7 +101,7 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
 {
    char *p;
    char *tmp = NULL;
-   struct map * exports = default_exports(csp, "");
+   struct map *exports = default_exports(csp, "");
 
    /* If there were other parameters, export a dump as "cgi-parameters" */
    if(parameters)
@@ -119,6 +123,50 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
    free_map(exports);
    return(0);
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_show_request
+ *
+ * Description :  Show the client's request and what sed() would have
+ *                made of it.
+ *               
+ * Parameters  :
+ *           1 :  csp = Current client state (buffers, headers, etc...)
+ *           2 :  rsp = http_response data structure for output
+ *           3 :  parameters = map of cgi parameters
+ *
+ * Returns     :  0
+ *
+ *********************************************************************/
+int cgi_show_request(struct client_state *csp, struct http_response *rsp,
+                struct map *parameters)
+{
+   char *p;
+   struct map *exports = default_exports(csp, "show-request");
+   
+   /*
+    * Repair the damage done to the IOB by get_header()
+    */
+   for (p = csp->iob->buf; p < csp->iob->eod; p++)
+   {
+      if (*p == '\0') *p = '\n';
+   }
+
+   /*
+    * Export the original client's request and the one we would
+    * be sending to the server if this wasn't a CGI call
+    */
+   map(exports, "client-request", 1, csp->iob->buf, 1);
+   map(exports, "processed-request", 1, sed(client_patterns, add_client_headers, csp), 0);
+   
+   rsp->body = template_load(csp, "show-request");
+   template_fill(&rsp->body, exports);
+   free_map(exports);
+   return(0);
+ 
 }
 
 

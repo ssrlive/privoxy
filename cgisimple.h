@@ -1,9 +1,9 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgi.h,v 1.15 2001/09/16 15:02:35 jongfoster Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.1 2001/09/16 17:08:54 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
@@ -37,7 +37,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: cgi.h,v $
+ *    $Log: cgisimple.h,v $
+ *    Revision 1.1  2001/09/16 17:08:54  jongfoster
+ *    Moving simple CGI functions from cgi.c to new file cgisimple.c
+ *
  *
  **********************************************************************/
 
@@ -67,6 +70,9 @@ extern int cgi_show_url_info       (struct client_state *csp,
                                     struct http_response *rsp,
                                     struct map *parameters);
 extern int cgi_show_version        (struct client_state *csp,
+                                    struct http_response *rsp,
+                                    struct map *parameters);
+extern int cgi_show_request        (struct client_state *csp,
                                     struct http_response *rsp,
                                     struct map *parameters);
 
