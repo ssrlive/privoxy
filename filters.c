@@ -1,7 +1,7 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.22 2001/07/18 12:29:34 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.23 2001/07/23 13:40:12 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/filters.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.22 2001/07/18 12:29:34 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.23  2001/07/23 13:40:12  oes
+ *    Fixed bug that caused document body to be dropped when pcrs joblist was empty.
+ *
  *    Revision 1.22  2001/07/18 12:29:34  oes
  *    - Made gif_deanimate_response respect
  *      csp->action->string[ACTION_STRING_DEANIMATE]
@@ -506,7 +509,21 @@ struct http_response *block_url(struct client_state *csp)
       rsp->body = fill_template(csp, "blocked", exports);
       free_map(exports);
   
-      rsp->status = strdup("403 Request for blocked URL"); 
+      /*
+       * Workaround for stupid Netscape bug which prevents
+       * pages from being displayed if loading a referenced
+       * JavaScript or style sheet fails. So make it appear
+       * as if it succeeded.
+       */
+      if (csp->http->user_agent && !strncmpic(csp->http->user_agent, "mozilla", 7))
+      {
+         rsp->status = strdup("200 Request for blocked URL"); 
+      }
+      else
+      {
+         rsp->status = strdup("404 Request for blocked URL"); 
+      }
+
    }
 
    return(finish_http_response(rsp));
