@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.8 2002/04/02 08:45:22 oes Exp $
+  $Id: index.php,v 1.14 2002/04/07 15:10:12 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.14  2002/04/07 15:10:12  oes
+  Restoring CVS history
+
   Revision 1.13  2002/04/06 15:19:35  oes
   Clean-up, smarter handling of unreachable URLs
 
@@ -90,7 +93,7 @@
 $required_actions_file_version = "1.0";
 $required_privoxy_version = "2.9.13";
 $actions_file_download = "http://www.privoxy.org/actions/testdrive.action";
-$submit_target = "http://www.oesterhelt.org/actions-test/step2.php";
+$submit_target = "http://www.oesterhelt.org/actions/step2.php";
 
 
 /*
