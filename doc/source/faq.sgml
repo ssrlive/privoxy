@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.26 2002/03/25 02:54:39 hal9 Exp $
+ $Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.26 2002/03/25 02:54:39 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -90,6 +90,26 @@ Please see the Contact section in the
 
 </sect3>
 
+
+<sect3>
+<title id="whyprivoxy">Why <quote>Privoxy</quote>? Why a name change at all?</title>
+<para>
+ <application>Privoxy</application> is for <quote>Privacy Enhancing Proxy</quote>.
+ There are possible legal complications from the continued use of the 
+ <application>Junkbuster</application> name, which is a trademark of 
+ <ulink url="http://junkbusters.com">The Junkbusters Corporation</ulink>.
+ There are no objections from Junkbusters Corporation to the project 
+ itself though.
+</para>
+
+<para>
+ The developers also believed that there so many changes from the original 
+ code, that it was time to make a clean break from the past and make 
+ a name in their own right.
+</para>
+</sect3>
+
+
 <sect3 id="differs"><title>How does it differ from the old <application>Junkbuster?</application></title>
  <para>
    All the old features remain. The new <application>Privoxy</application> 
@@ -109,7 +129,7 @@ Please see the Contact section in the
 
 <sect3 id="features"><title>What are some of the new features?</title>
 <!--
- The section is in both user-manual and faq. Please keep in sync!!!
+ This section is in both user-manual and faq. Please keep in sync!!!
 -->
 <para>
  <itemizedlist>
@@ -794,7 +814,7 @@ browsers are able to start rendering incomplete content, giving the
 user a feeling of "it works". 
  </para>
 <para>
-To modify the content of a page (i.e. make frames resize-able again, etc.) and
+To modify the content of a page (i.e. make frames resizeable again, etc.) and
 not just replace ads, <application>Privoxy</application> needs to download the
 entire page first, do its content magic and then send the page to the browser.
 </para>
@@ -1231,9 +1251,6 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
-Revision 1.26  2002/03/25 02:54:39  hal9
-Fix typo in link.
-
 Revision 1.25  2002/03/24 16:08:08  swa
 we are too lazy to make a block-built
 privoxy logo. hence removed the option.
