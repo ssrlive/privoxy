@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.46 2002/01/17 21:06:09 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.47 2002/02/20 23:15:13 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.47  2002/02/20 23:15:13  jongfoster
+ *    Parsing functions now handle out-of-memory gracefully by returning
+ *    an error code.
+ *
  *    Revision 1.46  2002/01/17 21:06:09  jongfoster
  *    Now #defining the URLs of the config interface
  *
@@ -498,6 +502,7 @@ struct map
 struct http_request
 {
    char *cmd;      /* Whole command line: method, URL, Version */
+   char *ocmd;     /* Backup of original cmd for CLF logging */
    char *gpc;      /* HTTP method: GET, POST, .. */
    char *url;      /* The URL */
    char *ver;      /* Protocol version */

@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.1 2002/01/17 20:53:46 jongfoster Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.2 2002/01/21 00:14:09 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.1 2002/01/17 20:53:46 jongfoste
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.2  2002/01/21 00:14:09  jongfoster
+ *    Correcting comment style
+ *    Fixing an uninitialized memory bug in create_url_spec()
+ *
  *    Revision 1.1  2002/01/17 20:53:46  jongfoster
  *    Moving all our URL and URL pattern parsing code to the same file - it
  *    was scattered around in filters.c, loaders.c and parsers.c.
@@ -109,6 +113,7 @@ void free_http_request(struct http_request *http)
    assert(http);
 
    freez(http->cmd);
+   freez(http->ocmd);
    freez(http->gpc);
    freez(http->host);
    freez(http->url);
