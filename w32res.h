@@ -1,6 +1,6 @@
 #ifndef _W32RES_H
 #define _W32RES_H
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.6 2001/05/31 21:37:11 jongfoster Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.7 2001/06/07 23:08:12 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.7  2001/06/07 23:08:12  jongfoster
+ *    Forward and ACL edit options removed.
+ *
  *    Revision 1.6  2001/05/31 21:37:11  jongfoster
  *    GUI changes to rename "permissions file" to "actions file".
  *
@@ -151,10 +154,7 @@
 /* Break these out so they are easier to extend, but keep consecutive */
 #define ID_TOOLS_EDITJUNKBUSTER           5000
 #define ID_TOOLS_EDITACTIONS              5001
-
-#ifdef PCRS
 #define ID_TOOLS_EDITPERLRE               5002
-#endif /* def PCRS */
 
 #ifdef TRUST_FILES
 #define ID_TOOLS_EDITTRUST                5003

@@ -1,6 +1,6 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.6 2001/06/03 19:12:38 oes Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.7 2001/06/29 13:32:14 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.7  2001/06/29 13:32:14  oes
+ *    Removed logentry from cancelled commit
+ *
  *    Revision 1.6  2001/06/03 19:12:38  oes
  *    deleted const struct interceptors
  *
@@ -112,13 +115,8 @@ extern void client_xtra_adder(struct client_state *csp);
 extern void client_x_forwarded_adder(struct client_state *csp);
 extern char *server_set_cookie(const struct parsers *v, char *s, struct client_state *csp);
 
-#if defined(PCRS) || defined(KILLPOPUPS)
 extern char *content_type(const struct parsers *v, char *s, struct client_state *csp);
-#endif /* defined(PCRS) || defined(KILLPOPUPS) */
-
-#ifdef PCRS
 extern char *content_length(const struct parsers *v, char *s, struct client_state *csp);
-#endif /* def PCRS */
 
 #ifdef FORCE_LOAD
 char *client_host(const struct parsers *v, char *s, struct client_state *csp);

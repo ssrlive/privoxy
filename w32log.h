@@ -1,6 +1,6 @@
 #ifndef _W32LOG_H
 #define _W32LOG_H
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.4 2001/05/31 21:37:11 jongfoster Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.5 2001/06/07 23:08:12 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,6 +34,9 @@
  *
  * Revisions   :
  *    $Log: w32log.h,v $
+ *    Revision 1.5  2001/06/07 23:08:12  jongfoster
+ *    Forward and ACL edit options removed.
+ *
  *    Revision 1.4  2001/05/31 21:37:11  jongfoster
  *    GUI changes to rename "permissions file" to "actions file".
  *
@@ -111,15 +114,12 @@ extern int g_nFontSize;
 /* FIXME: this is a kludge */
 
 extern const char * g_actions_file;
-#ifdef PCRS
 extern const char * g_re_filterfile;
-#endif
 #ifdef TRUST_FILES
 extern const char * g_trustfile;
 #endif /* def TRUST_FILES */
 
 /* FIXME: end kludge */
-
 
 extern int LogPutString(const char *pszText);
 extern BOOL InitLogWindow(void);

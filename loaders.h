@@ -1,6 +1,6 @@
 #ifndef _LOADERS_H
 #define _LOADERS_H
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.5 2001/05/31 21:28:49 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.6 2001/06/07 23:14:38 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.6  2001/06/07 23:14:38  jongfoster
+ *    Removing ACL and forward file loaders - these files have
+ *    been merged into the config file.
+ *
  *    Revision 1.5  2001/05/31 21:28:49  jongfoster
  *    Removed all permissionsfile code - it's now called the actions
  *    file, and (almost) all the code is in actions.c
@@ -104,14 +108,13 @@ extern int check_file_changed(const struct file_list * current,
                               struct file_list ** newfl);
 
 extern int load_actions_file(struct client_state *csp);
-  
+extern int load_re_filterfile(struct client_state *csp);
+
 #ifdef TRUST_FILES
 extern int load_trustfile(struct client_state *csp);
 #endif /* def TRUST_FILES */
 
-#ifdef PCRS
-extern int load_re_filterfile(struct client_state *csp);
-#endif /* def PCRS */
+
 
 extern int create_url_spec(struct url_spec * url, char * buf);
 extern void free_url(struct url_spec *url);

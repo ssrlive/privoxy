@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.17 2001/06/29 13:31:51 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.18 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.17 2001/06/29 13:31:51 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.18  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.17  2001/06/29 13:31:51  oes
  *    Various adaptions
  *
@@ -185,9 +188,8 @@ const char loaders_h_rcs[] = LOADERS_H_VERSION;
 static struct file_list *current_trustfile      = NULL;
 #endif /* def TRUST_FILES */
 
-#ifdef PCRS
 static struct file_list *current_re_filterfile  = NULL;
-#endif /* def PCRS */
+
 
 
 /*********************************************************************
@@ -243,12 +245,10 @@ void sweep(void)
             ncsp->actions_list->active = 1;
          }
 
-#ifdef PCRS
-         if (ncsp->rlist)     /* perl re files */
+         if (ncsp->rlist)     /* pcrsjob files */
          {
             ncsp->rlist->active = 1;
          }
-#endif /* def PCRS */
 
 #ifdef TRUST_FILES
          if (ncsp->tlist)     /* trust files */
@@ -828,7 +828,6 @@ load_trustfile_error:
 #endif /* def TRUST_FILES */
 
 
-#ifdef PCRS
 /*********************************************************************
  *
  * Function    :  unload_re_filterfile
@@ -957,7 +956,6 @@ load_re_filterfile_error:
    return(-1);
 
 }
-#endif /* def PCRS */
 
 
 /*********************************************************************
