@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.2.2.2 2002/07/27 18:13:36 oes Exp $
+#  $Id: standard.action,v 1.3 2002/07/29 21:41:36 jongfoster Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -37,6 +37,7 @@
 -fast-redirects \
 +filter{js-annoyances} \
 +filter{html-annoyances} \
+-filter{content-cookies} \
 +filter{webbugs} \
 -filter{popups} \
 -filter{frameset-borders} \
@@ -47,6 +48,7 @@
 -filter{fun} \
 +filter{nimda} \
 -filter{shockwave-flash} \
+-filter{quicktime-kioskmode} \
 -filter{js-events} \
 -filter{crude-parental} \
 -handle-as-image \
@@ -78,6 +80,7 @@ standard.Cautious
 -fast-redirects \
 +filter{js-annoyances} \
 +filter{html-annoyances} \
++filter{content-cookies} \
 +filter{webbugs} \
 +filter{popups} \
 -filter{frameset-borders} \
@@ -88,6 +91,7 @@ standard.Cautious
 -filter{fun} \
 +filter{nimda} \
 -filter{shockwave-flash} \
++filter{quicktime-kioskmode} \
 -filter{js-events} \
 -filter{crude-parental} \
 -handle-as-image \
@@ -119,6 +123,7 @@ standard.Medium
 +fast-redirects \
 +filter{js-annoyances} \
 +filter{html-annoyances} \
++filter{content-cookies} \
 +filter{webbugs} \
 +filter{popups} \
 +filter{frameset-borders} \
@@ -129,6 +134,7 @@ standard.Medium
 +filter{fun} \
 +filter{nimda} \
 -filter{shockwave-flash} \
++filter{quicktime-kioskmode} \
 -filter{js-events} \
 -filter{crude-parental} \
 -handle-as-image \
