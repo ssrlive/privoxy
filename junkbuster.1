@@ -38,6 +38,11 @@ On startup, write the process ID to \fIpidfile\fP. Delete the
 \fIpidfile\fP on exit. Failiure to create or delete the
 \fIpidfile\fP is non-fatal. If no \fB--pidfile\fP option
 is given, no PID file will be used.
+.TP
+\fB --user\fP \fIuser\fP (unix only)
+After (optionally) writing the PID file, assume the user ID
+of \fIuser\fP. Exit if the privileges are not sufficient to
+do so.
 
 .PP
 If the \fIconfig file\fP is not specified on the command line,

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.69 2002/03/04 23:50:00 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.70 2002/03/05 04:52:42 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.69 2002/03/04 23:50:00 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.70  2002/03/05 04:52:42  oes
+ *    Deleted non-errlog debugging code
+ *
  *    Revision 1.69  2002/03/04 23:50:00  jongfoster
  *    Splitting off bind_port() call into bind_port_helper(), with
  *    improved logging.
@@ -462,6 +465,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.69 2002/03/04 23:50:00 jongfoster Exp $";
 #ifdef sun
 #include <sys/termios.h>
 #endif /* sun */
+
+#ifdef unix
+#include <pwd.h>
+#endif
 
 # include <signal.h>
 
@@ -1515,7 +1522,7 @@ static int32 server_thread(void *data)
 void usage(const char *myname)
 {
    printf("JunkBuster proxy version " VERSION " (" HOME_PAGE_URL ")\n"
-           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [configfile]\n"
+           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [--user user] [configfile]\n"
            "Aborting.\n", myname);
  
    exit(2);
@@ -1553,6 +1560,7 @@ int main(int argc, const char *argv[])
 #endif
 {
    int argc_pos = 0;
+   struct passwd *pw;
 
    Argc = argc;
    Argv = argv;
@@ -1592,6 +1600,17 @@ int main(int argc, const char *argv[])
       {
          if (++argc_pos == argc) usage(argv[0]);
          pidfile = strdup(argv[argc_pos]);
+      }
+
+      else if (strcmp(argv[argc_pos], "--user" ) == 0)
+      {
+         if (++argc_pos == argc) usage(argv[0]);
+         pw = getpwnam(argv[argc_pos]);
+
+         if (pw == NULL)
+         {
+            log_error(LOG_LEVEL_FATAL, "User %s not found.", argv[argc_pos]);
+         }
       }
       else
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
@@ -1744,9 +1763,19 @@ int main(int argc, const char *argv[])
       close( 1 );
       chdir("/");
 
-      write_pid_file();
-
    } /* -END- if (!no_daemon) */
+
+   /*
+    * As soon as we have written the PID file, we can switch
+    * to the user ID indicated by the --user option
+    */
+   write_pid_file();
+   
+   if (setuid(pw->pw_uid))
+   {
+      log_error(LOG_LEVEL_FATAL, "Cannot setuid(): Insufficient permissions.");
+   }
+
 }
 #endif /* defined unix */
 
