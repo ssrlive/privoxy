@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.82 2002/04/11 21:07:11 oes Exp $
+# $Id: GNUmakefile.in,v 1.83 2002/04/12 09:39:25 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -82,7 +82,7 @@ LN         = ln
 WDUMP      = @WDUMP@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
-DB         = $(JADEBIN) $(JADECAT) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
+DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
@@ -557,13 +557,13 @@ dok-readme: doc/source/ldpOK.dsl
 # webserver files
 dok-webserver: doc/source/ldpOK.dsl
 	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
-	$(PERL) -pi -e 's/..\/p_doc.css/p_web.css/;\
+	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
-	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/'\
-     doc/webserver/index.html
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
+	s/<\/BODY/\n<p align=\"center\"><a href=\"http:\/\/sourceforge\.net\"><img src=\"http:\/\/sourceforge\.net\/sflogo.php\?group_id=11118&type=1\" width=\"88\" height=\"32" border=\"0\" alt=\"SourceForge\.net Logo\" align=\"center\"><\/a><\/p><\/BODY/'\
+     doc/webserver/index.html && rm -f doc/source/webserver/*.bak
 
-# Removed dok-man 04/08/02, hal. Added authors and dok-release. And
-# dok-webserver!
+# Main documentation target.
 dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver authors
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
@@ -584,7 +584,7 @@ ifneq ($(MAN2HTML),false)
 	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
 	$(PERL) -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
 	$(PERL) -pi -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
-# Get rid of spurious  from converion. (How to do this with perl?)
+# Get rid of spurious  from conversion. (How to do this with perl?)
 	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && rm -f tmp.html
 else
 	$(MAKE) groff2html
@@ -605,10 +605,9 @@ authors: doc/source/ldpOK.dsl
 	@rm -f doc/source/ldpOK.dsl
 
 # make a man page, and then (lousy) HTML version.
-# Requires docbook2man (short perl script), see CVS
-# http://sources.redhat.com/docbook-tools/. Also requires openjade and SGMLSpm
-# perl module. This target is not invoked from other dok targets. It is 
-# built separately due to dependencies on perl scripts.
+# Requires docbook2man (short perl script), see comments 
+# in privoxy-man-page.sgml. This target is not invoked from other dok targets.
+# It is built separately due to dependencies on perl scripts.
 man: doc/source/ldpOK.dsl
 	mkdir -p doc/source/man
 	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
@@ -623,21 +622,24 @@ man: doc/source/ldpOK.dsl
 
 # Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
 # exceptions accordingly. This needs to go before any doc building (doh).
-make dok-release:
+dok-release:
 	@$(ECHO) Setting doc version and status to $(VERSION), $(CODE_STATUS)
-	@$(PERL) -pi -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
+	@$(PERL) -pi.bak -e 's/<!entity +p-version.*>/<!entity p-version "$(VERSION)">/;\
      s/<!entity +p-status.*>/<!entity p-status "$(CODE_STATUS)">/' \
      doc/source/*sgml doc/source/*/*sgml
+	rm -fr doc/source/*bak doc/source/*/*bak
 ifeq ($(CODE_STATUS),stable)
 	@$(ECHO) Setting docs to stable $(VERSION)
-	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
+	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
      doc/source/*sgml doc/source/*/*sgml
+	rm -fr doc/source/*bak doc/source/*/*bak
 else
 	@$(ECHO) Setting docs to not stable $(VERSION)
-	@$(PERL) -pi -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
+	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
      s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
      doc/source/*sgml doc/source/*/*sgml
+	rm -fr doc/source/*bak doc/source/*/*bak
 endif
 
 #############################################################################
@@ -786,6 +788,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.83  2002/04/12 09:39:25  oes
+# Excluding yet more files from tarball; making dist warning yet more scary
+#
 # Revision 1.82  2002/04/11 21:07:11  oes
 # Excluding more files from tarball build
 #
