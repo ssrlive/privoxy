@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.15  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.14  2002/03/24 16:32:08  jongfoster
  *    Removing logo option
  *
@@ -94,41 +97,61 @@
 #define DEFINE_CGI_PARAM_NO_RADIO(name, bit, index, default_val)
 #endif /* ndef DEFINE_CGI_PARAM_RADIO */
 
-DEFINE_ACTION_MULTI      ("add-header",      ACTION_MULTI_ADD_HEADER)
-DEFINE_ACTION_BOOL       ("block",           ACTION_BLOCK)
-DEFINE_ACTION_STRING     ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
-DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "first", 0)
-DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",  ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
+DEFINE_ACTION_MULTI      ("add-header",                 ACTION_MULTI_ADD_HEADER)
+DEFINE_ACTION_BOOL       ("block",                      ACTION_BLOCK)
+DEFINE_ACTION_STRING     ("deanimate-gifs",             ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
+DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",             ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "first", 0)
+DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",             ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
+DEFINE_ACTION_BOOL       ("downgrade-http-version",     ACTION_DOWNGRADE)
+DEFINE_ACTION_BOOL       ("fast-redirects",             ACTION_FAST_REDIRECTS)
+DEFINE_ACTION_MULTI      ("filter",                     ACTION_MULTI_FILTER)
+DEFINE_ACTION_BOOL       ("hide-forwarded-for-headers", ACTION_HIDE_FORWARDED)
+DEFINE_ACTION_STRING     ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM)
+DEFINE_CGI_PARAM_RADIO   ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "block", 1)
+DEFINE_CGI_PARAM_CUSTOM  ("hide-from-header",           ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "spam_me_senseless@sittingduck.xyz")
+DEFINE_ACTION_STRING     ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_CGI_PARAM_RADIO   ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "forge", 1)
+DEFINE_CGI_PARAM_RADIO   ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
+DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",               ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
+DEFINE_ACTION_STRING     ("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
+DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy/3.0 (Anonymous)")
+DEFINE_ACTION_BOOL       ("handle-as-image",            ACTION_IMAGE)
+DEFINE_ACTION_STRING     ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
+DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)
+DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
+DEFINE_CGI_PARAM_CUSTOM  ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER,  CGI_PREFIX "show-banner?type=pattern")
+DEFINE_ACTION_STRING     ("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
+DEFINE_CGI_PARAM_NO_RADIO("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT,  "443")
+DEFINE_ACTION_BOOL       ("prevent-compression",        ACTION_NO_COMPRESSION)
+DEFINE_ACTION_BOOL       ("session-cookies-only",       ACTION_NO_COOKIE_KEEP)
+DEFINE_ACTION_BOOL       ("prevent-reading-cookies",    ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("prevent-setting-cookies",    ACTION_NO_COOKIE_SET)
+DEFINE_ACTION_BOOL       ("kill-popups",                ACTION_NO_POPUPS)
+DEFINE_ACTION_BOOL       ("send-vanilla-wafer",         ACTION_VANILLA_WAFER)
+DEFINE_ACTION_MULTI      ("send-wafer",                 ACTION_MULTI_WAFER)
+
+#if DEFINE_ACTION_ALIAS
+
+/* 
+ * Alternative spellings
+ */
+DEFINE_ACTION_BOOL       ("kill-popup",      ACTION_NO_POPUPS)
+DEFINE_ACTION_STRING     ("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
+DEFINE_ACTION_BOOL       ("prevent-keeping-cookies", ACTION_NO_COOKIE_KEEP)
+
+/* 
+ * Pre-3.0 compatibility
+ */
 DEFINE_ACTION_BOOL       ("downgrade",       ACTION_DOWNGRADE)
-DEFINE_ACTION_BOOL       ("fast-redirects",  ACTION_FAST_REDIRECTS)
-DEFINE_ACTION_MULTI      ("filter",          ACTION_MULTI_FILTER)
 DEFINE_ACTION_BOOL       ("hide-forwarded",  ACTION_HIDE_FORWARDED)
 DEFINE_ACTION_STRING     ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM)
-DEFINE_CGI_PARAM_RADIO   ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "block", 1)
-DEFINE_CGI_PARAM_CUSTOM  ("hide-from",       ACTION_HIDE_FROM,       ACTION_STRING_FROM,          "spam_me_senseless@sittingduck.xyz")
-DEFINE_ACTION_STRING     ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
-DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "forge", 1)
-DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
-DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
-DEFINE_ACTION_STRING     ("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
-DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy/3.0 (Anonymous)")
 DEFINE_ACTION_BOOL       ("image",           ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
-DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)
-DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
-DEFINE_CGI_PARAM_CUSTOM  ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, CGI_PREFIX "show-banner?type=pattern")
-DEFINE_ACTION_STRING     ("limit-connect",   ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
-DEFINE_CGI_PARAM_NO_RADIO("limit-connect",   ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT,  "443")
 DEFINE_ACTION_BOOL       ("no-compression",  ACTION_NO_COMPRESSION)
 DEFINE_ACTION_BOOL       ("no-cookies-keep", ACTION_NO_COOKIE_KEEP)
 DEFINE_ACTION_BOOL       ("no-cookies-read", ACTION_NO_COOKIE_READ)
 DEFINE_ACTION_BOOL       ("no-cookies-set",  ACTION_NO_COOKIE_SET)
 DEFINE_ACTION_BOOL       ("no-popups",       ACTION_NO_POPUPS)
-DEFINE_ACTION_BOOL       ("vanilla-wafer",   ACTION_VANILLA_WAFER)
-DEFINE_ACTION_MULTI      ("wafer",           ACTION_MULTI_WAFER)
-#if DEFINE_ACTION_ALIAS
-DEFINE_ACTION_BOOL       ("no-popup",        ACTION_NO_POPUPS)
-DEFINE_ACTION_STRING     ("hide-referrer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
 #endif /* if DEFINE_ACTION_ALIAS */
 
 #undef DEFINE_ACTION_MULTI
