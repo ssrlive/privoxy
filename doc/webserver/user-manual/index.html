@@ -49,7 +49,7 @@ CLASS="ORGNAME"
 ></DIV
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 1.91 2002/04/24 02:39:31 hal9 Exp $<BR></P
+>$Id: user-manual.sgml,v 1.95 2002/04/26 17:23:29 swa Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -58,9 +58,6 @@ NAME="AEN9"
 ></A
 ><P
 ></P
-><P
-> 
- </P
 ><P
 >  The user manual gives users information on how to install, configure and use
   <A
@@ -137,8 +134,8 @@ HREF="introduction.html"
 ><DL
 ><DT
 >1.1. <A
-HREF="introduction.html#NEWFEATURES"
->New Features</A
+HREF="introduction.html#FEATURES"
+>Features</A
 ></DT
 ></DL
 ></DD
@@ -151,59 +148,58 @@ HREF="installation.html"
 ><DL
 ><DT
 >3.1. <A
-HREF="installation.html#INSTALLATION-PACKAGES"
->Binary Packages</A
-></DT
-><DD
-><DL
-><DT
->3.1.1. <A
 HREF="installation.html#INSTALLATION-PACK-RPM"
 >Red Hat and SuSE RPMs</A
 ></DT
 ><DT
->3.1.2. <A
+>3.2. <A
 HREF="installation.html#INSTALLATION-DEB"
 >Debian</A
 ></DT
 ><DT
->3.1.3. <A
+>3.3. <A
 HREF="installation.html#INSTALLATION-PACK-WIN"
 >Windows</A
 ></DT
 ><DT
->3.1.4. <A
+>3.4. <A
 HREF="installation.html#INSTALLATION-PACK-BINTGZ"
 >Solaris, NetBSD, FreeBSD, HP-UX</A
 ></DT
 ><DT
->3.1.5. <A
+>3.5. <A
 HREF="installation.html#INSTALLATION-OS2"
 >OS/2</A
 ></DT
 ><DT
->3.1.6. <A
+>3.6. <A
 HREF="installation.html#INSTALLATION-MAC"
 >Max OSX</A
 ></DT
 ><DT
->3.1.7. <A
+>3.7. <A
 HREF="installation.html#INSTALLATION-AMIGA"
 >AmigaOS</A
 ></DT
 ></DL
 ></DD
 ><DT
->3.2. <A
-HREF="installation.html#INSTALLATION-SOURCE"
->Building from Source</A
-></DT
-></DL
-></DD
-><DT
 >4. <A
+HREF="upgradersnote.html"
+>Note to Upgraders</A
+></DT
+><DT
+>5. <A
 HREF="quickstart.html"
 >Quickstart to Using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+></DT
+><DT
+>6. <A
+HREF="startup.html"
+>Starting <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 ></A
@@ -211,27 +207,14 @@ CLASS="APPLICATION"
 ><DD
 ><DL
 ><DT
->4.1. <A
-HREF="quickstart.html#UPGRADERSNOTE"
->Note to Upgraders</A
-></DT
-><DT
->4.2. <A
-HREF="quickstart.html#STARTUP"
->Starting <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></A
-></DT
-><DT
->4.3. <A
-HREF="quickstart.html#CMDOPTIONS"
+>6.1. <A
+HREF="startup.html#CMDOPTIONS"
 >Command Line Options</A
 ></DT
 ></DL
 ></DD
 ><DT
->5. <A
+>7. <A
 HREF="configuration.html"
 ><SPAN
 CLASS="APPLICATION"
@@ -241,110 +224,110 @@ CLASS="APPLICATION"
 ><DD
 ><DL
 ><DT
->5.1. <A
-HREF="configuration.html#AEN324"
+>7.1. <A
+HREF="configuration.html#AEN320"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > with Your Web Browser</A
 ></DT
 ><DT
->5.2. <A
-HREF="configuration.html#AEN343"
+>7.2. <A
+HREF="configuration.html#CONFOVERVIEW"
 >Configuration Files Overview</A
 ></DT
 ><DT
->5.3. <A
-HREF="configuration.html#AEN383"
+>7.3. <A
+HREF="configuration.html#CONFIG"
 >The Main Configuration File</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.3.1. <A
-HREF="configuration.html#AEN402"
+>7.3.1. <A
+HREF="configuration.html#CONF-LOG-LOC"
 >Configuration and Log File Locations</A
 ></DT
 ><DT
->5.3.2. <A
-HREF="configuration.html#AEN622"
+>7.3.2. <A
+HREF="configuration.html#LOCAL-SET-UP"
 >Local Set-up Documentation</A
 ></DT
 ><DT
->5.3.3. <A
-HREF="configuration.html#AEN706"
+>7.3.3. <A
+HREF="configuration.html#DEBUGGING"
 >Debugging</A
 ></DT
 ><DT
->5.3.4. <A
-HREF="configuration.html#AEN772"
+>7.3.4. <A
+HREF="configuration.html#ACCESS-CONTROL"
 >Access Control and Security</A
 ></DT
 ><DT
->5.3.5. <A
+>7.3.5. <A
 HREF="configuration.html#FORWARDING"
 >Forwarding</A
 ></DT
 ><DT
->5.3.6. <A
-HREF="configuration.html#AEN1143"
+>7.3.6. <A
+HREF="configuration.html#WINDOWS-GUI"
 >Windows GUI Options</A
 ></DT
 ></DL
 ></DD
 ><DT
->5.4. <A
-HREF="configuration.html#ACTIONSFILE"
->The Actions File</A
+>7.4. <A
+HREF="configuration.html#ACTIONS-FILE"
+>Actions Files</A
 ></DT
 ><DD
 ><DL
 ><DT
->5.4.1. <A
-HREF="configuration.html#AEN1234"
+>7.4.1. <A
+HREF="configuration.html#AEN1285"
 >Finding the Right Mix</A
 ></DT
 ><DT
->5.4.2. <A
-HREF="configuration.html#AEN1240"
+>7.4.2. <A
+HREF="configuration.html#AEN1292"
 >How to Edit</A
 ></DT
 ><DT
->5.4.3. <A
-HREF="configuration.html#AEN1247"
+>7.4.3. <A
+HREF="configuration.html#AEN1298"
 >How Actions are Applied to URLs</A
 ></DT
 ><DT
->5.4.4. <A
-HREF="configuration.html#AEN1256"
+>7.4.4. <A
+HREF="configuration.html#AEN1312"
 >Patterns</A
 ></DT
 ><DT
->5.4.5. <A
+>7.4.5. <A
 HREF="configuration.html#ACTIONS"
 >Actions</A
 ></DT
 ><DT
->5.4.6. <A
-HREF="configuration.html#AEN2110"
+>7.4.6. <A
+HREF="configuration.html#ALIASES"
 >Aliases</A
 ></DT
 ></DL
 ></DD
 ><DT
->5.5. <A
-HREF="configuration.html#FILTERFILE"
+>7.5. <A
+HREF="configuration.html#FILTER-FILE"
 >The Filter File</A
 ></DT
 ><DT
->5.6. <A
-HREF="configuration.html#AEN2176"
+>7.6. <A
+HREF="configuration.html#AEN2273"
 >Templates</A
 ></DT
 ></DL
 ></DD
 ><DT
->6. <A
+>8. <A
 HREF="contact.html"
 >Contacting the Developers, Bug Reporting and Feature
 Requests</A
@@ -352,54 +335,71 @@ Requests</A
 ><DD
 ><DL
 ><DT
->6.1. <A
-HREF="contact.html#SUBMITACTIONS"
->Submitting Ads and <SPAN
-CLASS="QUOTE"
->"Action"</SPAN
-> Problems</A
+>8.1. <A
+HREF="contact.html#CONTACT-SUPPORT"
+>Get Support</A
+></DT
+><DT
+>8.2. <A
+HREF="contact.html#CONTACT-BUGS"
+>Report bugs</A
+></DT
+><DT
+>8.3. <A
+HREF="contact.html#CONTACT-FEATURE"
+>Request new features</A
+></DT
+><DT
+>8.4. <A
+HREF="contact.html#CONTACT-ADS"
+>Report ads or other filter problems</A
+></DT
+><DT
+>8.5. <A
+HREF="contact.html#CONTACT-OTHER"
+>Other</A
 ></DT
 ></DL
 ></DD
 ><DT
->7. <A
+>9. <A
 HREF="copyright.html"
 >Copyright and History</A
 ></DT
 ><DD
 ><DL
 ><DT
->7.1. <A
-HREF="copyright.html#AEN2227"
+>9.1. <A
+HREF="copyright.html#AEN2320"
 >Copyright</A
 ></DT
 ><DT
->7.2. <A
+>9.2. <A
 HREF="copyright.html#HISTORY"
 >History</A
 ></DT
 ></DL
 ></DD
 ><DT
->8. <A
+>10. <A
 HREF="seealso.html"
 >See Also</A
 ></DT
 ><DT
->9. <A
+>11. <A
 HREF="appendix.html"
 >Appendix</A
 ></DT
 ><DD
 ><DL
 ><DT
->9.1. <A
+>11.1. <A
 HREF="appendix.html#REGEX"
 >Regular Expressions</A
 ></DT
 ><DT
->9.2. <A
-HREF="appendix.html#AEN2452"
+>11.2. <A
+HREF="appendix.html#AEN2545"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -408,19 +408,19 @@ CLASS="APPLICATION"
 ><DD
 ><DL
 ><DT
->9.2.1. <A
+>11.2.1. <A
 HREF="appendix.html#BOOKMARKLETS"
 >Bookmarklets</A
 ></DT
 ></DL
 ></DD
 ><DT
->9.3. <A
+>11.3. <A
 HREF="appendix.html#CHAIN"
 >Chain of Events</A
 ></DT
 ><DT
->9.4. <A
+>11.4. <A
 HREF="appendix.html#ACTIONSANAT"
 >Anatomy of an Action</A
 ></DT

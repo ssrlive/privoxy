@@ -10,8 +10,8 @@ REL="HOME"
 TITLE="Privoxy User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
-TITLE="Quickstart to Using Privoxy"
-HREF="quickstart.html"><LINK
+TITLE="Starting Privoxy"
+HREF="startup.html"><LINK
 REL="NEXT"
 TITLE="Contacting the Developers, Bug Reporting and Feature
 Requests"
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="quickstart.html"
+HREF="startup.html"
 >Prev</A
 ></TD
 ><TD
@@ -72,7 +72,7 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONFIGURATION"
->5. <SPAN
+>7. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > Configuration</A
@@ -88,15 +88,14 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > can 
   also be controlled easily with a web browser.
-
  </P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN324"
->5.1. Controlling <SPAN
+NAME="AEN320"
+>7.1. Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > with Your Web Browser</A
@@ -118,8 +117,7 @@ TARGET="_top"
 >), 
  which is a built-in page and works without Internet access.
  You will see the following section:&#13;</P
-><P
-> <TABLE
+><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -127,27 +125,73 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->&#13;Please choose from the following options:
-
-    * Privoxy main page
-    * Show information about the current configuration
-    * Show the source code version numbers
-    * Show the request headers.
-    * Show which actions apply to a URL and why
-    * Toggle Privoxy on or off
-    * Edit the actions list
-
- </PRE
+> <H3
+CLASS="BRIDGEHEAD"
+>Privoxy Menu</H3
+><P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>          &#9642;  <A
+HREF="http://config.privoxy.org/show-status"
+TARGET="_top"
+>View &#38; change the current configuration</A
+>
+ </TD
+></TR
+><TR
+><TD
+>          &#9642;  <A
+HREF="http://config.privoxy.org/show-version"
+TARGET="_top"
+>View the source code version numbers</A
+>
+ </TD
+></TR
+><TR
+><TD
+>          &#9642;  <A
+HREF="http://config.privoxy.org/show-request"
+TARGET="_top"
+>View the request headers.</A
+>
+ </TD
+></TR
+><TR
+><TD
+>          &#9642;  <A
+HREF="http://config.privoxy.org/show-url-info"
+TARGET="_top"
+>Look up which actions apply to a URL and why</A
+>
+ </TD
+></TR
+><TR
+><TD
+>          &#9642;  <A
+HREF="http://config.privoxy.org/toggle"
+TARGET="_top"
+>Toggle Privoxy on or off</A
+>
+ </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></PRE
 ></TD
 ></TR
 ></TABLE
-></P
 ><P
-> This should be self-explanatory. Note the last item is an editor for the
+> This should be self-explanatory. Note the first item leads to an editor for the
  <SPAN
 CLASS="QUOTE"
 >"actions list"</SPAN
->, which is where much of the ad, banner, cookie,
+>, which is where the ad, banner, cookie,
  and URL blocking magic is configured as well as other advanced features of
  <SPAN
 CLASS="APPLICATION"
@@ -188,8 +232,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN343"
->5.2. Configuration Files Overview</A
+NAME="CONFOVERVIEW"
+>7.2. Configuration Files Overview</A
 ></H2
 ><P
 > For Unix, *BSD and Linux, all configuration files are located in
@@ -205,24 +249,24 @@ CLASS="APPLICATION"
  and number of configuration files has changed from previous versions, and is
  subject to change as development progresses.</P
 ><P
-> The installed defaults provide a reasonable starting point, though possibly
- aggressive by some standards. For the time being, there are only three
- default configuration files (this may change in time):</P
+> The installed defaults provide a reasonable starting point, though 
+ some settings may be aggressive by some standards. For the time being, the
+ principle configuration files are:</P
 ><P
 > <P
 ></P
 ><UL
 ><LI
 ><P
->     The main configuration file is named <TT
-CLASS="FILENAME"
->config</TT
+>     The main configuration file is named <A
+HREF="configuration.html#CONFIG"
+>config</A
 >
      on Linux, Unix, BSD, OS/2, and AmigaOS and <TT
 CLASS="FILENAME"
 >config.txt</TT
 >
-     on Windows.
+     on Windows. This is a required file.
    </P
 ></LI
 ><LI
@@ -230,27 +274,54 @@ CLASS="FILENAME"
 >    <TT
 CLASS="FILENAME"
 >default.action</TT
-> (the actions file) is used to define
-    which of a set of various <SPAN
+> (the main <A
+HREF="configuration.html#ACTIONS-FILE"
+>actions file</A
+>) is used to define
+    the default settings for various <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
 > relating to images, banners, 
-    pop-ups, access restrictions, banners and cookies are to be applied, and where.
-    There is a web based editor for this file that can be accessed at <A
-HREF="http://config.privoxy.org/edit-actions/"
+    pop-ups, access restrictions, banners and cookies.
+   </P
+><P
+>    Multiple actions files may be defined in <TT
+CLASS="FILENAME"
+>config</TT
+>. These 
+    are processed in the order they are defined. Local customizations and locally 
+    preferred exceptions to the default policies as defined in
+    <TT
+CLASS="FILENAME"
+>default.action</TT
+> are probably best applied in
+    <TT
+CLASS="FILENAME"
+>user.action</TT
+>, which should be preserved across
+    upgrades. <TT
+CLASS="FILENAME"
+>standard.action</TT
+> is also included. This is mostly 
+    for <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> internal use.
+   </P
+><P
+>    
+    There is also a web based editor that can be accessed from
+    <A
+HREF="http://config.privoxy.org/show-status/"
 TARGET="_top"
->http://config.privoxy.org/edit-actions/</A
+>http://config.privoxy.org/show-status/</A
 >
     (Shortcut: <A
-HREF="http://p.p/edit-actions/"
+HREF="http://p.p/show-status/"
 TARGET="_top"
->http://p.p/edit-actions/</A
->).
-    (Other actions files are included as well with differing levels of filtering 
-    and blocking, e.g. <TT
-CLASS="FILENAME"
->basic.action</TT
->.)
+>http://p.p/show-status/</A
+>) for the
+    various actions files. 
    </P
 ></LI
 ><LI
@@ -258,10 +329,14 @@ CLASS="FILENAME"
 >    <TT
 CLASS="FILENAME"
 >default.filter</TT
-> (the filter file) can be used to re-write the raw
-    page content, including viewable text as well as embedded HTML and JavaScript,
-    and whatever else lurks on any given web page. The filtering jobs are only
-    pre-defined here; whether to apply them or not is up to the actions file.
+> (the <A
+HREF="configuration.html#FILTER-FILE"
+>filter
+    file</A
+>) can be used to re-write the raw page content, including
+    viewable text as well as embedded HTML and JavaScript, and whatever else
+    lurks on any given web page. The filtering jobs are only pre-defined here;
+    whether to apply them or not is up to the actions files.
    </P
 ></LI
 ></UL
@@ -274,7 +349,7 @@ CLASS="LITERAL"
 >#</TT
 >"</SPAN
 > character to denote a
- comment (the rest of the line will be ignored) and understand line continuation
+ comment (the rest of the line will be ignored) angd understand line continuation
  through placing a backslash ("<TT
 CLASS="LITERAL"
 >\</TT
@@ -290,10 +365,7 @@ CLASS="LITERAL"
  valid configuration line to prevent it from being interpreted is called "commenting
  out" that line.</P
 ><P
-> <TT
-CLASS="FILENAME"
->default.action</TT
-> and <TT
+> The actions files and <TT
 CLASS="FILENAME"
 >default.filter</TT
 > 
@@ -339,8 +411,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN383"
->5.3. The Main Configuration File</A
+NAME="CONFIG"
+>7.3. The Main Configuration File</A
 ></H2
 ><P
 > Again, the main configuration file is named <TT
@@ -402,8 +474,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN402"
->5.3.1. Configuration and Log File Locations</A
+NAME="CONF-LOG-LOC"
+>7.3.1. Configuration and Log File Locations</A
 ></H3
 ><P
 > <SPAN
@@ -421,8 +493,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN407"
->5.3.1.1. confdir</A
+NAME="CONFDIR"
+>7.3.1.1. confdir</A
 ></H4
 ><P
 ></P
@@ -499,8 +571,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN439"
->5.3.1.2. logdir</A
+NAME="LOGDIR"
+>7.3.1.2. logdir</A
 ></H4
 ><P
 ></P
@@ -569,8 +641,20 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN469"
->5.3.1.3. actionsfile</A
+NAME="ACTIONSFILE"
+>7.3.1.3. <A
+NAME="DEFAULT.ACTION"
+></A
+>
+<A
+NAME="STANDARD.ACTION"
+></A
+>
+<A
+NAME="USER.ACTION"
+></A
+>
+actionsfile</A
 ></H4
 ><P
 ></P
@@ -581,7 +665,10 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    The actions file to use
+>    The <A
+HREF="configuration.html#ACTIONS"
+>actions</A
+> file(s) to use
    </P
 ></DD
 ><DT
@@ -597,39 +684,74 @@ CLASS="LITERAL"
 >Default value:</DT
 ><DD
 ><P
->default.action (Unix) <I
-CLASS="EMPHASIS"
->or</I
-> default.action.txt (Windows)</P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>     <P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;standard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;recommended&nbsp;not&nbsp;editing</P
+>
+    </TD
+></TR
+><TR
+><TD
+>     <P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
+>
+    </TD
+></TR
+><TR
+><TD
+>     <P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;User&nbsp;customizations</P
+>
+    </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
 ></DD
 ><DT
 >Effect if unset:</DT
 ><DD
 ><P
->    No action is taken at all. Simple neutral proxying. 
+>    No actions are taken at all. Simple neutral proxying. 
    </P
 ></DD
 ><DT
 >Notes:</DT
 ><DD
 ><P
->    There is no point in using <SPAN
+>    Multiple <TT
+CLASS="LITERAL"
+>actionsfile</TT
+> lines are OK and are in fact recommended!
+   </P
+><P
+> 
+    The default values include standard.action, which is used for internal
+    purposes and should be loaded, default.action, which is the
+    <SPAN
+CLASS="QUOTE"
+>"main"</SPAN
+> actions file maintained by the developers, and
+    <TT
+CLASS="FILENAME"
+>user.action</TT
+>, where you can make your personal additions.
+   </P
+><P
+> 
+    There is no point in using <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> without
-    an actions file. There are three different actions files included in the
-    distribution, with varying degrees of aggressiveness: 
-    <TT
-CLASS="FILENAME"
->default.action</TT
->, <TT
-CLASS="FILENAME"
->intermediate.action</TT
-> and
-    <TT
-CLASS="FILENAME"
->advanced.action</TT
->.
+> without an actions file.
    </P
 ></DD
 ></DL
@@ -640,8 +762,11 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN498"
->5.3.1.4. filterfile</A
+NAME="FILTERFILE"
+>7.3.1.4. <A
+NAME="DEFAULT.FILTER"
+></A
+>filterfile</A
 ></H4
 ><P
 ></P
@@ -652,7 +777,10 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    The filter file to use
+>    The <A
+HREF="configuration.html#FILTER"
+>filter</A
+> file to use
    </P
 ></DD
 ><DT
@@ -687,7 +815,7 @@ CLASS="REPLACEABLE"
 ></TT
 >}</TT
 >
-    actions in the actions file are turned off
+    actions in the actions files are turned off
    </P
 ></DD
 ><DT
@@ -722,8 +850,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN529"
->5.3.1.5. logfile</A
+NAME="LOGFILE"
+>7.3.1.5. logfile</A
 ></H4
 ><P
 ></P
@@ -817,8 +945,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN564"
->5.3.1.6. jarfile</A
+NAME="JARFILE"
+>7.3.1.6. jarfile</A
 ></H4
 ><P
 ></P
@@ -872,8 +1000,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN589"
->5.3.1.7. trustfile</A
+NAME="TRUSTFILE"
+>7.3.1.7. trustfile</A
 ></H4
 ><P
 ></P
@@ -959,8 +1087,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN622"
->5.3.2. Local Set-up Documentation</A
+NAME="LOCAL-SET-UP"
+>7.3.2. Local Set-up Documentation</A
 ></H3
 ><P
 >    If you intend to operate <SPAN
@@ -975,8 +1103,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN626"
->5.3.2.1. trust-info-url</A
+NAME="TRUST-INFO-URL"
+>7.3.2.1. trust-info-url</A
 ></H4
 ><P
 ></P
@@ -1037,8 +1165,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN652"
->5.3.2.2. admin-address</A
+NAME="ADMIN-ADDRESS"
+>7.3.2.2. admin-address</A
 ></H4
 ><P
 ></P
@@ -1097,8 +1225,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN678"
->5.3.2.3. proxy-info-url</A
+NAME="PROXY-INFO-URL"
+>7.3.2.3. proxy-info-url</A
 ></H4
 ><P
 ></P
@@ -1165,8 +1293,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN706"
->5.3.3. Debugging</A
+NAME="DEBUGGING"
+>7.3.3. Debugging</A
 ></H3
 ><P
 >  These options are mainly useful when tracing a problem.
@@ -1185,8 +1313,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN711"
->5.3.3.1. debug</A
+NAME="DEBUG"
+>7.3.3.1. debug</A
 ></H4
 ><P
 ></P
@@ -1246,8 +1374,7 @@ CLASS="PROGRAMLISTING"
   debug       512 # Common Log Format
   debug      1024 # debug kill pop-ups
   debug      4096 # Startup banner and warnings.
-  debug      8192 # Non-fatal errors
-    </PRE
+  debug      8192 # Non-fatal errors</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1300,8 +1427,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN746"
->5.3.3.2. single-threaded</A
+NAME="SINGLE-THREADED"
+>7.3.3.2. single-threaded</A
 ></H4
 ><P
 ></P
@@ -1361,8 +1488,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN772"
->5.3.4. Access Control and Security</A
+NAME="ACCESS-CONTROL"
+>7.3.4. Access Control and Security</A
 ></H3
 ><P
 >  This section of the config file controls the security-relevant aspects
@@ -1376,8 +1503,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN776"
->5.3.4.1. listen-address</A
+NAME="LISTEN-ADDRESS"
+>7.3.4.1. listen-address</A
 ></H4
 ><P
 ></P
@@ -1446,7 +1573,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > will
     bind to all interfaces (addresses) on your machine and may become reachable
-    from the Internet. In that case, consider using access control lists (acl's)
+    from the Internet. In that case, consider using access control lists (ACL's)
     (see <SPAN
 CLASS="QUOTE"
 >"ACLs"</SPAN
@@ -1474,8 +1601,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  listen-address  192.168.0.1:8118
-    </PRE
+>  listen-address  192.168.0.1:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1490,8 +1616,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN814"
->5.3.4.2. toggle</A
+NAME="TOGGLE"
+>7.3.4.2. toggle</A
 ></H4
 ><P
 ></P
@@ -1564,8 +1690,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN843"
->5.3.4.3. enable-remote-toggle</A
+NAME="ENABLE-REMOTE-TOGGLE"
+>7.3.4.3. enable-remote-toggle</A
 ></H4
 ><P
 ></P
@@ -1656,8 +1782,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN877"
->5.3.4.4. enable-edit-actions</A
+NAME="ENABLE-EDIT-ACTIONS"
+>7.3.4.4. enable-edit-actions</A
 ></H4
 ><P
 ></P
@@ -1669,7 +1795,7 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    Whether or not the <A
-HREF="http://config.privoxy.org/edit-actions"
+HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >web-based actions
     file editor</A
@@ -1740,8 +1866,16 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN909"
->5.3.4.5. ACLs: permit-access and deny-access</A
+NAME="ACLS"
+>7.3.4.5. <A
+NAME="PERMIT-ACCES"
+></A
+>
+<A
+NAME="DENY-ACCES"
+></A
+>
+ACLs: permit-access and deny-access</A
 ></H4
 ><P
 ></P
@@ -1947,8 +2081,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  permit-access  localhost
-    </PRE
+>  permit-access  localhost</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1967,8 +2100,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  permit-access  www.privoxy.org/24 www.example.com/32
-    </PRE
+>  permit-access  www.privoxy.org/24 www.example.com/32</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1988,8 +2120,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >  permit-access  192.168.45.64/26
-  deny-access    192.168.45.73    www.dirty-stuff.example.com
-    </PRE
+  deny-access    192.168.45.73    www.dirty-stuff.example.com</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2004,8 +2135,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN978"
->5.3.4.6. buffer-limit</A
+NAME="BUFFER-LIMIT"
+>7.3.4.6. buffer-limit</A
 ></H4
 ><P
 ></P
@@ -2089,7 +2220,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FORWARDING"
->5.3.5. Forwarding</A
+>7.3.5. Forwarding</A
 ></H3
 ><P
 > This feature allows routing of HTTP requests through a chain of
@@ -2118,8 +2249,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN1016"
->5.3.5.1. forward</A
+NAME="FORWARD"
+>7.3.5.1. forward</A
 ></H4
 ><P
 ></P
@@ -2167,7 +2298,10 @@ CLASS="REPLACEABLE"
 >target_domain</I
 ></TT
 > is a domain name pattern (see the
-    chapter on domain matching in the actions file),
+    chapter on domain matching in the <TT
+CLASS="FILENAME"
+>default.action</TT
+> file),
     <TT
 CLASS="REPLACEABLE"
 ><I
@@ -2242,8 +2376,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >  forward   .*     anon-proxy.example.org:8080
-  forward   :443   .
-    </PRE
+  forward   :443   .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2263,8 +2396,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >  forward   .*.                caching-proxy.example-isp.net:8000
-  forward   .example-isp.net   .
-    </PRE
+  forward   .example-isp.net   .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2279,8 +2411,16 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN1062"
->5.3.5.2. forward-socks4 and forward-socks4a</A
+NAME="SOCKS"
+>7.3.5.2. <A
+NAME="FORWARD-SOCKS4"
+></A
+>
+<A
+NAME="FORWARD-SOCKS4A"
+></A
+>
+forward-socks4 and forward-socks4a</A
 ></H4
 ><P
 ></P
@@ -2339,7 +2479,10 @@ CLASS="REPLACEABLE"
 >target_domain</I
 ></TT
 > is a domain name pattern (see the
-    chapter on domain matching in the actions file),
+    chapter on domain matching in the <TT
+CLASS="FILENAME"
+>default.action</TT
+> file),
     <TT
 CLASS="REPLACEABLE"
 ><I
@@ -2441,8 +2584,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >  forward-socks4a   .*.            socks-gw.example.com:1080  www-cache.example-isp.net:8080
-  forward           .example.com   .
-    </PRE
+  forward           .example.com   .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2460,8 +2602,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  forward-socks4   .*.            socks-gw.example.com:1080  .
-    </PRE
+>  forward-socks4   .*.            socks-gw.example.com:1080  .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2476,8 +2617,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN1116"
->5.3.5.3. Advanced Forwarding Examples</A
+NAME="ADVANCED-FORWARDING-EXAMPLES"
+>7.3.5.3. Advanced Forwarding Examples</A
 ></H4
 ><P
 > If you have links to multiple ISPs that provide various special content 
@@ -2509,8 +2650,7 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >  forward    .*.         .
-  forward    .isp-b.net  host-b:8118
- </PRE
+  forward    .isp-b.net  host-b:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2527,8 +2667,7 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >  forward    .*.         .
-  forward    .isp-a.net  host-a:8118
- </PRE
+  forward    .isp-a.net  host-a:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2578,8 +2717,7 @@ CLASS="SCREEN"
   always_direct allow ftp 
 
   # Forward all the rest to Privoxy
-  never_direct allow all 
- </PRE
+  never_direct allow all</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2603,8 +2741,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1143"
->5.3.6. Windows GUI Options</A
+NAME="WINDOWS-GUI"
+>7.3.6. Windows GUI Options</A
 ></H3
 ><P
 > <SPAN
@@ -2612,6 +2750,9 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > has a number of options specific to the
  Windows GUI interface:</P
+><A
+NAME="ACTIVITY-ANIMATION"
+></A
 ><P
 > If <SPAN
 CLASS="QUOTE"
@@ -2638,6 +2779,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-MESSAGES"
+></A
 ><P
 > If <SPAN
 CLASS="QUOTE"
@@ -2661,6 +2805,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-BUFFER-SIZE"
+></A
 ><P
 > 
  If <SPAN
@@ -2688,6 +2835,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-MAX-LINES"
+></A
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -2707,6 +2857,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-HIGHLIGHT-MESSAGES"
+></A
 ><P
 > If <SPAN
 CLASS="QUOTE"
@@ -2730,6 +2883,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-FONT-NAME"
+></A
 ><P
 > The font used in the console window:</P
 ><P
@@ -2745,6 +2901,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="LOG-FONT-SIZE"
+></A
 ><P
 > Font size used in the console window:</P
 ><P
@@ -2760,6 +2919,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="SHOW-ON-TASK-BAR"
+></A
 ><P
 >  
  <SPAN
@@ -2784,6 +2946,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="CLOSE-BUTTON-MINIMIZES"
+></A
 ><P
 > If <SPAN
 CLASS="QUOTE"
@@ -2807,6 +2972,9 @@ CLASS="EMPHASIS"
 > 
  </TT
 ></P
+><A
+NAME="HIDE-CONSOLE"
+></A
 ><P
 > The <SPAN
 CLASS="QUOTE"
@@ -2838,112 +3006,135 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="ACTIONSFILE"
->5.4. The Actions File</A
+NAME="ACTIONS-FILE"
+>7.4. Actions Files</A
 ></H2
 ><P
-> The actions file (<TT
-CLASS="FILENAME"
->default.action</TT
->, formerly:
- <TT
-CLASS="FILENAME"
->actionsfile</TT
-> or <TT
-CLASS="FILENAME"
->ijb.action</TT
->) is used
- to define what actions <SPAN
+> The actions files are used to define what actions
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> takes for which
- URLs, and thus determines how ad images, cookies and various other aspects
- of HTTP content and transactions are handled on which sites (or even parts
- thereof).</P
+> takes for which URLs, and thus determines
+ how ad images, cookies and various other aspects of HTTP content and
+ transactions are handled, and on which sites (or even parts thereof). There 
+ are three such files included with <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, 
+ with slightly different purposes. <TT
+CLASS="FILENAME"
+>default.action</TT
+> sets
+ the default policies. <TT
+CLASS="FILENAME"
+>standard.action</TT
+> is used by 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and the web based editor to set 
+ pre-defined values (and normally should not be edited). Local exceptions 
+ are best done in <TT
+CLASS="FILENAME"
+>user.action</TT
+>. The content of these 
+ can all be viewed and edited from <A
+HREF="http://config.privoxy.org/show-status"
+TARGET="_top"
+>http://config.privoxy.org/show-status</A
+>.
+ </P
 ><P
 > 
  Anything you want can blocked, including ads, banners, or just some obnoxious
- URL that you would rather not see. Cookies can be accepted or rejected, or
+ URL that you would rather not see is done here. Cookies can be accepted or rejected, or
  accepted only during the current browser session (i.e. not written to disk),
  content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
  See below for a complete list of available actions.</P
 ><P
-> An actions file typically has sections. At the top, <SPAN
+> An actions file typically has sections. Near the top, <SPAN
 CLASS="QUOTE"
 >"aliases"</SPAN
 > are 
- defined (discussed below), then the default set of rules which will apply 
- universally to all sites and pages. And then below that is generally a lengthy 
- set of exceptions to the defined universal policies.</P
+ optionally defined (discussed <A
+HREF="configuration.html#ALIASES"
+TARGET="_top"
+>below</A
+>), then the default set of rules
+ which will apply universally to all sites and pages. And then below that,
+ exceptions to the defined universal policies. </P
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1234"
->5.4.1. Finding the Right Mix</A
+NAME="AEN1285"
+>7.4.1. Finding the Right Mix</A
 ></H3
 ><P
-> Note that some actions like cookie suppression or script disabling may
- render some sites unusable, which rely on these techniques to work properly.
- Finding the right mix of actions is not easy and certainly a matter of personal
- taste. In general, it can be said that the more <SPAN
+> Note that some <A
+HREF="configuration.html#ACTIONS"
+>actions</A
+> like cookie suppression
+ or script disabling may render some sites unusable, which rely on these
+ techniques to work properly. Finding the right mix of actions is not easy and
+ certainly a matter of personal taste. In general, it can be said that the more
+ <SPAN
 CLASS="QUOTE"
 >"aggressive"</SPAN
->
- your default settings (in the top section of the actions file) are,
- the more exceptions for <SPAN
+> your default settings (in the top section of the
+ actions file) are, the more exceptions for <SPAN
 CLASS="QUOTE"
 >"trusted"</SPAN
-> sites you will have to
- make later. If, for example, you want to kill popup windows per default, you'll
- have to make exceptions from that rule for sites that you regularly use
- and that require popups for actually useful content, like maybe your bank,
- favorite shop, or newspaper.</P
+> sites you
+ will have to make later. If, for example, you want to kill popup windows per
+ default, you'll have to make exceptions from that rule for sites that you
+ regularly use and that require popups for actually useful content, like maybe
+ your bank, favorite shop, or newspaper.</P
 ><P
 > We have tried to provide you with reasonable rules to start from in the
- distribution actions file. But there is no general rule of thumb on these
+ distribution actions files. But there is no general rule of thumb on these
  things. There just are too many variables, and sites are constantly changing.
- Sooner or later you will want to change the rules (and read this chapter).</P
+ Sooner or later you will want to change the rules (and read this chapter again :).</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1240"
->5.4.2. How to Edit</A
+NAME="AEN1292"
+>7.4.2. How to Edit</A
 ></H3
 ><P
 > The easiest way to edit the <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> file is with a browser by
- using our browser-based editor, which is available at <A
-HREF="http://config.privoxy.org/edit-actions"
+> files is with a browser by
+ using our browser-based editor, which can be reached from <A
+HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
->http://config.privoxy.org/edit-actions</A
+>http://config.privoxy.org/show-status</A
 >.</P
 ><P
 > If you prefer plain text editing to GUIs, you can of course also directly edit the
- <TT
-CLASS="FILENAME"
->default.action</TT
-> file.</P
+ the actions files.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1247"
->5.4.3. How Actions are Applied to URLs</A
+NAME="AEN1298"
+>7.4.3. How Actions are Applied to URLs</A
 ></H3
 ><P
-> The actions file is divided into sections. There are special sections,
+> Actions files are divided into sections. There are special sections,
  like the <SPAN
 CLASS="QUOTE"
->"alias"</SPAN
+>"<A
+HREF="configuration.html#ALIASES"
+>alias</A
+>"</SPAN
 > sections which will be discussed later. For now
  let's concentrate on regular sections: They have a heading line (often split
  up to multiple lines for readability) which consist of a list of actions,
@@ -2954,7 +3145,25 @@ CLASS="QUOTE"
  compared to all patterns in this file. Every time it matches, the list of
  applicable actions for the URL is incrementally updated, using the heading
  of the section in which the pattern is located. If multiple matches for
- the same URL set the same action differently, the last match wins.</P
+ the same URL set the same action differently, the last match wins. If not, 
+ the effects are aggregated (e.g. a URL might match both the 
+ <A
+HREF="configuration.html#HANDLE-AS-IMAGE"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+handle-as-image"</SPAN
+></A
+>
+ and <A
+HREF="configuration.html#BLOCK"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+></A
+> actions).
+ </P
 ><P
 > You can trace this process by visiting <A
 HREF="http://config.privoxy.org/show-url-info"
@@ -2972,8 +3181,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1256"
->5.4.4. Patterns</A
+NAME="AEN1312"
+>7.4.4. Patterns</A
 ></H3
 ><P
 > Generally, a pattern has the form <TT
@@ -3079,8 +3288,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN1296"
->5.4.4.1. The Domain Pattern</A
+NAME="AEN1352"
+>7.4.4.1. The Domain Pattern</A
 ></H4
 ><P
 > The matching of the domain part offers some flexible options: if the
@@ -3253,8 +3462,8 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="AEN1358"
->5.4.4.2. The Path Pattern</A
+NAME="AEN1414"
+>7.4.4.2. The Path Pattern</A
 ></H4
 ><P
 > <SPAN
@@ -3295,7 +3504,8 @@ CLASS="QUOTE"
  i.e. it matches as if it would start with a <SPAN
 CLASS="QUOTE"
 >"^"</SPAN
->.</P
+> (regular expression speak 
+ for the beginning of a line).</P
 ><P
 > Please also note that matching in the path is case
  <I
@@ -3327,33 +3537,33 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ACTIONS"
->5.4.5. Actions</A
+>7.4.5. Actions</A
 ></H3
 ><P
-> Actions are enabled if preceded with a <SPAN
+> All actions are disabled by default, until they are explicitly enabled
+ somewhere in an actions file. Actions are turned on if preceded with a
+ <SPAN
 CLASS="QUOTE"
 >"+"</SPAN
->, and disabled if 
- preceded with a <SPAN
+>, and turned off if preceded with a <SPAN
 CLASS="QUOTE"
 >"-"</SPAN
->. So a <SPAN
+>. So a
+ <SPAN
 CLASS="QUOTE"
 >"+action"</SPAN
-> means 
- <SPAN
+> means <SPAN
 CLASS="QUOTE"
 >"do that action"</SPAN
->, e.g. <SPAN
-CLASS="QUOTE"
->"+block"</SPAN
-> means please 
+>, e.g.
  <SPAN
 CLASS="QUOTE"
->"block the following URLs and/or patterns"</SPAN
->. All actions are
- disabled by default, until they are explicitly enabled somewhere in an actions
- file.</P
+>"+block"</SPAN
+> means please <SPAN
+CLASS="QUOTE"
+>"block the following URL
+ patterns"</SPAN
+>. </P
 ><P
 > 
  Actions are invoked by enclosing the action name in curly braces (e.g.
@@ -3436,12 +3646,12 @@ CLASS="QUOTE"
    Multi-value, e.g. <SPAN
 CLASS="QUOTE"
 >"{+/-add-header{Name: value}}"</SPAN
-> ot
+> or
    <SPAN
 CLASS="QUOTE"
->"{+/-wafer{name=value}}"</SPAN
+>"{+/-send-wafer{name=value}}"</SPAN
 >), where some value needs to be defined
-   in addition to simply enabling the actino. Examples:
+   in addition to simply enabling the action. Examples:
   </P
 ><P
 >   <TT
@@ -3481,26 +3691,28 @@ CLASS="APPLICATION"
 ></UL
 ></P
 ><P
-> If nothing is specified in this file, no <SPAN
+> If nothing is specified in any actions file, no <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> are taken.
- So in this case <SPAN
+> are
+ taken. So in this case <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > would just be a
- normal, non-blocking, non-anonymizing proxy. You must specifically
- enable the privacy and blocking features you need (although the 
- provided default <TT
-CLASS="FILENAME"
->default.action</TT
-> file will 
- give a good starting point).</P
+ normal, non-blocking, non-anonymizing proxy. You must specifically enable the
+ privacy and blocking features you need (although the provided default actions
+ files will give a good starting point).</P
 ><P
 > Later defined actions always over-ride earlier ones.  So exceptions 
  to any rules you make, should come in the latter part of the file. For
  multi-valued actions, the actions are applied in the order they are
- specified.</P
+ specified. Actions files are processed in the order they are defined 
+ in <TT
+CLASS="FILENAME"
+>config</TT
+> (the default installation has three 
+ actions files). It also quite possible for any given URL pattern to 
+ match more than one action!</P
 ><P
 > The list of valid <SPAN
 CLASS="APPLICATION"
@@ -3515,7 +3727,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="ADD-HEADER"
->5.4.5.1. <I
+>7.4.5.1. <I
 CLASS="EMPHASIS"
 >+add-header{Name: value}</I
 ></A
@@ -3582,7 +3794,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="BLOCK"
->5.4.5.2. <I
+>7.4.5.2. <I
 CLASS="EMPHASIS"
 >+block</I
 ></A
@@ -3624,7 +3836,7 @@ CLASS="EMPHASIS"
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->.example.com</I
+>.banners.example.com</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -3636,41 +3848,77 @@ CLASS="EMPHASIS"
 >Notes:</DT
 ><DD
 ><P
->    <SPAN
+>    If a URL matches one of the blocked patterns, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will display its 
-    special <SPAN
+>
+    will intercept the URL and display its special <SPAN
 CLASS="QUOTE"
 >"BLOCKED"</SPAN
-> page if a URL matches one of the 
-    blocked patterns. If there is sufficient space, a large red 
-    banner will appear with a friendly message about why the page 
-    was blocked, and a way to go there anyway. If there is insufficient 
-    space a smaller blocked page will appear without the red banner.
-    One exception is if the URL matches both <SPAN
-CLASS="QUOTE"
->"+block"</SPAN
-> 
-    and <SPAN
-CLASS="QUOTE"
->"+image"</SPAN
->, then it can be handled by 
-    <SPAN
-CLASS="QUOTE"
->"+image-blocker"</SPAN
-> (see below).
+> page
+    instead. If there is sufficient space, a large red banner will appear with
+    a friendly message about why the page was blocked, and a way to go there
+    anyway. If there is insufficient space a smaller blocked page will appear
+    without the red banner. 
+    <A
+HREF="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"
+TARGET="_top"
+>Click here</A
+>
+    to view the default blocked HTML page (<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> must be running 
+    for this to work as intended!).
    </P
 ><P
->    The <SPAN
+> 
+    A very important exception is if the URL <I
+CLASS="EMPHASIS"
+>matches both</I
+>
+    <SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+> and <A
+HREF="configuration.html#HANDLE-AS-IMAGE"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+handle-as-image"</SPAN
+></A
+>,
+    then it will be handled by 
+    <A
+HREF="configuration.html#SET-IMAGE-BLOCKER"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+set-image-blocker"</SPAN
+></A
+>
+    (see below). It is important to understand this process, in order 
+    to understand how <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is able to deal with 
+    ads and other objectionable content.
+   </P
+><P
+>    The <A
+HREF="configuration.html#FILTER"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
-> action can also perform some of the 
+></A
+>
+    action can also perform some of the 
     same functionality as <SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
 >, but by virtue of very 
-    different programming techniques, and is typically used for different 
+    different programming techniques, and is most often used for different 
     reasons.
    </P
 ></DD
@@ -3683,7 +3931,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="DEANIMATE-GIFS"
->5.4.5.3. <I
+>7.4.5.3. <I
 CLASS="EMPHASIS"
 >+deanimate-gifs</I
 ></A
@@ -3761,10 +4009,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="DOWNGRADE"
->5.4.5.4. <I
+NAME="DOWNGRADE-HTTP-VERSION"
+>7.4.5.4. <I
 CLASS="EMPHASIS"
->+downgrade</I
+>+downgrade-http-version</I
 ></A
 ></H4
 ><P
@@ -3784,7 +4032,7 @@ CLASS="VARIABLELIST"
 ><P
 >    <SPAN
 CLASS="QUOTE"
->"+downgrade"</SPAN
+>"+downgrade-http-version"</SPAN
 > will downgrade HTTP/1.1 client requests to
     HTTP/1.0 and downgrade the responses as well.
    </P
@@ -3803,7 +4051,7 @@ CLASS="QUOTE"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+downgrade}</I
+>{+downgrade-http-version}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -3821,7 +4069,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > doesn't handle well yet. HTTP/1.1 is
     only partially implemented. Default is not to downgrade requests. This is
-    an infrequently needed action, and is used to help with problem sites only.
+    an infrequently needed action, and is used to help with rare problem sites only.
    </P
 ></DD
 ></DL
@@ -3833,7 +4081,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="FAST-REDIRECTS"
->5.4.5.5. <I
+>7.4.5.5. <I
 CLASS="EMPHASIS"
 >+fast-redirects</I
 ></A
@@ -3865,7 +4113,7 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > can cut off
-    all but the last valid URL in redirect request and send a local redirect
+    all but the last valid URL in a redirect request and send a local redirect
     back to your browser without contacting the intermediate site(s).
    </P
 ></DD
@@ -3914,8 +4162,11 @@ CLASS="EMPHASIS"
     the advertisers.
    </P
 ><P
->    This is a normally on feature, and often requires exceptions for sites that
-    are sensitive to defeating this mechanism.
+>    This is a normally <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+> feature, and often requires exceptions
+    for sites that are sensitive to defeating this mechanism.
    </P
 ></DD
 ></DL
@@ -3927,7 +4178,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="FILTER"
->5.4.5.6. <I
+>7.4.5.6. <I
 CLASS="EMPHASIS"
 >+filter</I
 ></A
@@ -4203,7 +4454,7 @@ CLASS="EMPHASIS"
 CLASS="QUOTE"
 >"roll your own"</SPAN
 >.
-    Filtering operates on a line by line basis.
+    Filtering operates on a line by line basis throughout the entire page.
    </P
 ><P
 >    Filtering requires buffering the page content, which may appear to
@@ -4213,16 +4464,25 @@ CLASS="QUOTE"
     noticeable on slower connections.
    </P
 ><P
->    Filtering can achieve some of the effects as the <SPAN
+>    Filtering can achieve some of the effects as the 
+    <A
+HREF="configuration.html#BLOCK"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
-> 
+></A
+>
     action, i.e. it can be used to block ads and banners. In the overall 
-    scheme of things, filtering is one of the last things <SPAN
+    scheme of things, filtering is one of the first things <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
 > 
-    does with a web page. So other actions are applied first.
+    does with a web page. So other most other actions are applied to the 
+    already <SPAN
+CLASS="QUOTE"
+>"filtered"</SPAN
+> page.
    </P
 ></DD
 ></DL
@@ -4233,10 +4493,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="HIDE-FORWARDED"
->5.4.5.7. <I
+NAME="HIDE-FORWARDED-FOR-HEADERS"
+>7.4.5.7. <I
 CLASS="EMPHASIS"
->+hide-forwarded</I
+>+hide-forwarded-for-headers</I
 ></A
 ></H4
 ><P
@@ -4271,7 +4531,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+hide-forwarded}</I
+>{+hide-forwarded-for-headers}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4294,10 +4554,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="HIDE-FROM"
->5.4.5.8. <I
+NAME="HIDE-FROM-HEADER"
+>7.4.5.8. <I
 CLASS="EMPHASIS"
->+hide-from</I
+>+hide-from-header</I
 ></A
 ></H4
 ><P
@@ -4339,7 +4599,7 @@ CLASS="QUOTE"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+hide-from{block}}</I
+>{+hide-from-header{block}}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4354,7 +4614,15 @@ CLASS="EMPHASIS"
 >    The keyword <SPAN
 CLASS="QUOTE"
 >"block"</SPAN
-> will completely remove the header.
+> will completely remove the header 
+    (not to be confused with the <A
+HREF="configuration.html#BLOCK"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+block"</SPAN
+></A
+> action).
     Alternately, you can specify any value you prefer to send to the web
     server.
    </P
@@ -4368,14 +4636,14 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="HIDE-REFERER"
->5.4.5.9. <I
+>7.4.5.9. <I
 CLASS="EMPHASIS"
->+hide-referer</I
-></A
-></H4
 ><A
 NAME="HIDE-REFERRER"
 ></A
+>+hide-referer</I
+></A
+></H4
 ><P
 ></P
 ><DIV
@@ -4471,7 +4739,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="HIDE-USER-AGENT"
->5.4.5.10. <I
+>7.4.5.10. <I
 CLASS="EMPHASIS"
 >+hide-user-agent</I
 ></A
@@ -4537,10 +4805,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="IMAGE"
->5.4.5.11. <I
+NAME="HANDLE-AS-IMAGE"
+>7.4.5.11. <I
 CLASS="EMPHASIS"
->+image</I
+>+handle-as-image</I
 ></A
 ></H4
 ><P
@@ -4562,7 +4830,8 @@ CLASS="VARIABLELIST"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > should treat 
-    automatically as an image.
+    automatically as an image, and is an important ingredient of how 
+    ads are handled.
    </P
 ></DD
 ><DT
@@ -4579,7 +4848,7 @@ CLASS="APPLICATION"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+image}</I
+>{+handle-as-image}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4595,18 +4864,38 @@ CLASS="EMPHASIS"
     <SPAN
 CLASS="QUOTE"
 >"+block"</SPAN
->ed, in which case a <SPAN
+>ed, in which case a user definable image can
+    be sent rather than a HTML page. This is integral to the whole concept of
+    ad blocking: the URL must match <I
+CLASS="EMPHASIS"
+>both</I
+> a <A
+HREF="configuration.html#BLOCK"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"blocked"</SPAN
-> image can
-    be sent rather than a HTML page. (See <SPAN
+>"+block"</SPAN
+></A
+> rule,
+    <I
+CLASS="EMPHASIS"
+>and</I
+> <SPAN
 CLASS="QUOTE"
->"+image-blocker{}"</SPAN
-> below
-    for the control over what is actually sent.)    
+>"+handle-as-image"</SPAN
+>.
+    (See <A
+HREF="configuration.html#SET-IMAGE-BLOCKER"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+set-image-blocker"</SPAN
+></A
+>
+    below for control over what will actually be displayed by the browser.)
    </P
 ><P
->    There is little reason to change the default definition for this.
+>    There is little reason to change the default definition for this action.
    </P
 ></DD
 ></DL
@@ -4617,10 +4906,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="IMAGE-BLOCKER"
->5.4.5.12. <I
+NAME="SET-IMAGE-BLOCKER"
+>7.4.5.12. <I
 CLASS="EMPHASIS"
->+image-blocker</I
+>+set-image-blocker</I
 ></A
 ></H4
 ><P
@@ -4638,14 +4927,27 @@ CLASS="VARIABLELIST"
 >Typical uses:</DT
 ><DD
 ><P
->    Decide what to do with URLs that end up tagged with both <SPAN
+>    Decide what to do with URLs that end up tagged with <I
+CLASS="EMPHASIS"
+>both</I
+> 
+    <A
+HREF="configuration.html#BLOCK"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"{+block}"</SPAN
+>"+block"</SPAN
+></A
 >
-    and <SPAN
+    and <A
+HREF="configuration.html#HANDLE-AS-IMAGE"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"{+image}"</SPAN
->, e.g an advertisement.
+>"+handle-as-image"</SPAN
+></A
+>,
+    e.g an advertisement.
    </P
 ></DD
 ><DT
@@ -4654,7 +4956,7 @@ CLASS="QUOTE"
 ><P
 >    There are four available options: <SPAN
 CLASS="QUOTE"
->"-image-blocker"</SPAN
+>"-set-image-blocker"</SPAN
 > will send a HTML
     <SPAN
 CLASS="QUOTE"
@@ -4663,21 +4965,33 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"broken
     image"</SPAN
-> icon. <SPAN
+> icon.
+    <SPAN
 CLASS="QUOTE"
->"+image-blocker{blank}"</SPAN
-> will send a 1x1
-    transparent GIF image. <SPAN
+>"+set-image-blocker{<I
+CLASS="EMPHASIS"
+>blank</I
+>}"</SPAN
+> will send a
+    1x1 transparent GIF image.
+    <SPAN
 CLASS="QUOTE"
->"+image-blocker{pattern}"</SPAN
+>"+set-image-blocker{<I
+CLASS="EMPHASIS"
+>pattern</I
+>}"</SPAN
 > will send a
     checkerboard type pattern (the default). And finally,
     <SPAN
 CLASS="QUOTE"
->"+image-blocker{http://xyz.com}"</SPAN
-> will send a HTTP temporary
-    redirect to the specified image. This has the advantage of the icon being
-    being cached by the browser, which will speed up the display.
+>"+set-image-blocker{<I
+CLASS="EMPHASIS"
+>http://xyz.com</I
+>}"</SPAN
+> will
+    send a HTTP temporary redirect to the specified image. This has the
+    advantage of the icon being being cached by the browser, which will speed
+    up the display.
    </P
 ></DD
 ><DT
@@ -4687,7 +5001,7 @@ CLASS="QUOTE"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+image-blocker{blank}}</I
+>{+set-image-blocker{blank}}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4702,15 +5016,15 @@ CLASS="EMPHASIS"
 >    If you want <I
 CLASS="EMPHASIS"
 >invisible</I
-> ads, they need to be both
-    defined as <I
+> ads, they need to meet 
+    criteria as matching both <I
 CLASS="EMPHASIS"
 >images</I
 > and <I
 CLASS="EMPHASIS"
 >blocked</I
->.
-    And then, <SPAN
+>
+    actions. And then, <SPAN
 CLASS="QUOTE"
 >"image-blocker"</SPAN
 > should be set to
@@ -4718,12 +5032,13 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"blank"</SPAN
 > for invisibility. Note you cannot treat HTML pages as
-    images in most cases. For instance, frames require an HTML page to display.
-    So a frame that is an ad, cannot be treated as an image. Forcing an
-    <SPAN
+    images in most cases. For instance, frames require an HTML page to
+    display. So a frame that is an ad, typically cannot be treated as an image.
+    Forcing an <SPAN
 CLASS="QUOTE"
 >"image"</SPAN
-> in this situation just will not work.
+> in this situation just will not work
+    reliably. 
    </P
 ></DD
 ></DL
@@ -4735,7 +5050,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="LIMIT-CONNECT"
->5.4.5.13. <I
+>7.4.5.13. <I
 CLASS="EMPHASIS"
 >+limit-connect</I
 ></A
@@ -4782,15 +5097,15 @@ CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >+limit-connect{443}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;This&nbsp;is&nbsp;the&nbsp;default&nbsp;and&nbsp;need&nbsp;not&nbsp;be&nbsp;specified.<br>
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;This&nbsp;is&nbsp;the&nbsp;default&nbsp;and&nbsp;need&nbsp;not&nbsp;be&nbsp;specified.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >+limit-connect{80,443}</I
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Ports&nbsp;80&nbsp;and&nbsp;443&nbsp;are&nbsp;OK.<br>
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Ports&nbsp;80&nbsp;and&nbsp;443&nbsp;are&nbsp;OK.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
 >+limit-connect{-3, 7, 20-100, 500-}</I
->&nbsp;#&nbsp;Port&nbsp;less&nbsp;than&nbsp;3,&nbsp;7,&nbsp;20&nbsp;to&nbsp;100&nbsp;and&nbsp;above&nbsp;500&nbsp;are&nbsp;OK.<br>
+>&nbsp;&nbsp;&nbsp;#&nbsp;Port&nbsp;less&nbsp;than&nbsp;3,&nbsp;7,&nbsp;20&nbsp;to&nbsp;100&nbsp;and&nbsp;above&nbsp;500&nbsp;are&nbsp;OK.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;</P
 ></DD
 ><DT
@@ -4827,10 +5142,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="NO-COMPRESSION"
->5.4.5.14. <I
+NAME="PREVENT-COMPRESSION"
+>7.4.5.14. <I
 CLASS="EMPHASIS"
->+no-compression</I
+>+prevent-compression</I
 ></A
 ></H4
 ><P
@@ -4865,7 +5180,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+no-compression}</I
+>{+prevent-compression}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4881,21 +5196,36 @@ CLASS="EMPHASIS"
     <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->, since <SPAN
+>, since 
+    <A
+HREF="configuration.html#FILTER"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
 >"+filter"</SPAN
+></A
 >,
-    <SPAN
+    <A
+HREF="configuration.html#KILL-POPUPS"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
->"+no-popup"</SPAN
-> and <SPAN
+>"+kill-popups"</SPAN
+></A
+>
+    and <A
+HREF="configuration.html#GIF-DEANIMATE"
+TARGET="_top"
+><SPAN
 CLASS="QUOTE"
 >"+gif-deanimate"</SPAN
-> will not work
-    on compressed data. This will slow down connections to those websites,
-    though. Default typically is to turn <SPAN
+></A
+>
+    will not work on compressed data. This will slow down connections to those
+    websites, though. Default typically is to turn
+    <SPAN
 CLASS="QUOTE"
->"no-compression"</SPAN
+>"prevent-compression"</SPAN
 > on.
    </P
 ></DD
@@ -4907,10 +5237,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="NO-COOKIES-KEEP"
->5.4.5.15. <I
+NAME="SESSION-COOKIES-ONLY"
+>7.4.5.15. <I
 CLASS="EMPHASIS"
->+no-cookies-keep</I
+>+session-cookies-only</I
 ></A
 ></H4
 ><P
@@ -4928,7 +5258,10 @@ CLASS="VARIABLELIST"
 >Typical uses:</DT
 ><DD
 ><P
->    Allow cookies for the current browser session only.
+>    Allow cookies for the current browser session <I
+CLASS="EMPHASIS"
+>only</I
+>.
    </P
 ></DD
 ><DT
@@ -4939,13 +5272,13 @@ CLASS="VARIABLELIST"
    </P
 ></DD
 ><DT
->Example usage:</DT
+>Example usage (disabling):</DT
 ><DD
 ><P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+no-cookies-keep}</I
+>{-session-cookies-only}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -4959,15 +5292,27 @@ CLASS="EMPHASIS"
 ><P
 >    If websites set cookies, <SPAN
 CLASS="QUOTE"
->"no-cookies-keep"</SPAN
+>"+session-cookies-only"</SPAN
 > will make sure
     they are erased when you exit and restart your web browser. This makes
     profiling cookies useless, but won't break sites which require cookies so
     that you can log in for transactions. This is generally turned on for all 
-    sites. Sometimes referred to as <SPAN
+    sites, and is the recommended setting.
+   </P
+><P
+>    <SPAN
 CLASS="QUOTE"
->"session cookies"</SPAN
->.
+>"+prevent-*-cookies"</SPAN
+> actions should be turned off as well (see
+    below), for <SPAN
+CLASS="QUOTE"
+>"+session-cookies-only"</SPAN
+> to work. Or, else no cookies 
+    will get through at all. For, <SPAN
+CLASS="QUOTE"
+>"persistent"</SPAN
+> cookies that survive 
+    across browser sessions, see below as well.
    </P
 ></DD
 ></DL
@@ -4978,10 +5323,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="NO-COOKIES-READ"
->5.4.5.16. <I
+NAME="PREVENT-READING-COOKIES"
+>7.4.5.16. <I
 CLASS="EMPHASIS"
->+no-cookies-read</I
+>+prevent-reading-cookies</I
 ></A
 ></H4
 ><P
@@ -5017,7 +5362,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+no-cookies-read}</I
+>{+prevent-reading-cookies}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -5031,9 +5376,29 @@ CLASS="EMPHASIS"
 ><P
 >    Often used in conjunction with <SPAN
 CLASS="QUOTE"
->"+no-cookies-set"</SPAN
+>"+prevent-setting-cookies"</SPAN
 > to 
-    disable persistant cookies completely.
+    disable cookies completely. Note that 
+    <A
+HREF="configuration.html#SESSION-COOKIES-ONLY"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+session-cookies-only"</SPAN
+></A
+>
+    requires these to both be disabled (or else it never gets any cookies to cache).
+   </P
+><P
+>    For <SPAN
+CLASS="QUOTE"
+>"persistent"</SPAN
+> cookies to work (i.e. they survive across browser 
+    sessions and reboots), all three cookie settings should be <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+> 
+    for the specified sites.
    </P
 ></DD
 ></DL
@@ -5044,10 +5409,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="NO-COOKIES-SET"
->5.4.5.17. <I
+NAME="PREVENT-SETTING-COOKIES"
+>7.4.5.17. <I
 CLASS="EMPHASIS"
->+no-cookies-set</I
+>+prevent-setting-cookies</I
 ></A
 ></H4
 ><P
@@ -5065,7 +5430,7 @@ CLASS="VARIABLELIST"
 >Typical uses:</DT
 ><DD
 ><P
->    Explicitly block the web server from sending cookies to your 
+>    Explicitly block the web server from storing cookies on your 
     system.
    </P
 ></DD
@@ -5083,7 +5448,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+no-cookies-set}</I
+>{+prevent-setting-cookies}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -5097,9 +5462,9 @@ CLASS="EMPHASIS"
 ><P
 >    Often used in conjunction with <SPAN
 CLASS="QUOTE"
->"+no-cookies-read"</SPAN
+>"+prevent-reading-cookies"</SPAN
 > to 
-    disable persistant cookies completely.
+    disable cookies completely (see above).
    </P
 ></DD
 ></DL
@@ -5110,15 +5475,15 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="NO-POPUP"
->5.4.5.18. <I
+NAME="KILL-POPUP"
+>7.4.5.18. <I
 CLASS="EMPHASIS"
->+no-popup</I
+>+kill-popups<A
+NAME="KILL-POPUPS"
+></A
+></I
 ></A
 ></H4
-><A
-NAME="NO-POPUPS"
-></A
 ><P
 ></P
 ><DIV
@@ -5151,7 +5516,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+no-popup}</I
+>{+kill-popups}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -5165,20 +5530,25 @@ CLASS="EMPHASIS"
 ><P
 >    <SPAN
 CLASS="QUOTE"
->"+no-popup"</SPAN
+>"+kill-popups"</SPAN
 > uses a built in filter to disable pop-ups
     that use the <TT
 CLASS="LITERAL"
 >window.open()</TT
-> function, etc.
-   </P
-><P
->    An alternate spelling is <SPAN
+> function, etc. This is 
+    one of the first actions processed by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    as it contacts the remote web server. This action is not always 100% reliable, 
+    and is supplemented by <SPAN
 CLASS="QUOTE"
->"+no-popups"</SPAN
->, which is 
-    interchangeable.
-   </P
+>"+filter{<I
+CLASS="EMPHASIS"
+>popups</I
+>}"</SPAN
+>.
+    </P
 ></DD
 ></DL
 ></DIV
@@ -5188,10 +5558,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="VANILLA-WAFER"
->5.4.5.19. <I
+NAME="SEND-VANILLA-WAFER"
+>7.4.5.19. <I
 CLASS="EMPHASIS"
->+vanilla-wafer</I
+>+send-vanilla-wafer</I
 ></A
 ></H4
 ><P
@@ -5227,7 +5597,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+vanilla-wafer}</I
+>{+send-vanilla-wafer}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -5244,7 +5614,7 @@ CLASS="FILENAME"
 >jarfile</TT
 >
     for saving cookies. Of course, this is a (relatively) unique header and 
-    could be used to track you.
+    could conceivably be used to track you.
    </P
 ></DD
 ></DL
@@ -5255,10 +5625,10 @@ CLASS="SECT4"
 ><H4
 CLASS="SECT4"
 ><A
-NAME="WAFER"
->5.4.5.20. <I
+NAME="SEND-WAFER"
+>7.4.5.20. <I
 CLASS="EMPHASIS"
->+wafer</I
+>+send-wafer</I
 ></A
 ></H4
 ><P
@@ -5293,7 +5663,7 @@ CLASS="VARIABLELIST"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
->{+wafer{name=value}}</I
+>{+send-wafer{name=value}}</I
 ><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
 CLASS="EMPHASIS"
@@ -5318,7 +5688,7 @@ CLASS="SECT4"
 CLASS="SECT4"
 ><A
 NAME="ACT-EXAMPLES"
->5.4.5.21. Actions Examples</A
+>7.4.5.21. Actions Examples</A
 ></H3
 ><P
 > Note that the meaning of any of the above examples is reversed by preceding
@@ -5334,39 +5704,54 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"on"</SPAN
 >.
- Some actions that are turned on the default section do typically require
- exceptions to be listed in the lower sections of actions file.</P
+ But, other actions that are turned on the default section <I
+CLASS="EMPHASIS"
+>do
+ typically require</I
+> exceptions to be listed in the lower sections of
+ actions file. E.g. by default no URLs are <SPAN
+CLASS="QUOTE"
+>"blocked"</SPAN
+> (i.e. in 
+ the default definitions of <TT
+CLASS="FILENAME"
+>default.action</TT
+>). We need 
+ exceptions to this in order to enable ad blocking.</P
 ><P
 > Some examples:</P
 ><P
-> Turn off cookies by default, then allow a few through for specified sites:</P
+> Turn off cookies by default, then allow a few through for specified sites 
+ (showing an excerpt from the <SPAN
+CLASS="QUOTE"
+>"default"</SPAN
+> section of an actions
+ file ONLY):</P
 ><P
 > <TT
 CLASS="LITERAL"
 >  <P
 CLASS="LITERALLAYOUT"
->&nbsp;#&nbsp;Turn&nbsp;off&nbsp;all&nbsp;persistent&nbsp;cookies<br>
-&nbsp;{&nbsp;+no-cookies-read&nbsp;}<br>
-&nbsp;{&nbsp;+no-cookies-set&nbsp;}<br>
-&nbsp;<br>
-&nbsp;#&nbsp;Allow&nbsp;cookies&nbsp;for&nbsp;this&nbsp;browser&nbsp;session&nbsp;ONLY<br>
-&nbsp;{&nbsp;+no-cookies-keep&nbsp;}<br>
+>&nbsp;#&nbsp;Excerpt&nbsp;only:<br>
+&nbsp;#&nbsp;Allow&nbsp;cookies&nbsp;to&nbsp;and&nbsp;from&nbsp;the&nbsp;server,&nbsp;but<br>
+&nbsp;#&nbsp;for&nbsp;this&nbsp;browser&nbsp;session&nbsp;ONLY<br>
+&nbsp;{&nbsp;<br>
+&nbsp;&nbsp;&nbsp;#&nbsp;other&nbsp;actions&nbsp;normally&nbsp;listed&nbsp;here...<br>
+&nbsp;&nbsp;&nbsp;-prevent-setting-cookies&nbsp;\<br>
+&nbsp;&nbsp;&nbsp;-prevent-reading-cookies&nbsp;\<br>
+&nbsp;&nbsp;&nbsp;+session-cookies-only&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;<br>
+&nbsp;}<br>
+&nbsp;/&nbsp;#&nbsp;match&nbsp;all&nbsp;URLs<br>
 <br>
 &nbsp;#&nbsp;Exceptions&nbsp;to&nbsp;the&nbsp;above,&nbsp;sites&nbsp;that&nbsp;benefit&nbsp;from&nbsp;persistent&nbsp;cookies<br>
-&nbsp;#&nbsp;that&nbsp;saved&nbsp;from&nbsp;one&nbsp;browser&nbsp;session&nbsp;to&nbsp;the&nbsp;next.<br>
-&nbsp;{&nbsp;-no-cookies-read&nbsp;}<br>
-&nbsp;{&nbsp;-no-cookies-set&nbsp;}<br>
-&nbsp;{&nbsp;-no-cookies-keep&nbsp;}<br>
-&nbsp;.javasoft.com<br>
-&nbsp;.sun.com<br>
-&nbsp;.yahoo.com<br>
-&nbsp;.msdn.microsoft.com<br>
-&nbsp;.redhat.com<br>
+&nbsp;#&nbsp;that&nbsp;are&nbsp;saved&nbsp;from&nbsp;one&nbsp;browser&nbsp;session&nbsp;to&nbsp;the&nbsp;next.<br>
+&nbsp;{&nbsp;-session-cookies-only&nbsp;}<br>
+&nbsp;&nbsp;.javasoft.com<br>
+&nbsp;&nbsp;.sun.com<br>
+&nbsp;&nbsp;.yahoo.com<br>
+&nbsp;&nbsp;.msdn.microsoft.com<br>
+&nbsp;&nbsp;.redhat.com<br>
 <br>
-&nbsp;#&nbsp;Alternative&nbsp;way&nbsp;of&nbsp;saying&nbsp;the&nbsp;same&nbsp;thing<br>
-&nbsp;{-no-cookies-set&nbsp;-no-cookies-read&nbsp;-no-cookies-keep}<br>
-&nbsp;.sourceforge.net<br>
-&nbsp;.sf.net<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
  </TT
@@ -5381,13 +5766,17 @@ CLASS="QUOTE"
 CLASS="LITERAL"
 >  <P
 CLASS="LITERALLAYOUT"
->&nbsp;#&nbsp;Turn&nbsp;them&nbsp;off!<br>
-&nbsp;{+fast-redirects}<br>
+>&nbsp;#&nbsp;Turn&nbsp;them&nbsp;off&nbsp;(excerpt&nbsp;only)!<br>
+&nbsp;{<br>
+&nbsp;&nbsp;#&nbsp;other&nbsp;actions&nbsp;normally&nbsp;listed&nbsp;here...<br>
+&nbsp;&nbsp;+fast-redirects<br>
+&nbsp;}<br>
+&nbsp;/&nbsp;#&nbsp;match&nbsp;all&nbsp;URLs<br>
 &nbsp;<br>
 &nbsp;#&nbsp;Reverse&nbsp;it&nbsp;for&nbsp;these&nbsp;two&nbsp;sites,&nbsp;which&nbsp;don't&nbsp;work&nbsp;right&nbsp;without&nbsp;it.<br>
 &nbsp;{-fast-redirects}<br>
-&nbsp;www.ukc.ac.uk/cgi-bin/wac\.cgi\?<br>
-&nbsp;login.yahoo.com<br>
+&nbsp;&nbsp;www.ukc.ac.uk/cgi-bin/wac\.cgi\?<br>
+&nbsp;&nbsp;login.yahoo.com<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
  </TT
@@ -5405,14 +5794,18 @@ CLASS="FILENAME"
 CLASS="LITERAL"
 >  <P
 CLASS="LITERALLAYOUT"
->&nbsp;#&nbsp;Run&nbsp;everything&nbsp;through&nbsp;the&nbsp;filter&nbsp;file,&nbsp;using&nbsp;only&nbsp;the<br>
+>&nbsp;#&nbsp;Run&nbsp;everything&nbsp;through&nbsp;the&nbsp;filter&nbsp;file,&nbsp;using&nbsp;only&nbsp;certain<br>
 &nbsp;#&nbsp;specified&nbsp;sections:<br>
-&nbsp;+filter{html-annoyances}&nbsp;+filter{js-annoyances}&nbsp;+filter{no-popups}\<br>
-&nbsp;+filter{webbugs}&nbsp;+filter{nimda}&nbsp;+filter{banners-by-size}<br>
+&nbsp;{<br>
+&nbsp;&nbsp;#&nbsp;other&nbsp;actions&nbsp;normally&nbsp;listed&nbsp;here...<br>
+&nbsp;&nbsp;+filter{html-annoyances}&nbsp;+filter{js-annoyances}&nbsp;+filter{kill-popups}\<br>
+&nbsp;&nbsp;+filter{webbugs}&nbsp;+filter{nimda}&nbsp;+filter{banners-by-size}<br>
+&nbsp;}<br>
+&nbsp;/&nbsp;#match&nbsp;all&nbsp;URLs<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;#&nbsp;Then&nbsp;disable&nbsp;filtering&nbsp;of&nbsp;code&nbsp;from&nbsp;sourceforge!<br>
+&nbsp;#&nbsp;Then&nbsp;disable&nbsp;filtering&nbsp;of&nbsp;code&nbsp;from&nbsp;all&nbsp;sourceforge&nbsp;domains!<br>
 &nbsp;{-filter}<br>
-&nbsp;.cvs.sourceforge.net<br>
+&nbsp;&nbsp;.sourceforge.net<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
  </TT
@@ -5425,12 +5818,16 @@ CLASS="QUOTE"
  the <SPAN
 CLASS="QUOTE"
 >"blocked"</SPAN
-> banner). Many of these use 
- <A
+> banner). Typically, the <SPAN
+CLASS="QUOTE"
+>"block"</SPAN
+>
+ action is off by default in the upper section of an actions file, then enabled
+ against certain URLs and patterns in the lower part of the file. Many of these use <A
 HREF="appendix.html#REGEX"
 >regular expressions</A
-> that will expand to match
- multiple URLs: </P
+> that will expand to match multiple
+ URLs: </P
 ><P
 > <TT
 CLASS="LITERAL"
@@ -5438,48 +5835,16 @@ CLASS="LITERAL"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;#&nbsp;Blocklist:<br>
 &nbsp;&nbsp;{+block}<br>
-&nbsp;&nbsp;/.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))<br>
-&nbsp;&nbsp;/.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])<br>
+&nbsp;&nbsp;ad*.<br>
+&nbsp;&nbsp;.*ads.<br>
+&nbsp;&nbsp;banner?.<br>
+&nbsp;&nbsp;count*.<br>
+&nbsp;&nbsp;/.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)<br>
+&nbsp;&nbsp;/(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/<br>
+&nbsp;&nbsp;.hitbox.com&nbsp;<br>
 &nbsp;&nbsp;/.*/(ng)?adclient\.cgi<br>
 &nbsp;&nbsp;/.*/(plain|live|rotate)[-_.]?ads?/<br>
-&nbsp;&nbsp;/.*/(sponsor)s?[0-9]?/<br>
-&nbsp;&nbsp;/.*/_?(plain|live)?ads?(-banners)?/<br>
 &nbsp;&nbsp;/.*/abanners/<br>
-&nbsp;&nbsp;/.*/ad(sdna_image|gifs?)/<br>
-&nbsp;&nbsp;/.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)<br>
-&nbsp;&nbsp;/.*/adbanners/<br>
-&nbsp;&nbsp;/.*/adserver<br>
-&nbsp;&nbsp;/.*/adstream\.cgi<br>
-&nbsp;&nbsp;/.*/adv((er)?ts?|ertis(ing|ements?))?/<br>
-&nbsp;&nbsp;/.*/banner_?ads/<br>
-&nbsp;&nbsp;/.*/banners?/<br>
-&nbsp;&nbsp;/.*/banners?\.cgi/<br>
-&nbsp;&nbsp;/.*/cgi-bin/centralad/getimage<br>
-&nbsp;&nbsp;/.*/images/addver\.gif<br>
-&nbsp;&nbsp;/.*/images/marketing/.*\.(gif|jpe?g)<br>
-&nbsp;&nbsp;/.*/popupads/<br>
-&nbsp;&nbsp;/.*/siteads/<br>
-&nbsp;&nbsp;/.*/sponsor.*\.gif<br>
-&nbsp;&nbsp;/.*/sponsors?[0-9]?/<br>
-&nbsp;&nbsp;/.*/advert[0-9]+\.jpg<br>
-&nbsp;&nbsp;/Media/Images/Adds/<br>
-&nbsp;&nbsp;/ad_images/<br>
-&nbsp;&nbsp;/adimages/<br>
-&nbsp;&nbsp;/.*/ads/<br>
-&nbsp;&nbsp;/bannerfarm/<br>
-&nbsp;&nbsp;/grafikk/annonse/<br>
-&nbsp;&nbsp;/graphics/defaultAd/<br>
-&nbsp;&nbsp;/image\.ng/AdType<br>
-&nbsp;&nbsp;/image\.ng/transactionID<br>
-&nbsp;&nbsp;/images/.*/.*_anim\.gif&nbsp;#&nbsp;alvin&nbsp;brattli<br>
-&nbsp;&nbsp;/ip_img/.*\.(gif|jpe?g)<br>
-&nbsp;&nbsp;/rotateads/<br>
-&nbsp;&nbsp;/rotations/&nbsp;<br>
-&nbsp;&nbsp;/worldnet/ad\.cgi<br>
-&nbsp;&nbsp;/cgi-bin/nph-adclick.exe/<br>
-&nbsp;&nbsp;/.*/Image/BannerAdvertising/<br>
-&nbsp;&nbsp;/.*/ad-bin/<br>
-&nbsp;&nbsp;/.*/adlib/server\.cgi<br>
 &nbsp;&nbsp;/autoads/<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
@@ -5489,12 +5854,12 @@ CLASS="LITERALLAYOUT"
 > Note that many of these actions have the potential to cause a page to
  misbehave, possibly even not to display at all. There are many ways 
  a site designer may choose to design his site, and what HTTP header 
- content he may depend on. There is no way to have hard and fast rules 
- for all sites. See the <A
+ content, and other criteria, he may depend on. There is no way to have hard
+ and fast rules for all sites. See the <A
 HREF="appendix.html#ACTIONSANAT"
 >Appendix</A
->
- for a brief example on troubleshooting actions.</P
+> for a brief example on troubleshooting
+ actions.</P
 ></DIV
 ></DIV
 ><DIV
@@ -5502,8 +5867,8 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2110"
->5.4.6. Aliases</A
+NAME="ALIASES"
+>7.4.6. Aliases</A
 ></H3
 ><P
 > Custom <SPAN
@@ -5557,16 +5922,14 @@ CLASS="QUOTE"
 >. Alias names are not case sensitive, and 
  <I
 CLASS="EMPHASIS"
->must be defined  before anything</I
-> else in the
- <TT
-CLASS="FILENAME"
->default.action</TT
->file! And there can only be one set of
- <SPAN
+>must be defined before other actions</I
+> in the
+ actions file! And there can only be one set of <SPAN
 CLASS="QUOTE"
 >"aliases"</SPAN
-> defined.</P
+>
+ defined per file. Each actions file may have its own aliases, but they are 
+ only visible within that file.</P
 ><P
 > Now let's define a few aliases:</P
 ><P
@@ -5576,17 +5939,16 @@ CLASS="LITERAL"
 CLASS="LITERALLAYOUT"
 >&nbsp;#&nbsp;Useful&nbsp;custom&nbsp;aliases&nbsp;we&nbsp;can&nbsp;use&nbsp;later.&nbsp;These&nbsp;must&nbsp;come&nbsp;first!<br>
 &nbsp;{{alias}}<br>
-&nbsp;+no-cookies&nbsp;=&nbsp;+no-cookies-set&nbsp;+no-cookies-read<br>
-&nbsp;-no-cookies&nbsp;=&nbsp;-no-cookies-set&nbsp;-no-cookies-read<br>
-&nbsp;fragile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;-block&nbsp;-no-cookies&nbsp;-filter&nbsp;-fast-redirects&nbsp;-hide-referer&nbsp;-no-popups<br>
-&nbsp;shop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;-no-cookies&nbsp;-filter&nbsp;-fast-redirects<br>
-&nbsp;+imageblock&nbsp;=&nbsp;+block&nbsp;+image<br>
+&nbsp;+prevent-cookies&nbsp;=&nbsp;+prevent-setting-cookies&nbsp;+prevent-reading-cookies<br>
+&nbsp;-prevent-cookies&nbsp;=&nbsp;-prevent-setting-cookies&nbsp;-prevent-reading-cookies<br>
+&nbsp;fragile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;-block&nbsp;-prevent-cookies&nbsp;-filter&nbsp;-fast-redirects&nbsp;-hide-referer&nbsp;-kill-popups<br>
+&nbsp;shop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;-prevent-cookies&nbsp;-filter&nbsp;-fast-redirects<br>
+&nbsp;+imageblock&nbsp;=&nbsp;+block&nbsp;+handle-as-image<br>
 <br>
-&nbsp;#For&nbsp;people&nbsp;who&nbsp;don't&nbsp;like&nbsp;to&nbsp;type&nbsp;too&nbsp;much:&nbsp;&nbsp;;-)<br>
-&nbsp;c0&nbsp;=&nbsp;+no-cookies<br>
-&nbsp;c1&nbsp;=&nbsp;-no-cookies<br>
-&nbsp;c2&nbsp;=&nbsp;-no-cookies-set&nbsp;+no-cookies-read<br>
-&nbsp;c3&nbsp;=&nbsp;+no-cookies-set&nbsp;-no-cookies-read<br>
+&nbsp;#&nbsp;Aliases&nbsp;defined&nbsp;from&nbsp;other&nbsp;aliases,&nbsp;for&nbsp;people&nbsp;who&nbsp;don't&nbsp;like&nbsp;to&nbsp;type&nbsp;<br>
+&nbsp;#&nbsp;too&nbsp;much:&nbsp;&nbsp;;-)<br>
+&nbsp;c0&nbsp;=&nbsp;+prevent-cookies<br>
+&nbsp;c1&nbsp;=&nbsp;-prevent-cookies<br>
 &nbsp;#...&nbsp;etc.&nbsp;&nbsp;Customize&nbsp;to&nbsp;your&nbsp;heart's&nbsp;content.<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
@@ -5600,7 +5962,9 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"fragile"</SPAN
 >
- aliases from above:</P
+ aliases from above. These would appear in the lower sections of an 
+ actions file as exceptions to the default actions (as defined in the 
+ upper section):</P
 ><P
 > <TT
 CLASS="LITERAL"
@@ -5609,21 +5973,20 @@ CLASS="LITERALLAYOUT"
 >&nbsp;#&nbsp;These&nbsp;sites&nbsp;are&nbsp;very&nbsp;complex&nbsp;and&nbsp;require<br>
 &nbsp;#&nbsp;minimal&nbsp;interference.<br>
 &nbsp;{fragile}<br>
-&nbsp;.office.microsoft.com<br>
-&nbsp;.windowsupdate.microsoft.com<br>
-&nbsp;.nytimes.com<br>
+&nbsp;&nbsp;.office.microsoft.com<br>
+&nbsp;&nbsp;.windowsupdate.microsoft.com<br>
+&nbsp;&nbsp;.nytimes.com<br>
 <br>
 &nbsp;#&nbsp;Shopping&nbsp;sites&nbsp;-&nbsp;but&nbsp;we&nbsp;still&nbsp;want&nbsp;to&nbsp;block&nbsp;ads.<br>
 &nbsp;{shop}<br>
-&nbsp;.quietpc.com<br>
-&nbsp;.worldpay.com&nbsp;&nbsp;&nbsp;#&nbsp;for&nbsp;quietpc.com<br>
-&nbsp;.jungle.com<br>
-&nbsp;.scan.co.uk<br>
+&nbsp;&nbsp;.quietpc.com<br>
+&nbsp;&nbsp;.worldpay.com&nbsp;&nbsp;&nbsp;#&nbsp;for&nbsp;quietpc.com<br>
+&nbsp;&nbsp;.scan.co.uk<br>
 <br>
 &nbsp;#&nbsp;These&nbsp;shops&nbsp;require&nbsp;pop-ups&nbsp;also&nbsp;<br>
-&nbsp;{shop&nbsp;-no-popups}<br>
-&nbsp;.dabs.com<br>
-&nbsp;.overclockers.co.uk<br>
+&nbsp;{shop&nbsp;-kill-popups}<br>
+&nbsp;&nbsp;.dabs.com<br>
+&nbsp;&nbsp;.overclockers.co.uk<br>
 &nbsp;&nbsp;&nbsp;</P
 > 
  </TT
@@ -5648,8 +6011,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="FILTERFILE"
->5.5. The Filter File</A
+NAME="FILTER-FILE"
+>7.5. The Filter File</A
 ></H2
 ><P
 > Any web page can be dynamically modified with the filter file. This
@@ -5767,8 +6130,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2176"
->5.6. Templates</A
+NAME="AEN2273"
+>7.6. Templates</A
 ></H2
 ><P
 > When <SPAN
@@ -5816,7 +6179,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="quickstart.html"
+HREF="startup.html"
 >Prev</A
 ></TD
 ><TD
@@ -5841,7 +6204,7 @@ HREF="contact.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Quickstart to Using <SPAN
+>Starting <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 ></TD

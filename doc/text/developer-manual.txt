@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $
+$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -119,6 +119,13 @@ Table of Contents
    
 9. Update the Webserver
 10. Contacting the developers, Bug Reporting and Feature Requests
+   
+    10.1. Get Support
+    10.2. Report bugs
+    10.3. Request new features
+    10.4. Report ads or other filter problems
+    10.5. Other
+   
 11. Copyright and History
    
     11.1. Copyright
@@ -1363,7 +1370,7 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $"; 
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $"; 
 /*********************************************************************                         
  *                                                                                             
  * File        :  $Source$                                                                     
@@ -1420,7 +1427,7 @@ Example for file header comments:
 
 #ifndef _FILENAME_H                                                                          
 #define _FILENAME_H                                                                          
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.35 2002/04/17 15:16:15 oes Exp $" 
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $" 
 /*********************************************************************                       
  *                                                                                           
  * File        :  $Source$                                                                   
@@ -1595,7 +1602,6 @@ The following must be done by one of the developers prior to each new release.
     version info in this line:
    
       {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}    
-                                                                       
    
     Then change the version info in doc/webserver/actions/index.php, line:
     '$required_actions_file_version = "A.B";'
@@ -1620,11 +1626,10 @@ For all types of packages, including the source tarball, you must make sure
 that you build from clean sources by exporting the right version from CVS into
 an empty directory:.
 
-  mkdir dist # delete or choose different name if it already exists                                 
-  cd dist                                                                                           
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                         
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current 
-                                                                                                    
+  mkdir dist # delete or choose different name if it already exists                                
+  cd dist                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                        
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
 
 Do NOT change a single bit, including, but not limited to version information
 after export from CVS. This is to make sure that all release packages, and with
@@ -1642,17 +1647,14 @@ directory. (See "Building and releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then do:
 
   make tarball-dist                                                            
-                                                                               
 
 To upload the package to Sourceforge, simply issue
 
   make tarball-upload                                                          
-                                                                               
 
 Go to the displayed URL and release the file publicly on Sourceforge. For the
 change log field, use the relevant section of the ChangeLog file.
@@ -1666,17 +1668,14 @@ directory. (See "Building and releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then do
 
   make suse-dist (or make redhat-dist)                                         
-                                                                               
 
 To upload the package to Sourceforge, simply issue
 
   make suse-upload (or make redhat-upload)                                     
-                                                                               
 
 Go to the displayed URL and release the file publicly on Sourceforge. Use the
 release notes and çhange log from the source tarball package.
@@ -1689,8 +1688,7 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the OS/2
 Setup module:
 
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup 
-                                                                                      
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co os2setup
 
 You will need a mix of development tools. The main compilation takes place with
 IBM Visual Age C++. Some ancillary work takes place with GNU tools, available
@@ -1702,18 +1700,15 @@ Change directory to the os2setup directory. Edit the os2build.cmd file to set
 the final executable filename. For example,
 
   installExeName='privoxyos2_setup_X.Y.Z.exe'                                  
-                                                                               
 
 Next, edit the IJB.wis file so the release number matches in the PACKAGEID
 section:
 
   PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"                       
-                                                                               
 
 You're now ready to build. Run:
 
   os2build                                                                     
-                                                                               
 
 You will find the WarpIN-installable executable in the ./files directory.
 Upload this anonymously to uploads.sourceforge.net/incoming, create a release
@@ -1727,7 +1722,6 @@ tarball package.
 Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
-                                                                               
 
 Choose the right operating system (not the Debian one). When logged in, make
 sure that you have freshly exported the right version into an empty directory.
@@ -1735,12 +1729,10 @@ sure that you have freshly exported the right version into an empty directory.
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then run
 
   gmake solaris-dist                                                           
-                                                                               
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make solaris-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
@@ -1758,15 +1750,13 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Windows
 setup module:
 
-        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup 
-                                                                                             
+        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
 
 Then you can build the package. This is fully automated, and is controlled by
 winsetup/GNUmakefile. All you need to do is:
 
         cd winsetup                                                            
         make                                                                   
-                                                                               
 
 Now you can manually rename privoxy_setup.exe to privoxy_setup_X_Y_Z.exe, and
 upload it to SourceForge. When releasing the package on SourceForge, use the
@@ -1781,7 +1771,6 @@ directory. (See "Building and releasing packages" above). Then, run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then do FIXME.
 
@@ -1793,14 +1782,12 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Mac OSX
 setup module:
 
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup 
-                                                                                      
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co osxsetup
 
 Then run:
 
   cd osxsetup                                                                  
   build                                                                        
-                                                                               
 
 This will run autoheader, autoconf and configure as well as make. Finally, it
 will copy over the necessary files to the ./osxsetup/files directory for
@@ -1812,7 +1799,6 @@ specify ./Privoxy.pkg as the output package name, you can then create the
 distributable zip file with the command:
 
 zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg                                  
-                                                                               
 
 You can then upload privoxyosx_setup_x.y.z.zip anonymously to
 uploads.sourceforge.net/incoming, create a release for it, and you're done. Use
@@ -1825,7 +1811,6 @@ the release notes and Change Log from the source tarball package.
 Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
-                                                                               
 
 Choose the right operating system. When logged in, make sure that you have
 freshly exported the right version into an empty directory. (See "Building and
@@ -1833,12 +1818,10 @@ releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then run:
 
   gmake freebsd-dist                                                           
-                                                                               
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make freebsd-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
@@ -1854,7 +1837,6 @@ directory. (See "Building and releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then do FIXME.
 
@@ -1867,7 +1849,6 @@ directory. (See "Building and releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then do FIXME.
 
@@ -1878,7 +1859,6 @@ Then do FIXME.
 Login to Sourceforge's compilefarm via ssh:
 
   ssh cf.sourceforge.net                                                       
-                                                                               
 
 Choose the right operating system. When logged in, make sure that you have
 freshly exported the right version into an empty directory. (See "Building and
@@ -1886,12 +1866,10 @@ releasing packages" above). Then run:
 
   cd current                                                                   
   autoheader && autoconf && ./configure                                        
-                                                                               
 
 Then run:
 
   make aix-dist                                                                
-                                                                               
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make aix-upload on
 the Sourceforge machine (no ncftpput). You now have to manually upload the
@@ -1917,7 +1895,6 @@ broken links, incosistent contents or permission problems will occur:
 If you have changed anything in the documentation source SGML files, do:
 
   make dok # (or make redkat-dok if make dok doesn't work for you)             
-                                                                               
 
 That will generate doc/webserver/user-manual, doc/webserver/developer-manual,
 doc/webserver/faq and doc/webserver/index.html automatically.
@@ -1932,7 +1909,6 @@ webserver/* directory (or create new directories under doc/webserver).
 Next, commit any changes from the above steps to CVS. All set? Then do
 
   make webserver                                                               
-                                                                               
 
 This will do the upload to the webserver (www.privoxy.org) and ensure all files
 and directories there are group writable.
@@ -1945,47 +1921,69 @@ avoid permission problems.
 10. Contacting the developers, Bug Reporting and Feature Requests
 
 We value your feedback. However, to provide you with the best support, please
-note:
+note the following sections.
 
-  * Use the Sourceforge Support Forum to get help:
-       
-        http://sourceforge.net/tracker/?group_id=11118&atid=211118
-       
+-------------------------------------------------------------------------------
+
+10.1. Get Support
+
+To get support, use the Sourceforge Support Forum:
+
+    http://sourceforge.net/tracker/?group_id=11118&atid=211118
    
-  * Submit bugs only through our Sourceforge Bug Forum:
-     
-        http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-        
+
+-------------------------------------------------------------------------------
+
+10.2. Report bugs
+
+To submit bugs, use the Sourceforge Bug Forum:
+
+    http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+    
+
+Make sure that the bug has not already been submitted. Please try to verify
+that it is a Privoxy bug, and not a browser or site bug first. If you are using
+your own custom configuration, please try the stock configs to see if the
+problem is a configuration related bug. And if not using the latest development
+snapshot, please try the latest one. Or even better, CVS sources. Please be
+sure to include the Privoxy version, platform, browser, any pertinent log data,
+any other relevant details (please be specific) and, if possible, some way to
+reproduce the bug.
+
+-------------------------------------------------------------------------------
+
+10.3. Request new features
+
+To submit ideas on new features, use the Sourceforge feature request forum:
+
+    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
    
-    Make sure that the bug has not already been submitted. Please try to verify
-    that it is a Privoxy bug, and not a browser or site bug first. If you are
-    using your own custom configuration, please try the stock configs to see if
-    the problem is a configuration related bug. And if not using the latest
-    development snapshot, please try the latest one. Or even better, CVS
-    sources. Please be sure to include the Privoxy/Junkbuster version,
-    platform, browser, any pertinent log data, any other relevant details
-    (please be specific) and, if possible, some way to reproduce the bug.
-   
-  * Submit feature requests only through our Sourceforge feature request forum:
-     
-        http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
-       
-   
-  * You can also send feedback on websites that Privoxy has problems with. Please bookmark
-    the following link: "Privoxy - Submit Filter Feedback"
-    . Once you surf to a page with problems, use the
-    bookmark to send us feedback. We will look into the issue as soon as possible.
-       
-   
-  * For any other issues, feel free to use the mailing lists:
-     
-        http://sourceforge.net/mail/?group_id=11118.
-     
-   
-    Anyone interested in actively participating in development and related
-    discussions can also join the appropriate mailing list. Archives are
-    available, too.
-   
+
+-------------------------------------------------------------------------------
+
+10.4. Report ads or other filter problems
+
+You can also send feedback on websites that Privoxy has problems with. Please
+bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
+to a page with problems, use the bookmark to send us feedback. We will look
+into the issue as soon as possible.
+
+New, improved default.action files will occasionally be made available based on
+your feedback. These will be announced on the ijbswa-announce list.
+
+-------------------------------------------------------------------------------
+
+10.5. Other
+
+For any other issues, feel free to use the mailing lists:
+ 
+    http://sourceforge.net/mail/?group_id=11118.
+ 
+
+Anyone interested in actively participating in development and related
+discussions can also join the appropriate mailing list. Archives are available,
+too. See the page on Sourceforge.
+
 -------------------------------------------------------------------------------
 
 11. Copyright and History

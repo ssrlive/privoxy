@@ -13,8 +13,8 @@ REL="PREVIOUS"
 TITLE="Introduction"
 HREF="introduction.html"><LINK
 REL="NEXT"
-TITLE="Quickstart to Using Privoxy"
-HREF="quickstart.html"><LINK
+TITLE="Note to Upgraders"
+HREF="upgradersnote.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
 HREF="../p_doc.css"></HEAD
@@ -57,7 +57,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="quickstart.html"
+HREF="upgradersnote.html"
 >Next</A
 ></TD
 ></TR
@@ -83,8 +83,10 @@ CLASS="APPLICATION"
  <A
 HREF="http://sourceforge.net/projects/ijbswa/"
 TARGET="_top"
->Privoxy Project Page</A
->.</P
+>Privoxy Project
+ Page</A
+>. For installing and compiling the source code, please look 
+ into our Developer Manual.</P
 ><P
 > If you like to live on the bleeding edge and are not afraid of using
  possibly unstable development versions, you can check out the up-to-the-minute
@@ -98,22 +100,14 @@ HREF="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.gz"
 TARGET="_top"
 >the nightly CVS
  tarball.</A
-></P
+> Again, we refer you to the Developer Manual.</P
 ><P
 > At present, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is known to run on Win32, Mac
- OSX, OS/2, AmigaOS, Linux (RedHat, Suse, Debian), FreeBSD, NetBSD, BeOS, and
- many flavors of Unix.</P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="INSTALLATION-PACKAGES"
->3.1. Binary Packages</A
-></H2
+> is known to run on
+ Windows(95, 98, ME, 2000, XP), Linux (RedHat, Suse, Debian), Mac OSX,
+ OS/2, AmigaOS, FreeBSD, NetBSD, BeOS, and many more flavors of Unix.</P
 ><P
 > Note: If you have a previous <SPAN
 CLASS="APPLICATION"
@@ -132,19 +126,18 @@ CLASS="EMPHASIS"
  if it is valuable to you.</I
 > See the
  <A
-HREF="quickstart.html#UPGRADERSNOTE"
+HREF="upgradersnote.html"
 >note to upgraders</A
->.</P
-><P
-> How to install the binary packages depends on your operating system:</P
+> section
+ below.</P
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-PACK-RPM"
->3.1.1. Red Hat and SuSE RPMs</A
-></H3
+>3.1. Red Hat and SuSE RPMs</A
+></H2
 ><P
 > RPMs can be installed with <TT
 CLASS="LITERAL"
@@ -159,15 +152,20 @@ CLASS="FILENAME"
 > Note that on Red Hat, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will not be
- automatically started on system boot. You will need to enable that using
- <B
+> will
+ <I
+CLASS="EMPHASIS"
+>not</I
+> be automatically started on system boot. You will
+ need to enable that using <B
 CLASS="COMMAND"
 >chkconfig</B
->, <B
+>,
+ <B
 CLASS="COMMAND"
 >ntsysv</B
->, or similar method.</P
+>, or similar methods. Note that SuSE will 
+automatically start Privoxy in the boot process.</P
 ><P
 > If you have problems with failed dependencies, try rebuilding the SRC RPM: 
  <TT
@@ -191,36 +189,38 @@ CLASS="APPLICATION"
 >.</P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-DEB"
->3.1.2. Debian</A
-></H3
+>3.2. Debian</A
+></H2
 ><P
 > FIXME.</P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-PACK-WIN"
->3.1.3. Windows</A
-></H3
+>3.3. Windows</A
+></H2
 ><P
 > Just double-click the installer, which will guide you through
- the installation process.</P
+ the installation process. You will find the configuration files
+ in the same directory as you installed Privoxy in. We do not
+ use the registry of Windows. </P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-PACK-BINTGZ"
->3.1.4. Solaris, NetBSD, FreeBSD, HP-UX</A
-></H3
+>3.4. Solaris, NetBSD, FreeBSD, HP-UX</A
+></H2
 ><P
 > Create a new directory, <TT
 CLASS="LITERAL"
@@ -230,13 +230,13 @@ CLASS="LITERAL"
  things go. FIXME.</P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-OS2"
->3.1.5. OS/2</A
-></H3
+>3.5. OS/2</A
+></H2
 ><P
 > First, make sure that no previous installations of
  <SPAN
@@ -264,13 +264,13 @@ CLASS="APPLICATION"
  into will contain all of the configuration files.</P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-MAC"
->3.1.6. Max OSX</A
-></H3
+>3.6. Max OSX</A
+></H2
 ><P
 > Unzip the downloaded package (you can either double-click on the file
  in the finder, or on the desktop if you downloaded it there).  Then,
@@ -288,20 +288,20 @@ CLASS="LITERAL"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > will set itself up to start 
- automatically on system bringup via
+ automatically on system bring-up via
  <TT
 CLASS="LITERAL"
 >/System/Library/StartupItems/Privoxy</TT
 >.</P
 ></DIV
 ><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
 ><A
 NAME="INSTALLATION-AMIGA"
->3.1.7. AmigaOS</A
-></H3
+>3.7. AmigaOS</A
+></H2
 ><P
 > Copy and then unpack the <TT
 CLASS="FILENAME"
@@ -339,124 +339,6 @@ CLASS="APPLICATION"
 ></DIV
 ></DIV
 ><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="INSTALLATION-SOURCE"
->3.2. Building from Source</A
-></H2
-><P
-> To build <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> from source, 
- autoheader, autoconf, <A
-HREF="http://www.gnu.org/software/make/make.html"
-TARGET="_top"
->GNU make
- (gmake)</A
->, and, of course, a C compiler are required.</P
-><P
-> When building from a source tarball (either release version or
- nightly CVS tarball), first unpack the source: </P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
-> tar xzvf privoxy-2.9.14-beta-src* [.tgz or .tar.gz]
- cd privoxy-2.9.14-beta
- </PRE
-></TD
-></TR
-></TABLE
-></P
-><P
-> For retrieving the current CVS sources, you'll need CVS installed.
- Note that sources from CVS are development quality, and may not be
- stable, or well tested. To download CVS source:</P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
-  cd current
- </PRE
-></TD
-></TR
-></TABLE
-></P
-><P
-> This will create a directory named <TT
-CLASS="FILENAME"
->current/</TT
->, which will 
- contain the source tree.</P
-><P
-> Then, in either case, to build from unpacked tarball or CVS source:</P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
-> autoheader
- autoconf
- ./configure      # (--help to see options)
- make             # (the make from gnu, gmake for *BSD) 
- su 
- make -n install  # (to see where all the files will go)
- make install     # (to really install)
- </PRE
-></TD
-></TR
-></TABLE
-></P
-><P
->  If you have gnu make, you can have the first four steps 
-  automatically done for you by just typing</P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  make
- </PRE
-></TD
-></TR
-></TABLE
-></P
-><P
->  in the freshly downloaded or unpacked source directory.</P
-><P
-> For more detailed instructions on how to build Redhat and SuSE RPMs,
- Windows self-extracting installers, building on platforms with
- special requirements etc, please consult the <A
-HREF="../developer-manual/newrelease.html"
-TARGET="_top"
->developer manual</A
->.</P
-></DIV
-></DIV
-><DIV
 CLASS="NAVFOOTER"
 ><HR
 ALIGN="LEFT"
@@ -487,7 +369,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="quickstart.html"
+HREF="upgradersnote.html"
 >Next</A
 ></TD
 ></TR
@@ -506,10 +388,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Quickstart to Using <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></TD
+>Note to Upgraders</TD
 ></TR
 ></TABLE
 ></DIV

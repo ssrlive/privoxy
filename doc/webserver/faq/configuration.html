@@ -105,7 +105,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN239"
+NAME="AEN237"
 >3.2. What is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -165,7 +165,7 @@ CLASS="QUOTE"
 ><P
 > These are all explained in the 
  <A
-HREF="../user-manual/configuration.html#ACTIONSFILE"
+HREF="../user-manual/configuration.html#ACTIONS-FILE"
 TARGET="_top"
 >user-manual</A
 >.
@@ -176,7 +176,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN257"
+NAME="AEN255"
 >3.4. How are actions files configured? What is the easiest
 way to do this?</A
 ></H3
@@ -201,7 +201,7 @@ TARGET="_top"
 ><P
 > Please see the 
  <A
-HREF="../user-manual/configuration.html#ACTIONSFILE"
+HREF="../user-manual/configuration.html#ACTIONS-FILE"
 TARGET="_top"
 >user-manual</A
 > for a
@@ -213,424 +213,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="CONFIGFILES"
->3.5. What are the differences between
-intermediate.action, basic.action, etc.?</A
-></H3
-><P
->Configuring <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is not easy. To help you get
-started, we provide you with three different default configurations. The
-following table shows you, which features are enabled in each configuration.
- </P
-><P
-><DIV
-CLASS="TABLE"
-><A
-NAME="AEN270"
-></A
-><P
-><B
->Table 1. Default Configurations</B
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Feature</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->default.action</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->basic.action</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->intermediate.action</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->advanced.action</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->ad-filtering</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->blank image</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->de-animate GIFs</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->referer forging</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->jon's +no-cookies-keep (i.e. session cookies only)</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no-popup windows</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->fast redirects</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->hide-referrer</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->hide-useragent</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->content-modification</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->x</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->feature-x</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->feature-y</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->feature-z</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->?</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="TOP"
->&nbsp;</TD
-></TR
-></TBODY
-></TABLE
-></DIV
-></P
-></DIV
-><DIV
-CLASS="SECT2"
-><H3
-CLASS="SECT2"
-><A
 NAME="BROWSECONFIG"
->3.6. Why can I change the configuration with a
+>3.5. Why can I change the configuration with a
 browser? Does that not raise security issues?</A
 ></H3
 ><P
@@ -688,8 +272,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN379"
->3.7. What is <SPAN
+NAME="AEN278"
+>3.6. What is <SPAN
 CLASS="QUOTE"
 >"default.filter"</SPAN
 >?</A
@@ -733,8 +317,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN391"
->3.8. How can I set up <SPAN
+NAME="AEN290"
+>3.7. How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to act as a proxy for my 
@@ -769,8 +353,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  listen-address  192.168.1.1:8118
- </PRE
+>  listen-address  192.168.1.1:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -787,8 +370,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN403"
->3.9. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
+NAME="AEN302"
+>3.8. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></H3
 ><P
 > This is a configuration option for images that
@@ -844,8 +427,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN418"
->3.10. Why would anybody want to see a checkerboard pattern?</A
+NAME="AEN317"
+>3.9. Why would anybody want to see a checkerboard pattern?</A
 ></H3
 ><P
 > This can be helpful for troubleshooting problems. It might also be good 
@@ -865,8 +448,8 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN423"
->3.11. I see large red banners on some pages that say 
+NAME="AEN322"
+>3.10. I see large red banners on some pages that say 
 <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
@@ -979,7 +562,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ALLISEEISRED"
->3.12. I cannot see all of the <SPAN
+>3.11. I cannot see all of the <SPAN
 CLASS="QUOTE"
 >"Blocked"</SPAN
 > page banner. All I
@@ -1003,7 +586,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="SRVANY"
->3.13. Can <SPAN
+>3.12. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a service 
@@ -1035,7 +618,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="OTHERPROXY"
->3.14. How can I make <SPAN
+>3.13. How can I make <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > work with other 

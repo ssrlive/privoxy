@@ -1,0 +1,534 @@
+<HTML
+><HEAD
+><TITLE
+>Starting Privoxy</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Privoxy User Manual"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Quickstart to Using Privoxy"
+HREF="quickstart.html"><LINK
+REL="NEXT"
+TITLE="Privoxy Configuration"
+HREF="configuration.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy User Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="quickstart.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="configuration.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="STARTUP"
+>6. Starting <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></A
+></H1
+><P
+> Before launching <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> for the first time, you 
+ will want to configure your browser(s) to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
+ and port 8118 (earlier versions used port 8000). This is the one
+ configuration step that must be done! </P
+><P
+> 
+ With <SPAN
+CLASS="APPLICATION"
+>Netscape</SPAN
+> (and
+ <SPAN
+CLASS="APPLICATION"
+>Mozilla</SPAN
+>), this can be set under <TT
+CLASS="LITERAL"
+>Edit
+ -&#62; Preferences -&#62; Advanced -&#62; Proxies -&#62; HTTP Proxy</TT
+>.
+ For <SPAN
+CLASS="APPLICATION"
+>Internet Explorer</SPAN
+>: <TT
+CLASS="LITERAL"
+>Tools -&#62;
+ Internet Properties -&#62; Connections -&#62; LAN Setting</TT
+>. Then,
+ check <SPAN
+CLASS="QUOTE"
+>"Use Proxy"</SPAN
+> and fill in the appropriate info (Address:
+ localhost, Port: 8118). Include if HTTPS proxy support too.</P
+><P
+> After doing this, flush your browser's disk and memory caches to force a
+ re-reading of all pages and to get rid of any ads that may be cached. You 
+ are now ready to start enjoying the benefits of using
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>!</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is typically started by specifying the
+ main configuration file to be used on the command line. Example Unix startup
+ command:</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> 
+ # /usr/sbin/privoxy /etc/privoxy/config</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+> See <A
+HREF="startup.html#CMDOPTIONS"
+>below</A
+> for other command line options.</P
+><P
+> An init script is provided for SuSE and Red Hat.</P
+><P
+> For for SuSE: <B
+CLASS="COMMAND"
+>rcprivoxy start</B
+></P
+><P
+> For Red Hat and Debian: <B
+CLASS="COMMAND"
+>/etc/rc.d/init.d/privoxy start</B
+></P
+><P
+> If no configuration file is specified on the command line,
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will look for a file named
+ <TT
+CLASS="FILENAME"
+>config</TT
+> in the current directory. Except on Win32 where
+ it will try <TT
+CLASS="FILENAME"
+>config.txt</TT
+>. If no file is specified on the
+ command line and no default configuration file can be found, 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will fail to start.</P
+><P
+> The included default configuration files should give a reasonable starting
+ point. Most of the per site configuration is done in the
+ <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> files. These are where various cookie actions are
+ defined, ad and banner blocking, and other aspects of
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> configuration. There are several such
+ files included, with varying levels of aggressiveness. </P
+><P
+> You will probably want to keep an eye out for sites for which you may prefer
+ persistent cookies, and add these to your actions configuration as needed. By
+ default, most of these will be accepted only during the current browser
+ session (aka <SPAN
+CLASS="QUOTE"
+>"session cookies"</SPAN
+>), unless you add them to the
+ configuration. If you want the browser to handle this instead, you will need
+ to edit <TT
+CLASS="FILENAME"
+>user.action</TT
+> (or through the web based interface)
+ and disable this feature. If you use more than one browser, it would make
+ more sense to let <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> handle this. In which
+ case, the browser(s) should be set to accept all cookies.</P
+><P
+> Another feature where you will probably want to define exceptions for trusted
+ sites is the popup-killing (through the <TT
+CLASS="LITERAL"
+>+popup</TT
+> and
+ <TT
+CLASS="LITERAL"
+>+filter{popups}</TT
+> actions), because your favorite shopping,
+ banking, or leisure site may need popups (explained below). </P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is HTTP/1.1 compliant,  but not all of
+ the optional 1.1 features are as yet supported. In the unlikely event that
+ you experience inexplicable problems with browsers that use HTTP/1.1 per default
+ (like <SPAN
+CLASS="APPLICATION"
+>Mozilla</SPAN
+> or recent versions of I.E.), you might
+ try to force HTTP/1.0 compatibility. For Mozilla, look under <TT
+CLASS="LITERAL"
+>Edit -&#62;
+ Preferences -&#62; Debug -&#62; Networking</TT
+>.
+ Alternatively, set the <SPAN
+CLASS="QUOTE"
+>"+downgrade-http-version"</SPAN
+> config option in
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+> which will downgrade your browser's HTTP
+ requests from HTTP/1.1 to HTTP/1.0 before processing them.</P
+><P
+> After running <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> for a while, you can 
+ start to fine tune the configuration to suit your personal, or site, 
+ preferences and requirements. There are many, many aspects that can 
+ be customized. <SPAN
+CLASS="QUOTE"
+>"Actions"</SPAN
+> 
+ can be adjusted by pointing your browser to 
+ <A
+HREF="http://config.privoxy.org/"
+TARGET="_top"
+>http://config.privoxy.org/</A
+>
+ (shortcut: <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>), 
+ and then follow the link to <SPAN
+CLASS="QUOTE"
+>"View &#38; Change the Current Configuration"</SPAN
+>. 
+ (This is an internal page and does not require Internet access.)</P
+><P
+> In fact, various aspects of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ configuration can be viewed from this page, including 
+ current configuration parameters, source code version numbers, 
+ the browser's request headers, and <SPAN
+CLASS="QUOTE"
+>"actions"</SPAN
+> that apply 
+ to a given URL. In addition to the actions file 
+ editor mentioned above, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can also 
+ be turned <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+> (toggled) from this page.</P
+><P
+> If you encounter problems, try loading the page without
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. If that helps, enter the URL where
+ you have the problems into <A
+HREF="http://p.p/show-url-info"
+TARGET="_top"
+>the browser
+ based rule tracing utility</A
+>. See which rules apply and why, and
+ then try turning them off for that site one after the other, until the problem
+ is gone. When you have found the culprit, you might want to turn the rest on
+ again.</P
+><P
+> If the above paragraph sounds gibberish to you, you might want to <A
+HREF="configuration.html#ACTIONSFILE"
+TARGET="_top"
+>read more about the actions concept</A
+>
+ or even dive deep into the <A
+HREF="appendix.html#ACTIONSANAT"
+TARGET="_top"
+>Appendix
+ on actions</A
+>.</P
+><P
+> If you can't get rid of the problem at all, think you've found a bug in
+ Privoxy, want to propose a new feature or smarter rules, please see the 
+ section <A
+HREF="contact.html"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Contacting the
+ Developers"</SPAN
+></A
+> below. </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CMDOPTIONS"
+>6.1. Command Line Options</A
+></H2
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> may be invoked with the following
+ command-line options:</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>    <I
+CLASS="EMPHASIS"
+>--version</I
+>
+  </P
+><P
+>     Print version info and exit. Unix only.
+  </P
+></LI
+><LI
+><P
+>    <I
+CLASS="EMPHASIS"
+>--help</I
+>
+  </P
+><P
+>   Print short usage info and exit. Unix only.
+  </P
+></LI
+><LI
+><P
+>   <I
+CLASS="EMPHASIS"
+>--no-daemon</I
+>
+  </P
+><P
+>   Don't become a daemon, i.e. don't fork and become process group
+   leader, and don't detach from controlling tty. Unix only.
+  </P
+></LI
+><LI
+><P
+>   <I
+CLASS="EMPHASIS"
+>--pidfile FILE</I
+>
+  
+  </P
+><P
+>   On startup, write the process ID to <I
+CLASS="EMPHASIS"
+>FILE</I
+>. Delete the
+   <I
+CLASS="EMPHASIS"
+>FILE</I
+> on exit. Failure to create or delete the
+   <I
+CLASS="EMPHASIS"
+>FILE</I
+> is non-fatal. If no <I
+CLASS="EMPHASIS"
+>FILE</I
+>
+   option is given, no PID file will be used. Unix only.
+  </P
+></LI
+><LI
+><P
+>   <I
+CLASS="EMPHASIS"
+>--user USER[.GROUP]</I
+>
+  
+  </P
+><P
+>   After (optionally) writing the PID file, assume the user  ID  of
+   <I
+CLASS="EMPHASIS"
+>USER</I
+>, and if included the GID of GROUP.  Exit if the
+   privileges are not sufficient to do so. Unix only.
+  </P
+></LI
+><LI
+><P
+>    <I
+CLASS="EMPHASIS"
+>configfile</I
+>
+  </P
+><P
+>    If no <I
+CLASS="EMPHASIS"
+>configfile</I
+> is included on the command line, 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will look for a file named 
+    <SPAN
+CLASS="QUOTE"
+>"config"</SPAN
+> in the current directory (except on Win32 
+    where it will look for <SPAN
+CLASS="QUOTE"
+>"config.txt"</SPAN
+> instead). Specify 
+    full path to avoid confusion. If no config file is found, 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will fail to start.
+  </P
+></LI
+></UL
+></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="quickstart.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="configuration.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Quickstart to Using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> Configuration</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
