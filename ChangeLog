@@ -9,6 +9,7 @@ ChangeLog for Privoxy
   (common cases anyway).
 - Add a 'dashboard' to watch activity in real-time - implemented
   as a GUI in Java
+- Add the ability to specify the 'blocked' image to serve
 
 *** Version 3.0  ***
 
