@@ -1,8 +1,8 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 2.1 2002/08/26 11:18:24 sarantis Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 2.2 2002/09/04 15:52:02 oes Exp $";
 
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/pcrs.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/pcrs.c,v $
  *
  * Purpose     :  pcrs is a supplement to the pcre library by Philip Hazel
  *                <ph10@cam.ac.uk> and adds Perl-style substitution. That
@@ -33,6 +33,12 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 2.1 2002/08/26 11:18:24 sarantis Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 2.2  2002/09/04 15:52:02  oes
+ *    Synced with the stable branch:
+ *        Revision 1.19.2.1  2002/08/10 11:23:40  oes
+ *        Include prce.h via project.h, where the appropriate
+ *        source will have been selected
+ *
  *    Revision 2.1  2002/08/26 11:18:24  sarantis
  *    Fix typo.
  *
@@ -921,7 +927,9 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
          if (k != job->substitute->backrefs
              /* ..in legal range.. */
              && job->substitute->backref[k] < PCRS_MAX_SUBMATCHES + 2
-             /* ..and referencing a nonempty match.. */
+              /* ..and referencing a real submatch.. */
+             && job->substitute->backref[k] < matches[i].submatches
+             /* ..that is nonempty.. */
              && matches[i].submatch_length[job->substitute->backref[k]] > 0)
          {
             /* ..copy the submatch that is ref'd. */
