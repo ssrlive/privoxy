@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.6 2001/10/07 15:33:59 oes Exp $
+# $Id: actionsfile,v 1.7 2001/10/10 16:43:39 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -310,11 +310,6 @@ shop        = -no-cookies -filter -fast-redirects
 +imageblock = +block +image
 +filter-all = +filter +no-compression
 
-#For people who don't like to type too much:  ;-)
-c0 = +no-cookies
-c1 = -no-cookies
-c2 = -no-cookies-set +no-cookies-read
-c3 = +no-cookies-set -no-cookies-read
 #... etc.  Customize to your heart's content.
 
 #############################################################################
@@ -357,9 +352,6 @@ privacy.net
 .sun.com
 .yahoo.com
 .msdn.microsoft.com
-
-# Alternative way of saying the same thing
-{-no-cookies-set -no-cookies-read}
 .sourceforge.net
 .sf.net
 
@@ -368,6 +360,7 @@ privacy.net
 {fragile}
 .office.microsoft.com
 .windowsupdate.microsoft.com
+.deutsche-bank-24.de
 
 # Shopping sites - still want to block ads.
 {shop}
@@ -388,6 +381,16 @@ login.yahoo.com
 # Please don't re_filter code!
 {-filter}
 .cvs.sourceforge.net
+
+# Hal reported that fast-redirects break this site
+{-no-cookies -fast-redirects}
+.nytimes.com
+
+# Test for new GIF deanimation feature.
+# Just try http://www.oesterhelt.org/deanimate-demo with and without it.
+#
+{+deanimate-gifs{last}}
+www.oesterhelt.org/deanimate-demo
 
 #############################################################################
 # Imagelist:
@@ -1397,14 +1400,5 @@ foggy.sda.t-online.de
 www.nexgo.de/.*/bg_banner.jpg
 
 prdownloads.sourceforge.net
-
-# New GIF deanimation feature. Just try http://www.oesterhelt.org/deanimate-demo
-# with and without it.
-#
-{+deanimate-gifs{last}}
-www.oesterhelt.org/deanimate-demo
-
-{fragile}
-.deutsche-bank-24.de
 
 # End of file
