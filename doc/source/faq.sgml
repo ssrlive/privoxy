@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.8 2002/10/15 12:47:23 oes Exp $
+ $Id: faq.sgml,v 2.9 2002/10/29 03:22:22 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -72,7 +72,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.8 2002/10/15 12:47:23 oes Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.9 2002/10/29 03:22:22 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1149,6 +1149,33 @@ and thus avoid individual browser configuration?</title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="allow-cookies">
+<title>How can I allow permanent cookies for my trusted sites?</title>
+
+<para>
+  There are several actions that relate to cookies. The default behavior is to 
+  allow only <quote>session cookies</quote>, which means the cookies only last
+  for the current browser session. This eliminates most kinds of abuse related 
+  to cookies. But there may be cases where we want cookies to last.
+</para>
+<para>
+  To disable all cookie actions, so that cookies are allowed unrestricted,
+  both in and out, for <literal>example.com</literal>: 
+</para>
+<para>
+ <screen>
+ { -crunch-incoming-cookies -crunch-outgoing-cookies -session-cookies-only -filter{content-cookies} }
+  .example.com</screen>
+</para>
+<para>
+ Place the above in <filename>user.action</filename>. Note some of these may
+ be off by default anyway, so this might be redundant, but there is no harm
+ being explicit in what you want to happen. <filename>user.action</filename>
+ includes an alias for this situation, called
+ <literal>allow-cookies</literal>.
+</para>
+</sect2>
+
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -1292,7 +1319,7 @@ how to do that. Please note that you (technically) need the latest
  url="http://www.multiproxy.org/anon_list.htm">multiproxy.org</ulink> and many
  more through Google. A particularly interesting project is the JAP service
  offered by the Technical University of Dresden (<ulink
- url="http://anon.inf.tu-dresden.de/index_en.html">http://anon.inf.tu-dresden.de/index_en.html</ulink>.
+ url="http://anon.inf.tu-dresden.de/index_en.html">http://anon.inf.tu-dresden.de/index_en.html</ulink>).
 </para>
 <para>
  There is, however, even in the single-machine case the possibility to make the
@@ -1836,6 +1863,17 @@ every time I start IE. What gives?</title>
  </para>
 </sect2>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3" id="error503">
+<title>Why am I getting a 503 Error (WSAECONNREFUSED) on every page?</title>
+ <para>
+  More than likely this is a problem with the network stack. ZoneAlarm has
+  been reported to cause this symptom -- even if not running. The solution is
+  to either fight the ZA configuration, or uninstall ZoneAlarm, and then find
+  something better behaved in its place. Other firewall type products may
+  cause similar type problems if not configured correctly.
+ </para>
+</sect2>
 
 </sect1>
 <!--
@@ -1929,6 +1967,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.9  2002/10/29 03:22:22  hal9
+Add 3 FAQs relating to HTML in email. Other minor touch ups.
+
 Revision 2.8  2002/10/15 12:47:23  oes
 Added Microsuck faq; more detail for PHP problem
 
