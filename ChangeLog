@@ -5,8 +5,8 @@ ChangeLog for Internet JunkBuster
 *** Version 2.2.11 Beta Changes ***
 - Fix restart failure where sockets were in TIME_WAIT.
 - Fixes for actions cgi editor, make sure we have right file.
-- The default listening port is NOW 8118!!! Changed from 8000
-due to conflict with NAS (Network Audio Server, whatever that 
+- *READ*: The default listening PORT is NOW 8118!!! Changed from 
+8000 due to conflict with NAS (Network Audio Server, whatever that 
 is.)
 - A --pidfile command line option now, in addition to --help, 
 --version, --no-daemon, and configfile. --no-daemon replaces
