@@ -1,6 +1,6 @@
-# $Id: privoxy-rh.spec,v 1.42 2002/07/03 20:46:38 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.43 2002/07/05 17:15:56 morcego Exp $
 #
-# Written by and Copyright (C) 2001 the SourceForge
+# Written by and Copyright (C) 2001, 2002 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -37,8 +37,8 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 2.9.15
-Release: 8
+Version: 3.1.1
+Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -67,9 +67,9 @@ Privoxy is based on the Internet Junkbuster.
 %build
 
 # We check to see if versions match
-VERSION_MAJOR=2
-VERSION_MINOR=9
-VERSION_POINT=15
+VERSION_MAJOR=3
+VERSION_MINOR=1
+VERSION_POINT=1
 
 CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
 if [ "%{version}" != "${CONFIG_VERSION}" ]; then
@@ -149,17 +149,6 @@ perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
     %{buildroot}%{privoxyconf}/default.action
 
 
-# Creating ghost init files
-mkdir -p %{buildroot}/%{_sysconfdir}/rc.d/rc{0,1,2,3,4,5,6}.d
-for i in 0 1 4 6
-do
-ln -sf ../init.d/%{name} %{buildroot}/%{_sysconfdir}/rc.d/rc${i}.d/K09%{name}
-done
-for i in 2 3 5
-do
-ln -sf ../init.d/%{name} %{buildroot}/%{_sysconfdir}/rc.d/rc${i}.d/S84%{name}
-done
-
 ## Macros are expanded even on commentaries. So, we have to use %%
 ## -- morcego
 #%%makeinstall
@@ -217,14 +206,17 @@ fi
 
 %post
 # for upgrade from 2.0.x
-[ -f %{_localstatedir}/log/%{oldname}/logfile ] &&\
- mv -f %{_localstatedir}/log/%{oldname}/logfile %{_localstatedir}/log/%{name}/logfile || /bin/true
-[ -f %{_localstatedir}/log/%{name}/%{name} ] &&\
- mv -f %{_localstatedir}/log/%{name}/%{name} %{_localstatedir}/log/%{name}/logfile || /bin/true
-chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null
-chown -R %{name}:%{name} %{_sysconfdir}/%{name} 2>/dev/null
+[ -f %{_localstatedir}/log/%{oldname}/logfile ] && {
+  mv -f %{_localstatedir}/log/%{oldname}/logfile %{_localstatedir}/log/%{name}/logfile ||: ;
+  chown -R %{name}:%{name} %{_localstatedir}/log/%{name} 2>/dev/null ||: ;
+}
+[ -f %{_localstatedir}/log/%{name}/%{name} ] && {
+  mv -f %{_localstatedir}/log/%{name}/%{name} %{_localstatedir}/log/%{name}/logfile ||: ;
+  chown -R %{name}:%{name} %{_sysconfdir}/%{name} 2>/dev/null ||: ;
+}
+/sbin/chkconfig --add privoxy
 if [ "$1" = "1" ]; then
-	/sbin/service %{name} condrestart > /dev/null 2>&1
+	/sbin/service %{name} condrestart > /dev/null 2>&1 ||:
 fi
 
 %preun
@@ -233,7 +225,7 @@ fi
 
 if [ "$1" = "0" ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1 ||:
-	# No need to use chkconfig. The %%ghost files will handle it
+	/sbin/chkconfig --del privoxy
 fi
 
 %postun
@@ -320,18 +312,19 @@ fi
 %defattr(0644,root,root,0755)
 
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%config(noreplace) %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/K09%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
-%ghost %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/K09%{name}
+%config(noreplace) %attr(0755,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
 
 %{_mandir}/man1/%{name}.*
 
+
 %changelog
+* Thu Sep 05 2002 Hal Burgiss <hal@foobox.net>
+- Import changes from 3.0.0 to main trunk.
+
+* Fri Jul 12 2002 Karsten Hopp <karsten@redhat.de>
+- don't use ghost files for rcX.d/*, using chkconfig is the 
+  correct way to do this job (#68619)
+
 * Fri Jul 05 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-8
 - Changing delete order for groups and users (users should be first) 
@@ -722,6 +715,39 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.33.2.19  2002/08/25 23:36:03  hal9
+# Bump version for 3.0.0.
+#
+# Revision 1.33.2.18  2002/08/10 11:28:50  oes
+# Bumped version
+#
+# Revision 1.33.2.17  2002/08/07 01:08:49  hal9
+# Bumped version to 2.9.18.
+#
+# Revision 1.33.2.16  2002/08/05 08:42:13  kick_
+# same permissions, same runlevels as all the other initscripts
+#
+# Revision 1.33.2.15  2002/07/30 21:51:19  hal9
+# Bump version to 2.9.17.
+#
+# Revision 1.33.2.14  2002/07/27 21:58:16  kick_
+# bump version
+#
+# Revision 1.33.2.13  2002/07/27 21:39:41  kick_
+# condrestart raised an error during an fresh install when privoxy wasn't already running
+#
+# Revision 1.33.2.12  2002/07/27 15:47:10  hal9
+# Reset version and release for 2.9.16.
+#
+# Revision 1.33.2.11  2002/07/25 09:47:57  kick_
+# this caused some errors during a fresh installation. It's unnecessary to call an extra program (/bin/true) to set the error code to 0
+#
+# Revision 1.33.2.10  2002/07/12 09:14:26  kick_
+# don't use ghost files for rcX.d/*, chkconfig is available to do this job. Enable translation of error messge
+#
+# Revision 1.43  2002/07/05 17:15:56  morcego
+# - Changing delete order for groups and users (users should be first)
+#
 # Revision 1.42  2002/07/03 20:46:38  morcego
 # - Changing sed expression that removed CR from the end of the lines. This
 #   new one removes any control caracter, and should work with older versions
