@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.34 2002/04/15 23:39:32 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.34 2002/04/15 23:39:32 oes Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -389,6 +389,11 @@
  Look at any of the existing docs for examples of all these and more.
 </para>
 
+<para>
+ You might also find <quote><ulink
+ url="http://www.bureau-cornavin.com/opensource/crash-course/">Writing Documentation
+ Using DocBook - A Crash Course</ulink></quote> useful.
+</para>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -1715,7 +1720,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.34 2002/04/15 23:39:32 oes Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1775,7 +1780,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.33 2002/04/12 03:49:53 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.34 2002/04/15 23:39:32 oes Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2537,6 +2542,14 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.34  2002/04/15 23:39:32  oes
+   - Extended & fixed the release section
+   - Added CVS guideline sections
+   - Separated webserver section from release section
+   - Commented out boilerplate inclusion (If you don't know yet what it is,
+     you shouldn't mess with its code ;-)
+   - Nits & fixes
+
   Revision 1.33  2002/04/12 03:49:53  hal9
   Spell checked. Clarification on where docs are kept.
 
