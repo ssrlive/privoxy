@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $
+ $Id: user-manual.sgml,v 1.76 2002/04/16 04:25:51 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.75 2002/04/12 02:08:48 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.76 2002/04/16 04:25:51 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -146,173 +146,111 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="installation"><title>Installation</title>
 <para>
- <application>Privoxy</application> is available as raw source code (tarball 
- or via CVS), or pre-compiled binaries for various platforms. See the <ulink
- url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink> for
- the most up to date release information.
- <application>Privoxy</application> is also available via <ulink
- url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
- <![%p-not-stable;[This is the recommended approach at this time.]]> But
- please be aware that CVS is constantly changing, and it may break in
- mysterious ways.
+ <application>Privoxy</application> is available both in convenient pre-compiled
+ packages for a wide range of operating systems, and as raw source code.
+ For most users, we recommend using the packages, which can be downloaded from our
+ <ulink url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink>.
+</para>
+<para>
+ If you like to live on the bleeding edge and are not afraid of using
+ possibly unstable development versions, you can check out the up-to-the-minute
+ version directly from <ulink url="http://sourceforge.net/cvs/?group_id=11118">the
+ CVS repository</ulink> or simply download <ulink
+ url="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.gz">the nightly CVS
+ tarball.</ulink>
 </para>
 
 <!-- Include supported.sgml boilerplate -->
- &supported;
+&supported; 
 <!-- end boilerplate -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="installation-source"><title>Source</title>
-
-
-<!-- include buildsource.sgml boilerplate: -->
- &buildsource;
-<!-- end boilerplate -->
-
+<sect2 id="installation-packages"><title>Binary Packages</title>
 <para>
- For Redhat and SuSE Linux RPM packages, see below.
+ The packages can be downloaded from our <ulink
+ url="http://sourceforge.net/projects/ijbswa/">Privoxy Project Page</ulink>.
 </para>
 
+<para>
+ How to install them depends on your operating system:
+</para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-rh"><title>Red Hat</title>
+<sect3 id="installation-pack-rpm"><title>Redhat and SuSE RPMs</title>
+
 <para>
- To build Redhat RPM packages from source, install source as above. Then:
+ RPMs can be installed with <literal>rpm -i &lt;name-of-rpm.rpm&gt</literal>,
+ and will use <filename>/etc/privoxy</filename> for configuration files.
 </para>
 
 <para>
- <screen>
- autoheader
- autoconf
- ./configure
- make redhat-dist
- </screen>
+ Note that if you have a Junkbuster RPM installed on your system, you
+ need to remove it first, because the packages conflict.
 </para>
-
-<para>
- This will create both binary and src RPMs in the usual places. Example:
-</para>
-
-<para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/RPMS/i686/privoxy-&p-version;-1.i686.rpm
-</para>
-<para>
- &nbsp;&nbsp;&nbsp;/usr/src/redhat/SRPMS/privoxy-&p-version;-1.src.rpm
-</para>
-
-<para>
- To install, of course:
-</para>
-
-<para>
- <screen>
- rpm -Uvv /usr/src/redhat/RPMS/i686/privoxy-&p-version;-1.i686.rpm
- </screen>
-</para>
-
-<para>
- This will place the <application>Privoxy</application> configuration 
- files in <filename>/etc/privoxy/</filename>, and log files in 
- <filename>/var/log/privoxy/</filename>. Run 
- <quote><command>chkconfig privoxy on</command></quote> to have
- <application>Privoxy</application> start automatically during init.
-
-</para>
-
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-suse"><title>SuSE</title>
-<para>
- To build SuSE RPM packages, install source as above. Then:
-</para>
+<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, HP-UX</title>
 
 <para>
- <screen>
- autoheader
- autoconf
- ./configure
- make suse-dist
- </screen>
+ Create a new directory, <literal>cd</literal> to it, then unzip and
+ untar the archive. For the most part, you'll have to figure out where
+ things go. FIXME.
 </para>
-
-<para>
- This will create both binary and src RPMs in the usual places. Example:
-</para>
-
-<para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/RPMS/i686/privoxy-&p-version;-1.i686.rpm
-</para>
-<para>
- &nbsp;&nbsp;&nbsp;/usr/src/packages/SRPMS/privoxy-&p-version;-1.src.rpm
-</para>
-
-<para>
- To install, of course:
-</para>
-
-<para>
- <screen>
- rpm -Uvv /usr/src/packages/RPMS/i686/privoxy-&p-version;-1.i686.rpm
- </screen>
-</para>
-
-<para>
- This will place the <application>Privoxy</application> configuration 
- files in <filename>/etc/privoxy/</filename>, and log files in 
- <filename>/var/log/privoxy/</filename>. 
-</para>
-
 </sect3>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="installation-pack-win"><title>Windows</title>
+
+<para>
+ Just double-click the installer, which will guide you through
+ the installation process.
+</para>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-os2"><title>OS/2</title>
 
-<!--
-Thanx David Schmidt!
--->
-
 <para>
- <application>Privoxy</application> is packaged in a WarpIN self-
- installing archive.  The self-installing program will be named depending
- on the release version, something like:
- <filename>privoxyos2_setup_&p-version;.exe</filename>.  In order to install it, simply
- run this executable or double-click on its icon and follow the WarpIN
- installation panels.  A shadow of the <application>Privoxy</application>
- executable will be placed in your startup folder so it will start 
- automatically whenever OS/2 starts.
+ Just double-click the WarpIN self-installing archive, which will guide
+ you through the installation process. A shadow of the
+ <application>Privoxy</application> executable will be placed in your
+ startup folder so it will start automatically whenever OS/2 starts.
 </para>
 
 <para>
  The directory you choose to install <application>Privoxy</application>
  into will contain all of the configuration files.
 </para>
-
 </sect3>
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-win"><title>Windows</title>
-<para>Click-click. (I need help on this. Not a clue here. Also for 
-configuration section below. HB.)
+<sect3 id="installation-deb"><title>Debian</title>
+<para>
+ FIXME.
 </para>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-other"><title>Other</title>
+<sect3 id="installation-amiga"><title>AmigaOS</title>
 <para>
- Some quick notes on other Operating Systems.
+ Unpack the <literal>.lha</literal> archive, then FIXME.
 </para>
-
-<para>
- For FreeBSD (and other *BSDs?), the build will require <command>gmake</command> 
- instead of the included <command>make</command>. <command>gmake</command> is
- available from <ulink url="http://www.gnu.org">http://www.gnu.org</ulink>.
- The rest should be the same as above for Linux/Unix.
-</para>
-
 </sect3>
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="installation-source"><title>Building from Source</title>
+
+<!-- include buildsource.sgml boilerplate: -->
+&buildsource;
+<!-- end boilerplate -->
+
+<para>
+ For more detailed instructions, on how to build Redhat and SuSE RPMs,
+ Windows self-extracting installers etc, please consult the <ulink
+ url="../developer-manual/newrelease.html">developer manual</ulink>.
+</para>
 </sect2>
 
 </sect1>
@@ -336,19 +274,21 @@ configuration section below. HB.)
  configuration files will not migrate. The functionality of the old
  <filename>blockfile</filename>, <filename>cookiefile</filename> and
  <filename>imagelist</filename>, are now combined into the
- <quote><filename>actions file</filename></quote>
- (<filename>default.action</filename> for most installations).
+ <quote>actions file</quote>  (<filename>default.action</filename>
+ for most installations).
 </para>
 <para>
- A <quote><filename>filterfile</filename></quote> (typically
- <filename>default.filter</filename>) is new with
- <application>Privoxy 2.9.x</application>, and provides some of the new
- sophisticaton (explained below). <filename>config</filename> is 
- much the same.
+ A <quote>filter file</quote> (typically <filename>default.filter</filename>)
+ is new with <application>Privoxy 2.9.x</application>, and provides some
+ of the new  sophisticaton (explained below). <filename>config</filename> is 
+ much the same as before.
 </para>
 <para>
  If upgrading from a 2.0.x version, you will have to use the new config 
  files, and possibly adapt any personal rules from your older files.
+ When porting personal rules over from the old <filename>blockfile</filename>
+ to the new actions file, please note that even the pattern syntax has
+ changed.
  If upgrading from 2.9.x development versions, it is still recommended 
  to use the new configuration files.
 </para>
@@ -373,19 +313,21 @@ configuration section below. HB.)
  </listitem>
  <listitem>
   <para>
-   <application>Privoxy</application> is reachable with a web browser 
-   at the special URL: <ulink url="http://p.p/">http://p.p/</ulink>. Many
+   <application>Privoxy</application> is controllable with a web browser 
+   at the special URL: <ulink
+   url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+   (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>). Many
    aspects of configuration can be done here, including temporarily disabling
-   <application>Privoxy</application>. Alternately, 
-   <ulink url="http://config.privoxy.org/">http://config.privoxy.org</ulink>
-   may work in some rare cases where the former does not.
+   <application>Privoxy</application>.
   </para>
  </listitem> 
  <listitem>
   <para>
    The primary configuration file for cookie management, ad and banner 
    blocking, and many other aspects of <application>Privoxy</application>
-   configuration is <filename>default.action</filename>.
+   configuration is <filename>default.action</filename>. It is strongly
+   recommended to make oneself familiar with the new actions concept below
+   before modifying that file.
   </para>
  </listitem> 
   <listitem>
@@ -450,7 +392,7 @@ configuration section below. HB.)
 </para>
 
 <para>
- For for SuSE: <command>/etc/rc.d/privoxy start</command>
+ For for SuSE: <command>rcprivoxy start</command>
 </para>
 
 <para>
@@ -490,13 +432,22 @@ configuration section below. HB.)
 </para>
 
 <para>
- <application>Privoxy</application> is HTTP/1.1 compliant,  but not all 1.1
- features are as yet implemented. If browsers that support HTTP/1.1 (like
- <application>Mozilla</application> or recent versions of I.E.) experience
- problems, you might try to force HTTP/1.0 compatibility. For Mozilla, look
- under <literal>Edit -&gt; Preferences -&gt; Debug -&gt; Networking</literal>.
- Or set the <quote>+downgrade</quote> config option in
- <filename>default.action</filename>.
+ Another feature where you will propably want to define exceptions for trusted
+ sites is the popup-killing (through the <literal>+popup</literal> and
+ <literal>+filter{popups}</literal> actions), because your favourite shopping,
+ banking, or leisure site may need popups. 
+</para>
+
+<para>
+ <application>Privoxy</application> is HTTP/1.1 compliant,  but not all of
+ the optional 1.1 features are as yet supported. In the unlikely event that
+ you experience inexplicable problems with browsers that use HTTP/1.1 per default
+ (like <application>Mozilla</application> or recent versions of I.E.), you might
+ try to force HTTP/1.0 compatibility. For Mozilla, look under <literal>Edit -&gt;
+ Preferences -&gt; Debug -&gt; Networking</literal>.
+ Alternatively, set the <quote>+downgrade</quote> config option in
+ <filename>default.action</filename> which will downgrade you brower's HTTP
+ requests from HTTP/1.1 to HTTP/1.0 before processing them.
 </para>
 
 <para>
@@ -505,7 +456,8 @@ configuration section below. HB.)
  preferences and requirements. There are many, many aspects that can 
  be customized. <quote>Actions</quote> (as specified in <filename>default.action</filename>) 
  can be adjusted by pointing your browser to 
- <ulink url="http://p.p/">http://p.p/</ulink>, 
+ <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+ (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), 
  and then follow the link to <quote>edit the actions list</quote>. 
  (This is an internal page and does not require Internet access.)
 </para>
@@ -517,22 +469,30 @@ configuration section below. HB.)
  the browser's request headers, and <quote>actions</quote> that apply 
  to a given URL. In addition to the <filename>default.action</filename> file 
  editor mentioned above, <application>Privoxy</application> can also 
- be turned <quote>on</quote> and <quote>off</quote> from this page.
+ be turned <quote>on</quote> and <quote>off</quote> (toggled) from this page.
 </para>
 
 <para>
- If you encounter problems, please verify it is a
- <application>Privoxy</application> bug, by disabling
- <application>Privoxy</application>, and then trying the same page. 
- Also, try another browser if possible to eliminate browser or site 
- problems. Before reporting it as a bug, see if there is not a configuration
- option that is enabled that is causing the page not to load. You can then add
- an exception for that page or site. For instance, try adding it to the
- <literal>{fragile}</literal> section of <filename>default.action</filename>.
- This will turn off most actions for this site. For more on troubleshooting
- problem sites, see the <ulink
- url="appendix.html#ACTIONSANAT">Appendix</ulink>. If a bug, please report it
- to the developers (see below). 
+ If you encounter problems, try loading the page without
+ <application>Privoxy</application>. If that helps, enter the URL where
+ you have the problems into <ulink url="http://p.p/show-url-info">the browser
+ based rule tracing utility</ulink>. Watch out which rules apply and why, and
+ then try turning them off for that site one after the other, until the problem
+ is gone. When you have found the culprit, you might want to turn the rest on
+ again.
+</para>
+
+<para>
+ If the above paragraph sounds gibberish to you, you might want to <ulink
+ url="configuration.html#ACTIONSFILE">read more about the actions concept</ulink>
+ or even dive deep into the <ulink url="appendix.html#ACTIONSANAT">Appendix
+ on actions</ulink>.
+</para>
+
+<para>
+ If you can't get rid of the problem at all, think you've found a bug in
+ Privoxy, want to propose a new feature or smarter rules, please see the 
+ chapter "Contacting the Developers, .." below.
 </para>
 
 </sect2>
@@ -636,10 +596,11 @@ configuration section below. HB.)
 <sect2>
 <title>Controlling <application>Privoxy</application> with Your Web Browser</title>
 <para>
- <application>Privoxy</application> can be reached by the special 
- URL <ulink url="http://p.p/">http://p.p/</ulink> (or alternately
- <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>), 
- which is an internal page. You will see the following section:
+ <application>Privoxy</application>'s user interface can be reached through the special 
+ URL <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+ (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), 
+ which is a built-in page and works without internet access.
+ You will see the following section:
 
 </para>
 
@@ -666,19 +627,16 @@ Please choose from the following options:
  <application>Privoxy</application>. This is an easy way to adjust various
  aspects of <application>Privoxy</application> configuration. The actions
  file, and other configuration files, are explained in detail below. 
- <application>Privoxy</application> will automatically detect any changes 
- to these files. Note: one or two requests to the proxy might required to
- <quote>wake up</quote> <application>Privoxy</application>, 
- and force a re-reading of the configuration. It is not necessarily 
- instantaneous.
 </para>
 
 <para>
  <quote>Toggle Privoxy On or Off</quote> is handy for sites that might 
- have problems with your current actions and filters, or just to test if 
- a site misbehaves, whether it is <application>Privoxy</application> 
+ have problems with your current actions and filters. You can in fact use
+ it as a test to see whether it is <application>Privoxy</application> 
  causing the problem or not. <application>Privoxy</application> continues 
- to run as a proxy in this case, but all filtering is disabled.
+ to run as a proxy in this case, but all filtering is disabled. There
+ is even a toggle Bookmarklet offered, so that you can toggle
+ <application>Privoxy</application> with one click from your browser.
 
 </para>
 
@@ -721,21 +679,23 @@ Please choose from the following options:
 
   <listitem>
    <para>
-    The <filename>default.action</filename> file is used  to define various 
-    <quote>actions</quote> relating to images, banners, pop-ups, access
-    restrictions, banners and cookies. There is a CGI based editor for this
-    file that can be accessed via <ulink
-    url="http://p.p">http://p.p</ulink>. (Other actions 
-    files are included as well with differing levels of filtering 
+    <filename>default.action</filename> (the actions file) is used to define
+    which of a set of various <quote>actions</quote> relating to images, banners, 
+    pop-ups, access restrictions, banners and cookies are to be applied where.
+    There is a web based editor for this file that can be accessed at <ulink
+    url="http://config.privoxy.org/edit-actions/">http://config.privoxy.org/edit-actions/</ulink>
+    (Shortcut: <ulink url="http://p.p/edit-actions/">http://p.p/edit-actions/</ulink>).
+    (Other actions files are included as well with differing levels of filtering 
     and blocking, e.g. <filename>basic.action</filename>.)
    </para>
   </listitem> 
 
   <listitem>
    <para>
-    The <filename>default.filter</filename> file can be used to re-write the raw
+    <filename>default.filter</filename> (the filter file) can be used to re-write the raw
     page content, including viewable text as well as embedded HTML and JavaScript,
-    and whatever else lurks on any given web page.
+    and whatever else lurks on any given web page. The filtering jobs are only
+    pre-defined here; whether to apply them or not is up to the actions file.
    </para>
   </listitem> 
 
@@ -743,14 +703,28 @@ Please choose from the following options:
 </para>
 
 <para>
+ All files use the <quote><literal>#</literal></quote> character to denote a
+ comment (the rest of the line will be ignored) and understand line continuation
+ through placing a backslash ("<literal>\</literal>") as the very last character
+ in a line. If the <literal>#</literal> is preceded by a backslash, it looses
+ its special function. Placing a <literal>#</literal> in front of an otherwise
+ valid configuration line to prevent it from being interpreted is called "commenting
+ out" that line.
+</para>
+
+<para>
  <filename>default.action</filename> and <filename>default.filter</filename> 
- can use Perl style regular expressions for maximum flexibility. All files use
- the <quote><literal>#</literal></quote> character to denote a comment. Such
- lines are not processed by <application>Privoxy</application>. After
- making any changes, there is no need to restart
+ can use Perl style regular expressions for maximum flexibility.
+</para>
+
+<para>
+ After making any changes, there is no need to restart
  <application>Privoxy</application> in order for the changes to take
- effect. <application>Privoxy</application> should detect such changes 
- automatically.
+ effect. <application>Privoxy</application> detects such changes 
+ automatically. Note, however, that it may take one or two additional
+ requests for the change to take effect. When changing the listening address
+ of <application>Privoxy</application>, these <quote>wake up</quote> requests
+ must obviously be sent to the <emphasis>old</emphasis> listening address.
 </para>
 
 <![%p-not-stable;[
@@ -780,253 +754,426 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>blockfile blocklist.ini</emphasis>
+  <emphasis>confdir /etc/privoxy</emphasis>
    </literallayout>
-  </msgtext> 
- </literal>
+  </msgtext>
+ </literal> 
 </para>
 
 <para>
- Indicates that the blockfile is named <quote>blocklist.ini</quote>. (A 
- default installation does not use this.)
+ Assigns the value <literal>/etc/privoxy</literal> to the option
+ <literal>confdir</literal> and thus indicates that the configuration
+ directory is named <quote>/etc/privoxy/</quote>.
 </para>
 
 <para>
- A <quote><literal>#</literal></quote> indicates a comment.  Any part of a
- line following a <quote><literal>#</literal></quote> is ignored, except if
- the <quote><literal>#</literal></quote> is preceded by a
- <quote><literal>\</literal></quote>.
+ All options in the config file except for <literal>confdir</literal> and
+ <literal>logdir</literal> are optional. Watch out in the below description
+ for what happens if you leave them unset.
 </para>
 
 <para>
- Thus, by placing a <quote><literal>#</literal></quote> at the start of an
- existing configuration line, you can make it a comment and it will be treated
- as if it weren't there. This is called <quote>commenting out</quote> an
- option and can be useful to turn off features: If you comment out the
- <quote>logfile</quote> line, <application>Privoxy</application> will not
- log to a file at all. Watch for the <quote>default:</quote> section in each
- explanation to see what happens if the option is left unset (or commented
- out). 
-</para>
-
-<para>
- Long lines can be continued on the next line by using a
- <quote><literal>\</literal></quote> as the very last character.
-</para>
-
-<para>
- There are various aspects of <application>Privoxy</application> behavior 
- that can be tuned.
+ The main config file controls all aspects of <application>Privoxy</application>'s
+ operation that are not location dependent (i.e. that apply invariantly no matter
+ where in the web you are surfing).
 </para>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect3>
-<title>Defining Other Configuration Files</title>
+<title>Configuration and Log File Locations</title>
 
 <para>
- <application>Privoxy</application> can use a number of other files to tell it
- what ads to block, what cookies to accept, and perform other functions.  This
- section of the configuration file tells <application>Privoxy</application>
- where to find all those other files. 
+ <application>Privoxy</application> can (and normally does) use a number of
+ other files for addidtional configuration and logging.
+ This section of the configuration file tells <application>Privoxy</application>
+ where to find those other files. 
 </para>
 
-<para>
- On <application>Windows</application> and <application>AmigaOS</application>,
- <application>Privoxy</application> looks for these files in the same
- directory as the executable.  On Unix and  OS/2,
- <application>Privoxy</application> looks for these files in the current
- working directory. In either case, an absolute path name can be used to
- avoid problems.
-</para>
 
-<para>
- When development goes modular and multi-user, the blocker, filter, and
- per-user config will be stored in subdirectories of <quote>confdir</quote>.
- For now, only <filename>confdir/templates</filename> is used for storing HTML
- templates for CGI results. 
-</para>
+<sect4><title>confdir</title>
 
-<para>
- The location of the configuration files:
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>The directory where the other configuration files are located</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Path name</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>/etc/privoxy (Unix) <emphasis>or</emphasis> <application>Privoxy</application> installation dir (Windows) </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para><emphasis>Mandatory</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    No trailing <quote><literal>/</literal></quote>, please
+   </para>
+   <para>
+    When development goes modular and multi-user, the blocker, filter, and
+    per-user config will be stored in subdirectories of <quote>confdir</quote>.
+    For now, the configuration dir structure is flat, except for 
+    <filename>confdir/templates</filename>, where the HTML templates for CGI 
+    output reside. 
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>confdir  /etc/privoxy</emphasis>       # No trailing /, please.
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
 
-<para>
- The directory where all logging (i.e. <filename>logfile</filename> and 
- <filename>jarfile</filename>) takes place. No trailing
- <quote><literal>/</literal></quote>, please: 
-</para>
+<sect4><title>logdir</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>logdir  /var/log/privoxy</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The directory where all logging takes place (i.e. where <filename>logfile</filename> and 
+    <filename>jarfile</filename> are located) 
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Path name</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>/var/log/privoxy (Unix) <emphasis>or</emphasis> <application>Privoxy</application> installation dir (Windows) </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para><emphasis>Mandatory</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    No trailing <quote><literal>/</literal></quote>, please
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Note that all file specifications below are relative to 
- the above two directories!
-</para>
+<sect4><title>actionsfile</title>
 
-<para>
- The <quote>default.action</quote> file contains patterns to specify the
- actions to apply to requests for each site. Default: Cookies to and from all
- destinations are kept only during the current browser session (i.e. they are
- not saved to disk). Pop-ups are disabled for all sites. All sites are
- filtered through selected sections of <quote>default.filter</quote>. No sites
- are blocked. <application>Privoxy</application> displays a checkboard type
- pattern for filtered ads and other images. The syntax of this file is
- explained in detail <link linkend="actionsfile">below</link>. Other
- <quote>actions</quote> files are included, and you are free to use any of
- them. They have varying degrees of aggressiveness.
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The actions file to use
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>confdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>default.action (Unix) <emphasis>or</emphasis> default.action.txt (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No action is taken at all. Simple neutral proxying.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    There is no point in using <application>Privoxy</application> without
+    an actions file.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>actionsfile  default.action</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<sect4><title>actionsfile</title>
 
-<para>
- The <quote>default.filter</quote> file contains content modification rules 
- that use <quote>regular expressions</quote>. These rules permit powerful
- changes on the content of Web pages, e.g., you could disable your favorite
- JavaScript annoyances, re-write the actual displayed text, or just have some
- fun replacing <quote>Microsoft</quote> with <quote>MicroSuck</quote> wherever
- it appears on a Web page. Default: whatever the developers are playing with
- :-/
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The actions file to use
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>confdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>default.action (Unix) <emphasis>or</emphasis> default.action.txt (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No action is taken at all. Simple neutral proxying. 
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    There is no point in using <application>Privoxy</application> without
+    an actions file. There are three diffrent actions files included in the
+    distribution, with varying degrees of aggressiveness: 
+    <filename>default.action</filename>, <filename>intermediate.action</filename> and
+    <filename>advanced.action</filename>.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Filtering requires buffering the page content, which may appear to slow down
- page rendering since nothing is displayed until all content has passed 
- the filters. (It does not really take longer, but seems that way since 
- the page is not incrementally displayed.) This effect will be more noticeable
- on slower connections.
+<sect4><title>filterfile</title>
 
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The filter file to use
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>confdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>default.filter (Unix) <emphasis>or</emphasis> default.filter.txt (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No textual content filtering takes place, i.e. all
+    <literal>+filter{<replaceable class="parameter">name</replaceable>}</literal>
+    actions in the actions file are turned off
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The <quote>default.filter</quote> file contains content modification rules 
+    that use <quote>regular expressions</quote>. These rules permit powerful
+    changes on the content of Web pages, e.g., you could disable your favorite
+    JavaScript annoyances, re-write the actual displayed text, or just have some
+    fun replacing <quote>Microsoft</quote> with <quote>MicroSuck</quote> wherever
+    it appears on a Web page.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>filterfile  default.filter</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<sect4><title>logfile</title>
 
-<para>
- The logfile is where all logging and error messages are written. The logfile
- can be useful for tracking down a problem with
- <application>Privoxy</application> (e.g., it's not blocking an ad you
- think it should block) but in most cases you probably will never look at it.
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The log file to use
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>logdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>logfile (Unix) <emphasis>or</emphasis> privoxy.log (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No log file is used, all log messages go to the console (<literal>stderr</literal>).
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The windows version will additionally log to the console
+   </para>
+   <para>
+    The logfile is where all logging and error messages are written. The level
+    of detail and number of messages are set with the <literal>debug</literal>
+    option (see below). The logfile can be useful for tracking down a problem with
+    <application>Privoxy</application> (e.g., it's not blocking an ad you
+    think it should block) but in most cases you probably will never look at it.
+   </para>
+   <para>
+    Your logfile will grow indefinitely, and you will probably want to
+    periodically remove it.  On Unix systems, you can do this with a cron job
+    (see <quote>man cron</quote>). For Redhat, a <command>logrotate</command> 
+    script has been included.
+   </para> 
+   <para>
+    On SuSE Linux systems, you can place a line like <quote>/var/log/privoxy.*
+    +1024k 644 nobody.nogroup</quote> in <filename>/etc/logfiles</filename>, with
+    the effect that cron.daily will automatically archive, gzip, and empty the
+    log, when it exceeds 1M size.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Your logfile will grow indefinitely, and you will probably want to
- periodically remove it.  On Unix systems, you can do this with a cron job
- (see <quote>man cron</quote>). For Redhat, a <command>logrotate</command> 
- script has been included.
-</para>
+<sect4><title>jarfile</title>
 
-<para>
- On SuSE Linux systems, you can place a line like <quote>/var/log/privoxy.*
- +1024k 644 nobody.nogroup</quote> in <filename>/etc/logfiles</filename>, with
- the effect that cron.daily will automatically archive, gzip, and empty the
- log, when it exceeds 1M size.
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The file to store intercepted cookies in
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>logdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>jarfile (Unix) <emphasis>or</emphasis> privoxy.jar (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Intercepted cookies are not stored at all.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The jarfile may grow to ridiculous sizes over time.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Default: Log to the a file named <filename>logfile</filename>. 
- Comment out to disable logging.
-</para>
+<sect4><title>trustfile</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>logfile  logfile</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- The <quote>jarfile</quote> defines where
- <application>Privoxy</application> stores the cookies it intercepts.  Note
- that if you use a <quote>jarfile</quote>, it may grow quite large. Default:
- Don't store intercepted cookies.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>#jarfile  jarfile</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- If you specify a <quote>trustfile</quote>,
- <application>Privoxy</application> will only allow access to sites that
- are named in the trustfile. You can also mark sites as trusted referrers,
- with the effect that access to untrusted sites will be granted, if a link
- from a trusted referrer was used. The link target will then be added to the
- <quote>trustfile</quote>. This is a very restrictive feature that typical
- users most probably want to leave disabled. Default: Disabled, don't use the
- trust mechanism.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>#trustfile  trust</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
- 
-<para>
- If you use the trust mechanism, it is a good idea to write up some on-line
- documentation about your blocking policy and to specify the URL(s) here. They
- will appear on the page that your users receive when they try to access
- untrusted content. Use multiple times for multiple URLs. Default: Don't
- display links on the <quote>untrusted</quote> info page.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>trust-info-url http://www.example.com/why_we_block.html</emphasis>
-  <emphasis>trust-info-url http://www.example.com/what_we_allow.html</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The trust file to use
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>File name, relative to <literal>confdir</literal></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset (commented out)</emphasis>. When activated: trust (Unix) <emphasis>or</emphasis> trust.txt (Windows)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    The whole trust mechansim is turned off.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The trust mechansim is an experimental feature for building whitelists and should
+    be used with care. It is <emphasis>NOT</emphasis> recommended for the casual user.
+   </para>
+   <para>
+    If you specify a trust file, <application>Privoxy</application> will only allow
+    access to sites that are named in the trustfile. 
+    You can also mark sites as trusted referrers (with <literal>+</literal>), with
+    the effect that access to untrusted sites will be granted, if a link from a
+    trusted referrer was used.
+    The link target will then be added to the <quote>trustfile</quote>.
+    Possible applications include limiting internet access for children.
+   </para>
+   <para>
+    If you use <literal>+</literal> operator in the trust file, it may grow considerably over time.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
 </sect3>
 
@@ -1037,538 +1184,714 @@ Please choose from the following options:
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect3>
-<title>Other Configuration Options</title>
+<title>Local Setup Documentation</title>
 
-<para>
- This part of the configuration file contains options that control how
- <application>Privoxy</application> operates.
-</para>
+  <para>
+    If you intend to operate <application>Privoxy</application> for more users
+    that just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies etc.
+   </para>
 
-<para>
- <quote>Admin-address</quote> should be set to the email address of the proxy
- administrator. It is used in many of the proxy-generated pages. Default:
- fill@me.in.please.
-</para>
+<sect4><title>trust-info-url</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>#admin-address  fill@me.in.please</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>Two example URL are provided</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No links are displayed on the "untrusted" error page.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The value of this option only matters if the experimental trust mechanism has been
+    activated. (See <literal>trustfile</literal> above.)
+   </para>
+   <para>
+    If you use the trust mechanism, it is a good idea to write up some online
+    documentation about your trust policy and to specify the URL(s) here.
+    Use multiple times for multiple URLs.
+   </para>
+   <para>
+    The URL(s) should be added to the trustfile as well, so users don't end up
+    locked out from the information on why they were locked out in the first place!
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- <quote>Proxy-info-url</quote> can be set to a URL that contains more info
- about this <application>Privoxy</application> installation, it's
- configuration and policies. It is used in many of the proxy-generated pages
- and its use is highly recommended in multi-user installations, since your
- users will want to know why certain content is blocked or modified. Default:
- Don't show a link to on-line documentation.
-</para>
+<sect4><title>admin-address</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>proxy-info-url  http://www.example.com/proxy.html</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    An email address to reach the proxy administrator.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Email address</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No email address is displayed on error pages and the CGI user interface.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+    <para>
+    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </para>  
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- <quote>Listen-address</quote> specifies the address and port where
- <application>Privoxy</application> will listen for connections from your
- Web browser.  The default is to listen on the localhost port 8118, and
- this is suitable for most users.  (In your web browser, under proxy
- configuration, list the proxy server as <quote>localhost</quote> and the
- port as <quote>8118</quote>).
-</para>
+<sect4><title>proxy-info-url</title>
 
-<para>
- If you already have another service running on port 8118, or if you want to
- serve requests from other machines (e.g. on your local network) as well, you
- will need to override the default. The syntax is 
- <quote>listen-address [&lt;ip-address&gt;]:&lt;port&gt;</quote>. If you leave
- out the IP address, <application>Privoxy</application> will bind to all
- interfaces (addresses) on your machine and may become reachable from the
- Internet. In that case, consider using access control lists (acl's) (see
- <quote>aclfile</quote> above), or a firewall.
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A URL to documentation about the local <application>Privoxy</application> setup,
+    configuration or policies.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No link to local documentation is displayed on error pages and the CGI user interface.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </para>  
+   <para>
+    This URL shouldn't be blocked ;-)
+   </para> 
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- For example, suppose you are running <application>Privoxy</application> on
- a machine which has the address 192.168.0.1 on your local private network
- (192.168.0.0) and has another outside connection with a different address.
- You want it to serve requests from inside only:
-</para>
+</sect3>
+<!--  ~  End section  ~  -->
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>listen-address  192.168.0.1:8118</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<!--   ~~~~~       New section      ~~~~~     -->
 
-<para>
- If you want it to listen on all addresses (including the outside
- connection):
-</para>
+<sect3>
+<title>Debugging</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>listen-address  :8118</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- If you do this, consider using ACLs (see <quote>aclfile</quote> above). Note:
- you will need to point your browser(s) to the address and port that you have
- configured here. Default: localhost:8118 (127.0.0.1:8118).
-</para>
-
-<para>
- The debug option sets the level of debugging information to log in the
- logfile (and to the console in the Windows version).  A debug level of 1 is
- informative because it will show you each request as it happens.  Higher
- levels of debug are probably only of interest to developers.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  debug         1 # GPC   = show each GET/POST/CONNECT request
-  debug         2 # CONN  = show each connection status
-  debug         4 # IO    = show I/O status
-  debug         8 # HDR   = show header parsing
-  debug        16 # LOG   = log all data into the logfile
-  debug        32 # FRC   = debug force feature
-  debug        64 # REF   = debug regular expression filter 
-  debug       128 #       = debug fast redirects
-  debug       256 #       = debug GIF de-animation
-  debug       512 # CLF   = Common Log Format
-  debug      1024 #       = debug kill pop-ups
-  debug      4096 # INFO  = Startup banner and warnings.
-  debug      8192 # ERROR = Non-fatal errors
-    </literallayout>
-  </msgtext>
- </literal>
-</para>
-
-<![%p-not-stable;[
-<para>
- It is <emphasis>highly recommended</emphasis> that you enable ERROR
- reporting (debug 8192), at least until v3.0 is released.
-</para>
-]]>
-
-<para>
- The reporting of FATAL errors (i.e. ones which crash 
- <application>Privoxy</application>) is always on and cannot be disabled.
-</para>
-
-<para>
- If you want to use CLF (Common Log Format), you should set <quote>debug
- 512</quote> ONLY, do not enable anything else.
-</para>
-
-<para>
- Multiple <quote>debug</quote> directives, are OK - they're logical-OR'd
- together. 
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>debug    15     # same as setting the first 4 listed above</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Default:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>debug   1     # URLs</emphasis>
-  <emphasis>debug   4096  # Info</emphasis>
-  <emphasis>debug   8192  # Errors - *we highly recommended enabling this*</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- <application>Privoxy</application> normally uses
- <quote>multi-threading</quote>, a software technique that permits it to
- handle many different requests simultaneously. In some cases you may wish to
- disable this -- particularly if you're trying to debug a problem.  The
- <quote>single-threaded</quote> option forces
- <application>Privoxy</application> to handle requests sequentially.
- Default: Multi-threaded mode.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>#single-threaded</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- <quote>toggle</quote> allows you to temporarily disable all
- <application>Privoxy's</application>  filtering. Just set <quote>toggle
- 0</quote>.
-</para>
-
-<para>
- The Windows version of <application>Privoxy</application> puts an icon in
- the system tray, which also allows you to change this option.  If you
- right-click on that icon (or select the <quote>Options</quote> menu), one
- choice is <quote>Enable</quote>. Clicking on enable toggles
- <application>Privoxy</application> on and off. This is useful if you want
- to temporarily disable <application>Privoxy</application>, e.g., to access
- a site that requires cookies which you would otherwise have blocked. This can also
- be toggled via a web browser at the <application>Privoxy</application>
- internal address of <ulink url="http://p.p">http://p.p</ulink> on 
- any platform.
-</para>
-
-<para>
- <quote>toggle 1</quote> means <application>Privoxy</application> runs
- normally, <quote>toggle 0</quote> means that
- <application>Privoxy</application> becomes a non-anonymizing non-blocking
- proxy. Default: 1 (on). 
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>toggle    1</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- For content filtering, i.e. the <quote>+filter</quote> and
- <quote>+deanimate-gif</quote> actions, it is necessary that 
- <application>Privoxy</application> buffers the entire document body.
- This can be potentially dangerous, since a server could just keep sending
- data indefinitely and wait for your RAM to exhaust. With nasty consequences.
-</para>
-
-<para>
- The <application>buffer-limit</application> option lets you set the maximum
- size in Kbytes that each buffer may use. When the documents buffer exceeds
- this size, it is flushed to the client unfiltered and no further attempt to
- filter the rest of it is made. Remember that there may multiple threads
- running, which might require increasing the <quote>buffer-limit</quote>
- Kbytes <emphasis>each</emphasis>, unless you have enabled 
- <quote>single-threaded</quote> above.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>buffer-limit    4096</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- To enable the web-based <filename>default.action</filename> file editor set
- <application>enable-edit-actions</application> to 1, or 0 to disable.  Note
- that you must have compiled <application>Privoxy</application> with
- support for this feature, otherwise this option has no effect. This 
- internal page can be reached at <ulink
- url="http://p.p">http://p.p</ulink>.
+ <para>
+  These options are mainly useful when tracing a problem.
+  Note that you might also want to invoke
+  <application>Privoxy</application> with the <literal>--no-daemon</literal>
+  command line option when debugging.
  </para>
 
-<para>
- Security note: If this is enabled, anyone who can use the proxy
- can edit the actions file, and their changes will affect all users.
- For shared proxies, you probably want to disable this. Default: enabled.
-</para>
+<sect4><title>debug</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>enable-edit-actions    1</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Keys that determine what information gets logged.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Integer values</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>12289 (i.e.: URLs plus informational and warning messages)</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Nothing gets logged.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The available debug levels are:
+   </para>
+   <para>
+    <programlisting>
+  debug         1 # show each GET/POST/CONNECT request
+  debug         2 # show each connection status
+  debug         4 # show I/O status
+  debug         8 # show header parsing
+  debug        16 # log all data into the logfile
+  debug        32 # debug force feature
+  debug        64 # debug regular expression filter 
+  debug       128 # debug fast redirects
+  debug       256 # debug GIF de-animation
+  debug       512 # Common Log Format
+  debug      1024 # debug kill pop-ups
+  debug      4096 # Startup banner and warnings.
+  debug      8192 # Non-fatal errors
+    </programlisting>
+   </para>
+   <para>
+    To select multiple debug levels, you can either add them or use
+    multiple <literal>debug</literal> lines.
+   </para>
+   <para>
+    A debug level of 1 is informative because it will show you each request
+    as it happens. <emphasis>1, 4096 and 8192 are highly recommended</emphasis>
+    so that you will notice when things go wrong. The other levels are probably
+    only of interest if you are hunting down a specific problem. They can produce
+    a hell of output (especially 16).
+   </para>
+   <para>
+    The reporting of <emphasis>fatal</emphasis> errors (i.e. ones which crash 
+    <application>Privoxy</application>) is always on and cannot be disabled.
+   </para>
+   <para>
+    If you want to use CLF (Common Log Format), you should set <quote>debug
+    512</quote> <emphasis>ONLY</emphasis> and not enable anything else.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Allow <application>Privoxy</application> to be toggled on and off
- remotely, using your web browser.  Set <quote>enable-remote-toggle</quote>to
- 1 to enable, and 0 to disable.  Note that you must have compiled 
- <application>Privoxy</application> with support for this feature,
- otherwise this option has no effect.
-</para>
+<sect4><title>single-threaded</title>
 
-<para>
- Security note:  If this is enabled, anyone who can use the proxy can toggle
- it on or off (see <ulink url="http://p.p">http://p.p</ulink>), and
- their changes will affect all users. For shared proxies, you probably want to
- disable this. Default: enabled.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>enable-remote-toggle    1</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether to run only one server thread
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para><emphasis>None</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Multi-threaded (or, where unavailable: forked) operation, i.e. the ability to
+    serve multiple requests simultaneously.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This option is only there for debug purposes and you should never
+    need to use it. <emphasis>It will drastically reduce performance.</emphasis>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
 </sect3>
-
-<!--  ~  End section  ~  -->
-
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect3>
-<title>Access Control List (ACL)</title>
-<para>
- Access controls are included at the request of some ISPs and systems
- administrators, and are not usually needed by individual users. Please note
- the warnings in the FAQ that this proxy is not intended to be a substitute
- for a firewall or to encourage anyone to defer addressing basic security
- weaknesses.
-</para>
+<title>Access Control and Security</title>
 
-<para>
- If no access settings are specified, the proxy talks to anyone that
- connects. If any access settings file are specified, then the proxy
- talks only to IP addresses permitted somewhere in this file and not
- denied later in this file.
-</para>
+ <para>
+  This section of the config file controls the security-relevant aspects
+  of <application>Privoxy</application>'s configuration.
+ </para>
 
-<para>
- Summary -- if using an ACL:
-</para>
+<sect4><title>listen-address</title>
 
- <simplelist>
-  <member>
-   Client must have permission to receive service.
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   LAST match in ACL wins.
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   Default behavior is to deny service.
-  </member>
- </simplelist>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The IP address and TCP port on which <application>Privoxy</application> will
+    listen for client requests.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>[<replaceable class="parameter">IP-Adddress</replaceable>]:<replaceable class="parameter">Port</replaceable></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>localhost:8118</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended for
+    home users who run <application>Privoxy</application> on the same machine as
+    their browser.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    You will need to configure your browser(s) to this proxy address and port.
+   </para>
+   <para>
+    If you already have another service running on port 8118, or if you want to
+    serve requests from other machines (e.g. on your local network) as well, you
+    will need to override the default.
+   </para>
+   <para>
+    If you leave out the IP address, <application>Privoxy</application> will
+    bind to all interfaces (addresses) on your machine and may become reachable
+    from the Internet. In that case, consider using access control lists (acl's)
+    (see <quote>Acls</quote> below), or a firewall.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Example:</term>
+  <listitem>
+   <para>
+     Suppose you are running <application>Privoxy</application> on
+     a machine which has the address 192.168.0.1 on your local private network
+     (192.168.0.0) and has another outside connection with a different address.
+     You want it to serve requests from inside only:
+   </para>
+   <para>
+    <programlisting>
+  listen-address  192.168.0.1:8118
+    </programlisting>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- The syntax for an entry in the Access Control List is:
-</para>
+<sect4><title>toggle</title>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Initial state of "toggle" status
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>1 or 0</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>1</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Act as if toggled on
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If set to 0, <application>Privoxy</application> will start in
+    <quote>toggled off</quote> mode, i.e. behave like a normal, content-neutral
+    proxy. See <literal>enable-remote-toggle</literal>
+    below. This is not really useful anymore, since toggling is much easier
+    via <ulink url="http://config.privoxy.org/toggle">the web
+    interface</ulink> then via editing the <filename>conf</filename> file.
+   </para>
+   <para>
+    The windows version will only display the toggle icon in the system tray
+    if this option is present.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para>
- Where the individual fields are:
-</para>
 
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>ACTION</emphasis>      = <quote>permit-access</quote> or <quote>deny-access</quote>
+<sect4><title>enable-remote-toggle</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether or not the <ulink url="http://config.privoxy.org/toggle">web-based toggle
+    feature</ulink> may be used
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>0 or 1</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>1</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    The web-based toggle feature is disabled.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    When toggled off, <application>Privoxy</application> acts like a normal,
+    content-neutral proxy, i.e. it acts as if none of the actions applied to
+    any URL.
+   </para>
+   <para>
+    For the time being, access to the toggle feature can <emphasis>not</emphasis> be
+    controlled separately by <quote>Acls</quote> or HTTP authentication,
+    so that everybody who can access <application>Privoxy</application> (see
+    <quote>Acls</quote> and <literal>listen-address</literal> above) can
+    toggle it for all users. So this option is <emphasis>not recommended</emphasis>
+    for multi-user environments with untrusted users.
+   </para>
+   <para>
+    Note that you must have compiled <application>Privoxy</application> with
+    support for this feature, otherwise this option has no effect. 
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
- <emphasis>SRC_ADDR</emphasis>    = client hostname or dotted IP address
- <emphasis>SRC_MASKLEN</emphasis> = number of bits in the subnet mask for the source
 
- <emphasis>DST_ADDR</emphasis>    = server or forwarder hostname or dotted IP address
- <emphasis>DST_MASKLEN</emphasis> = number of bits in the subnet mask for the target
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
+<sect4><title>enable-edit-actions</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether or not the <ulink url="http://config.privoxy.org/edit-actions">web-based actions
+    file editor</ulink> may be used
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>0 or 1</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>1</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    The web-based actions file editor is disabled.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    For the time being, access to the editor can <emphasis>not</emphasis> be
+    controlled separately by <quote>Acls</quote> or HTTP authentication,
+    so that everybody who can access <application>Privoxy</application> (see
+    <quote>Acls</quote> and <literal>listen-address</literal> above) can
+    modify its configuration for all users. So this option is <emphasis>not
+    recommended</emphasis> for multi-user environments with untrusted users.
+   </para>
+   <para>
+    Note that you must have compiled <application>Privoxy</application> with
+    support for this feature, otherwise this option has no effect. 
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
+<sect4><title>Acls: permit-access and deny-access</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Who can access what.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable class="parameter">src_addr</replaceable>[/<replaceable class="parameter">src_masklen</replaceable>]
+    [<replaceable class="parameter">dst_addr</replaceable>[/<replaceable class="parameter">dst_masklen</replaceable>]]
+   </para>
+   <para>
+    Where <replaceable class="parameter">src_addr</replaceable> and 
+   <replaceable class="parameter">dst_addr</replaceable> are IP addresses in dotted decimal notation or valid
+    DNS names, and <replaceable class="parameter">src_masklen</replaceable> and
+    <replaceable class="parameter">dst_masklen</replaceable> are subnet masks in CIDR notation, i.e. integer
+    values from 2 to 30 representing the length (in bits) of the network address. The masks and the whole
+    destination part are optional.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Don't restrict access further than implied by <literal>listen-address</literal>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Access controls are included at the request of ISPs and systems
+    administrators, and <emphasis>are not usually needed by individual users</emphasis>.
+    For a typical home user, it will normally suffice to ensure that 
+    <application>Privoxy</application> only listens on the localhost or internal (home)
+    network address by means of the <literal>listen-address</literal> option.
+   </para>
+   <para>
+    Please see the warnings in the FAQ that this proxy is not intended to be a substitute
+    for a firewall or to encourage anyone to defer addressing basic security
+    weaknesses.
+   </para>
+   <para>
+    Multiple acl lines are OK.
+    If any acls are specified, then the <application>Privoxy</application>
+    talks only to IP addresses that match at least one <literal>permit-access</literal> line
+    and don't match any subsequent <literal>deny-access</literal> line. In other words, the
+    last match wins, with the default being <literal>deny-access</literal>.
+   </para>
+   <para>
+    If <application>Privoxy</application> is using a forwarder (see <literal>forward</literal> below)
+    for a particular destination URL, the <replaceable class="parameter">dst_addr</replaceable>
+    that is examined is the address of the forwarder and <emphasis>NOT</emphasis> the address
+    of the ultimate target. This is necessary because it may be impossible for the local
+    <application>Privoxy</application> to determine the IP address of the
+    ultimate target (that's often what gateways are used for).
+   </para>
+   <para>
+    You should prefer using IP addresses over DNS names, because the address lookups take
+    time. All DNS names must resolve! You can <emphasis>not</emphasis> use domain patterns
+    like <quote>*.org</quote> or partial domain names. If a DNS name resolves to multiple
+    IP addresses, only the first one is used.
+   </para>
+   <para>
+    Denying access to particular sites by acl may have undesired side effects
+    if the site in question is hosted on a machine which also hosts other sites.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    Explicitly define the defauklt behaviour if no acl and
+    <literal>listen-address</literal> are set: <quote>localhost</quote>
+    is OK. The absence of a <replaceable class="parameter">dst_addr</replaceable> implies that
+    <emphasis>all</emphasis> destination addresses are OK:
+   </para>
+   <para>
+    <screen>
+  permit-access  localhost
+    </screen>
+   </para>
+   <para>
+    Allow any host on the same class C subnet as www.privoxy.org access to
+    nothing but www.example.com:
+   </para>
+   <para>
+    <screen>
+  permit-access  www.privoxy.org/24 www.example.com/32
+    </screen>
+   </para>
+   <para>
+    Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
+    with the exception that 192.168.45.73 may not access www.dirty-stuff.example.com:
+   </para>
+   <para>
+    <screen>
+  permit-access  192.168.45.64/26
+  deny-access    192.168.45.73    www.dirty-stuff.example.com
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
-<para> 
- The field separator (FS) is whitespace (space or tab).
-</para>
+<sect4><title>buffer-limit</title>
 
-<para>
- IMPORTANT NOTE: If <application>Privoxy</application> is using a
- forwarder (see below) or a gateway for a particular destination URL, the
- <literal>DST_ADDR</literal> that is examined is the address of the forwarder
- or the gateway and <emphasis>NOT</emphasis> the address of the ultimate
- target. This is necessary because it may be impossible for the local
- <application>Privoxy</application> to determine the address of the
- ultimate target (that's often what gateways are used for).
-</para>
-
-<para>
- Here are a few examples to show how the ACL features work:
-</para>
-
-<para>
- <quote>localhost</quote> is OK -- no DST_ADDR implies that
- <emphasis>ALL</emphasis> destination addresses are OK:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>permit-access  localhost</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- A silly example to illustrate permitting any host on the class-C subnet with
- <application>Privoxy</application> to go anywhere:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>permit-access    www.privoxy.com/24</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Except deny one particular IP address from using it at all:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>deny-access      ident.privoxy.com</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- You can also specify an explicit network address and subnet mask.
- Explicit addresses do not have to be resolved to be used.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>permit-access    207.153.200.0/24</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- A subnet mask of 0 matches anything, so the next line permits everyone.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>permit-access    0.0.0.0/0</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Note, you <emphasis>cannot</emphasis> say:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>permit-access    .org</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- to allow all *.org domains. Every IP address listed must resolve fully.
-</para>
-
-<para>
- An ISP may want to provide a <application>Privoxy</application> that is
- accessible by <quote>the world</quote> and yet restrict use of some of their
- private content to hosts on its internal network (i.e. its own subscribers).
- Say, for instance the ISP owns the Class-B IP address block 123.124.0.0 (a 16
- bit netmask). This is how they could do it:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>permit-access 0.0.0.0/0   0.0.0.0/0</emphasis>   # other clients can go anywhere 
-                                       # with the following exceptions:
- 
- <emphasis>deny-access</emphasis>   0.0.0.0/0   123.124.0.0/16 # block all external requests for
-                                          # sites on the ISP's network
-
- <emphasis>permit 0.0.0.0/0   www.my_isp.com</emphasis>        # except for the ISP's main 
-                                          # web site
-
- <emphasis>permit 123.124.0.0/16 0.0.0.0/0</emphasis>          # the ISP's clients can go 
-                                          # anywhere
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Note that if some hostnames are listed with multiple IP addresses, 
- the primary value returned by DNS (via gethostbyname()) is used. Default:
- Anyone can access the proxy.
-</para>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Maximum size of the buffer for content filtering.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Size in Kbytes</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>4096</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Use a 4MB (4096 KB) limit.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    For content filtering, i.e. the <literal>+filter</literal> and
+    <literal>+deanimate-gif</literal> actions, it is necessary that 
+    <application>Privoxy</application> buffers the entire document body.
+    This can be potentially dangerous, since a server could just keep sending
+    data indefinitely and wait for your RAM to exhaust -- with nasty consequences.
+    Hence this option.
+   </para>
+   <para>
+    When a document buffer size reaches the <literal>buffer-limit</literal>, it is
+    flushed to the client unfiltered and no further attempt to
+    filter the rest of the document is made. Remember that there may be multiple threads
+    running, which might require up to <literal>buffer-limit</literal> Kbytes
+    <emphasis>each</emphasis>, unless you have enabled <quote>single-threaded</quote>
+    above.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
 
 </sect3>
 
@@ -1581,250 +1904,231 @@ Please choose from the following options:
 <title>Forwarding</title>
 
 <para>
- This feature allows chaining of HTTP requests via multiple proxies.
+ This feature allows routing of HTTP requests through a chain of
+ multiple proxies.
  It can be used to better protect privacy and confidentiality when
  accessing specific domains by routing requests to those domains
- to a special purpose filtering proxy such as lpwa.com. Or to use 
- a caching proxy to speed up browsing.
-</para>
-
-<para>
- It can also be used in an environment with multiple networks to route
- requests via multiple gateways allowing transparent access to multiple
- networks without having to modify browser configurations.
+ through an anonymous public proxy (see e.g. <ulink
+ url="http://www.multiproxy.org/anon_list.htm">http://www.multiproxy.org/anon_list.htm</ulink>)
+ Or to use a caching proxy to speed up browsing. Or chaining to a parent
+ proxy may be necessary because the mackine that <application>Privoxy</application>
+ runs on has no direct internet access.
 </para>
 
 <para>
  Also specified here are SOCKS proxies. <application>Privoxy</application>
- SOCKS 4 and SOCKS 4A. The difference is that SOCKS 4A will resolve the target
- hostname using DNS on the SOCKS server, not our local DNS client.
+ supports the SOCKS 4 and SOCKS 4A protocols.
+</para>
+
+<sect4><title>forward</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    To which parent HTTP proxy specific requests should be routed.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable class="parameter">target_domain</replaceable>[:<replaceable class="parameter">port</replaceable>]
+    <replaceable class="parameter">http_parent</replaceable>[/<replaceable class="parameter">port</replaceable>]
+   </para>
+   <para>
+    Where <replaceable class="parameter">target_domain</replaceable> is a domain name pattern (see the
+    chapter on domain matching in the actions file),
+    <replaceable class="parameter">http_parent</replaceable> is the address of the parent HTTP proxy
+    as an IP addresses in dotted decimal notation or as a valid DNS name (or <quote>.</quote> to denote
+    <quote>no forwarding</quote>, and the optional 
+    <replaceable class="parameter">port</replaceable> parameters are TCP ports, i.e. integer
+    values from 1 to 64535
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Don't use parent HTTP proxies.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
+    forwarded to another HTTP proxy but are made directly to the web servers.
+   </para>
+   <para>
+    Multiple lines are OK, they are checked in sequence, and the last match wins.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    Everything goes to an example anonymizing proxy, except SSL on port 443 (which it doesn't handle):
+   </para>
+   <para>
+    <screen>
+  forward   .*     anon-proxy.example.org:8080
+  forward   :443   .
+    </screen>
+   </para>
+   <para>
+    Everything goes to our example ISP's caching proxy, except for requests
+    to that ISP's sites:
+   </para>
+   <para>
+    <screen>
+  forward   .*.                caching-proxy.example-isp.net:8000
+  forward   .example-isp.net   .
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
+
+<sect4><title>forward-socks4 and forward-socks4a</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Through which SOCKS proxy (and to which parent HTTP proxy) specific requests should be routed.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable class="parameter">target_domain</replaceable>[:<replaceable class="parameter">port</replaceable>]
+    <replaceable class="parameter">socks_proxy</replaceable>[/<replaceable class="parameter">port</replaceable>]
+    <replaceable class="parameter">http_parent</replaceable>[/<replaceable class="parameter">port</replaceable>]
+   </para>
+   <para>
+    Where <replaceable class="parameter">target_domain</replaceable> is a domain name pattern (see the
+    chapter on domain matching in the actions file),
+    <replaceable class="parameter">http_parent</replaceable> and <replaceable class="parameter">socks_proxy</replaceable>
+    are IP addresses in dotted decimal notation or valid DNS names (<replaceable class="parameter">http_parent</replaceable>
+    may be <quote>.</quote> to denote <quote>no HTTP forwarding</quote>), and the optional 
+    <replaceable class="parameter">port</replaceable> parameters are TCP ports, i.e. integer values from 1 to 64535
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Don't use SOCKS proxies.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Multiple lines are OK, they are checked in sequence, and the last match wins.
+   </para>
+   <para>
+    The difference between <literal>forward-socks4</literal> and <literal>forward-socks4a</literal>
+    is that in the SOCKS 4A protocol, the DNS resolution of the target hostname happens on the SOCKS
+    server, while in SOCKS 4 it happens locally.
+   </para>
+   <para>
+    If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
+    forwarded to another HTTP proxy but are made (HTTP-wise) directly to the web servers, albeit through
+    a SOCKS proxy.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+     From the company example.com, direct connections are made to all <quote>internal</quote>
+     domains, but everything outbound goes through their ISP's proxy by way example.com's
+     corporate SOCKS 4A gateway to the Internet.
+   </para>
+   <para>
+    <screen>
+  forward-socks4a   .*.            socks-gw.example.com:1080  www-cache.example-isp.net:8080
+  forward           .example.com   .
+    </screen>
+   </para>
+   <para>
+    A rule that uses a SOCKS 4 gateway for all destinations but no HTTP parent looks like this:
+   </para>
+   <para>
+    <screen>
+  forward-socks4   .*.            socks-gw.example.com:1080  .
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect4>
+
+<sect4><title>Advanced Forwarding Examples</title>
+
+<para>
+ If you have links to multiple ISPs that provide various special content 
+ only to their subscribers, you can configure multiple <application>Privoxies</application>
+ which have connections to the respective ISPs to act as forwarders to each other, so that
+ <emphasis>your</emphasis> users can see the internal content of all ISPs.
 </para>
 
 <para>
- The syntax of each line is:
+ Assume that host-a has a PPP connection to isp-a.net. And host-b has a PPP connection to
+ isp-b.net. Both run <application>Privoxy</application>. Their forwarding
+ configuration can look like this:
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward target_domain[:port] http_proxy_host[:port]</emphasis>
- <emphasis>forward-socks4  target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
- <emphasis>forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:port]</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
+ host-a:
 </para>
 
 <para>
- If http_proxy_host is <quote>.</quote>, then requests are not forwarded to a
- HTTP proxy but are made directly to the web servers.
+ <screen>
+  forward    .*.         .
+  forward    .isp-b.net  host-b:8118
+ </screen>
 </para>
 
 <para>
- Lines are checked in sequence, and the last match wins.
+ host-b:
 </para>
 
 <para>
- There is an implicit line equivalent to the following, which specifies that
- anything not finding a match on the list is to go out without forwarding
- or gateway protocol, like so:
+ <screen>
+  forward    .*.         .
+  forward    .isp-a.net  host-a:8118
+ </screen>
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>forward   .*   .       </emphasis># implicit
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- In the following common configuration, everything goes to Lucent's LPWA,
- except SSL on port 443 (which it doesn't handle):
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward   .*     lpwa.com:8000</emphasis>
- <emphasis>forward   :443   .</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
-<!--
- See the FAQ for instructions on how to automate the login procedure for LPWA.
---> 
- Some users have reported difficulties related to LPWA's use of
- <quote>.</quote> as the last element of the domain, and have said that this
- can be fixed with this:
-</para>
-   
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>forward   lpwa.  lpwa.com:8000</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
- 
-<para>
- (NOTE: the syntax for specifying target_domain has changed since the
- previous paragraph was written -- it will not work now.  More information
- is welcome.)
-</para>
-
-<para>
- In this fictitious example, everything goes via an ISP's caching proxy,
- except requests to that ISP:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward    .*         caching.myisp.net:8000</emphasis>
- <emphasis>forward    myisp.net  .</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- For the @home network, we're told the forwarding configuration is this:
-</para>
-
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>forward    .*    proxy:8080</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Also, we're told they insist on getting cookies and JavaScript, so you should 
- allow cookies from home.com. We consider JavaScript a potential security risk.
- Java need not be enabled.
-</para>
-
-<para>
- In this example direct connections are made to all <quote>internal</quote>
- domains, but everything else goes through Lucent's LPWA by way of the
- company's SOCKS gateway to the Internet.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward-socks4  .*  lpwa.com:8000  firewall.my_company.com:1080</emphasis>
- <emphasis>forward    my_company.com  .</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- This is how you could set up a site that always uses SOCKS but no forwarders:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  <emphasis>forward-socks4a   .*  .  firewall.my_company.com:1080</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- An advanced example for network administrators:
-</para>
-
-<para>
- If you have links to multiple ISPs that provide various special content to
- their subscribers, you can configure forwarding to pass requests to the
- specific host that's connected to that ISP so that everybody can see all
- of the content on all of the ISPs.
-</para>
-
-<para>
- This is a bit tricky, but here's an example:
-</para>
-
-
-<para>
- host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
- isp-b.com. host-a can run a <application>Privoxy</application> proxy with
- forwarding like this: 
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward    .*         .</emphasis>
- <emphasis>forward    isp-b.com  host-b:8118</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- host-b can run a <application>Privoxy</application> proxy with forwarding
- like this: 
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward    .*          .</emphasis>
- <emphasis>forward    isp-a.com   host-a:8118</emphasis>
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Now, <emphasis>anyone</emphasis> on the Internet (including users on host-a
- and host-b) can set their browser's proxy to <emphasis>either</emphasis>
- host-a or host-b and be able to browse the content on isp-a or isp-b.
-</para>
-
-<para>
- Here's another practical example, for University of Kent at
- Canterbury students with a network connection in their room, who
- need to use the University's Squid web cache.
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- <emphasis>forward  *. ssbcache.ukc.ac.uk:3128</emphasis>  # Use the proxy, except for:
- <emphasis>forward  .ukc.ac.uk            .    </emphasis> # Anything on the same domain as us
- <emphasis>forward  *                     .    </emphasis> # Host with no domain specified
- <emphasis>forward  129.12.*.*            .    </emphasis> # A dotted IP on our /16 network.
- <emphasis>forward  127.*.*.*             .    </emphasis> # Loopback address
- <emphasis>forward  localhost.localdomain .    </emphasis> # Loopback address
- <emphasis>forward  www.ukc.mirror.ac.uk  .    </emphasis> # Specific host
-   </literallayout>
-  </msgtext> 
- </literal>
+ Now, you users can set their browser's proxy to use either
+ host-a or host-b and be able to browse the internal content
+ on both isp-a or isp-b.
 </para>
 
 <para>
@@ -1834,44 +2138,32 @@ Please choose from the following options:
 </para>
 
 <para>
-Your squid configuration could then look like this (assuming that the IP
-address of the box is <literal>192.168.0.1</literal> ):
+ Assuming that <application>Privoxy</application> and <application>squid</application>
+ run on the same box, your squid configuration could then look like this:
 </para>
 
 <para>
- <literal>
-  <msgtext> 
-   <literallayout>
-  # Define Privoxy as parent cache 
- <!-- per feedback from user...
-  cache_peer 127.0.0.1 8118 parent 0 no-query 
- --> 
-  cache_peer 192.168.0.1 parent 8118 0 no-query
+ <screen>
+  # Define Privoxy as parent proxy (without ICP) 
+  cache_peer 127.0.0.1 parent 8118 7 no-query 
 
-  # don't listen to the whole world
-  http_port 192.168.0.1:3128
-
-  # define the local lan
-  acl mylocallan src 192.168.0.1-192.168.0.5/255.255.255.255
-
-  # grant access for http to local lan
-  http_access allow mylocallan
-  
   # Define ACL for protocol FTP 
-  acl FTP proto FTP 
+  acl ftp proto FTP 
 
-  # Do not forward ACL FTP to privoxy
-  always_direct allow FTP 
+  # Do not forward FTP requests to Privoxy
+  always_direct allow ftp 
 
-  # Do not forward ACL CONNECT (https) to privoxy
-  always_direct allow CONNECT 
-
-  # Forward the rest to privoxy
+  # Forward all the rest to Privoxy
   never_direct allow all 
-   </literallayout>
-  </msgtext> 
- </literal>
+ </screen>
 </para>
+
+<para>
+ You would then need to change your browser's proxy settings to <application>squid</application>'s address and port.
+ Squid normally uses port 3128. If unsure consult <literal>http_port</literal> in <filename>squid.conf</filename>.
+</para>
+
+</sect4>
 
 </sect3>
 
@@ -2090,7 +2382,8 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The easiest way to edit the <quote>actions</quote> file is with a browser by
- loading <ulink url="http://p.p/">http://p.p/</ulink>, and then select
+ loading <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+ (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), and then select
  <quote>Edit Actions List</quote>. A text editor can also be used.
 </para>
 
@@ -2511,6 +2804,14 @@ Removed references to Win32. HB 09/23/01
    </member>
   </simplelist>
  </blockquote>
+
+ <para>
+  Note: Filtering requires buffering the page content, which may appear to slow down
+  page rendering since nothing is displayed until all content has passed 
+  the filters. (It does not really take longer, but seems that way since 
+  the page is not incrementally displayed.) This effect will be more noticeable
+  on slower connections.
+</para>
 
  </listitem>
 
@@ -3249,11 +3550,12 @@ Requests</title>
 </para>
 <para>
  To do this, point your browser to <application>Privoxy</application> 
- at <ulink url="http://p.p/">http://p.p/</ulink>, and then select 
+ at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+ (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), and then select 
  <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Actions file feedback system</ulink>, 
  near the bottom of the page. Paste in the URL that is the cause of the 
  unwanted behavior, and follow the prompts. The developers will 
- try to incorporate your submission into future versions.
+ try to incorporate a fix for the problem you reported into future versions.
 </para>
 
 <para>
@@ -3351,72 +3653,72 @@ Requests</title>
  and then some examples:
 </para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>.</emphasis> - Matches any single character, e.g. <quote>a</quote>,
   <quote>A</quote>, <quote>4</quote>, <quote>:</quote>, or <quote>@</quote>.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>?</emphasis> - The preceding character or expression is matched ZERO or ONE
   times. Either/or.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>+</emphasis> - The preceding character or expression is matched ONE or MORE
   times.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>*</emphasis> - The preceding character or expression is matched ZERO or MORE
   times.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>\</emphasis> - The <quote>escape</quote> character denotes that
   the following character should be taken literally. This is used where one of the 
   special characters (e.g. <quote>.</quote>) needs to be taken literally and
   not as a special meta-character.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>[]</emphasis> - Characters enclosed in brackets will be matched if
   any of the enclosed characters are encountered.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>()</emphasis> - parentheses are used to group a sub-expression,
   or multiple sub-expressions.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>|</emphasis> - The <quote>bar</quote> character works like an
   <quote>or</quote> conditional statement. A match is successful if the
   sub-expression on either side of <quote>|</quote> matches.
  </member>
-</simplelist>
+</simplelist></para>
 
-<simplelist>
+<para><simplelist>
  <member>
   <emphasis>s/string1/string2/g</emphasis> - This is used to rewrite strings of text. 
   <quote>string1</quote> is replaced by <quote>string2</quote> in this
   example.
  </member>
-</simplelist>
+</simplelist></para>
 
 <para>
  These are just some of the ones you are likely to use when matching URLs with 
@@ -4036,6 +4338,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.76  2002/04/16 04:25:51  hal9
+ -Added 'Note to Upgraders' and re-ordered the 'Quickstart' section.
+ -Note about proxy may need requests to re-read config files.
+
  Revision 1.75  2002/04/12 02:08:48  david__schmidt
  Remove OS/2 building info... it is already in the developer-manual
 
