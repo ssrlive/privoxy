@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.34 2002/05/25 22:09:58 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.35 2002/05/28 03:56:59 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 1
+Release: 2
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: Privoxy.Org
@@ -106,13 +106,24 @@ mkdir -p %{buildroot}%{_sbindir} \
 ## Gziping the documentation files is not recomended - morcego
 #gzip README AUTHORS ChangeLog %{name}.1 || /bin/true
 
+# Using sed to "convert" from DOS format to UNIX
+
 install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 
 cp -f %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-cp -f *.action %{buildroot}%{privoxyconf}/
-cp -f default.filter %{buildroot}%{privoxyconf}/default.filter
-cp -f trust %{buildroot}%{privoxyconf}/trust
-cp -f templates/*  %{buildroot}%{privoxyconf}/templates/
+for i in `ls *.action`
+do
+	cat $i | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/$i
+done
+cat default.filter | sed -e 's/\r$//' >  %{buildroot}%{privoxyconf}/default.filter
+cat trust | sed -e 's/\r$//' > %{buildroot}%{privoxyconf}/trust
+(
+cd templates
+for i in `ls`
+do
+cat $i | sed -e 's/\r$//' > buildroot}%{privoxyconf}/templates/$i
+done
+)
 cp -f %{name}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -m 755 %{name}.init %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}
 install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
@@ -129,7 +140,8 @@ cat config | \
 #    sed 's/^jarfile.*/jarfile \%{_localstatedir}\/log\/%{name}\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
-    sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' > \
+    sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' | \
+    sed -e 's/\r$//' > \
     %{buildroot}%{privoxyconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
     %{buildroot}%{privoxyconf}/default.action
@@ -312,6 +324,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Thu May 30 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-2
+- Using sed to convert files from DOS to UNIX format (BUG: #562174)
+
 * Mon May 27 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
 - Index.html is now privoxy-index.html.
@@ -663,6 +679,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.35  2002/05/28 03:56:59  hal9
+# Index.html re-vamped as privoxy-index.html for docs.
+#
 # Revision 1.34  2002/05/25 22:09:58  hal9
 # Add html man page to keep index.html from breaking (untested).
 #
