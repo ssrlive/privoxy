@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.23 2001/12/09 20:24:42 david__schmidt Exp $
+dnl $Id: configure.in,v 1.24 2001/12/30 14:07:31 steudten Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,14 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.24  2001/12/30 14:07:31  steudten
+dnl - Add signal handling (unix)
+dnl - Add SIGHUP handler (unix)
+dnl - Add creation of pidfile (unix)
+dnl - Add action 'top' in rc file (RH)
+dnl - Add entry 'SIGNALS' to manpage
+dnl - Add exit message to logfile (unix)
+dnl
 dnl Revision 1.23  2001/12/09 20:24:42  david__schmidt
 dnl Change from "alpha" to "beta" in configure.in
 dnl
@@ -203,7 +211,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.23 $)
+AC_REVISION($Revision: 1.24 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -216,7 +224,7 @@ dnl =================================================================
 VERSION_MAJOR=2
 VERSION_MINOR=9
 VERSION_POINT=10
-CODE_STATUS="\"beta\""
+CODE_STATUS="beta"
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
 dnl used for CGI output
@@ -228,13 +236,14 @@ dnl =================================================================
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_POINT)
+AC_SUBST(CODE_STATUS)
 
 dnl
 AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR})
 AC_DEFINE_UNQUOTED(VERSION_MINOR,${VERSION_MINOR})
 AC_DEFINE_UNQUOTED(VERSION_POINT,${VERSION_POINT})
 AC_DEFINE_UNQUOTED(VERSION,"${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_POINT}")
-AC_DEFINE_UNQUOTED(CODE_STATUS,${CODE_STATUS})
+AC_DEFINE_UNQUOTED(CODE_STATUS,"${CODE_STATUS}")
 
 dnl =================================================================
 dnl pid file only for unix 
