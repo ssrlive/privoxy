@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.39 2002/03/06 16:19:28 hal9 Exp $
+ $Id: user-manual.sgml,v 1.40 2002/03/07 16:28:39 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.39 2002/03/06 16:19:28 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.40 2002/03/07 16:28:39 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -40,10 +40,10 @@ Hal Burgiss <hal@foobox.net>
 
 <abstract>
  <para>
-  The user manual gives the users information on how to install and configure
-  <application>Internet Junkbuster</application>. <application>Internet
-  Junkbuster</application> is an application that provides privacy and
-  security to users of the World Wide Web.
+  The user manual gives users information on how to install, configure
+  and use <application>Internet Junkbuster</application>.
+  <application>Internet Junkbuster</application> is an application that
+  provides privacy and security to users of the World Wide Web.
  </para>
  <para>
 You can find the latest version of the user manual at  <ulink url="http://ijbswa.sourceforge.net/user-manual/">http://ijbswa.sourceforge.net/user-manual/</ulink>.
@@ -73,7 +73,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  This documentation is included with the current BETA version of
- <application>Internet Junkbuster</application> and mostly complete at this
+ <application>Internet Junkbuster</application> and is mostly complete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
  of version 3.0 is currently nearing completion, and includes many significant
@@ -83,8 +83,9 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  Since this is a BETA version, not all new features are well tested. This
- documentation may be slightly out of sync as a result. And there
- <emphasis>may be</emphasis> bugs, though hopefully not many! 
+ documentation may be slightly out of sync as a result (especially with 
+ CVS sources). And there <emphasis>may be</emphasis> bugs, though hopefully
+ not many! 
 </para>
 
 
@@ -210,8 +211,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <application>Junkbuster</application> is available as raw source code, or
  pre-compiled binaries. See the <ulink
  url="http://sourceforge.net/projects/ijbswa/">Junkbuster Home Page</ulink>
- for current release info. <application>Junkbuster</application> is also available
- via <ulink
+ for binaries and current release info. <application>Junkbuster</application>
+ is also available via <ulink
  url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
  This is the recommended approach at this time. But please be aware that CVS 
  is constantly changing, and it may break in mysterious ways.
@@ -3003,26 +3004,24 @@ Requests</title>
 We value your feedback. However, to provide you with the best support,
 please note:
  <simplelist>
-  <member>Use the <ulink url="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</ulink> to get
+  <member>Use the <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118">support forum</ulink> to get
   help.</member>
-  <member>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+  <member>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">bug
       forum</ulink>. 
-Make sure that the bug has not yet been submitted.  Please try to
+Make sure that the bug has not already been submitted.  Please try to
 verify that it is a <application>Junkbuster</application> bug, and not
-a browser or site bug first. Also, check to make sure this is not
-already a known bug. If you are using your own custom configuration,
+a browser or site bug first. If you are using your own custom configuration,
 please try the stock configs to see if the problem is a configuration
 related bug.  And if not using the latest development snapshot, please
 try the latest one. Or even better, CVS sources.
 </member>
   <member>Submit feature requests only thru our <ulink
-      url="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</ulink>.</member>
+      url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse">feature request forum</ulink>.</member>
  </simplelist>
 </para>
 
 <para>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
+For any other issues, feel free to use the <ulink url="http://sourceforge.net/mail/?group_id=11118">mailing lists</ulink>.
 </para>
 
 <para>
@@ -3383,6 +3382,9 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.40  2002/03/07 16:28:39  swa
+ provide correct feedback channels
+
  Revision 1.39  2002/03/06 16:19:28  hal9
  Note on perceived filtering slowdown per FR.
 
