@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.10 2001/06/03 19:11:54 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.11 2001/06/04 18:31:58 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.10 2001/06/03 19:11:54 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.11  2001/06/04 18:31:58  swa
+ *    files are now prefixed with either `confdir' or `logdir'.
+ *    `make redhat-dist' replaces both entries confdir and logdir
+ *    with redhat values
+ *
  *    Revision 1.10  2001/06/03 19:11:54  oes
  *    introduced confdir option
  *
@@ -226,6 +231,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.10 2001/06/03 19:11:54 oes Exp $"
 # ifndef _WIN_CONSOLE
 #  include "w32log.h"
 # endif /* ndef _WIN_CONSOLE */
+
+/* VC++ has "_snprintf", not "snprintf" */
+#define snprintf _snprintf
 
 #else /* ifndef _WIN32 */
 
