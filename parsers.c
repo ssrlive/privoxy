@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.7 2001/05/27 13:19:06 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.8 2001/05/27 22:17:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,19 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.7 2001/05/27 13:19:06 oes Exp $";
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.8  2001/05/27 22:17:04  oes
+ *
+ *    - re_process_buffer no longer writes the modified buffer
+ *      to the client, which was very ugly. It now returns the
+ *      buffer, which it is then written by chat.
+ *
+ *    - content_length now adjusts the Content-Length: header
+ *      for modified documents rather than crunch()ing it.
+ *      (Length info in csp->content_length, which is 0 for
+ *      unmodified documents)
+ *
+ *    - For this to work, sed() is called twice when filtering.
+ *
  *    Revision 1.7  2001/05/27 13:19:06  oes
  *    Patched Joergs solution for the content-length in.
  *
@@ -546,7 +559,9 @@ char *sed(const struct parsers pats[], void (* const more_headers[])(struct clie
    }
 
    /* add the blank line at the end of the header, if necessary */
-   if(strlen(csp->headers->last->str) != 0)
+   if ( (csp->headers->last == NULL)
+     || (csp->headers->last->str == NULL)
+     || (*csp->headers->last->str != '\0') )
    {
       enlist(csp->headers, "");
    }
@@ -805,7 +820,7 @@ char *content_length(const struct parsers *v, char *s, struct client_state *csp)
    if (csp->content_length != 0) /* Content has been modified */
 	{
 	   s = (char *) zalloc(100);
-	   snprintf(s, 100, "Content-Length: %d", csp->content_length);
+	   sprintf(s, "Content-Length: %d", csp->content_length);
 		log_error(LOG_LEVEL_HEADER, "Adjust Content-Length to %d", csp->content_length);
 	   return(s);
 	}
