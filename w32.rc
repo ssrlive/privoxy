@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.8  2001/05/31 21:37:11  jongfoster
+ *    GUI changes to rename "permissions file" to "actions file".
+ *
  *    Revision 1.7  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -152,13 +155,9 @@ BEGIN
         MENUITEM                       SEPARATOR
         POPUP "&Options"
         BEGIN
-            MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
+            MENUITEM "&Configuration...",           ID_TOOLS_EDITJUNKBUSTER
             MENUITEM                                SEPARATOR
             MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-            MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
-#ifdef ACL_FILES
-            MENUITEM "Access &Control Lists...",    ID_TOOLS_EDITACLS
-#endif /* def ACL_FILES */
 #ifdef PCRS
             MENUITEM "Perl &Regexps...",            ID_TOOLS_EDITPERLRE
 #endif /* def PCRS */
@@ -199,13 +198,9 @@ BEGIN
         MENUITEM "&Enable",                     ID_TOGGLE_IJB, CHECKED
         MENUITEM                                SEPARATOR
 #endif
-        MENUITEM "&Junkbuster...",              ID_TOOLS_EDITJUNKBUSTER
+        MENUITEM "&Configuration...",           ID_TOOLS_EDITJUNKBUSTER
         MENUITEM                                SEPARATOR
         MENUITEM "&Actions...",                 ID_TOOLS_EDITACTIONS
-        MENUITEM "&Forward...",                 ID_TOOLS_EDITFORWARD
-#ifdef ACL_FILES
-            MENUITEM "&Access Control Lists...",ID_TOOLS_EDITACLS
-#endif /* def ACL_FILES */
 #ifdef PCRS
             MENUITEM "Perl &Regexps...",        ID_TOOLS_EDITPERLRE
 #endif /* def PCRS */
