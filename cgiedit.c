@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.39 2002/05/12 21:39:15 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.40 2002/05/19 11:34:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,14 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.39 2002/05/12 21:39:15 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.40  2002/05/19 11:34:35  jongfoster
+ *    Handling read-only actions files better - report the actual
+ *    error, not "Out of memory"!
+ *
+ *    Bug report:
+ *    http://sourceforge.net/tracker/index.php?func=detail
+ *    &aid=557905&group_id=11118&atid=111118
+ *
  *    Revision 1.39  2002/05/12 21:39:15  jongfoster
  *    - Adding Doxygen-style comments to structures and #defines.
  *    - Correcting function comments
@@ -478,6 +486,34 @@ static jb_err map_copy_parameter_url(struct map *out,
                                      const char *name);
 #endif /* unused function */
 
+/* Internal convenience functions */
+static char *section_target(const unsigned sectionid);
+
+/*********************************************************************
+ *
+ * Function    :  section_target
+ *
+ * Description :  Given an unsigned (section id) n, produce a dynamically
+ *                allocated string of the form #l<n>, for use in link
+ *                targets.
+ *
+ * Parameters  :
+ *          1  :  sectionid = start line number of section
+ *
+ * Returns     :  String with link target, or NULL if out of
+ *                memory
+ *
+ *********************************************************************/
+static char *section_target(const unsigned sectionid)
+{
+   char buf[30];
+
+   snprintf(buf, 30, "#l%d", sectionid);
+   return(strdup(buf));
+
+}
+
+
 /*********************************************************************
  *
  * Function    :  map_copy_parameter_html
@@ -607,6 +643,7 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
    struct editable_file * file;
    struct file_line * cur_line;
    unsigned line_number;
+   unsigned section_start_line_number = 0;
    jb_err err;
 
    assert(csp);
@@ -635,6 +672,10 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
 
    for (line_number = 1; (cur_line != NULL) && (line_number < patternid); line_number++)
    {
+      if (cur_line->type == FILE_LINE_ACTION)
+      {
+         section_start_line_number = line_number;
+      }
       cur_line = cur_line->next;
    }
 
@@ -658,6 +699,7 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
+   if (!err) err = map(exports, "jumptarget", 1, section_target(section_start_line_number), 0);
 
    edit_free_file(file);
 
@@ -761,6 +803,7 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
    struct editable_file * file;
    struct file_line * cur_line;
    unsigned line_number;
+   unsigned section_start_line_number = 0;
    jb_err err;
 
    assert(csp);
@@ -789,6 +832,10 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
 
    for (line_number = 1; (cur_line != NULL) && (line_number < patternid); line_number++)
    {
+      if (cur_line->type == FILE_LINE_ACTION)
+      {
+         section_start_line_number = line_number;
+      }      
       cur_line = cur_line->next;
    }
 
@@ -810,8 +857,9 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
 
    err = map(exports, "f", 1, file->identifier, 1);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
-   if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
+   if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
+   if (!err) err = map(exports, "jumptarget", 1, section_target(section_start_line_number), 0);
 
    edit_free_file(file);
 
@@ -3322,6 +3370,8 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
 
    target = strdup(CGI_PREFIX "edit-actions-list?f=");
    string_append(&target, file->identifier);
+   string_join(&target, section_target(sectionid));
+
 
    edit_free_file(file);
 
@@ -3378,6 +3428,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
    struct editable_file * file;
    struct file_line * cur_line;
    unsigned line_number;
+   unsigned section_start_line_number = 0;
    char * target;
    jb_err err;
 
@@ -3415,6 +3466,10 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
 
    while ((cur_line != NULL) && (line_number < patternid))
    {
+      if (cur_line->type == FILE_LINE_ACTION)
+      {
+         section_start_line_number = line_number;
+      }      
       cur_line = cur_line->next;
       line_number++;
    }
@@ -3449,6 +3504,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
 
    target = strdup(CGI_PREFIX "edit-actions-list?f=");
    string_append(&target, file->identifier);
+   string_join(&target, section_target(section_start_line_number));
 
    edit_free_file(file);
 
@@ -3593,6 +3649,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
 
    target = strdup(CGI_PREFIX "edit-actions-list?f=");
    string_append(&target, file->identifier);
+   string_join(&target, section_target(sectionid));
 
    edit_free_file(file);
 
@@ -3647,6 +3704,7 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
    struct file_line * cur_line;
    struct file_line * prev_line;
    unsigned line_number;
+   unsigned section_start_line_number = 0;
    char * target;
    jb_err err;
 
@@ -3674,6 +3732,10 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
 
    while ((cur_line != NULL) && (line_number < patternid))
    {
+      if (cur_line->type == FILE_LINE_ACTION)
+      {
+         section_start_line_number = line_number;
+      }
       prev_line = cur_line;
       cur_line = cur_line->next;
       line_number++;
@@ -3714,6 +3776,7 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
 
    target = strdup(CGI_PREFIX "edit-actions-list?f=");
    string_append(&target, file->identifier);
+   string_join(&target, section_target(section_start_line_number));
 
    edit_free_file(file);
 
