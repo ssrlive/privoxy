@@ -89,6 +89,34 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee>
+	<h2>Show-Request</h2>
+          <blockquote>
+            Here you see the original headers that your client sent when requesting this page, along with
+            the headers that JunkBuster would have sent to the remote server if this request hadn't been
+            intercepted. 
+          </blockquote>
+
+        <h3>Original Client Request:</h3>
+          <blockquote>
+	    <pre>@client-request@</pre>
+          </blockquote>
+
+        <h3>Processed Request:</h3>
+          <blockquote>
+	    <pre>@processed-request@</pre>
+          </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -118,34 +146,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-	<h2>Show-Request</h2>
-          <blockquote>
-            Here you see the original headers that your client sent when requesting this page, along with
-            the headers that JunkBuster would have sent to the remote server if this request hadn't been
-            intercepted. 
-          </blockquote>
-
-        <h3>Original Client Request:</h3>
-          <blockquote>
-	    <pre>@client-request@</pre>
-          </blockquote>
-
-        <h3>Processed Request:</h3>
-          <blockquote>
-	    <pre>@processed-request@</pre>
-          </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

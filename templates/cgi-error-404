@@ -87,6 +87,30 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee colspan=2>
+        <h2>JunkBuster Configuration page not found</h2>
+          <blockquote>
+            <p>You typed in what looks like a URL used to configure
+               JunkBuster, but it cannot be recognised.  Maybe it's
+               for a different JunkBuster version, or you typed it
+               in wrong?  Or maybe the JunkBuster administrator
+               has decided to disable the feature.</p>
+            <p>If you got here by clicking a link in the
+               configuration interface, please file a bug report!</p>
+            <p>You can use the menu below to select from the available
+               configuration options</p>
+          </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd colspan=2>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -116,30 +140,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee colspan=2>
-        <h2>JunkBuster Configuration page not found</h2>
-          <blockquote>
-            <p>You typed in what looks like a URL used to configure
-               JunkBuster, but it cannot be recognised.  Maybe it's
-               for a different JunkBuster version, or you typed it
-               in wrong?  Or maybe the JunkBuster administrator
-               has decided to disable the feature.</p>
-            <p>If you got here by clicking a link in the
-               configuration interface, please file a bug report!</p>
-            <p>You can use the menu below to select from the available
-               configuration options</p>
-          </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd colspan=2>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

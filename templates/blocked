@@ -97,6 +97,27 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee colspan=2>
+        <h2>Request for blocked URL</h2>
+        <blockquote>
+          <p>Your request for <b>@hostport@@path@</b> was blocked.
+            <br><a href="@default-cgi@show-url-info?url=@hostport@@path@">See why</a>
+    <!-- @if-force-support-start -->
+            or <a href="http://@hostport@@force-prefix@@path@">go there anyway</a>.
+<!-- if-force-support-end@ -->
+          </p>
+        </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd colspan=2>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -126,27 +147,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee colspan=2>
-        <h2>Request for blocked URL</h2>
-        <blockquote>
-          <p>Your request for <b>@hostport@@path@</b> was blocked.
-            <br><a href="@default-cgi@show-url-info?url=@hostport@@path@">See why</a>
-    <!-- @if-force-support-start -->
-            or <a href="http://@hostport@@force-prefix@@path@">go there anyway</a>.
-<!-- if-force-support-end@ -->
-          </p>
-        </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd colspan=2>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

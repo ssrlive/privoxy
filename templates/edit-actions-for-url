@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.13  2002/03/16 14:28:38  jongfoster
+#    First version of modular filters support
+#
 #    Revision 1.12  2002/03/12 01:42:50  oes
 #    Introduced modular filters
 #
@@ -788,57 +791,6 @@ if (document.getElementById) {
       </td>
     </tr>
 
-<!-- @if-unstable-start -->
-# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
-    <tr>
-      <td style="background-color: #ffdddd" >
-        <p><b>Please note that this <span style="color: #ff0000">@code-status@</span> release
-          of the proxy software is not intended for production systems!
-          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
-        </p>
-
- 	<p>
-<h2>Support and Service via Sourceforge</h2>
-<p>
-We value your feedback. However, to provide you with the best support,
-please note:
-<ul>
-  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
-  help.</li>
-  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
-      forum</a>. Make sure that the bug has not yet been submitted.</li>
-  <li>Submit feature requests only thru our <a
-      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
-</ul>
-</p>
-<p>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
-</p>
-      </td>
-    </tr>
-<!-- if-unstable-end@ -->
-
-<!-- @if-have-help-info-start -->
-    <tr>
-      <td class="light">
-        <h2>Local Junkbuster support:</h2>
-
-<!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.
-<!-- if-have-proxy-info-end@ -->
-
-<!-- @if-have-adminaddr-info-start -->
-        <p>Address e-mail questions about this service to
-          <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
-          who will be glad to help you.
-<!-- if-have-adminaddr-info-end@ -->
-
-        </p>
-      </td>
-    </tr>
-<!-- if-have-help-info-end@ -->
-    
     <tr>
       <td>
         <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>

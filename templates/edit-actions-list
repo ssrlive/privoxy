@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.9  2002/03/05 00:24:51  jongfoster
+#    Patch to always edit the current actions file.
+#
 #    Revision 1.8  2002/03/03 10:29:12  swa
 #    point users to the right feedback forms,
 #    not necessarily the developer list.
@@ -207,37 +210,6 @@ function rm_p(pattern,curtext)
         @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</big></big></b></p>
     </td>
   </tr>
-
-<!-- @if-unstable-start -->
-# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
-  <tr>
-    <td style="background-color: #ffdddd" >
-      <p><b>Please note that this <span style="color: #ff0000">@code-status@</span> release
-        of the proxy software is not intended for production systems!
-        <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
-      </p>
-
- 	<p>
-<h2>Support and Service via Sourceforge</h2>
-<p>
-We value your feedback. However, to provide you with the best support,
-please note:
-<ul>
-  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
-  help.</li>
-  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
-      forum</a>. Make sure that the bug has not yet been submitted.</li>
-  <li>Submit feature requests only thru our <a
-      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
-</ul>
-</p>
-<p>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
-</p>
-    </td>
-  </tr>
-<!-- if-unstable-end@ -->
 </table>
 
 <div class="buttons">
@@ -262,26 +234,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       <ul>@menu@</ul>
     </td>
   </tr>
-
-<!-- @if-have-help-info-start -->
-  <tr>
-    <td class="light">
-      <h2>Local Junkbuster support:</h2>
-
-<!-- @if-have-proxy-info-start -->
-      <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.
-<!-- if-have-proxy-info-end@ -->
-
-<!-- @if-have-adminaddr-info-start -->
-      <p>Address e-mail questions about this service to
-        <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
-        who will be glad to help you.
-<!-- if-have-adminaddr-info-end@ -->
-
-      </p>
-    </td>
-  </tr>
-<!-- if-have-help-info-end@ -->
 
   <tr>
     <td>

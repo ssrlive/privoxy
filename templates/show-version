@@ -100,6 +100,25 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Source code versions:</h2>
+        <p><i>(Note: This information is only relevant if you checked out JunkBuster from CVS
+           and compiled it yourself.  If you downloaded a binary, .exe, RPM, or a .tgz file, 
+           then when you ask for support just mention the version number <b>@version@</b> 
+           and the type of download you got.)</i></p>
+        <p>&nbsp;</p>
+        <blockquote><pre>@sourceversions@</pre></blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -129,25 +148,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Source code versions:</h2>
-        <p><i>(Note: This information is only relevant if you checked out JunkBuster from CVS
-           and compiled it yourself.  If you downloaded a binary, .exe, RPM, or a .tgz file, 
-           then when you ask for support just mention the version number <b>@version@</b> 
-           and the type of download you got.)</i></p>
-        <p>&nbsp;</p>
-        <blockquote><pre>@sourceversions@</pre></blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

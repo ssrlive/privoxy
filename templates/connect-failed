@@ -95,6 +95,25 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee colspan=2>
+        <h2>Connect failed</h2>
+          <blockquote>
+            <p>Your request for <b>http://@hostport@@path@</b> could not be fulfilled, because the connection
+              to <b>@host@</b> (@host-ip@) could not be established.</p>
+            <p>This is often a temporary failiure, so you might just
+              <a href="http://@hostport@@path@">try again</a>.</p>
+          </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd colspan=2>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -124,25 +143,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee colspan=2>
-        <h2>Connect failed</h2>
-          <blockquote>
-            <p>Your request for <b>http://@hostport@@path@</b> could not be fulfilled, because the connection
-              to <b>@host@</b> (@host-ip@) could not be established.</p>
-            <p>This is often a temporary failiure, so you might just
-              <a href="http://@hostport@@path@">try again</a>.</p>
-          </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd colspan=2>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

@@ -84,6 +84,14 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee>
+        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Internet Junkbuster!</b></p>
+        <p>Please choose from the following options:</p>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -113,14 +121,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Internet Junkbuster!</b></p>
-        <p>Please choose from the following options:</p>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

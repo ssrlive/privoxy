@@ -84,6 +84,23 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Actions file not found</h2>
+        <blockquote>
+          <p>The actions file you are trying to edit (<code>@f@.action</code>)
+             does not exist, or cannot be read.</p>
+        </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -113,23 +130,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Actions file not found</h2>
-        <blockquote>
-          <p>The actions file you are trying to edit (<code>@f@.action</code>)
-             does not exist, or cannot be read.</p>
-        </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

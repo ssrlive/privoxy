@@ -98,6 +98,49 @@
       </td>
     </tr>
 
+<!-- @if-url-given-start -->
+    <tr>
+      <td bgcolor=#eeeeee>
+<!-- @if-https-start -->
+        <h2>NOTE:</h2>
+        <p>This is a secure (https:) URL, so the part after the "/" is ignored.
+          This is a feature of the HTTPS protocol - the exact address of the
+          page you're visiting is hidden.  JunkBuster can only detect the host
+          part of the URL.</p>
+        <p>&nbsp;</p>
+<!-- if-https-end@ -->
+        <h2>Matches for <a href="@url@">@url@</a>:</h2>
+        <p>@matches@</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Final results:</h2>
+        <p><b>@final@</b></p>
+      </td>
+    </tr>
+<!-- if-url-given-end@ -->
+
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>Look up the actions for a 
+<!-- @if-url-given-start -->new<!-- if-url-given-end@ -->
+          URL:</h2>
+        <form method="GET" action="@default-cgi@show-url-info">
+          <input type="text" name="url" size="80" value="@url@"> 
+          <input type="submit" value="Go">
+        </form>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#dddddd>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -127,56 +170,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-<!-- @if-url-given-start -->
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>System default actions:</h2>
-        <p>{@default@}</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#eeeeee>
-<!-- @if-https-start -->
-        <h2>NOTE:</h2>
-        <p>This is a secure (https:) URL, so the part after the "/" is ignored.
-          This is a feature of the HTTPS protocol - the exact address of the
-          page you're visiting is hidden.  JunkBuster can only detect the host
-          part of the URL.</p>
-        <p>&nbsp;</p>
-<!-- if-https-end@ -->
-        <h2>Matches for <a href="@url@">@url@</a>:</h2>
-        <p>@matches@</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Final results:</h2>
-        <p>@final@</p>
-      </td>
-    </tr>
-<!-- if-url-given-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Look up the actions for a 
-<!-- @if-url-given-start -->new<!-- if-url-given-end@ -->
-          URL:</h2>
-        <form method="GET" action="@default-cgi@show-url-info">
-          <input type="text" name="url" size="80" value="@url@"> 
-          <input type="submit" value="Go">
-        </form>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>

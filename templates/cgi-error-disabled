@@ -84,6 +84,27 @@
       </td>
     </tr>
 
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>JunkBuster Configuration page diasabled</h2>
+          <blockquote>
+            <p>The JunkBuster administrator has decided to disable this 
+               feature.  If you want to use it, you must ask them to
+               enable it.</p>
+            <p>If you are the JunkBuster administrator, you can enable
+               this feature by changing the appropriate line in your
+               configuration file.</p>
+          </blockquote>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor=#eeeeee>
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
 <!-- @if-unstable-start -->
 # This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
@@ -113,27 +134,6 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
       </td>
     </tr>
 <!-- if-unstable-end@ -->
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>JunkBuster Configuration page diasabled</h2>
-          <blockquote>
-            <p>The JunkBuster administrator has decided to disable this 
-               feature.  If you want to use it, you must ask them to
-               enable it.</p>
-            <p>If you are the JunkBuster administrator, you can enable
-               this feature by changing the appropriate line in your
-               configuration file.</p>
-          </blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>More Junkbuster:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
 
 <!-- @if-have-help-info-start -->
     <tr>
