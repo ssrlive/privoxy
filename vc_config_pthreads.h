@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: vc_config_pthreads.h,v $
+ *    Revision 1.2  2002/04/26 18:26:09  jongfoster
+ *    Bumping version numbers
+ *
  *    Revision 1.1  2002/04/06 20:38:01  jongfoster
  *    Renaming VC++ versions of config.h
  *
@@ -202,12 +205,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 14
+#define VERSION_POINT 15
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.14"
+#define VERSION "2.9.15"
 
 /*
  * Status of the code: alpha, beta or stable
