@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.3 2002/09/04 03:53:35 hal9 Exp $
+ $Id: p-authors.sgml,v 2.4 2002/10/10 06:08:48 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -89,11 +89,14 @@
  Peter E
  Aaron Hamid
  Magnus Holmgren
+ Don Libes  
  Paul Lieverse
  David Mediavilla 
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
+ Oliver Stoeneberg
  Darren Wiebe
+ Jamie Zawinski
 </literallayout>
 ]]>
