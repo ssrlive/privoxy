@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.6 2001/05/26 00:28:36 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.7 2001/05/26 15:26:15 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.6 2001/05/26 00:28:36 jongfoster 
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.7  2001/05/26 15:26:15  jongfoster
+ *    ACL feature now provides more security by immediately dropping
+ *    connections from untrusted hosts.
+ *
  *    Revision 1.6  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -279,11 +283,11 @@ int block_acl(struct access_control_addr *dst,
  *
  * Function    :  acl_addr
  *
- * Description :  Called from `load_aclfile'.  FIXME: I can't say more.
+ * Description :  Called from `load_aclfile' to parse an ACL address.
  *
  * Parameters  :
- *          1  :  aspec = (what?)
- *          2  :  aca = (what?)
+ *          1  :  aspec = String specifying ACL address.
+ *          2  :  aca = struct access_control_addr to fill in.
  *
  * Returns     :  0 => Ok, everything else is an error.
  *
