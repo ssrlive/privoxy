@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.62 2002/04/10 19:59:46 jongfoster Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.63 2002/04/15 19:06:43 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.62 2002/04/10 19:59:46 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.63  2002/04/15 19:06:43  jongfoster
+ *    Typos
+ *
  *    Revision 1.62  2002/04/10 19:59:46  jongfoster
  *    Fixes to #include in templates:
  *    - Didn't close main file if loading an included template fails.
@@ -355,6 +358,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.62 2002/04/10 19:59:46 jongfoster Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <limits.h>
 #include <assert.h>
 
 #ifdef _WIN32
@@ -394,25 +398,24 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
 #endif
    { "show-status", 
          cgi_show_status,  
-         "Show information about the current configuration" }, 
+         "View & change the current configuration" }, 
    { "show-version", 
          cgi_show_version,  
-         "Show the source code version numbers" }, 
+         "View the source code version numbers" }, 
    { "show-request", 
          cgi_show_request,  
-         "Show the request headers." }, 
+         "View the request headers." }, 
    { "show-url-info",
          cgi_show_url_info, 
-         "Show which actions apply to a URL and why"  },
+         "Look up which actions apply to a URL and why"  },
 #ifdef FEATURE_CGI_EDIT_ACTIONS
    { "toggle",
          cgi_toggle, 
          "Toggle Privoxy on or off" },
-   { "edit-actions",
-         cgi_edit_actions, 
-         "Edit the actions list" },
 
-   
+   { "edit-actions", /* Edit the actions list */
+         cgi_edit_actions, 
+         NULL },
    { "eaa", /* Shortcut for edit-actions-add-url-form */
          cgi_edit_actions_add_url_form, 
          NULL },
@@ -422,8 +425,11 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "ear", /* Shortcut for edit-actions-remove-url-form */
          cgi_edit_actions_remove_url_form, 
          NULL },
-   { "eas", /* Shortcut for edit-actions-for-url */
+   { "eafu", /* Shortcut for edit-actions-for-url */
          cgi_edit_actions_for_url, 
+         NULL },
+   { "eas", /* Shortcut for edit-actions-submit */
+         cgi_edit_actions_submit, 
          NULL },
    { "easa", /* Shortcut for edit-actions-section-add */
          cgi_edit_actions_section_add, 
@@ -767,6 +773,188 @@ static struct map *parse_cgi_parameters(char *argstring)
    }
 
    return cgi_params;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_char_param
+ *
+ * Description :  Get a single-character parameter passed to a CGI
+ *                function.
+ *
+ * Parameters  :
+ *          1  :  parameters = map of cgi parameters
+ *          2  :  param_name = The name of the parameter to read
+ *
+ * Returns     :  Uppercase character on success, '\0' on error.
+ *
+ *********************************************************************/
+char get_char_param(const struct map *parameters,
+                    const char *param_name)
+{
+   char ch;
+
+   assert(parameters);
+   assert(param_name);
+
+   ch = *(lookup(parameters, param_name));
+   if ((ch >= 'a') && (ch <= 'z'))
+   {
+      ch = ch - 'a' + 'A';
+   }
+
+   return ch;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_string_param
+ *
+ * Description :  Get a string paramater, to be used as an
+ *                ACTION_STRING or ACTION_MULTI paramater.
+ *                Validates the input to prevent stupid/malicious
+ *                users from corrupting their action file.
+ *
+ * Parameters  :
+ *          1  :  parameters = map of cgi parameters
+ *          2  :  param_name = The name of the parameter to read
+ *          3  :  pparam = destination for paramater.  Allocated as
+ *                part of the map "parameters", so don't free it.
+ *                Set to NULL if not specified.
+ *
+ * Returns     :  JB_ERR_OK         on success, or if the paramater
+ *                                  was not specified.
+ *                JB_ERR_MEMORY     on out-of-memory.
+ *                JB_ERR_CGI_PARAMS if the paramater is not valid.
+ *
+ *********************************************************************/
+jb_err get_string_param(const struct map *parameters,
+                        const char *param_name,
+                        const char **pparam)
+{
+   const char *param;
+   const char *s;
+   char ch;
+
+   assert(parameters);
+   assert(param_name);
+   assert(pparam);
+
+   *pparam = NULL;
+
+   param = lookup(parameters, param_name);
+   if (!*param)
+   {
+      return JB_ERR_OK;
+   }
+
+   if (strlen(param) >= CGI_PARAM_LEN_MAX)
+   {
+      /*
+       * Too long.
+       *
+       * Note that the length limit is arbitrary, it just seems
+       * sensible to limit it to *something*.  There's no
+       * technical reason for any limit at all.
+       */
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* Check every character to see if it's legal */
+   s = param;
+   while ((ch = *s++) != '\0')
+   {
+      if ( ((unsigned char)ch < (unsigned char)' ')
+        || (ch == '}') )
+      {
+         /* Probable hack attempt, or user accidentally used '}'. */
+         return JB_ERR_CGI_PARAMS;
+      }
+   }
+
+   /* Success */
+   *pparam = param;
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_number_param
+ *
+ * Description :  Get a non-negative integer from the parameters
+ *                passed to a CGI function.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  parameters = map of cgi parameters
+ *          3  :  name = Name of CGI parameter to read
+ *          4  :  pvalue = destination for value.
+ *                         Set to -1 on error.
+ *
+ * Returns     :  JB_ERR_OK         on success
+ *                JB_ERR_MEMORY     on out-of-memory
+ *                JB_ERR_CGI_PARAMS if the parameter was not specified
+ *                                  or is not valid.
+ *
+ *********************************************************************/
+jb_err get_number_param(struct client_state *csp,
+                        const struct map *parameters,
+                        char *name,
+                        unsigned *pvalue)
+{
+   const char *param;
+   char ch;
+   unsigned value;
+
+   assert(csp);
+   assert(parameters);
+   assert(name);
+   assert(pvalue);
+
+   *pvalue = 0; 
+
+   param = lookup(parameters, name);
+   if (!*param)
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* We don't use atoi because I want to check this carefully... */
+
+   value = 0;
+   while ((ch = *param++) != '\0')
+   {
+      if ((ch < '0') || (ch > '9'))
+      {
+         return JB_ERR_CGI_PARAMS;
+      }
+
+      ch -= '0';
+
+      /* Note:
+       *
+       * <limits.h> defines UINT_MAX
+       *
+       * (UINT_MAX - ch) / 10 is the largest number that
+       *     can be safely multiplied by 10 then have ch added.
+       */
+      if (value > ((UINT_MAX - (unsigned)ch) / 10U))
+      {
+         return JB_ERR_CGI_PARAMS;
+      }
+
+      value = value * 10 + ch;
+   }
+
+   /* Success */
+   *pvalue = value;
+
+   return JB_ERR_OK;
 
 }
 
