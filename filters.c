@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.56 2002/04/05 15:51:24 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.57 2002/04/08 20:38:34 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.56 2002/04/05 15:51:24 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.57  2002/04/08 20:38:34  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.56  2002/04/05 15:51:24  oes
  *     - bugfix: error-pages now get correct request protocol
  *     - fix for invalid HTML in trust info
@@ -1498,16 +1501,21 @@ void url_actions(struct http_request *http,
 {
    struct file_list *fl;
    struct url_actions *b;
+   int i;
 
    init_current_action(csp->action);
 
-   if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
+   for (i = 0; i < MAX_ACTION_FILES; i++)
    {
-      return;
+      if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
+      {
+         return;
+      }
+
+      apply_url_actions(csp->action, http, b);
    }
 
-   apply_url_actions(csp->action, http, b);
-
+   return;
 }
 
 
