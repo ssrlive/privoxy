@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.37 2001/10/23 21:36:02 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.38 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.37 2001/10/23 21:36:02 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.38  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.37  2001/10/23 21:36:02  jongfoster
  *    Documenting sed()'s error behaviou (doc change only)
  *
@@ -321,6 +327,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.37 2001/10/23 21:36:02 jongfoster
 #include "errlog.h"
 #include "jbsockets.h"
 #include "miscutil.h"
+#include "list.h"
 
 const char parsers_h_rcs[] = PARSERS_H_VERSION;
 
@@ -347,9 +354,6 @@ const struct parsers client_patterns[] = {
    { "x-forwarded-for:",         16,   client_x_forwarded },
    { "Accept-Encoding:",         16,   client_accept_encoding },
    { "TE:",                      3,    client_te },
-#if defined(FEATURE_IMAGE_DETECT_MSIE)
-   { "Accept:",                   7,   client_accept },
-#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
    { "Host:",                     5,   crumble },
 /* { "if-modified-since:",       18,   crumble }, */
    { "Keep-Alive:",              11,   crumble },
@@ -548,6 +552,56 @@ char *get_header(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  get_header_value
+ *
+ * Description :  Get the value of a given header from a chained list
+ *                of header lines or return NULL if no such header is
+ *                present in the list.
+ *
+ * Parameters  :
+ *          1  :  header_list = pointer to list
+ *          2  :  header_name = string with name of header to look for.
+ *                              Trailing colon required, capitalization
+ *                              doesn't matter.
+ *
+ * Returns     :  NULL if not found, else value of header
+ *
+ *********************************************************************/
+char *get_header_value(const struct list *header_list, const char *header_name)
+{
+   struct list_entry *cur_entry;
+   char *ret = NULL;
+   size_t length = 0;
+
+   assert(header_list);
+   assert(header_name);
+   length = strlen(header_name);
+
+   for (cur_entry = header_list->first; cur_entry ; cur_entry = cur_entry->next)
+   {
+      if (cur_entry->str)
+      {
+         if (!strncmpic(cur_entry->str, header_name, length))
+         {
+            /*
+             * Found: return pointer to start of value
+             */
+            ret = (char *) (cur_entry->str + length);
+            while (*ret && ijb_isspace(*ret)) ret++;
+            return(ret);
+         }
+      }
+   }
+
+   /* 
+    * Not found
+    */
+   return NULL;
+
+}
+
+/*********************************************************************
+ *
  * Function    :  sed
  *
  * Description :  add, delete or modify lines in the HTTP header streams.
@@ -630,7 +684,6 @@ void free_http_request(struct http_request *http)
    freez(http->path);
    freez(http->ver);
    freez(http->host_ip_addr_str);
-   freez(http->user_agent);
 
 }
 
@@ -1075,10 +1128,6 @@ char *client_referrer(const struct parsers *v, const char *s, struct client_stat
    strclean(s, FORCE_PREFIX);
 #endif /* def FEATURE_FORCE_LOAD */
 
-#ifdef FEATURE_TRUST
-   csp->referrer = strdup(s);
-#endif /* def FEATURE_TRUST */
-
    /*
     * Are we sending referer?
     */
@@ -1171,22 +1220,6 @@ char *client_uagent(const struct parsers *v, const char *s, struct client_state 
 {
    const char * newval;
    char * s2;
-
-   /* Save the client's User-Agent: value */
-   if (strlen(s) >= 12)
-   {
-      csp->http->user_agent = strdup(s + 12);
-   }
-
-#ifdef FEATURE_IMAGE_DETECT_MSIE
-   if (strstr (s, "MSIE "))
-   {
-      /* This is Microsoft Internet Explorer.
-       * Enable auto-detect.
-       */
-      csp->accept_types |= ACCEPT_TYPE_IS_MSIE;
-   }
-#endif /* def FEATURE_IMAGE_DETECT_MSIE */
 
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
    {
@@ -1350,49 +1383,7 @@ char *client_x_forwarded(const struct parsers *v, const char *s, struct client_s
 
 }
 
-#if defined(FEATURE_IMAGE_DETECT_MSIE)
-/*********************************************************************
- *
- * Function    :  client_accept
- *
- * Description :  Detect whether the client wants HTML or an image.
- *                Clients do not always make this information available
- *                in a sane way.  Always passes the header through
- *                the proxy unchanged.
- *
- * Parameters  :
- *          1  :  v = Ignored.
- *          2  :  s = Header string.  Null terminated.
- *          3  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  Duplicate of argument s.
- *
- *********************************************************************/
-char *client_accept(const struct parsers *v, const char *s, struct client_state *csp)
-{
-#ifdef FEATURE_IMAGE_DETECT_MSIE
-   if (strstr (s, "image/gif"))
-   {
-      /* Client will accept HTML.  If this seems counterintuitive,
-       * blame Microsoft.
-       */
-      csp->accept_types |= ACCEPT_TYPE_MSIE_HTML;
-   }
-   else
-   {
-      csp->accept_types |= ACCEPT_TYPE_MSIE_IMAGE;
-   }
-#endif /* def FEATURE_IMAGE_DETECT_MSIE */
-
-   return(strdup(s));
-
-}
-#endif /* defined(FEATURE_IMAGE_DETECT_MSIE) */
-
-
-
 /* the following functions add headers directly to the header list */
-
 
 /*********************************************************************
  *
