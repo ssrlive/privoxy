@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.15 2001/12/30 14:07:32 steudten Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.16 2002/01/21 00:53:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.16  2002/01/21 00:53:36  jongfoster
+ *    Adding string_join()
+ *
  *    Revision 1.15  2001/12/30 14:07:32  steudten
  *    - Add signal handling (unix)
  *    - Add SIGHUP handler (unix)
@@ -132,8 +135,7 @@ extern const char *basedir;
 extern void *zalloc(int size);
 
 #if defined(unix)
-extern void writePidFile( void );
-extern void deletePidFile( void );
+extern void write_pid_file(void);
 #endif /* unix */
 
 extern unsigned int hash_string(const char* s);
