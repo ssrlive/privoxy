@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.42 2002/01/17 21:00:32 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.43 2002/01/22 23:51:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 1.42 2002/01/17 21:00:32 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.43  2002/01/22 23:51:59  jongfoster
+ *    Replacing strsav() with the safer string_append().
+ *
+ *    Adding missing html_encode() to error message generators.  Where encoded
+ *    and unencoded versions of a string were provided, removing the unencoded
+ *    one.
+ *
  *    Revision 1.42  2002/01/17 21:00:32  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -456,7 +463,7 @@ int block_acl(struct access_control_addr *dst, struct client_state *csp)
  *
  * Function    :  acl_addr
  *
- * Description :  Called from `load_aclfile' to parse an ACL address.
+ * Description :  Called from `load_config' to parse an ACL address.
  *
  * Parameters  :
  *          1  :  aspec = String specifying ACL address.
@@ -504,9 +511,8 @@ int acl_addr(char *aspec, struct access_control_addr *aca)
 
    aca->addr = ntohl(resolve_hostname_to_ip(aspec));
 
-   if (aca->addr == -1)
+   if (aca->addr == INADDR_NONE)
    {
-      log_error(LOG_LEVEL_ERROR, "can't resolve address for %s", aspec);
       return(-1);
    }
 
@@ -657,15 +663,15 @@ struct http_response *block_url(struct client_state *csp)
       /* and handle accordingly: */
       if ((p == NULL) || (0 == strcmpic(p, "logo")))
       {
-         rsp->body = bindup(image_junkbuster_gif_data, image_junkbuster_gif_length);
+         rsp->body = bindup(image_logo_data, image_logo_length);
          if (rsp->body == NULL)
          {
             free_http_response(rsp);
             return cgi_error_memory();
          }
-         rsp->content_length = image_junkbuster_gif_length;
+         rsp->content_length = image_logo_length;
 
-         if (enlist_unique_header(rsp->headers, "Content-Type", "image/gif"))
+         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
          {
             free_http_response(rsp);
             return cgi_error_memory();
@@ -674,15 +680,32 @@ struct http_response *block_url(struct client_state *csp)
 
       else if (0 == strcmpic(p, "blank"))
       {
-         rsp->body = bindup(image_blank_gif_data, image_blank_gif_length);
+         rsp->body = bindup(image_blank_data, image_blank_length);
          if (rsp->body == NULL)
          {
             free_http_response(rsp);
             return cgi_error_memory();
          }
-         rsp->content_length = image_blank_gif_length;
+         rsp->content_length = image_blank_length;
 
-         if (enlist_unique_header(rsp->headers, "Content-Type", "image/gif"))
+         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+      }
+
+      else if (0 == strcmpic(p, "pattern"))
+      {
+         rsp->body = bindup(image_pattern_data, image_pattern_length);
+         if (rsp->body == NULL)
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+         rsp->content_length = image_pattern_length;
+
+         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
          {
             free_http_response(rsp);
             return cgi_error_memory();
@@ -1266,7 +1289,7 @@ char *gif_deanimate_response(struct client_state *csp)
 {
    struct binbuffer *in, *out;
    char *p;
-   int size = csp->iob->eod - csp->iob->cur;
+   size_t size = csp->iob->eod - csp->iob->cur;
 
    /*
     * If the body has a "chunked" transfer-encoding,
