@@ -1,0 +1,158 @@
+#############################################################################
+#
+# Bare-bones actions file for Privoxy pre release testdrive
+#
+# For information, see http://www.oesterhelt.org/testdrive
+#
+#############################################################################
+{{alias}}
+# Useful aliases
++imageblock = +block +image
+
+# Fragile sites should have the minimum changes
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -no-cookies-keep -no-popups
+
+# Shops should be allowed to set persistent cookies
+shop        = -filter -no-cookies-keep
+
+#############################################################################
+# Defaults
+#############################################################################
+{\
+-add-header \
+-block \
++deanimate-gifs{last} \
+-downgrade \
++fast-redirects \
++filter{html-annoyances} \
++filter{content-cookies} \
++filter{js-annoyances} \
++filter{no-popups} \
++filter{webbugs} \
++filter{nimda} \
++filter{banners-by-size} \
++no-compression \
++hide-forwarded \
++hide-from{block} \
++hide-referer{forge} \
+-hide-user-agent \
+-image \
++image-blocker{pattern} \
++no-cookies-keep \
+-no-cookies-read \
+-no-cookies-set \
++no-popups \
+-vanilla-wafer \
+-wafer \
+}
+/ # Match all URLs
+
+
+#############################################################################
+# Needed for automatic feedback evaluation; Please don't delete!
+#############################################################################
+{+add-header{X-Actions-File-Version: 1.0} -filter -no-popups}
+.privoxy.org/actions
+.oesterhelt.org/actions
+
+
+#############################################################################
+# These sites are very complex and require
+# minimal interference.
+#############################################################################
+{fragile}
+.office.microsoft.com
+.windowsupdate.microsoft.com
+
+#############################################################################
+# Shopping sites - still want to block ads.
+#############################################################################
+{shop}
+.quietpc.com
+.worldpay.com   # for quietpc.com
+.jungle.com
+.scan.co.uk
+
+#############################################################################
+# These shops require pop-ups
+#############################################################################
+{shop -no-popups -filter{no-poups}}
+.dabs.com
+.overclockers.co.uk
+
+#############################################################################
+# Sometimes fast-redirects catches things by mistake
+#############################################################################
+{-fast-redirects}
+www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+login.yahoo.com
+edit.europe.yahoo.com
+.google.com
+.altavista.com/.*(like|url|link):http
+.altavista.com/trans.*urltext=http
+.speedfind.de
+.nytimes.com
+
+#############################################################################
+# Don't filter code!
+#############################################################################
+{-filter}
+.cvs.sourceforge.net
+
+#############################################################################
+# Imagelist:
+#############################################################################
+{+image}
+#############################################################################
+/.*\.(gif|jpe?g|png|bmp|ico)
+
+#############################################################################
+{+imageblock}
+#############################################################################
+#BLOCK-REFERRER: http://www.cnn.com/
+#BLOCK-REFERRER: http://www.aol.com/
+ar.atwola.com 
+
+#BLOCK-REFERRER: 
+bs*.gsanet.com
+bs*.einets.com
+
+#BLOCK-REFERRER: Opera browser built-in
+.qkimg.net
+
+#BLOCK-REFERRER: http://www.tecchannel.de/index.html
+#BLOCK-REFERRER: and thousands more
+ad.*.doubleclick.net
+
+#############################################################################
+# Blocklist:
+#############################################################################
+{+block}
+#############################################################################
+#BLOCK-GENERIC:
+ad*.
+.*ads.
+banner?.
+count*.
+
+/(?:.*/)?(ads(erver?|tream)?|.*?ads|adv(ert(s|enties|is(ing|e?ments)?)?)?|(ad)?[-_]?banner(s|ads?|farm)?)/
+/.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+/(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
+
+#BLOCK-REFERRER: http://www.brooksbrothers.com
+#BLOCK-REFERRER: http://www.autodesk.com
+.hitbox.com 
+
+#############################################################################
+{-block}
+#############################################################################
+include.ebay.com
+advogato.org
+adsl.
+ad[ud]*.
+advice.
+.edu
+.ac.uk
+.uni-*.de
+www.ugu.com/sui/ugu/adv
+.*downloads.
