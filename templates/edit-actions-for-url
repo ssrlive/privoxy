@@ -32,6 +32,12 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.27  2002/04/26 22:55:26  jongfoster
+#    Removing the alternating colors because they've been wrong
+#    since the actions renames, they're high maintenance, they
+#    don't look particularly good, and now there are gaps between
+#    the table cells we don't need them.
+#
 #    Revision 1.26  2002/04/26 21:55:17  jongfoster
 #    Cosmetic change: Making the +filter UI look the same as
 #    the other actions.
@@ -401,7 +407,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="add_header" value="X" @add-header-x@
         onclick="show_add_header_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@ADD-HEADER">add-header</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@ADD-HEADER">add-header</a></td>
       <td>Adds HTTP headers.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="add_header_opts">
@@ -423,8 +429,34 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="block" value="X" @block-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@BLOCK">block</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@BLOCK">block</a></td>
       <td>Block the request</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="crunch_incoming_cookies" value="Y" @crunch-incoming-cookies-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="crunch_incoming_cookies" value="N" @crunch-incoming-cookies-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="crunch_incoming_cookies" value="X" @crunch-incoming-cookies-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</a></td>
+      <td>Prevent the website from setting cookies on your system.</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="crunch_outgoing_cookies" value="Y" @crunch-outgoing-cookies-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="crunch_outgoing_cookies" value="N" @crunch-outgoing-cookies-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="crunch_outgoing_cookies" value="X" @crunch-outgoing-cookies-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</a></td>
+      <td>Prevent the website from reading cookies from your system.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -436,7 +468,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="deanimate_gifs" value="X" @deanimate-gifs-x@
         onclick="show_deanimate_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@DEANIMATE-GIFS">deanimate-gifs</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@DEANIMATE-GIFS">deanimate-gifs</a></td>
       <td>Replace animated GIFs with their (first/last) frame.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="deanimate_opts">
@@ -458,7 +490,7 @@ function show_send_wafer_opts(tf)
         name="downgrade_http_version" value="N" @downgrade-http-version-n@></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="downgrade_http_version" value="X" @downgrade-http-version-x@></td>
-      <td class="action"><a href="@user-manual@@helplink@DOWNGRADE-HTTP-VERSION">downgrade-http-version</td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@DOWNGRADE-HTTP-VERSION">downgrade-http-version</td>
       <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
         what you're doing!</td>
     </tr>
@@ -472,7 +504,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="fast_redirects" value="X" @fast-redirects-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@FAST-REDIRECTS">fast-redirects</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@FAST-REDIRECTS">fast-redirects</a></td>
       <td>Bypass some click-tracking URLs.</td>
     </tr>
 
@@ -482,7 +514,7 @@ function show_send_wafer_opts(tf)
         name="filter_all" id="filter_all_n" value="N" @filter-all-n@ ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="filter_all" id="filter_all_x" value="X" @filter-all-x@ ></td>
-      <td class="action"><a href="@user-manual@@helplink@FILTER">filter</a> *</td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@FILTER">filter</a> *</td>
       <td>Filter the website through regular expression
         filters.  You can use the radio buttons on this line to disable
         all filters applied by previous rules, and/or you can enable or
@@ -499,9 +531,9 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="handle_as_image" value="X" @handle-as-image-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@HANDLE-AS-IMAGE">handle-as-image</a></td>
-      <td>Request is for an image (only useful in conjunction with the <i><b><a href="@user-manual@@helplink@BLOCK">block</a></b></i>
-        and <i><b><a href="@user-manual@@helplink@SET-IMAGE-BLOCKER">set-image-blocker</a></b></i> actions).</td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HANDLE-AS-IMAGE">handle-as-image</a></td>
+      <td>Request is for an image (only useful in conjunction with the <i><b><a href="@user-manual@@actions-help-prefix@BLOCK">block</a></b></i>
+        and <i><b><a href="@user-manual@@actions-help-prefix@SET-IMAGE-BLOCKER">set-image-blocker</a></b></i> actions).</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -513,7 +545,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_forwarded_for_headers" value="X" @hide-forwarded-for-headers-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</a></td>
       <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
@@ -526,7 +558,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_from_header" value="X" @hide-from-header-x@
         onclick="show_hide_from_header_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@HIDE-FROM-HEADER">hide-from-header</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-FROM-HEADER">hide-from-header</a></td>
       <td>Stop old web browsers from sending the user's e-mail address with
         every request.</td>
     </tr>
@@ -557,7 +589,7 @@ function show_send_wafer_opts(tf)
         name="hide_referer" id="hide_referer_x" value="X" @hide-referer-x@
         onclick="show_hide_referer_opts(false)"
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@HIDE-REFERRER">hide-referrer</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-REFERRER">hide-referrer</a></td>
       <td>Helps prevent tracking by not sending the URL of the previous web
         page.&nbsp;</td>
     </tr>
@@ -594,7 +626,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_user_agent" value="X" @hide-user-agent-x@
         onclick="show_user_agent_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@HIDE-USER-AGENT">hide-user-agent</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-USER-AGENT">hide-user-agent</a></td>
       <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
         sites).</td>
     </tr>
@@ -617,7 +649,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="kill_popups" value="X" @kill-popups-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@KILL-POPUPS">kill-popups</td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@KILL-POPUPS">kill-popups</td>
       <td>Filter the website through a built-in filter to disable many JavaScript
         pop-up windows.</td>
     </tr>
@@ -631,7 +663,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="limit_connect" value="X" @limit-connect-x@
         onclick="show_limit_connect_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@LIMIT-CONNECT">limit-connect</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@LIMIT-CONNECT">limit-connect</a></td>
       <td>Specify which ports are allowed for SSL (HTTP CONNECT) access.
         Note that this allows arbitrary tunnelling, so opening all
         ports would be a security hole.</td>
@@ -655,38 +687,12 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="prevent_compression" value="X" @prevent-compression-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@PREVENT-COMPRESSION">prevent-compression</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@PREVENT-COMPRESSION">prevent-compression</a></td>
       <td>Disables compression.  Compressed web pages are faster to
-        download, but cannot be filtered with <a href="@user-manual@@helplink@FILTER"><b>filter</b></a>
-        or <a href="@user-manual@@helplink@KILL-POPUPS"><b>kill-popups</b></a>.
+        download, but cannot be filtered with <a href="@user-manual@@actions-help-prefix@FILTER"><b>filter</b></a>
+        or <a href="@user-manual@@actions-help-prefix@KILL-POPUPS"><b>kill-popups</b></a>.
         This setting only affects the few web sites which support
         compression.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="prevent_reading_cookies" value="Y" @prevent-reading-cookies-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="prevent_reading_cookies" value="N" @prevent-reading-cookies-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="prevent_reading_cookies" value="X" @prevent-reading-cookies-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@helplink@PREVENT-READING-COOKIES">prevent-reading-cookies</a></td>
-      <td>Prevent the website from reading cookies.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="prevent_setting_cookies" value="Y" @prevent-setting-cookies-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="prevent_setting_cookies" value="N" @prevent-setting-cookies-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="prevent_setting_cookies" value="X" @prevent-setting-cookies-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@helplink@PREVENT-SETTING-COOKIES">prevent-setting-cookies</a></td>
-      <td>Prevent the website from setting cookies.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -698,7 +704,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="send_vanilla_wafer" value="X" @send-vanilla-wafer-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@SEND-VANILLA-WAFER">send-vanilla-wafer</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SEND-VANILLA-WAFER">send-vanilla-wafer</a></td>
       <td>Adds a special wafer (standard cookie) to all your requests.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
@@ -711,7 +717,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="send_wafer" id="send_wafer_x" value="X" @send-wafer-x@
         onclick="show_send_wafer_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@SEND-WAFER">send-wafer</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SEND-WAFER">send-wafer</a></td>
       <td>Adds user-specified cookies.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="send_wafer_opts">
@@ -733,14 +739,14 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="session_cookies_only" value="X" @session-cookies-only-x@
         ></td>
-      <td class="action"><a href="@user-manual@@helplink@SESSION-COOKIES-ONLY">session-cookies-only</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SESSION-COOKIES-ONLY">session-cookies-only</a></td>
       <td>Any cookies set by the website are changed to temporary
         ("per-session") ones, which only last until you close your web
         browser.  This will allow you to use sites that require cookies, but
         sites will not be able to track you across sessions.  For this to
         be useful, you should disable 
-        <a href="@user-manual@@helplink@PREVENT-READING-COOKIES"><b>prevent-reading-cookies</b></a> and
-        <a href="@user-manual@@helplink@PREVENT-SETTING-COOKIES"><b>prevent-setting-cookies</b></a>.</td>
+        <a href="@user-manual@@actions-help-prefix@CRUNCH-OUTGOING-COOKIES"><b>crunch-outgoing-cookies</b></a> and
+        <a href="@user-manual@@actions-help-prefix@CRUNCH-INCOMING-COOKIES"><b>crunch-incoming-cookies</b></a>.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -752,7 +758,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="set_image_blocker" value="X" @set-image-blocker-x@
         onclick="show_set_image_blocker_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@helplink@SET-IMAGE-BLOCKER">set-image-blocker</a></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SET-IMAGE-BLOCKER">set-image-blocker</a></td>
       <td>Specifies how to block images.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="set_image_blocker_opts">
