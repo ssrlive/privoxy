@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.20 2001/07/18 17:27:22 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.21 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,12 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.20 2001/07/18 17:27:22 oes Exp 
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.21  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.20  2001/07/18 17:27:22  oes
  *    Adapted to new #defines
  *
@@ -200,6 +206,8 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.20 2001/07/18 17:27:22 oes Exp 
 #include "errlog.h"
 #include "miscutil.h"
 #include "gateway.h"
+#include "cgi.h"
+#include "list.h"
 
 const char showargs_h_rcs[] = SHOWARGS_H_VERSION;
 
@@ -364,107 +372,108 @@ char *show_rcs(void)
  * Returns     :  string 
  *
  *********************************************************************/
-char *show_defines(void)
+struct map * show_defines(struct map *exports)
 {
-   char *b = NULL;
+
+#ifdef FEATURE_ACL
+   exports = map_conditional(exports, "FEATURE_ACL", 1);
+#else /* ifndef FEATURE_ACL */
+   exports = map_conditional(exports, "FEATURE_ACL", 0);
+#endif /* ndef FEATURE_ACL */
+
+#ifdef FEATURE_COOKIE_JAR
+   exports = map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
+#else /* ifndef FEATURE_COOKIE_JAR */
+   exports = map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
+#endif /* ndef FEATURE_COOKIE_JAR */
+
+#ifdef FEATURE_DENY_GZIP
+   exports = map_conditional(exports, "FEATURE_DENY_GZIP", 1);
+#else /* ifndef FEATURE_DENY_GZIP */
+   exports = map_conditional(exports, "FEATURE_DENY_GZIP", 0);
+#endif /* ndef FEATURE_DENY_GZIP */
+
+#ifdef FEATURE_FAST_REDIRECTS
+   exports = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
+#else /* ifndef FEATURE_FAST_REDIRECTS */
+   exports = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
+#endif /* ndef FEATURE_FAST_REDIRECTS */
+
+#ifdef FEATURE_FORCE_LOAD
+   exports = map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
+#else /* ifndef FEATURE_FORCE_LOAD */
+   exports = map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
+#endif /* ndef FEATURE_FORCE_LOAD */
+
+#ifdef FEATURE_IMAGE_BLOCKING
+   exports = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
+#else /* ifndef FEATURE_IMAGE_BLOCKING */
+   exports = map_conditional(exports, "FEATURE_IMAGE_BLOCKING, 0);
+#endif /* ndef FEATURE_IMAGE_BLOCKING */
+
+#ifdef FEATURE_IMAGE_DETECT_MSIE
+   exports = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
+#else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
+   exports = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
+#endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
+
+#ifdef FEATURE_KILL_POPUPS
+   exports = map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
+#else /* ifndef FEATURE_KILL_POPUPS */
+   exports = map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
+#endif /* ndef FEATURE_KILL_POPUPS */
 
 #ifdef FEATURE_PTHREAD
-   b = strsav(b, "  <li><code>#define <b>FEATURE_PTHREAD</b></code> - Support POSIX threads.</li>\n");
-#else
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_PTHREAD</b></code> - No support POSIX threads.</li>\n");
-#endif
+   exports = map_conditional(exports, "FEATURE_PTHREAD", 1);
+#else /* ifndef FEATURE_PTHREAD */
+   exports = map_conditional(exports, "FEATURE_PTHREAD", 0);
+#endif /* ndef FEATURE_PTHREAD */
+
+#ifdef FEATURE_STATISTICS
+   exports = map_conditional(exports, "FEATURE_STATISTICS", 1);
+#else /* ifndef FEATURE_STATISTICS */
+   exports = map_conditional(exports, "FEATURE_STATISTICS", 0);
+#endif /* ndef FEATURE_STATISTICS */
+
+#ifdef FEATURE_TOGGLE
+   exports = map_conditional(exports, "FEATURE_TOGGLE", 1);
+#else /* ifndef FEATURE_TOGGLE */
+   exports = map_conditional(exports, "FEATURE_TOGGLE", 0);
+#endif /* ndef FEATURE_TOGGLE */
+
+#ifdef FEATURE_TRUST
+   exports = map_conditional(exports, "FEATURE_TRUST", 1);
+#else /* ifndef FEATURE_TRUST */
+   exports = map_conditional(exports, "FEATURE_TRUST", 0);
+#endif /* ndef FEATURE_TRUST */
 
 #ifdef REGEX_GNU
-   b = strsav(b, "  <li><code>#define <b>REGEX_GNU</b></code> - Support for GNU style regular expressions in the path specs.</li>\n");
+   exports = map_conditional(exports, "REGEX_GNU", 1);
+#else /* ifndef REGEX_GNU */
+   exports = map_conditional(exports, "REGEX_GNU", 0);
 #endif /* def REGEX_GNU */
 
 #ifdef REGEX_PCRE
-   b = strsav(b, "  <li><code>#define <b>REGEX_PCRE</b></code> - Support for pcre style regular expressions in the path specs.</li>\n");
+   exports = map_conditional(exports, "REGEX_PCRE", 1);
+#else /* ifndef REGEX_PCRE */
+   exports = map_conditional(exports, "REGEX_PCRE", 0);
 #endif /* def REGEX_PCRE */
 
-#ifndef REGEX
-   b = strsav(b, "  <li><code>#undef <b>REGEX</b></code> - No support for regular expressions in the path specs.</li>\n");
-#endif /* ndef REGEX */
-
 #ifdef STATIC_PCRE
-   b = strsav(b, "  <li><code>#define <b>STATIC_PCRE</b></code> - Using static built-in pcre rather than libpcre.</li>\n");
+   exports = map_conditional(exports, "STATIC_PCRE", 1);
 #else /* ifndef STATIC_PCRE */
-   b = strsav(b, "  <li><code>#undef <b>STATIC_PCRE</b></code> - Using libpcre rather than static built-in pcre.</li>\n");
+   exports = map_conditional(exports, "STATIC_PCRE", 0);
 #endif /* ndef STATIC_PCRE */
 
 #ifdef STATIC_PCRS
-   b = strsav(b, "  <li><code>#define <b>STATIC_PCRS</b></code> - Using static built-in pcrs rather than libpcrs.</li>\n");
+   exports = map_conditional(exports, "STATIC_PCRS", 1);
 #else /* ifndef STATIC_PCRS */
-   b = strsav(b, "  <li><code>#undef <b>STATIC_PCRS</b></code> - Using libpcrs rather than static built-in pcrs.</li>\n");
+   exports = map_conditional(exports, "STATIC_PCRS", 0);
 #endif /* ndef STATIC_PCRS */
 
-#ifdef FEATURE_TOGGLE
-   b = strsav(b, "  <li><code>#define <b>FEATURE_TOGGLE</b></code> - Allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
-#else /* ifndef FEATURE_TOGGLE */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_TOGGLE</b></code> - Do not allow JunkBuster to be \"disabled\" so it is just a normal non-blocking non-anonymizing proxy.</li>\n");
-#endif /* ndef FEATURE_TOGGLE */
+   exports = map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
 
-#ifdef FEATURE_FORCE_LOAD
-   b = strsav(b, "  <li><code>#define <b>FEATURE_FORCE_LOAD</b></code> - Enables bypassing filtering for a single page using the prefix \"" FORCE_PREFIX "\".</li>\n");
-#else /* ifndef FEATURE_FORCE_LOAD */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_FORCE_LOAD</b></code> - Disables bypassing filtering for a single page.</li>\n");
-#endif /* ndef FEATURE_FORCE_LOAD */
-
-#ifdef FEATURE_DENY_GZIP
-   b = strsav(b, "  <li><code>#define <b>FEATURE_DENY_GZIP</b></code> - Prevents requests from being compressed - required for PCRS on some sites.</li>\n");
-#else /* ifndef FEATURE_DENY_GZIP */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_DENY_GZIP</b></code> - Allows requests to be compressed if the browser and server support it.</li>\n");
-#endif /* ndef FEATURE_DENY_GZIP */
-
-#ifdef FEATURE_STATISTICS
-   b = strsav(b, "  <li><code>#define <b>FEATURE_STATISTICS</b></code> - Enables statistics function.</li>\n");
-#else /* ifndef FEATURE_STATISTICS */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_STATISTICS</b></code> - Disables statistics function.</li>\n");
-#endif /* ndef FEATURE_STATISTICS */
-
-#ifdef FEATURE_KILL_POPUPS
-   b = strsav(b, "  <li><code>#define <b>FEATURE_KILL_POPUPS</b></code> - Enables killing JavaScript popups.</li>\n");
-#else /* ifndef FEATURE_KILL_POPUPS */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_KILL_POPUPS</b></code> - Disables killing JavaScript popups.</li>\n");
-#endif /* ndef FEATURE_KILL_POPUPS */
-
-#ifdef FEATURE_IMAGE_DETECT_MSIE
-   b = strsav(b, "  <li><code>#define <b>FEATURE_IMAGE_DETECT_MSIE</b></code> - Enables detecting image requests automatically for MSIE.</li>\n");
-#else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_IMAGE_DETECT_MSIE</b></code> - Disables detecting image requests automatically for MSIE.</li>\n");
-#endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
-
-#ifdef FEATURE_IMAGE_BLOCKING
-   b = strsav(b, "  <li><code>#define <b>FEATURE_IMAGE_BLOCKING</b></code> - Enables sending \"blocked\" images instead of HTML.</li>\n");
-#else /* ifndef FEATURE_IMAGE_BLOCKING */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_IMAGE_BLOCKING</b></code> - Disables sending \"blocked\" images instead of HTML.</li>\n");
-#endif /* ndef FEATURE_IMAGE_BLOCKING */
-
-#ifdef FEATURE_ACL
-   b = strsav(b, "  <li><code>#define <b>FEATURE_ACL</b></code> - Enables the use of ACL files to control access to the proxy by IP address.</li>\n");
-#else /* ifndef FEATURE_ACL */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_ACL</b></code> - Disables the use of ACL files to control access to the proxy by IP address.</li>\n");
-#endif /* ndef FEATURE_ACL */
-
-#ifdef FEATURE_TRUST
-   b = strsav(b, "  <li><code>#define <b>FEATURE_TRUST</b></code> - Enables the use of trust files.</li>\n");
-#else /* ifndef FEATURE_TRUST */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_TRUST</b></code> - Disables the use of trust files.</li>\n");
-#endif /* ndef FEATURE_TRUST */
-
-#ifdef FEATURE_COOKIE_JAR
-   b = strsav(b, "  <li><code>#define <b>FEATURE_COOKIE_JAR</b></code> - Enables the use of jar files to capture cookies.</li>\n");
-#else /* ifndef FEATURE_COOKIE_JAR */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_COOKIE_JAR</b></code> - Disables the use of jar files to capture cookies.</li>\n");
-#endif /* ndef FEATURE_COOKIE_JAR */
-
-#ifdef FEATURE_FAST_REDIRECTS
-   b = strsav(b, "  <li><code>#define <b>FEATURE_FAST_REDIRECTS</b></code> - Enables intercepting remote script redirects.</li>\n");
-#else /* ifndef FEATURE_FAST_REDIRECTS */
-   b = strsav(b, "  <li><code>#undef <b>FEATURE_FAST_REDIRECTS</b></code> - Disables intercepting remote script redirects.</li>\n");
-#endif /* ndef FEATURE_FAST_REDIRECTS */
-
-   return b;
+   return exports;
 }
 
 
