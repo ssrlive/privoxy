@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.13 2002/04/11 10:09:20 oes Exp $
+# $Id: privoxy-suse.spec,v 1.14 2002/04/11 17:57:40 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -78,7 +78,7 @@ SuSE series: n
 %build
 autoheader
 autoconf
-./configure
+./configure --disable-dynamic-pcre
 make
 
 
@@ -296,6 +296,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.14  2002/04/11 17:57:40  oes
+# Fixed(?) Conflicts: Provides: Obsoletes:
+#
 # Revision 1.13  2002/04/11 10:09:20  oes
 # Version 2.9.14
 #
