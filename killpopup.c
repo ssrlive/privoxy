@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.2 2001/05/20 01:21:20 jongfoster Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.3 2001/05/22 18:56:28 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,9 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.2 2001/05/20 01:21:20 jongfos
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.3  2001/05/22 18:56:28  oes
+ *    CRLF -> LF
+ *
  *    Revision 1.2  2001/05/20 01:21:20  jongfoster
  *    Version 2.9.4 checkin.
  *    - Merged popupfile and cookiefile, and added control over PCRS
@@ -87,6 +90,7 @@ const char killpopup_h_rcs[] = KILLPOPUP_H_VERSION;
  * Description :  Filter the block of data that's been read from the server.
  *                Caller is responsible for checking permissons list
  *                to determine if this function should be called.
+ *                FIXME: Should use the replacements proposed by Guy
  *
  * Parameters  :
  *          1  :  buff = Buffer to scan and modify.  Null terminated.
@@ -156,7 +160,7 @@ void filter_popups(char *buff, int size)
       close=strchr(popup,'>');
       if (close)
       {
-         /* we are now between <body and the ending > */
+         /* we are now between <body and the ending > FIXME: No, we're anywhere! --oes*/
          p=strstr(popup, "onUnload");
          if (p)
          {
