@@ -190,29 +190,18 @@ SOURCE=.\showargs.h
 # PROP Default_Filter ".win"
 # Begin Source File
 
-SOURCE=.\pcre\chartables.c.win
-
-!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
-
-# Begin Custom Build - Copying pcre\chartables.c.win
-InputDir=".\pcre"
-InputPath=.\pcre\chartables.c.win
-
-"$(InputDir)\chartables.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) $(InputDir)\chartables.c
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\config.h.win
 
 !IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+
+# Begin Custom Build - Copying config.h.win
+InputDir=.
+InputPath=.\config.h.win
+
+"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(InputDir)\config.h
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
 

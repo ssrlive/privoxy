@@ -188,11 +188,32 @@ SOURCE=.\showargs.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\pcre\chartables.c.win
-# End Source File
-# Begin Source File
-
 SOURCE=.\config.h.win
+
+!IF  "$(CFG)" == "console_junkbuster - Win32 Release"
+
+# Begin Custom Build - Copying config.h.win
+InputDir=.
+InputPath=.\config.h.win
+
+"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(InputDir)\config.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Debug"
+
+# Begin Custom Build - Copying config.h.win
+InputDir=.
+InputPath=.\config.h.win
+
+"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(InputDir)\config.h
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File
