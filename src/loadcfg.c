@@ -1,7 +1,7 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.1 2002/06/04 17:22:36 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/loadcfg.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/loadcfg.c,v $
  *
  * Purpose     :  Loads settings from the configuration file into
  *                global variables.  This file contains both the
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.0 2002/06/04 14:34:21 jongfoster 
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 2.1  2002/06/04 17:22:36  jongfoster
+ *    Adding comments
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -1475,7 +1478,8 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_actions_file     = config->actions_file[0]; /* FIXME only works for first action file */
+   g_default_actions_file  = config->actions_file[1]; /* FIXME Hope this is default.action */
+   g_user_actions_file = config->actions_file[2]; /* FIXME Hope this is user.action */
    g_re_filterfile    = config->re_filterfile;
 
 #ifdef FEATURE_TRUST
