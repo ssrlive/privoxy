@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.7 2002/04/10 18:45:15 swa Exp $
+ $Id: readme.sgml,v 1.8 2002/04/12 10:09:50 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@
  READ: Document Note: This file generates the README in the top level 
  source directory. It is generated as only a plain text file. The 
  current markup is not suitable for other formats. Build from 
- Makefile with 'make readme'.
+ Makefile with 'make dok-readme'.
  ===================================================================
 
  READ:
@@ -195,14 +195,13 @@
 -------------- </LiteralLayout>
 </para>
 <para>
- See: 'config', 'default.action', and 'default.filter'. There are several
- actions files included. These are all well commented. Most of the magic is in
- '*.action', and there are several of these included with varying degrees of
- aggressiveness. On Unix-like systems, these files are installed in
- /etc/privoxy.  On Windows, then wherever the executable itself is installed.
- There are many significant changes and advances since Junkbuster v2.0.x. The
- user-manual has a run down of configuration options, and examples:
- http://www.privoxy.org/user-manual/.
+ See: 'config', 'default.action', 'standard.action', 'user.action', and
+ 'default.filter'. 'user.action' is for personal configuration. These are all
+ well commented. Most of the magic is in '*.action' files. On Unix-like
+ systems, these files are installed in /etc/privoxy.  On Windows, then
+ wherever the executable itself is installed. There are many significant
+ changes and advances since Junkbuster v2.0.x. The user-manual has a run down
+ of configuration options, and examples: http://www.privoxy.org/user-manual/.
 </para>
 <para>
  Be sure to set your browser(s) for HTTP/HTTPS Proxy at &lt;IP&gt;:&lt;Port&gt;, or
@@ -210,7 +209,7 @@
  localhost:8118.
 </para>
 <para>
- The default.action file can be configured via the web interface accessed via
+ The actions list can be configured via the web interface accessed via
  http://p.p/, as well other options.
 </para>
 <![%p-not-stable;[
@@ -236,8 +235,7 @@
  may still be either comments in the source code, or the included
  configuration files. ]]>The source and configuration files are all well
  commented. The main configuration files are: 'config', 'default.action', and
- 'default.filter'<![%p-not-stable;[ in the toplevel source directory]]>. There
- are several *.action files included, with varying levels of aggressiveness.
+ 'default.filter'<![%p-not-stable;[ in the toplevel source directory]]>. 
 </para>
 
 <para>
@@ -262,7 +260,7 @@
  </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.7 2002/04/10 18:45:15 swa Exp $
+ $Id: readme.sgml,v 1.8 2002/04/12 10:09:50 swa Exp $
 </para>
 
 </article>
