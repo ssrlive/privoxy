@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.53 2002/03/26 22:29:55 swa Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.54 2002/04/02 15:03:16 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.53 2002/03/26 22:29:55 swa Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.54  2002/04/02 15:03:16  oes
+ *    Tiny code cosmetics
+ *
  *    Revision 1.53  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -505,69 +508,74 @@ int flush_socket(jb_socket fd, struct client_state *csp)
  *
  * Function    :  add_to_iob
  *
- * Description :  Add content to the buffered page.
+ * Description :  Add content to the buffered page, expanding the
+ *                buffer if necessary.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  buf = holds the content to be added to the page
  *          3  :  n = number of bytes to be added
  *
- * Returns     :  None
+ * Returns     :  JB_ERR_OK on success, JB_ERR_MEMORY if out-of-memory
+ *                or buffer limit reached.
  *
  *********************************************************************/
-void add_to_iob(struct client_state *csp, char *buf, int n)
+jb_err add_to_iob(struct client_state *csp, char *buf, int n)
 {
    struct iob *iob = csp->iob;
-   size_t have, need;
+   size_t used, offset, need, want;
    char *p;
 
-   have = iob->eod - iob->cur;
+   if (n <= 0) return JB_ERR_OK;
 
-   if (n <= 0)
+   used   = iob->eod - iob->buf;
+   offset = iob->cur - iob->buf;
+   need   = used + n + 1;
+
+   /*
+    * If the buffer can't hold the new data, extend it first.
+    * Use the next power of two if possible, else use the actual need.
+    */
+   if (need > csp->config->buffer_limit)
    {
-      return;
+      log_error(LOG_LEVEL_ERROR, "Buffer limit reached while extending the buffer (iob)");
+      return JB_ERR_MEMORY;
    }
 
-   need = have + n;
-
-   if ((p = (char *)malloc(need + 1)) == NULL)
+   if (need > iob->size)
    {
-      log_error(LOG_LEVEL_FATAL, "malloc() iob failed: %E");
-   }
+      for (want = csp->iob->size ? csp->iob->size : 512; want <= need;) want *= 2;
+      
+      if (want <= csp->config->buffer_limit && NULL != (p = (char *)realloc(iob->buf, want)))
+      {
+         iob->size = want;
+      }
+      else if (NULL != (p = (char *)realloc(iob->buf, need)))
+      {
+         iob->size = need;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR, "Extending the buffer (iob) failed: %E");
+         return JB_ERR_MEMORY;
+      }
 
-   if (have)
-   {
-      /* there is something in the buffer - save it */
-      memcpy(p, iob->cur, have);
-
-      /* replace the buffer with the new space */
-      freez(iob->buf);
-      iob->buf = p;
-
-      /* point to the end of the data */
-      p += have;
-   }
-   else
-   {
-      /* the buffer is empty, free it and reinitialize */
-      freez(iob->buf);
+      /* Update the iob pointers */
+      iob->cur = p + offset;
+      iob->eod = p + used;
       iob->buf = p;
    }
 
    /* copy the new data into the iob buffer */
-   memcpy(p, buf, (size_t)n);
+   memcpy(iob->eod, buf, (size_t)n);
 
    /* point to the end of the data */
-   p += n;
+   iob->eod += n;
 
    /* null terminate == cheap insurance */
-   *p = '\0';
+   *iob->eod = '\0';
 
-   /* set the pointers to the new values */
-   iob->cur = iob->buf;
-   iob->eod = p;
-
-   return;
+   return JB_ERR_OK;
 
 }
 
