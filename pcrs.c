@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 11:03:48 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 19:12:45 oes Exp $";
 
 /*********************************************************************
  *
@@ -20,7 +20,11 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 11:03:48 oes Exp $";
  *                Currently, there's no documentation besides comments and the
  *                source itself ;-)
  *
- * Copyright   :  Written and Copyright (C) 2000 by Andreas Oesterhelt
+ *                Short note: I addition to perl's options, 'U' for ungreedy
+ *                and 't' for trivial (i.e.: ignore backrefs in the substitute)
+ *                are supported.
+ *
+ * Copyright   :  Written and Copyright (C) 2000, 2001 by Andreas S. Oesterhelt
  *                <andreas@oesterhelt.org>
  *
  *                This program is free software; you can redistribute it 
@@ -43,59 +47,8 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 11:03:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
- *    Revision 1.6  2001/06/03 11:03:48  oes
- *    Makefile/in
- *
- *    introduced cgi.c
- *
- *    actions.c:
- *
- *    adapted to new enlist_unique arg format
- *
- *    conf loadcfg.c
- *
- *    introduced confdir option
- *
- *    filters.c filtrers.h
- *
- *     extracted-CGI relevant stuff
- *
- *    jbsockets.c
- *
- *     filled comment
- *
- *    jcc.c
- *
- *     support for new cgi mechansim
- *
- *    list.c list.h
- *
- *    functions for new list type: "map"
- *    extended enlist_unique
- *
- *    miscutil.c .h
- *    introduced bindup()
- *
- *    parsers.c parsers.h
- *
- *    deleted const struct interceptors
- *
- *    pcrs.c
+ *    Revision 1.6  2001/06/03 19:12:45  oes
  *    added FIXME
- *
- *    project.h
- *
- *    added struct map
- *    added struct http_response
- *    changes struct interceptors to struct cgi_dispatcher
- *    moved HTML stuff to cgi.h
- *
- *    re_filterfile:
- *
- *    changed
- *
- *    showargs.c
- *    NO TIME LEFT
  *
  *    Revision 1.5  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
@@ -185,92 +138,41 @@ const char pcrs_h_rcs[] = PCRS_H_VERSION;
 
 /*********************************************************************
  *
- * Function    :  my_strsep
- *
- * Description :  Convenience function. It acts like strsep, except that
- *                it respects quoting of the delimiter character with the
- *                quote character. (And, of course, quoting the quote char
- *                with itself.)  Called from `pcrs_make_job'.
- *
- * Parameters  :
- *          1  :  token = current token
- *          2  :  text = string to tokenize
- *          3  :  delimiter = single character deliminter
- *          4  :  quote_char = character to cause quoting
- *
- * Returns     :  -1 => failure, else the length of the token found.
- *                In the latter case, *text is the token's start.
- *
- *********************************************************************/
-int my_strsep(char *token, char **text, char delimiter, char quote_char)
-{
-   int i, k=0, limit, quoted = FALSE;
-
-   limit = strlen(*text);
-   if ( 0 == limit )
-   {
-      return -1;
-   }
-
-   token[0] = '\0';
-
-   for (i=0; i < limit; i++)
-   {
-      if (text[0][i] == delimiter && !quoted)
-      {
-         *text += 1;
-         break;
-      }
-      else if (text[0][i] == quote_char && !quoted && i+1 < limit && text[0][i+1] == delimiter)
-      {
-         quoted = TRUE;
-         continue;
-      }
-      token[k++] = text[0][i];
-      quoted = FALSE;
-   }
-   token[k] = '\0';
-   *text += i;
-   return k;
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  pcrs_compile_perl_options
  *
  * Description :  This function parses a string containing the options to
  *                Perl's s/// operator. It returns an integer that is the
  *                pcre equivalent of the symbolic optstring.
- *                Since pcre doesn't know about Perl's 'g' (global) option,
- *                but pcrs needs it, the globalflag integer is set if 'g'
- *                is encountered.
- *
+ *                Since pcre doesn't know about Perl's 'g' (global) or pcrs',
+ *                'T' (trivial) options but pcrs needs them, the corresponding
+ *                flags are set if 'g'or 'T' is encountered.
+ *                Note: The 'T' and 'U' options do not conform to Perl.
+ *             
  * Parameters  :
  *          1  :  optstring = string with options in perl syntax
- *          2  :  globalflag = see description
+ *          2  :  flags = see description
  *
  * Returns     :  option integer suitable for pcre 
  *
  *********************************************************************/
-int pcrs_compile_perl_options(char *optstring, int *globalflag)
+int pcrs_compile_perl_options(char *optstring, int *flags)
 {
    size_t i;
    int rc = 0;
-   *globalflag = 0;
+   *flags = 0;
    for (i=0; i < strlen(optstring); i++)
    {
       switch(optstring[i])
       {
          case 'e': break;
-         case 'g': *globalflag = 1; break;
+         case 'g': *flags |= PCRS_GLOBAL; break;
          case 'i': rc |= PCRE_CASELESS; break;
          case 'm': rc |= PCRE_MULTILINE; break;
          case 'o': break;
          case 's': rc |= PCRE_DOTALL; break;
          case 'x': rc |= PCRE_EXTENDED; break;
          case 'U': rc |= PCRE_UNGREEDY; break;
+		   case 'T': *flags |= PCRS_TRIVIAL; break;
          default:  break;
       }
    }
@@ -299,7 +201,7 @@ int pcrs_compile_perl_options(char *optstring, int *globalflag)
  *                the reason.
  *
  *********************************************************************/
-pcrs_substitute *pcrs_compile_replacement(char *replacement, int *errptr)
+pcrs_substitute *pcrs_compile_replacement(char *replacement, int trivialflag, int *errptr)
 {
    int length, i, k = 0, l = 0, quoted = 0, idx;
    char *text, *num_ptr, *numbers = "0123456789";
@@ -319,57 +221,64 @@ pcrs_substitute *pcrs_compile_replacement(char *replacement, int *errptr)
 
    length = strlen(replacement);
 
-   for (i=0; i < length; i++)
+   if (trivialflag)
    {
-      /* Backslash treatment */
-      if (replacement[i] == '\\')
+ 	   k = length;
+   }
+   else
+	{
+      for (i=0; i < length; i++)
       {
-         if (quoted)
+         /* Backslash treatment */
+         if (replacement[i] == '\\')
          {
-            text[k++] = replacement[i];
-            quoted = 0;
-         }
-         else
-         {
-            quoted = 1;
-         }
-         continue;
-      }
-
-      /* Dollar treatment */
-      if (replacement[i] == '$' && !quoted && i < length - 1)
-      {
-         if (strchr("0123456789&", replacement[i + 1]) == NULL)
-         {
-            text[k++] = replacement[i];
-         }
-         else
-         {
-            r->block_length[l] = k - r->block_offset[l];
-            r->backref[l] = 0;
-            if (replacement[i + 1] != '&')
+            if (quoted)
             {
-               while ((num_ptr = strchr(numbers, replacement[++i])) != NULL && i < length)
-               {
-                  idx = num_ptr - numbers;
-                  r->backref[l] = r->backref[l] * 10 + idx;
-               }
-               i--;
+               text[k++] = replacement[i];
+               quoted = 0;
             }
             else
-               i++;
-            if (r->backref[l] < PCRS_MAX_SUBMATCHES)
-               r->backref_count[r->backref[l]] += 1;
-            l++;
-            r->block_offset[l] = k;
+            {
+               quoted = 1;
+            }
+            continue;
          }
-         continue;
-      }
 
-      /* Plain char treatment */
-      text[k++] = replacement[i];
-      quoted = 0;
-   }
+         /* Dollar treatment */
+         if (replacement[i] == '$' && !quoted && i < length - 1)
+         {
+            if (strchr("0123456789&", replacement[i + 1]) == NULL)
+            {
+               text[k++] = replacement[i];
+            }
+            else
+            {
+               r->block_length[l] = k - r->block_offset[l];
+               r->backref[l] = 0;
+               if (replacement[i + 1] != '&')
+               {
+                  while ((num_ptr = strchr(numbers, replacement[++i])) != NULL && i < length)
+                  {
+                     idx = num_ptr - numbers;
+                     r->backref[l] = r->backref[l] * 10 + idx;
+                  }
+                  i--;
+               }
+               else
+                  i++;
+               if (r->backref[l] < PCRS_MAX_SUBMATCHES)
+                  r->backref_count[r->backref[l]] += 1;
+               l++;
+               r->block_offset[l] = k;
+            }
+            continue;
+         }
+
+         /* Plain char treatment */
+         text[k++] = replacement[i];
+         quoted = 0;
+      }
+	} /* -END- if (!trivialflag) */
 
    text[k] = '\0';
    r->text = text;
@@ -391,8 +300,8 @@ pcrs_substitute *pcrs_compile_replacement(char *replacement, int *errptr)
  * Parameters  :
  *          1  :  job = pointer to the pcrs_job structure to be freed
  *
- * Returns     : a pointer to the next job, if there was any, or
- *               NULL otherwise. 
+ * Returns     :  a pointer to the next job, if there was any, or
+ *                NULL otherwise. 
  *
  *********************************************************************/
 pcrs_job *pcrs_free_job(pcrs_job *job)
@@ -419,15 +328,36 @@ pcrs_job *pcrs_free_job(pcrs_job *job)
 
 }
 
+/*********************************************************************
+ *
+ * Function    :  pcrs_free_joblist
+ *
+ * Description :  Iterates through a chained list of pcrs_job's and
+ *                frees them using pcrs_free_job.
+ *
+ * Parameters  :
+ *          1  :  joblist = pointer to the first pcrs_job structure to
+ *                be freed
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void pcrs_free_joblist(pcrs_job *joblist)
+{
+   while ( NULL != (joblist = pcrs_free_job(joblist)) ) {};
+
+   return;
+
+}
+
 
 /*********************************************************************
  *
- * Function    :  pcrs_make_job
+ * Function    :  pcrs_compile
  *
  * Description :  Main entry point. Takes a string with a Perl-style
  *                s/// command and returns a corresponding pcrs_job,
  *                or NULL if compiling the job fails at any stage.
- *                Diagnostics could obviously be improved.
  *
  * Parameters  :
  *          1  :  command = string with perl-style s/// command
@@ -439,91 +369,133 @@ pcrs_job *pcrs_free_job(pcrs_job *job)
  *                has the reason.
  *
  *********************************************************************/
-pcrs_job *pcrs_make_job(char *command, int *errptr)
+pcrs_job *pcrs_compile(char *command, int *errptr)
 {
-   char *dummy, *token, delimiter;
-   const char *error;
-   int i = 0, globalflag;
+   int i, k, l, limit, quoted = FALSE;
+   char delimiter;
+   char *tokens[4];   
    pcrs_job *newjob;
 
-   /* Get and init memory */
-   if ((newjob = (pcrs_job *)malloc(sizeof(pcrs_job))) == NULL)
+   i = k = l = 0;
+
+   /*
+    * Tokenize the perl command
+    */
+   limit = strlen(command);
+   if (limit < 4)
+	{
+      *errptr = PCRS_ERR_CMDSYNTAX;
+      return NULL;
+   }
+   else
+	{
+	  delimiter = command[1];
+	}
+
+   tokens[l] = (char *) malloc(limit + 1);
+
+   for (i=0; i <= limit; i++)
+   {
+
+      if (command[i] == delimiter && !quoted)
+      {
+ 		   if (l == 3)
+			{
+			   l = -1;
+            break;
+         }
+ 	      tokens[0][k++] = '\0';
+         tokens[++l] = tokens[0] + k;
+	      continue;
+      }
+
+      else if (command[i] == '\\' && !quoted && i+1 < limit && command[i+1] == delimiter)
+      {
+         quoted = TRUE;
+         continue;
+      }
+      tokens[0][k++] = command[i];
+      quoted = FALSE;
+   }
+
+
+   /*
+    * Syntax error ?
+    */
+   if (l != 3)
+   {
+	   *errptr = PCRS_ERR_CMDSYNTAX;
+      free(tokens[0]);
+      return NULL;
+   }
+
+	newjob = pcrs_make_job(tokens[1], tokens[2], tokens[3], errptr);
+   free(tokens[0]);
+   return newjob;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  pcrs_make_job
+ *
+ * Description :  Takes the three arguments to a perl s/// command
+ *                and compiles a pcrs_job structure from them.
+ *
+ * Parameters  :
+ *          1  :  pattern = string with perl-style pattern
+ *          2  :  substitute = string with perl-style substitute
+ *          3  :  options = string with perl-style options
+ *          4  :  errptr = pointer to an integer in which error
+ *                         conditions can be returned.
+ *
+ * Returns     :  a corresponding pcrs_job data structure, or NULL
+ *                if an error was encountered. In that case, *errptr
+ *                has the reason.
+ *
+ *********************************************************************/
+pcrs_job *pcrs_make_job(char *pattern, char *substitute, char *options, int *errptr)
+{
+   pcrs_job *newjob;
+   int flags;
+   const char *error;
+
+   /* 
+    * Handle NULL arguments
+    */
+   if (pattern == NULL) pattern = "";
+   if (substitute == NULL) substitute = "";
+   if (options == NULL) options = "";
+
+   /* 
+    * Get and init memory
+    */
+   if (NULL == (newjob = (pcrs_job *)malloc(sizeof(pcrs_job))))
    {
       *errptr = PCRS_ERR_NOMEM;
       return NULL;
    }
    memset(newjob, '\0', sizeof(pcrs_job));
 
-   /* Command too short? */
-   if (strlen(command) < 4)
-   {
-      *errptr = PCRS_ERR_CMDSYNTAX;
-      pcrs_free_job(newjob);
-      return NULL;
-   }
 
-   /* Split command into tokens and handle them */
-   delimiter = command[1];
-   token = (char *)malloc(strlen(command)); /* current token */
-   dummy = (char *)malloc(strlen(command)); /* must store pattern, since we can't */
-                                            /* use it until the options are known */
-   while (my_strsep(token, &command, delimiter, '\\') >= 0)
-   {
-      switch (i)
-      {
-         /* We don't care about the command and assume 's' */
-         case 0:
-            break;
+   /*
+    * Evaluate the options
+    */
+   newjob->options = pcrs_compile_perl_options(options, &flags);
+   newjob->flags = flags;
 
-         /* The pattern */
-         case 1:
-            strcpy(dummy, token);
-            break;
 
-         /* The substitute */
-         case 2:
-            if ((newjob->substitute = pcrs_compile_replacement(token, errptr)) == NULL)
-            {
-               pcrs_free_job(newjob);
-               return NULL;
-            }
-            else
-            {
-               break;
-            }
-
-         /* The options */
-         case 3:
-            newjob->options = pcrs_compile_perl_options(token, &globalflag);
-            newjob->globalflag = globalflag;
-            break;
-
-         /* There shouldn't be anything else! */
-         default:
-            *errptr = PCRS_ERR_CMDSYNTAX;
-            pcrs_free_job(newjob);
-            return NULL;
-      }
-      i++;
-   }
-   free(token);
-
-   /* We have a valid substitute? */
-   if (newjob->substitute == NULL)
-   {
-      *errptr = PCRS_ERR_CMDSYNTAX;
-      pcrs_free_job(newjob);
-      return NULL;
-   }
-
-   /* Compile the pattern */
-   newjob->pattern = pcre_compile(dummy, newjob->options, &error, errptr, NULL);
+   /*
+    * Compile the pattern
+    */
+   newjob->pattern = pcre_compile(pattern, newjob->options, &error, errptr, NULL);
    if (newjob->pattern == NULL)
    {
       pcrs_free_job(newjob);
       return NULL;
    }
-   free(dummy);
+
 
    /*
     * Generate hints. This has little overhead, since the
@@ -536,7 +508,17 @@ pcrs_job *pcrs_make_job(char *command, int *errptr)
       pcrs_free_job(newjob);
       return NULL;
    }
+ 
 
+   /*
+    * Compile the substitute
+    */
+   if (NULL == (newjob->substitute = pcrs_compile_replacement(substitute, newjob->flags & PCRS_TRIVIAL, errptr)))
+   {
+      pcrs_free_job(newjob);
+      return NULL;
+   }
+ 
    return newjob;
 
 }
@@ -544,49 +526,7 @@ pcrs_job *pcrs_make_job(char *command, int *errptr)
 
 /*********************************************************************
  *
- * Function    :  create_pcrs_job
- *
- * Description :  Create a job from all its components, if you don't
- *                have a Perl command to start from. Rather boring.
- *
- * Parameters  :
- *          1  :  pattern = pointer to pcre pattern
- *          2  :  hints = pointer to pcre hints
- *          3  :  options = options in pcre format
- *          4  :  globalflag = flag that indicates if global matching is desired
- *          5  :  substitute = pointer to pcrs_substitute data structure
- *          2  :  errptr = pointer to an integer in which error
- *                         conditions can be returned.
- *
- * Returns     :  pcrs_job structure, or NULL if an error was encountered.
- *                In that case, *errptr has the reason why.
- *
- *********************************************************************/
-pcrs_job *create_pcrs_job(pcre *pattern, pcre_extra *hints, int options, int globalflag, pcrs_substitute *substitute, int *errptr)
-{
-   pcrs_job *newjob;
-
-   if ((newjob = (pcrs_job *)malloc(sizeof(pcrs_job))) == NULL)
-   {
-      *errptr = PCRS_ERR_NOMEM;
-      return NULL;
-   }
-   memset(newjob, '\0', sizeof(pcrs_job));
-
-   newjob->pattern = pattern;
-   newjob->hints = hints;
-   newjob->options = options;
-   newjob->globalflag = globalflag;
-   newjob->substitute = substitute;
-
-   return(newjob);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  pcrs_exec_substitution
+ * Function    :  pcrs_execute
  *
  * Description :  Modify the subject by executing the regular substitution
  *                defined by the job. Since the result may be longer than
@@ -595,52 +535,65 @@ pcrs_job *create_pcrs_job(pcre *pattern, pcre_extra *hints, int options, int glo
  *                It is the caller's responsibility to free the result when
  *                it's no longer needed.
  *
- *                FIXME: MUST HANDLE SUBJECTS THAT ARE LONGER THAN subject_length
-                         CORRECTLY! --oes
- *
  * Parameters  :
  *          1  :  job = the pcrs_job to be executed
  *          2  :  subject = the subject (== original) string
- *          3  :  subject_length = the subject's length
+ *          3  :  subject_length = the subject's length 
+ *                INCLUDING the terminating zero, if string!
  *          4  :  result = char** for returning  the result 
  *          5  :  result_length = int* for returning the result's length
  *
  * Returns     :  the number of substitutions that were made. May be > 1
- *                if job->globalflag was set
+ *                if job->flags contained PCRS_GLOBAL
  *
  *********************************************************************/
-int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length)
+int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length)
 {
    int offsets[3 * PCRS_MAX_SUBMATCHES],
-      offset = 0, i=0, k, matches_found, newsize, submatches;
+       offset, i, k,
+       matches_found,
+       newsize,
+       submatches;
    pcrs_match matches[PCRS_MAX_MATCHES];
    char *result_offset;
 
+   offset = i = k = 0;
 
-   /* Sanity first */
+   /* 
+    * Sanity check
+    */
    if (job == NULL || job->pattern == NULL || job->substitute == NULL)
    {
       *result = NULL;
       return(PCRS_ERR_BADJOB);
    }
 
+   
+   /*
+    * Find the pattern and calculate the space
+    * requirements for the result (newsize)
+    */
    newsize=subject_length;
 
-
-   /* Find.. */
-   while ((submatches = pcre_exec(job->pattern, job->hints, subject, subject_length, offset, 0, offsets, 99)) > 0)
+   while ((submatches = pcre_exec(job->pattern, job->hints, subject, subject_length, offset, 0, offsets, 3 * PCRS_MAX_SUBMATCHES)) > 0)
    {
+	   job->flags |= PCRS_SUCCESS;
       matches[i].submatches = submatches;
       for (k=0; k < submatches; k++)
       {
          matches[i].submatch_offset[k] = offsets[2 * k];
-         matches[i].submatch_length[k] = offsets[2 * k + 1] - offsets[2 * k]; /* Non-found optional submatches have length -1-(-1)==0 */
-         newsize += matches[i].submatch_length[k] * job->substitute->backref_count[k]; /* reserve mem for each submatch as often as it is ref'd */
+
+         /* Note: Non-found optional submatches have length -1-(-1)==0 */
+         matches[i].submatch_length[k] = offsets[2 * k + 1] - offsets[2 * k]; 
+
+         /* reserve mem for each submatch as often as it is ref'd */
+         newsize += matches[i].submatch_length[k] * job->substitute->backref_count[k]; 
       }
-      newsize += strlen(job->substitute->text) - matches[i].submatch_length[0]; /* plus replacement text size minus match text size */
+      /* plus replacement text size minus match text size */
+      newsize += strlen(job->substitute->text) - matches[i].submatch_length[0]; 
 
       /* Non-global search or limit reached? */
-      if (++i >= PCRS_MAX_MATCHES || !job->globalflag ) break;
+      if (++i >= PCRS_MAX_MATCHES || !(job->flags & PCRS_GLOBAL) ) break;
 
       /* Don't loop on empty matches */
       if (offsets[1] == offset)
@@ -652,24 +605,30 @@ int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, cha
       else
          offset = offsets[1];
    }
-   if (submatches < -1) return submatches;   /* Pass pcre error through */
+   /* Pass pcre error through if failiure*/
+   if (submatches < -1) return submatches;   
    matches_found = i;
 
 
-   /* ..get memory ..*/
+   /* 
+    * Get memory for the result
+    */
    if ((*result = (char *)malloc(newsize)) == NULL)   /* must be free()d by caller */
    {
       return PCRS_ERR_NOMEM;
    }
 
 
-   /* ..and replace */
+   /* 
+    * Replace
+    */
    offset = 0;
    result_offset = *result;
 
    for (i=0; i < matches_found; i++)
    {
-      memcpy(result_offset, subject + offset, matches[i].submatch_offset[0] - offset); /* copy the chunk preceding the match */
+      /* copy the chunk preceding the match */
+      memcpy(result_offset, subject + offset, matches[i].submatch_offset[0] - offset); 
       result_offset += matches[i].submatch_offset[0] - offset;
 
       /* For every segment of the substitute.. */
