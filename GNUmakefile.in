@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.112 2002/06/28 18:30:10 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.113 2002/07/30 21:50:25 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -81,6 +81,7 @@ LD         = @CC@
 RM         = rm -f
 STRIP_PROG = strip
 SED	   = sed
+GREP       = grep
 CAT        = cat
 RPM        = rpm
 MV	   = mv
@@ -230,7 +231,7 @@ LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
 #
 # There should NOT be any targets above this line.
 #############################################################################
-all: $(PROGRAM)
+all: $(PROGRAM) default.action
 
 
 #############################################################################
@@ -255,6 +256,12 @@ $(DIR_PRIVOXY_OBJ):
 	mkdir obj
 
 #############################################################################
+# Strip master copy comments from default.action:
+#############################################################################
+default.action: default.action.master
+	$(GREP) -v '^#MASTER#' $< > $@
+
+#############################################################################
 # Win32 config files
 #############################################################################
 
@@ -274,10 +281,6 @@ config.txt: config
 
 trust.txt: trust
 	$(DOSFILTER) < $< > $@ 
-
-re_filterfile.txt: re_filterfile
-	$(DOSFILTER) < $< > $@ 
-
 
 #############################################################################
 # Pre-dist check:
@@ -436,6 +439,7 @@ suse-clean:
 	$(RM) /usr/sbin/privoxy
 	$(RM) /usr/sbin/rcprivoxy
 	$(RM) /usr/share/man/man1/privoxy.1.gz
+
 
 #############################################################################
 # generic distribution
@@ -651,7 +655,7 @@ $(DIR_PRIVOXY_OBJ)/ssplit.@OBJEXT@:    $(DIR_PRIVOXY_SRC)/ssplit.c    $(DIR_PRIV
 $(DIR_PRIVOXY_OBJ)/urlmatch.@OBJEXT@:  $(DIR_PRIVOXY_SRC)/urlmatch.c  $(DIR_PRIVOXY_SRC)/urlmatch.h  $(DIR_PRIVOXY_SRC)/config.h $(PROJECT_H_DEPS) $(DIR_PRIVOXY_SRC)/errlog.h  $(DIR_PRIVOXY_SRC)/miscutil.h  $(DIR_PRIVOXY_SRC)/ssplit.h
 
 # PCRS
-$(DIR_PRIVOXY_OBJ)/pcrs.@OBJEXT@: $(DIR_PRIVOXY_SRC)/pcrs.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC)/pcrs.h
+$(DIR_PRIVOXY_OBJ)/pcrs.@OBJEXT@: $(DIR_PRIVOXY_SRC)/pcrs.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC)/pcrs.h $(DIR_PRIVOXY_SRC)/config.h
 
 # PCRE
 $(DIR_PRIVOXY_OBJ)/get.@OBJEXT@:        $(DIR_PRIVOXY_SRC_PCRE)/get.c        $(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/pcre.h
@@ -701,7 +705,7 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 
 clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) \
-	`find . -name TAGS -o -name tags`
+	default.action `find . -name TAGS -o -name tags`
 
 tidy:
 	$(RM) `find . -name "*~"`
@@ -756,6 +760,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.113  2002/07/30 21:50:25  hal9
+# Add redhat-test target, and migrate the RPM_PACKAGEV stuff from 3.0 branch.
+#
 # Revision 1.112  2002/06/28 18:30:10  jongfoster
 # Fixing bugs compiling PCRE
 #
