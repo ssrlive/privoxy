@@ -10,3 +10,9 @@ Section: Apps/Net
 Format: HTML
 Index: /usr/share/doc/privoxy/developer-manual/index.html
 Files: /usr/share/doc/privoxy/developer-manual/*.html
+
+Format: text
+Files: /usr/share/doc/privoxy/developer-manual.txt.gz
+
+Format: pdf
+Files: /usr/share/doc/privoxy/privoxy-developer-manual.pdf

@@ -27,8 +27,7 @@ configure-stamp:
 	autoconf
 	env CFLAGS="$(OPTIMIZE) -g" \
 		./configure --prefix=/usr --sysconfdir=/etc \
-		--mandir=/usr/share/man	$(WITHDEBUG) \
-		--with-docbook=no
+		--mandir=/usr/share/man	$(WITHDEBUG)
 
 	touch configure-stamp
 
@@ -37,6 +36,21 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	$(MAKE)
+
+# 	backup formatted upstream documentation:
+	for x in text webserver pdf; do \
+		if [ ! -d doc/$$x.dist ]; then \
+			cp -a doc/$$x doc/$$x.dist; \
+		fi; \
+	done
+	for x in INSTALL README privoxy.1; do \
+		if [ ! -f $$x.dist ]; then \
+			cp -a $$x $$x.dist; \
+		fi; \
+	done
+
+	(cd doc/source; $(MAKE) pdf)
+	(cd doc/source; $(MAKE) all)
 
 	touch build-stamp
 
@@ -50,6 +64,23 @@ clean:
 	rm -f privoxy 
 	rm -f configure config.h GNUmakefile 
 	rm -f doc/source/ldp.dsl
+	rm -rf obj
+	rm -f ActivityConsole.jar
+	rm -f src/java/org/privoxy/activityconsole/*.class
+
+# 	restore formatted upstream documentation:
+	for x in text webserver pdf; do \
+		if [ -d doc/$$x.dist ]; then \
+			rm -rf doc/$$x; \
+			mv doc/$$x.dist doc/$$x; \
+		fi; \
+	done
+	for x in INSTALL README privoxy.1; do \
+		if [ -f $$x.dist ]; then \
+			rm -f $$x; \
+			mv $$x.dist $$x; \
+		fi; \
+	done
 
 	dh_clean
 
@@ -63,8 +94,8 @@ install: build
 
 	sed -e 's/^\(\(trust\|proxy\)-info-url\|admin-address\)/#\1/'  \
 	    -e 's/^\(enable-\(edit-actions\|remote-toggle\)\)[ 	]*1/\1 0/' \
-	    -e 's#^confdir \.#confdir /etc/privoxy#' \
-	    -e 's#^logdir \.#logdir /var/log/privoxy#' \
+	    -e 's#^confdir .*#confdir /etc/privoxy#' \
+	    -e 's#^logdir .*#logdir /var/log/privoxy#' \
 	    -e 's%^#\(user-manual\).*%\1 /usr/share/doc/privoxy/user-manual%' \
 	    -e 's/\(Sample Configuration File for Privoxy\).*/\1/' \
 	    -e 's/Id: config,v.*/Id: config,v $$/' \
@@ -90,6 +121,8 @@ binary-arch: build install
 	dh_testroot
 #	dh_installdebconf	
 	dh_installdocs -XCVS
+	(cd $(DEBDIR)/usr/share/doc/privoxy/; \
+	 mv privoxy-index.html index.html)
 	dh_installexamples
 	dh_installmenu
 	dh_installlogrotate

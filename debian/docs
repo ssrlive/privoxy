@@ -8,3 +8,8 @@ doc/webserver/user-manual
 doc/webserver/developer-manual
 doc/webserver/images
 doc/webserver/p_doc.css
+doc/webserver/privoxy-index.html
+doc/webserver/man-page
+doc/pdf/privoxy-developer-manual.pdf
+doc/pdf/privoxy-user-manual.pdf
+doc/pdf/privoxy-faq.pdf

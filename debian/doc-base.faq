@@ -9,3 +9,9 @@ Section: Apps/Net
 Format: HTML
 Index: /usr/share/doc/privoxy/faq/index.html
 Files: /usr/share/doc/privoxy/faq/*.html
+
+Format: text
+Files: /usr/share/doc/privoxy/faq.txt.gz
+
+Format: pdf
+Files: /usr/share/doc/privoxy/privoxy-faq.pdf
