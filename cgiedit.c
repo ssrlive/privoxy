@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.27 2002/03/26 23:06:04 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.28 2002/03/27 12:30:29 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.27 2002/03/26 23:06:04 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.28  2002/03/27 12:30:29  oes
+ *    Deleted unsused variable
+ *
  *    Revision 1.27  2002/03/26 23:06:04  jongfoster
  *    Removing duplicate @ifs on the toggle page
  *
@@ -2403,10 +2406,10 @@ jb_err cgi_error_file(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_error_bad_param
+ * Function    :  cgi_error_disabled
  *
- * Description :  CGI function that is called if the parameters
- *                (query string) for a CGI were wrong.
+ * Description :  CGI function that is called if the actions editor
+ *                is called although it's disabled in config
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
