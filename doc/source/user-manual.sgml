@@ -5050,15 +5050,15 @@ Requests</title>
  <listitem>
   <para>
    First, your web browser requests a web page. The browser knows to send 
-   the request to <application>Privoxy</application>, who in turn, 
-   will relay the request to the remote web server after passing the following 
+   the request to <application>Privoxy</application>, which will in turn, 
+   relay the request to the remote web server after passing the following 
    tests: 
   </para>
  </listitem> 
  <listitem>
   <para>
    <application>Privoxy</application> traps any request for its own internal CGI 
-  pages (e.g http://p.p/) and sends these back to the browser.
+   pages (e.g http://p.p/) and sends the CGI page back to the browser.
   </para>
  </listitem> 
  <listitem>
@@ -5066,13 +5066,13 @@ Requests</title>
    Next, <application>Privoxy</application> checks to see if the URL 
    matches any <ulink
    url="configuration.html#BLOCK"><quote>+block</quote></ulink> patterns. If
-   so, the remote web server is not contacted, and the URL is then further
-   checked against <quote>+handle-as-image</quote>. If both match, then the
-   setting of <ulink url="configuration.html#SET-IMAGE-BLOCKER">
-   <quote>+set-image-blocker</quote></ulink> is used to display whichever
-   option is appropriate. If <ulink
-   url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
-   does not match, then the <quote>BLOCKED</quote> banner page is displayed.
+   so, the URL is then blocked, and the remote web server will not be contacted.
+   <ulink url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> 
+   is then checked and if it does not match, an 
+   HTML <quote>BLOCKED</quote> page is sent back. Otherwise, if it does match,
+   an image is returned. The type of image depends on the setting of <ulink
+   url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+   (blank, checkerboard pattern, or an HTTP redirect to an image elsewhere).
   </para>
  </listitem> 
  <listitem>
@@ -5083,44 +5083,74 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   <ulink
-   url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
-   is processed, stripping unwanted parts of the requested web page URL.
+   If the URL pattern matches the <ulink
+   url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink> action,
+   it is then processed. Unwanted parts of the requested URL are stripped.
   </para>
  </listitem> 
  <listitem>
   <para>
-   At this point, <application>Privoxy</application> now relays the URL to the
-   web server, requesting the page (assuming nothing up to this point has
-   prevented getting us from this far).
+   Now the rest of the client browser's request headers are processed. If any
+   of these match any of the relevant actions (e.g. <ulink
+   url="configuration.html#HIDE-USER-AGENT"><quote>+hide-user-agent</quote></ulink>,
+   etc.), headers are suppressed or forged as determined by these actions and
+   their parameters.
   </para>
  </listitem> 
  <listitem>
   <para>
-   The first few hundred bytes are read from the web server and 
-   <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
-   is processed, if enabled.
+   Now the web server starts sending its response back (i.e. typically a web page and related 
+   data).
   </para>
  </listitem> 
  <listitem>
   <para>
-   If <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
-   applies, the rest of the page is read into memory and then the filter rules
-   (from <filename>default.filter</filename>) are processed. Filters are
-   applied in the order they are specified in the
-   <filename>default.filter</filename> file.  The entire page, which is now
-   filtered, is then sent by <application>Privoxy</application> back to your
-   browser.
+   First, the server headers are read and processed to determine, among other
+   things, the MIME type (document type) and encoding. The headers are then
+   filtered as deterimed by the 
+   <ulink url="configuration.html#PREVENT-SETTING-COOKIES"><quote>+prevent-setting-cookies</quote></ulink>,
+   <ulink url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
+   and <ulink url="configuration.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
+   actions.
   </para>
  </listitem> 
  <listitem>
   <para>
-   As the browser receives the now filtered page content, it will read and request any
-   embedded URLs on the page, e.g. ad images. As the browser requests these
-   secondary URLs from whatever server they may be on,
-   <application>Privoxy</application> handles these same as above, and the process
-   is repeated all over again for each such URL. Note that a fancy web page may
-   have many, many such embedded URLs for graphics, frames, etc.
+   If the <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+   action applies, and it is an HTML or JavaScript document, the popup-code in the
+   response is filtered on-the-fly as it is received.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   If a <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+   or <ulink
+   url="configuration.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   action applies (and the document type fits the action), the rest of the page is
+   read into memory (up to a configurable limit). Then the filter rules (from
+   <filename>default.filter</filename>) are processed against the buffered
+   content. Filters are applied in the order they are specified in the
+   <filename>default.filter</filename> file. Animated GIFs, if present, are
+   reduced to either the first or last frame, depending on the action
+   setting.The entire page, which is now filtered, is then sent by
+   <application>Privoxy</application> back to your browser. 
+  </para>
+  <para>
+   If neither <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+   or <ulink
+   url="configuration.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   matches, then <application>Privoxy</application> passes the raw data through 
+   to the client browser as it becomes available.
+  </para>
+ </listitem> 
+ <listitem>
+  <para>
+   As the browser receives the now (probably filtered) page content, it 
+   reads and then requests any URLs that may be embedded within the page
+   source, e.g. ad images, stylesheets, JavaScript, other HTML documents (e.g.
+   frames), sounds, etc. For each of these objects, the browser issues a new
+   request. And each such request is in turn processed as above. Note that a
+   complex web page may have many such embedded URLs.
   </para>
  </listitem> 
  
@@ -5166,16 +5196,17 @@ Requests</title>
  First, enter one URL (or partial URL) at the prompt, and then
  <application>Privoxy</application> will tell us 
  how the current configuration will handle it. This will not
- help with filtering effects (i.e. the <quote>+filter</quote> action) from the
- <filename>default.filter</filename> file since this is handled very differently 
- and not so easy to trap! It also will not tell you about any other URLs that
- may be embedded within the URL you are testing (i.e. a web page). For
- instance, images such as ads are expressed as URLs within the raw page source
- of HTML pages. So you will only get info for the actual URL that is pasted
- into the prompt area -- not any sub-URLs. If you want to know about embedded
- URLs like ads, you will have to dig those out of the HTML source. Use your
- browser's <quote>View Page Source</quote> option for this. Or right click on
- the ad, and grab the URL.
+ help with filtering effects (i.e. the <ulink
+ url="configuration.html#FILTER"><quote>+filter</quote></ulink> action) from
+ the <filename>default.filter</filename> file since this is handled very
+ differently and not so easy to trap! It also will not tell you about any other
+ URLs that may be embedded within the URL you are testing. For instance, images
+ such as ads are expressed as URLs within the raw page source of HTML pages. So
+ you will only get info for the actual URL that is pasted into the prompt area
+ -- not any sub-URLs. If you want to know about embedded URLs like ads, you
+ will have to dig those out of the HTML source. Use your browser's <quote>View
+ Page Source</quote> option for this. Or right click on the ad, and grab the
+ URL.
 </para>
 
 <para>
@@ -5198,11 +5229,11 @@ Requests</title>
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only +prevent-reading-cookies 
- +prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+ +prevent-compression +session-cookies-only -prevent-reading-cookies 
+ -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }
 /
 
- { -prevent-setting-cookies -prevent-reading-cookies }
+ { -session-cookies-only }
  .google.com
 
  { -fast-redirects }
@@ -5215,40 +5246,45 @@ Requests</title>
 </para>
 
 <para>
- This tells us how we have defined our <quote>actions</quote>, and which ones
- match for our example, <quote>google.com</quote>. The first listing is 
- for the <filename>standard.action</filename>. No hits at all here on
- <quote>standard</quote>. Then next is <quote>default</quote>, or our
- <filename>default.action</filename> file. The large, multi-line listing, is
- how the actions are set to match for all URLs, i.e. our default settings. If
- you look at your <quote>actions</quote> file, this would be the section just
- below the <quote>aliases</quote> section near the top. This will apply to all
- URLs as signified by the single forward slash at the end of the listing --
- <quote>/</quote>.
- 
+ This tells us how we have defined our 
+ <ulink url="configuration.html#ACTIONS"><quote>actions</quote></ulink>, and
+ which ones match for our example, <quote>google.com</quote>. The first listing
+ is any matches for the <filename>standard.action</filename> file. No hits at
+ all here on <quote>standard</quote>. Then next is <quote>default</quote>, or
+ our <filename>default.action</filename> file. The large, multi-line listing,
+ is how the actions are set to match for all URLs, i.e. our default settings.
+ If you look at your <quote>actions</quote> file, this would be the section
+ just below the <quote>aliases</quote> section near the top. This will apply to
+ all URLs as signified by the single forward slash at the end of the listing
+ -- <quote>/</quote>.
 </para>
 
 <para>
  But we can define additional actions that would be exceptions to these general
  rules, and then list specific URLs (or patterns) that these exceptions would
  apply to. Last match wins. Just below this then are two explicit matches for
- <quote>.google.com</quote>. The first is negating our various cookie blocking
- actions (i.e. we will allow cookies here). The second is allowing
- <quote>fast-redirects</quote> to take place. Note that there is a leading dot
- here -- <quote>.google.com</quote>. This will match any hosts and sub-domains,
- in the google.com domain also, such as <quote>www.google.com</quote>. So,
- apparently, we have these two actions defined somewhere in the lower part of our
- actions file, and <quote>google.com</quote> is referenced somewhere in these
- latter sections.
+ <quote>.google.com</quote>. The first is negating our previous cookie setting, 
+ which was for <ulink
+ url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
+ (i.e. not persistent). So we will allow persistent cookies for google. The
+ second turns <emphasis>off</emphasis> any 
+ <ulink
+ url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
+ action, allowing this to take place unmolested. Note that there is a leading
+ dot here -- <quote>.google.com</quote>. This will match any hosts and
+ sub-domains, in the google.com domain also, such as
+ <quote>www.google.com</quote>. So, apparently, we have these two actions
+ defined somewhere in the lower part of our <filename>default.action</filename>
+ file, and <quote>google.com</quote> is referenced somewhere in these latter
+ sections.
 </para>
 
 <para>
- Then, for our <filename>user.action</filename> file, we again have no hits, as 
- signified by <quote>File user</quote>.
+ Then, for our <filename>user.action</filename> file, we again have no hits.
 </para>
 
 <para>
- And finally we pull it altogether in the bottom section and summarize how
+ And finally we pull it all together in the bottom section and summarize how
  <application>Privoxy</application> is applying all its <quote>actions</quote> 
  to <quote>google.com</quote>:
 
@@ -5264,7 +5300,7 @@ Requests</title>
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only -prevent-reading-cookies 
+ +prevent-compression -session-cookies-only -prevent-reading-cookies 
  -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer 
  
  </screen>
@@ -5272,7 +5308,7 @@ Requests</title>
 
 <para>
  Notice the only difference here to the previous listing, is to 
- <quote>fast-redirects</quote> and the two cookie settings.
+ <quote>fast-redirects</quote> and <quote>session-cookies-only</quote>.
 </para>
 
 <para>
@@ -5298,8 +5334,9 @@ Requests</title>
  We'll just show the interesting part here, the explicit matches. It is 
  matched three different times. Each as an <quote>+block +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
- <quote>+imageblock</quote>. (<quote>Aliases</quote> are defined in the 
- first section of the actions file and typically used to combine more 
+ <quote>+imageblock</quote>. (<ulink
+ url="configuration.html#ALIASES"><quote>Aliases</quote></ulink> are defined in
+ the first section of the actions file and typically used to combine more 
  than one action.)
 </para>
 
@@ -5309,9 +5346,13 @@ Requests</title>
  would also cover the first. No point in taking chances with these guys 
  though ;-) Note that if you want an ad or obnoxious 
  URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
- is done here -- as both a <quote>+block</quote> <emphasis>and</emphasis> an
- <quote>+handle-as-image</quote>. The custom alias <quote>+imageblock</quote> does this
- for us.
+ is done here -- as both a <ulink
+ url="configuration.html#BLOCK"><quote>+block</quote></ulink>
+ <emphasis>and</emphasis> an 
+ <ulink
+ url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>.
+ The custom alias <quote>+imageblock</quote> just simplifies the process and make 
+ it more readable.
 </para>
 
 <para>
@@ -5329,8 +5370,8 @@ Requests</title>
    +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
    +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
    +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
-   +prevent-compression +session-cookies-only +prevent-setting-cookies 
-   +prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }
+   +prevent-compression +session-cookies-only -prevent-setting-cookies 
+   -prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }
    /
 
  { +block +handle-as-image }
@@ -5343,8 +5384,8 @@ Requests</title>
  Ooops, the <quote>/adsl/</quote> is matching <quote>/ads</quote>! But 
  we did not want this at all! Now we see why we get the blank page. We could
  now add a new action below this that explicitly does <emphasis>not</emphasis>
- block (-block) pages with <quote>adsl</quote>. There are various ways to
- handle such exceptions. Example:
+ block (<quote>{-block}</quote>) paths with <quote>adsl</quote>. There are
+ various ways to handle such exceptions. Example:
 </para>
 
 <para>
@@ -5369,9 +5410,9 @@ Requests</title>
 <para>
  <screen>
 
- { -block }
-  /adsl
- 
+ { +block +handle-as-image }
+ /ads
+  
  </screen>
 </para>
 
@@ -5399,7 +5440,7 @@ Requests</title>
 
 <para>
  <quote>{shop}</quote> is an <quote>alias</quote> that expands to 
- <quote>{ -filter -prevent-setting-cookies -prevent-reading-cookies }</quote>.
+ <quote>{ -filter -session-cookies-only }</quote>.
  Or you could do your own exception to negate filtering:
 
 </para>
@@ -5415,7 +5456,7 @@ Requests</title>
 
 <para>
  This would probably be most appropriately put in <filename>user.action</filename>, 
- for personal user exceptions.
+ for local site exceptions.
 </para>
 
 <para>
