@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# From configure.in Revision: 1.25 
+# From configure.in Revision: 1.27 
 # Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version 2.13 
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
@@ -619,7 +619,7 @@ echo "$ac_t""$host" 1>&6
 
 VERSION_MAJOR=2
 VERSION_MINOR=9
-VERSION_POINT=10
+VERSION_POINT=11
 CODE_STATUS="beta"
 
 
@@ -2006,7 +2006,7 @@ if eval "test \"`echo '$''{'ac_cv_sizeof_int'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
+  ac_cv_sizeof_int=4
 else
   cat > conftest.$ac_ext <<EOF
 #line 2013 "configure"
@@ -2045,7 +2045,7 @@ if eval "test \"`echo '$''{'ac_cv_sizeof_char_p'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
+  ac_cv_sizeof_char_p=4
 else
   cat > conftest.$ac_ext <<EOF
 #line 2052 "configure"
@@ -2084,7 +2084,7 @@ if eval "test \"`echo '$''{'ac_cv_sizeof_long'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
+  ac_cv_sizeof_long=4
 else
   cat > conftest.$ac_ext <<EOF
 #line 2091 "configure"
@@ -2123,7 +2123,7 @@ if eval "test \"`echo '$''{'ac_cv_sizeof_long_long'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
+  ac_cv_sizeof_long_long=8
 else
   cat > conftest.$ac_ext <<EOF
 #line 2130 "configure"
@@ -2162,7 +2162,7 @@ if eval "test \"`echo '$''{'ac_cv_sizeof_size_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
+  ac_cv_sizeof_size_t=4
 else
   cat > conftest.$ac_ext <<EOF
 #line 2169 "configure"
