@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh 
 # 
 #  ********************************************************************
 # 
@@ -39,6 +39,13 @@
 # 
 #  Revisions   :
 #     $Log: privoxy-generic.init,v $
+#     Revision 1.2  2002/09/08 20:27:58  hal9
+#     -Rewrote script config section.
+#     -Added comments to script.
+#     -Tried to add logic to use a --user privoxy, if available.
+#     -Minor script changes due to 'echo -n' does not work on a true
+#      /bin/sh system.
+#
 #     Revision 1.1  2002/09/06 00:20:26  hal9
 #     Creating a generic init script, meant to be used on platforms where don't have
 #     a custom init script.
@@ -59,33 +66,49 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin/:/usr/bin:/sbin:/bin
 P_NAME=Privoxy
 # Path to executable.
 P_DAEMON=privoxy
-P_USER=privoxy
 # Full path to location of Privoxy config file. 
 P_CONF_FILE=./config
 # Full path to PID file location. Location must be writable by 
 # whoever runs this script.
-P_PIDFILE=`pwd`/${P_USER}.pid
-# User that will own the Privoxy process.
-P_DAEMON_OWNER="$USER"
+P_PIDFILE=`pwd`/privoxy.pid
+# If uncommented, this script will try to run as USER=privoxy, which
+# may require special handling of config, *.action, trust, logfile, 
+# jarfile, and pidfile.
+P_USER=privoxy
+
+# If a privoxy user is specified, lets try that. /bin/sh does not seem to 
+# know about $UID.
+if [ "$USER" = "root" ] && [ -n "$P_USER" ] && id $P_USER >/dev/null; then
+  P_OWNER=$P_USER
+else 
+  P_OWNER=$USER
+fi
 
 if [ ! -f $P_CONF_FILE ]; then
   echo "Can't find $P_CONF_FILE, exiting."
   exit 1
 fi
 
-# If a privoxy user exists, lets use that. /bin/sh does not seem to 
-# know about $UID.
-if [ "$USER" = "root" ] && [ "$P_DAEMON_OWNER" = "$USER" ] && id $P_USER >/dev/null; then
-  P_DAEMON_OWNER="$P_USER"
-fi
-
 case "$1" in
  
  start)
-     test -f $P_PIDFILE && echo "$P_PIDFILE exists, exiting." && exit 1
-	$P_DAEMON --pidfile $P_PIDFILE --user $P_DAEMON_OWNER $P_CONF_FILE 2>/dev/null &&\
-     echo "Starting $P_NAME, OK." || echo "Starting $P_NAME, Failed."
-        
+     if [ -f $P_PIDFILE ]; then
+       if kill -0 `cat $P_PIDFILE`; then
+         echo "Error: $NAME is already running, exiting."
+         exit 1
+       else
+         rm -f $P_PIDFILE
+       fi
+     fi
+
+	$P_DAEMON --pidfile $P_PIDFILE --user $P_OWNER $P_CONF_FILE 2>/dev/null
+     
+     if [ $? -eq 0 ]; then
+       echo "Starting $P_NAME, OK." 
+     else
+       echo "Starting $P_NAME, Failed."
+       rm -f $P_PIDFILE
+     fi
      ;;
  
  restart)
