@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.15 2001/07/13 14:02:24 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.16 2001/09/10 10:56:59 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.15 2001/07/13 14:02:24 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.16  2001/09/10 10:56:59  oes
+ *    Silenced compiler warnings
+ *
  *    Revision 1.15  2001/07/13 14:02:24  oes
  *    Removed vim-settings
  *
@@ -454,12 +457,12 @@ char *strsav(char *old, const char *text_to_append)
  *********************************************************************/
 int simplematch(char *pattern, char *text)
 {
-   char *fallback = pattern; 
-   char *pat = pattern;
-   char *txt = text;
+   unsigned char *pat = (unsigned char *) pattern;
+   unsigned char *txt = (unsigned char *) text;
+   unsigned char *fallback = pat; 
    int wildcard = 0;
   
-   char lastchar = 'a';
+   unsigned char lastchar = 'a';
    unsigned i;
    unsigned char charmap[32];
   
