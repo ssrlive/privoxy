@@ -1,4 +1,8 @@
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+<!entity % dummy "INCLUDE"> 
+<!entity supported SYSTEM "supported.sgml">
+<!entity newfeatures SYSTEM "newfeatures.sgml">
+]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
 
@@ -6,7 +10,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.35 2002/03/30 04:14:19 hal9 Exp $
+ $Id: faq.sgml,v 1.36 2002/03/31 23:18:47 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -14,13 +18,16 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
+ 
 -->
+
 
 <article id="index">
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.35 2002/03/30 04:14:19 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.36 2002/03/31 23:18:47 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -31,6 +38,15 @@
 </authorgroup>
 
 <abstract>
+<![%dummy;[
+<para>
+ <comment>
+  This is here to keep vim syntax file from breaking :/
+  If I knew enough to fix it, I would.
+  PLEASE DO NOT REMOVE! HB: hal@foobox.net
+ </comment>
+</para>
+]]>
  <para>
  This FAQ gives users and developers alike answers to frequently asked
  questions about <ulink url="http://www.privoxy.org">Privoxy</ulink>. 
@@ -52,7 +68,6 @@
  Stefan Waldherr made many improvements, and started the SourceForge project
  to continue development.
 </para>
-
 
  <para>
 You can find the latest version of the document at <ulink url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
@@ -150,113 +165,9 @@ from the old <application>Junkbuster?</application></title>
 
 <sect3 id="features"><title>What are some of the new features?</title>
 <!--
- This section is in both user-manual and faq. Please keep in sync!!!
--->
-<para>
- <itemizedlist>
-
- <listitem>
-  <para>
-   Integrated browser based configuration and control utility (<ulink
-   url="http://p.p">http://p.p</ulink>). Browser-based tracing of rule
-   and filter effects.
-  </para>
- </listitem> 
-<!--
- <listitem>
-  <para>
-   Modularized configuration that will allow for system wide settings, and
-   individual user settings. (not implemented yet, probably a 3.1 feature)
-  </para>
- </listitem> 
--->
- <listitem>
-  <para>
-    Blocking of annoying pop-up browser windows.
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   HTTP/1.1 compliant (most, but not all 1.1 features are supported).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Support for Perl Compatible Regular Expressions in the configuration files, and 
-   generally a more sophisticated and flexible configuration syntax over
-   previous versions. 
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   GIF de-animation. 
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Web page content filtering (removes banners based on size,
-   invisible <quote>web-bugs</quote>, JavaScript, pop-ups, status bar abuse,
-   etc.)
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Bypass many click-tracking scripts (avoids script redirection).
- 
-  </para>
- </listitem> 
- 
- <listitem>
-  <para>
-   Multi-threaded (POSIX and native threads).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Auto-detection and re-reading of config file changes.
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   User-customizable HTML templates (e.g. 404 error page).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Improved cookie management features (e.g. session based cookies).
-  </para>
-</listitem> 
-
- <listitem>
-  <para>
-   Improved signal handling, and a true daemon mode (Unix).
-  </para>
-</listitem> 
-
- <listitem>
-  <para>
-   Builds from source on most UNIX-like systems. Packages available for: Linux
-   (RedHat, SuSE, or Debian), Windows, Sun Solaris, Mac OSX, OS/2, HP-UX 11 and AmigaOS.
- 
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   In addition, the configuration is much more powerful and versatile over-all.
-  </para>
-</listitem> 
-
- </itemizedlist>
-</para>
+Include newfeatures.sgml
+--> 
+&newfeatures;
 
 </sect3>
 
@@ -416,22 +327,17 @@ warranty? Registration?</title>
  Any browser that can be configured to use a <quote>proxy</quote>, which 
  should be virtually all browsers. Direct browser support is not necessary
  since <application>Privoxy</application> runs as a separate application and
- just exchanges standard HTML data with your browser.
+ just exchanges standard HTML data with your browser, just like a web server
+ does.
 </para>
 </sect3>
 
 <sect3 id="whichos">
 <title>Which operating systems are supported?</title>
-<para>
- Right now Win32, Mac OSX, OS/2, AmigaOS, Linux, and many 
- flavors of Unix.
-</para>
-
-<para>
- Source code is available, so porting to other operating systems, 
- is always a possibility.
-
-</para>
+<!--
+Include supported.sgml here:
+-->
+&supported;
 </sect3>
 
 <sect3 id="newinstall"><title>Can I install  
@@ -452,7 +358,7 @@ warranty? Registration?</title>
   Note: Some installers may automatically uninstall
   <application>Junkbuster</application>, if present!
  </para>
- 
+
 </sect3>
 
 <sect3>
@@ -868,10 +774,9 @@ Note that normally only local users can connect to <application>Privoxy</applica
  <quote>Edit Actions List</quote> selection at <ulink
  url="http://p.p/">http://p.p/</ulink>. Or by hand editing the appropriate 
  actions file. This will only effect what is defined as <quote>images</quote>
- though. Also, any URLs that generate the bright red <quote>Blocked</quote>
+ though. Also, some URLs that generate the bright red <quote>Blocked</quote>
  banner, can be moved to the <quote>+image-blocker</quote> section for the
- same reason.
-
+ same reason, but there are some limits and risks to this (see below).
 </para>
 
 </sect3>
@@ -899,7 +804,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
  for you to see why. These are handled differently than what has been defined
  explicitly as <quote>images</quote> (e.g. ad banners). Depending on the 
  URL itself, it is sometimes hard for <application>Privoxy</application> to 
- really know whether it is indeed an ad image or not. And there are
+ really know whether there is indeed an ad image there or not. And there are
  limitations as to what <application>Privoxy</application> can do to 
  <quote>fool</quote> the browser.
 </para>
@@ -919,7 +824,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
  <quote>+block</quote> section to the <quote>+imageblock</quote> section of
  your actions file. Just be forewarned, if any URL is made
  <quote>invisible</quote>, you may not have any inkling that something has
- been removed from that page. If this approach does not work, then you are
+ been removed from that page, or why. If this approach does not work, then you are
  probably dealing with a frame (or <quote>ilayer</quote>), and the only thing
  that can go there is an HTML page of some sort.
 </para>
@@ -1462,6 +1367,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.36  2002/03/31 23:18:47  hal9
+More on dealing with BLOCKED.
+
 Revision 1.35  2002/03/30 04:14:19  hal9
 Fix privoxy.org/config links.
 
