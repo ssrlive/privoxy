@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.54 2002/03/24 15:46:20 swa Exp $
+ $Id: user-manual.sgml,v 1.55 2002/03/24 16:08:08 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.54 2002/03/24 15:46:20 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.55 2002/03/24 16:08:08 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -286,8 +286,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- autoheader   [suggested for CVS source]
- autoconf     [suggested for CVS source]
+ autoheader
+ autoconf
  ./configure
  make redhat-dist
  </screen>
@@ -330,8 +330,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
- autoheader   [suggested for CVS source]
- autoconf     [suggested for CVS source]
+ autoheader
+ autoconf
  ./configure
  make suse-dist
  </screen>
@@ -3945,6 +3945,10 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.55  2002/03/24 16:08:08  swa
+ we are too lazy to make a block-built
+ privoxy logo. hence removed the option.
+
  Revision 1.54  2002/03/24 15:46:20  swa
  name change related issue.
 
