@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.3 2001/10/14 22:00:32 jongfoster Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.4 2001/10/23 21:48:19 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -38,6 +38,18 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.4  2001/10/23 21:48:19  jongfoster
+ *    Cleaning up error handling in CGI functions - they now send back
+ *    a HTML error page and should never cause a FATAL error.  (Fixes one
+ *    potential source of "denial of service" attacks).
+ *
+ *    CGI actions file editor that works and is actually useful.
+ *
+ *    Ability to toggle JunkBuster remotely using a CGI call.
+ *
+ *    You can turn off both the above features in the main configuration
+ *    file, e.g. if you are running a multi-user proxy.
+ *
  *    Revision 1.3  2001/10/14 22:00:32  jongfoster
  *    Adding support for a 404 error when an invalid CGI page is requested.
  *
@@ -84,6 +96,9 @@ extern jb_err cgi_show_version (struct client_state *csp,
 extern jb_err cgi_show_request (struct client_state *csp,
                                 struct http_response *rsp,
                                 const struct map *parameters);
+extern jb_err cgi_transparent_gif (struct client_state *csp,
+                                   struct http_response *rsp,
+                                   const struct map *parameters);
 
 /* Revision control strings from this header and associated .c file */
 extern const char cgisimple_rcs[];
