@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.12 2001/09/28 02:57:04 hal9 Exp $
+ $Id: user-manual.sgml,v 1.13 2001/10/10 17:28:33 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.12 2001/09/28 02:57:04 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.13 2001/10/10 17:28:33 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -84,7 +84,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  Since this is a development version, some features are in the process of
- being implemented. And there <emphasis>are</emphasis> bugs! 
+ being implemented. This documentation may be slightly out of sync as a 
+ result. And there <emphasis>are</emphasis> bugs! 
 </para>
 
 
@@ -122,14 +123,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
  <listitem>
   <para>
-   Fledgling support for HTTP 1.1.
+   Partial support for HTTP/1.1.
   </para>
  </listitem> 
 
  <listitem>
   <para>
    Support for Perl Compatible Regular Expressions in the configuration files, and 
-   generally a more sophisticated configuration syntax.
+   generally a more sophisticated configuration syntax over previous versions.
   </para>
  </listitem> 
 
@@ -139,6 +140,12 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
   </para>
  </listitem> 
  
+ <listitem>
+  <para>
+   Multi-threaded.
+  </para>
+ </listitem> 
+
  </itemizedlist>
 </para>
 
@@ -1902,7 +1909,26 @@ Removed references to Win32. HB 09/23/01
    </literal>
   </para>
  </listitem>
-   
+ 
+ <listitem>
+  <para>
+   <quote>+downgrade</quote> will downgrade HTTP/1.1 client requests to
+   HTTP/1.0 and downgrade the responses as well. Use this action for servers
+   that use HTTP/1.1 protocol features that
+   <application>Junkbuster</application> doesn't handle well yet. HTTP/1.1 
+   is only partially implemented. Default is not to downgrade requests.
+  </para>
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+downgrade</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem> 
+ 
  <listitem>
   <para>  
    Many sites, like yahoo.com, don't just link to other sites. Instead, they
@@ -2107,6 +2133,66 @@ Removed references to Win32. HB 09/23/01
    </literal>
   </para>
  </listitem>
+ 
+ <listitem>
+   <para> 
+   By default (i.e. in the absence of a <quote>+limit-connect</quote>
+   action), <application>Junkbuster</application> will only allow CONNECT
+   requests to port 443, which is the standard port for https as a 
+   precaution.
+  </para>
+ 
+  <para>
+   The CONNECT methods exists in HTTP to allow access to secure websites
+   (https:// URLs) through proxies. It works very simply: the proxy
+   connects to the server on the specified port, and then short-circuits
+   its connections to the client <emphasis>and</emphasis> to the remote proxy.
+   This can be a big security hole, since CONNECT-enabled proxies can
+   be abused as TCP relays very easily.
+  </para>
+  
+  <para> 
+   If you want to allow CONNECT for more ports than this, or want to forbid
+   CONNECT altogether, you can specify a comma separated list of ports and
+   port ranges (the latter using dashes, with the minimum defaulting to 0 and
+   max to 65K):
+  </para>
+
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+limit-connect{443}                 # This is the default and need no be specified.</emphasis>
+  <emphasis>+limit-connect{80,443}              # Ports 80 and 443 are OK.</emphasis>
+  <emphasis>+limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100</emphasis>
+  <emphasis>                                    #and above 500 are OK.</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   <quote>+no-compression</quote> prevents the website from compressing the
+   data. Some websites do this, which can be a problem for
+   <application>Junkbuster</application>, since <quote>+filter</quote>,
+   <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work on
+   compressed data. This will slow down connections to those websites,
+   though. Default is <quote>nocompression</quote> is turned on.
+  </para>
+
+  <para>
+   <literal>
+    <MSGText> 
+     <literallayout>
+  <emphasis>+nocompression</emphasis>
+     </literallayout>
+    </MSGText> 
+   </literal>
+  </para>
+ </listitem> 
  
  <listitem>
   <para>  
@@ -2506,23 +2592,34 @@ Removed references to Win32. HB 09/23/01
  want to keep an eye out for sites that require cookies, and add these to
  <filename>actionsfile</filename> as needed. By default, most of these will
  be blocked until you add them to the configuration. If you want the browser
- to handle this, you will need to edit <filename>actionsfile</filename> and
- disable this feature. If you use more than one browser, it would make more
- sense to let <application>Junkbuster</application> handle this. In which
- case, the browser(s) should be set to accept all cookies.
+ to handle this instead, you will need to edit
+ <filename>actionsfile</filename> and disable this feature. If you use more
+ than one browser, it would make more sense to let
+ <application>Junkbuster</application> handle this. In which case, the
+ browser(s) should be set to accept all cookies.
 </para>
 
 <para>
- Browsers, like Mozilla, that support HTTP/1.1, might do better if forced 
- back to HTTP/1.0. For Mozilla, look under 
- <literal>Edit -&gt; Preferences -&gt; Debug -&gt; Networking</literal>.
+ HTTP/1.1 support is not fully implemented. If browsers that
+ support HTTP/1.1 (like Mozilla or recent versions of I.E.) experience 
+ problems, you might try to force HTTP/1.0 compatiblity. For Mozilla, look under <literal>Edit -&gt;
+ Preferences -&gt; Debug -&gt; Networking</literal>. Or set the 
+ <quote>+downgrade</quote> config option in <filename>actionsfile</filename>.
+</para>
+
+<para>
+ After running <application>Junkbuster</application> for a while, you can 
+ start to fine tune the configuration to suit your personal, or site, 
+ preferences and requirements. There are many, many aspects that can 
+ be customized.
 </para>
 
 <para>
  If you encounter problems, please verify it is a
  <application>Junkbuster</application> bug, by disabling
  <application>Junkbuster</application>, and then trying the same page. 
- Before reporting it as a bug, see if there is not a configuration 
+ Also, try another browser if possible to eliminate browser or site 
+ problems. Before reporting it as a bug, see if there is not a configuration 
  option that is enabled that is causing the page not to load. You can 
  then add an exception for that page or site. If a bug, please report it to
  the developers (see below). 
@@ -2872,6 +2969,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.13  2001/10/10 17:28:33  hal9
+ Very minor changes.
+
  Revision 1.12  2001/09/28 02:57:04  hal9
  Ditto :/
 
