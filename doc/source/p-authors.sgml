@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 1.3 2002/04/06 13:52:58 hal9 Exp $
+ $Id: p-authors.sgml,v 1.4 2002/04/15 19:08:39 jongfoster Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -11,6 +11,7 @@
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
+
 
 
  ======================================================================
@@ -33,13 +34,13 @@
 ]]>
 
 <literallayout>
- Stefan Waldherr
- Andreas Oesterhelt
  Jon Foster
+ Andreas Oesterhelt
+ Stefan Waldherr
 <![%p-authors-formal;[
  ]]>
- Markus Breitenbach
  Thomas Steudten
+ Rodney Stromlund
 <![%p-authors-formal;[
 </literallayout>
 
@@ -49,18 +50,15 @@
 
 <literallayout>
 ]]>
- David Schmidt (OS/2, Mac OSX ports)
- Gabriel L. Somlo
- Hal Burgiss (docs)
- Haroon Rafique
- John Venvertloh
- Joerg Strohmayer
- Rodney Stromlund
  Rodrigo Barbosa (RPM specfiles)
- Sarantis Paskalis
- Shamim Mohamed
- Gábor Lipták
+ Hal Burgiss (docs)
  Alexander Lazic
+ Gábor Lipták
+ Guy
+ Haroon Rafique
+ David Schmidt (OS/2, Mac OSX ports)
+ Joerg Strohmayer
+ Sarantis Paskalis
 </literallayout>
 
 <![%p-authors-formal;[
@@ -79,17 +77,16 @@
 </para>
 
 <literallayout>
- Aaron Hamid
- Andrew J. Caines
- Bart Schelstraete
- Clifford Caoile
- Darren Wiebe
- Guy
  Ken Arromdee
+ Reiner Buehl
+ Andrew J. Caines
+ Clifford Caoile
+ Peter E
+ Aaron Hamid
  Magnus Holmgren
  Paul Lieverse
- Peter E
- Reiner Buehl
  Roberto Ragusa
+ Bart Schelstraete
+ Darren Wiebe
 </literallayout>
 ]]>
