@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: supported.sgml,v 1.4 2002/04/04 14:59:13 swa Exp $
+ $Id: supported.sgml,v 1.5 2002/04/06 05:07:29 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -27,10 +27,8 @@
 -->
 <para>
  At present, <application>Privoxy</application> is known to run on Win32, Mac
- OSX, OS/2, AmigaOS, Linux (RedHat, Suse, Debian), FreeBSD, and many flavors
- of Unix. There are source and binary releases for these available for
- download at <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">http://sourceforge.net/project/showfiles.php?group_id=11118</ulink>.
+ OSX, OS/2, AmigaOS, Linux (RedHat, Suse, Debian), FreeBSD, BeOS, and many flavors
+ of Unix.
 </para>
 
 <![%p-supp-userman;[
