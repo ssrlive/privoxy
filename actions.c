@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.9 2001/07/30 22:08:36 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.10 2001/09/10 10:14:34 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.9 2001/07/30 22:08:36 jongfoster 
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.10  2001/09/10 10:14:34  oes
+ *    Removing unused variable
+ *
  *    Revision 1.9  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -233,6 +236,8 @@ void merge_actions (struct action_spec *dest,
  *
  * Description :  Copy an action_specs.
  *                Similar to "cur_action = new_action".
+ *                Note that dest better not contain valid data
+ *                - it's overwritten, not freed.
  *
  * Parameters  :
  *          1  :  dest = Destination of copy.
@@ -245,6 +250,8 @@ void copy_action (struct action_spec *dest,
                   const struct action_spec *src)
 {
    int i;
+
+   memset(dest, '\0', sizeof(*dest));
 
    dest->mask = src->mask;
    dest->add  = src->add;
@@ -268,7 +275,9 @@ void copy_action (struct action_spec *dest,
  *
  * Function    :  free_action
  *
- * Description :  Free an action_specs.
+ * Description :  Destroy an action_spec.  Frees memory used by it,
+ *                except for the memory used by the struct action_spec
+ *                itself.
  *
  * Parameters  :
  *          1  :  src = Source to free.
@@ -422,7 +431,7 @@ static int get_actions(char *line,
                        struct action_alias * alias_list,
                        struct action_spec *cur_action)
 {
-   memset(cur_action, '\0', sizeof(*cur_action));
+   init_action(cur_action);
    cur_action->mask = ACTION_MASK_ALL;
 
    while (line)
@@ -734,6 +743,24 @@ void init_current_action (struct current_action_spec *dest)
 
 /*********************************************************************
  *
+ * Function    :  init_action
+ *
+ * Description :  Zero out an action.
+ *
+ * Parameters  :
+ *          1  :  dest = An uninitialized action_spec.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void init_action (struct action_spec *dest)
+{
+   memset(dest, '\0', sizeof(*dest));
+}
+
+
+/*********************************************************************
+ *
  * Function    :  merge_current_action
  *
  * Description :  Merge two actions together.
@@ -742,7 +769,7 @@ void init_current_action (struct current_action_spec *dest)
  *                is that this one doesn't allocate memory for
  *                strings (so "src" better be in memory for at least
  *                as long as "dest" is, and you'd better free
- *                "dest" using "current_free_action").
+ *                "dest" using "free_current_action").
  *                Also, there is no  mask or remove lists in dest.
  *                (If we're applying it to a URL, we don't need them)
  *
@@ -792,7 +819,8 @@ void merge_current_action (struct current_action_spec *dest,
  *
  * Function    :  free_current_action
  *
- * Description :  Free a current_action_spec.
+ * Description :  Free memory used by a current_action_spec.
+ *                Does not free the current_action_spec itself.
  *
  * Parameters  :
  *          1  :  src = Source to free.
@@ -839,6 +867,7 @@ void unload_actions_file(void *file_data)
    {
       next = cur->next;
       free_url(cur->url);
+      free_action(cur->action);
       freez(cur);
       cur = next;
    }
@@ -876,7 +905,7 @@ int load_actions_file(struct client_state *csp)
    struct action_spec cur_action[1];
    struct action_alias * alias_list = NULL;
 
-   memset(cur_action, '\0', sizeof(*cur_action));
+   init_action(cur_action);
 
    if (!check_file_changed(current_actions_file, csp->config->actions_file, &fs))
    {

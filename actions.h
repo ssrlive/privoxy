@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.1 2001/05/31 21:16:46 jongfoster Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.2 2001/07/29 19:01:11 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.2  2001/07/29 19:01:11  jongfoster
+ *    Changed _FILENAME_H to FILENAME_H_INCLUDED.
+ *    Added forward declarations for needed structures.
+ *
  *    Revision 1.1  2001/05/31 21:16:46  jongfoster
  *    Moved functions to process the action list into this new file.
  *
@@ -51,18 +55,18 @@ struct action_spec;
 struct current_action_spec;
 struct client_state;
 
-
+extern void init_action(struct action_spec *dest);
+extern void free_action(struct action_spec *src);
 extern void merge_actions (struct action_spec *dest, 
                            const struct action_spec *src);
 extern void copy_action (struct action_spec *dest, 
                          const struct action_spec *src);
-extern void free_action (struct action_spec *src);
 extern char * actions_to_text     (struct action_spec *action);
 
 extern void init_current_action     (struct current_action_spec *dest);
+extern void free_current_action     (struct current_action_spec *src);
 extern void merge_current_action    (struct current_action_spec *dest, 
                                      const struct action_spec *src);
-extern void free_current_action     (struct current_action_spec *src);
 extern char * current_action_to_text(struct current_action_spec *action);
 
 extern int get_action_token(char **line, char **name, char **value);
