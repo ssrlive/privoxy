@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.43 2002/04/04 21:59:53 hal9 Exp $
+$Id: faq.sgml,v 1.44 2002/04/07 21:24:29 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -15,7 +15,7 @@ tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
 Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
-originally written by JunkBusters Corporation, and was released as free
+originally written by Junkbusters Corporation, and was released as free
 open-source software under the GNU GPL. Stefan Waldherr made many improvements,
 and started the SourceForge project to continue development.
 
@@ -687,7 +687,7 @@ Privoxy.
 
 If you have version 2.0.2, then the equivalent is http://example.com/
 show-proxy-args (but you get far less information, and you should really
-consider upgrading to 2.9.13).
+consider upgrading to 2.9.14).
 
 -------------------------------------------------------------------------------
 
