@@ -4,7 +4,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.win,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/config.h.win32threads.win,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -38,7 +38,11 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: config.h.win,v $
+ *    $Log: config.h.win32threads.win,v $
+ *    Revision 1.1  2001/07/15 20:08:40  jongfoster
+ *    New build files for VC++ which provide the option of POSIX
+ *    or Win32 threads.
+ *
  *    Revision 1.5  2001/07/15 18:00:46  jongfoster
  *    Renaming STATIC to STATIC_PCRE.
  *    Replacing this file with one built by "configure" from
@@ -160,12 +164,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 6
+#define VERSION_POINT 7
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.6"
+#define VERSION "2.9.7"
 
 /*
  * Status of the code: alpha, beta or stable
