@@ -67,12 +67,14 @@ $actions_file_download = "http://www.privoxy.org/actions/testdrive.action";
 /*
  * For testing: 
  */
-$base_url = "http://www.oesterhelt.org/actions";
-//$base_url = "http://www.privoxy.org/actions";
-//$base_url = "http://localhost/actions";
-error_reporting(E_NONE);
-//error_reporting(E_ALL);
 //phpinfo();
+//error_reporting(E_ALL);
+error_reporting(E_NONE);
+
+//$bookmarklet_base = "http://www.privoxy.org/actions/";
+$bookmarklet_base = "http://www.oesterhelt.org/actions/index.php";
+$bookmarklet = "javascript:void(window.open('$bookmarklet_base?url='+escape(location.href), 'Feedback', " .
+               "'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());";
 
 
 /* 
@@ -129,7 +131,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   </div>
 
   <div class="box">
-   <form action="<?php echo($base_url); ?>/step2.php" method="post">
+   <form action="step2.php" method="post">
 
     <table border="0" cellpadding="0" cellspacing="4">
 
@@ -178,7 +180,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
     </p>
     <p>
      Please right-click the following link and choose "Add to Favorites" (IE) or "Add Bookmark for Link" (Netscape): 
-     <a href="javascript:void(window.open('<?php echo($base_url); ?>/index.php?url='+escape(location.href), 'Feedback', 'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy-Submit</a>
+     <a href="<?php echo($bookmarklet); ?>">Privoxy-Submit</a>
     </p>
 
     <p>
