@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.46 2002/03/10 00:51:08 hal9 Exp $
+ $Id: user-manual.sgml,v 1.47 2002/03/11 13:13:27 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.46 2002/03/10 00:51:08 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.47 2002/03/11 13:13:27 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -560,8 +560,9 @@ Please choose from the following options:
 
   <listitem>
    <para>
-    The <filename>re_filterfile</filename> file can be used to rewrite the raw
-    page content, including text as well as embedded HTML and JavaScript.
+    The <filename>re_filterfile</filename> file can be used to re-write the raw
+    page content, including viewable text as well as embedded HTML and JavaScript,
+    and whatever else lurks on any given web page.
    </para>
   </listitem> 
 
@@ -711,10 +712,9 @@ Please choose from the following options:
  apply to requests for each site. Default: Cookies to and from all
  destinations are kept only during the current browser session (i.e. they 
  are not saved to disk). Pop-ups are disabled for all sites. All sites are
- filtered if <quote>re_filterfile</quote> specified according to the 
- contents of <quote>re_filterfile</quote>. No sites are blocked. The 
- JunkBuster logo is displayed for filtered ads and other images . The syntax
- of this file is explained in detail <link
+ filtered through selected sections of <quote>re_filterfile</quote>. No sites
+ are blocked. The JunkBuster logo is displayed for filtered ads and other
+ images . The syntax of this file is explained in detail <link
  linkend="actionsfile">below</link>. 
 </para>
 
@@ -729,12 +729,13 @@ Please choose from the following options:
 </para>
 
 <para>
- The <quote>re_filterfile</quote> file contains content modification rules.
- These rules permit powerful changes on the content of Web pages, e.g., you
- could disable your favorite JavaScript annoyances, rewrite the actual
- content, or just have some fun replacing <quote>Microsoft</quote> with
- <quote>MicroSuck</quote> wherever it appears on a Web page. Default: No
- content modification, or whatever the developers are playing with :-/
+ The <quote>re_filterfile</quote> file contains content modification rules 
+ that use <quote>regular expressions</quote>. These rules permit powerful
+ changes on the content of Web pages, e.g., you could disable your favorite
+ JavaScript annoyances, re-write the actual displayed text, or just have some
+ fun replacing <quote>Microsoft</quote> with <quote>MicroSuck</quote> wherever
+ it appears on a Web page. Default: whatever the developers are playing with
+ :-/
 </para>
 
 <para>
@@ -2220,17 +2221,80 @@ Removed references to Win32. HB 09/23/01
 
  <listitem>
   <para>  
-   Filter the website through the re_filterfile:
-  </para>
+   Apply the filters in the <literal>section_header</literal> 
+   section of the <filename>re_filterfile</filename> file to the site(s).
+   <filename>Re_filterfile</filename> sections are grouped according to like
+   functionality. 
+  </para> 
+   
   <para>
    <literal>
     <msgtext> 
      <literallayout>
- <emphasis>+filter{filename}</emphasis>
+ <emphasis>+filter{section_header}</emphasis>
      </literallayout>
     </msgtext> 
    </literal>
   </para>
+
+  <para>   
+   Filter sections that are pre-defined in the supplied
+   <filename>re_filterfile</filename> include:
+  </para>
+
+ <blockquote>
+  <simplelist>
+   <member>
+     <emphasis>html-annoyances</emphasis>:  Get rid of particularly annoying HTML abuse.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>js-annoyances</emphasis>:    Get rid of particularly annoying JavaScript abuse
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>no-poups</emphasis>:         Kill all popups in JS and HTML
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>frameset-borders</emphasis>: Give frames a border
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>webbugs</emphasis>:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>no-refresh</emphasis>:       Automatic refresh sucks on auto-dialup lines
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>fun</emphasis>:              Text replacements  for subversive browsing fun!
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>nimda</emphasis>:            Remove (virus) Nimda code.
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+     <emphasis>banners-by-size</emphasis>:  Kill banners by size
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>crude-parental</emphasis>:   Kill all web pages that contain the words "sex" or "warez"
+   </member>
+  </simplelist>
+ </blockquote>
+
  </listitem>
 
  <listitem>
@@ -2387,6 +2451,7 @@ Removed references to Win32. HB 09/23/01
      <literallayout>
   <emphasis>+image-blocker{logo}</emphasis>
   <emphasis>+image-blocker{blank}</emphasis>
+  <emphasis>+image-blocker{pattern}</emphasis>
   <emphasis>+image-blocker{http://i.j.b/send-banner}</emphasis>
      </literallayout>
     </msgtext> 
@@ -2621,17 +2686,21 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- Turn on page filtering, with one exception for sourceforge:
-</para>
+ Turn on page filtering according to rules in the defined sections 
+ of <filename>refilterfile</filename>, and make one exception for 
+ sourceforge:
+ </para>
 
 <para>
  <literal>
   <msgtext> 
    <literallayout>
- # Run everything through the default filter file (<filename>re_filterfile</filename>):
- {+filter}
- 
- # But please don't re_filter code from sourceforge!
+ # Run everything through the filter file, using only the
+ # specified sections:
+ +filter{html-annoyances} +filter{js-annoyances} +filter{no-popups}\
+ +filter{webbugs} +filter{nimda} +filter{banners-by-size}
+              
+ # Then disable filtering of code from sourceforge!
  {-filter}
  .cvs.sourceforge.net
    </literallayout>
@@ -2796,8 +2865,16 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
+ The included example file is divided into sections. Each section begins 
+ with the <literal>FILTER</literal> keyword, followed by the identifier 
+ for that section, e.g. <quote>FILTER: webbugs</quote>. Each section performs
+ a similar type of filtering, such as <quote>html-annoyances</quote>.
+
+</para>
+
+<para>
  This file uses regular expressions to alter or remove any string in the
- target page. The expressions can only operate on one line at a time .Some
+ target page. The expressions can only operate on one line at a time. Some
  examples from the included default <filename>re_filterfile</filename>:
 </para>
 
@@ -2810,9 +2887,24 @@ Removed references to Win32. HB 09/23/01
  <literal>
   <msgtext> 
    <literallayout>
- # The status bar is for displaying link targets, not pointless buzzwords.
- # Again, check it out on http://www.airport-cgn.de/.
- s/status='.*?';*//ig
+ FILTER: html-annoyances
+
+ # New browser windows should be resizeable and have a location and status
+ # bar. Make it so.
+ #
+ s/resizable="?(no|0)"?/resizable=1/ig s/noresize/yesresize/ig
+ s/location="?(no|0)"?/location=1/ig s/status="?(no|0)"?/status=1/ig
+ s/scrolling="?(no|0|Auto)"?/scrolling=1/ig
+ s/menubar="?(no|0)"?/menubar=1/ig 
+
+ # The &lt;BLINK&gt; tag was a crime!
+ #
+ s*&lt;blink&gt;|&lt;/blink&gt;**ig
+
+ # Is this evil? 
+ #
+ #s/framespacing="?(no|0)"?//ig
+ #s/margin(height|width)=[0-9]*//gi
    </literallayout>
   </msgtext> 
  </literal>
@@ -2820,32 +2912,37 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  Just for kicks, replace any occurrence of <quote>Microsoft</quote> with
- <quote>MicroSuck</quote>: 
+ <quote>MicroSuck</quote>, and have a little fun with topical buzzwords: 
 </para>
 
 <para>
  <literal>
   <msgtext> 
    <literallayout>
+ FILTER: fun
+
  s/microsoft(?!.com)/MicroSuck/ig
+
+ # Buzzword Bingo:
+ #
+ s/industry-leading|cutting-edge|award-winning/&lt;font color=red&gt;&lt;b&gt;BINGO!&lt;/b&gt;&lt;/font&gt;/ig
    </literallayout>
   </msgtext> 
  </literal>
 </para>
 
 <para>
- Kill those auto-refresh tags:
+ Kill those pesky little web-bugs:
 </para>
 
 <para>
  <literal>
   <msgtext> 
    <literallayout>
- # Kill refresh tags. I like to refresh myself. Manually.
- # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
- #
- s/&lt;meta[^&gt;]*http-equiv[^&gt;]*refresh.*URL=([^&gt;]*?)"?&gt;/&lt;link rev="x-refresh" href=$1&gt;/i
- s/&lt;meta[^&gt;]*http-equiv="?page-enter"?[^&gt;]*content=[^&gt;]*&gt;/&lt;!--no page enter for me--&gt;/i
+ # webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
+ FILTER: webbugs
+
+ s/&lt;img\s+[^&gt;]*?(width|height)\s*=\s*['"]?1\D[^&gt;]*?(width|height)\s*=\s*['"]?1(\D[^&gt;]*?)?>/&lt;!-- Squished WebBug --&gt;/sig
    </literallayout>
   </msgtext> 
  </literal>
@@ -3459,7 +3556,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  <application>JunkBuster</application>, and see how it is 
  configured, see how our rules are being applied, change these 
  rules and other configuration options, and even turn
- <application>JunkBuster</application> off.
+ <application>JunkBuster's</application> filtering off, all with 
+ a web browser.
 
 </para>
 
@@ -3602,6 +3700,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.47  2002/03/11 13:13:27  swa
+ correct feedback channels
+
  Revision 1.46  2002/03/10 00:51:08  hal9
  Added section on JB internal pages in Appendix.
 
