@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.28 2002/03/24 16:19:48 swa Exp $
+# $Id: GNUmakefile.in,v 1.29 2002/03/24 17:03:55 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team.  http://ijbswa.sourceforge.net
@@ -262,11 +262,44 @@ redhat-upload:
 #############################################################################
 solaris-dist:
 	@$(ECHO) coming soon. 
+solaris-upload:
+	@$(ECHO) coming soon. 
 
 #############################################################################
-# suse distribution (need to be root to build)
+# hpux distribution
 #############################################################################
+hpux-dist:
+	@$(ECHO) coming soon. 
+hpux-upload:
+	@$(ECHO) coming soon. 
 
+#############################################################################
+# debian distribution
+#############################################################################
+debian-dist:
+	@$(ECHO) coming soon. 
+debian-upload:
+	@$(ECHO) coming soon. 
+
+#############################################################################
+# macosx distribution
+#############################################################################
+macosx-dist:
+	@$(ECHO) coming soon. 
+macosx-upload:
+	@$(ECHO) coming soon. 
+
+#############################################################################
+# amiga distribution
+#############################################################################
+amiga-dist:
+	@$(ECHO) coming soon. 
+amiga-upload:
+	@$(ECHO) coming soon. 
+
+#############################################################################
+# suse distribution. works fine. no need to be root. 
+#############################################################################
 suse-dist:
 	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
@@ -342,9 +375,12 @@ tarball-dist:
 	@make clean
 	make $(PROGRAM) 
 #	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../privoxy-distribution-$(VERSION).tar.gz current/
+	cd .. && $(RM) current/a.out current/core current/*.@OBJEXT@ && tar --exclude "current/CVS" -cvzf ../privoxy-distribution-$(VERSION).tar.gz current/
 	chmod a+r ../../privoxy-distribution-$(VERSION).tar.gz
 	@$(ECHO) Tarball with binary created.
+
+tarball-upload:
+	@$(ECHO) coming soon. 
 
 #############################################################################
 #
@@ -518,6 +554,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.29  2002/03/24 17:03:55  jongfoster
+# Name change
+#
 # Revision 1.28  2002/03/24 16:19:48  swa
 # configure needs to be generated.
 #
