@@ -137,7 +137,7 @@ binary-arch: build install
 	dh_installchangelogs ChangeLog
 	dh_link
 	dh_strip
-	dh_compress
+	dh_compress -Xpdf
 	dh_fixperms
 #	dh_makeshlibs
 	dh_installdeb
