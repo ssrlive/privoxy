@@ -2,7 +2,7 @@
 .\" Hal Burgiss <hal@foobox.net> 
 .\" for Junkbuster developers: ijbswa-developers@lists.sourceforge.net
 .\"
-.TH JUNKBUSTER 1 "v2.9.10 (beta) Date: 2001/12/30"
+.TH JUNKBUSTER 1 "v2.9.10 (beta) Date: 2002/01/09"
 
 .SH NAME
 \fBjunkbuster\fP
@@ -68,6 +68,8 @@ otherwise
 \fB\&https:\fP
 \s-2URL\s0s
 won't be proxied.
+.P
+For other browser, check the documentation.
 
 .SH CONFIGURATION
 All \fBJunkbuster\fP configuration is done via the various configuration 
@@ -213,9 +215,9 @@ files (see CONFIGURATION). This includes the re-open of the logfiles
 after rotation of the logfiles by logrotate.
 The \fISIGHUP\fP behavior is only for UNIX like OS'.
 .br
-However the configfile will be read if \fBJunkbuster\fP notice a different
-modification time of this file and behaves so like start of \fBJunkbuster\fP 
-in context of all the files.
+However the configfile will be re-read if \fBJunkbuster\fP detects a changed
+modification time and then behaves like a re-start of \fBJunkbuster\fP 
+in context of all the pertinent files.
  
 .SH NOTES
 This is a development version of \fBJunkbuster\fP. Not all features are  
