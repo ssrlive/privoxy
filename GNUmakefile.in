@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.90 2002/04/26 17:46:53 swa Exp $
+# $Id: GNUmakefile.in,v 1.91 2002/04/27 04:44:51 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -404,14 +404,14 @@ gen-dist: dist-check
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	(cd .. && $(TAR) -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
+	(cd .. && $(TAR) -cvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done;
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
@@ -506,7 +506,7 @@ tarball-dist: dist-check clean clobber
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" \)`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
-	cd .. && $(TAR) cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
+	cd .. && $(TAR) -cvhf --exclude "PACKAGERS" privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
 
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS) 
@@ -834,6 +834,14 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.91  2002/04/27 04:44:51  morcego
+# GNUmakefile.in: The tarball created on redhat-dist and suse-dist now ignore
+#   the PACKAGERS file, as well privoxy-cl.spec (in case it was created)
+# GNUmakefile.in: New targets -> conectiva-spec, conectiva-dist and
+#   conectiva-upload
+# genclspec.sh  : New file to generate, from privoxy-rh.spec, a specfile
+#   for Conectiva Linux
+#
 # Revision 1.90  2002/04/26 17:46:53  swa
 # be consistent
 #
