@@ -7,6 +7,8 @@ ChangeLog for Privoxy
 - Add an INSTALL file, and remove these instructions from README.
 - Add a demoronizer filter, which fixes MS's abuse of std charsets
   (common cases anyway).
+- Add a 'dashboard' to watch activity in real-time - implemented
+  as a GUI in Java
 
 *** Version 3.0  ***
 

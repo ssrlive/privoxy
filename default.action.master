@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.6 2002/10/20 19:33:07 hal9 Exp $
+#  $Id: default.action.master,v 1.7 2003/02/20 14:00:55 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -285,15 +285,17 @@
 #
 # +set-image-blocker{blank}
 # +set-image-blocker{pattern}
+# +set-image-blocker{custom}
 # +set-image-blocker{<URL>} with <url> being any valid image URL
 #    Decides what to do with URLs that end up tagged with {+block +handle-as-image}.
-#    There are 4 options:
+#    There are 5 options:
 #      * "-set-image-blocker" will send a HTML "blocked" page, usually
 #         resulting in a "broken image" icon.
 #      * "+set-image-blocker{blank}" will send a 1x1 transparent image
 #      * "+set-image-blocker{pattern}" will send a 4x4 grey/white pattern
-#        which is less intrusive than the logo but easier to recognize
-#        than the transparent one.
+#        which is easier to recognize than the transparent one.
+#      * "+set-image-blocker{custom}" will send an image file as specified
+#        in the config file (see image-blocker-custom-file within config).
 #      * "+set-image-blocker{<URL>}" will send a HTTP temporary redirect
 #        to the specified image URL.
 #

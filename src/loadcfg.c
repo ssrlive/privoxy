@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.3 2002/09/19 03:48:29 iwanttokeepanon Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.3 2002/09/19 03:48:29 iwanttokeep
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *    Revision 2.3  2002/09/19 03:48:29  iwanttokeepanon
  *    Just moved "int i" up 3 lines in function unload_configfile, out of the "ifdef FEATURE_ACL" clause.  I disable ACL and it was not compiling because "int i" was ifdef(d) out.  I noticed this in the past, but am just now in a spot where I can change/commit stuff ... long live broadband!
  *
@@ -438,6 +442,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward                          2029845ul /**< "forward" */
 #define hash_forward_socks4                3963965521ul /**< "forward-socks4" */
 #define hash_forward_socks4a               2639958518ul /**< "forward-socks4a" */
+#define hash_image_blocker_custom_file     2863352327ul /**< "image-blocker-custom-file" */
 #define hash_jarfile                          2046641ul /**< "jarfile" */
 #define hash_listen_address                1255650842ul /**< "listen-address" */
 #define hash_logdir                            422889ul /**< "logdir" */
@@ -536,6 +541,8 @@ void unload_configfile (void * data)
 
    freez(config->re_filterfile);
 
+   freez(config->image_blocker_data);
+   freez(config->image_blocker_format);
 }
 
 
@@ -577,13 +584,15 @@ void unload_current_config_file(void)
 struct configuration_spec * load_config(void)
 {
    char buf[BUFFER_SIZE];
-   char *p, *q;
-   FILE *configfp = NULL;
+   char *p, *q, *image_buf, *image_path;
+   FILE *configfp = NULL,
+        *imagefp = NULL;
    struct configuration_spec * config = NULL;
    struct client_state * fake_csp;
    struct file_list *fs;
+   struct stat statbuf[1];
    unsigned long linenum = 0;
-   int i;
+   int i, file_size, bytes_read;
 
    if ( !check_file_changed(current_configfile, configfile, &fs))
    {
@@ -1364,6 +1373,87 @@ struct configuration_spec * load_config(void)
 
 #endif /* defined(_WIN32) && ! defined(_WIN_CONSOLE) */
 
+/* *************************************************************************
+ * image-blocker-custom-file
+ * *************************************************************************/
+         case hash_image_blocker_custom_file :
+            freez(config->image_blocker_data);
+            freez(config->image_blocker_format);
+            config->image_blocker_length = 0; 
+            image_path = make_path(config->confdir, arg);
+
+            /*
+             * Load up the custom image bitmap file
+             */
+            if (NULL == (imagefp = fopen(image_path, "rb")))
+            {
+              /*
+               * If we can't open the user's requested image, complain
+               */
+              log_error(LOG_LEVEL_ERROR, "Unable to load custom blocker image: %s.", image_path);
+            }
+            else
+            {
+              if (stat(image_path, statbuf) == 0)
+              {
+                file_size = statbuf->st_size;
+                image_buf = zalloc(file_size);
+                if (image_buf != NULL)
+                {
+                  bytes_read = fread(image_buf,1,file_size,imagefp);
+                  if (bytes_read > 0)
+                  {
+                    config->image_blocker_data = image_buf;
+                    config->image_blocker_length = file_size;
+                    /*
+                     * Ensure we can look into files for file signatures
+                     */
+                    if (file_size > 10)
+                    {
+                      /*
+                       * Snoop into the binary data for a filetype signature
+                       */
+                      if (memcmp(image_buf,"GIF",3) == 0)
+                        config->image_blocker_format = IMAGE_MIMETYPE_GIF;
+                      else if (memcmp(&image_buf[6],"JFIF",4) == 0)
+                        config->image_blocker_format = IMAGE_MIMETYPE_JPG;
+                      else if (memcmp(&image_buf[1],"PNG",3) == 0)
+                        config->image_blocker_format = IMAGE_MIMETYPE_PNG;
+                      else
+                      {
+                        log_error(LOG_LEVEL_ERROR, "Unsupported custom image file type.");
+                        freez(config->image_blocker_data);
+                      }
+                    }
+                    else
+                      freez(config->image_blocker_data);
+                  }
+                  else
+                  {
+                    log_error(LOG_LEVEL_ERROR, "Unable to read custom blocker image: %s", image_path, bytes_read, file_size);
+                    freez(image_buf);
+                    config->image_blocker_length = 0;
+                  }
+                }
+                else
+                  log_error(LOG_LEVEL_ERROR, "Unable to allocate memory for custom blocker image: %s.", image_path);
+              }
+              else
+                log_error(LOG_LEVEL_ERROR, "Unable to get statistics on custom blocker image file: %s", image_path);
+            }
+            freez(image_path);
+            /*
+             * If our load failed for some reason, just give the default
+             * checkerboard pattern 
+             */
+            if (config->image_blocker_data == NULL)
+            {
+              log_error(LOG_LEVEL_ERROR, "Custom blocker image processing failed; defaulting to \"pattern\".");
+              config->image_blocker_data = (char*)image_pattern_data;
+              config->image_blocker_length = image_pattern_length;
+              config->image_blocker_format = BUILTIN_IMAGE_MIMETYPE;
+            }
+            continue;
 
 /* *************************************************************************
  * Warnings about unsupported features

@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 2.3 2002/09/05 08:00:23 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *    Revision 2.3  2002/09/05 08:00:23  oes
  *    Synced with the stable branch:
  *        Revision 1.72.2.1  2002/08/10 11:25:18  oes
@@ -1418,6 +1422,15 @@ struct configuration_spec
 
    /** Nonzero if we need to bind() to the new port. */
    int need_bind;
+
+   /** The raw blocker custom bitmap data */
+   char *image_blocker_data;
+
+   /** The length of the blocker custom image data */
+   size_t image_blocker_length;
+
+   /** The mimetype of the blocker custom image data */
+   char *image_blocker_format;
 };
 
 /** Calculates the number of elements in an array, using sizeof. */
@@ -1428,11 +1441,15 @@ struct configuration_spec
 #define FORCE_PREFIX "/PRIVOXY-FORCE"
 #endif /* def FEATURE_FORCE_LOAD */
 
+#define IMAGE_MIMETYPE_PNG "image/png"
+#define IMAGE_MIMETYPE_GIF "image/gif"
+#define IMAGE_MIMETYPE_JPG "image/jpg"
+
 #ifdef FEATURE_NO_GIFS
-/** The MIME type for images ("image/png" or "image/gif"). */
-#define BUILTIN_IMAGE_MIMETYPE "image/png"
+/** The MIME type for built-in images ("image/png" or "image/gif"). */
+#define BUILTIN_IMAGE_MIMETYPE IMAGE_MIMETYPE_PNG
 #else
-#define BUILTIN_IMAGE_MIMETYPE "image/gif"
+#define BUILTIN_IMAGE_MIMETYPE IMAGE_MIMETYPE_GIF
 #endif /* def FEATURE_NO_GIFS */
 
 

@@ -2,7 +2,7 @@
 #
 #  Copyright (C) 2001, 2002 Privoxy Developers http://privoxy.org
 #
-#  $Id: config,v 1.43 2003/02/20 13:51:50 hal9 Exp $
+#  $Id: config,v 1.44 2003/04/20 17:37:28 hal9 Exp $
 #
 ####################################################################
 #                                                                  #
@@ -324,6 +324,37 @@ jarfile jarfile
 #      over time.
 #
 #trustfile trust
+
+#
+#  1.8. image-blocker-custom-file
+#  ==============
+#
+#  Specifies:
+#
+#      The custom image to display for blocked images when
+#      +set-image-blocker{custom} is in effect in an action file
+#
+#  Type of value:
+#
+#      File name, relative to confdir; can be a jpeg, png or gif image
+#
+#  Default value:
+#
+#      Unset
+#
+#  Effect if unset:
+#
+#      If a custom image is called for and it is unset, the "pattern"
+#      built-in image will be sent instead.  I.e. it is as if you had
+#      specified "+set-image-blocker{pattern}" instead of
+#      "+set-image-blocker{custom}".
+#
+#  Notes:
+#
+#      If the specified file signature is not found to be jpeg, png
+#      or gif, the the built-in "pattern" image will be sent instead.
+#
+#image-blocker-custom-file my-custom-image.jpg
 
 #
 #  2. LOCAL SET-UP DOCUMENTATION

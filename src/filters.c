@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 2.3 2002/12/28 03:58:19 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.4 2003/01/21 02:49:27 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 2.3 2002/12/28 03:58:19 david__schm
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.4  2003/01/21 02:49:27  david__schmidt
+ *    Developer TODO 612294: src: C++ keyword as variable name
+ *    I changed all ocurrences of 'new' to 'new_something' wherever I found
+ *    one.  I also brought up all the source files in MSDEV to see if I could
+ *    spot any highlighted keywords that really were variables.  Non-scientific,
+ *    but at least I tried. :-)
+ *
  *    Revision 2.3  2002/12/28 03:58:19  david__schmidt
  *    Initial drop of dashboard instrumentation - enabled with
  *    --enable-activity-console
@@ -776,6 +783,23 @@ struct http_response *block_url(struct client_state *csp)
          rsp->content_length = image_blank_length;
 
          if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+      }
+
+      else if (0 == strcmpic(p, "custom"))
+      {
+         rsp->body = bindup(csp->config->image_blocker_data, csp->config->image_blocker_length);
+         if (rsp->body == NULL)
+         {
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+         rsp->content_length = csp->config->image_blocker_length;
+
+         if (enlist_unique_header(rsp->headers, "Content-Type", csp->config->image_blocker_format))
          {
             free_http_response(rsp);
             return cgi_error_memory();
