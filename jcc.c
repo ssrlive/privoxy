@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.14 2001/05/29 20:14:01 joergs Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.15 2001/05/31 21:24:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.14 2001/05/29 20:14:01 joergs Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.15  2001/05/31 21:24:47  jongfoster
+ *    Changed "permission" to "action" throughout.
+ *    Removed DEFAULT_USER_AGENT - it must now be specified manually.
+ *    Moved vanilla wafer check into chat(), since we must now
+ *    decide whether or not to add it based on the URL.
+ *
  *    Revision 1.14  2001/05/29 20:14:01  joergs
  *    AmigaOS bugfix: PCRS needs a lot of stack, stacksize for child threads
  *    increased.
@@ -463,7 +469,7 @@ static void chat(struct client_state *csp)
        && (csp->action->multi[ACTION_MULTI_WAFER]->next == NULL)
        && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
    {
-      enlist_share(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
+      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
    }
 #endif /* def JAR_FILES */
 

@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v NOT CHECKED IN $";
+const char list_rcs[] = "$Id: list.c,v 1.1 2001/05/31 21:11:53 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,21 @@ const char list_rcs[] = "$Id: list.c,v NOT CHECKED IN $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.1  2001/05/31 21:11:53  jongfoster
+ *    - Moved linked list support to new "list.c" file.
+ *      Structure definitions are still in project.h,
+ *      function prototypes are now in "list.h".
+ *    - Added support for "struct list_share", which is identical
+ *      to "struct list" except it saves memory by not duplicating
+ *      the strings.  Obviously, this only works if there is some
+ *      other way of managing the memory used by the strings.
+ *      (These list_share lists are used for lists which last
+ *      for only 1 request, and where all the list entries are
+ *      just coming directly from entries in the actionsfile.)
+ *      Note that you still need to destroy list_share lists
+ *      properly to free the nodes - it's only the strings
+ *      which are shared.
+ *
  *
  *********************************************************************/
 
@@ -336,7 +351,8 @@ void list_duplicate(struct list *dest, const struct list *src)
  *
  * Function    :  list_append_list_unique
  *
- * Description :  Append a string list to another list
+ * Description :  Append a string list to another list.
+ *                Duplicate items are not added.
  *
  * Parameters  :
  *          1  :  dest = pointer to destination for merge.  Caller allocs.
@@ -356,248 +372,8 @@ void list_append_list_unique(struct list *dest, const struct list *src)
    }
 }
 
-
-/*********************************************************************
- *
- * Function    :  destroy_list_share
- *
- * Description :  Destroy a string list (opposite of enlist)
- *
- * Parameters  :
- *          1  :  h = pointer to list 'dummy' header
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void destroy_list_share(struct list_share *h)
-{
-   struct list_share *p, *n;
-
-   for (p = h->next; p ; p = n)
-   {
-      n = p->next;
-      free(p);
-   }
-
-   memset(h, '\0', sizeof(*h));
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  enlist_share
- *
- * Description :  Append a string into a specified string list.
- *
- * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  str = string to add to the list (maybe NULL)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void enlist_share(struct list_share *header, const char *str)
-{
-   struct list_share *cur = (struct list_share *)malloc(sizeof(*cur));
-   struct list_share *last;
-
-   if (cur)
-   {
-      cur->str  = (str ? strdup(str) : NULL);
-      cur->next = NULL;
-
-      last = header->last;
-      if (last == NULL)
-      {
-         last = header;
-      }
-
-      last->next   = cur;
-      header->last = cur;
-   }
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  enlist_unique_share
- *
- * Description :  Append a string into a specified string list,
- *                if & only if it's not there already.
- *
- * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  str = string to add to the list (maybe NULL)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void enlist_unique_share(struct list_share *header, const char *str)
-{
-   struct list_share *last;
-   struct list_share *cur = header->next;
-
-   while (cur != NULL)
-   {
-      if ((cur->str != NULL) && (0 == strcmp(str, cur->str)))
-      {
-         /* Already there */
-         return;
-      }
-      cur = cur->next;
-   }
-
-   cur = (struct list_share *)malloc(sizeof(*cur));
-
-   if (cur != NULL)
-   {
-      cur->str  = str;
-      cur->next = NULL;
-
-      last = header->last;
-      if (last == NULL)
-      {
-         last = header;
-      }
-      last->next   = cur;
-      header->last = cur;
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  list_append_list_unique_share
- *
- * Description :  Append a string list to another list
- *
- * Parameters  :
- *          1  :  dest = pointer to destination for merge.  Caller allocs.
- *          2  :  src = pointer to source for merge.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void list_append_list_unique_share(struct list_share *dest, const struct list *src)
-{
-   struct list * cur = src->next;
-
-   while (cur)
-   {
-      enlist_unique_share(dest, cur->str);
-      cur = cur->next;
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  list_remove_item_share
- *
- * Description :  Remove a string from a specified string list.
- *
- * Parameters  :
- *          1  :  header = pointer to list 'dummy' header
- *          2  :  str = string to remove from the list
- *
- * Returns     :  Number of times it was removed.
- *
- *********************************************************************/
-int list_remove_item_share(struct list_share *header, const char *str)
-{
-   struct list_share *prev = header;
-   struct list_share *cur = prev->next;
-   int count = 0;
-
-   while (cur != NULL)
-   {
-      if ((cur->str != NULL) && (0 == strcmp(str, cur->str)))
-      {
-         count++;
-
-         prev->next = cur->next;
-         free(cur);
-      }
-      else
-      {
-         prev = cur;
-      }
-      cur = prev->next;
-   }
-
-   header->last = prev;
-
-   return count;
-}
-
-
-/*********************************************************************
- *
- * Function    :  list_remove_list_share
- *
- * Description :  Remove all strings in one list from another list.
- *                This is currently a brute-force algorithm
- *                (it compares every pair of strings).
- *
- * Parameters  :
- *          1  :  dest = list to change
- *          2  :  src = list of strings to remove
- *
- * Returns     :  Total number of strings removed.
- *
- *********************************************************************/
-int list_remove_list_share(struct list_share *dest, const struct list *src)
-{
-   struct list *cur = src->next;
-   int count = 0;
-
-   while (cur != NULL)
-   {
-      if (cur->str != NULL)
-      {
-         count += list_remove_item_share(dest, cur->str);
-      }
-      cur = cur->next;
-   }
-
-   return count;
-}
-
-
-/*********************************************************************
- *
- * Function    :  list_duplicate_share
- *
- * Description :  Duplicate a string list
- *
- * Parameters  :
- *          1  :  dest = pointer to destination for copy.  Caller allocs.
- *          2  :  src = pointer to source for copy.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void list_duplicate_share(struct list_share *dest, const struct list *src)
-{
-   struct list * cur_src = src->next;
-   struct list_share * cur_dest = dest;
-
-   memset(dest, '\0', sizeof(*dest));
-
-   while (cur_src)
-   {
-      cur_dest = cur_dest->next = (struct list_share *)zalloc(sizeof(*cur_dest));
-      if (cur_dest == NULL)
-      {
-         return;
-      }
-      cur_dest->str = cur_src->str;
-      cur_src = cur_src->next;
-   }
-
-   dest->last = cur_dest;
-
-}
-
+/*
+  Local Variables:
+  tab-width: 3
+  end:
+*/

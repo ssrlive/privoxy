@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.10 2001/05/31 21:33:53 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.11 2001/06/01 10:32:47 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.11  2001/06/01 10:32:47  oes
+ *    Added constants for anchoring selection bitmap
+ *
  *    Revision 1.10  2001/05/31 21:33:53  jongfoster
  *    Changes for new actions file, replacing permissionsfile
  *    and parts of the config file.  Also added support for
@@ -259,15 +262,6 @@ struct list /* FIXME: Why not separate entries and header? */
 };
 
 
-/* Generic linked list of strings */
-struct list_share /* FIXME: Why not separate entries and header? */
-{
-   const char *       str;  /* valid in an entry */
-   struct list_share *last; /* valid in header */
-   struct list_share *next;
-};
-
-
 /* A URL pattern */
 struct url_spec
 {
@@ -341,7 +335,7 @@ struct current_action_spec
    char * string[ACTION_STRING_COUNT];
 
    /* Strings to add */
-   struct list_share multi[ACTION_MULTI_COUNT][1];
+   struct list multi[ACTION_MULTI_COUNT][1];
 };
 
 struct action_spec

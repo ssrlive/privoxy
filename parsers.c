@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.12 2001/05/31 17:33:13 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.13 2001/05/31 21:30:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.12 2001/05/31 17:33:13 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.13  2001/05/31 21:30:33  jongfoster
+ *    Removed list code - it's now in list.[ch]
+ *    Renamed "permission" to "action", and changed many features
+ *    to use the actions file rather than the global config.
+ *
  *    Revision 1.12  2001/05/31 17:33:13  oes
  *
  *    CRLF -> LF
@@ -1102,7 +1107,6 @@ char *client_accept(const struct parsers *v, char *s, struct client_state *csp)
 void client_cookie_adder(struct client_state *csp)
 {
    struct list *lst;
-   struct list_share *lsts;
    char *tmp = NULL;
    char *e;
 
@@ -1115,14 +1119,14 @@ void client_cookie_adder(struct client_state *csp)
       tmp = strsav(tmp, lst->str);
    }
 
-   for (lsts = csp->action->multi[ACTION_MULTI_WAFER]->next;  lsts ; lsts = lsts->next)
+   for (lst = csp->action->multi[ACTION_MULTI_WAFER]->next;  lst ; lst = lst->next)
    {
       if (tmp)
       {
          tmp = strsav(tmp, "; ");
       }
 
-      if ((e = cookie_encode(lsts->str)))
+      if ((e = cookie_encode(lst->str)))
       {
          tmp = strsav(tmp, e);
          freez(e);
@@ -1158,12 +1162,12 @@ void client_cookie_adder(struct client_state *csp)
  *********************************************************************/
 void client_xtra_adder(struct client_state *csp)
 {
-   struct list_share *l = csp->action->multi[ACTION_MULTI_ADD_HEADER];
+   struct list *lst = csp->action->multi[ACTION_MULTI_ADD_HEADER];
 
-   for (l = l->next; l ; l = l->next)
+   for (lst = lst->next; lst ; lst = lst->next)
    {
-      log_error(LOG_LEVEL_HEADER, "addh: %s", l->str);
-      enlist(csp->headers, l->str);
+      log_error(LOG_LEVEL_HEADER, "addh: %s", lst->str);
+      enlist(csp->headers, lst->str);
    }
 
 }

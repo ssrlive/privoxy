@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.1 2001/05/31 21:16:46 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.2 2001/05/31 21:40:00 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.1 2001/05/31 21:16:46 jongfoster 
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.2  2001/05/31 21:40:00  jongfoster
+ *    Removing some commented out, obsolete blocks of code.
+ *
  *    Revision 1.1  2001/05/31 21:16:46  jongfoster
  *    Moved functions to process the action list into this new file.
  *
@@ -627,7 +630,7 @@ char * current_action_to_text(struct current_action_spec *action)
 {
    unsigned flags  = action->flags;
    char * result = strdup("");
-   struct list_share * lst;
+   struct list * lst;
 
 #define DEFINE_ACTION_BOOL(__name, __bit)   \
    if (flags & __bit)                       \
@@ -743,13 +746,13 @@ void merge_current_action (struct current_action_spec *dest,
       if (src->multi_remove_all[i])
       {
          /* Remove everything from dest */
-         destroy_list_share(dest->multi[i]);
-         list_duplicate_share(dest->multi[i], src->multi_add[i]);
+         destroy_list(dest->multi[i]);
+         list_duplicate(dest->multi[i], src->multi_add[i]);
       }
       else
       {
-         list_remove_list_share(dest->multi[i], src->multi_remove[i]);
-         list_append_list_unique_share(dest->multi[i], src->multi_add[i]);
+         list_remove_list(dest->multi[i], src->multi_remove[i]);
+         list_append_list_unique(dest->multi[i], src->multi_add[i]);
       }
    }
 }
@@ -773,7 +776,7 @@ void free_current_action (struct current_action_spec *src)
 
    for (i = 0; i < ACTION_MULTI_COUNT; i++)
    {
-      destroy_list_share(src->multi[i]);
+      destroy_list(src->multi[i]);
    }
 
    memset(src, '\0', sizeof(*src));
