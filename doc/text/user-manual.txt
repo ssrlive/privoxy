@@ -2,7 +2,7 @@ Privoxy User Manual
 
 By: Privoxy Developers
 
-$Id: user-manual.sgml,v 1.61 2002/03/29 01:31:08 hal9 Exp $
+$Id: user-manual.sgml,v 1.64 2002/04/03 03:53:43 hal9 Exp $
 
 The user manual gives users information on how to install, configure and use
 Privoxy. Privoxy is a web proxy with advanced filtering capabilities for
@@ -62,7 +62,7 @@ Table of Contents
     6.1. License
     6.2. History
    
-7. See also
+7. See Also
 8. Appendix
    
     8.1. Regular Expressions
@@ -242,10 +242,10 @@ in /var/log/privoxy/.
 
 Privoxy is packaged in a WarpIN self- installing archive. The self-installing
 program will be named depending on the release version, something like:
-ijbos2_setup_1.2.3.exe. In order to install it, simply run this executable or
-double-click on its icon and follow the WarpIN installation panels. A shadow of
-the Privoxy executable will be placed in your startup folder so it will start
-automatically whenever OS/2 starts.
+privoxyos2_setup_1.2.3.exe. In order to install it, simply run this executable
+or double-click on its icon and follow the WarpIN installation panels. A shadow
+of the Privoxy executable will be placed in your startup folder so it will
+start automatically whenever OS/2 starts.
 
 The directory you choose to install Privoxy into will contain all of the
 configuration files.
@@ -303,12 +303,12 @@ the same as above for Linux/Unix.
 3. Quickstart to Using Privoxy
 
 Before launching Privoxy for the first time, you will want to configure your
-browser(s) to use Privoxy and the HTTP and HTTPS proxy. The default is
-localhost for the proxy address, and port 8118 (earlier versions used port
-800). This is the one required configuration that must be done!
+browser(s) to use Privoxy as a HTTP and HTTPS proxy. The default is localhost
+for the proxy address, and port 8118 (earlier versions used port 800). This is
+the one required configuration that must be done!
 
 With Netscape (and Mozilla), this can be set under Edit -> Preferences ->
-Advanced -> Proxies -> HTTP Proxy. For Internet Explorer: Tools > Internet
+Advanced -> Proxies -> HTTP Proxy. For Internet Explorer: Tools -> Internet
 Properties -> Connections -> LAN Setting. Then, check "Use Proxy" and fill in
 the appropriate info (Address: localhost, Port: 8118). Include if HTTPS proxy
 support too.
@@ -420,9 +420,9 @@ Privoxy may be invoked with the following command-line options:
 
 4. Privoxy Configuration
 
-All Privoxy configuration is kept in text files. These files can be edited with
-a text editor. Many important aspects of Privoxy can also be controlled easily
-with a web browser.
+All Privoxy configuration is stored in text files. These files can be edited
+with a text editor. Many important aspects of Privoxy can also be controlled
+easily with a web browser.
 
 -------------------------------------------------------------------------------
 
@@ -476,7 +476,7 @@ configuration files (this will change in time):
     images, banners, pop-ups, access restrictions, banners and cookies. There
     is a CGI based editor for this file that can be accessed via http://p.p.
     (Other actions files are included as well with differing levels of
-    filtering and blocking, e.g. ijb-basic.action.)
+    filtering and blocking, e.g. basic.action.)
    
   * The default.filter file can be used to re-write the raw page content,
     including viewable text as well as embedded HTML and JavaScript, and
@@ -528,8 +528,8 @@ There are various aspects of Privoxy behavior that can be tuned.
 4.3.1. Defining Other Configuration Files
 
 Privoxy can use a number of other files to tell it what ads to block, what
-cookies to accept, etc. This section of the configuration file tells Privoxy
-where to find all those other files.
+cookies to accept, and perform other functions. This section of the
+configuration file tells Privoxy where to find all those other files.
 
 On Windows and AmigaOS, Privoxy looks for these files in the same directory as
 the executable. On Unix and OS/2, Privoxy looks for these files in the current
@@ -623,8 +623,8 @@ will appear on the page that your users receive when they try to access
 untrusted content. Use multiple times for multiple URLs. Default: Don't display
 links on the "untrusted" info page.
 
-  trust-info-url http://www.your-site.com/why_we_block.html
-  trust-info-url http://www.your-site.com/what_we_allow.html
+  trust-info-url http://www.example.com/why_we_block.html
+  trust-info-url http://www.example.com/what_we_allow.html
    
 
 -------------------------------------------------------------------------------
@@ -646,7 +646,7 @@ proxy-generated pages and its use is highly recommended in multi-user
 installations, since your users will want to know why certain content is
 blocked or modified. Default: Don't show a link to on-line documentation.
 
-  proxy-info-url http://www.your-site.com/proxy.html
+  proxy-info-url http://www.example.com/proxy.html
    
 
 "Listen-address" specifies the address and port where Privoxy will listen for
@@ -1106,16 +1106,25 @@ console.
 4.4. The Actions File
 
 The "default.action" file (formerly actionsfile or ijb.action) is used to
-define what actions Privoxy takes, and thus determines how images, cookies and
-various other aspects of HTTP content and transactions are handled. Images can
-be anything you want, including ads, banners, or just some obnoxious URL that
-you would rather not see. Cookies can be accepted or rejected, or accepted only
-during the current browser session (i.e. not written to disk). Changes to
-default.action should be immediately visible to Privoxy without the need to
-restart.
+define what actions Privoxy takes, and thus determines how ad images, cookies
+and various other aspects of HTTP content and transactions are handled. These
+can be accepted or rejected for all sites, or just those sites you choose. See
+below for a complete list of actions.
 
-The easiest way to edit "actions" file is with a browser by loading http://p.p/
-, and then select "Edit Actions List". A text editor can also be used.
+Anything you want can blocked, including ads, banners, or just some obnoxious
+URL that you would rather not see. Cookies can be accepted or rejected, or
+accepted only during the current browser session (i.e. not written to disk).
+Changes to default.action should be immediately visible to Privoxy without the
+need to restart.
+
+Note that some sites may misbehave, or possibly not work at all with some
+actions. This may require some tinkering with the rules to get the most mileage
+of Privoxy's features, and still be able to see and enjoy just what you want
+to. There is no general rule of thumb on these things. There just are too many
+variables, and sites are always changing. 
+
+The easiest way to edit the "actions" file is with a browser by loading http://
+p.p/, and then select "Edit Actions List". A text editor can also be used.
 
 To determine which actions apply to a request, the URL of the request is
 compared to all patterns in this file. Every time it matches, the list of
@@ -1142,7 +1151,8 @@ www.example.com/ - means exactly the same.
 www.example.com/index.html - matches only the single document "/index.html" on
 "www.example.com".
 
-/index.html - matches the document "/index.html", regardless of the domain.
+/index.html - matches the document "/index.html", regardless of the domain. So
+would match any page named "index.html" on any site.
 
 index.html - matches nothing, since it would be interpreted as a domain name
 and there is no top-level domain called ".html".
@@ -1150,7 +1160,7 @@ and there is no top-level domain called ".html".
 The matching of the domain part offers some flexible options: if the domain
 starts or ends with a dot, it becomes unanchored at that end. For example:
 
-.example.com - matches any domain that ENDS in ".example.com".
+.example.com - matches any domain or sub-domain that ENDS in ".example.com".
 
 www. - matches any domain that STARTS with "www".
 
@@ -1170,10 +1180,12 @@ etc.
 www[1-9a-ez].example.com - matches "www1.example.com", "www4.example.com",
 "wwwd.example.com", "wwwz.example.com", etc., but not "wwww.example.com".
 
-If Privoxy was compiled with "pcre" support (default), Perl compatible regular
-expressions can be used. See the pcre/docs/ directory or "man perlre" (also
-available on http://www.perldoc.com/perl5.6/pod/perlre.html) for details. A
-brief discussion of regular expressions is in the Appendix. For instance:
+If Privoxy was compiled with "pcre" support (the default), Perl compatible
+regular expressions can be used. These are more flexible and powerful than
+other types of "regular expressions". See the pcre/docs/ directory or "man
+perlre" (also available on http://www.perldoc.com/perl5.6/pod/perlre.html) for
+details. A brief discussion of regular expressions is in the Appendix. For
+instance:
 
 /.*/advert[0-9]+\.jpe?g - would match a URL from any domain, with any path that
 includes "advert" followed immediately by one or more digits, then a "." and
@@ -1222,7 +1234,8 @@ Privoxy would just be a normal, non-blocking, non-anonymizing proxy. You must
 specifically enable the privacy and blocking features you need (although the
 provided default default.action file will give a good starting point).
 
-Later defined actions always over-ride earlier ones. For multi-valued actions,
+Later defined actions always over-ride earlier ones. So exceptions to any rules
+you make, should come in the latter part of the file. For multi-valued actions,
 the actions are applied in the order they are specified.
 
 The list of valid Privoxy "actions" are:
@@ -1235,7 +1248,8 @@ The list of valid Privoxy "actions" are:
    
   * Block this URL totally. In a default installation, a "blocked" URL will
     result in bright red banner that says "BLOCKED", with a reason why it is
-    being blocked.
+    being blocked, and an option to see it anyway. The page displayed for this
+    is the "blocked" template file.
    
       +block
          
@@ -1283,7 +1297,8 @@ The list of valid Privoxy "actions" are:
    
   * Apply the filters in the section_header section of the default.filter file
     to the site(s). default.filter sections are grouped according to like
-    functionality.
+    functionality. Filters can be used to re-write any of the raw page content.
+    This is a potentially a very powerful feature!
    
      +filter{section_header}
          
@@ -1327,8 +1342,8 @@ The list of valid Privoxy "actions" are:
    
   * Don't send the "Referer:" (sic) header to the web site. You can block it,
     forge a URL to the same server as the request (which is preferred because
-    some sites will not send images otherwise) or set it to a constant string
-    of your choice.
+    some sites will not send images otherwise) or set it to a constant, user
+    defined string of your choice.
    
       +hide-referer{block}
       +hide-referer{forge}
@@ -1354,7 +1369,9 @@ The list of valid Privoxy "actions" are:
     which case a "blocked" image can be sent rather than a HTML page. See
     "+image-blocker{}" below for the control over what is actually sent. If you
     want invisible ads, they should be defined as images and blocked. And also,
-    "image-blocker" should be set to "blank".
+    "image-blocker" should be set to "blank". Note you cannot treat HTML pages
+    as images in most cases. For instance, frames require an HTML page to
+    display. Forcing an "image" in this situation just will not work.
    
       +image
          
@@ -1399,7 +1416,7 @@ The list of valid Privoxy "actions" are:
     websites do this, which can be a problem for Privoxy, since "+filter",
     "+no-popup" and "+gif-deanimate" will not work on compressed data. This
     will slow down connections to those websites, though. Default is
-    "nocompression" is turned on.
+    "no-compression" is turned on.
    
       +nocompression
          
@@ -1497,8 +1514,8 @@ refilterfile, and make one exception for sourceforge:
  .cvs.sourceforge.net
    
 
-Now some URLs that we want "blocked", ie we won't see them. Many of these use
-regular expressions that will expand to match multiple URLs:
+Now some URLs that we want "blocked" (normally generates the "blocked" banner).
+Many of these use regular expressions that will expand to match multiple URLs:
 
   # Blocklist:
   {+block}
@@ -1562,7 +1579,7 @@ other "actions". These can in turn be invoked just like the built-in "actions".
 Currently, an alias can contain any character except space, tab, "=", "{" or "}
 ". But please use only "a"- "z", "0"-"9", "+", and "-". Alias names are not
 case sensitive, and must be defined before anything else in the
-default.actionfile ! And there can only be one set of "aliases" defined.
+default.actionfile! And there can only be one set of "aliases" defined.
 
 Now let's define a few aliases:
 
@@ -1605,6 +1622,9 @@ Some examples using our "shop" and "fragile" aliases from above:
  .overclockers.co.uk
    
 
+The "shop" and "fragile" aliases are often used for "problem" sites that
+require most actions to be disabled in order to function properly. 
+
 -------------------------------------------------------------------------------
 
 4.5. The Filter File
@@ -1614,10 +1634,14 @@ modification can be removal, or re-writing, of any web page content, including
 tags and non-visible content. The default filter file is default.filter,
 located in the config directory.
 
+This is potentially a very powerful feature, and requires knowledge of both
+"regular expression" and HTML in order create custom filters. But, there are a
+number of useful filters included with Privoxy for many common situations.
+
 The included example file is divided into sections. Each section begins with
 the FILTER keyword, followed by the identifier for that section, e.g. "FILTER:
 webbugs". Each section performs a similar type of filtering, such as
-"html-annoyances". 
+"html-annoyances".
 
 This file uses regular expressions to alter or remove any string in the target
 page. The expressions can only operate on one line at a time. Some examples
@@ -1675,6 +1699,10 @@ Kill those pesky little web-bugs:
 When Privoxy displays one of its internal pages, such as a 404 Not Found error
 page, it uses the appropriate template. On Linux, BSD, and Unix, these are
 located in /etc/privoxy/templates by default. These may be customized, if
+desired.
+
+The default "Blocked" banner page with the bright red top banner, is called
+just "blocked". This may be customized or replaced with something else if
 desired. 
 
 -------------------------------------------------------------------------------
@@ -1686,12 +1714,16 @@ note:
 
   * Use the Sourceforge support forum to get help.
    
-  * Submit bugs only thru our Sourceforge bug forum. Make sure that the bug has
-    not already been submitted. Please try to verify that it is a Privoxy bug,
-    and not a browser or site bug first. If you are using your own custom
-    configuration, please try the stock configs to see if the problem is a
-    configuration related bug. And if not using the latest development
-    snapshot, please try the latest one. Or even better, CVS sources.
+  * Submit bugs only thru our Sourceforge bug forum.
+   
+    Make sure that the bug has not already been submitted. Please try to verify
+    that it is a Privoxy bug, and not a browser or site bug first. If you are
+    using your own custom configuration, please try the stock configs to see if
+    the problem is a configuration related bug. And if not using the latest
+    development snapshot, please try the latest one. Or even better, CVS
+    sources. Please be sure to include the Privoxy/Junkbuster version,
+    platform, browser, any pertinent log data, any other relevant details
+    (please be specific) and, if possible, some way to reproduce the bug.
    
   * Submit feature requests only thru our Sourceforge feature request forum.
    
@@ -1720,6 +1752,10 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details, which
 is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
 330, Boston, MA 02111-1307, USA.
 
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA 02111-1307 USA.
+
 -------------------------------------------------------------------------------
 
 6.2. History
@@ -1736,13 +1772,17 @@ grown whiskers ;-).
 
 -------------------------------------------------------------------------------
 
-7. See also
+7. See Also
 
-  http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy.
+Other references and sites of interest to Privoxy users:
 
-  http://www.privoxy.org/
+  http://www.privoxy.org/, The Privoxy Home page.
 
-  http://p.p/
+  http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy on      
+Sourceforge.                                                                   
+
+  http://p.p/, access Privoxy from your browser. Alternately, http://          
+config.privoxy.org may work in some situations where the first does not.       
 
   http://www.junkbusters.com/ht/en/cookies.html
 
@@ -1974,15 +2014,15 @@ www.bookmarklets.com. They have more information about bookmarklets.
 
 8.3. Anatomy of an Action
 
-The way Privoxy applies "actions" to any given URL can be complex, and not
-always so easy to understand what is happening. And sometimes we need to be
-able to see just what Privoxy is doing. Especially, if something Privoxy is
-doing is causing us a problem inadvertantly. It can be a little daunting to
-look at the actions files themselves, since they tend to be filled with
-"regular expressions" whose consequences are not always so obvious. Privoxy
-provides the http://config.privoxy.org/show-url-info page that can show us very
-specifically how actions are being applied to any given URL. This is a big help
-for troubleshooting.
+The way Privoxy applies "actions" and "filters" to any given URL can be
+complex, and not always so easy to understand what is happening. And sometimes
+we need to be able to see just what Privoxy is doing. Especially, if something
+Privoxy is doing is causing us a problem inadvertantly. It can be a little
+daunting to look at the actions and filters files themselves, since they tend
+to be filled with "regular expressions" whose consequences are not always so
+obvious. Privoxy provides the http://config.privoxy.org/show-url-info page that
+can show us very specifically how actions are being applied to any given URL.
+This is a big help for troubleshooting.
 
 First, enter one URL (or partial URL) at the prompt, and then Privoxy will tell
 us how the current configuration will handle it. This will not help with
@@ -2117,7 +2157,8 @@ handle such exceptions. Example:
                                                                                
                                                                                
 
-Now the page displays ;-) 
+Now the page displays ;-) Be sure to flush your browser's caches when making
+such changes. Or, try using Shift+Reload. 
 
 But now what about a situation where we get no explicit matches like we did
 with: 
@@ -2150,4 +2191,9 @@ to one of aliases that turn off "+filter":
  .forbes.com                                                                   
                                                                                
                                                                                
+
+"{fragile}" is an alias that disables most actions. This can be used as a last
+resort for problem sites. Remember to flush caches! If this still does not
+work, you will have to go through the remaining actions one by one to find
+which one(s) is causing the problem.
 

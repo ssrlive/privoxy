@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $
+$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -17,12 +17,14 @@ networks.
 Privoxy is based on the code of the Internet Junkbuster. Junkbuster was
 originally written by JunkBusters Corporation, and was released as free
 open-source software under the GNU GPL. Stefan Waldherr made many improvements,
-and started the SourceForge project to continue development. Other developers
-have since joined Stefan.
+and started the SourceForge project to continue development.
 
-You can find the latest version of the user manual at http://www.privoxy.org/
-developer-manual/. Please see the Contact section in the user-manual if you
-want to contact the developers.
+Privoxy continues the Junkbuster tradition, but adds many refinements and
+enhancements.
+
+You can find the latest version of the this manual at http://www.privoxy.org/
+developer-manual/. Please see the Contact section of the User Manual on how to
+contact the developers.
 
 -------------------------------------------------------------------------------
 
@@ -102,18 +104,19 @@ Table of Contents
    
 7. Releasing a new version
    
-    7.1. Update the webserver
-    7.2. SuSE or RedHat
-    7.3. OS/2
-    7.4. Solaris
-    7.5. Windows
-    7.6. Debian
-    7.7. Mac OSX
-    7.8. FreeBSD
-    7.9. Tarball
-    7.10. HP-UX 11
-    7.11. Amiga OS
-    7.12. AIX
+    7.1. Before the Release
+    7.2. Update the webserver
+    7.3. SuSE or Red Hat
+    7.4. OS/2
+    7.5. Solaris
+    7.6. Windows
+    7.7. Debian
+    7.8. Mac OSX
+    7.9. FreeBSD
+    7.10. Tarball
+    7.11. HP-UX 11
+    7.12. Amiga OS
+    7.13. AIX
    
 8. Contact the developers
 9. Copyright and History
@@ -135,9 +138,10 @@ porting, are all important jobs as well.
 2. Quickstart to Privoxy Development
 
 You'll need an account on Sourceforge to support our development. Mail your ID
-to the list and wait until a project manager has added you. For the time beeing
-(read, this section is under construction), please note the following
-guidelines for changing stuff in the code. If it is
+to the list and wait until a project manager has added you.
+
+For the time being (read, this section is under construction), please note the
+following guidelines for changing stuff in the code. If it is
 
  1. A bugfix / clean-up / cosmetic thing: shoot
    
@@ -159,15 +163,18 @@ comparable alternatives), and either jade or openjade installed in order to
 build docs from source. Currently there is user-manual, FAQ, and, of course
 this, the developer-manual in this format.
 
+Other, less formal documents (e.g. README, LICENSE) are maintained as plain
+text files in the toplevel source directory.
+
 Packagers are encouraged to include this documentation. For those without the
 ability to build the docs locally, text versions of each are kept in CVS. Or
 HTML versions can be downloaded from the www.privoxy.org website, which should
 be fairly current.
 
-Documents are built with the Makefile targets of make dok, or alternately make
-redhat-dok. If you have problems, try both. The build process uses the document
-SGML sources in doc/source to update all text files in doc/text and to update
-all HTML documents in doc/webserver.
+Formal documents are built with the Makefile targets of make dok, or
+alternately make redhat-dok. If you have problems, try both. The build process
+uses the document SGML sources in doc/source to update all text files in doc/
+text and to update all HTML documents in doc/webserver.
 
 Documentation writers should please make sure documents build successfully
 before committing to CVS.
@@ -1123,49 +1130,49 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $"; 
-/*********************************************************************                         
- *                                                                                             
- * File        :  $Source$                                                                     
- *                                                                                             
- * Purpose     :  (Fill me in with a good description!)                                        
- *                                                                                             
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                            
- *                Privoxy team. http://www.privoxy.org/                                        
- *                                                                                             
- *                Based on the Internet Junkbuster originally written                          
- *                by and Copyright (C) 1997 Anonymous Coders and                               
- *                Junkbusters Corporation.  http://www.junkbusters.com                         
- *                                                                                             
- *                This program is free software; you can redistribute it                       
- *                and/or modify it under the terms of the GNU General                          
- *                Public License as published by the Free Software                             
- *                Foundation; either version 2 of the License, or (at                          
- *                your option) any later version.                                              
- *                                                                                             
- *                This program is distributed in the hope that it will                         
- *                be useful, but WITHOUT ANY WARRANTY; without even the                        
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                         
- *                PARTICULAR PURPOSE.  See the GNU General Public                              
- *                License for more details.                                                    
- *                                                                                             
- *                The GNU General Public License should be included with                       
- *                this file.  If not, you can view it at                                       
- *                http://www.gnu.org/copyleft/gpl.html                                         
- *                or write to the Free Software Foundation, Inc., 59                           
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                       
- *                                                                                             
- * Revisions   :                                                                               
- *    $Log$                                                                                    
- *                                                                                             
- *********************************************************************/                        
-                                                                                               
-                                                                                               
-#include "config.h"                                                                            
-                                                                                               
-   ...necessary include files for us to do our work...                                         
-                                                                                               
-const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                              
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $"; 
+/*********************************************************************                          
+ *                                                                                              
+ * File        :  $Source$                                                                      
+ *                                                                                              
+ * Purpose     :  (Fill me in with a good description!)                                         
+ *                                                                                              
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                             
+ *                Privoxy team. http://www.privoxy.org/                                         
+ *                                                                                              
+ *                Based on the Internet Junkbuster originally written                           
+ *                by and Copyright (C) 1997 Anonymous Coders and                                
+ *                Junkbusters Corporation.  http://www.junkbusters.com                          
+ *                                                                                              
+ *                This program is free software; you can redistribute it                        
+ *                and/or modify it under the terms of the GNU General                           
+ *                Public License as published by the Free Software                              
+ *                Foundation; either version 2 of the License, or (at                           
+ *                your option) any later version.                                               
+ *                                                                                              
+ *                This program is distributed in the hope that it will                          
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                         
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                          
+ *                PARTICULAR PURPOSE.  See the GNU General Public                               
+ *                License for more details.                                                     
+ *                                                                                              
+ *                The GNU General Public License should be included with                        
+ *                this file.  If not, you can view it at                                        
+ *                http://www.gnu.org/copyleft/gpl.html                                          
+ *                or write to the Free Software Foundation, Inc., 59                            
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                        
+ *                                                                                              
+ * Revisions   :                                                                                
+ *    $Log$                                                                                     
+ *                                                                                              
+ *********************************************************************/                         
+                                                                                                
+                                                                                                
+#include "config.h"                                                                             
+                                                                                                
+   ...necessary include files for us to do our work...                                          
+                                                                                                
+const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                               
 
 Note: This declares the rcs variables that should be added to the
 "show-proxy-args" page. If this is a brand new creation by you, you are free to
@@ -1177,71 +1184,71 @@ code (via `forward-page' and `backward-page'). Please include it if you can.
 
 Example for file header comments:
 
-#ifndef _FILENAME_H                                                                          
-#define _FILENAME_H                                                                          
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.15 2002/03/30 22:29:47 swa Exp $" 
-/*********************************************************************                       
- *                                                                                           
- * File        :  $Source$                                                                   
- *                                                                                           
- * Purpose     :  (Fill me in with a good description!)                                      
- *                                                                                           
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                          
- *                Privoxy team. http://www.privoxy.org/                                      
- *                                                                                           
- *                Based on the Internet Junkbuster originally written                        
- *                by and Copyright (C) 1997 Anonymous Coders and                             
- *                Junkbusters Corporation.  http://www.junkbusters.com                       
- *                                                                                           
- *                This program is free software; you can redistribute it                     
- *                and/or modify it under the terms of the GNU General                        
- *                Public License as published by the Free Software                           
- *                Foundation; either version 2 of the License, or (at                        
- *                your option) any later version.                                            
- *                                                                                           
- *                This program is distributed in the hope that it will                       
- *                be useful, but WITHOUT ANY WARRANTY; without even the                      
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                       
- *                PARTICULAR PURPOSE.  See the GNU General Public                            
- *                License for more details.                                                  
- *                                                                                           
- *                The GNU General Public License should be included with                     
- *                this file.  If not, you can view it at                                     
- *                http://www.gnu.org/copyleft/gpl.html                                       
- *                or write to the Free Software Foundation, Inc., 59                         
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                     
- *                                                                                           
- * Revisions   :                                                                             
- *    $Log$                                                                                  
- *                                                                                           
- *********************************************************************/                      
-                                                                                             
-                                                                                             
-#include "project.h"                                                                         
-                                                                                             
-#ifdef __cplusplus                                                                           
-extern "C" {                                                                                 
-#endif                                                                                       
-                                                                                             
-   ... function headers here ...                                                             
-                                                                                             
-                                                                                             
-/* Revision control strings from this header and associated .c file */                       
-extern const char FILENAME_rcs[];                                                            
-extern const char FILENAME_h_rcs[];                                                          
-                                                                                             
-                                                                                             
-#ifdef __cplusplus                                                                           
-} /* extern "C" */                                                                           
-#endif                                                                                       
-                                                                                             
-#endif /* ndef _FILENAME_H */                                                                
-                                                                                             
-/*                                                                                           
-  Local Variables:                                                                           
-  tab-width: 3                                                                               
-  end:                                                                                       
-*/                                                                                           
+#ifndef _FILENAME_H                                                                           
+#define _FILENAME_H                                                                           
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.18 2002/04/03 03:51:48 hal9 Exp $" 
+/*********************************************************************                        
+ *                                                                                            
+ * File        :  $Source$                                                                    
+ *                                                                                            
+ * Purpose     :  (Fill me in with a good description!)                                       
+ *                                                                                            
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                           
+ *                Privoxy team. http://www.privoxy.org/                                       
+ *                                                                                            
+ *                Based on the Internet Junkbuster originally written                         
+ *                by and Copyright (C) 1997 Anonymous Coders and                              
+ *                Junkbusters Corporation.  http://www.junkbusters.com                        
+ *                                                                                            
+ *                This program is free software; you can redistribute it                      
+ *                and/or modify it under the terms of the GNU General                         
+ *                Public License as published by the Free Software                            
+ *                Foundation; either version 2 of the License, or (at                         
+ *                your option) any later version.                                             
+ *                                                                                            
+ *                This program is distributed in the hope that it will                        
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                       
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                        
+ *                PARTICULAR PURPOSE.  See the GNU General Public                             
+ *                License for more details.                                                   
+ *                                                                                            
+ *                The GNU General Public License should be included with                      
+ *                this file.  If not, you can view it at                                      
+ *                http://www.gnu.org/copyleft/gpl.html                                        
+ *                or write to the Free Software Foundation, Inc., 59                          
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                      
+ *                                                                                            
+ * Revisions   :                                                                              
+ *    $Log$                                                                                   
+ *                                                                                            
+ *********************************************************************/                       
+                                                                                              
+                                                                                              
+#include "project.h"                                                                          
+                                                                                              
+#ifdef __cplusplus                                                                            
+extern "C" {                                                                                  
+#endif                                                                                        
+                                                                                              
+   ... function headers here ...                                                              
+                                                                                              
+                                                                                              
+/* Revision control strings from this header and associated .c file */                        
+extern const char FILENAME_rcs[];                                                             
+extern const char FILENAME_h_rcs[];                                                           
+                                                                                              
+                                                                                              
+#ifdef __cplusplus                                                                            
+} /* extern "C" */                                                                            
+#endif                                                                                        
+                                                                                              
+#endif /* ndef _FILENAME_H */                                                                 
+                                                                                              
+/*                                                                                            
+  Local Variables:                                                                            
+  tab-width: 3                                                                                
+  end:                                                                                        
+*/                                                                                            
 
 Example for function comments:
 
@@ -1272,8 +1279,8 @@ create a "self-documenting" web page.
 
 5. Version Control Guidelines
 
-To be filled. note on cvs comments. don't comment what you did, comment why you
-did it.
+To be filled. note on cvs comments. Don't only comment what you did, but also
+why you did it!
 
 -------------------------------------------------------------------------------
 
@@ -1330,296 +1337,340 @@ Do not mail to the mailinglist (we cannot keep track on issues there).
 
 7. Releasing a new version
 
-To minimize trouble with distribution contents, webpage errors and the like, I
-(Stefan) strongly encourage you to follow this section if you prepare a new
-release of code or new pages on the webserver.
+To minimize trouble with distribution contents, webpage errors and the like, we
+strongly encourage you to follow this section if you prepare a new release of
+code or new pages on the webserver.
 
 The following programs are required to follow this process: ncftpput (ncftp),
-scp (ssh), gmake (GNU's version of make), ???.
+scp (ssh), gmake (GNU's version of make), autoconf, cvs, ???.
 
 -------------------------------------------------------------------------------
 
-7.1. Update the webserver
+7.1. Before the Release
+
+The following must be done by one of the developers prior to each new release:
+
+  * Make sure that everybody who has worked on the code in the last couple of
+    days has had a chance to yell "no!" in case they have pending changes/fixes
+    in their pipelines.
+   
+  * Increment the version number in configure.in in CVS. Also, the RPM release
+    number in configure.in. Do NOT touch version information after export from
+    CVS. All packages will use the version and release data from configure.in.
+    Local files should not be changed, except prior to a CVS commit!!! This way
+    we are all on the same page!
+   
+  * If the default actionsfile has changed since last release, bump up its
+    version info in this line:
+   
+      {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}    
+                                                                       
+   
+    Then change the version info in doc/webserver/actions/index.php, line:
+    '$required_actions_file_version = "A.B";'
+   
+  * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z" (where
+    X = major, Y = minor, Z = point). Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z
+    (won't work) etc.
+   
+  * The first package uploaded should be the official "tarball" release. This
+    is built with the "make tarball-dist" Makefile target, and then can be
+    uploaded with "make tarball-upload" (see below).
+   
+-------------------------------------------------------------------------------
+
+7.2. Update the webserver
 
 All files must be group-readable and group-writable (or no one else will be
 able to change them). To update the webserver, create any pages locally in the
 doc/webserver directory (or create new directories under doc/webserver), then
 do
 
-     make webserver                                                            
+  make webserver                                                               
                                                                                
 
-Note that make dok creates doc/webserver/user-manual, doc/webserver/
-developer-manual, doc/webserver/faq and doc/webserver/man-page automatically.
+Note that "make dok" (or "make redhat-dok") creates doc/webserver/user-manual,
+doc/webserver/developer-manual, doc/webserver/faq and doc/webserver/man-page
+automatically.
 
-Verify on the webserver that the permissions are set correctly. Do NOT use any
-other means of transferring files to the webserver.
+Please do NOT use any other means of transferring files to the webserver. "make
+webserver" not only uploads, but will make sure that the appropriate
+permissions are preserved for shared group access.
 
 -------------------------------------------------------------------------------
 
-7.2. SuSE or RedHat
+7.3. SuSE or Red Hat
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Update the release number directly in the specific spec file
-(particularly, set the release number to 1 if you have increased the version
-number before). Run
+first.
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do
 
-     make suse-dist or make redhat-dist                                        
+  make suse-dist or make redhat-dist                                           
                                                                                
 
 To upload the package to Sourceforge, simply issue
 
-     make suse-upload or make redhat-upload                                    
+  make suse-upload or make redhat-upload                                       
                                                                                
 
-Goto the displayed URL and release the file publically on Sourceforge.
+Go to the displayed URL and release the file publicly on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7.3. OS/2
+7.4. OS/2
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+first.
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.4. Solaris
+7.5. Solaris
 
 Login to Sourceforge's compilefarm via ssh
 
-     ssh cf.sourceforge.net                                                    
+  ssh cf.sourceforge.net                                                       
                                                                                
 
 Choose the right operating system (not the Debian one). If you have downloaded
 Privoxy before,
 
-     cd current && cvs update .                                                
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-If not, please checkout Privoxy via CVS first. Verify the version number in
-configure.in. If necessary, change the version number. Run
+If not, please checkout Privoxy via CVS first. Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then run
 
-     gmake solaris-dist                                                        
+  gmake solaris-dist                                                           
                                                                                
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make solaris-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publically
+archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-7.5. Windows
+7.6. Windows
 
 Ensure that you have the latest code version. Hence run
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.6. Debian
+7.7. Debian
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+first. Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.7. Mac OSX
+7.8. Mac OSX
 
 Login to Sourceforge's compilefarm via ssh
 
-     ssh cf.sourceforge.net                                                    
+  ssh cf.sourceforge.net                                                       
                                                                                
 
 Choose the right operating system. If you have downloaded Privoxy before,
 
-     cd current && cvs update .                                                
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
+
+If not, please checkout Privoxy via CVS first. Run:
+
+ autoheader && autoconf && ./configure                                         
                                                                                
 
-If not, please checkout Privoxy via CVS first. Verify the version number in
-configure.in. If necessary, change the version number. Run
+Then run:
 
-     autoheader && autoconf && ./configure                                     
-                                                                               
-
-Then run
-
-     make macosx-dist                                                          
+  make macosx-dist                                                             
                                                                                
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make macosx-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publically
+archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-7.8. FreeBSD
+7.9. FreeBSD
 
-Change the version number of Privoxy in the configure.in file. Run
+Change the version number of Privoxy in the configure.in file. Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then ...
 
-Login to Sourceforge's compilefarm via ssh
+Login to Sourceforge's compilefarm via ssh:
 
-     ssh cf.sourceforge.net                                                    
+  ssh cf.sourceforge.net                                                       
                                                                                
 
 Choose the right operating system. If you have downloaded Privoxy before,
 
-     cd current && cvs update .                                                
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
+
+If not, please checkout Privoxy via CVS first. Run:
+
+  autoheader && autoconf && ./configure                                        
                                                                                
 
-If not, please checkout Privoxy via CVS first. Verify the version number in
-configure.in. If necessary, change the version number. Run
+Then run:
 
-     autoheader && autoconf && ./configure                                     
-                                                                               
-
-Then run
-
-     gmake freebsd-dist                                                        
+  gmake freebsd-dist                                                           
                                                                                
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make freebsd-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publically
+archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
-7.9. Tarball
+7.10. Tarball
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
+
+first. Run:
+
+  make clobber                                                                 
+  autoheader && autoconf && ./configure                                        
                                                                                
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+Then do:
 
-     make clobber                                                              
-     autoheader && autoconf && ./configure                                     
-                                                                               
-
-Then do
-
-     make tarball-dist                                                         
+  make tarball-dist                                                            
                                                                                
 
 To upload the package to Sourceforge, simply issue
 
-     make tarball-upload                                                       
+  make tarball-upload                                                          
                                                                                
 
-Goto the displayed URL and release the file publically on Sourceforge.
+Goto the displayed URL and release the file publicly on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7.10. HP-UX 11
+7.11. HP-UX 11
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+first. Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.11. Amiga OS
+7.12. Amiga OS
 
-Ensure that you have the latest code version. Hence run
+Ensure that you have the latest code version. Hence run:
 
-     cvs update .                                                              
-                                                                               
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
 
-first. If necessary, change the version number of Privoxy in the configure.in
-file. Run
+first. Run:
 
-     autoheader && autoconf && ./configure                                     
+  autoheader && autoconf && ./configure                                        
                                                                                
 
 Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-7.12. AIX
+7.13. AIX
 
-Login to Sourceforge's compilefarm via ssh
+Login to Sourceforge's compilefarm via ssh:
 
-     ssh cf.sourceforge.net                                                    
+  ssh cf.sourceforge.net                                                       
                                                                                
 
-Choose the right operating system. If you have downloaded Privoxy before,
+Choose the right operating system. If you have downloaded Privoxy before:
 
-     cd current && cvs update .                                                
+  cd current                                                                                          
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login                           
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current 
+                                                                                                      
+
+If not, please checkout Privoxy via CVS first. Run:
+
+  autoheader && autoconf && ./configure                                        
                                                                                
 
-If not, please checkout Privoxy via CVS first. Verify the version number in
-configure.in. If necessary, change the version number. Run
+Then run:
 
-     autoheader && autoconf && ./configure                                     
-                                                                               
-
-Then run
-
-     make aix-dist                                                             
+  make aix-dist                                                                
                                                                                
 
 which creates a gzip'ed tar archive. Sadly, you cannot use make aix-upload on
 the Sourceforge machine (no ncftpput). You now have to manually upload the
-archive to Sourceforge's ftp server and release the file publically
+archive to Sourceforge's ftp server and release the file publicly.
 
 -------------------------------------------------------------------------------
 
