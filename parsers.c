@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.17 2001/06/29 21:45:41 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.18 2001/07/13 14:02:46 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,14 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.17 2001/06/29 21:45:41 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.18  2001/07/13 14:02:46  oes
+ *     - Included fix to repair broken HTTP requests that
+ *       don't contain a path, not even '/'.
+ *     - Removed all #ifdef PCRS
+ *     - content_type now always inspected and classified as
+ *       text, gif or other.
+ *     - formatting / comments
+ *
  *    Revision 1.17  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -520,6 +528,7 @@ void free_http_request(struct http_request *http)
    freez(http->path);
    freez(http->ver);
    freez(http->host_ip_addr_str);
+   freez(http->user_agent);
 
 }
 
@@ -880,8 +889,9 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
  *
  * Function    :  client_uagent
  *
- * Description :  Handle the "user-agent" config setting properly.
- *                Called from `sed'.
+ * Description :  Handle the "user-agent" config setting properly
+ *                and remember its original value to enable browser
+ *                bug workarounds. Called from `sed'.
  *
  * Parameters  :
  *          1  :  v = ignored
@@ -895,6 +905,12 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
 char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
 {
    const char * newval;
+
+   /* Save the client's User-Agent: value */
+   if (strlen(s) >= 12)
+   {
+      csp->http->user_agent = strdup(s + 12);
+   }
 
 #ifdef DETECT_MSIE_IMAGES
    if (strstr (s, "MSIE "))
