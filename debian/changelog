@@ -6,10 +6,10 @@ privoxy (2.9.15-beta-0) unstable; urgency=low
   * Force usage of w3m -dump to convert HTML to ASCII (build depend on it).
   * Exclude CVS files from dh_installdocs (when compiling from CVS).
   * Add user.action and standard.action to /etc/privoxy.
-  * Change permission of /etc/privoxy recursively to privoxy:adm, to allow
-    modification of the config via web interface (Closes: SF-552144)
+  * Change owner of /etc/privoxy/{*.action|trust} to privoxy in postinst,
+    to allow modification of these files web interface (Closes: SF-552144).
 
- -- Roland Rosenfeld <roland@debian.org>  Wed, 22 May 2002 21:51:53 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 23 May 2002 07:06:01 +0200
 
 privoxy (2.9.14-beta-1) unstable; urgency=low
 
