@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.21 2001/10/25 03:40:47 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.22 2001/11/05 23:43:05 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.21 2001/10/25 03:40:47 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.22  2001/11/05 23:43:05  steudten
+ *    Add time+date to log files.
+ *
  *    Revision 1.21  2001/10/25 03:40:47  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -404,6 +407,7 @@ void log_error(int loglevel, char *fmt, ...)
          outc = sprintf(outbuf, "IJB(%ld) Gif-Deanimate: ", this_thread);
          break;
       case LOG_LEVEL_CLF:
+	 outbuf = outbuf_save;
          outc = 0;
          outbuf[0] = '\0';
          break;

@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.10 2001/09/22 16:36:59 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.11 2001/10/23 21:38:53 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.11  2001/10/23 21:38:53  jongfoster
+ *    Adding error-checking to create_url_spec()
+ *
  *    Revision 1.10  2001/09/22 16:36:59  jongfoster
  *    Removing unused parameter fs from read_config_line()
  *
@@ -122,7 +125,7 @@ struct configuration_spec;
 struct url_spec;
 
 extern void sweep(void);
-extern char *read_config_line(char *buf, int buflen, FILE *fp);
+extern char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum);
 extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);

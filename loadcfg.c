@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.25 2001/10/25 03:40:48 david__schmidt Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.26 2001/11/05 21:41:43 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,15 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.25 2001/10/25 03:40:48 david__sch
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.26  2001/11/05 21:41:43  steudten
+ *    Add changes to be a real daemon just for unix os.
+ *    (change cwd to /, detach from controlling tty, set
+ *    process group and session leader to the own process.
+ *    Add DBG() Macro.
+ *    Add some fatal-error log message for failed malloc().
+ *    Add '-d' if compiled with 'configure --with-debug' to
+ *    enable debug output.
+ *
  *    Revision 1.25  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -430,6 +439,7 @@ struct configuration_spec * load_config(void)
    struct configuration_spec * config = NULL;
    struct client_state * fake_csp;
    struct file_list *fs;
+   unsigned long linenum = 0;
 
    DBG(1, ("load_config() entered..\n") );
    if (!check_file_changed(current_configfile, configfile, &fs))
@@ -487,7 +497,7 @@ struct configuration_spec * load_config(void)
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
-   while (read_config_line(buf, sizeof(buf), configfp) != NULL)
+   while (read_config_line(buf, sizeof(buf), configfp, &linenum) != NULL)
    {
       char cmd[BUFFER_SIZE];
       char arg[BUFFER_SIZE];
@@ -569,7 +579,7 @@ struct configuration_spec * load_config(void)
  ****************************************************************************/
          case hash_confdir :
             freez(config->confdir);
-            config->confdir = strdup(arg);
+            config->confdir = make_path( NULL, arg);
             continue;
 
 /****************************************************************************
@@ -1212,8 +1222,11 @@ struct configuration_spec * load_config(void)
              * error.  To change back to an error, just change log level
              * to LOG_LEVEL_FATAL.
              */
-            log_error(LOG_LEVEL_ERROR, "Unrecognized directive (%luul) in "
+            log_error(LOG_LEVEL_ERROR, "Unrecognized directive '%s' in line %lu in "
+                  "configuration file (%s).",  buf, linenum, configfile);
+            /* log_error(LOG_LEVEL_ERROR, "Unrecognized directive (%luul) in "
                   "configuration file: \"%s\"", hash_string( cmd ), buf);
+ 	    */
             config->proxy_args = strsav( config->proxy_args, "<br>\nWARNING: unrecognized directive : ");
             config->proxy_args = strsav( config->proxy_args, buf);
             config->proxy_args = strsav( config->proxy_args, "<br><br>\n");

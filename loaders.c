@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.30 2001/10/25 03:40:48 david__schmidt Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.31 2001/10/26 17:39:01 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.30 2001/10/25 03:40:48 david__sch
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.31  2001/10/26 17:39:01  oes
+ *    Removed csp->referrer
+ *    Moved ijb_isspace and ijb_tolower to project.h
+ *
  *    Revision 1.30  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -604,12 +608,13 @@ int check_file_changed(const struct file_list * current,
  *          1  :  buf = Buffer to use.
  *          2  :  buflen = Size of buffer in bytes.
  *          3  :  fp = File to read from
+ *	    4  :  linenum = linenumber in file
  *
  * Returns     :  NULL on EOF or error
  *                Otherwise, returns buf.
  *
  *********************************************************************/
-char *read_config_line(char *buf, int buflen, FILE *fp)
+char *read_config_line(char *buf, int buflen, FILE *fp, unsigned long *linenum)
 {
    char *p;
    char *src;
@@ -621,6 +626,7 @@ char *read_config_line(char *buf, int buflen, FILE *fp)
 
    while (fgets(linebuf, sizeof(linebuf), fp))
    {
+       (*linenum)++;
       /* Trim off newline */
       if ((p = strpbrk(linebuf, "\r\n")) != NULL)
       {
@@ -737,6 +743,7 @@ int load_trustfile(struct client_state *csp)
    char  buf[BUFFER_SIZE], *p, *q;
    int reject, trusted;
    struct file_list *fs;
+   unsigned long linenum = 0;
 
    if (!check_file_changed(current_trustfile, csp->config->trustfile, &fs))
    {
@@ -765,7 +772,7 @@ int load_trustfile(struct client_state *csp)
 
    tl = csp->config->trust_list;
 
-   while (read_config_line(buf, sizeof(buf), fp) != NULL)
+   while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
    {
       trusted = 0;
       reject  = 1;
@@ -903,6 +910,7 @@ int load_re_filterfile(struct client_state *csp)
 
    char  buf[BUFFER_SIZE];
    int error;
+   unsigned long linenum = 0;
    pcrs_job *dummy;
 
    if (!check_file_changed(current_re_filterfile, csp->config->re_filterfile, &fs))
@@ -932,7 +940,7 @@ int load_re_filterfile(struct client_state *csp)
    }
 
    /* Read line by line */
-   while (read_config_line(buf, sizeof(buf), fp) != NULL)
+   while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
    {
       enlist( bl->patterns, buf );
 
