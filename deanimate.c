@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.1 2001/07/13 13:40:09 oes Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.2 2001/07/13 13:46:20 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,15 +37,21 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.1 2001/07/13 13:40:09 oes Exp
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.2  2001/07/13 13:46:20  oes
+ *    Introduced GIF deanimation feature
+ *
  *
  **********************************************************************/
 
 
 #include "config.h"
+
+#include <string.h>
+#include <fcntl.h>
+
 #include "project.h"
 #include "deanimate.h"
-
-#include <fcntl.h>
+#include "miscutil.h"
 
 const char deanimate_h_rcs[] = DEANIMATE_H_VERSION;
 
