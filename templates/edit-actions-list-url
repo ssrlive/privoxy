@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-url,v $
+#    Revision 1.8  2002/04/26 12:58:11  oes
+#    Central "button" link style in cgi-style.css
+#
 #    Revision 1.7  2002/03/26 22:29:56  swa
 #    we have a new homepage!
 #
@@ -68,9 +71,8 @@
 # edit-actions page is ~300k.  Before it was optimized, it was ~550k.
 #
 #############################################################################
-<tr class="url@url-1-2@" valign="top"><td align="left">&nbsp;</td>
-<td align="center" class="buttons"><a name="l@p@"
+<tr class="url" valign="top">
+<td class="indentbuttons"><a name="l@p@"
 href="ear?f=@f@&amp;v=@v@&amp;p=@p@" onclick="return rm_p(@p@,'@url@');">Remove</a>&nbsp;&nbsp;&nbsp;<a
-href="eau?f=@f@&amp;v=@v@&amp;p=@p@">Edit</a>&nbsp;</td>
-<td class="url" align="left">@url-html@</td>
+href="eau?f=@f@&amp;v=@v@&amp;p=@p@">Edit</a>&nbsp; @url-html@</td>
 </tr>

@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list-section,v $
+#    Revision 1.12  2002/04/26 12:58:11  oes
+#    Central "button" link style in cgi-style.css
+#
 #    Revision 1.11  2002/04/24 02:14:03  oes
 #    Changed shortcuts, Cosmetics
 #
@@ -81,38 +84,20 @@
 # edit-actions page is ~300k.  Before it was optimized, it was ~550k.
 #
 #############################################################################
-<table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
-<tr class="actions" valign="top">
- <td class="header" align="right">Actions:</td>
- <td class="buttons" align="center"><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td>
- <td class="action" align="left">@actions@</td>
-</tr>
-<tr class="rule">
- <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
-</tr>
-<tr class="url1" valign="top">
- <td class="header" align="right">URL patterns:</td>
- <td class="buttons" align="center"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@">Add</a></td>
- <td align="left">&nbsp;</td>
-</tr>
+<tr><td class="container">
+<table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
+<tr class="actions"><td class="header">Actions</td></tr>
+<tr class="actions"><td class="indentbuttons"><a name="l@s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@s@">Edit</a></td></tr>
+<tr class="actions"><td class="action">@actions@</td></tr>
+<tr class="url"><td class="header">URL patterns</td></tr>
+<tr class="url"><td class="indentbuttons"><a href="eaa?f=@f@&amp;v=@v@&amp;s=@s@">Add</a></td></tr>
 @urls@
-<tr class="rule">
- <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
-</tr>
-<tr class="adv" valign="top">
- <td class="header" align="right"><b>Advanced:</b></td>
- <td class="buttons" colspan="2">
-  <table border="0" cellspacing="0" cellpadding="4">
-   <tr class="buttons" valign="middle" align="center">
-    <td class="nbr"> &nbsp; @if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@#l@s-prev@">Move section up</a> &nbsp; @if-s-prev-exists-end@</td>
-    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@s@#l@s-next@">Insert new section below</a> &nbsp; </td>
-   </tr>
-   <tr valign="middle" align="center">
-    <td class="nbr"> &nbsp; @if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@#l@s@">Move section down</a> &nbsp; @if-s-next-exists-end@</td>
-    <td class="nbr"> &nbsp; @if-empty-section-start@<a href="easr?f=@f@&amp;v=@v@&amp;s=@s@#l@s@">Delete whole section</a>&nbsp; @if-empty-section-end@</td>
-   </tr>
-  </table>
- </td>
-</tr>
+<tr class="adv"><td class="header">Advanced</td></tr>
+<tr class="adv"><td class="indentbuttons">
+@if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@#l@s-prev@">Move section up</a> &nbsp; @if-s-prev-exists-end@
+@if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@#l@s@">Move section down</a> &nbsp; @if-s-next-exists-end@
+<a href="easa?f=@f@&amp;v=@v@&amp;s=@s@#l@s-next@">Insert new section below</a>
+@if-empty-section-start@ &nbsp; <a href="easr?f=@f@&amp;v=@v@&amp;s=@s@#l@s@">Delete whole section</a>@if-empty-section-end@
+</td></tr>
 </table>
-
+</td></tr>

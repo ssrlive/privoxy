@@ -1,7 +1,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: cgi-style.css,v 1.5 2002/04/24 02:14:36 oes Exp $
+ * $Id: cgi-style.css,v 1.6 2002/04/26 12:56:18 oes Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ td.buttons {
   padding: 2px;
 }
 
-a.cmd, td.buttons a {
+a.cmd, td.indentbuttons a, td.buttons a {
   white-space: nowrap;
   width: auto;
   padding: 2px;
@@ -84,10 +84,10 @@ a.cmd, td.buttons a {
   border-bottom: 1px solid #000000;
   border-right:  1px solid #000000;
 }
-a.cmd:hover, td.buttons a:hover {
+a.cmd:hover, td.indentbuttons a:hover, td.buttons a:hover {
   background-color: #eeeeee;
 }
-a.cmd:active, td.buttons a:active {
+a.cmd:active, td.indentbuttons a:active, td.buttons a:active {
   border-top:    1px solid #000000;
   border-left:   1px solid #000000;
   border-bottom: 1px solid #ffffff;

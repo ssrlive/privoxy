@@ -148,9 +148,6 @@
 
   <style type="text/css">
 
-table.wide {
-  padding: 5px;
-}
 table.framed {
   border: solid black 1px;
   margin: 10px 0px;
@@ -158,23 +155,16 @@ table.framed {
 tr.actions {
   background-color: #eeffee;
 }
-tr.url1 {
-  background-color: #d0d0ff;
-}
-tr.url2 {
-  background-color: #eeeeff;
-}
-tr.rule {
-  background-color: #c0c0c0;
-  height: 3px;
-  max-height: 3px;
-  font-size: 1px
+tr.url {
+  background-color: #ddddff;
 }
 tr.adv {
   background-color: #FFFFD0;
 }
 td.header {
   font-weight: bold;
+  font-size: 110%;
+  padding: 10px 15px 2px 15px;
 }
 td.url {
   font-weight: bold;
@@ -182,18 +172,18 @@ td.url {
 td.action {
   font-weight: bold;
   font-style: italic;
+  padding: 2px 30px;
 }
 td.nbr, td.buttons {
   white-space: nowrap;
+}
+td.indentbuttons {
+  padding: 2px 30px;
 }
 </style>
 
 <script type="text/javascript">
 <!--
-function not_yet()
-{
-   window.alert("The feature you are trying to use has not been implemented yet.");
-}
 
 // Non-JS capable browsers will follow the link to a HTML "are you sure?" page
 // JavaScript-capable browsers will call this function, which does a
@@ -276,55 +266,25 @@ function rm_p(pattern,curtext)
     <!-- @if-all-urls-present-then@ -->
     <tr>
       <td class="container">
-        <div class="buttons">
-          <table border="0" width="100%" cellspacing="0" cellpadding="3" class="framed">
-            <tr class="actions" valign="top">
-              <td class="header" align="right">Actions:</td>
-              <td class="buttons" align="center">
-                <p><a name="l@all-urls-s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a></p>
-                @all-urls-buttons@
-              </td>
-              <td class="action" align="left">@all-urls-actions@</td>
-            </tr>
-            <tr class="rule">
-              <td colspan="3"><img src="t" width="2" height="1" alt="----"></td>
-            </tr>
-            <tr class="url1" valign="top">
-              <td class="header" align="right">URL pattern:</td>
-              <td align="center">&nbsp;</td>
-              <td align="left"><b>/ (Matches all URLs!)</b></td>
-            </tr>
-            <tr class="rule">
-              <td colspan="3"><img src="t" width="2" height="1" alt="-"></td>
-            </tr>
-            <tr class="adv" valign="top">
-              <td class="header" align="right"><b>Advanced:</b></td>
-              <td colspan="2" class="buttons">
-                <table border="0" cellspacing="0" cellpadding="4">
-                  <tr valign="middle" align="center">
-                    <td class="nbr"> &nbsp; </td>
-                    <td class="nbr"> &nbsp; <a href="eafua?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert
-                      new section below</a> &nbsp;
-                    </td>
-                  </tr>
-                  <tr valign="middle" align="center">
-                    <td class="nbr"> &nbsp; </td>
-                    <td class="nbr"> &nbsp; </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </div>
+<table border="0" width="100%" cellspacing="2" cellpadding="3" class="framed">
+<tr class="actions"><td class="header">Actions</td></tr>
+<tr class="actions"><td class="indentbuttons">
+<a name="l@all-urls-s@" href="eafu?f=@f@&amp;v=@v@&amp;s=@all-urls-s@">Edit</a>
+@all-urls-buttons@
+</td></tr>
+<tr class="actions"><td class="action">@all-urls-actions@</td></tr>
+<tr class="url"><td class="header">URL patterns</td></tr>
+<tr class="url"><td class="indentbuttons">/ &nbsp; <i>(Matches all requests)</a></td></tr>
+<tr class="adv"><td class="header">Advanced</td></tr>
+<tr class="adv"><td class="indentbuttons">
+<a href="easa?f=@f@&amp;v=@v@&amp;s=@all-urls-s@#l@all-urls-s-next@">Insert new section below</a>
+</td></tr>
+</table>
       </td>
     </tr>
     <!-- @else-not-all-urls-present@@endif-all-urls-present@ -->
 
-    <tr>
-      <td class="container">
-        <div class="buttons">@sections@</div>
-      </td>
-    </tr>
+@sections@
 
     <tr>
       <td class="box">
