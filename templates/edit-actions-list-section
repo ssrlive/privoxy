@@ -30,7 +30,10 @@
 #                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # Revisions   :
-#    $Log: $
+#    $Log: edit-actions-list-section,v $
+#    Revision 1.9  2002/04/17 15:51:47  oes
+#    Args! Restoring CVS history
+#
 #    Revision 1.8  2002/04/17 15:04:16  oes
 #    Adapted to style change
 #
@@ -94,12 +97,12 @@
  <td colspan="2">
   <table border="0" cellspacing="0" cellpadding="4">
    <tr valign="middle" align="center">
-    <td class="nbr"> &nbsp; @if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@">Move section up</a> &nbsp; @if-s-prev-exists-end@</td>
-    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@s@">Insert new section below</a> &nbsp; </td>
+    <td class="nbr"> &nbsp; @if-s-prev-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s-prev@&amp;s2=@s@#l@s-prev@">Move section up</a> &nbsp; @if-s-prev-exists-end@</td>
+    <td class="nbr"> &nbsp; <a href="easa?f=@f@&amp;v=@v@&amp;s=@s@#l@s-next@">Insert new section below</a> &nbsp; </td>
    </tr>
    <tr valign="middle" align="center">
-    <td class="nbr"> &nbsp; @if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@">Move section down</a> &nbsp; @if-s-next-exists-end@</td>
-    <td class="nbr"> &nbsp; @if-empty-section-start@<a href="easr?f=@f@&amp;v=@v@&amp;s=@s@">Delete whole section</a>&nbsp; @if-empty-section-end@</td>
+    <td class="nbr"> &nbsp; @if-s-next-exists-start@<a href="eass?f=@f@&amp;v=@v@&amp;s1=@s@&amp;s2=@s-next@#l@s@">Move section down</a> &nbsp; @if-s-next-exists-end@</td>
+    <td class="nbr"> &nbsp; @if-empty-section-start@<a href="easr?f=@f@&amp;v=@v@&amp;s=@s@#l@s@">Delete whole section</a>&nbsp; @if-empty-section-end@</td>
    </tr>
   </table>
  </td>
