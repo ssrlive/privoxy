@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $
+ $Id: user-manual.sgml,v 1.32 2002/03/03 09:26:06 joergs Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.31 2002/03/02 22:45:52 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.32 2002/03/03 09:26:06 joergs Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -62,22 +62,23 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 <sect1 id="introduction"><title>Introduction</title>
 <para>
  <application>Internet Junkbuster</application> is a web proxy with advanced
- filtering capabilities for protecting privacy, filtering web page content,
- managing cookies, controlling access, and removing ads, banners, pop-ups and
- other obnoxious Internet Junk. <application>Junkbuster</application> has a
- very flexible configuration and can be customized to suit individual needs
- and tastes. <application>Internet Junkbuster</application> has application
- for both stand-alone systems and multi-user networks.
+ filtering capabilities for protecting privacy, filtering and modifying web
+ page content, managing cookies, controlling access, and removing ads,
+ banners, pop-ups and other obnoxious Internet Junk.
+ <application>Junkbuster</application> has a very flexible configuration and
+ can be customized to suit individual needs and tastes. <application>Internet
+ Junkbuster</application> has application for both stand-alone systems and
+ multi-user networks.
 </para>
 
 <para>
  This documentation is included with the current BETA version of
- <application>Internet Junkbuster</application> and is incomplete at this
+ <application>Internet Junkbuster</application> and mostly complete at this
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
  of version 3.0 is currently nearing completion, and includes many significant
  changes and enhancements over earlier versions. The target release date for
- stable v3.0 RSN.
+ stable v3.0 is <quote>soon</quote> ;-)
 </para>
 
 <para>
@@ -2902,7 +2903,14 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="contact"><title>Contact the Developers</title>
+<sect1 id="contact"><title>Contacting the Developers, Bug Reporting and Feature
+Requests</title>
+<para>
+ Please do not use the mailing lists for feature requests or 
+ bug reports. They are not as easily tracked this way!
+
+</para>
+
 <para>
 <!--
 To be filled. mention the support forums as the primary channel of
@@ -2925,7 +2933,8 @@ communication (bugs, feature requests, etc.)
  <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">Sourceforge</ulink>.
  Please try to verify that it is a <application>Junkbuster</application> bug,
  and not a browser or site bug first. Also, check to make sure this is not
- already a known bug.
+ already a known bug. If you are using your own custom configuration, please
+ try the stock configs to see if the problem is a configuration related bug.
 </para>
 
 </sect1>
@@ -2969,8 +2978,8 @@ communication (bugs, feature requests, etc.)
  GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
  Waldherr</ulink> made many improvements, and started the <ulink
  url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
- rekindle development. The last stable release was v2.0.2, which has now 
- grown whiskers ;-).
+ rekindle development. There are now several active developers contributing.
+ The last stable release was v2.0.2, which has now grown whiskers ;-).
 </para>
 
 </sect2>
@@ -3279,6 +3288,11 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.32  2002/03/03 09:26:06  joergs
+ AmigaOS changes, config is now loaded from PROGDIR: instead of
+ AmiTCP:db/junkbuster/ if no configuration file is specified on the
+ command line.
+
  Revision 1.31  2002/03/02 22:45:52  david__schmidt
  Just tweaking
 
