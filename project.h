@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.20 2001/06/29 21:45:41 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.21 2001/07/13 14:03:19 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,13 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.21  2001/07/13 14:03:19  oes
+ *     - Reorganized regex header inclusion and #defines to
+ *       comply to the scheme in configure.in
+ *     - Added csp->content_type and its CT_* keys
+ *     - Added ACTION_DEANIMATE
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.20  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -224,7 +231,7 @@
 # define REGEX
 #endif /* defined(REGEX_PCRE) || defined (REGEX_GNU) */
 
-#ifdef STATIC
+#ifdef STATIC_PCRE
 #  include "pcre.h"
 #else
 #  include <pcre.h>
@@ -237,7 +244,7 @@
 #endif
 
 #if defined(REGEX_PCRE)
-#  ifdef STATIC
+#  ifdef STATIC_PCRE
 #    include "pcreposix.h"
 #  else
 #    include <pcreposix.h>
