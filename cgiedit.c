@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.24 2002/03/24 15:23:33 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.25 2002/03/26 22:29:54 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.24 2002/03/24 15:23:33 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.25  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.24  2002/03/24 15:23:33  jongfoster
  *    Name changes
  *
@@ -4161,11 +4164,6 @@ jb_err cgi_toggle(struct client_state *csp,
       return cgi_error_disabled(csp, rsp);
    }
 
-   if (NULL == (exports = default_exports(csp, "toggle")))
-   {
-      return JB_ERR_MEMORY;
-   }
-
    mode = get_char_param(parameters, "set");
 
    if (mode == 'E')
@@ -4182,6 +4180,11 @@ jb_err cgi_toggle(struct client_state *csp,
    {
       /* Toggle */
       g_bToggleIJB = !g_bToggleIJB;
+   }
+
+   if (NULL == (exports = default_exports(csp, "toggle")))
+   {
+      return JB_ERR_MEMORY;
    }
 
    err = map_conditional(exports, "enabled", g_bToggleIJB);
