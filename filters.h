@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.18 2002/03/25 22:12:45 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.19 2002/03/26 22:29:54 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.19  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.18  2002/03/25 22:12:45  oes
  *    Added fix for undefined INADDR_NONE on Solaris by Bart Schelstraete
  *
@@ -219,16 +222,16 @@ extern int match_portlist(const char *portlist, int port);
  */
 extern struct http_response *block_url(struct client_state *csp);
 extern struct http_response *redirect_url(struct client_state *csp);
-#ifdef FEATURE_COOKIE_JAR
+#ifdef FEATURE_TRUST
 extern struct http_response *trust_url(struct client_state *csp);
-#endif /* def FEATURE_COOKIE_JAR */
+#endif /* def FEATURE_TRUST */
 
 /*
  * Request inspectors
  */
-#ifdef FEATURE_COOKIE_JAR
+#ifdef FEATURE_TRUST
 extern int is_untrusted_url(struct client_state *csp);
-#endif /* def FEATURE_COOKIE_JAR */
+#endif /* def FEATURE_TRUST */
 #ifdef FEATURE_IMAGE_BLOCKING
 extern int is_imageurl(struct client_state *csp);
 #endif /* def FEATURE_IMAGE_BLOCKING */
