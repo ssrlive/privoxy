@@ -12,12 +12,10 @@ Proxy
 \s-2(TM)\s+2
 .SH SYNOPSIS
 \fBjunkbuster\fP
-[--help] [--version] [--no-daemon] [--pidfile \fIPID_FILE\fP] [--user USER] 
-\fI\&[config_file]\fP (Unix)
+[--help] [--version] [--no-daemon] [--pidfile \fIpidfile\fP] [--user \fIuser\fP[.\fIgroup\fP]] 
+\fI\&[configfile]\fP (Unix)
 .TP
-\fBjunkbstr.exe\fP
-\fI\&[config_file]\fP
-(Windows)
+\fBjunkbstr.exe\fP \fI[configfile]\fP (Windows)
 .br
 
 .SH OPTIONS
@@ -34,19 +32,20 @@ Don't become a daemon, i.e. don't fork and become process group
 leader, don't detach from controlling tty, and do all logging
 there.
 .TP
-\fB --pidfile\fP \fIPID_FILE\fP (unix only)
+\fB --pidfile\fP \fIpidfile\fP (unix only)
 On startup, write the process ID to \fIpidfile\fP. Delete the
 \fIpidfile\fP on exit. Failiure to create or delete the
 \fIpidfile\fP is non-fatal. If no \fB--pidfile\fP option
 is given, no PID file will be used.
 .TP
-\fB --user\fP \fIUSER\fP (unix only)
+\fB --user\fP \fIuser\fP[.\fIgroup\fP] (unix only)
 After (optionally) writing the PID file, assume the user ID
-of \fIuser\fP. Exit if the privileges are not sufficient to
-do so.
+of \fIuser\fP and the GID of \fIgroup\fP, or, if the optional
+\fIgroup\fP was not given, the default group of \fIuser\fP.
+Exit if the privileges are not sufficient to do so.
 
 .PP
-If the \fIconfig file\fP is not specified on the command line,
+If the \fIconfigfile\fP is not specified on the command line,
 \fBJunkbuster\fP will look for a file named \fBconfig\fP in the 
 current directory (except on Win32 where it will try \fBconfig.txt\fP).
 
