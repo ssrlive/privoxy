@@ -1,6 +1,6 @@
 ##########################################################
 #
-# Show-Status-CGI Output template for junkbuster 2.9.x
+# Show-Status-CGI Output template for Foobar.
 #
 # USING HTML TEMPLATES:
 # ---------------------
@@ -14,7 +14,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Junkbuster.
+#   will be replaced by the version number of Foobar.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -47,10 +47,10 @@
 #    software.
 #
 #  redirect-url:
-#    The URL to a script that will redirect to the junkbuster
+#    The URL to a script that will redirect to the Foobar
 #    documentation for a given item  
 #  invocation:
-#    The command line with whitch junkbuster was invoked
+#    The command line with whitch Foobar was invoked
 #  options:
 #    The options read from the configfile, linked to their
 #    explanations, plus warnings if parsing acl or forward
@@ -59,7 +59,7 @@
 #    A HTML-formatted list of the individual source file cvs versions
 #  defines:
 #    A HTML-formatted list of all conditional #defines used when
-#    junkbuster was compiled
+#    Foobar was compiled
 #
 #  
 # CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
@@ -68,7 +68,7 @@
 #  unstable:
 #    This is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Junkbuster adminstrator has
+#    An e-mail address for the local Foobar adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -84,7 +84,7 @@
 <html>
 
 <head>
-  <title>Junkbuster@@my-hostname@: Detailed proxy version information</title>
+  <title>Foobar@@my-hostname@: Detailed proxy version information</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -103,7 +103,7 @@
     <tr>
       <td bgcolor=#eeeeee>
         <h2>Source code versions:</h2>
-        <p><i>(Note: This information is only relevant if you checked out JunkBuster from CVS
+        <p><i>(Note: This information is only relevant if you checked out Foobar from CVS
            and compiled it yourself.  If you downloaded a binary, .exe, RPM, or a .tgz file, 
            then when you ask for support just mention the version number <b>@version@</b> 
            and the type of download you got.)</i></p>
@@ -114,7 +114,7 @@
 
     <tr>
       <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
+        <h2>More Foobar:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>
@@ -152,10 +152,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <h2>Local Junkbuster support:</h2>
+        <h2>Local Foobar support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.         
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Foobar installation.         
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->

@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-add-url-form,v $
+#    Revision 1.6  2002/03/16 15:22:19  jongfoster
+#    Moving 'alpha' warning to the end of the page
+#
 #    Revision 1.5  2002/03/03 10:29:12  swa
 #    point users to the right feedback forms,
 #    not necessarily the developer list.
@@ -78,7 +81,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
-<title>JunkBuster: Edit URL Pattern</title>
+<title>Foobar: Edit URL Pattern</title>
 
 <style type="text/css">
 body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
@@ -138,7 +141,7 @@ function validate(text)
 
   <tr>
     <td class="dark">
-      <h2>More Junkbuster:</h2>
+      <h2>More Foobar:</h2>
       <ul>@menu@</ul>
     </td>
   </tr>

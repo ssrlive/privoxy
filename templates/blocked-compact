@@ -1,6 +1,6 @@
 ##########################################################
 #
-# "Blocked" Error Output template for junkbuster 2.9.x.
+# "Blocked" Error Output template for Foobar.
 # Compact variant.
 #
 # USING HTML TEMPLATES:
@@ -15,7 +15,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Junkbuster.
+#   will be replaced by the version number of Foobar.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -59,14 +59,14 @@
 #  unstable:
 #    This is an alpha or beta release of the proxy software
 #  force-support:
-#    Junkbuster has been compiled with support for forced loading
+#    Foobar has been compiled with support for forced loading
 #    of blocked content. In that case, the symbol "force-prefix" is
 #    avaiable, which translates to the FORCE_PREFIX  
 #
 <html>
 
   <head>
-    <title>Request blocked (Junkbuster@@my-hostname@)</title>
+    <title>Request blocked (Foobar@@my-hostname@)</title>
     <style type="text/css">
       BODY, P { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
     </style>

@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.14  2002/03/16 15:22:19  jongfoster
+#    Moving 'alpha' warning to the end of the page
+#
 #    Revision 1.13  2002/03/16 14:28:38  jongfoster
 #    First version of modular filters support
 #
@@ -138,7 +141,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
-<title>JunkBuster: Edit actions</title>
+<title>Foobar: Edit actions</title>
 
 <style type="text/css">
 body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
@@ -590,7 +593,7 @@ function show_wafer_opts(tf)
         <input type="radio" name="image_blocker_mode"
         onclick="image_blocker_param_disable(true)"
         value="logo" id="image_blocker_mode_logo" @image-blocker-param-logo@><label
-        for="image_blocker_mode_logo">Send Junkbuster logo
+        for="image_blocker_mode_logo">Send Foobar logo
         (<img src="send-banner?type=l" alt="logo">)</label><br>
         <input type="radio" name="image_blocker_mode" value="blank"
         onclick="image_blocker_param_disable(true)"
@@ -786,7 +789,7 @@ if (document.getElementById) {
 
     <tr>
       <td class="dark">
-        <h2>More Junkbuster:</h2>
+        <h2>More Foobar:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>

@@ -1,6 +1,6 @@
 ##########################################################
 #
-# No-Such-Domain Error Output template for junkbuster 2.9.x.
+# No-Such-Domain Error Output template for Foobar.
 #
 #
 # USING HTML TEMPLATES:
@@ -15,7 +15,7 @@
 # - Each item in the below list of exported symbols will
 #   be replaced by dynamically generated text, if they
 #   are enclosed in '@'-characters. E.g. The string @version@
-#   will be replaced by the version number of Junkbuster.
+#   will be replaced by the version number of Foobar.
 #
 # - One special application of this is to make whole blocks
 #   of the HTML template disappear if the condition <name>
@@ -53,7 +53,7 @@
 #  unstable:
 #    this is an alpha or beta release of the proxy software
 #  have-adminaddr-info:
-#    An e-mail address for the local Junkbuster adminstrator has
+#    An e-mail address for the local Foobar adminstrator has
 #    been specified and is available through the "admin-address"
 #    symbol
 #  have-proxy-info:
@@ -68,7 +68,7 @@
 <html>
 
 <head>
-  <title>JunkBuster: Actions file not found</title>
+  <title>Foobar: Actions file not found</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -96,7 +96,7 @@
 
     <tr>
       <td bgcolor=#dddddd>
-        <h2>More Junkbuster:</h2>
+        <h2>More Foobar:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>
@@ -134,10 +134,10 @@ href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 <!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <h2>Local Junkbuster support:</h2>
+        <h2>Local Foobar support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.         
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Foobar installation.         
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->

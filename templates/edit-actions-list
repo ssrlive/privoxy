@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.10  2002/03/16 15:22:19  jongfoster
+#    Moving 'alpha' warning to the end of the page
+#
 #    Revision 1.9  2002/03/05 00:24:51  jongfoster
 #    Patch to always edit the current actions file.
 #
@@ -99,7 +102,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
-<title>JunkBuster: Edit actions file</title>
+<title>Foobar: Edit actions file</title>
 
 <style type="text/css">
 body {
@@ -230,7 +233,7 @@ function rm_p(pattern,curtext)
 <table cellpadding="20" cellspacing="10" border="0" width="100%">
   <tr>
     <td class="dark">
-      <h2>More Junkbuster:</h2>
+      <h2>More Foobar:</h2>
       <ul>@menu@</ul>
     </td>
   </tr>
