@@ -2,13 +2,13 @@
 
 <!--
 
-  File        :  $Source: /cvsroot/ijbswa/current/doc/webserver/index.html,v $
+  File        :  $Source: /cvsroot/ijbswa/current/doc/webserver/config/index.php,v $
 
   Purpose     :  Warn user of incorrect configuration.
                  This file belongs in
                  ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.html,v 1.14 2002/03/27 09:34:26 swa Exp $
+  $Id: index.php,v 1.3 2002/04/03 19:41:11 swa Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
   Privoxy team. http://www.privoxy.org/
@@ -39,7 +39,7 @@
 
 <html><head>
 <title>Privoxy not running</title>
-    <link rel="stylesheet" type="text/css" href="p_web.css">
+    <link rel="stylesheet" type="text/css" href="../p_web.css">
 </head>
 
 <body>
@@ -49,7 +49,7 @@
 <p>If you were redirected to this page, it means that you aren't using
 <a href="http://privoxy.org/">Privoxy</a>. &nbsp; Please check your browser settings.</p>
 
-<p>_Until version 2.9.13, Privoxy was also known as Internet
+<p>Until version 2.9.13, Privoxy was also known as Internet
 Junkbuster. If you recently upgraded, then the web-based interface has
 moved - it is now at <a
 href="http://config.privoxy.org/">http://config.privoxy.org/</a>
