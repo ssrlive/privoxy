@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.18 2001/11/16 00:46:31 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.19 2002/01/21 00:33:52 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.19  2002/01/21 00:33:52  jongfoster
+ *    Adding map_block_keep() to save a few bytes in the edit-actions-list HTML.
+ *
  *    Revision 1.18  2001/11/16 00:46:31  jongfoster
  *    Fixing compiler warnings
  *
@@ -171,7 +174,7 @@ extern jb_err cgi_error_bad_param(struct client_state *csp,
  */
 extern void get_http_time(int time_offset, char * buf);
 extern char *make_menu(const char *self);
-extern char *dump_map(const struct map *map);
+extern char *dump_map(const struct map *the_map);
 
 /*
  * Some images.
