@@ -12,7 +12,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.37 2002/04/01 16:24:07 hal9 Exp $
+ $Id: faq.sgml,v 1.38 2002/04/02 03:49:10 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -21,21 +21,29 @@
  by and Copyright (C) 1997 Anonymous Coders and 
  Junkbusters Corporation.  http://www.junkbusters.com
 
- =============================================================
- IMPORTANT: READ: This document does not use automatic section
- numbering. It is turned off by GNUmakefile to keep the Table 
- of contents from being so messy. Sections will need to be 
- manually numbered as a consequence.
- =============================================================
+ <Qandaset defaultlabel='qanda'>
+  <QandAEntry>
+   <question>
+    <para> 
+     How are you?
+    </para>
+   </question>
+   <answer>
+    <para> 
+     Fine.
+    </para>
+   </answer>
+  </QandAEntry>
+ </QandASet>
 
 -->
 
 
-<article id="index">
+<article id="index" class="faq">
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.37 2002/04/01 16:24:07 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.38 2002/04/02 03:49:10 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -69,7 +77,7 @@
   You can find the latest version of the document at <ulink
   url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
   Please see the Contact section in the <ulink
-  url="http://www.privoxy.org/user-manual/contact.html">user-manual</ulink> if
+  url="../user-manual/contact.html">user-manual</ulink> if
   you want to contact the developers.
  </para>
 
@@ -79,10 +87,8 @@
 </abstract>
 </artheader>
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="intro">
-<title></title>
+<sect1 id="intro" label=""><title></title>
 <!-- dummy section to force TOC on page by itself -->
 <!-- DO NOT REMOVE! please ;) -->
 <para> </para>
@@ -90,22 +96,23 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="general"><title>1. General Information</title>
+<sect1 label="1" id="general"><title>General Information</title>
 
-<sect2 id="newjb"><title>What is this new version of <application>Privoxy</application>?</title>
+<sect2 renderas="sect3" id="newjb"><title>What is this new version of <application>Privoxy</application>?</title>
  <para>
-  The original <application>Internet Junkbuster</application> (tm) is a 
-  copyrighted product of <ulink url="http://www.junkbusters.com">Junkbusters
-  Corporation</ulink>. Development of this effort stopped some time ago as of
-  version 2.0.2. Stefan Waldherr started the ijbswa project on <ulink
-  url="http://sourceforge.net/projects/ijbswa/">Sourceforge</ulink> to rekindle
-  development. Other developers subsequently joined with Stefan, and have
-  since added many new features, refinements and enhancements. The result 
+  The original <application><trademark>Internet
+  Junkbuster</trademark></application> (tm) is a copyrighted product of <ulink
+  url="http://www.junkbusters.com">Junkbusters Corporation</ulink>.
+  Development of this effort stopped some time ago as of version 2.0.2. Stefan
+  Waldherr started the ijbswa project on <ulink
+  url="http://sourceforge.net/projects/ijbswa/">Sourceforge</ulink> to
+  rekindle development. Other developers subsequently joined with Stefan, and
+  have since added many new features, refinements and enhancements. The result
   of this effort is <application>Privoxy</application>.
  </para>
  <para>
-  <application>Privoxy</application> started with the 
-  <application>Junkbuster 2.0.2</application> code base, but has advanced
+  <application>Privoxy</application> has evolved from the 
+  <application>Junkbuster 2.0.2</application> code base, and has advanced
   significantly at this point. 
  </para>
  <para> 
@@ -118,7 +125,7 @@
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="whyprivoxy">Why <quote>Privoxy</quote>? Why a name change at all?</title>
 <para>
  <application>Privoxy</application> is the 
@@ -138,12 +145,11 @@
  code, that it was time to make a clean break from the past and make 
  a name in their own right, especially now with the pending release of 
  version 3.0.
-
 </para>
 </sect2>
 
 
-<sect2 id="differs"><title>How does <application>Privoxy</application> differ
+<sect2 renderas="sect3" id="differs"><title>How does <application>Privoxy</application> differ
 from the old <application>Junkbuster?</application></title> 
 <para>
   <application>Privoxy</application> picks up where
@@ -158,19 +164,18 @@ from the old <application>Junkbuster?</application></title>
   not exist any more. This is replaced by <quote>actions</quote> files, such
   as <filename>default.actions</filename>. This is where most of the per site
   configuration is now.
-
  </para>
 </sect2>
 
-<sect2 id="features"><title>What are some of the new features?</title>
+<sect2 renderas="sect3" id="features"><title>What are some of the new features?</title>
 <!--
-Include newfeatures.sgml
+ Include newfeatures.sgml
 --> 
 &newfeatures;
 
 </sect2>
 
-<sect2 id="proxymoron"><title>What is a <quote>proxy</quote>? How does
+<sect2 renderas="sect3" id="proxymoron"><title>What is a <quote>proxy</quote>? How does
 <application>Privoxy</application> work? </title>
  <para>
   When you connect to a web site with <application>Privoxy</application>, 
@@ -200,7 +205,7 @@ Include newfeatures.sgml
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="knows">How does <application>Privoxy</application> know what is
 an ad, and what is not?</title>
 <para>
@@ -227,7 +232,7 @@ an ad, and what is not?</title>
 </para>
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="mistakes">Can <application>Privoxy</application> make mistakes? 
 This does not sound very scientific.</title>
 <para>
@@ -248,7 +253,7 @@ This does not sound very scientific.</title>
 </sect2>
 
 
-<sect2 id="browsers2"><title>My browser does the same things as
+<sect2 renderas="sect3" id="browsers2"><title>My browser does the same things as
 <application>Privoxy</application>. Why should I use
 <application>Privoxy</application> at all?</title>
  <para>
@@ -268,7 +273,7 @@ This does not sound very scientific.</title>
 
 
 
-<sect2 id="license"><title>Is there is a license or fee? What about a 
+<sect2 renderas="sect3" id="license"><title>Is there is a license or fee? What about a 
 warranty? Registration?</title>
  <para>
   <application>Privoxy</application> is licensed under the 
@@ -289,9 +294,9 @@ warranty? Registration?</title>
 
 </sect2>
 
-<sect2 id="jointeam"><title>I would like to help you, what do I do?</title>
+<sect2 renderas="sect3" id="jointeam"><title>I would like to help you, what do I do?</title>
 
-<sect3 id="jointeam-money"><title>Money Money Money</title>
+<sect3 renderas="sect4" id="jointeam-money"><title>Money Money Money</title>
 <para>
  We, of course, welcome donations and use the money for domain registering,
  regular world-wide get-togethers (hahaha). Anyway, we'll soon describe the
@@ -299,12 +304,12 @@ warranty? Registration?</title>
 </para>
 </sect3>
 
-<sect3 id="jointeam-work"><title>You want to work with us?</title>
+<sect3 renderas="sect4" id="jointeam-work"><title>You want to work with us?</title>
 <para>
    Well, helping the team is always a good idea. We welcome new developers,
    RPM gurus or documentation makers. Simply get an account on sourceforge.net
    and mail your id to the developer mailing list. Then read the
-   section Quickstart in the <ulink url="http://privoxy.org/developer-manual/quickstart.html">
+   section Quickstart in the <ulink url="../developer-manual/quickstart.html">
    Developer's Manual</ulink>.
 </para>
 <para>
@@ -320,9 +325,9 @@ warranty? Registration?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="installation"><title>2. Installation</title>
+<sect1  label="2" id="installation"><title>Installation</title>
 
-<sect2 id="whichbrowsers">
+<sect2 renderas="sect3" id="whichbrowsers">
 <title>Which browsers are supported by <application>Privoxy</application>?</title>
 <para>
  Any browser that can be configured to use a <quote>proxy</quote>, which 
@@ -333,7 +338,7 @@ warranty? Registration?</title>
 </para>
 </sect2>
 
-<sect2 id="whichos">
+<sect2 renderas="sect3" id="whichos">
 <title>Which operating systems are supported?</title>
 <!--
 Include supported.sgml here:
@@ -341,7 +346,7 @@ Include supported.sgml here:
 &supported;
 </sect2>
 
-<sect2 id="newinstall"><title>Can I install  
+<sect2 renderas="sect3" id="newinstall"><title>Can I install  
  <application>Privoxy</application> over <application>Junkbuster</application>?</title>
  <para>
    We recommend you uninstall <application>Junkbuster</application>
@@ -362,7 +367,7 @@ Include supported.sgml here:
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="firststep">I just installed <application>Privoxy</application>. Is there anything 
 special I have to do now?</title>
 
@@ -378,7 +383,7 @@ special I have to do now?</title>
 </sect2>
 
 
-<sect2 id="localhost"><title>What is the proxy address of <application>Privoxy</application>?</title>
+<sect2 renderas="sect3" id="localhost"><title>What is the proxy address of <application>Privoxy</application>?</title>
  <para>
   If you set up the <application>Privoxy</application> to run on
   the computer you browse from (rather than your ISP's server or some
@@ -409,7 +414,7 @@ special I have to do now?</title>
  </para>
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="nothing">I just installed <application>Privoxy</application>, and nothing is happening.
 All the ads are there. What's wrong?</title>
 
@@ -434,9 +439,9 @@ All the ads are there. What's wrong?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="configuration"><title>3. Configuration</title>
+<sect1  label="3" id="configuration"><title>Configuration</title>
 
-<sect2 id="newconfig"><title>Can I use my old config files?</title>
+<sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
    There are major changes to <application>Junkbuster</application>, 
    <application>Privoxy</application>, configuration from version 2.0.x to
@@ -448,7 +453,7 @@ All the ads are there. What's wrong?</title>
  </para>
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="actionsfile">What is an <quote>actions</quote> file?</title>
 
 <para>
@@ -477,7 +482,7 @@ All the ads are there. What's wrong?</title>
 
 </sect2>
 
-<sect2 id="actionss">
+<sect2 renderas="sect3" id="actionss">
 <title>The <quote>actions</quote>concept confuses me. Please list 
 some of these <quote>actions</quote>.</title>
 <para>
@@ -488,7 +493,7 @@ some of these <quote>actions</quote>.</title>
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="actconfig">How are actions files configured? What is the easiest
 way to do this?</title> 
 
@@ -514,26 +519,26 @@ way to do this?</title>
 <!--
 FIXME: Commenting these out until we have some data there. HB 03/17/02.
 
-<sect2 id="yahoo"><title>How can I make my Yahoo account work?</title>
+<sect2 renderas="sect3" id="yahoo"><title>How can I make my Yahoo account work?</title>
  <para>
    Fillme.
  </para>
 </sect2>
 
-<sect2 id="hotmail"> <title>How can I make my Hotmail account work?</title>
+<sect2 renderas="sect3" id="hotmail"> <title>How can I make my Hotmail account work?</title>
   <para>
    Fillme.
   </para>
 </sect2>
 
-<sect2 id="gmx"> <title>How can I make my GMX account work?</title>
+<sect2 renderas="sect3" id="gmx"> <title>How can I make my GMX account work?</title>
  <para>
    Fillme.
  </para>
 </sect2>
 -->
 
-<sect2 id="configfiles"> <title>What are the differences between
+<sect2 renderas="sect3" id="configfiles"> <title>What are the differences between
 intermediate.action, basic.action, etc.?</title>
  <para>
 Configuring <application>Privoxy</application> is not easy. To help you get
@@ -680,7 +685,7 @@ following table shows you, which features are enabled in each configuration.
 </para>
 </sect2>
 
-<sect2 id="browseconfig"> <title>Why can I change the configuration with a
+<sect2 renderas="sect3" id="browseconfig"> <title>Why can I change the configuration with a
 browser? Does that not raise security issues?</title>
  <para>
 What I don't understand, is how I can browser edit the config file as a
@@ -706,7 +711,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="filterfile">What is <quote>default.filter</quote>?</title>
 <para>
  The <quote>default.filter</quote> file is used to <quote>filter</quote> any
@@ -731,7 +736,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="lanconfig">How can I set up <application>Privoxy</application> to act as a proxy for my 
  LAN?</title>
 <para>
@@ -758,7 +763,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="noseeum">Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</title>
 <para>
  This is a configuration option for images that
@@ -783,7 +788,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="whyseeum">Why would anybody want to see a checkerboard pattern?</title>
 <para>
  This can be helpful for troubleshooting problems. It might also be good 
@@ -795,7 +800,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="blockedisugly">I see large red banners on some pages that say 
 <quote>Blocked</quote>. Why and how do I get rid of this?</title>
 <para>
@@ -848,7 +853,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 </sect2>
 
-<sect2 id="alliseeisred">
+<sect2 renderas="sect3" id="alliseeisred">
 <title>I cannot see all of the <quote>Blocked</quote> page banner. All I
 see is a bright red square.</title>
 <para>
@@ -859,7 +864,7 @@ see is a bright red square.</title>
 </para>
 </sect2>
 
-<sect2 id="otherproxy">
+<sect2 renderas="sect3" id="otherproxy">
 <title>How can I make <application>Privoxy</application> work with other 
 proxies like <application>Squid</application>?</title>
 <para>
@@ -875,9 +880,9 @@ proxies like <application>Squid</application>?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="misc"><title>4. Miscellaneous</title>
+<sect1  label="4"id="misc"><title>Miscellaneous</title>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="slowsme">How much does <application>Privoxy</application> slow my browsing down? This 
 has to add extra time to browsing.</title>
 <para>
@@ -899,7 +904,7 @@ has to add extra time to browsing.</title>
 
 
 
-<sect2 id="loadingtimes"><title>I noticed considerable
+<sect2 renderas="sect3" id="loadingtimes"><title>I noticed considerable
 delays in page requests compared to the old Junkbuster. What's wrong?</title>
 <para>
 Using the default filtering configuration, I noticed considerable delays in
@@ -921,7 +926,7 @@ entire page first, do its content magic and then send the page to the browser.
 </sect2>
 
 
-<sect2 id="configurl"><title>What is the "http://p.p/"?</title>
+<sect2 renderas="sect3" id="configurl"><title>What is the "http://p.p/"?</title>
 <para>
 Since <application>Privoxy</application> sits between your web browser and the Internet, it can be
 programmed to handle certain pages specially.
@@ -960,13 +965,13 @@ should really consider upgrading to 2.9.x).
 <!--
 FIXME: commented out until we have data. HB 03/18/02.
 
-<sect2 id="badfiledesc"><title>I get the message 'Bad File Descriptor', why?</title>
+<sect2 renderas="sect3" id="badfiledesc"><title>I get the message 'Bad File Descriptor', why?</title>
 <para>
    Fillme.
 </para>
 </sect2>
 
-<sect2 id="proxy-chaining"><title>How do I chain <application>Privoxy</application> with other proxies
+<sect2 renderas="sect3" id="proxy-chaining"><title>How do I chain <application>Privoxy</application> with other proxies
 (e.g. squid)?</title>
 <para>
    Fillme.
@@ -974,7 +979,7 @@ FIXME: commented out until we have data. HB 03/18/02.
 </sect2>
 -->
 
-<sect2 id="blocklist"><title>Do you still maintain the blocklists?</title>
+<sect2 renderas="sect3" id="blocklist"><title>Do you still maintain the blocklists?</title>
 <para>
     No. The format of the blocklists has changed significantly in the versions
     2.9.x. Once we have released the new stable version, v3.0, there will
@@ -982,7 +987,7 @@ FIXME: commented out until we have data. HB 03/18/02.
 </para>
 </sect2>
 
-<sect2 id="newads"><title>How can I submit new ads?</title>
+<sect2 renderas="sect3" id="newads"><title>How can I submit new ads?</title>
 <para>
     As of now, please discontinue to submit new ad blocking infos. Once we
     have released the new version, there will again be a form on the website,
@@ -990,7 +995,7 @@ FIXME: commented out until we have data. HB 03/18/02.
 </para>
 </sect2>
 
-<sect2 id="ip"><title>How can I hide my IP address?</title>
+<sect2 renderas="sect3" id="ip"><title>How can I hide my IP address?</title>
 <para>
  You cannot hide your IP address with <application>Privoxy</application> or any other software, since
 the server needs to know your IP address to send the answer to you.
@@ -1014,7 +1019,7 @@ more through Google.
 </para>
 </sect2>
 
-<!--  <sect2 id="image"><title>What is the imagefile (simage.ini, etc.) for?</title> -->
+<!--  <sect2 renderas="sect3" id="image"><title>What is the imagefile (simage.ini, etc.) for?</title> -->
 <!--  <para> -->
 <!--   Anytime <application>Privoxy</application> determines (with the help of the blocklist) that a URL -->
 <!--   contains an advertisement, it has to decide whether this advertisement is an -->
@@ -1022,7 +1027,7 @@ more through Google.
 <!--  </para> -->
 <!--  </sect2> -->
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="anonforsure">Can <application>Privoxy</application> guarantee I am anonymous?</title>
 <para>
  No. Your chances of remaining anonymous are greatly improved, but unless you
@@ -1053,7 +1058,7 @@ more through Google.
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="sitebreak">Might some things break because header information is
 being altered?</title>
 
@@ -1093,7 +1098,7 @@ being altered?</title>
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="caching">Can <application>Privoxy</application> act as a <quote>caching</quote> proxy to 
 speed up web browsing?</title>
 <para>
@@ -1104,7 +1109,7 @@ speed up web browsing?</title>
 </para>
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="firewall">What about as a firewall? Can <application>Privoxy</application> protect me?</title>
 <para>
  Not in the way you mean, or in the way a true firewall can, or a proxy that
@@ -1114,7 +1119,7 @@ speed up web browsing?</title>
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="logo">The <application>Privoxy</application> logo that replaces ads is very blocky 
 and ugly looking. Can't a better font be used?</title>
 
@@ -1134,7 +1139,7 @@ Given the above problem, we have decided to remove the logo option entirely
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="wasted">I have large empty spaces now where ads used to be. 
 Why?</title>
 <para>
@@ -1147,7 +1152,7 @@ Why?</title>
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="ssl">How can <application>Privoxy</application> filter Secure (HTTPS) URLs?</title>
 <para>
  This is a limitation since HTTPS transactions are encrypted SSL sessions
@@ -1163,7 +1168,7 @@ Why?</title>
 </sect2>
 
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="secure"><application>Privoxy</application> runs as a <quote>server</quote>. How 
 secure is it? Do I need to take any special precautions?</title>
 <para>
@@ -1186,7 +1191,7 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect2>
 
-<sect2 id="turnoff">
+<sect2 renderas="sect3" id="turnoff">
 <title>How can I temporarily disable <application>Privoxy</application>?</title>
 <para>
  The easiest way is to access <application>Privoxy</application> with your 
@@ -1196,7 +1201,7 @@ secure is it? Do I need to take any special precautions?</title>
 </para>
 </sect2>
 
-<sect2 id="seealso">
+<sect2 renderas="sect3" id="seealso">
 <title>Where can I find more information about <application>Privoxy</application>
 and related issues?</title>
 
@@ -1220,10 +1225,10 @@ and related issues?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="trouble">
-<title>5. Troubleshooting</title>
+<sect1 label="5" id="trouble">
+<title>Troubleshooting</title>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="refused">I just upgraded and am getting <quote>connection refused</quote>
 with every web page?</title>
 <para>
@@ -1245,7 +1250,7 @@ with every web page?</title>
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="flushit">I just added a new rule, but the steenkin ad is 
 still getting through. How?</title>
 <para>
@@ -1265,7 +1270,7 @@ still getting through. How?</title>
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="badsite">One of my favorite sites does not work with <application>Privoxy</application>.
 What can I do?</title>
 
@@ -1284,13 +1289,16 @@ What can I do?</title>
  being applied to the URL. Now, armed with this information, go to <quote>Edit
  the actions list</quote>. Here you should see various sections that have
  various <application>Privoxy</application> features disabled for specific
- sites. Disabled <quote>actions</quote> will have a <quote>-</quote> (minus
- sign) in front of them. Add your problem page URL to one of these sections
- that looks like it is disabling the feature that is causing the
- problem. Re-try the page. There might be some trial and error involved. This
- is discussed in a little more detail in the 
- <ulink url="../user-manual/appendix.html#ACTIONSANAT">user-manual
- appendix</ulink>.
+ sites. Most disabled <quote>actions</quote> will have a <quote>-</quote> (minus
+ sign) in front of them. Some aliases are used just to disable other actions, 
+ e.g. <quote>shop</quote> and <quote>fragile</quote>, and won't necessarily 
+ use a <quote>+</quote> or <quote>-</quote> sign. Add your problem page
+ URL to one of these sections that looks like it is disabling the feature that
+ is causing the problem. Rember to flush your browser's caches when making 
+ such changes! As a last resort, try <quote>fragile</quote> which
+ disables most actions. Now re-try the page. There might be some trial and
+ error involved. This is discussed in a little more detail in the <ulink
+ url="../user-manual/appendix.html#ACTIONSANAT">user-manual appendix</ulink>.
 
 </para>
 
@@ -1301,7 +1309,7 @@ What can I do?</title>
 
 </sect2>
 
-<sect2 id="bugs">
+<sect2 renderas="sect3" id="bugs">
 <title>Where can I get help? Report bugs? Feature Requests? Etc?</title>
 <para>
  Feedback is encouraged, whether good, bad or ugly. Please see the contact
@@ -1312,7 +1320,7 @@ What can I do?</title>
 
 </sect2>
 
-<sect2>
+<sect2 renderas="sect3">
 <title id="time">What time is it?</title>
 <para>
  Time for you to go!
@@ -1371,6 +1379,10 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.38  2002/04/02 03:49:10  hal9
+Major changes to doc structure and layout. Sections are not automatically
+numbered now. TOC is on page by itself.
+
 Revision 1.37  2002/04/01 16:24:07  hal9
 -Rework of supported Q/A.
 -Set up entities to include boilerplate text.
