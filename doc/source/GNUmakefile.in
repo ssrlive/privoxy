@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.3 2002/06/07 00:27:04 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.4 2002/08/08 01:02:26 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -41,6 +41,8 @@ VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
 CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
+# Whatever the most recent stable version is.
+STABLE	    =  3.0.0
 
 #############################################################################
 # Build tools
@@ -68,6 +70,7 @@ PERL       = perl
 DOC_DIR    = .
 DOC_TMP    = $(DOC_DIR)/tmp
 ROOT		 = ../..
+UTILS	 = $(ROOT)/utils
 DOK_WEB_USEM=$(ROOT)/webserver/user-manual
 
 DOC_FILES = AUTHORS LICENSE README ChangeLog \
@@ -87,13 +90,13 @@ man dok-man man2html manuals dok-release dok-pdf dok-shtml announce config-file
 #
 # Documentation
 #
-# converts *.sgml into html, text and man pages
+# converts *.sgml into html, pdf, text and man pages
 #
 #############################################################################
 #
 # Build the Manuals, etc            #########################################
 # This does not build _all_ targets #########################################
-all: dok-release dok-user dok-devel dok-faq dok-index dok-readme dok-authors dok-clean
+all: dok-release dok-user dok-devel dok-faq dok-webserver dok-index dok-readme dok-authors dok-man dok-clean
 	@$(ECHO) Documentation created.
 
 # Shortcuts. Use these targets.
@@ -107,6 +110,7 @@ readme: dok-release dok-readme dok-clean
 webserver: dok-release dok-webserver dok-clean
 man: dok-release dok-man dok-clean
 authors: dok-release dok-authors dok-clean
+pdf: dok-release dok-pdf
 
 # 3 checks to make sure docs will be generated
 ensure-wdump:
@@ -151,72 +155,48 @@ dok-faq: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(RM) ../webserver/faq/*.html && cp $(DOC_TMP)/*.html ../webserver/faq/
 	$(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt 
 
-# man page, using one variant of man2html that reads page from stdin.
-dok-man-suse: ensure-dkprefix ensure-jadebin ensure-wdump dok-release
-	$(RM) ../webserver/man-page/*.html
-ifneq ($(MAN2HTML),false)
-	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > \
-	 ../webserver/man-page/privoxy-man-page.html
-	man $(ROOT)/privoxy.1 | $(MAN2HTML) -bare >> ../webserver/man-page/privoxy-man-page.html
-	$(ECHO) "</body></html>" >> ../webserver/man-page/privoxy-man-page.html
-else
-	$(MAKE) groff2html
-endif
-
 # readme page
 dok-readme: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
-	$(WDUMP) tmp.html > $(ROOT)/README
+	$(WDUMP) tmp.html > $(ROOT)/README ;\
+	$(RM) tmp.*
 
 # index.sgml is used to create both the Home Page, and a local index
 # for documentation (privoxy-index.html), etc.
 #
 # index.html for webserver:
 dok-webserver: ensure-dkprefix ensure-jadebin ensure-wdump
-	cd webserver && $(DB)-notoc -ip-homepage -V nochunks index.sgml > ../../webserver/index.html
+	cd webserver && $(DB)-notoc -ip-homepage -V nochunks index.sgml > index.html ;\
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
-	s/\.\d\. //'\
-     ../webserver/index.html
+	s/\.\d\. //' index.html ;\
+	$(MV) index.html ../../webserver ;\
+	$(RM) *.html *.bak
 
-# privoxy-index.html for local documentation:
+# privoxy-index.html for bundling with locally installed documentation:
 dok-index: ensure-dkprefix ensure-jadebin ensure-wdump
-	cd webserver && $(DB)-notoc -ip-index -V nochunks index.sgml > ../../webserver/privoxy-index.html
+	cd webserver && $(DB)-notoc -ip-index -V nochunks index.sgml > privoxy-index.html ;\
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
-	s/\.\d\. //'\
-     ../webserver/privoxy-index.html 
+	s/\.\d\. //' privoxy-index.html ;\
+	$(MV) privoxy-index.html ../../webserver ;\
+	$(RM) *.html *.bak
 
 ## Make AUTHORS file
 dok-authors: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../AUTHORS
 
-# Make a man page, and then (lousy) HTML version.
-# Requires docbook2man (short perl script), see comments 
-# in privoxy-man-page.sgml. This target is not invoked from other dok targets.
-# It is built separately due to dependencies on off-beat perl scripts.
-# Note: docbook2man eats all command line arguments except file name. Bummer.
-dok-man: ensure-dkprefix ensure-jadebin 
-	cd $(DOC_TMP) && $(RM) * && docbook2man $(DOC_STATUS) ../privoxy-man-page.sgml &&\
-	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
-	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
-	$(MV) -f index.html privoxy-man-page.html
-     # This html is not used. See make man2html.
-	$(MV) -f $(DOC_TMP)/privoxy.1 $(ROOT)/privoxy.1
-	# Build a proper HTML man page.
-	$(MAKE) man2html
-
-# This is laternate version of above, that does handle command line options,
-# ie DOC_STATUS.
-dok-man-test: ensure-dkprefix ensure-jadebin dok-release
+# Make a man page, and then HTML version. Uses docbook2man (short perl script)
+# in utils dir. 
+dok-man: ensure-dkprefix ensure-jadebin dok-release
 	cd $(DOC_TMP) && $(RM) * &&\
-	nsgmls $(DOC_STATUS) ../privoxy-man-page.sgml  | sgmlspl `find /usr/share/sgml -name docbook2man-spec.pl` &&\
+	nsgmls $(DOC_STATUS) ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
 	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
-	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
-	$(MV) -f index.html privoxy-man-page.html
+#	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
+#	$(MV) -f index.html privoxy-man-page.html
      # This html is not used. See make man2html.
 	$(MV) -f $(DOC_TMP)/privoxy.1 $(ROOT)/privoxy.1
 	$(MAKE) man2html
@@ -224,16 +204,16 @@ dok-man-test: ensure-dkprefix ensure-jadebin dok-release
 
 # For those with man2html ala RH7s.
 man2html: ensure-dkprefix ensure-jadebin ensure-wdump
-	mkdir -p doc/webserver/man-page
+	mkdir -p ../webserver/man-page
 ifneq ($(MAN2HTML),false)
-	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
+	$(MAN2HTML) $(ROOT)/privoxy.1 |grep -v "^Content-type" > tmp.html
 	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
 	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
 # Twice because my version of man2html is pulling in commas and periods in URLs.
 	$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html
 	$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html
 # Get rid of spurious  from conversion. (How to do this with perl?)
-	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
+	$(SED) -e 's///g' tmp.html > ../webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
 else
 	$(MAKE) groff2html
 endif
@@ -251,27 +231,34 @@ dok-release:
 	mkdir -p $(DOC_TMP)
 	$(ECHO) -n $(VERSION) > $(DOC_DIR)/doc_version.tmp
 	$(ECHO) -n $(CODE_STATUS) > $(DOC_DIR)/doc_status.tmp
+	$(ECHO) -n $(STABLE) > $(DOC_DIR)/doc_stable.tmp
 
-dok-pdf: dok-release 
-	$(RM) ../pdf/*.pdf
-	cp -f *.sgml ../pdf
-	cp -f *.dsl ../pdf
-	cd ../pdf && db2pdf --pdf -s ldp.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
-	cd ../pdf && db2pdf --pdf -s ldp.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
-	cd ../pdf && db2pdf --pdf -s ldp.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
-	$(RM) ../pdf/*.sgml ../pdf/*.dsl ../pdf/*.out ../pdf/*.tex ../pdf/*.log ../pdf/*.aux
+# Make pdf docs from single page html. Requires htmldoc, see
+# (http://www.easysw.com/htmldoc/). Note: 1.8.20 has a TOC bug.
+# PDF docs are uploaded to webserver as zip archive.
+dok-pdf: dok-shtml
+	@$(ECHO) -n "starting htmldoc version: "; htmldoc --version
+	cd $(UTILS)/ldp_print && $(RM) *html *bak *jpg *tmp *pdf *zip
+	cp -f $(DOC_TMP)/*html ../webserver/images/*jpg  $(UTILS)/ldp_print
+	cd $(UTILS)/ldp_print ;\
+	$(PERL) -pi.bak -e 's/\.\.\/images\///; s/(<\/?)SUB/$$1small/i;\
+	                    s/\.\.\/user-manual\/index\.html/privoxy-user-manual.pdf/;\
+					s/\.\.\/developer-manual\/index\.html/privoxy-developer-manual.pdf/;\
+					s/\.\.\/faq\/index\.html/privoxy-faq.pdf/' *.html ;\
+	for i in developer-manual user-manual faq; do \
+		./ldp_print privoxy-$$i.html ;\
+		$(ECHO) DONE: privoxy-$$i.pdf ;\
+	done ;\
+	$(MV) *.pdf  ../../doc/pdf ;\
+	$(RM) *html *bak *jpg *pdf *zip 
+	$(RM)  $(DOC_TMP)
+
 
 # Generate single page html. Used only for creating pdf docs (ATM).
-# Currently using: See http://www.easysw.com/htmldoc/pdf-o-matic.php.
-# If using this generator, remember U-M has a couple of graphics in 
-# a parallel directory.
-#
-dok-shtml: dok-release 
-	mkdir -p doc/source/temp # this directory not in cvs
-	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > temp/privoxy-user-manual.html
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
-	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
-# one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
+dok-shtml: dok-release ensure-dkprefix ensure-jadebin ensure-wdump
+	$(DB) -iuser-man -V nochunks user-manual.sgml > $(DOC_TMP)/privoxy-user-manual.html
+	$(DB) -V nochunks developer-manual.sgml > $(DOC_TMP)/privoxy-developer-manual.html
+	$(DB) -V nochunks faq.sgml > $(DOC_TMP)/privoxy-faq.html
 
 # Create release announcement in text and html, with short and long versions.
 # This is a standalone target, and must be invoked directly.
@@ -329,11 +316,10 @@ config-file-alt: dok-release ensure-wdump
 
 # This is mostly to catch cruft from build failures
 dok-clean:
-	$(RM) $(DOC_TMP) `find $(ROOT) -name "tmp.*" -o -name "*.tmp" -o -name "*.bak" -o -name "*.fot"`
+	$(RM) $(DOC_TMP) *.html `find $(ROOT) -name "tmp.*" -o -name "*.tmp" -o -name "*.bak" -o -name "*.fot"`
 
 tidy:
-	$(RM) `find . -name "*~"`
-	$(RM) `find . -name ".\#*"`
+	$(RM) `find . -name "*~"` `find . -name ".\#*"`
 
 clobber: tidy clean
 	$(RM) GNUmakefile ldp.dsl
@@ -350,6 +336,9 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.4  2002/08/08 01:02:26  hal9
+# Update pdf2 target to dok-shtml (for single page html)
+#
 # Revision 1.3  2002/06/07 00:27:04  hal9
 # Fixing man2html quirk that pulls in punctuation, and breaks URLs.
 #
