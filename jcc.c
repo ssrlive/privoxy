@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.30 2001/07/25 22:57:13 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.31 2001/07/29 12:17:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.30 2001/07/25 22:57:13 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.31  2001/07/29 12:17:48  oes
+ *    Applied pthread fix by Paul Lieverse
+ *
  *    Revision 1.30  2001/07/25 22:57:13  jongfoster
  *    __BEOS__ no longer overrides FEATURE_PTHREAD.
  *    This is because FEATURE_PTHREAD will soon be widely used, so I
@@ -317,6 +320,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.30 2001/07/25 22:57:13 jongfoster Exp $";
 #include "gateway.h"
 #include "actions.h"
 #include "cgi.h"
+#include "loadcfg.h"
 
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;

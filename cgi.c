@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.10 2001/07/13 13:53:13 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.11 2001/07/18 17:24:37 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.10 2001/07/13 13:53:13 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.11  2001/07/18 17:24:37  oes
+ *    Changed to conform to new pcrs interface
+ *
  *    Revision 1.10  2001/07/13 13:53:13  oes
  *    Removed all #ifdef PCRS and related code
  *
@@ -140,6 +143,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.10 2001/07/13 13:53:13 oes Exp $";
 #include "errlog.h"
 #include "miscutil.h"
 #include "showargs.h"
+#include "loadcfg.h"
 
 const char cgi_h_rcs[] = CGI_H_VERSION;
 

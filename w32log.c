@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.12 2001/07/13 14:04:59 oes Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.13 2001/07/19 19:15:14 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.12 2001/07/13 14:04:59 oes Exp $";
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.13  2001/07/19 19:15:14  haroon
+ *    - Added a FIXME for EditFile but didn't fix :-)
+ *
  *    Revision 1.12  2001/07/13 14:04:59  oes
  *    Removed all #ifdef PCRS
  *
@@ -126,6 +129,7 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.12 2001/07/13 14:04:59 oes Exp $";
 #include "jcc.h"
 #include "miscutil.h"
 #include "errlog.h"
+#include "loadcfg.h"
 
 const char w32res_h_rcs[] = W32RES_H_VERSION;
 
