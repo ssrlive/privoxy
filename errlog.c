@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.26 2002/01/09 19:05:45 steudten Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.27 2002/03/04 02:08:01 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.26 2002/01/09 19:05:45 steudten Exp
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.27  2002/03/04 02:08:01  david__schmidt
+ *    Enable web editing of actions file on OS/2 (it had been broken all this time!)
+ *
  *    Revision 1.26  2002/01/09 19:05:45  steudten
  *    Fix big memory leak.
  *
@@ -206,6 +209,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.26 2002/01/09 19:05:45 steudten Exp
 
 #include "errlog.h"
 #include "project.h"
+#include "jcc.h"
 
 const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
@@ -257,7 +261,7 @@ static void fatal_error(const char * error_message)
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
 #if defined(unix)
-   deletePidFile();
+   unlink(pidfile);
 #endif /* unix */
 
    exit(1);
@@ -266,7 +270,7 @@ static void fatal_error(const char * error_message)
 
 /*********************************************************************
  *
- * Function    :  init_errlog
+ * Function    :  init_error_log
  *
  * Description :  Initializes the logging module.  Must call before
  *                calling log_error.
@@ -300,7 +304,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
    {
       if( !(fp = fopen(logfname, "a")) )
       {
-         log_error(LOG_LEVEL_FATAL, "init_errlog(): can't open logfile: %s", logfname);
+         log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: %s", logfname);
       }
 
       /* set logging to be completely unbuffered */
