@@ -5,14 +5,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.10 2002/05/04 08:44:44 swa Exp $
+ $Id: privoxy-man-page.sgml,v 1.11 2002/05/05 20:26:02 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -52,17 +48,19 @@
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
 <!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
+<!entity my-copy "(C)">               <!-- db2man barfs on copyright symbol  -->
 ]>
 
 <refentry id="privoxy">
 <refentryinfo>
  <date>2002-04-11</date>
 </refentryinfo>
-
 <refmeta>
  <refentrytitle>privoxy</refentrytitle> 
  <manvolnum>1</manvolnum>
- <refmiscinfo>Privoxy &p-version;<![%p-not-stable;[ &p-status;]]></refmiscinfo>
+ <refmiscinfo>
+  Privoxy &p-version;<![%p-not-stable;[ &p-status;]]>
+ </refmiscinfo>
 </refmeta>
 
 <refnamediv>

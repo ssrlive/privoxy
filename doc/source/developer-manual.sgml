@@ -14,6 +14,7 @@
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
+<!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/developer-manual.sgml,v $
@@ -22,15 +23,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $
+ $Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -44,14 +40,17 @@
 <article id="index">
   <artheader>
     <title>Privoxy Developer Manual</title>
+    <pubdate>
+     <subscript>
+    <!-- Completely the wrong markup, but very little is allowed  -->
+    <!-- in this part of an article. FIXME -->
+      <link linkend="copyright">Copyright</link> &my-copy; 2001, 2002 by 
+      <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
+     </subscript>
+    </pubdate>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $</pubdate>
 
-   <copyright>
-    <year>2001</year>
-    <year>2002</year>
-    <holder>Privoxy Developers</holder>
-   </copyright>
+    <pubdate>$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $</pubdate>
 
 <!--
 
@@ -70,16 +69,8 @@ Hal.
 
 -->
 
-<!--
-    <authorgroup>
-      <author>
-        <affiliation>
-          <orgname>By: Privoxy Developers</orgname>
-        </affiliation>
-      </author>
-    </authorgroup>
--->
     <abstract>
+
 <![%dummy;[
  <para>
  <comment>
@@ -1736,7 +1727,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1796,7 +1787,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2654,13 +2645,11 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   
 
 <!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
-<sect1 id="copyright"><title>Copyright, License and History</title>
+<sect1 id="copyright"><title>Privoxy Copyright, License and History</title>
 
-<sect2><title>Copyright</title>
 <!-- Include copyright.sgml -->
  &copyright;
 <!-- end -->
-</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2><title>License</title>
@@ -2708,6 +2697,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.42  2002/05/05 20:26:02  hal9
+  Sorting out license vs copyright in these docs.
+
   Revision 1.41  2002/05/04 08:44:44  swa
   bumped version
 

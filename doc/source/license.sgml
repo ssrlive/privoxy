@@ -3,15 +3,11 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: license.sgml,v 1.0 2002/04/26 05:25:23 hal9 Exp $
+ $Id: license.sgml,v 1.1 2002/05/05 20:20:00 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+  See LICENSE.
+ 
  ======================================================================
   This file used for inclusion with other documents only.
  ======================================================================
@@ -31,12 +27,13 @@
 
 <para>
  <application>Privoxy</application> is free software; you can
- redistribute it and/or modify it under the terms of the GNU General Public
-<!-- 
+ redistribute it and/or modify it under the terms of the 
+ <citetitle>GNU General Public
+<!--
  <informalfigure pgwide="1" float="1">
     <mediaobject>
        <imageobject>
-          <imagedata align="left" fileref="../gnu.jpg" format="jpg">
+          <imagedata scale="300" width="300" scalefit="1" fileref="../gnu.jpg" format="jpg">
        </imageobject>
        <textobject>
           <phrase>GNU's Pet GNU</phrase>
@@ -44,17 +41,16 @@
     </mediaobject>
  </informalfigure>
  or better:
- <inlinegraphic depth="1" align="left" fileref="../gnu.png"></inlinegraphic> 
---> 
-
- License as published by the Free Software Foundation; either version 2 of the
- License, or (at your option) any later version.
+ <inlinegraphic depth="1" scale="300" align="left" fileref="../gnu.jpg"></inlinegraphic> 
+-->
+ License</citetitle>, version 2, as published by the Free Software Foundation.
 </para>
 
 <para>
  This program is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ <citetitle>GNU General Public License</citetitle> for
 <!--
 <figure pgwide="0"><title>The Pythagorean Theorum Illustrated</title>
 </figure>
@@ -65,8 +61,11 @@
 
 <para>
  You should have received a copy of the <ulink
- url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</ulink>
- along with this program; if not, write to the Free Software Foundation, Inc.,
- 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+ url="http://www.gnu.org/copyleft/gpl.html">
+ <citetitle>GNU General Public License</citetitle></ulink>
+ along with this program; if not, write to the <address> Free Software
+ Foundation, Inc. <street>59 Temple Place</street> - Suite 330
+ <city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>
+ <country>USA</country> </address>
 </para>
 

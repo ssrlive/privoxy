@@ -2,7 +2,7 @@ Privoxy User Manual
 
 Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $
+$Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $
 
 The user manual gives users information on how to install, configure and use 
 Privoxy.
@@ -149,11 +149,10 @@ Table of Contents
     11.4. Report ads or other filter problems
     11.5. Other
    
-12. Copyright, License and History
+12. Privoxy Copyright, License and History
    
-    12.1. Copyright
-    12.2. License
-    12.3. History
+    12.1. License
+    12.2. History
    
 13. See Also
 14. Appendix
@@ -3077,24 +3076,20 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-12. Copyright, License and History
+12. Privoxy Copyright, License and History
 
-12.1. Copyright
+Copyright © 2001, 2002 by Privoxy Developers <developers@privoxy.org>
 
-Permission is granted to copy, distribute and/or modify this document under the
-terms of the GNU Free Documentation License, Version 1.1 or any later version
-published by the Free Software Foundation with no Invariant Sections, no
-Front-Cover Texts, and no Back-Cover Texts. A copy of the license can be found 
-http://www.gnu.org/licenses/fdl.html.
+Some source code is based on code Copyright © 1997 by Anonymous Coders and
+Junkbusters, Inc. and licensed under the GNU General Public License.
 
 -------------------------------------------------------------------------------
 
-12.2. License
+12.1. License
 
 Privoxy is free software; you can redistribute it and/or modify it under the
-terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+terms of the GNU General Public License, version 2, as published by the Free
+Software Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -3103,12 +3098,16 @@ is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
 330, Boston, MA 02111-1307, USA.
 
 You should have received a copy of the GNU General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place, Suite 330, Boston, MA 02111-1307 USA.
+this program; if not, write to the
+
+ Free Software
+ Foundation, Inc. 59 Temple Place - Suite 330
+ Boston, MA 02111-1307
+ USA 
 
 -------------------------------------------------------------------------------
 
-12.3. History
+12.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.

@@ -3,15 +3,10 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.7 2002/04/26 17:22:28 swa Exp $
+ $Id: buildsource.sgml,v 1.8 2002/05/03 17:41:41 oes Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ======================================================================
   This file used for inclusion with other documents only.

@@ -3,14 +3,10 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: copyright.sgml,v 1.5 2002/05/05 20:26:02 hal9 Exp $
+ $Id: copyright.sgml,v 1.6 2002/05/07 00:37:31 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ======================================================================
   This file used for inclusion with other documents only.
@@ -26,19 +22,26 @@
   developer-manual
   faq
 
+ **************************************************************
+ NOTE: the &my-copy entity must be defined in any file that will 
+ include this file. (This is a workaround for docbook2man not 
+ handling the standard &copy entity in the man page processing.)
+ **************************************************************
+
 -->
+
 <!--
  GFDL:
  http://www.gnu.org/licenses/fdl.html
 -->
 
 <para>
- Permission is granted to copy, distribute and/or modify this document under
- the terms of the <ulink
- url="http://www.gnu.org/licenses/gpl.html"><citetitle>GNU General Public
- License</citetitle></ulink>, Version 2, as published by the Free Software
- Foundation. A copy of the license can be found <ulink
- url="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</ulink>.
+ Copyright &my-copy; 2001, 2002 by Privoxy Developers <email>developers@privoxy.org</email>
 </para>
 
+<para>
+ Some source code is based on code Copyright &my-copy; 1997 by Anonymous Coders
+ and Junkbusters, Inc. and licensed under the <citetitle>GNU General Public
+ License</citetitle>.
+</para>
 

@@ -3,15 +3,11 @@
 
  Purpose     :  AUTHORS file for Privoxy
                 
- $Id: authors.sgml,v 1.6 2002/04/26 05:25:23 hal9 Exp $
+ $Id: authors.sgml,v 1.7 2002/05/04 08:44:44 swa Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ 
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -34,8 +30,8 @@
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
-<!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
-<!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc -->
+<!entity % p-text "INCLUDE">           <!-- define we are a text only doc -->
+<!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 ]>
 
 <article id="index">

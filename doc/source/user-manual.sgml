@@ -18,6 +18,7 @@
 <!entity % p-readme "IGNORE">
 <!entity % p-config "IGNORE">
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
+<!entity  my-copy "&copy;">         <!-- kludge for docbook2man           -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -26,15 +27,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $
+ $Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -48,23 +44,31 @@
 
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.104 2002/05/04 08:44:45 swa Exp $</pubdate>
+<pubdate>
+ <subscript>
+<!-- Completely the wrong markup, but very little is allowed  -->
+<!-- in this part of an article. FIXME -->
+ <link linkend="copyright">Copyright</link> &my-copy; 2001, 2002 by 
+ <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
+ </subscript>
+</pubdate>
+
+<pubdate>$Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $</pubdate>
+
+<!--
+
+Note: the following should generate a separate page, and a live link to it,
+all nicely done. But it doesn't for some mysterious reason. Please leave
+commented unless it can be fixed proper. For the time being, the
+copyright/license declarations will be in their own sgml.
+
+Hal.
 
 <copyright>
   <year>2001</year>
   <year>2002</year>
   <holder>Privoxy Developers</holder>
 </copyright>
-
-
-<!--
-
-Note: this should generate a separate page, and a live link to it. 
-But it doesn't for some mysterious reason. Please leave commented
-unless it can be fixed proper. For the time being, the copyright 
-statement will be in copyright.smgl.
-
-Hal.
 
 <legalnotice id="legalnotice"> 
  <para>
@@ -74,16 +78,9 @@ Hal.
 
 -->
 
-<!--
-<authorgroup>
- <author>
-  <affiliation>
-   <orgname>By: Privoxy Developers</orgname>
-   </affiliation>
- </author>
-</authorgroup>
--->
+
 <abstract>
+
 <![%dummy;[
  <para>
  <comment>
@@ -98,7 +95,7 @@ Hal.
   The user manual gives users information on how to install, configure and use
   <ulink
   url="http://www.privoxy.org/"><application>Privoxy</application></ulink>.
-  </para>
+ </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
@@ -109,7 +106,7 @@ Hal.
   url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
   Please see the <ulink url="contact.html">Contact section</ulink> on how to
   contact the developers.
-  </para>
+ </para>
 
 <!--   <para> -->
 <!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
@@ -325,8 +322,6 @@ automatically start Privoxy in the boot process.
 <!-- include buildsource.sgml boilerplate: -->
 &buildsource;
 <!-- end boilerplate -->
-
-
 
 </sect2>
 
@@ -5034,16 +5029,15 @@ Requests</title>
 
 </sect1>
 
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="copyright"><title>Copyright, License and History</title>
+<sect1 id="copyright"><title><application>Privoxy</application> Copyright, License and History</title>
 
-<sect2><title>Copyright</title>
 <!-- Include copyright.sgml: -->
  &copyright;
 <!-- end copyright -->
-</sect2>
-<!--  ~  End section  ~  -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2><title>License</title>
@@ -5062,6 +5056,9 @@ Requests</title>
 <!-- end history -->
 </sect2>
 </sect1>
+
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See Also</title>
@@ -5956,6 +5953,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.105  2002/05/05 20:26:02  hal9
+ Sorting out license vs copyright in these docs.
+
  Revision 1.104  2002/05/04 08:44:45  swa
  bumped version
 

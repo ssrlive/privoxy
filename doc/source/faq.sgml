@@ -15,6 +15,7 @@
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
+<!entity  my-copy "&copy;">          <!-- kludge for docbook2man          -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
@@ -23,14 +24,14 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $
+ $Id: faq.sgml,v 1.57 2002/05/05 20:26:02 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
+ Based partially on the Internet Junkbuster FAQ originally written by and
+ Copyright (C) 1997 Anonymous Coders and Junkbusters Corporation.
+ http://www.junkbusters.com
 
  <Qandaset defaultlabel='qanda'>
   <QandAEntry>
@@ -62,14 +63,16 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $</pubdate>
+<pubdate>
+ <subscript>
+<!-- Completely the wrong markup, but very little is allowed  -->
+<!-- in this part of an article. FIXME -->
+ <link linkend="copyright">Copyright</link> &my-copy; 2001, 2002 by 
+ <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
+ </subscript>
+</pubdate>
 
-
-   <copyright>
-    <year>2001</year>
-    <year>2002</year>
-    <holder>Privoxy Developers</holder>
-   </copyright>
+<pubdate>$Id: faq.sgml,v 1.57 2002/05/05 20:26:02 hal9 Exp $</pubdate>
 
 <!--
 
@@ -316,7 +319,8 @@ warranty? Registration?</title>
   License (GPL). It is free to use, copy, modify or distribute as you wish
   under the terms of this license.  Please see the <link
   linkend="copyright">Copyright</link> section for more information on the
-  license and copyright.
+  license and copyright. Or the <filename>LICENSE</filename> file 
+  that should be included.
 
   </para>
  <para>
@@ -1440,18 +1444,17 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
   </sect1>
   
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="copyright"><title>Copyright, License and History</title>
+<sect1 id="copyright"><title>Privoxy Copyright, License and History</title>
 
- <sect2><title>Copyright</title>
  <!-- Include copyright.sgml -->
   &copyright;
  <!-- end -->
+  
   <para>
    Portions of this document are <quote>borrowed</quote> from the original
    <application>Junkbuster</application> (tm) FAQ, and modified as 
    appropriate for <application>Privoxy</application>.
   </para>
- </sect2>
 
  <!--   ~~~~~       New section      ~~~~~     -->
  <sect2><title>License</title>
@@ -1510,6 +1513,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.57  2002/05/05 20:26:02  hal9
+Sorting out license vs copyright in these docs.
+
 Revision 1.56  2002/05/04 08:44:44  swa
 bumped version
 

@@ -12,6 +12,7 @@
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
+<!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/webserver/index.sgml,v $
@@ -20,15 +21,10 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.12 2002/05/05 20:26:02 hal9 Exp $
+ $Id: index.sgml,v 1.13 2002/05/05 20:29:59 hal9 Exp $
 
- Written by and Copyright (C) 2001, 2002 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -175,6 +171,9 @@ page</ulink> on Sourceforge
 <sect1 label="">
 <title>License</title>
 <!-- Include copyright.sgml -->
+ &copyright;
+<!-- end -->
+<!-- Include license.sgml -->
  &license;
 <!-- end -->
 </sect1>
@@ -220,7 +219,9 @@ page</ulink> on Sourceforge
 
 <!-- Formal copyright markup does not work here. HB. -->
 <para>
+ <subscript>
   Copyright &copy; 2001, 2002 by Privoxy Developers
+ </subscript>
 </para>
 
 </sect1>
@@ -246,6 +247,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.13  2002/05/05 20:29:59  hal9
+ Ooops, fixing an accidental delete of title element.
+
  Revision 1.12  2002/05/05 20:26:02  hal9
  Sorting out license vs copyright in these docs.
 

@@ -3,16 +3,14 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 1.5 2002/04/10 04:06:44 hal9 Exp $
+ $Id: seealso.sgml,v 1.6 2002/04/28 16:22:56 swa Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
-      ===========================================
+ ======================================================================
+  This file used for inclusion with other documents only.
+ ======================================================================
 
  If you make changes to this file, please verify the finished 
  docs all display as intended.

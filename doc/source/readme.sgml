@@ -17,15 +17,10 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.14 2002/05/05 13:46:59 swa Exp $
+ $Id: readme.sgml,v 1.15 2002/05/05 17:35:32 hal9 Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
- Privoxy team. http://www.privoxy.org/
-
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and 
- Junkbusters Corporation.  http://www.junkbusters.com
-
+ Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
@@ -243,7 +238,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 1.14 2002/05/05 13:46:59 swa Exp $ -->
+<!--  $Id: readme.sgml,v 1.15 2002/05/05 17:35:32 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>

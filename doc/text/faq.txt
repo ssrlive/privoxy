@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: faq.sgml,v 1.56 2002/05/04 08:44:44 swa Exp $
+$Id: faq.sgml,v 1.57 2002/05/05 20:26:02 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -110,11 +110,10 @@ Table of Contents
     6.4. Report ads or other filter problems
     6.5. Other
    
-7. Copyright, License and History
+7. Privoxy Copyright, License and History
    
-    7.1. Copyright
-    7.2. License
-    7.3. History
+    7.1. License
+    7.2. History
    
 1. General Information
 
@@ -279,7 +278,7 @@ you don't have to maintain a similar configuration for possibly many browsers.
 Privoxy is licensed under the GNU General Public License (GPL). It is free to
 use, copy, modify or distribute as you wish under the terms of this license.
 Please see the Copyright section for more information on the license and
-copyright.
+copyright. Or the LICENSE file that should be included.
 
 There is no warranty of any kind, expressed, implied or otherwise. That is
 something that would cost real money ;-) There is no registration either.
@@ -975,27 +974,23 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-7. Copyright, License and History
+7. Privoxy Copyright, License and History
 
-7.1. Copyright
+Copyright © 2001, 2002 by Privoxy Developers <developers@privoxy.org>
 
-Permission is granted to copy, distribute and/or modify this document under the
-terms of the GNU Free Documentation License, Version 1.1 or any later version
-published by the Free Software Foundation with no Invariant Sections, no
-Front-Cover Texts, and no Back-Cover Texts. A copy of the license can be found 
-http://www.gnu.org/licenses/fdl.html.
+Some source code is based on code Copyright © 1997 by Anonymous Coders and
+Junkbusters, Inc. and licensed under the GNU General Public License.
 
 Portions of this document are "borrowed" from the original Junkbuster (tm) FAQ,
 and modified as appropriate for Privoxy.
 
 -------------------------------------------------------------------------------
 
-7.2. License
+7.1. License
 
 Privoxy is free software; you can redistribute it and/or modify it under the
-terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+terms of the GNU General Public License, version 2, as published by the Free
+Software Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -1004,12 +999,16 @@ is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
 330, Boston, MA 02111-1307, USA.
 
 You should have received a copy of the GNU General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place, Suite 330, Boston, MA 02111-1307 USA.
+this program; if not, write to the
+
+ Free Software
+ Foundation, Inc. 59 Temple Place - Suite 330
+ Boston, MA 02111-1307
+ USA 
 
 -------------------------------------------------------------------------------
 
-7.3. History
+7.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.

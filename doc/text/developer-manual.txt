@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $
+$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -129,11 +129,10 @@ Table of Contents
     8.4. Report ads or other filter problems
     8.5. Other
    
-9. Copyright, License and History
+9. Privoxy Copyright, License and History
    
-    9.1. Copyright
-    9.2. License
-    9.3. History
+    9.1. License
+    9.2. History
    
 10. See also
 
@@ -1371,49 +1370,49 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $"; 
-/*********************************************************************                         
- *                                                                                             
- * File        :  $Source$                                                                     
- *                                                                                             
- * Purpose     :  (Fill me in with a good description!)                                        
- *                                                                                             
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                            
- *                Privoxy team. http://www.privoxy.org/                                        
- *                                                                                             
- *                Based on the Internet Junkbuster originally written                          
- *                by and Copyright (C) 1997 Anonymous Coders and                               
- *                Junkbusters Corporation.  http://www.junkbusters.com                         
- *                                                                                             
- *                This program is free software; you can redistribute it                       
- *                and/or modify it under the terms of the GNU General                          
- *                Public License as published by the Free Software                             
- *                Foundation; either version 2 of the License, or (at                          
- *                your option) any later version.                                              
- *                                                                                             
- *                This program is distributed in the hope that it will                         
- *                be useful, but WITHOUT ANY WARRANTY; without even the                        
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                         
- *                PARTICULAR PURPOSE.  See the GNU General Public                              
- *                License for more details.                                                    
- *                                                                                             
- *                The GNU General Public License should be included with                       
- *                this file.  If not, you can view it at                                       
- *                http://www.gnu.org/copyleft/gpl.html                                         
- *                or write to the Free Software Foundation, Inc., 59                           
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                       
- *                                                                                             
- * Revisions   :                                                                               
- *    $Log$                                                                                    
- *                                                                                             
- *********************************************************************/                        
-                                                                                               
-                                                                                               
-#include "config.h"                                                                            
-                                                                                               
-   ...necessary include files for us to do our work...                                         
-                                                                                               
-const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                              
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $"; 
+/*********************************************************************                          
+ *                                                                                              
+ * File        :  $Source$                                                                      
+ *                                                                                              
+ * Purpose     :  (Fill me in with a good description!)                                         
+ *                                                                                              
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                             
+ *                Privoxy team. http://www.privoxy.org/                                         
+ *                                                                                              
+ *                Based on the Internet Junkbuster originally written                           
+ *                by and Copyright (C) 1997 Anonymous Coders and                                
+ *                Junkbusters Corporation.  http://www.junkbusters.com                          
+ *                                                                                              
+ *                This program is free software; you can redistribute it                        
+ *                and/or modify it under the terms of the GNU General                           
+ *                Public License as published by the Free Software                              
+ *                Foundation; either version 2 of the License, or (at                           
+ *                your option) any later version.                                               
+ *                                                                                              
+ *                This program is distributed in the hope that it will                          
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                         
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                          
+ *                PARTICULAR PURPOSE.  See the GNU General Public                               
+ *                License for more details.                                                     
+ *                                                                                              
+ *                The GNU General Public License should be included with                        
+ *                this file.  If not, you can view it at                                        
+ *                http://www.gnu.org/copyleft/gpl.html                                          
+ *                or write to the Free Software Foundation, Inc., 59                            
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                        
+ *                                                                                              
+ * Revisions   :                                                                                
+ *    $Log$                                                                                     
+ *                                                                                              
+ *********************************************************************/                         
+                                                                                                
+                                                                                                
+#include "config.h"                                                                             
+                                                                                                
+   ...necessary include files for us to do our work...                                          
+                                                                                                
+const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                               
 
 Note: This declares the rcs variables that should be added to the
 "show-proxy-args" page. If this is a brand new creation by you, you are free to
@@ -1426,71 +1425,71 @@ can.
 
 Example for file header comments:
 
-#ifndef _FILENAME_H                                                                          
-#define _FILENAME_H                                                                          
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.41 2002/05/04 08:44:44 swa Exp $" 
-/*********************************************************************                       
- *                                                                                           
- * File        :  $Source$                                                                   
- *                                                                                           
- * Purpose     :  (Fill me in with a good description!)                                      
- *                                                                                           
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                          
- *                Privoxy team. http://www.privoxy.org/                                      
- *                                                                                           
- *                Based on the Internet Junkbuster originally written                        
- *                by and Copyright (C) 1997 Anonymous Coders and                             
- *                Junkbusters Corporation.  http://www.junkbusters.com                       
- *                                                                                           
- *                This program is free software; you can redistribute it                     
- *                and/or modify it under the terms of the GNU General                        
- *                Public License as published by the Free Software                           
- *                Foundation; either version 2 of the License, or (at                        
- *                your option) any later version.                                            
- *                                                                                           
- *                This program is distributed in the hope that it will                       
- *                be useful, but WITHOUT ANY WARRANTY; without even the                      
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                       
- *                PARTICULAR PURPOSE.  See the GNU General Public                            
- *                License for more details.                                                  
- *                                                                                           
- *                The GNU General Public License should be included with                     
- *                this file.  If not, you can view it at                                     
- *                http://www.gnu.org/copyleft/gpl.html                                       
- *                or write to the Free Software Foundation, Inc., 59                         
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                     
- *                                                                                           
- * Revisions   :                                                                             
- *    $Log$                                                                                  
- *                                                                                           
- *********************************************************************/                      
-                                                                                             
-                                                                                             
-#include "project.h"                                                                         
-                                                                                             
-#ifdef __cplusplus                                                                           
-extern "C" {                                                                                 
-#endif                                                                                       
-                                                                                             
-   ... function headers here ...                                                             
-                                                                                             
-                                                                                             
-/* Revision control strings from this header and associated .c file */                       
-extern const char FILENAME_rcs[];                                                            
-extern const char FILENAME_h_rcs[];                                                          
-                                                                                             
-                                                                                             
-#ifdef __cplusplus                                                                           
-} /* extern "C" */                                                                           
-#endif                                                                                       
-                                                                                             
-#endif /* ndef _FILENAME_H */                                                                
-                                                                                             
-/*                                                                                           
-  Local Variables:                                                                           
-  tab-width: 3                                                                               
-  end:                                                                                       
-*/                                                                                           
+#ifndef _FILENAME_H                                                                           
+#define _FILENAME_H                                                                           
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $" 
+/*********************************************************************                        
+ *                                                                                            
+ * File        :  $Source$                                                                    
+ *                                                                                            
+ * Purpose     :  (Fill me in with a good description!)                                       
+ *                                                                                            
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                           
+ *                Privoxy team. http://www.privoxy.org/                                       
+ *                                                                                            
+ *                Based on the Internet Junkbuster originally written                         
+ *                by and Copyright (C) 1997 Anonymous Coders and                              
+ *                Junkbusters Corporation.  http://www.junkbusters.com                        
+ *                                                                                            
+ *                This program is free software; you can redistribute it                      
+ *                and/or modify it under the terms of the GNU General                         
+ *                Public License as published by the Free Software                            
+ *                Foundation; either version 2 of the License, or (at                         
+ *                your option) any later version.                                             
+ *                                                                                            
+ *                This program is distributed in the hope that it will                        
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                       
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                        
+ *                PARTICULAR PURPOSE.  See the GNU General Public                             
+ *                License for more details.                                                   
+ *                                                                                            
+ *                The GNU General Public License should be included with                      
+ *                this file.  If not, you can view it at                                      
+ *                http://www.gnu.org/copyleft/gpl.html                                        
+ *                or write to the Free Software Foundation, Inc., 59                          
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                      
+ *                                                                                            
+ * Revisions   :                                                                              
+ *    $Log$                                                                                   
+ *                                                                                            
+ *********************************************************************/                       
+                                                                                              
+                                                                                              
+#include "project.h"                                                                          
+                                                                                              
+#ifdef __cplusplus                                                                            
+extern "C" {                                                                                  
+#endif                                                                                        
+                                                                                              
+   ... function headers here ...                                                              
+                                                                                              
+                                                                                              
+/* Revision control strings from this header and associated .c file */                        
+extern const char FILENAME_rcs[];                                                             
+extern const char FILENAME_h_rcs[];                                                           
+                                                                                              
+                                                                                              
+#ifdef __cplusplus                                                                            
+} /* extern "C" */                                                                            
+#endif                                                                                        
+                                                                                              
+#endif /* ndef _FILENAME_H */                                                                 
+                                                                                              
+/*                                                                                            
+  Local Variables:                                                                            
+  tab-width: 3                                                                                
+  end:                                                                                        
+*/                                                                                            
 
 Example for function comments:
 
@@ -2072,24 +2071,20 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-9. Copyright, License and History
+9. Privoxy Copyright, License and History
 
-9.1. Copyright
+Copyright © 2001, 2002 by Privoxy Developers <developers@privoxy.org>
 
-Permission is granted to copy, distribute and/or modify this document under the
-terms of the GNU Free Documentation License, Version 1.1 or any later version
-published by the Free Software Foundation with no Invariant Sections, no
-Front-Cover Texts, and no Back-Cover Texts. A copy of the license can be found 
-http://www.gnu.org/licenses/fdl.html.
+Some source code is based on code Copyright © 1997 by Anonymous Coders and
+Junkbusters, Inc. and licensed under the GNU General Public License.
 
 -------------------------------------------------------------------------------
 
-9.2. License
+9.1. License
 
 Privoxy is free software; you can redistribute it and/or modify it under the
-terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+terms of the GNU General Public License, version 2, as published by the Free
+Software Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -2098,12 +2093,16 @@ is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
 330, Boston, MA 02111-1307, USA.
 
 You should have received a copy of the GNU General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place, Suite 330, Boston, MA 02111-1307 USA.
+this program; if not, write to the
+
+ Free Software
+ Foundation, Inc. 59 Temple Place - Suite 330
+ Boston, MA 02111-1307
+ USA 
 
 -------------------------------------------------------------------------------
 
-9.3. History
+9.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
