@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $
+ $Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -124,33 +124,37 @@
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>
-You'll need an account on <ulink
-url="http://sourceforge.net">Sourceforge</ulink> to support our development.
-Mail your ID to the list and wait until a project manager has added you.
-</para>
-
-<para>
-For the time being (read, this section is under construction), please note the
-following guidelines for changing stuff in the code. If it is
-	<orderedlist numeration="arabic">
-       	        <listitem><para>
-	      	A bugfix / clean-up / cosmetic thing: shoot
-               	</para></listitem>
-      	        <listitem><para>
-      		A new feature that can be turned off: shoot
-               	</para></listitem>
-        	<listitem><para>
-	      	A clear improvement w/o side effects on other parts of the code: shoot
-                </para></listitem>
-        	<listitem><para>
-	        A matter of taste: ask the list
-              	</para></listitem>
-        	<listitem><para>
-	        A major redesign of some part of the code: ask the list
-                </para></listitem>
-        </orderedlist>	
- </para>		
-</sect1>	
+      You'll need an account on <ulink
+      url="http://sourceforge.net">Sourceforge</ulink> to support our
+      development.  Mail your ID to the list and wait until a project
+      manager has added you.
+    </para>
+    <para>
+      For the time being (read, this section is under construction), please
+      note the following guidelines for changing stuff in the code. If it is
+      <orderedlist numeration="arabic">
+        <listitem><para>
+          A bugfix / clean-up / cosmetic thing: shoot
+        </para></listitem>
+        <listitem><para>
+          A new feature that can be turned off: shoot
+        </para></listitem>
+        <listitem><para>
+          A clear improvement w/o side effects on other parts of the code: shoot
+        </para></listitem>
+        <listitem><para>
+          A matter of taste: ask the list
+        </para></listitem>
+        <listitem><para>
+          A major redesign of some part of the code: ask the list
+        </para></listitem>
+      </orderedlist>
+    </para>
+    <para>
+      Note that near a major public release, we get a bit more cautious - if
+      unsure, it doesn't hurt to ask first.
+    </para>
+  </sect1>
 	
   <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="documentation"><title>Documentation Guidelines</title>
@@ -1628,7 +1632,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1688,7 +1692,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2092,26 +2096,42 @@ at sourceforge. Three simple steps:
 
     <sect2 id="newrelease-windows"><title>Windows</title>
       <para>
-	Ensure that you have the latest code version. Hence run
-	</para>
-	<para>
-	<programlisting>
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z current
-  cd current
-	</programlisting>
-	</para>
-	<para>
-	 Run:
-	</para>
-	<para>
-	<programlisting>
-  autoheader && autoconf && ./configure
-	</programlisting>
-	</para>
-	<para>
-	Then do FIXME.
-	</para>
+        You should ensure you have the latest version of Cygwin (from
+        <ulink url="http://www.cygwin.com/">http://www.cygwin.com/</ulink>).
+        Run the following commands from within a Cygwin bash shell.
+      </para>
+      <para>
+        First check out a clean copy of the correct code version, by running:
+      </para>
+      <para>
+      <programlisting>
+        mkdir dist
+        cd dist
+        cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r  v_X_Y_Z .
+      </programlisting>
+      </para>
+      <para>
+        (Note: It is important that this is a clean copy of the code,
+        do not re-use a working directory after you have manually compiled
+        there).
+      </para>
+      <para>
+        Then you can build the package.  This is fully automated, and is
+        controlled by <filename>winsetup/GNUmakefile</filename>.
+        All you need to do is:
+      </para>
+      <para>
+      <programlisting>
+        cd winsetup
+        make
+      </programlisting>
+      </para>
+      <para>
+        Now you can manually rename <filename>privoxy_setup.exe</filename> to
+        <filename>privoxy_setup_X_Y_Z.exe</filename>, and upload it to
+        SourceForge.
+      </para>
     </sect2>
 
     <sect2 id="newrelease-debian"><title>Debian</title>
@@ -2416,6 +2436,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.31  2002/04/11 09:32:52  oes
+  more nits
+
   Revision 1.30  2002/04/11 09:24:53  oes
   nits
 
