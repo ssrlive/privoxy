@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.83 2002/10/24 16:32:41 hal9 Exp $
+dnl $Id: configure.in,v 1.84 2002/10/24 22:24:57 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.84  2002/10/24 22:24:57  hal9
+dnl Make install: Minor clean up for variable handling.
+dnl
 dnl Revision 1.83  2002/10/24 16:32:41  hal9
 dnl echo -n does not work with true /bin/sh. Use AC_MSG_CHECKING for docbook stuff.
 dnl
@@ -427,7 +430,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.83 $)
+AC_REVISION($Revision: 1.84 $)
 AC_INIT(src/jcc.c)
 if test ! -f src/config.h.in; then
    echo "You need to run autoheader first. "
@@ -483,7 +486,9 @@ dnl Checks for programs needed to build.
 dnl =================================================================
 
 dnl Keep AC_PROG_CC from setting its own defaults:
-CFLAGS=" "
+if test "X$CFLAGS" = "X"; then
+   CFLAGS = " "
+fi
 
 AC_PROG_CC
 AC_PROG_CPP
@@ -509,23 +514,21 @@ AC_ARG_WITH(debug,
                     if test $ac_cv_prog_cc_g = yes; then
                       if test "$GCC" = yes; then
                         if test "$GDB"; then
-                          CFLAGS="-ggdb"
+                          CFLAGS="$CFLAGS -ggdb"
                         else
-                          CFLAGS="-g"
+                          CFLAGS="$CFLAGS -g"
                         fi
                         CFLAGS="$CFLAGS -Wshadow  -Wconversion"
                       else
-                        CFLAGS="-g"
+                        CFLAGS="$CFLAGS -g"
                       fi
                    fi
                 fi
         ],
         [
-            if test "X$CFLAGS" = "X"; then # if CFLAGS are unset
+            if test "X$CFLAGS" = "X "; then # if CFLAGS were unset (see above)
               if test "$GCC" = yes; then
                 CFLAGS="-O2"
-              else
-                CFLAGS=
               fi
             fi
         ]
