@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.2 2001/05/13 22:04:51 administrator Exp $
+# $Id: Makefile.in,v 1.1.1.1 2001/05/15 13:59:00 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.1.1.1  2001/05/15 13:59:00  oes
+# Initial import of version 2.9.3 source tree
+#
 #
 
 
@@ -145,7 +148,7 @@ SUFFIX     = .txt:o
 .SUFFIXES  : .txt
 
 %.txt:
-	sed -e 's/$$//' < $< > $@
+	sed -e 's/$$/&/' < $< > $@
 
 inifiles: $(W32_INIS)
 
@@ -160,7 +163,8 @@ junkbstr.txt: config
 			-e 's!\(/var/log/junkbuster\|.\)/junkbuster\.log!junkbstr.log!' \
 			-e 's!\(/etc/junkbuster\|.\)/imagelist!simage.txt!' \
 			-e 's!\(/etc/junkbuster\|.\)/re_filterfile!sregexp.txt!' \
-			-e 's!$$!!' \
+			-e 's!$$!&!' \
+			-e 's!#Win32-only: !!' \
 	< $< > $@
 
 saclfile.txt: aclfile
