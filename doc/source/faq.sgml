@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.4 2002/02/24 14:34:24 jongfoster Exp $
+ $Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.4 2002/02/24 14:34:24 jongfoster Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -89,11 +89,77 @@ Please see the Contact section in the user-manual if you want to contact the dev
  </para>
 </sect3>
 
+<sect3 id="browseconfig"> <title>Why can I change the configuration with a
+browser? Does that not raise security issues?</title>
+ <para>
+What I don't understand, is how I can browser edit the config file as a
+regular user, while the whole /etc/junkbuster hierarchy belongs to the user
+"junkbuster", with only 644 perms.
+
+When you use the browser-based editor, JunkBuster itself is writing to the
+config files.  Because JunkBuster is running as the user "junkbuster", it can
+update the config files.
+
+If you don't like this, setting "enable-edit-actions 0" in the config file
+will disable the browser-based editor.  If you're that paranoid, you should
+also consider setting "enable-remote-toggle 0" to prevent browser-based
+enabling/disabling of JunkBuster.
+
+Note that normally only local users can connect to JunkBuster, so this is not
+(normally) a security problem.
+ </para>
+</sect3>
+
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2 id="misc"><title>Misc</title>
+
+<sect3 id="loadingtimes"><title>I noticed considerable
+delays in page requests compared to the old IJB. What's wrong?</title>
+<para>
+Using the default filtering configuration, I noticed considerable delays in
+page requests compared to the old IJB. Loading pages with large contents
+seemed to take forever, then suddenly delivering all the content at once.
+
+The whole content must be loaded in order to filter, and nothing is is
+sent to the browser during this time. The loading time does not really
+change in real numbers, but the feeling is different, because most
+browsers are able to start rendering incomplete content, giving the
+user a feeling of "it works". 
+
+To modify the content of a page (i.e. make frames resizeable again, etc.) and
+not just replace ads, the Internet Junkbuster needs to download the entire
+page first, do its content magic and then send the page to the browser.
+</para>
+</sect3>
+
+
+<sect3 id="configurl"><title>What is the "http://i.j.b/"?</title>
+<para>
+Since JunkBuster sits between your web browser and the Internet, it can be
+programmed to handle certain pages specially.
+
+With recent versions of JunkBuster (version 2.9.x), you can get some
+information about JunkBuster and change some settings by going to
+http://i.j.b/ or, equivalently, http://ijbswa.sourceforge.net/config/
+(Note that i.j.b is far easier to type but may not work in some
+configurations).
+
+These pages are *not* forwarded to a server on the internet - instead they are
+handled by a special web server which is built in to JunkBuster.
+
+If you are not running JunkBuster, then http://i.j.b/ will fail, and
+http://ijbswa.sourceforge.net/config/ will return a web page telling you
+you're not running JunkBuster.
+
+If you have version 2.0.2, then the equivalent is
+http://example.com/show-proxy-args (but you get far less information, and you
+should really consider upgrading to 2.9.x).
+</para>
+</sect3>
+
 
 <sect3 id="badfiledesc"><title>I get the message 'Bad File Descriptor', why?</title>
 <para>
@@ -195,6 +261,9 @@ Please see the Contact section in the user-manual if you want to contact the dev
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.5  2002/03/02 15:50:04  swa
+2.9.11 version. more input for docs.
+
 Revision 1.4  2002/02/24 14:34:24  jongfoster
 Formatting changes.  Now changing the doctype to DocBook XML 4.1
 will work - no other changes are needed.
