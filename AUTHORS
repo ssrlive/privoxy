@@ -1,4 +1,4 @@
-                   Authors of Internet Junkbuster v2.9.9
+              Authors of Internet Junkbuster v2.9.x and 3.x
 ===========================================================================
 
 Current Project developers:
@@ -10,26 +10,25 @@ Current Project developers:
  Markus Breitenbach
  Thomas Steudten
 
-Current Project Contributors:
+Current Project Contributors (in alphabetical order):
 
  David Schmidt (OS/2 port)
- Haroon Rafique
- Jorg Strohmayer
- Shamim Mohamed
- Sarantis Paskalis
  Gabriel L. Somlo
- John Venvertloh
  Hal Burgiss (docs)
+ Haroon Rafique
+ John Venvertloh
+ Jorg Strohmayer
  Rodney Stromlund
+ Sarantis Paskalis
+ Shamim Mohamed
 
 Originally developed by:
 
  Junkbusters Corp.
  Anonymous Coders
 
-Thanks to the many people who have tested JunkBuster,
-reported bugs, or made suggestions.  These include
-(in alphabetical order):
+Thanks to the many people who have tested JunkBuster, reported bugs,
+or made suggestions. These include (in alphabetical order):
 
  Aaron Hamid
  Alexander Lazic  (FreeBSD patch)
@@ -43,7 +42,6 @@ reported bugs, or made suggestions.  These include
  Paul Lieverse
  Peter E
  Reiner Buehl
-
 
 If we've missed you off this list, please let us know!
 
