@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.103 2002/05/23 23:19:00 oes Exp $
+# $Id: GNUmakefile.in,v 1.104 2002/05/24 00:03:49 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -572,7 +572,7 @@ endif
 
 # readme page
 dok-readme:
-	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
+	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && $(RM) -r tmp.html
 
 # webserver files
@@ -839,6 +839,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.104  2002/05/24 00:03:49  oes
+# Use p_doc.css for the Homepage for consistency
+#
 # Revision 1.103  2002/05/23 23:19:00  oes
 # Use dsl without TOC for the homepage
 #
