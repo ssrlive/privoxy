@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.19 2001/07/25 13:48:54 oes Exp $
+# $Id: config,v 1.20 2001/07/26 15:06:21 haroon Exp $
 #
 
 #  Table of Contents
@@ -269,7 +269,7 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #
 #  Default: Multithreaded mode
 #
-#single-threaded
+single-threaded
 
 #
 #    'toggle' allows you to temporarily disable all Junkbuster's 
@@ -291,6 +291,23 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #
 toggle 1
 
+#
+#  For content filtering, i.e. the +filter and +deanimate-gif
+#  actions, it is neccessary that Junkbuster buffers up the
+#  whole document body. This can be potentially dangerous, since
+#  a server could just keep sending data indefinitely and wait
+#  for your RAM to exhaust.
+#  The buffer-limit option lets you set the size in Kbytes that
+#  each buffer may use at maximum. When the documents buffer
+#  exceeds that size, it is flushed to the client unfiltered and 
+#  no further attempt to filter the rest of it is taken.
+#  Remember that there may multiple threads running, which might
+#  require up to buffer-limit Kbytes *each*, unless you have set
+#  single-threaded below.
+#
+#  Default: 4069, i.e. 4 MB
+#
+buffer-limit 4069
 
 #############################################################################
 # Access Control List
