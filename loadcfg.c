@@ -1,4 +1,5 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.12 2001/06/05 20:04:09 jongfoster Exp $";
+/* vim:ts=3: */
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.13 2001/06/05 22:33:54 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +36,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.12 2001/06/05 20:04:09 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.13  2001/06/05 22:33:54  jongfoster
+ *
+ *    Fixed minor memory leak.
+ *    Also now uses make_path to prepend the pathnames.
+ *
  *    Revision 1.12  2001/06/05 20:04:09  jongfoster
  *    Now uses _snprintf() in place of snprintf() under Win32.
  *
@@ -573,7 +579,7 @@ struct configuration_spec * load_config(void)
 #ifdef PCRS
          case hash_re_filterfile :
             freez((char *)config->re_filterfile);
-            config->re_filterfile = strdup(arg);
+            config->re_filterfile = make_path(config->confdir, arg);
             continue;
 #endif /* def PCRS */
 
