@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.10  2001/07/20 11:04:26  oes
+#     Added Rodneys javascript cookie filter
+#
 #     Revision 1.9  2001/07/13 14:03:48  oes
 #     Elimiated yet another bug in the banner-by-size jobs. Shame on me!
 #
@@ -173,3 +176,11 @@ s/microsoft(?!.com)/MicroSuck/ig
 #
 # ********************************************************************/
 s/(\w+) was tired/<b>$1 needed more coffee<\/b>/ig
+
+# ********************************************************************/
+#
+# Remove Nimda code.
+#
+# ********************************************************************/
+s%<script language="JavaScript">(window\.open|1;''\.concat)\("readme\.eml", null, "resizable=no,top=6000,left=6000"\)</script>%<br><hr><font size=7><b>Internet J</b></font><b><font size=6>UNK</font><font size=5 color="red"><i>BUSTER</i></font></b><font size=7> WARNING: This Server is infected with <a href="http://www.cert.org/advisories/CA-2001-26.html">Nimda</a>!</font>%g
+
