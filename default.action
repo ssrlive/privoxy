@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: default.action,v 1.1 2002/03/24 11:37:39 jongfoster Exp $
+# $Id: default.action,v 1.2 2002/03/24 13:02:18 swa Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://ijbswa.sourceforge.net/faq/questions.html#CONFIGFILES
@@ -261,18 +261,19 @@
 #    in which case a "blocked" image can be sent rather than a HTML page.
 #    See +image-blocker{} for the control over what is actually sent.
 #
-# +image-blocker{logo}
 # +image-blocker{blank}
 # +image-blocker{pattern}
 # +image-blocker{<URL>} with <url> being any valid image URL
 #    Decides what to do with URLs that end up tagged with {+block +image}.
-#    There are 5 options.  "-image-blocker" will send a HTML "blocked" page,
-#    usually resulting in a "broken image" icon.  "+image-blocker{logo}"
-#    will send a "JunkBuster" image.  "+image-blocker{blank}" will send
-#    a 1x1 transparent image, "+image-blocker{pattern}" will send a 4x4
-#    grey/white pattern which is less intrusive than the logo but easier
-#    to recognize than the transparent one. And finally, "+image-blocker{<URL>}"
-#    will send a HTTP temporary redirect to the specified image URL.
+#    There are 4 options:
+#      * "-image-blocker" will send a HTML "blocked" page, usually
+#        resulting in a "broken image" icon.
+#      * "+image-blocker{blank}" will send a 1x1 transparent image
+#      * "+image-blocker{pattern}" will send a 4x4 grey/white pattern
+#        which is less intrusive than the logo but easier to recognize
+#        than the transparent one.
+#      * "+image-blocker{<URL>}" will send a HTTP temporary redirect
+#        to the specified image URL.
 #
 #
 # +limit-connect{portlist}
@@ -389,7 +390,7 @@ myfilters \
 +hide-referer{forge} \
 -hide-user-agent \
 -image \
-+image-blocker{http://i.j.b/send-banner} \
++image-blocker{http://config.privoxy.org/send-banner} \
 +no-cookies-keep \
 -no-cookies-read \
 -no-cookies-set \
