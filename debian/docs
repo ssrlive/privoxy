@@ -1,6 +1,8 @@
 README
 AUTHORS
-doc/text/faq.txt
-doc/text/user-manual.txt
-doc/text/developer-manual.txt
-
+doc/source/faq.txt
+doc/source/user-manual.txt
+doc/source/developer-manual.txt
+doc/source/faq
+doc/source/user-manual
+doc/source/developer-manual
