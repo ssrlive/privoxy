@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1720,7 +1720,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1780,7 +1780,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.36 2002/04/26 05:25:23 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.37 2002/04/26 17:23:29 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2422,6 +2422,59 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
     </sect3>
    </sect2>
 
+   <sect2 id="releasing">
+   <title>Uploading and Releasing Your Package</title>
+    <para>
+      After the package is ready, it is time to upload it 
+      to SourceForge, and go through the release steps. The upload 
+      is done via FTP:
+    </para>
+     <para>
+      <itemizedlist>
+       <listitem>
+        <para>
+          Upload to: <ulink url="ftp://upload.sourceforge.net/incoming">ftp://upload.sourceforge.net/incoming</ulink>
+        </para>
+      </listitem> 
+      <listitem>
+       <para>
+         user: <literal>anonymous</literal>
+       </para>
+      </listitem> 
+      <listitem>
+       <para>
+         password: <literal>ijbswa-developers@lists.sourceforge.net</literal>
+       </para>
+      </listitem> 
+     </itemizedlist>
+    </para> 
+    <para>
+     Once this done go to <ulink url="http://sourceforge.net/project/admin/editpackages.php?group_id=11118">http://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>, 
+     making sure you are logged in. Find your target platform in the 
+     second column, and click <literal>Add Release</literal>. You will 
+     then need to create a new release for your package, using the format 
+     of <literal>$VERSION ($CODE_STATUS)</literal>, e.g. <emphasis>&p-version;
+     (beta)</emphasis>.
+    </para>
+    <para>
+     Now just follow the prompts. Be sure to add any appropriate Release
+     notes. You should see your freshly uploaded packages in 
+     <quote>Step 2. Add Files To This Release</quote>. Check the 
+     appropriate box(es). Remember at each step to hit the 
+     <quote>Refresh/Submit</quote> buttons! You should now see your 
+     file(s) listed in Step 3. Fill out the forms with the appropriate 
+     information for your platform, being sure to hit <quote>Update</quote>
+     for each file. If anyone is monitoring your platform, check the 
+     <quote>email</quote> box at the very bottom to notify them of 
+     the new package. This should do it!
+    </para>
+    <para>
+     If you have made errors, or need to make changes, you can go through 
+     essentially the same steps, but select <literal>Edit Release</literal>, 
+     instead of <literal>Add Release</literal>.
+    </para>
+   </sect2>
+
     <sect2 id="afterrelease">
     <title>After the Release</title>
      <para>
@@ -2542,6 +2595,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.37  2002/04/26 17:23:29  swa
+  bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
+
   Revision 1.36  2002/04/26 05:25:23  hal9
   Mass commit to catch a few scattered fixes.
 
