@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.4 2002/09/11 10:47:11 oes Exp $
+#  $Id: standard.action,v 1.5 2002/10/20 19:33:07 hal9 Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -25,7 +25,7 @@
 
 ################
 #
-# Cautions settings -- safe for all sites, but offer little privacy protection
+# Cautious settings -- safe for all sites, but offer little privacy protection
 #
 { \
 -add-header \
