@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.27 2001/11/07 00:02:13 steudten Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.28 2001/12/30 14:07:32 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,14 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.27 2001/11/07 00:02:13 steudten E
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.28  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.27  2001/11/07 00:02:13  steudten
  *    Add line number in error output for lineparsing for
  *    actionsfile and configfile.
@@ -272,6 +280,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.27 2001/11/07 00:02:13 steudten E
 #include "errlog.h"
 #include "ssplit.h"
 #include "encode.h"
+#include "urlmatch.h"
 
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
@@ -385,7 +394,7 @@ void unload_configfile (void * data)
    while (cur_fwd != NULL)
    {
       struct forward_spec * next_fwd = cur_fwd->next;
-      free_url(cur_fwd->url);
+      free_url_spec(cur_fwd->url);
 
       freez(cur_fwd->gateway_host);
       freez(cur_fwd->forward_host);

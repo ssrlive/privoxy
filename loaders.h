@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.12 2001/11/07 00:02:13 steudten Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.13 2001/12/30 14:07:32 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,14 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.13  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.12  2001/11/07 00:02:13  steudten
  *    Add line number in error output for lineparsing for
  *    actionsfile and configfile.
@@ -144,9 +152,6 @@ extern int load_trustfile(struct client_state *csp);
 #endif /* def FEATURE_TRUST */
 
 
-
-extern jb_err create_url_spec(struct url_spec * url, char * buf);
-extern void free_url(struct url_spec *url);
 
 extern void add_loader(int (*loader)(struct client_state *), 
                        struct configuration_spec * config);
