@@ -1,7 +1,7 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.21 2001/07/13 13:59:53 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.22 2001/07/18 12:29:34 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -38,6 +38,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.21 2001/07/13 13:59:53 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.22  2001/07/18 12:29:34  oes
+ *    - Made gif_deanimate_response respect
+ *      csp->action->string[ACTION_STRING_DEANIMATE]
+ *    - Logging cosmetics
+ *
  *    Revision 1.21  2001/07/13 13:59:53  oes
  *     - Introduced gif_deanimate_response which shares the
  *       generic content modification interface of pcrs_filter_response
@@ -914,6 +919,12 @@ char *pcrs_filter_response(struct client_state *csp)
    if ( ( NULL == (fl = csp->rlist) ) || ( NULL == (b = fl->f) ) )
    {
       log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+      return(NULL);
+   }
+
+   if ( NULL == b->joblist )
+   {
+      log_error(LOG_LEVEL_RE_FILTER, "Empty joblist. Nothing to do.");
       return(NULL);
    }
 
