@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.90 2002/04/02 14:57:28 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.91 2002/04/08 20:35:58 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.90 2002/04/02 14:57:28 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.91  2002/04/08 20:35:58  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.90  2002/04/02 14:57:28  oes
  *    Made sending wafers independent of FEATURE_COOKIE_JAR
  *
@@ -786,8 +789,15 @@ static void chat(struct client_state *csp)
       len = read_socket(csp->cfd, buf, sizeof(buf));
 
       if (len <= 0) break;      /* error! */
-
-      add_to_iob(csp, buf, len);
+      
+      /*
+       * If there is no memory left for buffering the
+       * request, there is nothing we can do but hang up
+       */
+      if (add_to_iob(csp, buf, len))
+      {
+         return;
+      }
 
       req = get_header(csp);
 
@@ -1002,7 +1012,15 @@ static void chat(struct client_state *csp)
             log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
             return;
          }
-         add_to_iob(csp, buf, len);
+         
+         /*
+          * If there is no memory left for buffering the
+          * request, there is nothing we can do but hang up
+          */
+         if (add_to_iob(csp, buf, len))
+         {
+            return;
+         }
          continue;
       }
 
@@ -1359,41 +1377,50 @@ static void chat(struct client_state *csp)
          {
             if (content_filter)
             {
-               add_to_iob(csp, buf, len);
-
                /*
-                * If the buffer limit will be reached on the next read,
-                * switch to non-filtering mode, i.e. make & write the
-                * header, flush the socket and get out of the way.
+                * If there is no memory left for buffering the content, or the buffer limit
+                * has been reached, switch to non-filtering mode, i.e. make & write the
+                * header, flush the iob and buf, and get out of the way.
                 */
-               if (((size_t)(csp->iob->eod - csp->iob->buf)) + (size_t)BUFFER_SIZE > csp->config->buffer_limit)
+               if (add_to_iob(csp, buf, len))
                {
                   size_t hdrlen;
+                  int flushed;
 
-                  log_error(LOG_LEVEL_ERROR, "Buffer size limit reached! Flushing and stepping back.");
+                  log_error(LOG_LEVEL_ERROR, "Flushing header and buffers. Stepping back from filtering.");
 
                   hdr = sed(server_patterns, add_server_headers, csp);
                   if (hdr == NULL)
                   {
-                     /* FIXME Should handle error properly */
-                     log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
+                     /* 
+                      * Memory is too tight to even generate the header.
+                      * Send our static "Out-of-memory" page.
+                      */
+                     log_error(LOG_LEVEL_ERROR, "Out of memory while trying to flush.");
+                     rsp = cgi_error_memory();
+
+                     if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+                         || write_socket(csp->cfd, rsp->body, rsp->content_length))
+                     {
+                        log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
+                     }
+                     return;
                   }
 
                   hdrlen = strlen(hdr);
-                  byte_count += hdrlen;
 
                   if (write_socket(csp->cfd, hdr, hdrlen)
-                   || ((len = flush_socket(csp->cfd, csp)) < 0))
+                   || ((flushed = flush_socket(csp->cfd, csp)) < 0)
+                   || (write_socket(csp->cfd, buf, len)))
                   {
-                     log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
+                     log_error(LOG_LEVEL_CONNECT, "Flush header and buffers to client failed: %E");
 
                      freez(hdr);
                      return;
                   }
 
+                  byte_count += hdrlen + flushed + len;
                   freez(hdr);
-                  byte_count += len;
-
                   content_filter = NULL;
                   server_body = 1;
 
@@ -1417,8 +1444,23 @@ static void chat(struct client_state *csp)
              * parsing an "out of body experience" ?
              */
 
-            /* buffer up the data we just read */
-            add_to_iob(csp, buf, len);
+            /* 
+             * buffer up the data we just read.  If that fails, 
+             * there's little we can do but send our static
+             * out-of-memory page.
+             */
+            if (add_to_iob(csp, buf, len))
+            {
+               log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
+               rsp = cgi_error_memory();
+               
+               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+                   || write_socket(csp->cfd, rsp->body, rsp->content_length))
+               {
+                  log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
+               }
+               return;
+            }
 
             /* get header lines from the iob */
 
