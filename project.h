@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.15 2001/06/04 11:28:53 swa Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.16 2001/06/04 18:31:58 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.16  2001/06/04 18:31:58  swa
+ *    files are now prefixed with either `confdir' or `logdir'.
+ *    `make redhat-dist' replaces both entries confdir and logdir
+ *    with redhat values
+ *
  *    Revision 1.15  2001/06/04 11:28:53  swa
  *    redirect did not work due to missing /
  *
@@ -283,9 +288,6 @@ extern "C" {
 #define HADDR_PORT      8000
 
 
-/* Need this for struct gateway */
-struct client_state;
-
 /* Need this for struct client_state */
 struct configuration_spec;
 
@@ -302,15 +304,6 @@ struct map
   char *name;
   char *value;
   struct map *next;
-};
-
-
-/* Generic linked list of strings */
-struct list_share /* FIXME: Why not separate entries and header? */
-{
-   const char *       str;  /* valid in an entry */
-   struct list_share *last; /* valid in header */
-   struct list_share *next;
 };
 
 struct http_request
@@ -334,38 +327,30 @@ struct http_response
   char *head;             /* Formatted http response head */
   char *body;             /* HTTP document body */
 };
-  
-struct gateway
-{
-   /* generic attributes */
-   char *name;
-   int (*conn)(const struct gateway *, struct http_request *, struct client_state *);
-   int   type;
-
-   /* domain specific attributes */
-   char *gateway_host;
-   int   gateway_port;
-
-   char *forward_host;
-   int   forward_port;
-};
-
 
 /* A URL pattern */
 struct url_spec
 {
-   char  *spec;
-   char  *domain;        /* fqdn */
-   char  *dbuf;
-   char **dvec;          /* Domain ptr vector */
-   int    dcnt;          /* How many domains in fqdn? */
-   int    unanchored;    /* bitmap 0: left, 1: right */
+   char  *spec;        /* The string which was parsed to produce this       */
+                       /* url_spec.  Used for debugging or display only.    */
 
-   char *path;
-   int   pathlen;
-   int   port;
+   /* Hostname matching: */
+   char  *domain;      /* Fully qalified domain name (FQDN) pattern.        */
+                       /* May contain "*".                                  */
+   char  *dbuf;        /* FIXME: Comment this                               */
+   char **dvec;        /* Domain ptr vector                                 */
+   int    dcnt;        /* How many domains in fqdn?                         */
+   int    unanchored;  /* Bitmap - flags are ANCHOR_LEFT and ANCHOR_RIGHT   */
+
+   /* Port matching: */
+   int   port;         /* The port number, or 0 to match all ports.         */
+
+   /* Path matching: */
+   char *path;         /* The path prefix (if not using regex), or source   */
+                       /* for the regex.                                    */
+   int   pathlen;      /* ==strlen(path).  Needed for prefix matching.      */
 #ifdef REGEX
-   regex_t *preg;
+   regex_t *preg;      /* Regex for matching path part                      */
 #endif
 };
 
@@ -390,7 +375,7 @@ struct iob
 
 #define ACTION_MASK_ALL        (~0U)
 
-#define ACTION_MOST_COMPATIBLE 0U
+#define ACTION_MOST_COMPATIBLE 0x0000U
 
 #define ACTION_BLOCK           0x0001U
 #define ACTION_FAST_REDIRECTS  0x0002U
@@ -416,7 +401,12 @@ struct iob
 #define ACTION_MULTI_WAFER          1
 #define ACTION_MULTI_COUNT          2
 
-
+/*
+ * This structure contains a list of actions to apply to a URL.
+ * It only contains positive instructions - no "-" options.
+ * It is not used to store the actions list itself, only for
+ * url_actions() to return the current values.
+ */
 struct current_action_spec
 {
    unsigned flags;    /* a bit set to "1" = add action    */
@@ -430,6 +420,12 @@ struct current_action_spec
    struct list multi[ACTION_MULTI_COUNT][1];
 };
 
+
+/*
+ * This structure contains a set of changes to actions.
+ * It can contain both positive and negative instructions.
+ * It is used to store an entry in the actions list.
+ */
 struct action_spec
 {
    unsigned mask;   /* a bit set to "0" = remove action */
@@ -450,6 +446,12 @@ struct action_spec
    struct list multi_add[ACTION_MULTI_COUNT][1];
 };
 
+/*
+ * This structure is used to store the actions list.
+ *
+ * It contains a URL pattern, and the chages to the actions.
+ * It is a linked list.
+ */
 struct url_actions
 {
    struct url_spec url[1];
@@ -561,13 +563,7 @@ struct client_state
    int active;
 
    /* files associated with this client */
-   struct file_list *flist;   /* forwardfile */
    struct file_list *actions_list;
-
-
-#ifdef ACL_FILES
-   struct file_list *alist;   /* aclfile */
-#endif /* def ACL_FILES */
 
 #ifdef PCRS
      struct file_list *rlist;   /* Perl re_filterfile */
@@ -649,10 +645,26 @@ struct block_spec
 #endif /* def TRUST_FILES */
 
 
+#define SOCKS_NONE    0    /* Don't use a SOCKS server */
+#define SOCKS_4      40    /* original SOCKS 4 protocol */
+#define SOCKS_4A     41    /* as modified for hosts w/o external DNS */
+
 struct forward_spec
 {
    struct url_spec url[1];
-   struct gateway gw[1];
+
+   /* Connection type - must be a SOCKS_xxx constant */
+   int   type;
+
+   /* SOCKS server */
+   char *gateway_host;
+   int   gateway_port;
+
+   /* Parent HTTP proxy */
+   char *forward_host;
+   int   forward_port;
+
+   /* For the linked list */
    struct forward_spec *next;
 };
 
@@ -688,7 +700,7 @@ struct access_control_list
 #endif /* def ACL_FILES */
 
 
-/* Maximum number of loaders (actions, block, forward, acl...) */
+/* Maximum number of loaders (actions, re_filter, ...) */
 #define NLOADERS 8
 
 /*
@@ -706,11 +718,6 @@ struct configuration_spec
    const char *confdir;
    const char *logdir;
    const char *actions_file;
-   const char *forwardfile;
-
-#ifdef ACL_FILES
-   const char *aclfile;
-#endif /* def ACL_FILES */
 
 #ifdef PCRS
    const char *re_filterfile;
@@ -744,10 +751,15 @@ struct configuration_spec
    struct url_spec *trust_list[64];
 #endif /* def TRUST_FILES */
 
+#ifdef ACL_FILES
+   struct access_control_list *acl;
+#endif /* def ACL_FILES */
+
+   struct forward_spec *forward;
+
    /* Various strings for show-proxy-args */
    char *proxy_args_header;
    char *proxy_args_invocation;
-   char *proxy_args_gateways;
    char *proxy_args_trailer;
 
    /* the configuration file object. */
