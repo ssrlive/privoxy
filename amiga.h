@@ -1,7 +1,7 @@
 #ifdef AMIGA
 #ifndef _AMIGA_H
 #define _AMIGA_H
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $"
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.2 2001/05/23 00:13:58 joergs Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
@@ -31,6 +31,9 @@
  *
  * Revisions   :
  *    $Log: amiga.h,v $
+ *    Revision 1.2  2001/05/23 00:13:58  joergs
+ *    AmigaOS support fixed.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:46  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -54,8 +57,8 @@
 
 struct UserData
 {
-	struct Library *sb;
-	int eno;
+   struct Library *sb;
+   int eno;
 };
 
 #define SocketBase ((struct Library *)(((struct UserData *)(FindTask(NULL)->tc_UserData))->sb))
