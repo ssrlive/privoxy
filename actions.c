@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.12 2001/09/16 13:21:27 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.13 2001/09/16 15:47:37 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,12 @@ const char actions_rcs[] = "$Id: actions.c,v 1.12 2001/09/16 13:21:27 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.13  2001/09/16 15:47:37  jongfoster
+ *    First version of CGI-based edit interface.  This is very much a
+ *    work-in-progress, and you can't actually use it to edit anything
+ *    yet.  You must #define FEATURE_CGI_EDIT_ACTIONS for these changes
+ *    to have any effect.
+ *
  *    Revision 1.12  2001/09/16 13:21:27  jongfoster
  *    Changes to use new list functions.
  *
@@ -1047,7 +1053,7 @@ int load_actions_file(struct client_state *csp)
       return 1; /* never get here */
    }
 
-   while (read_config_line(buf, sizeof(buf), fp, fs) != NULL)
+   while (read_config_line(buf, sizeof(buf), fp) != NULL)
    {
       if (*buf == '{')
       {

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.20 2001/07/30 22:08:36 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.21 2001/09/16 17:10:43 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.20 2001/07/30 22:08:36 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.21  2001/09/16 17:10:43  jongfoster
+ *    Moving function savearg() here, since it was the only thing left in
+ *    showargs.c.
+ *
  *    Revision 1.20  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -458,7 +462,7 @@ struct configuration_spec * load_config(void)
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
-   while (read_config_line(buf, sizeof(buf), configfp, fs) != NULL)
+   while (read_config_line(buf, sizeof(buf), configfp) != NULL)
    {
       char cmd[BUFFER_SIZE];
       char arg[BUFFER_SIZE];

@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.8 2001/07/29 18:58:15 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.9 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.9  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.8  2001/07/29 18:58:15  jongfoster
  *    Removing nested #includes, adding forward declarations for needed
  *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
@@ -113,7 +119,7 @@ struct configuration_spec;
 struct url_spec;
 
 extern void sweep(void);
-extern char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs);
+extern char *read_config_line(char *buf, int buflen, FILE *fp);
 extern int check_file_changed(const struct file_list * current,
                               const char * filename,
                               struct file_list ** newfl);
