@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.78 2002/04/09 13:37:11 sarantis Exp $
+# $Id: GNUmakefile.in,v 1.79 2002/04/11 06:49:28 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -467,38 +467,22 @@ win-dist:
 # Tarball distribution. Only source files. No binaries.
 #############################################################################
 
-MISC_FILES = install-sh config.sub configure.in GNUmakefile.in config.h.in config.guess privoxy*
-
-tarball-dist: dist-check
+tarball-dist: dist-check clean clobber
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
-# add source files
-	for foo in `find . -name "*.c"`; do \
-		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
-	done; 
-# add header files
-	for foo in `find . -name "*.h"`; do \
-		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
-	done; 
-# add config files
-	for foo in $(CONFIG_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
-	done; 
-# add misc files
-	for foo in $(MISC_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
-	done; 
-# add documentation
-	for foo in $(DOC_FILES); do \
-		(cd .. && $(TAR) -uvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
-	done;
+
+	for i in `find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; do \
+	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
+	done &&  \
+	cd .. && $(TAR) cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
+
 # and zip the archive
-	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
+	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS) 
 	$(GZIP_PROG) ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Tarball distribution created.
 
 # anonymously ncftps the tarball to sourceforge
 tarball-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
@@ -507,7 +491,7 @@ tarball-upload:
 
 # handle with care
 tarball-clean:
-	$(RM) privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+	$(RM) ../rivoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 
 #############################################################################
 #
@@ -801,6 +785,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.79  2002/04/11 06:49:28  oes
+# webserver target: silenced timestamp warnings resulting from uploading westwards, made permissions fixing independant of screwed local dir permissions, suppress (false alarm) make error if not owner of feedback log
+#
 # Revision 1.78  2002/04/09 13:37:11  sarantis
 # fix tar options typo
 #
