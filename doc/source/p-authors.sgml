@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 1.10 2002/06/03 00:28:17 hal9 Exp $
+ $Id: p-authors.sgml,v 1.8.2.3 2002/07/30 20:05:42 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,6 +53,7 @@
  Guy
  Haroon Rafique
  Roland Rosenfeld
+ Georg Sauthoff
  David Schmidt (OS/2, Mac OSX ports)
  Joerg Strohmayer
  Sarantis Paskalis
