@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/config.h.in,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/README,v $
  *
  * Purpose     :  README file to give a short intro.
  *
@@ -54,13 +54,12 @@ For tarball, first unpack:
  make install
 
 Redhat and SuSE src and binary RPMs can be built with 'make
-redhat-dist' or 'make suse-dist'.
+redhat-dist' or 'make suse-dist' (run ./configure first).
 
 Junkbuster is also availabe via anonymous CVS:
 
  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
- cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co
-current
+ cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
 
 This will create a directory named 'current'. Then, 'cd current', and then
 build as above.
@@ -106,4 +105,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id$
+$Id: README,v 1.1 2001/09/13 15:24:30 swa Exp $
