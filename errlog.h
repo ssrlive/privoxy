@@ -1,6 +1,6 @@
 #ifndef _ERRLOG_H
 #define _ERRLOG_H
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.5 2001/05/26 17:25:14 jongfoster Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.6 2001/07/13 13:59:22 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,11 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.6  2001/07/13 13:59:22  oes
+ *     - Added LOG_LEVEL_DEANIMATE
+ *     - Changed LOG_LEVEL_CLF
+ *     - Removed all #ifdef PCRS
+ *
  *    Revision 1.5  2001/05/26 17:25:14  jongfoster
  *    Added support for CLF (Common Log Format) and fixed LOG_LEVEL_LOG
  *
@@ -118,6 +123,9 @@ extern "C" {
 #define LOG_LEVEL_DEANIMATE  0x0100
 
 #define LOG_LEVEL_CLF        0x0200 /* Common Log File format */
+#ifdef KILLPOPUPS
+#define LOG_LEVEL_POPUPS	0x0400 /* Kill Popups */
+#endif /* def KILLPOPUPS */
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000
