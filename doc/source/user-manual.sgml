@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $
+ $Id: user-manual.sgml,v 1.122 2002/05/24 13:24:08 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.122 2002/05/24 13:24:08 oes Exp $</pubdate>
 
 <!--
 
@@ -95,8 +95,8 @@ Hal.
 ]]>
 
  <para>
-  The user manual gives users information on how to install, configure and use
-  <ulink
+  The <citetitle>User Manual</citetitle> gives users information on how to
+  install, configure and use <ulink
   url="http://www.privoxy.org/"><application>Privoxy</application></ulink>.
  </para>
 
@@ -105,7 +105,7 @@ Hal.
 <!-- end privoxy.sgml -->
 
  <para>
-  You can find the latest version of the user manual at  <ulink
+  You can find the latest version of the <citetitle>User Manual</citetitle> at  <ulink
   url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
   Please see the <ulink url="contact.html">Contact section</ulink> on how to
   contact the developers.
@@ -187,7 +187,7 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-rpm"><title>Red Hat, SuSE RPMs and Conectiva</title>
+<sect3 id="installation-pack-rpm"><title>Red Hat, SuSE and Conectiva RPMs</title>
 
 <para>
  RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
@@ -205,7 +205,7 @@ automatically start Privoxy in the boot process.
 
 <para>
  If you have problems with failed dependencies, try rebuilding the SRC RPM: 
- <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm;</literal>. This 
+ <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm</literal>. This 
  will use your locally installed libraries and RPM version. 
 </para>
 
@@ -540,7 +540,7 @@ automatically start Privoxy in the boot process.
 <para> 
  This section will provide a quick summary of ad blocking so 
  you can get up to speed quickly without having to read the more extensive
- information provided below, though this is highly recommeneded.
+ information provided below, though this is highly recommended.
 </para>
 <para>
  First a bit of a warning ... blocking ads is much like blocking SPAM: the
@@ -580,7 +580,7 @@ automatically start Privoxy in the boot process.
  respective actions. If not, then nothing special happens. Futhermore, web
  pages may contain embedded, secondary URLs that your web browser will
  use to load additional components of the page, as it parses the
- original page's HTML content. An ad image for instance, is just a URL
+ original page's HTML content. An ad image for instance, is just an URL
  embedded in the page somewhere. The image itself may be on the same server,
  or a server somewhere else on the Internet. Complex web pages will have many
  such embedded URLs.
@@ -613,12 +613,13 @@ automatically start Privoxy in the boot process.
    tells <application>Privoxy</application> to treat this URL as an image.
    <application>Privoxy</application>'s default configuration already does this
    for all common image types (e.g. GIF), but there are many situations where this
-   is not as easy to determine. So we'll force it in these cases. This is particularly
-   important for ad blocking, since  only if we know that it's an image, we can replace
-   it by an image instead of the BLOCKED page, which would only result in a
-   <quote>broken image</quote> icon. There are some limitations to this though. For
-   instance, you can't just brute-force an image substituion for an entire HTML page
-   in most situations.
+   is not so easy to determine. So we'll force it in these cases. This is particularly
+   important for ad blocking, since  only if we know that it's an image of
+   some kind, can we replace it with an image of our chosing, instead of the 
+   <application>Privoxy</application> BLOCKED page (which would only result in
+   a <quote>broken image</quote> icon). There are some limitations to this
+   though. For instance, you can't just brute-force an image substituion for
+   an entire HTML page in most situations.
   </para>
  </listitem> 
 
@@ -708,7 +709,7 @@ automatically start Privoxy in the boot process.
       <imagedata  fileref="../images/files-in-use.jpg" format="jpg">
        </imageobject> 
        <textobject>
-        <phrase>Screenshot of Files in Use</phrase>
+        <phrase>[ Screenshot of Actions Files in Use ]</phrase>
       </textobject>
    </mediaobject>
   </figure>
@@ -780,15 +781,60 @@ automatically start Privoxy in the boot process.
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
  used port 8000). This is the one configuration step that must be done!
 </para>
+
+ <!-- image of Mozilla Proxy configuration -->
+ <para>
+  <figure pgwide="0" float="0"><title>Proxy Configuration (Mozilla)</title>
+   <mediaobject>
+     <imageobject>
+      <imagedata  fileref="../images/proxy_setup.jpg" format="jpg">
+       </imageobject> 
+       <textobject>
+        <phrase>[ Screenshot of Mozilla Proxy Configuration ]</phrase>
+      </textobject>
+   </mediaobject>
+  </figure>
+ </para>
  
 <para> 
  With <application>Netscape</application> (and
- <application>Mozilla</application>), this can be set under <literal>Edit
- -&gt; Preferences -&gt; Advanced -&gt; Proxies -&gt; HTTP Proxy</literal>.
- For <application>Internet Explorer</application>: <literal>Tools -&gt;
- Internet Properties -&gt; Connections -&gt; LAN Setting</literal>. Then,
- check <quote>Use Proxy</quote> and fill in the appropriate info (Address:
- 127.0.0.1, Port: 8118). Include if HTTPS proxy support too.
+ <application>Mozilla</application>), this can be set under:
+</para>
+ 
+<literallayout>
+<!-- Mix ascii and gui art, something for everybody -->
+<!-- spacing on this is tricky -->
+ <guibutton>Edit</guibutton>
+   |_   
+         <guibutton>Preferences</guibutton>
+                |_       
+                        <guibutton>Advanced</guibutton>
+                              |_     
+                                    <guibutton>Proxies</guibutton>
+                                         |_       
+                                                <guibutton>HTTP Proxy</guibutton>
+</literallayout>
+
+<para>
+ For <application>Internet Explorer</application>: 
+</para>
+
+<literallayout>
+<!-- Mix ascii and gui art, something for everybody -->
+<!-- spacing on this is tricky -->
+ <guibutton>Tools</guibutton>
+     |_   
+         <guibutton>Internet Properties</guibutton>
+                            |_       
+                                      <guibutton>Connections</guibutton>
+                                               |_     
+                                                            <guibutton>LAN Settings</guibutton>
+</literallayout>
+
+<para>
+ Then, check <quote>Use Proxy</quote> and fill in the appropriate info
+ (Address: 127.0.0.1, Port: 8118). Include HTTPS (SSL), if you want HTTPS
+ proxy support too. 
 </para>
 
 <para>
@@ -809,9 +855,9 @@ automatically start Privoxy in the boot process.
 <sect2 id="start-redhat">
 <title>RedHat and Conectiva</title>
 <para>
-We use a script. Note that RedHat does not start Privoxy upon booting per
-default. It will use the file <filename>/etc/privoxy/config</filename> as its
-main configuration file.
+ We use a script. Note that RedHat does not start Privoxy upon booting per
+ default. It will use the file <filename>/etc/privoxy/config</filename> as
+ its main configuration file.
 </para>
 <para>
  <screen>
@@ -1102,7 +1148,7 @@ must find a better place for this paragraph
 <!-- Needs to be put in a table and colorized  -->
 <screen>
  <msgtext>
- <bridgehead renderas="sect2">Privoxy Menu</bridgehead>
+ <bridgehead renderas="sect2">&nbsp;&nbsp;&nbsp;&nbsp;Privoxy Menu</bridgehead>
 
  <simplelist>
  <member>
@@ -5267,7 +5313,7 @@ shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
 <para>
  The first regular section is probably the most important. It has only
  one pattern, <quote><literal>/</literal></quote>, but this pattern
- <link linkend="af-patterns">matches all URLs.</link>. Therefore, the
+ <link linkend="af-patterns">matches all URLs</link>. Therefore, the
  set of actions used in this <quote>default</quote> section <emphasis>will
  be applied to all requests as a start</emphasis>. It can  be partly or
  wholly overridden by later matches further down this file, or in user.action,
@@ -5278,7 +5324,7 @@ shop        = mercy-for-cookies -filter{popups} -kill-popups</screen>
 <para>
  Again, at the start of matching, all actions are disabled, so there is
  no real need to disable any actions here, but we will do that nonetheless,
- to have a complete listing for your reference. (Remember: A <quote>+</quote>
+ to have a complete listing for your reference. (Remember: a <quote>+</quote>
  preceding the action name enables the action, a <quote>-</quote> disables!).
  Also note how this long line has been made more readable by splitting it into
  multiple lines with line continuation.
@@ -5591,7 +5637,7 @@ www.ugu.com/sui/ugu/adv</screen>
 <para>
  So far we are painting with a broad brush by setting general policies,
  which would be a reasonable starting point for many people. Now, 
- you'd maybe want to be more specific and have customized rules that
+ you might want to be more specific and have customized rules that
  are more suitable to your personal habits and preferences. These would
  be for narrowly defined situations like your ISP or your bank, and should
  be placed in <filename>user.action</filename>, which is parsed after all other 
@@ -6076,7 +6122,7 @@ s* industry[ -]leading \
  and all pages of its <ulink url="http://config.privoxy.org/">web-based
  user interface</ulink>, are generated from <emphasis>templates</emphasis>. 
  (<application>Privoxy</application> must be running for the above links to work as
- intended)
+ intended.)
 </para>
 
 <para>
@@ -6992,7 +7038,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  One last example. Let's try <quote>http://www.rhapsodyk.net/adsl/HOWTO/</quote>.
- This one is giving us problems. We are getting a blank page. Hmmm...
+ This one is giving us problems. We are getting a blank page. Hmmm ...
 </para>
 
 <para>
@@ -7142,6 +7188,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.122  2002/05/24 13:24:08  oes
+ Added Bookmarklet for one-click pre-filled access to show-url-info
+
  Revision 1.121  2002/05/23 23:20:17  oes
   - Changed more (all?) references to actions to the
     <literal><link> style.
