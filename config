@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.2 2001/05/17 22:37:46 oes Exp $
+# $Id: config,v 1.3 2001/05/20 01:21:20 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -339,9 +339,9 @@ referer     L
 #
 #  As an example of the last option:
 #
-#    tinygif 3 http://www.junkbusters.com/images/fb.gif
+#    tinygif 3 http://no.where/ijb-send-banner.gif
 #
-#  Will replace every blocked image with the "fb.gif" image.
+#  Will replace every blocked image with an image built into junkbuster.
 #
 #  There is one non-obvious benefit to using option "3".  If you use
 #  option 3, your Web browser will likely cache the image you specify
@@ -352,6 +352,31 @@ referer     L
 #  Default: 0, i.e. send HTML
 #
 tinygif   2
+
+#
+#  Many sites, like yahoo.com, don't just link to other sites.
+#  Instead, they will link to some script on their own server,
+#  giving the destination as a parameter, which will then redirect
+#  you to the final target. 
+#
+#  URLs resulting from this scheme typically look like:
+#  http://some.place/some_script?http://some.where-else
+#
+#  Sometimes, there are even multiple consecutive redirects encoded
+#  in the URL. These redirections via scripts make your web browing
+#  more traceable, since the server from which you follow such a link
+#  can see where you go to. Apart from that, valuable bandwidth and
+#  time is wasted, while your browser aks the server for one redirect
+#  after the other. Plus, it feeds the advertisers.
+#
+#  The fast-redirects option enables interception of these requests
+#  by junkbuster, who will cut off all but the last valid URL in the
+#  request and send a local redirect back to your browser without
+#  contacting the remote site.
+#
+#  Default: Don't intercept script-redirect URLs
+#
+fast-redirects 
 
 #
 #  The debug option sets the level of debugging information to log in
@@ -367,6 +392,7 @@ tinygif   2
 #   debug        16 # LOG  = log all data into the logfile
 #   debug        32 # FRC  = debug force feature
 #   debug        64 # REF  = debug regular expression filter 
+#   debug       128 # RED  = debug fast redirects
 #
 #  Multiple "debug" directives, are OK - they're logical-OR'd
 #  together. 

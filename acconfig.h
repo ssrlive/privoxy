@@ -2,7 +2,7 @@
 #define _CONFIG_H
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/acconfig.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/acconfig.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:45  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -98,6 +101,11 @@
  * Bypass filtering for 1 page only
  */
 #undef FORCE_LOAD
+
+/*
+ * Locally redirect remote script-redirect URLs
+ */
+#undef FAST_REDIRECTS
 
 /*
  * Split the show-proxy-args page into a page for each config file.
