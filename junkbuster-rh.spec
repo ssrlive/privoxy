@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.11 2001/07/03 11:00:25 sarantis Exp $
+# $Id: junkbuster-rh.spec,v 1.12 2001/09/10 16:25:04 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.12  2001/09/10 16:25:04  swa
+# copy all templates. version updated.
+#
 # Revision 1.11  2001/07/03 11:00:25  sarantis
 # replaced permissionsfile with actionsfile
 #
@@ -154,7 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-# %doc ijbfaq.html ijbman.html README README.TOO gpl.html
+%doc faq.html user-manual.html developer-manual.html
 %doc junkbuster.weekly junkbuster.monthly
 %dir %{ijbconf}
 %config %{ijbconf}/*
