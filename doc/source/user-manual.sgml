@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.15 2001/10/14 23:46:24 hal9 Exp $
+ $Id: user-manual.sgml,v 1.16 2001/10/21 17:19:21 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.15 2001/10/14 23:46:24 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.16 2001/10/21 17:19:21 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -206,6 +206,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
+ autoconf       #recommended for CVS source
  ./configure
  make
  su
@@ -228,6 +229,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
+ autoconf       #recommended for CVS source
  ./configure
  make redhat-dist
  </screen>
@@ -270,6 +272,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 
 <para>
  <screen>
+ autoconf       #recommended for CVS source
  ./configure
  make suse-dist
  </screen>
@@ -418,6 +421,9 @@ configuration section below. HB.)
    <para>
     The <filename>actionsfile</filename> file is used  to define various 
     actions relating to images, banners, pop-ups, banners and cookies.
+    There is a CGI based editor for this file that can be accessed 
+    via <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>.
+    (Still under active development.)
    </para>
   </listitem> 
 
@@ -468,7 +474,7 @@ configuration section below. HB.)
 </para>
 
 <para>
- The <quote><literal>#</literal></quote> indicates a comment.  Any part of a
+ A <quote><literal>#</literal></quote> indicates a comment.  Any part of a
  line following a <quote><literal>#</literal></quote> is ignored, except if
  the <quote><literal>#</literal></quote> is preceded by a
  <quote><literal>\</literal></quote>.
@@ -492,7 +498,7 @@ configuration section below. HB.)
 
 <para>
  There are various aspects of <application>Junkbuster</application> behavior 
- that can be adjusted.
+ that can be tuned.
 </para>
 
 
@@ -928,6 +934,84 @@ configuration section below. HB.)
  </literal>
 </para>
 
+<para>
+ For content filtering, i.e. the <quote>+filter</quote> and
+ <quote>+deanimate-gif</quote> actions, it is neccessary that 
+ <application>Junkbuster</application> buffers up the entire document body.
+ This can be potentially dangerous, since a server could just keep sending
+ data indefinitely and wait for your RAM to exhaust.
+</para>
+
+<para>
+ The <application>buffer-limit</application> option lets you set the maximum
+ size in Kbytes that each buffer may use. When the documents buffer exceeds
+ this size, it is flushed to the client unfiltered and no further attempt to
+ filter the rest of it is made. Remember that there may multiple threads
+ running, which might require increasing the <quote>buffer-limit</quote>
+ Kbytes <emphasis>each</emphasis>, unless you have enabled 
+ <quote>single-threaded</quote> above.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>buffer-limit    4069</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ To enable the web-based actionsfile editor set
+ <application>enable-edit-actions</application> to 1, or 0 to disable.  Note
+ that you must have compiled <application>JunkBuster</application> with
+ support for this feature, otherwise this option has no effect. This 
+ internal page can be reached at <ulink
+ url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>.
+ </para>
+
+<para>
+ Security note: If this is enabled, anyone who can use the proxy
+ can edit the actions file, and their changes will affect all users.
+ For shared proxies, you probably want to disable this. Default: enabled.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>enable-edit-actions    1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
+<para>
+ Allow <application>JunkBuster</application> to be toggled on and off
+ remotely, using your web browser.  Set <quote>enable-remote-toggle</quote>to
+ 1 to enable, and 0 to disable.  Note that you must have compiled 
+ <application>JunkBuster</application> with support for this feature,
+ otherwise this option has no effect.
+</para>
+
+<para>
+ Security note:  If this is enabled, anyone who can use the proxy
+ can toggle it on or off, and their changes will affect all users.
+ For shared proxies, you probably want to disable this. Default: 
+ enabled.
+</para>
+
+<para>
+ <literal>
+  <MSGText> 
+   <literallayout>
+  <emphasis>enable-remote-toggle    1</emphasis>
+   </literallayout>
+  </MSGText> 
+ </literal>
+</para>
+
 </sect3>
 
 <!--  ~  End section  ~  -->
@@ -1164,7 +1248,8 @@ configuration section below. HB.)
  This feature allows chaining of HTTP requests via multiple proxies.
  It can be used to better protect privacy and confidentiality when
  accessing specific domains by routing requests to those domains
- to a special purpose filtering proxy such as lpwa.com.
+ to a special purpose filtering proxy such as lpwa.com. Or to use 
+ a caching proxy to speed up browsing.
 </para>
 
 <para>
@@ -2440,7 +2525,7 @@ Removed references to Win32. HB 09/23/01
  <quote>-</quote>. Alias names are not case sensitive, and 
  <emphasis>must be defined  before anything</emphasis> else in
  <filename>actionsfile</filename>! And there can only be one set of
- <quote>aliases</quote> of defined.
+ <quote>aliases</quote> defined.
 </para>
 
 <para>
@@ -2605,15 +2690,14 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- Be sure your browser is set to use 
- the proxy which is by default at localhost, port 8000. With 
- <application>Netscape</application> (and <application>Mozilla</application>),
- this can be set under <literal>Edit -&gt; Preferences -&gt; Advanced -&gt;
- Proxies -&gt; HTTP Proxy</literal>. For <application>Internet
- Explorer</application>: <literal>Tools &gt; Internet Properties -&gt;
- Connections -&gt; LAN Setting</literal>. Then, check <quote>Use Proxy</quote>
- and fill in the appropriate info (Address: localhost, Port: 8000). 
- Include if HTTPS proxy support too.
+ Be sure your browser is set to use the proxy which is by default at
+ localhost, port 8000. With <application>Netscape</application> (and
+ <application>Mozilla</application>), this can be set under <literal>Edit
+ -&gt; Preferences -&gt; Advanced -&gt; Proxies -&gt; HTTP Proxy</literal>.
+ For <application>Internet Explorer</application>: <literal>Tools &gt;
+ Internet Properties -&gt; Connections -&gt; LAN Setting</literal>. Then,
+ check <quote>Use Proxy</quote> and fill in the appropriate info (Address:
+ localhost, Port: 8000). Include if HTTPS proxy support too.
 </para>
 
 <para>
@@ -2649,7 +2733,21 @@ Removed references to Win32. HB 09/23/01
  After running <application>Junkbuster</application> for a while, you can 
  start to fine tune the configuration to suit your personal, or site, 
  preferences and requirements. There are many, many aspects that can 
- be customized.
+ be customized. <quote>Actions</quote> (from <filename>actionsfile</filename>) 
+ can be adjusted by pointing your browser to 
+ <ulink url="http://ijbswa.sourceforge.net/config/">http://ijbswa.sourceforge.net/config/</ulink>, 
+ and then follow the link to <quote>edit the actions list</quote>. 
+ (This is an internal page and does not require Internet access.)
+</para>
+
+<para>
+ In fact, various aspects of <application>Junkbuster</application>
+ configuration can be viewed from this page, including 
+ current configuration parameters, source code version numbers, 
+ the browser's request headers, and <quote>actions</quote> that apply 
+ to a given URL. In addition to the <filename>actionsfile</filename> 
+ editor mentioned above, <application>Junkbuster</application> can also 
+ be turned <quote>on</quote> and <quote>off</quote> from this page.
 </para>
 
 <para>
@@ -3044,6 +3142,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.16  2001/10/21 17:19:21  swa
+ wrong url in documentation
+
  Revision 1.15  2001/10/14 23:46:24  hal9
  Various minor changes. Fleshed out SEE ALSO section.
 
