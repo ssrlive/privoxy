@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.7 2001/06/03 19:12:30 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.8 2001/06/05 22:32:01 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.7 2001/06/03 19:12:30 oes Exp $
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.8  2001/06/05 22:32:01  jongfoster
+ *    New function make_path() to splice directory and file names together.
+ *
  *    Revision 1.7  2001/06/03 19:12:30  oes
  *    introduced bindup()
  *
@@ -653,7 +656,7 @@ char * make_path(const char * dir, const char * file)
 #ifdef _WIN32
       strcat(path, "\\");
 #else /* ifndef _WIN32 */
-      strcat(path, "\\");
+      strcat(path, "/");
 #endif /* ifndef _WIN32 */
       strcat(path, file);
 
