@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.120 2002/05/23 19:16:43 roro Exp $
+ $Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.120 2002/05/23 19:16:43 roro Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $</pubdate>
 
 <!--
 
@@ -6614,7 +6614,11 @@ Requests</title>
     <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions/index.php?url='+escape(location.href),'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Actions File Feedback</ulink>
    </para>
   </listitem> 
-
+  <listitem>
+   <para>
+    <ulink url="javascript:void(window.open('http://config.privoxy.org/show-url-info?url='+escape(location.href),'Why').focus());">Privoxy - Why?</ulink>
+   </para>
+  </listitem> 
  </itemizedlist>
 </para>
 
@@ -7138,6 +7142,14 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.121  2002/05/23 23:20:17  oes
+  - Changed more (all?) references to actions to the
+    <literal><link> style.
+  - Small fixes in the actions chapter
+  - Small clarifications in the quickstart to ad blocking
+  - Removed <emphasis> from <title>s since the new doc CSS
+    renders them red (bad in TOC).
+
  Revision 1.120  2002/05/23 19:16:43  roro
  Correct Debian specials (installation and startup).
 
