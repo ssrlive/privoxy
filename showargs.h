@@ -1,6 +1,6 @@
 #ifndef _SHOWARGS_H
 #define _SHOWARGS_H
-#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.1.1.1 2001/05/15 13:59:03 oes Exp $"
+#define SHOWARGS_H_VERSION "$Id: showargs.h,v 1.2 2001/05/26 00:28:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.h,v $
@@ -35,6 +35,13 @@
  *
  * Revisions   :
  *    $Log: showargs.h,v $
+ *    Revision 1.2  2001/05/26 00:28:36  jongfoster
+ *    Automatic reloading of config file.
+ *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
+ *    Most of the global variables have been moved to a new
+ *    struct configuration_spec, accessed through csp->config->globalname
+ *    Most of the globals remaining are used by the Win32 GUI.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:59:03  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -46,7 +53,7 @@
 extern "C" {
 #endif
 
-extern char *strsav(char *old, const char *text_to_append);
+
 extern void savearg(char *c, char *o, struct configuration_spec * config);
 
 extern void init_proxy_args(int argc, const char *argv[], struct configuration_spec * config);

@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.7 2001/05/26 00:28:36 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.8 2001/05/29 09:50:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,29 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.7 2001/05/26 00:28:36 jongfoste
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.8  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.7  2001/05/26 00:28:36  jongfoster
  *    Automatic reloading of config file.
  *    Removed obsolete SIGHUP support (Unix) and Reload menu option (Win32).
@@ -131,66 +154,6 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.7 2001/05/26 00:28:36 jongfoste
 #include "gateway.h"
 
 const char showargs_h_rcs[] = SHOWARGS_H_VERSION;
-
-/*********************************************************************
- *
- * Function    :  strsav
- *
- * Description :  Reallocate "old" and append text to it.  This makes
- *                it easier to append to malloc'd strings.
- *
- * Parameters  :
- *          1  :  old = Old text that is to be extended.  Will be
- *                free()d by this routine.
- *          2  :  text_to_append = Text to be appended to old.
- *
- * Returns     :  Pointer to newly malloc'ed appended string.
- *                If there is no text to append, return old.  Caller
- *                must free().
- *
- *********************************************************************/
-char *strsav(char *old, const char *text_to_append)
-{
-   int old_len, new_len;
-   char *p;
-
-   if (( text_to_append == NULL) || (*text_to_append == '\0'))
-   {
-      return(old);
-   }
-
-   if (NULL != old)
-   {
-      old_len = strlen(old);
-   }
-   else
-   {
-      old_len = 0;
-   }
-
-   new_len = old_len + strlen(text_to_append) + 1;
-
-   if (old)
-   {
-      if ((p = realloc(old, new_len)) == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "realloc(%d) bytes for proxy_args failed!", new_len);
-         /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      }
-   }
-   else
-   {
-      if ((p = (char *)malloc(new_len)) == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "malloc(%d) bytes for proxy_args failed!", new_len);
-         /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      }
-   }
-
-   strcpy(p + old_len, text_to_append);
-   return(p);
-
-}
 
 
 /*********************************************************************
