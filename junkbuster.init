@@ -36,6 +36,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.6  2001/06/28 13:38:42  sarantis
+#     formatting changes; individual return values are returned from the init script.
+#
 #     Revision 1.5  2001/06/11 11:37:40  sarantis
 #     Minor editing changes.
 #
@@ -79,7 +82,7 @@ start () {
 	# start daemon
 	[ -f /var/lock/subsys/junkbuster ] && exit 0
 	echo -n $"Starting junkbuster: "
-	daemon --user junkbust '$JB' 
+	daemon --user junkbust $JB 
 	RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && touch /var/lock/subsys/junkbuster
