@@ -4,7 +4,8 @@
 >Releasing a new version</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
 REL="HOME"
 TITLE="Privoxy Developer Manual"
 HREF="index.html"><LINK
@@ -73,7 +74,7 @@ NAME="NEWRELEASE"
 >8. Releasing a new version</A
 ></H1
 ><P
->	To minimize trouble with distribution contents, webpage
+>	To minimize trouble with distribution contents, web-page
 	errors and the like, we strongly encourage you
 	to follow this section if you prepare a new release of
 	code or new pages on the webserver.
@@ -130,7 +131,7 @@ CLASS="QUOTE"
 CLASS="FILENAME"
 >configure.in</TT
 > in
-         CVS. Also, inrease or reset the RPM release number in
+         CVS. Also, increase or reset the RPM release number in
          <TT
 CLASS="FILENAME"
 >configure.in</TT
@@ -153,8 +154,11 @@ CLASS="FILENAME"
 ></LI
 ><LI
 ><P
->        If the default actionsfile has changed since last release,
-        bump up its version info in this line:
+>        If the default <TT
+CLASS="FILENAME"
+>actionsfile</TT
+> has changed since last
+        release, bump up its version info in this line:
        </P
 ><P
 > 
@@ -206,14 +210,14 @@ CLASS="COMMAND"
         <SPAN
 CLASS="QUOTE"
 >"tarball"</SPAN
-> release. This is built with the
-        <SPAN
+> release, as required by the GPL. This is built
+        with the <SPAN
 CLASS="QUOTE"
 >"<B
 CLASS="COMMAND"
 >make tarball-dist</B
 >"</SPAN
-> Makefile 
+> Makefile
         target, and then can be uploaded with 
         <SPAN
 CLASS="QUOTE"
@@ -238,10 +242,10 @@ NAME="NEWRELEASE-WEB"
 ></H2
 ><P
 >	All files must be group-readable and group-writable (or no one else
-	will be able to change them). To update the webserver, create any
+	will be able to change them)! To update the webserver, create any
 	pages locally in the <TT
 CLASS="FILENAME"
->doc/webserver</TT
+>doc/webserver/*</TT
 > directory (or
 	create new directories under <TT
 CLASS="FILENAME"
@@ -264,6 +268,9 @@ CLASS="PROGRAMLISTING"
 ></TABLE
 >
 	</P
+><P
+>      This will do the upload to the webserver (www.privoxy.org).      
+     </P
 ><P
 >	Note that <SPAN
 CLASS="QUOTE"
@@ -293,9 +300,31 @@ CLASS="FILENAME"
 > and
 	<TT
 CLASS="FILENAME"
->doc/webserver/man-page</TT
+>doc/webserver/index.html</TT
 > automatically.
+     (<TT
+CLASS="FILENAME"
+>doc/webserver/man-page/privoxy-man-page.html</TT
+>
+     is created by a separate Makefile target, <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make
+     man</B
+>"</SPAN
+>, due to dependencies on some obscure perl scripts. 
+     See comments in <TT
+CLASS="FILENAME"
+>GNUmakefile</TT
+>.)
       </P
+><P
+> 
+      Someone should also commit these to CVS so that packagers without the
+      ability to build docs locally, have access to them. This is a separate
+      step, and should also be done before each official release.
+     </P
 ><P
 >      Please do NOT use any other means of transferring files to the
       webserver. <SPAN
@@ -388,7 +417,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  make suse-upload or make redhat-upload
+>  make suse-upload (or make redhat-upload)
 	</PRE
 ></TD
 ></TR

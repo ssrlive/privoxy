@@ -74,7 +74,7 @@ NAME="DOCUMENTATION"
 >4. Documentation Guidelines</A
 ></H1
 ><P
->    All formal documents are maintained in docbook SGML and located in the
+>    All formal documents are maintained in Docbook SGML and located in the
     <TT
 CLASS="COMPUTEROUTPUT"
 >doc/source/*</TT
@@ -149,7 +149,7 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >INSTALL</TT
 >) are maintained as plain text files in the
-     toplevel source directory. At least for the time being.
+     top-level source directory. At least for the time being.
     </P
 ><P
 >     Packagers are encouraged to include this documentation. For those without
@@ -223,6 +223,27 @@ CLASS="COMPUTEROUTPUT"
 ></LI
 ></OL
 >
+  </P
+><P
+>   Finished docs should be occasionally submitted to CVS
+   (<TT
+CLASS="FILENAME"
+>doc/webserver/*/*.html</TT
+>) so that those without 
+   the ability to build them locally, have access to them if needed.
+   This is especially important just prior to a new release! Please
+   do this <I
+CLASS="EMPHASIS"
+>after</I
+> the <TT
+CLASS="LITERAL"
+>$VERSION</TT
+> and
+   other release specific data in <TT
+CLASS="FILENAME"
+>configure.in</TT
+> has been
+   updated (this is done just prior to a new release).
   </P
 ><DIV
 CLASS="SECT2"
@@ -365,7 +386,7 @@ CLASS="EMPHASIS"
 ><TD
 >  <I
 CLASS="EMPHASIS"
->&#60;literallayout&#62;&#60;/literllayout&#62;</I
+>&#60;literallayout&#62;&#60;/literallayout&#62;</I
 >, like 
   <TT
 CLASS="LITERAL"
@@ -377,7 +398,7 @@ CLASS="LITERAL"
 ><TD
 >  <I
 CLASS="EMPHASIS"
->&#60;itemizedlist&#62;&#60;/itemizdelist&#62;</I
+>&#60;itemizedlist&#62;&#60;/itemizedlist&#62;</I
 >, list with bullets.
  </TD
 ></TR
@@ -516,13 +537,14 @@ CLASS="LITERALLAYOUT"
 ><LI
 ><P
 >     We have an international audience. Refrain from slang, or English 
-     idiosyncrasies (too many to list :).
+     idiosyncrasies (too many to list :). Humor also does not translate 
+     well sometimes.
    </P
 ></LI
 ><LI
 ><P
 >    Try to keep overall line lengths in source files to 80 characters or less
-    for obvious reasons. This is not always possible, with lenghty URLs for
+    for obvious reasons. This is not always possible, with lengthy URLs for
     instance.
    </P
 ></LI
@@ -573,7 +595,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN179"
+NAME="AEN185"
 >4.3. Privoxy Custom Entities</A
 ></H2
 ><P
@@ -629,7 +651,7 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->    Re-cyclable <SPAN
+>    Re- <SPAN
 CLASS="QUOTE"
 >"boilerplate"</SPAN
 > text entities are defined like:
@@ -678,7 +700,7 @@ CLASS="APPLICATION"
 > 
     version string, e.g. <SPAN
 CLASS="QUOTE"
->"2.9.13"</SPAN
+>"2.9.14"</SPAN
 >.
    </TD
 ></TR
@@ -690,13 +712,13 @@ CLASS="EMPHASIS"
 >: the project status, either 
     <SPAN
 CLASS="QUOTE"
->"ALPHA"</SPAN
+>"alpha"</SPAN
 >, <SPAN
 CLASS="QUOTE"
->"BETA"</SPAN
+>"beta"</SPAN
 >, or <SPAN
 CLASS="QUOTE"
->"STABLE"</SPAN
+>"stable"</SPAN
 >.
    </TD
 ></TR
@@ -711,7 +733,7 @@ CLASS="QUOTE"
 >"not stable"</SPAN
 > releases (e.g. <SPAN
 CLASS="QUOTE"
->"BETA"</SPAN
+>"beta"</SPAN
 >).
    </TD
 ></TR

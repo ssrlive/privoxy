@@ -224,7 +224,7 @@ CLASS="EMPHASIS"
 ></P
 ><P
 >If you are trying to add a small logic comment and do not
-    wish to "disrubt" the flow of the code, feel free to use a 1
+    wish to "disrupt" the flow of the code, feel free to use a 1
     line comment which is NOT on the same line as the code.</P
 ></DIV
 ><DIV
@@ -432,7 +432,7 @@ CLASS="EMPHASIS"
 >Explanation:</I
 ></P
 ><P
->Use all lowercase, and seperate words via an underscore
+>Use all lowercase, and separate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
@@ -489,7 +489,7 @@ CLASS="EMPHASIS"
 >Explanation:</I
 ></P
 ><P
->Use all lowercase, and seperate words via an underscore
+>Use all lowercase, and separate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
     reserves these for use by the compiler and system headers.) Do
     not use identifiers which are reserved in ANSI C++. (E.g.
@@ -780,14 +780,14 @@ CLASS="EMPHASIS"
 >Note:</I
 > In the special case that the if-statement is
     inside a loop, and it is trivial, i.e. it tests for a
-    condidtion that is obvious from the purpose of the block,
+    condition that is obvious from the purpose of the block,
     one-liners as above may optically preserve the loop structure
     and make it easier to read.</P
 ><P
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> developer-discrection.</P
+> developer-discretion.</P
 ><P
 ><I
 CLASS="EMPHASIS"
@@ -910,7 +910,7 @@ CLASS="EMPHASIS"
 ><I
 CLASS="EMPHASIS"
 >Note:</I
-> The former is readable and consice. The later
+> The former is readable and concise. The later
     is wordy and inefficient. Please assume that any developer new
     to the project has at least a "good" knowledge of C/C++. (Hope
     I do not offend by that last comment ... 8-)</P
@@ -1054,9 +1054,9 @@ CLASS="EMPHASIS"
 CLASS="EMPHASIS"
 >Note:</I
 > Use 1 blank line before the closing brace and 2
-    lines afterwards. This makes the end of function standout to
+    lines afterward. This makes the end of function standout to
     the most casual viewer. Although function comments help
-    seperate functions, this is still a good coding practice. In
+    separate functions, this is still a good coding practice. In
     fact, I follow these rules when using blocks in "for", "while",
     "do" loops, and long if {} statements too. After all whitespace
     is free!</P
@@ -1064,7 +1064,7 @@ CLASS="EMPHASIS"
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> developer-discrection on the number of blank
+> developer-discretion on the number of blank
     lines. Enforced is the end of function comments.</P
 ></DIV
 ><DIV
@@ -1180,7 +1180,7 @@ CLASS="EMPHASIS"
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> developer-discrection if and only if the
+> developer-discretion if and only if the
     variable is assigned a value "shortly after" declaration.</P
 ></DIV
 ></DIV
@@ -1446,7 +1446,7 @@ CLASS="EMPHASIS"
 >Note:</I
 > Please! do not add "-I." to the Makefile
     without a _very_ good reason. This duplicates the #include
-    "file.h" behaviour.</P
+    "file.h" behavior.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
@@ -1581,12 +1581,12 @@ CLASS="EMPHASIS"
 > If you declare "file_list xyz;" (without the
     pointer), then including the proper header file is necessary.
     If you only want to prototype a pointer, however, the header
-    file is unneccessary.</P
+    file is unnecessary.</P
 ><P
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> Use with discrection.</P
+> Use with discretion.</P
 ></DIV
 ></DIV
 ><DIV
@@ -1659,7 +1659,7 @@ CLASS="PROGRAMLISTING"
 
    default :
       log_error( ... );
-      ... anomly code goes here ...
+      ... anomaly code goes here ...
       continue; / break; / exit( 1 ); / etc ...
 
 } /* end switch( hash_string( cmd ) ) */</PRE
@@ -1679,7 +1679,7 @@ CLASS="EMPHASIS"
 CLASS="EMPHASIS"
 >Another Note:</I
 > This is not so much a readability issue
-    as a robust programming issue. The "anomly code goes here" may
+    as a robust programming issue. The "anomaly code goes here" may
     be no more than a print to the STDERR stream (as in
     load_config). Or it may really be an ABEND condition.</P
 ><P
@@ -1831,7 +1831,7 @@ CLASS="EMPHASIS"
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> developer-discrection.</P
+> developer-discretion.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
@@ -1847,7 +1847,7 @@ CLASS="EMPHASIS"
 >Explanation:</I
 ></P
 ><P
->Create a local stuct (on the stack) if the variable will
+>Create a local struct (on the stack) if the variable will
     live and die within the context of one function call.</P
 ><P
 >Only "malloc" a struct (on the heap) if the variable's life
@@ -1866,7 +1866,7 @@ WIDTH="100%"
 ><PRE
 CLASS="PROGRAMLISTING"
 >If a function creates a struct and stores a pointer to it in a
-list, then it should definately be allocated via `malloc'.</PRE
+list, then it should definitely be allocated via `malloc'.</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1892,7 +1892,7 @@ CLASS="EMPHASIS"
     responsible for ensuring that deletion is timely (i.e. not too
     soon, not too late). This is known as "low-coupling" and is a
     "good thing (tm)". You may need to offer a
-    free/unload/destuctor type function to accomodate this.</P
+    free/unload/destuctor type function to accommodate this.</P
 ><P
 ><I
 CLASS="EMPHASIS"
@@ -1924,7 +1924,7 @@ CLASS="EMPHASIS"
 ><I
 CLASS="EMPHASIS"
 >Status:</I
-> developer-discrection. The "main" use of this
+> developer-discretion. The "main" use of this
     standard is for allocating and freeing data structures (complex
     or nested).</P
 ></DIV
@@ -1962,7 +1962,7 @@ CLASS="SECT3"
 ><A
 NAME="S45"
 >5.7.10. "Uncertain" new code and/or changes to
-    exitinst code, use FIXME</A
+    existing code, use FIXME</A
 ></H3
 ><P
 ><I
@@ -1971,11 +1971,11 @@ CLASS="EMPHASIS"
 ></P
 ><P
 >If you have enough confidence in new code or confidence in
-    your changes, but are not *quite* sure of the reprocussions,
+    your changes, but are not *quite* sure of the repercussions,
     add this:</P
 ><P
 >/* FIXME: this code has a logic error on platform XYZ, *
-    attempthing to fix */ #ifdef PLATFORM ...changed code here...
+    attempting to fix */ #ifdef PLATFORM ...changed code here...
     #endif</P
 ><P
 >or:</P
@@ -1993,7 +1993,7 @@ CLASS="EMPHASIS"
 >Note:</I
 > If you make it clear that this may or may not
     be a "good thing (tm)", it will be easier to identify and
-    include in the project (or conversly exclude from the
+    include in the project (or conversely exclude from the
     project).</P
 ></DIV
 ></DIV
@@ -2019,7 +2019,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $";
+>const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -2079,7 +2079,7 @@ CLASS="EMPHASIS"
 >Note:</I
 > The formfeed character that is present right
     after the comment flower box is handy for (X|GNU)Emacs users to
-    skip the verbige and get to the heart of the code (via
+    skip the verbiage and get to the heart of the code (via
     `forward-page' and `backward-page'). Please include it if you
     can.</P
 ><P
@@ -2097,7 +2097,7 @@ WIDTH="100%"
 CLASS="PROGRAMLISTING"
 >#ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.28 2002/04/08 22:59:26 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.31 2002/04/11 09:32:52 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
