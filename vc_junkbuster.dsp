@@ -91,6 +91,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\actionlist.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\actions.c
 # End Source File
 # Begin Source File
@@ -181,6 +185,50 @@ SOURCE=.\showargs.h
 # Begin Group "Win32"
 
 # PROP Default_Filter ""
+# Begin Group "File Copy"
+
+# PROP Default_Filter ".win"
+# Begin Source File
+
+SOURCE=.\pcre\chartables.c.win
+
+!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
+
+# Begin Custom Build - Copying pcre\chartables.c.win
+InputDir=".\pcre"
+InputPath=.\pcre\chartables.c.win
+
+"$(InputDir)\chartables.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(InputDir)\chartables.c
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\config.h.win
+
+!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
+
+# Begin Custom Build - Copying config.h.win
+InputDir=.
+InputPath=.\config.h.win
+
+"$(InputDir)\config.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) $(InputDir)\config.h
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\cygwin.h
@@ -284,15 +332,7 @@ SOURCE=.\w32.rc
 # Begin Source File
 
 SOURCE=.\pcre\chartables.c
-
-!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

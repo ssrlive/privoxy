@@ -15,6 +15,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vc_dftables"=".\pcre\vc_dftables.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vc_junkbuster"=".\vc_junkbuster.dsp" - Package Owner=<4>
 
 Package=<5>

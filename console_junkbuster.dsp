@@ -89,6 +89,18 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\actionlist.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\actions.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\actions.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\amiga.c
 # End Source File
 # Begin Source File
@@ -171,6 +183,18 @@ SOURCE=.\showargs.h
 # Begin Group "Win32"
 
 # PROP Default_Filter ""
+# Begin Group "File Copy"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\pcre\chartables.c.win
+# End Source File
+# Begin Source File
+
+SOURCE=.\config.h.win
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\cygwin.h
@@ -190,6 +214,7 @@ SOURCE=.\win32.h
 # Begin Source File
 
 SOURCE=.\pcre\chartables.c
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -270,6 +295,14 @@ SOURCE=.\encode.c
 # Begin Source File
 
 SOURCE=.\encode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\list.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\list.h
 # End Source File
 # Begin Source File
 
