@@ -1,6 +1,8 @@
-body, div, p, h1, h2, ul, ol, li, td, th, dl, dt, dd { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
-body { background-color: #ffffff }
-div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:15px; font-weight:bold }
-div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:10px }
-div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
-div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
+body,td,th { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
+body { background-color: #ffffff; color: #000000 }
+h1 { font-size: 140%; marign: 0px; }
+h2 { font-size: 120%; marign: 0px; }
+div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; padding:20px; }
+div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; padding:20px; }
+div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; padding:20px; width: 60%; }
+div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; padding:20px; width: 60%; text-align: left; } 

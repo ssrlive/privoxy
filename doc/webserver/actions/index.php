@@ -8,15 +8,9 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.10 2002/04/03 19:36:04 swa Exp $
+  $Id: index.php,v 1.8 2002/04/02 08:45:22 oes Exp $
 
   $Log: index.php,v $
-  Revision 1.10  2002/04/03 19:36:04  swa
-  consistent look
-
-  Revision 1.9  2002/04/02 19:32:45  oes
-  Adding temporary fix for missing curl support on SF (step 2 + 3 on oesterhelt.org)
-
   Revision 1.8  2002/04/02 08:45:22  oes
   Made script location indepandant
 
@@ -57,7 +51,19 @@
  -->
 
  <head>
-  <link rel="stylesheet" type="text/css" href="../p_feedback.css">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <style type="text/css">
+   body,td,th { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
+   body { background-color: #ffffff; color: #000000 }
+   h1 { font-size: 140%; marign: 0px; }
+   h2 { font-size: 120%; marign: 0px; }
+   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; padding:20px; }
+   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; padding:20px; }
+   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; padding:20px; width: 60%; }
+   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; padding:20px; width: 60%; text-align: left; } 
+  </style>
+
 <?php
 
 /*
@@ -80,7 +86,7 @@ error_reporting(E_NONE);
  * Bookmarklet that leads here:
  */
 $my_address = "http://" . $HTTP_SERVER_VARS["HTTP_HOST"] . $PHP_SELF;
-$bookmarklet = "javascript:void(window.open('$my_address?url='+escape(location.href),'Feedback'," .
+$bookmarklet = "javascript:void(window.open('$my_address?url='+escape(location.href), 'Feedback', " .
                "'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());";
 
 
@@ -101,11 +107,10 @@ $headers = getallheaders();
 
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] < $required_actions_file_version)
 {
-   echo ("<title>Invalid Privoxy Action List Feedback</title>
-          </head>
-          <body><div class=\"title\">Invalid Feedback Submission</div>
-           <div align=\"center\">
-            <div class=\"errorbox\" align=\"left\"><p>As much as we welcome your feedback, please note that
+   echo ("<title>Invalid Privoxy Action List Feedback</title></head>
+          <body><div class=\"title\"><h1>Invalid Feedback Submission</h1></div>
+           <center>
+            <div class=\"errorbox\"><p>As much as we welcome your feedback, please note that
              we can only accept problem reports based on:
              <ul>
               <li><a href=\"http://www.privoxy.org/\">Privoxy</a> version $required_privoxy_version or later</li>
@@ -113,7 +118,8 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
              </ul>
              <p>We hope you will understand that we feel unable to maintain concurrent versions of the file.</p>
             </div>
-           </div>
+           </center>
+           <p>Valid <a href=\"http://validator.w3.org/\">HTML 4.01 Transitional</a></p>
           </body>
          </html>");
    exit;
@@ -125,7 +131,11 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
  </head>
 
  <body>
-  <div class="title"><a href="http://www.privoxy.org/" target="_blank">Privoxy</a> Action List Feedback - Step 1 of 2</div>
+  <div class="title">
+    <h1>
+      <a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 1 of 2
+    </h1>
+  </div>
 
   <div class="box">
    <p>
@@ -139,8 +149,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
   </div>
 
   <div class="box">
-   <!-- FIXME: This must become action="step2.php" as soon as SF supports curl in PHP -->
-   <form action="http://www.oesterhelt.org/actions/step2.php" method="post">
+   <form action="step2.php" method="post">
 
     <table border="0" cellpadding="0" cellspacing="4">
 
@@ -176,13 +185,9 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
    </form>
   </div>
 
-  <div align=center>
-   <div class="infobox" width="60%" align=\"left\">
-    <p>
-     <big>
-      <b>Using <a href="http://www.bookmarklets.com" target="_blank">Bookmarklets</a> for Feedback</b>
-     </big>
-    </p>
+  <center>
+   <div class="infobox">
+    <h2>Using <a href="http://www.bookmarklets.com" target="_blank">Bookmarklets</a> for Feedback</h2>
     <p>
      To make it even easier for you, we provide a bookmarklet which will not only take you here from
      any troubled page you might be surfing, but also pre-fill the form!
@@ -198,7 +203,9 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
      and submit feedback with a single click!</i>
     </p>
    </div>
-  </div>
+  </center>
+
+  <p>Valid <a href="http://validator.w3.org/">HTML 4.01 Transitional</a></p>
 
  </body>
 </html>

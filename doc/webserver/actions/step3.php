@@ -8,15 +8,9 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.7 2002/04/04 10:29:58 oes Exp $
+  $Id: step3.php,v 1.5 2002/04/02 07:22:43 oes Exp $
 
   $Log: step3.php,v $
-  Revision 1.7  2002/04/04 10:29:58  oes
-  Keeping feedback confidential
-
-  Revision 1.6  2002/04/03 19:36:04  swa
-  consistent look
-
   Revision 1.5  2002/04/02 07:22:43  oes
   Cosmetics
 
@@ -51,14 +45,16 @@
  -->
 
  <head>
-  <link rel="stylesheet" type="text/css" href="../p_feedback.css">
+  <style type="text/css">
+   body, div, p, h1, h2, ul, ol, li, td, th, dl, dt, dd { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
+   body { background-color: #ffffff }
+   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:15px; font-weight:bold }
+   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:10px }
+   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
+   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
+  </style>
 
 <?php
-
-/* 
- * Config:
- */
-$logfile = "results/actions-feedback.txt";
 
 /* 
  * For testing:
@@ -66,6 +62,7 @@ $logfile = "results/actions-feedback.txt";
 //phpinfo();
 //error_reporting(E_ALL);
 error_reporting(E_NONE);
+
 
 
 /* 
@@ -120,6 +117,7 @@ if (!isset($name) || ($name == ""))
 /* 
  * Open the logfile or fail:
  */
+$logfile = "feedback-data.txt";
 $fp = fopen($logfile, "a");
 
 if(!$fp)
@@ -223,7 +221,7 @@ fclose($fp);
    </p>
 
    <p>
-    The developers will review and use your submission to improve the
+    It will be reviewed by the developers and used to improve the
     distribution actions file.
    </p>
    
