@@ -30,7 +30,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.122 2002/05/24 13:24:08 oes Exp $
+ $Id: user-manual.sgml,v 1.123 2002/05/24 23:19:23 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -56,7 +56,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.122 2002/05/24 13:24:08 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.123 2002/05/24 23:19:23 hal9 Exp $</pubdate>
 
 <!--
 
@@ -255,7 +255,9 @@ automatically start Privoxy in the boot process.
  First, make sure that no previous installations of
  <application>Junkbuster</application> and / or 
  <application>Privoxy</application> are left on your
- system. You can do this by 
+ system. Check that no <application>Junkbuster</application>
+ or <application>Privoxy</application> objects are in
+ your startup folder.
 </para>
 
 <para>
@@ -901,7 +903,7 @@ your PC.
 Click on the Privoxy Icon to start Privoxy. If no configuration file is
  specified on the command line, <application>Privoxy</application> will look
  for a file named <filename>config.txt</filename>. Note that Windows will
- automatically start Privoxy upon booting you PC.
+ automatically start Privoxy upon booting your PC.
 </para>
 </sect2>
 
@@ -920,17 +922,22 @@ Example Unix startup command:
 <sect2 id="start-os2">
 <title>OS/2</title>
 <para>
-FIXME.
+During installation, Privoxy is configured to start automatically when the system restarts.
+You can start it manually by double-clicking on the Privoxy icon in the Privoxy folder.
 </para>
 </sect2>
 
 <sect2 id="start-macosx">
 <title>MAX OSX</title>
 <para>
-FIXME.
+During installation, Privoxy is configured to start automatically when the system restarts.
+You can start it manually through the Termial with these commands:
+  <screen>
+  cd /Applications/Privoxy.app
+  ./privoxy
+  </screen>
 </para>
 </sect2>
-
 
 <sect2 id="start-amigaos">
 <title>AmigaOS</title>
@@ -7188,6 +7195,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.123  2002/05/24 23:19:23  hal9
+ Include new image (Proxy setup). More fun with guibutton.
+ Minor corrections/clarifications here and there.
+
  Revision 1.122  2002/05/24 13:24:08  oes
  Added Bookmarklet for one-click pre-filled access to show-url-info
 
