@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.26 2002/04/04 00:36:36 gliptak Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.27 2002/04/05 15:50:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.26 2002/04/04 00:36:36 glipta
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.27  2002/04/05 15:50:48  oes
+ *    added send-stylesheet CGI
+ *
  *    Revision 1.26  2002/04/04 00:36:36  gliptak
  *    always use pcre for matching
  *
@@ -425,17 +428,32 @@ jb_err cgi_send_banner(struct client_state *csp,
 #ifdef FEATURE_IMAGE_BLOCKING
       if ((csp->action->flags & ACTION_IMAGE_BLOCKER) != 0)
       {
+         static const char prefix1[] = CGI_PREFIX "send-banner?type=";
+         static const char prefix2[] = "http://" CGI_SITE_1_HOST "/send-banner?type=";
+
          /* determine HOW images should be blocked */
          const char * p = csp->action->string[ACTION_STRING_IMAGE_BLOCKER];
 
          /* and handle accordingly: */
-         if ((p != NULL) && (0 == strcmpic(p, "blank")))
+         if (p == NULL)
+         {
+            /* Use default - nothing to do here. */
+         }
+         else if (0 == strcmpic(p, "blank"))
          {
             imagetype = 'b';
          }
-         else if ((p != NULL) && (0 == strcmpic(p, "pattern")))
+         else if (0 == strcmpic(p, "pattern"))
          {
             imagetype = 'p';
+         }
+         else if (0 == strncmpic(p, prefix1, sizeof(prefix1) - 1))
+         {
+            imagetype = p[sizeof(prefix1) - 1];
+         }
+         else if (0 == strncmpic(p, prefix2, sizeof(prefix2) - 1))
+         {
+            imagetype = p[sizeof(prefix2) - 1];
          }
       }
 #endif /* def FEATURE_IMAGE_BLOCKING */
