@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.28 2002/02/27 15:02:38 oes Exp $
+dnl $Id: configure.in,v 1.29 2002/02/28 14:20:53 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.29  2002/02/28 14:20:53  oes
+dnl Fixed detection of gethost*_r functions on Solaris
+dnl
 dnl Revision 1.28  2002/02/27 15:02:38  oes
 dnl Incremented version number
 dnl
@@ -231,7 +234,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.28 $)
+AC_REVISION($Revision: 1.29 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -264,12 +267,6 @@ AC_DEFINE_UNQUOTED(VERSION_MINOR,${VERSION_MINOR})
 AC_DEFINE_UNQUOTED(VERSION_POINT,${VERSION_POINT})
 AC_DEFINE_UNQUOTED(VERSION,"${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_POINT}")
 AC_DEFINE_UNQUOTED(CODE_STATUS,"${CODE_STATUS}")
-
-dnl =================================================================
-dnl pid file only for unix 
-dnl =================================================================
-dnl 
-PID_FILE_PATH="\"/etc/junkbuster"\"
 
 dnl =================================================================
 dnl Checks for programs needed to build.
@@ -305,7 +302,6 @@ AC_ARG_WITH(debug,
 			CFLAGS="-g"
 		      fi
 		   fi
-                   CFLAGS="$CFLAGS -D_DEBUG"
                 fi
         ],
 	[
@@ -830,9 +826,6 @@ dnl Remove the SPECIAL_CFLAGS stuff from CFLAGS, and add it seperately
 dnl in the Makefile
 CFLAGS=$old_CFLAGS_nospecial
 AC_SUBST(SPECIAL_CFLAGS)
-
-AC_SUBST(PID_FILE_PATH)
-AC_DEFINE_UNQUOTED(PID_FILE_PATH,${PID_FILE_PATH})
 
 AC_SUBST(PTHREAD_LIB)
 
