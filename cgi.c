@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.37 2001/11/01 14:28:47 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.38 2001/11/13 00:31:21 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,14 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.37 2001/11/01 14:28:47 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.38  2001/11/13 00:31:21  jongfoster
+ *    - Adding new CGIs for use by non-JavaScript browsers:
+ *        edit-actions-url-form
+ *        edit-actions-add-url-form
+ *        edit-actions-remove-url-form
+ *    - Fixing make_menu()'s HTML generation - it now quotes the href parameter.
+ *    - Fixing || bug.
+ *
  *    Revision 1.37  2001/11/01 14:28:47  david__schmidt
  *    Show enablement/disablement status in almost all templates.
  *    There is a little trickiness here: apparent recursive resolution of
@@ -380,6 +388,7 @@ static struct http_response cgi_error_memory_response[1];
 
 static struct http_response *dispatch_known_cgi(struct client_state * csp,
                                                 const char * path);
+static struct map *parse_cgi_parameters(char *argstring);
 
 
 /*********************************************************************
