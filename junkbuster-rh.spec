@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.21 2001/10/31 19:27:27 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.22 2001/11/05 21:37:34 steudten Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.22  2001/11/05 21:37:34  steudten
+# Fix to include the actual version for name.
+# Let the 'real' packager be included - sorry stefan.
+#
 # Revision 1.21  2001/10/31 19:27:27  swa
 # consistent description. new name for suse since
 # we had troubles with rpms of identical names
@@ -137,16 +141,16 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d 
 
+gzip README AUTHORS junkbuster.1
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
-# Out temporarily
-cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
+cp -f junkbuster.1.gz $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8.gz
 cp -f actionsfile $RPM_BUILD_ROOT%{ijbconf}/actionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
 cp -f templates/*  $RPM_BUILD_ROOT%{ijbconf}/templates/
 cp -f junkbuster.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/junkbuster
 install -m 755 junkbuster.init $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/junkbuster
-install -m 744 -d $RPM_BUILD_ROOT/var/log/junkbuster
+install -m 711 -d $RPM_BUILD_ROOT/var/log/junkbuster
 
 # verify all file locations, etc. in the config file
 # don't start with ^ or commented lines are not replaced
@@ -190,8 +194,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc doc/webserver/developer-manual doc/webserver/user-manual README 
-%doc junkbuster.weekly junkbuster.monthly AUTHORS
+%doc README.gz AUTHORS.gz 
+#%doc doc/webserver/developer-manual doc/webserver/user-manual README 
+#%doc junkbuster.weekly junkbuster.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
 %attr(0744,junkbuster,junkbuster) %dir /var/log/junkbuster
@@ -202,6 +207,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov  6 2001 Thomas Steudten <thomas@steudten.ch>
+- Compress manpage
+- Add more documents for installation
+- Add version string to name and source
+
 * Wed Oct 24 2001 Hal Burigss <hal@foobox.net>
 - Back to user 'junkbuster' and fix configure macro.
 
