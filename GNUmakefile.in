@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.117 2002/09/06 23:33:35 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.118 2002/09/11 08:22:37 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -59,10 +59,30 @@ DIR_PRIVOXY_OBJ      := $(DIR_PRIVOXY_ROOT)/obj
 # Directories for "make install"
 #############################################################################
 
-DEST         = @prefix@
-CONFDEST     = @prefix@@sysconfdir@
-SBIN_DEST    = @prefix@@sbindir@
-MAN_DEST     = @prefix@@mandir@
+prefix       = @prefix@
+exec_prefix  = @exec_prefix@
+CONF_BASE    = @sysconfdir@
+SBIN_DEST    = @sbindir@
+MAN_DIR      = @mandir@
+MAN_DEST     = $(MAN_DIR)/man1
+SHARE_DEST   = @datadir@
+DOC_DEST     = $(SHARE_DEST)/doc/privoxy
+VAR_DEST     = @localstatedir@
+LOGS_DEST    = $(VAR_DEST)/log/privoxy
+PIDS_DEST    = $(VAR_DEST)/run
+
+# if $prefix = /usr/local then the default CONFDEST change from 
+# CONF_DEST = $(CONF_BASE) to CONF_DEST = $(CONF_BASE)/privoxy  
+# by the target rule CONF_DEST
+#
+# also if the $prefix is /usr/local and there is no
+# $(SHARE_DEST)/doc, it checks for $prefix/doc and installs there
+# instead in this situation
+#
+# finally if $prefix=/usr/local and VAR_DEST=$prefix/var it 
+# changes this to /var for storing the logs and pidfile
+
+# used in source dir only, the install goes to $share_dest/doc/privoxy
 DOK_WEB_USEM = doc/webserver/user-manual
 
 #############################################################################
@@ -74,11 +94,16 @@ CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
 INSTALL    = @INSTALL@
-INSTALL_P  = -m 0750 -g @GROUP@ -o @USER@ -b
-INSTALL_T  = -m 0640 -g @GROUP@ -o @USER@ -b
-INSTALL_D  = -m 0750 -g @GROUP@ -o @USER@ -d
+INSTALL_P  = -m 0755  
+INSTALL_T  = -m 0644 
+INSTALL_D  = -m 0755 -d
+# install options for superuser install
+INSTALL_S  = -g @GROUP@ -o @USER@ 
+ID         = id -u
 LD         = @CC@
 RM         = rm -f
+RMDIR      = rmdir
+MKDIR      = ./mkinstalldirs
 STRIP_PROG = strip
 SED	   = sed
 GREP       = grep
@@ -87,6 +112,10 @@ RPM        = rpm
 MV	   = mv
 TAR        = tar
 LN         = ln
+TOUCH      = touch
+KILL       = kill
+CHMOD      = chmod
+CHOWN      = chown
 WDUMP      = @WDUMP@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
@@ -240,7 +269,8 @@ all: $(PROGRAM) default.action
 .PHONY: all inifiles redhat-dist redhat-upload redhat-test solaris-dist suse-dist \
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
 install conectiva-spec conectiva-dist conectiva-upload debian-dist \
-debian-upload ensure-wdump ensure-jadebin ensure-dkprefix
+debian-upload ensure-wdump ensure-jadebin ensure-dkprefix CONF_DEST LOG_DEST \
+PID_DEST check_doc install-strip
 
 
 #############################################################################
@@ -253,7 +283,7 @@ $(DIR_PRIVOXY_OBJ)/%.o: $(DIR_PRIVOXY_SRC_PCRE)/%.c $(DIR_PRIVOXY_OBJ)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 $(DIR_PRIVOXY_OBJ):
-	mkdir obj
+	$(MKDIR) obj
 
 #############################################################################
 # Strip master copy comments from default.action:
@@ -786,24 +816,157 @@ distclean: clobber
 tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 
-install: all
+CONF_DEST:=$(shell if [ "$(prefix)" == "/usr/local" ] && [ "$(CONF_BASE)" == "$(prefix)/etc" ];then \
+		$(ECHO) "$(CONF_BASE)/privoxy";\
+	 else\
+		 $(ECHO) "$(CONF_BASE)";\
+	 fi)
+
+LOG_DEST:=$(shell if [ "$(prefix)" == "/usr/local" ] && [ "$(LOGS_DEST)" == "$(prefix)/var/log/privoxy" ];then \
+		$(ECHO) "/var/log/privoxy" ;\
+	 else\
+		 $(ECHO) "$(LOGS_DEST)";\
+	 fi)
+
+PID_DEST:=$(shell if [ "$(prefix)" == "/usr/local" ] && [ "$(PIDS_DEST)" == "$(prefix)/var/run" ];then \
+		$(ECHO) "/var/run" ;\
+	 else\
+		 $(ECHO) "$(PIDS_DEST)";\
+	 fi)
+
+check_doc:=$(shell if [ ! -d "$(SHARE_DEST)/doc" ] && [ "$(prefix)" == "/usr/local" ]  && [ -d "$(prefix)/doc" ];then \
+		$(ECHO) "1";\
+	 else\
+		 $(ECHO) "0";\
+	 fi)
+
+install-strip:  
+	$(MAKE) INSTALL_P='$(INSTALL_P) -s'  install
+
+install: CONF_DEST LOG_DEST PID_DEST check_doc all
 	#
-	# FIXME: This is a dirty hack to have an install target
-	#        that works at least for some setups. This needs
-	#        to be fixed!
+	# FIXME: test this in all systems and with several options and report any bugs
 	#
-	$(STRIP_PROG) $(PROGRAM)
-	$(INSTALL) $(INSTALL_D) $(SBIN_DEST)
-	$(INSTALL) $(INSTALL_D) $(DEST)/user-manual
-	$(INSTALL) $(INSTALL_D) $(CONFDEST)/templates
-	$(INSTALL) $(INSTALL_D) $(DEST)/$(DOK_WEB_USEM)
+
+	$(MKDIR) $(SBIN_DEST) $(prefix) $(CONF_DEST) $(SHARE_DEST) $(MAN_DEST) $(LOG_DEST) $(PID_DEST)
+		
+	# Install the executable binary
 	$(INSTALL) $(INSTALL_P) $(PROGRAM) $(SBIN_DEST)
-	if [ -d "$(DOK_WEB_USEM)" ]; then $(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/[a-z]* $(DEST)/$(DOK_WEB_USEM); fi
-	$(INSTALL) $(INSTALL_T) templates/[a-z]* $(CONFDEST)/templates
-	$(INSTALL) $(INSTALL_T) config default.action default.filter trust $(CONFDEST)
+
+	$(INSTALL) $(INSTALL_D) $(CONF_DEST)
+	$(INSTALL) $(INSTALL_D) $(CONF_DEST)/templates
+
+	# Install the DOCS and man page 
+	if [ $(check_doc) == 0 ]; then \
+		DOC=$(DOC_DEST) ;\
+	else \
+		DOC=$(prefix)/doc/privoxy ;\
+	fi;\
+	$(INSTALL) $(INSTALL_D) $$DOC ;\
+	$(INSTALL) $(INSTALL_D) $$DOC/user-manual ;\
+	if [ -d "$(DOK_WEB_USEM)" ]; then \
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/[^C]* $$DOC/user-manual;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/../p_doc.css $$DOC;\
+	fi
+	-$(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
+
+	# Change the Config file default directories acording to the configured ones
+	if [ -e config.base ] ; then \
+		$(CAT) config >config~ ;\
+		$(MV) config.base config ;\
+	fi
+	$(SED) 's+confdir .+confdir $(CONF_DEST)+' config | \
+	$(SED) 's+logdir .+logdir $(LOG_DEST)+' >config.updated
+	$(MV) config config.base
+	$(MV) config.updated config 
+
+	# Install the config support files
+	$(INSTALL) $(INSTALL_T) templates/[^C]* $(CONF_DEST)/templates
+	if [ `$(ID)` == 0 ] ;then\
+		$(ECHO) -e "\n Superuser install, installing config files as $(USER),$(GROUP)" ;\
+		INSTALL_CONF="$(INSTALL_T) -b $(INSTALL_S)" ;\
+	else \
+		if [ ! `$(ID) $(USER)` == `$(ID)` ] ;then \
+			$(ECHO) -e "\n  ** WARNING ** current install user different from configured user!! edit may fail.\n" ;\
+		fi ;\
+		INSTALL_CONF="$(INSTALL_T) -b " ;\
+	fi ;\
+	$(INSTALL) $$INSTALL_CONF config default.action default.filter trust standard.action $(CONF_DEST) ;\
+	if [ ! -s "$(CONF_DEST)\user.action" ] ; then \
+		$(INSTALL) $$INSTALL_CONF user.action  $(CONF_DEST) ;\
+	fi ;\
+
+	# setup the logfiles
+	# mode 0640 in the logs for privacy reasons 
+	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
+	-$(CHOWN) $(USER),$(GROUP) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
+		$(ECHO) -e "\n  ** WARNING ** current install user different from configured user!! Loging may fail\n"
+	-$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
+
+	# Install the init scripts
+	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
+		$(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
+		$(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
+		$(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
+		$(SED) 's+%USER%+$(USER)+' | \
+		$(SED) 's+%GROUP%+$(GROUP)+' >slackware/rc.privoxy ;\
+		$(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
+		$(ECHO) -e "\n Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
+	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
+		$(INSTALL) $(INSTALL_P) privoxy-generic.init /etc/init.d/privoxy ;\
+	else \
+		$(ECHO) -e "\n No init script installed, install it manually" ;\
+	fi
 	# FIXME $(ECHO) privoxy.logrotate privoxy.monthly privoxy.weekly
-	# FIXME: Need new manual! $(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
-	$(INSTALL) $(INSTALL_P) privoxy.init /etc/init.d/privoxy
+
+uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
+	#
+	# FIXME: test this in all systems and with several options and report any bugs
+	#
+	
+	# KILL privoxy if running
+	-@ $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid `  >/dev/nul 2>/dev/null
+	-@ $(KILL) `$(CAT) /var/run/privoxy.pid `  >/dev/nul 2>/dev/null
+
+	# Program binary
+	$(RM) $(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
+
+	# config files and dir and maybe old install backups
+	$(RM) $(CONF_DEST)/config $(CONF_DEST)/default.action $(CONF_DEST)/default.filter \
+		$(CONF_DEST)/trust $(CONF_DEST)/standard.action $(CONF_DEST)/user.action \
+		$(CONF_DEST)/config~ $(CONF_DEST)/default.action~ $(CONF_DEST)/default.filter~ \
+		$(CONF_DEST)/trust~ $(CONF_DEST)/standard.action~ $(CONF_DEST)/user.action~
+	$(RM) -r $(CONF_DEST)/templates
+	-$(RMDIR) $(CONF_DEST) || $(ECHO) -e "  $(CONF_DEST) is not empty, couldnt remove it\n" ;\
+	
+	# man page and docs
+	-$(RM) $(MAN_DEST)/privoxy.1.gz
+	-$(RM) -r $(DOC_DEST) || $(RM) -r $(prefix)/doc/privoxy
+
+	# Log and jarfile and pidfile
+	-$(RM) $(LOG_DEST)/logfile || $(RM) /var/log/privoxy/logfile
+	-$(RM) $(LOG_DEST)/jarfile || $(RM) /var/log/privoxy/jarfile
+	-$(RM) $(PID_DEST)/privoxy.pid || $(RM) /var/run/privoxy.pid
+
+	# final clean up of unused directories
+	if [  ! "$(prefix)" == "/usr/local" ] ;then \
+		$(RMDIR)  $(MAN_DEST) || $(ECHO) -e "  $(MAN_DEST) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(MAN_DIR) || $(ECHO) -e "  $(MAN_DIR) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(SHARE_DEST)/doc || $(ECHO) -e "  $(SHARE_DEST)/doc is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(SHARE_DEST) || $(ECHO) -e "  $(SHARE_DEST) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(CONF_BASE) || $(ECHO) -e "  $(CONF_BASE) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(SBIN_DEST) || $(ECHO) -e "  $(SBIN_DEST) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(LOG_DEST) || $(ECHO) -e "  $(LOG_DEST) is not empty, couldnt remove it\n" ;\
+		$(RMDIR)  $(prefix) || $(ECHO) -e "  $(prefix) is not empty, couldnt remove it\n" ;\
+	fi
+	# init scripts
+	if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
+		$(RM) /etc/rc.d/rc.privoxy ;\
+	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
+		$(RM) /etc/init.d/privoxy ;\
+	else \
+		$(ECHO) -e "\n Unable to remove privoxy init script... not installed or permition denied" ;\
+	fi
 
 coffee:
 	 @perl -e 'print pack "C*", (31,139,8,8,153,63,226,60,2,3,99,111,102,102,101,101,0,109,143,205,13,192,32,8,133,\
@@ -819,6 +982,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.118  2002/09/11 08:22:37  oes
+# Fixed path (C_HDRS are in src/ now)
+#
 # Revision 1.117  2002/09/06 23:33:35  hal9
 # Fix clobber for config.h and config.h.in are in src now.
 #
