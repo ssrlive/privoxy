@@ -105,58 +105,79 @@
 #  trust-filename:
 #    The path to the trust file.Only available if
 #    trust-support is set
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
   <title>Privoxy@@my-hostname@: Proxy Status</title>
-  <style type="text/css">
-    BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
-  </style>
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
 </head>
 
-<body bgcolor="#ffffff">
+<body>
 
-  <table cellpadding=20 cellspacing=10 border=0 width=100%>
+  <table cellpadding="20" cellspacing="10" border="0" width="100%">
     <tr>
-      <td bgcolor=#dddddd>
-        <p><big><big><b>This is Privoxy (privacy enhancing proxy) @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></big></big></p>
+      <td class="title">
+        <h1>
+          This is <a href="@homepage@">Privoxy</a> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@,
+          @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@
+        </h1>
       </td>
     </tr>
 
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
-      <td bgcolor=#eeeeee>
+      <td class="warning">
+        <h2>Warning:</h2>
+          <p>
+            <b>Please note that this <em class="warning">@code-status@</em> release
+            of the proxy software is not intended for production systems!
+            <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+          </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
+
+    <tr>
+      <td class="box">
         <h2>The program was invoked as follows</h2>
-        <blockquote><p>@invocation@</p></blockquote>
+        <p>@invocation@</p>
       </td>
     </tr>
 
     <tr>
-      <td bgcolor=#eeeeee>
+      <td class="box">
         <h2>The following options were given in the config file:</h2>
-        <blockquote><p>@options@</p></blockquote>
+        <p>@options@</p>
       </td>
     </tr>
 
 <!-- @if-statistics-start -->
     <tr>
-      <td bgcolor=#eeeeee>
+      <td class="box">
         <h2>Blocking Statistics:</h2>
-        <blockquote>
-<!-- @if-have-stats-start -->
-        @requests-blocked@ out of @requests-received@ requests have been blocked,
-        which equals a block rate of @percent-blocked@%.
+        <p>
+  <!-- @if-have-stats-start -->
+          @requests-blocked@ out of @requests-received@ requests have been blocked,
+          which equals a block rate of @percent-blocked@%.
 <!-- if-have-stats-end@ -->
 <!-- @if-have-no-stats-start -->
-        There haven't been any requests so far.
+          There haven't been any requests so far.
 <!-- if-have-no-stats-end@ -->
+        </p>
       </td>
     </tr>
 <!-- if-statistics-end@ -->
 
     <tr>
-      <td bgcolor=#eeeeee>
+      <td class="box">
         <h2>The following files are in use:</h2>
-        <blockquote><p>Click a filename to browse</p></blockquote>
+        <p>Click a filename to browse</p>
         <ul>
           <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
 <!-- @if-pcrs-support-start -->
@@ -170,101 +191,90 @@
     </tr>
 
     <tr>
-      <td bgcolor=#eeeeee>
+      <td class="box">
         <h2>Conditional #defines:</h2>
-          <table border=1>
+        <table border="1" style="margin-left: 10px">
           <tr> 
             <th>#define</th> <th>Enabled?</th> <th>Effects when enabled</th>
           </tr>
           <tr>
-             <td><code>FEATURE_ACL</code></td>
-             <td>@if-FEATURE_ACL-then@ Yes @else-not-FEATURE_ACL@ No @endif-FEATURE_ACL@</td>
-             <td>Allows the use of an ACL to control access to the proxy by IP address.</td>
+            <td><code>FEATURE_ACL</code></td>
+            <td>@if-FEATURE_ACL-then@ Yes @else-not-FEATURE_ACL@ No @endif-FEATURE_ACL@</td>
+            <td>Allows the use of an ACL to control access to the proxy by IP address.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_CGI_EDIT_ACTIONS</code></td>
-             <td>@if-FEATURE_CGI_EDIT_ACTIONS-then@ Yes @else-not-FEATURE_CGI_EDIT_ACTIONS@ No @endif-FEATURE_CGI_EDIT_ACTIONS@</td>
-             <td>Allows the use of the web-based actions file 
+            <td><code>FEATURE_CGI_EDIT_ACTIONS</code></td>
+            <td>@if-FEATURE_CGI_EDIT_ACTIONS-then@ Yes @else-not-FEATURE_CGI_EDIT_ACTIONS@ No @endif-FEATURE_CGI_EDIT_ACTIONS@</td>
+            <td>Allows the use of the web-based actions file 
                editor@if-FEATURE_CGI_EDIT_ACTIONS-then@, which is <a href="@default-cgi@edit-actions">here</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_COOKIE_JAR</code></td>
-             <td>@if-FEATURE_COOKIE_JAR-then@ Yes @else-not-FEATURE_COOKIE_JAR@ No @endif-FEATURE_COOKIE_JAR@</td>
-             <td>Allows the use of a "cookie jar" file to capture cookies.</td>
+            <td><code>FEATURE_COOKIE_JAR</code></td>
+            <td>@if-FEATURE_COOKIE_JAR-then@ Yes @else-not-FEATURE_COOKIE_JAR@ No @endif-FEATURE_COOKIE_JAR@</td>
+            <td>Allows the use of a "cookie jar" file to capture cookies.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_FAST_REDIRECTS</code></td>
-             <td>@if-FEATURE_FAST_REDIRECTS-then@ Yes @else-not-FEATURE_FAST_REDIRECTS@ No @endif-FEATURE_FAST_REDIRECTS@</td>
-             <td>Allows the +fast-redirects action, to bypass redirect and logging scripts.</td>
+            <td><code>FEATURE_FAST_REDIRECTS</code></td>
+            <td>@if-FEATURE_FAST_REDIRECTS-then@ Yes @else-not-FEATURE_FAST_REDIRECTS@ No @endif-FEATURE_FAST_REDIRECTS@</td>
+            <td>Allows the +fast-redirects action, to bypass redirect and logging scripts.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_FORCE_LOAD</code></td>
-             <td>@if-FEATURE_FORCE_LOAD-then@ Yes @else-not-FEATURE_FORCE_LOAD@ No @endif-FEATURE_FORCE_LOAD@</td>
-             <td>Allows bypassing all filtering for a single page using the prefix "<code>@FORCE_PREFIX@</code>".</td>
+            <td><code>FEATURE_FORCE_LOAD</code></td>
+            <td>@if-FEATURE_FORCE_LOAD-then@ Yes @else-not-FEATURE_FORCE_LOAD@ No @endif-FEATURE_FORCE_LOAD@</td>
+            <td>Allows bypassing all filtering for a single page using the prefix "<code>@FORCE_PREFIX@</code>".</td>
           </tr>
           <tr>
-             <td><code>FEATURE_IMAGE_BLOCKING</code></td>
-             <td>@if-FEATURE_IMAGE_BLOCKING-then@ Yes @else-not-FEATURE_IMAGE_BLOCKING@ No @endif-FEATURE_IMAGE_BLOCKING@</td>
-             <td>Allows the +image ation, to send "blocked" images instead of HTML.</td>
+            <td><code>FEATURE_IMAGE_BLOCKING</code></td>
+            <td>@if-FEATURE_IMAGE_BLOCKING-then@ Yes @else-not-FEATURE_IMAGE_BLOCKING@ No @endif-FEATURE_IMAGE_BLOCKING@</td>
+            <td>Allows the +image ation, to send "blocked" images instead of HTML.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_IMAGE_DETECT_MSIE</code></td>
-             <td>@if-FEATURE_IMAGE_DETECT_MSIE-then@ Yes @else-not-FEATURE_IMAGE_DETECT_MSIE@ No @endif-FEATURE_IMAGE_DETECT_MSIE@</td>
-             <td>Enables automatic detection of image and HTML requests from
+            <td><code>FEATURE_IMAGE_DETECT_MSIE</code></td>
+            <td>@if-FEATURE_IMAGE_DETECT_MSIE-then@ Yes @else-not-FEATURE_IMAGE_DETECT_MSIE@ No @endif-FEATURE_IMAGE_DETECT_MSIE@</td>
+            <td>Enables automatic detection of image and HTML requests from
              Microsoft Internet Explorer users, overriding the setting of 
              +image in the actions file.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_KILL_POPUPS</code></td>
-             <td>@if-FEATURE_KILL_POPUPS-then@ Yes @else-not-FEATURE_KILL_POPUPS@ No @endif-FEATURE_KILL_POPUPS@</td>
-             <td>Allows the +no-popups action, to block JavaScript popups.</td>
+            <td><code>FEATURE_KILL_POPUPS</code></td>
+            <td>@if-FEATURE_KILL_POPUPS-then@ Yes @else-not-FEATURE_KILL_POPUPS@ No @endif-FEATURE_KILL_POPUPS@</td>
+            <td>Allows the +no-popups action, to block JavaScript popups.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_NO_GIFS</code></td>
-             <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
-             <td>Use PNG instead of GIF for the built-in images.</td>
+            <td><code>FEATURE_NO_GIFS</code></td>
+            <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
+            <td>Use PNG instead of GIF for the built-in images.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_PTHREAD</code></td>
-             <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
-             <td>Use POSIX threads rather than native threads</td>
+            <td><code>FEATURE_PTHREAD</code></td>
+            <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
+            <td>Use POSIX threads rather than native threads</td>
           </tr>
           <tr>
-             <td><code>FEATURE_STATISTICS</code></td>
-             <td>@if-FEATURE_STATISTICS-then@ Yes @else-not-FEATURE_STATISTICS@ No @endif-FEATURE_STATISTICS@</td>
-             <td>Enables the statistics function.</td>
+            <td><code>FEATURE_STATISTICS</code></td>
+            <td>@if-FEATURE_STATISTICS-then@ Yes @else-not-FEATURE_STATISTICS@ No @endif-FEATURE_STATISTICS@</td>
+            <td>Enables the statistics function.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_TOGGLE</code></td>
-             <td>@if-FEATURE_TOGGLE-then@ Yes @else-not-FEATURE_TOGGLE@ No @endif-FEATURE_TOGGLE@</td>
-             <td>Allow Privoxy to be "disabled" so it is just a normal non-blocking non-anonymizing proxy.</td>
+            <td><code>FEATURE_TOGGLE</code></td>
+            <td>@if-FEATURE_TOGGLE-then@ Yes @else-not-FEATURE_TOGGLE@ No @endif-FEATURE_TOGGLE@</td>
+            <td>Allow Privoxy to be "disabled" so it is just a normal non-blocking non-anonymizing proxy.</td>
           </tr>
           <tr>
-             <td><code>FEATURE_TRUST</code></td>
-             <td>@if-FEATURE_TRUST-then@ Yes @else-not-FEATURE_TRUST@ No @endif-FEATURE_TRUST@</td>
-             <td>Allows the use of trust files.</td>
+            <td><code>FEATURE_TRUST</code></td>
+            <td>@if-FEATURE_TRUST-then@ Yes @else-not-FEATURE_TRUST@ No @endif-FEATURE_TRUST@</td>
+            <td>Allows the use of trust files.</td>
           </tr>
           <tr>
-             <td><code>REGEX_GNU</code></td>
-             <td>@if-REGEX_GNU-then@ Yes @else-not-REGEX_GNU@ No @endif-REGEX_GNU@</td>
-             <td rowspan="2">Changes the type of pattern matching done on URL paths.  PCRE is by far the best.
-             The old GNU style will slow down Privoxy and increase the executable's size.  If both of
-             these are disabled, simple prefix matching is done, but this is very inflexible.</td>
-          </tr>
-          <tr>
-             <td><code>REGEX_PCRE</code></td>
-             <td>@if-REGEX_PCRE-then@ Yes @else-not-REGEX_PCRE@ No @endif-REGEX_PCRE@</td>
-          </tr>
-          <tr>
-             <td><code>STATIC_PCRE</code></td>
-             <td>@if-STATIC_PCRE-then@ Yes @else-not-STATIC_PCRE@ No @endif-STATIC_PCRE@</td>
-             <td>Use the supplied statically-linked PCRE library.  This is set automatically
+            <td><code>STATIC_PCRE</code></td>
+            <td>@if-STATIC_PCRE-then@ Yes @else-not-STATIC_PCRE@ No @endif-STATIC_PCRE@</td>
+            <td>Use the supplied statically-linked PCRE library.  This is set automatically
              by <code>./configure</code> if you do not have the libpcre installed.</td>
           </tr>
           <tr>
-             <td><code>STATIC_PCRS</code></td>
-             <td>@if-STATIC_PCRS-then@ Yes @else-not-STATIC_PCRS@ No @endif-STATIC_PCRS@</td>
-             <td>Use the supplied statically-linked PCRS library.  This is set automatically
+            <td><code>STATIC_PCRS</code></td>
+            <td>@if-STATIC_PCRS-then@ Yes @else-not-STATIC_PCRS@ No @endif-STATIC_PCRS@</td>
+            <td>Use the supplied statically-linked PCRS library.  This is set automatically
              by <code>./configure</code> if you do not have the libpcrs installed.</td>
           </tr>
         </table>
@@ -272,62 +282,68 @@
     </tr>
 
     <tr>
-      <td bgcolor=#dddddd>
+      <td class="box">
         <h2>More Privoxy:</h2>
         <ul>@menu@</ul>
       </td>
     </tr>
 
-<!-- @if-unstable-start -->
-# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
-      <td bgcolor=#ffdddd>
-        <p><b>Please note that this <font color=red>@code-status@</font> release
-          of the proxy software is not intended for production systems!
-          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+      <td class="info">
+        <h2>Support and Service via Sourceforge:</h2>
+        <p>
+          We value your feedback. To provide you with the best support,
+          we ask that you:
         </p>
- 	<p>
-<h2>Support and Service via Sourceforge</h2>
-<p>
-We value your feedback. However, to provide you with the best support,
-please note:
-<ul>
-  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
-  help.</li>
-  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
-      forum</a>. Make sure that the bug has not yet been submitted.</li>
-  <li>Submit feature requests only thru our <a
-      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
-</ul>
-</p>
-<p>
-For any other issues, feel free to use the <a
-href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
-</p>
+        <ul>
+          <li>
+            use the <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a> or (better) the
+            <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.
+          </li>
+          <li>
+            submit banners and all problems with the actions file only through the
+            <a href="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">actions
+            file feedback system</a>.
+          </li>
+          <li>
+            submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>.
+            Make sure that the bug has not yet been submitted.
+          </li>
+          <li>
+            submit feature requests only through our <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature
+            request tracker</a>.
+          </li>
+        </ul>
       </td>
     </tr>
-<!-- if-unstable-end@ -->
 
 <!-- @if-have-help-info-start -->
     <tr>
-      <td bgcolor=#dddddd>
+      <td class="info">
         <h2>Local Privoxy support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Privoxy installation.         
+        <p>
+          You can consult the <a href="@proxy-info-url@">online documentation</a> for more information
+          about this Privoxy installation.
+        </p>
 <!-- if-have-proxy-info-end@ -->
 
 <!-- @if-have-adminaddr-info-start -->
         <p>Address e-mail questions about this service to
-          <a href=mailto:@admin-address@><code>@admin-address@</code></a>,
+          <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
           who will be glad to help you.
-<!-- if-have-adminaddr-info-end@ -->
-
         </p>
+<!-- if-have-adminaddr-info-end@ -->
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->
 
+     <tr>
+      <td>
+        <p class="small">Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></p>
+      </td>
+    </tr>   
   </table>
 
 </body>

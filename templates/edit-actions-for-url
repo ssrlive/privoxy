@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.19  2002/03/26 22:29:56  swa
+#    we have a new homepage!
+#
 #    Revision 1.18  2002/03/24 16:32:08  jongfoster
 #    Removing logo option
 #
@@ -151,17 +154,15 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Style-Type" content="text/css">
-<meta http-equiv="Content-Script-Type" content="text/javascript">
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
 
-<title>Privoxy: Edit actions</title>
+  <title>Privoxy@@my-hostname@: Edit actions</title>
 
 <style type="text/css">
-body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
-               background-color: #ffffff;
-               color: #000000            }
 td.action    { font-weight: bold;
                font-style: italic;
                white-space: nowrap       }
@@ -182,16 +183,17 @@ td.noc2      { background-color: #ddddff }
 th.enh       { background-color: #99ff99 }
 th.dish      { background-color: #ff9999 }
 th.noch      { background-color: #9999ff }
-table.wide   { border-color: white;
+table.wide   { padding: 5px; }
+</style>
+
+<!--
+border-color: white;
                border-style: solid;
                border-left-width: 10px;
                border-right-width: 10px;
                border-top-width: 0px;
                border-bottom-width: 0px  }
-td.light     { background-color: #eeeeee }
-td.dark      { background-color: #dddddd }
-td.green     { background-color: #ddffdd }
-</style>
+-->
 
 <script type="text/javascript">
 <!--
@@ -331,13 +333,30 @@ function show_wafer_opts(tf)
 
   <table cellpadding="20" cellspacing="10" border="0" width="100%">
     <tr>
-      <td class="dark">
-        <p><big><big><b>This is Privoxy (privacy enhancing proxy) @version@ on @my-hostname@ (@my-ip-address@), port @my-port@, @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b></big></big></p>
+      <td class="title">
+        <h1>
+          This is <a href="@homepage@">Privoxy</a> @version@ on @my-hostname@ (@my-ip-address@), port @my-port@,
+          @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@
+        </h1>
       </td>
     </tr>
 
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
     <tr>
-      <td class="light">
+      <td class="warning">
+        <h2>Warning:</h2>
+          <p>
+            <b>Please note that this <em class="warning">@code-status@</em> release
+            of the proxy software is not intended for production systems!
+            <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+          </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
+
+    <tr>
+      <td class="box">
         <h2>Edit Actions
           <input type="hidden" name="f" value="@f@">
           <input type="hidden" name="v" value="@v@">
@@ -345,9 +364,10 @@ function show_wafer_opts(tf)
         </h2>
       </td>
     </tr>
-  </table>
 
-  <table border="0" width="100%" cellspacing="2" class="wide">
+<tr><td class="wrapbox">
+
+  <table border="0" cellspacing="2" width="100%" class="wide">
     <tr class="hdr" align="left">
       <th class="enh" align="center">Enable</th>
       <th class="dish" align="center">Disable</th>
@@ -748,6 +768,78 @@ function show_wafer_opts(tf)
     </tr>
   </table>
 
+</td></tr>
+
+    <tr>
+      <td class="submit" align="center">
+        <p><input type="submit" value="Submit" name="Submit"></p>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="box">
+        <h2>More Privoxy:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="info">
+        <h2>Support and Service via Sourceforge:</h2>
+        <p>
+          We value your feedback. To provide you with the best support,
+          we ask that you:
+        </p>
+        <ul>
+          <li>
+            use the <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=211118">support forum</a> or (better) the
+            <a href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a> to get help.
+          </li>
+          <li>
+            submit banners and all problems with the actions file only through the
+            <a href="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">actions
+            file feedback system</a>.
+          </li>
+          <li>
+            submit bugs only through our <a href="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">bug tracker</a>.
+            Make sure that the bug has not yet been submitted.
+          </li>
+          <li>
+            submit feature requests only through our <a href="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">feature
+            request tracker</a>.
+          </li>
+        </ul>
+      </td>
+    </tr>
+
+<!-- @if-have-help-info-start -->
+    <tr>
+      <td class="info">
+        <h2>Local Privoxy support:</h2>
+
+<!-- @if-have-proxy-info-start -->
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Privoxy installation.</p>        
+<!-- if-have-proxy-info-end@ -->
+
+<!-- @if-have-adminaddr-info-start -->
+        <p>Address e-mail questions about this service to
+          <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
+          who will be glad to help you.
+        </p>
+<!-- if-have-adminaddr-info-end@ -->
+      </td>
+    </tr>
+<!-- if-have-help-info-end@ -->
+
+    <tr>
+      <td>
+        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
+      </td>
+    </tr>
+
+  </table>
+</form>
+
 
 <script type="text/javascript">
 <!--
@@ -786,30 +878,7 @@ if (document.getElementById) {
 //-->
 </script>
 
-  <table cellpadding="20" cellspacing="10" border="0" width="100%">
-    <tr>
-      <td class="green" align="center">
-        <p><input type="submit" value="Submit" name="Submit"></p>
-      </td>
-    </tr>
-
-    <tr>
-      <td class="dark">
-        <h2>More Privoxy:</h2>
-        <ul>@menu@</ul>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
-      </td>
-    </tr>
-
-  </table>
-</form>
 
 </body>
 
 </html>
-
