@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.3 2001/06/03 19:12:16 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.4 2001/06/04 10:41:52 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -36,6 +36,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.3 2001/06/03 19:12:16 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.4  2001/06/04 10:41:52  swa
+ *    show version string of cgi.h and cgi.c
+ *
  *    Revision 1.3  2001/06/03 19:12:16  oes
  *    introduced new cgi handling
  *
@@ -105,6 +108,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.3 2001/06/03 19:12:16 oes Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif /* def _WIN32 */
 
 #include "project.h"
 #include "cgi.h"
@@ -178,7 +185,7 @@ struct http_response *cgi_dispatch(struct client_state *csp)
       argstring = csp->http->path;
    }
    /* Or it's the host part of HOME_PAGE_URL ? */
-   else if (   (0 == strcmpic(csp->http->host, *&HOME_PAGE_URL + 7 ))
+   else if (   (0 == strcmpic(csp->http->host, HOME_PAGE_URL + 7 ))
             && (0 == strncmpic(csp->http->path,"/config", 7))
             && ((csp->http->path[7] == '/') || (csp->http->path[7] == '\0')))
    {
@@ -370,7 +377,7 @@ char *fill_template(struct client_state *csp, char *template, struct map *answer
    pcrs_job *job, *joblist = NULL;
    char buf[BUFSIZ];
    char *new, *old = NULL;
-   int error, size;
+   int size;
    FILE *fp;
 
    /*
@@ -515,8 +522,8 @@ int cgi_default(struct client_state *csp, struct http_response *rsp,
    if(parameters)
 	{
       p = dump_map(parameters);
-	   tmp = strsav(tmp, "<p>What made you think this cgi takes options?\n
-                         Anyway, here they are, in case you're interested:</p>\n");
+	   tmp = strsav(tmp, "<p>What made you think this cgi takes options?\n"
+                        "Anyway, here they are, in case you're interested:</p>\n");
 		tmp = strsav(tmp, p);
 		exports = map(exports, "cgi-parameters", 1, tmp, 0);
       free(p);
@@ -642,9 +649,6 @@ int cgi_show_status(struct client_state *csp, struct http_response *rsp,
                     struct map *parameters)
 {
    char *s = NULL;
-   const struct gateway *g;
-   int i;
-
    struct map *exports = NULL;
 
 #ifdef SPLIT_PROXY_ARGS
