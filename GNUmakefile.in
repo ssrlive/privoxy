@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.34 2002/03/27 10:30:11 swa Exp $
+# $Id: GNUmakefile.in,v 1.35 2002/03/27 14:53:19 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -76,6 +76,7 @@ DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
+TARGET_OS  = foobar
 
 # Program to do LF->CRLF
 #
@@ -278,32 +279,32 @@ solaris-dist:
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	$(TAR) -C.. -cvhf privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
+	$(TAR) -C.. -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		$(TAR) -C.. --exclude "CVS" --exclude "#*" --exclude ".#*" --exclude ".cvsignore" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
 	done; 
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
-	$(GZIP_PROG) privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar
+	$(GZIP_PROG) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Distribution with binary created.
 
 # anonymously ncftps the tarball to sourceforge
 solaris-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
 
-
+# use with care
 solaris-clean:
-	$(RM) privoxy-solaris-$(VERSION)-$(CODE_STATUS)-src.tar*
+	$(RM) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar*
 
 #############################################################################
 # hpux distribution
@@ -619,6 +620,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.35  2002/03/27 14:53:19  swa
+# added solaris-dist
+#
 # Revision 1.34  2002/03/27 10:30:11  swa
 # we want a html man file on the webserver
 #
