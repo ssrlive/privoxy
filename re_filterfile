@@ -34,7 +34,9 @@ s/menubar="?(no|0)"?/menubar=1/ig
 #s/margin(height|width)=[0-9]*//gi
 
 # Remove frameborder=0 and border=0 from framesets
-s/(<frameset[ -z]+)(frame)?border="?(no|0)"?/$1/ig
+#
+s/(<frameset[^>]+?)border=['"]?(no|0)['"]?/$1/ig
+s/(<frameset[^>]+?)frameborder=['"]?(no|0)['"]?/$1/ig
 
 # The status bar is for displaying link targets, not pointless buzzwords.
 # Again, check it out on http://www.airport-cgn.de/
@@ -44,7 +46,7 @@ s/status='.*?';*//ig
 # Kill *all* popups a la popup.c. (But for *all* sites, so I wouldn't do that.)
 #
 # JavaScript: s/window\.open\(/who_wants_this_to.open(/ig
-# HTML      : s/target="?_blank"?/target_who/g
+# HTML      : s/target=['"]?_blank['"]?/target_who/g
 
 # Kill banners by size:
 # (Sizes from http://www.iab.net/iab_banner_standards/bannersizes.html)
