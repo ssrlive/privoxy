@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.7 2001/05/29 09:50:24 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.8 2001/05/31 21:27:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.7 2001/05/29 09:50:24 jongfoster 
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.8  2001/05/31 21:27:13  jongfoster
+ *    Removed many options from the config file and into the
+ *    "actions" file: add_forwarded, suppress_vanilla_wafer,
+ *    wafer, add_header, user_agent, referer, from
+ *    Also globally replaced "permission" with "action".
+ *
  *    Revision 1.7  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -236,7 +242,6 @@ static struct file_list *current_configfile = NULL;
 #define hash_re_filterfile             3877522444ul
 #define hash_single_threaded           4250084780ul
 #define hash_suppress_blocklists       1948693308ul
-#define hash_tinygif                      2227702ul /* FIXME should be in actions file */
 #define hash_toggle                        447966ul
 #define hash_trust_info_url             449869467ul
 #define hash_trustfile                   56494766ul
@@ -278,9 +283,6 @@ void unload_configfile (void * data)
       config->jar = NULL;
    }
 #endif /* def JAR_FILES */
-#ifdef IMAGE_BLOCKING
-   freez((char *)config->tinygifurl);
-#endif /* def IMAGE_BLOCKING */
 
    freez((char *)config->haddr);
    freez((char *)config->logfile);
@@ -446,41 +448,6 @@ struct configuration_spec * load_config(void)
             config->debug |= atoi(arg);
             continue;
 
-#ifdef IMAGE_BLOCKING
-         case hash_tinygif :
-            freez((char *)config->tinygifurl);
-            config->tinygif = atoi(arg);
-            if(3 == config->tinygif)
-            {
-               p = arg;
-               while((*p >= '0') && (*p <= '9'))
-               {
-                  p++;
-               }
-               while((*p == ' ') || (*p == '\t'))
-               {
-                  p++;
-               }
-               if (*p)
-               {
-                  q = malloc(strlen(p) + 5);
-                  if (q)
-                  {
-                     strcpy(q, p);
-                     strcat(q, "\r\n\r\n");
-                     config->tinygifurl = q;
-                  }
-               }
-            }
-            if ((config->tinygif != 1) && 
-                (config->tinygif != 2) && 
-                ((config->tinygif != 3) || (config->tinygifurl==NULL)) )
-            {
-               log_error(LOG_LEVEL_ERROR, "tinygif setting invalid.");
-            }
-            continue;
-#endif /* def IMAGE_BLOCKING */
-
          case hash_single_threaded :
             config->multi_threaded = 0;
             continue;
@@ -614,9 +581,6 @@ struct configuration_spec * load_config(void)
 #ifndef _WIN_CONSOLE
          case hash_hide_console :
 #endif /* ndef _WIN_CONSOLE */
-#ifndef IMAGE_BLOCKING
-         case hash_tinygif :
-#endif /* def IMAGE_BLOCKING */
 #ifndef JAR_FILES
          case hash_jarfile :
 #endif /* ndef JAR_FILES */
