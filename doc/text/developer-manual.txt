@@ -115,7 +115,8 @@ Table of Contents
         8.2.10. Amiga OS
         8.2.11. AIX
        
-    8.3. After the Release
+    8.3. Uploading and Releasing Your Package
+    8.4. After the Release
    
 9. Update the Webserver
 10. Contacting the developers, Bug Reporting and Feature Requests
@@ -295,18 +296,17 @@ sufficient for our purposes.
 
 Some common elements that you likely will use:
 
-, paragraph delimiter. Most text needs to be within paragraph elements (there  
-are some exceptions).                                                          
-, the stylesheets make this italics.                                           
-, files and directories.                                                       
-, command examples.                                                            
-, like                                                                         
-, more or less.                                                                
-, list with bullets.                                                           
-, member of the above.                                                         
-, screen output, implies .                                                     
-, like HTML tag.                                                               
-, for, doh, quoting text.                                                      
+<para></para>, paragraph delimiter. Most text needs to be within paragraph     
+elements (there are some exceptions).                                          
+<emphasis></emphasis>, the stylesheets make this italics.                      
+<filename></filename>, files and directories.                                  
+<command></command>, command examples.                                         
+<literallayout></literallayout>, like <pre>, more or less.                     
+<itemizedlist></itemizedlist>, list with bullets.                              
+<listitem></listitem>, member of the above.                                    
+<screen></screen>, screen output, implies <literallayout>.                     
+<ulink url="example.com"></ulink>, like HTML <a> tag.                          
+<quote></quote>, for, doh, quoting text.                                       
 
 Look at any of the existing docs for examples of all these and more.
 
@@ -1081,13 +1081,13 @@ other header files.
 
 Example:
 
-#include      /* This is not a local include */                                
+#include <iostream.h>     /* This is not a local include */                    
 #include "config.h"       /* This IS a local include */                        
 
 Exception:
 
 /* This is not a local include, but requires a path element. */                
-#include                                                                       
+#include <sys/fileName.h>                                                      
 
 Note: Please! do not add "-I." to the Makefile without a _very_ good reason.
 This duplicates the #include "file.h" behavior.
@@ -1878,7 +1878,38 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-8.3. After the Release
+8.3. Uploading and Releasing Your Package
+
+After the package is ready, it is time to upload it to SourceForge, and go
+through the release steps. The upload is done via FTP:
+
+  * Upload to: ftp://upload.sourceforge.net/incoming
+   
+  * user: anonymous
+   
+  * password: ijbswa-developers@lists.sourceforge.net
+   
+Once this done go to http://sourceforge.net/project/admin/editpackages.php?
+group_id=11118, making sure you are logged in. Find the your target platform in
+the second column, and click Add Release. You will then need to create a new
+release for your package, using the format of $VERSION ($CODE_STATUS), e.g.
+2.9.14 (beta).
+
+Now just follow the prompts. Be sure to add any appropriate Release notes. You
+should see your freshly uploaded packages in "Step 2. Add Files To This
+Release". Check the appropriate box(es). Remember at each step to hit the
+"Refresh/Submit" buttons! You should now see your file(s) listed in Step 3.
+Fill out the forms with the appropriate information for your platform, being
+sure to hit "Update" for each file. If anyone is monitoring your platform,
+check the "email" box at the very bottom to notify them of the new package.
+This should do it!
+
+If you have made errors, or need to make changes, you can go through
+essentially the same steps, but select Edit Release, instead of Add Release.
+
+-------------------------------------------------------------------------------
+
+8.4. After the Release
 
 When all (or: most of the) packages have been uploaded and made available, send
 an email to the announce mailing list, Subject: "Version X.Y.Z available for
