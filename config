@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.18 2001/07/18 12:28:20 oes Exp $
+# $Id: config,v 1.19 2001/07/25 13:48:54 oes Exp $
 #
 
 #  Table of Contents
@@ -236,6 +236,7 @@ proxy-info-url http://www.your-site.com/proxy.html
 #   debug       128 #      = debug fast redirects
 #   debug       256 #      = debug GIF deanimation
 #   debug       512 # CLF  = Common Log Format
+#   debug     1024 #        = debug kill popups
 #   debug      4096 # INFO = Startup banner and warnings.
 #   debug      8192 # ERROR = Non-fatal errors
 #
