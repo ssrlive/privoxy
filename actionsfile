@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.5 2001/07/26 21:09:18 oes Exp $
+# $Id: actionsfile,v 1.6 2001/10/07 15:33:59 oes Exp $
 #
 #############################################################################
 # Syntax
@@ -227,6 +227,25 @@
 #    will send a HTTP temporary redirect to the specified image - this 
 #    has the advantage of the icon being beeing cached by the browser,
 #    which will speed up the display.  
+#
+#
+# +limit-connect{portlist}
+#   The CONNECT methods exists in HTTP to allow access to secure websites
+#   (https:// URLs) through proxies. It works very simply: The proxy
+#   connects to the server on the specified port, and then short-circuits
+#   its connections to the cliant and to the remote proxy.
+#   This can be a big security hole, since CONNECT-enabled proxies can
+#   be abused as TCP relays very easily.
+#   By default, i.e. in the absence of a +limit-connect action, Junkbuster
+#   will only allow CONNECT requests to port 443, which is the standard port
+#   for https.
+#   If you want to allow CONNECT for more ports than that, or want to forbid
+#   CONNECT altogether, you can specify a comma separated list of ports and port
+#   ranges (the latter using dashes, with the minimum defaulting to 0 and max to 65K):
+#
+#   +limit-connect{443} # This is the default and need no be specified.
+#   +limit-connect{80,443} # Ports 80 and 443 are OK.
+#   +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100, and above 500 are OK.
 #
 # +no-compression
 #    Prevent the website from compressing the data. Some websites do
@@ -1384,5 +1403,8 @@ prdownloads.sourceforge.net
 #
 {+deanimate-gifs{last}}
 www.oesterhelt.org/deanimate-demo
+
+{fragile}
+.deutsche-bank-24.de
 
 # End of file
