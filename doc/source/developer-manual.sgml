@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $</pubdate>
 
 <!--
 
@@ -81,10 +81,11 @@ Hal.
  </para>
  ]]>
 <para>
- The developer manual gives the users information on how to help the developer
- team. It provides guidance on coding, testing, documentation and other
- issues. 
- </para>
+ The developer manual provides guidance on coding, testing, packaging, documentation
+ and other issues of importance to those involved with
+ <application>Privoxy</application> development. It is mandatory (and helpful!) reading
+ for anyone who wants to join the team.
+</para>
 
 <!-- Include privoxy.sgml boilerplate text: -->
 
@@ -1726,7 +1727,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1786,7 +1787,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.44 2002/05/15 03:55:17 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.45 2002/05/19 23:01:54 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2800,6 +2801,10 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.45  2002/05/19 23:01:54  hal9
+  Add small section on general packaging guidelines (e.g. actions files must
+  be writable).
+
   Revision 1.44  2002/05/15 03:55:17  hal9
   Fix ulink -> link, and minor modification to release process section for
   clarification.
