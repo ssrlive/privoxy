@@ -1,8 +1,8 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: default.action,v 1.20 2002/04/21 05:50:10 swa Exp $
+#  $Id: standard.action,v 1.1 2002/04/24 02:20:49 oes Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -53,8 +53,8 @@
 -limit-connect \
 +prevent-compression \
 -session-cookies-only \
--prevent-reading-cookies \
--prevent-setting-cookies \
+-crunch-outgoing-cookies \
+-crunch-incoming-cookies \
 -kill-popups \
 -send-vanilla-wafer \
 -send-wafer \
@@ -91,8 +91,8 @@ standard.Cautious
 -limit-connect \
 +prevent-compression \
 +session-cookies-only \
--prevent-reading-cookies \
--prevent-setting-cookies \
+-crunch-outgoing-cookies \
+-crunch-incoming-cookies \
 -kill-popups \
 -send-vanilla-wafer \
 -send-wafer \
@@ -129,8 +129,8 @@ standard.Medium
 -limit-connect \
 +prevent-compression \
 +session-cookies-only \
--prevent-reading-cookies \
--prevent-setting-cookies \
+-crunch-outgoing-cookies \
+-crunch-incoming-cookies \
 -kill-popups \
 -send-vanilla-wafer \
 -send-wafer \
