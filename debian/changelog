@@ -3,8 +3,9 @@ privoxy (3.1.1-alpha-1) unstable; urgency=low
   * Removed build dependency on w3m.
   * Removed ./configure argument for docbook, moving the path to the
     configure.in.
+  * Added LICENSE, pdfs, privoxy-index and HTMLized man-page
 
- -- Devin Bayer <devin@elektrono.com>  Mon, 27 May 2002 13:29:34 -0400
+ -- Devin Bayer <devin@elektrono.com>  Tue, 28 May 2002 21:21:48 -0400
 
 privoxy (3.1.1-alpha-0) unstable; urgency=low
 
