@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.43 2002/01/22 23:51:59 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.44 2002/03/07 03:49:31 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 1.43 2002/01/22 23:51:59 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.44  2002/03/07 03:49:31  oes
+ *     - Fixed compiler warnings etc
+ *     - Changed built-in images from GIF to PNG
+ *       (with regard to Unisys patent issue)
+ *     - Added a 4x4 pattern PNG which is less intrusive
+ *       than the logo but also clearly marks the deleted banners
+ *
  *    Revision 1.43  2002/01/22 23:51:59  jongfoster
  *    Replacing strsav() with the safer string_append().
  *
@@ -671,7 +678,7 @@ struct http_response *block_url(struct client_state *csp)
          }
          rsp->content_length = image_logo_length;
 
-         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
+         if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
          {
             free_http_response(rsp);
             return cgi_error_memory();
@@ -688,7 +695,7 @@ struct http_response *block_url(struct client_state *csp)
          }
          rsp->content_length = image_blank_length;
 
-         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
+         if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
          {
             free_http_response(rsp);
             return cgi_error_memory();
@@ -705,7 +712,7 @@ struct http_response *block_url(struct client_state *csp)
          }
          rsp->content_length = image_pattern_length;
 
-         if (enlist_unique_header(rsp->headers, "Content-Type", "image/png"))
+         if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
          {
             free_http_response(rsp);
             return cgi_error_memory();

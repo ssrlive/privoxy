@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.15 2002/03/06 22:54:35 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.16 2002/03/07 03:48:38 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,12 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.15 2002/03/06 22:54:35 jongfo
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.16  2002/03/07 03:48:38  oes
+ *     - Changed built-in images from GIF to PNG
+ *       (with regard to Unisys patent issue)
+ *     - Added a 4x4 pattern PNG which is less intrusive
+ *       than the logo but also clearly marks the deleted banners
+ *
  *    Revision 1.15  2002/03/06 22:54:35  jongfoster
  *    Automated function-comment nitpicking.
  *
@@ -380,7 +386,7 @@ jb_err cgi_send_banner(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (enlist(rsp->headers, "Content-Type: image/png"))
+   if (enlist(rsp->headers, "Content-Type: " BUILTIN_IMAGE_MIMETYPE))
    {
       return JB_ERR_MEMORY;
    }
@@ -394,9 +400,9 @@ jb_err cgi_send_banner(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_transparent_png
+ * Function    :  cgi_transparent_image
  *
- * Description :  CGI function that sends a 1x1 transparent PNG.
+ * Description :  CGI function that sends a 1x1 transparent image.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -409,7 +415,7 @@ jb_err cgi_send_banner(struct client_state *csp,
  *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-jb_err cgi_transparent_png(struct client_state *csp,
+jb_err cgi_transparent_image(struct client_state *csp,
                            struct http_response *rsp,
                            const struct map *parameters)
 {
@@ -421,7 +427,7 @@ jb_err cgi_transparent_png(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (enlist(rsp->headers, "Content-Type: image/png"))
+   if (enlist(rsp->headers, "Content-Type: " BUILTIN_IMAGE_MIMETYPE))
    {
       return JB_ERR_MEMORY;
    }
@@ -1070,6 +1076,12 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_KILL_POPUPS */
    if (!err) err = map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
 #endif /* ndef FEATURE_KILL_POPUPS */
+
+#ifdef FEATURE_NO_GIFS
+   if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 1);
+#else /* ifndef FEATURE_NO_GIFS */
+   if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 0);
+#endif /* ndef FEATURE_NO_GIFS */
 
 #ifdef FEATURE_PTHREAD
    if (!err) err = map_conditional(exports, "FEATURE_PTHREAD", 1);
