@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.85 2002/04/18 21:23:23 hal9 Exp $
+ $Id: user-manual.sgml,v 1.86 2002/04/21 01:46:32 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.85 2002/04/18 21:23:23 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.86 2002/04/21 01:46:32 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -171,13 +171,13 @@
 <para>
  Note: If you have a previous <application>Junkbuster</application> or
  <application>Privoxy</application> installation on your system, you
- will either need to remove it, or that might be done by the setup 
- procedure. (See below for your platform).
+ will need to remove it.  Some platforms do this for you as part 
+ of their installation procedure. (See below for your platform).
 </para>
 
 <para>
  In any case <emphasis>be sure to backup your old configuration
- if it is valuable to you.</emphasis> In that case, also see the
+ if it is valuable to you.</emphasis> See the
  <link linkend="upgradersnote">note to upgraders</link>.
 </para>
 
@@ -236,6 +236,7 @@
  <application>Junkbuster</application> and / or 
  <application>Privoxy</application> are left on your
  system.
+ You can do this by 
 </para>
 
 <para>
@@ -254,7 +255,15 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-mac"><title>Max OSX</title>
 <para>
- FIXME.
+ Unzip the downloaded package (you can either double-click on the file
+ in the finder, or on the desktop if you downloaded it there).  Then,
+ double-click on the package installer icon and follow the installation
+ process.
+ <application>Privoxy</application> will be installed in the subdirectory
+ <literal>/Applications/Privoxy.app</literal>.
+ <application>Privoxy</application> will set itself up to start 
+ automatically on system bringup via
+ <literal>/System/Library/StartupItems/Privoxy</literal>.
 </para>
 </sect3>
 
@@ -371,8 +380,8 @@
  Before launching <application>Privoxy</application> for the first time, you 
  will want to configure your browser(s) to use <application>Privoxy</application>
  as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
- and port 8118 (earlier versions used port 8000). This is the one required 
- configuration that must be done! 
+ and port 8118 (earlier versions used port 8000). This is the one
+ configuration step that must be done! 
 </para>
  
 <para> 
@@ -5199,6 +5208,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.86  2002/04/21 01:46:32  hal9
+ Re-write actions section.
+
  Revision 1.85  2002/04/18 21:23:23  hal9
  Fix ugly typo (mine).
 
