@@ -10,6 +10,9 @@
 ]]>
 ]>
 
+;; borrowed from the LDP stylesheet, with modifications, HB.
+;; Added support for css 03/20/02, and other mods.
+
 <style-sheet>
 
 <style-specification id="print" use="docbook">
@@ -84,8 +87,65 @@
   ;; For enumerated sections (1.1, 1.1.1, 1.2, etc.)
   #t)
 
+;; HB changed TOC depth to 3 levels.
 (define (toc-depth nd)
   3)
+
+;; HB added 03/20/02, see dbparam.dsl ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define %body-attr% 
+  ;; REFENTRY body-attr
+  ;; PURP What attributes should be hung off of BODY?
+  ;; DESC
+  ;; A list of the the BODY attributes that should be generated.
+  ;; The format is a list of lists, each interior list contains the
+  ;; name and value of a BODY attribute.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  (list
+   (list "BGCOLOR" "#EEEEEE")
+   (list "TEXT" "#000000")
+   (list "LINK" "#0000FF")
+   (list "VLINK" "#840084")
+   (list "ALINK" "#0000FF")))
+
+(define %stylesheet%
+  ;; REFENTRY stylesheet
+  ;; PURP Name of the stylesheet to use
+  ;; DESC
+  ;; The name of the stylesheet to place in the HTML LINK TAG, or '#f' to
+  ;; suppress the stylesheet LINK.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  "../ijb.css")
+
+(define %stylesheet-type%
+  ;; REFENTRY stylesheet-type
+  ;; PURP The type of the stylesheet to use
+  ;; DESC
+  ;; The type of the stylesheet to place in the HTML LINK TAG.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  "text/css")
+
+(define %css-liststyle-alist%
+  ;; REFENTRY css-liststyle-alist
+  ;; PURP Map DocBook OVERRIDE and MARK attributes to CSS
+  ;; DESC
+  ;; If '%css-decoration%' is turned on then the list-style-type property of
+  ;; list items will be set to reflect the list item style selected in the
+  ;; DocBook instance.  This associative list maps the style type names used
+  ;; in your instance to the appropriate CSS names.  If no mapping exists,
+  ;; the name from the instance will be used.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  '(("bullet" "disc")
+    ("box" "square")))
+
 
 </style-specification-body>
 </style-specification>
