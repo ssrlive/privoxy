@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step3.php,v 1.12 2002/04/06 18:57:38 swa Exp $
+  $Id: step3.php,v 1.13 2002/04/07 17:11:40 oes Exp $
 
   $Log: step3.php,v $
+  Revision 1.13  2002/04/07 17:11:40  oes
+  Tracker submit via curl (no need for user to see), fixing problems, removing monster comments
+
   Revision 1.12  2002/04/06 18:57:38  swa
   first version of the script that writes the
   logfile with all submissions and additionally
@@ -80,8 +83,8 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <link rel="stylesheet" type="text/css" href="../privoxy.css">
   <link rel="stylesheet" type="text/css" href="../p_feedback.css">
-
 
 <?php
 
@@ -118,7 +121,7 @@ function error_abort($title, $message)
               </h1>
              </div>
             <center>
-             <div class=\"errorbox\">
+             <div class=\"warning\">
               $message
              </div>
             </center>
@@ -180,7 +183,7 @@ if(!$fp)
               <h1><a href=\"http://www.privoxy.org/\">Privoxy</a>: Internal Script Error</h1>
             </div>
             <center>
-             <div class=\"errorbox\">
+             <div class=\"warning\">
               <p>
                This script was unable to open its logfile.
               </p>

@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: step2.php,v 1.6 2002/04/02 07:22:19 oes Exp $
+  $Id: step2.php,v 1.11 2002/04/07 15:00:20 oes Exp $
 
   $Log: step2.php,v $
+  Revision 1.11  2002/04/07 15:00:20  oes
+  Descand into framesets to harvest all image URLs
+
   Revision 1.10  2002/04/06 15:19:35  oes
   Cosmetics   Clean-up, smarter handling of unreachable URLs
 
@@ -68,6 +71,7 @@
  <head>
   <meta http-equiv="Content-Style-Type" content="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <link rel="stylesheet" type="text/css" href="../privoxy.css">
   <link rel="stylesheet" type="text/css" href="../p_feedback.css">
 
   <script language="javascript" type="text/javascript">
@@ -257,7 +261,7 @@ function error_abort($title, $message)
               </h1>
              </div>
             <center>
-             <div class=\"errorbox\">
+             <div class=\"warning\">
               $message
              </div>
             </center>
