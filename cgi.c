@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.64 2002/04/24 02:17:21 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.65 2002/04/26 12:53:51 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.64 2002/04/24 02:17:21 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.65  2002/04/26 12:53:51  oes
+ *     - New function add_help_link
+ *     - default_exports now exports links to the user manual
+ *       and a prefix for links into the config chapter
+ *
  *    Revision 1.64  2002/04/24 02:17:21  oes
  *     - Better descriptions for CGIs
  *     - Hide edit-actions, more shortcuts
@@ -1249,11 +1254,11 @@ jb_err cgi_error_bad_param(struct client_state *csp,
 char *add_help_link(const char *item, 
                     struct configuration_spec *config)
 {
-   char *result = strdup("");
+   char *result;
 
    if (!item) return NULL;
-   
-   string_append(&result, "<a href=\"");
+
+   result = strdup("<a href=\"");
    string_append(&result, config->usermanual);
    string_append(&result, HELP_LINK_PREFIX);
    string_join  (&result, string_toupper(item));
