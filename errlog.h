@@ -1,6 +1,6 @@
 #ifndef _ERRLOG_H
 #define _ERRLOG_H
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.4 2001/05/25 21:56:06 jongfoster Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.5 2001/05/26 17:25:14 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.5  2001/05/26 17:25:14  jongfoster
+ *    Added support for CLF (Common Log Format) and fixed LOG_LEVEL_LOG
+ *
  *    Revision 1.4  2001/05/25 21:56:06  jongfoster
  *    Added FIXME comment to (broken) LOG_LEVEL_LOG
  *
@@ -108,14 +111,13 @@ extern "C" {
 #ifdef FORCE_LOAD
 #define LOG_LEVEL_FORCE      0x0020
 #endif /* def FORCE_LOAD */
-#ifdef PCRS
 #define LOG_LEVEL_RE_FILTER  0x0040
-#endif /* def PCRS */
 #ifdef FAST_REDIRECTS
 #define LOG_LEVEL_REDIRECTS  0x0080
 #endif /* def FAST_REDIRECTS */
+#define LOG_LEVEL_DEANIMATE  0x0100
 
-#define LOG_LEVEL_CLF        0x0100 /* Common Log File format */
+#define LOG_LEVEL_CLF        0x0200 /* Common Log File format */
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000
