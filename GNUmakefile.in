@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.115 2002/09/05 19:13:04 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.116 2002/09/06 05:22:57 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -772,7 +772,7 @@ tidy:
 	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
-	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
+	$(RM) GNUmakefile configure src/config.h.in src/config.h config.cache config.status config.log logfile \
               privoxy.log core *.tar.gz *.tar privoxy-cl.spec $(DOC_DIR)/ldp.dsl \
 		    $(DOC_DIR)/GNUmakefile
 
@@ -819,6 +819,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.116  2002/09/06 05:22:57  hal9
+# Adapt make webserver target to 3.0 for pdf uploading.
+#
 # Revision 1.115  2002/09/05 19:13:04  hal9
 # Migrate Karstens make snapshot stuff (not tested).
 #
