@@ -10,8 +10,12 @@
 ]]>
 ]>
 
+<!--
+
 ;; borrowed from the LDP stylesheet, with modifications, HB.
 ;; Added support for css 03/20/02, and other mods.
+
+-->
 
 <style-sheet>
 
@@ -119,7 +123,7 @@
   ;; /DESC
   ;; AUTHOR N/A
   ;; /REFENTRY
-  "../ijb.css")
+  "../ijb_docs.css")
 
 (define %stylesheet-type%
   ;; REFENTRY stylesheet-type
@@ -145,6 +149,19 @@
   ;; /REFENTRY
   '(("bullet" "disc")
     ("box" "square")))
+
+(define %css-decoration%
+  ;; REFENTRY css-decoration
+  ;; PURP Enable CSS decoration of elements
+  ;; DESC
+  ;; If '%css-decoration%' is turned on then HTML elements produced by the
+  ;; stylesheet may be decorated with STYLE attributes.  For example, the
+  ;; LI tags produced for list items may include a fragment of CSS in the
+  ;; STYLE attribute which sets the CSS property "list-style-type".
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  #t)
 
 
 </style-specification-body>
