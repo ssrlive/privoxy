@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.101 2002/05/03 03:58:30 hal9 Exp $
+ $Id: user-manual.sgml,v 1.102 2002/05/03 17:46:00 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.101 2002/05/03 03:58:30 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.102 2002/05/03 17:46:00 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -90,13 +90,6 @@
 </abstract>
 
 </artheader>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="intro" label=""><title></title>
-<!-- dummy section to force TOC on page by itself -->
-<!-- DO NOT REMOVE! please ;) -->
-<para> </para>
-</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 label="1" id="introduction"><title>Introduction</title>
@@ -405,32 +398,68 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-  Install <application>Privoxy</application>. See the section <link linkend="installation">Installing</link>.
+   If upgrading, please back up any configuration files. See 
+   the <link linkend="upgradersnote">Note to Upgraders</link> Section.
+  </para>
+</listitem> 
+ <listitem>
+  <para>
+  Install <application>Privoxy</application>. See the <link
+  linkend="installation">Installation Section</link> for platform specific
+  information. 
+ </para>
+ </listitem>  
+
+ <listitem>
+  <para>
+  Start <application>Privoxy</application>, if the installation program has
+  not done this already. See the section <link linkend="startup">Starting
+  <application>Privoxy</application></link>.
   </para>
  </listitem>  
 
  <listitem>
   <para>
-  Start <application>Privoxy</application>. See the section <link linkend="startup">Starting <application>Privoxy</application></link>.
+  Set your browser to use <application>Privoxy</application> as HTTP and HTTPS
+  proxy by setting the proxy configuration for address of
+  <literal>localhost</literal> and port <literal>8118</literal>.
+  (<application>Junkbuster</application> and earlier versions of
+  <application>Privoxy</application> used port 8000.) See the section <link
+  linkend="startup">Starting <application>Privoxy</application></link>.
   </para>
  </listitem>  
 
  <listitem>
   <para>
-  Change your browser's configuration to use the proxy <literal>localhost</literal> on port
-  <literal>8118</literal>. See the section <link linkend="startup">Starting <application>Privoxy</application></link>.
+    Flush your browser's caches, to remove any cached ad images.
   </para>
- </listitem>  
+</listitem> 
 
  <listitem>
   <para>
-  Enjoy surfing with enhanced comfort and privacy. Please see the section
-  <link linkend="contact">Contacting the Developers</link> on how to report
-  bugs or problems with websites or to get help. You may want to change the
-  file <filename>user.action</filename> to further tweak your new browsing
-  experience.
+  Enjoy surfing with enhanced comfort and privacy.  You may want to customize the
+  <link linkend="actions-file"><filename>user.action</filename></link> file to
+  personalize your new browsing experience. See the <link
+  linkend="configuration">Configuration section</link> for more configuration
+  options, and how to further customize your installation.
   </para>
- </listitem>  
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   If you experience problems with sites that <quote>misbehave</quote>, see
+   the <link linkend="actionsanat">Anatomy of an Action</link> section in the
+   Appendix.
+  </para>
+ </listitem> 
+ 
+ <listitem>
+  <para>
+   Please see the section <link linkend="contact">Contacting the
+   Developers</link> on how to report bugs or problems with websites or to get
+   help. 
+  </para>
+ </listitem> 
 
  </itemizedlist>
 </para>
@@ -5893,6 +5922,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.102  2002/05/03 17:46:00  oes
+ Further proofread & reactivated short build instructions
+
  Revision 1.101  2002/05/03 03:58:30  hal9
  Move the user-manual config directive to top of section. Add note about
  Privoxy needing read permissions for configs, and write for logs.
