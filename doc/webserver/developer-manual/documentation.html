@@ -4,7 +4,8 @@
 >Documentation Guidelines</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
 REL="HOME"
 TITLE="Privoxy Developer Manual"
 HREF="index.html"><LINK
@@ -76,23 +77,23 @@ NAME="DOCUMENTATION"
 >    All formal documents are maintained in docbook SGML and located in the
     <TT
 CLASS="COMPUTEROUTPUT"
->doc/source</TT
+>doc/source/*</TT
 > directory. You will need
     <A
 HREF="http://www.docbook.org"
 TARGET="_top"
->docbook</A
-> and the docbook
-    stylesheets (or comparable alternatives), and either
-    <SPAN
+>Docbook</A
+>, the Docbook 
+    DTD's and the Docbook modular stylesheets (or comparable alternatives),
+    and either <SPAN
 CLASS="APPLICATION"
 >jade</SPAN
-> or <SPAN
+> or
+    <SPAN
 CLASS="APPLICATION"
 >openjade</SPAN
->
-    (recommended) installed in order to build docs from source. Currently
-    there is <A
+> (recommended) installed in order to
+    build docs from source. Currently there is <A
 HREF="../user-manual/index.html"
 TARGET="_top"
 ><I
@@ -107,39 +108,57 @@ TARGET="_top"
 CLASS="CITETITLE"
 >FAQ</I
 ></A
->, and,
-    of course this, the <I
+>, and, of
+    course this, the <I
 CLASS="CITETITLE"
 >developer-manual</I
-> in this
-    format. The <I
+> in this format.
+    The <I
 CLASS="CITETITLE"
 >README</I
->, is also now maintained 
-    as SGML. The <I
+>, <I
 CLASS="CITETITLE"
->README</I
-> in the top-level source 
-    directory is a generated file. <I
+>AUTHORS</I
+>
+    <I
+CLASS="CITETITLE"
+>privoxy.1</I
+> (man page) files are also now maintained
+    as Docbook SGML. The finished files are all in the top-level source
+    directory are generated files! Also, <TT
+CLASS="FILENAME"
+>index.html</TT
+>, the
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> home page, is maintained as SGML.
+    <I
 CLASS="EMPHASIS"
->DO NOT edit this
-    directly</I
->. Edit the SGML source!
+>DO NOT edit these directly</I
+>. Edit the SGML source, or
+    contact someone involved in the documentation (at present Stefan and
+    Hal).
     </P
 ><P
->     Other, less formal documents (e.g. AUTHORS, LICENSE) are maintained as
-     plain text files in the toplevel source directory. At least for the 
-     time being.
+>     Other, less formal documents (e.g. <TT
+CLASS="FILENAME"
+>LICENSE</TT
+>,
+     <TT
+CLASS="FILENAME"
+>INSTALL</TT
+>) are maintained as plain text files in the
+     toplevel source directory. At least for the time being.
     </P
 ><P
 >     Packagers are encouraged to include this documentation. For those without
      the ability to build the docs locally, text versions of each are kept in
-     CVS. Or HTML versions can be downloaded from the <A
-HREF="http://www.privoxy.org"
-TARGET="_top"
->www.privoxy.org</A
-> website, which
-     should be fairly current. (This is only a temporary solution.)
+     CVS. HTML versions are also now being kept in CVS under 
+     <TT
+CLASS="FILENAME"
+>doc/webserver/*</TT
+>.
     </P
 ><P
 >     Formal documents are built with the Makefile targets of
@@ -154,15 +173,15 @@ CLASS="COMPUTEROUTPUT"
      try both. The build process uses the document SGML sources in
      <TT
 CLASS="COMPUTEROUTPUT"
->doc/source</TT
+>doc/source/*/*</TT
 > to update all text files in
      <TT
 CLASS="COMPUTEROUTPUT"
->doc/text</TT
+>doc/text/</TT
 > and to update all HTML
      documents in <TT
 CLASS="COMPUTEROUTPUT"
->doc/webserver</TT
+>doc/webserver/</TT
 >.
     </P
 ><P
@@ -215,46 +234,47 @@ NAME="SGML"
 ></H2
 ><P
 > If you are not familiar with SGML, it is a markup language similar to HTML. 
- In fact, HTML is an SGML application. Both use <SPAN
+ Actually, not a mark up language per se, but a language used to define 
+ markup languages. In fact, HTML is an SGML application. Both will use
+ <SPAN
 CLASS="QUOTE"
 >"tags"</SPAN
->
- to format text and other content. SGML tags are much more varied, 
- and flexible, but do much of the same kinds of things. The tags, 
+> to format text and other content. SGML tags can be much
+ more varied, and flexible, but do much of the same kinds of things. The tags,
  or <SPAN
 CLASS="QUOTE"
 >"elements"</SPAN
->, are definable in SGML. There is no 
- set <SPAN
+>, are definable in SGML. There is no set
+ <SPAN
 CLASS="QUOTE"
 >"standards"</SPAN
 >. Since we are using
  <SPAN
 CLASS="APPLICATION"
 >Docbook</SPAN
->, our tags are those that are 
- defined by <SPAN
+>, our tags are those that are defined by 
+ <SPAN
 CLASS="APPLICATION"
 >Docbook</SPAN
->. Much of how the 
- finish document is rendered is determined by the <SPAN
+>. Much of how the finish document is
+ rendered is determined by the <SPAN
 CLASS="QUOTE"
 >"stylesheets"</SPAN
 >.
- The stylesheets determine how each tag gets translated to HTML, or 
- other formats.</P
+ The stylesheets determine how each tag gets translated to HTML, or other
+ formats.</P
 ><P
-> Tags in SGML need to be always <SPAN
+> Tags in Docbook SGML need to be always <SPAN
 CLASS="QUOTE"
 >"closed"</SPAN
->. If not, you 
- will likely generate errors. Example: 
- <TT
+>. If not, you
+ will likely generate errors. Example: <TT
 CLASS="LITERAL"
->&#60;title&#62;My Title&#60;/title&#62;</TT
->. They are 
- also case-insensitive, but we strongly suggest using all lower 
- case. This keeps compatibility with [Docbook] <SPAN
+>&#60;title&#62;My
+ Title&#60;/title&#62;</TT
+>. They are also case-insensitive, but we
+ strongly suggest using all lower case. This keeps compatibility with
+ [Docbook] <SPAN
 CLASS="APPLICATION"
 >XML</SPAN
 >.</P
@@ -313,7 +333,7 @@ BORDER="0"
 CLASS="EMPHASIS"
 >&#60;para&#62;&#60;/para&#62;</I
 >, paragraph delimiter. Most 
-  text needs to be within paragraph elements.
+  text needs to be within paragraph elements (there are some exceptions).
  </TD
 ></TR
 ><TR
@@ -321,7 +341,7 @@ CLASS="EMPHASIS"
 >  <I
 CLASS="EMPHASIS"
 >&#60;emphasis&#62;&#60;/emphasis&#62;</I
->, stylesheets make this
+>, the stylesheets make this
  italics.
  </TD
 ></TR
@@ -438,8 +458,11 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->       Tags delimiting a block of text should be on their own line. 
-       Like:
+>       Tags delimiting a <I
+CLASS="EMPHASIS"
+>block</I
+> of text (even small
+       blocks) should be on their own line. Like:
        <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&#60;para&#62;<br>
@@ -457,8 +480,9 @@ CLASS="LITERALLAYOUT"
 ></LI
 ><LI
 ><P
->      Tags should be nested and step indented like:
-       <P
+>      Tags should be nested and step indented for block text like: (except
+      in-line tags) 
+     <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&#60;para&#62;<br>
 &nbsp;&nbsp;&#60;itemizedlist&#62;<br>
@@ -485,7 +509,8 @@ CLASS="LITERALLAYOUT"
 ><P
 >     Do not hesitate to make comments. Comments can either use the 
      &#60;comment&#62; element, or the &#60;!--  --&#62; style comment 
-     familiar from HTML.
+     familiar from HTML. (Note in Docbook v4.x &#60;comment&#62; is 
+     replaced by &#60;remark&#62;.)
     </P
 ></LI
 ><LI
@@ -548,7 +573,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN173"
+NAME="AEN179"
 >4.3. Privoxy Custom Entities</A
 ></H2
 ><P
@@ -595,8 +620,8 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > version string. You are strongly 
   encouraged to use these where possible. Some of these obviously 
-  require re-setting with each release. A sampling of custom entities are
-  listed below. See any of the main docs for examples.
+  require re-setting with each release (done by the Makefile). A sampling of
+  custom entities are listed below. See any of the main docs for examples.
  </P
 ><P
 >  <P
