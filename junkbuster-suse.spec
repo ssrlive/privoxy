@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.18 2002/03/11 12:30:31 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.19 2002/03/11 22:59:05 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -69,7 +69,7 @@ SuSE series: n
 # -----------------------------------------------------------------------------
 #
 %prep
-%setup -c -n ijbswa
+%setup -c
 
 #
 # -----------------------------------------------------------------------------
@@ -272,6 +272,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.19  2002/03/11 22:59:05  hal9
+# Remove --enable-no-gifs
+#
 # Revision 1.18  2002/03/11 12:30:31  swa
 # be consistent with rh spec file
 #
