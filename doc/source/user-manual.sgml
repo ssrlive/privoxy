@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.7 2001/09/24 14:31:36 hal9 Exp $
+ $Id: user-manual.sgml,v 1.8 2001/09/25 00:34:59 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.7 2001/09/24 14:31:36 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.8 2001/09/25 00:34:59 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -83,9 +83,66 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
 </para>
 
 <para>
- Since this is a development version, there <emphasis>are</emphasis> bugs! 
+ Since this is a development version, some features are in the process of
+ being implemented. And there <emphasis>are</emphasis> bugs! 
 </para>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2>
+<title>New Features</title>
+<para>
+ In addition to <application>Junkbuster's</application> traditional features
+ of ad and banner blocking and cookie management, this is a list of new
+ features currently under development:
+</para>
+
+<para>
+ <itemizedlist>
+
+ <listitem>
+  <para>
+   Modularized configuration that will allow for system wide settings, and
+   individual user settings. 
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   A web based GUI configuration utility.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+    Blocking of annoying pop-up browser windows (previously available as a
+    patch). 
+  </para>
+ </listitem> 
+ </itemizedlist>
+
+ <listitem>
+  <para>
+   Support for HTTP 1.1.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Support for Perl Compatible Regular Expressions in the configuration files, and 
+   generally a more sophisticated configuration syntax.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   Web page content filtering.
+  </para>
+ </listitem> 
+ 
+</para>
+
+</sect2>
 
 </sect1>
 
@@ -324,7 +381,7 @@ configuration section below.
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="configuration"><title>Junkbuster Configuration</title>
 <para>
- For Unix and Linux, all configuraton files are located in
+ For Unix, *BSD and Linux, all configuraton files are located in
  <filename>/etc/junkbuster/</filename> by default. For MS Windows and OS/2,
  these are all in the same directory as the
  <application>Junkbuster</application> executable. The name and number of
@@ -344,7 +401,7 @@ configuration section below.
   <listitem>
    <para>
      The main configuration file is named <filename>config</filename>
-     on Linux, Unix, and OS/2, and <filename>junkbustr.txt</filename> on
+     on Linux, Unix, BSD, and OS/2, and <filename>junkbustr.txt</filename> on
      Windows.
    </para>
   </listitem> 
@@ -382,7 +439,7 @@ configuration section below.
 <title>The Main Configuration File</title>
 <para>
  Again, the main configuration file is named <filename>config</filename> on
- Linux/Unix and OS/2, and <filename>junkbustr.txt</filename> on Windows.
+ Linux/Unix/BSD and OS/2, and <filename>junkbustr.txt</filename> on Windows.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:
@@ -2445,16 +2502,18 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The included default configuration files should give a reasonable starting
- point, though may be aggressive in blocking junk. You will probably want to
- keep an eye out for sites that require cookies, and add these to
- <filename>actionsfile</filename> as needed. By default, most of these will be
- blocked until you add them to the configuration. If you want the browser to
- handle this, you will need to edit <filename>actionsfile</filename> and
- disable this feature. 
+ point, though may be somewhat aggressive in blocking junk. You will probably
+ want to keep an eye out for sites that require cookies, and add these to
+ <filename>actionsfile</filename> as needed. By default, most of these will
+ be blocked until you add them to the configuration. If you want the browser
+ to handle this, you will need to edit <filename>actionsfile</filename> and
+ disable this feature. If you use more than one browser, it would make more
+ sense to let <application>Junkbuster</application> handle this. In which
+ case, the browser(s) should be set to accept all cookies.
 </para>
 
 <para>
- If you enter counter problems, please verify it is a
+ If you encounter problems, please verify it is a
  <application>Junkbuster</application> bug, by disabling
  <application>Junkbuster</application>, and then trying the same page. 
  Before reporting it as a bug, see if there is not a configuration 
@@ -2474,8 +2533,8 @@ To be filled. mention the support forums as the primary channel of
 communication (bugs, feature requests, etc.)
 -->
  Feature requests and other questions should be posted to the <ulink
- url="http://sourceforge.net/forum/?group_id=11118">Support Forums</ulink> at
- SourceForge. There is also an archive there.
+ url="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">Feature
+ request page</ulink> at SourceForge. There is also an archive there.
 </para>
 
 <para>
@@ -2488,6 +2547,9 @@ communication (bugs, feature requests, etc.)
 <para>
  Please report bugs, using the form at 
  <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">Sourceforge</ulink>.
+ Please try to verify that it is a <application>Junkbuster</application> bug,
+ and not a browser or site bug first. Also, check to make sure this is not
+ already a known bug.
 </para>
 
 </sect1>
@@ -2532,7 +2594,7 @@ communication (bugs, feature requests, etc.)
  Waldherr</ulink> made many improvements, and started the <ulink
  url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
  rekindle development. The last stable release was v2.0.2, which has now 
- grown whiskers ;-),
+ grown whiskers ;-).
 </para>
 
 </sect2>
@@ -2555,7 +2617,228 @@ communication (bugs, feature requests, etc.)
 <sect2 id="regex">
 <title>Regular Expressions</title>
 <para>
- Some expressions are regular, and some are not. 
+ <application>Junkbuster</application> can use <quote>regular expressions</quote> 
+ in various config files. Assuming support for <quote>pcre</quote> (Perl
+ Compatible Regular Expressions) is compiled in, which is the default. Such
+ configuration directives do not require regular expressions, but they can be
+ used to increase flexibility by matching a pattern with wildcards against
+ URLs.
+</para>
+
+<para>
+ If you are reading this, you probably don't understand what <quote>regular
+ expressions</quote> are, or what they can do. So this will be a very brief
+ introduction only. A full explanation would require a book ;-)
+</para>
+
+<para>
+ <quote>Regular expressions</quote> is a way of matching one character
+ expression against another to see if it matches or not. One of the
+ <quote>expressions</quote> is a literal string of readable characters
+ (letter, numbers, etc), and the other is a complex string of literal
+ characters combined with wildcards, and other special characters, called
+ metacharacters. The <quote>metacharacters</quote> have special meanings and
+ are used to build the complex pattern to be matched against. Perl Compatible
+ Regular Expressions is an enhanced form of the regular expression language
+ with backward compatibility.
+</para>
+
+<para>
+ To make a simple analogy, we do something similar when we use wildcard
+ characters when listing files with the <command>dir</command> command in DOS. 
+ <literal>*.*</literal> matches all filenames. The <quote>special</quote>
+ character here is the asterik which matches any and all characters. We can be
+ more specific and use <literal>?</literal> to match just individual
+ characters. So <quote>dir file?.text</quote> would match
+ <quote>file1.txt</quote>, <quote>file2.txt</quote>, etc. We are pattern
+ matching, using a similar technique to <quote>regular expressions</quote>!
+</para>
+
+<para>
+ Regular expressions do essentially the same thing, but are much, much more
+ powerful. There are many more <quote>special characters</quote> and ways of 
+ building complex patterns however. Let's look at a few of the common ones,
+ and then some examples:
+</para>
+
+<simplelist>
+ <member>
+  <emphasis>.</emphasis> - Matches any single character, e.g. <quote>a</quote>,
+  <quote>A</quote>, <quote>4</quote>, <quote>:</quote>, or <quote>@</quote>.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>?</emphasis> - The preceding character or expression is matched ZERO or ONE
+  times. Either/or.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>+</emphasis> - The preceding character or expression is matched ONE or MORE
+  times.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>*</emphasis> - The preceding character or expression is matched ZERO or MORE
+  times.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>\</emphasis> - The <quote>escape</quote> character denotes that
+  the following character should be taken literally. This is used where one of the 
+  special characters (e.g. <quote>.</quote>) needs to be taken literally and
+  not as a special metacharacter.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>[]</emphasis> - Characters enclosed in brackets will be matched if
+  any of the enclosed characters are encountered.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>()</emphasis> - Pararentheses are used to group a sub-expression,
+  or multiple sub-expressions.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>|</emphasis> - The <quote>bar</quote> character works like an
+  <quote>or</quote> conditional statement. A match is successful if the
+  sub-expression on either side of <quote>|</quote> matches.
+ </member>
+</simplelist>
+
+<simplelist>
+ <member>
+  <emphasis>s/string1/string2/g</emphasis> - This is used to rewrite strings of text. 
+  <quote>string1</quote> is replaced by <quote>string2</quote> in this
+  example.
+ </member>
+</simplelist>
+
+<para>
+ These are just some of the ones you are likely to use when matching URLs with 
+ <application>Junkbuster</application>, and is a long way from a definitive
+ list. This is enough to get us started with a few simple examples which may
+ be more illuminating:
+</para>
+
+<para>
+ <literal><emphasis>/.*/banners/.*</emphasis></literal> - A  simple example
+ that uses the common combination of <quote>.</quote> and <quote>*</quote> to 
+ denote any character, zero or more times. In other words, any string at all.
+ So we start with a literal forward slash, then our regular expression pattern 
+ (<quote>.*</quote>) another literal forward slash, the string
+ <quote>banners</quote>, another forward slash, and lastly another
+ <quote>.*</quote>. We are building 
+ a directory path here. This will match any file with the path that has a
+ directory named <quote>banners</quote> in it. The <quote>.*</quote> matches
+ any characters, and this could conceivably be more forward slashes, so it
+ might expand into a much longer looking path. For example, this could match:
+ <quote>/eye/hate/spammers/banners/annoy_me_please.gif</quote>, or just
+ <quote>/banners/annoying.html</quote>, or almost an infinite number of other
+ possible combinations, just so it has <quote>banners</quote> in the path
+ somewhere.
+</para>
+
+<para>
+ A now something a little more complex:
+</para>
+
+<para>
+ <literal><emphasis>/.*/adv((er)?ts?|ertis(ing|ements?))?/</emphasis></literal> - 
+ We have several literal forward slashes again (<quote>/</quote>), so we are
+ building another expression that is a file path statement. We have another 
+ <quote>.*</quote>, so we are matching against any conceivable sub-path, just so
+ it matches our expression. The only true literal that <emphasis>must
+ match</emphasis> our pattern is <application>adv</application>, together with
+ the forward slashes. What comes after the <quote>adv</quote> string is the
+ interesting part. 
+</para>
+
+<para>
+ Remember the <quote>?</quote> means the preceding expression (either a
+ literal character or anything grouped with <quote>(...)</quote> in this case)
+ can exist or not, since this means either zero or one match. So
+ <quote>((er)?ts?|ertis(ing|ements?))</quote> is optional, as are the
+ individual sub-expressions: <quote>(er)</quote>,
+ <quote>(ing|ements?)</quote>, and the <quote>s</quote>. The <quote>|</quote>
+ means <quote>or</quote>. We have two of those. For instance, 
+ <quote>(ing|ements?)</quote>, can expand to match either <quote>ing</quote> 
+ <emphasis>OR</emphasis> <quote>ements?</quote>. What is being done here, is an
+ attempt at matching as many variations of <quote>advertisement</quote>, and 
+ similar, as possible. So this would expand to match just <quote>adv</quote>,
+ or <quote>advert</quote>, or <quote>adverts</quote>, or
+ <quote>advertising</quote>, or <quote>advertisement</quote>, or
+ <quote>advertisements</quote>. You get the idea. But it would not match 
+ <quote>advertizements</quote> (with a <quote>z</quote>). We could fix that by
+ changing our regular expression to: 
+ <quote>/.*/adv((er)?ts?|erti(s|z)(ing|ements?))?/</quote>, which would then match
+ either spelling.
+</para>
+
+<para>
+ <literal><emphasis>/.*/advert[0-9]+\.(gif|jpe?g)</emphasis></literal> - Again 
+ another path statement with forward slashes. Anything in the square brackets 
+ <quote>[]</quote> can be matched. This is using <quote>0-9</quote> as a
+ shorthand expression to mean any digit one through nine. It is the same as
+ saying <quote>0123456789</quote>. So any digit matches. The <quote>+</quote>
+ means one or more of the preceding expression must be included. The preceding 
+ expression here is what is in the square brackets -- in this case, any digit 
+ one through nine. Then, at the end, we have a grouping: <quote>(gif|jpe?g)</quote>. 
+ This includes a <quote>|</quote>, so this needs to match the expression on
+ either side of that bar character also. A simple <quote>gif</quote> on one side, and the other
+ side will in turn match either <quote>jpeg</quote> or <quote>jpg</quote>,
+ since the <quote>?</quote> means the letter <quote>e</quote> is optional and
+ can be matched once or not at all. So we are building an expression here to
+ match image GIF or JPEG type image file. It must include the literal
+ string <quote>advert</quote>, then one or more digits, and a <quote>.</quote>
+ (which is now a literal, and not a special character, since it is escaped
+ with <quote>\</quote>), and lastly either <quote>gif</quote>, or
+ <quote>jpeg</quote>, or <quote>jpg</quote>. Some possible matches would
+ include: <quote>//advert1.jpg</quote>,
+ <quote>/nasty/ads/advert1234.gif</quote>,
+ <quote>/banners/from/hell/advert99.jpg</quote>. It would not match
+ <quote>advert1.gif</quote> (no leading slash), or
+ <quote>/adverts232.jpg</quote> (the expression does not include an
+ <quote>s</quote>), or <quote>/advert1.jsp</quote> (<quote>jsp</quote> is not
+ in the expression anywhere).
+</para>
+
+<para>
+ <literal><emphasis>s/microsoft(?!.com)/MicroSuck/i</emphasis></literal> - This is 
+ a substitution. <quote>MicroSuck</quote> will replace any occurence of 
+ <quote>microsoft</quote>.  The <quote>i</quote> at the end of the expression
+ means ignore case. The <quote>(?!.com)</quote> means 
+ the match should fail if <quote>microsoft</quote> is followed by
+ <quote>.com</quote>. In other words, this acts like a <quote>NOT</quote>
+ modifier. In case this is a hyperlink, we don't want to break it ;-).
+</para>
+
+<para>
+ We are barely scratching the surface of regular expressions here so that you
+ can understand the default <application>Junkbuster</application>
+ configuration files, and maybe use this knowledge to customize your own
+ installation. There is much, much more that can be done with regular
+ expressions. Now that you know enough to get started, you can learn more on
+ your own :/
+</para>
+
+<para>
+ More reading on Perl Compatible Regular expressions: 
+ <ulink url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>
 </para>
 
 </sect2>
@@ -2583,7 +2866,14 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+<<<<<<< user-manual.sgml
  
+=======
+ Revision 1.8  2001/09/25 00:34:59  hal9
+ Some additions, and re-arranging.
+
+ 
+>>>>>>> 1.8
  Revision 1.7  2001/09/24 14:31:36  hal9
  Diddling.
 
