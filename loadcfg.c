@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.30 2002/01/22 23:31:43 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.31 2002/03/03 15:07:20 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.30 2002/01/22 23:31:43 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.31  2002/03/03 15:07:20  oes
+ *    Re-enabled automatic config reloading
+ *
  *    Revision 1.30  2002/01/22 23:31:43  jongfoster
  *    Replacing strsav() with string_append()
  *
@@ -475,9 +478,7 @@ struct configuration_spec * load_config(void)
                 configfile);
    }
 
-   /*
    log_error(LOG_LEVEL_INFO, "loading configuration file '%s':", configfile);
-   */
 
 #ifdef FEATURE_TOGGLE
    g_bToggleIJB      = 1;
@@ -1245,11 +1246,8 @@ struct configuration_spec * load_config(void)
              * error.  To change back to an error, just change log level
              * to LOG_LEVEL_FATAL.
              */
-            log_error(LOG_LEVEL_ERROR, "Unrecognized directive '%s' in line %lu in "
-                  "configuration file (%s).",  buf, linenum, configfile);
-            /* log_error(LOG_LEVEL_ERROR, "Unrecognized directive (%luul) in "
-                  "configuration file: \"%s\"", hash_string( cmd ), buf);
- 	    */
+            log_error(LOG_LEVEL_ERROR, "Unrecognized directive '%s' (%luul) in line %lu in "
+                  "configuration file (%s).",  buf, hash_string(cmd), linenum, configfile);
             string_append(&config->proxy_args, "<br>\nWARNING: unrecognized directive : ");
             string_append(&config->proxy_args, buf);
             string_append(&config->proxy_args, "<br><br>\n");
