@@ -187,23 +187,35 @@ page</ulink> on Sourceforge
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 label="">
 <title></title>
-<para></para>
-<!-- dummy, for spacing -->
-</sect1>
-
-<!--
-BWAAAAAAA!!!!!!!!!!!
+<!-- dummy section, for spacing -->
 <para>
- <ulink url="http://sourceforge.net/>
-  <graphic align="center" fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1"></graphic>
- </ulink>
+<!-- show the SF logo per AUP -->
+<informaltable frame=none label="" pgwide="1">
+ <tgroup cols=1 align="center" colsep=1 rowsep=1>
+  <colspec colname=c1 align="center">
+   <tbody>
+    <row>
+     <entry align="center">
+      <ulink url="http://sourceforge.net/">
+       <inlinegraphic  fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1&#38;dummy=.gif"></inlinegraphic>
+      </ulink>
+    </entry>
+   </row>
+  </tbody>
+ </tgroup>
+</informaltable>
 </para>
 
-NOTE: Sourceforge Logo is required. Makefile is dumping that here, 
-courtesy of Mr Perl.
-
+<!--
+<informalfigure pgwide="1">
+ <ulink url="http://sourceforge.net/">
+  <inlinegraphic align="center" fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1&#38;dummy=.gif"></inlinegraphic>
+ </ulink>
+</informalfigure>
 -->
 
+</sect1>
+ 
  <!--
 
  This program is free software; you can redistribute it 
