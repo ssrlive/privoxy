@@ -1,10 +1,10 @@
 #ifdef AMIGA
 #ifndef _AMIGA_H
 #define _AMIGA_H
-#define AMIGA_H_VERSION "$Id: amiga.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define AMIGA_H_VERSION "$Id: amiga.h,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/amiga.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/amiga.h,v $
  *
  * Purpose     :  Amiga-specific declarations.
  *
@@ -30,7 +30,10 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: jcc.h,v $
+ *    $Log: amiga.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:46  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -43,6 +46,7 @@
 #include <proto/socket.h>
 #undef __NOLIBBASE__
 
+#define __CONSTLIBBASEDECL__ const
 #include <proto/exec.h>
 #include <exec/tasks.h>
 #include <proto/dos.h>

@@ -1,7 +1,7 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.1.1.1 2001/05/15 13:58:46 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/jcc.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
  *
  * Purpose     :  Amiga-specific declarations.
  *
@@ -27,7 +27,10 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.1 2001/05/13 21:57:06 administrator E
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log: jcc.c,v $
+ *    $Log: amiga.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:46  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -39,12 +42,12 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.1 2001/05/13 21:57:06 administrator E
 #include <stdio.h>
 #include <signal.h>
 
-#include "amiga.h"
+#include "project.h"
 
-chonst char amiga_h_rcs[] = AMIGA_H_VERSION;
+const char amiga_h_rcs[] = AMIGA_H_VERSION;
 
 unsigned long __stack = 20*1024;
-/* static char ver[] = "$VER: junkbuster " __AMIGAVERSION__ " (" __AMIGADATE__ ")"; */
+static char ver[] = "$VER: junkbuster " __AMIGAVERSION__ " (" __AMIGADATE__ ")";
 struct Task *main_task = NULL;
 int childs = 0;
 

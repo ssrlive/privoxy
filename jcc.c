@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.4 2001/05/21 19:34:01 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.5 2001/05/22 18:46:04 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,50 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.4 2001/05/21 19:34:01 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.5  2001/05/22 18:46:04  oes
+ *
+ *    - Enabled filtering banners by size rather than URL
+ *      by adding patterns that replace all standard banner
+ *      sizes with the "Junkbuster" gif to the re_filterfile
+ *
+ *    - Enabled filtering WebBugs by providing a pattern
+ *      which kills all 1x1 images
+ *
+ *    - Added support for PCRE_UNGREEDY behaviour to pcrs,
+ *      which is selected by the (nonstandard and therefore
+ *      capital) letter 'U' in the option string.
+ *      It causes the quantifiers to be ungreedy by default.
+ *      Appending a ? turns back to greedy (!).
+ *
+ *    - Added a new interceptor ijb-send-banner, which
+ *      sends back the "Junkbuster" gif. Without imagelist or
+ *      MSIE detection support, or if tinygif = 1, or the
+ *      URL isn't recognized as an imageurl, a lame HTML
+ *      explanation is sent instead.
+ *
+ *    - Added new feature, which permits blocking remote
+ *      script redirects and firing back a local redirect
+ *      to the browser.
+ *      The feature is conditionally compiled, i.e. it
+ *      can be disabled with --disable-fast-redirects,
+ *      plus it must be activated by a "fast-redirects"
+ *      line in the config file, has its own log level
+ *      and of course wants to be displayed by show-proxy-args
+ *      Note: Boy, all the #ifdefs in 1001 locations and
+ *      all the fumbling with configure.in and acconfig.h
+ *      were *way* more work than the feature itself :-(
+ *
+ *    - Because a generic redirect template was needed for
+ *      this, tinygif = 3 now uses the same.
+ *
+ *    - Moved GIFs, and other static HTTP response templates
+ *      to project.h
+ *
+ *    - Some minor fixes
+ *
+ *    - Removed some >400 CRs again (Jon, you really worked
+ *      a lot! ;-)
+ *
  *    Revision 1.4  2001/05/21 19:34:01  jongfoster
  *    Made failure to bind() a fatal error.
  *
@@ -133,7 +177,12 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 
 static void listen_loop(void);
 static void chat(struct client_state *csp);
+#ifdef AMIGA
+void serve(struct client_state *csp);
+#else /* ifndef AMIGA */
 static void serve(struct client_state *csp);
+#endif /* def AMIGA */
+
 #ifdef __BEOS__
 static int32 server_thread(void *data);
 #endif /* def __BEOS__ */
@@ -404,6 +453,10 @@ static void chat(struct client_state *csp)
             p = (char *)malloc(strlen(HTTP_REDIRECT_TEMPLATE) + strlen(tinygifurl));
 	         sprintf(p, HTTP_REDIRECT_TEMPLATE, tinygifurl);
             write_socket(csp->cfd, p, strlen(p));
+         }
+         else
+         {
+            write_socket(csp->cfd, JBGIF, sizeof(JBGIF)-1);
          }
       }
       else
@@ -799,7 +852,11 @@ static void chat(struct client_state *csp)
  * Returns     :  N/A
  *
  *********************************************************************/
+#ifdef AMIGA
+void serve(struct client_state *csp)
+#else /* ifndef AMIGA */
 static void serve(struct client_state *csp)
+#endif /* def AMIGA */
 {
    chat(csp);
    close_socket(csp->cfd);
@@ -868,7 +925,9 @@ int main(int argc, const char *argv[])
 #endif
 {
    configfile =
-#ifndef _WIN32
+#ifdef AMIGA
+   "AmiTCP:db/junkbuster.config"
+#elif !defined(_WIN32)
    "config"
 #else
    "junkbstr.txt"
@@ -891,6 +950,10 @@ int main(int argc, const char *argv[])
       exit(2);
    }
 #endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
+
+#ifdef AMIGA
+   InitAmiga();
+#endif
 
    Argc = argc;
    Argv = argv;
