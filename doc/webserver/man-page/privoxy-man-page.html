@@ -2,7 +2,7 @@
 <HTML><HEAD><TITLE>Manpage of PRIVOXY</TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></HEAD><BODY>
 <H1>PRIVOXY</H1>
-Section:  (1)<BR>Updated: 24 April 2002<BR><A HREF="#index">Index</A>
+Section:  (1)<BR>Updated: 25 April 2002<BR><A HREF="#index">Index</A>
 <HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -101,11 +101,14 @@ For other browsers, check the documentation.
 
 <B>Privoxy</B> can be configured with the various configuration
 files. The default configuration files are: <I>config</I>,
-<I>default.action</I>, and
-<I>default.filter</I>. These are well commented.  On Unix and
-Unix-like systems, these are located in <I>/etc/privoxy/</I> by
-default. On Windows, OS/2 and AmigaOS, these files are in the same directory
-as the <B>Privoxy</B> executable.
+<I>default.filter</I>, and
+<I>default.action</I>. <I>user.action</I> should 
+be used for locally defined exceptions to the default rules of
+<I>default.action</I> These are all well commented.  On Unix
+and Unix-like systems, these are located in
+<I>/etc/privoxy/</I> by default. On Windows, OS/2 and AmigaOS,
+these files are in the same directory as the <B>Privoxy</B>
+executable.
 <P>
 
 The name and number of configuration files has changed from previous
@@ -125,11 +128,10 @@ This is an internal page.
 
 <P>
 
-A brief example of what a <I>default.action</I> configuration
-might look like:
+A brief example of what a simple <I>default.action</I>
+configuration might look like:
 <P>
 <PRE>
-
  # Define a few useful custom aliases for later use
  {{alias}}
 
@@ -142,15 +144,7 @@ might look like:
  fragile     = -block -deanimate-gifs -fast-redirects -filter \
                -hide-referer -prevent-cookies -kill-popups
 
- # Shops should be allowed to set persistent cookies
- shop        = -filter -prevent-cookies -prevent-keeping-cookies
-
- # Your favourite blend of filters:
- #
- myfilters   = +filter{html-annoyances} +filter{js-annoyances} \
-               +filter{popups} +filter{webbugs} +filter{banners-by-size} 
-
- ## Default Policies (actions) ############################
+ ## Turn some actions on ################################
  { \
  -add-header \
  -block \
@@ -160,14 +154,8 @@ might look like:
  +filter{html-annoyances} \
  +filter{js-annoyances} \
  +filter{content-cookies} \
- -filter{popups} \
  +filter{webbugs} \
- +filter{refresh-tags} \
- -filter{fun} \
- +filter{nimda} \
  +filter{banners-by-size} \
- -filter{shockwave-flash} \
- -filter{crude-prental} \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \
  +hide-referrer{forge} \
@@ -180,60 +168,48 @@ might look like:
  +prevent-reading-cookies \
  +prevent-setting-cookies \
  -kill-popups \
- -send-vanilla-wafer \
- -send-wafer \
  }
- /
- # Now set exceptions to the above defined policies #######
-
- # Sites where we want persistant cookies
- {-prevent-reading-cookies -prevent-setting-cookies}
-  .redhat.com
-  .sun.com
-  .yahoo.com
-  .msdn.microsoft.com
-
- # This site requires cookies AND 'fast-redirects' on
- {-prevent-reading-cookies -prevent-setting-cookies -fast-redirects}
-  .nytimes.com
-
- # Add custom headers, and turn off filtering of page source
- {+add-header{X-Privacy: Yes please} #-add-header{*} \
-  +add-header{X-User-Tracking: No thanks!} -filter}
-  privacy.net
-
- # Block, and treat these URLs as 'images'.
+ /   # Match all URLs
+ 
+ # Block, and treat these URL patterns as if they were 'images'.
  {+imageblock}
- ar.atwola.com 
- .ad.doubleclick.net
- .a.yimg.com/(?:(?!/i/).)*$
- .a[0-9].yimg.com/(?:(?!/i/).)*$
- bs*.gsanet.com
- bs*.einets.com
- .qkimg.net
- ad.*.doubleclick.net
+  .ad.doubleclick.net
+  .a[0-9].yimg.com/(?:(?!/i/).)*$
+  ad.*.doubleclick.net
 
  # Block any URLs that match these patterns
  {+block}
- ad*.
- .*ads.
- banner?.
- count*.
- /(?:.*/)?(ads(erver?|tream)?|.*?ads|adv(ert(s|enties|is(ing|e?ments)?)?)?|(ad)?[-_]?banner(s|ads?|farm)?)/
- /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
- /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
- .hitbox.com 
+  ad*.
+  .*ads.
+  banner?.
+  /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+  /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|maino(kset|nta|s)?)/
+  .hitbox.com 
 
  # Make exceptions for these harmless ones that would be 
- # caught by +block.
+ # caught by +block above.
  {-block}
- include.ebay.com
- adsl.
- advice.
- .edu
- .ac.uk
- .uni-*.de
- .*downloads.
+  adsl.
+  advice.
+  .*downloads.
+</PRE>
+
+<P>
+
+Then for a <I>user.action</I>, we would put local,
+narrowly defined exceptions:
+<P>
+<PRE>
+ # Set personal exceptions to the policies in default.action #######
+
+ # Sites where we want persistant cookies
+ {-prevent-reading-cookies -prevent-setting-cookies -session-cookies-only}
+  .redhat.com
+  .sun.com
+  .msdn.microsoft.com
+ 
+ {-block -fast-redirects}
+  .forbes.com
 </PRE>
 
 <P>
@@ -384,6 +360,6 @@ along with this program; if not, write to the Free Software Foundation, Inc.,
 This document was created by
 man2html,
 using the manual pages.<BR>
-Time: 23:48:45 GMT, April 24, 2002
+Time: 14:43:58 GMT, April 25, 2002
 </BODY>
 </HTML>

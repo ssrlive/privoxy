@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "24 April 2002" "Privoxy 2.9.14 beta" ""
+.TH "PRIVOXY" "1" "25 April 2002" "Privoxy 2.9.14 beta" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -82,11 +82,14 @@ For other browsers, check the documentation.
 .PP
 \fBPrivoxy\fR can be configured with the various configuration
 files. The default configuration files are: \fIconfig\fR,
-\fIdefault.action\fR, and
-\fIdefault.filter\fR. These are well commented.  On Unix and
-Unix-like systems, these are located in \fI/etc/privoxy/\fR by
-default. On Windows, OS/2 and AmigaOS, these files are in the same directory
-as the \fBPrivoxy\fR executable.
+\fIdefault.filter\fR, and
+\fIdefault.action\fR. \fIuser.action\fR should 
+be used for locally defined exceptions to the default rules of
+\fIdefault.action\fR These are all well commented.  On Unix
+and Unix-like systems, these are located in
+\fI/etc/privoxy/\fR by default. On Windows, OS/2 and AmigaOS,
+these files are in the same directory as the \fBPrivoxy\fR
+executable.
 .PP
 The name and number of configuration files has changed from previous
 versions, and is subject to change as development progresses. In fact, the
@@ -101,11 +104,10 @@ the same page. In addition, \fBPrivoxy\fR can be toggled on/off.
 This is an internal page.
 .SH "SAMPLE CONFIGURATION"
 .PP
-A brief example of what a \fIdefault.action\fR configuration
-might look like:
+A brief example of what a simple \fIdefault.action\fR
+configuration might look like:
 
 .nf
-
  # Define a few useful custom aliases for later use
  {{alias}}
 
@@ -118,15 +120,7 @@ might look like:
  fragile     = -block -deanimate-gifs -fast-redirects -filter \\
                -hide-referer -prevent-cookies -kill-popups
 
- # Shops should be allowed to set persistent cookies
- shop        = -filter -prevent-cookies -prevent-keeping-cookies
-
- # Your favourite blend of filters:
- #
- myfilters   = +filter{html-annoyances} +filter{js-annoyances} \\
-               +filter{popups} +filter{webbugs} +filter{banners-by-size} 
-
- ## Default Policies (actions) ############################
+ ## Turn some actions on ################################
  { \\
  -add-header \\
  -block \\
@@ -136,14 +130,8 @@ might look like:
  +filter{html-annoyances} \\
  +filter{js-annoyances} \\
  +filter{content-cookies} \\
- -filter{popups} \\
  +filter{webbugs} \\
- +filter{refresh-tags} \\
- -filter{fun} \\
- +filter{nimda} \\
  +filter{banners-by-size} \\
- -filter{shockwave-flash} \\
- -filter{crude-prental} \\
  +hide-forwarded-for-headers \\
  +hide-from-header{block} \\
  +hide-referrer{forge} \\
@@ -156,60 +144,46 @@ might look like:
  +prevent-reading-cookies \\
  +prevent-setting-cookies \\
  -kill-popups \\
- -send-vanilla-wafer \\
- -send-wafer \\
  }
- /
- # Now set exceptions to the above defined policies #######
-
- # Sites where we want persistant cookies
- {-prevent-reading-cookies -prevent-setting-cookies}
-  .redhat.com
-  .sun.com
-  .yahoo.com
-  .msdn.microsoft.com
-
- # This site requires cookies AND 'fast-redirects' on
- {-prevent-reading-cookies -prevent-setting-cookies -fast-redirects}
-  .nytimes.com
-
- # Add custom headers, and turn off filtering of page source
- {+add-header{X-Privacy: Yes please} #-add-header{*} \\
-  +add-header{X-User-Tracking: No thanks!} -filter}
-  privacy.net
-
- # Block, and treat these URLs as 'images'.
+ /   # Match all URLs
+ 
+ # Block, and treat these URL patterns as if they were 'images'.
  {+imageblock}
- ar.atwola.com 
- .ad.doubleclick.net
- .a.yimg.com/(?:(?!/i/).)*$
- .a[0-9].yimg.com/(?:(?!/i/).)*$
- bs*.gsanet.com
- bs*.einets.com
- .qkimg.net
- ad.*.doubleclick.net
+  .ad.doubleclick.net
+  .a[0-9].yimg.com/(?:(?!/i/).)*$
+  ad.*.doubleclick.net
 
  # Block any URLs that match these patterns
  {+block}
- ad*.
- .*ads.
- banner?.
- count*.
- /(?:.*/)?(ads(erver?|tream)?|.*?ads|adv(ert(s|enties|is(ing|e?ments)?)?)?|(ad)?[-_]?banner(s|ads?|farm)?)/
- /.*count(er)?\\.(pl|cgi|exe|dll|asp|php[34]?)
- /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
- .hitbox.com 
+  ad*.
+  .*ads.
+  banner?.
+  /.*count(er)?\\.(pl|cgi|exe|dll|asp|php[34]?)
+  /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|maino(kset|nta|s)?)/
+  .hitbox.com 
 
  # Make exceptions for these harmless ones that would be 
- # caught by +block.
+ # caught by +block above.
  {-block}
- include.ebay.com
- adsl.
- advice.
- .edu
- .ac.uk
- .uni-*.de
- .*downloads.
+  adsl.
+  advice.
+  .*downloads.
+.fi
+.PP
+Then for a \fIuser.action\fR, we would put local,
+narrowly defined exceptions:
+
+.nf
+ # Set personal exceptions to the policies in default.action #######
+
+ # Sites where we want persistant cookies
+ {-prevent-reading-cookies -prevent-setting-cookies -session-cookies-only}
+  .redhat.com
+  .sun.com
+  .msdn.microsoft.com
+ 
+ {-block -fast-redirects}
+  .forbes.com
 .fi
 .PP
 See the comments in the configuration files themselves, or the 
