@@ -64,13 +64,13 @@
 #    If either have-proxy-info is true or have-adminaddr-info is
 #    true, have-help-info is true.  Used to conditionally include
 #    a grey box for any and all help info.
-#  @if-enabled-then@ on @else-not-enabled@ off @endif-enabled@
+#  @if-enabled-display-then@ on @else-not-enabled-display@ off @endif-enabled-display@
 #
 <html>
 
 <head>
   
-  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Privoxy@@my-hostname@</title>
+  <title>@if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@ - Privoxy@@my-hostname@</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -80,9 +80,9 @@
 leftmargin="3" rightmargin="3" topmargin="3" bottommargin="3">
 <center>
 <a href="@default-cgi@" target="_blank">Privoxy</a> is 
-<b>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</b>.
-<a href="@default-cgi@toggle?mini=y&set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@"
->@if-enabled-then@[Disable]@else-not-enabled@[Enable]@endif-enabled@</a>
+<b>@if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</b>.
+<a href="@default-cgi@toggle?mini=y&set=@if-enabled-display-then@disable@else-not-enabled-display@enable@endif-enabled-display@"
+>@if-enabled-display-then@[Disable]@else-not-enabled-display@[Enable]@endif-enabled-display@</a>
 <br>
 <a href="" onclick="window.close();">[Close]</a>
 </center>

@@ -64,13 +64,13 @@
 #    If either have-proxy-info is true or have-adminaddr-info is
 #    true, have-help-info is true.  Used to conditionally include
 #    a grey box for any and all help info.
-#  @if-enabled-then@ on @else-not-enabled@ off @endif-enabled@
+#  @if-enabled-display-then@ on @else-not-enabled-display@ off @endif-enabled-display@
 #
 <html>
 
 <head>
   
-  <title>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@ - Privoxy@@my-hostname@</title>
+  <title>@if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@ - Privoxy@@my-hostname@</title>
   <style type="text/css">
     BODY, P, H1, H2, UL, OL, LI { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
   </style>
@@ -87,14 +87,14 @@
 
     <tr>
       <td bgcolor=#eeeeee>
-        <h2>Privoxy is @if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</h2>
+        <h2>Privoxy is @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</h2>
           <blockquote>
             <p>When enabled, Privoxy performs its magic - blocking
                adverts, filtering cookies, regex-filtering, etc.</p>
             <p>When disabled, Privoxy behaves as a normal HTTP proxy,
                and will not affect your web browsing.</p>
-            <p><a href="@default-cgi@toggle?set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@">Click
-               here</a> to @if-enabled-then@disable@else-not-enabled@enable@endif-enabled@ Privoxy.</p>
+            <p><a href="@default-cgi@toggle?set=@if-enabled-display-then@disable@else-not-enabled-display@enable@endif-enabled-display@">Click
+               here</a> to @if-enabled-display-then@disable@else-not-enabled-display@enable@endif-enabled-display@ Privoxy.</p>
           </blockquote>
       </td>
     </tr>

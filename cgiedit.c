@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.25 2002/03/26 22:29:54 swa Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.26 2002/03/26 22:59:17 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.25 2002/03/26 22:29:54 swa Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.26  2002/03/26 22:59:17  jongfoster
+ *    Fixing /toggle to display status consistently.
+ *
  *    Revision 1.25  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -4185,13 +4188,6 @@ jb_err cgi_toggle(struct client_state *csp,
    if (NULL == (exports = default_exports(csp, "toggle")))
    {
       return JB_ERR_MEMORY;
-   }
-
-   err = map_conditional(exports, "enabled", g_bToggleIJB);
-   if (err)
-   {
-      free_map(exports);
-      return err;
    }
 
    template_name = (get_char_param(parameters, "mini")
