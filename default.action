@@ -1,16 +1,8 @@
-#############################################################################
-#
-# Bare-bones actions file for Privoxy pre release testdrive
-#
-# For information, see http://www.oesterhelt.org/testdrive
-#
-#############################################################################
-
 ######################################################################
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.20 2002/04/21 05:50:10 swa Exp $
+#  $Id: default.action,v 1.21 2002/04/23 21:29:01 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -160,7 +152,7 @@
 #   +name{param}  # enable and set parameter to "param"
 #   -name         # disable
 #
-# Multi-value (e.g. "add-header", "wafer"):
+# Multi-value (e.g. "add-header", "send-wafer"):
 #   +name{param}  # enable and add parameter "param"
 #   -name{param}  # remove the parameter "param"
 #   -name         # disable totally
@@ -196,7 +188,7 @@
 #    most banner animations, but also has the risk of not showing the
 #    entire last frame (if it is only a delta to an earlier frame).
 #
-# +downgrade
+# +downgrade-http-version
 #    Downgrade HTTP/1.1 client requests to HTTP/1.0 and downgrade the
 #    responses as well. Use this action for servers that use HTTP/1.1
 #    protocol features that Privoxy currently can't handle yet.
@@ -242,11 +234,11 @@
 #     crude-parental:   Kill all web pages that contain the words "sex" or "warez"
 #
 #
-# +hide-forwarded
+# +hide-forwarded-for-headers
 #    Block any existing X-Forwarded-for header, and do not add a new one.
 #
-# +hide-from{block}
-# +hide-from{spam@sittingduck.xqq}
+# +hide-from-header{block}
+# +hide-from-header{spam@sittingduck.xqq}
 #    If the browser sends a "From:" header containing your e-mail address, 
 #    either completely removes the header ("block"), or change it to the
 #    specified e-mail address.
@@ -274,23 +266,23 @@
 #      +hide-user-agent{Privoxy/1.0}
 #    (Don't change the version number from 1.0 - after all, why tell them?)
 #
-# +image
+# +handle-as-image
 #    Treat this URL as an image.  This only matters if it's also "+block"ed,
 #    in which case a "blocked" image can be sent rather than a HTML page.
-#    See +image-blocker{} for the control over what is actually sent.
+#    See +set-image-blocker{} for the control over what is actually sent.
 #
-# +image-blocker{blank}
-# +image-blocker{pattern}
-# +image-blocker{<URL>} with <url> being any valid image URL
-#    Decides what to do with URLs that end up tagged with {+block +image}.
+# +set-image-blocker{blank}
+# +set-image-blocker{pattern}
+# +set-image-blocker{<URL>} with <url> being any valid image URL
+#    Decides what to do with URLs that end up tagged with {+block +handle-as-image}.
 #    There are 4 options:
-#      * "-image-blocker" will send a HTML "blocked" page, usually
-#        resulting in a "broken image" icon.
-#      * "+image-blocker{blank}" will send a 1x1 transparent image
-#      * "+image-blocker{pattern}" will send a 4x4 grey/white pattern
+#      * "-set-image-blocker" will send a HTML "blocked" page, usually
+#         resulting in a "broken image" icon.
+#      * "+set-image-blocker{blank}" will send a 1x1 transparent image
+#      * "+set-image-blocker{pattern}" will send a 4x4 grey/white pattern
 #        which is less intrusive than the logo but easier to recognize
 #        than the transparent one.
-#      * "+image-blocker{<URL>}" will send a HTTP temporary redirect
+#      * "+set-image-blocker{<URL>}" will send a HTTP temporary redirect
 #        to the specified image URL.
 #
 #
@@ -312,38 +304,38 @@
 #   +limit-connect{80,443} # Ports 80 and 443 are OK.
 #   +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100, and above 500 are OK.
 #
-# +no-compression
+# +prevent-compression
 #    Prevent the website from compressing the data. Some websites do
-#    that, which is a problem for Privoxy, since +filter, +no-popup
+#    that, which is a problem for Privoxy, since +filter, +kill-popups
 #    and +gif-deanimate will not work on compressed data. Will slow down
 #    connections to those websites, though.
 #
-# +no-cookies-keep
+# +prevent-keeping-cookies
+# +session-cookies-only
 #    If the website sets cookies, make sure they are erased when you exit
 #    and restart your web browser.  This makes profiling cookies useless,
 #    but won't break sites which require cookies so that you can log in
 #    or for transactions.
 #
-# +no-cookies-read
+# +prevent-reading-cookies
 #    Prevent the website from reading cookies
 #
-# +no-cookies-set
+# +prevent-setting-cookies
 #    Prevent the website from setting cookies
 #
-# +no-popup
-# +no-popups
+# +kill-popups
 #    Filter the website through a built-in filter to disable
 #    1;''.concat() etc.  The two alternative spellings are
 #    equivalent.
 #
-# +vanilla-wafer
+# +send-vanilla-wafer
 #    This action only applies if you are using a jarfile.  It sends a
 #    cookie to every site stating that you do not accept any copyright
 #    on cookies sent to you, and asking them not to track you.  Of
 #    course, this is a (relatively) unique header they could use to 
 #    track you.
 #
-# +wafer{name=value}
+# +send-wafer{name=value}
 #    This allows you to add an arbitrary cookie.  Specify it multiple
 #    times in order to add several cookies.
 #
@@ -363,8 +355,8 @@ for-privoxy-version=3.0
 #############################################################################
 #
 # You can define a short form for a list of permissions - e.g., instead
-# of "-no-cookies-set -no-cookies-read -filter -fast-redirects", you can
-# just write "shop".  This is called an alias.
+# of "-prevent-setting-cookies -prevent-reading-cookies -filter -fast-redirects",
+# you can just write "shop". This is called an alias.
 #
 # Currently, an alias can contain any character except space, tab, '=', '{'
 # or '}'.
@@ -374,65 +366,38 @@ for-privoxy-version=3.0
 #
 # Aliases beginning with '+' or '-' may be used for system permission names 
 # in future releases - so try to avoid alias names like this.  (e.g. 
-# "+no-cookies" below is not a good name)
+# "+prevent-cookies" below is not a good name)
 #
 # Aliases must be defined before they are used.
 # 
 
 # Useful aliases
-+no-cookies = +no-cookies-set +no-cookies-read
--no-cookies = -no-cookies-set -no-cookies-read
-+imageblock = +block +image
++prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
+-prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
++imageblock      = +block +handle-as-image
 
 # Fragile sites should have the minimum changes
-fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -no-cookies -no-popups
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -prevent-cookies -kill-popups
 
 # Shops should be allowed to set persistent cookies
-shop        = -filter -no-cookies -no-cookies-keep
+shop        = -filter -prevent-cookies -prevent-keeping-cookies
 
 # Your favourite blend of filters:
 #
 myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{popups}\
               +filter{webbugs} +filter{nimda} +filter{banners-by-size} #+filter{fun}
-
 #... etc.  Customize to your heart's content.
-
 #############################################################################
 # Defaults
 #############################################################################
-{\
--add-header \
--block \
-+deanimate-gifs{last} \
--downgrade \
-+filter{html-annoyances} \
-+filter{content-cookies} \
-+filter{js-annoyances} \
-+filter{popups} \
-+filter{webbugs} \
-+filter{nimda} \
-+filter{banners-by-size} \
-+hide-forwarded \
-+hide-from{block} \
-+hide-referer{forge} \
--hide-user-agent \
--image \
-+image-blocker{pattern} \
-+no-compression \
-+no-cookies-keep \
--no-cookies-read \
--no-cookies-set \
-+no-popups \
--vanilla-wafer \
--wafer \
-}
+{-add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-prental} +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies} +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect +prevent-compression +session-cookies-only -prevent-reading-cookies -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer}
 / # Match all URLs
 
 
 #############################################################################
 # Needed for automatic feedback evaluation; Please don't delete!
 #############################################################################
-{+add-header{X-Actions-File-Version: 1.2} -filter -no-popups}
+{+add-header{X-Actions-File-Version: 1.2} -filter -kill-popups}
 .privoxy.org/actions
 .oesterhelt.org/actions
 
@@ -483,7 +448,7 @@ edit.europe.yahoo.com
 #############################################################################
 # Imagelist:
 #############################################################################
-{+image}
+{+handle-as-image}
 #############################################################################
 /.*\.(gif|jpe?g|png|bmp|ico)
 
@@ -499,8 +464,6 @@ ar.atwola.com
 
 .a.yimg.com/(?:(?!/i/).)*$
 .a[0-9].yimg.com/(?:(?!/i/).)*$
-
-
 
 #BLOCK-REFERRER: 
 bs*.gsanet.com
