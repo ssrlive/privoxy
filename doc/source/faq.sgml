@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.16 2002/03/17 21:32:56 hal9 Exp $
+ $Id: faq.sgml,v 1.17 2002/03/18 03:53:53 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.16 2002/03/17 21:32:56 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.17 2002/03/18 03:53:53 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -645,6 +645,60 @@ Note that normally only local users can connect to JunkBuster, so this is not
 <para>
  Save the file, and restart <application>Junkbuster</application>. Configure 
  all browsers on the network then to use this address and port number.
+</para>
+
+</sect3>
+
+
+<sect3>
+<title id="noseeum">Instead of ads, now I get a Junkbuster logo [or 
+checkerboard]. I don't want to see anything.</title>
+<para>
+ This is a configuration option for images that
+ <application>Junkbuster</application> is stopping. You have the choice of the
+ <application>Junkbuster</application> logo, a checkerboard pattern (this
+ scales better), a transparent 1x1 GIF image, or a custom URL or your choice.
+</para>
+
+<para>
+ If you want to see nothing, then change the <quote>+image-blocker</quote> 
+ action to <quote>+image-blocker{blank}</quote>. This can done from the 
+ <quote>Edit Actions List</quote> selection at <ulink
+ url="http://i.j.b/">http://i.j.b/</ulink>. Or by hand editing the appropriate 
+ actions file. This will only effect what is defined as <quote>images</quote>
+ though. 
+
+</para>
+
+</sect3>
+
+
+<sect3>
+<title id="whyseeum">Why would anybody want to see the logo or checkerboard?</title>
+<para>
+ This can be helpful for troubleshooting problems. It might also be good 
+ for anyone new to <application>Junkbuster</application> so that they can 
+ see if their favorite pages are displaying correctly, and
+ <application>Junkbuster</application> is not inadvertantly removing something 
+ important.
+</para>
+
+</sect3>
+
+<sect3>
+<title id="blockedisugly">I see large red banners on some pages that say 
+<quote>Blocked</quote>. How do I get rid of this?</title>
+<para>
+ These are URLs that match something on
+ <application>Junkbuster's</application> block list. It is meant to be a
+ warning, and they are handled differently than what has been defined as
+ <quote>images</quote> (e.g. ad banners). If you want them to be treated as
+ images, so that they can be invisible, then move the offending URL from the
+ <quote>+block</quote> section to the <quote>+image-blocker</quote> section of
+ your actions file. Alternately, you could modify the
+ <quote><filename>block</filename></quote> HTML template that is used by
+ <application>Junkbuster</application> to display this, and make it something
+ more to your liking.
 
 </para>
 
@@ -896,6 +950,24 @@ Why does Junkbuster leave these large gaps?</title>
 
 </sect3>
 
+
+<sect3>
+<title id="ssl">How can Junkbuster filter HTTPS URLs?</title>
+<para>
+ This is a limitation since HTTPS transactions are encrypted SSL sessions
+ between your browser and the secure site, and are meant to be reliably 
+ <emphasis>secure</emphasis> and private. This means that all cookies and HTTP
+ header information are also encrypted from the time they leave your browser,
+ or the site. <application>Junkbuster</application> does not try to unencrypt
+ this information, so it just passes through as is.
+ <application>Junkbuster</application> can still catch images and ads that
+ are embedded in the SSL stream though.
+
+</para>
+
+</sect3>
+
+
 <sect3>
 <title id="secure">Junkbuster runs as a <quote>server</quote>. How 
 secure is it? Do I need to take any special precautions?</title>
@@ -919,15 +991,30 @@ secure is it? Do I need to take any special precautions?</title>
 
 </sect3>
 
-<!--
 <sect3>
-<title id="blank">Now I see the ugly Junkbuster logo (or checkboard pattern) in
-place of ads. How can I get rid of this? I don't want to see anything.</title>
+<title id="filterfile">What is a <quote>re_filterfile</quote>?</title>
 <para>
+ The <quote>re_filterfile</quote> is used to <quote>filter</quote> any
+ page content. By <quote>filtering</quote> we mean it can modify, remove, 
+ or change <emphasis>anything</emphasis> on the page, including HTML tags, and
+ JavaScript. Regular expressions are used to accomplish this. This is
+ potentially a very powerful feature, but requires some expertise.
+
 </para>
- 
+
+<para>
+ If you are familiar with regular expressions, and HTML, you can look at 
+ the provided <filename>re_filterfile</filename> with a text editor and see
+ some of things it can be used for.
+
+</para>
+
+<para>
+ Presently, there is no GUI editor option for this part of the configuration.
+
+</para>
+
 </sect3>
--->
 </sect2>
 
 
@@ -1012,18 +1099,27 @@ What can I do?</title>
 
 </sect3>
 
+<sect3>
+<title id="time">What time is it?</title>
+<para>
+ Time for you to go!
+</para>
+</sect3>
+
 </sect2>
 
 </sect1>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<!--
+FIXME: Commented out until we have something to put here. HB 03/18/02.
 <sect1 id="knownissues"><title>Known Issues</title>
 <para>
    Fillme.
 </para>
 </sect1>
-
+-->
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="contact"><title>Contact the developers</title>
 <para>Please see the user manual for information on how to contact the developers.
@@ -1067,6 +1163,9 @@ What can I do?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.17  2002/03/18 03:53:53  hal9
+Some new additions.
+
 Revision 1.16  2002/03/17 21:32:56  hal9
 A few more additions.
 
