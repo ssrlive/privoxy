@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.116 2002/09/06 05:22:57 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.117 2002/09/06 23:33:35 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -167,7 +167,7 @@ C_SRC  =          \
   $(DIR_PRIVOXY_SRC)/urlmatch.c
 
 C_OBJS = $(C_SRC:$(DIR_PRIVOXY_SRC)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
-C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
+C_HDRS = $(C_SRC:.c=.h) $(DIR_PRIVOXY_SRC)/project.h $(DIR_PRIVOXY_SRC)/actionlist.h
 
 W32_SRC   = @WIN_ONLY@$(DIR_PRIVOXY_SRC)/w32log.c $(DIR_PRIVOXY_SRC)/w32taskbar.c $(DIR_PRIVOXY_SRC)/win32.c
 W32_FILES = @WIN_ONLY@$(DIR_PRIVOXY_OBJ)/w32res.res
@@ -819,6 +819,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.117  2002/09/06 23:33:35  hal9
+# Fix clobber for config.h and config.h.in are in src now.
+#
 # Revision 1.116  2002/09/06 05:22:57  hal9
 # Adapt make webserver target to 3.0 for pdf uploading.
 #
