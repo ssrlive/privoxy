@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.66 2002/03/03 15:06:55 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.67 2002/03/04 18:18:57 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,19 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.66 2002/03/03 15:06:55 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.67  2002/03/04 18:18:57  oes
+ *    - Removed _DEBUG mode
+ *    - Cleand up cmdline parsing
+ *    - Introduced --no-daemon, --pidfile options
+ *    - Cleaned up signal handling:
+ *      - Terminate cleanly on INT, TERM and ABRT
+ *      - Schedule logfile for re-opening on HUP
+ *      - Ignore CHLD and PIPE
+ *      - Leave the rest with their default handlers
+ *      - Uniform handler registration
+ *    - Added usage() function
+ *    - Played styleguide police
+ *
  *    Revision 1.66  2002/03/03 15:06:55  oes
  *    Re-enabled automatic config reloading
  *
@@ -1495,7 +1508,7 @@ static int32 server_thread(void *data)
 void usage(const char *myname)
 {
    printf("JunkBuster proxy version " VERSION " (" HOME_PAGE_URL ")\n"
-           "Usage: %s [--no-daemon] [--pidfile pidfile] [--help] [configfile]\n"
+           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [configfile]\n"
            "Aborting.\n", myname);
  
    exit(2);
