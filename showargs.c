@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.8 2001/05/29 09:50:24 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.9 2001/05/29 23:11:38 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -33,6 +33,10 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.8 2001/05/29 09:50:24 jongfoste
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.9  2001/05/29 23:11:38  oes
+ *
+ *     - Moved strsav() from showargs to miscutil
+ *
  *    Revision 1.8  2001/05/29 09:50:24  jongfoster
  *    Unified blocklist/imagelist/permissionslist.
  *    File format is still under discussion, but the internal changes
@@ -334,6 +338,8 @@ void end_proxy_args(struct configuration_spec * config)
    }
 
    /* In alphabetical order */
+   SHOW_RCS(actions_h_rcs)
+   SHOW_RCS(actions_rcs)
 #ifdef __MINGW32__
    SHOW_RCS(cygwin_h_rcs)
 #endif
@@ -357,6 +363,8 @@ void end_proxy_args(struct configuration_spec * config)
    SHOW_RCS(killpopup_h_rcs)
    SHOW_RCS(killpopup_rcs)
 #endif /* def KILLPOPUPS */
+   SHOW_RCS(list_h_rcs)
+   SHOW_RCS(list_rcs)
    SHOW_RCS(loadcfg_h_rcs)
    SHOW_RCS(loadcfg_rcs)
    SHOW_RCS(loaders_h_rcs)
