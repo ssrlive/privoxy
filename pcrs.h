@@ -26,6 +26,11 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.4  2001/06/29 13:33:19  oes
+ *    - Cleaned up, commented and adapted to reflect the
+ *      changes in pcrs.c
+ *    - Introduced the PCRS_* flags
+ *
  *    Revision 1.3  2001/06/09 10:58:57  jongfoster
  *    Removing a single unused #define which referenced BUFSIZ
  *
@@ -49,7 +54,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.3 2001/06/09 10:58:57 jongfoster Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.4 2001/06/29 13:33:19 oes Exp $"
 
 
 #include <pcre.h>
@@ -74,14 +79,14 @@
 /* Flags */
 #define PCRS_GLOBAL          1      /* Job should be applied globally, as with perl's g option */
 #define PCRS_SUCCESS         2      /* Job did previously match */
-#define PCRS_TRIVIAL         4      /* No backreferences need to be parsed in the substitute */
+#define PCRS_TRIVIAL         4      /* Backreferences in the substitute are ignored */
 
 /*
  * Data types:
  */
 
 /* A compiled substitute */
-typedef struct S_PCRS_SUBSTITUTE {
+typedef struct PCRS_SUBSTITUTE {
   char *text;                               /* The plaintext part of the substitute, with all backreferences stripped */
   int backrefs;                             /* The number of backreferences */
   int block_offset[PCRS_MAX_SUBMATCHES];    /* Array with the offsets of all plaintext blocks in text */
@@ -90,20 +95,20 @@ typedef struct S_PCRS_SUBSTITUTE {
   int backref_count[PCRS_MAX_SUBMATCHES];   /* Array with the number of reference to each backref index */
 } pcrs_substitute;
 
-typedef struct S_PCRS_MATCH {
+typedef struct PCRS_MATCH {
   /* char *buffer; */
   int submatches;                           /* Number of submatches. Note: The zeroth is the whole match */
   int submatch_offset[PCRS_MAX_SUBMATCHES]; /* Offset for each submatch in the subject */
   int submatch_length[PCRS_MAX_SUBMATCHES]; /* Length of each submatch in the subject */
 } pcrs_match;
 
-typedef struct S_PCRS_JOB {
+typedef struct PCRS_JOB {
   pcre *pattern;                            /* The compiled pcre pattern */
   pcre_extra *hints;                        /* The pcre hints for the pattern */
   int options;                              /* The pcre options (numeric) */
   int flags;                                /* The pcrs and user flags (see "Flags" above) */
   pcrs_substitute *substitute;              /* The compiles pcrs substitute */
-  struct S_PCRS_JOB *next;                  /* Pointer for chaining jobs to joblists */
+  struct PCRS_JOB *next;                    /* Pointer for chaining jobs to joblists */
 } pcrs_job;
 
 /*
@@ -111,8 +116,8 @@ typedef struct S_PCRS_JOB {
  */
 
 /* Main usage */
-extern pcrs_job        *pcrs_compile(char *command, int *errptr);
-extern pcrs_job        *pcrs_make_job(char *pattern, char *substitute, char *options, int *errptr);
+extern pcrs_job        *pcrs_compile_command(char *command, int *errptr);
+extern pcrs_job        *pcrs_compile(char *pattern, char *substitute, char *options, int *errptr);
 extern int              pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result, int *result_length);
 
 /* Freeing jobs */

@@ -1,28 +1,19 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.7 2001/06/29 13:33:04 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.8 2001/06/29 21:45:41 oes Exp $";
 
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
  *
- * Purpose     :  This is the alpha release of libpcrs. It is only published
- *                at this early stage of development, because it is
- *                needed for a new feature in JunkBuster.
- *
- *                While no inconsistencies, memory leaks or functional bugs
- *                are known at this time, there *could* be plenty ;-). Also,
- *                Many pcre-specific options are not yet supported, and
- *                error handling needs improvement.
- *
- *                pcrs is a supplement to the brilliant pcre library by Philip
+ * Purpose     :  pcrs is a supplement to the brilliant pcre library by Philip
  *                Hazel (ph10@cam.ac.uk) and adds Perl-style substitution. That
  *                is, it mimics Perl's 's' operator.
  *
  *                Currently, there's no documentation besides comments and the
  *                source itself ;-)
  *
- *                Short note: I addition to perl's options, 'U' for ungreedy
- *                and 't' for trivial (i.e.: ignore backrefs in the substitute)
- *                are supported.
+ *                Note: In addition to perl's options, 'U' for ungreedy and 'T'
+ *                for trivial (i.e.: ignore backrefs in the substitute) are
+ *                supported.
  *
  * Copyright   :  Written and Copyright (C) 2000, 2001 by Andreas S. Oesterhelt
  *                <andreas@oesterhelt.org>
@@ -47,6 +38,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.7 2001/06/29 13:33:04 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.8  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.7  2001/06/29 13:33:04  oes
  *    - Cleaned up, renamed and reordered functions,
  *      improved comments
@@ -375,11 +369,12 @@ void pcrs_free_joblist(pcrs_job *joblist)
 
 /*********************************************************************
  *
- * Function    :  pcrs_compile
+ * Function    :  pcrs_compile_command
  *
- * Description :  Main entry point. Takes a string with a Perl-style
- *                s/// command and returns a corresponding pcrs_job,
- *                or NULL if compiling the job fails at any stage.
+ * Description :  Parses a string with a Perl-style s/// command, 
+ *                calls pcrs_compile, and returns a corresponding
+ *                pcrs_job, or NULL if parsing or compiling the job
+ *                fails.
  *
  * Parameters  :
  *          1  :  command = string with perl-style s/// command
@@ -391,7 +386,7 @@ void pcrs_free_joblist(pcrs_job *joblist)
  *                has the reason.
  *
  *********************************************************************/
-pcrs_job *pcrs_compile(char *command, int *errptr)
+pcrs_job *pcrs_compile_command(char *command, int *errptr)
 {
    int i, k, l, limit, quoted = FALSE;
    char delimiter;
@@ -451,7 +446,7 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
       return NULL;
    }
 
-   newjob = pcrs_make_job(tokens[1], tokens[2], tokens[3], errptr);
+   newjob = pcrs_compile(tokens[1], tokens[2], tokens[3], errptr);
    free(tokens[0]);
    return newjob;
 
@@ -460,7 +455,7 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
 
 /*********************************************************************
  *
- * Function    :  pcrs_make_job
+ * Function    :  pcrs_compile
  *
  * Description :  Takes the three arguments to a perl s/// command
  *                and compiles a pcrs_job structure from them.
@@ -477,11 +472,12 @@ pcrs_job *pcrs_compile(char *command, int *errptr)
  *                has the reason.
  *
  *********************************************************************/
-pcrs_job *pcrs_make_job(char *pattern, char *substitute, char *options, int *errptr)
+pcrs_job *pcrs_compile(char *pattern, char *substitute, char *options, int *errptr)
 {
    pcrs_job *newjob;
    int flags;
    const char *error;
+
 
    /* 
     * Handle NULL arguments
@@ -489,6 +485,7 @@ pcrs_job *pcrs_make_job(char *pattern, char *substitute, char *options, int *err
    if (pattern == NULL) pattern = "";
    if (substitute == NULL) substitute = "";
    if (options == NULL) options = "";
+
 
    /* 
     * Get and init memory
@@ -627,7 +624,7 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
       else
          offset = offsets[1];
    }
-   /* Pass pcre error through if failiure*/
+   /* Pass pcre error through if failiure */
    if (submatches < -1) return submatches;   
    matches_found = i;
 
@@ -660,14 +657,14 @@ int pcrs_execute(pcrs_job *job, char *subject, int subject_length, char **result
          memcpy(result_offset, job->substitute->text + job->substitute->block_offset[k], job->substitute->block_length[k]);
          result_offset += job->substitute->block_length[k];
 
-         /* ..plus, if it's not the last chunk (i.e.: There IS a backref).. */
+         /* ..plus, if it's not the last chunk, i.e.: There *is* a backref.. */
          if (k != job->substitute->backrefs
-             /* ..and a nonempty match.. */
-             && matches[i].submatch_length[job->substitute->backref[k]] > 0
-             /* ..and in legal range, ... */
-             && job->substitute->backref[k] <= PCRS_MAX_SUBMATCHES)
+             /* ..in legal range.. */
+             && job->substitute->backref[k] <= PCRS_MAX_SUBMATCHES
+             /* ..and referencing a nonempty match.. */
+             && matches[i].submatch_length[job->substitute->backref[k]] > 0)
          {
-            /* copy the submatch that is ref'd. */
+            /* ..copy the submatch that is ref'd. */
             memcpy(
                result_offset,
                subject + matches[i].submatch_offset[job->substitute->backref[k]],
