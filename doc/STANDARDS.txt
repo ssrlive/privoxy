@@ -1,4 +1,4 @@
-** Introduction
+@ Introduction
 
 
 This set of standards is designed to make our lives easier. It is
@@ -13,12 +13,12 @@ solve more of the request for changes/improvements and in general
 feel good about ourselves.  ;->
 
 
-** Using Comments
+@ Using Comments
 
 
-* Comment, Comment, Comment
+@@ Comment, Comment, Comment
 
-Explanation:
+@@@ Explanation:
 
 Comment as much as possible without commenting the obvious.  For
 example do not comment "aVariable is equal to bVariable".  Instead
@@ -33,7 +33,7 @@ The comments will also help justify the intent of the code.  If the
 comment describes something different than what the code is doing
 then maybe a programming error is occurring.
 
-Example:
+@@@ Example:
 
 /* if page size greater than 1k ... */
 if ( PageLength() > 1024 )
@@ -52,9 +52,9 @@ This demonstrates 2 cases of "what not to do".  The first is a
 is actually being done.
 
 
-* Use blocks for comments
+@@ Use blocks for comments
 
-Explanation:
+@@@ Explanation:
 
 Comments can help or they can clutter.  They help when they are
 differentiated from the code they describe.  One line comments do
@@ -62,7 +62,7 @@ not offer effective separation between the comment and the code.
 Block identifiers do, by surrounding the code with a clear,
 definable pattern.
 
-Example:
+@@@ Example:
 
 /*********************************************************************
  * This will stand out clearly in your code!
@@ -85,17 +85,16 @@ if ( thisVariable == thatVariable ) /* this may not either */
    DoSomethingVeryImportant();
 }
 
-
-Exception:
+@@@ Exception:
 
 If you are trying to add a small logic comment and do not wish to
 "disrubt" the flow of the code, feel free to use a 1 line comment
 which is NOT on the same line as the code.
 
 
-* Keep Comments on their own line
+@@ Keep Comments on their own line
 
-Explanation:
+@@@ Explanation:
 
 It goes back to the question of readability.  If the comment is on
 the same line as the code it will be harder to read than the
@@ -105,7 +104,7 @@ There are three exceptions to this rule, which should be violated
 freely and often: during the definition of variables, at the end
 of closing braces, when used to comment parameters.
 
-Example:
+@@@ Example:
 
 /*********************************************************************
  * This will stand out clearly in your code,
@@ -138,14 +137,14 @@ short DoSomethingVeryImportant(
    short firstParam,   /* represents something */
    short nextParam     /* represents something else */ )
 {
-...code here...
+   ...code here...
 
 }   /* -END- DoSomethingVeryImportant */
 
 
-* Comment each logical step
+@@ Comment each logical step
 
-Explanation:
+@@@ Explanation:
 
 Logical steps should be commented to help others follow the
 intent of the written code and comments will make the code more
@@ -158,9 +157,9 @@ Most "for", "while", "do", etc... loops _probably_ need a
 comment.  After all, these are usually major logic containers.
 
 
-* Comment All Functions Thoroughly
+@@ Comment All Functions Thoroughly
 
-Explanation:
+@@@ Explanation:
 
 A reader of the code should be able to look at the comments just
 prior to the beginning of a function and discern the reason for
@@ -176,9 +175,9 @@ the information presented in the addendum section of this
 document.
 
 
-* Comment at the end of braces if the content is more than one screen length
+@@ Comment at the end of braces if the content is more than one screen length
 
-Explanation:
+@@@ Explanation:
 
 Each closing brace should be followed on the same line by a
 comment that describes the origination of the brace if the
@@ -192,7 +191,7 @@ its brace more readable:
 use following a closing brace:
    } /* -END- if() or while () or etc... */
 
-Example:
+@@@ Example:
 
 if ( 1 == X )
 {
@@ -209,89 +208,89 @@ if ( 1 == X )
 } /* -END- if ( 1 == X ) */
 
 
-** Naming Conventions
+@ Naming Conventions
 
 
-* Variable Names
+@@ Variable Names
 
-Explanation:
+@@@ Explanation:
 
 Capitalize the first letter of each word in a variable name
 except the first word.
 
-Example:
+@@@ Example:
 
 int msIis5Hack = 0;
 
-
-Instead of:
+@@@ Instead of:
 
 int ms_iis5_hack = 0;
 
-Note: This is not an "enforcable" issue since too much of IJB uses
+@@@ Note: This is not an "enforcable" issue since too much of IJB uses
 the underscore (_) to seperate words.
 
-Status: developer-descrition.  This item is at developer
-discrection and is currently open to debate by the IJB developer
-team.  Too much of IJB violates this proposed standard.
+@@@ Status: developer-discrection.  This item is at developer
+discrection and is currently open to debate by the IJB developer team.
+Too much of IJB violates this proposed standard.
 
 
-* Function Names
+@@ Function Names
 
-Explanation:
+@@@ Explanation:
 
 Capitalize the first letter of each word in a function name.
 
-Example:
+@@@ Example:
 
-int loadAclFile(struct client_state *csp)
+int loadAclFile( struct client_state *csp )
 
-Instead of:
+@@@ Instead of:
 
-int load_aclfile(struct client_state *csp)
+int load_aclfile( struct client_state *csp )
 
-Status: developer-descrition.  This item is at developer
-discrection and is currently open to debate by the IJB developer
-team.  Too much of IJB violates this proposed standard.
+@@@ Status: developer-discrection.  This item is at developer
+discrection and is currently open to debate by the IJB developer team.
+Too much of IJB violates this proposed standard.
 
-Note: on the 2 above "standards" ... if enough of the current
+@@@ Note: on the 2 above "standards" ... if enough of the current
 developer team agrees, I can use XEmacs to apply a few regular
 expressions to make the current tree comply with these 2 points.
-Otherwise I will remove them from this document.  Afterall, there
-is no need to add to the "multiple personallity" syndrome that IJB
-now has.
+Otherwise I will remove them from this document.  Afterall, there is
+no need to add to the "multiple personallity" syndrome that IJB now
+has (or recently had before standardization).
 
 
-* Header file prototypes
+@@ Header file prototypes
 
-Explanation:
+@@@ Explanation:
 
 Use a descriptive parameter name in the function prototype in
 header files.  Use the same parameter name in the header file
 that you use in the c file.
 
-Example:
+@@@ Example:
 
-(.h) extern int load_aclfile(struct client_state *csp);
-(.c) int load_aclfile(struct client_state *csp)
+(.h) extern int load_aclfile( struct client_state *csp );
+(.c) int load_aclfile( struct client_state *csp )
 
-Instead of:
-(.h) extern int load_aclfile(struct client_state *);   or
+@@@ Instead of:
+(.h) extern int load_aclfile( struct client_state * );   or
 (.h) extern int load_aclfile();
+(.c) int load_aclfile( struct client_state *csp )
 
 
 18.  Ennumerations, and #defines
 
-Explanation:
+@@@ Explanation:
 
 Use all capital letters, with underscores between words.
 
-Example:
+@@@ Example:
 
 (enumeration) : enum Boolean { FALSE, TRUE };
 (#define) : #define DEFAULT_SIZE 100;
 
-Note: We should have a standard naming scheme for Symbols that
+@@@ Note: We should have a standard naming scheme for Symbols that
 toggle a feature in the precompiler, and the constants used by that
 feature. I'd propose that the toggles should be just one word, with
 a common prefix, and that any depandant constants should be
@@ -299,10 +298,10 @@ prefixed by that word.
 
 The prefix could be WITH_, HAVE_, ENABLE_, FEATURE_ etc.
 
-Status: I see some this in the code currently!  Anybody "figured"
+@@@ Status: I see some this in the code currently!  Anybody "figured"
 out a standard way to do this?
 
-Example:
+@@@ Example:
 
 #define ENABLE_FORCE 1
 
@@ -311,113 +310,119 @@ Example:
 #endif /* def ENABLE_FORCE */
 
 
-* Constants
+@@ Constants
 
-Explanation:
+@@@ Explanation:
 
 Spell common words out entirely (do not remove vowels).
 
-Use only widely-known domain acronyms and abbreviations.
-Capitalize all letters of an acronym.
+Use only widely-known domain acronyms and abbreviations.  Capitalize
+all letters of an acronym.
 
 Use underscore (_) to separate adjacent acronyms and
 abbreviations.  Never terminate a name with an underscore.
 
-Example:
+@@@ Example:
 
 #define USE_IMAGE_LIST 1
 
-Instead of:
+@@@ Instead of:
 
+#define USE_IMG_LST 1       or
 #define _USE_IMAGE_LIST 1   or
 #define USE_IMAGE_LIST_ 1   or
 #define use_image_list  1   or
 #define UseImageList    1
 
 
-** Using Space
+@ Using Space
 
 
-* Put braces on a line by themselves.
+@@ Put braces on a line by themselves.
 
-Explanation:
+@@@ Explanation:
 
 The brace needs to be on a line all by itself, not at the end of
 the statement.  Curly braces should line up with the construct
 that they're associated with.  This practice makes it easier to
 identify the opening and closing braces for a block.
 
-Example:
+@@@ Example:
 
 if ( this == that )
 {
    ...
 }
 
-Instead of:
+@@@ Instead of:
 
 if ( this == that ) {
-...
+   ...
 }
 
 or
 
 if ( this == that ) { ...  }
 
-Note: In the special case that the if-statement is inside a loop,
+@@@ Note: In the special case that the if-statement is inside a loop,
 and it is trivial, i.e. it tests for a condidtion that is obvious
 from the purpose of the block, one-liners as above may optically
 preserve the loop structure and make it easier to read.
 
-Status: developer-descrition.
+@@@ Status: developer-discrection.
 
-Example exception:
+@@@ Example exception:
 
-while (more lines are read)
+while ( more lines are read )
 {
    /* Please document what is/is not a comment line here */
-   if (it's a comment) continue;
+   if ( it's a comment ) continue;
 
-   do_something(line);
+   do_something( line );
 }
 
 
-* ALL control statements should have a block
+@@ ALL control statements should have a block
 
-Explanation:
+@@@ Explanation:
 
 Using braces to make a block will make your code more readable
 and less prone to error.  All control statements should have a
 block defined.
 
-Example:
+@@@ Example:
 
 if ( this == that )
 {
    DoSomething();
+   DoSomethingElse();
 }
 
-Instead of:
+@@@ Instead of:
 
 if ( this == that )
    DoSomething();
+   DoSomethingElse();
 
 or
 
 if ( this == that ) DoSomething();
 
-Note: see the exception above.
+@@@ Note: The first example in "Instead of" will execute in a manner
+other than that which the developer desired (per indentation).  Using
+code braces would have prevented this "feature".  The "explanation"
+and "exception" from the point above also applies.
 
 
-* Do not belabor/blow-up boolean expressions
+@@ Do not belabor/blow-up boolean expressions
 
-Example:
+@@@ Example:
 
-structure->flag = (condition);
+structure->flag = ( condition );
 
-Instead of:
+@@@ Instead of:
 
-if (condition)
+if ( condition )
 {
    structure->flag = 1;
 }
@@ -426,20 +431,20 @@ else
    structure->flag = 0;
 }
 
-Note: The former is readable and consice.  The later is wordy and
-inefficient.  Please assume that any new developer has at least a
-"good" knowledge of C/C++.  (Hope I do not offend by that last
-comment ... 8-)
+@@@ Note: The former is readable and consice.  The later is wordy and
+inefficient.  Please assume that any developer new to the project has
+at least a "good" knowledge of C/C++.  (Hope I do not offend by that
+last comment ... 8-)
 
 
-* Use white space freely because it is free
+@@ Use white space freely because it is free
 
-Explanation:
+@@@ Explanation:
 
 Make it readable.  The notable exception to using white space
 freely is listed in the next guideline.
 
-Example:
+@@@ Example:
 
 int firstValue   = 0;
 int someValue    = 0;
@@ -451,9 +456,9 @@ if ( thisVariable == thatVariable )
 firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
 
 
-* Don't use white space around structure operators
+@@ Don't use white space around structure operators
 
-Explanation:
+@@@ Explanation:
 
 - structure pointer operator ( "->" ) 
 - member operator ( "." )
@@ -463,21 +468,21 @@ It is a general coding practice to put pointers, references, and
 function parentheses next to names.  With spaces, the connection
 between the object and variable/function name is not as clear.
 
-Example:
+@@@ Example:
 
 aStruct->aMember;
 aStruct.aMember;
 FunctionName();
 
-Instead of:
+@@@ Instead of:
 aStruct -> aMember;
 aStruct .  aMember;
 FunctionName ();
 
 
-* Make the last brace of a function stand out
+@@ Make the last brace of a function stand out
 
-Example:
+@@@ Example:
 
 int function1( ... )
 {
@@ -492,7 +497,7 @@ int function2( ... )
 }   /* -END- function2 */
 
 
-Instead of:
+@@@ Instead of:
 
 int function1( ... )
 {
@@ -503,28 +508,27 @@ int function2( ... )
 {
 }
 
-NOTE: Use 1 blank line before the closing brace and 2 lines
+@@@ Note: Use 1 blank line before the closing brace and 2 lines
 afterwards.  This makes the end of function standout to the most
-casual viewer.  Although function comments help seperate
-functions, this is still a good coding practice.  In fact, I
-follow these rules when using blocks in "for", "while", "do"
-loops, and long if {} statements too.  After all whitespace is
-free!
+casual viewer.  Although function comments help seperate functions,
+this is still a good coding practice.  In fact, I follow these rules
+when using blocks in "for", "while", "do" loops, and long if {}
+statements too.  After all whitespace is free!
 
-Status: developer-descrition on the number of blank lines.
+@@@ Status: developer-discrection on the number of blank lines.
 Enforced is the end of function comments.
 
 
-* Use 3 character indentions
+@@ Use 3 character indentions
 
-Explanation:
+@@@ Explanation:
 
-If some use 8 character TABs and some use 3 character TABs, the
-code can look *very* ragged.  So use 3 character indentions only.
-If you like to use TABs, pass your code through a filter such as
-"expand -t3" before checking in your code.
+If some use 8 character TABs and some use 3 character TABs, the code
+can look *very* ragged.  So use 3 character indentions only.  If you
+like to use TABs, pass your code through a filter such as "expand -t3"
+before checking in your code.
 
-Example:
+@@@ Example:
 
 static const char * const url_code_map[256] =
 {
@@ -548,52 +552,52 @@ int function1( ... )
 }
 
 
-** Initializing
+@ Initializing
 
 
-* Initialize all variables
+@@ Initialize all variables
 
-Explanation:
+@@@ Explanation:
 
 Do not assume that the variables declared will not be used until
 after they have been assigned a value somewhere else in the
 code.  Remove the chance of accidentally using an unassigned
 variable.
 
-Example:
+@@@ Example:
 
 short anShort = 0;
 float aFloat  = 0;
 struct *ptr = NULL;
 
-NOTE: It is much easier to debug a SIGSEGV if the message says
+@@@ Note: It is much easier to debug a SIGSEGV if the message says
 you are trying to access memory address 00000000 and not
 129FA012; or arrayPtr[20] causes a SIGSEV vs. arrayPtr[0].
 
-Status: developer-descrition if and only if the variable is
+@@@ Status: developer-discrection if and only if the variable is
 assigned a value "shortly after" declaration.
 
 
-** Functions
+@ Functions
 
 
-* Name functions that return a boolean as a question.
+@@ Name functions that return a boolean as a question.
 
-Explanation:
+@@@ Explanation:
 
 Value should be phrased as a question that would logically be
 answered as a true or false statement
 
-Example:
+@@@ Example:
 
 ShouldWeBlockThis();
 ContainsAnImage();
 IsWebPageBlank();
 
 
-* Always specify a return type for a function.
+@@ Always specify a return type for a function.
 
-Explanation:
+@@@ Explanation:
 
 The default return for a function is an int.  To avoid ambiguity,
 create a return for a function when the return has a purpose, and
@@ -601,49 +605,49 @@ create a void return type if the function does not need to return
 anything.
 
 
-* Minimize function calls when iterating by using variables
+@@ Minimize function calls when iterating by using variables
 
-Explanation:
+@@@ Explanation:
 
 It is easy to write the following code, and a clear argument can
 be made that the code is easy to understand:
 
-Example:
+@@@ Example:
 
-for ( size_t curr = 0; curr < PageLength(); curr ++ )
+for ( size_t cnt = 0; cnt < blockListLength(); cnt ++ )
 {
    ....
 }
 
-Unfortunately, this makes a function call for each and every
-iteration.  This increases the overhead in the program, because
-the compiler has to look up the function each time, call it, and
-return a value.  Depending on what occurs in the PageLength()
-call, it might even be creating and destroying structures with
-each iteration, even though in each case it is comparing "curr"
-to the same value, over and over.  Remember too - even a call to
-PageLength() is a function call, with the same overhead.
+@@@ Note: Unfortunately, this makes a function call for each and every
+iteration.  This increases the overhead in the program, because the
+compiler has to look up the function each time, call it, and return a
+value.  Depending on what occurs in the blockListLength() call, it
+might even be creating and destroying structures with each iteration,
+even though in each case it is comparing "cnt" to the same value, over
+and over.  Remember too - even a call to blockListLength() is a
+function call, with the same overhead.
 
 Instead of using a function call during the iterations, assign
 the value to a variable, and evaluate using the variable.
 
-Example:
+@@@ Example:
 
-size_t len = PageLength();
+size_t len = blockListLength();
 
-for ( size_t curr = 0; curr < len; curr ++ )
+for ( size_t cnt = 0; cnt < len; cnt ++ )
 {
    ....
 }
 
-Exceptions: if the value of PageLength() *may* change or could
+@@@ Exceptions: if the value of blockListLength() *may* change or could
 *potentially* change, then you must code the function call in the
 for/while loop.
 
 
-* Pass and Return by Const Reference
+@@ Pass and Return by Const Reference
 
-Explanation:
+@@@ Explanation:
 
 This allows a developer to define a const pointer and call your
 function.  If your function does not have the const keyword, we
@@ -657,26 +661,26 @@ I could then not use it to compare argv's in main:
      strcmp( argv[0], "junkbusters" );
    }
 
-Both these pointers are *const*!  If the c runtime library
-maintainers do it, we should too.
+Both these pointers are *const*!  If the c runtime library maintainers
+do it, we should too.
 
 
-* Pass and Return by Value
+@@ Pass and Return by Value
 
-Explanation:
+@@@ Explanation:
 
 Most structures cannot fit onto a normal stack entry (i.e. they
 are not 4 bytes or less).  Aka, a function declaration like:
-   int load_aclfile(struct client_state csp)
+   int load_aclfile( struct client_state csp )
 
 would not work.  So, to be consistent, we should declare all
 prototypes with "pass by value":
-   int load_aclfile(struct client_state *csp)
+   int load_aclfile( struct client_state *csp )
 
 
-* Use #include <fileName> and #include "fileName" for locals
+@@ Use #include <fileName> and #include "fileName" for locals
 
-Explanation:
+@@@ Explanation:
 
 Your include statements should contain the file name without a
 path.  The path should be listed in the Makefile, using -I as
@@ -685,20 +689,23 @@ to this would be for some proprietary software that utilizes a
 partial path to distinguish their header files from system or
 other header files.
 
-Example:
+@@@ Example:
 
 #include <iostream.h>     /* This is not a local include */
 #include "config.h"       /* This IS a local include */
 
-Exception:
+@@@ Exception:
 
 /* This is not a local include, but requires a path element. */
 #include <sys/fileName.h>
 
+@@@ Note: Please! do not add "-I." to the Makefile without a _very_
+good reason.  This duplicates the #include "file.h" behaviour.
 
-* Provide multiple inclusion protection
 
-Explanation:
+@@ Provide multiple inclusion protection
+
+@@@ Explanation:
 
 Prevents compiler and linker errors resulting from redefinition of
 items.
@@ -707,50 +714,49 @@ Wrap each header file with the following syntax to prevent multiple
 inclusions of the file.  Of course, replace FILENAME_UPPERCASE with
 your file name, with "." Changed to "_", and make it uppercase.
 
-Example (from project.h):
+@@@ Example:
 
 #ifndef _PROJECT_H
 #define _PROJECT_H
-
-...
-
+   ...
 #endif /* ndef _PROJECT_H */
 
 
-* Where Possible, Use Forward Struct Declaration Instead of Includes
+@@ Where Possible, Use Forward Struct Declaration Instead of Includes
 
-Explanation:
+@@@ Explanation:
 
 Useful in headers that include pointers to other struct's.
 Modifications to excess header files may cause needless compiles.
 
-Example:
+@@@ Example:
 
 /*********************************************************************
  * We're avoiding an include statement here!
  *********************************************************************/
 struct file_list;
-file_list *xyz;
+extern file_list *xyz;
 
-NOTE: If you declare "file_list xyz;" (without the pointer), then
+@@@ Note: If you declare "file_list xyz;" (without the pointer), then
 including the proper header file is necessary.  If you only want to
-prototype a pointer, however, the header file is unneccessary.  Use
-with discrection.
+prototype a pointer, however, the header file is unneccessary.
+
+@@@ Status: Use with discrection.
 
 
-** General Coding Practices
+@ General Coding Practices
 
 
-* Provide a default case for all switch statements
+@@ Provide a default case for all switch statements
 
-Explanation:
+@@@ Explanation:
 
-What you think is guaranteed is never really guaranteed.  The
-value that you don't think you need to check is the one that
-someday will be passed.  So, to protect yourself from the unknown,
-always have a default step in a switch statement.
+What you think is guaranteed is never really guaranteed.  The value
+that you don't think you need to check is the one that someday will be
+passed.  So, to protect yourself from the unknown, always have a
+default step in a switch statement.
 
-Example:
+@@@ Example:
 
 switch( hash_string( cmd ) )
 {
@@ -764,24 +770,27 @@ switch( hash_string( cmd ) )
 
    default :
       log_error( ... );
-      ... more code ...
-      continue; / break; / exit(1); / etc ...
-} /* end switch( hash_string(cmd) ) */
+      ... anomly code goes here ...
+      continue; / break; / exit( 1 ); / etc ...
 
-NOTE: If you already have a default condition, you are obviously
+} /* end switch( hash_string( cmd ) ) */
+
+@@@ Note: If you already have a default condition, you are obviously
 exempt from this point.  Of note, most of the WIN32 code calls
 `DefWindowProc' after the switch statement.  This API call
 *should* be included in a default statement.
 
-Another NOTE: This is not so much a readability issue as a robust
-programming issue.  The "anomly code goes here" may be no more
-than a print to the STDERR stream (as in load_config).  Or it may 
-really be an ABEND condition.  Programmer discretion is advised.
+@@@ Another Note: This is not so much a readability issue as a robust
+programming issue.  The "anomly code goes here" may be no more than a
+print to the STDERR stream (as in load_config).  Or it may really be
+an ABEND condition.
+
+@@@ Status: Programmer discretion is advised.
 
 
-* Try to avoid falling through cases in a switch statement.
+@@ Try to avoid falling through cases in a switch statement.
 
-Explanation:
+@@@ Explanation:
 
 In general, you will want to have a 'break' statement within each
 'case' of a switch statement.  This allows for the code to be more
@@ -790,62 +799,61 @@ surprises if someone else later gets creative and moves the code
 around.
 
 The language allows you to plan the fall through from one case
-statement to another simply by omitting the break statement within
-the case statement.  This feature does have benefits, but should
-only be used in rare cases.  In general, use a break statement for
-each case statement.
+statement to another simply by omitting the break statement within the
+case statement.  This feature does have benefits, but should only be
+used in rare cases.  In general, use a break statement for each case
+statement.
 
-If you choose to allow fall through, you should comment both the
-fact of the fall through and reason why you felt it was
-necessary.
+If you choose to allow fall through, you should comment both the fact
+of the fall through and reason why you felt it was necessary.
 
 
-* Use 'long' or 'short' Instead of 'int'
+@@ Use 'long' or 'short' Instead of 'int'
 
-Explanation:
+@@@ Explanation:
 
 On 32-bit platforms, int usually has the range of long.  On 16-bit
 platforms, int has the range of short.
 
-Status: open-to-debate.  In the case of most FSF projects
-(including X/GNU-Emacs), there are typedefs to int4, int8, int16,
-(or equivalence ... I forget the exact typedefs now).  Should we
-add these to IJB now that we have a "configure" script?
+@@@ Status: open-to-debate.  In the case of most FSF projects
+(including X/GNU-Emacs), there are typedefs to int4, int8, int16, (or
+equivalence ... I forget the exact typedefs now).  Should we add these
+to IJB now that we have a "configure" script?
 
 
-* Declare each variable and struct on its own line.
+@@ Declare each variable and struct on its own line.
 
-Explanation:
+@@@ Explanation:
 
-It can be tempting to declare a series of variables all on one
-line.  Don't.
+It can be tempting to declare a series of variables all on one line.
+Don't.
 
-Example:
+@@@ Example:
 
 long a = 0;
 long b = 0;
 long c = 0;
 
-Instead of:
+@@@ Instead of:
 
 long a, b, c;
 
-Reasons:
+@@@ Explanation:
 - there is more room for comments on the individual variables
 - easier to add new variables without messing up the original ones
 - when searching on a variable to find its type, there is less
   clutter to "visually" eliminate
 
-Exceptions: when you want to declare a bunch of loop variables or
+@@@ Exceptions: when you want to declare a bunch of loop variables or
 other trivial variables; feel free to declare them on 1 line.  You
 should, although, provide a good comment on their functions.
 
-Status: developer-descrition.
+@@@ Status: developer-discrection.
 
 
-* Use malloc/zalloc sparingly
+@@ Use malloc/zalloc sparingly
 
-Explanation:
+@@@ Explanation:
 
 Create a local stuct (on the stack) if the variable will live
 and die within the context of one function call.
@@ -853,55 +861,55 @@ and die within the context of one function call.
 Only "malloc" a struct (on the heap) if the variable's life will
 extend beyond the context of one function call.
 
-Example:
+@@@ Example:
 
 If a function creates a struct and stores a pointer to it in a
 list, then it should definately be allocated via `malloc'.
 
 
-* The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
+@@ The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
 
-Explanation:
+@@@ Explanation:
 
-If you have to "malloc" an instance, you are responsible for
-insuring that the instance is `free'd, even if the deallocation
-event falls within some other programmer's code.  You are also
-responsible for ensuring that deletion is timely (i.e. not too
-soon, not too late).  This is known as "low-coupling" and is a
-"good thing (tm)".  You may need to offer a free/unload/destuctor
-type function to accomodate this.
+If you have to "malloc" an instance, you are responsible for insuring
+that the instance is `free'd, even if the deallocation event falls
+within some other programmer's code.  You are also responsible for
+ensuring that deletion is timely (i.e. not too soon, not too late).
+This is known as "low-coupling" and is a "good thing (tm)".  You may
+need to offer a free/unload/destuctor type function to accomodate
+this.
 
-Example:
+@@@ Example:
 
-static void unload_re_filterfile(void *f) { ... }
-int load_re_filterfile(struct client_state *csp) { ... }
+int load_re_filterfile( struct client_state *csp ) { ... }
+static void unload_re_filterfile( void *f ) { ... }
 
-Exceptions:
+@@@ Exceptions:
 
 The developer cannot be expected to provide `free'ing functions for 
 C run-time library functions ... such as `strdup'.
 
-Status: developer-descrition.  The "main" use of this standard is
+@@@ Status: developer-discrection.  The "main" use of this standard is
 for allocating and freeing data structures (complex or nested).
 
 
-* Add loaders to the `file_list' structure and in order
+@@ Add loaders to the `file_list' structure and in order
 
-Explanation:
+@@@ Explanation:
 
 I have ordered all of the "blocker" file code to be in alpha
 order.  It is easier to add/read new blockers when you expect a
 certain order.
 
-NOTE: It may appear that the alpha order is broken in places by
+@@@ Note: It may appear that the alpha order is broken in places by
 POPUP tests coming before PCRS tests.  But since POPUPs can also
 be referred to as KILLPOPUPs, it is clear that it should come
 first.
 
 
-* "Uncertain" new code and/or changes to exitinst code, use FIXME
+@@ "Uncertain" new code and/or changes to exitinst code, use FIXME
 
-Explanation:
+@@@ Explanation:
 
 If you have enough confidence in new code or confidence in your
 changes, but are not *quite* sure of the reprocussions, add this:
@@ -923,17 +931,17 @@ or:
 /* FIXME: new code that *may* break something else... */
    ...new code here...
 
-NOTE: If you make it clear that this may or may not be a "good
-thing (tm)", it will be easier to identify and include in the
-project (or conversly exclude from the project).
+@@@ Note: If you make it clear that this may or may not be a "good
+thing (tm)", it will be easier to identify and include in the project
+(or conversly exclude from the project).
 
 
-** Addendum: Template for files and function comment blocks:
+@ Addendum: Template for files and function comment blocks:
 
 
-Example for file comments:
+@@@ Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.1 2001/06/28 03:01:32 iwanttokeepanon Exp $";
+const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.2 2001/06/28 04:02:42 iwanttokeepanon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
@@ -967,36 +975,38 @@ const char FILENAME_rcs[] = "$Id: STANDARDS.txt,v 1.1 2001/06/28 03:01:32 iwantt
  *
  * Revisions   :
  *    $Log: STANDARDS.txt,v $
+ *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
+ *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
+ *
  *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
  *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
  *
  *
  *********************************************************************/
-
+
 
 #include "config.h"
 
-...necessary include files for us to do our work...
+   ...necessary include files for us to do our work...
 
 const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 
 
-NOTE: This declares the rcs variables that should be added to the 
-"show-proxy-args" page.  If this is a brand new creation by you,
-you are free to change the "Copyright" section to represent the
-rights you wish to maintain.
+@@@ Note: This declares the rcs variables that should be added to the
+"show-proxy-args" page.  If this is a brand new creation by you, you
+are free to change the "Copyright" section to represent the rights you
+wish to maintain.
 
-NOTE: The formfeed character that is present right after the
-comment flower box is handy for (X|GNU)Emacs users to skip the
-verbige and get to the heart of the code (via `forward-page' and
+@@@ Note: The formfeed character that is present right after the
+comment flower box is handy for (X|GNU)Emacs users to skip the verbige
+and get to the heart of the code (via `forward-page' and
 `backward-page').  Please include it if you can.
 
-
-Example for file header comments:
+@@@ Example for file header comments:
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.1 2001/06/28 03:01:32 iwanttokeepanon Exp $"
+#define FILENAME_H_VERSION "$Id: STANDARDS.txt,v 1.2 2001/06/28 04:02:42 iwanttokeepanon Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/doc/STANDARDS.txt,v $
@@ -1030,6 +1040,9 @@ Example for file header comments:
  *
  * Revisions   :
  *    $Log: STANDARDS.txt,v $
+ *    Revision 1.2  2001/06/28 04:02:42  iwanttokeepanon
+ *    Testing XEmacs and VC/CVS modes.  Will this work?   We shall see...
+ *
  *    Revision 1.1  2001/06/28 03:01:32  iwanttokeepanon
  *    A suggested standard for IJB.  Outline-mode formatting and spell checking to follow.  Developer comments encouraged and requested.
  *
@@ -1043,7 +1056,7 @@ Example for file header comments:
 extern "C" {
 #endif
 
-... function headers here ...
+   ... function headers here ...
 
 
 /* Revision control strings from this header and associated .c file */
@@ -1064,7 +1077,7 @@ extern const char FILENAME_h_rcs[];
 */
 
 
-Example for function comments:
+@@@ Example for function comments:
 
 /*********************************************************************
  *
@@ -1081,55 +1094,23 @@ Example for function comments:
  *********************************************************************/
 int FUNCTION_NAME( void *param1, const char *x )
 {
-...
+   ...
    return( 0 );
 
 }
 
 
-NOTE: If we all follow this practice, we should be able to parse
+@@@ Note: If we all follow this practice, we should be able to parse
 our code to create a "self-documenting" web page.
 
 
-** XEmacs and VC mode
+@ Local variables for this standards file
 
 
-* Explanation:
-
-These are the files I have in current/doc/CVS.  I am experimenting
-with XEmacs and VC/CVS modes.  Can I check this in?  We will see...
-
-* current/doc/CVS/Entries:
-
-/USER_DOC_IS_WIDELY_OBSOLETED/1.1.1.1/Tue May 15 13:59:57 2001//
-/changes.txt/1.1.1.1/Tue May 15 13:59:50 2001//
-/fb.gif/1.1/Thu May 17 22:56:17 2001//
-/gpl.html/1.2/Thu May 17 22:56:17 2001//
-/ijbfaq.html/1.2/Thu May 17 22:56:17 2001//
-/ijbman.html/1.2/Thu May 17 22:56:17 2001//
-/top.gif/1.1/Thu May 17 22:56:17 2001//
-D/webserver////
-/STANDARDS.txt/1.1/Thu Jun 28 03:01:32 2001//
-
-* current/doc/CVS/Repository:
-
-current/doc
-
-* current/doc/CVS/Root:
-
-:ext:IwantToKeepAnon@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa
-
-
-** Local variables for this standards file
-
-
-* Hopefully this will be in outline-mode soon.
-
-
-/*
-  Local Variables:
-  tab-width: 3
-  fill-column: 67
-  mode: auto-fill
-  end:
-*/
+
+Local variables:
+mode: outline
+mode: auto-fill
+outline-regexp: "[@]+"
+tab-width: 3
+End:
