@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.22 2001/09/22 16:36:59 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.23 2001/10/07 15:36:00 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.22 2001/09/22 16:36:59 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.23  2001/10/07 15:36:00  oes
+ *    Introduced new config option "buffer-limit"
+ *
  *    Revision 1.22  2001/09/22 16:36:59  jongfoster
  *    Removing unused parameter fs from read_config_line()
  *
@@ -293,6 +296,8 @@ static struct file_list *current_configfile = NULL;
 #define hash_confdir                      1978389ul /* "confdir" */
 #define hash_debug                          78263ul /* "debug" */
 #define hash_deny_access               1227333715ul /* "deny-access" */
+#define hash_enable_edit_actions       2517097536ul /* "enable-edit-actions" */
+#define hash_enable_remote_toggle      2979744683ul /* "enable-remote-toggle" */
 #define hash_forward                      2029845ul /* "forward" */
 #define hash_forward_socks4            3963965521ul /* "forward-socks4" */
 #define hash_forward_socks4a           2639958518ul /* "forward-socks4a" */
@@ -634,6 +639,38 @@ struct configuration_spec * load_config(void)
 
             continue;
 #endif /* def FEATURE_ACL */
+
+/****************************************************************************
+ * enable-edit-actions 0|1
+ ****************************************************************************/
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+         case hash_enable_edit_actions:
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_CGI_EDIT_ACTIONS;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_CGI_EDIT_ACTIONS;
+            }
+            continue;
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
+
+/****************************************************************************
+ * enable-remote-toggle 0|1
+ ****************************************************************************/
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+         case hash_enable_remote_toggle:
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_CGI_TOGGLE;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_CGI_TOGGLE;
+            }
+            continue;
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 /****************************************************************************
  * forward url-pattern (.|http-proxy-host[:port])
@@ -1115,6 +1152,10 @@ struct configuration_spec * load_config(void)
 #ifndef FEATURE_ACL
          case hash_deny_access:
 #endif /* ndef FEATURE_ACL */
+#ifndef FEATURE_CGI_EDIT_ACTIONS
+         case hash_enable_edit_actions:
+         case hash_enable_remote_toggle:
+#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 #ifndef FEATURE_COOKIE_JAR
          case hash_jarfile :
 #endif /* ndef FEATURE_COOKIE_JAR */
