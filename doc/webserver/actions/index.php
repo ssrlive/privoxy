@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.2 2002/03/30 03:35:48 oes Exp $
+  $Id: index.php,v 1.5 2002/04/01 19:13:47 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.5  2002/04/01 19:13:47  oes
+  Extended, fixed bugs, beefed up design, made IE-safe
+
   Revision 1.2  2002/03/30 03:35:48  oes
   Updated bookmarklet
 
@@ -175,8 +178,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
     </p>
     <p>
      Please right-click the following link and choose "Add to Favorites" (IE) or "Add Bookmark for Link" (Netscape): 
-     <a href="javascript:void(window.open('<?php echo($base_url); ?>/index.php?url='+escape(location.href), 'Feedback',
-      'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy-Submit</a>
+     <a href="javascript:void(window.open('<?php echo($base_url); ?>/index.php?url='+escape(location.href), 'Feedback', 'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy-Submit</a>
     </p>
 
     <p>
