@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.83 2002/04/12 09:39:25 oes Exp $
+# $Id: GNUmakefile.in,v 1.84 2002/04/13 22:43:25 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -559,8 +559,7 @@ dok-webserver: doc/source/ldpOK.dsl
 	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_web.css/;\
      s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
-	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
-	s/<\/BODY/\n<p align=\"center\"><a href=\"http:\/\/sourceforge\.net\"><img src=\"http:\/\/sourceforge\.net\/sflogo.php\?group_id=11118&type=1\" width=\"88\" height=\"32" border=\"0\" alt=\"SourceForge\.net Logo\" align=\"center\"><\/a><\/p><\/BODY/'\
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/'\
      doc/webserver/index.html && rm -f doc/source/webserver/*.bak
 
 # Main documentation target.
@@ -788,6 +787,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.84  2002/04/13 22:43:25  hal9
+# -Fix dok-webserver for SF logo (more perl).
+# -Change all perl -pi to perl -pi.bak for Cygwin problem.
+#
 # Revision 1.83  2002/04/12 09:39:25  oes
 # Excluding yet more files from tarball; making dist warning yet more scary
 #
