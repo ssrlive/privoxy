@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.33 2002/04/24 02:17:47 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.34 2002/04/26 12:54:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.33 2002/04/24 02:17:47 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.34  2002/04/26 12:54:17  oes
+ *    Adaptions to changes in actions.c
+ *
  *    Revision 1.33  2002/04/24 02:17:47  oes
  *     - Moved get_char_param, get_string_param and get_number_param to cgi.c
  *     - Comments
@@ -2849,6 +2852,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          }
          return err;
       }
+
+      err = template_fill(&filter_template, exports);
 
       result = strdup("");
 
