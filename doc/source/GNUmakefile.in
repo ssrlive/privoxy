@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.0 2002/05/28 09:16:15 oes Exp $
+# $Id: GNUmakefile.in,v 1.1 2002/06/05 00:28:28 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -194,18 +194,33 @@ dok-authors: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
 	  tmp.html > ../../AUTHORS
 
-# make a man page, and then (lousy) HTML version.
+# Make a man page, and then (lousy) HTML version.
 # Requires docbook2man (short perl script), see comments 
 # in privoxy-man-page.sgml. This target is not invoked from other dok targets.
 # It is built separately due to dependencies on off-beat perl scripts.
-dok-man: ensure-dkprefix ensure-jadebin ensure-wdump
-	cd $(DOC_TMP) && $(RM) * && docbook2man ../privoxy-man-page.sgml &&\
+# Note: docbook2man eats all command line arguments except file name. Bummer.
+dok-man: ensure-dkprefix ensure-jadebin 
+	cd $(DOC_TMP) && $(RM) * && docbook2man $(DOC_STATUS) ../privoxy-man-page.sgml &&\
+	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
+	$(MV) -f index.html privoxy-man-page.html
+     # This html is not used. See make man2html.
+	$(MV) -f $(DOC_TMP)/privoxy.1 $(ROOT)/privoxy.1
+	# Build a proper HTML man page.
+	$(MAKE) man2html
+
+# This is laternate version of above, that does handle command line options,
+# ie DOC_STATUS.
+dok-man-test: ensure-dkprefix ensure-jadebin dok-release
+	cd $(DOC_TMP) && $(RM) * &&\
+	nsgmls $(DOC_STATUS) ../privoxy-man-page.sgml  | sgmlspl `find /usr/share/sgml -name docbook2man-spec.pl` &&\
 	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
 	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
 	$(MV) -f index.html privoxy-man-page.html
      # This html is not used. See make man2html.
 	$(MV) -f $(DOC_TMP)/privoxy.1 $(ROOT)/privoxy.1
 	$(MAKE) man2html
+	$(MAKE) clean
 
 # For those with man2html ala RH7's.
 man2html: ensure-dkprefix ensure-jadebin ensure-wdump
@@ -252,7 +267,7 @@ dok-pdf2: dok-release
 
 # Create release announcement in text and html, with short and long versions.
 # This is a standalone target, and must be invoked directly.
-announce: dok-release
+announce: dok-release ensure-wdump
 	cd $(DOC_TMP) && $(DB) -iannounce-big ../announce.sgml &&\
 	mv -f index.html announce.html && $(WDUMP) announce.html > announce.txt
 	cd $(DOC_TMP) && $(DB) ../announce.sgml &&\
@@ -297,7 +312,7 @@ config-file: ensure-dkprefix ensure-jadebin ensure-wdump dok-release
 
 # config file, alternate verison using lynx (perl stuff unfinished). Lynx
 # does not do so good a job.
-config-file-alt: dok-release
+config-file-alt: dok-release ensure-wdump
 	$(ECHO) -e ".h2 JUSTIFY\\nJUSTIFY:FALSE" > tmp.lynx_cfg &&\
 	$(DB)-notoc -iconfig-file -V nochunks config.sgml > tmp.html &&\
 	lynx -cfg=tmp.lynx_cfg -width=78 -dump tmp.html > ../../config.new && $(RM) tmp.*
@@ -326,4 +341,8 @@ coffee:
 
 #############################################################################
 
-# $Log: Makefile.in,v $
+# $Log: GNUmakefile.in,v $
+# Revision 1.1  2002/06/05 00:28:28  hal9
+# Moving all doc building to doc/source. Rewrite all targets (not well tested).
+# Docs are now built without touching sgml source.
+#
