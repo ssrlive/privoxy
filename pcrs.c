@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.14 2001/09/09 21:41:57 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.15 2001/09/20 16:11:06 steudten Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,10 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.14 2001/09/09 21:41:57 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.15  2001/09/20 16:11:06  steudten
+ *
+ *    Add casting for some string functions.
+ *
  *    Revision 1.14  2001/09/09 21:41:57  oes
  *    Fixing yet another silly bug
  *
@@ -207,7 +211,7 @@ int pcrs_parse_perl_options(const char *optstring, int *flags)
          case 's': rc |= PCRE_DOTALL; break;
          case 'x': rc |= PCRE_EXTENDED; break;
          case 'U': rc |= PCRE_UNGREEDY; break;
-   	   case 'T': *flags |= PCRS_TRIVIAL; break;
+         case 'T': *flags |= PCRS_TRIVIAL; break;
          default: break;
       }
    }
@@ -753,7 +757,8 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
 int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **result, size_t *result_length)
 {
    int offsets[3 * PCRS_MAX_SUBMATCHES],
-       offset, i, k,
+       offset,
+       i, k,
        matches_found,
        newsize,
        submatches,
@@ -817,7 +822,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
       /* Storage for matches exhausted? -> Extend! */
       if (++i >= max_matches)
       {
-         max_matches *= PCRS_MAX_MATCH_GROW;
+         max_matches = (int) (max_matches * PCRS_MAX_MATCH_GROW);
          if (NULL == (dummy = (pcrs_match *)realloc(matches, max_matches * sizeof(pcrs_match))))
          {
             free(matches);
@@ -832,7 +837,10 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
 
       /* Don't loop on empty matches */
       if (offsets[1] == offset)
-         if (offset < subject_length)
+         /* FIXME: is offset an int or a size_t?  Previous line compares
+          * against int, the next one compares against size_t.
+          */
+         if ((size_t)offset < subject_length)
             offset++;
          else
             break;
