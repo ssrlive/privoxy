@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $
+ $Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -44,7 +44,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -1628,7 +1628,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1688,7 +1688,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.29 2002/04/10 18:45:14 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.30 2002/04/11 09:24:53 oes Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1903,6 +1903,11 @@ at sourceforge. Three simple steps:
        <para> 
         Then change the version info in doc/webserver/actions/index.php,
         line: '$required_actions_file_version = "A.B";'
+       </para>
+      </listitem> 
+      <listitem>
+       <para>
+        <emphasis>Commit all files that were changed in the above steps!</emphasis>
        </para>
       </listitem> 
       <listitem>
@@ -2411,6 +2416,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.30  2002/04/11 09:24:53  oes
+  nits
+
   Revision 1.29  2002/04/10 18:45:14  swa
   generated
 
