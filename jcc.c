@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.64 2002/03/03 09:18:03 joergs Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.65 2002/03/03 14:49:11 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.64 2002/03/03 09:18:03 joergs Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.65  2002/03/03 14:49:11  oes
+ *    Fixed CLF logging: Now uses client's original HTTP request
+ *
  *    Revision 1.64  2002/03/03 09:18:03  joergs
  *    Made jumbjuster work on AmigaOS again.
  *
@@ -485,8 +488,6 @@ const char project_h_rcs[] = PROJECT_H_VERSION;
 struct client_state  clients[1];
 struct file_list     files[1];
 
-short int MustReload = 0;
-
 #ifdef FEATURE_STATISTICS
 int urls_read     = 0;     /* total nr of urls read inc rejected */
 int urls_rejected = 0;     /* total nr of urls rejected */
@@ -547,7 +548,7 @@ static void SIG_handler( int signal )
    switch( signal )
    {
       case SIGHUP:
-         MustReload = 1;
+         log_error(LOG_LEVEL_INFO, "ignoring HUP signal (%d)", signal);
          break;
       case SIGTERM:
          log_error(LOG_LEVEL_INFO, "exiting by signal %d .. bye", signal);

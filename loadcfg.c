@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.29 2002/01/17 21:02:30 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.30 2002/01/22 23:31:43 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.29 2002/01/17 21:02:30 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.30  2002/01/22 23:31:43  jongfoster
+ *    Replacing strsav() with string_append()
+ *
  *    Revision 1.29  2002/01/17 21:02:30  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -1393,7 +1396,6 @@ struct configuration_spec * load_config(void)
    files->next = fs;
 
    current_configfile = fs;
-   MustReload = 0;
 
    return (config);
 }

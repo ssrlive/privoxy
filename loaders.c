@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.35 2002/01/17 21:03:08 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.36 2002/01/22 23:46:18 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,16 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.35 2002/01/17 21:03:08 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.36  2002/01/22 23:46:18  jongfoster
+ *    Moving edit_read_line() and simple_read_line() to loaders.c, and
+ *    extending them to support reading MS-DOS, Mac and UNIX style files
+ *    on all platforms.
+ *
+ *    Modifying read_config_line() (without changing it's prototype) to
+ *    be a trivial wrapper for edit_read_line().  This means that we have
+ *    one function to read a line and handle comments, which is common
+ *    between the initialization code and the edit interface.
+ *
  *    Revision 1.35  2002/01/17 21:03:08  jongfoster
  *    Moving all our URL and URL pattern parsing code to urlmatch.c.
  *
@@ -422,8 +432,7 @@ int check_file_changed(const struct file_list * current,
        && (current->lastmodified == statbuf->st_mtime)
        && (0 == strcmp(current->filename, filename)))
    {
-       /* force reload of configfile and all the logs */
-       if ( !MustReload ) return 0;
+      return 0;
    }
 
    fs = (struct file_list *)zalloc(sizeof(struct file_list));
