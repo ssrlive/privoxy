@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.24 2002/03/24 15:46:20 swa Exp $
+ $Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.24 2002/03/24 15:46:20 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.25 2002/03/24 16:08:08 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1099,7 +1099,8 @@ with every web page?</title>
 </para>
 
 <para>
- The old <application>Privoxy</application> used port 8000 by 
+ The old <application>Privoxy</application> (and also
+ <application>Junkbuster</application>) used port 8000 by 
  default. This has been changed to port 8118 now, due to a conflict 
  with NAS (Network Audio Service), which uses port 8000. If you haven't, 
  you need to change your browser to the new port number, or alternately 
@@ -1154,7 +1155,7 @@ What can I do?</title>
  that looks like it is disabling the feature that is causing the
  problem. Re-try the page. There might be some trial and error involved. This
  is discussed in a little more detail in the <ulink
- url="http://ijbswa.sourceforge.net/user-manual/appenix.html#ACTIONSANAT">user-manual
+ url="http://ijbswa.sourceforge.net/user-manual/appendix.html#ACTIONSANAT">user-manual
  appendix</ulink>.
 
 </para>
@@ -1230,6 +1231,10 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.25  2002/03/24 16:08:08  swa
+we are too lazy to make a block-built
+privoxy logo. hence removed the option.
+
 Revision 1.24  2002/03/24 15:46:20  swa
 name change related issue.
 
