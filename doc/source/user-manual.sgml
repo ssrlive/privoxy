@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $
+ $Id: user-manual.sgml,v 1.106 2002/05/10 01:48:20 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.105 2002/05/05 20:26:02 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.106 2002/05/10 01:48:20 hal9 Exp $</pubdate>
 
 <!--
 
@@ -444,7 +444,7 @@ automatically start Privoxy in the boot process.
   <para>
   Set your browser to use <application>Privoxy</application> as HTTP and HTTPS
   proxy by setting the proxy configuration for address of
-  <literal>localhost</literal> and port <literal>8118</literal>.
+  <literal>127.0.0.1</literal> and port <literal>8118</literal>.
   (<application>Junkbuster</application> and earlier versions of
   <application>Privoxy</application> used port 8000.) See the section <link
   linkend="startup">Starting <application>Privoxy</application></link>.
@@ -495,8 +495,8 @@ automatically start Privoxy in the boot process.
  Before launching <application>Privoxy</application> for the first time, you
  will want to configure your browser(s) to use
  <application>Privoxy</application> as a HTTP and HTTPS proxy. The default is
- localhost for the proxy address, and port 8118 (earlier versions used port
- 8000). This is the one configuration step that must be done!
+ 127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
+ used port 8000). This is the one configuration step that must be done!
 </para>
  
 <para> 
@@ -506,7 +506,7 @@ automatically start Privoxy in the boot process.
  For <application>Internet Explorer</application>: <literal>Tools -&gt;
  Internet Properties -&gt; Connections -&gt; LAN Setting</literal>. Then,
  check <quote>Use Proxy</quote> and fill in the appropriate info (Address:
- localhost, Port: 8118). Include if HTTPS proxy support too.
+ 127.0.0.1, Port: 8118). Include if HTTPS proxy support too.
 </para>
 
 <para>
@@ -1791,14 +1791,14 @@ actionsfile
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para>localhost:8118</para>
+   <para>127.0.0.1:8118</para>
   </listitem>
  </varlistentry>
  <varlistentry>
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    Bind to localhost (127.0.0.1), port 8118. This is suitable and recommended for
+    Bind to 127.0.0.1 (localhost), port 8118. This is suitable and recommended for
     home users who run <application>Privoxy</application> on the same machine as
     their browser.
    </para>
@@ -2054,8 +2054,9 @@ ACLs: permit-access and deny-access</title>
     Access controls are included at the request of ISPs and systems
     administrators, and <emphasis>are not usually needed by individual users</emphasis>.
     For a typical home user, it will normally suffice to ensure that 
-    <application>Privoxy</application> only listens on the localhost or internal (home)
-    network address by means of the <literal>listen-address</literal> option.
+    <application>Privoxy</application> only listens on the localhost
+    (127.0.0.1) or internal (home) network address by means of the
+    <literal>listen-address</literal> option.
    </para>
    <para>
     Please see the warnings in the FAQ that this proxy is not intended to be a substitute
@@ -5953,6 +5954,11 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.106  2002/05/10 01:48:20  hal9
+ This is mostly proposed copyright/licensing additions and changes. Docs
+ are still GPL, but licensing and copyright are more visible. Also, copyright
+ changed in doc header comments (eliminate references to JB except FAQ).
+
  Revision 1.105  2002/05/05 20:26:02  hal9
  Sorting out license vs copyright in these docs.
 

@@ -1,6 +1,6 @@
 #  Sample Configuration file for Privoxy
 #
-# $Id: config,v 1.37 2002/04/27 21:05:27 hal9 Exp $
+# $Id: config,v 1.38 2002/05/03 03:59:25 hal9 Exp $
 #
 ###################################################################
 #                                                                 #
@@ -572,11 +572,11 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #     
 #  Default value:
 #     
-#      localhost:8118
+#      127.0.0.1:8118
 #     
 #  Effect if unset:
 #     
-#      Bind to localhost (127.0.0.1), port 8118. This is suitable and
+#      Bind to 127.0.0.1 (localhost), port 8118. This is suitable and
 #      recommended for home users who run Privoxy on the same machine as
 #      their browser.
 #    
