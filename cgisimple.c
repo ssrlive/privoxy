@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.6 2001/10/14 22:00:32 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.7 2001/10/23 21:48:19 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,18 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.6 2001/10/14 22:00:32 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.7  2001/10/23 21:48:19  jongfoster
+ *    Cleaning up error handling in CGI functions - they now send back
+ *    a HTML error page and should never cause a FATAL error.  (Fixes one
+ *    potential source of "denial of service" attacks).
+ *
+ *    CGI actions file editor that works and is actually useful.
+ *
+ *    Ability to toggle JunkBuster remotely using a CGI call.
+ *
+ *    You can turn off both the above features in the main configuration
+ *    file, e.g. if you are running a multi-user proxy.
+ *
  *    Revision 1.6  2001/10/14 22:00:32  jongfoster
  *    Adding support for a 404 error when an invalid CGI page is requested.
  *
@@ -509,7 +521,7 @@ jb_err cgi_show_status(struct client_state *csp,
    }
 
    err = map(exports, "options", 1, csp->config->proxy_args, 1);
-   err = err || show_defines(exports);
+   if (!err) err = show_defines(exports);
 
 #ifdef FEATURE_STATISTICS
    local_urls_read     = urls_read;
@@ -527,23 +539,23 @@ jb_err cgi_show_status(struct client_state *csp,
 
    if (local_urls_read == 0)
    {
-      err = err || map_block_killer(exports, "have-stats");
+      if (!err) err = map_block_killer(exports, "have-stats");
    }
    else
    {
-      err = err || map_block_killer(exports, "have-no-stats");
+      if (!err) err = map_block_killer(exports, "have-no-stats");
 
       perc_rej = (float)local_urls_rejected * 100.0F /
             (float)local_urls_read;
 
       sprintf(buf, "%d", local_urls_read);
-      err = err || map(exports, "requests-received", 1, buf, 1);
+      if (!err) err = map(exports, "requests-received", 1, buf, 1);
 
       sprintf(buf, "%d", local_urls_rejected);
-      err = err || map(exports, "requests-blocked", 1, buf, 1);
+      if (!err) err = map(exports, "requests-blocked", 1, buf, 1);
 
       sprintf(buf, "%6.2f", perc_rej);
-      err = err || map(exports, "percent-blocked", 1, buf, 1);
+      if (!err) err = map(exports, "percent-blocked", 1, buf, 1);
    }
 
 #else /* ndef FEATURE_STATISTICS */
@@ -552,33 +564,33 @@ jb_err cgi_show_status(struct client_state *csp,
 
    if (csp->actions_list)
    {
-      err = err || map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
+      if (!err) err = map(exports, "actions-filename", 1,  csp->actions_list->filename, 1);
    }
    else
    {
-      err = err || map(exports, "actions-filename", 1, "None specified", 1);
+      if (!err) err = map(exports, "actions-filename", 1, "None specified", 1);
    }
 
    if (csp->rlist)
    {
-      err = err || map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
+      if (!err) err = map(exports, "re-filter-filename", 1,  csp->rlist->filename, 1);
    }
    else
    {
-      err = err || map(exports, "re-filter-filename", 1, "None specified", 1);
+      if (!err) err = map(exports, "re-filter-filename", 1, "None specified", 1);
    }
 
 #ifdef FEATURE_TRUST
    if (csp->tlist)
    {
-      err = err || map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
+      if (!err) err = map(exports, "trust-filename", 1,  csp->tlist->filename, 1);
    }
    else
    {
-      err = err || map(exports, "trust-filename", 1, "None specified", 1);
+      if (!err) err = map(exports, "trust-filename", 1, "None specified", 1);
    }
 #else
-   err = err || map_block_killer(exports, "trust-support");
+   if (!err) err = map_block_killer(exports, "trust-support");
 #endif /* ndef FEATURE_TRUST */
 
    if (err)
@@ -874,7 +886,7 @@ jb_err cgi_robots_txt(struct client_state *csp,
    rsp->is_static = 1;
 
    get_http_time(7 * 24 * 60 * 60, buf); /* 7 days into future */
-   err = err || enlist_unique_header(rsp->headers, "Expires", buf);
+   if (!err) err = enlist_unique_header(rsp->headers, "Expires", buf);
 
    return (err ? JB_ERR_MEMORY : JB_ERR_OK);
 }
@@ -899,96 +911,96 @@ static jb_err show_defines(struct map *exports)
    jb_err err = JB_ERR_OK;
 
 #ifdef FEATURE_ACL
-   err = err || map_conditional(exports, "FEATURE_ACL", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_ACL", 1);
 #else /* ifndef FEATURE_ACL */
-   err = err || map_conditional(exports, "FEATURE_ACL", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_ACL", 0);
 #endif /* ndef FEATURE_ACL */
 
 #ifdef FEATURE_COOKIE_JAR
-   err = err || map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
 #else /* ifndef FEATURE_COOKIE_JAR */
-   err = err || map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
 #endif /* ndef FEATURE_COOKIE_JAR */
 
 #ifdef FEATURE_FAST_REDIRECTS
-   err = err || map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
 #else /* ifndef FEATURE_FAST_REDIRECTS */
-   err = err || map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
 #endif /* ndef FEATURE_FAST_REDIRECTS */
 
 #ifdef FEATURE_FORCE_LOAD
-   err = err || map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
 #else /* ifndef FEATURE_FORCE_LOAD */
-   err = err || map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
 #endif /* ndef FEATURE_FORCE_LOAD */
 
 #ifdef FEATURE_IMAGE_BLOCKING
-   err = err || map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
 #else /* ifndef FEATURE_IMAGE_BLOCKING */
-   err = err || map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
 #endif /* ndef FEATURE_IMAGE_BLOCKING */
 
 #ifdef FEATURE_IMAGE_DETECT_MSIE
-   err = err || map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
 #else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
-   err = err || map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
 #endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
 
 #ifdef FEATURE_KILL_POPUPS
-   err = err || map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
 #else /* ifndef FEATURE_KILL_POPUPS */
-   err = err || map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
 #endif /* ndef FEATURE_KILL_POPUPS */
 
 #ifdef FEATURE_PTHREAD
-   err = err || map_conditional(exports, "FEATURE_PTHREAD", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_PTHREAD", 1);
 #else /* ifndef FEATURE_PTHREAD */
-   err = err || map_conditional(exports, "FEATURE_PTHREAD", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_PTHREAD", 0);
 #endif /* ndef FEATURE_PTHREAD */
 
 #ifdef FEATURE_STATISTICS
-   err = err || map_conditional(exports, "FEATURE_STATISTICS", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_STATISTICS", 1);
 #else /* ifndef FEATURE_STATISTICS */
-   err = err || map_conditional(exports, "FEATURE_STATISTICS", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_STATISTICS", 0);
 #endif /* ndef FEATURE_STATISTICS */
 
 #ifdef FEATURE_TOGGLE
-   err = err || map_conditional(exports, "FEATURE_TOGGLE", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_TOGGLE", 1);
 #else /* ifndef FEATURE_TOGGLE */
-   err = err || map_conditional(exports, "FEATURE_TOGGLE", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_TOGGLE", 0);
 #endif /* ndef FEATURE_TOGGLE */
 
 #ifdef FEATURE_TRUST
-   err = err || map_conditional(exports, "FEATURE_TRUST", 1);
+   if (!err) err = map_conditional(exports, "FEATURE_TRUST", 1);
 #else /* ifndef FEATURE_TRUST */
-   err = err || map_conditional(exports, "FEATURE_TRUST", 0);
+   if (!err) err = map_conditional(exports, "FEATURE_TRUST", 0);
 #endif /* ndef FEATURE_TRUST */
 
 #ifdef REGEX_GNU
-   err = err || map_conditional(exports, "REGEX_GNU", 1);
+   if (!err) err = map_conditional(exports, "REGEX_GNU", 1);
 #else /* ifndef REGEX_GNU */
-   err = err || map_conditional(exports, "REGEX_GNU", 0);
+   if (!err) err = map_conditional(exports, "REGEX_GNU", 0);
 #endif /* def REGEX_GNU */
 
 #ifdef REGEX_PCRE
-   err = err || map_conditional(exports, "REGEX_PCRE", 1);
+   if (!err) err = map_conditional(exports, "REGEX_PCRE", 1);
 #else /* ifndef REGEX_PCRE */
-   err = err || map_conditional(exports, "REGEX_PCRE", 0);
+   if (!err) err = map_conditional(exports, "REGEX_PCRE", 0);
 #endif /* def REGEX_PCRE */
 
 #ifdef STATIC_PCRE
-   err = err || map_conditional(exports, "STATIC_PCRE", 1);
+   if (!err) err = map_conditional(exports, "STATIC_PCRE", 1);
 #else /* ifndef STATIC_PCRE */
-   err = err || map_conditional(exports, "STATIC_PCRE", 0);
+   if (!err) err = map_conditional(exports, "STATIC_PCRE", 0);
 #endif /* ndef STATIC_PCRE */
 
 #ifdef STATIC_PCRS
-   err = err || map_conditional(exports, "STATIC_PCRS", 1);
+   if (!err) err = map_conditional(exports, "STATIC_PCRS", 1);
 #else /* ifndef STATIC_PCRS */
-   err = err || map_conditional(exports, "STATIC_PCRS", 0);
+   if (!err) err = map_conditional(exports, "STATIC_PCRS", 0);
 #endif /* ndef STATIC_PCRS */
 
-   err = err || map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
+   if (!err) err = map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
 
    return err;
 }

@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.17 2001/10/25 03:40:47 david__schmidt Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.18 2001/11/07 00:06:06 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.17 2001/10/25 03:40:47 david__sch
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.18  2001/11/07 00:06:06  steudten
+ *    Add line number in error output for lineparsing for
+ *    actionsfile.
+ *
  *    Revision 1.17  2001/10/25 03:40:47  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -112,6 +116,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.17 2001/10/25 03:40:47 david__sch
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "project.h"
 #include "jcc.h"
@@ -251,7 +256,7 @@ jb_err merge_actions (struct action_spec *dest,
          /* No "remove all"s to worry about. */
          list_remove_list(dest->multi_add[i], src->multi_remove[i]);
          err = list_append_list_unique(dest->multi_remove[i], src->multi_remove[i]);
-         err = err || list_append_list_unique(dest->multi_add[i], src->multi_add[i]);
+         if (!err) err = list_append_list_unique(dest->multi_add[i], src->multi_add[i]);
       }
 
       if (err)
@@ -308,8 +313,12 @@ jb_err copy_action (struct action_spec *dest,
    for (i = 0; i < ACTION_MULTI_COUNT; i++)
    {
       dest->multi_remove_all[i] = src->multi_remove_all[i];
-      err =        list_duplicate(dest->multi_remove[i], src->multi_remove[i]);
-      err = err || list_duplicate(dest->multi_add[i],    src->multi_add[i]);
+      err = list_duplicate(dest->multi_remove[i], src->multi_remove[i]);
+      if (err)
+      {
+         return err;
+      }
+      err = list_duplicate(dest->multi_add[i],    src->multi_add[i]);
       if (err)
       {
          return err;

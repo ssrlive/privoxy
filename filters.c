@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:34:17 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:37:55 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,14 @@ const char filters_rcs[] = "$Id: filters.c,v 1.40 2001/10/26 17:34:17 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.40  2001/10/26 17:37:55  oes
+ *    - Re-enabled Netscape 200/404 bug workaround in block_url():
+ *      - Removed OS/2 special case
+ *      - Made block_url() independant from sed() having been run
+ *    - Made trust_url independant from sed() having been run
+ *    - Made is_imageurl independant from sed() having been run.
+ *      It now checks User-Agent: and Accept: by itself.
+ *
  *
  *    Revision 1.39  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
@@ -729,10 +737,10 @@ struct http_response *block_url(struct client_state *csp)
       err = map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
 
-      err = err || map(exports, "hostport", 1, csp->http->hostport, 1);
-      err = err || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-      err = err || map(exports, "path", 1, csp->http->path, 1);
-      err = err || map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+      if (!err) err = map(exports, "hostport", 1, csp->http->hostport, 1);
+      if (!err) err = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+      if (!err) err = map(exports, "path", 1, csp->http->path, 1);
+      if (!err) err = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
       if (err)
       {
@@ -804,20 +812,20 @@ struct http_response *trust_url(struct client_state *csp)
    /*
     * Export the host, port, and referrer information
     */
-   err = map(exports, "hostport", 1, csp->http->hostport, 1)
-      || map(exports, "path", 1, csp->http->path, 1)
-      || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0)
-      || map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+   err = map(exports, "hostport", 1, csp->http->hostport, 1);
+   if (!err) err = map(exports, "path", 1, csp->http->path, 1);
+   if (!err) err = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+   if (!err) err = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
    if (NULL != (p = get_header_value(csp->headers, "Referer:")))
    {
-      err = err || map(exports, "referrer", 1, p, 1);
-      err = err || map(exports, "referrer-html", 1, html_encode(p), 0);
+      if (!err) err = map(exports, "referrer", 1, p, 1);
+      if (!err) err = map(exports, "referrer-html", 1, html_encode(p), 0);
    }
    else
    {
-      err = err || map(exports, "referrer", 1, "unknown", 1);
-      err = err || map(exports, "referrer-html", 1, "unknown", 1);
+      if (!err) err = map(exports, "referrer", 1, "unknown", 1);
+      if (!err) err = map(exports, "referrer-html", 1, "unknown", 1);
    }
 
    if (err)
