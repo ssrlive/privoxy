@@ -26,17 +26,18 @@ _$*
 *.ln
 core
 # CVS default ignores end
+.\logfile
 Makefile
 config
 config.cache
 config.h
 config.log
 config.status
+junkbstr.txt
 junkbuster
 junkbuster.log
 logfile
 permissionsfile
 re_filterfile
-vc_junkbuster.opt
 vc_junkbuster.ncb
-junkbstr.txt
+vc_junkbuster.opt
