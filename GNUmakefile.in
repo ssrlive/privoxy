@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.50 2002/04/02 03:46:24 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.51 2002/04/02 13:03:56 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -496,8 +496,6 @@ dok-user: doc/source/ldpOK.dsl
 dok-faq: doc/source/ldpOK.dsl
 	mkdir -p doc/text
 	rm -rf doc/webserver/faq
-# Turn off section numbering for FAQ
-	sed 's/(define %section-autolabel% #t)/(define %section-autolabel% #f)/' doc/source/ldpOK.dsl > tmp.dsl && mv -f tmp.dsl  doc/source/ldpOK.dsl
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
@@ -541,8 +539,6 @@ redhat-dok: doc/source/ldpOK.dsl man2html
           developer-manual
 ##  faq
 	rm -rf doc/webserver/faq
-# Turn off section numbering for FAQ
-	sed 's/(define %section-autolabel% #t)/(define %section-autolabel% #f)/' doc/source/ldpOK.dsl > tmp.dsl && mv -f tmp.dsl  doc/source/ldpOK.dsl
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
@@ -682,6 +678,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.51  2002/04/02 13:03:56  oes
+# Added fix for webserver permissions
+#
 # Revision 1.50  2002/04/02 03:46:24  hal9
 # Rewrite ldpOK.dsl so that sections are NOT numbered on FAQ, in an effort
 # to make the Table of Contents not so 'busy' looking. SuSE needs testing :)
