@@ -1,0 +1,83 @@
+#!/bin/sh
+# 
+#  ********************************************************************
+# 
+#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init,v $
+# 
+#  Purpose     :  This shell script takes care of starting and stopping
+#                 privoxy.
+# 
+#  Copyright   :  Written by and Copyright (C) 2001,2002 the SourceForge
+#                 Privoxy team. http://www.privoxy.org/
+# 
+#                 Based on the Internet Junkbuster originally written
+#                 by and Copyright (C) 1997 Anonymous Coders and
+#                 Junkbusters Corporation.  http://www.junkbusters.com
+# 
+#                 This program is free software; you can redistribute it
+#                 and/or modify it under the terms of the GNU General
+#                 Public License as published by the Free Software
+#                 Foundation; either version 2 of the License, or (at
+#                 your option) any later version.
+# 
+#                 This program is distributed in the hope that it will
+#                 be useful, but WITHOUT ANY WARRANTY; without even the
+#                 implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                 PARTICULAR PURPOSE.  See the GNU General Public
+#                 License for more details.
+# 
+#                 The GNU General Public License should be included with
+#                 this file.  If not, you can view it at
+#                 http://www.gnu.org/copyleft/gpl.html
+#                 or write to the Free Software Foundation, Inc., 59
+#                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# 
+#  Revisions   :
+#     $Log: privoxy-generic.init,v $
+#     Revision 1.0  2002/09/05 17:14:32  hal9
+#
+#######################################################################
+
+# Is this needed by Solaris?
+#ident  "@(#)privoxy  1.0     02/09/05"
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin/:/usr/bin:/sbin:/bin
+NAME=Privoxy
+DAEMON=privoxy
+P_CONF_FILE=/etc/${NAME}/config
+PIDFILE=/var/run/${NAME}.pid
+#RUN_AS="--user privoxy"
+
+if [ ! -f $P_CONF_FILE ]; then
+  echo "Can't find $P_CONF_FILE, exiting."
+  exit 1
+fi
+
+case "$1" in
+ 
+ start)
+     test -f $PIDFILE && echo "$PIDFILE exists, exiting." && exit 1
+	echo -n "Starting $NAME: "
+	$DAEMON --pidfile $PIDFILE $RUN_AS $P_CONF_FILE 2>/dev/null &&\
+     echo "OK." || echo "Failed."
+        
+     ;;
+ 
+ restart)
+     $0 stop
+     $0 start
+     ;;
+ 
+ stop)
+	echo -n "Stopping $NAME: "
+     kill `cat $PIDFILE` &&\
+     echo "OK." || echo "Failed."
+     ;;
+ 
+ *)
+     echo "Usage: $0 {start|stop|restart}"
+     exit 1
+     ;;
+esac
+
+exit 0
