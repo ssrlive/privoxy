@@ -23,7 +23,6 @@ shop        = -filter -no-cookies-keep
 -block \
 +deanimate-gifs{last} \
 -downgrade \
-+fast-redirects \
 +filter{html-annoyances} \
 +filter{content-cookies} \
 +filter{js-annoyances} \
