@@ -36,9 +36,17 @@ which will eventually become Junkbuster v3.0. See
 http://ijbswa.sourceforge.net.
 
 Internet Junkbuster is a web proxy with advanced filtering
-capabilities for protecting privacy and removing ads, banners, pop-ups
-and other obnoxious Internet Junk.
+capabilities for protecting privacy, filtering web page content,
+managing cookies, controlling access, and removing ads, banners,
+pop-ups and other obnoxious Internet Junk. Junkbuster has a very
+flexible configuration and can be customized to suit individual needs
+and tastes. Internet Junkbuster has application for both stand-alone
+systems and multi-user networks.
 
+JunkBuster was originally written by JunkBusters Corporation, and was
+released as free open-source software under the GNU GPL. Stefan
+Waldherr made many improvements, and started the SourceForge project
+to continue development.
 
  INSTALL
 --------
@@ -48,6 +56,7 @@ For tarball, first unpack:
  tar zxvf ijb_source_*
  cd ijb_source_2.9.9_alpha
 
+ autoheader   [suggested for CVS source]
  autoconf     [suggested for CVS source]
  ./configure
  make         (gmake on BSD?)
@@ -73,7 +82,8 @@ build as above.
 
  junkbuster /etc/junkbuster/config &
 
-Or for RPMS: /etc/rc.d/init.d/junkbuster start
+Or for RedHat: /etc/rc.d/init.d/junkbuster start
+Or for SuSE: /etc/rc.d/junkbuster start
 
 The only command line option supported is the location of the 
 main configuration file. If none is specified, Junkbuster will 
@@ -121,4 +131,4 @@ anything new.
 -------------------------------------------------------------------------
 ijbswa-developers@lists.sourceforge.net
 
-$Id: README,v 1.5 2001/10/16 01:31:53 hal9 Exp $
+$Id: README,v 1.6 2001/10/24 18:47:54 hal9 Exp $
