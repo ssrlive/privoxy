@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.78 2002/04/17 18:04:16 oes Exp $
+ $Id: user-manual.sgml,v 1.79 2002/04/18 03:18:06 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.78 2002/04/17 18:04:16 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.79 2002/04/18 03:18:06 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -245,13 +245,6 @@
 <!-- include buildsource.sgml boilerplate: -->
 &buildsource;
 <!-- end boilerplate -->
-
-<para>
- For more detailed instructions, on how to build Redhat and SuSE RPMs,
- Windows self-extracting installers etc, and for building from CVS sources,
- please consult the <ulink url="../developer-manual/newrelease.html">developer
- manual</ulink>.
-</para>
 </sect2>
 
 </sect1>
@@ -775,7 +768,7 @@ Please choose from the following options:
 
 <para>
  The main config file controls all aspects of <application>Privoxy</application>'s
- operation that are not location dependent (i.e. they apply to all URLs, no matter
+ operation that are not location dependent (i.e. they apply universally, no matter
  where you may be surfing).
 </para>
 
@@ -2088,7 +2081,7 @@ Please choose from the following options:
 <para>
  Now, your users can set their browser's proxy to use either
  host-a or host-b and be able to browse the internal content
- on both isp-a or isp-b.
+ of both isp-a and isp-b.
 </para>
 
 <para>
@@ -2336,7 +2329,7 @@ Removed references to Win32. HB 09/23/01
 <para>
  Note that some actions like cookie suppression or script disabling may
  render some sites unusable, which rely on these techniques to work properly.
- Finding the right mix of actions is not easy and a matter of personal
+ Finding the right mix of actions is not easy and certainly a matter of personal
  taste. In general, it can be said that the more <quote>aggressive</quote>
  your default settings (in the top section of the actions file) are,
  the more exceptions for <quote>trusted</quote> sites you will have to
@@ -2404,26 +2397,27 @@ Removed references to Win32. HB 09/23/01
 <sect3>
 <title>Patterns</title>
 <para>
- Generally, a pattern has the form &lt;domain&gt;/&lt;path&gt;, where both the
- &lt;domain&gt; and &lt;path&gt; part are optional. If you only specify a
- domain part, the <quote>/</quote> can be left out:
+ Generally, a pattern has the form <literal>&lt;domain&gt;/&lt;path&gt;</literal>,
+ where both the <literal>&lt;domain&gt;</literal> and <literal>&lt;path&gt;</literal>
+ are optional. (This is why the pattern <literal>/</literal> matches all URLs).
 </para>
 
 <variablelist>
  <varlistentry>
-  <term><literal>www.example.com</literal></term>
+  <term><literal>www.example.com/</literal></term>
   <listitem>
    <para>
-    is a domain only pattern and will match any request to <literal>www.example.com</literal>,
+    is a domain-only pattern and will match any request to <literal>www.example.com</literal>,
     regardless of which document on that server is requested.
    </para>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>www.example.com/</literal></term>
+  <term><literal>www.example.com</literal></term>
   <listitem>
    <para>
-    means exactly the same.
+    means exactly the same. For domain-only patterns, the trailing <literal>/</literal> may
+    be omitted.
    </para>
   </listitem>
  </varlistentry>
@@ -2562,7 +2556,7 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- Note that the pattern is automatically left-anchored at the <quote>/</quote>,
+ Note that the path pattern is automatically left-anchored at the <quote>/</quote>,
  i.e. it matches as if it would start with a <quote>^</quote>.
 </para>
 
@@ -2822,12 +2816,17 @@ Removed references to Win32. HB 09/23/01
   </simplelist>
   <simplelist>
    <member>
-    <emphasis>no-popups</emphasis>:         Kill all popups in JS and HTML
+    <emphasis>content-cookies</emphasis>:   Kill cookies that come in the HTML or JS content 
    </member>
   </simplelist>
   <simplelist>
    <member>
-    <emphasis>frameset-borders</emphasis>: Give frames a border
+    <emphasis>popups</emphasis>:         Kill all popups in JS and HTML
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>frameset-borders</emphasis>: Give frames a border and make them resizable 
    </member>
   </simplelist>
   <simplelist>
@@ -2837,7 +2836,7 @@ Removed references to Win32. HB 09/23/01
   </simplelist>
   <simplelist>
    <member>
-    <emphasis>no-refresh</emphasis>:       Automatic refresh sucks on auto-dialup lines
+    <emphasis>refresh-tags</emphasis>:     Kill automatic refresh tags (for dial-on-demand setups) 
    </member>
   </simplelist>
   <simplelist>
@@ -2847,12 +2846,17 @@ Removed references to Win32. HB 09/23/01
   </simplelist>
   <simplelist>
    <member>
-    <emphasis>nimda</emphasis>:            Remove (virus) Nimda code.
+    <emphasis>nimda</emphasis>:            Remove Nimda (virus) code.
    </member>
   </simplelist>
   <simplelist>
    <member>
-     <emphasis>banners-by-size</emphasis>:  Kill banners by size
+     <emphasis>banners-by-size</emphasis>:  Kill banners by size (<emphasis>very</emphasis> efficient!)
+   </member>
+  </simplelist>
+  <simplelist>
+   <member>
+    <emphasis>shockwave-flash</emphasis>:   Kill embedded Shockwave Flash objects
    </member>
   </simplelist>
   <simplelist>
@@ -2861,6 +2865,7 @@ Removed references to Win32. HB 09/23/01
    </member>
   </simplelist>
  </blockquote>
+
 
  <para>
   Note: Filtering requires buffering the page content, which may appear to slow down
@@ -4395,6 +4400,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.79  2002/04/18 03:18:06  hal9
+ Spellcheck, and minor touchups.
+
  Revision 1.78  2002/04/17 18:04:16  oes
  Proofreading part 2
 
