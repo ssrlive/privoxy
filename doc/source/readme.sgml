@@ -1,0 +1,305 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity % dummy "INCLUDE"> 
+<!entity supported SYSTEM "supported.sgml">
+<!entity newfeatures SYSTEM "newfeatures.sgml">
+<!entity p-intro SYSTEM "privoxy.sgml">
+<!entity seealso SYSTEM "seealso.sgml">
+]>
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
+
+ Purpose     :  README for Privoxy
+                
+ $Id: readme.sgml,v 1.0 2002/04/03 03:53:43 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+
+ ===================================================================
+ READ: Document note: This file generates the README in the top level 
+ source directory. It is generated as only a plain text file. The 
+ current markup is not suitable for other formats. Build from 
+ Makefile with 'make readme'.
+ ===================================================================
+
+-->
+
+<article id="index">
+
+<![%dummy;[
+ <para>
+ <comment>
+  This is here to keep vim syntax file from breaking :/
+  If I knew enough to fix it, I would.
+  PLEASE DO NOT REMOVE! HB: hal@foobox.net
+ </comment>
+ </para>
+]]>
+
+<para>
+ <literal>
+  <msgtext>
+   <literallayout>
+
+/*********************************************************************
+ *
+ * File        :  $Source: /cvsroot/ijbswa/current/README,v $
+ *
+ * Purpose     :  README file to give a short intro.
+ *
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ *                Privoxy team. http://www.privoxy.org/
+ *
+ *                Based on the Internet Junkbuster originally written
+ *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                This program is free software; you can redistribute it 
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *********************************************************************/
+   </literallayout>
+  </msgtext>
+ </literal>
+</para>
+
+<para>
+ This README is included with the development version of Privoxy, which will
+ eventually become Privoxy v3.0 (and soon we hope!). See
+ http://www.privoxy.org/. The current code level is BETA, and seems stable to
+ us :)
+</para>
+
+<!--
+ Include privoxy.sgml
+-->
+&p-intro;
+
+<para>
+ <LiteralLayout>
+
+ IMPORTANT CHANGES
+------------------</LiteralLayout>
+</para>
+<para>
+ NEWS! As of 03/24/02, the name of this project has been changed from
+ ijbswa/Junkbuster to Privoxy. This is reflected in many of the included
+ files. 
+</para>
+<para>
+ WARNING! If upgrading from earlier versions of this project via RPM packages,
+ the new package will delete any previously installed 'Junkbuster' packages.
+</para>
+<para>
+ IMPORTANT! READ! Configuration Change as of 3 Apr 2002: The default listening
+ port is now 8118 due to conflicts with port 8000 assignment. You will need to
+ change your browser if upgrading!!! And maybe firewall, etc.
+</para>
+
+<para>
+ <LiteralLayout>
+
+ INSTALL
+--------</LiteralLayout>
+</para>
+<para>
+ For tarball, first unpack:
+</para>
+
+<programlisting>
+ tar xzvf privoxy-2.9.13-beta-src.tar.gz
+ cd privoxy-2.9.13-beta
+</programlisting>
+
+<programlisting>
+ autoheader
+ autoconf
+ ./configure	(--help to see options)
+ gmake        	(the make from gnu) 
+ su 
+ make -n install	(to see where all the files will go)
+ make install		(to really install)
+</programlisting>
+
+<para>
+ Redhat and SuSE src and binary RPMs can be built with 'make redhat-dist' or
+ 'make suse-dist' (run ./configure first) from unpacked sources. BSD will
+ (probably?) require gmake (from http://gnu.org). See the user-manual for OS/2
+ build instructions.
+</para>
+<para>
+ Privoxy is also available via anonymous CVS:
+</para>
+
+<programlisting>
+ cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
+ cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
+</programlisting>
+<para>
+ This will create a directory named 'current'. Then, 'cd current', and then
+ build as above.
+</para>
+
+<para>
+ <LiteralLayout>
+
+ RUN
+---- </LiteralLayout>
+</para>
+
+<para>
+ privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
+  [--user USER[.GROUP]] [config_file]
+</para>
+<para>
+See the man page or user-manual for a brief explanation of each option.
+</para>
+<para>
+ If no config_file is specified on the command line, Privoxy will look for a
+ file named 'config' in the current directory (except Win32 which will look
+ for 'config.txt'). If no config_file is found, Privoxy will fail to start.
+</para>
+<para>
+ Or for Red Hat: /etc/rc.d/init.d/privoxy start
+</para>
+<para>
+ Or for SuSE:   /etc/rc.d/privoxy start
+</para>
+
+<para>
+ <LiteralLayout>
+
+ CONFIGURATION
+-------------- </LiteralLayout>
+</para>
+<para>
+ See: 'config', 'default.action', and 'default.filter'. There are several
+ actions files included. These are all well commented. Most of the magic is in
+ '*.action', and there are several of these included with varying degrees of
+ aggressiveness. On Unix-like systems, these files are installed in
+ /etc/privoxy.  On Windows, then wherever the executable itself is installed.
+ There are many significant changes and advances since Junkbuster v2.0.x. The
+ user-manual has a run down of configuration options, and examples:
+ http://www.privoxy.org/user-manual/.
+</para>
+<para>
+ Be sure to set your browser(s) for HTTP/HTTPS Proxy at &lt;IP&gt;:&lt;Port&gt;, or
+ whatever you specify in the config file under 'listen-address'. DEFAULT is
+ localhost:8118.
+</para>
+<para>
+ The default.action file can be configured via the web interface accessed via
+ http://p.p/, as well other options.
+</para>
+<para>
+ All configuration files are subject to unannounced changes during the
+ development process.
+</para>
+
+<para>
+ <LiteralLayout>
+
+ DOCUMENTATION
+--------------</LiteralLayout>
+ There is a growing amount of documentation in the 'doc' subdirectory, but it
+ is not completed at this point. In particular, see the user-manual there, the
+ faq, and developers should look at developer-manual.
+</para>
+<para>
+ The most up to date source of information on the current development version,
+ may still be either comments in the source code, or the included
+ configuration files, which are all well commented. These are 'config',
+ '*.action', and 'default.filter' in the toplevel source directory.
+</para>
+
+<para>
+ Included documentation may vary according to platform and packager.
+</para>
+
+<para>
+ <LiteralLayout>
+
+ CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
+--------------------------------------------------------------</LiteralLayout>
+</para>
+
+<para>
+We value your feedback. However, to provide you with the best support,
+please note:
+</para>
+<para>
+ <LiteralLayout>
+ * Use the support forum to get help:
+   http://sourceforge.net/tracker/?group_id=11118&#38;atid=211118
+  </LiteralLayout>
+</para>
+<Para>
+ <LiteralLayout>
+ * Submit bugs only thru our bug forum:
+   http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118 
+ </LiteralLayout>
+</Para>
+<para>
+   Make sure that the bug has not already been submitted. Please try
+   to verify that it is a Privoxy bug, and not a browser or site
+   bug first. If you are using your own custom configuration, please
+   try the stock configs to see if the problem is a configuration
+   related bug. And if not using the latest development snapshot,
+   please try the latest one. Or even better, CVS sources. Please 
+   be sure to include the Privoxy/Junkbuster version, platform, 
+   browser, any pertinent log data, any other relevant details 
+   (please be specific) and, if possible, some way to reproduce the 
+   bug.
+</para>
+<para>
+ <LiteralLayout>
+ * Submit feature requests only thru our feature request forum:
+   http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118&#38;func=browse
+ </LiteralLayout>
+</para>
+
+<para>
+ <LiteralLayout>
+ For any other issues, feel free to use the mailing lists:
+ http://sourceforge.net/mail/?group_id=11118 
+ </LiteralLayout>
+</para>
+
+<para>   
+ <LiteralLayout>
+ Anyone interested in actively participating in development and related
+ discussions can join the appropriate mailing list here:
+ http://sourceforge.net/mail/?group_id=11118. Archives are available here
+ too.
+ </LiteralLayout>
+</para>
+<para>
+ <LiteralLayout>
+ -------------------------------------------------------------------------
+ ijbswa-developers@lists.sourceforge.net
+ </LiteralLayout>
+</para>
+<para>
+ $Id: readme.sgml,v 1.0 2002/03/31 02:03:36 hal9 Exp $
+</para>
+
+</article>
