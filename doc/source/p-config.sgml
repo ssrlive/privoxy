@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.2 2002/09/05 05:45:30 hal9 Exp $
+ $Id: p-config.sgml,v 2.3 2002/10/09 01:45:05 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.2 2002/09/05 05:45:30 hal9 Exp $
+ $Id: p-config.sgml,v 2.3 2002/10/09 01:45:05 hal9 Exp $
 </para>
 <para>
 Copyright (C) 2001, 2002 Privoxy Developers http://privoxy.org
@@ -468,9 +468,12 @@ actionsfile
  <varlistentry>
   <term>Notes:</term>
   <listitem>
+<!--  HB removed per bug report 688728 02/20/03
+
    <para>
     The windows version will additionally log to the console.
    </para>
+-->   
    <para>
     The logfile is where all logging and error messages are written. The level
     of detail and number of messages are set with the <literal>debug</literal>
