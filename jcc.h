@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.7 2001/11/05 21:41:43 steudten Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.8 2002/03/04 18:19:49 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.8  2002/03/04 18:19:49  oes
+ *    Added extern const char *pidfile
+ *
  *    Revision 1.7  2001/11/05 21:41:43  steudten
  *    Add changes to be a real daemon just for unix os.
  *    (change cwd to /, detach from controlling tty, set
@@ -93,6 +96,7 @@ extern struct file_list    files[];
 #ifdef unix
 extern const char *pidfile;
 #endif
+extern int no_daemon;
 
 /* Functions */
 

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.33 2002/03/05 04:52:42 oes Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.34 2002/03/06 23:14:35 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.33 2002/03/05 04:52:42 oes Exp $"
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.34  2002/03/06 23:14:35  jongfoster
+ *    Trivial cosmetic changes to make function comments easier to find.
+ *
  *    Revision 1.33  2002/03/05 04:52:42  oes
  *    Deleted non-errlog debugging code
  *
@@ -981,7 +984,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_logfile :
             freez(config->logfile);
-            config->logfile = make_path(config->logdir, arg);
+            config->logfile = no_daemon ? NULL : make_path(config->logdir, arg);
             continue;
 
 /* *************************************************************************
