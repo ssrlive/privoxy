@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.29 2002/03/04 23:45:13 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.30 2002/03/05 22:43:45 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.29 2002/03/04 23:45:13 jongfoster E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.30  2002/03/05 22:43:45  david__schmidt
+ *    - Better error reporting on OS/2
+ *    - Fix double-slash comment (oops)
+ *
  *    Revision 1.29  2002/03/04 23:45:13  jongfoster
  *    Printing thread ID if using Win32 native threads
  *
@@ -395,11 +399,11 @@ void log_error(int loglevel, char *fmt, ...)
 
     {
        /*
-	* Write timestamp into tempbuf.
-	*
-	* Complex because not all OSs have tm_gmtoff or
-	* the %z field in strftime()
-	*/
+        * Write timestamp into tempbuf.
+        *
+        * Complex because not all OSs have tm_gmtoff or
+        * the %z field in strftime()
+        */
        time_t now; 
        struct tm tm_now; 
        time (&now);
@@ -451,7 +455,7 @@ void log_error(int loglevel, char *fmt, ...)
          outc = sprintf(outbuf, "IJB(%ld) Gif-Deanimate: ", this_thread);
          break;
       case LOG_LEVEL_CLF:
-	 outbuf = outbuf_save;
+         outbuf = outbuf_save;
          outc = 0;
          outbuf[0] = '\0';
          break;

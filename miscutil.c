@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.30 2002/03/04 18:27:42 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.31 2002/03/05 04:52:42 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.30 2002/03/04 18:27:42 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.31  2002/03/05 04:52:42  oes
+ *    Deleted non-errlog debugging code
+ *
  *    Revision 1.30  2002/03/04 18:27:42  oes
  *    - Deleted deletePidFile
  *    - Made write_pid_file use the --pidfile option value
@@ -890,17 +893,17 @@ char * make_path(const char * dir, const char * file)
 #if defined(unix)
       if ( *dir != '/' && basedir && *basedir )
       {
-	      path = malloc( strlen( basedir ) + strlen(dir) + strlen(file) + 3);
-	      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
-	      strcpy(path, basedir);
-	      strcat(path, "/");
-	      strcat(path, dir);
+         path = malloc( strlen( basedir ) + strlen(dir) + strlen(file) + 3);
+         if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+         strcpy(path, basedir);
+         strcat(path, "/");
+         strcat(path, dir);
       }
       else
       {
-	      path = malloc(strlen(dir) + strlen(file) + 2);
-	      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
-	      strcpy(path, dir);
+         path = malloc(strlen(dir) + strlen(file) + 2);
+         if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+         strcpy(path, dir);
       }
 #else
 
@@ -1013,24 +1016,24 @@ Author
  * Small values favor memcpy, large values favor inline code.
  */
 #if defined(__alpha__) || defined(__alpha)
-#  define breakeven_point   2	/* AXP (DEC Alpha)     - gcc or cc or egcs */
+#  define breakeven_point   2    /* AXP (DEC Alpha)     - gcc or cc or egcs */
 #endif
 #if defined(__i386__)  || defined(__i386)
-#  define breakeven_point  12	/* Intel Pentium/Linux - gcc 2.96 */
+#  define breakeven_point  12    /* Intel Pentium/Linux - gcc 2.96 */
 #endif
 #if defined(__hppa)
-#  define breakeven_point  10	/* HP-PA               - gcc */
+#  define breakeven_point  10    /* HP-PA               - gcc */
 #endif
 #if defined(__sparc__) || defined(__sparc)
-#  define breakeven_point  33	/* Sun Sparc 5         - gcc 2.8.1 */
+#  define breakeven_point  33    /* Sun Sparc 5         - gcc 2.8.1 */
 #endif
 
 /* some other values of possible interest: */
-/* #define breakeven_point  8 */  /* VAX 4000          - vaxc */
-/* #define breakeven_point 19 */  /* VAX 4000          - gcc 2.7.0 */
+/* #define breakeven_point  8 */ /* VAX 4000          - vaxc */
+/* #define breakeven_point 19 */ /* VAX 4000          - gcc 2.7.0 */
 
 #ifndef breakeven_point
-#  define breakeven_point   6	/* some reasonable one-size-fits-all value */
+#  define breakeven_point   6    /* some reasonable one-size-fits-all value */
 #endif
 
 #define fast_memcpy(d,s,n) \
