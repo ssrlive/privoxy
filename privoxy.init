@@ -1,4 +1,14 @@
 #!/bin/sh
+#
+# This is file /etc/rc.d/init.d/privoxy and was put here 
+# by the privoxy rpm
+#
+# chkconfig: 235 84 09
+#
+# description: This shell script takes care of starting and stopping \
+#              privoxy.
+#
+
 #  ********************************************************************
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/privoxy.init,v $
@@ -33,6 +43,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.init,v $
+#     Revision 1.6  2002/03/26 22:29:55  swa
+#     we have a new homepage!
+#
 #     Revision 1.5  2002/03/25 06:14:18  morcego
 #     Removing the OPRG definition (no longer needed)
 #
@@ -147,15 +160,6 @@
 #
 # 
 # ********************************************************************/
-
-# This is file /etc/rc.d/init.d/privoxy and was put here 
-# by the privoxy rpm
-#
-# chkconfig: 235 84 09
-#
-# description: This shell script takes care of starting and stopping \
-#              privoxy.
-#
 
 
 # Source function library.
