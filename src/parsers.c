@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 2.2 2002/11/10 04:20:38 hal9 Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 2.3 2002/12/28 03:58:19 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/parsers.c,v $
@@ -40,6 +40,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 2.2 2002/11/10 04:20:38 hal9 Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 2.3  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *    Revision 2.2  2002/11/10 04:20:38  hal9
  *    Fix typo: supressed -> suppressed
  *
@@ -1097,14 +1101,16 @@ jb_err client_referrer(struct client_state *csp, char **header)
 
    newval = csp->action->string[ACTION_STRING_REFERER];
 
+#ifdef FEATURE_ACTIVITY_CONSOLE
+   /* Otherwise, we're doing something with the referer. */
+   accumulate_stats(STATS_REFERER, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
+
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
       /*
        * Blocking referer
        */
-#ifdef FEATURE_ACTIVITY_CONSOLE
-      accumulate_stats(STATS_REFERER, 1);
-#endif /* def FEATURE_ACTIVITY_CONSOLE */
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return JB_ERR_OK;
    }
@@ -1247,6 +1253,10 @@ jb_err client_from(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
+#ifdef FEATURE_ACTIVITY_CONSOLE
+   /* Otherwise, we're doing something with it. */
+   accumulate_stats(STATS_CLIENT_FROM, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
    freez(*header);
 
    newval = csp->action->string[ACTION_STRING_FROM];
@@ -1256,9 +1266,6 @@ jb_err client_from(struct client_state *csp, char **header)
     */
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
-#ifdef FEATURE_ACTIVITY_CONSOLE
-      accumulate_stats(STATS_CLIENT_FROM, 1);
-#endif /* def FEATURE_ACTIVITY_CONSOLE */
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return JB_ERR_OK;
    }
@@ -1700,6 +1707,9 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
    if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
       log_error(LOG_LEVEL_HEADER, "Crunched incoming cookie -- yum!");
+#ifdef FEATURE_ACTIVITY_CONSOLE
+      accumulate_stats(STATS_COOKIE, 1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
       return crumble(csp, header);
    }
    else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)

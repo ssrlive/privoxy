@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 2.3 2002/07/18 22:06:12 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 2.3 2002/07/18 22:06:12 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
+ *    Initial drop of dashboard instrumentation - enabled with
+ *    --enable-activity-console
+ *
  *    Revision 2.3  2002/07/18 22:06:12  jongfoster
  *    Trivial formatting changes
  *
@@ -1477,6 +1481,9 @@ static void listen_loop(void)
 #ifdef FEATURE_ACL
       if (block_acl(NULL,csp))
       {
+#ifdef FEATURE_ACTIVITY_CONSOLE
+         accumulate_stats(STATS_ACL_RESTRICT,1);
+#endif /* def FEATURE_ACTIVITY_CONSOLE */
          log_error(LOG_LEVEL_CONNECT, "Connection dropped due to ACL");
          close_socket(csp->cfd);
          freez(csp);
