@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.60 2002/04/04 12:25:41 oes Exp $
+# $Id: GNUmakefile.in,v 1.61 2002/04/04 19:18:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -80,8 +80,9 @@ MV	   = mv
 TAR        = tar
 LN         = ln
 WDUMP      = @WDUMP@ -dump
+JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
-DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
+DB         = $(JADEBIN) $(JADECAT) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
@@ -466,7 +467,6 @@ tarball-dist:
 	$(GZIP_PROG) ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Tarball distribution created.
 
-
 # anonymously ncftps the tarball to sourceforge
 tarball-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
@@ -500,31 +500,31 @@ doc/source/ldpOK.dsl:
 groff2html:
 	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
 
-##  developer manual
+# developer manual
 dok-devel: doc/source/ldpOK.dsl
-	mkdir -p doc/text
-	rm -rf doc/webserver/developer-manual
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+	rm -rf doc/webserver/developer-manual doc/source/developer-manual
+	mkdir -p doc/text doc/source/developer-manual
+	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml && cd .. && mv developer-manual ../webserver
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
 
-##  user manual
+# user manual
 dok-user: doc/source/ldpOK.dsl
-	mkdir -p doc/text
-	rm -rf doc/webserver/user-manual
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+	rm -rf doc/webserver/user-manual doc/source/user-manual
+	mkdir -p doc/text doc/source/user-manual
+	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. && mv user-manual ../webserver
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
 
-##  faq
+# faq
 dok-faq: doc/source/ldpOK.dsl
-	mkdir -p doc/text
-	rm -rf doc/webserver/faq
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+	rm -rf doc/webserver/faq doc/source/faq
+	mkdir -p doc/text doc/source/faq
+	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
+	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt && rm -rf tmp.html faq
 
-## man page
+# man page
 dok-man: doc/source/ldpOK.dsl
-	mkdir -p doc/man
-	mkdir -p doc/webserver/man-page
+	rm -rf doc/man doc/webserver/man-page
+	mkdir -p doc/man -p doc/webserver/man-page
 	if [ "$(MAN2HTML)" != "false" ]; then \
 		$(ECHO) "<html><head><title>Privoxy|Doc/Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html; \
 		man ./privoxy.1 | $(MAN2HTML) -bare \
@@ -534,14 +534,13 @@ dok-man: doc/source/ldpOK.dsl
           $(MAKE) groff2html; \
 	fi
 
+# readme page
 dok-readme: doc/source/ldpOK.dsl
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks readme.sgml > tmp.html &&\
-     $(WDUMP) tmp.html > ../../README && rm -rf tmp.html readme
-     # kludge to force recreation on next run. Rodgrigo?
-	@rm -f doc/source/ldpOK.dsl
+	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
+	$(WDUMP) tmp.html > ../../README && rm -rf tmp.html
 
 dok: dok-devel dok-user dok-faq dok-man dok-readme
-## kludge to force recreation on next run. Rodgrigo?
+# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
 
@@ -733,6 +732,11 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.61  2002/04/04 19:18:21  swa
+# readme was leftover directory. use w3m instead
+# of lynx to be consistent among developers. use
+# consistent target naming.
+#
 # Revision 1.60  2002/04/04 12:25:41  oes
 # Tidy webserver upload w/o *~ files, CVS dirs and logfiles and with proper dir and file permissions
 #
