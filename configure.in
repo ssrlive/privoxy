@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.81 2002/09/27 00:38:44 hal9 Exp $
+dnl $Id: configure.in,v 1.82 2002/09/27 04:24:07 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.82  2002/09/27 04:24:07  hal9
+dnl Minor change of "! test" to "test -ne" for Solaris.
+dnl
 dnl Revision 1.81  2002/09/27 00:38:44  hal9
 dnl Some general cleanup of the user/group stuff. Including remove up to ':' to
 dnl make Linux (?) compatible with other *nix. Better AC output stuff.
@@ -421,14 +424,14 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.81 $)
+AC_REVISION($Revision: 1.82 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
    echo "You need to run autoheader first. "
    echo -n "Shall I do this for you now? (y/n) "
    read answer
-   if test $answer != "y"; then
+   if test "$answer" != "y"; then
       exit 1
    else
       autoheader
@@ -1232,7 +1235,9 @@ DKPREFIX=false
 for i in $DKPREFIXCOPY /usr/share/sgml/docbook/stylesheet/dsssl/modular \
         /usr/share/sgml/docbook/dsssl-stylesheets /usr/share/sgml/docbkdsl \
         /usr/share/sgml/docbook-dsssl; do
-        echo -n "checking for $i/html/docbook.dsl..."
+dnl  echo -n does not fly with /bin/sh.
+dnl      echo -n "checking for $i/html/docbook.dsl..."
+      AC_MSG_CHECKING([for $i])
         if test -f $i/html/docbook.dsl; then
                 echo "yes"
                 DKPREFIX=$i
@@ -1247,7 +1252,8 @@ JADECAT=""
 dnl where are the catalogs?
 for i in /usr/share/sgml/CATALOG.docbk30 \
          /usr/share/sgml/CATALOG.docbk31; do
-        echo -n "checking for $i..."
+dnl     echo -n "checking for $i..."
+      AC_MSG_CHECKING([for $i])
         if test -f $i; then
                 echo "yes"
                 JADECAT="$JADECAT -c $i"
