@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.51 2002/03/05 04:52:42 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.52 2002/03/07 03:46:17 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.52  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.51  2002/03/05 04:52:42  oes
  *    Deleted non-errlog debugging code
  *
@@ -981,6 +984,13 @@ struct configuration_spec
 #ifdef FEATURE_FORCE_LOAD
 #define FORCE_PREFIX "/IJB-FORCE-LOAD"
 #endif /* def FEATURE_FORCE_LOAD */
+
+#ifdef FEATURE_NO_GIFS
+#define BUILTIN_IMAGE_MIMETYPE "image/png"
+#else
+#define BUILTIN_IMAGE_MIMETYPE "image/gif"
+#endif /* def FEATURE_NO_GIFS */
+
 
 /* Hardwired URLs */
 #define HOME_PAGE_URL       "http://ijbswa.sourceforge.net"
