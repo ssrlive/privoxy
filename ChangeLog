@@ -2,13 +2,15 @@
 ChangeLog for Internet JunkBuster
 --------------------------------------------------------------------
 
-*** Version 2.2.11 Beta Changes (WIP 03/07/02) *** 
+*** Version 2.2.11 Beta and CVS Changes (WIP 03/07/02) *** 
+
 - **READ**: The default listening PORT is NOW 8118!!! Changed from 
 8000 due to conflict with NAS (Network Audio Server, whatever that 
 is.)
--Added a new image blocker option: +image-blocker{pattern}, which 
+- Added a new image blocker option: +image-blocker{pattern}, which 
 displays a checkboard patthern and scales better than the logo.
-- Change JB built-in images from GIF to PNG.
+- PNG images will be used in place of GIF for JB built-in images
+if configured with --enable-no-gif.
 - Clean up compiler warnings (mostly).
 - Improved handling of failed DNS lookups & diagnostics for failed bind
 to listen socket
