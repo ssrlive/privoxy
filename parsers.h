@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.13 2001/09/29 12:56:03 joergs Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.14 2001/10/07 15:45:48 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,13 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.14  2001/10/07 15:45:48  oes
+ *    added client_accept_encoding, client_te, client_accept_encoding_adder
+ *
+ *    renamed content_type and content_length
+ *
+ *    fixed client_host and strclean prototypes
+ *
  *    Revision 1.13  2001/09/29 12:56:03  joergs
  *    IJB now changes HTTP/1.1 to HTTP/1.0 in requests and answers.
  *
@@ -147,7 +154,7 @@ extern char *server_content_type(const struct parsers *v, const char *s, struct 
 extern char *server_content_length(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *server_content_md5(const struct parsers *v, const char *s, struct client_state *csp);
 extern char *server_transfer_encoding(const struct parsers *v, const char *s, struct client_state *csp);
-extern char *server_http11(const struct parsers *v, const char *s, struct client_state *csp);
+extern char *server_http(const struct parsers *v, const char *s, struct client_state *csp);
 
 #ifdef FEATURE_FORCE_LOAD
 extern char *client_host(const struct parsers *v, const char *s, struct client_state *csp);
