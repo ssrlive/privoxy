@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.8 2001/06/29 13:19:52 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.9 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,12 @@ const char actions_rcs[] = "$Id: actions.c,v 1.8 2001/06/29 13:19:52 oes Exp $";
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.9  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.8  2001/06/29 13:19:52  oes
  *    Removed logentry from cancelled commit
  *
@@ -1012,7 +1018,6 @@ int load_actions_file(struct client_state *csp)
          /* define an alias */
          char  actions_buf[BUFFER_SIZE];
          struct action_alias * new_alias;
-         int more = 1;
 
          char * start = strchr(buf, '=');
          char * end = start;
