@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.99 2002/05/08 13:42:07 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.100 2002/05/08 13:48:18 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -812,6 +812,12 @@ install: all
 	# FIXME: Need new manual! $(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
 	$(INSTALL) $(INSTALL_P) privoxy.init /etc/init.d/privoxy
 
+coffee:
+	 @perl -e 'print pack "C*", (31,139,8,8,153,63,226,60,2,3,99,111,102,102,101,101,0,109,143,205,13,192,32,8,133,\
+                  239,78,241,110,234,1,28,160,171,152,208,53,26,117,247,22,165,73,137,125,9,1,62,126,2,128,169,5,243,143,\
+                  13,139,49,164,65,100,149,152,102,73,141,88,73,178,116,205,100,69,253,36,102,81,49,83,236,19,225,171,131,\
+                  214,172,163,73,4,168,123,115,71,126,247,122,94,128,178,227,95,154,12,86,215,122,197,249,146,187,54,220,125,\
+                  193,51,228,11,1,0,0);'|zcat
 
 #############################################################################
 
@@ -820,6 +826,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.100  2002/05/08 13:48:18  hal9
+# Ooops, that trashed JB v2.0.2 comment. Fixed.
+#
 # Revision 1.99  2002/05/08 13:42:07  hal9
 # This fixes the numbering problem on index.html in contact info section (.1.). Using
 # perl, since its way too convoluted to try to fix proper with docbook.
