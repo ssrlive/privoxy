@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.55 2002/03/12 01:42:50 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.56 2002/03/13 20:27:30 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.56  2002/03/13 20:27:30  oes
+ *    Fixing bug with CT_TABOO
+ *
  *    Revision 1.55  2002/03/12 01:42:50  oes
  *    Introduced modular filters
  *
@@ -932,7 +935,8 @@ struct forward_spec
  */
 struct re_filterfile_spec
 {
-   char *filtername;                /* Name from FILTER: statement in re_filterfile (or "default") */
+   char *name;                      /* Name from FILTER: statement in re_filterfile */
+   char *description;               /* Description from FILTER: statement in re_filterfile */
    struct list patterns[1];         /* The patterns from the re_filterfile */
    pcrs_job *joblist;               /* The resulting compiled pcrs_jobs */
    struct re_filterfile_spec *next; /* The pointer for chaining */

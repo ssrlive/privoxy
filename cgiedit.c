@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.18 2002/03/16 14:57:44 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.19 2002/03/16 18:38:14 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.18 2002/03/16 14:57:44 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.19  2002/03/16 18:38:14  jongfoster
+ *    Stopping stupid or malicious users from breaking the actions
+ *    file using the web-based editor.
+ *
  *    Revision 1.18  2002/03/16 14:57:44  jongfoster
  *    Full support for enabling/disabling modular filters.
  *
@@ -2935,7 +2939,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
          filter_name = cur_line->data.action->multi_add[ACTION_MULTI_FILTER]->first;
          while ((filter_name != NULL)
-             && (0 != strcmp(filter_group->filtername, filter_name->str)))
+             && (0 != strcmp(filter_group->name, filter_name->str)))
          {
               filter_name = filter_name->next;
          }
@@ -2948,7 +2952,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          {
             filter_name = cur_line->data.action->multi_remove[ACTION_MULTI_FILTER]->first;
             while ((filter_name != NULL)
-                && (0 != strcmp(filter_group->filtername, filter_name->str)))
+                && (0 != strcmp(filter_group->name, filter_name->str)))
             {
                  filter_name = filter_name->next;
             }
@@ -2971,7 +2975,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          else
          {
             if (!err) err = map(line_exports, "index", 1, number, 1);
-            if (!err) err = map(line_exports, "name",  1, filter_group->filtername, 1);
+            if (!err) err = map(line_exports, "name",  1, filter_group->name, 1);
+            if (!err) err = map(line_exports, "description",  1, filter_group->description, 1);
             if (!err) err = map_radio(line_exports, "this-filter", "ynx", current_mode);
 
             this_line = NULL;

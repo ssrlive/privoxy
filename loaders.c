@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.41 2002/03/12 01:42:50 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.42 2002/03/13 00:27:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.41 2002/03/12 01:42:50 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.42  2002/03/13 00:27:05  jongfoster
+ *    Killing warnings
+ *
  *    Revision 1.41  2002/03/12 01:42:50  oes
  *    Introduced modular filters
  *
@@ -1116,6 +1119,8 @@ static void unload_re_filterfile(void *f)
 
       destroy_list(b->patterns);
       pcrs_free_joblist(b->joblist);
+      freez(b->name);
+      freez(b->description);
       freez(b);
 
       b = a;
@@ -1144,7 +1149,7 @@ int load_re_filterfile(struct client_state *csp)
 {
    FILE *fp;
 
-   struct re_filterfile_spec *bl, *new_bl;
+   struct re_filterfile_spec *new_bl, *bl = NULL;
    struct file_list *fs;
 
    char  buf[BUFFER_SIZE];
@@ -1167,21 +1172,6 @@ int load_re_filterfile(struct client_state *csp)
    {
       goto load_re_filterfile_error;
    }
-
-   /*
-    * Allocate the first re_filterfile_spec struct
-    */
-   fs->f = bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
-   if (bl == NULL)
-   {
-      goto load_re_filterfile_error;
-   }
-
-   /*
-    * Initialize the name in case there are
-    * expressions before the first block header
-    */
-   bl->filtername = "default";
 
    /* 
     * Open the file or fail
@@ -1207,12 +1197,38 @@ int load_re_filterfile(struct client_state *csp)
          {
             goto load_re_filterfile_error;
          }
+
+         new_bl->name = chomp(buf + 7);
+
+         if (NULL != (new_bl->description = strchr(new_bl->name, ' ')))
+         {
+            *new_bl->description++ = '\0';
+            new_bl->description = strdup(chomp(new_bl->description));
+         }
          else
          {
-            new_bl->filtername = strdup(chomp(buf + 7));
-            bl->next = new_bl;
-            bl = new_bl;
+            new_bl->description = strdup("No description available for this filter");
          }
+
+         new_bl->name = strdup(chomp(new_bl->name));
+         
+         /*
+          * If this is the first filter block, chain it
+          * to the file_list rather than its (nonexistant)
+          * predecessor
+          */
+         if (fs->f == NULL)
+         {
+            fs->f = new_bl;
+         }
+         else
+         {
+            bl->next = new_bl;
+         }
+         bl = new_bl;
+
+         log_error(LOG_LEVEL_RE_FILTER, "Reading in filter \"%s\" (\"%s\")", bl->name, bl->description);
+
          continue;
       }
 
@@ -1220,19 +1236,26 @@ int load_re_filterfile(struct client_state *csp)
        * Else, save the expression, make it a pcrs_job
        * and chain it into the current filter's joblist 
        */
-      enlist(bl->patterns, buf);
-
-      if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
+      if (bl != NULL)
       {
-         log_error(LOG_LEVEL_RE_FILTER,
-               "Adding re_filter job %s to filter %s failed with error %d.", buf, bl->filtername, error);
-         continue;
+         enlist(bl->patterns, buf);
+
+         if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
+         {
+            log_error(LOG_LEVEL_RE_FILTER,
+                      "Adding re_filter job %s to filter %s failed with error %d.", buf, bl->name, error);
+            continue;
+         }
+         else
+         {
+            dummy->next = bl->joblist;
+            bl->joblist = dummy;
+            log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s to filter %s succeeded.", buf, bl->name);
+         }
       }
       else
       {
-         dummy->next = bl->joblist;
-         bl->joblist = dummy;
-         log_error(LOG_LEVEL_RE_FILTER, "Adding re_filter job %s to filter %s succeeded.", buf, bl->filtername);
+         log_error(LOG_LEVEL_ERROR, "Ignoring job %s outside filter block in %s, line %d", buf, csp->config->re_filterfile, linenum);
       }
    }
 
