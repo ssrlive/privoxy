@@ -11,10 +11,10 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
+<!entity p-version SYSTEM "doc_version.tmp">
+<!entity p-status SYSTEM "doc_status.tmp">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.124 2002/05/29 02:01:02 hal9 Exp $
+ $Id: user-manual.sgml,v 1.125 2002/06/03 00:28:17 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.124 2002/05/29 02:01:02 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.125 2002/06/03 00:28:17 hal9 Exp $</pubdate>
 
 <!--
 
@@ -5507,6 +5507,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.125  2002/06/03 00:28:17  hal9
+ Sync with various changes from 3.0 branch. Add two new files for config stuff.
+
  Revision 1.123.2.5  2002/05/29 02:01:02  hal9
  This is break out of the entire config section from u-m, so it can
  eventually be used to generate the comments, etc in the main config file

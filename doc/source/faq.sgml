@@ -8,9 +8,9 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-version SYSTEM "doc_version.tmp">
+<!entity p-status SYSTEM "doc_status.tmp">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.61 2002/05/25 12:37:25 hal9 Exp $
+ $Id: faq.sgml,v 1.62 2002/06/03 00:28:16 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -70,7 +70,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.61 2002/05/25 12:37:25 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.62 2002/06/03 00:28:16 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1575,6 +1575,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.62  2002/06/03 00:28:16  hal9
+Sync with various changes from 3.0 branch. Add two new files for config stuff.
+
 Revision 1.61  2002/05/25 12:37:25  hal9
 Various minor changes and edits.
 

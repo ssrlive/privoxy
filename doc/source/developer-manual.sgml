@@ -8,9 +8,9 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-version SYSTEM "doc_version.tmp">
+<!entity p-status SYSTEM "doc_status.tmp">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.51 2002/05/29 00:30:59 mal0rd Exp $
+ $Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -48,7 +48,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.51 2002/05/29 00:30:59 mal0rd Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $</pubdate>
 
 <!--
 
@@ -67,7 +67,7 @@ Hal.
 
 -->
 
-    <abstract>
+<abstract>
 
 <![%dummy;[
  <para>
@@ -1740,7 +1740,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1800,7 +1800,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.49 2002/06/03 00:28:16 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2835,6 +2835,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.49  2002/06/03 00:28:16  hal9
+  Sync with various changes from 3.0 branch. Add two new files for config stuff.
+
   Revision 1.51 2002/05/29 00:30:59  mal0rd
   Fixed a little formatting.  Clarified debian section.
 

@@ -5,9 +5,9 @@
 <!entity contacting SYSTEM "../contacting.sgml">
 <!entity history SYSTEM "../history.sgml">
 <!entity newfeatures SYSTEM "../newfeatures.sgml">
-<!entity p-version "2.9.15">
-<!entity p-status "beta">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-version SYSTEM "doc_version.tmp">
+<!entity p-status SYSTEM "doc_status.tmp">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-stable "IGNORE">
 <!entity % p-supp-userman "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
@@ -19,7 +19,7 @@
 
  Purpose     :  Announcement text
                 
- $Id: announce.sgml,v 1.1 2002/05/27 22:03:51 hal9 Exp $
+ $Id: announce.sgml,v 1.2 2002/06/03 00:28:16 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
