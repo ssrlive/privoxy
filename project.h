@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.58 2002/03/24 13:25:43 swa Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.59 2002/03/24 15:23:33 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.59  2002/03/24 15:23:33  jongfoster
+ *    Name changes
+ *
  *    Revision 1.58  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -1073,9 +1076,9 @@ struct configuration_spec
  * 2) CGI_SITE_2_PATH must not end with /, one will be added automatically.
  * 3) CGI_SITE_2_PATH must start with /, unless it is the empty string.
  */
-#define CGI_SITE_1_HOST "i.j.b"
-#define CGI_SITE_2_HOST "ijbswa.sourceforge.net"
-#define CGI_SITE_2_PATH "/config"
+#define CGI_SITE_1_HOST "p.p"
+#define CGI_SITE_2_HOST "config.privoxy.org"
+#define CGI_SITE_2_PATH ""
 
 /*
  * The prefix for CGI pages.  Written out in generated HTML.
