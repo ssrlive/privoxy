@@ -1,6 +1,6 @@
-#ifndef _KILLPOPUP_H
-#define _KILLPOPUP_H
-#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.1.1.1 2001/05/15 13:58:58 oes Exp $"
+#ifndef KILLPOPUP_H_INCLUDED
+#define KILLPOPUP_H_INCLUDED
+#define KILLPOPUP_H_VERSION "$Id: killpopup.h,v 1.2 2001/05/20 01:21:20 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.h,v $
@@ -34,6 +34,19 @@
  *
  * Revisions   :
  *    $Log: killpopup.h,v $
+ *    Revision 1.2  2001/05/20 01:21:20  jongfoster
+ *    Version 2.9.4 checkin.
+ *    - Merged popupfile and cookiefile, and added control over PCRS
+ *      filtering, in new "permissionsfile".
+ *    - Implemented LOG_LEVEL_FATAL, so that if there is a configuration
+ *      file error you now get a message box (in the Win32 GUI) rather
+ *      than the program exiting with no explanation.
+ *    - Made killpopup use the PCRS MIME-type checking and HTTP-header
+ *      skipping.
+ *    - Removed tabs from "config"
+ *    - Moved duplicated url parsing code in "loaders.c" to a new funcition.
+ *    - Bumped up version number.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:58  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -42,6 +55,10 @@
 
 
 #include "project.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifdef KILLPOPUPS
 
@@ -53,7 +70,11 @@ extern void filter_popups(char *buff, int size);
 extern const char killpopup_rcs[];
 extern const char killpopup_h_rcs[];
 
-#endif /* ndef _KILLPOPUP_H */
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif /* ndef KILLPOPUP_H_INCLUDED */
 
 /*
   Local Variables:
