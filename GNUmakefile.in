@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.38 2002/03/27 16:02:30 swa Exp $
+# $Id: GNUmakefile.in,v 1.39 2002/03/28 01:04:14 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -473,8 +473,8 @@ dok: doc/source/ldpOK.dsl man2html-swa
 	rm -rf doc/webserver/faq
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
 	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-	# kludge to force recreation on next run. Rodgrigo?
-	rm -f doc/source/ldpOK.dsl
+## kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
 
 man2html-swa:
 	mkdir -p doc/webserver/man-page
@@ -509,8 +509,8 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
 	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
           tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-	# kludge to force recreation on next run. Rodgrigo?
-	rm -f doc/source/ldpOK.dsl
+## kludge to force recreation on next run. Rodgrigo?
+	@rm -f doc/source/ldpOK.dsl
 
 
 doc/source/ldpOK.dsl:
@@ -520,7 +520,7 @@ doc/source/ldpOK.dsl:
 		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
 	fi
 
-# for those with good man2html output. RH7.x seems to work well.
+# For those with man2html ala RH7's.
 man2html:
 	mkdir -p doc/webserver/man-page
 	if [ "$(MAN2HTML)" != "false" ]; then \
@@ -530,7 +530,7 @@ man2html:
           $(MAKE) groff2html; \
 	fi
 
-# Default, except for Redhat. Create html man page.
+# Otherwise we get plain groff conversion.
 groff2html:
 	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
 
@@ -650,6 +650,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.39  2002/03/28 01:04:14  hal9
+# More man2html stuff for docs.
+#
 # Revision 1.38  2002/03/27 16:02:30  swa
 # have a generic target
 #
