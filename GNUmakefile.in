@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.91 2002/04/27 04:44:51 morcego Exp $
+# $Id: GNUmakefile.in,v 1.92 2002/04/27 04:53:40 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -796,7 +796,7 @@ tidy:
 	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
-	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar
+	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar privoxy-cl.spec
 #
 # FIXME: What is all this? 
 #
@@ -834,6 +834,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.92  2002/04/27 04:53:40  morcego
+# Adding --exclude "PACKAGERS" to every tar command that applies (not for
+#   webserver target)
+#
 # Revision 1.91  2002/04/27 04:44:51  morcego
 # GNUmakefile.in: The tarball created on redhat-dist and suse-dist now ignore
 #   the PACKAGERS file, as well privoxy-cl.spec (in case it was created)
