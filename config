@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.25 2001/10/26 11:12:15 oes Exp $
+# $Id: config,v 1.26 2001/11/05 21:31:09 steudten Exp $
 #
 
 #  Table of Contents
@@ -84,7 +84,7 @@ logdir .
 #           All sites are filtered if re_filterfile specified.
 #           No sites are blocked.  Nothing is an image.
 #
-actionsfile actionsfile
+actionsfile ijb.action
 
 #  The re_filterfile contains content modification rules.  These rules
 #  permit powerful changes on the content of Web pages, e.g., you
@@ -94,7 +94,7 @@ actionsfile actionsfile
 #
 #  Default: content modification. (see '+-filter' in actionsfile)
 #
-re_filterfile   re_filterfile
+re_filterfile re_filterfile
 
 #
 #  The logfile is where all logging and error messages are written.
@@ -113,7 +113,7 @@ re_filterfile   re_filterfile
 #
 #  Default: Log to the standard error channel, not to a file
 #
-logfile      logfile
+logfile logfile
 
 #
 #  The jarfile defines where Junkbuster stores the cookies it
@@ -122,7 +122,7 @@ logfile      logfile
 #
 #  Default: Don't store intercepted cookies
 #
-jarfile     jarfile
+jarfile jarfile
 
 #
 #  If you specify a trustfile, Junkbuster will only allow access

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.6 2001/10/29 03:48:09 david__schmidt Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.7 2001/11/13 00:28:24 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -35,6 +35,19 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.6 2001/10/29 03:48:09 david__schm
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.7  2001/11/13 00:28:24  jongfoster
+ *    - Renaming parameters from edit-actions-for-url so that they only
+ *      contain legal JavaScript characters.  If we wanted to write
+ *      JavaScript that worked with Netscape 4, this is nessacery.
+ *      (Note that at the moment the JavaScript doesn't actually work
+ *      with Netscape 4, but now this is purely a template issue, not
+ *      one affecting code).
+ *    - Adding new CGIs for use by non-JavaScript browsers:
+ *        edit-actions-url-form
+ *        edit-actions-add-url-form
+ *        edit-actions-remove-url-form
+ *    - Fixing || bug.
+ *
  *    Revision 1.6  2001/10/29 03:48:09  david__schmidt
  *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
  *    by and __OS2__ ifdef.
@@ -2586,7 +2599,7 @@ jb_err cgi_edit_actions(struct client_state *csp,
    {
       return JB_ERR_MEMORY;
    }
-   if (enlist_unique_header(rsp->headers, "Location", "http://ijbswa.sourceforge.net/config/edit-actions-list?filename=edit"))
+   if (enlist_unique_header(rsp->headers, "Location", "http://ijbswa.sourceforge.net/config/edit-actions-list?filename=ijb"))
    {
       free(rsp->status);
       rsp->status = NULL;
