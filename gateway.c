@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.9 2001/10/25 03:40:48 david__schmidt Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.10 2002/03/07 03:50:19 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.9 2001/10/25 03:40:48 david__schm
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.10  2002/03/07 03:50:19  oes
+ *     - Improved handling of failed DNS lookups
+ *     - Fixed compiler warnings
+ *
  *    Revision 1.9  2001/10/25 03:40:48  david__schmidt
  *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
  *    threads to call select() simultaneously.  So, it's time to do a real, live,
@@ -224,7 +228,7 @@ static int socks4_connect(const struct forward_spec * fwd,
    char sbuf[BUFFER_SIZE];
    struct socks_op    *c = (struct socks_op    *)cbuf;
    struct socks_reply *s = (struct socks_reply *)sbuf;
-   int n;
+   size_t n;
    size_t csiz;
    int sfd;
    int err = 0;
@@ -299,14 +303,14 @@ static int socks4_connect(const struct forward_spec * fwd,
       return(-1);
    }
 
-   if ((n = write_socket(sfd, (char *)c, csiz)) != csiz)
+   if (write_socket(sfd, (char *)c, csiz) != csiz)
    {
       log_error(LOG_LEVEL_CONNECT, "SOCKS4 negotiation write failed...");
       close_socket(sfd);
       return(-1);
    }
 
-   if ((n = read_socket(sfd, sbuf, sizeof(sbuf))) != sizeof(*s))
+   if (read_socket(sfd, sbuf, sizeof(sbuf)) != sizeof(*s))
    {
       log_error(LOG_LEVEL_CONNECT, "SOCKS4 negotiation read failed...");
       close_socket(sfd);

@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.5 2001/09/10 10:16:06 oes Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.6 2002/03/07 03:46:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.5 2001/09/10 10:16:06 oes Exp
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.6  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.5  2001/09/10 10:16:06  oes
  *    Silenced compiler warnings
  *
@@ -100,7 +103,7 @@ void buf_free(struct binbuffer *buf)
  *
  * Description :  Ensure that a given binbuffer can hold a given amount
  *                of bytes, by reallocating its buffer if necessary.
- *                Allocate new mem in chunks of 1000 bytes, so we don't
+ *                Allocate new mem in chunks of 1024 bytes, so we don't
  *                have to realloc() too often.
  *
  * Parameters  :
@@ -117,7 +120,7 @@ int buf_extend(struct binbuffer *buf, size_t length)
 
    if (buf->offset + length > buf->size)
    {
-      buf->size = buf->size + length + 1000 - (buf->size + length) % 1000;
+      buf->size = ((buf->size + length + 1023) & ~1023);
       newbuf = (char *)realloc(buf->buffer, buf->size);
 
       if (newbuf == NULL)
@@ -198,7 +201,7 @@ int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
  * Returns     :  The byte on success, or 0 on failiure
  *
  *********************************************************************/
-unsigned char buf_getbyte(struct binbuffer *src, int offset)
+unsigned char buf_getbyte(struct binbuffer *src, size_t offset)
 {
    if (src->offset + offset < src->size)
    {
@@ -296,14 +299,14 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
     */
    while((c = buf_getbyte(src, 0)))
    {
-      if (buf_copy(src, dst, (size_t) c + 1)) return 1;
+      if (buf_copy(src, dst, 1 + (size_t) c)) return 1;
    }
    if (buf_copy(src, dst, 1)) return 1;
 
    /*
     * Trim and rewind the dst buffer
     */
-   if (NULL == (dst->buffer = (char *)realloc(dst->buffer, (size_t) dst->offset))) return 1;
+   if (NULL == (dst->buffer = (char *)realloc(dst->buffer, dst->offset))) return 1;
    dst->size = dst->offset;
    dst->offset = 0;
 

@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.38 2002/03/06 22:54:35 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.39 2002/03/07 03:46:17 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.38 2002/03/06 22:54:35 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.39  2002/03/07 03:46:17  oes
+ *    Fixed compiler warnings
+ *
  *    Revision 1.38  2002/03/06 22:54:35  jongfoster
  *    Automated function-comment nitpicking.
  *
@@ -492,7 +495,7 @@ int check_file_changed(const struct file_list * current,
  *********************************************************************/
 jb_err simple_read_line(FILE *fp, char **dest, int *newline)
 {
-   int len = 0;
+   size_t len = 0;
    size_t buflen = BUFFER_SIZE;
    char * buf;
    char * p;
