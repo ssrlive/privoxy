@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.50 2002/03/24 13:25:43 swa Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.51 2002/03/24 15:23:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.50 2002/03/24 13:25:43 swa Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.51  2002/03/24 15:23:33  jongfoster
+ *    Name changes
+ *
  *    Revision 1.50  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -690,15 +693,15 @@ struct http_response *block_url(struct client_state *csp)
 #if 1 /* Two alternative strategies, use this one for now: */
 
       /* and handle accordingly: */
-      if ((p == NULL) || (0 == strcmpic(p, "logo")))
+      if ((p == NULL) || (0 == strcmpic(p, "pattern")))
       {
-         rsp->body = bindup(image_logo_data, image_logo_length);
+         rsp->body = bindup(image_pattern_data, image_pattern_length);
          if (rsp->body == NULL)
          {
             free_http_response(rsp);
             return cgi_error_memory();
          }
-         rsp->content_length = image_logo_length;
+         rsp->content_length = image_pattern_length;
 
          if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
          {
@@ -716,23 +719,6 @@ struct http_response *block_url(struct client_state *csp)
             return cgi_error_memory();
          }
          rsp->content_length = image_blank_length;
-
-         if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
-         {
-            free_http_response(rsp);
-            return cgi_error_memory();
-         }
-      }
-
-      else if (0 == strcmpic(p, "pattern"))
-      {
-         rsp->body = bindup(image_pattern_data, image_pattern_length);
-         if (rsp->body == NULL)
-         {
-            free_http_response(rsp);
-            return cgi_error_memory();
-         }
-         rsp->content_length = image_pattern_length;
 
          if (enlist_unique_header(rsp->headers, "Content-Type", BUILTIN_IMAGE_MIMETYPE))
          {
@@ -760,17 +746,13 @@ struct http_response *block_url(struct client_state *csp)
 #else /* Following code is disabled for now */
 
       /* and handle accordingly: */
-      if ((p == NULL) || (0 == strcmpic(p, "logo")))
+      if ((p == NULL) || (0 == strcmpic(p, "pattern")))
       {
-         p = CGI_PREFIX "send-banner?type=logo";
+         p = CGI_PREFIX "send-banner?type=pattern";
       }
       else if (0 == strcmpic(p, "blank"))
       {
          p = CGI_PREFIX "send-banner?type=blank";
-      }
-      else if (0 == strcmpic(p, "pattern"))
-      {
-         p = CGI_PREFIX "send-banner?type=pattern";
       }
       rsp->status = strdup("302 Local Redirect from Privoxy");
       if (rsp->status == NULL)
