@@ -34,6 +34,10 @@
 
 -------------------------------------------------------------------------------
 
+This file describes installing Privoxy from source. If you are installing a
+pre-built binary installation, you should probably read the appropriate section
+in User Manual.
+
 To build Privoxy from source, autoconf, GNU make (gmake), and, of course, a C
 compiler like gcc are required.
 
@@ -76,7 +80,7 @@ Then, to build from either unpacked tarball or CVS source:
  autoheader                                                                    
  autoconf                                                                      
  ./configure      # (--help to see options)                                    
- make             # (the make from gnu, gmake for *BSD)                        
+ make             # (the make from GNU, sometimes called gmake)                
  su                                                                            
  make -n install  # (to see where all the files will go)                       
  make -s install  # (to really install, -s to silence output)                  
@@ -88,21 +92,23 @@ you by just typing:
 
 in the freshly downloaded or unpacked source directory.
 
-WARNING: If installing as root, the install will fail unless another user is
-specified. configure accepts --with-user and --with-group options for setting
-user and group ownership of the configuration files (which need to be writable
-by the daemon). The specified user must already exist. Or if there is already a
-privoxy user on the system, and no user was specified during configure, make
-install then will use the privoxy user. When starting Privoxy, it should be run
-as this same user that owns the configuration and log files.
+WARNING: If installing as root, the install will fail unless a non-root user or
+group is specified, or a privoxy user and group already exist on the system. If
+a non-root user is specified, and no group, then the installation will try to
+also use a group of the same name as "user". If a group is specified (and no
+user), then the support files will be installed as writable by that group, and
+owned by the user running the installation.
+
+configure accepts --with-user and --with-group options for setting user and
+group ownership of the configuration files (which need to be writable by the
+daemon). The specified user must already exist. When starting Privoxy, it
+should be run as this same user to insure write access to configuration and log
+files.
 
 Alternately, you can specify user and group on the make command line, but be
 sure both already exist:
 
  make -s install  USER=privoxy GROUP=privoxy                                   
-
-If no group is specified, the install will assume a group exists with the same
-name as the specified user.
 
 The default installation path for make install is /usr/local. This may of
 course be customized with the various ./configure path options. If you are
@@ -141,8 +147,6 @@ already running, you will have to restart it manually.
 For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
 self-extracting installers, building on platforms with special requirements
 etc, please consult the developer manual.
-
-For binary RPM installation, and other platforms, see the User Manual as well.
 
 The simplest command line to start Privoxy is $path/privoxy --user=privoxy
 $path/etc/privoxy/config. See privoxy --usage, or the man page, for other

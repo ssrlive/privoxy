@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.131 2002/10/23 07:00:21 agotneja Exp $
+# $Id: GNUmakefile.in,v 1.132 2002/10/24 22:24:58 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -56,9 +56,14 @@ DIR_PRIVOXY_SRC_PCRE := $(DIR_PRIVOXY_ROOT)/pcre
 DIR_PRIVOXY_OBJ      := $(DIR_PRIVOXY_ROOT)/obj
 
 #############################################################################
-# "make install" directories and variables
+# "make install" settings
 #############################################################################
 
+# User and Group settings
+USER   = @USER@
+GROUP  = @GROUP@
+
+# PATHS set from configure
 prefix       = @prefix@
 exec_prefix  = @exec_prefix@
 CONF_BASE    = @sysconfdir@
@@ -82,42 +87,47 @@ PIDS_DEST    = $(VAR_DEST)/run
 # finally if $prefix=/usr/local and VAR_DEST=$prefix/var it 
 # changes this to /var for storing the logs and pidfile
 
-# used in source dir only, the install goes to $share_dest/doc/privoxy
-DOK_WEB = doc/webserver/
+# Where to find docs. The install goes to $share_dest/doc/privoxy.
+DOK_WEB    = doc/webserver/
+
+# Install usage should be compatible with install-sh.
+INSTALL    = @INSTALL@
+
+# Permissions used during installation.
+# Binaries (daemon, init scripts)
+BIN_MODE	 = 0755
+# Files daemon writes to: *action, trust and logs.
+RWD_MODE   = 0660
+# Misc files, docs, etc.
+RA_MODE    = 0664
+# Directory
+DIR_MODE   = 0755
+
+INSTALL_P  = -m $(BIN_MODE)  
+INSTALL_T  = -m $(RA_MODE)
+INSTALL_D  = -m $(DIR_MODE) -d
+INSTALL_R  = -m $(RWD_MODE)
+# install options for superuser install
+#INSTALL_S  = -g  -o  
 
 #############################################################################
-# Build tools
+# Build and Install tools
 #############################################################################
 
 PROGRAM    = privoxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
-# Install usage should be compatible with install-sh.
-INSTALL    = @INSTALL@
-# Binaries
-BIN_MODE	 = 0755
-# Support files, docs, etc.
-RA_MODE   = 0664
-# Directory
-DIR_MODE   = 0755
-# Files daemon writes to.
-RWD_MODE   = 0660
-INSTALL_P  = -m $(BIN_MODE)  
-INSTALL_T  = -m $(RA_MODE)
-INSTALL_D  = -m $(DIR_MODE) -d
-INSTALL_R  = -m $(RWD_MODE)
-
-# install options for superuser install
-#INSTALL_S  = -g @GROUP@ -o @USER@ 
 # id -u is not universal. FIXME: need to set from configure. Breaks on
 # Solaris.
 #ID         = id -u
+ID         = id
 LD         = @CC@
 RM         = rm -f
 RMDIR      = rmdir
 MKDIR      = ./mkinstalldirs
 STRIP_PROG = strip
+CP         = cp -f
 SED	      = sed
 GREP       = grep
 CAT        = cat
@@ -129,6 +139,8 @@ TOUCH      = touch
 KILL       = kill
 CHMOD      = chmod
 CHOWN      = chown
+CHGRP      = chgrp
+GROUPS     = groups
 DOC_STATUS = @DOC_STATUS@
 # Note: Please make sure that -d ldp.dsl\#html stays the last option to
 #       $(JADEBIN), because for some targets "-notoc" will be appended
@@ -136,10 +148,6 @@ DOC_STATUS = @DOC_STATUS@
 TARGET_OS  = @host@
 PERL       = perl
 DOC_DIR    = doc/source
-
-#User Group paras
-USER       = @USER@
-GROUP	 = @GROUP@
 
 # Program to do LF->CRLF
 #
@@ -149,6 +157,8 @@ GROUP	 = @GROUP@
 #DOSFILTER  = $(SED) -e $$'s,$$,\r,'
 #DOSFILTER  = gawk -v ORS='\r\n' '{print $0;}'
 DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
+CVSROOT    = :pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa
+TMPDIR     := $(shell mktemp -d /tmp/$(PROGRAM).XXXXXX)
 
 #############################################################################
 # Setup for make distribution rh and suse for now 
@@ -859,17 +869,18 @@ install-strip:
 #
 # FIXME: id handling needs help, probably via configure, since 'id -u' is not 
 # universally reliable (eg Solaris). Group handling could be better. 
-# Perhaps the whole user/group validation should be done here.
+# Perhaps the whole user/group validation should be done here, and simplified.
 PROGRAM_V = Privoxy $(VERSION)
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	# Quick test for valid USER.
 	if [ -n "$(USER)" ]; then \
-		id $(USER) >/dev/null || exit 1;\
+		$(ID) $(USER) >/dev/null || exit 1;\
 	fi
-	# Test for valid group.
-	if [ -n "$(GROUP_T)" ] && [ -n "$(USER)" ] && ! groups $(USER) | $(GREP) "\<$(GROUP_T)\>" >/dev/null; then \
-		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
-	fi
+	# Test for valid group. FIXME. USER does not have to belong to GROUP 
+	# for file ownership purposes.
+# 	if [ -n "$(GROUP_T)" ] && [ -n "$(USER)" ] && ! $(GROUPS) $(USER) | $(GREP) "\<$(GROUP_T)\>" >/dev/null; then \
+# 		$(ECHO) Group $(GROUP_T) for User $(USER) is invalid && exit 1 ;\
+# 	fi
 	
 	$(ECHO) "Creating directories, and preparing $(PROGRAM_V) installation"
 	$(CHMOD) $(DIR_MODE) $(MKDIR)
@@ -881,7 +892,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(ECHO) Installing $(PROGRAM) executable to $(SBIN_DEST)
 	$(INSTALL) $(INSTALL_P) $(STRIP) $(PROGRAM) $(SBIN_DEST)
      
-	# Install the DOCS and man page 
+	# Install the DOCS and man page. install-sh only does one file at a time.
 	-if [ $(check_doc) = 0 ]; then \
 		DOC=$(DOC_DEST) ;\
 	else \
@@ -930,45 +941,49 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) $$i $(CONF_DEST)/templates ;\
 	done
 
-	if [ "`id |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
+	# FIXME: group/user validation is overly convoluted.
+	# If superuser install ... we require a minimum of group ownership
+	# of those files the daemon writes to, to be non-root owned.
+	if [ "`$(ID) |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
 		if [ x$(USER) = x ] || [ $(USER) = root ]; then \
-			if [ "`id privoxy`" ]; then \
-				$(ECHO) "Warning: Setting user and group to privoxy";\
-				INSTALL_CONF="$(INSTALL_T) -g privoxy -o privoxy" ;\
-				USER=privoxy ;\
-				GROUP_T=privoxy ;\
+			if [ x$(GROUP) = x ] || [ $(GROUP) = root ]; then \
+				if [ "`$(ID) privoxy`" ] && \
+					$(GROUPS) privoxy | $(SED) 's/^.*://' |$(GREP) "\<privoxy\>" >/dev/null; then \
+					$(ECHO) "Warning: Setting group owner to privoxy";\
+					GROUP_T=privoxy ;\
+				else \
+					$(ECHO)  "******************************************************************" ;\
+					$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
+					$(ECHO)  " It is strongly recommended to run $(PROGRAM) as a non-root user," ;\
+					$(ECHO)  " and to install the config files as that user and/or group!" ;\
+					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
+					$(ECHO)  "*******************************************************************" ;\
+					exit 1 ;\
+				fi ;\
 			else \
-				$(ECHO)  "******************************************************************" ;\
-				$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
-				$(ECHO)  " It is strongly recommended to run $(PROGRAM) as non-root user," ;\
-				$(ECHO)  " and to install the config files as that user!" ;\
-				$(ECHO)  " Please read INSTALL, and create a privoxy user!" ;\
-				$(ECHO)  "*******************************************************************" ;\
-				exit 1 ;\
+				GROUP_T=$(GROUP) ;\
 			fi ;\
+			INSTALL_CONF="$(INSTALL_R) -g $$GROUP_T " ;\
 		else \
 			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
-			INSTALL_CONF="$(INSTALL_T) -o $(USER) -g $(GROUP_T)" ;\
+			INSTALL_CONF="$(INSTALL_R) -o $(USER) -g $(GROUP_T)" ;\
+			GROUP_T=$(GROUP_T) ;\
 		fi ;\
 	else \
 		if [ ! "`id $(USER)`" = "`id`" ] ;then \
 			$(ECHO) "** WARNING ** current install user different from configured user!!" ;\
 			$(ECHO) "Edit may fail." ;\
 		fi ;\
-		INSTALL_CONF="$(INSTALL_T)" ;\
+		INSTALL_CONF="$(INSTALL_R)" ;\
 	fi ;\
 	$(ECHO) Installing configuration files to $(CONF_DEST);\
 	for i in $(CONFIGS); do \
 		if [ -s "$(CONF_DEST)/$$i" ] ; then \
 			$(ECHO) Installing $$i as $$i.new ;\
-			$(INSTALL) $(INSTALL_R) $$i $(CONF_DEST)/$$i.new || exit 1;\
+			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST)/$$i.new || exit 1;\
 			NEW=1;\
 		else \
-			if test "$$i" = "config" || test "$$i" = "default.filter"; then \
-				$(INSTALL) $(INSTALL_R) $$i $(CONF_DEST) || exit 1;\
-			else \
-				$(INSTALL) $(INSTALL_R) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
-			fi;\
+			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
 		fi ;\
 	done ;\
 	if [ -n "$$NEW" ]; then \
@@ -977,9 +992,13 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	fi ;\
 	[ ! -f $(LOG_DEST)/logfile ] && $(ECHO) Creating logfiles in $(LOG_DEST) || \
 		$(ECHO) Checking logfiles in $(LOG_DEST) ;\
-	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
+		$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
 	if [ x$$USER != x ]; then \
-		$(CHOWN) $$USER:$$GROUP_T $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
+		$(CHOWN) $$USER $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
+		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
+	fi ;\
+	if [ x$$GROUP_T != x ]; then \
+		$(CHGRP) $$GROUP_T $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
 	$(CHMOD) $(RWD_MODE) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
@@ -1001,7 +1020,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			$(INSTALL) $(INSTALL_P) init.tmp /etc/rc.d/init.d/privoxy && $(RM) init.tmp;\
 			$(MKDIR) /etc/logrotate.d/ ;\
 			$(ECHO) "Installing logrotate script to /etc/logrotate.d/" ;\
-			$(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
+			$(INSTALL) -m 0644 privoxy.logrotate /etc/logrotate.d/privoxy ;\
 		elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
 			$(ECHO) "Installing generic init script to /etc/init.d/privoxy" ;\
 			$(ECHO) "Please check that the PATHs are correct, and edit if needed." ;\
@@ -1019,7 +1038,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(ECHO) Starting Privoxy uninstallation
 	# KILL privoxy if running
-	-if [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
+	-if [ -f /etc/redhat-release ] && [ -x /etc/rc.d/init.d/privoxy ]; then \
 		/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
 		chkconfig --del $(PROGRAM) 2>/dev/null;\
 	fi
@@ -1033,6 +1052,14 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(RM) $(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
 
 	# config files and dir, and maybe old install backups
+	-if [ -d $(CONF_DEST) ]; then \
+		$(ECHO) Saving $(PROGRAM) config files ;\
+		$(MKDIR) /tmp/$(PROGRAM)-save ;\
+		cd $(CONF_DEST) ;\
+		for i in $(CONFIGS); do \
+			[ -f $$i ] && $(CP) -v $$i /tmp/$(PROGRAM)-save ;\
+		done ;\
+	fi
 	$(ECHO) Removing $(PROGRAM) config files
 	for i in $(CONFIGS); do \
 		$(RM) $(CONF_DEST)/$$i $(CONF_DEST)/$$i~ $(CONF_DEST)/$$i.new ;\
@@ -1106,6 +1133,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.132  2002/10/24 22:24:58  hal9
+# Make install: Minor clean up for variable handling.
+#
 # Revision 1.131  2002/10/23 07:00:21  agotneja
 # added a chmod on mkinstalldirs just before using it, otherwise it
 # will fail when running make for the first time.
