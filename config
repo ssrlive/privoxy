@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.9 2001/06/01 20:17:10 jongfoster Exp $
+# $Id: config,v 1.10 2001/06/03 17:10:04 swa Exp $
 #
 
 #  Table of Contents
@@ -66,9 +66,8 @@
 # Now, only confdir/templates is used for storing HTML templates
 # for CGI results.
 #
-confdir /home/oes/projekte/pcrs/ijb/confdir
+confdir .
 
-#
 #  The permissions file contains patterns to specify the
 #  filtering rules to apply to each site.
 #
