@@ -9,13 +9,15 @@ Package: privoxy
 Architecture: any
 Depends: ${shlibs:Depends}, logrotate, adduser
 Description: Privacy enhancing HTTP Proxy
- Privoxy is an instrumentable HTTP proxy that filters the HTTP data
- stream between web servers and browsers.  Privoxy can be used to
- protect privacy, manage cookies, filter web page content, manage
- access restrictions, and to discard such annoying Internet junk as
- ads, banners, and pop-ups.  Or whatever other annoyances strike your
- fancy.
+ Privoxy is a web proxy with advanced filtering capabilities for
+ protecting privacy, filtering web page content, managing cookies,
+ controlling access, and removing ads, banners, pop-ups and other
+ obnoxious Internet junk. Privoxy has a very flexible configuration
+ and can be customized to suit individual needs and tastes. Privoxy
+ has application for both stand-alone systems and multi-user networks.
  .
- Privoxy is a derivate of junkbuster, but it uses a different name
- space and a different port (8118), so junkbuster and privoxy can
- coexist on one system.
+ Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+ was originally written by JunkBusters Corporation, and was released
+ as free open-source software under the GNU GPL. Stefan Waldherr made
+ many improvements, and started the SourceForge project to continue
+ development. Several other developers are now contributing.
