@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.3 2001/06/01 18:49:17 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.5 2001/06/03 11:03:48 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,64 @@ const char actions_rcs[] = "$Id: actions.c,v 1.3 2001/06/01 18:49:17 jongfoster 
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.5  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.4  2001/06/01 20:03:42  jongfoster
+ *    Better memory management - current_action->strings[] now
+ *    contains copies of the strings, not the original.
+ *
  *    Revision 1.3  2001/06/01 18:49:17  jongfoster
  *    Replaced "list_share" with "list" - the tiny memory gain was not
  *    worth the extra complexity.
@@ -466,7 +524,7 @@ int get_actions(char *line, struct action_alias * alias_list,
                   }
 
                   list_remove_item(remove, value);
-                  enlist_unique(add, value);
+                  enlist_unique(add, value, 0);
                   break;
                }
             case AV_REM_MULTI:
@@ -495,7 +553,7 @@ int get_actions(char *line, struct action_alias * alias_list,
                      if ( !cur_action->multi_remove_all[action->index] )
                      {
                         /* there isn't a catch-all in the remove list already */
-                        enlist_unique(remove, value);
+                        enlist_unique(remove, value, 0);
                      }
                      list_remove_item(add, value);
                   }
