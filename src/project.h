@@ -1,10 +1,10 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 2.1 2002/06/04 16:35:56 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 2.2 2002/07/12 04:26:17 agotneja Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/project.h,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/project.h,v $
  *
  * Purpose     :  Defines data structures which are widely used in the
  *                project.  Does not define any variables or functions
@@ -37,6 +37,14 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 2.2  2002/07/12 04:26:17  agotneja
+ *    Re-factored 'chat()' to become understandable and maintainable as
+ *    a first step in adding Transparent Proxy functionality.
+ *
+ *    Added several new static functions in jcc.c, and moved some data
+ *    parameters up into project.h to allow them to be passed between
+ *    the new functions.
+ *
  *    Revision 2.1  2002/06/04 16:35:56  jongfoster
  *    Moving three variable declarations to jcc.c from project.h
  *
@@ -458,6 +466,8 @@
 
 /* Need time_t for file_list */
 #include <time.h>
+/* Needed for pcre choice */
+#include "config.h"
 
 /*
  * Include appropriate regular expression libraries.
@@ -468,7 +478,11 @@
 #ifdef STATIC_PCRE
 #  include "pcre.h"
 #else
-#  include <pcre.h>
+#  ifdef PCRE_H_IN_SUBDIR
+#    include <pcre/pcre.h>
+#  else
+#    include <pcre.h>
+#  endif
 #endif
 
 #ifdef STATIC_PCRS
@@ -480,7 +494,11 @@
 #ifdef STATIC_PCRE
 #  include "pcreposix.h"
 #else
-#  include <pcreposix.h>
+#  ifdef PCRE_H_IN_SUBDIR
+#    include <pcre/pcreposix.h>
+#  else
+#    include <pcreposix.h>
+#  endif
 #endif
 
 #ifdef AMIGA
