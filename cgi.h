@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.26 2002/04/10 13:38:35 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.27 2002/04/24 02:16:51 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.27  2002/04/24 02:16:51  oes
+ *    Moved get_char_param, get_string_param and get_number_param here from cgiedit.c
+ *
  *    Revision 1.26  2002/04/10 13:38:35  oes
  *    load_template signature changed
  *
@@ -207,6 +210,7 @@ extern char   get_char_param(const struct map *parameters,
  * Text generators
  */
 extern void get_http_time(int time_offset, char * buf);
+extern char *add_help_link(const char *item, struct configuration_spec *config);
 extern char *make_menu(const char *self);
 extern char *dump_map(const struct map *the_map);
 
