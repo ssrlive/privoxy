@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.3 2002/03/24 12:56:21 swa Exp $
+# $Id: privoxy-rh.spec,v 1.4 2002/03/24 13:32:42 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -65,6 +65,7 @@ development. Several other developers are now contributing.
 %setup -q -c
 
 %build
+autoconf
 %configure
 make 
 make redhat-dok
@@ -77,7 +78,7 @@ make redhat-dok
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_sbindir} \
-         %{buildroot}%{_mandir}/man8 \
+         %{buildroot}%{_mandir}/man1 \
          %{buildroot}%{_localstatedir}/log/%{name} \
          %{buildroot}%{privoxyconf}/templates \
          %{buildroot}%{_sysconfdir}/logrotate.d \
@@ -97,11 +98,12 @@ install -s -m 744 %{name} %{buildroot}%{_sbindir}/%{name}
 
 # do we need this???
 #sed -e 's@^.TH JUNKBUSTER 1@.TH JUNKBUSTER 8@g' %{oldname}.1 > %{buildroot}%{_mandir}/man8/%{oldname}.8
+cp -f %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 cp -f *.action %{buildroot}%{privoxyconf}/
 cp -f default.filter %{buildroot}%{privoxyconf}/default.filter
 cp -f trust %{buildroot}%{privoxyconf}/trust
 cp -f templates/*  %{buildroot}%{privoxyconf}/templates/
-cp -f %{oldname}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{oldname}
+cp -f %{name}.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -m 755 %{name}.init %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}
 install -m 711 -d %{buildroot}%{_localstatedir}/log/%{name}
 
@@ -160,7 +162,7 @@ id junkbust > /dev/null 2>&1 && /usr/sbin/userdel junkbust || /bin/true
 
 %preun
 /sbin/service %{oldname} stop > /dev/null 2>&1 ||:
-/sbin/chkconfig --del %{oldname}
+/sbin/chkconfig --del %{oldname} ||;
 
 if [ "$1" = "0" ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1 ||:
@@ -228,19 +230,25 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %config %{privoxyconf}/templates/toggle-mini
 %config %{privoxyconf}/templates/untrusted
 
-%config %{_sysconfdir}/logrotate.d/%{oldname}
+%config %{_sysconfdir}/logrotate.d/%{name}
 %config %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/S84%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
-%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/S84%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc0.d/K09%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc1.d/K09%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc2.d/S84%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc3.d/S84%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc4.d/S84%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc5.d/S84%{name}
+#%%config(missingok) %attr(-,root,root) %{_sysconfdir}/rc.d/rc6.d/S84%{name}
 
-%{_mandir}/man8/%{oldname}.8*
+%{_mandir}/man1/%{name}.*
 
 %changelog
+* Sun Mar 24 2002 Hal Burgiss <hal@foobox.net>
++ junkbusterng-2.9.13-1
+- Fixed build problems re: name conflicts with man page and logrotate.
+- Commented out rc?d/* configs for time being, which are causing a build 
+- failure.
+
 * Fri Mar 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + junkbusterng-2.9.13-1
 - References to the expression ijb where changed where possible
@@ -480,6 +488,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.4  2002/03/24 13:32:42  swa
+# name change related issues
+#
 # Revision 1.3  2002/03/24 12:56:21  swa
 # name change related issues.
 #
