@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.21 2001/07/31 14:46:00 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.22 2001/09/10 10:58:53 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.21 2001/07/31 14:46:00 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.22  2001/09/10 10:58:53  oes
+ *    Silenced compiler warnings
+ *
  *    Revision 1.21  2001/07/31 14:46:00  oes
  *     - Persistant connections now suppressed
  *     - sed() no longer appends empty header to csp->headers
@@ -559,7 +562,7 @@ void free_http_request(struct http_request *http)
  *********************************************************************/
 void parse_http_request(char *req, struct http_request *http, struct client_state *csp)
 {
-   char *buf, *v[10], *url, *p;
+   char *buf, *v[10], *url, *p, *save_url;
    int n;
 
    memset(http, '\0', sizeof(*http));
@@ -599,6 +602,7 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
          url            = v[1];
          http->ver      = strdup(v[2]);
 
+	 save_url = url;
          if (strncmpic(url, "http://",  7) == 0)
          {
             url += 7;
@@ -632,7 +636,9 @@ void parse_http_request(char *req, struct http_request *http, struct client_stat
                /* Even repair cmd in case we're just forwarding. Boy are we nice ;-)  */
                freez(http->cmd);
                http->cmd = strsav(http->cmd, http->gpc);
-               http->cmd = strsav(http->cmd, " / ");
+               http->cmd = strsav(http->cmd, " ");
+               http->cmd = strsav(http->cmd, save_url);
+               http->cmd = strsav(http->cmd, "/ ");
                http->cmd = strsav(http->cmd, http->ver);
             }
          }
