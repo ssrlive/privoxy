@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.38 2002/03/05 23:55:14 hal9 Exp $
+ $Id: user-manual.sgml,v 1.39 2002/03/06 16:19:28 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.38 2002/03/05 23:55:14 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.39 2002/03/06 16:19:28 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3000,19 +3000,29 @@ For RedHat: /etc/rc.d/init.d/junkbuster start
 <sect1 id="contact"><title>Contacting the Developers, Bug Reporting and Feature
 Requests</title>
 <para>
- Please do not use the mailing lists for feature requests or 
- bug reports. They are not as easily tracked this way!
-
+We value your feedback. However, to provide you with the best support,
+please note:
+ <simplelist>
+  <member>Use the <ulink url="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</ulink> to get
+  help.</member>
+  <member>Submit bugs only thru our <ulink url="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+      forum</ulink>. 
+Make sure that the bug has not yet been submitted.  Please try to
+verify that it is a <application>Junkbuster</application> bug, and not
+a browser or site bug first. Also, check to make sure this is not
+already a known bug. If you are using your own custom configuration,
+please try the stock configs to see if the problem is a configuration
+related bug.  And if not using the latest development snapshot, please
+try the latest one. Or even better, CVS sources.
+</member>
+  <member>Submit feature requests only thru our <ulink
+      url="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</ulink>.</member>
+ </simplelist>
 </para>
 
 <para>
-<!--
-To be filled. mention the support forums as the primary channel of
-communication (bugs, feature requests, etc.)
--->
- Feature requests and other questions should be posted to the <ulink
- url="http://sourceforge.net/tracker/?atid=361118&amp;group_id=11118&amp;func=browse">Feature
- request page</ulink> at SourceForge. There is also an archive there.
+For any other issues, feel free to use the <a
+href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
 </para>
 
 <para>
@@ -3020,17 +3030,6 @@ communication (bugs, feature requests, etc.)
  discussions can join the appropriate mailing list  
  <ulink url="http://sourceforge.net/mail/?group_id=11118">here</ulink>.
  Archives are available here too.
-</para>
-
-<para>
- Please report bugs, using the form at 
- <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">Sourceforge</ulink>.
- Please try to verify that it is a <application>Junkbuster</application> bug,
- and not a browser or site bug first. Also, check to make sure this is not
- already a known bug. If you are using your own custom configuration, please
- try the stock configs to see if the problem is a configuration related bug.
- And if not using the latest development snapshot, please try the latest 
- one. Or even better, CVS sources.
 </para>
 
 </sect1>
@@ -3384,6 +3383,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.39  2002/03/06 16:19:28  hal9
+ Note on perceived filtering slowdown per FR.
+
  Revision 1.38  2002/03/05 23:55:14  hal9
  Stupid I did it again. Double hyphen in comment breaks jade.
 
