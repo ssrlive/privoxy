@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.22 2002/06/09 18:59:44 hal9 Exp $
+ $Id: index.sgml,v 1.16.2.8 2002/08/16 03:05:42 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -36,7 +36,7 @@
  perl.
 
  Generates: index.html, for webserver home page.
-            And privoxy-index.html, for packaging with docs.
+            privoxy-index.html, for packaging with docs
  
 -->
 
@@ -59,15 +59,6 @@
 
  <abstract>
 
-<![%dummy;[
-  <para>
-   <comment>
-    This is here to keep vim syntax file from breaking :/
-    If I knew enough to fix it, I would.
-    PLEASE DO NOT REMOVE! HB: hal@foobox.net
-   </comment>
-  </para>
-]]>
 
 <!-- Include privoxy.sgml boilerplate: -->
   &p-intro;
@@ -75,11 +66,9 @@
 
 <![%p-homepage;[
   <para>
-  <!-- FIXME: Temporarily hard coding this. HB.  -->
-   The most recent release is 2.9.14 (&p-status;). 
+   The most recent release is &p-version; (&p-status;). 
   </para>
 ]]>
-
 
  </abstract>
 </artheader>
@@ -127,6 +116,13 @@
     <ulink url="developer-manual/index.html">Developer Manual</ulink>
    </para>
   </listitem>
+<![%p-homepage;[
+<!-- not included for local installation index page -->
+  <listitem>
+   <para>
+    <ulink url="pdf/privoxy-pdf-docs.zip">The above docs as PDF in Zip archive</ulink>
+   </para>
+  </listitem> ]]>
   <listitem>
    <para>
     <ulink url="man-page/privoxy-man-page.html">Classic Man Page</ulink>
@@ -246,19 +242,20 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
- Revision 1.22  2002/06/09 18:59:44  hal9
+ Revision 1.16.2.8  2002/08/16 03:05:42  hal9
+ Put all pdf docs in a zip archive now.
+
+ Revision 1.16.2.7  2002/08/14 16:40:00  hal9
+ Add links to pdf docs.
+
+ Revision 1.16.2.6  2002/07/26 15:22:15  oes
+ Most recent release now inserted automatically (again)
+
+ Revision 1.16.2.5  2002/06/09 18:59:16  hal9
  Correct typo.
 
- Revision 1.21  2002/06/09 16:37:31  hal9
- Sync with filtering clarifications in 3.0 branch.
-
- Revision 1.20  2002/06/05 00:31:55  hal9
- Mass commit for new entities, most significantly so docs can read version
- and code status info from tmp files, so perl is no longer used. Also, docs can
- differentiate on alpha -> beta -> stable now.
-
- Revision 1.19  2002/06/03 00:28:17  hal9
- Sync with various changes from 3.0 branch. Add two new files for config stuff.
+ Revision 1.16.2.4  2002/06/09 16:36:33  hal9
+ Clarifications on filtering and MIME. Hardcode 'latest release' in index.html.
 
  Revision 1.16.2.3  2002/05/28 02:31:38  hal9
  New file, privoxy-index.html, for bundling with documentation. Built from
