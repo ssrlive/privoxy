@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.13 2001/09/10 17:44:43 swa Exp $
+# $Id: junkbuster-rh.spec,v 1.16 2001/09/24 20:56:23 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.16  2001/09/24 20:56:23  hal9
+# Minor changes.
+#
 # Revision 1.13  2001/09/10 17:44:43  swa
 # integrate three pieces of documentation. needs work.
 # will not build cleanly under redhat.
@@ -141,6 +144,10 @@ cat config | \
 #    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
     $RPM_BUILD_ROOT%{ijbconf}/config
+perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' actionsfile >\
+    $RPM_BUILD_ROOT%{ijbconf}/actionsfile
+perl -pi -e 's/JB_USER=\"junkbuster\"/JB_USER=\"junkbust\"/' \
+    $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/junkbuster
 
 %post
 if [ "$1" = "1" ]; then
@@ -150,7 +157,7 @@ fi
 chown junkbust:junkbust /var/log/junkbuster/* 2>/dev/null
 chown junkbust:junkbust /etc/junkbuster 2>/dev/null
 [ -f /var/log/junkbuster/junkbuster ] &&\
- mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || true
+ mv -f /var/log/junkbuster/junkbuster /var/log/junkbuster/logfile || /bin/true
 
 %preun
 if [ "$1" = "0" ]; then
@@ -181,6 +188,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 10 2001 Hal Burigss <hal@foobox.net>
+- More changes for user 'junkbust'. Init script had 'junkbuster'.
+
 * Sun Sep 23 2001 Hal Burgiss <hal@foobox.net>
 - Change of $RPM_OPT_FLAGS handling. Added new HTML doc files.
 - Changed owner of /etc/junkbuster to shut up PAM/xauth log noise.
