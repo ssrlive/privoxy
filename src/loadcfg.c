@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.5 2003/09/22 00:33:01 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.4 2002/12/28 03:58:19 david__schm
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 2.5  2003/09/22 00:33:01  david__schmidt
+ *    Enable sending a custom 'blocked' image.  Shows up as
+ *    "image-blocker-custom-file" parameter in config, and
+ *    "+set-image-blocker{custom}" in action files.
+ *
  *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
  *    Initial drop of dashboard instrumentation - enabled with
  *    --enable-activity-console
@@ -326,6 +331,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.4 2002/12/28 03:58:19 david__schm
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -349,17 +355,16 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 2.4 2002/12/28 03:58:19 david__schm
 /* VC++ has "_snprintf", not "snprintf" */
 #define snprintf _snprintf
 
-#else /* ifndef _WIN32 */
+#else /* every platform but _WIN32 */
 
 #ifndef __OS2__
 # include <unistd.h>
 # include <sys/wait.h>
-#endif
+#endif /* ndef __OS2__ */
 # include <sys/time.h>
-# include <sys/stat.h>
 # include <signal.h>
 
-#endif
+#endif /* ndef _WIN32 */
 
 #include "loadcfg.h"
 #include "list.h"
