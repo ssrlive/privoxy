@@ -85,7 +85,7 @@
 
     <tr>
       <td bgcolor=#eeeeee>
-        <p><b>Thank you for using <a href="@homepage@">the SourceForge edition</a> of Privoxy!</b></p>
+        <p><b>Thank you for using <a href="@homepage@">Privoxy!</a></b></p>
         <p>Please choose from the following options:</p>
         <ul>@menu@</ul>
       </td>
