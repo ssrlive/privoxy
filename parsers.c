@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.40 2001/10/26 20:13:09 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.41 2001/11/05 23:43:05 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.40 2001/10/26 20:13:09 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.41  2001/11/05 23:43:05  steudten
+ *    Add time+date to log files.
+ *
  *    Revision 1.40  2001/10/26 20:13:09  jongfoster
  *    ctype.h is needed in Windows, too.
  *
@@ -1645,22 +1648,21 @@ char *server_http(const struct parsers *v, const char *s, struct client_state *c
 char *server_set_cookie(const struct parsers *v, const char *s, struct client_state *csp)
 {
 #ifdef FEATURE_COOKIE_JAR
-
-       /*
-	* Write timestamp into outbuf.
-	*
-	* Complex because not all OSs have tm_gmtoff or
-	* the %z field in strftime()
-	*/
-       char tempbuf[ BUFFER_SIZE ];
-       time_t now; 
-       struct tm *tm_now; 
-       time (&now); 
-       tm_now = localtime (&now); 
-       strftime (tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", tm_now); 
-    
    if (csp->config->jar)
    {
+      /*
+       * Write timestamp into outbuf.
+       *
+       * Complex because not all OSs have tm_gmtoff or
+       * the %z field in strftime()
+       */
+      char tempbuf[ BUFFER_SIZE ];
+      time_t now; 
+      struct tm *tm_now; 
+      time (&now); 
+      tm_now = localtime (&now); 
+      strftime (tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", tm_now); 
+
       fprintf(csp->config->jar, "%s %s\t%s\n", tempbuf, csp->http->host, (s + v->len + 1));
    }
 #endif /* def FEATURE_COOKIE_JAR */
@@ -1669,9 +1671,83 @@ char *server_set_cookie(const struct parsers *v, const char *s, struct client_st
    {
       return(crumble(v, s, csp));
    }
+   else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
+   {
+      /* Flag whether or not to log a message */
+      int changed = 0;
+
+      /* A variable to store the tag we're working on */
+      char * cur_tag;
+
+      /* Make a copy of the header we can write to */
+      char * result = strdup(s);
+      if (result == NULL)
+      {
+         /* FIXME: This error handling is incorrect */
+         return NULL;
+      }
+
+      /* Skip "Set-Cookie:" (11 characters) in header */
+      cur_tag = result + 11;
+
+      /* skip whitespace between "Set-Cookie:" and value */
+      while (*cur_tag && ijb_isspace(*cur_tag))
+      {
+         cur_tag++;
+      }
+
+      /* Loop through each tag in the cookie */
+      while (*cur_tag)
+      {
+         /* Find next tag */
+         char * next_tag = strchr(cur_tag, ';');
+         if (next_tag != NULL)
+         {
+            /* Skip the ';' character itself */
+            next_tag++;
+
+            /* skip whitespace ";" and start of tag */
+            while (*next_tag && ijb_isspace(*next_tag))
+            {
+               next_tag++;
+            }
+         }
+         else
+         {
+            /* "Next tag" is the end of the string */
+            next_tag = cur_tag + strlen(cur_tag);
+         }
+
+         /* Is this the "Expires" tag? */
+         if (strncmpic(cur_tag, "expires=", 8) == 0)
+         {
+            /* Delete the tag by copying the rest of the string over it.
+             * (Note that we cannot just use "strcpy(cur_tag, next_tag)",
+             * since the behaviour of strcpy is undefined for overlapping
+             * strings.)
+             */
+            memmove(cur_tag, next_tag, strlen(next_tag));
+
+            /* That changed the header, need to issue a log message */
+            changed = 1;
+
+            /* Note that the next tag has now been moved to *cur_tag,
+             * so we do not need to update the cur_tag pointer.
+             */
+         }
+         else
+         {
+            /* Move on to next cookie tag */
+            cur_tag = next_tag;
+         }
+      }
+
+      log_error(LOG_LEVEL_HEADER, "Changed cookie to a temporary one.");
+
+      return result;
+   }
 
    return(strdup(s));
-
 }
 
 
