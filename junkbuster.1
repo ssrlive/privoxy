@@ -12,16 +12,37 @@ Proxy
 \s-2(TM)\s+2
 .SH SYNOPSIS
 \fBjunkbuster\fP
-\fI\&[config_file]\fP
+[--help] [--version] [--no-daemon] [--pidfile \fIpidfile\fP] 
+\fI\&[config_file]\fP (Unix)
 .br
 \fBjunkbstr.exe\fP
 \fI\&[config_file]\fP
 (Windows)
 .br
-.P
-If the configuration file is not specified on the command line,
-\fBJunkbuster\fP will look for a file named \fIconfig\fP in the 
-current directory (except on Win32 where it will try \fIconfig.txt\fP).
+
+.SH OPTIONS
+\fBJunkbuster\fP may be invoked with the following command-line options:
+.TP
+.BR --version " (unix only)"
+Print version info and exit.
+.TP
+.BR --help " (unix only)"
+Print a short usae info and exit.
+.TP
+.BR --no-daemon " (unix only)"
+Don't become a daemon, i.e. don't fork and become process group
+leader, don't detach from controlling tty.
+.TP
+\fB --pidfile\fP \fIpidfile\fP (unix only)
+On startup, write the process ID to \fIpidfile\fP. Delete the
+\fIpidfile\fP on exit. Failiure to create or delete the
+\fIpidfile\fP is non-fatal. If no \fB--pidfile\fP option
+is given, no PID file will be used.
+
+.PP
+If the \fIconfig file\fP is not specified on the command line,
+\fBJunkbuster\fP will look for a file named \fBconfig\fP in the 
+current directory (except on Win32 where it will try \fBconfig.txt\fP).
 
 
 .SH DESCRIPTION
@@ -39,7 +60,7 @@ fancy.
 Browsers must be configured to use 
 \fBJunkbuster\fP
 (the default is localhost, 
-port 8000).
+port 8118).
 To set the 
 \s-2HTTP\s0
 proxy in Netscape and Mozilla,
@@ -58,7 +79,7 @@ go through:
 \fB\&Connections\fP;
 \fB\&LAN Settings\fP.
 .P
-Set the HTTP proxy location for localhost, port 8000.
+Set the HTTP proxy location for localhost, port 8118.
 The
 Secure (SSL) Proxy\" ijbfaq.html#security
 should also be set to the same values,
@@ -67,7 +88,7 @@ otherwise
 \s-2URL\s0s
 won't be proxied.
 .P
-For other browser, check the documentation.
+For other browsers, check the documentation.
 
 .SH CONFIGURATION
 All \fBJunkbuster\fP configuration is done via the various configuration 
@@ -83,7 +104,7 @@ itself is changed and much more sophisticated. See the user-manual for a brief
 explanation of all configuration options.
 .P
 \fBJunkbuster's\fP configuration parameters can be viewed at
-\fIhttp://i.j.b/\fP. This is an internal page. In
+\fIhttp://ijbswa.sourceforge.net/config\fP. This is an internal page. In
 addition, the \fIijb.action\fP file can be edited here, and \fBJunkbuster\fP can
 be toggled on/off.
 
@@ -209,18 +230,14 @@ and build configuration. More documentation should be included in the local
 documentation directory, though is not complete at this time.
 
 .SH SIGNALS
-\fBJunkbuster\fP use the signal \fISIGHUP\fP (see kill -l) to reload all configuration
-files (see CONFIGURATION). This includes the re-open of the logfiles
-(logfile and jarfile) eg. used
-after rotation of the logfiles by logrotate.
-The \fISIGHUP\fP behavior is only for UNIX like OS'.
-.br
-However the configfile will be re-read if \fBJunkbuster\fP detects a changed
-modification time and then behaves like a re-start of \fBJunkbuster\fP 
-in context of all the pertinent files.
+\fBJunkbuster\fP teriminates on the \fBSIGINT\fP, \fBSIGTERM\fP and \fBSIGABRT\fP
+signals. Log rotation scripts may cause a re-opening of the logfile by sending
+a \fBSIGHUP\fP to \fBJunkbuster\fP. Note that unlike other daemons, \fBJunkbuster\fP
+does not need to be made aware of config file changes by \fBSIGHUP\fP -- it will
+detect them automatically.
  
 .SH NOTES
-This is a BETA version of \fBJunkbuster\fP. Not all features are  
+This is a \fBBETA\fP version of \fBJunkbuster\fP. Not all features are  
 complete.
 .br
 Please see the user-maual on how to contact the developers for 
@@ -231,7 +248,7 @@ Probably. Please the user-manual for how and where to report bugs.
 
 .SH SEE ALSO
 .br
-http://i.j.b/
+http://ijbswa.sourceforge.net/config
 .br
 http://ijbswa.sourceforge.net/
 .br
