@@ -36,6 +36,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.7  2001/06/28 13:40:26  sarantis
+#     remove single quotes from $JB; it was not expanded.
+#
 #     Revision 1.6  2001/06/28 13:38:42  sarantis
 #     formatting changes; individual return values are returned from the init script.
 #
@@ -93,7 +96,7 @@ stop () {
 	# stop daemon
 	echo -n $"Stopping junkbuster: "
 	killproc junkbuster && rm -f /var/lock/subsys/junkbuster
-	RETVAL=?$
+	RETVAL=$?
 	echo
 	return $RETVAL
 }
@@ -116,7 +119,6 @@ case "$1" in
 		stop
 		start
 		RETVAL=$?
-		;;
 	fi 
 	;;
   status)
