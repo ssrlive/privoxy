@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.7  2001/10/07 15:33:59  oes
+ *    Introduced a +no-compression action
+ *    Introduced a +downgrade action
+ *
  *    Revision 1.6  2001/09/16 15:47:37  jongfoster
  *    First version of CGI-based edit interface.  This is very much a
  *    work-in-progress, and you can't actually use it to edit anything
@@ -86,12 +90,14 @@ DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRI
 DEFINE_CGI_PARAM_RADIO   ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "block", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("hide-referer",    ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
 DEFINE_ACTION_STRING     ("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
-DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_FROM,          "JunkBuster/3.0 (Anonymized)")
+DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent", ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "JunkBuster/3.0 (Anonymized)")
 DEFINE_ACTION_BOOL       ("image",           ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "logo", 1)
 DEFINE_CGI_PARAM_RADIO   ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("image-blocker",   ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "http://")
+DEFINE_ACTION_STRING     ("limit-connect",   ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
+DEFINE_CGI_PARAM_NO_RADIO("limit-connect",   ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT,  "443")
 DEFINE_ACTION_BOOL       ("no-compression",  ACTION_NO_COMPRESSION)
 DEFINE_ACTION_BOOL       ("no-cookies-read", ACTION_NO_COOKIE_READ)
 DEFINE_ACTION_BOOL       ("no-cookies-set",  ACTION_NO_COOKIE_SET)
