@@ -1,8 +1,10 @@
 Privoxy Developer Manual
 
+
 By: Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $
+$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $
+
 
 The developer manual gives the users information on how to help the developer
 team. It provides guidance on coding, testing, documentation and other issues.
@@ -27,22 +29,22 @@ developer-manual/. Please see the Contact section on how to contact the
 developers.
 
 -------------------------------------------------------------------------------
-
 Table of Contents
- 
+ 
 1. Introduction
 3. Quickstart to Privoxy Development
 4. Documentation Guidelines
-   
     4.1. Quickstart to Docbook and SGML
+        1 
+       
+       
     4.2. Privoxy Documentation Style
     4.3. Privoxy Custom Entities
    
-5. Coding Guidelines
    
+5. Coding Guidelines
     5.1. Introduction
     5.2. Using Comments
-       
         5.2.1. Comment, Comment, Comment
         5.2.2. Use blocks for comments
         5.2.3. Keep Comments on their own line
@@ -51,16 +53,16 @@ Table of Contents
         5.2.6. Comment at the end of braces if the content is more than one
             screen length
        
-    5.3. Naming Conventions
        
+    5.3. Naming Conventions
         5.3.1. Variable Names
         5.3.2. Function Names
         5.3.3. Header file prototypes
         5.3.4. Enumerations, and #defines
         5.3.5. Constants
        
-    5.4. Using Space
        
+    5.4. Using Space
         5.4.1. Put braces on a line by themselves.
         5.4.2. ALL control statements should have a block
         5.4.3. Do not belabor/blow-up boolean expressions
@@ -69,12 +71,12 @@ Table of Contents
         5.4.6. Make the last brace of a function stand out
         5.4.7. Use 3 character indentions
        
-    5.5. Initializing
        
+    5.5. Initializing
         5.5.1. Initialize all variables
        
-    5.6. Functions
        
+    5.6. Functions
         5.6.1. Name functions that return a boolean as a question.
         5.6.2. Always specify a return type for a function.
         5.6.3. Minimize function calls when iterating by using variables
@@ -86,8 +88,8 @@ Table of Contents
         5.6.9. Where Possible, Use Forward Struct Declaration Instead of
             Includes
        
-    5.7. General Coding Practices
        
+    5.7. General Coding Practices
         5.7.1. Turn on warnings
         5.7.2. Provide a default case for all switch statements
         5.7.3. Try to avoid falling through cases in a switch statement.
@@ -100,16 +102,17 @@ Table of Contents
         5.7.9. Add loaders to the `file_list' structure and in order
         5.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
        
+       
     5.8. Addendum: Template for files and function comment blocks:
+   
    
 6. Version Control Guidelines
 7. Testing Guidelines
-   
     7.1. Testplan for releases
     7.2. Test reports
    
-8. Releasing a new version
    
+8. Releasing a new version
     8.1. Before the Release
     8.2. Update the webserver
     8.3. SuSE or Red Hat
@@ -124,16 +127,17 @@ Table of Contents
     8.12. Amiga OS
     8.13. AIX
    
+   
 9. Contacting the developers, Bug Reporting and Feature Requests
 10. Copyright and History
-   
     10.1. Copyright
     10.2. History
    
+   
 11. See also
 
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 1. Introduction
 
 Privoxy, as an heir to Junkbuster, is an Open Source project and licensed under
@@ -144,7 +148,6 @@ wide an audience as possible.
 
 One does not have to be a programmer to contribute. Packaging, testing, and
 porting, are all important jobs as well.
-
 -------------------------------------------------------------------------------
 
 3. Quickstart to Privoxy Development
@@ -165,8 +168,8 @@ following guidelines for changing stuff in the code. If it is
    
  5. A major redesign of some part of the code: ask the list
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 4. Documentation Guidelines
 
 All formal documents are maintained in docbook SGML and located in the doc/
@@ -200,8 +203,8 @@ How do you update the webserver (i.e. the pages on privoxy.org)?
  2. Run make webserver which copies all files from doc/webserver to the
     sourceforge webserver via scp.
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 4.1. Quickstart to Docbook and SGML
 
 If you are not familiar with SGML, it is a markup language similar to HTML. In
@@ -241,7 +244,6 @@ elements.
 <quote></quote>, for, doh, quoting text.                                       
 
 Look at any of the existing docs for examples of all these and more.
-
 -------------------------------------------------------------------------------
 
 4.2. Privoxy Documentation Style
@@ -252,50 +254,47 @@ fashion.
 
 Here it is:
 
-  * All tags should be lower case.
+  * All tags should be lower case.
    
-  * Tags delimiting a block of text should be on their own line. Like:
+  * Tags delimiting a block of text should be on their own line. Like:
    
-     <para>
-      Some text goes here.
-     </para>
-           
-   
+     <para>
+      Some text goes here.
+     </para>
+           
     Tags marking individual words, or few words, should be in-line:
    
-      Just to <emphasis>emphasize</emphasis>, some text goes here.
-           
+      Just to <emphasis>emphasize</emphasis>, some text goes here.
+           
    
-  * Tags should be nested and step indented like:
+  * Tags should be nested and step indented like:
    
-     <para>
-      <itemizedlist>
-       <para>
-        <listitem>
-          Some text goes here in our list example.
-         </listitem>
-       </para>
-      </itemizedlist>
-     </para>
-           
-   
+     <para>
+      <itemizedlist>
+       <para>
+        <listitem>
+          Some text goes here in our list example.
+         </listitem>
+       </para>
+      </itemizedlist>
+     </para>
+           
     This makes it easier to find the text amongst the tags ;-)
-   
-  * Use white space to separate logical divisions within a document, like
+  * Use white space to separate logical divisions within a document, like
     between sections. Running everything together consistently makes it harder
     to read and work on.
    
-  * Do not hesitate to make comments. Comments can either use the <comment>
+  * Do not hesitate to make comments. Comments can either use the <comment>
     element, or the <!-- --> style comment familiar from HTML.
    
-  * We have an international audience. Refrain from slang, or English
+  * We have an international audience. Refrain from slang, or English
     idiosyncrasies (too many to list :).
    
-  * Try to keep overall line lengths in source files to 80 characters or less
+  * Try to keep overall line lengths in source files to 80 characters or less
     for obvious reasons. This is not always possible, with lenghty URLs for
     instance.
    
-  * Our documents are available in differing formats. Right now, they are just
+  * Our documents are available in differing formats. Right now, they are just
     plain text, and HTML, but PDF, and others is always a future possibility.
     Be careful with URLs (<ulink>), and avoid this mistake:
    
@@ -306,11 +305,11 @@ Here it is:
    
     My favorite site is <ulink url="http://example.com">example.com</ulink>.
    
-  * All documents should be spell checked occasionally. aspell can check SGML
+  * All documents should be spell checked occasionally. aspell can check SGML
     with the -H option. (ispell I think too.)
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 4.3. Privoxy Custom Entities
 
 Privoxy documentation is using a number of customized "entities" to facilitate
@@ -329,7 +328,7 @@ encouraged to use these where possible. Some of these obviously require
 re-setting with each release. A sampling of custom entities are listed below.
 See any of the main docs for examples.
 
-  * Re-cyclable "boilerplate" text entities are defined like:
+  * Re-cyclable "boilerplate" text entities are defined like:
    
     <!entity supported SYSTEM "supported.sgml">
    
@@ -339,7 +338,7 @@ See any of the main docs for examples.
     semi-colon), and the contents will be dumped into the finished doc at that
     point.
    
-  * Commonly used "internal entities":
+  * Commonly used "internal entities":
    
     p-version: the Privoxy version string, e.g. "2.9.13".                      
     p-status: the project status, either "ALPHA", "BETA", or "STABLE".         
@@ -348,9 +347,10 @@ See any of the main docs for examples.
     p-stable: just the opposite.                                               
     p-text: this doc is only generated as text.                                
    
+   
+
 There are others in various places that are defined for a specific purpose.
 Read the source!
-
 -------------------------------------------------------------------------------
 
 5. Coding Guidelines
@@ -365,7 +365,6 @@ of success of the project.
 And that of course comes back to us as individuals. If we can increase our
 development and product efficiencies then we can solve more of the request for
 changes/improvements and in general feel good about ourselves. ;->
-
 -------------------------------------------------------------------------------
 
 5.2. Using Comments
@@ -386,7 +385,6 @@ describes something different than what the code is doing then maybe a
 programming error is occurring.
 
 Example:
-
 /* if page size greater than 1k ... */                                         
 if ( PageLength() > 1024 )                                                     
 {                                                                              
@@ -402,7 +400,6 @@ if ( PageLength() > 1024 )
 This demonstrates 2 cases of "what not to do".  The first is a                 
 "syntax comment".  The second is a comment that does not fit what              
 is actually being done.                                                        
-
 -------------------------------------------------------------------------------
 
 5.2.2. Use blocks for comments
@@ -415,7 +412,6 @@ separation between the comment and the code. Block identifiers do, by
 surrounding the code with a clear, definable pattern.
 
 Example:
-
 /*********************************************************************         
  * This will stand out clearly in your code!                                   
  *********************************************************************/        
@@ -442,7 +438,6 @@ Exception:
 If you are trying to add a small logic comment and do not wish to "disrubt" the
 flow of the code, feel free to use a 1 line comment which is NOT on the same
 line as the code.
-
 -------------------------------------------------------------------------------
 
 5.2.3. Keep Comments on their own line
@@ -457,7 +452,6 @@ often: during the definition of variables, at the end of closing braces, when
 used to comment parameters.
 
 Example:
-
 /*********************************************************************         
  * This will stand out clearly in your code,                                   
  * But the second example won't.                                               
@@ -492,7 +486,6 @@ short DoSomethingVeryImportant(
    ...code here...                                                             
                                                                                
 }   /* -END- DoSomethingVeryImportant */                                       
-
 -------------------------------------------------------------------------------
 
 5.2.4. Comment each logical step
@@ -507,7 +500,6 @@ into it to see where you forgot to put one.
 
 Most "for", "while", "do", etc... loops _probably_ need a comment. After all,
 these are usually major logic containers.
-
 -------------------------------------------------------------------------------
 
 5.2.5. Comment All Functions Thoroughly
@@ -524,7 +516,6 @@ code reuse by allowing a user to determine the safety and applicability of any
 function for the problem at hand. As a result of such benefits, all functions
 should contain the information presented in the addendum section of this
 document.
-
 -------------------------------------------------------------------------------
 
 5.2.6. Comment at the end of braces if the content is more than one screen
@@ -543,7 +534,6 @@ more readable:
 use following a closing brace: } /* -END- if() or while () or etc... */
 
 Example:
-
 if ( 1 == X )                                                                  
 {                                                                              
    DoSomethingVeryImportant();                                                 
@@ -557,7 +547,6 @@ if ( 1 == X )
    DoSomethingVeryImportant();                                                 
    ...some long list of commands...                                            
 } /* -END- if ( 1 == X ) */                                                    
-
 -------------------------------------------------------------------------------
 
 5.3. Naming Conventions
@@ -573,13 +562,11 @@ and system headers.) Do not use identifiers which are reserved in ANSI C++.
 port Privoxy to C++.
 
 Example:
-
 int ms_iis5_hack = 0;                                                          
 
 Instead of:
 
 int msiis5hack = 0; int msIis5Hack = 0;                                        
-
 -------------------------------------------------------------------------------
 
 5.3.2. Function Names
@@ -593,14 +580,12 @@ and system headers.) Do not use identifiers which are reserved in ANSI C++.
 port Privoxy to C++.
 
 Example:
-
 int load_some_file( struct client_state *csp )                                 
 
 Instead of:
 
 int loadsomefile( struct client_state *csp )                                   
 int loadSomeFile( struct client_state *csp )                                   
-
 -------------------------------------------------------------------------------
 
 5.3.3. Header file prototypes
@@ -611,16 +596,13 @@ Use a descriptive parameter name in the function prototype in header files. Use
 the same parameter name in the header file that you use in the c file.
 
 Example:
-
 (.h) extern int load_aclfile( struct client_state *csp );                      
 (.c) int load_aclfile( struct client_state *csp )                              
 
 Instead of:
-
 (.h) extern int load_aclfile( struct client_state * ); or                      
 (.h) extern int load_aclfile();                                                
 (.c) int load_aclfile( struct client_state *csp )                              
-
 -------------------------------------------------------------------------------
 
 5.3.4. Enumerations, and #defines
@@ -632,7 +614,6 @@ identifier with an underscore. (ANSI C reserves these for use by the compiler
 and system headers.)
 
 Example:
-
 (enumeration) : enum Boolean { FALSE, TRUE };                                  
 (#define) : #define DEFAULT_SIZE 100;                                          
 
@@ -641,13 +622,11 @@ the preprocessor: FEATURE_>, where > is a short (preferably 1 or 2 word)
 description.
 
 Example:
-
 #define FEATURE_FORCE 1                                                        
                                                                                
 #ifdef FEATURE_FORCE                                                           
 #define FORCE_PREFIX blah                                                      
 #endif /* def FEATURE_FORCE */                                                 
-
 -------------------------------------------------------------------------------
 
 5.3.5. Constants
@@ -663,7 +642,6 @@ Use underscore (_) to separate adjacent acronyms and abbreviations. Never
 terminate a name with an underscore.
 
 Example:
-
 #define USE_IMAGE_LIST 1                                                       
 
 Instead of:
@@ -673,7 +651,6 @@ Instead of:
 #define USE_IMAGE_LIST_ 1 or                                                   
 #define use_image_list 1 or                                                    
 #define UseImageList 1                                                         
-
 -------------------------------------------------------------------------------
 
 5.4. Using Space
@@ -688,7 +665,6 @@ This practice makes it easier to identify the opening and closing braces for a
 block.
 
 Example:
-
 if ( this == that )                                                            
 {                                                                              
    ...                                                                         
@@ -710,7 +686,6 @@ it easier to read.
 Status: developer-discrection.
 
 Example exception:
-
 while ( more lines are read )                                                  
 {                                                                              
    /* Please document what is/is not a comment line here */                    
@@ -718,7 +693,6 @@ while ( more lines are read )
                                                                                
    do_something( line );                                                       
 }                                                                              
-
 -------------------------------------------------------------------------------
 
 5.4.2. ALL control statements should have a block
@@ -729,7 +703,6 @@ Using braces to make a block will make your code more readable and less prone
 to error. All control statements should have a block defined.
 
 Example:
-
 if ( this == that )                                                            
 {                                                                              
    DoSomething();                                                              
@@ -748,13 +721,11 @@ Note: The first example in "Instead of" will execute in a manner other than
 that which the developer desired (per indentation). Using code braces would
 have prevented this "feature". The "explanation" and "exception" from the point
 above also applies.
-
 -------------------------------------------------------------------------------
 
 5.4.3. Do not belabor/blow-up boolean expressions
 
 Example:
-
 structure->flag = ( condition );                                               
 
 Instead of:
@@ -764,7 +735,6 @@ if ( condition ) { structure->flag = 1; } else { structure->flag = 0; }
 Note: The former is readable and consice. The later is wordy and inefficient.
 Please assume that any developer new to the project has at least a "good"
 knowledge of C/C++. (Hope I do not offend by that last comment ... 8-)
-
 -------------------------------------------------------------------------------
 
 5.4.4. Use white space freely because it is free
@@ -775,7 +745,6 @@ Make it readable. The notable exception to using white space freely is listed
 in the next guideline.
 
 Example:
-
 int firstValue   = 0;                                                          
 int someValue    = 0;                                                          
 int anotherValue = 0;                                                          
@@ -784,7 +753,6 @@ int thisVariable = 0;
 if ( thisVariable == thatVariable )                                            
                                                                                
 firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )            
-
 -------------------------------------------------------------------------------
 
 5.4.5. Don't use white space around structure operators
@@ -799,19 +767,16 @@ parentheses next to names. With spaces, the connection between the object and
 variable/function name is not as clear.
 
 Example:
-
 aStruct->aMember;                                                              
 aStruct.aMember;                                                               
 FunctionName();                                                                
 
 Instead of: aStruct -> aMember; aStruct . aMember; FunctionName ();
-
 -------------------------------------------------------------------------------
 
 5.4.6. Make the last brace of a function stand out
 
 Example:
-
 int function1( ... )                                                           
 {                                                                              
    ...code...                                                                  
@@ -836,7 +801,6 @@ long if {} statements too. After all whitespace is free!
 
 Status: developer-discrection on the number of blank lines. Enforced is the end
 of function comments.
-
 -------------------------------------------------------------------------------
 
 5.4.7. Use 3 character indentions
@@ -848,7 +812,6 @@ very* ragged. So use 3 character indentions only. If you like to use TABs, pass
 your code through a filter such as "expand -t3" before checking in your code.
 
 Example:
-
 static const char * const url_code_map[256] =                                  
 {                                                                              
    NULL, ...                                                                   
@@ -869,7 +832,6 @@ int function1( ... )
    return( NEVER_GETS_HERE );                                                  
                                                                                
 }                                                                              
-
 -------------------------------------------------------------------------------
 
 5.5. Initializing
@@ -883,7 +845,6 @@ have been assigned a value somewhere else in the code. Remove the chance of
 accidentally using an unassigned variable.
 
 Example:
-
 short anShort = 0;                                                             
 float aFloat  = 0;                                                             
 struct *ptr = NULL;                                                            
@@ -894,7 +855,6 @@ SIGSEV vs. arrayPtr[0].
 
 Status: developer-discrection if and only if the variable is assigned a value
 "shortly after" declaration.
-
 -------------------------------------------------------------------------------
 
 5.6. Functions
@@ -907,11 +867,9 @@ Value should be phrased as a question that would logically be answered as a
 true or false statement
 
 Example:
-
 ShouldWeBlockThis();                                                           
 ContainsAnImage();                                                             
 IsWebPageBlank();                                                              
-
 -------------------------------------------------------------------------------
 
 5.6.2. Always specify a return type for a function.
@@ -921,7 +879,6 @@ Explanation:
 The default return for a function is an int. To avoid ambiguity, create a
 return for a function when the return has a purpose, and create a void return
 type if the function does not need to return anything.
-
 -------------------------------------------------------------------------------
 
 5.6.3. Minimize function calls when iterating by using variables
@@ -932,7 +889,6 @@ It is easy to write the following code, and a clear argument can be made that
 the code is easy to understand:
 
 Example:
-
 for ( size_t cnt = 0; cnt < blockListLength(); cnt ++ )                        
 {                                                                              
    ....                                                                        
@@ -950,7 +906,6 @@ Instead of using a function call during the iterations, assign the value to a
 variable, and evaluate using the variable.
 
 Example:
-
 size_t len = blockListLength();                                                
                                                                                
 for ( size_t cnt = 0; cnt < len; cnt ++ )                                      
@@ -961,7 +916,6 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 Exceptions: if the value of blockListLength() *may* change or could *
 potentially* change, then you must code the function call in the for/while
 loop.
-
 -------------------------------------------------------------------------------
 
 5.6.4. Pass and Return by Const Reference
@@ -978,7 +932,6 @@ char *argv[] ) { strcmp( argv[0], "privoxy" ); }
 
 Both these pointers are *const*! If the c runtime library maintainers do it, we
 should too.
-
 -------------------------------------------------------------------------------
 
 5.6.5. Pass and Return by Value
@@ -991,7 +944,6 @@ client_state csp )
 
 would not work. So, to be consistent, we should declare all prototypes with
 "pass by value": int load_aclfile( struct client_state *csp )
-
 -------------------------------------------------------------------------------
 
 5.6.6. Names of include files
@@ -1005,7 +957,6 @@ that utilizes a partial path to distinguish their header files from system or
 other header files.
 
 Example:
-
 #include <iostream.h>     /* This is not a local include */                    
 #include "config.h"       /* This IS a local include */                        
 
@@ -1016,7 +967,6 @@ Exception:
 
 Note: Please! do not add "-I." to the Makefile without a _very_ good reason.
 This duplicates the #include "file.h" behaviour.
-
 -------------------------------------------------------------------------------
 
 5.6.7. Provide multiple inclusion protection
@@ -1030,12 +980,10 @@ of the file. Of course, replace PROJECT_H with your file name, with "." Changed
 to "_", and make it uppercase.
 
 Example:
-
 #ifndef PROJECT_H_INCLUDED                                                     
 #define PROJECT_H_INCLUDED                                                     
  ...                                                                           
 #endif /* ndef PROJECT_H_INCLUDED */                                           
-
 -------------------------------------------------------------------------------
 
 5.6.8. Use `extern "C"` when appropriate
@@ -1047,7 +995,6 @@ If our headers are included from C++, they must declare our functions as
 of our code.
 
 Example:
-
 #ifdef __cplusplus                                                             
 extern "C"                                                                     
 {                                                                              
@@ -1058,7 +1005,6 @@ extern "C"
 #ifdef __cplusplus                                                             
 }                                                                              
 #endif /* def __cplusplus */                                                   
-
 -------------------------------------------------------------------------------
 
 5.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
@@ -1069,7 +1015,6 @@ Useful in headers that include pointers to other struct's. Modifications to
 excess header files may cause needless compiles.
 
 Example:
-
 /*********************************************************************         
  * We're avoiding an include statement here!                                   
  *********************************************************************/        
@@ -1081,7 +1026,6 @@ proper header file is necessary. If you only want to prototype a pointer,
 however, the header file is unneccessary.
 
 Status: Use with discrection.
-
 -------------------------------------------------------------------------------
 
 5.7. General Coding Practices
@@ -1093,7 +1037,6 @@ Explanation
 Compiler warnings are meant to help you find bugs. You should turn on as many
 as possible. With GCC, the switch is "-Wall". Try and fix as many warnings as
 possible.
-
 -------------------------------------------------------------------------------
 
 5.7.2. Provide a default case for all switch statements
@@ -1106,7 +1049,6 @@ protect yourself from the unknown, always have a default step in a switch
 statement.
 
 Example:
-
 switch( hash_string( cmd ) )                                                   
 {                                                                              
    case hash_actions_file :                                                    
@@ -1133,7 +1075,6 @@ issue. The "anomly code goes here" may be no more than a print to the STDERR
 stream (as in load_config). Or it may really be an ABEND condition.
 
 Status: Programmer discretion is advised.
-
 -------------------------------------------------------------------------------
 
 5.7.3. Try to avoid falling through cases in a switch statement.
@@ -1152,7 +1093,6 @@ use a break statement for each case statement.
 
 If you choose to allow fall through, you should comment both the fact of the
 fall through and reason why you felt it was necessary.
-
 -------------------------------------------------------------------------------
 
 5.7.4. Use 'long' or 'short' Instead of 'int'
@@ -1166,7 +1106,6 @@ Status: open-to-debate. In the case of most FSF projects (including X/
 GNU-Emacs), there are typedefs to int4, int8, int16, (or equivalence ... I
 forget the exact typedefs now). Should we add these to IJB now that we have a
 "configure" script?
-
 -------------------------------------------------------------------------------
 
 5.7.5. Don't mix size_t and other types
@@ -1178,7 +1117,6 @@ whether it is signed or unsigned, or about how long it is. Do not compare a
 size_t against another variable of a different type (or even against a
 constant) without casting one of the values. Try to avoid using size_t if you
 can.
-
 -------------------------------------------------------------------------------
 
 5.7.6. Declare each variable and struct on its own line.
@@ -1188,7 +1126,6 @@ Explanation:
 It can be tempting to declare a series of variables all on one line. Don't.
 
 Example:
-
 long a = 0;                                                                    
 long b = 0;                                                                    
 long c = 0;                                                                    
@@ -1207,7 +1144,6 @@ variables; feel free to declare them on 1 line. You should, although, provide a
 good comment on their functions.
 
 Status: developer-discrection.
-
 -------------------------------------------------------------------------------
 
 5.7.7. Use malloc/zalloc sparingly
@@ -1221,10 +1157,8 @@ Only "malloc" a struct (on the heap) if the variable's life will extend beyond
 the context of one function call.
 
 Example:
-
 If a function creates a struct and stores a pointer to it in a                 
 list, then it should definately be allocated via `malloc'.                     
-
 -------------------------------------------------------------------------------
 
 5.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
@@ -1239,7 +1173,6 @@ is a "good thing (tm)". You may need to offer a free/unload/destuctor type
 function to accomodate this.
 
 Example:
-
 int load_re_filterfile( struct client_state *csp ) { ... }                     
 static void unload_re_filterfile( void *f ) { ... }                            
 
@@ -1250,7 +1183,6 @@ library functions ... such as `strdup'.
 
 Status: developer-discrection. The "main" use of this standard is for
 allocating and freeing data structures (complex or nested).
-
 -------------------------------------------------------------------------------
 
 5.7.9. Add loaders to the `file_list' structure and in order
@@ -1263,7 +1195,6 @@ easier to add/read new blockers when you expect a certain order.
 Note: It may appear that the alpha order is broken in places by POPUP tests
 coming before PCRS tests. But since POPUPs can also be referred to as
 KILLPOPUPs, it is clear that it should come first.
-
 -------------------------------------------------------------------------------
 
 5.7.10. "Uncertain" new code and/or changes to exitinst code, use FIXME
@@ -1288,14 +1219,12 @@ or:
 Note: If you make it clear that this may or may not be a "good thing (tm)", it
 will be easier to identify and include in the project (or conversly exclude
 from the project).
-
 -------------------------------------------------------------------------------
 
 5.8. Addendum: Template for files and function comment blocks:
 
 Example for file comments:
-
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $"; 
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $"; 
 /*********************************************************************                          
  *                                                                                              
  * File        :  $Source$                                                                      
@@ -1348,10 +1277,9 @@ is handy for (X|GNU)Emacs users to skip the verbige and get to the heart of the
 code (via `forward-page' and `backward-page'). Please include it if you can.
 
 Example for file header comments:
-
 #ifndef _FILENAME_H                                                                           
 #define _FILENAME_H                                                                           
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.24 2002/04/04 21:33:37 hal9 Exp $" 
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.25 2002/04/06 05:07:28 hal9 Exp $" 
 /*********************************************************************                        
  *                                                                                            
  * File        :  $Source$                                                                    
@@ -1416,7 +1344,6 @@ extern const char FILENAME_h_rcs[];
 */                                                                                            
 
 Example for function comments:
-
 /*********************************************************************         
  *                                                                             
  * Function    :  FUNCTION_NAME                                                
@@ -1439,20 +1366,17 @@ int FUNCTION_NAME( void *param1, const char *x )
 
 Note: If we all follow this practice, we should be able to parse our code to
 create a "self-documenting" web page.
-
 -------------------------------------------------------------------------------
 
 6. Version Control Guidelines
 
 To be filled. note on cvs comments. Don't only comment what you did, but also
 why you did it!
-
 -------------------------------------------------------------------------------
 
 7. Testing Guidelines
 
 To be filled.
-
 -------------------------------------------------------------------------------
 
 7.1. Testplan for releases
@@ -1463,16 +1387,17 @@ Explain release numbers. major, minor. developer releases. etc.
    
  2. Remove any file that was left over. This includes (but is not limited to)
    
-      + /var/log/privoxy
+      + /var/log/privoxy
        
-      + /etc/privoxy
+      + /etc/privoxy
        
-      + /usr/sbin/privoxy
+      + /usr/sbin/privoxy
        
-      + /etc/init.d/privoxy
+      + /etc/init.d/privoxy
        
-      + /usr/doc/privoxy*
+      + /usr/doc/privoxy*
        
+   
  3. Install the rpm. Any error messages?
    
  4. start,stop,status Privoxy with the specific script (e.g. /etc/rc.d/init/
@@ -1482,22 +1407,22 @@ Explain release numbers. major, minor. developer releases. etc.
    
  6. Remove the rpm. Any error messages? All files removed?
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 7.2. Test reports
 
 Please submit test reports only with the test form at sourceforge. Three simple
 steps:
 
-  * Select category: the distribution you test on.
+  * Select category: the distribution you test on.
    
-  * Select group: the version of Privoxy that we are about to release.
+  * Select group: the version of Privoxy that we are about to release.
    
-  * Fill the Summary and Detailed Description with something intelligent (keep
+  * Fill the Summary and Detailed Description with something intelligent (keep
     it short and precise).
    
-Do not mail to the mailinglist (we cannot keep track on issues there).
 
+Do not mail to the mailinglist (we cannot keep track on issues there).
 -------------------------------------------------------------------------------
 
 8. Releasing a new version
@@ -1508,24 +1433,23 @@ code or new pages on the webserver.
 
 The following programs are required to follow this process: ncftpput (ncftp),
 scp (ssh), gmake (GNU's version of make), autoconf, cvs, ???.
-
 -------------------------------------------------------------------------------
 
 8.1. Before the Release
 
 The following must be done by one of the developers prior to each new release:
 
-  * Make sure that everybody who has worked on the code in the last couple of
+  * Make sure that everybody who has worked on the code in the last couple of
     days has had a chance to yell "no!" in case they have pending changes/fixes
     in their pipelines.
    
-  * Increment the version number in configure.in in CVS. Also, the RPM release
+  * Increment the version number in configure.in in CVS. Also, the RPM release
     number in configure.in. Do NOT touch version information after export from
     CVS. All packages will use the version and release data from configure.in.
     Local files should not be changed, except prior to a CVS commit!!! This way
     we are all on the same page!
    
-  * If the default actionsfile has changed since last release, bump up its
+  * If the default actionsfile has changed since last release, bump up its
     version info in this line:
    
       {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}    
@@ -1534,16 +1458,16 @@ The following must be done by one of the developers prior to each new release:
     Then change the version info in doc/webserver/actions/index.php, line:
     '$required_actions_file_version = "A.B";'
    
-  * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z" (where
+  * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z" (where
     X = major, Y = minor, Z = point). Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z
     (won't work) etc.
    
-  * The first package uploaded should be the official "tarball" release. This
+  * The first package uploaded should be the official "tarball" release. This
     is built with the "make tarball-dist" Makefile target, and then can be
     uploaded with "make tarball-upload" (see below).
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 8.2. Update the webserver
 
 All files must be group-readable and group-writable (or no one else will be
@@ -1561,7 +1485,6 @@ automatically.
 Please do NOT use any other means of transferring files to the webserver. "make
 webserver" not only uploads, but will make sure that the appropriate
 permissions are preserved for shared group access.
-
 -------------------------------------------------------------------------------
 
 8.3. SuSE or Red Hat
@@ -1589,7 +1512,6 @@ To upload the package to Sourceforge, simply issue
                                                                                
 
 Go to the displayed URL and release the file publicly on Sourceforge.
-
 -------------------------------------------------------------------------------
 
 8.4. OS/2
@@ -1611,25 +1533,18 @@ available from various sources, including its home page: xworkplace.
 
 Change directory to the os2setup directory. Edit the os2build.cmd file to set
 the final executable filename. For example,
-
   installExeName='privoxyos2_setup_X.Y.Z.exe'                                  
                                                                                
-
 Next, edit the IJB.wis file so the release number matches in the PACKAGEID
 section:
-
   PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"                       
                                                                                
-
 You're now ready to build. Run:
-
   os2build                                                                     
                                                                                
-
 And in the ./files directory you will have the WarpIN-installable executable.
 Upload this anonymously to uploads.sourceforge.net/incoming, create a release
 for it, and you're done.
-
 -------------------------------------------------------------------------------
 
 8.5. Solaris
@@ -1639,7 +1554,7 @@ Login to Sourceforge's compilefarm via ssh
   ssh cf.sourceforge.net                                                       
                                                                                
 
-Choose the right operating system (not the Debian one). If you have downloaded
+Choose the right operating system (not the Debian one). If you have downloaded 
 Privoxy before,
 
   cd current                                                                                          
@@ -1660,7 +1575,6 @@ Then run
 which creates a gzip'ed tar archive. Sadly, you cannot use make solaris-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly.
-
 -------------------------------------------------------------------------------
 
 8.6. Windows
@@ -1678,7 +1592,6 @@ Run:
                                                                                
 
 Then do FIXME.
-
 -------------------------------------------------------------------------------
 
 8.7. Debian
@@ -1696,7 +1609,6 @@ first. Run:
                                                                                
 
 Then do FIXME.
-
 -------------------------------------------------------------------------------
 
 8.8. Mac OSX
@@ -1711,7 +1623,6 @@ Ensure that you have the latest code version. Hence run:
                                                                                                      
 
 From the osxsetup directory, run:
-
   build                                                                        
                                                                                
 
@@ -1723,22 +1634,17 @@ Bring up PackageMaker with the PrivoxyPackage.pmsp definition file, modify the
 package name to match the release, and hit the "Create package" button. If you
 specify ./Privoxy.pkg as the output package name, you can then create the
 distributable zip file with the command:
-
 zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg                                  
                                                                                
-
 You can then upload privoxyosx_setup_x.y.z.zip anonymously to
 uploads.sourceforge.net/incoming, create a release for it, and you're done.
-
 -------------------------------------------------------------------------------
 
 8.9. FreeBSD
 
 Change the version number of Privoxy in the configure.in file. Run:
-
   autoheader && autoconf && ./configure                                        
                                                                                
-
 Then ...
 
 Login to Sourceforge's compilefarm via ssh:
@@ -1766,7 +1672,6 @@ Then run:
 which creates a gzip'ed tar archive. Sadly, you cannot use make freebsd-upload
 on the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly.
-
 -------------------------------------------------------------------------------
 
 8.10. Tarball
@@ -1795,7 +1700,6 @@ To upload the package to Sourceforge, simply issue
                                                                                
 
 Goto the displayed URL and release the file publicly on Sourceforge.
-
 -------------------------------------------------------------------------------
 
 8.11. HP-UX 11
@@ -1813,7 +1717,6 @@ first. Run:
                                                                                
 
 Then do FIXME.
-
 -------------------------------------------------------------------------------
 
 8.12. Amiga OS
@@ -1831,7 +1734,6 @@ first. Run:
                                                                                
 
 Then do FIXME.
-
 -------------------------------------------------------------------------------
 
 8.13. AIX
@@ -1861,7 +1763,6 @@ Then run:
 which creates a gzip'ed tar archive. Sadly, you cannot use make aix-upload on
 the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly.
-
 -------------------------------------------------------------------------------
 
 9. Contacting the developers, Bug Reporting and Feature Requests
@@ -1869,15 +1770,15 @@ archive to Sourceforge's ftp server and release the file publicly.
 We value your feedback. However, to provide you with the best support, please
 note:
 
-  *  Use the Sourceforge Support Forum to get help:
-       
-     http://sourceforge.net/tracker/?group_id=11118&atid=211118
-       
+  *  Use the Sourceforge Support Forum to get help:
+       
+     http://sourceforge.net/tracker/?group_id=11118&atid=211118
+       
    
-  *  Submit bugs only through our Sourceforge Bug Forum:
-     
-     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-        
+  *  Submit bugs only through our Sourceforge Bug Forum:
+     
+     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+        
    
     Make sure that the bug has not already been submitted. Please try to verify
     that it is a Privoxy bug, and not a browser or site bug first. If you are
@@ -1888,23 +1789,27 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request 
-     forum:
-     
-     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
-       
+  *  Submit feature requests only through our Sourceforge feature request 
+     forum:
+     
+     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+       
    
-  *  For any other issues, feel free to use the mailing lists:
-     
-     http://sourceforge.net/mail/?group_id=11118.
-     
+  * We will soon have an automated way to submit advertisements, incorrectly
+    blocked images, popups and the like. Check back.
+       
+   
+  *  For any other issues, feel free to use the mailing lists:
+     
+     http://sourceforge.net/mail/?group_id=11118.
+     
    
     Anyone interested in actively participating in development and related
     discussions can also join the appropriate mailing list. Archives are
     available too.
    
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 10. Copyright and History
 
 10.1. Copyright
@@ -1923,7 +1828,6 @@ is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
 You should have received a copy of the GNU General Public License along with
 this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place, Suite 330, Boston, MA 02111-1307 USA.
-
 -------------------------------------------------------------------------------
 
 10.2. History
@@ -1937,7 +1841,6 @@ Stefan Waldherr made many improvements, and started the SourceForge project
 Privoxy to rekindle development. There are now several active developers
 contributing. The last stable release of Junkbuster was v2.0.2, which has now
 grown whiskers ;-).
-
 -------------------------------------------------------------------------------
 
 11. See also
@@ -1961,4 +1864,3 @@ http://privacy.net/analyze/
 http://www.squid-cache.org/
 
  
-

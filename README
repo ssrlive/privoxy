@@ -1,37 +1,38 @@
 
+
 /*********************************************************************
- *
- * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
- *
- * Purpose     :  README file to give a short intro.
- *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team. http://www.privoxy.org/
- *
- *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
- *                Junkbusters Corporation.  http://www.junkbusters.com
- *
- *                This program is free software; you can redistribute it 
- *                and/or modify it under the terms of the GNU General
- *                Public License as published by the Free Software
- *                Foundation; either version 2 of the License, or (at
- *                your option) any later version.
- *
- *                This program is distributed in the hope that it will
- *                be useful, but WITHOUT ANY WARRANTY; without even the
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A
- *                PARTICULAR PURPOSE.  See the GNU General Public
- *                License for more details.
- *
- *                The GNU General Public License should be included with
- *                this file.  If not, you can view it at
- *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *********************************************************************/
-   
+ *
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
+ *
+ * Purpose     :  README file to give a short intro.
+ *
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ *                Privoxy team. http://www.privoxy.org/
+ *
+ *                Based on the Internet Junkbuster originally written
+ *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                This program is free software; you can redistribute it 
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *********************************************************************/
+   
 
 This README is included with the development version of Privoxy 2.9.13, which
 will eventually become Privoxy v3.0 (and soon we hope!). See http://
@@ -45,16 +46,16 @@ very flexible configuration and can be customized to suit individual needs and
 tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster. Junkbuster was
+Privoxy is based on the code of the Internet Junkbuster (tm). Junkbuster was
 originally written by JunkBusters Corporation, and was released as free
 open-source software under the GNU GPL. Stefan Waldherr made many improvements,
 and started the SourceForge project to continue development.
 
-Privoxy continues the Junkbuster tradition, but adds many refinements and
-enhancements.
+Privoxy continues the Junkbuster tradition, but adds many refinements,
+enhancements and new features.
 
 
- IMPORTANT CHANGES
+ IMPORTANT CHANGES
 ------------------
 
 NEWS! As of 03/24/02, the name of this project has been changed from ijbswa/
@@ -68,7 +69,7 @@ port is now 8118 due to conflicts with port 8000 assignment. You will need to
 change your browser if upgrading!!! And maybe firewall, etc.
 
 
- INSTALL
+ INSTALL
 --------
 
 There are several ways to install Privoxy.
@@ -106,13 +107,13 @@ Then, in either case, to build from unpacked tarball or CVS source:
 Redhat and SuSE src and binary RPMs can be built with "make redhat-dist" or "
 make suse-dist" from unpacked sources. You will need to run "autoconf;
 autoheader; ./configure" beforehand. *BSD will require gmake (from http://
-gnu.org). See the user-manual for OS/2 build instructions.
+www.gnu.org). See the user-manual for OS/2 build instructions.
 
 For binary RPM installation, and other platforms, see the user-manual as well.
 
 
- RUN
----- 
+ RUN
+---- 
 
 privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] [--user USER
 [.GROUP]] [config_file]
@@ -128,8 +129,8 @@ Or for Red Hat: /etc/rc.d/init.d/privoxy start
 Or for SuSE: /etc/rc.d/privoxy start
 
 
- CONFIGURATION
--------------- 
+ CONFIGURATION
+-------------- 
 
 See: 'config', 'default.action', and 'default.filter'. There are several
 actions files included. These are all well commented. Most of the magic is in '
@@ -151,9 +152,8 @@ All configuration files are subject to unannounced changes during the
 development process.
 
 
- DOCUMENTATION
+ DOCUMENTATION
 --------------
-
 There should be documentation in the 'doc' subdirectory, but it is not
 completed at this point. In particular, see the user-manual there, the faq, and
 those interested in Privoxy development, should look at developer-manual.
@@ -168,21 +168,21 @@ varying levels of aggressiveness.
 Included documentation may vary according to platform and packager.
 
 
- CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
+ CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
 --------------------------------------------------------------
 
 We value your feedback. However, to provide you with the best support, please
 note:
 
-  *  Use the Sourceforge Support Forum to get help:
-       
-     http://sourceforge.net/tracker/?group_id=11118&atid=211118
-       
+  *  Use the Sourceforge Support Forum to get help:
+       
+     http://sourceforge.net/tracker/?group_id=11118&atid=211118
+       
    
-  *  Submit bugs only through our Sourceforge Bug Forum:
-     
-     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-        
+  *  Submit bugs only through our Sourceforge Bug Forum:
+     
+     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+        
    
     Make sure that the bug has not already been submitted. Please try to verify
     that it is a Privoxy bug, and not a browser or site bug first. If you are
@@ -193,24 +193,28 @@ note:
     platform, browser, any pertinent log data, any other relevant details
     (please be specific) and, if possible, some way to reproduce the bug.
    
-  *  Submit feature requests only through our Sourceforge feature request 
-     forum:
-     
-     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
-       
+  *  Submit feature requests only through our Sourceforge feature request 
+     forum:
+     
+     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+       
    
-  *  For any other issues, feel free to use the mailing lists:
-     
-     http://sourceforge.net/mail/?group_id=11118.
-     
+  * We will soon have an automated way to submit advertisements, incorrectly
+    blocked images, popups and the like. Check back.
+       
+   
+  *  For any other issues, feel free to use the mailing lists:
+     
+     http://sourceforge.net/mail/?group_id=11118.
+     
    
     Anyone interested in actively participating in development and related
     discussions can also join the appropriate mailing list. Archives are
     available too.
    
- -------------------------------------------------------------------------
- ijbswa-developers@lists.sourceforge.net
- 
 
-$Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
+ -------------------------------------------------------------------------
+ ijbswa-developers@lists.sourceforge.net
+ 
 
+$Id: readme.sgml,v 1.4 2002/04/06 05:07:29 hal9 Exp $
