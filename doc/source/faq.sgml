@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.13 2002/03/17 00:22:20 hal9 Exp $
+ $Id: faq.sgml,v 1.14 2002/03/17 02:39:13 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.13 2002/03/17 00:22:20 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.14 2002/03/17 02:39:13 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -71,30 +71,36 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 <sect2 id="general"><title>General Information</title>
 
-<sect3 id="newjb"><title>What is this new <application>Junkbuster</application>?</title>
+<sect3 id="newjb"><title>What is this new version of <application>Junkbuster</application>?</title>
  <para>
-  The original <application>Junkbuster</application> was a product of 
-  Junkbusters Corporation (tm). Development of this effort stopped 
-  as of version 2.0.2. Stefan Walherr started the ijbswa project on 
-  <ulink url="http://ijbswa.sourceforge.net">Sourceforge</ulink> to 
-  rekindle development. Other developers subsequently joined with 
-  Stefan, and have since added many new features and enhancements.
+  The original <application>Internet Junkbuster</application> (tm) is a 
+  coyrighted product of <ulink url="http://www.junkbusters.com">Junkbusters
+  Corporation</ulink>. Development of this effort stopped some time ago as of
+  version 2.0.2. Stefan Walherr started the ijbswa project on <ulink
+  url="http://ijbswa.sourceforge.net">Sourceforge</ulink> to rekindle
+  development. Other developers subsequently joined with Stefan, and have
+  since added many new features, refinements and enhancements. 
  </para>
+ <para>
+  The new <application>Junkbuster</application> started with the same
+  code base, but has changed significantly at this point.
+ </para>
+
 </sect3>
 
 <sect3 id="differs"><title>How does it differ from the old <application>Junkbuster?</application></title>
  <para>
    All the old features remain. The new <application>Junkbuster</application> 
    still blocks ads and banners, still manages cookies, and protects 
-   privacy. But, these are all enhanced, and many new features have been 
+   your privacy. But, these are all enhanced, and many new features have been 
    added, all in the same vein.
  </para>
  <para>
-  The configuration has changed significantly. This is something that users
-  will notice right off the bat. The <quote>blocklist</quote> file does 
-  not exist any more. This is replaced by <quote>actions</quote>
-  files, such as <filename>ijb.actions</filename>. This is where most of 
-  the per site configuration is now.
+  The configuration has changed significantly as well. This is something that
+  users will notice right off the bat. The <quote>blocklist</quote> file does
+  not exist any more. This is replaced by <quote>actions</quote> files, such
+  as <filename>ijb.actions</filename>. This is where most of the per site
+  configuration is now.
 
  </para>
 </sect3>
@@ -205,8 +211,8 @@ Please see the Contact section in the user-manual if you want to contact the dev
 
 </sect3>
 
-<sect3 id="proxymoron"><title>How does <application>Junkbuster</application>
- work? What is a <quote>proxy</quote>?</title>
+<sect3 id="proxymoron"><title>What is a <quote>proxy</quote>? How does
+<application>Junkbuster</application> work? </title>
  <para>
   When you connect to a web site with <application>Junkbuster</application>, 
   you are really connecting to your locally running version of 
@@ -225,7 +231,7 @@ Please see the Contact section in the user-manual if you want to contact the dev
   HTTP content before it gets to your browser.
   <application>Junkbuster</application> uses various programming methods to do
   this, all of which is under your control via the various configuration
-  files.
+  files and options.
 
  </para>
 </sect3>
@@ -254,11 +260,14 @@ warranty? Registration?</title>
  <para>
   <application>Junkbuster</application> is licensed under the 
   GNU General Public License (GPL). It is free to use, copy, 
-  modify or distribute as you wish.
- </para>
+  modify or distribute as you wish under the terms of this license.
+  See <ulink
+  url="http://www.gnu.org/copyleft/gpl.html">http://www.gnu.org/copyleft/gpl.html</ulink>
+  for specifics.
+  </para>
  <para>
-  There is no warranty of any kind, expressed, implied or otherwise. That is something
-  that would cost real money ;-) There is no registration either. 
+  There is no warranty of any kind, expressed, implied or otherwise. That is
+  something that would cost real money ;-) There is no registration either.
   <application>Junkbuster</application> really is <emphasis>free</emphasis>
   in every respect!
 
@@ -685,7 +694,7 @@ more through Google.
 
 <sect3>
 <title id="sitebreak">Might some things break because header information is
-changed?</title>
+being altered?</title>
 
 <para>
  Definitely. More and more sites use HTTP header content to decide what to
@@ -707,7 +716,7 @@ changed?</title>
  operating system or browser manufacturer causes some sites in these languages
  to be garbled; Surfers to Eastern European sites should change it to
  something closer. Some page access counters work by looking at the
- <quote>REFERER</quote> header; they may fail or break if deprived. The
+ <quote>REFERER</quote> header; they may fail or break if unavailable. The
  weather maps of Intellicast have been blocked by their server when no
  <quote>REFERER</quote> or cookie is provided, is another example. There 
  are many, many other ways things can go wrong when trying to fool a 
@@ -723,8 +732,10 @@ changed?</title>
 
 </sect3>
 
+
 <sect3>
-<title id="caching">Can Junkbuster act as a <quote>caching</quote> proxy?</title>
+<title id="caching">Can Junkbuster act as a <quote>caching</quote> proxy to 
+speed up web browsing?</title>
 <para>
  No, it does not have this ability at all. You want something like 
  <ulink url="http://www.squid-cache.org/">Squid</ulink> for this. And, yes, 
@@ -733,6 +744,47 @@ changed?</title>
 </para>
 </sect3>
 
+
+<sect3>
+<title id="logo">The Junkbuster logo that replaces ads is very blocky 
+looking. Can't a better font be used?</title>
+
+<para>
+ This is not a font problem. The logo is an image that is created by 
+ <application>Junkbuster</application> on the fly. So as not waste 
+ memory, the image is rather small. The blockiness comes when the 
+ image is scaled to fill a largish area. There is not much to be done 
+ about this, other than to use one of the other
+ <quote>imageblocker</quote> directives: <emphasis>pattern</emphasis>, 
+ <emphasis>blank</emphasis>, or a URL of your chosing.
+</para>
+
+</sect3>
+
+
+<sect3>
+<title id="wasted">I have large empty spaces now where ads used to be. 
+Why does Junkbuster leave these large gaps?</title>
+<para>
+ It would be easy enough to just eliminate this space altogether, rather than
+ fill it with blank space. But, this would create problems with many pages
+ that use the overall size of the ad to help organize the page layout and 
+ hold the various components of the page where they were intended to be. It is 
+ best left this way.
+
+</para>
+
+</sect3>
+
+<!--
+<sect3>
+<title id="blank">Now I see the ugly Junkbuster logo (or checkboard pattern) in
+place of ads. How can I get rid of this? I don't want to see anything.</title>
+<para>
+</para>
+ 
+</sect3>
+-->
 </sect2>
 
 
@@ -748,7 +800,6 @@ with every web page?</title>
  Either <application>Junkbuster</application> is not running, or your 
  browser is configured for a different port than what
  <application>Junkbuster</application> is using.
-
 </para>
 
 <para>
@@ -757,8 +808,8 @@ with every web page?</title>
  with NAS (Network Audio Service), which uses port 8000. If you haven't, 
  you need to change your browser to the new port number, or alternately 
  change <application>Junkbuster's</application> <quote>listen-address</quote>
- setting in the default <filename>config</filename> file.
-
+ setting in the <filename>config</filename> file used to start 
+ <application>Junkbuster</application>.
 </para>
 
 </sect3>
@@ -767,17 +818,17 @@ with every web page?</title>
 <title id="flushit">I just added a new rule, but the steenkin ad is 
 still getting through. How?</title>
 <para>
- If the ad had been displayed before you added its URL, it
- will probably be held in cache for some time, so it will be displayed without
- the need for any request to the server. The best thing to do is try 
- flusing the browser's caches.
+ If the ad had been displayed before you added its URL, it will probably be
+ held in the browser's cache for some time, so it will be displayed without
+ the need for any request to the server. The best thing to do is try flusing
+ the browser's caches. And then try again.
 </para>
 
 <para>
- If this doesn't help, you probably don't have the configuration applied 
- incorrectly. Try pasting the full URL of the offending ad into
- <ulink url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
- and see if any actions match.
+ If this doesn't help, you probably have an error in the rule you
+ applied. Try pasting the full URL of the offending ad into <ulink
+ url="http://ijbswa.sourceforge.net/config/show-url-info">http://ijbswa.sourceforge.net/config/show-url-info</ulink>
+ and see if any actions match your new rule.
 
 </para>
 
@@ -837,6 +888,9 @@ still getting through. How?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.14  2002/03/17 02:39:13  hal9
+A little more added ...
+
 Revision 1.13  2002/03/17 00:22:20  hal9
 Adding new stuff, and trying to incorporate stuff from old faq.
 
