@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.22 2001/10/26 17:39:38 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.23 2001/10/29 03:48:10 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.22 2001/10/26 17:39:38 oes Exp 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.23  2001/10/29 03:48:10  david__schmidt
+ *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
+ *    by and __OS2__ ifdef.
+ *
  *    Revision 1.22  2001/10/26 17:39:38  oes
  *    Moved ijb_isspace and ijb_tolower to project.h
  *
@@ -736,8 +740,32 @@ char * make_path(const char * dir, const char * file)
    }
    else
    {
-      char * path = malloc(strlen(dir) + strlen(file) + 2);
+      char * path;
+
+#if defined(unix)
+      if ( *dir != '/' && basedir && *basedir )
+      {
+	      path = malloc( strlen( basedir ) + strlen(dir) + strlen(file) + 3);
+	      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+	      strcpy(path, basedir);
+	      strcat(path, "/");
+	      strcat(path, dir);
+	      DBG(1, ("make_path: path: %s\n",path) );
+      }
+      else
+      {
+	      path = malloc(strlen(dir) + strlen(file) + 2);
+	      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+	      strcpy(path, dir);
+      }
+#else
+
+      path = malloc(strlen(dir) + strlen(file) + 2);
+      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
       strcpy(path, dir);
+
+#endif /* defined unix */
+
 #ifdef _WIN32
       if(path[strlen(path)-1] != '\\')
       {

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.51 2001/10/26 17:38:28 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.52 2001/10/26 20:11:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.51 2001/10/26 17:38:28 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.52  2001/10/26 20:11:20  jongfoster
+ *    Fixing type mismatch
+ *
  *    Revision 1.51  2001/10/26 17:38:28  oes
  *    Cosmetics
  *
@@ -379,6 +382,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.51 2001/10/26 17:38:28 oes Exp $";
 # endif /* ndef __OS2__ */
 # include <sys/time.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
+
+#ifdef sun
+#include <sys/termios.h>
+#endif /* sun */
+
 # include <signal.h>
 
 # ifdef __BEOS__
@@ -399,6 +408,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.51 2001/10/26 17:38:28 oes Exp $";
 #  include <select.h>
 # endif
 
+#endif
+
+#ifdef _DEBUG
+int ldebug = 0;
 #endif
 
 #include "project.h"
@@ -448,6 +461,9 @@ static int32 server_thread(void *data);
 #define sleep(N)  DosSleep(((N) * 100))
 #endif
 
+#if defined(unix)
+const char *basedir;
+#endif /* defined unix */
 
 /* The vanilla wafer. */
 static const char VANILLA_WAFER[] =
@@ -1346,6 +1362,8 @@ int real_main(int argc, const char *argv[])
 int main(int argc, const char *argv[])
 #endif
 {
+   int 	argc_pos = 1;
+
    configfile =
 #ifdef AMIGA
    "AmiTCP:db/junkbuster/config"
@@ -1371,15 +1389,50 @@ int main(int argc, const char *argv[])
       printf(VERSION "\n");
       exit(2);
    }
+#ifdef _DEBUG
+   if ((argc >= 2) && (strcmp(argv[1], "-d")==0))
+   {
+	ldebug++;
+	argc_pos++;
+	fprintf(stderr,"debugging enabled..\n");
+   }
+#endif /* _DEBUG */
 #endif /* !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
    Argc = argc;
    Argv = argv;
 
-   if (argc > 1)
+   if (argc > argc_pos )
    {
-      configfile = argv[1];
+      configfile = argv[argc_pos];
    }
+
+#if defined(unix)
+	if ( *configfile != '/' )
+	{
+		char	*abs_file;
+
+		DBG(1, ("configfile before '%s'\n",configfile) );
+
+		/* make config-filename absolute here */	
+		if ( !(basedir = getcwd( NULL, 1024 )))
+		{
+			perror("get working dir");
+		}
+		DBG(1, ("working dir '%s'\n",basedir) );
+		if ( !(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 )))
+		{
+			perror("malloc failed");
+			exit( 1 );
+		}
+		strcpy( abs_file, basedir );
+		strcat( abs_file, "/" );
+		strcat( abs_file, configfile );
+		configfile = abs_file;
+		DBG(1, ("configfile after '%s'\n",configfile) );
+	}
+#endif /* defined unix */
+
 
    files->next = NULL;
 
@@ -1408,6 +1461,52 @@ int main(int argc, const char *argv[])
    /* Initialize the CGI subsystem */
    cgi_init_error_messages();
 
+#if defined(unix)
+{
+	pid_t	pid = 0;
+	int	fd;
+
+	/*
+	** we make us a real daemon
+	*/
+#ifdef _DEBUG
+	if ( !ldebug) 
+#endif
+		pid  = fork();
+	if ( pid < 0 )	/* error */
+	{
+		perror("fork");
+	 	exit( 3 );
+	} 
+	else if ( pid != 0 ) /* parent */
+	{
+		exit( 0 );
+	}
+	/* child */
+	setpgrp();
+	fd = open("/dev/tty", O_RDONLY);
+	if ( fd ) 
+	{
+		/* no error check here */
+		ioctl( fd, TIOCNOTTY,0 );
+		close ( fd );
+	}
+	/* should close stderr (fd 2) here too, but the test for existence
+	** and load config file is done in listen_loop() and puts
+	** some messages on stderr there.
+	*/
+#ifdef _DEBUG
+	if ( !ldebug ) 
+		close( 0 ); close( 1 ); 
+#else
+	close( 0 ); close( 1 ); 
+#endif /* _DEBUG */
+	chdir("/");
+
+}
+#endif /* defined unix */
+
+   DBG(1, ("call listen_loop() \n") );
    listen_loop();
 
    /* NOTREACHED */

@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.5 2001/07/29 19:32:00 jongfoster Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.6 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,12 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.6  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.5  2001/07/29 19:32:00  jongfoster
  *    Renaming _main() [mingw32 only] to real_main(), for ANSI compliance.
  *
@@ -64,7 +70,6 @@ extern "C" {
 
 struct client_state;
 struct file_list;
-
 
 /* Global variables */
 

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.24 2001/10/23 21:40:30 jongfoster Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.25 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.24 2001/10/23 21:40:30 jongfoster
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.25  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.24  2001/10/23 21:40:30  jongfoster
  *    Added support for enable-edit-actions and enable-remote-toggle config
  *    file options.
@@ -425,6 +431,7 @@ struct configuration_spec * load_config(void)
    struct client_state * fake_csp;
    struct file_list *fs;
 
+   DBG(1, ("load_config() entered..\n") );
    if (!check_file_changed(current_configfile, configfile, &fs))
    {
       /* No need to load */
@@ -436,7 +443,9 @@ struct configuration_spec * load_config(void)
                 configfile);
    }
 
+   /*
    log_error(LOG_LEVEL_INFO, "loading configuration file '%s':", configfile);
+   */
 
 #ifdef FEATURE_TOGGLE
    g_bToggleIJB      = 1;
@@ -924,7 +933,7 @@ struct configuration_spec * load_config(void)
  ****************************************************************************/
          case hash_logdir :
             freez(config->logdir);
-            config->logdir = strdup(arg);
+            config->logdir = make_path(NULL, arg);
             continue;
 
 /****************************************************************************
