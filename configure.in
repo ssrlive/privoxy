@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.27 2002/01/10 12:35:18 oes Exp $
+dnl $Id: configure.in,v 1.28 2002/02/27 15:02:38 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 the SourceForge
 dnl IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.28  2002/02/27 15:02:38  oes
+dnl Incremented version number
+dnl
 dnl Revision 1.27  2002/01/10 12:35:18  oes
 dnl Added cross-compile defaults to the AC_CHECK_SIZEOF macros
 dnl to silence autoconf warnings. Numbers are for Intel/Linux.
@@ -228,7 +231,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.27 $)
+AC_REVISION($Revision: 1.28 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
@@ -430,6 +433,9 @@ dnl =================================================================
 dnl Support for thread-safe versions of gethostbyaddr, gethostbyname,
 dnl gmtime and localtime
 dnl =================================================================
+
+dnl Next line needed to find the gethost*_r functions on Solaris
+AC_CHECK_LIB(nsl, gethostbyname)
 
 AC_CHECK_FUNC(gethostbyaddr_r, [
   AC_MSG_CHECKING([signature of gethostbyaddr_r])
