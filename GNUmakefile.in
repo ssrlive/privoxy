@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.95 2002/04/27 15:37:25 swa Exp $
+# $Id: GNUmakefile.in,v 1.96 2002/04/27 17:44:32 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -347,15 +347,15 @@ redhat-upload: check-release
 # suse distribution. works fine. no need to be root. 
 #############################################################################
 suse-dist: rpm-stuff
-	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-              privoxy-suse.spec > $$TMPFILE ; then \
-	$(MV) -f $$TMPFILE privoxy-suse.spec; \
-	else \
-		$(ECHO) "Could not set version info in specfile."; \
-	exit 1;\
-	fi
+# 	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+# 	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+#              -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
+#               privoxy-suse.spec > $$TMPFILE ; then \
+# 	$(MV) -f $$TMPFILE privoxy-suse.spec; \
+# 	else \
+# 		$(ECHO) "Could not set version info in specfile."; \
+# 	exit 1;\
+# 	fi
 
 	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
 	$(RPM) --clean -ta  $(TAR_ARCH)
@@ -844,6 +844,11 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.96  2002/04/27 17:44:32  morcego
+# - Correcting typo in my name (Rodrigo, not Rodgrigo) :-)
+# - Using the RM macro everywhere rm is called (either we use, or don't)
+# - Same for RPM
+#
 # Revision 1.95  2002/04/27 15:37:25  swa
 # replacing directory in document creation process
 # no longer necessary.
