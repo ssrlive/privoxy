@@ -8,9 +8,12 @@
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.22 2002/04/11 10:11:04 oes Exp $
+  $Id: index.php,v 1.23 2002/04/13 14:13:19 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.23  2002/04/13 14:13:19  oes
+  Require exact AF version; Added hint where to go for BRs, FRs and SRs
+
   Revision 1.22  2002/04/11 10:11:04  oes
   Actionsfile Version 1.2
 
@@ -280,7 +283,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
     </p>
     <p>
      Please right-click the following link and choose "Add to Favorites" (IE) or "Add Bookmark for Link" (Netscape): 
-     <a href="<?php echo($bookmarklet); ?>">Privoxy-Submit</a>
+     <a href="<?php echo($bookmarklet); ?>">Privoxy - Submit Filter Feedback</a>
     </p>
 
     <p>
