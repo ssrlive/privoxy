@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.15 2002/03/17 07:25:59 hal9 Exp $
+ $Id: faq.sgml,v 1.16 2002/03/17 21:32:56 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -20,7 +20,7 @@
 <artheader>
 <title>Junkbuster Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.15 2002/03/17 07:25:59 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.16 2002/03/17 21:32:56 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -280,6 +280,7 @@ warranty? Registration?</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2 id="installation"><title>Installation</title>
+
 <sect3 id="newinstall"><title>Can I install the new 
  <application>Junkbuster</application> over the old one?</title>
  <para>
@@ -290,23 +291,24 @@ warranty? Registration?</title>
  </para>
  <para>
   See the user-manual for platform specific installation instructions.
-  [FIXME: This is meant for after the name change!]
+  [FIXME: This is meant for after the name change for 3.0!]
  </para>
  
 </sect3>
 
 <sect3>
-<title id="nothing">I just installed Junkbuster, and nothing is happening.
-All the ads are there. What's wrong?</title>
+<title id="firststep">I just installed Junkbuster. Is there anything 
+special I have to do now?</title>
 
 <para>
- Did you configure your browser to use <application>Junkbuster</application> 
- as a proxy? It does not sound like it. See below. You might also try flushing
- the browser's caches to force a full re-reading of pages.
+ All browsers must be told to use <application>Junkbuster</application> 
+ as a proxy by specifying the correct proxy address and port number 
+ in the appropriate configuration area for the browser. See below.
 
 </para>
 
 </sect3>
+
 
 <sect3 id="localhost"><title>What is the proxy address of Junkbuster?</title>
  <para>
@@ -340,6 +342,26 @@ All the ads are there. What's wrong?</title>
  </para>
 </sect3>
 
+<sect3>
+<title id="nothing">I just installed Junkbuster, and nothing is happening.
+All the ads are there. What's wrong?</title>
+
+<para>
+ Did you configure your browser to use <application>Junkbuster</application> 
+ as a proxy? It does not sound like it. See above. You might also try flushing
+ the browser's caches to force a full re-reading of pages. You can verify 
+ that <application>Junkbuster</application> is running, and your browser 
+ is correctly configured by entering the special URL: 
+ <ulink url="http://i.j.b/">http://i.j.b/</ulink>. This should give you 
+ a banner that says <quote>This is the Internet JUNKBUSTER</quote> and 
+ access to <application>Junkbuster's</application> internal configuration. 
+ If you see this, then you are good to go. If not, the browser or 
+ <application>Junkbuster</application> are not set up correctly.
+
+</para>
+
+</sect3>
+
 </sect2>
 
 
@@ -349,10 +371,64 @@ All the ads are there. What's wrong?</title>
 
 <sect3 id="newconfig"><title>Can I use my old config files?</title>
  <para>
-   No. These will not work. You will need to re-enter your old 
-   data into the new configuration structure.
+   There are major changes to <application>Junkbuster</application> 
+   configuration from version 2.0.x to 2.9.x and later. The older files will
+   not work at all. If this is the case, you will need to re-enter your old
+   data into the new configuration structure. This is probably also a good 
+   recommendation even if upgrading from 2.9.x to 3.x since there were 
+   many minor changes along the way.
  </para>
 </sect3>
+
+<sect3>
+<title id="actionsfile">What is an <quote>actions</quote> file?</title>
+
+<para>
+ <quote>actions</quote> files are where various actions that
+ <application>Junkbuster</application> might take, are configured. 
+ Typically, you would define a set of default actions that apply 
+ to all URLs, then add exceptions to these defaults.
+</para>
+ 
+<para>
+ Actions can be defined on a per site basis, or for groups of sites. Actions
+ can also be grouped together and then applied to one or more sites. There
+ are many possible actions that might apply to any given site. As an example,
+ if we are blocking cookies as one of our default
+ <application>actions</application>, but need to accept cookies from a given
+ site, we would define this in our <quote>actions</quote> file.
+
+</para>
+
+<para>
+ <application>Junkbuster</application> comes with several default
+ <application>actions</application> files, with varying degrees 
+ of filtering and blocking, as starting points for your own 
+ configuration (see below).
+</para>
+
+</sect3>
+
+
+<sect3>
+<title id="actconfig">How are actions files configured? What is the easiest
+way to do this?</title> 
+
+<para>
+ The easiest way to do this, is to access <application>Junkbuster</application>
+ with your web browser at <ulink url="http://i.j.b/">http://i.j.b/</ulink>, 
+ and then select 
+ "<ulink url="http://ijbswa.sourceforge.net/config/edit-actions">Edit the actions list</ulink>"
+ from the selection list. You can also do this by editing the appropriate 
+ file with a text editor.
+</para>
+
+<para>
+ Please see the user-manual for a detailed explanation of these and other
+ configuration files, and their various options and syntax.
+</para>
+</sect3>
+
 
 <!--
 FIXME: Commenting these out until we have some data there. HB 03/17/02.
@@ -545,6 +621,33 @@ enabling/disabling of JunkBuster.
 Note that normally only local users can connect to JunkBuster, so this is not
 (normally) a security problem.
  </para>
+</sect3>
+
+<sect3>
+<title id="lanconfig">How can I set up Junkbuster to act as a proxy for my 
+ LAN?</title>
+<para>
+ By default, <application>Junkbuster</application> only responds to requests 
+ from localhost. To have it act as a server for a network, this needs to be 
+ changed in the main config file where the <application>Junkbuster</application>
+ configuration is located. In that file is a <quote>listen-address</quote> 
+ option. It may be commented out with a <quote>#</quote> symbol. Make sure 
+ it is uncommented, and assign it the address of the LAN gateway interface, 
+ and port number to use:
+</para>
+
+<para>
+ <screen>
+  listen-address  192.168.1.1:8118
+ </screen>
+</para>
+
+<para>
+ Save the file, and restart <application>Junkbuster</application>. Configure 
+ all browsers on the network then to use this address and port number.
+
+</para>
+
 </sect3>
 
 </sect2>
@@ -785,9 +888,9 @@ Why does Junkbuster leave these large gaps?</title>
 <para>
  It would be easy enough to just eliminate this space altogether, rather than
  fill it with blank space. But, this would create problems with many pages
- that use the overall size of the ad to help organize the page layout and 
- hold the various components of the page where they were intended to be. It is 
- best left this way.
+ that use the overall size of the ad to help organize the page layout and
+ position the various components of the page where they were intended to be.
+ It is best left this way.
 
 </para>
 
@@ -805,10 +908,12 @@ secure is it? Do I need to take any special precautions?</title>
  from <quote>localhost</quote>. It is not itself directly exposed to the
  Internet in this configuration. If you want to have
  <application>Junkbuster</application> serve as a LAN proxy, this will have to
- be opened up to allow for external requests. In this case, we'd recommend
- that the port used by <application>Junkbuster</application> (default is
- 8118), be firewalled from outside (Internet) connections. Better safe than 
- sorry.
+ be opened up to allow for LAN requests. In this case, we'd recommend
+ you specify only the LAN gateway address, e.g. 192.168.1.1 in the main 
+ <application>Junkbuster</application> config file. All LAN hosts can then use 
+ this as their proxy address in the browser proxy configuration. In this way, 
+ <application>Junkbuster</application> will not listen on any external ports.
+ Of course, a firewall is always good too. Better safe than sorry.
 
 </para>
 
@@ -962,6 +1067,9 @@ What can I do?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.16  2002/03/17 21:32:56  hal9
+A few more additions.
+
 Revision 1.15  2002/03/17 07:25:59  hal9
 Correcting some of my typos, and some additions.
 
