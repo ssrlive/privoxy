@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.58 2002/04/04 06:32:58 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.59 2002/04/04 08:32:45 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -599,21 +599,30 @@ redhat-readme: doc/source/ldpOK.dsl
 # moves dokumentation to webserver
 #
 #############################################################################
-webserver:
+webserver: tidy
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) You have run make dok/redhat-dok before, right?
 	@$(ECHO) Note that this command scps all stuff to the webserver,
 	@$(ECHO) it will not remove obsolete documents.
 	@$(ECHO) -------------------------------------------------------
-	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-	@$(ECHO) Fixing permissions
-	@ssh ijbswa.sourceforge.net chmod -R g+rw /home/groups/i/ij/ijbswa/htdocs/ 2> /dev/null
 
-webquick:
-	cd doc/webserver/actions && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/actions
-	@$(ECHO) Fixing permissions
-	@ssh ijbswa.sourceforge.net chmod -R g+rw /home/groups/i/ij/ijbswa/htdocs/actions 2> /dev/null
+	@$(ECHO) Uploading 
+	@cd doc/webserver; \
+          upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
+          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xv'
 
+	@$(ECHO) Fixing permissions
+	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/* -type d | xargs chmod 775 2>/dev/null'
+	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/* -type f | xargs chmod 664 2>/dev/null'
+
+web-actions: tidy
+	@$(ECHO) Uploading 
+	@cd doc/webserver/actions; \
+          upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
+          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xv'
+
+	@$(ECHO) Fixing permissions
+	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/* -type f | xargs chmod 664 2>/dev/null'	
 
 #############################################################################
 # Source file dependencies
@@ -682,8 +691,11 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) `find . -iname TAGS`
 
-clobber:
-	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *~ *.tar.gz *.tar \#*\#
+tidy:
+	$(RM) `find . -name "*~" -o -name "#*#"`
+
+clobber: tidy
+	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile privoxy.log core *.tar.gz *.tar
 #
 # FIXME: What is all this? 
 #
@@ -721,6 +733,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.59  2002/04/04 08:32:45  swa
+# wrong name for tarball-dist target. further fixed content of tarball dist
+#
 # Revision 1.58  2002/04/04 06:32:58  hal9
 # New dok targets for make readme.
 #
