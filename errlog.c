@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.18 2001/09/10 11:27:24 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.19 2001/09/13 20:08:06 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.18 2001/09/10 11:27:24 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.19  2001/09/13 20:08:06  jongfoster
+ *    Adding support for LOG_LEVEL_CGI
+ *
  *    Revision 1.18  2001/09/10 11:27:24  oes
  *    Declaration of w32_socket_strerr now conditional
  *
@@ -368,7 +371,7 @@ void log_error(int loglevel, char *fmt, ...)
          break;
 #endif /* def FEATURE_KILL_POPUPS */
       case LOG_LEVEL_CGI:
-         outc = sprintf(outbuf, "IJB(%d) CGI: ", this_thread);
+         outc = sprintf(outbuf, "IJB(%ld) CGI: ", this_thread);
          break;
       default:
          outc = sprintf(outbuf, "IJB(%ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
