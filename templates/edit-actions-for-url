@@ -32,6 +32,15 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.32  2004/10/05 02:03:19  david__schmidt
+#    Add the ability to check jpeg images for invalid
+#    lengths of comment blocks.  Defensive strategy
+#    against the exploit:
+#    Microsoft Security Bulletin MS04-028
+#       Buffer Overrun in JPEG Processing (GDI+) Could
+#       Allow Code Execution (833987)
+#    Enabled with +inspect-jpegs in actions files.
+#
 #    Revision 1.31  2003/09/22 00:33:01  david__schmidt
 #    Enable sending a custom 'blocked' image.  Shows up as
 #    "image-blocker-custom-file" parameter in config, and
@@ -675,13 +684,13 @@ function show_send_wafer_opts(tf)
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="inspect-jpegs" value="Y" @inspect-jpegs-y@
+        name="inspect_jpegs" value="Y" @inspect-jpegs-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="inspect-jpegs" value="N" @inspect-jpegs-n@
+        name="inspect_jpegs" value="N" @inspect-jpegs-n@
         ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="inspect-jpegs" value="X" @inspect-jpegs-x@
+        name="inspect_jpegs" value="X" @inspect-jpegs-x@
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@INSPECT-JPEGS">inspect-jpegs</a></td>
       <td>Checks jpeg images for malicious content.</td>
