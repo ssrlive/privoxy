@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.3 2002/03/24 12:44:31 swa Exp $
+# $Id: privoxy-suse.spec,v 1.4 2002/03/24 12:56:21 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -199,6 +199,7 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc README.gz AUTHORS.gz ChangeLog.gz
 %doc doc/webserver/developer-manual doc/webserver/user-manual
 %doc doc/webserver/user-manual
+%doc doc/webserver/faq
 %doc doc/webserver/ijb_docs.css
 #%doc privoxy.weekly privoxy.monthly AUTHORS
 %dir %{ijbconf}
@@ -214,6 +215,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Sun Mar 24 2002 Hal Burgiss <hal@foobox.net>
+- added faq to docs.
+
 * Thu Mar 21 2002 Hal Burgiss <hal@foobox.net>
 - added ijb_docs.css to docs.
 
@@ -283,6 +287,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.4  2002/03/24 12:56:21  swa
+# name change related issues.
+#
 # Revision 1.3  2002/03/24 12:44:31  swa
 # new version string
 #

@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.9 2002/03/24 22:03:22 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.10 2002/03/24 22:16:14 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # PRIVOXY team.  http://ijbswa.sourceforge.net
@@ -33,7 +33,7 @@
 
 Name: privoxy
 Version: 2.9.13
-Release: 2
+Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Vendor: http://ijbswa.sourceforge.net
@@ -201,6 +201,7 @@ fi
 %doc doc/text/developer-manual.txt doc/text/user-manual.txt
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
+%doc doc/webserver/faq
 %doc doc/webserver/ijb_docs.css
 
 %dir %{privoxyconf}
@@ -520,6 +521,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.10  2002/03/24 22:16:14  morcego
+# Just removing some old commentaries.
+#
 # Revision 1.9  2002/03/24 22:03:22  morcego
 # Should be working now. See %changelog for details
 #
