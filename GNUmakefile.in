@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.47 2002/03/30 09:05:21 swa Exp $
+# $Id: GNUmakefile.in,v 1.48 2002/03/30 19:04:06 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -113,13 +113,15 @@ RPM_BASE = @RPM_BASE@
 #############################################################################
 # take care that no CVS .cvsignore or other crappy files
 # are included here
+# and escape every '#' in the find. doh.
 CONFIG_FILES = config trust \
 		default.action \
 		basic.action intermediate.action advanced.action \
 		default.filter \
-		`find templates/ -type f | grep -v "CVS" | grep -v "\.#" | grep -v ".*~" | grep -v ".cvsignore" | grep - v "TAGS"` 
+		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"`
+
 DOC_FILES = AUTHORS LICENSE README ChangeLog \
-	`find doc/text/ -type f | grep -v "CVS" | grep -v "\.#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` privoxy.1
+		`find doc/text/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` privoxy.1
 
 #############################################################################
 # Filenames and libraries
@@ -347,23 +349,23 @@ gen-dist:
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	cd .. && $(TAR) -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM)
+	(cd .. && $(TAR) -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done; 
 # add documentation
 	for foo in $(DOC_FILES); do \
-		cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo; \
-	done; 
+		(cd .. && $(TAR) -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+	done;
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
-	$(GZIP_PROG) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
+	$(GZIP_PROG) ../privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar
 	@$(ECHO) Distribution with binary created.
 
 # anonymously ncftps the package to sourceforge
 gen-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming ../privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
 	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
@@ -680,6 +682,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.48  2002/03/30 19:04:06  swa
+# people release differently. no good.
+# I want to make parts of the docs only.
+#
 # Revision 1.47  2002/03/30 09:05:21  swa
 # better packaging. better rpm building.
 # tar failed on sun (no exclude there).
