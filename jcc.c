@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.88 2002/03/27 14:32:43 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.89 2002/03/31 17:18:59 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.88 2002/03/27 14:32:43 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.89  2002/03/31 17:18:59  jongfoster
+ *    Win32 only: Enabling STRICT to fix a VC++ compile warning.
+ *
  *    Revision 1.88  2002/03/27 14:32:43  david__schmidt
  *    More compiler warning message maintenance
  *
@@ -964,19 +967,15 @@ static void chat(struct client_state *csp)
    enlist(csp->headers, http->cmd);
 
 
-#ifdef FEATURE_COOKIE_JAR
    /*
-    * If we're logging cookies in a cookie jar, and the user has not
-    * supplied any wafers, and the user has not told us to suppress the
-    * vanilla wafer, then send the vanilla wafer.
+    * If the user has not supplied any wafers, and the user has not
+    * told us to suppress the vanilla wafer, then send the vanilla wafer.
     */
-   if ((csp->config->jarfile != NULL)
-       && list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
+   if (list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
        && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
    {
       enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
    }
-#endif /* def FEATURE_COOKIE_JAR */
 
 
 #ifdef FEATURE_KILL_POPUPS
