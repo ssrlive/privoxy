@@ -1,4 +1,4 @@
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
 <!entity % dummy "INCLUDE"> 
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
@@ -11,7 +11,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.16 2002/03/31 23:04:40 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -25,7 +25,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.16 2002/03/31 23:04:40 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -95,10 +95,13 @@
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="quickstart"><title>Quickstart to Privoxy Development</title>
     <para>
-You'll need an account on Sourceforge to support our development. Mail your ID
-to the list and wait until a project manager has added you.
+You'll need an account on <ulink
+url="http://sourceforge.net">Sourceforge</ulink> to support our development.
+Mail your ID to the list and wait until a project manager has added you.
+</para>
 
-For the time beeing (read, this section is under construction), please note the
+<para>
+For the time being (read, this section is under construction), please note the
 following guidelines for changing stuff in the code. If it is
 	<orderedlist numeration="arabic">
        	        <listitem><para>
@@ -117,8 +120,8 @@ following guidelines for changing stuff in the code. If it is
 	        A major redesign of some part of the code: ask the list
                 </para></listitem>
         </orderedlist>	
-</para>		
-  </sect1>	
+ </para>		
+</sect1>	
 	
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="documentation"><title>Documentation Guidelines</title>
@@ -1309,7 +1312,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.16 2002/03/31 23:04:40 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1369,7 +1372,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.16 2002/03/31 23:04:40 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.17 2002/04/03 01:21:17 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2073,6 +2076,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.17  2002/04/03 01:21:17  hal9
+  Implementing Andreas's suggestions for Release sections.
+
   Revision 1.16  2002/03/31 23:04:40  hal9
   Fleshed out the doc section, and added something for an intro so it was not
   blank.
