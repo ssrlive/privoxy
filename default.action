@@ -1,8 +1,8 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/basic.action,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: basic.action,v 1.3 2002/03/26 22:29:54 swa Exp $
+#  $Id: default.action,v 1.5 2002/03/27 15:30:26 swa Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -210,7 +210,7 @@
 #    The +fast-redirects option enables interception of these requests
 #    by junkbuster, who will cut off all but the last valid URL in the
 #    request and send a local redirect back to your browser without
-#    contacting the remote site.
+#    contacting the intermediate sites.
 #
 # +filter{name}
 #    Filter the website through one or more regular expression filters.
