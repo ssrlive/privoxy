@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v ???? $";
+const char actions_rcs[] = "$Id: actions.c,v 1.1 2001/05/31 21:16:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v ???? $";
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.1  2001/05/31 21:16:46  jongfoster
+ *    Moved functions to process the action list into this new file.
+ *
  *
  *********************************************************************/
 
@@ -126,40 +129,6 @@ static const struct action_name action_names[] =
 #undef DEFINE_ACTION_BOOL
 #undef DEFINE_ACTION_ALIAS
 
- /*
-   { "+add-header",        ACTION_MASK_ALL, 0,                      AV_ADD_MULTI,  ACTION_MULTI_ADD_HEADER },
-   { "+block",             ACTION_MASK_ALL, ACTION_BLOCK           },
-   { "+fast-redirects",    ACTION_MASK_ALL, ACTION_FAST_REDIRECTS  },
-   { "+filter",            ACTION_MASK_ALL, ACTION_FILTER          },
-   { "+hide-forwarded",    ACTION_MASK_ALL, ACTION_HIDE_FORWARDED  },
-   { "+hide-from",         ACTION_MASK_ALL, ACTION_HIDE_FROM,       AV_ADD_STRING, ACTION_STRING_FROM       },
-   { "+hide-referer",      ACTION_MASK_ALL, ACTION_HIDE_REFERER,    AV_ADD_STRING, ACTION_STRING_REFERER    },
-   { "+hide-referrer",     ACTION_MASK_ALL, ACTION_HIDE_REFERER,    AV_ADD_STRING, ACTION_STRING_REFERER    },
-   { "+hide-user-agent",   ACTION_MASK_ALL, ACTION_HIDE_USER_AGENT, AV_ADD_STRING, ACTION_STRING_USER_AGENT },
-   { "+image",             ACTION_MASK_ALL, ACTION_IMAGE           },
-   { "+no-cookies-read",   ACTION_MASK_ALL, ACTION_NO_COOKIE_READ  },
-   { "+no-cookies-set",    ACTION_MASK_ALL, ACTION_NO_COOKIE_SET   },
-   { "+no-popup",          ACTION_MASK_ALL, ACTION_NO_POPUPS       },
-   { "+no-popups",         ACTION_MASK_ALL, ACTION_NO_POPUPS       },
-   { "+vanilla-wafer",     ACTION_MASK_ALL, ACTION_VANILLA_WAFER   },
-   { "+wafer",             ACTION_MASK_ALL, 0,                      AV_ADD_MULTI,  ACTION_MULTI_WAFER },
-   { "-add-header",        ACTION_MASK_ALL,         0, AV_REM_MULTI,  ACTION_MULTI_ADD_HEADER },
-   { "-block",             ~ACTION_BLOCK,           0 },
-   { "-fast-redirects",    ~ACTION_FAST_REDIRECTS,  0 },
-   { "-filter",            ~ACTION_FILTER,          0 },
-   { "-hide-forwarded",    ~ACTION_HIDE_FORWARDED,  0 },
-   { "-hide-from",         ~ACTION_HIDE_FROM,       0, AV_REM_STRING, ACTION_STRING_FROM       },
-   { "-hide-referer",      ~ACTION_HIDE_REFERER,    0, AV_REM_STRING, ACTION_STRING_REFERER    },
-   { "-hide-referrer",     ~ACTION_HIDE_REFERER,    0, AV_REM_STRING, ACTION_STRING_REFERER    },
-   { "-hide-user-agent",   ~ACTION_HIDE_USER_AGENT, 0, AV_REM_STRING, ACTION_STRING_USER_AGENT },
-   { "-image",             ~ACTION_IMAGE,           0 },
-   { "-no-cookies-read",   ~ACTION_NO_COOKIE_READ,  0 },
-   { "-no-cookies-set",    ~ACTION_NO_COOKIE_SET,   0 },
-   { "-no-popup",          ~ACTION_NO_POPUPS,       0 },
-   { "-no-popups",         ~ACTION_NO_POPUPS,       0 },
-   { "-vanilla-wafer",     ~ACTION_VANILLA_WAFER,   0 },
-   { "-wafer",             ACTION_MASK_ALL,         0, AV_REM_MULTI,  ACTION_MULTI_WAFER },
-*/
    { NULL, 0, 0 } /* End marker */
 };
 
@@ -637,26 +606,7 @@ char * actions_to_text(struct action_spec *action)
 #undef DEFINE_ACTION_STRING
 #undef DEFINE_ACTION_BOOL
 #undef DEFINE_ACTION_ALIAS
-/*   
-   ACTION_MULTI_TO_TEXT (                        "add-header",      ACTION_MULTI_ADD_HEADER)
-   ACTION_TO_TEXT       (ACTION_BLOCK,           "block");
-   ACTION_TO_TEXT       (ACTION_FAST_REDIRECTS,  "fast-redirects");
-   ACTION_TO_TEXT       (ACTION_FILTER,          "filter");
-   ACTION_TO_TEXT       (ACTION_HIDE_FORWARDED,  "hide-forwarded");
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_FROM,       "hide-from",       ACTION_STRING_FROM);
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_REFERER,    "hide-referer",    ACTION_STRING_REFERER);
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_USER_AGENT, "hide-user-agent", ACTION_STRING_USER_AGENT);
-   ACTION_TO_TEXT       (ACTION_IMAGE,           "image");
-   ACTION_TO_TEXT       (ACTION_NO_COOKIE_READ,  "no-cookies-read");
-   ACTION_TO_TEXT       (ACTION_NO_COOKIE_SET,   "no-cookies-set");
-   ACTION_TO_TEXT       (ACTION_NO_POPUPS,       "no-popups");
-   ACTION_TO_TEXT       (ACTION_VANILLA_WAFER,   "vanilla-wafer");
-   ACTION_MULTI_TO_TEXT (                        "wafer",           ACTION_MULTI_WAFER);
 
-#undef ACTION_TO_TEXT
-#undef ACTION_STRING_TO_TEXT
-#undef ACTION_MULTI_TO_TEXT
-*/
    return result;
 }
 
@@ -726,27 +676,7 @@ char * current_action_to_text(struct current_action_spec *action)
 #undef DEFINE_ACTION_STRING
 #undef DEFINE_ACTION_BOOL
 #undef DEFINE_ACTION_ALIAS
-/*   
 
-   ACTION_MULTI_TO_TEXT (                        "add-header",      ACTION_MULTI_ADD_HEADER)
-   ACTION_TO_TEXT       (ACTION_BLOCK,           "block");
-   ACTION_TO_TEXT       (ACTION_FAST_REDIRECTS,  "fast-redirects");
-   ACTION_TO_TEXT       (ACTION_FILTER,          "filter");
-   ACTION_TO_TEXT       (ACTION_HIDE_FORWARDED,  "hide-forwarded");
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_FROM,       "hide-from",       ACTION_STRING_FROM);
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_REFERER,    "hide-referer",    ACTION_STRING_REFERER);
-   ACTION_STRING_TO_TEXT(ACTION_HIDE_USER_AGENT, "hide-user-agent", ACTION_STRING_USER_AGENT);
-   ACTION_TO_TEXT       (ACTION_IMAGE,           "image");
-   ACTION_TO_TEXT       (ACTION_NO_COOKIE_READ,  "no-cookies-read");
-   ACTION_TO_TEXT       (ACTION_NO_COOKIE_SET,   "no-cookies-set");
-   ACTION_TO_TEXT       (ACTION_NO_POPUPS,       "no-popups");
-   ACTION_TO_TEXT       (ACTION_VANILLA_WAFER,   "vanilla-wafer");
-   ACTION_MULTI_TO_TEXT (                        "wafer",           ACTION_MULTI_WAFER);
-
-#undef ACTION_TO_TEXT
-#undef ACTION_STRING_TO_TEXT
-#undef ACTION_MULTI_TO_TEXT
-*/
    return result;
 }
 
