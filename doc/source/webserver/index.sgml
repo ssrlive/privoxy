@@ -19,9 +19,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.3 2002/04/07 20:27:18 hal9 Exp $
+ $Id: index.sgml,v 1.4 2002/04/08 20:42:07 swa Exp $
 
- Written by and Copyright (C) 2001 the SourceForge
+ Written by and Copyright (C) 2001, 2002 the SourceForge
  Privoxy team. http://www.privoxy.org/
 
  Based on the Internet Junkbuster originally written
@@ -73,8 +73,8 @@
 <!-- end boilerplate -->
 </sect1>
 
-<sect1 id="moreinfos" label="">
-<title>More infos</title>
+<sect1 id="moreinfo" label="">
+<title>More info</title>
 <para>
 <itemizedlist>
 	<listitem>
@@ -200,6 +200,9 @@ page</ulink> on Sourceforge
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.4  2002/04/08 20:42:07  swa
+ fixed JB spelling
+
  Revision 1.3  2002/04/07 20:27:18  hal9
  Fix meta data.
 
