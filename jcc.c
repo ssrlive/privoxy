@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.56 2001/11/13 20:20:54 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.57 2001/11/16 00:47:43 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.56 2001/11/13 20:20:54 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.57  2001/11/16 00:47:43  jongfoster
+ *    Changing the tty-disconnection code to use setsid().
+ *
  *    Revision 1.56  2001/11/13 20:20:54  jongfoster
  *    Tabs->spaces, fixing a bug with missing {} around an if()
  *
@@ -1389,7 +1392,7 @@ int main(int argc, const char *argv[])
 #elif !defined(_WIN32)
    "config"
 #else
-   "junkbstr.txt"
+   "config.txt"
 #endif
       ;
 

@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.16 2001/08/01 19:58:12 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.17 2001/11/16 00:46:31 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.16 2001/08/01 19:58:12 jongfoster E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.17  2001/11/16 00:46:31  jongfoster
+ *    Fixing compiler warnings
+ *
  *    Revision 1.16  2001/08/01 19:58:12  jongfoster
  *    Fixing documentation filenames in help menu, and making status
  *    option work without needing the "Junkbuster Status.URL" file.
@@ -962,7 +965,7 @@ void ShowLogWindow(BOOL bShow)
 *        from ShellExecute??
  *
  * Parameters  :
- *          1  :  filename = filename from the config (aka junkbstr.txt) file.
+ *          1  :  filename = filename from the config (aka config.txt) file.
  *
  * Returns     :  N/A
  *
