@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.59 2002/04/05 15:51:51 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.60 2002/04/08 20:50:25 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.59 2002/04/05 15:51:51 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.60  2002/04/08 20:50:25  swa
+ *    fixed JB spelling
+ *
  *    Revision 1.59  2002/04/05 15:51:51  oes
  *     - added send-stylesheet CGI
  *     - bugfix: error-pages now get correct request protocol
@@ -944,9 +947,9 @@ jb_err cgi_error_no_template(struct client_state *csp,
       "<p>Privoxy encountered an error while processing your request:</p>\r\n"
       "<p><b>Could not load template file <code>";
    static const char body_suffix[] =
-      "</code></b></p>\r\n"
+      "</code> or one of it's included components.</b></p>\r\n"
       "<p>Please contact your proxy administrator.</p>\r\n"
-      "<p>If you are the proxy administrator, please put the required file "
+      "<p>If you are the proxy administrator, please put the required file(s)"
       "in the <code><i>(confdir)</i>/templates</code> directory.  The "
       "location of the <code><i>(confdir)</i></code> directory "
       "is specified in the main Privoxy <code>config</code> "
@@ -1248,13 +1251,16 @@ void free_http_response(struct http_response *rsp)
  *
  * Description :  CGI support function that loads a given HTML
  *                template from the confdir, ignoring comment
- *                lines. 
+ *                lines and following #include statements up to
+ *                a depth of 1.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  template_ptr = Destination for pointer to loaded
  *                               template text.
  *          3  :  template = name of the HTML template to be used
+ *          4  :  recursive = Flag set if this function calls itself
+ *                            following an #include statament
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out-of-memory error.  
@@ -1262,11 +1268,13 @@ void free_http_response(struct http_response *rsp)
  *
  *********************************************************************/
 jb_err template_load(struct client_state *csp, char **template_ptr, 
-                     const char *templatename)
+                     const char *templatename, int recursive)
 {
+   jb_err err;
    char *templates_dir_path;
    char *full_path;
    char *file_buffer;
+   char *included_module;
    FILE *fp;
    char buf[BUFFER_SIZE];
 
@@ -1310,15 +1318,35 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
    free(full_path);
 
    /* 
-    * Read the file, ignoring comments.
+    * Read the file, ignoring comments, and honring #include
+    * statements, unless we're already called recursively.
     *
     * FIXME: The comment handling could break with lines >BUFFER_SIZE long.
     *        This is unlikely in practise.
     */
    while (fgets(buf, BUFFER_SIZE, fp))
    {
+      if (!recursive && !strncmp(buf, "#include ", 9))
+      {
+         if (JB_ERR_OK != (err = template_load(csp, &included_module, chomp(buf + 9), 1)))
+         {
+            free(file_buffer);
+            return err;
+         }
+
+         if (string_append(&file_buffer, included_module))
+         {
+            fclose(fp);
+            free(included_module);
+            return JB_ERR_MEMORY;
+         }
+
+         free(included_module);
+         continue;
+      }
+
       /* skip lines starting with '#' */
-      if(*buf == '#')
+      if (*buf == '#')
       {
          continue;
       }
@@ -1478,7 +1506,7 @@ jb_err template_fill_for_cgi(struct client_state *csp,
    assert(exports);
    assert(rsp);
 
-   err = template_load(csp, &rsp->body, templatename);
+   err = template_load(csp, &rsp->body, templatename, 0);
    if (err == JB_ERR_FILE)
    {
       free_map(exports);
