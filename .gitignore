@@ -39,6 +39,7 @@ jarfile
 logfile
 privoxy
 privoxy.exe
+privoxy-cl.spec
 vc_debug
 vc_debug_winthr
 vc_console.ncb
