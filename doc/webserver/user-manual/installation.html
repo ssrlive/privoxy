@@ -4,9 +4,10 @@
 >Installation</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="HOME"
-TITLE="Privoxy User Manual"
+TITLE="Privoxy 3.1.1 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Introduction"
@@ -27,6 +28,7 @@ ALINK="#0000FF"
 ><DIV
 CLASS="NAVHEADER"
 ><TABLE
+SUMMARY="Header navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -35,7 +37,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy User Manual</TH
+>Privoxy 3.1.1 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -44,6 +46,7 @@ ALIGN="left"
 VALIGN="bottom"
 ><A
 HREF="introduction.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -57,6 +60,7 @@ ALIGN="right"
 VALIGN="bottom"
 ><A
 HREF="upgradersnote.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR
@@ -69,9 +73,7 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="INSTALLATION"
->2. Installation</A
-></H1
+NAME="INSTALLATION">2. Installation</H1
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -96,10 +98,13 @@ CLASS="APPLICATION"
 > installation on your system, you
  will need to remove it.  On some platforms, this may be done for you as part
  of their installation procedure. (See below for your platform). In any case
- <I
+ <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >be sure to backup your old configuration if it is valuable to
  you.</I
+></SPAN
 > See the <A
 HREF="upgradersnote.html"
 >note to
@@ -110,9 +115,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="INSTALLATION-PACKAGES"
->2.1. Binary Packages</A
-></H2
+NAME="INSTALLATION-PACKAGES">2.1. Binary Packages</H2
 ><P
 >How to install the binary packages depends on your operating system:</P
 ><DIV
@@ -120,13 +123,11 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-PACK-RPM"
->2.1.1. Red Hat, SuSE RPMs and Conectiva</A
-></H3
+NAME="INSTALLATION-PACK-RPM">2.1.1. Red Hat, SuSE and Conectiva RPMs</H3
 ><P
 > RPMs can be installed with <TT
 CLASS="LITERAL"
->rpm -Uvh privoxy-2.9.15-1.rpm</TT
+>rpm -Uvh privoxy-3.1.1-1.rpm</TT
 >,
  and will use <TT
 CLASS="FILENAME"
@@ -138,9 +139,12 @@ CLASS="FILENAME"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > will
- <I
+ <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >not</I
+></SPAN
 > be automatically started on system boot. You will
  need to enable that using <B
 CLASS="COMMAND"
@@ -155,7 +159,7 @@ automatically start Privoxy in the boot process.</P
 > If you have problems with failed dependencies, try rebuilding the SRC RPM: 
  <TT
 CLASS="LITERAL"
->rpm --rebuild privoxy-2.9.15-1.src.rpm;</TT
+>rpm --rebuild privoxy-3.1.1-1.src.rpm</TT
 >. This 
  will use your locally installed libraries and RPM version. </P
 ><P
@@ -178,14 +182,12 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-DEB"
->2.1.2. Debian</A
-></H3
+NAME="INSTALLATION-DEB">2.1.2. Debian</H3
 ><P
 > DEBs can be installed with <TT
 CLASS="LITERAL"
 >dpkg -i
- privoxy_2.9.15-1.deb</TT
+ privoxy_3.1.1-1.deb</TT
 >, and will use
  <TT
 CLASS="FILENAME"
@@ -198,9 +200,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-PACK-WIN"
->2.1.3. Windows</A
-></H3
+NAME="INSTALLATION-PACK-WIN">2.1.3. Windows</H3
 ><P
 > Just double-click the installer, which will guide you through
  the installation process. You will find the configuration files
@@ -212,25 +212,21 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-PACK-BINTGZ"
->2.1.4. Solaris, NetBSD, FreeBSD, HP-UX</A
-></H3
+NAME="INSTALLATION-PACK-BINTGZ">2.1.4. Solaris, NetBSD, FreeBSD, HP-UX</H3
 ><P
 > Create a new directory, <TT
 CLASS="LITERAL"
 >cd</TT
 > to it, then unzip and
  untar the archive. For the most part, you'll have to figure out where
- things go. FIXME.</P
+ things go. </P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-OS2"
->2.1.5. OS/2</A
-></H3
+NAME="INSTALLATION-OS2">2.1.5. OS/2</H3
 ><P
 > First, make sure that no previous installations of
  <SPAN
@@ -241,7 +237,15 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > are left on your
- system. You can do this by </P
+ system. Check that no <SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+>
+ or <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> objects are in
+ your startup folder.&#13;</P
 ><P
 > Then, just double-click the WarpIN self-installing archive, which will
  guide you through the installation process. A shadow of the
@@ -262,40 +266,65 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-MAC"
->2.1.6. Max OSX</A
-></H3
+NAME="INSTALLATION-MAC">2.1.6. Mac OSX</H3
 ><P
-> Unzip the downloaded package (you can either double-click on the file
- in the finder, or on the desktop if you downloaded it there).  Then,
- double-click on the package installer icon and follow the installation
- process.
+> Unzip the downloaded file (you can either double-click on the file
+ from the finder, or from the desktop if you downloaded it there).
+ Then, double-click on the package installer icon named
+ <TT
+CLASS="LITERAL"
+>Privoxy.pkg</TT
+>
+ and follow the installation process.
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will be installed in the subdirectory
+> will be installed in the folder
  <TT
 CLASS="LITERAL"
->/Applications/Privoxy.app</TT
+>/Library/Privoxy</TT
 >.
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> will set itself up to start 
- automatically on system bring-up via
+ It will start automatically whenever you start up.  To prevent it from
+ starting automatically, remove or rename the folder
  <TT
 CLASS="LITERAL"
->/System/Library/StartupItems/Privoxy</TT
->.</P
+>/Library/StartupItems/Privoxy</TT
+>. </P
+><P
+> To start Privoxy by hand, double-click on 
+ <TT
+CLASS="LITERAL"
+>StartPrivoxy.command</TT
+> in the
+ <TT
+CLASS="LITERAL"
+>/Library/Privoxy</TT
+> folder.
+ Or, type this command in the Terminal:</P
+><P
+>  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  /Library/Privoxy/StartPrivoxy.command
+  </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+> You will be prompted for the administrator password.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="INSTALLATION-AMIGA"
->2.1.7. AmigaOS</A
-></H3
+NAME="INSTALLATION-AMIGA">2.1.7. AmigaOS</H3
 ><P
 > Copy and then unpack the <TT
 CLASS="FILENAME"
@@ -307,29 +336,51 @@ CLASS="APPLICATION"
 >
  directory, including all configuration and log files. To uninstall, just 
  remove this directory.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="INSTALLATTION-GENTOO">2.1.8. Gentoo</H3
 ><P
-> Start <SPAN
+> Gentoo source packages (Ebuilds) for <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> (with RUN &#60;&#62;NIL:) in your
- <TT
-CLASS="FILENAME"
->startnet</TT
-> script (AmiTCP), in
- <TT
-CLASS="FILENAME"
->s:user-startup</TT
-> (RoadShow), as startup program in your
- startup script (Genesis), or as startup action (Miami and MiamiDx). 
+> are 
+ contained in the Gentoo  Portage Tree (they are not on the download page, 
+ but there is a Gentoo section, where you can see when a new 
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will automatically quit when you quit your
- TCP/IP stack (just ignore the harmless warning your TCP/IP stack may display that
- <SPAN
+> Version is added to the  Portage Tree).</P
+><P
+> Before installing <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is still running).</P
+> under Gentoo just do 
+ first <TT
+CLASS="LITERAL"
+>emerge rsync</TT
+> to get the latest changes from the 
+ Portage tree. With <TT
+CLASS="LITERAL"
+>emerge privoxy</TT
+> you install the latest 
+ version.</P
+><P
+> Configuration files are in <TT
+CLASS="FILENAME"
+>/etc/privoxy</TT
+>, the 
+ documentation is in <TT
+CLASS="FILENAME"
+>/usr/share/doc/privoxy-3.1.1</TT
+>
+ and the Log directory is in <TT
+CLASS="FILENAME"
+>/var/log/privoxy</TT
+>.</P
 ></DIV
 ></DIV
 ><DIV
@@ -337,9 +388,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="INSTALLATION-SOURCE"
->2.2. Building from Source</A
-></H2
+NAME="INSTALLATION-SOURCE">2.2. Building from Source</H2
 ><P
 > The most convenient way to obtain the <SPAN
 CLASS="APPLICATION"
@@ -402,8 +451,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-> tar xzvf privoxy-2.9.15-beta-src* [.tgz or .tar.gz]
- cd privoxy-2.9.15-beta</PRE
+> tar xzvf privoxy-3.1.1-beta-src* [.tgz or .tar.gz]
+ cd privoxy-3.1.1-beta</PRE
 ></TD
 ></TR
 ></TABLE
@@ -456,6 +505,37 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ></P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+> 
+  The <SPAN
+CLASS="QUOTE"
+>"make install"</SPAN
+> target is temporary quite broken! It is
+  recommended to use a binary package, or do a source build, and manually 
+  install the components. Sorry.
+ </P
+></TD
+></TR
+></TABLE
+></DIV
 ><P
 >  If you have gnu make, you can have the first four steps 
   automatically done for you by just typing:</P
@@ -484,12 +564,66 @@ TARGET="_top"
 >developer manual</A
 >.</P
 ></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="INSTALLATION-KEEPUPDATED">2.3. Keeping your Installation Up-to-Date</H2
+><P
+> As user feedback comes in and development continues, we will make updated versions
+ of both the main <A
+HREF="actions-file.html"
+>actions file</A
+> (as a <A
+HREF="http://sourceforge.net/project/showfiles.php?group_id=11118&release_id=103670"
+TARGET="_top"
+>separate
+ package</A
+>) and the software itself (including the actions file) available for
+ download.</P
+><P
+> If you wish to receive an email notification whenever we release updates of
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> or the actions file, <A
+HREF="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/"
+TARGET="_top"
+>subscribe
+ to our announce  mailing list</A
+>, ijbswa-announce@lists.sourceforge.net.</P
+><P
+> In order not to loose your personal changes and adjustments when updating
+ to the latest <TT
+CLASS="LITERAL"
+>default.action</TT
+> file we <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>strongly
+ recommend</I
+></SPAN
+> that you use <TT
+CLASS="LITERAL"
+>user.action</TT
+> for your
+ customization of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. See the <A
+HREF="actions-file.html"
+>Chapter on actions files</A
+> for details.</P
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
 ><HR
 ALIGN="LEFT"
 WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -501,6 +635,7 @@ ALIGN="left"
 VALIGN="top"
 ><A
 HREF="introduction.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -509,6 +644,7 @@ ALIGN="center"
 VALIGN="top"
 ><A
 HREF="index.html"
+ACCESSKEY="H"
 >Home</A
 ></TD
 ><TD
@@ -517,6 +653,7 @@ ALIGN="right"
 VALIGN="top"
 ><A
 HREF="upgradersnote.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR

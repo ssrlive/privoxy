@@ -4,7 +4,7 @@
 >Releasing a New Version</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
 TITLE="Privoxy Developer Manual"
@@ -28,6 +28,7 @@ ALINK="#0000FF"
 ><DIV
 CLASS="NAVHEADER"
 ><TABLE
+SUMMARY="Header navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -45,6 +46,7 @@ ALIGN="left"
 VALIGN="bottom"
 ><A
 HREF="testing.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -58,6 +60,7 @@ ALIGN="right"
 VALIGN="bottom"
 ><A
 HREF="webserver-update.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR
@@ -70,9 +73,7 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="NEWRELEASE"
->6. Releasing a New Version</A
-></H1
+NAME="NEWRELEASE">6. Releasing a New Version</H1
 ><P
 >        When we release versions of <SPAN
 CLASS="APPLICATION"
@@ -107,16 +108,14 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="VERSIONNUMBERS"
->6.1. Version numbers</A
-></H2
+NAME="VERSIONNUMBERS">6.1. Version numbers</H2
 ><P
 >      First you need to determine which version number the release will have. 
       <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > version numbers consist of three numbers,
-      separated by dots, like in X.Y.Z, where:
+      separated by dots, like in X.Y.Z (e.g. 3.0.0), where:
         <P
 ></P
 ><UL
@@ -140,7 +139,7 @@ CLASS="APPLICATION"
 >              Y, the version minor, represents the branch within the major version.
               At any point in time, there are two branches being maintained:
               The stable branch, with an even minor, say, 2N, in which no functionality is
-              being added and only bugfixes are made, and 2N+1, the development branch, in
+              being added and only bug-fixes are made, and 2N+1, the development branch, in
               which the further development of <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -148,7 +147,7 @@ CLASS="APPLICATION"
               place.
               This enables us to turn the code upside down and inside out, while at the same time
               providing and maintaining a stable version.
-              The minor is reset to zero (and one) when the major is inrcemented. When a development
+              The minor is reset to zero (and one) when the major is incremented. When a development
               branch has matured to the point where it can be turned into stable, the old stable branch
               2N is given up (i.e. no longer maintained), the former development branch 2N+1 becomes the
               new stable branch 2N+2, and a new development branch 2N+3 is opened.
@@ -170,20 +169,46 @@ CLASS="APPLICATION"
 ></UL
 >
     </P
+><P
+>     In summary, the main CVS trunk is the development branch where new
+     features are being worked on for the next stable series. This should
+     almost always be where the most activity takes place. There is always at
+     least one stable branch from the trunk, e.g now it is 3.0, which is only
+     used to release stable versions. Once the initial .0 release of the
+     stable branch has been done, then as a rule, only bugfixes that have had
+     prior testing should be committed to the stable branch. At that point, it
+     is mostly <SPAN
+CLASS="QUOTE"
+>"hands off"</SPAN
+>. Once there are enough bugfixes to
+     justify a new release, the version of this branch is again incremented 
+     Example: 3.0.0 -&#62; 3.0.1 -&#62; 3.0.2, etc are all stable releases from within
+     the stable branch. 3.1.x is currently the main trunk, and where work on
+     3.2.x is taking place. If any questions, please post to the devel list
+     <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>before</I
+></SPAN
+> committing to a stable branch!
+
+    </P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="BEFORERELEASE"
->6.2. Before the Release: Freeze</A
-></H2
+NAME="BEFORERELEASE">6.2. Before the Release: Freeze</H2
 ><P
->       The following <I
+>       The following <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >must be done by one of the
        developers</I
+></SPAN
 > prior to each new release.
      </P
 ><P
@@ -207,7 +232,8 @@ CLASS="QUOTE"
          branches!) in <TT
 CLASS="FILENAME"
 >configure.in</TT
->.
+>. (RPM spec files 
+         will need to be incremented as well.)
        </P
 ></LI
 ><LI
@@ -243,17 +269,60 @@ CLASS="PROGRAMLISTING"
 ></LI
 ><LI
 ><P
->        If the HTML documentation is not in sync with the SGML sources
-        you need to regenerate and upload it to the webserver. (If in
-        doubt, just do it.) See the Section "Updating the webserver" in
-        this manual for details.
+>        All documentation should be rebuild after the version bump.
+        Finished docs should be then be committed to CVS (for those 
+        without the ability to build these). Some docs may require 
+        rather obscure processing tools. <TT
+CLASS="FILENAME"
+>config</TT
+>,
+        the man page (and the html version of the man page), and the PDF docs
+        fall in this category. REAMDE, the man page, AUTHORS, and config
+        should all also be committed to CVS for other packagers. The 
+        formal docs should be uploaded to the webserver. See the
+        Section "Updating the webserver" in this manual for details.
        </P
 ></LI
 ><LI
 ><P
->        <I
+>         The <I
+CLASS="CITETITLE"
+>User Manual</I
+> is also used for context 
+         sensitive help for the CGI editor. This is version sensitive, so that
+         the user will get appropriate help for his/her release. So with 
+         each release a fresh version should be uploaded to the webserver
+         (this is in addition to the main <I
+CLASS="CITETITLE"
+>User Manual</I
+>
+         link from the main page since we need to keep manuals for various 
+         versions available). The CGI pages will link to something like 
+         <TT
+CLASS="LITERAL"
+>http://privoxy.org/$(VERSION)/user-manual/</TT
+>. This
+         will need to be updated for each new release. There is no Makefile
+         target for this at this time!!! It needs to be done manually.
+       </P
+></LI
+><LI
+><P
+>        All developers should look at the <TT
+CLASS="FILENAME"
+>ChangeLog</TT
+> and
+        make sure noteworthy changes are referenced.
+       </P
+></LI
+><LI
+><P
+>        <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >Commit all files that were changed in the above steps!</I
+></SPAN
 >
        </P
 ></LI
@@ -314,23 +383,28 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="THERELEASE"
->6.3. Building and Releasing the Packages</A
-></H2
+NAME="THERELEASE">6.3. Building and Releasing the Packages</H2
 ><P
 >      Now the individual packages can be built and released. Note that for
       GPL reasons the first package to be released is always the source tarball.
      </P
 ><P
->      For <I
+>      For <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >all</I
+></SPAN
 > types of packages, including the source tarball,
-      <I
+      <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >you must make sure that you build from clean sources by exporting
-      the right version from CVS into an empty directory:</I
->.
+      the right version from CVS into an empty directory</I
+></SPAN
+> (just press return when
+      asked for a password):
      </P
 ><P
 >      <TABLE
@@ -351,9 +425,12 @@ CLASS="PROGRAMLISTING"
 >
     </P
 ><P
->     <I
+>     <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >Do NOT change</I
+></SPAN
 > a single bit, including, but not limited to
      version information after export from CVS. This is to make sure that
      all release packages, and with them, all future bug reports, are based
@@ -369,14 +446,15 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="PACK-GUIDELINES"
->6.3.1. Note on Privoxy Packaging</A
-></H3
+NAME="PACK-GUIDELINES">6.3.1. Note on Privoxy Packaging</H3
 ><P
 >      Please keep these general guidelines in mind when putting together 
-      your package. These apply to <I
+      your package. These apply to <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >all</I
+></SPAN
 > platforms!
      </P
 ><P
@@ -388,9 +466,12 @@ CLASS="EMPHASIS"
 >          <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> <I
+> <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >requires</I
+></SPAN
 >
           write access to: all <TT
 CLASS="FILENAME"
@@ -417,7 +498,7 @@ BORDER="0"
 >          <TT
 CLASS="FILENAME"
 >LICENSE</TT
-> (toplevel directory)
+> (top-level directory)
          </TD
 ></TR
 ></TBODY
@@ -434,7 +515,7 @@ BORDER="0"
 >          <TT
 CLASS="FILENAME"
 >README</TT
-> (toplevel directory)
+> (top-level directory)
          </TD
 ></TR
 ></TBODY
@@ -451,7 +532,7 @@ BORDER="0"
 >          <TT
 CLASS="FILENAME"
 >AUTHORS</TT
-> (toplevel directory)
+> (top-level directory)
          </TD
 ></TR
 ></TBODY
@@ -468,7 +549,7 @@ BORDER="0"
 >          <TT
 CLASS="FILENAME"
 >man page</TT
-> (toplevel directory, Unix-like
+> (top-level directory, Unix-like
           platforms only)
          </TD
 ></TR
@@ -515,11 +596,11 @@ CLASS="FILENAME"
 CLASS="FILENAME"
 >Developer Manual</TT
 >
-          (doc/webserver/devel-manual) and <TT
+          (doc/webserver/developer-manual) and <TT
 CLASS="FILENAME"
 >ChangeLog</TT
 >
-          (toplevel directory). <TT
+          (top-level directory). <TT
 CLASS="FILENAME"
 >FAQ</TT
 > and the manuals are
@@ -535,24 +616,31 @@ CLASS="FILENAME"
          to each other from parallel directories, and should be packaged 
          that way. <TT
 CLASS="FILENAME"
+>privoxy-index.html</TT
+> can also be
+         included and can serve as a focal point for docs and other links of
+         interest (and possibly renamed to <TT
+CLASS="FILENAME"
 >index.html</TT
-> can also be included and 
-         can serve as a focal point for docs and other links of interest.
-         This should be one level up from the manuals. There are two 
+>).
+         This should be one level up from the manuals. There is a link also 
+         on this page to an HTMLized version of the man page. To avoid 404 for
+         this, it is in CVS as
+         <TT
+CLASS="FILENAME"
+>doc/webserver/man-page/privoxy-man-page.html</TT
+>,
+         and should be included along with the manuals. There is also a
          css stylesheets that can be included for better presentation:
          <TT
 CLASS="FILENAME"
 >p_doc.css</TT
-> and <TT
+>. This should be in the same directory
+         with <TT
 CLASS="FILENAME"
->p_web.css</TT
->.
-         These should be in the same directory with
-         <TT
-CLASS="FILENAME"
->index.html</TT
->, (i.e. one level up from the manual 
-         directories).
+>privoxy-index.html</TT
+>, (i.e. one level up from
+         the manual directories).
         </P
 ></LI
 ><LI
@@ -583,6 +671,18 @@ CLASS="QUOTE"
        maintainers to do this if you can't).
       </P
 ></LI
+><LI
+><P
+>       Packagers should do a <SPAN
+CLASS="QUOTE"
+>"clean"</SPAN
+> install of their 
+       package after building it. So any previous installs should be 
+       removed first to ensure the integrity of the newly built package. 
+       Then run the package for a while to make sure there are no 
+       obvious problems, before uploading.
+     </P
+></LI
 ></UL
 >
      </P
@@ -592,14 +692,15 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-TARBALL"
->6.3.2. Source Tarball</A
-></H3
+NAME="NEWRELEASE-TARBALL">6.3.2. Source Tarball</H3
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -669,9 +770,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-RPM"
->6.3.3. SuSE, Conectiva or Red Hat RPM</A
-></H3
+NAME="NEWRELEASE-RPM">6.3.3. SuSE, Conectiva or Red Hat RPM</H3
 ><P
 >        In following text, replace <TT
 CLASS="REPLACEABLE"
@@ -688,10 +787,13 @@ CLASS="QUOTE"
 > for SuSE.
         </P
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). 
 	</P
@@ -814,14 +916,15 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-OS2"
->6.3.4. OS/2</A
-></H3
+NAME="NEWRELEASE-OS2">6.3.4. OS/2</H3
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then get the OS/2 Setup module:
 	</P
@@ -948,9 +1051,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-SOLARIS"
->6.3.5. Solaris</A
-></H3
+NAME="NEWRELEASE-SOLARIS">6.3.5. Solaris</H3
 ><P
 >	Login to Sourceforge's compilefarm via ssh:
 	</P
@@ -971,10 +1072,13 @@ CLASS="PROGRAMLISTING"
 	</P
 ><P
 >	Choose the right operating system (not the Debian one).
-        When logged in, <I
+        When logged in, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -1028,9 +1132,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-WINDOWS"
->6.3.6. Windows</A
-></H3
+NAME="NEWRELEASE-WINDOWS">6.3.6. Windows</H3
 ><P
 >        You should ensure you have the latest version of Cygwin (from
         <A
@@ -1041,10 +1143,13 @@ TARGET="_top"
         Run the following commands from within a Cygwin bash shell.
       </P
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then get the Windows setup module:
       </P
@@ -1057,7 +1162,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup</PRE
+>  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1080,8 +1185,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->        cd winsetup
-        make</PRE
+>  cd winsetup
+  make</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1105,19 +1210,25 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-DEBIAN"
->6.3.7. Debian</A
-></H3
+NAME="NEWRELEASE-DEBIAN">6.3.7. Debian</H3
 ><P
->	First, <I
+>        First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
->make sure that you have freshly exported the right
-        version into an empty directory</I
->. (See "Building and releasing
-        packages" above). Then, run:
-	</P
+>make sure that you have freshly exported the
+        right version into an empty directory</I
+></SPAN
+>. (See
+        "Building and releasing packages" above).  Then add a log
+        entry to <TT
+CLASS="FILENAME"
+>debian/changelog</TT
+>, if it is not
+        already there, for example by running:
+      </P
 ><P
->	<TABLE
+>        <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -1125,30 +1236,69 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd current
-  autoheader &#38;&#38; autoconf &#38;&#38; ./configure</PRE
+>  debchange -v 3.1.1-alpha-1 "New upstream version"</PRE
 ></TD
 ></TR
 ></TABLE
 >
-	</P
+      </P
 ><P
->	Then do FIXME.
-	</P
+>        Then, run: 
+      </P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  dpkg-buildpackage -rfakeroot -us -uc -b</PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>        This will create
+        <TT
+CLASS="FILENAME"
+>../privoxy_3.1.1-alpha-1_i386.deb</TT
+>
+        which can be uploaded.  To upload the package to Sourceforge, simply
+	issue
+      </P
+><P
+>        <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  make debian-upload</PRE
+></TD
+></TR
+></TABLE
+>
+      </P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-MACOSX"
->6.3.8. Mac OSX</A
-></H3
+NAME="NEWRELEASE-MACOSX">6.3.8. Mac OSX</H3
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then get the Mac OSX setup module:
 	</P
@@ -1222,7 +1372,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg</PRE
+>  zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1246,11 +1396,9 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-FREEBSD"
->6.3.9. FreeBSD</A
-></H3
+NAME="NEWRELEASE-FREEBSD">6.3.9. FreeBSD</H3
 ><P
->	Login to Sourceforge's compilefarm via ssh:
+>	Login to Sourceforge's compile-farm via ssh:
 	</P
 ><P
 >	<TABLE
@@ -1269,10 +1417,13 @@ CLASS="PROGRAMLISTING"
 	</P
 ><P
 >	Choose the right operating system.
-        When logged in, <I
+        When logged in, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -1326,14 +1477,15 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-HPUX"
->6.3.10. HP-UX 11</A
-></H3
+NAME="NEWRELEASE-HPUX">6.3.10. HP-UX 11</H3
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -1362,14 +1514,15 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-AMIGA"
->6.3.11. Amiga OS</A
-></H3
+NAME="NEWRELEASE-AMIGA">6.3.11. Amiga OS</H3
 ><P
->	First, <I
+>	First, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -1398,9 +1551,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="NEWRELEASE-AIX"
->6.3.12. AIX</A
-></H3
+NAME="NEWRELEASE-AIX">6.3.12. AIX</H3
 ><P
 >	Login to Sourceforge's compilefarm via ssh:
 	</P
@@ -1421,10 +1572,13 @@ CLASS="PROGRAMLISTING"
 	</P
 ><P
 >	Choose the right operating system.
-        When logged in, <I
+        When logged in, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >make sure that you have freshly exported the right
         version into an empty directory</I
+></SPAN
 >. (See "Building and releasing
         packages" above). Then run:
 	</P
@@ -1479,9 +1633,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="RELEASING"
->6.4. Uploading and Releasing Your Package</A
-></H2
+NAME="RELEASING">6.4. Uploading and Releasing Your Package</H2
 ><P
 >      After the package is ready, it is time to upload it 
       to SourceForge, and go through the release steps. The upload
@@ -1540,10 +1692,13 @@ CLASS="LITERAL"
      of <TT
 CLASS="LITERAL"
 >$VERSION ($CODE_STATUS)</TT
->, e.g. <I
+>, e.g. <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
->2.9.15
+>3.1.1
      (beta)</I
+></SPAN
 >.
     </P
 ><P
@@ -1587,9 +1742,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AFTERRELEASE"
->6.5. After the Release</A
-></H2
+NAME="AFTERRELEASE">6.5. After the Release</H2
 ><P
 >      When all (or: most of the) packages have been uploaded and made available,
       send an email to the <A
@@ -1604,7 +1757,9 @@ HREF="http://sourceforge.net/project/showfiles.php?group_id=11118"
 TARGET="_top"
 >download
       location</A
->, the release notes and the change log.
+>, the release notes and the Changelog. Also, post an
+      updated News item on the project page Sourceforge, and update the Home 
+      page and docs linked from the Home page (see below).
      </P
 ></DIV
 ></DIV
@@ -1613,6 +1768,7 @@ CLASS="NAVFOOTER"
 ><HR
 ALIGN="LEFT"
 WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -1624,6 +1780,7 @@ ALIGN="left"
 VALIGN="top"
 ><A
 HREF="testing.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -1632,6 +1789,7 @@ ALIGN="center"
 VALIGN="top"
 ><A
 HREF="index.html"
+ACCESSKEY="H"
 >Home</A
 ></TD
 ><TD
@@ -1640,6 +1798,7 @@ ALIGN="right"
 VALIGN="top"
 ><A
 HREF="webserver-update.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR

@@ -2,14 +2,17 @@ Privoxy Developer Manual
 
 Copyright © 2001, 2002 by Privoxy Developers
 
-$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $
+$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $
 
-The developer manual gives the users information on how to help the developer
-team. It provides guidance on coding, testing, documentation and other issues.
+The developer manual provides guidance on coding, testing, packaging,
+documentation and other issues of importance to those involved with Privoxy
+development. It is mandatory (and helpful!) reading for anyone who wants to
+join the team.
 
-You can find the latest version of the this manual at http://www.privoxy.org/
-developer-manual/. Please see the Contact section on how to contact the
-developers.
+Please note that this document is constantly evolving. This copy represents the
+state at the release of version 3.1.1. You can find the latest version of the
+this manual at http://www.privoxy.org/developer-manual/. Please see the Contact
+section on how to contact the developers.
 
 -------------------------------------------------------------------------------
 
@@ -21,8 +24,8 @@ Table of Contents
 2. The CVS Repository
    
     2.1. Access to CVS
-    2.2. CVS Commit Guideline
-    2.3. Discussing Changes First
+    2.2. Branches
+    2.3. CVS Commit Guidelines
    
 3. Documentation Guidelines
    
@@ -105,17 +108,18 @@ Table of Contents
     6.2. Before the Release: Freeze
     6.3. Building and Releasing the Packages
        
-        6.3.1. Source Tarball
-        6.3.2. SuSE or Red Hat RPM
-        6.3.3. OS/2
-        6.3.4. Solaris
-        6.3.5. Windows
-        6.3.6. Debian
-        6.3.7. Mac OSX
-        6.3.8. FreeBSD
-        6.3.9. HP-UX 11
-        6.3.10. Amiga OS
-        6.3.11. AIX
+        6.3.1. Note on Privoxy Packaging
+        6.3.2. Source Tarball
+        6.3.3. SuSE, Conectiva or Red Hat RPM
+        6.3.4. OS/2
+        6.3.5. Solaris
+        6.3.6. Windows
+        6.3.7. Debian
+        6.3.8. Mac OSX
+        6.3.9. FreeBSD
+        6.3.10. HP-UX 11
+        6.3.11. Amiga OS
+        6.3.12. AIX
        
     6.4. Uploading and Releasing Your Package
     6.5. After the Release
@@ -124,9 +128,9 @@ Table of Contents
 8. Contacting the developers, Bug Reporting and Feature Requests
    
     8.1. Get Support
-    8.2. Report bugs
-    8.3. Request new features
-    8.4. Report ads or other filter problems
+    8.2. Report Bugs
+    8.3. Request New Features
+    8.4. Report Ads or Other Actions-Related Problems
     8.5. Other
    
 9. Privoxy Copyright, License and History
@@ -154,6 +158,11 @@ porting, are all important jobs as well.
 You'll need an account on Sourceforge to support our development. Mail your ID
 to the list and wait until a project manager has added you.
 
+You will also need to have a cvs package installed, which will entail having
+ssh installed as well (which seems to be a requirement of SourceForge), in
+order to access the cvs repository. Having the GNU build tools is also going to
+be important (particularly, autoconf and gmake).
+
 For the time being (read, this section is under construction), please refer to
 the extensive comments in the source code.
 
@@ -177,12 +186,36 @@ tree module is called current.
 
 -------------------------------------------------------------------------------
 
-2.2. CVS Commit Guideline
+2.2. Branches
+
+Within the CVS repository, there are modules and branches. As mentioned, the
+sources are in the current "module". Other modules are present for platform
+specific issues. There is a webview of the CVS hierarchy at http://
+cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/, which might help with
+visualizing how these pieces fit together.
+
+Branches are used to fork a sub-development path from the main trunk. Within
+the current module where the sources are, there is always at least one "branch"
+from the main trunk devoted to a stable release series. The main trunk is where
+active development takes place for the next stable series (e.g. 3.2.x). And for
+testing bugfixes for the stable series. Just prior to each stable series (e.g.
+3.0.x), a branch is created just for stable series releases (e.g. 3.0.0 ->
+3.0.1 -> 3.0.2, etc). Once the initial stable release of any stable branch has
+taken place, this branch is only used for bugfixes, which have had prior
+testing before being committed to CVS. (See Version Numbers below for details
+on versioning.)
+
+-------------------------------------------------------------------------------
+
+2.3. CVS Commit Guidelines
 
 The source tree is the heart of every software project. Every effort must be
-made to ensure that it is readable, compilable and consistent at all times. We
-therefore ask anyone with CVS access to strictly adhere to the following
+made to ensure that it is readable, compilable and consistent at all times.
+There are differing guidelines for the stable branch and the main development
+trunk, and we ask anyone with CVS access to strictly adhere to the following
 guidelines:
+
+Basic Guidelines, for all branches:
 
   * Never (read: never, ever) be tempted to commit that small change without
     testing it thoroughly first. When we're close to a public release, ask a
@@ -196,34 +229,40 @@ guidelines:
     all those files.
    
   * If your changes span multiple files, and the code won't recompile unless
-    all changes are commited (e.g. when changing the signature of a function),
-    then commit all files one after another, without long delays in beween. If
+    all changes are committed (e.g. when changing the signature of a function),
+    then commit all files one after another, without long delays in between. If
     necessary, prepare the commit messages in advance.
    
   * Before changing things on CVS, make sure that your changes are in line with
-    the team's general consensus on what should be done (see below).
+    the team's general consensus on what should be done.
    
--------------------------------------------------------------------------------
+  * Note that near a major public release, we get more cautious. There is
+    always the possibility to submit a patch to the patch tracker instead.
+   
+Stable branches are handled with decidedly more care, especially after the
+initial *.*.0 release, and we are just in bugfix mode. In addition to the
+above, the below applies only to the stable branch (currently the
+v_3_0_branchpoint branch):
 
-2.3. Discussing Changes First
-
-We don't have a too formal policy on this, just use common sense. Hints: If it
-is..
-
- 1. ..a bugfix / clean-up / cosmetic thing: shoot
+  * Do not commit anything into the stable branch, unless immediately before a
+    new release! There needs to be testing done before it hits CVS, and to
+    ensure that all changes are appropriate just to fix whatever the problem
+    is.
    
- 2. ..a new feature that can be turned off: shoot
+  * Where possible, bugfixes and changes should be tested in the main
+    development trunk first. There may be occasions where this is not feasible,
+    though.
    
- 3. ..a clear improvement w/o side effects on other parts of the code: shoot
+  * Alternately, proposed changes can be submitted as patches to the patch
+    tracker on Sourceforge first: http://sourceforge.net/tracker/?group_id=
+    11118&atid=311118. Then ask for peer review.
    
- 4. ..a matter of taste: ask the list
+  * Do not commit anything unless your proposed changes have been well tested
+    first, by other members of the project, and have prior approval of the
+    project leaders or consensus of the devel list.
    
- 5. ..a major redesign of some part of the code: ask the list
+  * Do not even think about anything except bugfixes. No new features!
    
-Note that near a major public release, we get a bit more cautious - if unsure,
-it doesn't hurt to ask first. There is always the possibility to submit a patch
-to the patches tracker instead.
-
 -------------------------------------------------------------------------------
 
 3. Documentation Guidelines
@@ -233,11 +272,21 @@ source/* directory. You will need Docbook, the Docbook DTD's and the Docbook
 modular stylesheets (or comparable alternatives), and either jade or openjade
 (recommended) installed in order to build docs from source. Currently there is 
 user-manual, FAQ, and, of course this, the developer-manual in this format. The
-README, AUTHORS privoxy.1 (man page) files are also now maintained as Docbook
-SGML. The finished files are all in the top-level source directory are
-generated files! Also, index.html, the Privoxy home page, is maintained as
-SGML. DO NOT edit these directly. Edit the SGML source, or contact someone
-involved in the documentation (at present Stefan and Hal).
+README, AUTHORS privoxy.1 (man page), and config files are also now maintained
+as Docbook SGML. These files, when built, in the top-level source directory are
+generated files! Also, the Privoxy index.html (and a variation on this file,
+privoxy-index.html, meant for inclusion with doc packages), are maintained as
+SGML as well. DO NOT edit these directly. Edit the SGML source, or contact
+someone involved in the documentation (at present Hal).
+
+config requires some special handling. The reason it is maintained this way is
+so that the extensive comments in the file mirror those in user-manual. But the
+conversion process requires going from SGML to HTML to text to special
+formatting required for the embedded comments. Some of this does not survive so
+well. Especially some of the examples that are longer than 80 characters. The
+build process for this file outputs to config.new, which should be reviewed for
+errors and mis-formatting. Once satisfied that it is correct, then it should be
+hand copied to config.
 
 Other, less formal documents (e.g. LICENSE, INSTALL) are maintained as plain
 text files in the top-level source directory. At least for the time being.
@@ -257,6 +306,7 @@ before committing to CVS, if possible.
 How do you update the webserver (i.e. the pages on privoxy.org)?
 
  1. First, build the docs by running make dok (or alternately make redhat-dok).
+    For PDF docs, do make dok-pdf.
    
  2. Run make webserver which copies all files from doc/webserver to the
     sourceforge webserver via scp.
@@ -371,8 +421,8 @@ Here it is:
     instance.
    
   * Our documents are available in differing formats. Right now, they are just
-    plain text, and HTML, but PDF, and others is always a future possibility.
-    Be careful with URLs (<ulink>), and avoid this mistake:
+    plain text, TML, and PDF, but others are always a future possibility. Be
+    careful with URLs (<ulink>), and avoid this mistake:
    
     My favorite site is <ulink url="http://example.com">here</ulink>.
    
@@ -416,7 +466,7 @@ entities are listed below. See any of the main docs for examples.
    
   * Commonly used "internal entities":
    
-    p-version: the Privoxy version string, e.g. "2.9.15".                      
+    p-version: the Privoxy version string, e.g. "3.1.1".                       
     p-status: the project status, either "alpha", "beta", or "stable".         
     p-not-stable: use to conditionally include text in "not stable" releases   
     (e.g. "beta").                                                             
@@ -1310,7 +1360,7 @@ If you have to "malloc" an instance, you are responsible for insuring that the
 instance is `free'd, even if the deallocation event falls within some other
 programmer's code. You are also responsible for ensuring that deletion is
 timely (i.e. not too soon, not too late). This is known as "low-coupling" and
-is a "good thing (tm)". You may need to offer a free/unload/destuctor type
+is a "good thing (tm)". You may need to offer a free/unload/destructor type
 function to accommodate this.
 
 Example:
@@ -1370,49 +1420,49 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $"; 
-/*********************************************************************                          
- *                                                                                              
- * File        :  $Source$                                                                      
- *                                                                                              
- * Purpose     :  (Fill me in with a good description!)                                         
- *                                                                                              
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                             
- *                Privoxy team. http://www.privoxy.org/                                         
- *                                                                                              
- *                Based on the Internet Junkbuster originally written                           
- *                by and Copyright (C) 1997 Anonymous Coders and                                
- *                Junkbusters Corporation.  http://www.junkbusters.com                          
- *                                                                                              
- *                This program is free software; you can redistribute it                        
- *                and/or modify it under the terms of the GNU General                           
- *                Public License as published by the Free Software                              
- *                Foundation; either version 2 of the License, or (at                           
- *                your option) any later version.                                               
- *                                                                                              
- *                This program is distributed in the hope that it will                          
- *                be useful, but WITHOUT ANY WARRANTY; without even the                         
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                          
- *                PARTICULAR PURPOSE.  See the GNU General Public                               
- *                License for more details.                                                     
- *                                                                                              
- *                The GNU General Public License should be included with                        
- *                this file.  If not, you can view it at                                        
- *                http://www.gnu.org/copyleft/gpl.html                                          
- *                or write to the Free Software Foundation, Inc., 59                            
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                        
- *                                                                                              
- * Revisions   :                                                                                
- *    $Log$                                                                                     
- *                                                                                              
- *********************************************************************/                         
-                                                                                                
-                                                                                                
-#include "config.h"                                                                             
-                                                                                                
-   ...necessary include files for us to do our work...                                          
-                                                                                                
-const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                               
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $"; 
+/*********************************************************************                         
+ *                                                                                             
+ * File        :  $Source$                                                                     
+ *                                                                                             
+ * Purpose     :  (Fill me in with a good description!)                                        
+ *                                                                                             
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                            
+ *                Privoxy team. http://www.privoxy.org/                                        
+ *                                                                                             
+ *                Based on the Internet Junkbuster originally written                          
+ *                by and Copyright (C) 1997 Anonymous Coders and                               
+ *                Junkbusters Corporation.  http://www.junkbusters.com                         
+ *                                                                                             
+ *                This program is free software; you can redistribute it                       
+ *                and/or modify it under the terms of the GNU General                          
+ *                Public License as published by the Free Software                             
+ *                Foundation; either version 2 of the License, or (at                          
+ *                your option) any later version.                                              
+ *                                                                                             
+ *                This program is distributed in the hope that it will                         
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                        
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                         
+ *                PARTICULAR PURPOSE.  See the GNU General Public                              
+ *                License for more details.                                                    
+ *                                                                                             
+ *                The GNU General Public License should be included with                       
+ *                this file.  If not, you can view it at                                       
+ *                http://www.gnu.org/copyleft/gpl.html                                         
+ *                or write to the Free Software Foundation, Inc., 59                           
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                       
+ *                                                                                             
+ * Revisions   :                                                                               
+ *    $Log$                                                                                    
+ *                                                                                             
+ *********************************************************************/                        
+                                                                                               
+                                                                                               
+#include "config.h"                                                                            
+                                                                                               
+   ...necessary include files for us to do our work...                                         
+                                                                                               
+const char FILENAME_h_rcs[] = FILENAME_H_VERSION;                                              
 
 Note: This declares the rcs variables that should be added to the
 "show-proxy-args" page. If this is a brand new creation by you, you are free to
@@ -1425,71 +1475,71 @@ can.
 
 Example for file header comments:
 
-#ifndef _FILENAME_H                                                                           
-#define _FILENAME_H                                                                           
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.42 2002/05/05 20:26:02 hal9 Exp $" 
-/*********************************************************************                        
- *                                                                                            
- * File        :  $Source$                                                                    
- *                                                                                            
- * Purpose     :  (Fill me in with a good description!)                                       
- *                                                                                            
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                           
- *                Privoxy team. http://www.privoxy.org/                                       
- *                                                                                            
- *                Based on the Internet Junkbuster originally written                         
- *                by and Copyright (C) 1997 Anonymous Coders and                              
- *                Junkbusters Corporation.  http://www.junkbusters.com                        
- *                                                                                            
- *                This program is free software; you can redistribute it                      
- *                and/or modify it under the terms of the GNU General                         
- *                Public License as published by the Free Software                            
- *                Foundation; either version 2 of the License, or (at                         
- *                your option) any later version.                                             
- *                                                                                            
- *                This program is distributed in the hope that it will                        
- *                be useful, but WITHOUT ANY WARRANTY; without even the                       
- *                implied warranty of MERCHANTABILITY or FITNESS FOR A                        
- *                PARTICULAR PURPOSE.  See the GNU General Public                             
- *                License for more details.                                                   
- *                                                                                            
- *                The GNU General Public License should be included with                      
- *                this file.  If not, you can view it at                                      
- *                http://www.gnu.org/copyleft/gpl.html                                        
- *                or write to the Free Software Foundation, Inc., 59                          
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                      
- *                                                                                            
- * Revisions   :                                                                              
- *    $Log$                                                                                   
- *                                                                                            
- *********************************************************************/                       
-                                                                                              
-                                                                                              
-#include "project.h"                                                                          
-                                                                                              
-#ifdef __cplusplus                                                                            
-extern "C" {                                                                                  
-#endif                                                                                        
-                                                                                              
-   ... function headers here ...                                                              
-                                                                                              
-                                                                                              
-/* Revision control strings from this header and associated .c file */                        
-extern const char FILENAME_rcs[];                                                             
-extern const char FILENAME_h_rcs[];                                                           
-                                                                                              
-                                                                                              
-#ifdef __cplusplus                                                                            
-} /* extern "C" */                                                                            
-#endif                                                                                        
-                                                                                              
-#endif /* ndef _FILENAME_H */                                                                 
-                                                                                              
-/*                                                                                            
-  Local Variables:                                                                            
-  tab-width: 3                                                                                
-  end:                                                                                        
-*/                                                                                            
+#ifndef _FILENAME_H                                                                          
+#define _FILENAME_H                                                                          
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.3 2002/09/05 02:27:59 hal9 Exp $" 
+/*********************************************************************                       
+ *                                                                                           
+ * File        :  $Source$                                                                   
+ *                                                                                           
+ * Purpose     :  (Fill me in with a good description!)                                      
+ *                                                                                           
+ * Copyright   :  Written by and Copyright (C) 2001 the SourceForge                          
+ *                Privoxy team. http://www.privoxy.org/                                      
+ *                                                                                           
+ *                Based on the Internet Junkbuster originally written                        
+ *                by and Copyright (C) 1997 Anonymous Coders and                             
+ *                Junkbusters Corporation.  http://www.junkbusters.com                       
+ *                                                                                           
+ *                This program is free software; you can redistribute it                     
+ *                and/or modify it under the terms of the GNU General                        
+ *                Public License as published by the Free Software                           
+ *                Foundation; either version 2 of the License, or (at                        
+ *                your option) any later version.                                            
+ *                                                                                           
+ *                This program is distributed in the hope that it will                       
+ *                be useful, but WITHOUT ANY WARRANTY; without even the                      
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A                       
+ *                PARTICULAR PURPOSE.  See the GNU General Public                            
+ *                License for more details.                                                  
+ *                                                                                           
+ *                The GNU General Public License should be included with                     
+ *                this file.  If not, you can view it at                                     
+ *                http://www.gnu.org/copyleft/gpl.html                                       
+ *                or write to the Free Software Foundation, Inc., 59                         
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.                     
+ *                                                                                           
+ * Revisions   :                                                                             
+ *    $Log$                                                                                  
+ *                                                                                           
+ *********************************************************************/                      
+                                                                                             
+                                                                                             
+#include "project.h"                                                                         
+                                                                                             
+#ifdef __cplusplus                                                                           
+extern "C" {                                                                                 
+#endif                                                                                       
+                                                                                             
+   ... function headers here ...                                                             
+                                                                                             
+                                                                                             
+/* Revision control strings from this header and associated .c file */                       
+extern const char FILENAME_rcs[];                                                            
+extern const char FILENAME_h_rcs[];                                                          
+                                                                                             
+                                                                                             
+#ifdef __cplusplus                                                                           
+} /* extern "C" */                                                                           
+#endif                                                                                       
+                                                                                             
+#endif /* ndef _FILENAME_H */                                                                
+                                                                                             
+/*                                                                                           
+  Local Variables:                                                                           
+  tab-width: 3                                                                               
+  end:                                                                                       
+*/                                                                                           
 
 Example for function comments:
 
@@ -1565,7 +1615,7 @@ steps:
   * Fill the Summary and Detailed Description with something intelligent (keep
     it short and precise).
    
-Do not mail to the mailinglist (we cannot keep track on issues there).
+Do not mail to the mailing list (we cannot keep track on issues there).
 
 -------------------------------------------------------------------------------
 
@@ -1587,8 +1637,8 @@ scp, ssh (ssh), gmake (GNU's version of make), autoconf, cvs.
 6.1. Version numbers
 
 First you need to determine which version number the release will have. Privoxy
-version numbers consist of three numbers, separated by dots, like in X.Y.Z,
-where:
+version numbers consist of three numbers, separated by dots, like in X.Y.Z
+(e.g. 3.0.0), where:
 
   * X, the version major, is rarely ever changed. It is increased by one if
     turning a development branch into stable substantially changes the
@@ -1598,11 +1648,11 @@ where:
   * Y, the version minor, represents the branch within the major version. At
     any point in time, there are two branches being maintained: The stable
     branch, with an even minor, say, 2N, in which no functionality is being
-    added and only bugfixes are made, and 2N+1, the development branch, in
+    added and only bug-fixes are made, and 2N+1, the development branch, in
     which the further development of Privoxy takes place. This enables us to
     turn the code upside down and inside out, while at the same time providing
     and maintaining a stable version. The minor is reset to zero (and one) when
-    the major is inrcemented. When a development branch has matured to the
+    the major is incremented. When a development branch has matured to the
     point where it can be turned into stable, the old stable branch 2N is given
     up (i.e. no longer maintained), the former development branch 2N+1 becomes
     the new stable branch 2N+2, and a new development branch 2N+3 is opened.
@@ -1618,6 +1668,19 @@ where:
     distinguished from released versions. The point version is reset to zero
     when the minor changes.
    
+In summary, the main CVS trunk is the development branch where new features are
+being worked on for the next stable series. This should almost always be where
+the most activity takes place. There is always at least one stable branch from
+the trunk, e.g now it is 3.0, which is only used to release stable versions.
+Once the initial .0 release of the stable branch has been done, then as a rule,
+only bugfixes that have had prior testing should be committed to the stable
+branch. At that point, it is mostly "hands off". Once there are enough bugfixes
+to justify a new release, the version of this branch is again incremented
+Example: 3.0.0 -> 3.0.1 -> 3.0.2, etc are all stable releases from within the
+stable branch. 3.1.x is currently the main trunk, and where work on 3.2.x is
+taking place. If any questions, please post to the devel list before committing
+to a stable branch!
+
 -------------------------------------------------------------------------------
 
 6.2. Before the Release: Freeze
@@ -1630,7 +1693,8 @@ The following must be done by one of the developers prior to each new release.
     last minute changes.
    
   * Increment the version number (point from odd to even in development
-    branches!) in configure.in.
+    branches!) in configure.in. (RPM spec files will need to be incremented as
+    well.)
    
   * If default.action has changed since last release (i.e. software release or
     standalone actions file release), bump up its version info to A.B in this
@@ -1641,9 +1705,26 @@ The following must be done by one of the developers prior to each new release.
     Then change the version info in doc/webserver/actions/index.php, line:
     '$required_actions_file_version = "A.B";'
    
-  * If the HTML documentation is not in sync with the SGML sources you need to
-    regenerate and upload it to the webserver. (If in doubt, just do it.) See
-    the Section "Updating the webserver" in this manual for details.
+  * All documentation should be rebuild after the version bump. Finished docs
+    should be then be committed to CVS (for those without the ability to build
+    these). Some docs may require rather obscure processing tools. config, the
+    man page (and the html version of the man page), and the PDF docs fall in
+    this category. REAMDE, the man page, AUTHORS, and config should all also be
+    committed to CVS for other packagers. The formal docs should be uploaded to
+    the webserver. See the Section "Updating the webserver" in this manual for
+    details.
+   
+  * The User Manual is also used for context sensitive help for the CGI editor.
+    This is version sensitive, so that the user will get appropriate help for
+    his/her release. So with each release a fresh version should be uploaded to
+    the webserver (this is in addition to the main User Manual link from the
+    main page since we need to keep manuals for various versions available).
+    The CGI pages will link to something like http://privoxy.org/$(VERSION)/
+    user-manual/. This will need to be updated for each new release. There is
+    no Makefile target for this at this time!!! It needs to be done manually.
+   
+  * All developers should look at the ChangeLog and make sure noteworthy
+    changes are referenced.
    
   * Commit all files that were changed in the above steps!
    
@@ -1668,7 +1749,7 @@ reasons the first package to be released is always the source tarball.
 
 For all types of packages, including the source tarball, you must make sure
 that you build from clean sources by exporting the right version from CVS into
-an empty directory:.
+an empty directory (just press return when asked for a password):
 
   mkdir dist # delete or choose different name if it already exists                                
   cd dist                                                                                          
@@ -1680,11 +1761,71 @@ after export from CVS. This is to make sure that all release packages, and with
 them, all future bug reports, are based on exactly the same code.
 
 Please find additional instructions for the source tarball and the individual
-platform dependent binary packages below.
+platform dependent binary packages below. And details on the Sourceforge
+release process below that.
 
 -------------------------------------------------------------------------------
 
-6.3.1. Source Tarball
+6.3.1. Note on Privoxy Packaging
+
+Please keep these general guidelines in mind when putting together your
+package. These apply to all platforms!
+
+  * Privoxy requires write access to: all *.action files, all logfiles, and the
+    trust file. You will need to determine the best way to do this for your
+    platform.
+   
+  * Please include up to date documentation. At a bare minimum:
+   
+    LICENSE (top-level directory)
+   
+    README (top-level directory)
+   
+    AUTHORS (top-level directory)
+   
+    man page (top-level directory, Unix-like platforms only)
+   
+    The User Manual (doc/webserver/user-manual/)
+   
+    FAQ (doc/webserver/faq/)
+   
+    Also suggested: Developer Manual (doc/webserver/developer-manual) and
+    ChangeLog (top-level directory). FAQ and the manuals are HTML docs. There
+    are also text versions in doc/text/ which could conceivably also be
+    included.
+   
+    The documentation has been designed such that the manuals are linked to
+    each other from parallel directories, and should be packaged that way.
+    privoxy-index.html can also be included and can serve as a focal point for
+    docs and other links of interest (and possibly renamed to index.html). This
+    should be one level up from the manuals. There is a link also on this page
+    to an HTMLized version of the man page. To avoid 404 for this, it is in CVS
+    as doc/webserver/man-page/privoxy-man-page.html, and should be included
+    along with the manuals. There is also a css stylesheets that can be
+    included for better presentation: p_doc.css. This should be in the same
+    directory with privoxy-index.html, (i.e. one level up from the manual
+    directories).
+   
+  * user.action is designed for local preferences. Make sure this does not get
+    overwritten!
+   
+  * Other configuration files should be installed as the new defaults, but all
+    previously installed configuration files should be preserved as backups.
+    This is just good manners :-)
+   
+  * Please check platform specific notes in this doc, if you haven't done
+    "Privoxy" packaging before for other platform specific issues. Conversely,
+    please add any notes that you know are important for your platform (or
+    contact one of the doc maintainers to do this if you can't).
+   
+  * Packagers should do a "clean" install of their package after building it.
+    So any previous installs should be removed first to ensure the integrity of
+    the newly built package. Then run the package for a while to make sure
+    there are no obvious problems, before uploading.
+   
+-------------------------------------------------------------------------------
+
+6.3.2. Source Tarball
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1705,7 +1846,7 @@ change log field, use the relevant section of the ChangeLog file.
 
 -------------------------------------------------------------------------------
 
-6.3.2. SuSE or Red Hat RPM
+6.3.3. SuSE, Conectiva or Red Hat RPM
 
 In following text, replace dist with either "rh" for Red Hat or "suse" for
 SuSE.
@@ -1740,7 +1881,7 @@ notes and change log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.3. OS/2
+6.3.4. OS/2
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the OS/2
@@ -1775,7 +1916,7 @@ tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.4. Solaris
+6.3.5. Solaris
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1799,7 +1940,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.5. Windows
+6.3.6. Windows
 
 You should ensure you have the latest version of Cygwin (from http://
 www.cygwin.com/). Run the following commands from within a Cygwin bash shell.
@@ -1808,13 +1949,13 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Windows
 setup module:
 
-        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
 
 Then you can build the package. This is fully automated, and is controlled by
 winsetup/GNUmakefile. All you need to do is:
 
-        cd winsetup                                                            
-        make                                                                   
+  cd winsetup                                                                  
+  make                                                                         
 
 Now you can manually rename privoxy_setup.exe to privoxy_setup_X_Y_Z.exe, and
 upload it to SourceForge. When releasing the package on SourceForge, use the
@@ -1822,19 +1963,26 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.6. Debian
+6.3.7. Debian
 
 First, make sure that you have freshly exported the right version into an empty
-directory. (See "Building and releasing packages" above). Then, run:
+directory. (See "Building and releasing packages" above). Then add a log entry
+to debian/changelog, if it is not already there, for example by running:
 
-  cd current                                                                   
-  autoheader && autoconf && ./configure                                        
+  debchange -v 3.1.1-alpha-1 "New upstream version"                            
 
-Then do FIXME.
+Then, run:
+
+  dpkg-buildpackage -rfakeroot -us -uc -b                                      
+
+This will create ../privoxy_3.1.1-alpha-1_i386.deb which can be uploaded. To
+upload the package to Sourceforge, simply issue
+
+  make debian-upload                                                           
 
 -------------------------------------------------------------------------------
 
-6.3.7. Mac OSX
+6.3.8. Mac OSX
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then get the Mac OSX
@@ -1856,7 +2004,7 @@ package name to match the release, and hit the "Create package" button. If you
 specify ./Privoxy.pkg as the output package name, you can then create the
 distributable zip file with the command:
 
-zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg                                  
+  zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg                                
 
 You can then upload privoxyosx_setup_x.y.z.zip anonymously to
 uploads.sourceforge.net/incoming, create a release for it, and you're done. Use
@@ -1864,9 +2012,9 @@ the release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.8. FreeBSD
+6.3.9. FreeBSD
 
-Login to Sourceforge's compilefarm via ssh:
+Login to Sourceforge's compile-farm via ssh:
 
   ssh cf.sourceforge.net                                                       
 
@@ -1888,7 +2036,7 @@ release notes and Change Log from the source tarball package.
 
 -------------------------------------------------------------------------------
 
-6.3.9. HP-UX 11
+6.3.10. HP-UX 11
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1900,7 +2048,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-6.3.10. Amiga OS
+6.3.11. Amiga OS
 
 First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then run:
@@ -1912,7 +2060,7 @@ Then do FIXME.
 
 -------------------------------------------------------------------------------
 
-6.3.11. AIX
+6.3.12. AIX
 
 Login to Sourceforge's compilefarm via ssh:
 
@@ -1947,11 +2095,13 @@ through the release steps. The upload is done via FTP:
    
   * password: ijbswa-developers@lists.sourceforge.net
    
+Or use the make targets as described above.
+
 Once this done go to http://sourceforge.net/project/admin/editpackages.php?
 group_id=11118, making sure you are logged in. Find your target platform in the
 second column, and click Add Release. You will then need to create a new
 release for your package, using the format of $VERSION ($CODE_STATUS), e.g.
-2.9.15 (beta).
+3.1.1 (beta).
 
 Now just follow the prompts. Be sure to add any appropriate Release notes. You
 should see your freshly uploaded packages in "Step 2. Add Files To This
@@ -1972,30 +2122,36 @@ essentially the same steps, but select Edit Release, instead of Add Release.
 When all (or: most of the) packages have been uploaded and made available, send
 an email to the announce mailing list, Subject: "Version X.Y.Z available for
 download". Be sure to include the download location, the release notes and the
-change log.
+Changelog. Also, post an updated News item on the project page Sourceforge, and
+update the Home page and docs linked from the Home page (see below).
 
 -------------------------------------------------------------------------------
 
 7. Update the Webserver
 
-When updating the webserver, please follow these steps to make sure that no
-broken links, incosistent contents or permission problems will occur:
+The webserver should be updated at least with each stable release. When
+updating, please follow these steps to make sure that no broken links,
+inconsistent contents or permission problems will occur (as it has many times
+in the past!):
 
-If you have changed anything in the documentation source SGML files, do:
+If you have changed anything in the stable-branch documentation source SGML
+files, do:
 
-  make dok # (or make redkat-dok if make dok doesn't work for you)             
+  make dok dok-pdf # (or 'make redhat-dok dok-pdf' if 'make dok' doesn't work for you)
 
 That will generate doc/webserver/user-manual, doc/webserver/developer-manual,
-doc/webserver/faq and doc/webserver/index.html automatically.
+doc/webserver/faq, doc/pdf/*.pdf and doc/webserver/index.html automatically.
 
-If you changed the manual page source, generate doc/webserver/man-page/
+If you changed the manual page sources, generate doc/webserver/man-page/
 privoxy-man-page.html by running "make man". (This is a separate target due to
-dependencies on some obscure perl scripts. See comments in GNUmakefile.)
+dependencies on some obscure perl scripts [now in CVS, but not well tested].
+See comments in GNUmakefile.)
 
 If you want to add new files to the webserver, create them locally in the doc/
 webserver/* directory (or create new directories under doc/webserver).
 
-Next, commit any changes from the above steps to CVS. All set? Then do
+Next, commit any changes from the above steps to CVS. All set? If these are
+docs in the stable branch, then do:
 
   make webserver                                                               
 
@@ -2003,71 +2159,80 @@ This will do the upload to the webserver (www.privoxy.org) and ensure all files
 and directories there are group writable.
 
 Please do NOT use any other means of transferring files to the webserver to
-avoid permission problems.
+avoid permission problems. Also, please do not upload docs from development
+branches or versions. The publicly posted docs should be in sync with the last
+official release.
 
 -------------------------------------------------------------------------------
 
 8. Contacting the developers, Bug Reporting and Feature Requests
 
-We value your feedback. However, to provide you with the best support, please
-note the following sections.
+We value your feedback. In fact, we rely on it to improve Privoxy and its
+configuration. However, please note the following hints, so we can provide you
+with the best support:
 
 -------------------------------------------------------------------------------
 
 8.1. Get Support
 
-To get support, use the Sourceforge Support Forum:
+For casual users, our support forum at SourceForge is probably best suited: 
+http://sourceforge.net/tracker/?group_id=11118&atid=211118
 
-    http://sourceforge.net/tracker/?group_id=11118&atid=211118
-
--------------------------------------------------------------------------------
-
-8.2. Report bugs
-
-To submit bugs, use the Sourceforge Bug Forum:
-
-    http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-
-Make sure that the bug has not already been submitted. Please try to verify
-that it is a Privoxy bug, and not a browser or site bug first. If you are using
-your own custom configuration, please try the stock configs to see if the
-problem is a configuration related bug. And if not using the latest development
-snapshot, please try the latest one. Or even better, CVS sources. Please be
-sure to include the Privoxy version, platform, browser, any pertinent log data,
-any other relevant details (please be specific) and, if possible, some way to
-reproduce the bug.
+All users are of course welcome to discuss their issues on the users mailing
+list, where the developers also hang around.
 
 -------------------------------------------------------------------------------
 
-8.3. Request new features
+8.2. Report Bugs
 
-To submit ideas on new features, use the Sourceforge feature request forum:
+Please report all bugs only through our bug tracker: http://sourceforge.net/
+tracker/?group_id=11118&atid=111118.
 
-    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+Before doing so, please make sure that the bug has not already been submitted
+and observe the additional hints at the top of the submit form.
+
+Please try to verify that it is a Privoxy bug, and not a browser or site bug
+first. If unsure, try toggling off Privoxy, and see if the problem persists.
+The appendix of the user manual also has helpful information on action
+debugging. If you are using your own custom configuration, please try the stock
+configs to see if the problem is configuration related.
+
+If not using the latest version, chances are that the bug has been found and
+fixed in the meantime. We would appreciate if you could take the time to 
+upgrade to the latest version (or even the latest CVS snapshot) and verify your
+bug, but this is not required for reporting.
 
 -------------------------------------------------------------------------------
 
-8.4. Report ads or other filter problems
+8.3. Request New Features
 
-You can also send feedback on websites that Privoxy has problems with. Please
-bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
-to a page with problems, use the bookmark to send us feedback. We will look
-into the issue as soon as possible.
+You are welcome to submit ideas on new features or other proposals for
+improvement through our feature request tracker at http://sourceforge.net/
+tracker/?atid=361118&group_id=11118.
+
+-------------------------------------------------------------------------------
+
+8.4. Report Ads or Other Actions-Related Problems
+
+Please send feedback on ads that slipped through, innocent images that were
+blocked, and any other problems relating to the default.action file through our
+actions feedback mechanism located at http://www.privoxy.org/actions/. On this
+page, you will also find a bookmark which will take you back there from any
+troubled site and even pre-fill the form!
 
 New, improved default.action files will occasionally be made available based on
-your feedback. These will be announced on the ijbswa-announce list.
+your feedback. These will be announced on the ijbswa-announce list and
+available from our the files section of our project page.
 
 -------------------------------------------------------------------------------
 
 8.5. Other
 
-For any other issues, feel free to use the mailing lists:
- 
-    http://sourceforge.net/mail/?group_id=11118.
-
-Anyone interested in actively participating in development and related
-discussions can also join the appropriate mailing list. Archives are available,
-too. See the page on Sourceforge.
+For any other issues, feel free to use the mailing lists. Technically
+interested users and people who wish to contribute to the project are also
+welcome on the developers list! You can find an overview of all Privoxy-related
+mailing lists, including list archives, at: http://sourceforge.net/mail/?
+group_id=11118.
 
 -------------------------------------------------------------------------------
 
@@ -2104,15 +2269,31 @@ this program; if not, write to the
 
 9.2. History
 
-Privoxy is evolved, and derived from, the Internet Junkbuster, with many
-improvments and enhancements over the original.
+In the beginning, there was the Internet Junkbuster, by Anonymous Coders and 
+Junkbusters Corporation. It saved many users a lot of pain in the early days of
+web advertising and user tracking.
 
-Junkbuster was originally written by Anonymous Coders and Junkbusters
-Corporation, and was released as free open-source software under the GNU GPL. 
-Stefan Waldherr made many improvements, and started the SourceForge project
-Privoxy to rekindle development. There are now several active developers
-contributing. The last stable release of Junkbuster was v2.0.2, which has now
-grown whiskers ;-).
+But the web, its protocols and standards, and with it, the techniques for
+forcing users to consume ads, give up autonomy over their browsing, and for
+spying on them, kept evolving. Unfortunately, the Internet Junkbuster did not.
+Version 2.0.2, published in 1998, was (and is) the last official release
+available from Junkbusters Corporation. Fortunately, it had been released under
+the GNU GPL, which allowed further development by others.
+
+So Stefan Waldherr started maintaining an improved version of the software, to
+which eventually a number of people contributed patches. It could already
+replace banners with a transparent image, and had a first version of pop-up
+killing, but it was still very closely based on the original, with all its
+limitations, such as the lack of HTTP/1.1 support, flexible per-site
+configuration, or content modification. The last release from this effort was
+version 2.0.2-10, published in 2000.
+
+Then, some developers picked up the thread, and started turning the software
+inside out, upside down, and then reassembled it, adding many new features
+along the way.
+
+The result of this is Privoxy, whose first stable release, 3.0, was released
+August, 2002.
 
 -------------------------------------------------------------------------------
 
@@ -2120,24 +2301,34 @@ grown whiskers ;-).
 
 Other references and sites of interest to Privoxy users:
 
-http://www.privoxy.org/, The Privoxy Home page.
+http://www.privoxy.org/, the Privoxy Home page.
 
-http://sourceforge.net/projects/ijbswa, the Project Page for Privoxy on        
-Sourceforge.                                                                   
+http://www.privoxy.org/faq/, the Privoxy FAQ.
 
-http://p.p/, access Privoxy from your browser. Alternately, http://            
-config.privoxy.org may work in some situations where the first does not.       
+http://sourceforge.net/projects/ijbswa/, the Project Page for Privoxy on       
+SourceForge.                                                                   
 
-http://p.p/, and select "Privoxy - Submit Filter Feedback" to submit "misses"  
-to the developers.                                                             
+http://config.privoxy.org/, the web-based user interface. Privoxy must be      
+running for this to work. Shortcut: http://p.p/                                
 
-http://www.junkbusters.com/ht/en/cookies.html
+http://www.privoxy.org/actions/, to submit "misses" to the developers.
 
-http://www.waldherr.org/junkbuster/
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/contrib/, cool and fun   
+ideas from Privoxy users.                                                      
 
-http://privacy.net/analyze/
+http://www.junkbusters.com/ht/en/cookies.html, an explanation how cookies are  
+used to track web users.                                                       
 
-http://www.squid-cache.org/
+http://www.junkbusters.com/ijb.html, the original Internet Junkbuster.
 
- 
+http://www.waldherr.org/junkbuster/, Stefan Waldherr's version of Junkbuster,  
+from which Privoxy was derived.                                                
+
+http://privacy.net/analyze/, a useful site to check what information about you 
+is leaked while you browse the web.                                            
+
+http://www.squid-cache.org/, a very popular caching proxy, which is often used 
+together with Privoxy.                                                         
+
+http://www.privoxy.org/developer-manual/, the Privoxy developer manual.
 

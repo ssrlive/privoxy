@@ -4,9 +4,10 @@
 >Quickstart to Using Privoxy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="HOME"
-TITLE="Privoxy User Manual"
+TITLE="Privoxy 3.1.1 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Note to Upgraders"
@@ -27,6 +28,7 @@ ALINK="#0000FF"
 ><DIV
 CLASS="NAVHEADER"
 ><TABLE
+SUMMARY="Header navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -35,7 +37,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy User Manual</TH
+>Privoxy 3.1.1 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -44,6 +46,7 @@ ALIGN="left"
 VALIGN="bottom"
 ><A
 HREF="upgradersnote.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -57,6 +60,7 @@ ALIGN="right"
 VALIGN="bottom"
 ><A
 HREF="startup.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR
@@ -69,11 +73,9 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="QUICKSTART"
->4. Quickstart to Using <SPAN
+NAME="QUICKSTART">4. Quickstart to Using <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-></A
 ></H1
 ><P
 > <P
@@ -240,9 +242,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="QUICKSTART-AD-BLOCKING"
->4.1. Quickstart to Ad Blocking</A
-></H2
+NAME="QUICKSTART-AD-BLOCKING">4.1. Quickstart to Ad Blocking</H2
 ><P
 > Ad blocking is but one of <SPAN
 CLASS="APPLICATION"
@@ -254,7 +254,7 @@ CLASS="APPLICATION"
 > 
  This section will provide a quick summary of ad blocking so 
  you can get up to speed quickly without having to read the more extensive
- information provided below, though this is highly recommeneded.</P
+ information provided below, though this is highly recommended.</P
 ><P
 > First a bit of a warning ... blocking ads is much like blocking SPAM: the
  more aggressive you are about it, the more likely you are to block 
@@ -265,13 +265,19 @@ CLASS="QUOTE"
 >"problem"</SPAN
 > sites, and to spend more time adjusting the
  configuration to solve these unintended consequences. In short, there is 
- not an easy way to eliminate <I
+ not an easy way to eliminate <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >all</I
+></SPAN
 > ads. Either take 
- the easy way and settle for <I
+ the easy way and settle for <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >most</I
+></SPAN
 > ads blocked with the
  default configuration, or jump in and tweak it for your personal surfing
  habits and preferences.</P
@@ -337,10 +343,10 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > will perform the
- respective actions. If not, then nothing special happens. Futhermore, web
+ respective actions. If not, then nothing special happens. Furthermore, web
  pages may contain embedded, secondary URLs that your web browser will
  use to load additional components of the page, as it parses the
- original page's HTML content. An ad image for instance, is just a URL
+ original page's HTML content. An ad image for instance, is just an URL
  embedded in the page somewhere. The image itself may be on the same server,
  or a server somewhere else on the Internet. Complex web pages will have many
  such embedded URLs.</P
@@ -406,15 +412,19 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >'s default configuration already does this
    for all common image types (e.g. GIF), but there are many situations where this
-   is not as easy to determine. So we'll force it in these cases. This is particularly
-   important for ad blocking, since  only if we know that it's an image, we can replace
-   it by an image instead of the BLOCKED page, which would only result in a
+   is not so easy to determine. So we'll force it in these cases. This is particularly
+   important for ad blocking, since  only if we know that it's an image of
+   some kind, can we replace it with an image of our choosing, instead of the 
    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> BLOCKED page (which would only result in
+   a <SPAN
 CLASS="QUOTE"
 >"broken image"</SPAN
-> icon. There are some limitations to this though. For
-   instance, you can't just brute-force an image substituion for an entire HTML page
-   in most situations.
+> icon). There are some limitations to this
+   though. For instance, you can't just brute-force an image substitution for
+   an entire HTML page in most situations.
   </P
 ></LI
 ><LI
@@ -438,9 +448,12 @@ HREF="actions-file.html#BLOCK"
 >block</A
 ></TT
 > action somewhere in the
-   configuration, <I
+   configuration, <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >and</I
+></SPAN
 >, it must also match an
    <TT
 CLASS="LITERAL"
@@ -460,10 +473,13 @@ BORDER="0"
 ><TBODY
 ><TR
 ><TD
->       <I
+>       <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >pattern</I
-> - a checkboard pattern, so that an ad 
+></SPAN
+> - a checkerboard pattern, so that an ad 
     replacement is obvious. This is the default.
    </TD
 ></TR
@@ -478,9 +494,12 @@ BORDER="0"
 ><TBODY
 ><TR
 ><TD
->       <I
+>       <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >blank</I
+></SPAN
 > - A very small empty GIF image is displayed.
     This is the so-called <SPAN
 CLASS="QUOTE"
@@ -499,9 +518,12 @@ BORDER="0"
 ><TBODY
 ><TR
 ><TD
->       <I
+>       <SPAN
+CLASS="emphasis"
+><I
 CLASS="EMPHASIS"
 >http://&#60;URL&#62;</I
+></SPAN
 > - A redirect to any image anywhere
     of the user's choosing (advanced usage).
    </TD
@@ -601,9 +623,7 @@ CLASS="GUIBUTTON"
 >  <DIV
 CLASS="FIGURE"
 ><A
-NAME="AEN356"
-></A
-><P
+NAME="AEN391"><P
 ><B
 >Figure 1. Actions Files in Use</B
 ></P
@@ -611,10 +631,7 @@ NAME="AEN356"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="../images/files-in-use.jpg"
-ALT="Screenshot of Files in Use"
-></IMG
-></P
+SRC="../images/files-in-use.jpg"></P
 ></DIV
 ></DIV
 >
@@ -742,7 +759,7 @@ HREF="actions-file.html"
 HREF="actions-file.html#ACT-EXAMPLES"
 >Actions Files Tutorial</A
 >.
- The ideas explained thererin also apply to the web-based editor.</P
+ The ideas explained therein also apply to the web-based editor.</P
 ></DIV
 ></DIV
 ><DIV
@@ -750,6 +767,7 @@ CLASS="NAVFOOTER"
 ><HR
 ALIGN="LEFT"
 WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -761,6 +779,7 @@ ALIGN="left"
 VALIGN="top"
 ><A
 HREF="upgradersnote.html"
+ACCESSKEY="P"
 >Prev</A
 ></TD
 ><TD
@@ -769,6 +788,7 @@ ALIGN="center"
 VALIGN="top"
 ><A
 HREF="index.html"
+ACCESSKEY="H"
 >Home</A
 ></TD
 ><TD
@@ -777,6 +797,7 @@ ALIGN="right"
 VALIGN="top"
 ><A
 HREF="startup.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR

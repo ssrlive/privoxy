@@ -1,10 +1,11 @@
 <HTML
 ><HEAD
 ><TITLE
->Privoxy User Manual</TITLE
+>Privoxy 3.1.1 User Manual</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.60"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="NEXT"
 TITLE="Introduction"
 HREF="introduction.html"><LINK
@@ -25,9 +26,7 @@ CLASS="TITLEPAGE"
 ><H1
 CLASS="TITLE"
 ><A
-NAME="AEN2"
->Privoxy User Manual</A
-></H1
+NAME="AEN2">Privoxy 3.1.1 User Manual</H1
 ><P
 CLASS="PUBDATE"
 > <SUB
@@ -36,7 +35,7 @@ HREF="copyright.html"
 >Copyright</A
 > © 2001, 2002 by 
  <A
-HREF="http://www.privoxy.org"
+HREF="http://www.privoxy.org/"
 TARGET="_top"
 >Privoxy Developers</A
 >
@@ -44,18 +43,19 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 1.121 2002/05/23 23:20:17 oes Exp $<BR></P
+>$Id: user-manual.sgml,v 2.2 2002/09/05 05:45:30 hal9 Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
 ><A
-NAME="AEN9"
-></A
-><P
+NAME="AEN9"><P
 ></P
 ><P
->  The user manual gives users information on how to install, configure and use
-  <A
+>  The <I
+CLASS="CITETITLE"
+>User Manual</I
+> gives users information on how to
+  install, configure and use <A
 HREF="http://www.privoxy.org/"
 TARGET="_top"
 ><SPAN
@@ -91,14 +91,16 @@ CLASS="APPLICATION"
  Junkbuster</SPAN
 > (tm).</P
 ><P
->  You can find the latest version of the user manual at  <A
+>  You can find the latest version of the <I
+CLASS="CITETITLE"
+>User Manual</I
+> at  <A
 HREF="http://www.privoxy.org/user-manual/"
 TARGET="_top"
 >http://www.privoxy.org/user-manual/</A
 >.
   Please see the <A
 HREF="contact.html"
-TARGET="_top"
 >Contact section</A
 > on how to
   contact the developers.
@@ -146,7 +148,7 @@ HREF="installation.html#INSTALLATION-PACKAGES"
 ><DT
 >2.1.1. <A
 HREF="installation.html#INSTALLATION-PACK-RPM"
->Red Hat, SuSE RPMs and Conectiva</A
+>Red Hat, SuSE and Conectiva RPMs</A
 ></DT
 ><DT
 >2.1.2. <A
@@ -171,12 +173,17 @@ HREF="installation.html#INSTALLATION-OS2"
 ><DT
 >2.1.6. <A
 HREF="installation.html#INSTALLATION-MAC"
->Max OSX</A
+>Mac OSX</A
 ></DT
 ><DT
 >2.1.7. <A
 HREF="installation.html#INSTALLATION-AMIGA"
 >AmigaOS</A
+></DT
+><DT
+>2.1.8. <A
+HREF="installation.html#INSTALLATTION-GENTOO"
+>Gentoo</A
 ></DT
 ></DL
 ></DD
@@ -184,6 +191,11 @@ HREF="installation.html#INSTALLATION-AMIGA"
 >2.2. <A
 HREF="installation.html#INSTALLATION-SOURCE"
 >Building from Source</A
+></DT
+><DT
+>2.3. <A
+HREF="installation.html#INSTALLATION-KEEPUPDATED"
+>Keeping your Installation Up-to-Date</A
 ></DT
 ></DL
 ></DD
@@ -222,7 +234,7 @@ CLASS="APPLICATION"
 ><DT
 >5.1. <A
 HREF="startup.html#START-REDHAT"
->RedHat and Conectiva</A
+>Red Hat and Conectiva</A
 ></DT
 ><DT
 >5.2. <A
@@ -252,7 +264,7 @@ HREF="startup.html#START-OS2"
 ><DT
 >5.7. <A
 HREF="startup.html#START-MACOSX"
->MAX OSX</A
+>Mac OSX</A
 ></DT
 ><DT
 >5.8. <A
@@ -261,6 +273,11 @@ HREF="startup.html#START-AMIGAOS"
 ></DT
 ><DT
 >5.9. <A
+HREF="startup.html#START-GENTOO"
+>Gentoo</A
+></DT
+><DT
+>5.10. <A
 HREF="startup.html#CMDOPTIONS"
 >Command Line Options</A
 ></DT
@@ -278,7 +295,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >6.1. <A
-HREF="configuration.html#AEN501"
+HREF="configuration.html#AEN582"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -469,12 +486,12 @@ HREF="actions-file.html"
 ><DL
 ><DT
 >8.1. <A
-HREF="actions-file.html#AEN1553"
+HREF="actions-file.html#AEN1645"
 >Finding the Right Mix</A
 ></DT
 ><DT
 >8.2. <A
-HREF="actions-file.html#AEN1560"
+HREF="actions-file.html#AEN1652"
 >How to Edit</A
 ></DT
 ><DT
@@ -490,18 +507,13 @@ HREF="actions-file.html#AF-PATTERNS"
 ><DD
 ><DL
 ><DT
->22<A
-HREF="actions-file.html#AEN1591"
-></A
-></DT
-><DT
 >8.4.1. <A
-HREF="actions-file.html#AEN1624"
+HREF="actions-file.html#AEN1716"
 >The Domain Pattern</A
 ></DT
 ><DT
 >8.4.2. <A
-HREF="actions-file.html#AEN1686"
+HREF="actions-file.html#AEN1778"
 >The Path Pattern</A
 ></DT
 ></DL
@@ -618,7 +630,7 @@ HREF="actions-file.html#SET-IMAGE-BLOCKER"
 ></DT
 ><DT
 >8.5.21. <A
-HREF="actions-file.html#AEN2600"
+HREF="actions-file.html#AEN2706"
 >Summary</A
 ></DT
 ></DL
@@ -637,12 +649,12 @@ HREF="actions-file.html#ACT-EXAMPLES"
 ><DL
 ><DT
 >8.7.1. <A
-HREF="actions-file.html#AEN2652"
+HREF="actions-file.html#AEN2758"
 >default.action</A
 ></DT
 ><DT
 >8.7.2. <A
-HREF="actions-file.html#AEN2806"
+HREF="actions-file.html#AEN2915"
 >user.action</A
 ></DT
 ></DL
@@ -658,7 +670,7 @@ HREF="filter-file.html"
 ><DL
 ><DT
 >9.1. <A
-HREF="filter-file.html#AEN2909"
+HREF="filter-file.html#AEN3018"
 >Filter File Tutorial</A
 ></DT
 ></DL
@@ -715,7 +727,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >12.1. <A
-HREF="copyright.html#AEN3103"
+HREF="copyright.html#AEN3220"
 >License</A
 ></DT
 ><DT
@@ -749,7 +761,7 @@ HREF="appendix.html#REGEX"
 ></DT
 ><DT
 >14.2. <A
-HREF="appendix.html#AEN3353"
+HREF="appendix.html#AEN3474"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -784,6 +796,7 @@ CLASS="NAVFOOTER"
 ><HR
 ALIGN="LEFT"
 WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -805,6 +818,7 @@ ALIGN="right"
 VALIGN="top"
 ><A
 HREF="introduction.html"
+ACCESSKEY="N"
 >Next</A
 ></TD
 ></TR

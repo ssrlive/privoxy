@@ -2,7 +2,7 @@
 <HTML><HEAD><TITLE>Manpage of PRIVOXY</TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></HEAD><BODY>
 <H1>PRIVOXY</H1>
-Section:  (1)<BR>Updated: 14 May 2002<BR><A HREF="#index">Index</A>
+Section:  (1)<BR>Updated: 05 September 2002<BR><A HREF="#index">Index</A>
 <HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -13,10 +13,10 @@ privoxy - Privacy Enhancing Proxy
 <H2>SYNOPSIS</H2>
 
 <P>
-<B>privoxy</B> [<B>--help</B>]  [<B>--version</B>]  [<B>--no-daemon</B>]  [<B>--pidfile </B><I>pidfile</I><B></B>]  [<B>--user </B><I>user[.group]</I><B></B>]  [<B></B><I>configfile</I><B></B>] <B>(UNIX)</B>
+<B>privoxy</B> [<B>--help</B> ] [<B>--version</B> ] [<B>--no-daemon</B> ] [<B>--pidfile </B><I>pidfile</I><B></B> ] [<B>--user </B><I>user[.group]</I><B></B> ] [<B></B><I>configfile</I><B></B> ]<B> (UNIX)</B>
 <P>
 <P>
-<B>privoxy.exe</B> [<B></B><I>configfile</I><B></B>] <B>(Windows)</B>
+<B>privoxy.exe</B> [<B></B><I>configfile</I><B></B> ]<B> (Windows)</B>
 <P>
 <A NAME="lbAD">&nbsp;</A>
 <H2>OPTIONS</H2>
@@ -90,7 +90,8 @@ For Internet Explorer, go through: <B>Tools</B>;
 <P>
 
 The Secure (SSL) Proxy should also be set to the same values, otherwise
-https: URLs will not be proxied. 
+https: URLs will not be proxied. Note: <B>Privoxy</B> can only
+proxy HTTP and HTTPS traffic. Do not try it with FTP or other protocols.
 <P>
 
 For other browsers, check the documentation.
@@ -112,17 +113,19 @@ executable.
 <P>
 
 The name and number of configuration files has changed from previous
-versions, and is subject to change as development progresses. In fact, the
-configuration itself is changed  and  much more sophisticated. See the
-user-manual for a
-complete explanation of all configuration options and general usage.
+versions, and is subject to change as development
+progresses. In fact, the configuration itself is changed  and  much more
+sophisticated. See the user-manual for a complete
+explanation of all configuration options and general usage, and notes for 
+upgrading from <B>Junkbuster</B> and earlier <B>Privoxy</B>
+versions.
 <P>
 
 The actions list (ad blocks, etc) can also be configured with your
-web browser at <A HREF="http://config.privoxy.org/.">http://config.privoxy.org/.</A>
+web browser at <A HREF="http://config.privoxy.org/">http://config.privoxy.org/.</A>
 <B>Privoxy's</B> configuration parameters  can also  be viewed at
 the same page. In addition, <B>Privoxy</B> can be toggled on/off.
-This is an internal page.
+This is an internal page, and does not require Internet access.
 <A NAME="lbAH">&nbsp;</A>
 <H2>SAMPLE CONFIGURATION</H2>
 
@@ -263,11 +266,11 @@ automatically.
 
 <P>
 
-This is a beta version of <B>Privoxy</B>. Not 
+This is a alpha version of <B>Privoxy</B>. Not 
 all features are well tested.
 <P>
 
-Please see the <I>user-manual</I> on how to contact the
+Please see the <I>User Manual</I> on how to contact the
 developers for feature requests, reporting problems, and other questions.
 <A NAME="lbAL">&nbsp;</A>
 <H2>SEE ALSO</H2>
@@ -279,27 +282,43 @@ users:
 <P>
 
 <P>
-<A HREF="http://www.privoxy.org/,">http://www.privoxy.org/,</A> 
-The <B>Privoxy</B> Home page. 
+<A HREF="http://www.privoxy.org/">http://www.privoxy.org/,</A> 
+the <B>Privoxy</B> Home page. 
 <P>
-<A HREF="http://sourceforge.net/projects/ijbswa,">http://sourceforge.net/projects/ijbswa,</A> 
+<A HREF="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/,</A> 
+the <B>Privoxy</B> FAQ. 
+<P>
+<A HREF="http://sourceforge.net/projects/ijbswa/">http://sourceforge.net/projects/ijbswa/,</A> 
 the Project Page for <B>Privoxy</B> on 
-Sourceforge.
+SourceForge.
 <P>
-<A HREF="http://p.p/,">http://p.p/,</A> access
-<B>Privoxy</B> from your browser. Alternately, 
-<A HREF="http://config.privoxy.org">http://config.privoxy.org</A>
-may work in some situations where the first does not.
+<A HREF="http://config.privoxy.org/">http://config.privoxy.org/,</A>
+the web-based user interface. <B>Privoxy</B> must be
+running for this to work. Shortcut: <A HREF="http://p.p/">http://p.p/</A>
 <P>
-<A HREF="http://p.p/">http://p.p/</A> to submit ``misses'' to the developers. 
+<A HREF="http://www.privoxy.org/actions/">http://www.privoxy.org/actions/,</A> to submit ``misses'' to the developers. 
 <P>
-<A HREF="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</A>
+<A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/contrib/">http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/contrib/,</A> cool
+and fun ideas from <B>Privoxy</B> users.
 <P>
-<A HREF="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</A>
+<A HREF="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html,</A>
+an explanation how cookies are used to track web users.
 <P>
-<A HREF="http://privacy.net/analyze/">http://privacy.net/analyze/</A>
+<A HREF="http://www.junkbusters.com/ijb.html">http://www.junkbusters.com/ijb.html,</A>
+the original Internet Junkbuster.
 <P>
-<A HREF="http://www.squid-cache.org/">http://www.squid-cache.org/</A>
+<A HREF="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/,</A>
+Stefan Waldherr's version of Junkbuster, from which <B>Privoxy</B> was
+derived.
+<P>
+<A HREF="http://privacy.net/analyze/">http://privacy.net/analyze/,</A> a useful site
+to check what information about you is leaked while you browse the web.
+<P>
+<A HREF="http://www.squid-cache.org/">http://www.squid-cache.org/,</A> a very popular
+caching proxy, which is often used together with <B>Privoxy</B>.
+<P>
+<A HREF="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/,</A> 
+the <B>Privoxy</B> developer manual. 
 <A NAME="lbAM">&nbsp;</A>
 <H2>DEVELOPMENT TEAM</H2>
 
@@ -311,13 +330,17 @@ may work in some situations where the first does not.
  Thomas Steudten
  Rodney Stromlund
  Rodrigo Barbosa (RPM specfiles)
+ Moritz Barsnick
  Hal Burgiss (docs)
+ Karsten Hopp (Red Hat)
  Alexander Lazic
  G&#225;bor Lipt&#225;k
  Guy
  Haroon Rafique
+ Roland Rosenfeld (Debian)
+ Georg Sauthoff (Gentoo)
  David Schmidt (OS/2, Mac OSX ports)
- Joerg Strohmayer
+ Joerg Strohmayer (Amiga)
  Sarantis Paskalis
 </PRE>
 
@@ -386,6 +409,6 @@ USA
 This document was created by
 man2html,
 using the manual pages.<BR>
-Time: 00:10:58 GMT, May 15, 2002
+Time: 23:23:42 GMT, September 05, 2002
 </BODY>
 </HTML>
