@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.33 2002/03/29 01:31:48 hal9 Exp $
+$Id: faq.sgml,v 1.34 2002/03/29 04:35:56 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy.
@@ -127,7 +127,7 @@ development. Other developers subsequently joined with Stefan, and have since
 added many new features, refinements and enhancements. The result of this
 effort is Privoxy.
 
-Privoxy started with the same Junkbuster 2.0.2 code base, but has advanced
+Privoxy started with the Junkbuster 2.0.2 code base, but has advanced
 significantly at this point.
 
 -------------------------------------------------------------------------------
@@ -626,14 +626,15 @@ programmed to handle certain pages specially.
 
 With recent versions of Privoxy (version 2.9.x), you can get some information
 about Privoxy and change some settings by going to http://p.p/ or,
-equivalently, http://www.privoxy.org/config/ (Note that p.p is far easier to
-type but may not work in some configurations).
+equivalently, http://config.privoxy.org/ (Note that p.p is far easier to type
+but may not work in some configurations. With the name change to Privoxy, this
+is changed from the previous http://i.j.b/ or earlier 2.9.x versions).
 
-These pages are *not* forwarded to a server on the Internet - instead they are
+These pages are not forwarded to a server on the Internet - instead they are
 handled by a special web server which is built in to Privoxy.
 
 If you are not running Privoxy, then http://p.p/ will fail, and http://
-www.privoxy.org/config/ will return a web page telling you you're not running
+config.privoxy.org/ will return a web page telling you you're not running
 Privoxy.
 
 If you have version 2.0.2, then the equivalent is http://example.com/
@@ -828,7 +829,7 @@ for any request to the server, and Privoxy will not be in the picture. The best
 thing to do is try flushing the browser's caches. And then try again.
 
 If this doesn't help, you probably have an error in the rule you applied. Try
-pasting the full URL of the offending ad into http://www.privoxy.org/config/
+pasting the full URL of the offending ad into http://config.privoxy.org/
 show-url-info and see if any actions match your new rule.
 
 -------------------------------------------------------------------------------
