@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.10 2001/09/10 10:14:34 oes Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.11 2001/09/14 00:17:32 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.10 2001/09/10 10:14:34 oes Exp $"
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.11  2001/09/14 00:17:32  jongfoster
+ *    Tidying up memory allocation. New function init_action().
+ *
  *    Revision 1.10  2001/09/10 10:14:34  oes
  *    Removing unused variable
  *
@@ -205,9 +208,9 @@ void merge_actions (struct action_spec *dest,
       if (src->multi_remove_all[i])
       {
          /* Remove everything from dest */
-         destroy_list(dest->multi_remove[i]);
-         destroy_list(dest->multi_add[i]);
+         list_remove_all(dest->multi_remove[i]);
          dest->multi_remove_all[i] = 1;
+
          list_duplicate(dest->multi_add[i], src->multi_add[i]);
       }
       else if (dest->multi_remove_all[i])
@@ -518,8 +521,8 @@ static int get_actions(char *line,
                       *
                       * Remove *ALL*.
                       */
-                     destroy_list(remove);
-                     destroy_list(add);
+                     list_remove_all(remove);
+                     list_remove_all(add);
                      cur_action->multi_remove_all[action->index] = 1;
                   }
                   else
@@ -586,7 +589,7 @@ char * actions_to_text(struct action_spec *action)
    unsigned mask = action->mask;
    unsigned add  = action->add;
    char * result = strdup("");
-   struct list * lst;
+   struct list_entry * lst;
 
    /* sanity - prevents "-feature +feature" */
    mask |= add;
@@ -621,7 +624,7 @@ char * actions_to_text(struct action_spec *action)
    }                                                 \
    else                                              \
    {                                                 \
-      lst = action->multi_remove[__index]->next;     \
+      lst = action->multi_remove[__index]->first;    \
       while (lst)                                    \
       {                                              \
          result = strsav(result, " -" __name "{");   \
@@ -630,7 +633,7 @@ char * actions_to_text(struct action_spec *action)
          lst = lst->next;                            \
       }                                              \
    }                                                 \
-   lst = action->multi_add[__index]->next;           \
+   lst = action->multi_add[__index]->first;          \
    while (lst)                                       \
    {                                                 \
       result = strsav(result, " +" __name "{");      \
@@ -668,7 +671,7 @@ char * current_action_to_text(struct current_action_spec *action)
 {
    unsigned flags  = action->flags;
    char * result = strdup("");
-   struct list * lst;
+   struct list_entry * lst;
 
 #define DEFINE_ACTION_BOOL(__name, __bit)   \
    if (flags & __bit)                       \
@@ -693,7 +696,7 @@ char * current_action_to_text(struct current_action_spec *action)
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)            \
-   lst = action->multi[__index]->next;                  \
+   lst = action->multi[__index]->first;                 \
    if (lst == NULL)                                     \
    {                                                    \
       result = strsav(result, " -" __name);             \
@@ -737,6 +740,7 @@ char * current_action_to_text(struct current_action_spec *action)
 void init_current_action (struct current_action_spec *dest)
 {
    memset(dest, '\0', sizeof(*dest));
+
    dest->flags = ACTION_MOST_COMPATIBLE;
 }
 
@@ -802,8 +806,7 @@ void merge_current_action (struct current_action_spec *dest,
    {
       if (src->multi_remove_all[i])
       {
-         /* Remove everything from dest */
-         destroy_list(dest->multi[i]);
+         /* Remove everything from dest, then add src->multi_add */
          list_duplicate(dest->multi[i], src->multi_add[i]);
       }
       else

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.37 2001/09/10 11:12:24 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.38 2001/09/16 13:01:46 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.37 2001/09/10 11:12:24 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.38  2001/09/16 13:01:46  jongfoster
+ *    Removing redundant function call that zeroed zalloc()'d memory.
+ *
  *    Revision 1.37  2001/09/10 11:12:24  oes
  *    Deleted unused variable
  *
@@ -581,7 +584,7 @@ static void chat(struct client_state *csp)
     * vanilla wafer, then send the vanilla wafer.
     */
    if ((csp->config->jarfile != NULL)
-       && (csp->action->multi[ACTION_MULTI_WAFER]->next == NULL)
+       && list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
        && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
    {
       enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
@@ -622,7 +625,7 @@ static void chat(struct client_state *csp)
    /* We have a request. */
 
    hdr = sed(client_patterns, add_client_headers, csp);
-   destroy_list(csp->headers);
+   list_remove_all(csp->headers);
 
    /* 
     * Now, check to see if we need to intercept it, i.e.

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.30 2001/09/16 11:00:10 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.31 2001/09/16 11:38:02 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,14 @@ const char filters_rcs[] = "$Id: filters.c,v 1.30 2001/09/16 11:00:10 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.31  2001/09/16 11:38:02  jongfoster
+ *    Splitting fill_template() into 2 functions:
+ *    template_load() loads the file
+ *    template_fill() performs the PCRS regexps.
+ *    This is because the CGI edit interface has a "table row"
+ *    template which is used many times in the page - this
+ *    change means it's only loaded from disk once.
+ *
  *    Revision 1.30  2001/09/16 11:00:10  jongfoster
  *    New function alloc_http_response, for symmetry with free_http_response
  *
@@ -637,11 +645,11 @@ struct http_response *trust_url(struct client_state *csp)
    /*
     * Export the trust info, if available
     */
-   if (csp->config->trust_info->next)
+   if (csp->config->trust_info->first)
    {
-      struct list *l;
+      struct list_entry *l;
 
-      for (l = csp->config->trust_info->next; l ; l = l->next)
+      for (l = csp->config->trust_info->first; l ; l = l->next)
       {
          sprintf(buf, "<li> <a href=%s>%s</a><br>\n",l->str, l->str);
          p = strsav(p, buf);
