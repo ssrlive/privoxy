@@ -27,6 +27,9 @@
 # 
 #  Revisions   :
 #     $Log: re_filterfile,v $
+#     Revision 1.9  2001/07/13 14:03:48  oes
+#     Elimiated yet another bug in the banner-by-size jobs. Shame on me!
+#
 #     Revision 1.8  2001/06/29 13:34:00  oes
 #     - Added explanation for U and T options
 #     - Added hint on image replacement by CGI call
@@ -101,6 +104,14 @@ s/(<frameset[^>]+?)frameborder=['"]?(no|0)['"]?/$1/ig
 #
 # ********************************************************************/
 s/status='.*?';*//ig
+
+# ********************************************************************/
+#
+# Get rid of Javascript cookies, like found on privacy.net:
+#
+# ********************************************************************/
+
+#s|document.cookie|c\?\?kie_what\?|sig
 
 # ********************************************************************/
 #
