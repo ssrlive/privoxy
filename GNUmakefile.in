@@ -1,9 +1,9 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.19 2002/03/22 20:53:03 morcego Exp $
+# $Id: GNUmakefile.in,v 1.20 2002/03/24 11:39:17 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
-# IJBSWA team.  http://ijbswa.sourceforge.net
+# Privoxy team.  http://ijbswa.sourceforge.net
 #
 # Based on the Internet Junkbuster originally written
 # by and Copyright (C) 1997 Anonymous Coders and 
@@ -27,7 +27,500 @@
 # or write to the Free Software Foundation, Inc., 59
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
+
+#############################################################################
+# Version number (for RPM)
+#############################################################################
+
+VERSION_MAJOR = @VERSION_MAJOR@
+VERSION_MINOR = @VERSION_MINOR@
+VERSION_POINT = @VERSION_POINT@
+CODE_STATUS   = @CODE_STATUS@
+VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
+# will automatically be postfixed with -$(RPM_PACKAGEV) in the SPECfile
+RPM_VERSION   = $(VERSION)
+RPM_PACKAGEV  = 3
+
+
+#############################################################################
+# Directories for "make install"
+#############################################################################
+
+DEST        = @sysconfdir@/privoxy
+SBIN_DEST   = @sbindir@
+MAN_DEST    = @mandir@
+
+
+#############################################################################
+# Build tools
+#############################################################################
+
+PROGRAM    = jbng@EXEEXT@
+CC         = @CC@
+ECHO       = echo
+GZIP_PROG  = gzip
+INSTALL    = cp -f
+LD         = @CC@
+RM         = rm -f
+STRIP_PROG = strip
+SED	   = sed
+CAT        = cat
+RPM        = rpm
+MV	   = mv
+TAR        = tar
+MAKE       = make
+LN         = ln
+WDUMP      = @WDUMP@ -dump
+JADEBIN    = @JADEBIN@
+DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
+DB2HTML    = @DB2HTML@
+DKPREFIX   = @DKPREFIX@
+
+# Program to do LF->CRLF
+#
+# The sed version should be the most portable, but it doesn't for for me,
+# the other two do.  FIXME.
+#   - Jon
+#DOSFILTER  = $(SED) -e $$'s,$$,\r,'
+#DOSFILTER  = gawk -v ORS='\r\n' '{print $0;}'
+DOSFILTER  = perl -p -e 's/\n/\r\n/'
+
+#############################################################################
+# Setup for make distribution rh and suse for now 
+#############################################################################
+
+TAR_ARCH = /tmp/Privoxy-$(RPM_VERSION).tar.gz
+RPM_BASE = @RPM_BASE@
+
+#############################################################################
+# Filenames and libraries
+#############################################################################
+
+C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
+         errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
+         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
+         urlmatch.c
+
+C_OBJS = $(C_SRC:.c=.@OBJEXT@)
+C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
+
+W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
+W32_FILES = @WIN_ONLY@w32.res
+W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.@OBJEXT@) $(W32_FILES)
+W32_HDRS  = @WIN_ONLY@w32log.h w32taskbar.h win32.h w32res.h
+W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
+W32_INIS  = @WIN_ONLY@config.txt trust.txt
+
+PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
+PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.@OBJEXT@)
+PCRS_HDRS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.h)
+
+PCRE_SRC     = @STATIC_PCRE_ONLY@pcre/get.c pcre/maketables.c pcre/study.c pcre/pcre.c
+PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.@OBJEXT@)
+PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h pcre/pcre.h
+
+# No REGEX (Either because dynamically linked pcreposix, or no regex at all):
+REGEX_SRC    =
+# GNU REGEX:
+@GNU_REGEX_ONLY@REGEX_SRC    = gnu_regex.c
+# PCRE REGEX:
+@PCRE_REGEX_ONLY@@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
+
+REGEX_OBJS   = $(REGEX_SRC:.c=.@OBJEXT@)
+REGEX_HDRS   = $(REGEX_SRC:.c=.h)
+
+# Dependencies introduced by #include "project.h".
+PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcre.h
+
+# Socket libraries for platforms that need them explicitly defined
+SOCKET_LIB   = @SOCKET_LIB@
+
+# PThreads library, if needed.
+PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
+
+SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
+OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
+HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
+LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
+
+
+#############################################################################
+# Compiler switches
+#############################################################################
+
+# The flag "-mno-win32" can be used by Cygwin to emulate a un?x type build.
+# The flag "-mwindows -mno-cygwin" will cause Cygwin to use MingW32 for a
+# Win32 GUI build.
+# The flag "-pthread" is required if using Pthreads under Linux (and
+# possibly other OSs).
+SPECIAL_CFLAGS = @SPECIAL_CFLAGS@
+
+# Add your flags here 
+OTHER_CFLAGS =   
+
+CFLAGS = @CFLAGS@ @CPPFLAGS@ $(OTHER_CFLAGS) $(SPECIAL_CFLAGS) -Wall \
+         @STATIC_PCRE_ONLY@ -Ipcre 
+
+LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
+
+
+#############################################################################
+# Build section.
+#
+# There should NOT be any targets above this line.
+#############################################################################
+all: $(PROGRAM)
+
+
+#############################################################################
+# Phony targets
+#############################################################################
+.PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
+suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
+install
+
+
+#############################################################################
+# Define this explicitly because Solaris is broken!
+#############################################################################
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+
+#############################################################################
+# Win32 config files
+#############################################################################
+
+inifiles: $(W32_INIS)
+
+config.txt: config
+	$(SED) -e 's!\trustfile trust!trustfile trust.txt!' \
+	       -e 's!\jarfile jarfile!jarfile jar.log!' \
+	       -e 's!\logfile logfile!logfile privoxy.log!' \
+	       -e 's!#Win32-only: !!' \
+	       < $< | \
+	       $(DOSFILTER) > $@
+	# LF to CRLF in default.action
+	$(DOSFILTER) <default.action >default.action.txt && mv default.action.txt default.action
+	# LF to CRLF in default.filter
+	$(DOSFILTER) <default.filter >default.filter.txt && mv default.filter.txt default.filter
+
+trust.txt: trust
+	$(DOSFILTER) < $< > $@ 
+
+re_filterfile.txt: re_filterfile
+	$(DOSFILTER) < $< > $@ 
+
+
+#############################################################################
+# redhat distribution alpha and x86
+#############################################################################
+
+redhat-dist:
+	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
+		if [ ! -w $(RPM_BASE)/$$dir ]; then \
+			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
+			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
+			$(ECHO) "%_topdir /home/foo/rpm-build"; \
+			exit 1; \
+		fi; \
+	done; \
+
+	$(MAKE) clobber
+	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
+
+	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
+              privoxy-rh.spec > $$TMPFILE ; then \
+      $(MV) -f $$TMPFILE privoxy-rh.spec; \
+   else \
+      $(ECHO) "Could not set version info in specfile."; \
+      exit 1;\
+   fi
+
+	$(TAR) --exclude "CVS" --exclude "privoxy-suse.spec" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+
+#
+# anonymously ncftps the rpms to sourceforge
+#
+redhat-upload:
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+# better should use `arch` here instead of ix86 to support other platforms too
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
+     # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+
+#############################################################################
+# sun solaris  distribution
+#############################################################################
+solaris-dist:
+	@$(ECHO) coming soon. 
+
+#############################################################################
+# suse distribution (need to be root to build)
+#############################################################################
+
+suse-dist:
+	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
+		if [ ! -w $(RPM_BASE)/$$dir ]; then \
+			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
+			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
+			$(ECHO) "%_topdir /home/foo/rpm-build"; \
+			exit 1; \
+		fi; \
+	done; \
+
+	$(MAKE) clobber
+	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
+
+	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
+	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
+             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
+              privoxy-suse.spec > $$TMPFILE ; then \
+      $(MV) -f $$TMPFILE privoxy-suse.spec; \
+   else \
+      $(ECHO) "Could not set version info in specfile."; \
+      exit 1;\
+   fi
+
+	$(TAR) --exclude "CVS" --exclude "privoxy-rh.spec" -czf $(TAR_ARCH) .
+	$(RPM) --clean -ta  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+
+#
+# anonymously ncftps the rpms to sourceforge
+#
+suse-upload:
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+# better should use `arch` here instead of ix86 to support other platforms too
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
+
+# handle with care. use with root.
+suse-clean:
+	rpm -e junkbuster-suse
+	rm -rf /etc/junkbuster
+	rm -rf /etc/rc.d/junkbuster*
+	rm -rf /var/run/junkbuster.pid 
+	rm -rf /var/log/junkbuster
+	rm -f /etc/init.d/junkbuster
+	rm -f /usr/sbin/junkbuster
+	rm -f /usr/sbin/rcjunkbuster
+	rm -f /usr/share/man/man1/junkbuster.1.gz
+	rpm -e privoxy-suse
+	rm -rf /etc/privoxy
+	rm -rf /etc/rc.d/privoxy*
+	rm -rf /var/run/privoxy.pid 
+	rm -rf /var/log/privoxy
+	rm -f /etc/init.d/privoxy
+	rm -f /usr/sbin/privoxy
+	rm -f /usr/sbin/rcprivoxy
+	rm -f /usr/share/man/man1/privoxy.1.gz
+
+#############################################################################
+# Windows distribution
+#############################################################################
+win-dist:
+	$(ECHO) Not implemented.
+
+
+#############################################################################
+# Tarball distribution
+#############################################################################
+tarball-dist:
+	@make clean
+	make $(PROGRAM) 
+#	remove all objects and create the tarball with the binary
+	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../Privoxy-distribution-$(VERSION).tar.gz ijb/
+	chmod a+r ../../Privoxy-distribution-$(VERSION).tar.gz
+	@$(ECHO) Tarball with binary created.
+
+#############################################################################
+#
+# Documentation
+#
+# converts doc/source/*.sgml into html, text and man pages
+#
+#############################################################################
+dok: doc/source/ldpOK.dsl
+	mkdir -p doc/text doc/man
+#  user manual
+	rm -rf doc/webserver/user-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
+##  developer manual
+	rm -rf doc/webserver/developer-manual
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
+##  faq
+	rm -rf doc/webserver/faq
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
+	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+
+redhat-dok: doc/source/ldpOK.dsl
+	mkdir -p doc/text doc/man doc/source/user-manual \
+          doc/source/developer-manual doc/source/faq
+##  user manual
+	rm -rf doc/webserver/user-manual
+	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. &&\
+          mv user-manual ../webserver
+	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && \
+          $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
+          user-manual
+##  developer manual
+	rm -rf doc/webserver/developer-manual
+	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml &&\
+          cd .. && mv developer-manual ../webserver
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && \
+          $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
+          developer-manual
+##  faq
+	rm -rf doc/webserver/faq
+	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
+	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
+          tmp.html > ../text/faq.txt && rm -rf tmp.html faq
+
+doc/source/ldpOK.dsl:
+	if [ "$(DKPREFIX)" != "none" ]; then \
+		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
+	else \
+		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
+	fi
+
+#############################################################################
+#
+# Webserver
+#
+# moves dokumentation to webserver
+#
+#############################################################################
+webserver:
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) You have run make dok/redhat-dok before, right?
+	@$(ECHO) Note that this command scps all stuff to the webserver,
+	@$(ECHO) it will not remove obsolete documents.
+	@$(ECHO) -------------------------------------------------------
+	chmod -R a+r doc/webserver
+	find doc/webserver -type d -exec chmod a+rx {} \;
+	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
+
+#############################################################################
+# Source file dependencies
+#############################################################################
+
+actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
+cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) cgiedit.h cgisimple.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+cgiedit.@OBJEXT@:   cgiedit.c   cgiedit.h   config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
+encode.@OBJEXT@:    encode.c    encode.h    config.h
+errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
+filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
+gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
+jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
+jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h cgi.h
+killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
+list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
+loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
+loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
+miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
+parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
+ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
+urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
+
+# GNU regex
+gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
+
+# PCRS
+pcrs.@OBJEXT@: pcrs.c pcre/pcre.h pcrs.h
+
+# PCRE
+pcre/get.@OBJEXT@:        pcre/get.c        pcre/config.h pcre/internal.h pcre/pcre.h
+pcre/maketables.@OBJEXT@: pcre/maketables.c pcre/config.h pcre/internal.h pcre/pcre.h
+pcre/pcre.@OBJEXT@:       pcre/pcre.c       pcre/config.h pcre/internal.h pcre/pcre.h pcre/chartables.c 
+pcre/pcreposix.@OBJEXT@:  pcre/pcreposix.c  pcre/config.h pcre/internal.h pcre/pcre.h pcre/pcreposix.h
+pcre/study.@OBJEXT@:      pcre/study.c      pcre/config.h pcre/internal.h pcre/pcre.h
+
+# An auxiliary program makes the PCRE default character table source
+
+pcre/chartables.c:   pcre/dftables@EXEEXT@
+		pcre/dftables@EXEEXT@ >pcre/chartables.c
+
+pcre/dftables@EXEEXT@:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal.h pcre/config.h
+		$(CC) -o pcre/dftables@EXEEXT@ $(CFLAGS) pcre/dftables.c
+
+# Win32
+w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
+w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
+win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h win32.h
+
+w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/idle.ico icons/junkbust.ico config.h
+	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
+
+# AmigaOS
+@AMIGAOS_ONLY@OBJS += amiga.o
+@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -m68020 -noixemul -fbaserel -msmall-code
+@AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
+@AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
+@AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
+
+
+$(PROGRAM): $(OBJS) $(W32_FILES)
+	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
+
+clean:
+	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
+
+clobber: clean
+	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` TAGS junkbuster.log privoxy.log config.cache *~ *.tar.gz
+
+tags: $(SRCS) $(HDRS)
+	etags $(SRCS) $(HDRS)
+
+tarball-src: clobber
+	$(LN) -s current ../Privoxy-$(VERSION)-$(CODE_STATUS)
+	$(TAR) -C.. -cvhzf Privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz Privoxy-$(VERSION)-$(CODE_STATUS)
+	$(RM) ../Privoxy-$(VERSION)-$(CODE_STATUS)
+
+install: all
+	#
+	# FIXME: This is a dirty hack to have an install target
+	#        that works at least for some setups. This needs
+	#        to be fixed!
+	#
+	$(STRIP_PROG) $(PROGRAM)
+	$(INSTALL) $(PROGRAM) $(SBIN_DEST)
+	mkdir -p $(DEST)/user-manual
+	mkdir -p $(DEST)/templates
+	cp -r doc/webserver/user-manual $(DEST)
+	cp -r templates $(DEST)
+	$(INSTALL) config default.action default.filter trust $(DEST)
+	# FIXME $(ECHO) privoxy.logrotate privoxy.monthly privoxy.weekly
+	# FIXME: Need new manual! $(GZIP_PROG) -c privoxy.1 > $(MAN_DEST)/privoxy.1.gz
+	$(INSTALL) privoxy.init /etc/init.d/privoxy
+
+
+#############################################################################
+
+## Local Variables:
+## tab-width: 3
+## end:
+
 # $Log: GNUmakefile.in,v $
+# Revision 1.20  2002/03/24 11:39:17  jongfoster
+# Renaming config files
+#
 # Revision 1.19  2002/03/22 20:53:03  morcego
 # - Ongoing process to change name to JunkbusterNG
 # - configure/configure.in: no change needed
@@ -299,483 +792,3 @@
 # Initial import of version 2.9.3 source tree
 #
 #
-
-#############################################################################
-# Version number (for RPM)
-#############################################################################
-
-VERSION_MAJOR = @VERSION_MAJOR@
-VERSION_MINOR = @VERSION_MINOR@
-VERSION_POINT = @VERSION_POINT@
-CODE_STATUS   = @CODE_STATUS@
-VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
-# will automatically be postfixed with -$(RPM_PACKAGEV) in the SPECfile
-RPM_VERSION   = $(VERSION)
-RPM_PACKAGEV  = 3
-
-
-#############################################################################
-# Directories for "make install"
-#############################################################################
-
-DEST        = @sysconfdir@/junkbuster
-SBIN_DEST   = @sbindir@
-MAN_DEST    = @mandir@
-
-
-#############################################################################
-# Build tools
-#############################################################################
-
-PROGRAM    = jbng@EXEEXT@
-CC         = @CC@
-ECHO       = echo
-GZIP_PROG  = gzip
-INSTALL    = cp -f
-LD         = @CC@
-RM         = rm -f
-STRIP_PROG = strip
-SED	   = sed
-CAT        = cat
-RPM        = rpm
-MV	   = mv
-TAR        = tar
-MAKE       = make
-LN         = ln
-WDUMP      = @WDUMP@ -dump
-JADEBIN    = @JADEBIN@
-DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
-DB2HTML    = @DB2HTML@
-DKPREFIX   = @DKPREFIX@
-
-# Program to do LF->CRLF
-#
-# The sed version should be the most portable, but it doesn't for for me,
-# the other two do.  FIXME.
-#   - Jon
-#DOSFILTER  = $(SED) -e $$'s,$$,\r,'
-#DOSFILTER  = gawk -v ORS='\r\n' '{print $0;}'
-DOSFILTER  = perl -p -e 's/\n/\r\n/'
-
-#############################################################################
-# Setup for make distribution rh and suse for now 
-#############################################################################
-
-TAR_ARCH = /tmp/JunkbusterNG-$(RPM_VERSION).tar.gz
-RPM_BASE = @RPM_BASE@
-
-#############################################################################
-# Filenames and libraries
-#############################################################################
-
-C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
-         errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
-         list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
-         urlmatch.c
-
-C_OBJS = $(C_SRC:.c=.@OBJEXT@)
-C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
-
-W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c
-W32_FILES = @WIN_ONLY@w32.res
-W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.@OBJEXT@) $(W32_FILES)
-W32_HDRS  = @WIN_ONLY@w32log.h w32taskbar.h win32.h w32res.h
-W32_LIB   = @WIN_ONLY@-lwsock32 -lcomctl32
-W32_INIS  = @WIN_ONLY@config.txt trust.txt
-
-PCRS_SRC     = @STATIC_PCRS_ONLY@pcrs.c
-PCRS_OBJS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.@OBJEXT@)
-PCRS_HDRS    = @STATIC_PCRS_ONLY@$(PCRS_SRC:.c=.h)
-
-PCRE_SRC     = @STATIC_PCRE_ONLY@pcre/get.c pcre/maketables.c pcre/study.c pcre/pcre.c
-PCRE_OBJS    = @STATIC_PCRE_ONLY@$(PCRE_SRC:.c=.@OBJEXT@)
-PCRE_HDRS    = @STATIC_PCRE_ONLY@pcre/config.h pcre/chartables.c pcre/internal.h pcre/pcre.h
-
-# No REGEX (Either because dynamically linked pcreposix, or no regex at all):
-REGEX_SRC    =
-# GNU REGEX:
-@GNU_REGEX_ONLY@REGEX_SRC    = gnu_regex.c
-# PCRE REGEX:
-@PCRE_REGEX_ONLY@@STATIC_PCRE_ONLY@REGEX_SRC = pcre/pcreposix.c
-
-REGEX_OBJS   = $(REGEX_SRC:.c=.@OBJEXT@)
-REGEX_HDRS   = $(REGEX_SRC:.c=.h)
-
-# Dependencies introduced by #include "project.h".
-PROJECT_H_DEPS = project.h $(REGEX_HDRS) $(PCRS_HDRS) @STATIC_PCRE_ONLY@pcre/pcre.h
-
-# Socket libraries for platforms that need them explicitly defined
-SOCKET_LIB   = @SOCKET_LIB@
-
-# PThreads library, if needed.
-PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
-
-SRCS         = $(C_SRC)  $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
-OBJS         = $(C_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
-HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
-LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
-
-
-#############################################################################
-# Compiler switches
-#############################################################################
-
-# The flag "-mno-win32" can be used by Cygwin to emulate a un?x type build.
-# The flag "-mwindows -mno-cygwin" will cause Cygwin to use MingW32 for a
-# Win32 GUI build.
-# The flag "-pthread" is required if using Pthreads under Linux (and
-# possibly other OSs).
-SPECIAL_CFLAGS = @SPECIAL_CFLAGS@
-
-# Add your flags here 
-OTHER_CFLAGS =   
-
-CFLAGS = @CFLAGS@ @CPPFLAGS@ $(OTHER_CFLAGS) $(SPECIAL_CFLAGS) -Wall \
-         @STATIC_PCRE_ONLY@ -Ipcre 
-
-LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
-
-
-#############################################################################
-# Build section.
-#
-# There should NOT be any targets above this line.
-#############################################################################
-all: $(PROGRAM)
-
-
-#############################################################################
-# Phony targets
-#############################################################################
-.PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
-suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
-install
-
-
-#############################################################################
-# Define this explicitly because Solaris is broken!
-#############################################################################
-%.o: %.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
-
-
-#############################################################################
-# Win32 config files
-#############################################################################
-
-inifiles: $(W32_INIS)
-
-config.txt: config
-	$(SED) -e 's!\trustfile trust!trustfile trust.txt!' \
-	       -e 's!\jarfile jarfile!jarfile jar.log!' \
-	       -e 's!\logfile logfile!logfile junkbuster.log!' \
-	       -e 's!#Win32-only: !!' \
-	       < $< | \
-	       $(DOSFILTER) > $@
-	# LF to CRLF in default.action
-	$(DOSFILTER) <default.action >default.action.txt && mv default.action.txt default.action
-	# LF to CRLF in default.filter
-	$(DOSFILTER) <default.filter >default.filter.txt && mv default.filter.txt default.filter
-
-trust.txt: trust
-	$(DOSFILTER) < $< > $@ 
-
-re_filterfile.txt: re_filterfile
-	$(DOSFILTER) < $< > $@ 
-
-
-#############################################################################
-# redhat distribution alpha and x86
-#############################################################################
-
-redhat-dist:
-	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
-		if [ ! -w $(RPM_BASE)/$$dir ]; then \
-			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
-			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
-			$(ECHO) "%_topdir /home/foo/rpm-build"; \
-			exit 1; \
-		fi; \
-	done; \
-
-	$(MAKE) clobber
-	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
-
-	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-              junkbusterng-rh.spec > $$TMPFILE ; then \
-      $(MV) -f $$TMPFILE junkbusterng-rh.spec; \
-   else \
-      $(ECHO) "Could not set version info in specfile."; \
-      exit 1;\
-   fi
-
-	$(TAR) --exclude "CVS" --exclude "junkbuster-suse.spec" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-#
-# anonymously ncftps the rpms to sourceforge
-#
-redhat-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/junkbusterng-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-# better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/junkbusterng-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
-	@$(ECHO) ... and release the files.
-	@$(ECHO) -------------------------------------------------------
-     # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
-
-#############################################################################
-# sun solaris  distribution
-#############################################################################
-solaris-dist:
-	@$(ECHO) coming soon. 
-
-#############################################################################
-# suse distribution (need to be root to build)
-#############################################################################
-
-suse-dist:
-	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
-		if [ ! -w $(RPM_BASE)/$$dir ]; then \
-			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
-			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
-			$(ECHO) "%_topdir /home/foo/rpm-build"; \
-			exit 1; \
-		fi; \
-	done; \
-
-	$(MAKE) clobber
-	if [ -f $(TAR_ARCH) ]; then $(RM) $(TAR_ARCH); fi
-
-	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-             -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-              junkbuster-suse.spec > $$TMPFILE ; then \
-      $(MV) -f $$TMPFILE junkbuster-suse.spec; \
-   else \
-      $(ECHO) "Could not set version info in specfile."; \
-      exit 1;\
-   fi
-
-	$(TAR) --exclude "CVS" --exclude "junkbuster-rh.spec" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-#
-# anonymously ncftps the rpms to sourceforge
-#
-suse-upload:
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-# better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
-	@$(ECHO) ... and release the files.
-	@$(ECHO) -------------------------------------------------------
-
-# handle with care. use with root.
-suse-clean:
-	rpm -e junkbuster-suse
-	rm -rf /etc/junkbuster
-	rm -rf /etc/rc.d/junkbuster*
-	rm -rf /var/run/junkbuster.pid 
-	rm -rf /var/log/junkbuster
-	rm -f /etc/init.d/junkbuster
-	rm -f /usr/sbin/junkbuster
-	rm -f /usr/sbin/rcjunkbuster
-	rm -f /usr/share/man/man1/junkbuster.1.gz
-
-#############################################################################
-# Windows distribution
-#############################################################################
-win-dist:
-	$(ECHO) Not implemented.
-
-
-#############################################################################
-# Tarball distribution
-#############################################################################
-tarball-dist:
-	@make clean
-	make $(PROGRAM) 
-#	remove all objects and create the tarball with the binary
-	cd .. && $(RM) ijb/a.out ijb/core ijb/*.@OBJEXT@ && tar --exclude "ijb/CVS" -cvzf ../JunkbusterNG-distribution-$(VERSION).tar.gz ijb/
-	chmod a+r ../../JunkbusterNG-distribution-$(VERSION).tar.gz
-	@$(ECHO) Tarball with binary created.
-
-#############################################################################
-#
-# Documentation
-#
-# converts doc/source/*.sgml into html, text and man pages
-#
-#############################################################################
-dok: doc/source/ldpOK.dsl
-	mkdir -p doc/text doc/man
-#  user manual
-	rm -rf doc/webserver/user-manual
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl user-manual.sgml && mv user-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks user-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/user-manual.txt && rm -rf tmp.html user-manual
-##  developer manual
-	rm -rf doc/webserver/developer-manual
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl developer-manual.sgml && mv developer-manual ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks developer-manual.sgml > tmp.html && lynx -dump tmp.html > ../text/developer-manual.txt && rm -rf tmp.html developer-manual
-##  faq
-	rm -rf doc/webserver/faq
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl faq.sgml && mv faq ../webserver
-	cd doc/source && $(DB2HTML) -s ldpOK.dsl --nochunks faq.sgml > tmp.html && lynx -dump tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-
-redhat-dok: doc/source/ldpOK.dsl
-	mkdir -p doc/text doc/man doc/source/user-manual \
-          doc/source/developer-manual doc/source/faq
-##  user manual
-	rm -rf doc/webserver/user-manual
-	cd doc/source/user-manual && $(DB) ../user-manual.sgml && cd .. &&\
-          mv user-manual ../webserver
-	cd doc/source && $(DB) -V nochunks user-manual.sgml > tmp.html && \
-          $(WDUMP) tmp.html > ../text/user-manual.txt && rm -rf tmp.html \
-          user-manual
-##  developer manual
-	rm -rf doc/webserver/developer-manual
-	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml &&\
-          cd .. && mv developer-manual ../webserver
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && \
-          $(WDUMP) tmp.html > ../text/developer-manual.txt && rm -rf tmp.html \
-          developer-manual
-##  faq
-	rm -rf doc/webserver/faq
-	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && mv faq ../webserver
-	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) \
-          tmp.html > ../text/faq.txt && rm -rf tmp.html faq
-
-doc/source/ldpOK.dsl:
-	if [ "$(DKPREFIX)" != "none" ]; then \
-		sed -e "s@/usr/share/sgml/docbook/dsssl-stylesheets@$(DKPREFIX)@g" doc/source/ldp.dsl > doc/source/ldpOK.dsl; \
-	else \
-		cp doc/source/ldp.dsl doc/source/ldpOK.dsl; \
-	fi
-
-#############################################################################
-#
-# Webserver
-#
-# moves dokumentation to webserver
-#
-#############################################################################
-webserver:
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) You have run make dok/redhat-dok before, right?
-	@$(ECHO) Note that this command scps all stuff to the webserver,
-	@$(ECHO) it will not remove obsolete documents.
-	@$(ECHO) -------------------------------------------------------
-	chmod -R a+r doc/webserver
-	find doc/webserver -type d -exec chmod a+rx {} \;
-	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-
-#############################################################################
-# Source file dependencies
-#############################################################################
-
-actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h
-cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) cgiedit.h cgisimple.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-cgiedit.@OBJEXT@:   cgiedit.c   cgiedit.h   config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
-deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
-encode.@OBJEXT@:    encode.c    encode.h    config.h
-errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
-filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
-gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
-jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
-jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h cgi.h
-killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
-list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
-loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
-loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
-miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
-parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
-ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
-urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
-
-# GNU regex
-gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
-
-# PCRS
-pcrs.@OBJEXT@: pcrs.c pcre/pcre.h pcrs.h
-
-# PCRE
-pcre/get.@OBJEXT@:        pcre/get.c        pcre/config.h pcre/internal.h pcre/pcre.h
-pcre/maketables.@OBJEXT@: pcre/maketables.c pcre/config.h pcre/internal.h pcre/pcre.h
-pcre/pcre.@OBJEXT@:       pcre/pcre.c       pcre/config.h pcre/internal.h pcre/pcre.h pcre/chartables.c 
-pcre/pcreposix.@OBJEXT@:  pcre/pcreposix.c  pcre/config.h pcre/internal.h pcre/pcre.h pcre/pcreposix.h
-pcre/study.@OBJEXT@:      pcre/study.c      pcre/config.h pcre/internal.h pcre/pcre.h
-
-# An auxiliary program makes the PCRE default character table source
-
-pcre/chartables.c:   pcre/dftables@EXEEXT@
-		pcre/dftables@EXEEXT@ >pcre/chartables.c
-
-pcre/dftables@EXEEXT@:       pcre/dftables.c pcre/maketables.c pcre/pcre.h pcre/internal.h pcre/config.h
-		$(CC) -o pcre/dftables@EXEEXT@ $(CFLAGS) pcre/dftables.c
-
-# Win32
-w32log.@OBJEXT@: w32log.c errlog.h config.h jcc.h loadcfg.h miscutil.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h w32taskbar.h win32.h
-w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
-win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h win32.h
-
-w32.res: w32.rc w32res.h icons/ico00001.ico icons/ico00002.ico icons/ico00003.ico icons/ico00004.ico icons/ico00005.ico icons/ico00006.ico icons/ico00007.ico icons/ico00008.ico icons/idle.ico icons/junkbust.ico config.h
-	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
-
-# AmigaOS
-@AMIGAOS_ONLY@OBJS += amiga.o
-@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -m68020 -noixemul -fbaserel -msmall-code
-@AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
-@AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
-@AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
-
-
-$(PROGRAM): $(OBJS) $(W32_FILES)
-	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
-
-clean:
-	$(RM) a.out core $(OBJS) $(W32_FILES) $(W32_INIS)
-
-clobber: clean
-	$(RM) $(PROGRAM) cscope.* logfile *.pdb *.lib *.exp `find . -name tags` TAGS junkbuster.log config.cache *~ *.tar.gz
-
-tags: $(SRCS) $(HDRS)
-	etags $(SRCS) $(HDRS)
-
-tarball-src: clobber
-	$(LN) -s current ../JunkbusterNG-$(VERSION)-$(CODE_STATUS)
-	$(TAR) -C.. -cvhzf JunkbusterNG-$(VERSION)-$(CODE_STATUS)-src.tar.gz JunkbusterNG-$(VERSION)-$(CODE_STATUS)
-	$(RM) ../JunkbusterNG-$(VERSION)-$(CODE_STATUS)
-
-install: all
-	#
-	# FIXME: This is a dirty hack to have an install target
-	#        that works at least for some setups. This needs
-	#        to be fixed!
-	#
-	$(STRIP_PROG) $(PROGRAM)
-	$(INSTALL) $(PROGRAM) $(SBIN_DEST)
-	mkdir -p $(DEST)/user-manual
-	mkdir -p $(DEST)/templates
-	cp -r doc/webserver/user-manual $(DEST)
-	cp -r templates $(DEST)
-	$(INSTALL) config default.action default.filter trust $(DEST)
-	# FIXME $(ECHO) junkbuster.logrotate junkbuster.monthly junkbuster.weekly
-	# FIXME: Need new manual! $(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
-	$(INSTALL) junkbusterng.init /etc/init.d/junkbusterng
-
-
-#############################################################################
-
-## Local Variables:
-## tab-width: 3
-## end:
