@@ -129,7 +129,7 @@
 
 <!-- @if-have-help-info-start -->
     <tr>
-      <td bgcolor=#dddddd>
+      <td bgcolor=#dddddd colspan=2>
         <h2>Local Junkbuster support:</h2>
 
 <!-- @if-have-proxy-info-start -->

@@ -62,18 +62,6 @@
 #
 #  unstable:
 #    This is an alpha or beta release of the proxy software
-#  have-adminaddr-info:
-#    An e-mail address for the local Junkbuster adminstrator has
-#    been specified and is available through the "admin-address"
-#    symbol
-#  have-proxy-info:
-#    A URL for online documentation about this proxy has been
-#    specified and is available through the "proxy-info-url"
-#    symbol
-#  have-help-info:
-#    If either have-proxy-info is true or have-adminaddr-info is
-#    true, have-help-info is true.  Used to conditionally include
-#    a grey box for any and all help info.
 #  force-support:
 #    Junkbuster has been compiled with support for forced loading
 #    of blocked content. In that case, the symbol "force-prefix" is
