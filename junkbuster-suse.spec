@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.17 2002/03/08 19:30:23 swa Exp $
+# $Id: junkbuster-suse.spec,v 1.18 2002/03/11 12:30:31 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -77,7 +77,7 @@ SuSE series: n
 %build
 autoheader
 autoconf
-./configure --enable-no-gifs 
+./configure
 make
 make dok
 
@@ -206,8 +206,8 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
-* Thu Mar  7 2002 Stefan Waldherr <stefan@waldherr.org>
-- major rework of rpm, help by kukuk@suse.de
+* Mon Mar 11 2002 Hal Burgiss <hal@foobox.net>
+- Remove --enable-no-gifs from configure.
 
 * Sun Mar 03 2002 Hal Burgiss <hal@foobox.net>
 - /bin/false for shell causes init script to fail. Reverting.
@@ -272,6 +272,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.18  2002/03/11 12:30:31  swa
+# be consistent with rh spec file
+#
 # Revision 1.17  2002/03/08 19:30:23  swa
 # remove user junkbuster after de-installation.
 # synced suse with rh-specfile. installation
