@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.34 2001/10/15 18:28:06 steudten Exp $
+# $Id: Makefile.in,v 1.35 2001/10/15 22:14:59 joergs Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.35  2001/10/15 22:14:59  joergs
+# Removed -O2 and -Wall from AmigaOS-only CFLAGS since they are now in
+#  the general CFLAGS already.
+#
 # Revision 1.34  2001/10/15 18:28:06  steudten
 # remove config.cache for target clobber.
 # Cleanup make dist for RH and S.u.S.E.
@@ -321,6 +325,21 @@ redhat-dist:
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
+#
+# anonymously ncftps the rpms to sourceforge
+#
+redhat-upload:
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Not configured yet.
+	@$(ECHO) -------------------------------------------------------
+#	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/SRPMS/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+#	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/RPMS/i386/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
+
 
 #############################################################################
 # suse distribution (need to be root to build)
@@ -337,10 +356,24 @@ suse-dist:
 # never use buildroot to define the location inside the spec
 # file or suse will fuck up the build process.
 	cd .. && rpm -ta --buildroot /tmp/xxx ijbswa.tar.gz
+	chmod a+r /usr/src/packages/SRPMS/*
+	chmod a+r /usr/src/packages/RPMS/i386/*
+
+#
+# anonymously ncftps the rpms to sourceforge
+#
+suse-upload:
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/SRPMS/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
+	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming /usr/src/packages/RPMS/i386/junkbuster-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).i386.rpm
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) Now goto
+	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) ... and release the files.
+	@$(ECHO) -------------------------------------------------------
 
 # handle with care. use with root.
 suse-clean:
-	rpm -e junkbuster
+	rpm -e junkbuster-suse
 	rm -rf /etc/junkbuster
 	rm -rf /var/log/junkbuster
 	rm -f /etc/init.d/junkbuster
@@ -396,11 +429,11 @@ dok:
 #
 #############################################################################
 webserver:
-	$(ECHO) -------------------------------------------------------
-	$(ECHO) You have run make dok before, right?
-	$(ECHO) Note that this command scps all stuff to the webserver,
-	$(ECHO) it will not remove obsolete documents.
-	$(ECHO) -------------------------------------------------------
+	@$(ECHO) -------------------------------------------------------
+	@$(ECHO) You have run make dok before, right?
+	@$(ECHO) Note that this command scps all stuff to the webserver,
+	@$(ECHO) it will not remove obsolete documents.
+	@$(ECHO) -------------------------------------------------------
 	chmod -R a+r doc/webserver
 	find doc/webserver -type d -exec chmod a+rx {} \;
 	cd doc/webserver && scp -Cr . ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
