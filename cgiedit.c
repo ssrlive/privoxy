@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.17 2002/03/16 14:26:42 jongfoster Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.18 2002/03/16 14:57:44 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.17 2002/03/16 14:26:42 jongfoster
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.18  2002/03/16 14:57:44  jongfoster
+ *    Full support for enabling/disabling modular filters.
+ *
  *    Revision 1.17  2002/03/16 14:26:42  jongfoster
  *    First version of modular filters support - READ ONLY!
  *    Fixing a double-free bug in the out-of-memory handling in map_radio().
@@ -271,6 +274,8 @@ struct editable_file
                                     * (Statically allocated) */
 };
 
+#define CGI_ACTION_PARAM_LEN_MAX 500
+
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
 
 /* Functions to read and write arbitrary config files */
@@ -326,6 +331,9 @@ static jb_err get_url_spec_param(struct client_state *csp,
                                  const struct map *parameters,
                                  const char *name,
                                  char **pvalue);
+static jb_err get_string_param(const struct map *parameters,
+                               const char *param_name,
+                               const char **pparam);
 
 /* Internal actionsfile <==> HTML conversion functions */
 static jb_err map_radio(struct map * exports,
@@ -1845,6 +1853,111 @@ static jb_err get_file_name_param(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  get_char_param
+ *
+ * Description :  Get a single-character parameter passed to a CGI
+ *                function.
+ *
+ * Parameters  :
+ *          1  :  parameters = map of cgi parameters
+ *          2  :  param_name = The name of the parameter to read
+ *
+ * Returns     :  Uppercase character on success, '\0' on error.
+ *
+ *********************************************************************/
+static char get_char_param(const struct map *parameters,
+                           const char *param_name)
+{
+   char ch;
+
+   assert(parameters);
+   assert(param_name);
+
+   ch = *(lookup(parameters, param_name));
+   if ((ch >= 'a') && (ch <= 'z'))
+   {
+      ch = ch - 'a' + 'A';
+   }
+
+   return ch;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_string_param
+ *
+ * Description :  Get a string paramater, to be used as an
+ *                ACTION_STRING or ACTION_MULTI paramater.
+ *                Validates the input to prevent stupid/malicious
+ *                users from corrupting their action file.
+ *
+ * Parameters  :
+ *          1  :  parameters = map of cgi parameters
+ *          2  :  param_name = The name of the parameter to read
+ *          3  :  pparam = destination for paramater.  Allocated as
+ *                part of the map "parameters", so don't free it.
+ *                Set to NULL if not specified.
+ *
+ * Returns     :  JB_ERR_OK         on success, or if the paramater
+ *                                  was not specified.
+ *                JB_ERR_MEMORY     on out-of-memory.
+ *                JB_ERR_CGI_PARAMS if the paramater is not valid.
+ *
+ *********************************************************************/
+static jb_err get_string_param(const struct map *parameters,
+                               const char *param_name,
+                               const char **pparam)
+{
+   const char *param;
+   const char *s;
+   char ch;
+
+   assert(parameters);
+   assert(param_name);
+   assert(pparam);
+
+   *pparam = NULL;
+
+   param = lookup(parameters, param_name);
+   if (!*param)
+   {
+      return JB_ERR_OK;
+   }
+
+   if (strlen(param) >= CGI_ACTION_PARAM_LEN_MAX)
+   {
+      /*
+       * Too long.
+       *
+       * Note that the length limit is arbitrary, it just seems
+       * sensible to limit it to *something*.  There's no
+       * technical reason for any limit at all.
+       */
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   /* Check every character to see if it's legal */
+   s = param;
+   while ((ch = *s++) != '\0')
+   {
+      if ( ((unsigned char)ch < (unsigned char)' ')
+        || (ch == '}') )
+      {
+         /* Probable hack attempt, or user accidentally used '}'. */
+         return JB_ERR_CGI_PARAMS;
+      }
+   }
+
+   /* Success */
+   *pparam = param;
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  get_number_param
  *
  * Description :  Get a non-negative integer from the parameters
@@ -2976,7 +3089,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       return err;
    }
 
-   ch = ijb_toupper((int)lookup(parameters, "filter_all")[0]);
+   ch = get_char_param(parameters, "filter_all");
    if (ch == 'N')
    {
       list_remove_all(cur_line->data.action->multi_add[ACTION_MULTI_FILTER]);
@@ -2988,7 +3101,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 0;
    }
 
-   for (index = 0; ; index++)
+   for (index = 0; !err; index++)
    {
       char key_value[30];
       char key_name[30];
@@ -3001,16 +3114,17 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       snprintf(key_name, sizeof(key_name), "filter_n%x", index);
       key_name[sizeof(key_name) - 1] = '\0';
 
-      name = lookup(parameters, key_name);
+      err = get_string_param(parameters, key_name, &name);
+      if (err) break;
 
-      if (*name == '\0')
+      if (name == NULL)
       {
          /* End of list */
          break;
       }
 
 
-      value = ijb_toupper((int)lookup(parameters, key_value)[0]);
+      value = get_char_param(parameters, key_value);
       if (value == 'Y')
       {
          list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
@@ -4032,7 +4146,7 @@ jb_err cgi_toggle(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   mode = *(lookup(parameters, "set"));
+   mode = get_char_param(parameters, "set");
 
    if (mode == 'e')
    {
@@ -4057,7 +4171,7 @@ jb_err cgi_toggle(struct client_state *csp,
       return err;
    }
 
-   template_name = (*(lookup(parameters, "mini"))
+   template_name = (get_char_param(parameters, "mini")
                  ? "toggle-mini"
                  : "toggle");
 
@@ -4257,6 +4371,7 @@ static jb_err actions_from_radio(const struct map * parameters,
    char * param_dup;
    char ch;
    const char * js_name;
+   jb_err err = JB_ERR_OK;
 
    assert(parameters);
    assert(action);
@@ -4279,8 +4394,7 @@ static jb_err actions_from_radio(const struct map * parameters,
 
 #define DEFINE_ACTION_BOOL(name, bit)                 \
    JAVASCRIPTIFY(js_name, name);                      \
-   param = lookup(parameters, js_name);               \
-   ch = ijb_toupper(param[0]);                        \
+   ch = get_char_param(parameters, js_name);          \
    if (ch == 'Y')                                     \
    {                                                  \
       action->add  |= bit;                            \
@@ -4299,18 +4413,18 @@ static jb_err actions_from_radio(const struct map * parameters,
 
 #define DEFINE_ACTION_STRING(name, bit, index)                 \
    JAVASCRIPTIFY(js_name, name);                               \
-   param = lookup(parameters, js_name);                        \
-   ch = ijb_toupper(param[0]);                                 \
+   ch = get_char_param(parameters, js_name);                   \
    if (ch == 'Y')                                              \
    {                                                           \
+      param = NULL;                                            \
       JAVASCRIPTIFY(js_name, name "-mode");                    \
-      param = lookup(parameters, js_name);                     \
-      if ((*param == '\0') || (0 == strcmp(param, "CUSTOM")))  \
-      {                                                        \
-         JAVASCRIPTIFY(js_name, name "-param");                \
-         param = lookup(parameters, js_name);                  \
+      if (!err) err = get_string_param(parameters, js_name, &param);    \
+      if ((param == NULL) || (0 == strcmp(param, "CUSTOM")))            \
+      {                                                                 \
+         JAVASCRIPTIFY(js_name, name "-param");                         \
+         if (!err) err = get_string_param(parameters, js_name, &param); \
       }                                                        \
-      if (*param != '\0')                                      \
+      if (param != NULL)                                       \
       {                                                        \
          if (NULL == (param_dup = strdup(param)))              \
          {                                                     \
@@ -4343,8 +4457,7 @@ static jb_err actions_from_radio(const struct map * parameters,
 
 #define DEFINE_ACTION_MULTI(name, index)                       \
    JAVASCRIPTIFY(js_name, name);                               \
-   param = lookup(parameters, js_name);                        \
-   ch = ijb_toupper((int)param[0]);                            \
+   ch = get_char_param(parameters, js_name);                   \
    if (ch == 'Y')                                              \
    {                                                           \
       /* FIXME */                                              \
@@ -4374,7 +4487,7 @@ static jb_err actions_from_radio(const struct map * parameters,
 
    first_time = 0;
 
-   return JB_ERR_OK;
+   return err;
 }
 
 
