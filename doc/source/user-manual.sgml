@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.24 2001/12/02 01:13:42 hal9 Exp $
+ $Id: user-manual.sgml,v 1.25 2002/01/09 18:20:30 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.24 2001/12/02 01:13:42 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.25 2002/01/09 18:20:30 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -111,7 +111,7 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  <listitem>
   <para>
    Modularized configuration that will allow for system wide settings, and
-   individual user settings. (not implemented yet)
+   individual user settings. (not implemented yet, probably a 3.1 feature)
   </para>
  </listitem> 
 
@@ -147,11 +147,18 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
   </para>
  </listitem> 
 
+ <listitem>
+  <para>
+   Auto-detection of config file changes.
+  </para>
+ </listitem> 
+
+
  </itemizedlist>
 </para>
 
 <para>
- In addition, the configuration is more versatile overall.
+ In addition, the configuration is much more versatile overall.
 </para>
 
 </sect2>
@@ -452,8 +459,10 @@ configuration section below. HB.)
  can use Perl style regular expressions for maximum flexibility. All files use
  the <quote><literal>#</literal></quote> character to denote a comment. Such
  lines are not processed by <application>Junkbuster</application>. After
- making any changes, restart <application>Junkbuster</application> in order
- for the changes to take effect.
+ making any changes, there is no need to restart
+ <application>Junkbuster</application> in order for the changes to take
+ effect. <application>Junkbuster</application> should detect such changes 
+ automatically.
 </para>
 
 <para>
@@ -3207,6 +3216,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.25  2002/01/09 18:20:30  hal9
+ Touch ups for *.action files.
+
  Revision 1.24  2001/12/02 01:13:42  hal9
  Fix typo.
 
