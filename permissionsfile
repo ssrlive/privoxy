@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: permissionsfile,v 1.7 2001/06/01 13:56:20 oes Exp $
+# $Id: permissionsfile,v 1.8 2001/06/01 17:05:32 jongfoster Exp $
 #
 #############################################################################
 # Syntax
@@ -102,9 +102,21 @@
 #    (Don't change the version number from 1.0 - after all, why tell them?)
 #
 # +image
-#    Treat this URL as an image.  This only matters if it's also blocked, in
-#    which case a "blocked" image rather than a HTML page will be sent.
-#    (According to the tinygif setting in the config file).
+#    Treat this URL as an image.  This only matters if it's also "+block"ed,
+#    in which case a "blocked" image can be sent rather than a HTML page.
+#    See +image-blocker{} for the control over what is actually sent.
+#
+# +image-blocker{logo}
+# +image-blocker{blank}
+# +image-blocker{http://i.j.b/ijb-send-banner}
+#    Decides what to do with URLs that end up tagged with {+block +image}.
+#    There are 4 options.  "-image-blocker" will send a HTML "blocked" page,
+#    usually resulting in a "broken image" icon.  "+image-blocker{logo}"
+#    will send a "JunkBuster" image.  "+image-blocker{blank}" will send
+#    a 1x1 transparent GIF.  And finally, "+image-blocker{http://xyz.com}"
+#    will send a HTTP temporary redirect to the specified image - this 
+#    has the advantage of the icon being beeing cached by the browser,
+#    which will speed up the display.  
 #
 # +no-cookies-read
 #    Prevent the website from reading cookies
@@ -182,6 +194,7 @@ c3 = +no-cookies-set -no-cookies-read
 +hide-referer{forge} \
 -hide-user-agent \
 -image \
++image-blocker{logo} \
 +no-cookies-read \
 +no-cookies-set \
 +no-popups \
