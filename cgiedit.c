@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.37 2002/04/30 11:14:52 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.38 2002/05/03 23:00:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.37 2002/04/30 11:14:52 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.38  2002/05/03 23:00:38  jongfoster
+ *    Support for templates for "standard actions" buttons.
+ *    See bug #549871
+ *
  *    Revision 1.37  2002/04/30 11:14:52  oes
  *    Made csp the first parameter in *action_to_html
  *
@@ -273,23 +277,49 @@ const char cgiedit_h_rcs[] = CGIEDIT_H_VERSION;
 
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 
+/**
+ * A line in an editable_file.
+ */
 struct file_line
 {
+   /** Next entry in the linked list */
    struct file_line * next;
+   
+   /** The raw data, to write out if this line is unmodified. */
    char * raw;
+   
+   /** Comments and/or whitespace to put before this line if it's modified
+       and then written out. */
    char * prefix;
+
+   /** The actual data, as a string.  Line continuation and comment removal
+       are performed on the data read from file before it's stored here, so
+       it will be a single line of data.  */
    char * unprocessed;
+   
+   /** The type of data on this line.  One of the FILE_LINE_xxx constants. */
    int type;
 
+   /** The actual data, processed into some sensible data type. */
    union
    {
+
+      /** An action specification. */
       struct action_spec action[1];
 
+      /** A name=value pair. */
       struct
       {
+
+         /** The name in the name=value pair. */
          char * name;
+
+         /** The value in the name=value pair, as a string. */
          char * svalue;
+
+         /** The value in the name=value pair, as an integer. */
          int ivalue;
+
       } setting;
 
       /* Add more data types here... e.g.
@@ -306,42 +336,65 @@ struct file_line
       */
 
    } data;
+
 };
 
+/** This file_line has not been processed yet. */
 #define FILE_LINE_UNPROCESSED           1
+
+/** This file_line is blank. Can only appear at the end of a file, due to
+    the way the parser works. */
 #define FILE_LINE_BLANK                 2
+
+/** This file_line says {{alias}}. */
 #define FILE_LINE_ALIAS_HEADER          3
+
+/** This file_line defines an alias. */
 #define FILE_LINE_ALIAS_ENTRY           4
+
+/** This file_line defines an {action}. */
 #define FILE_LINE_ACTION                5
+
+/** This file_line specifies a URL pattern. */
 #define FILE_LINE_URL                   6
+
+/** This file_line says {{settings}}. */
 #define FILE_LINE_SETTINGS_HEADER       7
+
+/** This file_line is in a {{settings}} block. */
 #define FILE_LINE_SETTINGS_ENTRY        8
+
+/** This file_line says {{description}}. */
 #define FILE_LINE_DESCRIPTION_HEADER    9
+
+/** This file_line is in a {{description}} block. */
 #define FILE_LINE_DESCRIPTION_ENTRY    10
 
 
+/**
+ * A configuration file, in a format that can be edited and written back to
+ * disk.
+ */
 struct editable_file
 {
-   struct file_line * lines;
-   const char * filename;     /* Full pathname - e.g. "/etc/privoxy/wibble.action" */
-   const char * identifier;   /* Filename stub - e.g. "wibble".  Use for CGI param. */
-                              /* Pre-encoded with url_encode() for ease of use. */
-   const char * version_str;  /* Last modification time, as a string.  For CGI param */
-                              /* Can be used in URL without using url_param(). */
-   unsigned version;          /* Last modification time - prevents chaos with
-                               * the browser's "back" button.  Note that this is a
-                               * time_t cast to an unsigned.  When comparing, always
-                               * cast the time_t to an unsigned, and *NOT* vice-versa.
-                               * This may lose the top few bits, but they're not
-                               * significant anyway.
-                               */
-   int newline;               /* Newline convention - one of the NEWLINE_xxx constants.
-                               * Note that changing this after the file has been
-                               * read in will cause a mess.
-                               */
-   struct file_line * parse_error; /* On parse error, this is the offending line. */
-   const char * parse_error_text;  /* On parse error, this is the problem.
-                                    * (Statically allocated) */
+   struct file_line * lines;  /**< The contents of the file.  A linked list of lines. */
+   const char * filename;     /**< Full pathname - e.g. "/etc/privoxy/wibble.action". */
+   const char * identifier;   /**< Filename stub - e.g. "wibble".  Use for CGI param. */
+                              /**< Pre-encoded with url_encode() for ease of use. */
+   const char * version_str;  /**< Last modification time, as a string.  For CGI param. */
+                              /**< Can be used in URL without using url_param(). */
+   unsigned version;          /**< Last modification time - prevents chaos with
+                                   the browser's "back" button.  Note that this is a
+                                   time_t cast to an unsigned.  When comparing, always
+                                   cast the time_t to an unsigned, and *NOT* vice-versa.
+                                   This may lose the top few bits, but they're not
+                                   significant anyway. */
+   int newline;               /**< Newline convention - one of the NEWLINE_xxx constants.
+                                   Note that changing this after the file has been
+                                   read in will cause a mess. */
+   struct file_line * parse_error; /**< On parse error, this is the offending line. */
+   const char * parse_error_text;  /**< On parse error, this is the problem.
+                                        (Statically allocated) */
 };
 
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
@@ -772,8 +825,7 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
  * Description :  Write a complete file to disk.
  *
  * Parameters  :
- *          1  :  filename = File to write to.
- *          2  :  file = Data structure to write.
+ *          1  :  file = File to write.
  *
  * Returns     :  JB_ERR_OK     on success
  *                JB_ERR_FILE   on error writing to file.
@@ -1081,8 +1133,8 @@ static int match_actions_file_header_line(const char * line, const char * name)
  * Parameters  :
  *          1  :  line = String from file.  Must not start with
  *                       whitespace (else infinite loop!)
- *          2  :  name = Destination for name
- *          2  :  name = Destination for value
+ *          2  :  pname = Destination for name
+ *          2  :  pvalue = Destination for value
  *
  * Returns     :  JB_ERR_OK     on success
  *                JB_ERR_MEMORY on out-of-memory
@@ -1460,6 +1512,7 @@ jb_err edit_parse_actions_file(struct editable_file * file)
  *                     at EOF but it will not have been closed.
  *          2  :  pfile = Destination for a linked list of file_lines.
  *                        Will be set to NULL on error.
+ *          3  :  newline = How to handle newlines.
  *
  * Returns     :  JB_ERR_OK     on success
  *                JB_ERR_MEMORY on out-of-memory
