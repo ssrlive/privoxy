@@ -1,7 +1,7 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 2.1 2002/06/04 16:37:48 jongfoster Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 2.2 2002/09/05 08:43:11 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa//current/src/w32log.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/w32log.c,v $
  *
  * Purpose     :  Functions for creating and destroying the log window,
  *                ouputting strings, processing messages and so on.
@@ -32,6 +32,12 @@ const char w32log_rcs[] = "$Id: w32log.c,v 2.1 2002/06/04 16:37:48 jongfoster Ex
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 2.2  2002/09/05 08:43:11  oes
+ *    Synced with the stable branch:
+ *        Revision 1.25.2.1  2002/08/21 17:59:05  oes
+ *         - "Show Privoxy Window" now a toggle
+ *         - Temp kludge to let user and default action file be edited through win32 GUI (FR 592080)
+ *
  *    Revision 2.1  2002/06/04 16:37:48  jongfoster
  *    Adding Doxygen-style comments to variables
  *
@@ -1352,6 +1358,7 @@ LRESULT CALLBACK LogWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
          return 0;
 
       case WM_SHOWWINDOW:
+         g_bShowLogWindow = wParam;
       case WM_SIZE:
          /* Resize the logging window to fit the new frame */
          if (g_hwndLogBox)
