@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.21 2001/07/18 17:26:24 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.22 2001/07/20 15:16:17 haroon Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.21 2001/07/18 17:26:24 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.22  2001/07/20 15:16:17  haroon
+ *    - per Guy's suggestion, added a while loop in sweep() to catch not just
+ *      the last inactive CSP but all other consecutive inactive CSPs after that
+ *      as well
+ *
  *    Revision 1.21  2001/07/18 17:26:24  oes
  *    Changed to conform to new pcrs interface
  *
@@ -269,7 +274,11 @@ void sweep(void)
 
       }
       else
-      /* this client is not active, release its resources */
+      /* 
+       * this client is not active, release its resources 
+       * and the ones of all inactive clients that might
+       * follow it
+       */
       {
          while( !ncsp->active )
          {
@@ -279,9 +288,9 @@ void sweep(void)
             freez(ncsp->my_ip_addr_str);
             freez(ncsp->my_hostname);
    
-   #ifdef TRUST_FILES
+#ifdef TRUST_FILES
             freez(ncsp->referrer);
-   #endif /* def TRUST_FILES */
+#endif /* def TRUST_FILES */
             freez(ncsp->x_forwarded);
             freez(ncsp->iob->buf);
    
@@ -292,13 +301,13 @@ void sweep(void)
    
             free_current_action(ncsp->action);
    
-   #ifdef STATISTICS
+#ifdef STATISTICS
             urls_read++;
             if (ncsp->rejected)
             {
                urls_rejected++;
             }
-   #endif /* def STATISTICS */
+#endif /* def STATISTICS */
    
             freez(ncsp);
             
