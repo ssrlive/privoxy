@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.9 2002/03/24 13:25:43 swa Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.10 2002/03/26 22:29:54 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.10  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.9  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -117,8 +120,11 @@ extern jb_err cgi_show_request (struct client_state *csp,
                                 struct http_response *rsp,
                                 const struct map *parameters);
 extern jb_err cgi_transparent_image (struct client_state *csp,
-                                   struct http_response *rsp,
-                                   const struct map *parameters);
+                                     struct http_response *rsp,
+                                     const struct map *parameters);
+extern jb_err cgi_send_stylesheet(struct client_state *csp,
+                                  struct http_response *rsp,
+                                  const struct map *parameters);
 
 #ifdef FEATURE_GRACEFUL_TERMINATION
 extern jb_err cgi_die (struct client_state *csp,

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.25 2002/04/03 22:28:03 gliptak Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.26 2002/04/04 00:36:36 gliptak Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.25 2002/04/03 22:28:03 glipta
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.26  2002/04/04 00:36:36  gliptak
+ *    always use pcre for matching
+ *
  *    Revision 1.25  2002/04/03 22:28:03  gliptak
  *    Removed references to gnu_regex
  *
@@ -162,6 +165,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.25 2002/04/03 22:28:03 glipta
 #include "loadcfg.h"
 #include "parsers.h"
 #include "urlmatch.h"
+#include "errlog.h"
 
 const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
@@ -484,8 +488,8 @@ jb_err cgi_send_banner(struct client_state *csp,
  *
  *********************************************************************/
 jb_err cgi_transparent_image(struct client_state *csp,
-                           struct http_response *rsp,
-                           const struct map *parameters)
+                             struct http_response *rsp,
+                             const struct map *parameters)
 {
    rsp->body = bindup(image_blank_data, image_blank_length);
    rsp->content_length = image_blank_length;
@@ -501,6 +505,57 @@ jb_err cgi_transparent_image(struct client_state *csp,
    }
 
    rsp->is_static = 1;
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_send_stylesheet
+ *
+ * Description :  CGI function that sends a css stylesheet found
+ *                in the cgi-style.css template
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_send_stylesheet(struct client_state *csp,
+                           struct http_response *rsp,
+                           const struct map *parameters)
+{
+   jb_err err;
+   
+   assert(csp);
+   assert(rsp);
+
+   err = template_load(csp, &rsp->body, "cgi-style.css");
+
+   if (err == JB_ERR_FILE)
+   {
+      /*
+       * No way to tell user; send empty stylesheet
+       */
+      log_error(LOG_LEVEL_ERROR, "Could not find cgi-style.css template");
+   }
+   else if (err)
+   {
+      return err; /* JB_ERR_MEMORY */
+   }
+
+   if (enlist(rsp->headers, "Content-Type: text/css"))
+   {
+      return JB_ERR_MEMORY;
+   }
 
    return JB_ERR_OK;
 
@@ -655,7 +710,6 @@ jb_err cgi_show_status(struct client_state *csp,
          while ((s != NULL) && fgets(buf, sizeof(buf), fp))
          {
             string_join  (&s, html_encode(buf));
-            string_append(&s, "<br>");
          }
          fclose(fp);
 
