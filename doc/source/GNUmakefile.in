@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.4 2002/08/08 01:02:26 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.5 2002/09/05 23:12:04 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -155,10 +155,12 @@ dok-faq: ensure-dkprefix ensure-jadebin ensure-wdump
 	$(RM) ../webserver/faq/*.html && cp $(DOC_TMP)/*.html ../webserver/faq/
 	$(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt 
 
-# readme page
-dok-readme: ensure-dkprefix ensure-jadebin ensure-wdump
+# Build README and INSTALL files.
+dok-readme: dok-release ensure-dkprefix ensure-jadebin ensure-wdump
 	$(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > $(ROOT)/README ;\
+	$(DB)-notoc -V nochunks install.sgml > tmp.html &&\
+	$(WDUMP) tmp.html > $(ROOT)/INSTALL ;\
 	$(RM) tmp.*
 
 # index.sgml is used to create both the Home Page, and a local index
@@ -336,6 +338,10 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.5  2002/09/05 23:12:04  hal9
+# Updated Makefile with 3.0 changes (pdf and man targets, etc). Revise comments
+# in privoxy-man-page.sgml to remove out of date comments.
+#
 # Revision 1.4  2002/08/08 01:02:26  hal9
 # Update pdf2 target to dok-shtml (for single page html)
 #

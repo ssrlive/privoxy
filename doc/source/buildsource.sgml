@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.9.2.1 2002/08/25 17:10:55 hal9 Exp $
+ $Id: buildsource.sgml,v 2.2 2002/09/05 05:45:30 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -18,7 +18,6 @@
  This file is included into:
 
   user-manual
-  README
   INSTALL
 
 -->
@@ -66,7 +65,36 @@
 </para>
 
 <para>
- Then, in either case, to build from unpacked tarball or CVS source:
+ You can also check out any <application>Privoxy</application>
+ <quote>branch</quote>, just exchange the <application>current</application>
+ name with the wanted branch name (Example: v_3_0_branch for the 3.0 cvs
+ tree).
+</para>
+
+<para>
+ It is also recommended to not run <application>Privoxy</application> as 
+ root, and instead it is suggested to create a <quote>privoxy</quote> user for
+ this purpose.
+</para>
+
+<para>
+ <filename>/etc/passwd</filename> might then look like:
+</para>
+
+<para>
+ <screen>  privoxy:*:7777:7777:privoxy proxy:/no/home:/no/shell</screen>
+</para>
+
+<para>
+ And then <filename>/etc/group</filename>, like:
+</para>
+
+<para>
+ <screen>  privoxy:*:7777:privoxy</screen>
+</para>
+
+<para>
+ Then, to build from either unpacked tarball or CVS source:
 </para>
 
 <para>
@@ -90,7 +118,7 @@
 </warning>
 
 <para>
-  If you have gnu make, you can have the first four steps 
+  If you have GNU <command>make</command>, you can have the first four steps
   automatically done for you by just typing:
 </para>
 
@@ -112,9 +140,10 @@
 </para>
 
 <!-- print for README only -->
+<!-- Actually this is now in INSTALL -->
  <![%p-readme;[
  <para>
-  For binary RPM installation, and other platforms, see the user-manual 
+  For binary RPM installation, and other platforms, see the User Manual
   as well.
  </para>
 ]]>
