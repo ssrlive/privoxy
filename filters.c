@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 19:12:00 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.16 2001/06/07 23:10:26 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,12 @@ const char filters_rcs[] = "$Id: filters.c,v 1.15 2001/06/03 19:12:00 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.16  2001/06/07 23:10:26  jongfoster
+ *    Allowing unanchored domain patterns to back off and retry
+ *    if they partially match.  Optimized right-anchored patterns.
+ *    Moving ACL and forward files into config file.
+ *    Replacing struct gateway with struct forward_spec
+ *
  *    Revision 1.15  2001/06/03 19:12:00  oes
  *    extracted-CGI relevant stuff
  *
@@ -944,7 +950,7 @@ const struct forward_spec * forward_url(struct http_request *http,
 struct url_spec dsplit(char *domain)
 {
    struct url_spec ret[1];
-   char *v[BUFSIZ];
+   char *v[BUFFER_SIZE];
    int size;
    char *p;
 

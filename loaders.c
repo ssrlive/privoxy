@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.14 2001/06/01 03:27:04 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.15 2001/06/07 23:14:14 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,12 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.14 2001/06/01 03:27:04 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.15  2001/06/07 23:14:14  jongfoster
+ *    Removing ACL and forward file loaders - these
+ *    files have been merged into the config file.
+ *    Cosmetic: Moving unloader funcs next to their
+ *    respective loader funcs
+ *
  *    Revision 1.14  2001/06/01 03:27:04  oes
  *    Fixed line continuation problem
  *
@@ -359,7 +365,7 @@ int create_url_spec(struct url_spec * url, char * buf)
    if (url->path)
    {
       int errcode;
-      char rebuf[BUFSIZ];
+      char rebuf[BUFFER_SIZE];
 
       if (NULL == (url->preg = zalloc(sizeof(*url->preg))))
       {
@@ -569,7 +575,7 @@ int check_file_changed(const struct file_list * current,
 char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 {
    char *p, *q;
-   char linebuf[BUFSIZ];
+   char linebuf[BUFFER_SIZE];
    int contflag = 0;
 
    *buf = '\0';
@@ -692,7 +698,7 @@ int load_trustfile(struct client_state *csp)
    struct block_spec *b, *bl;
    struct url_spec **tl;
 
-   char  buf[BUFSIZ], *p, *q;
+   char  buf[BUFFER_SIZE], *p, *q;
    int reject, trusted;
    struct file_list *fs;
 
@@ -867,7 +873,7 @@ int load_re_filterfile(struct client_state *csp)
    struct re_filterfile_spec *bl;
    struct file_list *fs;
 
-   char  buf[BUFSIZ];
+   char  buf[BUFFER_SIZE];
    int error;
    pcrs_job *dummy;
 

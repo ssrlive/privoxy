@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.2 2001/06/07 23:11:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,17 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.1.1.1 2001/05/15 13:58:54 oes Exp
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.2  2001/06/07 23:11:38  jongfoster
+ *    Removing gateways[] list - no longer used.
+ *    Replacing function pointer in struct gateway with a directly
+ *    called function forwarded_connect(), which can do the common
+ *    task of deciding whether to connect to the web server or HTTP
+ *    proxy.
+ *    Replacing struct gateway with struct forward_spec
+ *    Fixing bug with SOCKS4A and HTTP proxy server in combination.
+ *    It was a bug which led to the connection being made to the web
+ *    server rather than the HTTP proxy, and also a buffer overrun.
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -169,8 +180,8 @@ static int socks4_connect(const struct forward_spec * fwd,
                           struct client_state *csp)
 {
    int web_server_addr;
-   unsigned char cbuf[BUFSIZ];
-   unsigned char sbuf[BUFSIZ];
+   unsigned char cbuf[BUFFER_SIZE];
+   unsigned char sbuf[BUFFER_SIZE];
    struct socks_op    *c = (struct socks_op    *)cbuf;
    struct socks_reply *s = (struct socks_reply *)sbuf;
    int n;

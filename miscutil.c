@@ -1,5 +1,5 @@
 /* vim:ts=3: */
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.10 2001/06/07 14:51:38 joergs Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.11 2001/06/07 23:09:19 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -37,6 +37,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.10 2001/06/07 14:51:38 joergs E
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.11  2001/06/07 23:09:19  jongfoster
+ *    Cosmetic indentation changes.
+ *
  *    Revision 1.10  2001/06/07 14:51:38  joergs
  *    make_path() no longer adds '/' if the dir already ends in '/'.
  *
@@ -159,6 +162,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.10 2001/06/07 14:51:38 joergs E
 #include <malloc.h>
 #include <ctype.h>
 
+/*
+ * FIXME: Only need project.h for BUFFER_SIZE.  It would be nice
+ * to remove this dependency.
+ */
+#include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
 
@@ -279,7 +287,7 @@ char *strdup( const char *s )
 char *safe_strerror(int err)
 {
    char *s = NULL;
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
 
 
 #ifdef HAVE_STRERROR

@@ -1,5 +1,5 @@
 /* vim:ts=3: */
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.14 2001/06/07 14:46:25 joergs Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.15 2001/06/07 23:13:40 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -36,6 +36,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.14 2001/06/07 14:46:25 joergs Exp
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.15  2001/06/07 23:13:40  jongfoster
+ *    Merging ACL and forward files into config file.
+ *    Cosmetic: Sorting config file options alphabetically.
+ *    Cosmetic: Adding brief syntax comments to config file options.
+ *
  *    Revision 1.14  2001/06/07 14:46:25  joergs
  *    Missing make_path() added for re_filterfile.
  *
@@ -433,7 +438,7 @@ void unload_configfile (void * data)
  *********************************************************************/
 struct configuration_spec * load_config(void)
 {
-   char buf[BUFSIZ];
+   char buf[BUFFER_SIZE];
    char *p, *q;
    FILE *configfp = NULL;
    struct configuration_spec * config = NULL;
@@ -496,9 +501,9 @@ struct configuration_spec * load_config(void)
 
    while (read_config_line(buf, sizeof(buf), configfp, fs) != NULL)
    {
-      char cmd[BUFSIZ];
-      char arg[BUFSIZ];
-      char tmp[BUFSIZ];
+      char cmd[BUFFER_SIZE];
+      char arg[BUFFER_SIZE];
+      char tmp[BUFFER_SIZE];
 #ifdef ACL_FILES
       struct access_control_list *cur_acl;
 #endif /* def ACL_FILES */

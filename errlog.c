@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.10 2001/05/29 11:52:21 oes Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.11 2001/06/01 18:14:49 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.10 2001/05/29 11:52:21 oes Exp $";
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.11  2001/06/01 18:14:49  jongfoster
+ *    Changing the calls to strerr() to check HAVE_STRERR (which is defined
+ *    in config.h if appropriate) rather than the NO_STRERR macro.
+ *
  *    Revision 1.10  2001/05/29 11:52:21  oes
  *    Conditional compilation of w32_socket_error
  *
@@ -262,7 +266,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
 void log_error(int loglevel, char *fmt, ...)
 {
    va_list ap;
-   char outbuf[BUFSIZ];
+   char outbuf[BUFFER_SIZE];
    char * src = fmt;
    int outc = 0;
    long this_thread = 1;  /* was: pthread_t this_thread;*/
@@ -339,9 +343,9 @@ void log_error(int loglevel, char *fmt, ...)
    va_start( ap, fmt );
 
    /* build formatted message from fmt and var-args */
-   while ((*src) && (outc < BUFSIZ-2))
+   while ((*src) && (outc < BUFFER_SIZE-2))
    {
-      char tempbuf[BUFSIZ];
+      char tempbuf[BUFFER_SIZE];
       char *sval;
       int ival;
       unsigned uval;
@@ -366,7 +370,7 @@ void log_error(int loglevel, char *fmt, ...)
             ival = va_arg( ap, int );
             oldoutc = outc;
             outc += sprintf(tempbuf, "%d", ival);
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, tempbuf);
             }
@@ -379,7 +383,7 @@ void log_error(int loglevel, char *fmt, ...)
             uval = va_arg( ap, unsigned );
             oldoutc = outc;
             outc += sprintf(tempbuf, "%u", uval);
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, tempbuf);
             }
@@ -420,7 +424,7 @@ void log_error(int loglevel, char *fmt, ...)
                /* Never get here */
                break;
             }
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, tempbuf);
             }
@@ -440,7 +444,7 @@ void log_error(int loglevel, char *fmt, ...)
             sval = va_arg( ap, char * );
             oldoutc = outc;
             outc += strlen(sval);
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, sval);
             }
@@ -461,7 +465,7 @@ void log_error(int loglevel, char *fmt, ...)
             }
             oldoutc = outc;
             outc += ival;
-            if (outc < BUFSIZ-1)
+            if (outc < BUFFER_SIZE-1)
             {
                memcpy(outbuf + oldoutc, sval, ival);
             }
@@ -490,7 +494,7 @@ void log_error(int loglevel, char *fmt, ...)
 #endif /* ndef _WIN32 */
             oldoutc = outc;
             outc += strlen(sval);
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, sval);
             }
@@ -518,12 +522,12 @@ void log_error(int loglevel, char *fmt, ...)
                days = tm_now->tm_yday - gmt.tm_yday; 
                hrs = ((days < -1 ? 24 : 1 < days ? -24 : days * 24) + tm_now->tm_hour - gmt.tm_hour); 
                mins = hrs * 60 + tm_now->tm_min - gmt.tm_min; 
-               strftime (tempbuf, BUFSIZ-6, "%d/%b/%Y:%H:%M:%S ", tm_now); 
+               strftime (tempbuf, BUFFER_SIZE-6, "%d/%b/%Y:%H:%M:%S ", tm_now); 
                sprintf (tempbuf + strlen(tempbuf), "%+03d%02d", mins / 60, abs(mins) % 60); 
             }
             oldoutc = outc;
             outc += strlen(tempbuf);
-            if (outc < BUFSIZ-1) 
+            if (outc < BUFFER_SIZE-1) 
             {
                strcpy(outbuf + oldoutc, tempbuf);
             }
@@ -554,20 +558,20 @@ void log_error(int loglevel, char *fmt, ...)
    /* done with var. args */
    va_end( ap );
    
-   if (outc >= BUFSIZ-2)
+   if (outc >= BUFFER_SIZE-2)
    {
       /* insufficient room for newline and trailing null. */
 
       static const char warning[] = "... [too long, truncated]\n";
 
-      if (outc < BUFSIZ)
+      if (outc < BUFFER_SIZE)
       {
          /* Need to add terminating null in this case. */
          outbuf[outc] = '\0';
       }
 
       /* Truncate output */
-      outbuf[BUFSIZ - sizeof(warning)] = '\0';
+      outbuf[BUFFER_SIZE - sizeof(warning)] = '\0';
 
       /* Append warning */
       strcat(outbuf, warning);
