@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 1.3 2002/04/17 13:54:25 oes Exp $
+ $Id: buildsource.sgml,v 1.4 2002/04/18 10:20:53 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -29,8 +29,9 @@
 
 <para>
  To build <application>Privoxy</application> from source, 
- autoheader, autoconf,GNU make (gmake), and, of course, a C 
- compiler are required.
+ autoheader, autoconf, <ulink
+ url="http://www.gnu.org/software/make/make.html">GNU make
+ (gmake)</ulink>, and, of course, a C compiler are required.
 </para>
 
 <para>
@@ -96,18 +97,9 @@
 </para>
 
 <para>
- Redhat and SuSE src and binary RPMs can be built with 
- <quote><command>make redhat-dist</command></quote> or
- <quote><command>make suse-dist</command></quote> from unpacked sources. You
- will need to run <quote><command>autoconf; autoheader;
- ./configure</command></quote> beforehand. *BSD will require gmake (from
- <ulink url="http://www.gnu.org">http://www.gnu.org</ulink>). 
- <![%p-readme;[See the user-manual for OS/2 build instructions.]]>
-</para>
-
-<para>
  For more detailed instructions on how to build Redhat and SuSE RPMs,
- Windows self-extracting installers etc, please consult the <ulink
+ Windows self-extracting installers, building on platforms with
+ special requirements etc, please consult the <ulink
  url="../developer-manual/newrelease.html">developer manual</ulink>.
 </para>
 
