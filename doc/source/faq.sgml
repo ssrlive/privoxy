@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $
+ $Id: faq.sgml,v 1.53 2002/05/03 01:34:52 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -53,6 +53,16 @@
  to live a peaceful existence!
  ========================================================================
 
+
+ ********************************************************************
+ READ!!!
+
+ Document NOTE: To force the Table of Contents onto its own page, 
+ there is an empty sect1 at the top of the document. This skews 
+ the numbering of other sect1's, which need to be hand labeled to 
+ ensure proper rendering.
+ *********************************************************************
+
 -->
 
 
@@ -60,7 +70,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.53 2002/05/03 01:34:52 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -85,16 +95,6 @@
  questions about <ulink url="http://www.privoxy.org">Privoxy</ulink> 
  <![%p-stable;[ v.&p-version]]>.
  </para>
-
-<![%p-text;[ 
-
-<para>
-
- Test of text doc only.
-
-</para>
-
-]]>
 
 <!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
@@ -954,12 +954,33 @@ proxies like <application>Squid</application>?</title>
  This can be done. See the <ulink
  url="../user-manual/config.html#FORWARDING">user manual</ulink>, 
  which describes how to do this.
+</para>
+</sect2>
 
+<sect2 renderas="sect3" id="transparent">
+<title>Can <application>Privoxy</application> run as a <quote>transparent
+</quote> proxy?</title>
+<para>
+ No, <application>Privoxy</application> currently does not have this ability, 
+ though it is planned for a future release. Transparent proxies require 
+ special handling of the request headers beyond what
+ <application>Privoxy</application> is now capable of.
+</para>
+
+<para>
+ Chaining <application>Privoxy</application> with another proxy that has 
+ this ability should work though. 
+ See the <ulink url="../user-manual/config.html#FORWARDING">user
+ manual</ulink>, which describes this, and also <ulink
+ url="http://www.transproxy.nlc.net.au/">http://www.transproxy.nlc.net.au/</ulink>.
 </para>
 
 </sect2>
 
 </sect1>
+
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -984,7 +1005,6 @@ has to add extra time to browsing.</title>
 </para>
 
 </sect2>
-
 
 
 <sect2 renderas="sect3" id="loadingtimes"><title>I noticed considerable
@@ -1462,6 +1482,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.53  2002/05/03 01:34:52  hal9
+Fix section numbering for new sections (due to TOC kludge).
+
 Revision 1.52  2002/04/29 03:08:43  hal9
 -Added new Q/A on new actions file set up (pointer to u-m)
 -Fixed a few broken links and converted old actions as a result of

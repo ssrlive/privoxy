@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 By: Privoxy Developers
 
-$Id: faq.sgml,v 1.52 2002/04/29 03:08:43 hal9 Exp $
+$Id: faq.sgml,v 1.53 2002/05/03 01:34:52 hal9 Exp $
 
 This FAQ gives users and developers alike answers to frequently asked questions
 about Privoxy .
@@ -70,6 +70,7 @@ Table of Contents
     3.12. I cannot see all of the "Blocked" page banner. Help.
     3.13. Can Privoxy run as a service on Win2K/NT?
     3.14. How can I make Privoxy work with other proxies like Squid?
+    3.15. Can Privoxy run as a "transparent" proxy?
    
 4. Miscellaneous
    
@@ -102,18 +103,18 @@ Table of Contents
         How?
     5.3. One of my favorite sites does not work with Privoxy. What can I do?
    
-7. Contacting the developers, Bug Reporting and Feature Requests
+6. Contacting the developers, Bug Reporting and Feature Requests
    
-    7.1. Get Support
-    7.2. Report bugs
-    7.3. Request new features
-    7.4. Report ads or other filter problems
-    7.5. Other
+    6.1. Get Support
+    6.2. Report bugs
+    6.3. Request new features
+    6.4. Report ads or other filter problems
+    6.5. Other
    
-8. Copyright and History
+7. Copyright and History
    
-    8.1. Copyright
-    8.2. History
+    7.1. Copyright
+    7.2. History
    
 -------------------------------------------------------------------------------
 
@@ -121,12 +122,12 @@ Table of Contents
 
 1.1. What is this new version of Privoxy?
 
-The original Internet Junkbuster&trade; (tm) is a copyrighted product of 
-Junkbusters Corporation. Development of this effort stopped some time ago as of
-version 2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to
-rekindle development. Other developers subsequently joined with Stefan, and
-have since added many new features, refinements and enhancements. The result of
-this effort is Privoxy.
+The original Internet JunkbusterTM (tm) is a copyrighted product of Junkbusters
+Corporation. Development of this effort stopped some time ago as of version
+2.0.2. Stefan Waldherr started the ijbswa project on Sourceforge to rekindle
+development. Other developers subsequently joined with Stefan, and have since
+added many new features, refinements and enhancements. The result of this
+effort is Privoxy.
 
 Privoxy has evolved from the Junkbuster 2.0.2 code base, and has advanced
 significantly at this point.
@@ -596,7 +597,19 @@ details, and a sample configuration.
 
 3.14. How can I make Privoxy work with other proxies like Squid?
 
-This can be done. See the user manual, which describes how to do this. 
+This can be done. See the user manual, which describes how to do this.
+
+-------------------------------------------------------------------------------
+
+3.15. Can Privoxy run as a "transparent" proxy?
+
+No, Privoxy currently does not have this ability, though it is planned for a
+future release. Transparent proxies require special handling of the request
+headers beyond what Privoxy is now capable of.
+
+Chaining Privoxy with another proxy that has this ability should work though.
+See the user manual, which describes this, and also http://
+www.transproxy.nlc.net.au/.
 
 -------------------------------------------------------------------------------
 
@@ -900,14 +913,14 @@ same thing by editing the appropriate "actions" file.
 
 -------------------------------------------------------------------------------
 
-7. Contacting the developers, Bug Reporting and Feature Requests
+6. Contacting the developers, Bug Reporting and Feature Requests
 
 We value your feedback. However, to provide you with the best support, please
 note the following sections.
 
 -------------------------------------------------------------------------------
 
-7.1. Get Support
+6.1. Get Support
 
 To get support, use the Sourceforge Support Forum:
 
@@ -915,7 +928,7 @@ To get support, use the Sourceforge Support Forum:
 
 -------------------------------------------------------------------------------
 
-7.2. Report bugs
+6.2. Report bugs
 
 To submit bugs, use the Sourceforge Bug Forum:
 
@@ -932,7 +945,7 @@ reproduce the bug.
 
 -------------------------------------------------------------------------------
 
-7.3. Request new features
+6.3. Request new features
 
 To submit ideas on new features, use the Sourceforge feature request forum:
 
@@ -940,7 +953,7 @@ To submit ideas on new features, use the Sourceforge feature request forum:
 
 -------------------------------------------------------------------------------
 
-7.4. Report ads or other filter problems
+6.4. Report ads or other filter problems
 
 You can also send feedback on websites that Privoxy has problems with. Please
 bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
@@ -952,7 +965,7 @@ your feedback. These will be announced on the ijbswa-announce list.
 
 -------------------------------------------------------------------------------
 
-7.5. Other
+6.5. Other
 
 For any other issues, feel free to use the mailing lists:
  
@@ -964,9 +977,9 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-8. Copyright and History
+7. Copyright and History
 
-8.1. Copyright
+7.1. Copyright
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -985,7 +998,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-8.2. History
+7.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
