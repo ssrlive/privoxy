@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.31 2002/03/26 22:29:55 swa Exp $
+ $Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -20,7 +20,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.31 2002/03/26 22:29:55 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -90,13 +90,14 @@ Please see the Contact section in the
   copyrighted product of <ulink url="http://www.junkbusters.com">Junkbusters
   Corporation</ulink>. Development of this effort stopped some time ago as of
   version 2.0.2. Stefan Waldherr started the ijbswa project on <ulink
-  url="http://ijbswa.sourceforge.net">Sourceforge</ulink> to rekindle
+  url="http://sourceforge.net/projects/ijbswa/">Sourceforge</ulink> to rekindle
   development. Other developers subsequently joined with Stefan, and have
-  since added many new features, refinements and enhancements. 
+  since added many new features, refinements and enhancements. The result 
+  of this effort is <application>Privoxy</application>.
  </para>
  <para>
-  The new <application>Privoxy</application> started with the same
-  <application>Junkbuster</application> code base, but has changed
+  <application>Privoxy</application> started with the same
+  <application>Junkbuster 2.0.2</application> code base, but has advanced
   significantly at this point. 
  </para>
 
@@ -106,13 +107,16 @@ Please see the Contact section in the
 <sect3>
 <title id="whyprivoxy">Why <quote>Privoxy</quote>? Why a name change at all?</title>
 <para>
- <application>Privoxy</application> is for <quote>Privacy Enhancing Proxy</quote>.
+ <application>Privoxy</application> is the 
+ <quote><emphasis>Privacy Enhancing Proxy</emphasis></quote>.
+</para>
+<para>
  There are possible legal complications from the continued use of the 
  <application>Junkbuster</application> name, which is a trademark of 
  <ulink url="http://junkbusters.com">Junkbusters Corporation</ulink>.
- (There are no objections from Junkbusters Corporation to the 
- <application>Privoxy</application> project itself though, and they 
- in fact still share our ideals and goals.)
+ (There are, however, no objections from Junkbusters Corporation to the 
+ <application>Privoxy</application> project itself, and they, in fact, still
+ share our ideals and goals.)
 </para>
 
 <para>
@@ -125,12 +129,14 @@ Please see the Contact section in the
 </sect3>
 
 
-<sect3 id="differs"><title>How does it differ from the old <application>Junkbuster?</application></title>
- <para>
-   All the old features remain. The new <application>Privoxy</application> 
-   still blocks ads and banners, still manages cookies, and still helps protect
-   your privacy. But, these are all enhanced, and many new features have been 
-   added, all in the same vein.
+<sect3 id="differs"><title>How does <application>Privoxy</application> differ
+from the old <application>Junkbuster?</application></title> 
+<para>
+  <application>Privoxy</application> picks up where
+  <application>Junkbuster</application> left off. All the old features remain.
+  The new <application>Privoxy</application> still blocks ads and banners,
+  still manages cookies, and still helps protect your privacy. But, these are
+  all enhanced, and many new features have been added, all in the same vein.
  </para>
  <para>
   The configuration has changed significantly as well. This is something that
@@ -277,6 +283,55 @@ Please see the Contact section in the
 
 </sect3>
 
+
+<sect3>
+<title id="knows">How does <application>Privoxy</application> know what is
+an ad, and what is not?</title>
+<para>
+ <application>Privoxy</application> processes all the raw content of every 
+ web page. So it reads everything on each page. It then compares this to the
+ rules as set up in the configuration files, and looks for any matches to
+ these rules. <application>Privoxy</application> makes heavy use of
+ <quote>regular expressions</quote>. (If you are not familiar with regular
+ expressions, it is explained briefly in <ulink
+ url="../user-manual/appendix.html">the user manual</ulink>.) Regular
+ expressions facilitate matching of one text string against another, using
+ wildcards to build complex patterns. So <application>Privoxy</application>
+ will typically look for URLs and other content that match certain key words
+ and expressions as defined in the configuration files. For instance a URL
+ that contains <quote>/banners</quote>, has a high probability of containing
+ ad banners, and thus would be a prime candidate to have a matching rule.
+</para>
+<para>
+ So <application>Privoxy</application> will look for these kinds of obvious 
+ looking culprits. And also, will use lists of known organizations that
+ specialize in ads. Again, using complex patterns to match as many potential 
+ combinations as possible since there tend to be many, many variations used by 
+ advertisers, and new ones are being introduced all the time.
+</para>
+</sect3>
+
+<sect3>
+<title id="mistakes">Can <application>Privoxy</application> make mistakes? 
+This does not sound very scientific.</title>
+<para>
+ Actually, it's a black art ;-) And yes, it is always possible to have a broad rule
+ accidentally block something by mistake. There is a good chance you may run 
+ into such a situation at some point. It is tricky writing rules to cover
+ every conceivable possibility, and not occasionally get false positives.
+</para>
+
+<para>
+ But this should not be a big concern since the
+ <application>Privoxy</application> configuration is very flexible, and
+ includes tools to help identify these types of situations so they can be
+ addressed as needed, allowing you to customize your installation.
+ (<link linkend="badsite">See the appendix below</link>.)
+</para>
+
+</sect3>
+
+
 <sect3 id="browsers2"><title>My browser does the same things as
 <application>Privoxy</application>. Why should I use
 <application>Privoxy</application> at all?</title>
@@ -331,11 +386,12 @@ warranty? Registration?</title>
    Well, helping the team is always a good idea. We welcome new developers,
    RPM gurus or documentation makers. Simply get an account on sourceforge.net
    and mail your id to the developer mailing list. Then read the
-   section Quickstart in the developers manual.
+   section Quickstart in the <ulink url="http://privoxy.org/developer-manual/quickstart.html">
+   Developer's Manual</ulink>.
 </para>
 <para>
-Once we have added you to the team, you'll have write access to the CVS
-repository, and together we'll find a suitable task for you.
+ Once we have added you to the team, you'll have write access to the CVS
+ repository, and together we'll find a suitable task for you.
 </para>
 </sect4>
 
@@ -352,7 +408,7 @@ repository, and together we'll find a suitable task for you.
 <title>Which browsers are supported by <application>Privoxy</application>?</title>
 <para>
  Any browser that can be configured to use a <quote>proxy</quote>, which 
- is probably almost all browsers. Direct browser support is not necessary
+ should be virtually all browsers. Direct browser support is not necessary
  since <application>Privoxy</application> runs as a separate application and
  just exchanges standard HTML data with your browser.
 </para>
@@ -382,9 +438,13 @@ repository, and together we'll find a suitable task for you.
  </para>
  <para>
   See the <ulink
-  url="http://www.privoxy.org/user-manual/">user-manual</ulink> for
+  url="../user-manual/index.html">user-manual</ulink> for
   platform specific installation instructions. [FIXME: This is meant for after
   the name change for 3.0!]
+ </para>
+ <para>
+  Note: Some installers may automatically uninstall
+  <application>Junkbuster</application>, if present!
  </para>
  
 </sect3>
@@ -397,6 +457,8 @@ special I have to do now?</title>
  All browsers must be told to use <application>Privoxy</application> 
  as a proxy by specifying the correct proxy address and port number 
  in the appropriate configuration area for the browser. See below.
+ Also, you should flush your browser's memory and disk cache to get rid of any
+ cached items.
 
 </para>
 
@@ -731,7 +793,7 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 
 <sect3>
-<title id="filterfile">What is a <quote>default.filter</quote>?</title>
+<title id="filterfile">What is <quote>default.filter</quote>?</title>
 <para>
  The <quote>default.filter</quote> file is used to <quote>filter</quote> any
  web page content. By <quote>filtering</quote> we mean it can modify, remove, 
@@ -787,9 +849,10 @@ Note that normally only local users can connect to <application>Privoxy</applica
 <para>
  This is a configuration option for images that
  <application>Privoxy</application> is stopping. You have the choice <!-- of
- the --> <!-- <application>Privoxy</application> logo, --> a checkerboard
+ the --> <!-- <application>Privoxy</application> logo, --> of a checkerboard
  pattern, a transparent 1x1 GIF image (aka <quote>blank</quote>), or a custom
- URL or your choice.
+ URL of your choice. Note that to fit this category, the URL must match both 
+ the <quote>+image</quote> and <quote>+block</quote> actions.
 </para>
 
 <para>
@@ -798,7 +861,9 @@ Note that normally only local users can connect to <application>Privoxy</applica
  <quote>Edit Actions List</quote> selection at <ulink
  url="http://p.p/">http://p.p/</ulink>. Or by hand editing the appropriate 
  actions file. This will only effect what is defined as <quote>images</quote>
- though. 
+ though. Also, any URLs that generate the bright red <quote>Blocked</quote>
+ banner, can be moved to the <quote>+image-blocker</quote> section for the
+ same reason.
 
 </para>
 
@@ -819,21 +884,41 @@ Note that normally only local users can connect to <application>Privoxy</applica
 
 <sect3>
 <title id="blockedisugly">I see large red banners on some pages that say 
-<quote>Blocked</quote>. How do I get rid of this?</title>
+<quote>Blocked</quote>. Why and how do I get rid of this?</title>
 <para>
  These are URLs that match something in one of 
  <application>Privoxy's</application> block actions (+block). It is meant
  to be a warning so that you know something has been blocked and an easy way
  for you to see why. These are handled differently than what has been defined
- as <quote>images</quote> (e.g. ad banners). If you want them to be treated
- as if they were images, so that they can be made invisible, then move the
- offending URL from the <quote>+block</quote> section to the
- <quote>+imageblock</quote> section of your actions file. Alternately, you
- could modify the <quote><filename>block</filename></quote> HTML template that
- is used by <application>Privoxy</application> to display this, and make it
- something more to your liking.
+ explicitly as <quote>images</quote> (e.g. ad banners). Depending on the 
+ URL itself, it is sometimes hard for <application>Privoxy</application> to 
+ really know whether it is indeed an ad image or not.
 </para>
 
+<para>
+ If you want them to be treated as if they were images, so that they can be
+ made invisible, then move the offending URL from the <quote>+block</quote>
+ section to the <quote>+imageblock</quote> section of your actions file. Just
+ be forewarned, if make any URL is made <quote>invisible</quote>, you may not
+ have any inkling that something has been removed from that page.
+</para>
+<para>
+ Alternately, you could modify the <quote><filename>block</filename></quote>
+ HTML template that is used by <application>Privoxy</application> to display
+ this, and make it something more to your liking.
+</para>
+
+</sect3>
+
+<sect3 id="alliseeisred">
+<title>I cannot see all of the <quote>Blocked</quote> page banner. All I
+see is a bright red square.</title>
+<para>
+ There is not enough space to fit the entire page. Try right clicking on the
+ visible, red portion, and select <quote>Show Frame</quote>, or equivalent.
+ This will usually allow you to see the entire Privoxy <quote>Blocked</quote>
+ page, and from there you can see just what is being blocked, and why.
+</para>
 </sect3>
 
 <sect3 id="otherproxy">
@@ -1073,7 +1158,7 @@ speed up web browsing?</title>
  No, it does not have this ability at all. You want something like 
  <ulink url="http://www.squid-cache.org/">Squid</ulink> for this. And, yes, 
  before you ask, <application>Privoxy</application> can co-exist 
- with other kinds of proxies like <quote>Squid</quote>.
+ with other kinds of proxies like <application>Squid</application>.
 </para>
 </sect3>
 
@@ -1109,7 +1194,7 @@ Given the above problem, we have decided to remove the logo option entirely
 
 <sect3>
 <title id="wasted">I have large empty spaces now where ads used to be. 
-Why does <application>Privoxy</application> leave these large gaps?</title>
+Why?</title>
 <para>
  It would be easy enough to just eliminate this space altogether, rather than
  fill it with blank space. But, this would create problems with many pages
@@ -1145,11 +1230,12 @@ secure is it? Do I need to take any special precautions?</title>
  <application>Privoxy</application> can run as a non-privileged 
  user, which is how we recommend it be run. Also, by default 
  <application>Privoxy</application> only listens to requests 
- from <quote>localhost</quote>. It is not itself directly exposed to the
+ from <quote>localhost</quote>. The server aspect of
+ <application>Privoxy</application> is not itself directly exposed to the
  Internet in this configuration. If you want to have
  <application>Privoxy</application> serve as a LAN proxy, this will have to
  be opened up to allow for LAN requests. In this case, we'd recommend
- you specify only the LAN gateway address, e.g. 192.168.1.1 in the main 
+ you specify only the LAN gateway address, e.g. 192.168.1.1, in the main 
  <application>Privoxy</application> config file. All LAN hosts can then use 
  this as their proxy address in the browser proxy configuration. In this way, 
  <application>Privoxy</application> will not listen on any external ports.
@@ -1241,8 +1327,8 @@ What can I do?</title>
  sign) in front of them. Add your problem page URL to one of these sections
  that looks like it is disabling the feature that is causing the
  problem. Re-try the page. There might be some trial and error involved. This
- is discussed in a little more detail in the <ulink
- url="../user-manual/appendix.html#ACTIONSANAT">user-manual
+ is discussed in a little more detail in the 
+ <ulink url="../user-manual/appendix.html#ACTIONSANAT">user-manual
  appendix</ulink>.
 
 </para>
@@ -1250,6 +1336,17 @@ What can I do?</title>
 <para>
  Alternately, if you are comfortable with a text editor, you can accomplish 
  the same thing by editing the appropriate <quote>actions</quote> file.
+</para>
+
+</sect3>
+
+<sect3 id="bugs">
+<title>Where and how do I submit bug reports? Feature Requests? Etc?</title>
+<para>
+ Feedback is encouraged, whether good, bad or ugly. Please see the contact
+ page in the <ulink url="../user-manual/contact.html">user-manual</ulink> for
+ details.
+
 </para>
 
 </sect3>
@@ -1288,13 +1385,19 @@ This is referenced in the doc header already. HB 03/25/02
 -->
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="copyright"><title>Copyright and History</title>
-<para>Please see the user manual for information on Copyright and History.
+<para>
+ Please see the 
+<ulink url="../user-manual/copyright.html#HISTORY">user-manual</ulink> for 
+ information on Copyright and History.
 </para>
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See also</title>
-<para>Please see the user manual for information on references.
+<para>
+ Please see the 
+ <ulink url="../user-manual/seealso.html">user-manual</ulink> for 
+ others references.
 </para>
 </sect1>
 
@@ -1323,6 +1426,9 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.32  2002/03/27 00:57:03  hal9
+Touch ups for name change.
+
 Revision 1.31  2002/03/26 22:29:55  swa
 we have a new homepage!
 
