@@ -1,3 +1,17 @@
+<!--
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/supported.sgml,v $
+
+ Purpose     :  Entity included in other project documents.
+                
+ $Id: supported.sgml,v 1.0 2002/04/01 16:24:49 hal9 Exp $
+
+ Written by and Copyright (C) 2001 the SourceForge
+ Privoxy team. http://www.privoxy.org/
+
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and 
+ Junkbusters Corporation.  http://www.junkbusters.com
+-->
 <para>
  At present, <application>Privoxy</application> is known to run on Win32, Mac
  OSX, OS/2, AmigaOS, Linux, and many flavors of Unix. There are releases 
