@@ -1,4 +1,4 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.4 2001/11/30 21:29:33 jongfoster Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.5 2002/03/04 23:47:30 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
@@ -31,6 +31,10 @@ const char win32_rcs[] = "$Id: win32.c,v 1.4 2001/11/30 21:29:33 jongfoster Exp 
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.5  2002/03/04 23:47:30  jongfoster
+ *    - Rewritten, simpler command-line pre-parser
+ *    - not using raise(SIGINT) any more
+ *
  *    Revision 1.4  2001/11/30 21:29:33  jongfoster
  *    Fixing a warning
  *
@@ -64,6 +68,11 @@ const char win32_rcs[] = "$Id: win32.c,v 1.4 2001/11/30 21:29:33 jongfoster Exp 
 
 #include <stdarg.h>
 #include <process.h>
+
+#if defined(_WIN32) && defined(_MSC_VER) && defined(_DEBUG)
+/* Visual C++ Heap debugging */
+#include <crtdbg.h>
+#endif /* defined(_WIN32) && defined(_MSC_VER) && defined(_DEBUG) */
 
 #include "win32.h"
 
@@ -123,6 +132,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifndef _WIN_CONSOLE
    HANDLE hInitCompleteEvent = NULL;
 #endif
+
+
+#if defined(_WIN32) && defined(_MSC_VER) && defined(_DEBUG)
+#if 0
+   /* Visual C++ Heap debugging */
+
+   /* Get current flag*/
+   int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+
+   /* Turn on leak-checking bit */
+   tmpFlag |= _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF;
+
+   /* Turn off CRT block checking bit */
+   tmpFlag &= ~(_CRTDBG_CHECK_CRT_DF | _CRTDBG_DELAY_FREE_MEM_DF);
+
+   /* Set flag to the new value */
+   _CrtSetDbgFlag( tmpFlag );
+#endif
+#endif /* defined(_WIN32) && defined(_MSC_VER) && defined(_DEBUG) */
 
    /*
     * Cheat in parsing the command line.  We only ever have at most one
