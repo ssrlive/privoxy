@@ -1,4 +1,7 @@
-.TH JUNKBUSTER 1 "http://www.junkbusters.com/ht/en/ijb2.0man.html"
+.\" Revised man page 10/13/01
+.\" Hal Burgiss <hal@foobox.net for Junkbuster developers
+.TH JUNKBUSTER 1 "v2.9.9 (alpha) Date: 2001/10/14"
+
 .SH NAME
 \fBjunkbuster\fP
 - The
@@ -7,863 +10,254 @@ Proxy
 \s-2(TM)\s+2
 .SH SYNOPSIS
 \fBjunkbuster\fP
-\fI\&configfile\fP
-(Version 2.0 onwards)
+\fI\&[config_file] &\fP
 .br
 \fBjunkbstr.exe\fP
-\fI\&configfile\fP
+\fI\&[config_file]\fP
 (Windows)
 .br
-\fBjunkbuster\fP
-[-a]
-[-y]
-[-s]
-[-c]
-[-v]
-.br
-[-u user_agent]
-[-r referer]
-[-t from]
-.br
-[-b blockfile]
-[-j jarfile]
-[-l logfile]
-.br
-[-w NAME=VALUE]
-[-x Header_text]
-.br
-[-h [bind_host_address][:bind_port]]
-.br
-[-f forward_host[:port]]
-[-d N]
-.br
-[-g gw_protocol[:[gw_host][:gw_port]]]
-.br
-(Version 1.4 and earlier)
+.P
+If the configuration file is not specified on the command line,
+\fBJunkbuster\fP will look for a file named \fIconfig\fP in the 
+current directory (except on Amiga where it will look for 
+\fIAmiTCP:db/junkbuster/config\fP and Win32 where it will try 
+\fIjunkbstr.txt\fP).
+
+
 .SH DESCRIPTION
-\fBjunkbuster\fP
-is an instrumentable proxy that filters the 
+\fBJunkbuster\fP
+is an instrumentable HTTP proxy that filters the 
 \s-2HTTP\s0
-stream between
+data stream between
 web servers and browsers.
-Its main purpose is to enhance privacy.
-.P
-Versions before 2.0 used command-line options;
-Versions from 2.0 onward use a configuration file.
-The following descriptions of the options first give the older
-command-line usage, then the new configfile line.
-.P
-In Versions 2.0.1 upwards on Windows,
-a start-up message is printed and the configuration is read from the file
-\fC\&junkbstr.ini\fP
-if it exists and no argument was given.
-.P
-All files except the configfile
-are checked for changes before each page is fetched,
-so they may edited without restarting the proxy.
-.SS OPTIONS
-.TP
-.\" anchor: o_b blockfile
-\fI-b blockfile\fP (Old) blockfile \fIblockfile\fP (New)
-Block\" ijbfaq.html#blocking
-requests to
-\s-2URL\s0s
-matching any pattern given in the lines of the
-\fI\&blockfile\fP.
-The
-\fBjunkbuster\fP
-instead returns status 202, indicating that the request has been accepted
-(though not completed),
-and a
-message identifying itself\" ijbfaq.html#show
-(though the browser may
-display only a broken image icon).
-(Versions before 2.0 returned an error 403 (Forbidden).)
-The syntax of a pattern is
-\fB\&[domain][:port][/path]\fP
-(the
-\fB\&http://\fP
-or
-\fB\&https://\fP
-protocol part is omitted).
-To decide if a pattern matches a target, the domains are compared first,
-then the paths. 
-.P
-To compare the domains,
-the pattern domain and the target
-domain specified in the
-\s-2URL\s0
-are each broken into their components.
-(Components are separated by the
-\fC\&.\fP
-(period) character.)
-Next each of the target components
-is compared with the corresponding pattern component: last with last,
-next-to-last with next-to-last, and so on.
-(This is called
-\fIright-anchored\fP
-matching.)
-If all of the pattern components find their match in the target,
-then the domains are considered a match.
-Case is irrelevant when comparing domain components.
-.P
-A successfully
-matching pattern can be an anchored substring of a target, but
-not vice versa.
-Thus if a pattern doesn't specify a domain,
-it matches all domains.
-.\" anchor: wildcard
-Furthermore, when comparing two components,
-the components must either match in their entirety or up to a wildcard
-\fC\&* \fP
-(star character) in the pattern.  The wildcard feature
-implements only a "prefix" match capability ("abc*" vs. "abcdefg"),
-not suffix matching ("*efg" vs. "abcdefg") or
-infix matching ("abc*efg" vs. "abcdefg").
-The feature is restricted to the domain component;
-it is unrelated to the optional
-regular expression
-feature in the path
-(described below).\" ijbman.html#regex
-.P
-If a numeric port
-is specified in the pattern domain, then the target port must
-match as well.  The default port in a target is port 80.
-.P
-If the domain and port match,
-then the target
-\s-2URL\s0
-path is checked for
-a match against the path in the pattern.
-Paths are compared with a simple case-sensitive
-left-anchored substring comparison.
-Once again, the pattern can be an
-anchored substring of the target, but not vice versa.
-A path of
-\fC\&/\fP
-(slash) would match all paths.  Wildcards are not considered in
-path comparisons.
-.P
-For example, the target
-\s-2URL\s0
-.br
-.ti +0.25i
-\fB\&the.yellow-brick-road.com/TinMan/has_no_brain\fP
-.br
-would be matched (and blocked) by the following patterns
-.br
-.ti +0.25i
-\fB\&yellow-brick-road.com\fP
-.br
-and
-.br
-.ti +0.25i
-\fB\&Yellow*.COM\fP
-.br
-and
-.br
-.ti +0.25i
-\fB\&/TinM\fP
-.br
-but not
-.br
-.ti +0.25i
-\fB\&follow.the.yellow-brick-road.com\fP
-.br
-or
-.br
-.ti +0.25i
-\fB\&/tinman\fP
-.br
-.P
-Comments in a blockfile start with a
-\fB\&#\fP
-(hash) character and end at a new line.
-Blank lines are also ignored.
-.P
-Lines beginning with a
-\fC\&~\fP
-(tilde) character are taken to be
-exceptions:\" ijbfaq.html#exceptions
-a
-\s-2URL\s0
-blocked by previous patterns that matches the rest of
-the line is let through. (The last match wins.)
-.P
-Patterns
-may contain
-\s-2POSIX\s0
-regular expressions\" ijbfaq.html#regex
-provided the
-\fBjunkbuster\fP
-was compiled with this option
-(the default in Version 2.0 on).
-The idiom
-\fC\&/*.*/ad\fP
-can then be used
-to match any
-\s-2URL\s0
-containing
-\fC\&/ad\fP
-(such as
-\fC\&http://nomatterwhere.com/images/advert/g3487.gif\fP
-for example).
-These expressions
-don't work\" ijbman.html#substring
-in the domain part.
-.P
-In version 1.3 and later
-the blockfile and cookiefile are checked for changes before each request.
-.TP
-tinygif \fIN\fP
-Set appearance of blocked GIFs. You can select one of the following
-values:
-.br
-.br
-\h'-\w"0 = "u'0 = Show a ``broken icon'' in the browser
-.br
-\h'-\w"1 = "u'1 = Show a one pixel transparent GIF
-.br
-\h'-\w"2 = "u'2 = Show a GIF with the word ``JUNKBUSTER''
-.TP
-popupfile \fI\&popup\fP
-Sets the name of the popupfile. If uncommented, the popupfile
-controls on which sites Javascript popup windows are disabled.
-.TP
-.\" anchor: o_w wafer
-\fI-w NAME=VALUE\fP (Old) wafer \fINAME=VALUE\fP (New)
-Specifies a pair to be sent as a cookie with every request
-to the server.\" ijbfaq.html#wafers
-(Such boring cookies are called
-\fI\&wafers\fP.)
-This option may be called more than once to generate multiple wafers.
-The original
-Netscape specification
-prohibited
-semi-colons, commas and white space;
-these characters will be
-\s-2URL\s0-encoded
-if used in wafers.
-The Path and Domain attributes are not currently supported.
-.TP
-.\" anchor: o_c cookiefile
-\fI-c cookiefile\fP (Old) cookiefile \fIcookiefile\fP (New)
-Enforce the cookie management policy specified in the
-\fI\&cookiefile.\fP
-.\" anchor: java
-If this option is not used all cookies are silently crunched,
-so that users who never want cookies aren't bothered by browsers
-asking whether each cookie should be accepted.
-However, cookies can
-still get through\" ijbfaq.html#breakthrough
-via
-JavaScript\" links.html#javascript
-and
-\s-2SSL\s0,
-so alerts should be left on.
-.P
-In Version 1.2 and later
-this option must be followed by a
-filename\" ijbfaq.html#crumble
-containing instructions on which sites are allowed to
-receive and set cookies.
-.\" anchor: drop
-By default cookies are dropped in both the browser's request
-and the server's response, unless the
-\s-2URL\s0
-requested matches an entry in the
-\fI\&cookiefile\fP.
-The matching algorithm is the same as for the blockfile.
-A leading
-\fC\&>\fP
-character allows
-server-bound\" ijbfaq.html#directional
-cookies only;
-a
-\fC\&<\fP
-allows only browser-bound cookies;
-a
-\fC\&~\fP
-character stops cookies in
-both directions.\" ijbfaq.html#crumble
-Thus a cookiefile containing a single line with the two characters
-\fC\&>*\fP
-will pass on all cookies to servers but not give any new ones to the browser.
-.TP
-.\" anchor: o_j jarfile
-\fI-j jarfile\fP (Old) jarfile \fIjarfile\fP (New)
-All Set-cookie attempts by the server are
-logged\" ijbfaq.html#jar
-to
-\fI\&jarfile\fP.
-If no wafer is specified,
-one containing a
-canned notice\" ijbfaq.html#notice
-(the 
-\fI\&vanilla wafer\fP)
-is added as an alert to the server
-unless the
-suppress-vanilla-wafer\" ijbman.html#suppress-vanilla-wafer
-option is invoked.
-.TP
-.\" anchor: o_v suppress-vanilla-wafer
-\fI-v\fP (Old) suppress-vanilla-wafer \fI\fP (New)
-Suppress the vanilla wafer.
-.TP
-.\" anchor: o_t from
-\fI-t from\fP (Old) from \fIfrom\fP (New)
-If the browser
-discloses an email address\" ijbfaq.html#from
-in the
-\fB\&FROM\fP
-header (most don't),
-replace it with
-\fI\&from.\fP
-If
-\fI\&from\fP
-is set to
-\fB\&.\fP
-(the period character)
-the
-\fB\&FROM\fP
-is passed to the server unchanged.
-The default is to delete the
-\fB\&FROM\fP
-header.
-.TP
-.\" anchor: o_r referer
-\fI-r referer\fP (Old) referer \fIreferer\fP (New)
-Whenever the browser discloses the
-\s-2URL\s0
-that
-led to\" ijbfaq.html#referer
-the current request,
-replace it with
-\fI\&referer.\fP
-If
-\fI\&referer\fP
-is set to
-\fB\&.\fP
-(period)
-the 
-\s-2URL\s0
-is passed to the server unchanged.
-In 
-Version 1.4
-and later, if referer is set to 
-\fB\&@\fP
-(at) the
-\s-2URL\s0
-is sent in cases where the cookiefile
-specifies that a cookie would be sent.
-(No way to send bogus referers selectively is provided.)
-The default is to delete Referer.
-.P
-Version 2.0 also accepts the spelling
-\fC\&referrer\fP,
-which most dictionaries consider correct.
-.TP
-.\" anchor: o_u user-agent
-\fI-u user-agent\fP (Old) user-agent \fIuser-agent\fP (New)
-Information disclosed by the browser
-about itself\" ijbfaq.html#agent
-is replaced with the value
-\fI\&user-agent.\fP
-If
-\fI\&user-agent\fP
-is set to
-\fB\&.\fP
-(period)
-the
-\fB\&User-Agent\fP
-header is passed to the server unchanged,
-along with any
-\fB\&UA\fP
-headers produced by
-\s-2MS-IE\s0
-(which would otherwise be deleted).
-In 
-Version 1.4
-and later, if
-\fI\&user-agent\fP
-is set to
-\fB\&@\fP
-(at) these headers are sent unchanged in cases where the cookiefile
-specifies that a cookie would be sent,
-otherwise only default
-\fB\&User-Agent\fP
-header is sent.
-That default
-is Mozilla/3.0 (Netscape)
-with an unremarkable
-Macintosh\" ijbfaq.html#infer
-configuration.
-If used with a browser less advanced than Mozilla/3.0 or IE-3, the default
-may encourage pages containing extensions that confuse the browser.
-.TP
-.\" anchor: o_h listen-address
-\fI-h [host][:port]\fP (Old) listen-address \fI[host][:port]\fP (New)
-If
-\fI\&host\fP
-is specified,
-bind the
-\fBjunkbuster\fP
-to that
-\s-2IP\s0
-address.
-If a
-\fI\&port\fP
-is specified, use it.
-The default
-port
-is 8000;
-the default host is
-\fC\&localhost\fP.
-Before Version 2.0.2,
-the default was to bind to all 
-\s-2IP\s0
-addresses
-(\fB\&INADDR_ANY\fP);
-but this has been restricted to
-\fB\&localhost\fP
-to avoid unintended security breaches.
-(To open the proxy to all, use the line
-.br
-.ti +0.25i
-\fB\&listen-address :8000\fP
-.br
-in the configuration file.)
-.TP
-.\" anchor: o_f forwardfile
-\fI-f forward_host[:port]\fP (Old) forwardfile \fIforwardfile\fP (New)
-Version 1.X required all
-\s-2HTTP\s0
-requests from the client to be forwarded to the same destination.
-Version 2.0 takes its routing specification from a
-\fI\&forwardfile\fP,
-allowing selection of the proxy (a.k.a. forwarding host) and gateway
-according to the
-\s-2URL\s0.
-Here is a typical line.
-.br
-.ft CW
-.S 8
-.nf
-.sp
-*         lpwa.com:8000      .      .
-.S
-.ft
-.fi
-.sp
+\fBJunkbuster\fP can be used to protect privacy, manage cookies, filter web
+page content, manage access restrictions, and to remove such annoying Internet
+junk as ads, banners, and pop-ups. Or whatever other annoyances strike your
+fancy.
 
-.P
-Each line contains four fields:
-\fB\&target\fP,
-\fB\&forward_to\fP,
-\fB\&via_gateway_type\fP
-and
-\fB\&gateway\fP.
-As usual, the
-last\" ijbman.html#compare
-\fB\&target\fP
-domain that matches the requested
-\s-2URL\s0
-wins,
-and the
-\fC\&*\fP
-character alone matches any domain.
-The target domain need not be a fully qualified
-hostname; it can be a general domain such as
-\fC\&com\fP
-or
-\fC\&co.uk\fP
-or even just a port number.
-.\" anchor: nose
-For example, because
-<a href="http://lpwa.com">LPWA</a>
-does not handle
-SSL,\" ijbfaq.html#encrypt
-the line above will typically be followed by a line such as
-.br
-.ft CW
-.S 8
-.nf
-.sp
-:443  .      .      .
-.S
-.ft
-.fi
-.sp
-
-to allow SSL transactions to proceed directly.
-The cautious would also
-add an entry in their blockfile to stop transactions
-to port 443 for all but specified trusted sites.
-.P
-If the winning
-\fB\&forward_to\fP
-field is
-\fC\&.\fP
-(the dot character) the proxy connects 
-directly to the server given in the
-\s-2URL\s0,
-otherwise it forwards to the host and port number specified.
-The default port is 8000.
-The
-\fC\&via_gateway_type\fP
-and
-\fC\&gateway\fP
-fields also use a dot to indicate no gateway protocol.
-The gateway protocols are explained
-below.\" ijbman.html#o_g
-.P
-The example line above in a forwardfile alone
-would send everything through port 8000 at
-\fC\&lpwa.com\fP
-with no gateway protocol,
-and is equivalent to the old
-\fC\&-f lpwa.com:8000\fP
-with no
-\fC\&-g\fP
-option.
-For more information see the example file provided with the distribution.
-.P
-Configure with care: no loop detection is performed.
-When setting up chains of proxies that might loop back, try adding
-Squid.\" ijbman.html#squid
-.TP
-.\" anchor: o_g 
-\fI-g gw_protocol[:[gw_host][:gw_port]]\fP (Old) 
-Use
-\fI\&gw_protocol\fP
-as the gateway protocol.
-This option was introduced in Version 1.4,
-but was folded into the
-forwardfile\" ijbman.html#forwardfile
-option in Version 2.0.
-The default is to use no gateway protocol;
-this may be explicitly specified as
-\fB\&direct\fP
-on the command line
-or the dot character in the forwardfile.
-The
-\fC\&SOCKS4\fP
-protocol may be specified as
-\fB\&socks\fP
-or
-\fB\&socks4\fP.
-The
-\fC\&SOCKS4A\fP
-protocol is specified as
-\fB\&socks4a\fP.
-The
-\fC\&SOCKS5\fP
-protocol is not currently supported.
-The default
-\s-2SOCKS\s0
-\fI\&gw_port\fP
-is 1080.
-.P
-The user's browser should
-\fInot\fP
-be
-configured\" ijbfaq.html#socks
-to use
-\fC\&SOCKS\fP;
-the proxy conducts the negotiations, not the browser.
-.P
-The user identification capabilities of
-\fC\&SOCKS4\fP
-are deliberately not used;
-the user is always identified to the
-\fC\&SOCKS\fP
-server as
-\fC\&userid=anonymous\fP.
-If the server's policy is to reject requests from
-\fC\&anonymous\fP,
-the proxy will not work.
-Use a
-debug\" ijbman.html#o_d
-value of 3
-to see the status returned by the server.
-.TP
-.\" anchor: o_d debug
-\fI-d N\fP (Old) debug \fIN\fP (New)
-Set debug mode.
-The most common value is 1,
-to
-pinpoint\" ijbfaq.html#pinpoint
-offensive
-\s-2URL\s0s,
-so they can be added to the blockfile.
-The value of
-\fB\&N\fP
-is a bitwise
-logical-\s-2OR\s0
-of the following values:
-.br
-.br
-\h'-\w"1 = "u'1 = URLs (show each URL requested by the browser);
-.br
-\h'-\w"2 = "u'2 = Connections (show each connection to or from the proxy);
-.br
-\h'-\w"4 = "u'4 = I/O (log I/O errors);
-.br
-\h'-\w"8 = "u'8 = Headers (as each header is scanned, show the header and what is done to it);
-.br
-\h'-\w"16 = "u'16 = Log everything (including debugging traces and the contents of the pages).
-.\" anchor: or
-Multiple
-\fB\&debug\fP
-lines are permitted; they are logical OR-ed together.
-.P
-Because most browsers send several requests in parallel
-the debugging output may appear intermingled, so the
-single-threaded\" ijbman.html#single-threaded
-option is recommended when using
-debug\" ijbman.html#debug
-with
-\fB\&N\fP
-greater than 1.
-.TP
-.\" anchor: o_y add-forwarded-header
-\fI-y\fP (Old) add-forwarded-header \fI\fP (New)
-Add 
-\fB\&X-Forwarded-For\fP
-headers to the server-bound 
-\s-2HTTP\s0
-stream
-indicating the client 
-\s-2IP\s0
-address
-to the server,\" ijbfaq.html#detect
-in the new style of
-Squid 1.1.4.\" ijbman.html#squid
-If you want the traditional
-\fC\&HTTP_FORWARDED\fP
-response header, add it manually with the
--x\" ijbman.html#o_x
-option.
-.TP
-.\" anchor: o_x add-header
-\fI-x HeaderText\fP (Old) add-header \fIHeaderText\fP (New)
-Add the
-\fI\&HeaderText\fP
-verbatim to requests to the server.
-Typical uses include
-adding old-style forwarding notices such as
-\fB\&Forwarded: by http://pro-privacy-isp.net\fP
-and reinstating the
-\fB\&Proxy-Connection: Keep-Alive\fP
-header
-(which the
-\fBjunkbuster\fP
-deletes so as
-not\" ijbfaq.html#detect
-to reveal its existence).
-No checking is done for correctness or plausibility,
-so it can be used to throw any old trash into the server-bound 
-\s-2HTTP\s0
-stream.
-Please don't litter.
-.TP
-.\" anchor: o_s single-threaded
-\fI-s\fP (Old) single-threaded \fI\fP (New)
-Doesn't
-\fB\&fork()\fP
-a separate process
-(or create a separate thread)
-to handle each connection.
-Useful when debugging to keep the process single threaded.
-.TP
-.\" anchor: o_l logfile
-\fI-l logfile\fP (Old) logfile \fIlogfile\fP (New)
-Write all debugging data into
-\fI\&logfile.\fP
-The default
-\fI\&logfile\fP
-is the standard output.
-.TP
-.\" anchor: o_acl aclfile
-aclfile \fIaclfile\fP (New)
-Unless this option is used, the proxy talks to anyone who can connect to it,
-and everyone who can has equal permissions on where they can go.
-An access file allows restrictions to be placed on these two policies,
-by distinguishing some
-\fIsource\fP
-\s-2IP\s0
-addresses and/or
-some
-\fIdestination\fP
-addresses.
-(If a
-forwarder or a gateway\" ijbman.html#forwardfile
-is being used, its address is considered the destination address,
-not the ultimate
-\s-2IP\s0
-address of the
-\s-2URL\s0
-requested.)
-.P
-Each line of the access file begins with
-either the word
-\fB\&permit\fP
-or
-\fB\&deny\fP
-followed by source and (optionally) destination addresses 
-to be matched against those of the
-\s-2HTTP\s0
-request.
-The last matching line specifies the result: if it was a
-\fB\&deny\fP
-line or if no line matched,
-the request will be refused.
-.P
-A source or destination
-can be specified as a single numeric
-\s-2IP\s0
-address,
-or with a hostname, provided that the host's name
-can be resolved to a numeric address: this cannot be used to block all
-\fB\&.mil \fP
-domains for example,
-because there is no single address associated with that domain name.
-Either form may be followed by a slash and an integer
-\fB\&N\fP,
-specifying a subnet mask of
-\fB\&N\fP
-bits.
-For example,
-\fB\&permit 207.153.200.72/24\fP
-matches the entire Class-C subnet from
-207.153.200.0
-through 207.153.200.255.
-(A netmask of 255.255.255.0 corresponds to 24 bits of
-ones in the netmask, as with
-\fC\&*_MASKLEN=24\fP.)
-A value of 16 would be used for a Class-B subnet.
-A value of zero for
-\fB\&N\fP
-in the subnet mask length will cause any address to match;
-this can be used to express a default rule.
-For more information see the example file provided with the distribution.
-.P
-If you like these access controls
-you should probably have
-firewall;\" ijbfaq.html#firewall
-they are not intended to replace one.
-.TP
-.\" anchor: o_tf trustfile
-trustfile \fItrustfile\fP (New)
-This feature is experimental, has not been fully documented and is
-very subject to change.
-The goal is for parents to be able to choose a page or site whose
-links they regard suitable for their
-young children\" ijbfaq.html#children
-and for the proxy to allow access only to sites mentioned there.
-To do this the proxy examines the
-referer\" ijbman.html#o_r
-variable on each page request to check they resulted from
-a click on the ``trusted referer'' site: if so the referred site
-is added to a list of trusted sites, so that the child can
-then move around that site.
-There are several uncertainties in this scheme that experience may be
-able to iron out; check back in the months ahead.
-.TP
-.\" anchor: o_ti trust_info_url
-trust_info_url \fItrust_info_url\fP (New)
-When access is denied due to lack of a trusted referer, this
-\s-2URL\s0
-is displayed with a message pointing the user to it for further information.
-.TP
-.\" anchor: o_hc hide-console
-hide-console \fI\fP (New)
-In the Windows version only, instructs the program
-to disconnect from and hide the command console after starting.
-.TP
-.\" anchor: o_a 
-\fI-a\fP (Old) 
-(Obsolete) Accept the server's
-\fB\&Set-cookie\fP
-headers, passing them through to the browser.
-.\" anchor: obsolete
-This option was removed in Version 1.2
-and replaced by an improvement to the
--c\" ijbman.html#o_c
-option.
-.LE
 .SH INSTALLATION AND USE
-Browsers must be told where to find the
-\fBjunkbuster\fP
-(e.g.
-\fB\&localhost\fP
+Browsers must be configured to use 
+\fBJunkbuster\fP
+(the default is localhost, 
 port 8000).
 To set the 
 \s-2HTTP\s0
-proxy in Netscape 3.0,
+proxy in Netscape and Mozilla,
 go through:
-\fB\&Options\fP;
-\fB\&Network Preferences\fP;
+\fB\&Edit\fP;
+\fB\&Preferences\fP;
+\fB\&Advanced\fP;
 \fB\&Proxies\fP;
 \fB\&Manual Proxy Configuration\fP;
 \fB\&View\fP.
-See the
-\s-2FAQ\s0
-for other browsers.
+.P
+For Internet Explorer,
+go through:
+\fB\&Tools\fP;
+\fB\&Internet Properties\fP;
+\fB\&Connections\fP;
+\fB\&LAN Settings\fP.
+.P
+Set the HTTP proxy location for localhost, port 8000.
 The
-Security Proxy\" ijbfaq.html#security
+Secure (SSL) Proxy\" ijbfaq.html#security
 should also be set to the same values,
 otherwise
-\fB\&shttp:\fP
+\fB\&https:\fP
 \s-2URL\s0s
-won't work.
+won't be proxied.
+
+.SH CONFIGURATION
+All \fBJunkbuster\fP configuration is done via the various configuarion 
+files. The default configuration files are: \fIconfig\fP, 
+\fIactionsfile\fP, and \fIre_filterfile\fP. These are well commented. 
+On Unix and Unix-like systems, these are located in \fI/etc/junkbuster/\fP 
+by default. On Windows and OS/2, these files are in the same directory 
+as the \fBJunkbuster\fP executable. 
 .P
-Note the limitations
-explained in the
-\s-2FAQ\s0.
-.SH CHECKING OPTIONS
-To allow users to
-check\" ijbfaq.html#show
-that a
-\fBjunkbuster\fP
-is running and how it is configured,
-it intercepts requests for any
-\s-2URL\s0
-ending in
-\fB\&/show-proxy-args\fP
-and blocks it,
-returning instead returns information on its
-version number and
-current configuration
-including the contents of its blockfile.
-To get an explicit warning that no
-\fBjunkbuster\fP
-intervened if the proxy was not configured,
-it's best to point it to a
-\s-2URL\s0
-that does this, such as
-http://internet.junkbuster.com/cgi-bin/show-proxy-args
-on Junkbusters's website.
-.SH SEE ALSO
-http://www.waldherr.org/junkbuster/\" waldherr.org#
+The name and number of configuration files has changed from previous versions,
+and is subject to change as development progresses. In fact, the configuration
+itself is changed and much more sophisticated. See the user-manual for a brief
+explanation of all configuration options.
+
+
+.SH "SAMPLE CONFIGURATION"
+.PP
+A brief example of what an \fIactionsfile\fP configuration might look like:
+.PP
+.nf
+
+# Define a few useful custom aliases for later use
+{{alias}}
++no-cookies = +no-cookies-set +no-cookies-read
+-no-cookies = -no-cookies-set -no-cookies-read
++imageblock = +block +image
+
+## Default Policies (actions) ############################
+{ \\
+ -block \\
+ -downgrade \\
+ +fast-redirects \\
+ +filter \\
+ +no-compression \\
+ +hide-forwarded \\
+ +hide-from{block} \\
+ +hide-referer{forge} \\
+ -hide-user-agent \\
+ -image \\
+ +image-blocker{blank} \\
+ +no-cookies-read \\
+ +no-cookies-set \\
+ +no-popups \\
+ +vanilla-wafer \\
+}
+/
+
+# Now set exceptions to the above defined policies #######
+
+# Sites that DO need cookies
+{-no-cookies}
+ .redhat.com
+ .sun.com
+ .yahoo.com
+ .msdn.microsoft.com
+
+# This site requires cookies AND 'fast-redirects' on
+{-no-cookies -fast-redirects}
+ .nytimes.com
+
+# Add custom headers, and turn off filtering of page source
+{+add-header{X-Privacy: Yes please} #-add-header{*} \\
+ +add-header{X-User-Tracking: No thanks!} -filter}
+ privacy.net
+
+{+imageblock}
+ .adforce.imgis.com
+ .ad.preferences.com/image.*
+ .ads.web.aol.com
+ .ad-adex3.flycast.com
+ .ad.doubleclick.net
+ .ln.doubleclick.net
+ .ad.de.doubleclick.net
+ /.*/count\\.cgi\\?.*df=
+ 194.221.183.22[1-7]
+ a196.g.akamai.net/7/196/2670/000[12]/images.gmx.net/i4/images/.*/
+
+# Block any URLs that match these patterns
+{+block}
+ /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\\.(gif|jpe?g))
+ /.*/(.*[-_.])?count(er)?(\\.cgi|\\.dll|\\.exe|[?/])
+ /.*/(plain|live|rotate)[-_.]?ads?/
+ /.*/(sponsor)s?[0-9]?/
+ /.*/ad(server|stream|juggler)\\.(cgi|pl|dll|exe)
+ /.*/adbanners/
+ /.*/adv((er)?ts?|ertis(ing|ements?))?/
+ /.*/banners?/
+ /.*/popupads/
+ /.*/sponsor.*\\.gif
+ /.*/advert[0-9]+\\.jpg
+ /ad_images/
+ /.*/ads/
+ /images/.*/.*_anim\\.gif
+ /rotations/ 
+ /.*(ms)?backoff(ice)?.*\\.(gif|jpe?g)
+ 195.63.104.*/(inbox|log|meld|folderlu|folderru|log(in|out)[lmr]u|)
+ .images.nytimes.com
+ .images.yahoo.com/adv/
+ /.*cnnstore\\.gif
+
+.fi
+.sp
+.PP
+See the comments in the configuration files themselves, or the user-manual 
+for explanations of the above syntax.
+
+.SH "FILES"
+\fI/usr/sbin/junkbuster\fP
 .br
-http://www.junkbusters.com/ht/en/ijbfaq.html\" ijbfaq.html#
+\fI/etc/junkbuster/config\fP
+.br
+\fI/etc/junkbuster/actionsfile\fP
+.br
+\fI/etc/junkbuster/re_filterfile\fP
+.br
+\fI/var/log/junkbuster/logfile\fP
+
+.P
+Various other files should be included, but may vary depending on platform.
+More documentation should be included in the local documentation directory,
+though is not complete at this time.
+
+.SH NOTES
+This is a development version of \fBJunkbuster\fP. All features are not 
+complete.
+
+.SH BUGS
+Yes. HTTP/1.1 support is only partially implemented. See the user-manual for 
+how and where to report bugs.
+
+.SH SEE ALSO
+http://ijbswa.sourceforge.net/
+.br
+http://sourceforge.net/projects/ijbswa
+.br
+http://www.waldherr.org/junkbuster/\" waldherr.org#
 .br
 http://www.junkbusters.com/ht/en/cookies.html\" cookies.html#
 .br
-http://internet.junkbuster.com/cgi-bin/show-proxy-args
+http://ijbswa.sourceforge.net/config/
 .br
-http://www.cis.ohio-state.edu/htbin/rfc/rfc2109.html
+http://privacy.net/analyze/
 .br
-http://squid.nlanr.net/Squid/
+http://www.squid-cache.org/
+
+.SH DEVELOPMENT TEAM
 .br
-http://www-math.uni-paderborn.de/~axel/
+ Stefan Waldherr 
+.br
+ Andreas Oesterhelt 
+.br
+ Jon Foster 
+.br
+ Markus Breitenbach
+.br
+ Thomas Steudten
+.br
+ David Schmidt
+.br
+ Haroon Rafique
+.br
+ Jorg Strohmayer
+.br
+ Shamim Mohamed
+.br
+ Sarantis Paskalis
+.br
+ Gabriel L. Somlo
+.br
+ John Venvertloh
+.br
+ Hal Burgiss
+
+
 .SH COPYRIGHT AND GPL
-Written and copyright by the Anonymous Coders and Junkbusters Corporation
-and made available under the
-GNU General Public License (GPL).\" gpl.html#
-This software comes with
-NO WARRANTY.\" gpl.html#nowarr
+Orginally written by, and copyrighted by, the Anonymous Coders and Junkbusters
+Corporation. 
+.P
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+.P
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.P
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+.P
 Internet Junkbuster
 Proxy
 is a

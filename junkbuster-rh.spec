@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.16 2001/09/24 20:56:23 hal9 Exp $
+# $Id: junkbuster-rh.spec,v 1.17 2001/10/10 18:59:28 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.17  2001/10/10 18:59:28  hal9
+# Minor change for init script.
+#
 # Revision 1.16  2001/09/24 20:56:23  hal9
 # Minor changes.
 #
@@ -80,7 +83,7 @@
 Summary: The Internet Junkbuster
 Vendor: http://ijbswa.sourceforge.net
 Name: junkbuster
-Version: 2.9.8
+Version: 2.9.9
 Release: 1
 Source0: http://www.waldherr.org/junkbuster/ijbswa.tar.gz
 Copyright: GPL
@@ -119,11 +122,11 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sbindir} \
          ${RPM_BUILD_ROOT}/var/log/junkbuster \
          ${RPM_BUILD_ROOT}%{ijbconf}/templates \
          ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d \
-         ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
+         ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d 
 
 install -s -m 744 junkbuster $RPM_BUILD_ROOT%{_sbindir}/junkbuster
 # Out temporarily
-#cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
+cp -f junkbuster.1 $RPM_BUILD_ROOT%{_mandir}/man8/junkbuster.8
 cp -f actionsfile $RPM_BUILD_ROOT%{ijbconf}/actionsfile
 cp -f re_filterfile $RPM_BUILD_ROOT%{ijbconf}/re_filterfile
 cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
@@ -182,8 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0744,junkbust,junkbust) %dir /var/log/junkbuster
 %config %{_sysconfdir}/logrotate.d/junkbuster
 %attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
-#temporarily out until it is updated.
-#%{_mandir}/man8/*
+%{_mandir}/man8/*
 %config %{_sysconfdir}/rc.d/init.d/junkbuster
 
 
