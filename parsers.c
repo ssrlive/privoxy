@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.42 2001/11/22 21:59:30 jongfoster Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.43 2001/11/23 00:26:38 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.42 2001/11/22 21:59:30 jongfoster
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.43  2001/11/23 00:26:38  jongfoster
+ *    Fixing two really stupid errors in my previous commit
+ *
  *    Revision 1.42  2001/11/22 21:59:30  jongfoster
  *    Adding code to handle +no-cookies-keep
  *
@@ -1413,11 +1416,22 @@ char *client_x_forwarded(const struct parsers *v, const char *s, struct client_s
  *********************************************************************/
 void client_host_adder(struct client_state *csp)
 {
-   char *p = NULL;
+   char *p = NULL,
+        *pos = NULL;
 
+   if ( !csp->http->hostport || !*(csp->http->hostport)) return;
    p = strsav(p, "Host: ");
-   p = strsav(p, csp->http->hostport);
-
+   /*
+   ** remove 'user:pass@' from 'proto://user:pass@host'
+   */
+   if ( (pos = strchr( csp->http->hostport, '@')) != NULL )
+   {
+       p = strsav(p, pos+1);
+   }
+   else
+   {
+      p = strsav(p, csp->http->hostport);
+   }
    log_error(LOG_LEVEL_HEADER, "addh: %s", p);
    enlist(csp->headers, p);
 
