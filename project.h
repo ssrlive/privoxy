@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.68 2002/04/26 12:56:00 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.69 2002/05/08 16:00:16 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.69  2002/05/08 16:00:16  oes
+ *    Added size member to struct iob, so it can
+ *    be alloced larger than needed.
+ *
  *    Revision 1.68  2002/04/26 12:56:00  oes
  *    Killed REDIRECT_URL, added USER_MANUAL_URL and HELP_LINK_PREFIX
  *
@@ -676,7 +680,7 @@ struct iob
 #define CT_GIF    2 /* Suitable for GIF filtering */
 #define CT_TABOO  4 /* DONT filter */
 
-#define ACTION_MASK_ALL        (~0U)
+#define ACTION_MASK_ALL        (~0UL)
 
 #define ACTION_MOST_COMPATIBLE 0x00000000UL
 
