@@ -83,7 +83,7 @@ PIDS_DEST    = $(VAR_DEST)/run
 # changes this to /var for storing the logs and pidfile
 
 # used in source dir only, the install goes to $share_dest/doc/privoxy
-DOK_WEB_USEM = doc/webserver/user-manual
+DOK_WEB = doc/webserver/
 
 #############################################################################
 # Build tools
@@ -865,10 +865,12 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 	$(INSTALL) $(INSTALL_D) $$DOC ;\
 	$(INSTALL) $(INSTALL_D) $$DOC/user-manual ;\
 	$(INSTALL) $(INSTALL_D) $$DOC/faq ;\
-	if [ -d "$(DOK_WEB_USEM)" ]; then \
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/[^C]* $$DOC/user-manual;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/[^C]* $$DOC/faq;\
-		$(INSTALL) $(INSTALL_T) $(DOK_WEB_USEM)/../p_doc.css $$DOC;\
+	$(INSTALL) $(INSTALL_D) $$DOC/images ;\
+	if [ -d "$(DOK_WEB)" ]; then \
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/user-manual/[^C]* $$DOC/user-manual;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/faq/[^C]* $$DOC/faq;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/images/*jpg $$DOC/images;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
 		$(INSTALL) $(INSTALL_T) AUTHORS $$DOC;\
 		$(INSTALL) $(INSTALL_T) LICENSE $$DOC;\
 		$(INSTALL) $(INSTALL_T) README $$DOC;\
@@ -931,7 +933,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 	# mode 0640 in the logs for privacy reasons 
 	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
 	-$(CHOWN) $(USER),$(GROUP) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
-		$(ECHO) -e "\n  ** WARNING ** current install user different from configured user!! Loging may fail\n"
+		$(ECHO) -e "\n  ** WARNING ** current install user different from configured user!! Logging may fail\n"
 	-$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile
 
 	# Install the init and logrotate scripts. Test for Slackware and Red Hat only.
@@ -945,7 +947,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 		$(INSTALL) $(INSTALL_P) slackware/rc.privoxy /etc/rc.d/ ;\
 		$(ECHO) -e "\n Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
 	elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
-		$(INSTALL) $(INSTALL_P) privoxy.init /etc/init.d/privoxy ;\
+		$(INSTALL) $(INSTALL_P) privoxy.init /etc/rc./init.d/privoxy ;\
 		$(MKDIR) /etc/logrotate.d/ ;\
 		$(INSTALL) $(INSTALL_P) privoxy.logrotate /etc/logrotate.d/privoxy ;\
 	elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
@@ -953,7 +955,6 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc all
 	else \
 		$(ECHO) -e "\n No init script installed, install it manually" ;\
 	fi
-	# FIXME $(ECHO) privoxy.logrotate privoxy.monthly privoxy.weekly
 
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	#
