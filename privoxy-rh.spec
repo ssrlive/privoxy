@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.39 2002/06/26 17:32:04 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.40 2002/07/02 17:37:24 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,7 @@ Name: privoxy
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 2.9.15
-Release: 5
+Release: 6
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
 Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
@@ -261,7 +261,7 @@ fi
 %doc doc/webserver/man-page
 
 # ATTENTION FOR defattr change here !
-%defattr(0755,%{name},%{name},0644)
+%defattr(0644,%{name},%{name},0755)
 
 %dir %{privoxyconf}
 %dir %{privoxyconf}/templates
@@ -317,7 +317,7 @@ fi
 %config %{privoxyconf}/templates/untrusted
 
 # Attention, new defattr change here !
-%defattr(0755,root,root,0644)
+%defattr(0644,root,root,0755)
 
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %attr(0744,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
@@ -332,6 +332,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Jul 02 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
++ privoxy-2.9.15-6
+- Fixing defattr values. File and directory modes where swapped
+
 * Tue Jul 02 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-5
 - Fix typo in templates creation.
@@ -708,6 +712,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.40  2002/07/02 17:37:24  morcego
+# Fix typo in templates creation.
+#
 # Revision 1.39  2002/06/26 17:32:04  morcego
 # Fixing issues created by sync between the branches
 #
