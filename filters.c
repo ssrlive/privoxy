@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.25 2001/07/26 10:09:46 oes Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.26 2001/07/30 22:08:36 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,12 @@ const char filters_rcs[] = "$Id: filters.c,v 1.25 2001/07/26 10:09:46 oes Exp $"
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.26  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.25  2001/07/26 10:09:46  oes
  *    Made browser detection a little less naive
  *
@@ -444,7 +450,6 @@ struct http_response *block_url(struct client_state *csp)
    char *p;
 #endif /* def FEATURE_IMAGE_BLOCKING */
    struct http_response *rsp;
-   struct map *exports = NULL;
 
    /* 
     * If it's not blocked, don't block it ;-)
@@ -501,18 +506,17 @@ struct http_response *block_url(struct client_state *csp)
     * Else, generate an HTML "blocked" message:
     */
    {
-
-      exports = default_exports(csp, NULL);	   
+      struct map * exports = default_exports(csp, NULL);
 #ifdef FEATURE_FORCE_LOAD
-      exports = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+      map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
 #else /* ifndef FEATURE_FORCE_LOAD */
-      exports = map_block_killer(exports, "force-support");
+      map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
 
-      exports = map(exports, "hostport", 1, csp->http->hostport, 1);
-      exports = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-      exports = map(exports, "path", 1, csp->http->path, 1);
-      exports = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+      map(exports, "hostport", 1, csp->http->hostport, 1);
+      map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+      map(exports, "path", 1, csp->http->path, 1);
+      map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
       rsp->body = fill_template(csp, "blocked", exports);
       free_map(exports);
@@ -559,7 +563,7 @@ struct http_response *block_url(struct client_state *csp)
 struct http_response *trust_url(struct client_state *csp)
 {
    struct http_response *rsp;
-   struct map *exports = NULL;
+   struct map * exports;
    char buf[BUFFER_SIZE], *p = NULL;
    struct url_spec **tl, *t;
 
@@ -578,25 +582,26 @@ struct http_response *trust_url(struct client_state *csp)
    {
       return NULL;
    }
+
    exports = default_exports(csp, NULL);
 
    /* 
     * Export the host, port, and referrer information
     */
-   exports = map(exports, "hostport", 1, csp->http->hostport, 1);
-   exports = map(exports, "path", 1, csp->http->path, 1);
-   exports = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
-   exports = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+   map(exports, "hostport", 1, csp->http->hostport, 1);
+   map(exports, "path", 1, csp->http->path, 1);
+   map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+   map(exports, "path-html", 1, html_encode(csp->http->path), 0);
 
    if (csp->referrer && strlen(csp->referrer) > 9)
    {
-      exports = map(exports, "referrer", 1, csp->referrer + 9, 1);
-      exports = map(exports, "referrer-html", 1, html_encode(csp->referrer + 9), 0);
+      map(exports, "referrer", 1, csp->referrer + 9, 1);
+      map(exports, "referrer-html", 1, html_encode(csp->referrer + 9), 0);
    }
    else
    {
-      exports = map(exports, "referrer", 1, "unknown", 1);
-      exports = map(exports, "referrer-html", 1, "unknown", 1);
+      map(exports, "referrer", 1, "unknown", 1);
+      map(exports, "referrer-html", 1, "unknown", 1);
    }
 
    /*
@@ -607,7 +612,7 @@ struct http_response *trust_url(struct client_state *csp)
       sprintf(buf, "<li>%s</li>\n", t->spec);
       p = strsav(p, buf);
    }
-   exports = map(exports, "trusted-referrers", 1, p, 0);
+   map(exports, "trusted-referrers", 1, p, 0);
    p = NULL;
 
    /*
@@ -622,20 +627,20 @@ struct http_response *trust_url(struct client_state *csp)
          sprintf(buf, "<li> <a href=%s>%s</a><br>\n",l->str, l->str);
          p = strsav(p, buf);
       }
-      exports = map(exports, "trust-info", 1, p, 0);
+      map(exports, "trust-info", 1, p, 0);
    }
    else
    {
-      exports = map_block_killer(exports, "have-trust-info");
+      map_block_killer(exports, "have-trust-info");
    }
    
    /*
     * Export the force prefix or the force conditional block killer
     */
 #ifdef FEATURE_FORCE_LOAD
-   exports = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+   map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
 #else /* ifndef FEATURE_FORCE_LOAD */
-   exports = map_block_killer(exports, "force-support");
+   map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
 
    /*

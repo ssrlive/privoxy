@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.5 2001/06/29 21:45:41 oes Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.6 2001/07/31 14:44:51 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.5 2001/06/29 21:45:41 oes Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.6  2001/07/31 14:44:51  oes
+ *    list_to_text() now appends empty line at end
+ *
  *    Revision 1.5  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -78,6 +81,8 @@ const char list_rcs[] = "$Id: list.c,v 1.5 2001/06/29 21:45:41 oes Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
+#include <assert.h>
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -499,30 +504,36 @@ void list_append_list_unique(struct list *dest, const struct list *src)
  *                      strings that will be independantly free()d.
  *
  * Parameters  :
- *          1  :  map = map to add to
+ *          1  :  the_map = map to add to
  *          2  :  name = name to add
  *          3  :  nc = flag set if a copy of name should be used
  *          4  :  value = value to add
  *          5  :  vc = flag set if a copy of value should be used
  *
- * Returns     :  pointer to extended map, or NULL if failiure
+ * Returns     :  N/A
  *
  *********************************************************************/
-struct map *map(struct map *map, char *name, int nc, char *value, int vc)
+void map(struct map *the_map, const char *name, int nc, const char *value, int vc)
 {
-   struct map *cur;
+   struct map_entry *new_entry;
 
-   if (NULL == (cur = zalloc(sizeof(*cur))))
+   if (NULL == (new_entry = zalloc(sizeof(*new_entry))))
    {
-      return(NULL);
+      return;
    }
 
-   cur->name  = nc ? strdup(name) : name;
-   cur->value = vc ? strdup(value) : value;
-   cur->next = map;
+   new_entry->name  = nc ? strdup(name) : name;
+   new_entry->value = vc ? strdup(value) : value;
+   /* new_entry->next = NULL;  - implied by zalloc */
 
-   return(cur);
-
+   if (the_map->last)
+   {
+      the_map->last = the_map->last->next = new_entry;
+   }
+   else
+   {
+      the_map->last = the_map->first = new_entry;
+   }
 }
 
 
@@ -539,20 +550,36 @@ struct map *map(struct map *map, char *name, int nc, char *value, int vc)
  * Returns     :  the value if found, else the empty string
  *
  *********************************************************************/
-char *lookup(struct map *map, char *name)
+const char *lookup(const struct map *the_map, const char *name)
 {
-   struct map *p = map;
+   const struct map_entry *cur_entry = the_map->first;
 
-   while (p)
+   while (cur_entry)
    {
-      if (!strcmp(name, p->name))
+      if (!strcmp(name, cur_entry->name))
       {
-         return p->value;
+         return cur_entry->value;
       }
-      p = p->next;
+      cur_entry = cur_entry->next;
    }
    return "";
+}
 
+
+/*********************************************************************
+ *
+ * Function    :  new_nap
+ *
+ * Description :  Create a new, empty map.
+ *
+ * Parameters  :
+ *
+ * Returns     :  A new, empty map, or NULL if out of memory.
+ *
+ *********************************************************************/
+struct map *new_map(void)
+{
+   return (struct map *) zalloc(sizeof(struct map));
 }
 
 
@@ -564,25 +591,33 @@ char *lookup(struct map *map, char *name)
  *                depandant strings
  *
  * Parameters  :
- *          1  :  list = list to bee freed
+ *          1  :  cur_entry = map to be freed.  May be NULL.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void free_map(struct map *map)
+void free_map(struct map *the_map)
 {
-   struct map *p = map;
+   struct map_entry *cur_entry;
+   struct map_entry *next_entry;
 
-   while (p)
+   if (the_map == NULL)
    {
-      free(p->name);
-      free(p->value);
-
-      map = p->next;
-      free(p);
-      p = map;
+      return;
    }
 
+   for (cur_entry = the_map->first; cur_entry != NULL; cur_entry = next_entry) 
+   {
+      freez((char *)cur_entry->name);
+      freez((char *)cur_entry->value);
+
+      next_entry = cur_entry->next;
+      free(cur_entry);
+   }
+
+   the_map->first = the_map->last = NULL;
+
+   free(the_map);
 }
 
 

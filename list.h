@@ -1,6 +1,6 @@
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
-#define LIST_H_VERSION "$Id: list.h,v 1.4 2001/06/29 13:30:37 oes Exp $"
+#define LIST_H_VERSION "$Id: list.h,v 1.5 2001/07/29 18:43:08 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: list.h,v $
+ *    Revision 1.5  2001/07/29 18:43:08  jongfoster
+ *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
+ *    ANSI C rules.
+ *
  *    Revision 1.4  2001/06/29 13:30:37  oes
  *    - Introduced enlist_unique_header()
  *    - Removed logentry from cancelled commit
@@ -90,9 +94,10 @@ extern void  list_duplicate(struct list *dest, const struct list *src);
 extern void  destroy_list(struct list *h);
 extern char *list_to_text(struct list *h);
 
-extern struct map* map(struct map* map, char *name, int nc, char *value, int vc);
-extern char *lookup(struct map *list, char *name);
+extern struct map *new_map(void);
 extern void free_map(struct map *list);
+extern void map(struct map* map, const char *name, int nc, const char *value, int vc);
+extern const char *lookup(const struct map *list, const char *name);
 
 /* Revision control strings from this header and associated .c file */
 extern const char list_rcs[];

@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.9 2001/08/01 00:17:54 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.10 2001/08/01 21:19:22 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.10  2001/08/01 21:19:22  jongfoster
+ *    Moving file version information to a separate CGI page.
+ *
  *    Revision 1.9  2001/08/01 00:17:54  jongfoster
  *    Adding prototype for map_conditional
  *
@@ -109,17 +112,17 @@ extern struct http_response *error_response(struct client_state *csp, const char
 extern struct http_response *finish_http_response(struct http_response *rsp);
 extern void free_http_response(struct http_response *rsp);
 
-extern struct map *default_exports(struct client_state *csp, char *caller);
-extern struct map *map_block_killer(struct map *map, char *name);
-extern struct map *map_conditional(struct map *exports, char *name, int choose_first);
-extern char *fill_template(struct client_state *csp, const char *template, struct map *exports);
+extern struct map * default_exports(const struct client_state *csp, const char *caller);
+extern void map_block_killer(struct map *map, const char *name);
+extern void map_conditional(struct map *exports, const char *name, int choose_first);
+extern char *fill_template(struct client_state *csp, const char *templatename, struct map *exports);
 
 
 /*
  * Text generators
  */
 extern char *make_menu(const char *self);
-extern char *dump_map(struct map *map);
+extern char *dump_map(const struct map *map);
 
 #ifdef FEATURE_STATISTICS
 extern struct map *add_stats(struct map *exports);

@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.25 2001/07/29 18:43:08 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.26 2001/07/30 22:08:36 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,12 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.26  2001/07/30 22:08:36  jongfoster
+ *    Tidying up #defines:
+ *    - All feature #defines are now of the form FEATURE_xxx
+ *    - Permanently turned off WIN_GUI_EDIT
+ *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
+ *
  *    Revision 1.25  2001/07/29 18:43:08  jongfoster
  *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
  *    ANSI C rules.
@@ -299,11 +305,17 @@ struct list /* FIXME: Why not separate entries and header? */
    struct list *next;
 };
 
+struct map_entry
+{
+   const char *name;
+   const char *value;
+   struct map_entry *next;
+};
+
 struct map
 {
-  char *name;
-  char *value;
-  struct map *next;
+   struct map_entry *first;
+   struct map_entry *last;
 };
 
 struct http_request
