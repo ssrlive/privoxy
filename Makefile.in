@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.6 2001/06/03 17:07:27 swa Exp $
+# $Id: Makefile.in,v 1.7 2001/06/03 17:09:09 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.7  2001/06/03 17:09:09  swa
+# swa for oes: reversed my earlier change
+#
 # Revision 1.6  2001/06/03 17:07:27  swa
 # swa for oes
 #
@@ -56,7 +59,7 @@ VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
-RPM_VERSION   = $(VERSION)
+RPM_VERSION   = $(VERSION_MAJOR).$(VERSION_MINOR)
 
 # The version is currently specified in config.h, which is
 # written by "configure".
@@ -195,17 +198,21 @@ sregexp.txt: re_filterfile
 
 
 # -------------------------------------------------------------------------
-#
+# redhat distribution
 # -------------------------------------------------------------------------
-rpm-dist:
-	@make clean
+redhat-dist:
+	@make clobber
 # verify that i'm root needs to be done
-	cd .. && tar --exclude "ijb/CVS" -cvzf ijb.tar.gz ijb/
+	tar --exclude "ijb/CVS" -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
-	cat ../../SPECS/junkbuster.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc ../../SPECS/junkbuster.spec
-	cd ../../ && rpm -ba SPECS/junkbuster.spec
-	chmod -R a+r ../../RPMS
-	chmod -R a+r ../../SRPMS
+	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
+# verify all files in their correct location needs to be done
+	cd .. && rpm -ta ijbswa.tar.gz
+
+# -------------------------------------------------------------------------
+# suse distribution
+# -------------------------------------------------------------------------
+
 
 # -------------------------------------------------------------------------
 #
