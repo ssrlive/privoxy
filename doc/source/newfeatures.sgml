@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 1.6 2002/04/18 10:16:36 oes Exp $
+ $Id: newfeatures.sgml,v 1.7 2002/04/26 17:24:31 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,12 +28,14 @@
 <para>
  <itemizedlist>
 
+<!--
  <listitem>
   <para>
   FIXME: complete the list of features. change the order: most important
   features to the top of the list. prefix new features with "NEW".
   </para>
  </listitem> 
+-->
 
  <listitem>
   <para>
@@ -43,17 +45,19 @@
    tracing of rule and filter effects. Remote toggling.
   </para>
  </listitem> 
-<!--
+
  <listitem>
   <para>
-   Modularized configuration that will allow for system wide settings, and
-   individual user settings. (not implemented yet, probably a 3.1 feature)
+   Web page content filtering (removes banners based on size,
+   invisible <quote>web-bugs</quote>, JavaScript and HTML annoyances, pop-up windows, etc.)
   </para>
  </listitem> 
--->
+
  <listitem>
   <para>
-    Blocking of annoying pop-up browser windows.
+   Modularized configuration that allows for standard settings and
+   user settings to reside in separate files, so that installing updated
+   actions files won't overwrite idividual user settings.
   </para>
  </listitem> 
 
@@ -67,20 +71,19 @@
   <para>
    Support for Perl Compatible Regular Expressions in the configuration files, and 
    generally a more sophisticated and flexible configuration syntax over
-   previous versions. 
+   previous versions.
   </para>
  </listitem> 
 
  <listitem>
   <para>
-   GIF de-animation. 
+   Improved cookie management features (e.g. session based cookies).
   </para>
- </listitem> 
- 
+</listitem> 
+
  <listitem>
   <para>
-   Web page content filtering (removes banners based on size,
-   invisible <quote>web-bugs</quote>, JavaScript and HTML annoyances, pop-ups, etc.)
+   GIF de-animation. 
   </para>
  </listitem> 
  
@@ -98,21 +101,15 @@
 
  <listitem>
   <para>
+   User-customizable HTML templates for all proxy-generated pages (e.g. "blocked" page).
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
    Auto-detection and re-reading of config file changes.
   </para>
  </listitem> 
-
- <listitem>
-  <para>
-   User-customizable HTML templates (e.g. 404 error page).
-  </para>
- </listitem> 
-
- <listitem>
-  <para>
-   Improved cookie management features (e.g. session based cookies).
-  </para>
-</listitem> 
 
  <listitem>
   <para>
