@@ -2,6 +2,8 @@
 <!entity % dummy "INCLUDE"> 
 <!entity supported SYSTEM "supported.sgml">
 <!entity newfeatures SYSTEM "newfeatures.sgml">
+<!entity p-intro SYSTEM "privoxy.sgml">
+<!entity seealso SYSTEM "seealso.sgml">
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -10,7 +12,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.62 2002/03/30 04:15:53 hal9 Exp $
+ $Id: user-manual.sgml,v 1.63 2002/04/01 16:24:49 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -32,7 +34,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.62 2002/03/30 04:15:53 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.63 2002/04/01 16:24:49 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -79,30 +81,10 @@ You can find the latest version of the user manual at  <ulink url="http://www.pr
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="introduction"><title>Introduction</title>
-<para>
- <application>Privoxy</application> is a web proxy with advanced filtering
- capabilities for protecting privacy, filtering web page content, managing
- cookies, controlling access, and removing ads, banners, pop-ups and other
- obnoxious Internet junk. <application>Privoxy</application> has a very
- flexible configuration and can be customized to suit individual needs and
- tastes. <application>Privoxy</application> has application for both
- stand-alone systems and multi-user networks.
-</para>
-
-<para>
- <application>Privoxy</application> is based on the code of the 
- <application>Internet Junkbuster</application>.
- <application>Junkbuster</application> was originally written by JunkBusters
- Corporation, and was released as free open-source software under the GNU GPL.
- Stefan Waldherr made many improvements, and started the SourceForge project
- to continue development.
-</para>
-
-<para>
- <application>Privoxy</application> continues the
- <application>Junkbuster</application> tradition, but adds many 
- refinements and enhancements.
-</para>
+<!--
+ Include privoxy.sgml boilerplate:
+-->
+&p-intro;
 
 <para>
  This documentation is included with the current BETA version of
@@ -310,7 +292,7 @@ Thanx David Schmidt!
  <application>Privoxy</application> is packaged in a WarpIN self-
  installing archive.  The self-installing program will be named depending
  on the release version, something like:
- <filename>ijbos2_setup_1.2.3.exe</filename>.  In order to install it, simply
+ <filename>privoxyos2_setup_1.2.3.exe</filename>.  In order to install it, simply
  run this executable or double-click on its icon and follow the WarpIN
  installation panels.  A shadow of the <application>Privoxy</application>
  executable will be placed in your startup folder so it will start 
@@ -392,7 +374,7 @@ configuration section below. HB.)
 <para>
  Before launching <application>Privoxy</application> for the first time, you 
  will want to configure your browser(s) to use <application>Privoxy</application>
- and the HTTP and HTTPS proxy. The default is localhost for the proxy address,
+ as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
  and port 8118 (earlier versions used port 800). This is the one required 
  configuration that must be done! 
 </para>
@@ -401,7 +383,7 @@ configuration section below. HB.)
  With <application>Netscape</application> (and
  <application>Mozilla</application>), this can be set under <literal>Edit
  -&gt; Preferences -&gt; Advanced -&gt; Proxies -&gt; HTTP Proxy</literal>.
- For <application>Internet Explorer</application>: <literal>Tools &gt;
+ For <application>Internet Explorer</application>: <literal>Tools -&gt;
  Internet Properties -&gt; Connections -&gt; LAN Setting</literal>. Then,
  check <quote>Use Proxy</quote> and fill in the appropriate info (Address:
  localhost, Port: 8118). Include if HTTPS proxy support too.
@@ -606,7 +588,7 @@ For RedHat: /etc/rc.d/init.d/privoxy start
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="configuration"><title><application>Privoxy</application> Configuration</title>
  <para>
-  All <application>Privoxy</application> configuration is kept 
+  All <application>Privoxy</application> configuration is stored  
   in text files. These files can be edited with a text editor.
   Many important aspects of <application>Privoxy</application> can 
   also be controlled easily with a web browser.
@@ -706,7 +688,7 @@ Please choose from the following options:
     file that can be accessed via <ulink
     url="http://p.p">http://p.p</ulink>. (Other actions 
     files are included as well with differing levels of filtering 
-    and blocking, e.g. <filename>ijb-basic.action</filename>.)
+    and blocking, e.g. <filename>basic.action</filename>.)
    </para>
   </listitem> 
 
@@ -804,9 +786,9 @@ Please choose from the following options:
 
 <para>
  <application>Privoxy</application> can use a number of other files to tell it
- what ads to block, what cookies to accept, etc.  This section of the
- configuration file tells <application>Privoxy</application> where to find
- all those other files. 
+ what ads to block, what cookies to accept, and perform other functions.  This
+ section of the configuration file tells <application>Privoxy</application>
+ where to find all those other files. 
 </para>
 
 <para>
@@ -998,8 +980,8 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>trust-info-url http://www.your-site.com/why_we_block.html</emphasis>
-  <emphasis>trust-info-url http://www.your-site.com/what_we_allow.html</emphasis>
+  <emphasis>trust-info-url http://www.example.com/why_we_block.html</emphasis>
+  <emphasis>trust-info-url http://www.example.com/what_we_allow.html</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -1050,7 +1032,7 @@ Please choose from the following options:
  <literal>
   <msgtext> 
    <literallayout>
-  <emphasis>proxy-info-url  http://www.your-site.com/proxy.html</emphasis>
+  <emphasis>proxy-info-url  http://www.example.com/proxy.html</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
@@ -2028,19 +2010,33 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  The <quote>default.action</quote> file (formerly
- <filename>actionsfile</filename> or <filename>ijb.action</filename>) is used to define what actions
- <application>Privoxy</application> takes, and thus determines how images,
- cookies and various other aspects of HTTP content and transactions are
- handled. Images can be anything you want, including ads, banners, or just
- some obnoxious URL that you would rather not see. Cookies can be accepted
- or rejected, or accepted only during the current browser session (i.e. 
- not written to disk). Changes to <filename>default.action</filename> should 
- be immediately visible to <application>Privoxy</application> without 
- the need to restart.
+ <filename>actionsfile</filename> or <filename>ijb.action</filename>) is used
+ to define what actions <application>Privoxy</application> takes, and thus
+ determines how ad images, cookies and various other aspects of HTTP content
+ and transactions are handled. These can be accepted or rejected for all
+ sites, or just those sites you choose. See below for a complete list of 
+ actions. 
+</para>
+<para> 
+ Anything you want can blocked, including ads, banners, or just some obnoxious
+ URL that you would rather not see. Cookies can be accepted or rejected, or
+ accepted only during the current browser session (i.e. not written to disk).
+ Changes to <filename>default.action</filename> should be immediately visible
+ to <application>Privoxy</application> without the need to restart.
 </para>
 
 <para>
- The easiest way to edit <quote>actions</quote> file is with a browser by
+ Note that some sites may misbehave, or possibly not work at all with some 
+ actions. This may require some tinkering with the rules to get the most 
+ mileage of <application>Privoxy's</application> features, and still be 
+ able to see and enjoy just what you want to. There is no general rule of
+ thumb on these things. There just are too many variables, and sites are 
+ always changing.
+
+</para>
+
+<para>
+ The easiest way to edit the <quote>actions</quote> file is with a browser by
  loading <ulink url="http://p.p/">http://p.p/</ulink>, and then select
  <quote>Edit Actions List</quote>. A text editor can also be used.
 </para>
@@ -2087,8 +2083,9 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- <emphasis>/index.html</emphasis> - matches the document <quote>/index.html</quote>, regardless of
- the domain.
+ <emphasis>/index.html</emphasis> - matches the document <quote>/index.html</quote>, 
+ regardless of the domain. So would match any page named <quote>index.html</quote>
+ on any site.
 </para>
 
 <para>
@@ -2104,8 +2101,8 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- <emphasis>.example.com</emphasis> - matches any domain that <emphasis>ENDS</emphasis> in 
- <quote>.example.com</quote>.
+ <emphasis>.example.com</emphasis> - matches any domain or sub-domain that
+ <emphasis>ENDS</emphasis> in <quote>.example.com</quote>.
 </para>
 
 <para>
@@ -2144,8 +2141,9 @@ Removed references to Win32. HB 09/23/01
 
 <para>
  If <application>Privoxy</application> was compiled with
- <quote>pcre</quote> support (default), Perl compatible regular expressions
- can be used. See the <filename>pcre/docs/</filename> directory or <quote>man
+ <quote>pcre</quote> support (the default), Perl compatible regular expressions
+ can be used. These are more flexible and powerful than other types 
+ of <quote>regular expressions</quote>. See the <filename>pcre/docs/</filename> directory or <quote>man
  perlre</quote> (also available on  <ulink
  url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>)
  for details. A brief discussion of regular expressions is in the 
@@ -2259,8 +2257,10 @@ Removed references to Win32. HB 09/23/01
 </para>
 
 <para>
- Later defined actions always over-ride earlier ones.  For multi-valued
- actions, the actions are applied in the order they are specified.
+ Later defined actions always over-ride earlier ones.  So exceptions 
+ to any rules you make, should come in the latter part of the file. For
+ multi-valued actions, the actions are applied in the order they are
+ specified.
 </para>
 
 <para>
@@ -2291,7 +2291,9 @@ Removed references to Win32. HB 09/23/01
   <para>  
    Block this URL totally. In a default installation, a <quote>blocked</quote>
    URL will result in bright red banner that says <quote>BLOCKED</quote>, 
-   with a reason why it is being blocked. 
+   with a reason why it is being blocked, and an option to see it anyway.
+   The page displayed for this is the <quote>blocked</quote> template 
+   file.
   </para>
   <para>
    <literal>
@@ -2384,7 +2386,9 @@ Removed references to Win32. HB 09/23/01
    Apply the filters in the <literal>section_header</literal> 
    section of the <filename>default.filter</filename> file to the site(s).
    <filename>default.filter</filename> sections are grouped according to like
-   functionality. 
+   functionality. <application>Filters</application> can be used to 
+   re-write any of the raw page content. This is a potentially a 
+   very powerful feature!
   </para> 
    
   <para>
@@ -2495,7 +2499,7 @@ Removed references to Win32. HB 09/23/01
    Don't send the <quote>Referer:</quote> (sic) header to the web site.  You
    can block it, forge a URL to the same server as the request (which is
    preferred because some sites will not send images otherwise) or set it to a
-   constant string of your choice.
+   constant, user defined string of your choice.
   </para>
   <para>
    <literal>
@@ -2579,7 +2583,10 @@ Removed references to Win32. HB 09/23/01
    See <quote>+image-blocker{}</quote> below for the control over what is actually sent.
    If you want <emphasis>invisible</emphasis> ads, they should be defined as 
    <emphasis>images</emphasis> and <emphasis>blocked</emphasis>. And also, 
-   <quote>image-blocker</quote>  should be set to <quote>blank</quote>.
+   <quote>image-blocker</quote>  should be set to <quote>blank</quote>. Note you 
+   cannot treat HTML pages as images in most cases. For instance, frames 
+   require an HTML page to display. Forcing an <quote>image</quote> in this 
+   situation just will not work.
   </para>
   <para>
    <literal>
@@ -2669,7 +2676,7 @@ icon being being cached by the browser, which will speed up the display.
    <application>Privoxy</application>, since <quote>+filter</quote>,
    <quote>+no-popup</quote> and <quote>+gif-deanimate</quote> will not work on
    compressed data. This will slow down connections to those websites,
-   though. Default is <quote>nocompression</quote> is turned on.
+   though. Default is <quote>no-compression</quote> is turned on.
   </para>
 
   <para>
@@ -2873,9 +2880,9 @@ icon being being cached by the browser, which will speed up the display.
 </para>
 
 <para>
- Now some URLs that we want <quote>blocked</quote>, ie we won't see them.
- Many of these use regular expressions that will expand to match multiple 
- URLs:
+ Now some URLs that we want <quote>blocked</quote> (normally generates 
+ the <quote>blocked</quote> banner). Many of these use regular expressions
+ that will expand to match multiple URLs:
 </para>
 
 <para>
@@ -2959,7 +2966,7 @@ icon being being cached by the browser, which will speed up the display.
  <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
  <quote>-</quote>. Alias names are not case sensitive, and 
  <emphasis>must be defined  before anything</emphasis> else in the
- <filename>default.action</filename>file ! And there can only be one set of
+ <filename>default.action</filename>file! And there can only be one set of
  <quote>aliases</quote> defined.
 </para>
 
@@ -3022,6 +3029,13 @@ icon being being cached by the browser, which will speed up the display.
  </literal>
 </para>
 
+<para>
+ The <quote>shop</quote> and <quote>fragile</quote> aliases are often used for 
+ <quote>problem</quote> sites that require most actions to be disabled 
+ in order to function properly.
+
+</para>
+
 </sect3>
 </sect2>
 
@@ -3039,11 +3053,17 @@ icon being being cached by the browser, which will speed up the display.
 </para>
 
 <para>
+ This is potentially a very powerful feature, and requires knowledge of both 
+ <quote>regular expression</quote> and HTML in order create custom 
+ filters. But, there are a number of useful filters included with 
+ <application>Privoxy</application> for many common situations.
+</para>
+
+<para>
  The included example file is divided into sections. Each section begins 
  with the <literal>FILTER</literal> keyword, followed by the identifier 
  for that section, e.g. <quote>FILTER: webbugs</quote>. Each section performs
  a similar type of filtering, such as <quote>html-annoyances</quote>.
-
 </para>
 
 <para>
@@ -3138,6 +3158,11 @@ icon being being cached by the browser, which will speed up the display.
  On Linux, BSD, and Unix, these are located in
  <filename>/etc/privoxy/templates</filename> by default. These may be
  customized, if desired.
+</para>
+<para>
+ The default <quote>Blocked</quote> banner page with the bright red top 
+ banner, is called just <quote><filename>blocked</filename></quote>. This 
+ may be customized or replaced with something else if desired.
 
 </para>
 </sect2>
@@ -3208,17 +3233,36 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 <para>
  <application>Privoxy</application> is free software; you can
  redistribute it and/or modify it under the terms of the GNU General Public
+<!-- 
+ <informalfigure float="0">
+    <mediaobject>
+       <imageobject>
+          <imagedata fileref="gnu.jpg" format="jpg">
+       </imageobject>
+       <textobject>
+          <phrase>GNU's Pet GNU</phrase>
+       </textobject>
+    </mediaobject>
+ </informalfigure>
+--> 
  License as published by the Free Software Foundation; either version 2 of the
  License, or (at your option) any later version.
 </para>
+
 
 <para>
  This program is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- details, which is available from <ulink
- url="http://www.gnu.org/copyleft/gpl.html">the Free Software Foundation,
- Inc</ulink>, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ details, which is available from the Free Software Foundation,
+ Inc, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+</para>
+
+<para>
+ You should have received a copy of the <ulink
+ url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</ulink>
+ along with this program; if not, write to the Free Software Foundation, Inc.,
+ 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 </para>
 
 </sect2>
@@ -3255,47 +3299,12 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="seealso"><title>See also</title>
-<para>
- 
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://sourceforge.net/projects/ijbswa">http://sourceforge.net/projects/ijbswa</ulink>, 
-   the Project Page for <application>Privoxy</application>.
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://www.privoxy.org/">http://www.privoxy.org/</ulink>
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://p.p/">http://p.p/</ulink>
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</ulink>
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://www.waldherr.org/junkbuster/">http://www.waldherr.org/junkbuster/</ulink>
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp; <ulink url="http://privacy.net/analyze/">http://privacy.net/analyze/</ulink>
-  </member>
- </simplelist>
- <simplelist>
-  <member>
-   &nbsp;<ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>
-  </member>
- </simplelist>
+<sect1 id="seealso"><title>See Also</title>
+<!--
+ Include seealso.sgml:
+-->
+&seealso;
 
-</para>
 </sect1>
 
 
@@ -3941,7 +3950,8 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 </para>
 
 <para>
- Now the page displays ;-)
+ Now the page displays ;-) Be sure to flush your browser's caches when 
+ making such changes. Or, try using <literal>Shift+Reload</literal>.
 
 </para>
 
@@ -3998,6 +4008,13 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  </screen>
 </para>
 
+<para>
+ <quote>{fragile}</quote> is an alias that disables most actions. This can be 
+ used as a last resort for problem sites. Remember to flush caches! If this 
+ still does not work, you will have to go through the remaining actions one by
+ one to find which one(s) is causing the problem.
+</para>
+
 </sect2>
 
 </sect1>
@@ -4023,6 +4040,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.63  2002/04/01 16:24:49  hal9
+ Define entities to include boilerplate text. See doc/source/*.
+
  Revision 1.62  2002/03/30 04:15:53  hal9
  - Fix privoxy.org/config links.
  - Paste in Bookmarklets from Toggle page.
