@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.31 2001/07/29 12:17:48 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.32 2001/07/29 18:47:05 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.31 2001/07/29 12:17:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.32  2001/07/29 18:47:05  jongfoster
+ *    Adding missing #include "loadcfg.h"
+ *
  *    Revision 1.31  2001/07/29 12:17:48  oes
  *    Applied pthread fix by Paul Lieverse
  *
@@ -1167,7 +1170,7 @@ static int32 server_thread(void *data)
  *
  *********************************************************************/
 #ifdef __MINGW32__
-int _main(int argc, const char *argv[])
+int real_main(int argc, const char *argv[])
 #else
 int main(int argc, const char *argv[])
 #endif

@@ -1,7 +1,7 @@
-const char win32_rcs[] = "$Id: win32.c,v 1.1 2001/05/13 21:57:07 administrator Exp $";
+const char win32_rcs[] = "$Id: win32.c,v 1.1.1.1 2001/05/15 13:59:08 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/win32.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/win32.c,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
@@ -31,6 +31,9 @@ const char win32_rcs[] = "$Id: win32.c,v 1.1 2001/05/13 21:57:07 administrator E
  *
  * Revisions   :
  *    $Log: win32.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -164,7 +167,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #ifdef __MINGW32__
-   res = _main( argc, argv );
+   res = real_main( argc, argv );
 #else
    res = main( argc, argv );
 #endif

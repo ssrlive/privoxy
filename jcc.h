@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.3 2001/07/18 12:31:58 oes Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.4 2001/07/29 18:58:15 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.4  2001/07/29 18:58:15  jongfoster
+ *    Removing nested #includes, adding forward declarations for needed
+ *    structures, and changing the #define _FILENAME_H to FILENAME_H_INCLUDED.
+ *
  *    Revision 1.3  2001/07/18 12:31:58  oes
  *    moved #define freez from jcc.h to project.h
  *
@@ -74,7 +78,7 @@ extern struct file_list    files[];
 /* Functions */
 
 #ifdef __MINGW32__
-int _main(int argc, const char *argv[]);
+int real_main(int argc, const char *argv[]);
 #else
 int main(int argc, const char *argv[]);
 #endif
