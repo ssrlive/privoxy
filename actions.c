@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.29 2002/04/26 19:30:54 jongfoster Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.30 2002/04/30 11:14:52 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.29 2002/04/26 19:30:54 jongfoster
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.30  2002/04/30 11:14:52  oes
+ *    Made csp the first parameter in *action_to_html
+ *
  *    Revision 1.29  2002/04/26 19:30:54  jongfoster
  *    - current_action_to_html(): Adding help link for the "-" form of
  *      one-string actions.
@@ -182,9 +185,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.29 2002/04/26 19:30:54 jongfoster
 #include "miscutil.h"
 #include "errlog.h"
 #include "loaders.h"
-#ifdef FEATURE_CGI_EDIT_ACTIONS
 #include "encode.h"
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 #include "urlmatch.h"
 #include "cgi.h"
 
@@ -1460,7 +1461,6 @@ char * actions_to_text(struct action_spec *action)
 }
 
 
-#ifdef FEATURE_CGI_EDIT_ACTIONS
 /*********************************************************************
  *
  * Function    :  actions_to_html
@@ -1566,7 +1566,6 @@ char * actions_to_html(struct client_state *csp,
 
    return result;
 }
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
 
 
 /*********************************************************************
