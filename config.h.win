@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: config.h.win,v $
+ *    Revision 1.7  2001/07/21 18:00:07  jongfoster
+ *    Bumping version number to 2.9.7
+ *
  *    Revision 1.6  2001/07/15 20:08:40  jongfoster
  *    New build files for VC++ which provide the option of POSIX
  *    or Win32 threads.
@@ -164,12 +167,12 @@
 /*
  * Version number - Point (_._.X)
  */
-#define VERSION_POINT 7
+#define VERSION_POINT 8
 
 /*
  * Version number, as a string
  */
-#define VERSION "2.9.7"
+#define VERSION "2.9.8"
 
 /*
  * Status of the code: alpha, beta or stable
