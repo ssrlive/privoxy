@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.107 2002/05/12 03:20:41 hal9 Exp $
+ $Id: user-manual.sgml,v 1.108 2002/05/14 15:29:12 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.107 2002/05/12 03:20:41 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.108 2002/05/14 15:29:12 oes Exp $</pubdate>
 
 <!--
 
@@ -4265,8 +4265,8 @@ www.pclinuxonline.com</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="prevent-reading-cookies">
-<title><emphasis>prevent-reading-cookies</emphasis></title>
+<sect3 renderas="sect4" id="crunch-outgoing-cookies">
+<title><emphasis>crunch-outgoing-cookies</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -4310,7 +4310,7 @@ www.pclinuxonline.com</screen>
    <para>
     This action is only concerned with <emphasis>outgoing</emphasis> cookies. For
     <emphasis>incoming</emphasis> cookies, use
-    <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal>.
+    <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal>.
     Use <emphasis>both</emphasis> to disable cookies completely.
    </para>
    <para>
@@ -4325,7 +4325,7 @@ www.pclinuxonline.com</screen>
   <term>Example usage:</term>
   <listitem>
    <para>
-    <screen>+prevent-reading-cookies</screen>
+    <screen>+crunch-outgoing-cookies</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4335,8 +4335,8 @@ www.pclinuxonline.com</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="prevent-setting-cookies">
-<title><emphasis>prevent-setting-cookies</emphasis></title>
+<sect3 renderas="sect4" id="crunch-incoming-cookies">
+<title><emphasis>crunch-incoming-cookies</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -4380,7 +4380,7 @@ www.pclinuxonline.com</screen>
    <para>
     This action is only concerned with <emphasis>incoming</emphasis> cookies. For
     <emphasis>outgoing</emphasis> cookies, use
-    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal>.
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>.
     Use <emphasis>both</emphasis> to disable cookies completely.
    </para>
    <para>
@@ -4395,7 +4395,7 @@ www.pclinuxonline.com</screen>
   <term>Example usage:</term>
   <listitem>
    <para>
-    <screen>+prevent-setting-cookies</screen>
+    <screen>+crunch-incoming-cookies</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4448,8 +4448,8 @@ www.pclinuxonline.com</screen>
   <term>Notes:</term>
   <listitem>
    <para>
-    This is less strict than <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal> / 
-    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal> and allows you to browse
+    This is less strict than <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> / 
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal> and allows you to browse
     websites that insist or rely on setting cookies, without compromising your privacy too badly.
    </para>
    <para>
@@ -4461,16 +4461,13 @@ www.pclinuxonline.com</screen>
    </para>
    <para>
     It makes <emphasis>no sense at all</emphasis> to use <literal>session-cookies-only</literal>
-    together with <literal><link linkend="prevent-setting-cookies">prevent-setting-cookies</link></literal> or
-    <literal><link linkend="prevent-reading-cookies">prevent-reading-cookies</link></literal>. If you do, cookies
+    together with <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> or
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>. If you do, cookies
     will be plainly killed.
    </para>
    <para>
     Note that it is up to the browser how it handles such cookies without an <quote>expires</quote>
     field. If you use an exotic browser, you might want to try it out to be sure.
-   </para>
-   <para>
-    <literal>prevent-keeping-cookies</literal> is an alternate name for this action.
    </para>
   </listitem>
  </varlistentry>
@@ -4745,10 +4742,120 @@ my-internal-testing-server.void</screen>
  actions.
 </para>
 </sect3>
-
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect2" id="act-examples">
+<sect2 id="aliases">
+<title>Aliases</title>
+<para>
+ Custom <quote>actions</quote>, known to <application>Privoxy</application>
+ as <quote>aliases</quote>, can be defined by combining other actions.
+ These can in turn be invoked just like the built-in actions.
+ Currently, an alias name can contain any character except space, tab,
+ <quote>=</quote>,
+ <quote>{</quote> and <quote>}</quote>, but we <emphasis>strongly 
+ recommend</emphasis> that you only use <quote>a</quote> to <quote>z</quote>,
+ <quote>0</quote> to <quote>9</quote>, <quote>+</quote>, and <quote>-</quote>.
+ Alias names are not case sensitive, and are not required to start with a
+ <quote>+</quote> or <quote>-</quote> sign, since they are merely textually
+ expanded.
+</para>
+<para>
+ Aliases can be used throughout the actions file, but they <emphasis>must be
+ defined in a special section at the top of the file!</emphasis>
+ And there can only be one such section per actions file. Each actions file may
+ have its own alias section, and the aliases defined in it are only visible
+ within that file.
+</para>
+<para>
+ There are two main reasons to use aliases: One is to save typing for frequently
+ used combinations of actions, the other one is a gain in flexibility: If you
+ decide once how you want to handle shops by defining an alias called
+ <quote>shop</quote>, you can later chenge your policy on shops in
+ <emphasis>one</emphasis> place, and your changes will take effect everywhere
+ in the actions file where the <quote>shop</quote> alias is used. Calling aliases
+ by their purpose also makes your actions files more readable.
+</para>
+<para>
+ Currently, there is one big drawback to using aliases, though:
+ <application>Privoxy</application>'s built-in web-based action file
+ editor honors aliases when reading the actions files, but it expands
+ them before writing. So the effects of your aliases are of course preserved,
+ but the aliases themselves are lost when you edit the files this way.
+ This is likely to change in future versions of <application>Privoxy</application>.
+</para>
+
+<para>
+ Now let's define some aliases...
+</para>
+
+<para>
+ <screen>
+ # Useful custom aliases we can use later.
+ #
+ # Note the (required!) section header line and that this section
+ # must be at the top of the actions file!
+ #
+ {{alias}}
+
+ # These aliases just save typing later:
+ #
+ +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+ +imageblock = +block +handle-as-image
+
+ # These aliases define combinations of actions
+ # that are useful for certain types of sites:
+ #
+ fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
+ shop        = -crunch-all-cookies -fast-redirects
+
+ # Aliases defined from other aliases, for really lazy people ;-)
+ #
+ c0 = +crunch-all-cookies
+ c1 = -crunch-all-cookies</screen>
+</para>
+
+<para>
+ ...and put them to use. These sections would appear in the lower part of an 
+ actions file and define exceptions to the default actions (as specified further
+ up for the <quote>/</quote> pattern):
+</para>
+
+<para>
+ <screen>
+ # These sites are either very complex or very keen on
+ # user data and require minimal interference to work:
+ #
+ {fragile}
+ .office.microsoft.com
+ .windowsupdate.microsoft.com
+ .nytimes.com
+
+ # Shopping sites:
+ # Allow cookies (for setting and retrieving your customer data)
+ #           
+ {shop}
+ .quietpc.com
+ .worldpay.com   # for quietpc.com
+ .scan.co.uk
+
+ # These shops require pop-ups:
+ #
+ {shop -kill-popups -filter{popups}}
+  .dabs.com
+  .overclockers.co.uk</screen>
+</para>
+
+<para>
+ Aliases like <quote>shop</quote> and <quote>fragile</quote> are often used for 
+ <quote>problem</quote> sites that require some actions to be disabled 
+ in order to function properly.
+</para>
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="act-examples">
 <title>Sample Actions Files</title>
 <para>
  Remember that the meaning of any of the above references is reversed by preceding
@@ -4795,7 +4902,7 @@ for-privoxy-version=3.0
 
 # Some useful aliases.
 # Alias to turn off cookie handling, ie allow all cookies unmolested.
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
                     -session-cookies-only
 
 # Alias to both block and treat as if an image for ad blocking
@@ -4804,10 +4911,10 @@ for-privoxy-version=3.0
 
 # Fragile sites should have the minimum changes:
  fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -prevent-cookies -kill-popups
+               -crunch-all-cookies -kill-popups
 
 # Shops should be allowed to set persistent cookies
- shop        = -filter -prevent-cookies -session-cookies-only
+ shop        = -filter -crunch-all-cookies -session-cookies-only
 
 
 ##########################################################################
@@ -4845,8 +4952,8 @@ for-privoxy-version=3.0
  <ulink url="actions-file.html#LIMIT-CONNECT">-limit-connect</ulink> \
  <ulink url="actions-file.html#PREVENT-COMPRESSION">+prevent-compression</ulink> \
  <ulink url="actions-file.html#SESSION-COOKIES-ONLY">-session-cookies-only</ulink> \
- <ulink url="actions-file.html#PREVENT-READING-COOKIES">-prevent-reading-cookies</ulink> \
- <ulink url="actions-file.html#PREVENT-SETTING-COOKIES">-prevent-setting-cookies</ulink> \
+ <ulink url="actions-file.html#CRUNCH-OUTGOING-COOKIES">-crunch-outgoing-cookies</ulink> \
+ <ulink url="actions-file.html#CRUNCH-INCOMING-COOKIES">-crunch-incoming-cookies</ulink> \
  <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> \
  <ulink url="actions-file.html#SEND-VANILLA-WAFER">-send-vanilla-wafer</ulink> \
  <ulink url="actions-file.html#SEND-WAFER">-send-wafer</ulink> \
@@ -4984,20 +5091,20 @@ for-privoxy-version=3.0
 
 # Any aliases you want to use need to be re-defined here.
 # Alias to turn off cookie handling, ie allow all cookies unmolested.
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
-                    -session-cookies-only
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies \
+                       -session-cookies-only
 
 # Fragile sites should have the minimum changes:
  fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
-               -prevent-cookies -kill-popups
+               -crunch-all-cookies -kill-popups
 
 # Allow persistent cookies for a few regular sites that we 
 # trust via our above alias. These will be saved from one browser session 
 # to the next. We are explicity turning off any and all cookie handling, 
-# even though the prevent-*-cookie settings were disabled in our above 
+# even though the cunch-*-cookies settings were disabled in our above 
 # default.action anyway. So cookies from these domains will come through 
 # unmolested.
- { -prevent-cookies }
+ { -crunch-all-cookies }
  .sun.com
  .yahoo.com
  .msdn.microsoft.com
@@ -5028,98 +5135,12 @@ for-privoxy-version=3.0
   </msgtext> 
  </literal>
 </para>
-
-</sect3>
 </sect2>
 
 <!--  ~  End section  ~  -->
 
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="aliases">
-<title>Aliases</title>
-<para>
- Custom <quote>actions</quote>, known to <application>Privoxy</application>
- as <quote>aliases</quote>, can be defined by combining other <quote>actions</quote>.
- These can in turn be invoked just like the built-in <quote>actions</quote>.
- Currently, an alias can contain any character except space, tab, <quote>=</quote>,
- <quote>{</quote> or <quote>}</quote>. But please use only <quote>a</quote>-
- <quote>z</quote>, <quote>0</quote>-<quote>9</quote>, <quote>+</quote>, and
- <quote>-</quote>. Alias names are not case sensitive, and 
- <emphasis>must be defined before other actions</emphasis> in the
- actions file! And there can only be one set of <quote>aliases</quote>
- defined per file. Each actions file may have its own aliases, but they are 
- only visible within that file. Aliases do not requir a <quote>+</quote> or 
- <quote>-</quote> sign in front, since they are merely expanded.
-</para>
 
-<para>
- Now let's define a few aliases:
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- # Useful custom aliases we can use later. These must come first!
- {{alias}}
- +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
- fragile     = -block -prevent-cookies -filter -fast-redirects -hide-referer -kill-popups
- shop        = -prevent-cookies -filter -fast-redirects
- +imageblock = +block +handle-as-image
-
- # Aliases defined from other aliases, for people who don't like to type 
- # too much:  ;-)
- c0 = +prevent-cookies
- c1 = -prevent-cookies
- #... etc.  Customize to your heart's content.
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- Some examples using our <quote>shop</quote> and <quote>fragile</quote>
- aliases from above. These would appear in the lower sections of an 
- actions file as exceptions to the default actions (as defined in the 
- upper section):
-</para>
-
-<para>
- <literal>
-  <msgtext> 
-   <literallayout>
- # These sites are very complex and require
- # minimal interference.
- {fragile}
-  .office.microsoft.com
-  .windowsupdate.microsoft.com
-  .nytimes.com
-
- # Shopping sites - but we still want to block ads.
- {shop}
-  .quietpc.com
-  .worldpay.com   # for quietpc.com
-  .scan.co.uk
-
- # These shops require pop-ups also 
- {shop -kill-popups}
-  .dabs.com
-  .overclockers.co.uk
-   </literallayout>
-  </msgtext> 
- </literal>
-</para>
-
-<para>
- The <quote>shop</quote> and <quote>fragile</quote> aliases are often used for 
- <quote>problem</quote> sites that require most actions to be disabled 
- in order to function properly.
-
-</para>
-
-</sect2>
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -5846,7 +5867,7 @@ Requests</title>
    First, the server headers are read and processed to determine, among other
    things, the MIME type (document type) and encoding. The headers are then
    filtered as deterimed by the 
-   <ulink url="actions-file.html#PREVENT-SETTING-COOKIES"><quote>+prevent-setting-cookies</quote></ulink>,
+   <ulink url="actions-file.html#CRUNCH-INCOMING-COOKIES"><quote>+crunch-incoming-cookies</quote></ulink>,
    <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
    and <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
    actions.
@@ -5967,8 +5988,8 @@ Requests</title>
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression +session-cookies-only -prevent-reading-cookies 
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer }
+ +prevent-compression +session-cookies-only -crunch-outgoing-cookies 
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer }
 /
 
  { -session-cookies-only }
@@ -6037,8 +6058,8 @@ Requests</title>
  +filter{webbugs} +filter{refresh-tags} +filter{nimda} +filter{banners-by-size} 
  +hide-forwarded-for-headers +hide-from-header{block} +hide-referer{forge} 
  -hide-user-agent -handle-as-image +set-image-blocker{pattern} -limit-connect 
- +prevent-compression -session-cookies-only -prevent-reading-cookies 
- -prevent-setting-cookies -kill-popups -send-vanilla-wafer -send-wafer
+ +prevent-compression -session-cookies-only -crunch-outgoing-cookies 
+ -crunch-incoming-cookies -kill-popups -send-vanilla-wafer -send-wafer
 </screen>
 </para>
 
@@ -6105,8 +6126,8 @@ Requests</title>
    +filter{webbugs} +filter{nimda} +filter{banners-by-size} +filter{hal} 
    +filter{fun} +hide-forwarded-for-headers +hide-from-header{block} 
    +hide-referer{forge} -hide-user-agent -handle-as-image +set-image-blocker{blank} 
-   +prevent-compression +session-cookies-only -prevent-setting-cookies 
-   -prevent-reading-cookies +kill-popups -send-vanilla-wafer -send-wafer }
+   +prevent-compression +session-cookies-only -crunch-incoming-cookies 
+   -crunch-outgoing-cookies +kill-popups -send-vanilla-wafer -send-wafer }
    /
 
  { +block +handle-as-image }
@@ -6221,6 +6242,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.108  2002/05/14 15:29:12  oes
+ Completed proofreading the actions chapter
+
  Revision 1.107  2002/05/12 03:20:41  hal9
  Small clarifications for 127.0.0.1 vs localhost for listen-address since this
  apparently an important distinction for some OS's.
