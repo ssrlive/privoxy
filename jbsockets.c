@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.4 2001/05/26 00:37:42 jongfoster Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.5 2001/05/26 15:26:15 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.4 2001/05/26 00:37:42 jongfos
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.5  2001/05/26 15:26:15  jongfoster
+ *    ACL feature now provides more security by immediately dropping
+ *    connections from untrusted hosts.
+ *
  *    Revision 1.4  2001/05/26 00:37:42  jongfoster
  *    Cosmetic indentation correction.
  *
@@ -88,6 +92,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.4 2001/05/26 00:37:42 jongfos
 #include "project.h"
 #include "jbsockets.h"
 #include "filters.h"
+#include "errlog.h"
 
 const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
 
@@ -239,7 +244,7 @@ int write_socket(int fd, const char *buf, int len)
       return(0);
    }
 
-   /* if (DEBUG(LOG)) fwrite(buf, n, 1, logfp); */
+   log_error(LOG_LEVEL_LOG, "%n", len, buf);
 
 #if defined(_WIN32) || defined(__BEOS__) || defined(AMIGA)
    return( send(fd, buf, len, 0));
