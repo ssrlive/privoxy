@@ -173,6 +173,22 @@ SOURCE=.\cgi.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cgiedit.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cgiedit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cgisimple.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cgisimple.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\config.h
 # End Source File
 # Begin Source File
@@ -242,14 +258,6 @@ SOURCE=.\parsers.h
 # Begin Source File
 
 SOURCE=.\project.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\showargs.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\showargs.h
 # End Source File
 # End Group
 # Begin Group "Win32"
