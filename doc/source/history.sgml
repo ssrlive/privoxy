@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: history.sgml,v 1.1 2002/04/04 17:27:57 swa Exp $
+ $Id: history.sgml,v 1.2 2002/04/06 05:07:28 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -24,6 +24,7 @@
   user-manual
   developer-manual
   faq
+  webserver/index.sgml
 
 -->
 
