@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.7 2002/10/22 02:22:18 hal9 Exp $
+# $Id: Makefile,v 1.8 2002/10/23 05:41:45 agotneja Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile,v $
+# Revision 1.8  2002/10/23 05:41:45  agotneja
+# Added checks for Solaris 'make' command, and more extensive checks that
+# the user is running GNU make.
+#
 # Revision 1.7  2002/10/22 02:22:18  hal9
 # Look for gmake first, and fall back to make. More Solaris trouble.
 #
@@ -55,10 +59,11 @@
 # make command, checking whether the command returns 'GNU' as part of its
 # version string. Amend this to point to your GNU make command if it is
 # not in your path.
-# Further tests; Solaris 'make' sets the HOST_ARCH variable, GNU  'make'
-# sets the MAKE_VERSION variable, so a test is made that the former is
-# non-zero and the latter is zero, if so we bail out with an error message.
-
+# Further tests; 
+#   GNU  'make' sets the MAKE_VERSION variable
+#   Solaris 'make' sets the HOST_ARCH variable
+#   FreeBSD 'make' sets the MACHINE_ARCH variable
+# We check if this isn't GNU but matches one of the above we error out
 
 GNU_MAKE_CMD = gmake
 MAKE_CMD     = make
@@ -73,6 +78,12 @@ error:
 	 elif test -n "$(HOST_ARCH)"  && test -z "$(MAKE_VERSION)" ; then \
 	    echo "***"; \
 	    echo "*** You are not using GNU Make on Solaris, please make sure you do" ; \
+	    echo "*** and re-run 'make' "; \
+	    echo "***"; \
+	    exit 1 ; \
+	 elif test -n "$(MACHINE_ARCH)"  && test -z "$(MAKE_VERSION)" ; then \
+	    echo "***"; \
+	    echo "*** You are not using GNU Make on FreeBSD, please make sure you do" ; \
 	    echo "*** and re-run 'make' "; \
 	    echo "***"; \
 	    exit 1 ; \
