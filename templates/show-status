@@ -29,9 +29,6 @@
   <h2>And the following options were givem in the config file:</h2>
   <BLINK>FIXME: Which?</BLINK>
 
-  <h2>It supports the following gateway protocols:</h2>
-  @gateway-protocols@
-
   @statistics@
 
   <h2>The following files are in use:</h2>
@@ -42,11 +39,6 @@
   <p>(Click filenames to view)</p>
   <ul>
   <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
-  <li>Forward List: <a href="show-status?file=forward">@forward-filename@</a></li>
-
-  <!-- @acl-killer-start -->
-  <li>Access Control List: <a href="show-status?file=acl">@acl-filename@</a></li>
-  <!-- acl-killer-end@ -->
 
   <!-- @re-filter-killer-start -->
   <li>Regex Filter List: <a href="show-status?file=re">@re-filter-filename@</a></li>
