@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.7 2001/06/11 12:17:26 sarantis Exp $
+# $Id: junkbuster-rh.spec,v 1.8 2001/06/12 17:15:56 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.8  2001/06/12 17:15:56  swa
+# fixes, because a clean build on rh6.1 was impossible.
+# GZIP confuses make, % configure confuses rpm, etc.
+#
 # Revision 1.7  2001/06/11 12:17:26  sarantis
 # fix typo in %post
 #
