@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.24 2001/07/30 22:08:36 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.25 2001/09/13 22:44:03 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.24 2001/07/30 22:08:36 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.25  2001/09/13 22:44:03  jongfoster
+ *    Adding {} to an if statement
+ *
  *    Revision 1.24  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -181,14 +184,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.24 2001/07/30 22:08:36 jongfoster
 #include "project.h"
 #include "list.h"
 #include "loaders.h"
-#include "encode.h"
 #include "filters.h"
 #include "parsers.h"
 #include "jcc.h"
-#include "ssplit.h"
 #include "miscutil.h"
 #include "errlog.h"
-#include "gateway.h"
 #include "actions.h"
 
 const char loaders_h_rcs[] = LOADERS_H_VERSION;
@@ -592,7 +592,9 @@ int check_file_changed(const struct file_list * current,
  *********************************************************************/
 char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
 {
-   char *p, *q;
+   char *p;
+   char *src;
+   char *dest;
    char linebuf[BUFFER_SIZE];
    int contflag = 0;
 
@@ -618,13 +620,19 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
       }
 
       /* If there's a comment char.. */
-      if ((p = strpbrk(linebuf, "#")) != NULL)
+      p = linebuf;
+      while ((p = strchr(p, '#')) != NULL)
       {
          /* ..and it's escaped, left-shift the line over the escape. */
          if ((p != linebuf) && (*(p-1) == '\\'))
          {
-            q = p-1;
-            while ((*q++ = *p++) != '\0') /* nop */;
+            src = p;
+            dest = p - 1;
+            while ((*dest++ = *src++) != '\0')
+            {
+               /* nop */
+            }
+            /* Now scan from just after the "#". */
          }
          /* Else, chop off the rest of the line */
          else
@@ -643,7 +651,7 @@ char *read_config_line(char *buf, int buflen, FILE *fp, struct file_list *fs)
       if (contflag)
       {
          contflag = 0;
-   		continue;
+         continue;
       }
 
       /* Remove leading and trailing whitespace */         
