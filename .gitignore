@@ -33,6 +33,7 @@ autom4te.cache
 build-stamp
 configure-stamp
 configure
+config.base
 config.cache
 config.h
 config.h.in
