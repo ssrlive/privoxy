@@ -1,0 +1,35 @@
+##########################################################
+#
+# CGI-Output template for the junkbuster.
+#
+# Lines *starting* with '#' are ignored.
+# Symbols are enclosed in @ characters.
+#
+# Usable symbols in this file: filename, contents, 
+# filepath
+<html>
+
+<head>
+  <title>Internet Junkbuster Status - @filename@</title>
+</head>
+
+<body bgcolor="#ffffff">
+
+  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small>:
+      Contents of @filename@</h1>
+
+  
+
+  <h2>Contents of @filepath@</h2>
+
+  <pre>
+@contents@
+  </pre>
+
+  <p><a href="/config/show-status">Back to the general status page</a></p>
+
+  <p>Please feel free to mail <a href=mailto:ijbswa-developers@lists.sourceforge.net>the developers</a>
+     with any problems you might have</p>
+
+</body>
+</html>

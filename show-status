@@ -1,0 +1,73 @@
+##########################################################
+#
+# CGI-Output template for the junkbuster.
+#
+# Lines *starting* with '#' are ignored.
+# Symbols are enclosed in @ characters.
+#
+# Usable symbols in this file: 
+# redirect-url, version, home-page,
+# invocation-args, options, gateway-protocols
+# statistics,
+#
+<html>
+
+<head>
+  <title>Internet Junkbuster Status</title>
+</head>
+
+<body bgcolor="#ffffff">
+
+  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small>
+      version @version@ <a href="@redirect-url@faq#show">Proxy Status</a></h1>
+
+  <p>Homepage: <a href="@home-page@">@home-page@</a></p>
+
+  <h2>The program was invoked as follows</h2>
+  @invocation-args@<br>
+
+  <h2>And the following options were givem in the config file:</h2>
+  <BLINK>FIXME: Which?</BLINK>
+
+  <h2>It supports the following gateway protocols:</h2>
+  @gateway-protocols@
+
+  @statistics@
+
+  <h2>The following files are in use:</h2>
+
+  <!-- The block following this comment will magically disappear, #ifndef SPLIT_PROXY_ARGS -->
+  <!-- @magic-eliminator-start -->
+
+  <p>(Click filenames to view)</p>
+  <ul>
+  <li>Actions List: <a href="show-status?file=permit">@actions-filename@</a></li>
+  <li>Forward List: <a href="show-status?file=forward">@forward-filename@</a></li>
+
+  <!-- @acl-killer-start -->
+  <li>Access Control List: <a href="show-status?file=acl">@acl-filename@</a></li>
+  <!-- acl-killer-end@ -->
+
+  <!-- @re-filter-killer-start -->
+  <li>Regex Filter List: <a href="show-status?file=re">@re-filter-filename@</a></li>
+  <!-- re-filter-killer-end@ -->
+
+  <!-- @trust-killer-start -->
+  <li>Access Control List: <a href="show-status?file=trust">@trust-filename@</a></li>
+  <!-- trust-killer-end@ -->
+
+  </ul>
+  <!-- magic-eliminator-end@ -->
+  <!-- The block above this comment will magically disappear, #ifndef SPLIT_PROXY_ARGS -->
+
+  @clist@ @flist@ @alist@ @rlist@ @tlist@
+
+  @rcs-and-defines@
+
+  <p>Please feel free to mail <a href=mailto:ijbswa-developers@lists.sourceforge.net>the developers</a>
+     with any problems you might have</p>
+
+
+  
+</body>
+</html>

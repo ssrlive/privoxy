@@ -1,0 +1,38 @@
+##########################################################
+#
+# CGI-Output template for the junkbuster.
+#
+# Lines *starting* with '#' are ignored.
+# Symbols are enclosed in @ characters.
+#
+# Usable Symbols in this file: 
+#
+#   other-cgis: List of <li> elements linking to the other
+#     available CGIs
+# 
+#   cgi-parameters: If parameters were present (this CGI needs
+#     none, they are dumped in a HTML table.
+#
+<html>
+
+<head>
+  <title>Internet Junkbuster Configuration</title>
+</head>
+
+<body bgcolor="#ffffff">
+
+  <h1>Internet J<small>UNK<i><font color="red">BUSTER</font></i></small></h1>
+
+  <p>Thank you for using the internet Junkbuster.</p>
+
+  <p>The following CGI functions are currently implemented:</p>
+
+  @other-cgis@
+
+  @cgi-parameters@
+
+  <p>Please feel free to mail <a href=mailto:ijbswa-developers@lists.sourceforge.net>the developers</a>
+     with any problems you might have</p>
+
+</body>
+</html>

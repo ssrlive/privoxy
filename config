@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.8 2001/05/31 21:52:16 jongfoster Exp $
+# $Id: config,v 1.9 2001/06/01 20:17:10 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -60,6 +60,13 @@
 #  directory as the executable.  On Unix, Junkbuster looks for these
 #  files in the current working directory.  In either case, an
 #  absolute path name can be used to avoid problems.
+
+# While we go modular and multiuser, the blocker, filter, and 
+# per-user config will be stored in subdirectories of confdir.
+# Now, only confdir/templates is used for storing HTML templates
+# for CGI results.
+#
+confdir /home/oes/projekte/pcrs/ijb/confdir
 
 #
 #  The permissions file contains patterns to specify the
