@@ -117,7 +117,9 @@
             not be fulfilled, because the connection to <b>@host@</b> (@host-ip@) could not be established.
           </p>
           <p>This is often a temporary failure, so you might just
-            <a href="@protocol@@hostport@@path@">try again</a>.
+            <a href="@protocol@@hostport@@path@">try again</a> 
+	    or look the site up at 
+            <a href="http://www.google.com/search?q=@protocol@@hostport@@path@">Google</a>.
          </p>
       </td>
     </tr>
