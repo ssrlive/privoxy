@@ -20,7 +20,7 @@
 .\" Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111,
 .\" USA.
 .\"
-.TH PCRS 3 "17 August 2001"
+.TH PCRS 3 "6 September 2001"
 .SH NAME
 pcrs - Perl-compatible regular substitution.
 .SH SYNOPSIS
@@ -28,71 +28,73 @@ pcrs - Perl-compatible regular substitution.
 .BI "#include <pcrs.h>"
 .PP
 .br
-.BI "pcrs_job *pcrs_compile(const char *" "pattern" "," 
+.BI "pcrs_job *pcrs_compile(const char *" pattern "," 
 .ti +5n
-.BI "const char *" "substitute" ", const char *" "options" ","
+.BI "const char *" substitute ", const char *" options ,
 .ti +5n
-.BI "int *" "errptr" ");"
+.BI "int *" errptr );
 .PP
 .br
-.BI "pcrs_job *pcrs_compile_command(const char *" "command" ","
+.BI "pcrs_job *pcrs_compile_command(const char *" command ,
 .ti +5n
-.BI "int *" "errptr");
+.BI "int *" errptr );
 .PP
 .br
-.BI "int pcrs_execute(pcrs_job *" "job" ", char *" "subject" ","
+.BI "int pcrs_execute(pcrs_job *" job ", char *" subject ,
 .ti +5n
-.BI "int " "subject_length" ", char **" "result" ","
+.BI "int " subject_length ", char **" result ,
 .ti +5n
-.BI "int *" "result_length" ");"
+.BI "int *" result_length );
 .PP
 .br
-.BI "int pcrs_execute_list (pcrs_job *" "joblist" ", char *" "subject" ","
+.BI "int pcrs_execute_list (pcrs_job *" joblist ", char *" subject ,
 .ti +5n
-.BI "int " "subject_length" ", char **" "result" ","
+.BI "int " subject_length ", char **" result ,
 .ti +5n
-.BI "int *" "result_length" ");"
+.BI "int *" result_length );
 .PP
 .br
-.BI "pcrs_job *pcrs_free_job(pcrs_job *" "job" ");"
+.BI "pcrs_job *pcrs_free_job(pcrs_job *" job );
 .PP
 .br
-.BI "void pcrs_free_joblist(pcrs_job *" "joblist" ");"
+.BI "void pcrs_free_joblist(pcrs_job *" joblist );
 .PP
 .br
-.BI "char *pcrs_strerror(int " "err" ");"
+.BI "char *pcrs_strerror(int " err );
 .PP
 .br
 
 .SH DESCRIPTION
+
 The
 .SM PCRS
 library is a supplement to the 
 .SB PCRE(3)
 library that implements
-.RB "regular expression based substitution, like provided by " "Perl(1)" "'s 's'"
+.RB "regular expression based substitution, like provided by " Perl(1) "'s 's'"
 operator. It uses the same syntax and semantics as Perl 5, with just a few
 differences (see below).
 
 In a first step, the information on a substitution, i.e. the pattern, the
 substitute and the options are compiled from Perl syntax to an internal form
-.RB "called " "pcrs_job" " by using either the " "pcrs_compile()" " or " 
-.BR "pcrs_compile_command()" " functions."
+.RB "called " pcrs_job " by using either the " pcrs_compile() " or " 
+.BR pcrs_compile_command() " functions."
 
 Once the job is compiled, it can be used on subjects, which are arbitrary 
 memory areas containing string or binary data, by calling
-.BR "pcrs_execute()" ". Jobs can be chained to joblists and whole"
-.RB "joblists can be applied to a subject using " "pcrs_execute_list()" "."
+.BR pcrs_execute() ". Jobs can be chained to joblists and whole"
+.RB "joblists can be applied to a subject using " pcrs_execute_list() .
 
 There are also convenience functions for freeing the jobs and for errno-to-string
-.RB "conversion, namely " "pcrs_free_job()" ", " "pcrs_free_joblist()" " and "
-.BR "pcrs_strerror()" "."
+.RB "conversion, namely " pcrs_free_job() ", " pcrs_free_joblist() " and "
+.BR pcrs_strerror() .
 
 .SH COMPILING JOBS
-.RB "The function " "pcrs_compile()" " is called to compile a " "pcrs_job" 
-.RI "from a " "pattern" ", " "substitute" " and " "options" " string.
+
+.RB "The function " pcrs_compile() " is called to compile a " pcrs_job
+.RI "from a " pattern ", " substitute " and " options " string."
 .RB "The resulting " "pcrs_job" " structure is dynamically allocated and it"
-.RB "is the caller's responsibility to " "free()" " it when it's no longer needed."
+.RB "is the caller's responsibility to call " "pcrs_free_job()" "  when it's no longer needed."
 
 .BR "pcrs_compile_command()" " is a convenience wrapper function that parses a Perl"
 .IR "command" " of the form"
@@ -268,7 +270,7 @@ is set.
 
 .RB "On success, " pcrs_execute() " returns the number of substitutions that"
 were made, which is limited to 0 or 1 for non-global searches.
-.RI "On failure, a negative error code is returned and " *result " is set"
+.RI "On failure, a negative error code is returned and " result " is set"
 .RB "to " NULL .
 
 .SH FREEING JOBS
@@ -427,7 +429,7 @@ int main(int Argc, char **Argv)
    pcrs_free_job(job);
    if (result) free(result);
 
-   return 0;
+   return(err < 0);
 }
 
 .fi
@@ -464,9 +466,12 @@ was originally written for the Internet Junkbuster project
 .SH AUTHOR
 
 .SM PCRS
-is Copyright 2000, 2001 by Andreas Oesterhelt <oes@oesterhelt.org> and is
-licensed under the Terms of the GNU Lesser General Public License (LGPL), which
-should be included in this distribution.
+is Copyright 2000, 2001 by Andreas Oesterhelt <andreas@oesterhelt.org> and is
+licensed under the terms of the GNU Lesser General Public License (LGPL),
+version 2.1, which should be included in this distribution, with the exception
+that the permission to replace that license with the GNU General Public
+License (GPL) given in section 3 is restricted to version 2 of the GPL.
 
-If not, refer to http://www.gnu.org/licenses/lgpl.html or write to the Free
-Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.   
+If it is missing from this distribution, the LGPL can be obtained from
+http://www.gnu.org/licenses/lgpl.html or by mail: Write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
