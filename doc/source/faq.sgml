@@ -8,9 +8,9 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
-<!entity p-status "BETA">
-<!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
-<!entity % p-stable "IGNORE">      <!-- set INCLUDE for stable release    -->
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.42 2002/04/04 18:46:47 swa Exp $
+ $Id: faq.sgml,v 1.43 2002/04/04 21:59:53 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,6 @@
   </QandAEntry>
  </QandASet>
 
-
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
  anything in this, or other Privoxy documentation. You have been warned!
@@ -61,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.42 2002/04/04 18:46:47 swa Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.43 2002/04/04 21:59:53 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -132,7 +131,7 @@
   significantly at this point. 
  </para>
  <para> 
-  Please see the History section for more
+  Please see the <link linkend="copyright">History section</link> for more
   information on the history of <application>Junkbuster</application> and 
   <application>Privoxy</application>.
  </para>
@@ -148,8 +147,9 @@
 </para>
 <para>
  There are potential legal complications from the continued use of the 
- <application>Junkbuster</application> name, which is a trademark of 
+ <application>Junkbuster</application> name, which is a registered trademark of 
  <ulink url="http://junkbusters.com">Junkbusters Corporation</ulink>.
+ And thus they <quote>own</quote> the rights to the name.
  (There are, however, no objections from Junkbusters Corporation to the 
  <application>Privoxy</application> project itself, and they, in fact, still
  share our ideals and goals.)
@@ -184,10 +184,9 @@ from the old <application>Junkbuster?</application></title>
 </sect2>
 
 <sect2 renderas="sect3" id="features"><title>What are some of the new features?</title>
-<!--
- Include newfeatures.sgml
---> 
-&newfeatures;
+<!-- Include newfeatures.sgml: --> 
+ &newfeatures;
+<!-- end include -->
 
 </sect2>
 
@@ -878,7 +877,7 @@ see is a bright red square.</title>
 </para>
 </sect2>
 
-<sect2 id="srvany">
+<sect2 renderas="sect3" id="srvany">
 <title>Can <application>Privoxy</application> run as a service 
 on Win2K/NT?</title>
 <para>
@@ -1434,6 +1433,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.43  2002/04/04 21:59:53  hal9
+Added NT/W2K service/icon situation.
+
 Revision 1.42  2002/04/04 18:46:47  swa
 consistent look. reuse of copyright, history et. al.
 
