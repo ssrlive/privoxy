@@ -3,7 +3,7 @@ Junkbuster Frequently Asked Questions
 
    By: Junkbuster Developers
    
-   $Id: faq.sgml,v 1.4 2002/02/24 14:34:24 jongfoster Exp $
+   $Id: faq.sgml,v 1.5 2002/03/02 15:50:04 swa Exp $
    
    The FAQ document gives users and developers alike answers to
    frequently asked questions about the Internet Junkbuster. The Internet

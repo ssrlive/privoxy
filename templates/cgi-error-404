@@ -95,10 +95,24 @@
           of the proxy software is not intended for production systems!
           <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
         </p>
-
-        <p>Feel free to <a href=mailto:ijbswa-developers@lists.sourceforge.net>mail the developers</a>
-          with any problems you encounter.
-        </p>
+ 	<p>
+<h2>Support and Service via Sourceforge</h2>
+<p>
+We value your feedback. However, to provide you with the best support,
+please note:
+<ul>
+  <li>Use the <a href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">support forum</a> to get
+  help.</li>
+  <li>Submit bugs only thru our <a href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+      forum</a>. Make sure that the bug has not yet been submitted.</li>
+  <li>Submit feature requests only thru our <a
+      href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature request forum</a>.</li>
+</ul>
+</p>
+<p>
+For any other issues, feel free to use the <a
+href="http://sourceforge.net/mail/?group_id=11118">mailing lists</a>.
+</p>
       </td>
     </tr>
 <!-- if-unstable-end@ -->
