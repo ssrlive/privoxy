@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.43 2001/11/22 21:57:51 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.44 2001/12/30 14:07:32 steudten Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,14 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.44  2001/12/30 14:07:32  steudten
+ *    - Add signal handling (unix)
+ *    - Add SIGHUP handler (unix)
+ *    - Add creation of pidfile (unix)
+ *    - Add action 'top' in rc file (RH)
+ *    - Add entry 'SIGNALS' to manpage
+ *    - Add exit message to logfile (unix)
+ *
  *    Revision 1.43  2001/11/22 21:57:51  jongfoster
  *    Making action_spec->flags into an unsigned long rather than just an
  *    unsigned int.
@@ -414,6 +422,16 @@ typedef int jb_err;
  * - we don't want any buffer overflows!
  */
 #define BUFFER_SIZE 5000
+
+/*
+ * Buffer size for capturing struct hostent data in the
+ * gethostby(name|addr)_r library calls. Since we don't
+ * loop over gethostbyname_r, the buffer must be sufficient
+ * to accomodate multiple IN A RRs, as used in DNS round robin
+ * load balancing. W3C's wwwlib uses 1K, so that should be
+ * good enough for us, too.
+ */
+#define HOSTENT_BUFFER_SIZE 1024
 
 /*
  * So you can say "while (FOREVER) { ...do something... }"
