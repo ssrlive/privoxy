@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.50 2002/04/26 05:25:23 hal9 Exp $
+ $Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.50 2002/04/26 05:25:23 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.51 2002/04/26 17:24:31 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -482,7 +482,7 @@ All the ads are there. What's wrong?</title>
  <quote>actions</quote> files are where various actions that
  <application>Privoxy</application> might take, are configured. 
  Typically, you would define a set of default actions that apply 
- to all URLs, then add exceptions to these defaults.
+ to all URLs, then add exceptions to these defaults where needed.
 </para>
  
 <para>
@@ -494,6 +494,8 @@ All the ads are there. What's wrong?</title>
  site, we would define this in our <quote>actions</quote> file.
 
 </para>
+<!--
+No longer appropriate 04/28/02 hal.
 
 <para>
  <application>Privoxy</application> comes with several default
@@ -501,7 +503,7 @@ All the ads are there. What's wrong?</title>
  of filtering and blocking, as starting points for your own 
  configuration (see below).
 </para>
-
+-->
 </sect2>
 
 <sect2 renderas="sect3" id="actionss">
@@ -509,7 +511,7 @@ All the ads are there. What's wrong?</title>
 some of these <quote>actions</quote>.</title>
 <para>
  These are all explained in the 
- <ulink url="../user-manual/configuration.html#ACTIONS-FILE">user-manual</ulink>.
+ <ulink url="../user-manual/actions-file.html">user-manual</ulink>.
  Please refer to that.
 </para>
 </sect2>
@@ -523,7 +525,7 @@ way to do this?</title>
  The easiest way to do this, is to access <application>Privoxy</application>
  with your web browser at <ulink url="http://p.p/">http://p.p/</ulink>, 
  and then select 
- "<ulink url="http://config.privoxy.org">Edit the actions list</ulink>"
+ "<ulink url="http://config.privoxy.org">View & change the current configuration</ulink>"
  from the selection list. You can also do this by editing the appropriate 
  file with a text editor.
 </para>
@@ -531,12 +533,35 @@ way to do this?</title>
 <para>
  Please see the 
  <ulink
- url="../user-manual/configuration.html#ACTIONS-FILE">user-manual</ulink> for a
+ url="../user-manual/actions-file.html">user-manual</ulink> for a
  detailed explanation of these and other configuration files, and their
  various options and syntax.
 </para>
 </sect2>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3">
+<title>There are several different <quote>actions</quote> files. What are
+the differences?</title>
+<para>
+ As of <application>Privoxy</application> v2.9.15, three actions files 
+ are being included, to be used for 
+ different purposes. These are 
+ <filename>default.action</filename>, <filename>standard.action</filename>, 
+ and <filename>user.action</filename>. Please see 
+ <ulink url="../user-manual/actions-file.html">the User Manual</ulink> 
+ for an explanation of each.
+</para>
+
+<para>
+ Earlier versions included three different versions
+ <filename>default.action</filename> files. The new scheme allows for 
+ greater flexibility of local configuration, and for browser based 
+ configuration.
+</para>
+
+</sect2>
 
 <!--
 FIXME: Commenting these out until we have some data there. HB 03/17/02.
@@ -740,7 +765,8 @@ problem.
 <sect2 renderas="sect3">
 <title id="filterfile">What is <quote>default.filter</quote>?</title>
 <para>
- The <quote>default.filter</quote> file is used to <quote>filter</quote> any
+ The <quote>default.filter</quote> file is where <quote>filters</quote>
+ are defined, which are used to <quote>filter</quote> any
  web page content. By <quote>filtering</quote> we mean it can modify, remove, 
  or change <emphasis>anything</emphasis> on the page, including HTML tags, and
  JavaScript. Regular expressions are used to accomplish this, and operate 
@@ -757,7 +783,8 @@ problem.
 <para>
  Presently, there is no GUI editor option for this part of the configuration, 
  but you can disable/enable various sections of the included default 
- file with the <quote>Actions List Editor</quote> from your browser.
+ file with the <quote>View & change the current configuration</quote> from
+ your browser. 
 </para>
 
 </sect2>
@@ -793,21 +820,22 @@ problem.
 <title id="noseeum">Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</title>
 <para>
  This is a configuration option for images that
- <application>Privoxy</application> is stopping. You have the choice <!-- of
- the --> <!-- <application>Privoxy</application> logo, --> of a checkerboard
- pattern, a transparent 1x1 GIF image (aka <quote>blank</quote>), or a custom
- URL of your choice. Note that to fit this category, the URL must match both 
- the <quote>+image</quote> and <quote>+block</quote> actions.
+ <application>Privoxy</application> is stopping. You have the choice of a
+ checkerboard pattern, a transparent 1x1 GIF image (aka <quote>blank</quote>),
+ or a custom URL of your choice. Note that to fit this category, the URL must
+ match both the <ulink url="../user-manual/actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
+ <emphasis>and</emphasis> 
+ <ulink url="../user-manual/actions-file.html#BLOCK"><quote>+block</quote></ulink> actions.
 </para>
-
 <para>
- If you want to see nothing, then change the <quote>+image-blocker</quote> 
+ If you want to see nothing, then change the 
+ <ulink url="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
  action to <quote>+image-blocker{blank}</quote>. This can be done from the 
- <quote>Edit Actions List</quote> selection at <ulink
+ <quote>View & change the current configuration</quote> selection at <ulink
  url="http://p.p/">http://p.p/</ulink>. Or by hand editing the appropriate 
  actions file. This will only effect what is defined as <quote>images</quote>
  though. Also, some URLs that generate the bright red <quote>Blocked</quote>
- banner, can be moved to the <quote>+image-blocker</quote> section for the
+ banner, can be moved to the <quote>+set-image-blocker</quote> section for the
  same reason, but there are some limits and risks to this (see below).
 </para>
 
@@ -831,23 +859,27 @@ problem.
 <quote>Blocked</quote>. Why and how do I get rid of this?</title>
 <para>
  These are URLs that match something in one of 
- <application>Privoxy's</application> block actions (+block). It is meant
- to be a warning so that you know something has been blocked and an easy way
- for you to see why. These are handled differently than what has been defined
- explicitly as <quote>images</quote> (e.g. ad banners). Depending on the 
- URL itself, it is sometimes hard for <application>Privoxy</application> to 
- really know whether there is indeed an ad image there or not. And there are
- limitations as to what <application>Privoxy</application> can do to 
- <quote>fool</quote> the browser.
+ <application>Privoxy's</application> block actions 
+ (<ulink
+ url="../user-manual/actions-file.html#BLOCK"><quote>+block</quote></ulink>).
+ It is meant to be a warning so that you know something has been blocked and
+ an easy way for you to see why. These are handled differently than what has
+ been defined explicitly as <quote>images</quote> (e.g. ads that are GIF image
+ files). Depending on the URL itself, it is sometimes hard for
+ <application>Privoxy</application> to really know whether there is indeed an
+ ad image there or not. And there are limitations as to what
+ <application>Privoxy</application> can do to <quote>fool</quote> the
+ browser.
 </para>
 
 <para>
  For instance, if the ad is in a frame, then it is embedded in the separate
  HTML page used for the frame. In this case, you cannot just substitute an
- aribitray image (like we would for a <quote>blank</quote> image), for an HTML
+ aribitrary image (like we would for a <quote>blank</quote> image), for an HTML
  page. The browser is expecting an HTML page, and that is what it must have
- for frames. So this situation can be a little trickier to deal with, and 
- <application>Privoxy</application> will use the <quote>Blocked</quote> page.
+ for frames. Such situations can be a little trickier to deal with, and 
+ <application>Privoxy</application> may show the <quote>Blocked</quote> page,
+ despite your best efforts.
 </para>
 
 <para>
@@ -873,20 +905,26 @@ problem.
 <para>
  Another way to deal with this is find why and where
  <application>Privoxy</application> is blocking the frame, and 
- diable this. Then let the <quote>+image-blocker</quote> action 
+ diable this. Then let the <quote>+set-image-blocker</quote> action 
  handle the ad that is embedded in the frame's HTML page. 
 </para>
 
 </sect2>
 
 <sect2 renderas="sect3" id="alliseeisred">
-<title>I cannot see all of the <quote>Blocked</quote> page banner. All I
-see is a bright red square.</title>
+<title>I cannot see all of the <quote>Blocked</quote> page banner. Help.</title>
 <para>
- There is not enough space to fit the entire page. Try right clicking on the
- visible, red portion, and select <quote>Show Frame</quote>, or equivalent.
- This will usually allow you to see the entire Privoxy <quote>Blocked</quote>
- page, and from there you can see just what is being blocked, and why.
+ There is not enough available space to fit the entire Blocked page. Try right
+ clicking on the visible portion, and select <quote>Show Frame</quote>,
+ or equivalent. This will usually allow you to see the entire Privoxy
+ <quote>Blocked</quote> page, and from there you can see just what is being
+ blocked, and why.
+</para>
+<para>
+ As of Privoxy 2.9.14, the Blocked banner page is re-sizeable, and tries
+ to adjust to the allotted space. There may be occassions where there 
+ just isn't enough room to display much of anything useful though. 
+
 </para>
 </sect2>
 
@@ -914,7 +952,7 @@ on Win2K/NT?</title>
 proxies like <application>Squid</application>?</title>
 <para>
  This can be done. See the <ulink
- url="../user-manual/configuration.html#FORWARDING">user manual</ulink>, 
+ url="../user-manual/config.html#FORWARDING">user manual</ulink>, 
  which describes how to do this.
 
 </para>
@@ -952,21 +990,17 @@ has to add extra time to browsing.</title>
 <sect2 renderas="sect3" id="loadingtimes"><title>I noticed considerable
 delays in page requests compared to the old Junkbuster. What's wrong?</title>
 <para>
-Using the default filtering configuration, I noticed considerable delays in
-page requests compared to the old Junkbuster. Loading pages with large contents
-seemed to take forever, then suddenly delivering all the content at once.
+The entire page content must be loaded into memory in order for the filtering 
+mechanism to work, and nothing is sent to the browser during this time. The
+loading time does not really change in real numbers, but the feeling is
+different, because most browsers are able to start rendering incomplete
+content, giving the user a feeling of "it works". 
  </para>
 <para>
-The whole content must be loaded in order to filter, and nothing is is
-sent to the browser during this time. The loading time does not really
-change in real numbers, but the feeling is different, because most
-browsers are able to start rendering incomplete content, giving the
-user a feeling of "it works". 
- </para>
-<para>
-To modify the content of a page (i.e. make frames resizeable again, etc.) and
-not just replace ads, <application>Privoxy</application> needs to download the
-entire page first, do its content magic and then send the page to the browser.
+ To modify the content of a page (i.e. make frames resizeable again, etc.) and
+ not just replace ads, <application>Privoxy</application> needs to download
+ the entire page first, do its content magic and then send the page to the
+ browser.
 </para>
 </sect2>
 
@@ -1320,15 +1354,16 @@ What can I do?</title>
  by disabling <application>Privoxy</application> filtering and blocking. 
  Go to <ulink url="http://p.p/">http://p.p/</ulink> and click on 
  <quote>Toggle Privoxy On or Off</quote>, then disable it. Now try that 
- page again. It's probably a good idea to flush the browser cache as well.
+ page again. It's probably a good idea to flush the browser cache as well 
+ with <literal>Shift+Reload</literal> to flush caches.
 </para>
 
 <para>
  If still a problem, go to <quote>Show which actions apply to a URL and
  why</quote> from <ulink url="http://p.p/">http://p.p/</ulink> and paste
  the full URL of the page in question into the prompt. See which actions are
- being applied to the URL. Now, armed with this information, go to <quote>Edit
- the actions list</quote>. Here you should see various sections that have
+ being applied to the URL. Now, armed with this information, go to 
+ <quote>View & change the current configuration</quote>. Here you should see various sections that have
  various <application>Privoxy</application> features disabled for specific
  sites. Most disabled <quote>actions</quote> will have a <quote>-</quote> (minus
  sign) in front of them. Some aliases are used just to disable other actions, 
@@ -1338,7 +1373,7 @@ What can I do?</title>
  is causing the problem. Rember to flush your browser's caches when making 
  such changes! As a last resort, try <quote>fragile</quote> which
  disables most actions. Now re-try the page. There might be some trial and
- error involved. This is discussed in a little more detail in the <ulink
+ error involved. This is discussed in more detail in the <ulink
  url="../user-manual/appendix.html#ACTIONSANAT">user-manual appendix</ulink>.
 
 </para>
@@ -1348,13 +1383,6 @@ What can I do?</title>
  the same thing by editing the appropriate <quote>actions</quote> file.
 </para>
 
-</sect2>
-
-<sect2 renderas="sect3">
-<title id="time">What time is it?</title>
-<para>
- Time for you to go!
-</para>
 </sect2>
 
 </sect1>
@@ -1434,6 +1462,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.51  2002/04/26 17:24:31  swa
+bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
+
 Revision 1.50  2002/04/26 05:25:23  hal9
 Mass commit to catch a few scattered fixes.
 
