@@ -9,9 +9,12 @@ error_reporting(E_NONE);
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.1 2002/03/30 03:20:30 oes Exp $
+//  $Id: index.php,v 1.2 2002/03/30 03:35:48 oes Exp $
 //
 //  $Log: index.php,v $
+//  Revision 1.2  2002/03/30 03:35:48  oes
+//  Updated bookmarklet
+//
 //  Revision 1.1  2002/03/30 03:20:30  oes
 //  Added Feedback mechanism for actions file
 //
@@ -71,8 +74,9 @@ $headers = getallheaders();
 
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] < $current_actions_file_version)
 {
-   echo ("<html><head><title>Invalid Privoxy Action List Feedback</title></head>
-                <body><h2>Invalid Feedback Submission</h2>
+   echo ("<html><head><title>Invalid Privoxy Action List Feedback</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head><body><h2>Invalid Feedback Submission</h2>
                       <p>You are either not using Privoxy at all, or using an
                          actions file which is not based on the recent
                          distribution actions file (version $current_actions_file_version).</p>
@@ -140,7 +144,7 @@ proceed to Step 2.
 </form>
 </p>
 
-<p>To faciliate your feedback, you can bookmark <a href="javascript:void(window.open('http://privoxy.org/actions/?url='+escape(location.href),'Feedback', 'width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">this bookmarklet</a><br><i>(right-click and select "File Bookmark for link")</i>.
+<p>To faciliate your feedback, you can bookmark <a href="javascript:void(window.open('http://privoxy.org/actions/?url='+escape(location.href),'Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">this bookmarklet</a><br><i>To save them, right-click the link and choose "Add to Favorites" (IE) or "Add Bookmark" (Netscape). You will get a warning that the bookmark "may not be safe" - just click OK. Then you can run the Bookmarklet directly from your favourites/bookmarks. For even faster access, you can put them on the "Links" bar (IE) or the "Personal Toolbar" (Netscape), and run them with a single click.</i>.
 <br>Used on a page that you want to report on, it will take you here and pre-fill the URL field.
 </p>
 

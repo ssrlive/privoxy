@@ -4,15 +4,18 @@ error_reporting(E_NONE);
 #error_reporting(E_ALL);
 
 
-//  File :  $Source: $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/step2.php,v $
 //
 //  Purpose  :  Submit form for actions file feedback (step 2)
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: $
+//  $Id: step2.php,v 1.1 2002/03/30 03:20:30 oes Exp $
 //
-//  $Log: $
+//  $Log: step2.php,v $
+//  Revision 1.1  2002/03/30 03:20:30  oes
+//  Added Feedback mechanism for actions file
+//
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -52,7 +55,9 @@ $base_url = "http://www.privoxy.org/actions";
  */
 if (!isset($referrer_url))
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title></head>
+     echo ("<html><head><title>Invalid Feedback Submission</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Invalid Feedback Submission</h2>
                       <p>When submitting your feedback please start with
                          <a href=\"index.php\">step 1</a>.</p>
@@ -66,7 +71,9 @@ if (!isset($referrer_url))
  */
 if (!isset($problem) || $problem == "INVALID")
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title></head>
+     echo ("<html><head><title>Invalid Feedback Submission</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Invalid Feedback Submission</h2>
                       <p>You need to select the nature of the problem in
                          <a href=\"javascript:back()\">step 1</a>.</p>
@@ -93,7 +100,9 @@ curl_close ($ch);
 
 if (!$success)
 {
-   echo ("<html><head><title>Invalid Feedback Submission</title></head>
+   echo ("<html><head><title>Invalid Feedback Submission</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Invalid Feedback Submission</h2>
                       <p>The URL that you entered (<a href=\"$referrer_url\">$referrer_url</a>)
                          <br>could not be retrieved.</p>

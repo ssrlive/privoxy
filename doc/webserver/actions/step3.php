@@ -3,15 +3,18 @@
 error_reporting(E_NONE);
 #error_reporting(E_ALL);
 
-//  File :  $Source: $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/step3.php,v $
 //
 //  Purpose  :  Submit form for actions file feedback (step 1)
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: $
+//  $Id: step3.php,v 1.1 2002/03/30 03:20:30 oes Exp $
 //
-//  $Log: $
+//  $Log: step3.php,v $
+//  Revision 1.1  2002/03/30 03:20:30  oes
+//  Added Feedback mechanism for actions file
+//
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -45,7 +48,9 @@ error_reporting(E_NONE);
  */
 if (!isset($referrer_url))
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title></head>
+     echo ("<html><head><title>Invalid Feedback Submission</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Invalid Feedback Submission</h2>
                       <p>When submitting your feedback please start with
                          <a href=\"test.php\">step 1</a>.</p>
@@ -59,7 +64,9 @@ if (!isset($referrer_url))
  */
 if (!isset($problem))
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title></head>
+     echo ("<html><head><title>Invalid Feedback Submission</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Invalid Feedback Submission</h2>
                       <p>You need to select the nature of the problem in
                          <a href=\"test.php\">step 1</a>.</p>
@@ -84,7 +91,9 @@ $fp = fopen($logfile, "a");
 
 if(!$fp)
 {
-   echo ("<html><head><title>Internal Script Error</title></head>
+   echo ("<html><head><title>Internal Script Error</title>
+	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
+		</head>
                 <body><h2>Internal Script Error</h2>
                       <p>This script was unable to open its logfile.</p>
                       <p>Please <a href=\"mailto:info@privoxy.org?SUBJECT=Feedback-Script-Broken\">mail its owner</a>!</p>
