@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.30 2002/04/24 02:18:08 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.31 2002/04/26 12:54:36 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,16 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.30 2002/04/24 02:18:08 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.31  2002/04/26 12:54:36  oes
+ *     - Kill obsolete REDIRECT_URL code
+ *     - Error handling fixes
+ *     - Style sheet related HTML snipplet changes
+ *     - cgi_show_url_info:
+ *       - Matches now in table, actions on single lines,
+ *         linked to help
+ *       - standard.action suppressed
+ *       - Buttons to View and Edit AFs
+ *
  *    Revision 1.30  2002/04/24 02:18:08  oes
  *     - show-status is now the starting point for editing
  *       the actions files, generate list of all AFs with buttons
@@ -671,6 +681,7 @@ jb_err cgi_show_status(struct client_state *csp,
 {
    char *s = NULL;
    unsigned i;
+   int j;
 
    FILE * fp;
    char buf[BUFFER_SIZE];
@@ -762,9 +773,9 @@ jb_err cgi_show_status(struct client_state *csp,
    }
 
    s = strdup("");
-   for (i = 0; (s != NULL) && (i < Argc); i++)
+   for (j = 0; (s != NULL) && (j < Argc); j++)
    {
-      if (!err) err = string_join  (&s, html_encode(Argv[i]));
+      if (!err) err = string_join  (&s, html_encode(Argv[j]));
       if (!err) err = string_append(&s, " ");
    }
    if (!err) err = map(exports, "invocation", 1, s, 0);
