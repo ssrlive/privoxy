@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.36 2001/10/26 17:33:27 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.37 2001/11/01 14:28:47 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,14 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.36 2001/10/26 17:33:27 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.37  2001/11/01 14:28:47  david__schmidt
+ *    Show enablement/disablement status in almost all templates.
+ *    There is a little trickiness here: apparent recursive resolution of
+ *    @if-enabled-then@ caused the toggle template to show status out-of-phase with
+ *    the actual enablement status.  So a similar construct,
+ *    @if-enabled-display-then@, is used to resolve the status display on non-'toggle'
+ *    templates.
+ *
  *    Revision 1.36  2001/10/26 17:33:27  oes
  *    marginal bugfix
  *
@@ -305,12 +313,21 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "edit-actions-url",
          cgi_edit_actions_url, 
          NULL /* Change a URL pattern in the actionsfile */ },
+   { "edit-actions-url-form",
+         cgi_edit_actions_url_form, 
+         NULL /* Form to change a URL pattern in the actionsfile */ },
    { "edit-actions-add-url",
          cgi_edit_actions_add_url, 
          NULL /* Add a URL pattern to the actionsfile */ },
+   { "edit-actions-add-url-form",
+         cgi_edit_actions_add_url_form, 
+         NULL /* Form to add a URL pattern to the actionsfile */ },
    { "edit-actions-remove-url",
          cgi_edit_actions_remove_url, 
-         NULL /* Add a URL pattern to the actionsfile */ },
+         NULL /* Remove a URL pattern from the actionsfile */ },
+   { "edit-actions-remove-url-form",
+         cgi_edit_actions_remove_url_form, 
+         NULL /* Form to remove a URL pattern from the actionsfile */ },
    { "edit-actions-section-remove",
          cgi_edit_actions_section_remove, 
          NULL /* Remove a section from the actionsfile */ },
@@ -604,13 +621,13 @@ struct http_response *error_response(struct client_state *csp,
       return cgi_error_memory();
    }
 
-   err = map(exports, "host-html", 1, html_encode(csp->http->host), 0)
-      || map(exports, "hostport", 1, csp->http->hostport, 1)
-      || map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0)
-      || map(exports, "path", 1, csp->http->path, 1)
-      || map(exports, "path-html", 1, html_encode(csp->http->path), 0)
-      || map(exports, "error", 1, safe_strerror(sys_err), 0)
-      || map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
+   err = map(exports, "host-html", 1, html_encode(csp->http->host), 0);
+   if (!err) err = map(exports, "hostport", 1, csp->http->hostport, 1);
+   if (!err) err = map(exports, "hostport-html", 1, html_encode(csp->http->hostport), 0);
+   if (!err) err = map(exports, "path", 1, csp->http->path, 1);
+   if (!err) err = map(exports, "path-html", 1, html_encode(csp->http->path), 0);
+   if (!err) err = map(exports, "error", 1, safe_strerror(sys_err), 0);
+   if (!err) err = map(exports, "host-ip", 1, csp->http->host_ip_addr_str, 1);
 
    if (err)
    {
@@ -917,8 +934,11 @@ struct http_response *finish_http_response(struct http_response *rsp)
    {
       rsp->content_length = rsp->body ? strlen(rsp->body) : 0;
    }
-   sprintf(buf, "Content-Length: %d", rsp->content_length);
-   err = err || enlist(rsp->headers, buf);
+   if (!err)
+   {
+      sprintf(buf, "Content-Length: %d", rsp->content_length);
+      err = enlist(rsp->headers, buf);
+   }
 
    /* 
     * Fill in the default headers:
@@ -931,7 +951,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
     * 
     * See http://www.w3.org/Protocols/rfc2068/rfc2068
     */
-   err = err || enlist_unique(rsp->headers, "Content-Type: text/html", 13);
+   if (!err) err = enlist_unique(rsp->headers, "Content-Type: text/html", 13);
 
    if (rsp->is_static)
    {
@@ -940,14 +960,20 @@ struct http_response *finish_http_response(struct http_response *rsp)
        * occasionally, e.g. if IJB gets upgraded.
        */
 
-      get_http_time(0, buf);
-      err = err || enlist_unique_header(rsp->headers, "Date", buf);
+      if (!err)
+      {
+         get_http_time(0, buf);
+         err = enlist_unique_header(rsp->headers, "Date", buf);
+      }
 
       /* Some date in the past. */
-      err = err || enlist_unique_header(rsp->headers, "Last-Modified", "Sat, 17 Jun 2000 12:00:00 GMT");
+      if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", "Sat, 17 Jun 2000 12:00:00 GMT");
 
-      get_http_time(10 * 60, buf); /* 10 * 60sec = 10 minutes */
-      err = err || enlist_unique_header(rsp->headers, "Expires", buf);
+      if (!err)
+      {
+         get_http_time(10 * 60, buf); /* 10 * 60sec = 10 minutes */
+         err = enlist_unique_header(rsp->headers, "Expires", buf);
+      }
    }
    else
    {
@@ -956,11 +982,12 @@ struct http_response *finish_http_response(struct http_response *rsp)
        * setting.  However, to be certain, we also set both "Last-Modified"
        * and "Expires" to the current time.
        */
-      err = err || enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
+      if (!err) err = enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
+
       get_http_time(0, buf);
-      err = err || enlist_unique_header(rsp->headers, "Date", buf);
-      err = err || enlist_unique_header(rsp->headers, "Last-Modified", buf);
-      err = err || enlist_unique_header(rsp->headers, "Expires", buf);
+      if (!err) err = enlist_unique_header(rsp->headers, "Date", buf);
+      if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", buf);
+      if (!err) err = enlist_unique_header(rsp->headers, "Expires", buf);
    }
 
 
@@ -1298,7 +1325,7 @@ jb_err template_fill_for_cgi(struct client_state *csp,
 struct map *default_exports(const struct client_state *csp, const char *caller)
 {
    char buf[20];
-   int err = 0;
+   jb_err err;
    struct map * exports;
    int local_help_exists = 0;
 
@@ -1310,47 +1337,46 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       return NULL;
    }
 
-   err = map(exports, "version", 1, VERSION, 1)
-      || map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1)
-      || map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1)
-      || map(exports, "homepage", 1, HOME_PAGE_URL, 1)
-      || map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1)
-      || map(exports, "menu", 1, make_menu(caller), 0)
-      || map(exports, "code-status", 1, CODE_STATUS, 1);
-
-   err = err || map_conditional(exports, "enabled-display", g_bToggleIJB);
+   err = map(exports, "version", 1, VERSION, 1);
+   if (!err) err = map(exports, "my-ip-address", 1, csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown", 1);
+   if (!err) err = map(exports, "my-hostname", 1, csp->my_hostname ? csp->my_hostname : "unknown", 1);
+   if (!err) err = map(exports, "homepage", 1, HOME_PAGE_URL, 1);
+   if (!err) err = map(exports, "default-cgi", 1, HOME_PAGE_URL "/config", 1);
+   if (!err) err = map(exports, "menu", 1, make_menu(caller), 0);
+   if (!err) err = map(exports, "code-status", 1, CODE_STATUS, 1);
+   if (!err) err = map_conditional(exports, "enabled-display", g_bToggleIJB);
 
    snprintf(buf, 20, "%d", csp->config->hport);
-   err = err || map(exports, "my-port", 1, buf, 1);
+   if (!err) err = map(exports, "my-port", 1, buf, 1);
 
    if(!strcmp(CODE_STATUS, "stable"))
    {
-      err = err || map_block_killer(exports, "unstable");
+      if (!err) err = map_block_killer(exports, "unstable");
    }
 
-   if(csp->config->admin_address != NULL)
+   if (csp->config->admin_address != NULL)
    {
-      err = err || map(exports, "admin-address", 1, csp->config->admin_address, 1);
+      if (!err) err = map(exports, "admin-address", 1, csp->config->admin_address, 1);
       local_help_exists = 1;
    }
    else
    {
-      err = err || map_block_killer(exports, "have-adminaddr-info");
+      if (!err) err = map_block_killer(exports, "have-adminaddr-info");
    }
 
-   if(csp->config->proxy_info_url != NULL)
+   if (csp->config->proxy_info_url != NULL)
    {
-      err = err || map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
+      if (!err) err = map(exports, "proxy-info-url", 1, csp->config->proxy_info_url, 1);
       local_help_exists = 1;
    }
    else
    {
-      err = err || map_block_killer(exports, "have-proxy-info");
-   }   
+      if (!err) err = map_block_killer(exports, "have-proxy-info");
+   }
 
    if (local_help_exists == 0)
    {
-      err = err || map_block_killer(exports, "have-help-info");
+      if (!err) err = map_block_killer(exports, "have-help-info");
    }
 
    if (err)
@@ -1472,7 +1498,7 @@ char *make_menu(const char *self)
    {
       if (d->description && strcmp(d->name, self))
       {
-         snprintf(buf, BUFFER_SIZE, "<li><a href=%s/config/%s>%s</a></li>\n",
+         snprintf(buf, BUFFER_SIZE, "<li><a href=\"%s/config/%s\">%s</a></li>\n",
    	       HOME_PAGE_URL, d->name, d->description);
          result = strsav(result, buf);
       }
