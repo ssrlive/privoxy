@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.33 2001/10/07 18:04:49 oes Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.34 2001/10/07 18:50:55 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.33 2001/10/07 18:04:49 oes Exp $"
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.34  2001/10/07 18:50:55  oes
+ *    Added server_content_encoding, renamed server_transfer_encoding
+ *
  *    Revision 1.33  2001/10/07 18:04:49  oes
  *    Changed server_http11 to server_http and its pattern to "HTTP".
  *      Additional functionality: it now saves the HTTP status into
@@ -288,9 +291,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.33 2001/10/07 18:04:49 oes Exp $"
 #include <sys/types.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include<assert.h>
 #endif
 
+#include <assert.h>
 #include <string.h>
 
 #ifndef _WIN32
