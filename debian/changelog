@@ -28,6 +28,44 @@ privoxy (3.1.1-0) unstable; urgency=low
   
  -- Devin Bayer <devin@elektrono.com>  Sat, 25 May 2002 22:49:30 -0400
 
+privoxy (3.0.0-5) unstable; urgency=low
+
+  * Stop build-depending on special versions of libc6-dev and gcc.
+    Hopefully all auto-builders run new versions which shouldn't cause
+    trouble (Closes: #182267)  
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 24 Feb 2003 19:07:11 +0100
+
+privoxy (3.0.0-4) unstable; urgency=low
+
+  * Set "enable-edit-actions 0" and "enable-remote-toggle 0" in config
+    file, instead of simply commenting out these two lines.  Mention this
+    configuration change in README.Debian (Closes: #172965, #172966).
+  * Add new "cgi" user-manual, which sends the user manual to the client
+    and activate it in config file (Closes: #148128).
+  * Build-Depend on libc6-dev (>> 2.2.5) to avoid problems with pthread
+    (Closes: #158306, #162693).
+  * Don't search for user bsmtp in /etc/passwd before using adduser.
+    adduser handles already existing users correct.
+  * Remove /etc/provoxy on purge (Closes: #164039).
+  * Upgrade to Standards-Version 3.5.8:
+    - remove support for DEB_BUILD_OPTION "debug"
+    - add support for DEB_BUILD_OPTION "noopt"
+  * Upgrade to debhelper >=4 and use debian/compat instead of DH_COMPAT.
+  * Upgrade config.guess and config.sub (from autotools-dev 20030110.1).
+  * Remove no-pthread workaround for hppa and build-depend on gcc >=3.2.2,
+    which supports -pthread on hppa, too.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 23 Feb 2003 13:34:11 +0100
+
+privoxy (3.0.0-3) unstable; urgency=low
+
+  * Add aliases "wafer" and "vanilla-wafer" for "send-wafer" and
+    "send-vanilla-wafer" to actionlist to provide backward compatibility
+    to 2.9.14 (Closes: #154647).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun,  8 Sep 2002 11:43:38 +0200
+
 privoxy (3.0.0-2) unstable; urgency=low
 
   * Recompile with libc6 from testing (instead of unstable).

@@ -1,0 +1,11 @@
+privoxy for Debian
+==================
+
+- enable-edit-actions and enable-remote-toggle are disabled in the
+  Debian package for security reasons, because these options allow
+  every user of your privoxy to change its configuration. If you still
+  want to use these features, you can enable them in
+  /etc/privoxy/config and do a "/etc/init.d/privoxy restart".
+
+Roland Rosenfeld <roland@debian.org>
+$Id$

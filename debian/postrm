@@ -20,11 +20,8 @@ set -e
 
 case "$1" in
     purge)
-        echo "Removing user privoxy"
         userdel privoxy || echo "WARNING: Problem removing user privoxy."
-
-        echo "Deleting privoxy log files"
-        rm -rf /var/log/privoxy
+        rm -rf /var/log/privoxy /etc/privoxy
         ;;
 
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)

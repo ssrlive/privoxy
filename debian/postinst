@@ -25,11 +25,8 @@ set -e
 
 case "$1" in
     configure)
-        if ! grep -q '^privoxy:' /etc/passwd
-        then
-            adduser --system --home /etc/privoxy --ingroup nogroup \
-                    --disabled-password privoxy >/dev/null
-        fi
+        adduser --quiet --system --home /etc/privoxy --ingroup nogroup \
+                --disabled-password privoxy
         chown -R privoxy.adm /var/log/privoxy
         chmod 750 /var/log/privoxy
 	chown privoxy /etc/privoxy/*.action /etc/privoxy/trust
