@@ -1,7 +1,7 @@
-const char list_rcs[] = "$Id: list.c,v 1.15 2002/03/26 22:29:55 swa Exp $";
+const char list_rcs[] = "$Id: list.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/list.c,v $
  *
  * Purpose     :  Declares functions to handle lists.
  *                Functions declared include:
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.15 2002/03/26 22:29:55 swa Exp $";
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.15  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -259,11 +262,16 @@ static int list_is_valid (const struct list *the_list)
 
       /*
        * Arbitrarily limit length to prevent infinite loops.
+       * Note that the 1000 limit was hit by a real user in tracker 911950;
+       * removing it for now.  Symptoms of a real circular reference will
+       * include 100% CPU usage, I'd imagine.  It'll be obvious, anyway.
        */
+      /*
       if (++length > 1000)
       {
          return 0;
       }
+      */
 
       /*
        * Check this isn't marked as the last entry, unless of course it's
