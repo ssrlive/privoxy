@@ -68,18 +68,17 @@
   <head>
     <title>Request blocked (Privoxy@@my-hostname@)</title>
     <style type="text/css">
-      BODY, P { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
+      BODY, P { font-family: helvetica, helv, arial, sans-serif; font-size: 10pt;}
     </style>
   </head>
 
-  <body bgcolor="#ffffff">
+  <body bgcolor="#ffdddd">
 
-    <p align=center>Your request for <b>@hostport@@path@</b> was blocked.
-      <br><a href="@default-cgi@show-url-info?url=@hostport@@path@">See why</a>
+    <p align=center><a href="@default-cgi@" target="_blank">Privoxy</a> blocked <b>@hostport@@path@</b>.
+      <br><a href="@default-cgi@show-url-info?url=@hostport@@path@" target="_blank">See why</a>
       <!-- @if-force-support-start -->
       or <a href="http://@hostport@@force-prefix@@path@">go there anyway</a>.
       <!-- if-force-support-end@ -->
-      <br><a href="@default-cgi@">More info</a>.
     </p>
 
   </body>
