@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.24 2001/09/12 17:28:59 david__schmidt Exp $
+# $Id: Makefile.in,v 1.25 2001/09/12 22:55:45 joergs Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.25  2001/09/12 22:55:45  joergs
+# AmigaOS support added.
+#
 # Revision 1.24  2001/09/12 17:28:59  david__schmidt
 #
 # OS/2 port: update autoconf'd support for the platform.
@@ -156,7 +159,7 @@ CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
 INSTALL    = cp -f
-LD         = gcc
+LD         = @CC@
 OBJEXT     = @OBJEXT@
 RM         = rm -f
 STRIP_PROG = strip
