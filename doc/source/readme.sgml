@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
+ $Id: readme.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -38,7 +38,8 @@
  ======================================================================
  NOTE: The left margin spacing is *important* when using 'literallayout'
  WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
- the para tag forces a linebreak. Tags need to be carefully placed as a result.
+ the para tag forces a linebreak. Tags need to be carefully placed as a result
+ to avoid extra blank lines, etc.
  ======================================================================
 
  For stable releases, change 
@@ -47,7 +48,7 @@
  
  to 
  
-  entity % not-stable "IGNORE" 
+  entity % p-not-stable "IGNORE" 
   
  in the DTD at the top. This will toggle various text 'off'. BOTH
  MUST be toggled in this case.
@@ -252,7 +253,7 @@ See the man page or user-manual for a brief explanation of each option.
  </LiteralLayout>
 </para>
 <para>
- $Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
+ $Id: readme.sgml,v 1.2 2002/04/04 06:48:37 hal9 Exp $
 </para>
 
 </article>
