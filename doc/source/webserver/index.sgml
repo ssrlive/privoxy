@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.14 2002/05/10 01:48:20 hal9 Exp $
+ $Id: index.sgml,v 1.15 2002/05/24 00:02:05 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -176,7 +176,7 @@
   <colspec colname=c1 align="center">
   <tbody>
    <row>
-    <entry align="center">Developed on:</entry>
+    <entry align="center">Prixoxy is developed on:</entry>
    </row>
    <row>
     <entry align="center">
@@ -229,6 +229,12 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 1.15  2002/05/24 00:02:05  oes
+ Tried to make more useful and concise:
+   Reordered, no more TOC, link to instead of include info,
+   added some links. Should we use the free space to better
+   describe what Privoxy is good for?
+
  Revision 1.14  2002/05/10 01:48:20  hal9
  This is mostly proposed copyright/licensing additions and changes. Docs
  are still GPL, but licensing and copyright are more visible. Also, copyright
