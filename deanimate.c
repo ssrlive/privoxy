@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.3 2001/07/15 13:57:50 jongfoster Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.4 2001/07/18 12:28:49 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -37,6 +37,13 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.3 2001/07/15 13:57:50 jongfos
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.4  2001/07/18 12:28:49  oes
+ *    - Added feature for extracting the first frame
+ *      to gif_deanimate
+ *    - Separated image buffer extension into buf_extend
+ *    - Extended gif deanimation to GIF87a (untested!)
+ *    - Cosmetics
+ *
  *    Revision 1.3  2001/07/15 13:57:50  jongfoster
  *    Adding #includes string.h and miscutil.h
  *
@@ -226,7 +233,7 @@ int gif_skip_data_block(struct binbuffer *buf)
     * by a one-byte length field, with the last chunk having
     * zero length.
     */
-   while(c = buf_getbyte(buf, 0))
+   while((c = buf_getbyte(buf, 0)))
    {
       if ((buf->offset += c + 1) >= buf->size - 1)
       {
@@ -284,7 +291,7 @@ int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
    /*
     * Copy the image chunk by chunk.
     */
-   while(c = buf_getbyte(src, 0))
+   while((c = buf_getbyte(src, 0)))
    {
       if (buf_copy(src, dst, c + 1)) return 1;
    }

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.26 2001/07/30 22:08:36 jongfoster Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.27 2001/08/05 16:06:20 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -38,6 +38,13 @@ const char filters_rcs[] = "$Id: filters.c,v 1.26 2001/07/30 22:08:36 jongfoster
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.27  2001/08/05 16:06:20  jongfoster
+ *    Modifiying "struct map" so that there are now separate header and
+ *    "map_entry" structures.  This means that functions which modify a
+ *    map no longer need to return a pointer to the modified map.
+ *    Also, it no longer reverses the order of the entries (which may be
+ *    important with some advanced template substitutions).
+ *
  *    Revision 1.26  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -680,7 +687,7 @@ struct http_response *redirect_url(struct client_state *csp)
    /* 
     * find the last URL encoded in the request
     */
-   while (p = strstr(p, "http://"))
+   while ((p = strstr(p, "http://")))
    {
       q = p++;
    }
@@ -1140,9 +1147,11 @@ void apply_url_actions(struct current_action_spec *action,
 const struct forward_spec * forward_url(struct http_request *http,
                                         struct client_state *csp)
 {
-   static const struct forward_spec fwd_default[1] = { 0 }; /* All zeroes */
+   static const struct forward_spec fwd_default[1];
    struct forward_spec *fwd = csp->config->forward;
    struct url_spec url[1];
+
+   memset(&fwd_default, '\0', sizeof(struct forward_spec));
 
    if (fwd == NULL)
    {
