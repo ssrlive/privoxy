@@ -33,6 +33,9 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.12  2002/03/04 20:44:36  oes
+#     Changed to new cmdline syntax
+#
 #     Revision 1.11  2001/12/30 14:07:32  steudten
 #     - Add signal handling (unix)
 #     - Add SIGHUP handler (unix)
@@ -96,7 +99,7 @@ JB_PRG="junkbuster"
 JB_BIN="/usr/sbin/$JB_PRG"
 JB_CONF="/etc/$JB_PRG/config"
 JB_USER="junkbuster"
-JB_PID="/etc/junkbuster"/$JB_PRG.pid
+JB_PID="/var/run/$JB_PRG.pid"
 
 # some checks for us
 [ -x $JB_BIN  ] || exit 0
