@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.2 2002/09/04 15:32:10 oes Exp $
+#  $Id: default.action.master,v 1.3 2002/09/11 10:47:55 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -229,21 +229,22 @@
 #   
 #    Filters predefined in the supplied default.action include:
 #
-#     html-annoyances:  Get rid of particularly annoying HTML abuse
-#     js-annoyances:    Get rid of particularly annoying JavaScript abuse
-#     content-cookies:  Kill cookies that come in the HTML or JS content
-#     popups:           Kill all popups in JS and HTML
-#     frameset-borders: Give frames a border
-#     webbugs:          Squish WebBugs (1x1 invisible GIFs used for user tracking)
-#     refresh-tags:     Kill automatic refresh tags (for dial-on-demand setups)
-#     fun:              Text replacements  for subversive browsing fun!
-#     nimda:            Remove Nimda (virus) code.
-#     img-reorder:      Reorder attributes in <img> tags to make the banners-by-* filters more effective
-#     banners-by-size:  Kill banners by size (very efficient!)
-#     banners-by-link:  Kill banners by their links to known clicktrackers 
-#     shockwave-flash:  Kill embedded Shockwave Flash objects
-#     crude-parental:   Kill all web pages that contain the words "sex" or "warez"
-#     js-events:        Kill all JS event bindings (Radically destructive! Use only on real suckers)
+#     js-annoyances:       Get rid of particularly annoying JavaScript abuse
+#     html-annoyances:     Get rid of particularly annoying HTML abuse
+#     content-cookies:     Kill cookies that come in the HTML or JS content
+#     webbugs:             Squish WebBugs (1x1 invisible GIFs used for user tracking)
+#     popups:              Kill all popups in JS and HTML
+#     frameset-borders:    Give frames a border
+#     refresh-tags:        Kill automatic refresh tags (for dial-on-demand setups)
+#     img-reorder:         Reorder attributes in <img> tags to make the banners-by-* filters more effective
+#     banners-by-size:     Kill banners by size (very efficient!)
+#     banners-by-link:     Kill banners by their links to known clicktrackers 
+#     fun:                 Text replacements  for subversive browsing fun!
+#     nimda:               Remove Nimda (virus) code.
+#     shockwave-flash:     Kill embedded Shockwave Flash objects
+#     quicktime-kioskmode: Make Quicktime movies saveable
+#     js-events:           Kill all JS event bindings (Radically destructive! Use only on real suckers)
+#     crude-parental:      Kill all web pages that contain the words "sex" or "warez"
 #
 # +hide-forwarded-for-headers
 #    Block any existing X-Forwarded-for header, and do not add a new one.
