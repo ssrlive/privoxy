@@ -7,7 +7,7 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
-<!entity p-version "2.9.13">
+<!entity p-version "2.9.14">
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.47 2002/04/10 04:05:32 hal9 Exp $
+ $Id: faq.sgml,v 1.48 2002/04/10 18:45:15 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.47 2002/04/10 04:05:32 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.48 2002/04/10 18:45:15 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -1443,6 +1443,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.48  2002/04/10 18:45:15  swa
+generated
+
 Revision 1.47  2002/04/10 04:05:32  hal9
 More on BML, etc.
 
