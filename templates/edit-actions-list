@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.5  2002/01/17 21:21:05  jongfoster
+#    DOS->Unix line endings
+#
 #    Revision 1.4  2001/11/13 00:58:18  jongfoster
 #    New version of actions file editor templates
 #
@@ -139,7 +142,7 @@ function not_yet()
 function remove_pattern(section,pattern,curtext)
 {
    if (window.confirm("Are you sure you want to delete this URL pattern?\nPattern is: "+unescape(curtext)))
-   { window.location.href="http://i.j.b/edit-actions-remove-url?filename=@filename@&ver=@ver@&section="+section+"&pattern="+pattern+"#s"+section+"urls"; }
+   { window.location.href="@default-cgi@edit-actions-remove-url?filename=@filename@&ver=@ver@&section="+section+"&pattern="+pattern+"#s"+section+"urls"; }
    return false;
 }
 
@@ -180,7 +183,7 @@ function remove_pattern(section,pattern,curtext)
     <td class="light">
       <h2>Editing Actions File - @filename@.action</h2>
       <p>
-        <span><a class="cmd" href="http://i.j.b/edit-actions-section-add?filename=@filename@&amp;ver=@ver@&amp;section=0">Insert new section at top</a></span>
+        <span><a class="cmd" href="@default-cgi@edit-actions-section-add?filename=@filename@&amp;ver=@ver@&amp;section=0">Insert new section at top</a></span>
       </p>
     </td>
   </tr>

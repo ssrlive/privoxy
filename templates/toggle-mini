@@ -79,9 +79,9 @@
 <body bgcolor="#eeeeee" marginwidth="3" marginheight="3"
 leftmargin="3" rightmargin="3" topmargin="3" bottommargin="3">
 <center>
-<a href="@default-cgi@/" target="_blank">JunkBuster</a> is 
+<a href="@default-cgi@" target="_blank">JunkBuster</a> is 
 <b>@if-enabled-then@Enabled@else-not-enabled@Disabled@endif-enabled@</b>.
-<a href="@default-cgi@/toggle?mini=y&set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@"
+<a href="@default-cgi@toggle?mini=y&set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@"
 >@if-enabled-then@[Disable]@else-not-enabled@[Enable]@endif-enabled@</a>
 <br>
 <a href="" onclick="window.close();">[Close]</a>

@@ -109,6 +109,9 @@
              "?" mark) are wrong or missing.</p>
           <p>Possible causes:</p>
           <ul>
+            <li>If you just typed a URL pattern into a form, then you got
+               something wrong.  Press the "back" button on your browser
+               once and correct what you typed.</li>
             <li>If you tried to type in the URL, then you've found a
                page where you can't do that.  You can only view this
                page by following links from elsewhere in the configuration

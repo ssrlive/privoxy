@@ -202,7 +202,7 @@
              <td><code>FEATURE_CGI_EDIT_ACTIONS</code></td>
              <td>@if-FEATURE_CGI_EDIT_ACTIONS-then@ Yes @else-not-FEATURE_CGI_EDIT_ACTIONS@ No @endif-FEATURE_CGI_EDIT_ACTIONS@</td>
              <td>Allows the use of the web-based actions file 
-               editor@if-FEATURE_CGI_EDIT_ACTIONS-then@, which is <a href="http://i.j.b/edit-actions">here</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
+               editor@if-FEATURE_CGI_EDIT_ACTIONS-then@, which is <a href="@default-cgi@edit-actions">here</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
           </tr>
           <tr>
              <td><code>FEATURE_COOKIE_JAR</code></td>

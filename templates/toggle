@@ -110,7 +110,7 @@
                adverts, filtering cookies, regex-filtering, etc.</p>
             <p>When disabled, JunkBuster behaves as a normal HTTP proxy,
                and will not affect your web browsing.</p>
-            <p><a href="@default-cgi@/toggle?set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@">Click
+            <p><a href="@default-cgi@toggle?set=@if-enabled-then@disable@else-not-enabled@enable@endif-enabled@">Click
                here</a> to @if-enabled-then@disable@else-not-enabled@enable@endif-enabled@ JunkBuster.</p>
           </blockquote>
       </td>
@@ -137,11 +137,11 @@
                (Netscape), and run them with a single click.</p>
 
             <ul>
-              <li><a href="javascript:void(window.open('@default-cgi@/toggle?mini=y&set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable JunkBuster</a></li>
-              <li><a href="javascript:void(window.open('@default-cgi@/toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable JunkBuster</a></li>
-              <li><a href="javascript:void(window.open('@default-cgi@/toggle?mini=y&set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle JunkBuster</a>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=enabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Enable JunkBuster</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Disable JunkBuster</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y&set=toggle','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Toggle JunkBuster</a>
                   (Toggles between enabled and disabled)</li>
-              <li><a href="javascript:void(window.open('@default-cgi@/toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View JunkBuster Status</a></li>
+              <li><a href="javascript:void(window.open('@default-cgi@toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">View JunkBuster Status</a></li>
             </ul>
 
             <p><b>Credit:</b> The site which gave me the general idea for these

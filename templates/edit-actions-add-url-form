@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-add-url-form,v $
+#    Revision 1.2  2002/01/17 21:21:03  jongfoster
+#    DOS->Unix line endings
+#
 #    Revision 1.1  2001/11/13 00:58:18  jongfoster
 #    New version of actions file editor templates
 #
@@ -121,7 +124,7 @@ function validate(text)
   <tr>
     <td class="light">
       <h2>Add URL Pattern</h2>
-      <form method="GET" action="http://i.j.b/edit-actions-add-url"
+      <form method="GET" action="@default-cgi@edit-actions-add-url"
             onSubmit="return validate(newval.value);">
         <p>
           <input type="hidden" name="filename" value="@filename@">
@@ -130,7 +133,7 @@ function validate(text)
           <input type="text" name="newval" value="" size="78"><br>
           <input type="submit" value="Submit"> &nbsp;
           <input type="reset" value="Reset"> &nbsp;
-          <a href="http://i.j.b/edit-actions-list?filename=@filename@">Cancel</a>
+          <a href="@default-cgi@edit-actions-list?filename=@filename@">Cancel</a>
         </p>
       </form>
     </td>
