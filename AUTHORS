@@ -3,27 +3,27 @@
 
 Current Project developers:
 
- Stefan Waldherr 
- Andreas Oesterhelt 
- Jon Foster 
+ Stefan Waldherr
+ Andreas Oesterhelt
+ Jon Foster
 
- Markus Breitenbach 
- Thomas Steudten 
+ Markus Breitenbach
+ Thomas Steudten
 
 Current Project Contributors:
 
  David Schmidt (OS/2 port)
- Haroon Rafique 
- Jorg Strohmayer 
- Shamim Mohamed 
- Sarantis Paskalis 
- Gabriel L. Somlo 
+ Haroon Rafique
+ Jorg Strohmayer
+ Shamim Mohamed
+ Sarantis Paskalis
+ Gabriel L. Somlo
  John Venvertloh
  Hal Burgiss (docs)
  Rodney Stromlund
 
 Originally developed by:
- 
+
  Junkbusters Corp.
  Anonymous Coders
 
@@ -32,6 +32,7 @@ reported bugs, or made suggestions.  These include
 (in alphabetical order):
 
  Aaron Hamid
+ Alexander Lazic  (FreeBSD patch)
  Andrew J. Caines
  Clifford Caoile
  Darren Wiebe
