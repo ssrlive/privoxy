@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.29 2001/07/24 12:47:06 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.30 2001/07/25 22:57:13 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.29 2001/07/24 12:47:06 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.30  2001/07/25 22:57:13  jongfoster
+ *    __BEOS__ no longer overrides FEATURE_PTHREAD.
+ *    This is because FEATURE_PTHREAD will soon be widely used, so I
+ *    want to keep it simple.
+ *
  *    Revision 1.29  2001/07/24 12:47:06  oes
  *    Applied BeOS support update by Eugenia
  *
@@ -1388,6 +1393,7 @@ static void listen_loop(void)
             pthread_attr_t attrs;
 
             pthread_attr_init(&attrs);
+            pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
             child_id = (pthread_create(&the_thread, &attrs,
                (void*)serve, csp) ? -1 : 0);
             pthread_attr_destroy(&attrs);
