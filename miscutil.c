@@ -1,4 +1,5 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.8 2001/06/05 22:32:01 jongfoster Exp $";
+/* vim:ts=3: */
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.9 2001/06/07 14:43:17 swa Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +37,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.8 2001/06/05 22:32:01 jongfoste
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.9  2001/06/07 14:43:17  swa
+ *    slight mistake in make_path, unix path style is /.
+ *
  *    Revision 1.8  2001/06/05 22:32:01  jongfoster
  *    New function make_path() to splice directory and file names together.
  *
@@ -634,6 +638,24 @@ char *bindup(const char *string, int n)
  *********************************************************************/
 char * make_path(const char * dir, const char * file)
 {
+#ifdef AMIGA
+   char path[512];
+
+   if(dir)
+   {
+      strncpy(path,dir,512);
+      path[511]=0;
+   } else {
+      path[0]=0;
+   }
+   if(AddPart(path,file,512))
+   {
+      return strdup(path);
+   } else {
+      return NULL;
+   }
+#else /* ndef AMIGA */
+
    if ((file == NULL) || (*file == '\0'))
    {
       return NULL; /* Error */
@@ -656,12 +678,13 @@ char * make_path(const char * dir, const char * file)
 #ifdef _WIN32
       strcat(path, "\\");
 #else /* ifndef _WIN32 */
-      strcat(path, "/");
+      if(path[strlen(path)-1] != '/') strcat(path, "/");
 #endif /* ifndef _WIN32 */
       strcat(path, file);
 
       return path;
    }
+#endif /* ndef AMIGA */
 }
 
 
