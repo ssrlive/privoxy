@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.27 2001/09/22 16:36:59 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.28 2001/10/07 15:40:39 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.27 2001/09/22 16:36:59 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.28  2001/10/07 15:40:39  oes
+ *    Replaced 6 boolean members of csp with one bitmap (csp->flags)
+ *
  *    Revision 1.27  2001/09/22 16:36:59  jongfoster
  *    Removing unused parameter fs from read_config_line()
  *
@@ -184,6 +187,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.27 2001/09/22 16:36:59 jongfoster
 #include <errno.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <assert.h>
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -369,24 +373,24 @@ void sweep(void)
  *                      function fails, the contents of the buffer
  *                      are lost forever.
  *
- * Returns     :  0 => Ok, everything else is an error.
+ * Returns     :  JB_ERR_OK - Success
+ *                JB_ERR_MEMORY - Out of memory
+ *                JB_ERR_PARSE - Cannot parse regex (Detailed message
+ *                               written to system log)
  *
  *********************************************************************/
-int create_url_spec(struct url_spec * url, char * buf)
+jb_err create_url_spec(struct url_spec * url, char * buf)
 {
    char *p;
    struct url_spec tmp_url[1];
 
-   /* paranoia - should never happen. */
-   if ((url == NULL) || (buf == NULL))
-   {
-      return 1;
-   }
+   assert(url);
+   assert(buf);
 
    /* save a copy of the orignal specification */
    if ((url->spec = strdup(buf)) == NULL)
    {
-      return 1;
+      return JB_ERR_MEMORY;
    }
 
    if ((p = strchr(buf, '/')))
@@ -394,7 +398,7 @@ int create_url_spec(struct url_spec * url, char * buf)
       if (NULL == (url->path = strdup(p)))
       {
          freez(url->spec);
-         return 1;
+         return JB_ERR_MEMORY;
       }
       url->pathlen = strlen(url->path);
       *p = '\0';
@@ -414,7 +418,7 @@ int create_url_spec(struct url_spec * url, char * buf)
       {
          freez(url->spec);
          freez(url->path);
-         return 1;
+         return JB_ERR_MEMORY;
       }
 
       sprintf(rebuf, "^(%s)", url->path);
@@ -424,18 +428,22 @@ int create_url_spec(struct url_spec * url, char * buf)
       if (errcode)
       {
          size_t errlen = regerror(errcode,
-            url->preg, buf, sizeof(buf));
+            url->preg, rebuf, sizeof(rebuf));
 
-         buf[errlen] = '\0';
+         if (errlen > (sizeof(rebuf) - (size_t)1))
+         {
+            errlen = sizeof(rebuf) - (size_t)1;
+         }
+         rebuf[errlen] = '\0';
 
          log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-            url->spec, buf);
+            url->spec, rebuf);
 
          freez(url->spec);
          freez(url->path);
          freez(url->preg);
 
-         return 1;
+         return JB_ERR_PARSE;
       }
    }
 #endif
@@ -456,18 +464,29 @@ int create_url_spec(struct url_spec * url, char * buf)
 #ifdef REGEX
       freez(url->preg);
 #endif /* def REGEX */
-      return 1;
+      return JB_ERR_MEMORY;
    }
 
    /* split domain into components */
 
    *tmp_url = dsplit(url->domain);
+   if (tmp_url->dbuf == NULL)
+   {
+      freez(url->spec);
+      freez(url->path);
+      freez(url->domain);
+#ifdef REGEX
+      freez(url->preg);
+#endif /* def REGEX */
+      return JB_ERR_MEMORY;
+   }
+
    url->dbuf = tmp_url->dbuf;
    url->dcnt = tmp_url->dcnt;
    url->dvec = tmp_url->dvec;
    url->unanchored = tmp_url->unanchored;
 
-   return 0; /* OK */
+   return JB_ERR_OK;
 
 }
 

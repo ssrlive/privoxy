@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.9 2001/07/30 22:08:36 jongfoster Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.10 2001/09/22 16:36:59 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.10  2001/09/22 16:36:59  jongfoster
+ *    Removing unused parameter fs from read_config_line()
+ *
  *    Revision 1.9  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -133,7 +136,7 @@ extern int load_trustfile(struct client_state *csp);
 
 
 
-extern int create_url_spec(struct url_spec * url, char * buf);
+extern jb_err create_url_spec(struct url_spec * url, char * buf);
 extern void free_url(struct url_spec *url);
 
 extern void add_loader(int (*loader)(struct client_state *), 
