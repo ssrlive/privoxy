@@ -1,6 +1,6 @@
 #ifndef _FILTERS_H
 #define _FILTERS_H
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.8 2001/06/03 11:03:48 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.8 2001/06/03 19:12:00 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -40,6 +40,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.8  2001/06/03 19:12:00  oes
+ *    extracted-CGI relevant stuff
+ *
  *    Revision 1.8  2001/06/03 11:03:48  oes
  *    Makefile/in
  *
@@ -229,7 +232,7 @@ extern void apply_url_actions(struct current_action_spec *action,
                               struct http_request *http, 
                               struct url_actions *b);
 
-extern const struct gateway *forward_url(struct http_request *http, struct client_state *csp);
+extern const struct forward_spec *forward_url(struct http_request *http, struct client_state *csp);
 
 extern struct url_spec dsplit(char *domain);
 extern int domaincmp(struct url_spec *pattern, struct url_spec *fqdn);
