@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.15 2001/06/07 23:14:14 jongfoster Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.16 2001/06/09 10:55:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.15 2001/06/07 23:14:14 jongfoster
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.16  2001/06/09 10:55:28  jongfoster
+ *    Changing BUFSIZ ==> BUFFER_SIZE
+ *
  *    Revision 1.15  2001/06/07 23:14:14  jongfoster
  *    Removing ACL and forward file loaders - these
  *    files have been merged into the config file.
@@ -263,6 +266,9 @@ void sweep(void)
          csp->next = ncsp->next;
 
          freez(ncsp->ip_addr_str);
+         freez(ncsp->my_ip_addr_str);
+         freez(ncsp->my_hostname);
+
 #ifdef TRUST_FILES
          freez(ncsp->referrer);
 #endif /* def TRUST_FILES */
@@ -838,15 +844,13 @@ load_trustfile_error:
  *********************************************************************/
 static void unload_re_filterfile(void *f)
 {
-   pcrs_job *joblist;
    struct re_filterfile_spec *b = (struct re_filterfile_spec *)f;
 
    if (b == NULL) return;
 
    destroy_list(b->patterns);
 
-   joblist = b->joblist;
-   while ( NULL != (joblist = pcrs_free_job(joblist)) ) {}
+   pcrs_free_joblist(b->joblist);
 
    freez(b);
 
@@ -909,7 +913,7 @@ int load_re_filterfile(struct client_state *csp)
       enlist( bl->patterns, buf );
 
       /* We have a meaningful line -> make it a job */
-      if ((dummy = pcrs_make_job(buf, &error)) == NULL)
+      if ((dummy = pcrs_compile(buf, &error)) == NULL)
       {
          log_error(LOG_LEVEL_RE_FILTER, 
                "Adding re_filter job %s failed with error %d.", buf, error);
