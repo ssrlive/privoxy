@@ -1,11 +1,11 @@
 <?php
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/index.php,v $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/confirmad.php,v $
 //
 //  Purpose  :  Confirms ad submission.
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.2 2002/03/29 07:57:00 swa Exp $
+//  $Id: confirmad.php,v 1.1 2002/03/29 09:38:52 swa Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -41,8 +41,9 @@ $headers = getallheaders();
     <link rel="stylesheet" type="text/css" href="../p_web.css">
 </head>
 
-<h1>Confirm Ad Submission</h1>
+<h1>Privoxy Feedback</h1>
 
+<h2>Confirm Ad Submission</h2>
 
 <p>We have detemined that ...</p>
 
@@ -50,5 +51,8 @@ $headers = getallheaders();
 </html>
 
 <!--
-	$Log$
+	$Log: confirmad.php,v $
+	Revision 1.1  2002/03/29 09:38:52  swa
+	2nd page
+	
 -->

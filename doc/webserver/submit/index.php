@@ -5,7 +5,7 @@
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.2 2002/03/29 07:57:00 swa Exp $
+//  $Id: index.php,v 1.3 2002/03/29 09:39:48 swa Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -41,14 +41,18 @@ $headers = getallheaders();
     <link rel="stylesheet" type="text/css" href="../p_web.css">
 </head>
 
-<h1>Feedback</h1>
+<h1>Privoxy Feedback</h1>
 
-<p>Bla bla bla</p>
+<p>Compared to <a
+href="http://sourceforge.net/tracker/?group_id=11118&atid=111118">bug
+reports</a> or <a
+href="http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse">feature
+requests</a>, this page is intended to optimize the blocking behavior
+of Privoxy. Therefor we need your feedback.</p><p> If you have
+observed and advertisement, that was not blocked or an image that was
+incorrectly blocked, please use the forms below to report this.</p>
 
-<h2>Advertisements</h2>
-
-<p>You have seen an ad and want to support us making it disappear.
-Great. Please fill out the form below and hit "Submit".</p>
+<h2>New Advertisement</h2>
 
 <p>
 <form action="http://privoxy.org/submit/confirmad.php" method="post">
@@ -135,17 +139,21 @@ None.
 
 </table>
 </form>
-
 </p>
 
+<h2>Incorrect blocking</h2>
+<p>We soon present a form where you can submit websites, where the
+default action file was too agressive.</p>
+
 <h2>Misc</h2>
-
 <p>Bla bla bla</p>
-
 
 </body>
 </html>
 
 <!--
-	$Log$
+	$Log: index.php,v $
+	Revision 1.3  2002/03/29 09:39:48  swa
+	added form
+	
 -->
