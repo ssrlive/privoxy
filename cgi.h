@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.21 2002/03/07 03:48:38 oes Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.22 2002/03/24 13:25:43 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.22  2002/03/24 13:25:43  swa
+ *    name change related issues
+ *
  *    Revision 1.21  2002/03/07 03:48:38  oes
  *     - Changed built-in images from GIF to PNG
  *       (with regard to Unisys patent issue)
@@ -188,8 +191,6 @@ extern char *dump_map(const struct map *the_map);
 /*
  * Ad replacement images.
  */
-extern const char image_logo_data[];
-extern const size_t  image_logo_length;
 extern const char image_pattern_data[];
 extern const size_t  image_pattern_length;
 extern const char image_blank_data[];

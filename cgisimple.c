@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.20 2002/03/24 13:25:43 swa Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.21 2002/03/24 15:23:33 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.20 2002/03/24 13:25:43 swa Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.21  2002/03/24 15:23:33  jongfoster
+ *    Name changes
+ *
  *    Revision 1.20  2002/03/24 13:25:43  swa
  *    name change related issues
  *
@@ -401,7 +404,7 @@ jb_err cgi_send_banner(struct client_state *csp,
 
    if (imagetype == 'a') /* auto */
    {
-      /* Default to logo */
+      /* Default to pattern */
       imagetype = 'p';
 #ifdef FEATURE_IMAGE_BLOCKING
       if ((csp->action->flags & ACTION_IMAGE_BLOCKER) != 0)
@@ -428,11 +431,6 @@ jb_err cgi_send_banner(struct client_state *csp,
       rsp->content_length = image_blank_length;
 
    }
-   else  if (imagetype == 'l') /* logo */
-   {
-      rsp->body = bindup(image_logo_data, image_logo_length);
-      rsp->content_length = image_logo_length;
-   }   
    else /* pattern */
    {
       rsp->body = bindup(image_pattern_data, image_pattern_length);
