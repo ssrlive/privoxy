@@ -67,10 +67,18 @@
 #
 #  unstable:
 #    This is an alpha or beta release of the proxy software
+#  have-adminaddr-info:
+#    An e-mail address for the local Junkbuster adminstrator has
+#    been specified and is available through the "admin-address"
+#    symbol
 #  have-proxy-info:
 #    A URL for online documentation about this proxy has been
 #    specified and is available through the "proxy-info-url"
 #    symbol
+#  have-help-info:
+#    If either have-proxy-info is true or have-adminaddr-info is
+#    true, have-help-info is true.  Used to conditionally include
+#    a grey box for any and all help info.
 #  statistics:
 #    Junkbuster was compiled with statistics support
 #  have-stats:
@@ -283,19 +291,25 @@
       </td>
     </tr>
 
+<!-- @if-have-help-info-start -->
     <tr>
       <td bgcolor=#dddddd>
-        <p>If you have any questions about this service,
+        <h2>Local Junkbuster support:</h2>
 
 <!-- @if-have-proxy-info-start -->
-          consult the <a href="@proxy-info-url@">online documentation</a> or
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.         
 <!-- if-have-proxy-info-end@ -->
 
-          <a href=mailto:@admin-address@>send mail to <code>@admin-address@</code></a>
+<!-- @if-have-adminaddr-info-start -->
+        <p>Address e-mail questions about this service to
+          <a href=mailto:@admin-address@><code>@admin-address@</code></a>,
           who will be glad to help you.
+<!-- if-have-adminaddr-info-end@ -->
+
         </p>
       </td>
     </tr>
+<!-- if-have-help-info-end@ -->
 
   </table>
 
