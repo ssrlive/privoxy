@@ -1,30 +1,30 @@
-# Microsoft Developer Studio Project File - Name="console_junkbuster" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vc_console" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=console_junkbuster - Win32 Debug with Win32 threads
+CFG=vc_console - Win32 Debug with Win32 threads
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "console_junkbuster.mak".
+!MESSAGE NMAKE /f "vc_console.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "console_junkbuster.mak"\
- CFG="console_junkbuster - Win32 Debug with Win32 threads"
+!MESSAGE NMAKE /f "vc_console.mak"\
+ CFG="vc_console - Win32 Debug with Win32 threads"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "console_junkbuster - Win32 Release" (based on\
+!MESSAGE "vc_console - Win32 Release" (based on\
  "Win32 (x86) Console Application")
-!MESSAGE "console_junkbuster - Win32 Debug" (based on\
+!MESSAGE "vc_console - Win32 Debug" (based on\
  "Win32 (x86) Console Application")
-!MESSAGE "console_junkbuster - Win32 Debug with Win32 threads" (based on\
+!MESSAGE "vc_console - Win32 Debug with Win32 threads" (based on\
  "Win32 (x86) Console Application")
-!MESSAGE "console_junkbuster - Win32 Release with Win32 threads" (based on\
+!MESSAGE "vc_console - Win32 Release with Win32 threads" (based on\
  "Win32 (x86) Console Application")
 !MESSAGE 
 
@@ -34,7 +34,7 @@ CFG=console_junkbuster - Win32 Debug with Win32 threads
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "console_junkbuster - Win32 Release"
+!IF  "$(CFG)" == "vc_console - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -58,7 +58,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:console /machine:I386
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -82,7 +82,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Debug with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Debug with Win32 threads"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -107,7 +107,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Release with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Release with Win32 threads"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -136,10 +136,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "console_junkbuster - Win32 Release"
-# Name "console_junkbuster - Win32 Debug"
-# Name "console_junkbuster - Win32 Debug with Win32 threads"
-# Name "console_junkbuster - Win32 Release with Win32 threads"
+# Name "vc_console - Win32 Release"
+# Name "vc_console - Win32 Debug"
+# Name "vc_console - Win32 Debug with Win32 threads"
+# Name "vc_console - Win32 Release with Win32 threads"
 # Begin Group "JunkBuster"
 
 # PROP Default_Filter ""
@@ -291,20 +291,20 @@ SOURCE=.\win32.h
 
 SOURCE=.\pcre\chartables.c
 
-!IF  "$(CFG)" == "console_junkbuster - Win32 Release"
+!IF  "$(CFG)" == "vc_console - Win32 Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Debug with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Debug with Win32 threads"
 
 # PROP BASE Exclude_From_Build 1
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "console_junkbuster - Win32 Release with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_console - Win32 Release with Win32 threads"
 
 # PROP BASE Exclude_From_Build 1
 # PROP Exclude_From_Build 1

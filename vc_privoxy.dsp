@@ -1,28 +1,28 @@
-# Microsoft Developer Studio Project File - Name="vc_junkbuster" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vc_privoxy" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=vc_junkbuster - Win32 Debug with Win32 threads
+CFG=vc_privoxy - Win32 Debug with Win32 threads
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vc_junkbuster.mak".
+!MESSAGE NMAKE /f "vc_privoxy.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vc_junkbuster.mak"\
- CFG="vc_junkbuster - Win32 Debug with Win32 threads"
+!MESSAGE NMAKE /f "vc_privoxy.mak"\
+ CFG="vc_privoxy - Win32 Debug with Win32 threads"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vc_junkbuster - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "vc_junkbuster - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "vc_junkbuster - Win32 Release with Win32 threads" (based on\
+!MESSAGE "vc_privoxy - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vc_privoxy - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vc_privoxy - Win32 Release with Win32 threads" (based on\
  "Win32 (x86) Application")
-!MESSAGE "vc_junkbuster - Win32 Debug with Win32 threads" (based on\
+!MESSAGE "vc_privoxy - Win32 Debug with Win32 threads" (based on\
  "Win32 (x86) Application")
 !MESSAGE 
 
@@ -33,7 +33,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+!IF  "$(CFG)" == "vc_privoxy - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -59,7 +59,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:windows /machine:I386
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -85,7 +85,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Release with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Release with Win32 threads"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -112,7 +112,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib pthreadVC.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib ws2_32.lib comctl32.lib /nologo /subsystem:windows /machine:I386
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Debug with Win32 threads"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -143,10 +143,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vc_junkbuster - Win32 Release"
-# Name "vc_junkbuster - Win32 Debug"
-# Name "vc_junkbuster - Win32 Release with Win32 threads"
-# Name "vc_junkbuster - Win32 Debug with Win32 threads"
+# Name "vc_privoxy - Win32 Release"
+# Name "vc_privoxy - Win32 Debug"
+# Name "vc_privoxy - Win32 Release with Win32 threads"
+# Name "vc_privoxy - Win32 Debug with Win32 threads"
 # Begin Group "JunkBuster"
 
 # PROP Default_Filter ""
@@ -352,7 +352,7 @@ SOURCE=.\icons\idle.ico
 # End Source File
 # Begin Source File
 
-SOURCE=.\icons\junkbust.ico
+SOURCE=.\icons\privoxy.ico
 # End Source File
 # Begin Source File
 
@@ -366,20 +366,20 @@ SOURCE=.\w32.rc
 
 SOURCE=.\pcre\chartables.c
 
-!IF  "$(CFG)" == "vc_junkbuster - Win32 Release"
+!IF  "$(CFG)" == "vc_privoxy - Win32 Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Release with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Release with Win32 threads"
 
 # PROP BASE Exclude_From_Build 1
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "vc_junkbuster - Win32 Debug with Win32 threads"
+!ELSEIF  "$(CFG)" == "vc_privoxy - Win32 Debug with Win32 threads"
 
 # PROP BASE Exclude_From_Build 1
 # PROP Exclude_From_Build 1
