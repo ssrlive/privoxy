@@ -57,8 +57,9 @@ tree.
 You can also check out any Privoxy "branch", just exchange the current name
 with the wanted branch name (Example: v_3_0_branch for the 3.0 cvs tree).
 
-It is also recommended to not run Privoxy as root, and instead it is suggested
-to create a "privoxy" user for this purpose.
+It is also strongly recommended to not run Privoxy as root, and instead it is
+suggested to create a "privoxy" user and group for this purpose. See your local
+documentation for the correct command line to do this.
 
 /etc/passwd might then look like:
 
@@ -87,10 +88,16 @@ you by just typing:
 
 in the freshly downloaded or unpacked source directory.
 
+WARNING: If installing as root, the install will fail unless another user is
+specified. configure accepts --with-user and --with-group options for setting
+user and group ownership of the configuration files (which need to be writable
+by the daemon). The specified user must already exist. Or if there is already a
+privoxy user on the system, and no user was specified during configure, make
+install then will use the privoxy user. When starting Privoxy, it should be run
+as this same user.
+
 The default installation path for make install is /usr/local. This may of
-course be customized with the various ./configure path options. configure also
-accepts a --with-user and --with-group options for setting user and group
-ownership.
+course be customized with the various ./configure path options.
 
 If you do install to /usr/local, the install will use sysconfdir=$prefix/etc/
 privoxy by default. All other destinations, and the direct usage of
@@ -108,12 +115,17 @@ default to /var instead of $prefix/var so the logs will go to /var/log/privoxy
 /, and the pid file will be created in /var/run/privoxy.pid.
 
 make install will attempt to set the correct values in config (main
-configuration file). If appropriate, an init script will be installed, but it
-is up to the user to determine how and where to start Privoxy.
+configuration file). You may want to check this to make sure all values are
+correct. If appropriate, an init script will be installed, but it is up to the
+user to determine how and where to start Privoxy.
 
 For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
 self-extracting installers, building on platforms with special requirements
 etc, please consult the developer manual.
 
 For binary RPM installation, and other platforms, see the User Manual as well.
+
+The simplest command line to start Privoxy is $path/privoxy --user=privoxy
+$path/etc/privoxy/config. See privoxy --usage, or the man page, for other
+options, and configuration.
 
