@@ -66,6 +66,7 @@ install: build
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
 
 	sed -e 's/^\(\(trust\|proxy\)-info-url\|admin-address\)/#\1/'  \
+	    -e 's/^\(enable-\(edit-actions\|remote-toggle\)\)/#\1/' \
 	    -e 's#^confdir \.#confdir /etc/privoxy#' \
 	    -e 's#^logdir \.#logdir /var/log/privoxy#' \
 		< config > $(DEBDIR)/etc/privoxy/config

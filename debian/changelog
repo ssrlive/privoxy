@@ -1,15 +1,28 @@
 privoxy (2.9.15-beta-0) unstable; urgency=low
 
   * New upstream version.
-  * Fix debian/rules clean to really clean.
   * Use upstream docbook build mechanism now.
   * Force usage of w3m -dump to convert HTML to ASCII (build depend on it).
   * Exclude CVS files from dh_installdocs (when compiling from CVS).
   * Add user.action and standard.action to /etc/privoxy.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 20:47:33 +0200
+
+privoxy (2.9.14-beta-3) unstable; urgency=low
+
+  * Fix typo ('[' instead of '{') in default.action (Closes: #148122).
+  * Disable edit-actions and remote-toggle in config file by default
+    (Closes: #148125).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 11:53:49 +0200
+
+privoxy (2.9.14-beta-2) unstable; urgency=low
+
+  * Fix debian/rules clean to really clean.
   * Change owner of /etc/privoxy/{*.action|trust} to privoxy in postinst,
     to allow modification of these files web interface (Closes: SF-552144).
 
- -- Roland Rosenfeld <roland@debian.org>  Thu, 23 May 2002 07:06:01 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 23 May 2002 18:38:27 +0200
 
 privoxy (2.9.14-beta-1) unstable; urgency=low
 
