@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.27 2002/04/22 16:32:31 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.28 2002/04/22 18:51:33 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -242,9 +242,8 @@ fi
 # -- morcego
 # WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
 %config %{privoxyconf}/config
-%config %{privoxyconf}/advanced.action
-%config %{privoxyconf}/basic.action
-%config %{privoxyconf}/intermediate.action
+%config %{privoxyconf}/standard.action
+%config(noreplace) %{privoxyconf}/user.action
 %config %{privoxyconf}/default.action
 %config %{privoxyconf}/default.filter
 %config %{privoxyconf}/trust
@@ -294,6 +293,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Apr 23 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.14-2
+- Adjust for new *actions files.
+
 * Mon Apr 22 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.14-2
 - Removed the redhat hack that prevented the user and group from
@@ -617,6 +620,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.28  2002/04/22 18:51:33  morcego
+# user and group now get removed on rh too.
+#
 # Revision 1.27  2002/04/22 16:32:31  morcego
 # configure.in, *.spec: Bumping release to 2 (2.9.14-2)
 # -rh.spec: uid and gid are now macros
