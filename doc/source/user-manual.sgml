@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.66 2002/04/04 06:48:37 hal9 Exp $
+ $Id: user-manual.sgml,v 1.67 2002/04/04 17:27:57 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -39,7 +39,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.66 2002/04/04 06:48:37 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.67 2002/04/04 17:27:57 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -72,7 +72,7 @@
 
  <para>
   You can find the latest version of the user manual at  <ulink
-  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
+  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>. Please see the Contact section on how to contact the developers.
   </para>
 
 <!--   <para> -->
@@ -82,10 +82,16 @@
 
 </artheader>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="intro" label=""><title></title>
+<!-- dummy section to force TOC on page by itself -->
+<!-- DO NOT REMOVE! please ;) -->
+<para> </para>
+</sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect1 id="introduction"><title>Introduction</title>
+<sect1 label="1" id="introduction"><title>Introduction</title>
 
 <para>
  This documentation is included with the current &p-status; version of
@@ -3929,6 +3935,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.67  2002/04/04 17:27:57  swa
+ more single file to be included at multiple points. make maintaining easier
+
  Revision 1.66  2002/04/04 06:48:37  hal9
  Structural changes to allow for conditional inclusion/exclusion of content
  based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And

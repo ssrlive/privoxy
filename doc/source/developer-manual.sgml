@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $
+ $Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -35,7 +35,7 @@
   <artheader>
     <title>Privoxy Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
@@ -70,9 +70,7 @@
 <para>
  You can find the latest version of the this manual at <ulink
  url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
- Please see the Contact section of the <ulink
- url="../user-manual/contact.html">User Manual</ulink> on how to contact the
- developers.
+ Please see the Contact section on how to contact the developers.
 </para>
 
 <!--        <para> -->
@@ -82,8 +80,18 @@
     </abstract>
   </artheader>
 
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="introduction"><title>Introduction</title>
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 id="intro" label=""><title></title>
+<!-- dummy section to force TOC on page by itself -->
+<!-- DO NOT REMOVE! please ;) -->
+<para> </para>
+</sect1>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 label="1" id="introduction"><title>Introduction</title>
 <!--
 
  I don't like seeing blank space :) So added *something* here.
@@ -1324,7 +1332,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1384,7 +1392,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.21 2002/04/04 06:48:37 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.22 2002/04/04 17:27:56 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2058,7 +2066,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   </sect1>
   
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="contact"><title>Contact the developers</title>
+  <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
 <!-- Include contacting.sgml  -->
  &contacting;
 <!-- end contacting -->
@@ -2110,6 +2118,9 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.22  2002/04/04 17:27:56  swa
+  more single file to be included at multiple points. make maintaining easier
+
   Revision 1.21  2002/04/04 06:48:37  hal9
   Structural changes to allow for conditional inclusion/exclusion of content
   based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And

@@ -4,6 +4,9 @@
 <!entity newfeatures SYSTEM "newfeatures.sgml">
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
+<!entity contacting SYSTEM "contacting.sgml">
+<!entity history SYSTEM "history.sgml">
+<!entity copyright SYSTEM "copyright.sgml">
 <!entity p-version "2.9.13">
 <!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE"> <!-- set to IGNORE for stable release  -->
@@ -19,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.40 2002/04/03 04:22:03 hal9 Exp $
+ $Id: faq.sgml,v 1.41 2002/04/04 06:48:37 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -50,7 +53,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.40 2002/04/03 04:22:03 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.41 2002/04/04 06:48:37 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -83,9 +86,7 @@
  <para>
   You can find the latest version of the document at <ulink
   url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
-  Please see the Contact section in the <ulink
-  url="../user-manual/contact.html">user-manual</ulink> if
-  you want to contact the developers.
+  Please see the Contact section if you want to contact the developers.
  </para>
 
 <!--   <para> -->
@@ -123,8 +124,7 @@
   significantly at this point. 
  </para>
  <para> 
-  Please see the <ulink
-  url="../user-manual/copyright.html#HISTORY">user-manual</ulink> for more
+  Please see the History section for more
   information on the history of <application>Junkbuster</application> and 
   <application>Privoxy</application>.
  </para>
@@ -283,12 +283,10 @@ This does not sound very scientific.</title>
 <sect2 renderas="sect3" id="license"><title>Is there is a license or fee? What about a 
 warranty? Registration?</title>
  <para>
-  <application>Privoxy</application> is licensed under the 
-  GNU General Public License (GPL). It is free to use, copy, 
-  modify or distribute as you wish under the terms of this license.
-  Please see the 
-<ulink url="../user-manual/copyright.html#HISTORY">user-manual</ulink> for 
- more information on the license and copyright.
+  <application>Privoxy</application> is licensed under the GNU General Public
+  License (GPL). It is free to use, copy, modify or distribute as you wish
+  under the terms of this license.  Please see the Copyright section for more
+  information on the license and copyright.
 
   </para>
  <para>
@@ -1209,25 +1207,6 @@ secure is it? Do I need to take any special precautions?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3" id="seealso">
-<title>Where can I find more information about <application>Privoxy</application>
-and related issues?</title>
-
-<!--
- Include seealso.sgml
--->
- 
- &seealso;
-
-<!--
-<para>
- Please see the 
- <ulink url="../user-manual/seealso.html">user-manual</ulink> for 
- others references.
-</para>
--->
-</sect2>
-
 </sect1>
 
 
@@ -1350,17 +1329,37 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 </sect1>
 -->
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<!--
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
+<!-- Include contacting.sgml  -->
+ &contacting;
+<!-- end contacting -->
+  </sect1>
+  
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="copyright"><title>Copyright and History</title>
 
-This is referenced in the doc header already. HB 03/25/02
+<sect2><title>Copyright</title>
+<!-- Include copyright.sgml -->
+ &copyright;
+<!-- end -->
+</sect2>
 
-<sect1 id="contact"><title>Contact the developers</title>
-<para>Please see the user manual for information on how to contact the developers.
-</para>
-</sect1>
--->
+<sect2><title>History</title>
+<!-- Include history.sgml -->
+ &history;
+<!-- end -->
+</sect2>
 
+  </sect1>
+  
+  <!--   ~~~~~       New section      ~~~~~     -->
+  <sect1 id="seealso"><title>See also</title>
+<!-- Include seealso.sgml -->
+ &seealso;
+<!-- end  -->
+
+  </sect1>
 
 <!-- hhmts end -->
  <!--
@@ -1387,6 +1386,13 @@ This is referenced in the doc header already. HB 03/25/02
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.41  2002/04/04 06:48:37  hal9
+Structural changes to allow for conditional inclusion/exclusion of content
+based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And
+definition of internal entities, e.g. 'entity p-version "2.9.13"' that will
+eventually be set by Makefile.
+More boilerplate text for use across multiple docs.
+
 Revision 1.40  2002/04/03 04:22:03  hal9
 Fixed several typos.
 
