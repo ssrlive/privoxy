@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.19  2002/03/24 13:25:42  swa
+ *    name change related issues
+ *
  *    Revision 1.18  2002/03/08 16:40:28  oes
  *    Added FEATURE_NO_GIFS
  *
@@ -315,7 +318,7 @@
 #undef FEATURE_STATISTICS
 
 /*
- * Allow JunkBuster to be "disabled" so it is just a normal non-blocking
+ * Allow Privoxy to be "disabled" so it is just a normal non-blocking
  * non-anonymizing proxy.  This is useful if you're trying to access a
  * blocked or broken site - just change the setting in the config file,
  * or use the handy "Disable" menu option in the Windows GUI.
