@@ -1,9 +1,9 @@
 #ifndef _GATEWAY_H
 #define _GATEWAY_H
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.1 2001/05/13 21:57:06 administrator Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/gateway.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
  *                using a "gateway" (i.e. HTTP proxy and/or SOCKS4
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
@@ -46,11 +49,9 @@
 extern "C" {
 #endif
 
-extern const struct gateway gateways[];
-extern const struct gateway *gw_default;
-
-extern int socks4_connect(const struct gateway *gw, struct http_request *http, struct client_state *csp);
-extern int direct_connect(const struct gateway *gw, struct http_request *http, struct client_state *csp);
+extern int forwarded_connect(const struct forward_spec * fwd, 
+                             struct http_request *http, 
+                             struct client_state *csp);
 
 /* Revision control strings from this header and associated .c file */
 extern const char gateway_rcs[];
