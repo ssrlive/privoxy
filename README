@@ -1,6 +1,7 @@
+
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/README,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
  *
  * Purpose     :  README file to give a short intro.
  *
@@ -30,124 +31,139 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *********************************************************************/
+   
 
-This README is included with the development version of Privoxy,
-which will eventually become Privoxy v3.0 (and soon we hope!). See
-http://www.privoxy.org/. The current code level is BETA, and seems 
-stable to us :)
+This README is included with the development version of Privoxy 2.9.13, which
+will eventually become Privoxy v3.0 (and soon we hope!). See http://
+www.privoxy.org/ for more information. The current code level is BETA, and
+seems stable to us :).
 
-Privoxy is a web proxy with advanced filtering capabilities for
-protecting privacy, filtering web page content, managing cookies,
-controlling access, and removing ads, banners, pop-ups and other
-obnoxious Internet junk. Privoxy has a very flexible configuration and
-can be customized to suit individual needs and tastes. Privoxy
-has application for both stand-alone systems and multi-user
+Privoxy is a web proxy with advanced filtering capabilities for protecting
+privacy, filtering web page content, managing cookies, controlling access, and
+removing ads, banners, pop-ups and other obnoxious Internet junk. Privoxy has a
+very flexible configuration and can be customized to suit individual needs and
+tastes. Privoxy has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is based on the code of the Internet Junkbuster. Junkbuster
-was originally written by JunkBusters Corporation, and was released as
-free open-source software under the GNU GPL. Stefan Waldherr made many
-improvements, and started the SourceForge project to continue
-development. Several other developers are now contributing.
+Privoxy is based on the code of the Internet Junkbuster. Junkbuster was
+originally written by JunkBusters Corporation, and was released as free
+open-source software under the GNU GPL. Stefan Waldherr made many improvements,
+and started the SourceForge project to continue development.
+
+Privoxy continues the Junkbuster tradition, but adds many refinements and
+enhancements.
 
 
  IMPORTANT CHANGES
 ------------------
 
-NEWS! As of 03/24/02, the name of this project has been changed 
-from ijbswa/Junkbuster to Privoxy. This is reflected in many of the 
-included files. 
+NEWS! As of 03/24/02, the name of this project has been changed from ijbswa/
+Junkbuster to Privoxy. This is reflected in many of the included files.
 
-WARNING! If upgrading from earlier versions of this project via 
-RPM packages, the new package will delete any previously installed 
-'Junkbuster' packages.
+WARNING! If upgrading from earlier versions of this project via RPM packages,
+the new package will delete any previously installed 'Junkbuster' packages.
 
-IMPORTANT! READ! Configuration Change as of 3 Apr 2002: The default
-listening port is now 8118 due to conflicts with port 8000 assignment.
-You will need to change your browser if upgrading!!! And maybe
-firewall, etc.
+IMPORTANT! READ! Configuration Change as of 17 Mar 2002: The default listening
+port is now 8118 due to conflicts with port 8000 assignment. You will need to
+change your browser if upgrading!!! And maybe firewall, etc.
 
 
  INSTALL
 --------
 
-For tarball, first unpack:
+There are several ways to install Privoxy.
 
- tar xzvf privoxy-2.9.13-beta-src.tar.gz
- cd privoxy-2.9.13-beta
+To build Privoxy from source, autoconf and GNU make (gmake) are required.
+Source is available as gzipped tar archives. For this, first unpack the source:
 
- autoheader
- autoconf
- ./configure	(--help to see options)
- gmake        	(the make from gnu) 
- su 
- make -n install	(to see where all the files will go)
- make install		(to really install)
+ tar xzvf privoxy-2.9.13-beta-src* [.tgz or .tar.gz]                           
+ cd privoxy-2.9.13-beta                                                        
+                                                                               
 
-Redhat and SuSE src and binary RPMs can be built with 'make
-redhat-dist' or 'make suse-dist' (run ./configure first) from unpacked
-sources. BSD will (probably?) require gmake (from http://gnu.org). See
-the user-manual for OS/2 build instructions.
+For retrieving the current CVS sources, you'll need the CVS package installed
+first. Note CVS source is development quality, and may not be stable, or well
+tested. To download CVS source:
 
-Privoxy is also available via anonymous CVS:
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current 
+  cd current                                                                         
+                                                                                     
 
- cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
- cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current
+This will create a directory named current/, which will contain the source
+tree.
 
-This will create a directory named 'current'. Then, 'cd current', and
-then build as above.
+Then, in either case, to build from unpacked tarball or CVS source:
+
+ autoheader                                                                    
+ autoconf                                                                      
+ ./configure      (--help to see options)                                      
+ make             (the make from gnu, gmake for *BSD)                          
+ su                                                                            
+ make -n install  (to see where all the files will go)                         
+ make install     (to really install)                                          
+                                                                               
+
+Redhat and SuSE src and binary RPMs can be built with "make redhat-dist" or "
+make suse-dist" from unpacked sources. You will need to run "autoconf;
+autoheader; ./configure" beforehand. *BSD will require gmake (from http://
+gnu.org). See the user-manual for OS/2 build instructions.
+
+For binary RPM installation, and other platforms, see the user-manual as well.
 
 
  RUN
-----
+---- 
 
-privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] 
- [--user USER[.GROUP]] [config_file]
+privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] [--user USER
+[.GROUP]] [config_file]
 
 See the man page or user-manual for a brief explanation of each option.
 
-If no config_file is specified on the command line, Privoxy will look for 
-a file named 'config' in the current directory (except Win32 which will look
-for 'config.txt'). If no config_file is found, Privoxy will fail to start.
+If no config_file is specified on the command line, Privoxy will look for a
+file named 'config' in the current directory (except Win32 which will look for
+'config.txt'). If no config_file is found, Privoxy will fail to start.
 
 Or for Red Hat: /etc/rc.d/init.d/privoxy start
-Or for SuSE:   /etc/rc.d/privoxy start
+
+Or for SuSE: /etc/rc.d/privoxy start
 
 
  CONFIGURATION
---------------
+-------------- 
 
-See: 'config', 'default.action', and 'default.filter'. There are several 
-actions files included. These are all well commented. Most of the magic
-is in '*.action', and there are several of these included with varying degrees
-of aggressiveness. On Unix-like systems, these files are installed in
-/etc/privoxy.  On Windows, then wherever the executable itself is installed.
-There are many significant changes and advances since Junkbuster v2.0.x. The
-user-manual has a run down of configuration options, and examples:
-http://www.privoxy.org/user-manual/.
+See: 'config', 'default.action', and 'default.filter'. There are several
+actions files included. These are all well commented. Most of the magic is in '
+*.action', and there are several of these included with varying degrees of
+aggressiveness. On Unix-like systems, these files are installed in /etc/
+privoxy. On Windows, then wherever the executable itself is installed. There
+are many significant changes and advances since Junkbuster v2.0.x. The
+user-manual has a run down of configuration options, and examples: http://
+www.privoxy.org/user-manual/.
 
-Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or
-whatever you specify in the config file under 'listen-address'.
-DEFAULT is localhost:8118.
+Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or whatever
+you specify in the config file under 'listen-address'. DEFAULT is localhost:
+8118.
 
-The default.action file can be configured via the web interface accessed
-via http://p.p/, as well other options.
+The default.action file can be configured via the web interface accessed via
+http://p.p/, as well other options.
 
-All configuration files are subject to unannounced changes during the 
+All configuration files are subject to unannounced changes during the
 development process.
 
 
  DOCUMENTATION
 --------------
 
-There is a growing amount of documentation in the 'doc' subdirectory,
-but it is not completed at this point. In particular, see the
-user-manual there, the faq, and developers should look at developer-manual.
+There should be documentation in the 'doc' subdirectory, but it is not
+completed at this point. In particular, see the user-manual there, the faq, and
+those interested in Privoxy development, should look at developer-manual.
 
 The most up to date source of information on the current development version,
 may still be either comments in the source code, or the included configuration
-files, which are all well commented. These are 'config', '*.action', and
-'default.filter' in the toplevel source directory.
+files. The source and configuration files are all well commented. The main
+configuration files are: 'config', 'default.action', and 'default.filter' in
+the toplevel source directory. There are several *.action files included, with
+varying levels of aggressiveness.
 
 Included documentation may vary according to platform and packager.
 
@@ -155,38 +171,46 @@ Included documentation may vary according to platform and packager.
  CONTACTING THE DEVELOPERS, BUG REPORTING AND FEATURE REQUESTS
 --------------------------------------------------------------
 
-We value your feedback. However, to provide you with the best support,
-please note:
+We value your feedback. However, to provide you with the best support, please
+note:
+
+  *  Use the Sourceforge Support Forum to get help:
+       
+     http://sourceforge.net/tracker/?group_id=11118&atid=211118
+       
    
- * Use the support forum to get help:
-   http://sourceforge.net/tracker/?group_id=11118&atid=211118
- 
- * Submit bugs only thru our bug forum:
-   http://sourceforge.net/tracker/?group_id=11118&atid=111118 
-   
-   Make sure that the bug has not already been submitted. Please try
-   to verify that it is a Privoxy bug, and not a browser or site
-   bug first. If you are using your own custom configuration, please
-   try the stock configs to see if the problem is a configuration
-   related bug. And if not using the latest development snapshot,
-   please try the latest one. Or even better, CVS sources. Please 
-   be sure to include the Privoxy/Junkbuster version, platform, 
-   browser, any pertinent log data, any other relevant details 
-   (please be specific) and, if possible, some way to reproduce the 
-   bug.
- 
- * Submit feature requests only thru our feature request forum:
-   http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
+  *  Submit bugs only through our Sourceforge Bug Forum:
      
-For any other issues, feel free to use the mailing lists:
-http://sourceforge.net/mail/?group_id=11118
+     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
+        
    
-Anyone interested in actively participating in development and related
-discussions can join the appropriate mailing list here:
-http://sourceforge.net/mail/?group_id=11118. Archives are available
-here too.
+    Make sure that the bug has not already been submitted. Please try to verify
+    that it is a Privoxy bug, and not a browser or site bug first. If you are
+    using your own custom configuration, please try the stock configs to see if
+    the problem is a configuration related bug. And if not using the latest
+    development snapshot, please try the latest one. Or even better, CVS
+    sources. Please be sure to include the Privoxy/Junkbuster version,
+    platform, browser, any pertinent log data, any other relevant details
+    (please be specific) and, if possible, some way to reproduce the bug.
+   
+  *  Submit feature requests only through our Sourceforge feature request 
+     forum:
+     
+     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
+       
+   
+  *  For any other issues, feel free to use the mailing lists:
+     
+     http://sourceforge.net/mail/?group_id=11118.
+     
+   
+    Anyone interested in actively participating in development and related
+    discussions can also join the appropriate mailing list. Archives are
+    available too.
+   
+ -------------------------------------------------------------------------
+ ijbswa-developers@lists.sourceforge.net
+ 
 
--------------------------------------------------------------------------
-ijbswa-developers@lists.sourceforge.net
+$Id: readme.sgml,v 1.1 2002/04/03 06:01:41 hal9 Exp $
 
-$Id: README,v 1.22 2002/03/27 01:06:40 hal9 Exp $
