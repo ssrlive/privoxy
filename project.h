@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.31 2001/09/16 13:20:29 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.32 2001/09/16 23:02:51 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.32  2001/09/16 23:02:51  jongfoster
+ *    Fixing warning
+ *
  *    Revision 1.31  2001/09/16 13:20:29  jongfoster
  *    Rewrite of list library.  Now has seperate header and list_entry
  *    structures.  Also added a large sprinking of assert()s to the list
@@ -304,7 +307,7 @@
 extern "C" {
 #endif
 
-#define freez(X)  if(X) free(X); X = NULL
+#define freez(X)  { if(X) { free(X); X = NULL ; } }
 
 #define BUFFER_SIZE 5000
 
