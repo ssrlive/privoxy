@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.6 2001/09/24 14:10:32 hal9 Exp $
+ $Id: user-manual.sgml,v 1.7 2001/09/24 14:31:36 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.6 2001/09/24 14:10:32 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.7 2001/09/24 14:31:36 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -78,54 +78,14 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  point. The most up to date reference for the time being is still the comments
  in the source files and in the individual configuration files. Development
  of version 3.0 is currently underway, and includes significant changes and
- enhancements over earlier verions.
+ enhancements over earlier verions. The target release date for stable v3.0 is 
+ December 2001.
 </para>
 
 <para>
- Since this is a development version, there <emphasis>are</emphasis> bugs!
+ Since this is a development version, there <emphasis>are</emphasis> bugs! 
 </para>
 
-<!--   ~~~~~       New section      ~~~~~     -->
-
-<sect2>
-<title>License</title>
-<para>
- <application>Internet Junkbuster</application> is free software; you can
- redistribute it and/or modify it under the terms of the GNU General Public
- License as published by the Free Software Foundation; either version 2 of the
- License, or (at your option) any later version.
-</para>
-
-<para>
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- details, which is available from <ulink
- url="http://www.gnu.org/copyleft/gpl.html">the Free Software Foundation,
- Inc</ulink>, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-</para>
-
-</sect2>
-
-<!--  ~  End section  ~  -->
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-
-<sect2>
-<title>History</title>
-<para>
- <application>Junkbuster</application> was originally written by Anonymouse 
- Coders and <ulink
- url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBusters
- Corporation</ulink>, and was released as free open-source software under the
- GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
- Waldherr</ulink> made many improvements, and started the <ulink
- url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
- rekindle development. The last stable release was v2.0.2.
-</para>
-
-</sect2>
 
 </sect1>
 
@@ -141,7 +101,8 @@ You can find the latest version of the user manual at  <ulink url="http://ijbswa
  for current releases. <application>Junkbuster</application> is also available
  via <ulink
  url="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/">CVS</ulink>.
- This is the recommended approach at this time.
+ This is the recommended approach at this time. But please be aware that CVS 
+ is constantly changing, and it may break in mysterious ways.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -342,8 +303,17 @@ configuration section below.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-other"><title>Other</title>
-<para>I need help on this too. What others?
+<para>
+ Some quick notes on other Operating Systems.
 </para>
+
+<para>
+ For FreeBSD (and other *BSDs?), the build will need <command>gmake</command> 
+ instead of the included <command>make</command>. <command>gmake</command> is
+ available from <ulink url="http://www.gnu.org">http://www.gnu.org</ulink>.
+ The rest should be the same as above for Linux/Unix.
+</para>
+
 </sect2>
 
 </sect1>
@@ -2462,27 +2432,116 @@ Removed references to Win32. HB 09/23/01
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
-<para>To be filled.
+<para>
+ Install package, then run and enjoy! Be sure your browser is set to use 
+ the proxy which is by default at localhost, port 8000. With 
+ <application>Netscape</application> (and <application>Mozilla</application>),
+ this can be set under <literal>Edit -&gt; Preferences -&gt; Advanced -&gt;
+ Proxies -&gt; HTTP Proxy</literal>. For <application>Internet
+ Explorer</application>: <literal>Internet Properties -&gt; Connections -&gt;
+ LAN Setting</literal>. Then, check <quote>Use Proxy</quote> and fill in the 
+ appropriate info (Address: localhost, Port: 8000).
 </para>
+
+<para>
+ The included default configuration files should give a reasonable starting
+ point, though may be aggressive in blocking junk. You will probably want to
+ keep an eye out for sites that require cookies, and add these to
+ <filename>actionsfile</filename> as needed. By default, most of these will be
+ blocked until you add them to the configuration. If you want the browser to
+ handle this, you will need to edit <filename>actionsfile</filename> and
+ disable this feature. 
+</para>
+
+<para>
+ If you enter counter problems, please verify it is a
+ <application>Junkbuster</application> bug, by disabling
+ <application>Junkbuster</application>, and then trying the same page. 
+ Before reporting it as a bug, see if there is not a configuration 
+ option that is enabled that is causing the page not to load. You can 
+ then add an exception for that page or site. If a bug, please report it to
+ the developers (see below). 
+</para>
+
 </sect1>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="contact"><title>Contact the developers</title>
-<para>To be filled. mention the support forums as the primary channel of
+<sect1 id="contact"><title>Contact the Developers</title>
+<para>
+<!--
+To be filled. mention the support forums as the primary channel of
 communication (bugs, feature requests, etc.)
+-->
+ Feature requests and other questions should be posted to the <ulink
+ url="http://sourceforge.net/forum/?group_id=11118">Support Forums</ulink> at
+ SourceForge. There is also an archive there.
 </para>
+
+<para>
+ Anyone interested in actively participating in development and related 
+ discussions can join the appropriate mailing list  
+ <ulink url="http://sourceforge.net/mail/?group_id=11118">here</ulink>.
+ Archives are available here too.
+</para>
+
+<para>
+ Please report bugs, using the form at 
+ <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">Sourceforge</ulink>.
+</para>
+
 </sect1>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="copyright"><title>Copyright and History</title>
-<para>To be filled.
+
+<sect2>
+<title>License</title>
+<para>
+ <application>Internet Junkbuster</application> is free software; you can
+ redistribute it and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation; either version 2 of the
+ License, or (at your option) any later version.
 </para>
+
+<para>
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ details, which is available from <ulink
+ url="http://www.gnu.org/copyleft/gpl.html">the Free Software Foundation,
+ Inc</ulink>, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+</para>
+
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>History</title>
+<para>
+ <application>Junkbuster</application> was originally written by Anonymous 
+ Coders and <ulink
+ url="http://www.junkbusters.com/ht/en/ijbfaq.html">JunkBusters
+ Corporation</ulink>, and was released as free open-source software under the
+ GNU GPL. <ulink url="http://www.waldherr.org/junkbuster/">Stefan
+ Waldherr</ulink> made many improvements, and started the <ulink
+ url="http://sourceforge.net/projects/ijbswa/">SourceForge project</ulink> to
+ rekindle development. The last stable release was v2.0.2, which has now 
+ grown whiskers ;-),
+</para>
+
+</sect2>
+
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="seealso"><title>See also</title>
-<para>To be filled.
+<para>To be filled. What should go here :/
 </para>
 </sect1>
 
@@ -2496,7 +2555,7 @@ communication (bugs, feature requests, etc.)
 <sect2 id="regex">
 <title>Regular Expressions</title>
 <para>
- WIP
+ Some expressions are regular, and some are not. 
 </para>
 
 </sect2>
@@ -2524,12 +2583,13 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
-<<<<<<< user-manual.sgml
-=======
+ 
+ Revision 1.7  2001/09/24 14:31:36  hal9
+ Diddling.
+
  Revision 1.6  2001/09/24 14:10:32  hal9
  Including David's OS/2 installation instructions.
 
->>>>>>> 1.6
  Revision 1.2  2001/09/13 15:27:40  swa
  cosmetics
 
