@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.14 2001/09/16 11:38:02 jongfoster Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.15 2001/09/16 15:02:35 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,10 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.15  2001/09/16 15:02:35  jongfoster
+ *    Adding i.j.b/robots.txt.
+ *    Inlining add_stats() since it's only ever called from one place.
+ *
  *    Revision 1.14  2001/09/16 11:38:02  jongfoster
  *    Splitting fill_template() into 2 functions:
  *    template_load() loads the file
@@ -110,28 +114,6 @@ extern "C" {
 extern struct http_response *dispatch_cgi(struct client_state *csp);
 extern struct map *parse_cgi_parameters(char *argstring);
 
-/*
- * CGI functions
- */
-extern int cgi_default             (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_robots_txt          (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_send_banner         (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_status         (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_url_info       (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-extern int cgi_show_version        (struct client_state *csp,
-                                    struct http_response *rsp,
-                                    struct map *parameters);
-
 /* Not exactly a CGI */
 extern struct http_response * error_response(struct client_state *csp,
                                              const char *templatename,
@@ -146,12 +128,14 @@ extern void free_http_response(struct http_response *rsp);
 extern struct http_response *finish_http_response(struct http_response *rsp);
 
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
-extern void map_block_killer(struct map *map, const char *name);
-extern void map_conditional(struct map *exports, const char *name, int choose_first);
+
+extern void map_block_killer (struct map *exports, const char *name);
+extern void map_conditional  (struct map *exports, const char *name, int choose_first);
 
 extern char *template_load(struct client_state *csp, const char *templatename);
 extern void template_fill(char ** template_ptr, struct map *exports);
 
+extern void get_http_time(int time_offset, char * buf);
 
 /*
  * Text generators
