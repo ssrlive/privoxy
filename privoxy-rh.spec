@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.23 2002/04/10 18:14:45 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.24 2002/04/11 10:09:20 oes Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -66,7 +66,7 @@ Privoxy is based on the Internet Junkbuster.
 %build
 autoheader
 autoconf
-%configure
+%configure --disable-dynamic-pcre
 make 
 # Docs are in CVS and tarball now.
 #%%make dok
@@ -266,6 +266,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Tue Apr 16 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.13-6
+- Add --disable-dynamic-pcre to configure.
+
 * Wed Apr 10 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.13-5
 - Relisting template files on the %%files section
@@ -564,6 +568,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.24  2002/04/11 10:09:20  oes
+# Version 2.9.14
+#
 # Revision 1.23  2002/04/10 18:14:45  morcego
 # - (privoxy-rh.spec only) Relisting template files on the %%files section
 # - (configure.in, privoxy-rh.spec) Bumped package release to 5
