@@ -8,17 +8,20 @@
 
 Responsible persons for releasing packages are ...
 
-Amiga .......: joergs@users.sf.net
-Debian ......: roro@users.sf.net 
+Amiga .......: Jörg Strohmayer   <joergs@users.sf.net>         (joergs)
+Debian ......: Roland Rosenfeld  <roro@users.sf.net>           (roro)
 FreeBSD .....: ? 
-HP-UX .......: bart1803@users.sf.net 
-Mac OSX .....: david__schmidt@users.sf.ne 
+HP-UX .......: Schelstraete Bart <bart1803@users.sf.net>       (bart1803)
+Mac OSX .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
 NetBSD ......: ? 
-OS/2 ........: david__schmidt@users.sf.ne 
-RedHat ......: privoxy@darkover.org, Karsten.Hopp@redhat.de, hal@foobox.net
-RedHat 6.x ..: Karsten.Hopp@redhat.de
-Solaris .....: bart1803@users.sf.net 
-SuSE ........: stefan@waldherr.org 
-Windows .....: jon@jon-foster.co.uk, gliptak@users.sourceforge.net
- 
- 
+OS/2 ........: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
+RedHat ......: Rodrigo Barbosa   <privoxy@darkover.org>        (morcego)
+               Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
+               Hal Burgiss       <hal@foobox.net>              (hal9)
+RedHat 6.x ..: Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
+Solaris .....: Schelstraete Bart <bart1803@users.sf.net>       (bart1803)
+SuSE ........: Stephan Waldherr  <stefan@waldherr.org>         (swa)
+Windows .....: Jon Foster        <jon@jon-foster.co.uk>        (jongfoster)
+               Gábor Lipták      <gliptak@users.sf.net>        (gliptak)
+
+
