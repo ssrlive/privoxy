@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.22 2001/10/19 00:20:03 david__schmidt Exp $
+# $Id: config,v 1.23 2001/10/21 20:25:20 steudten Exp $
 #
 
 #  Table of Contents
@@ -300,6 +300,36 @@ toggle 1
 #  Default: 4069, i.e. 4 MB
 #
 buffer-limit 4069
+
+
+#
+#  Enable the web-based actionsfile editor.  Set to 1 to enable,
+#  0 to disable.  Note that you must have compiled JunkBuster
+#  with support for this feature, otherwise this option has no
+#  effect.
+#
+#  Security note:  If this is enabled, anyone who can use the proxy
+#  can edit the actions file, and their changes will affect all users.
+#  For shared proxies, you probably want to disable this.
+#
+#  Default: Disabled
+#
+enable-edit-actions 1
+
+
+#
+#  Allow JunkBuster to be toggled on and off remotely, using your
+#  web browser.  Set to 1 to enable, 0 to disable.  Note that you
+#  must have compiled JunkBuster with support for this feature,
+#  otherwise this option has no effect.
+#
+#  Security note:  If this is enabled, anyone who can use the proxy
+#  can toggle it on or off, and their changes will affect all users.
+#  For shared proxies, you probably want to disable this.
+#
+#  Default: Disabled
+#
+enable-remote-toggle 1
 
 #############################################################################
 # Access Control List
