@@ -43,6 +43,10 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.init,v $
+#     Revision 1.7  2002/04/08 14:54:51  morcego
+#     Moved the chkconfig comments to the begining of the file, couse Linuxconf
+#     was getting confused with it where it was.
+#
 #     Revision 1.6  2002/03/26 22:29:55  swa
 #     we have a new homepage!
 #
@@ -170,39 +174,39 @@
 #  Check that networking is up.
 [ ${NETWORKING} = "no" ] && exit 0
 
-JB_PRG="privoxy"
-JB_BIN="/usr/sbin/$JB_PRG"
-JB_CONF="/etc/$JB_PRG/config"
-JB_USER="privoxy"
-JB_PID=/var/run/$JB_PRG.pid
-JB_LOCK=/var/lock/subsys/$JB_PRG
-JB="$JB_BIN --user $JB_USER.$JB_USER --pidfile $JB_PID $JB_CONF"
+PRIVOXY_PRG="privoxy"
+PRIVOXY_BIN="/usr/sbin/$PRIVOXY_PRG"
+PRIVOXY_CONF="/etc/$PRIVOXY_PRG/config"
+PRIVOXY_USER="privoxy"
+PRIVOXY_PID=/var/run/$PRIVOXY_PRG.pid
+PRIVOXY_LOCK=/var/lock/subsys/$PRIVOXY_PRG
+PRIVOXY="$PRIVOXY_BIN --user $PRIVOXY_USER.$PRIVOXY_USER --pidfile $PRIVOXY_PID $PRIVOXY_CONF"
 
 # some checks for us
-! [ -x $JB_BIN  ] && echo "Can't find $JB_BIN, exit." && exit 0
-! [ -f $JB_CONF ] && echo "Can't find $JB_CONF, exit." && exit 0
+! [ -x $PRIVOXY_BIN  ] && echo "Can't find $PRIVOXY_BIN, exit." && exit 0
+! [ -f $PRIVOXY_CONF ] && echo "Can't find $PRIVOXY_CONF, exit." && exit 0
 
 # See how we were called.
 
 start () {
 	# start daemon
-	echo -n $"Starting $JB_PRG: "
-     if [ -f $JB_PID ]; then 
-        killproc $JB_PRG && rm -f $JB_LOCK $JB_PID
+	echo -n $"Starting $PRIVOXY_PRG: "
+     if [ -f $PRIVOXY_PID ]; then 
+        killproc $PRIVOXY_PRG && rm -f $PRIVOXY_LOCK $PRIVOXY_PID
         RETVAL=$?
         [ $RETVAL != 0 ] && return $RETVAL
      fi
-	daemon $JB 
+	daemon $PRIVOXY
 	RETVAL=$?
 	echo
-	[ $RETVAL = 0 ] && touch $JB_LOCK
+	[ $RETVAL = 0 ] && touch $PRIVOXY_LOCK
 	return $RETVAL
 }
 
 stop () {
 	# stop daemon
-	echo -n $"Stopping $JB_PRG: "
-	killproc $JB_PRG && rm -f $JB_LOCK $JB_PID
+	echo -n $"Stopping $PRIVOXY_PRG: "
+	killproc $PRIVOXY_PRG && rm -f $PRIVOXY_LOCK $PRIVOXY_PID
 	RETVAL=$?
 	echo
 	return $RETVAL
@@ -216,8 +220,8 @@ case "$1" in
 	stop
 	;;
   reload)
-	if [ -f $JB_PID ] ; then
-        kill -HUP `cat $JB_PID`
+	if [ -f $PRIVOXY_PID ] ; then
+        kill -HUP `cat $PRIVOXY_PID`
         RETVAL=$?
      fi
 	;;
@@ -228,27 +232,27 @@ case "$1" in
 	;;
   condrestart)
 	# restart only if already running
-	if [ -f $JB_PID ] ; then
+	if [ -f $PRIVOXY_PID ] ; then
         stop
         start
         RETVAL=$?
 	fi 
 	;;
   status)
-	status $JB_PRG 
+	status $PRIVOXY_PRG 
 	RETVAL=$?
 	;;
   top)
-     if [ -f $JB_PID ]; then
+     if [ -f $PRIVOXY_PID ]; then
                 a=""
-                for i in `pidof $JB_PRG` ; do
+                for i in `pidof $PRIVOXY_PRG` ; do
                         a="$a -p $i"
                 done
                 top $a
      fi
 	;;
   *)
-	echo $"Usage: $JB_PRG {start|stop|reload|restart|condrestart|status|top}"
+	echo $"Usage: $PRIVOXY_PRG {start|stop|reload|restart|condrestart|status|top}"
 	exit 1
 esac
 
