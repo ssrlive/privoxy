@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = "Privoxy 3.1.1"
 PROJECT_NUMBER         = 
-OUTPUT_DIRECTORY       = "dox"
+OUTPUT_DIRECTORY       = dox
 OUTPUT_LANGUAGE        = English
 EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = NO
@@ -51,13 +51,17 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "../src/"
+INPUT                  = ../src/
 FILE_PATTERNS          = *.c \
                          *.h
 RECURSIVE              = NO
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = config.h
+EXCLUDE_PATTERNS       = config.h \
+                         actionlist.h \
+                         w32res.h \
+                         pcrs.c \
+                         pcrs.h
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
@@ -128,7 +132,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = YES
+GENERATE_XML           = NO
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output
 #---------------------------------------------------------------------------
@@ -136,7 +140,7 @@ GENERATE_AUTOGEN_DEF   = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the preprocessor   
 #---------------------------------------------------------------------------
-ENABLE_PREPROCESSING   = NO
+ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
