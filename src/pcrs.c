@@ -1,8 +1,8 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.19 2002/03/08 14:47:48 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
 
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/pcrs.c,v $
  *
  * Purpose     :  pcrs is a supplement to the pcre library by Philip Hazel
  *                <ph10@cam.ac.uk> and adds Perl-style substitution. That
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.19 2002/03/08 14:47:48 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.19  2002/03/08 14:47:48  oes
  *    Cosmetics
  *
@@ -716,8 +719,8 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
  *
  * Returns     :  On success, the number of substitutions that were made.
  *                 May be > 1 if job->flags contained PCRS_GLOBAL
- *                On failiure, the (negative) pcre error code describing the
- *                 failiure, which may be translated to text using pcrs_strerror().
+ *                On failure, the (negative) pcre error code describing the
+ *                 failure, which may be translated to text using pcrs_strerror().
  *
  *********************************************************************/
 int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, char **result, size_t *result_length)
@@ -773,8 +776,8 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
  *
  * Returns     :  On success, the number of substitutions that were made.
  *                 May be > 1 if job->flags contained PCRS_GLOBAL
- *                On failiure, the (negative) pcre error code describing the
- *                 failiure, which may be translated to text using pcrs_strerror().
+ *                On failure, the (negative) pcre error code describing the
+ *                 failure, which may be translated to text using pcrs_strerror().
  *
  *********************************************************************/
 int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **result, size_t *result_length)
@@ -868,7 +871,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
       else
          offset = offsets[1];
    }
-   /* Pass pcre error through if (bad) failiure */
+   /* Pass pcre error through if (bad) failure */
    if (submatches < PCRE_ERROR_NOMATCH)
    {
       free(matches);

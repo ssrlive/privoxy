@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 2.1 2002/06/04 17:22:37 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 2.0 2002/06/04 14:34:21 jongfoste
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 2.1  2002/06/04 17:22:37  jongfoster
+ *    Adding comments
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -820,7 +823,7 @@ int simplematch(char *pattern, char *text)
       }
       else
       {
-         /* In wildcard mode, just try again after failiure */
+         /* In wildcard mode, just try again after failure */
          if(wildcard)
          {
             pat = fallback;
@@ -855,7 +858,7 @@ int simplematch(char *pattern, char *text)
  *          1  :  string = string to be duplicated
  *          2  :  len = number of bytes to duplicate
  *
- * Returns     :  pointer to copy, or NULL if failiure
+ * Returns     :  pointer to copy, or NULL if failure
  *
  *********************************************************************/
 char *bindup(const char *string, size_t len)
