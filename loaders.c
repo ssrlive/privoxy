@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.48 2002/04/05 00:56:09 gliptak Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.49 2002/04/19 16:53:25 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.48 2002/04/05 00:56:09 gliptak Ex
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.49  2002/04/19 16:53:25  jongfoster
+ *    Optimize away a function call by using an equivalent macro
+ *
  *    Revision 1.48  2002/04/05 00:56:09  gliptak
  *    Correcting typo to clean up on realloc failure
  *
@@ -331,6 +334,7 @@ void sweep(void)
 {
    struct file_list *fl, *nfl;
    struct client_state *csp, *ncsp;
+   int i;
 
    /* clear all of the file's active flags */
    for ( fl = files->next; NULL != fl; fl = fl->next )
@@ -351,9 +355,12 @@ void sweep(void)
           */
          ncsp->config->config_file_list->active = 1;
 
-         if (ncsp->actions_list)     /* actions files */
+         for (i = 0; i < MAX_ACTION_FILES; i++)
          {
-            ncsp->actions_list->active = 1;
+            if (ncsp->actions_list[i])     /* actions files */
+            {
+               ncsp->actions_list[i]->active = 1;
+            }
          }
 
          if (ncsp->rlist)     /* pcrsjob files */
