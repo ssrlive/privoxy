@@ -1,7 +1,7 @@
-#  Sample Configuration file for the Internet Junkbuster 2.0
+#  Sample Configuration file for the Internet Junkbuster 2.9.x
 
 #
-# $Id: config,v 1.13 2001/06/04 18:31:58 swa Exp $
+# $Id: config,v 1.14 2001/06/08 00:25:01 jongfoster Exp $
 #
 
 #  Table of Contents
@@ -40,12 +40,12 @@
 #  you can make it a comment and it will be treated as if it weren't there. 
 #  This is called "commenting out" an option and can be useful to turn
 #  off features: If you comment out the "logfile" line, junkbuster will
-#  not log at all. Watch for the "default:" section in each explanation
-#  to see what happens if the option is left unset (or commented out). 
+#  not log to a file at all. Watch for the "default:" section in each 
+#  explanation to see what happens if the option is left unset (or 
+#  commented out). 
 #
 #  Long lines can be continued on the next line by using a `\' as
-#  the last character. This also works if comments are present in
-#  between.
+#  the last character.
 #  
 
 #
@@ -61,34 +61,34 @@
 #  files in the current working directory.  In either case, an
 #  absolute path name can be used to avoid problems.
 
-# While we go modular and multiuser, the blocker, filter, and 
-# per-user config will be stored in subdirectories of confdir.
-# Now, only confdir/templates is used for storing HTML templates
-# for CGI results.
+#  While we go modular and multiuser, the blocker, filter, and 
+#  per-user config will be stored in subdirectories of confdir.
+#  Now, only confdir/templates is used for storing HTML templates
+#  for CGI results.
 #
-# No trailing /, please.
+#  No trailing /, please.
 confdir .
 
 #
-# The directory where all logging (i.e. logfile and jarfile) takes place
-# No trailing /, please.
+#  The directory where all logging (i.e. logfile and jarfile) takes place
+#  No trailing /, please.
 #
 logdir .
 
 #
-# Note that all file specifications below are relative to 
-# the above two directories!!!
+#  Note that all file specifications below are relative to 
+#  the above two directories!!!
 #
 
-#  The permissions file contains patterns to specify the
-#  filtering rules to apply to each site.
+#  The actions file contains patterns to specify the
+#  actions to apply to requests for each site.
 #
 #  Default: Cookies to and from all destinations are filtered.
 #           Popups are disabled for all sites.
 #           All sites are filtered if re_filterfile specified.
 #           No sites are blocked.  Nothing is an image.
 #
-permissionsfile permissionsfile
+actionsfile actionsfile
 
 #
 #  The re_filterfile contains content modification rules.  These rules
@@ -129,6 +129,32 @@ logfile      logfile
 #
 #jarfile     jarfile
 
+#
+#  If you specify a trustfile, Junkbuster will only allow access
+#  to sites that are named in the trustfile. You can also mark
+#  sites as trusted referrers, with the effect that access to
+#  untrusted sites will be granted, if a link from a trusted
+#  referrer was used. The link target will then be added to the
+#  trustfile.
+#  Note that this is a very restrictive feature that typical users
+#  most propably want to leave disabled.
+#
+#  Default: Don't use the trust mechanism
+#
+#trustfile trust
+
+#
+#  If you use the trust mechanism, it is a good idea to write up
+#  some online documentation about your blocking policy and to
+#  specify the URL(s) here. They will appear on the page that
+#  your users receive when they try to access untrusted content.
+#  Use multiple times for multiple URLs.
+#
+#  Default: Don't display links on the "untrusted" info page.
+#
+trust-info-url http://www.your-site.com/why_we_block.html
+trust-info-url http://www.your-site.com/what_we_allow.html
+
 
 #
 #  4. OPTIONS
@@ -136,6 +162,25 @@ logfile      logfile
 #  This part of the configuration file contains options that control
 #  how Junkbuster operates.
 #
+
+#
+#  Admin-address should be set to the email address of the proxy
+#  administrator. It is used in many of the proxy-generated pages.
+#
+#  Default: fill@me.in.please
+#
+#admin-address fill@me.in.please
+
+#
+#  Proxy-info-url can be set to a URL that contains more info about
+#  this junkbuster installation, it's configuration and policies.
+#  It is used in many of the proxy-generated pages and its use is
+#  highly recommended, since your users will want to know why certain
+#  content is blocked or modified.
+#
+#  Default: Don't show a link to online documentation
+#
+proxy-info-url http://www.your-site.com/proxy.html
 
 #
 #  Listen-address specifies the address and port where Junkbuster will
@@ -449,7 +494,7 @@ toggle 1
 #   forward .ukc.ac.uk            . # Anything on the same domain as us
 #   forward *                     . # Host with no domain specified
 #   forward 129.12.*.*            . # A dotted IP on our /16 network.
-#   forward 128.*.*.*             . # Loopback address
+#   forward 127.*.*.*             . # Loopback address
 #   forward localhost.localdomain . # Loopback address
 #   forward www.ukc.mirror.ac.uk  . # Specific host
 #
