@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.12 2001/08/18 11:35:00 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.13 2001/09/06 14:05:59 oes Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.12 2001/08/18 11:35:00 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.13  2001/09/06 14:05:59  oes
+ *    Fixed silly bug
+ *
  *    Revision 1.12  2001/08/18 11:35:00  oes
  *    - Introduced pcrs_strerror()
  *    - made some NULL arguments non-fatal
@@ -268,7 +271,7 @@ pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialfl
       *errptr = PCRS_ERR_NOMEM;
       return NULL;
    }
-   memset(r, '\0', length + 1);
+   memset(text, '\0', length + 1);
    
 
    /*
