@@ -1,0 +1,329 @@
+# Note:  Makefile is built automatically from Makefile.in
+#
+# $Id: Makefile.in,v 1.0 2002/05/28 09:16:15 oes Exp $
+#
+# Location: doc/source/Makefile.in 
+# Purpose: Build documentation
+#
+# Written by and Copyright (C) 2002 the Privoxy
+# team. http://www.privoxy.org/
+#
+# This program is free software; you can redistribute it 
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
+#
+# The GNU General Public License should be included with
+# this file.  If not, you can view it at
+# http://www.gnu.org/copyleft/gpl.html
+# or write to the Free Software Foundation, Inc., 59
+# Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+
+#############################################################################
+# Set make command correctly
+#############################################################################
+@SET_MAKE@
+
+#############################################################################
+# Version number (for RPM)
+#############################################################################
+
+VERSION_MAJOR = @VERSION_MAJOR@
+VERSION_MINOR = @VERSION_MINOR@
+VERSION_POINT = @VERSION_POINT@
+CODE_STATUS   = @CODE_STATUS@
+VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
+
+#############################################################################
+# Build tools
+#############################################################################
+
+PROGRAM    = privoxy@EXEEXT@
+ECHO       = echo
+INSTALL    = @INSTALL@
+RM         = rm -fr
+SED	      = sed
+CAT        = cat
+MV	      = mv -f
+WDUMP      = @WDUMP@ -dump
+JADECAT    = @JADECAT@
+JADEBIN    = @JADEBIN@
+DOC_STATUS = @DOC_STATUS@
+MAN2HTML   = @MAN2HTML@
+# Note: Please make sure that -d ldp.dsl\#html stays the last option to
+#       $(JADEBIN), because for some targets "-notoc" will be appended
+#       to it (--> "ldp.dsl\#html-notoc"). 
+DB         = $(JADEBIN) $(JADECAT) $(DOC_STATUS) -ihtml -t sgml  -D.. -d ldp.dsl\#html
+G2H_CMD    = groff -mandoc -Thtml
+TARGET_OS  = @host@
+PERL       = perl
+DOC_DIR    = .
+DOC_TMP    = $(DOC_DIR)/tmp
+ROOT		 = ../..
+DOK_WEB_USEM=$(ROOT)/webserver/user-manual
+
+DOC_FILES = AUTHORS LICENSE README ChangeLog \
+		`find ../text/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` \
+		`find ../webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html"` \
+		`find ../webserver/ -name "*.css"` \
+                $(ROOT)/privoxy.1
+
+#############################################################################
+# Phony targets
+#############################################################################
+.PHONY: all dok webserver dok-webserver clean dok-clean clobber ensure-wdump \
+ensure-jadebin ensure-dkprefix user dok-user devel dok-devel faq dok-faq \
+readme dok-readme authors dok-authors index dok-index webserver dok-webserver \
+man dok-man man2html manuals dok-release dok-pdf dok-pdf2 announce config-file
+#############################################################################
+#
+# Documentation
+#
+# converts *.sgml into html, text and man pages
+#
+#############################################################################
+#
+# Build the Manuals, etc            #########################################
+# This does not build _all_ targets #########################################
+all: dok-release dok-user dok-devel dok-faq dok-index dok-readme dok-authors dok-clean
+	@$(ECHO) Documentation created.
+
+# Shortcuts. Use these targets.
+clean: dok-clean
+index: dok-release dok-webserver dok-index dok-clean
+user: dok-release dok-user dok-clean
+devel: dok-release dok-devel dok-clean
+faq: dok-release dok-faq dok-clean
+manuals: dok-release dok-user dok-devel dok-faq dok-clean
+readme: dok-release dok-readme dok-clean
+webserver: dok-release dok-webserver dok-clean
+man: dok-release dok-man dok-clean
+authors: dok-release dok-authors dok-clean
+
+# 3 checks to make sure docs will be generated
+ensure-wdump:
+ifeq (@WDUMP@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; one of w3m, links, or lynx must be installed."
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
+ensure-jadebin:
+ifeq (@JADEBIN@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; one of openjade or jade must be installed"
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
+ensure-dkprefix:
+ifeq (@DKPREFIX@,false)
+	@$(ECHO)
+	@$(ECHO) "Cannot build docs; cannot find docbook-dsssl stylesheets"
+	@$(ECHO) "You should install the appropriate package and rerun ./configure"
+	@exit 1
+endif
+
+# user manual
+dok-user: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd $(DOC_TMP) && $(RM) * && $(DB) -iuser-man ../user-manual.sgml && cd .. && \
+	$(RM) ../webserver/user-manual/*.html && cp $(DOC_TMP)/*.html ../webserver/user-manual/
+	$(DB) -iuser-man -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt
+
+# developer manual
+dok-devel: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd $(DOC_TMP) && $(RM) * && $(DB) ../developer-manual.sgml && cd .. && \
+	$(RM) ../webserver/developer-manual/*.html && cp -f $(DOC_TMP)/*.html ../webserver/developer-manual/
+	$(DB) -V nochunks developer-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/developer-manual.txt
+
+# faq
+dok-faq: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd $(DOC_TMP) && $(RM) * && $(DB) ../faq.sgml && cd .. && \
+	$(RM) ../webserver/faq/*.html && cp $(DOC_TMP)/*.html ../webserver/faq/
+	$(DB) -V nochunks faq.sgml > tmp.html && $(WDUMP) tmp.html > ../text/faq.txt 
+
+# man page, using one variant of man2html that reads page from stdin.
+dok-man-suse: ensure-dkprefix ensure-jadebin ensure-wdump dok-release
+	$(RM) ../webserver/man-page/*.html
+ifneq ($(MAN2HTML),false)
+	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > \
+	 ../webserver/man-page/privoxy-man-page.html
+	man $(ROOT)/privoxy.1 | $(MAN2HTML) -bare >> ../webserver/man-page/privoxy-man-page.html
+	$(ECHO) "</body></html>" >> ../webserver/man-page/privoxy-man-page.html
+else
+	$(MAKE) groff2html
+endif
+
+# readme page
+dok-readme: ensure-dkprefix ensure-jadebin ensure-wdump
+	$(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
+	$(WDUMP) tmp.html > $(ROOT)/README
+
+# index.sgml is used to create both the Home Page, and a local index
+# for documentation (privoxy-index.html), etc.
+#
+# index.html for webserver:
+dok-webserver: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd webserver && $(DB)-notoc -ip-homepage -V nochunks index.sgml > ../../webserver/index.html
+	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
+     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
+	s/\.\d\. //'\
+     ../webserver/index.html
+
+# privoxy-index.html for local documentation:
+dok-index: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd webserver && $(DB)-notoc -ip-index -V nochunks index.sgml > ../../webserver/privoxy-index.html
+	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
+     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
+	s/\.\d\. //'\
+     ../webserver/privoxy-index.html 
+
+## Make AUTHORS file
+dok-authors: ensure-dkprefix ensure-jadebin ensure-wdump
+	$(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
+	  tmp.html > ../../AUTHORS
+
+# make a man page, and then (lousy) HTML version.
+# Requires docbook2man (short perl script), see comments 
+# in privoxy-man-page.sgml. This target is not invoked from other dok targets.
+# It is built separately due to dependencies on off-beat perl scripts.
+dok-man: ensure-dkprefix ensure-jadebin ensure-wdump
+	cd $(DOC_TMP) && $(RM) * && docbook2man ../privoxy-man-page.sgml &&\
+	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	cd $(DOC_TMP) && $(DB) ../privoxy-man-page.sgml &&\
+	$(MV) -f index.html privoxy-man-page.html
+     # This html is not used. See make man2html.
+	$(MV) -f $(DOC_TMP)/privoxy.1 $(ROOT)/privoxy.1
+	$(MAKE) man2html
+
+# For those with man2html ala RH7's.
+man2html: ensure-dkprefix ensure-jadebin ensure-wdump
+ifneq ($(MAN2HTML),false)
+	$(MAN2HTML) $(ROOT)/privoxy.1 |grep -v "^Content-type" > tmp.html
+	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
+	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
+# Get rid of spurious  from conversion. (How to do this with perl?)
+	$(SED) -e 's///g' tmp.html > ../webserver/man-page/privoxy-man-page.html
+else
+	$(MAKE) groff2html
+endif
+
+# Otherwise we get plain groff conversion.
+groff2html:
+	$(G2H_CMD) $(ROOT)/privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' >\
+	../webserver/man-page/privoxy-man-page.html
+
+# Write VERSION and CODE_STATUS to tmp files so they can be read into the doc
+# processing. This needs to go before any doc building (doh).
+dok-release:
+	@$(ECHO) Setting doc version and status to $(VERSION), $(CODE_STATUS)
+	$(MAKE) dok-clean
+	mkdir -p $(DOC_TMP)
+	$(ECHO) -n $(VERSION) > $(DOC_DIR)/doc_version.tmp
+	$(ECHO) -n $(CODE_STATUS) > $(DOC_DIR)/doc_status.tmp
+
+dok-pdf: dok-release 
+	$(RM) ../pdf/*.pdf
+	cp -f *.sgml ../pdf
+	cp -f *.dsl ../pdf
+	cd ../pdf && db2pdf --pdf -s ldp.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf > /dev/null 2>&1
+	cd ../pdf && db2pdf --pdf -s ldp.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf > /dev/null 2>&1
+	cd ../pdf && db2pdf --pdf -s ldp.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
+	$(RM) ../pdf/*.sgml ../pdf/*.dsl ../pdf/*.out ../pdf/*.tex ../pdf/*.log ../pdf/*.aux
+
+# the layout and style with db2pdf sucks, here is an alternative
+dok-pdf2: dok-release 
+	mkdir -p $(DOC_TMP) # this directory not in cvs
+	$(DB) -V nochunks user-manual.sgml > $(DOC_TMP)/privoxy-user-manual.html
+	$(DB) -V nochunks developer-manual.sgml > $(DOC_TMP)/privoxy-developer-manual.html
+	$(DB) -V nochunks faq.sgml > $(DOC_TMP)/privoxy-faq.html
+# one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
+
+# Create release announcement in text and html, with short and long versions.
+# This is a standalone target, and must be invoked directly.
+announce: dok-release
+	cd $(DOC_TMP) && $(DB) -iannounce-big ../announce.sgml &&\
+	mv -f index.html announce.html && $(WDUMP) announce.html > announce.txt
+	cd $(DOC_TMP) && $(DB) ../announce.sgml &&\
+	mv -f index.html announce-mini.html && $(WDUMP) announce-mini.html > announce-mini.txt &&\
+	mv -f *html *txt $(ROOT) 
+	$(MAKE) dok-clean
+	@$(ECHO) Announce texts are done. Please check them. Some hand editing
+	@$(ECHO) may be required.
+
+# The main Privoxy config file, generated from sgml sources. 
+# NOTE: This will require some hand editing. The new file is outputted 
+# as config.new so that problem sections can be compared to previous
+# version. This is hardcored to w3m for html/text conversion. Also, 
+# requires the shell util 'fmt'.
+config-file: ensure-dkprefix ensure-jadebin ensure-wdump dok-release
+	$(DB)-notoc -iconfig-file -V nochunks config.sgml > tmp.html &&\
+	w3m -dump tmp.html |fmt -w 70 > $(ROOT)/config.new && $(RM) tmp.*
+	$(PERL) -pi.bak -e 's/^1\. \@\@TITLE\@\@/     /i;\
+                     /^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;\
+                     $$header_len=0 unless $$hit_header;\
+                     if ($$hit_header) {\
+                        print "#  ";\
+                        for ($$i=1; $$i < $$header_len; $$i++) {print "=";}\
+                        print "\n";\
+                     };\
+                     $$hit_header=0;\
+                     $$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;\
+                     $$header_len = length($$_);\
+				 s/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;\
+                     s/^.*$$// if $$hit_option;\
+                     $$hit_option=0;\
+                     s/^\n//;  s/^#\s*-{20,}//;\
+                     $$hit_option=1 if s/^#\s+@@//;'   $(ROOT)/config.new
+	$(RM) $(ROOT)/*.bak *.tmp tmp.* $(DOC_TMP)
+	@$(ECHO)  "****************************************************"
+	@$(ECHO)  "The output file is config.new."
+	@$(ECHO)  "Now -- you need to hand edit the results!!!"
+	@$(ECHO)  "In particular, check the Debug levels, and the"
+	@$(ECHO)  "permit-access, forward & socks examples. They"
+	@$(ECHO)  "probably got hammered."
+	@$(ECHO)  "****************************************************"
+
+# config file, alternate verison using lynx (perl stuff unfinished). Lynx
+# does not do so good a job.
+config-file-alt: dok-release
+	$(ECHO) -e ".h2 JUSTIFY\\nJUSTIFY:FALSE" > tmp.lynx_cfg &&\
+	$(DB)-notoc -iconfig-file -V nochunks config.sgml > tmp.html &&\
+	lynx -cfg=tmp.lynx_cfg -width=78 -dump tmp.html > ../../config.new && $(RM) tmp.*
+	$(PERL) -pi -e 's/^(   )//;\
+	                s/:$\/:\n/' $(ROOT)/config.new
+
+# This is mostly to catch cruft from build failures
+dok-clean:
+	$(RM) $(DOC_TMP) `find $(ROOT) -name "tmp.*" -o -name "*.tmp" -o -name "*.bak" -o -name "*.fot"`
+
+tidy:
+	$(RM) `find . -name "*~"`
+	$(RM) `find . -name ".\#*"`
+
+clobber: tidy clean
+	$(RM) GNUmakefile ldp.dsl
+
+distclean: clobber
+
+coffee:
+	 @perl -e 'print pack "C*", (31,139,8,8,153,63,226,60,2,3,99,111,102,102,101,101,0,109,143,205,13,192,32,8,133,\
+                  239,78,241,110,234,1,28,160,171,152,208,53,26,117,247,22,165,73,137,125,9,1,62,126,2,128,169,5,243,143,\
+                  13,139,49,164,65,100,149,152,102,73,141,88,73,178,116,205,100,69,253,36,102,81,49,83,236,19,225,171,131,\
+                  214,172,163,73,4,168,123,115,71,126,247,122,94,128,178,227,95,154,12,86,215,122,197,249,146,187,54,220,125,\
+                  193,51,228,11,1,0,0);'|zcat
+
+#############################################################################
+
+# $Log: Makefile.in,v $
