@@ -1,4 +1,4 @@
-# $Id: junkbuster-suse.spec,v 1.19 2002/03/11 22:59:05 hal9 Exp $
+# $Id: junkbuster-suse.spec,v 1.20 2002/03/12 13:42:14 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -192,6 +192,7 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 %doc README.gz AUTHORS.gz ChangeLog.gz
 %doc doc/webserver/developer-manual doc/webserver/user-manual
 %doc doc/webserver/user-manual
+%doc doc/webserver/ijb_docs.css
 #%doc junkbuster.weekly junkbuster.monthly AUTHORS
 %dir %{ijbconf}
 %config %{ijbconf}/*
@@ -206,6 +207,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
+* Thu Mar 21 2002 Hal Burgiss <hal@foobox.net>
+- added ijb_docs.css to docs.
+
 * Mon Mar 11 2002 Hal Burgiss <hal@foobox.net>
 - Remove --enable-no-gifs from configure.
 
@@ -272,6 +276,9 @@ id junkbuster > /dev/null 2>&1 && /usr/sbin/userdel junkbuster || /bin/true
 - new package: version 2.0
 
 # $Log: junkbuster-suse.spec,v $
+# Revision 1.20  2002/03/12 13:42:14  sarantis
+# remove hardcoded "ijbswa" from build phase
+#
 # Revision 1.19  2002/03/11 22:59:05  hal9
 # Remove --enable-no-gifs
 #
