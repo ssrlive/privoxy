@@ -1,33 +1,36 @@
               Authors of Privoxy v2.9.x and 3.x
 ===========================================================================
 
-Current Project Developers:
+Current Developement Team:
 
+ Hal Burgiss (docs)
  Jon Foster
  Andreas Oesterhelt
- Stefan Waldherr
+ David Schmidt (OS/2, Mac OSX ports)
  
- Thomas Steudten
- Rodney Stromlund
+ 
 
-Current Project Contributors:
+Current and Former Project Contributors:
 
+ Johny Agotnes 
  Rodrigo Barbosa (RPM specfiles)
  Moritz Barsnick
- Hal Burgiss (docs)
- Mattes Dolak
+ Mattes Dolak 
  Karsten Hopp (Red Hat)
  Alexander Lazic
  Daniel Leite
  Gábor Lipták
+ Adam Lock (Win32)
  Guy Laroche
- Andrew Lock (Win32)
  Haroon Rafique
  Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
- David Schmidt (OS/2, Mac OSX ports)
+ Thomas Steudten
  Joerg Strohmayer (Amiga)
+ Rodney Stromlund
+ Sviatoslav Sviridov
  Sarantis Paskalis
+ Stefan Waldherr
 
 Based in part on code originally developed by:
 
@@ -37,7 +40,6 @@ Based in part on code originally developed by:
 Thanks to the many people who have tested Privoxy, reported bugs, or made
 suggestions. These include (in alphabetical order):
 
- Johny Agotnes 
  Ken Arromdee
  Devin Bayer
  Reiner Buehl
@@ -51,10 +53,10 @@ suggestions. These include (in alphabetical order):
  Don Libes  
  Paul Lieverse
  David Mediavilla 
+ Oliver Stoeneberg
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
- Oliver Stoeneberg
  Darren Wiebe
  Jamie Zawinski
 
