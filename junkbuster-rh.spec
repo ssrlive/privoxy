@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.33 2002/03/05 13:13:57 morcego Exp $
+# $Id: junkbuster-rh.spec,v 1.34 2002/03/07 00:11:57 morcego Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.34  2002/03/07 00:11:57  morcego
+# Few changes on the %pre and %post sections of the rh specfile to handle
+# usernames more cleanly
+#
 # Revision 1.33  2002/03/05 13:13:57  morcego
 # - Added "make redhat-dok" to the build phase
 # - Added docbook-utils to BuildRequires
@@ -238,7 +242,7 @@ perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' ijb.action >\
 # If we don't, we check to see if the user junkbust exist and, in case it
 # does, we change it do junkbuster. If it also does not exist, we create the
 # junkbuster user -- morcego
-id junkbuster > /dev/null 2>&1 || ( id junkbust && ( /usr/sbin/usermod -l junkbuster junkbust ) || ( /usr/sbin/useradd -d /etc/%{name} -r %{name} -s "" > /dev/null 2>&1 || /bin/true )
+id junkbuster > /dev/null 2>&1 || ( id junkbust && /usr/sbin/usermod -l junkbuster junkbust ) || ( /usr/sbin/useradd -d /etc/%{name} -r %{name} -s "" > /dev/null 2>&1 || /bin/true )
 
 %post
 # for upgrade from 2.0.x
@@ -275,7 +279,7 @@ fi
 %doc doc/text/developer-manual.txt doc/text/user-manual.txt
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
-#%doc %{name}.weekly %{name}.monthly AUTHORS
+#%%doc %{name}.weekly %{name}.monthly AUTHORS
 
 %dir %{ijbconf}
 %dir %{ijbconf}/templates
