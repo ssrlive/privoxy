@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.26 2002/01/09 18:21:10 hal9 Exp $
+# $Id: junkbuster-rh.spec,v 1.27 2002/01/09 18:32:02 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.27  2002/01/09 18:32:02  hal9
+# Removed RPM_OPT_FLAGS kludge.
+#
 # Revision 1.26  2002/01/09 18:21:10  hal9
 # A few minor updates.
 #
@@ -139,7 +142,7 @@ systems and multi-user networks.
 %build
 %configure
 make 
-# strip junkbuster
+strip junkbuster
 
 %pre
 /usr/sbin/useradd -d /etc/junkbuster -r junkbuster -s "/bin/false" > /dev/null 2>&1 || /bin/true
