@@ -1,99 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+ <!--
+
+  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/step2.php,v $
+
+  Purpose  :  Submit form for actions file feedback (step 2)
+              This file belongs in
+              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
+
+  $Id: step2.php,v 1.1 2002/03/30 03:20:30 oes Exp $
+
+  $Log: step2.php,v $
+  Revision 1.1  2002/03/30 03:20:30  oes
+  Added Feedback mechanism for actions file
+
+
+  Written by and Copyright (C) 2002 the SourceForge
+  Privoxy team. http://www.privoxy.org/
+
+  This program is free software; you can redistribute it
+  and/or modify it under the terms of the GNU General
+  Public License as published by the Free Software
+  Foundation; either version 2 of the License, or (at
+  your option) any later version.
+
+  This program is distributed in the hope that it will
+  be useful, but WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A
+  PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  The GNU General Public License should be included with
+  this file.  If not, you can view it at
+  http://www.gnu.org/copyleft/gpl.html
+  or write to the Free Software Foundation, Inc., 59
+  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+ -->
+
+ <head>
+  <style type="text/css">
+   body, div, p, h1, h2, ul, ol, li, td, th, dl, dt, dd { font-family:helvetica,helv,arial,sans-serif; font-size:10px }
+   body { background-color: #ffffff }
+   div.title    { background-color:#dddddd; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:15px; font-weight:bold }
+   div.box      { background-color:#eeeeee; border:solid black 1px; margin:20px; min-width: 80%; padding:20px; font-size:10px }
+   div.infobox  { background-color:#ccccff; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
+   div.errorbox { background-color:#ffdddd; border:solid black 1px; margin:20px; min-width: 60%; max-width: 60%; padding:20px; font-size:10px; }
+  </style>
+
+  <script language="javascript">
+   //
+   // Could be as easy as style="max-wdith: 300px; max-height..." inside the
+   // <img> tag, but IE doesn't do that. Setting the values directly also
+   // screws IE for some weird reason. All praise MS.
+   //
+
+   function prettyscale(image)
+   {
+      newwidth = 0
+      newheight = 0
+
+      if (image.width > 300)
+      {
+         newwidth = 300
+      }
+
+      if (image.height > 50)
+      {
+         newheight = 50
+      }
+
+      if (image.width < 20)
+      {
+         newwidth = 20
+      }
+
+      if (image.height < 20)
+      {
+         newheight = 20
+      }
+
+      if (newwidth != 0)
+      {
+         image.width = newwidth
+      }
+
+      if (newheight != 0)
+      {
+         image.height = newheight
+      }
+   }
+  </script>
+
+
 <?php
-
-error_reporting(E_NONE);
-#error_reporting(E_ALL);
-
-
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/step2.php,v $
-//
-//  Purpose  :  Submit form for actions file feedback (step 2)
-//              This file belongs in
-//              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-//
-//  $Id: step2.php,v 1.2 2002/03/30 19:49:34 swa Exp $
-//
-//  $Log: step2.php,v $
-//  Revision 1.2  2002/03/30 19:49:34  swa
-//  have consistent look and feel
-//
-//  Revision 1.1  2002/03/30 03:20:30  oes
-//  Added Feedback mechanism for actions file
-//
-//
-//  Written by and Copyright (C) 2001 the SourceForge
-//  Privoxy team. http://www.privoxy.org/
-//
-//  Based on the Internet Junkbuster originally written
-//  by and Copyright (C) 1997 Anonymous Coders and
-//  Junkbusters Corporation.  http://www.junkbusters.com
-//
-//  This program is free software; you can redistribute it
-//  and/or modify it under the terms of the GNU General
-//  Public License as published by the Free Software
-//  Foundation; either version 2 of the License, or (at
-//  your option) any later version.
-//
-//  This program is distributed in the hope that it will
-//  be useful, but WITHOUT ANY WARRANTY; without even the
-//  implied warranty of MERCHANTABILITY or FITNESS FOR A
-//  PARTICULAR PURPOSE.  See the GNU General Public
-//  License for more details.
-//
-//  The GNU General Public License should be included with
-//  this file.  If not, you can view it at
-//  http://www.gnu.org/copyleft/gpl.html
-//  or write to the Free Software Foundation, Inc., 59
-//  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//
 
 /*
  * For testing: 
  */
-#$base_url = "http://www.oesterhelt.org/actions";
-$base_url = "http://www.privoxy.org/actions";
-#$base_url = "http://localhost/actions";
+$base_url = "http://www.oesterhelt.org/actions";
+//$base_url = "http://privoxy.org/actions";
+//$base_url = "http://localhost/actions";
+//phpinfo();
+//error_reporting(E_NONE);
+error_reporting(E_ALL);
+
 
 /* 
  * Cannot start with step 2:
  */
 if (!isset($referrer_url))
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title>
-	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
-		</head>
-                <body><h2>Invalid Feedback Submission</h2>
-                      <p>When submitting your feedback please start with
-                         <a href=\"index.php\">step 1</a>.</p>
-                 </body>
-          </html>");
+   echo ("  <title>Invalid Feedback Submission</title>
+           </head>
+           <body>
+            <div class=\"title\">Invalid Feedback Submission</div>
+            <div align=\"center\">
+             <div class=\"errorbox\" align=\"left\">When submitting your feedback please start with
+              <a href=\"index.php\">step 1</a>.
+             </div>
+            </div>
+           </body>
+          </html>\n");
    exit; 
 }
+
 
 /* 
  * Cannot work on unknown problem:
  */
 if (!isset($problem) || $problem == "INVALID")
 {
-     echo ("<html><head><title>Invalid Feedback Submission</title>
-	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
-		</head>
-                <body><h2>Invalid Feedback Submission</h2>
-                      <p>You need to select the nature of the problem in
-                         <a href=\"javascript:back()\">step 1</a>.</p>
-                 </body>
-          </html>");
+   echo ("  <title>Invalid Feedback Submission</title>
+           </head>
+           <body>
+            <div class=\"title\">Invalid Feedback Submission</div>
+            <div align=\"center\">
+             <div class=\"errorbox\" align=\"left\">You need to select the nature of the problem in
+              <a href=\"javascript:history.back();\">step 1</a>.
+             </div>
+            </div>
+           </body>
+          </html>\n");
    exit; 
 }
 
 
 /*
  * Check if URL really exists and buffer its contents:
+ *
+ * FIXME: Curl is not installed on SF; Filed as Alexandria
+ *        Feature Request #537014. 
+ *        PHP's fopen() supports URLs, but it seems that
+ *        curls options for Timeouts and HTTP error handling
+ *        are not supported by fopen().
  */
-
 $ch = curl_init ($referrer_url);
+
 curl_setopt ($ch, CURLOPT_HEADER, 0);
 curl_setopt ($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt ($ch, CURLOPT_TIMEOUT, 15);
 
 ob_start();
 $success = curl_exec ($ch);
@@ -104,19 +170,24 @@ curl_close ($ch);
 
 if (!$success)
 {
-   echo ("<html><head><title>Invalid Feedback Submission</title>
-	    <link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\">
-		</head>
-                <body><h2>Invalid Feedback Submission</h2>
-                      <p>The URL that you entered (<a href=\"$referrer_url\">$referrer_url</a>)
-                         <br>could not be retrieved.</p>
-                         <p>Make sure the URL is correct and publicly accessible.</p>
-                         <p><a href=\"javascript:back()\">Back to step 1</a></p>
-                         
-                 </body>
-          </html>");
+   echo ("  <title>Invalid Feedback Submission</title>
+           </head>
+           <body>
+            <div class=\"title\">Invalid Feedback Submission</div>
+            <div align=\"center\">
+             <div class=\"errorbox\" align=\"left\">
+              <p>The URL that you entered (<a href=\"$referrer_url\">$referrer_url</a>)
+               <br>could not be retrieved.
+              </p>
+              <p>Make sure the URL is correct and publicly accessible.</p>
+              <p><a href=\"javascript:history.back();\">Back to step 1</a></p>
+             </div>
+            </div>
+           </body>
+          </html>\n");
    exit; 
 }
+
 
 /* 
  * Create description from problem code:
@@ -133,47 +204,86 @@ switch($problem)
 
 ?>
 
-<html>
-  <head>
-    <title>Privoxy Action List Feedback - Step 2 of 2</title>
-    <link rel="stylesheet" type="text/css" href="../p_web.css">
-</head>
+  <title>Privoxy Action List Feedback - Step 2 of 2</title>
+ </head>
+ <body>
 
-<h2><a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 2 of 2</h2>
-<p>
-You are about to report that <?php echo ($problem_description) ?>
-<br>on <a href="<?php echo ($referrer_url) ?>"><?php echo ($referrer_url) ?></a>.
-</p>
+  <div class="title"><a href="http://www.privoxy.org" target="_blank">Privoxy</a> Action List Feedback - Step 2 of 2</div>
 
+  <div class="box">
+   <b>You are about to report that <?php echo ($problem_description) ?> on
+   <a href="<?php echo ($referrer_url) ?>"><?php echo ($referrer_url) ?></a>.</b>
+  </div>
 
-<p>
-<form action="<?php echo($base_url); ?>/step3.php" method="post">
+  <div class="box">
+   <form action="<?php echo($base_url); ?>/step3.php" method="post">
+    <p>
+     <input type="hidden" name="problem" value="<?php echo ($problem) ?>">
+     <input type="hidden" name="referrer_url" value="<?php echo ($referrer_url) ?>">
+    </p>
 
-<input type="hidden" name="problem" value="<?php echo ($problem) ?>">
-<input type="hidden" name="referrer_url" value="<?php echo ($referrer_url) ?>">
-
-<dl>
+    <dl>
 
 <?php
 
+/*
+ * Create / suppress for elements depending on type of
+ * problem
+ */
 if ($problem != "P1")
 {
    echo ("<!--");
 }
 else
 {
+   /*
+    * Extract all image links from page, make them
+    * absolute, and present them (scaled to reasonable size)
+    * in a table for the user to select
+    */
    preg_match_all('|<img\s+[^>]*?src=[\'"]?(.*?)[\'" >]|i', $page, $matches);
    $count = count($matches[0]);
    if ($count > 0)
    {
-      $referrer_base = substr($referrer_url, 0, -strpos(strrev($referrer_url), '/'));
+      /* 
+       * Base URL ends in slash: don't touch.
+       */
+      if (strpos(strrev($referrer_url), '/') == 0)
+      {
+         $referrer_base = $referrer_url;
+      }
+      /* 
+       * Else grab URL up to last slash as base.
+       */
+      else
+      {
+         $referrer_base = substr($referrer_url, 0, -strpos(strrev($referrer_url), '/'));
+      }
+
+      /* 
+       * Get the protocol + host info for relative links
+       * that start with slash. FIXME: Cut trailing slash off!
+       */
       $referrer_host = "http://".strrev(strrchr(strrev(substr($referrer_url, 7)), "/"));
 
-      echo ("<dt><b>Choose the images to be blocked from the following list:</b></dt><dd><p>\n");
-      echo ("<input type=\"hidden\" name=\"num_images\" value=\"$count\">\n");
-      echo ("<table border=\"0\" cellpadding=\"0\" cellspacing=\"4\">\n");
-      for ($i=0; $i< $count; $i++) {
+      /*
+       * Open section in <dl>; Open table:
+       */
+      echo ("     <dt><b>Choose the images you want blocked from the following list:</b></dt>
+                  <dd>
+                   <p>
+                    <input type=\"hidden\" name=\"num_images\" value=\"$count\">
+                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"4\">\n");
+      /*
+       * Print one table row for each image found:
+       */
+      for ($i=0; $i< $count; $i++)
+      {
          $image_url = $matches[1][$i];
+ 
+         /*
+          * Make image URLs absolute:
+          */
          if (strncmp("http://", $image_url, 7))
          {
             if ($image_url{0} == "/")
@@ -185,66 +295,105 @@ else
                $image_url = $referrer_base.$image_url;
             }
          }
-         echo ("<tr><td rowspan=2><input type=\"checkbox\" name=\"block_image[$i]\" value=\"off\"></td>\n");
-         echo ("<td><a href=\"$image_url\">$image_url</a>:</td>\n");
-         echo ("<td><input type=\"hidden\" name=\"image_url[$i]\" value=\"$image_url\"></td></tr>\n");
-         echo ("<tr><td><img style=\"max-width: 300; max-height: 50; min-width: 20; min-height: 20\" src=\"$image_url\"></td></tr>\n");
+
+         /*
+          * Print the row(s):
+          */
+         echo ("       <tr>
+                        <td rowspan=2>
+                         <input type=\"checkbox\" name=\"block_image[$i]\" value=\"off\">
+                        </td>
+                        <td>
+                         <a href=\"$image_url\">$image_url</a>:
+                        </td>
+                        <td>
+                         <input type=\"hidden\" name=\"image_url[$i]\" value=\"$image_url\">
+                        </td>
+                       </tr>
+                       <tr>
+                        <td>
+                         <img onload=\"prettyscale(this);\" src=\"$image_url\" alt=\"banner or not?\">
+                        </td>
+                       </tr>\n");
       }
-      echo ("</table></p></dd><dt><b>If the banner that you saw is not listed above, enter the URL here</b>\n");
+      echo ("      </table>
+                  </dd>
+
+                  <dt>
+                   <b>If the banner that you saw is not listed above, enter the URL here</b>\n");
    }
    else
    {
-      echo ("<dt><b>URL of the advertisment image:</b>\n");
+      echo ("     <dt>
+                   <b>URL of the advertisment image:</b>\n");
    }
 }
 
 ?>
 
-<br><i>Hint: right-click the image, select "Copy image location" and paste the URL here.</i></dt>
-<dd>
-<p><input name="manual_image_url" type="text" size="45" maxlength="255"></p>
-</dd>
+      <br><i>Hint: right-click the image, select "Copy image location" and paste the URL here.</i>
+     </dt>
+     <dd>
+      <p>
+       <input name="manual_image_url" type="text" size="45" maxlength="255">
+      </p>
+     </dd>
+
 <?php if($problem != "P1") echo ("-->") ?>
 
 <?php if($problem != "P2") echo ("<!--") ?>
-<dt><b>URL of the innocent image:</b>
-<br><i>Hint: right-click the image, select "Copy image location" and paste the URL here.
-<br>This may not work if the image was blocked by size or if +image-blocker is set to redirect.</i></dt>
-<dd>
-<p><input name="image_url" value="unknown" type="text" size="45" maxlength="255"></p>
-</dd>
+
+     <dt>
+      <p><b>URL of the innocent image:</b>
+       <br><i>Hint: right-click the image, select "Copy image location" and paste the URL here.
+       <br>This may not work if the image was blocked by size or if +image-blocker is set to redirect.</i>
+      </p>
+     </dt>
+     <dd>
+      <p>
+       <input name="image_url" value="unknown" type="text" size="45" maxlength="255">
+      </p>
+     </dd>
+
 <?php if($problem != "P2") echo ("-->") ?>
 
+     <dt><b>Severity:</b></dt>
+     <dd>
+      <p>
+       <select name="severity">
+        <option value="3">drives me crazy</option>
+        <option selected value="2">normal</option>
+        <option value="1">cosmetic</option>
+       </select>
+      </p>
+     </dd>
 
-<dt><b>Severity:</b></dt>
-<dd>
-<p>
-<select name="severity">
-<option value="3">drives me crazy</option>
-<option selected value="2">vanilla banner</option>
-<option value="1">cosmetic</option>
-</select>
-</p>
-</dd>
+     <dt>
+      <b>Remarks:</b> <i>(optional)</i>
+     </dt>
+     <dd>
+      <p>
+       <textarea wrap="hard" style="font-size: 10px" name="remarks" cols="35" rows="3">None.</textarea>
+      </p>
+     </dd>
 
-<dt><b>Remarks:</b> <i>(optional)</i></dt>
-<dd>
-<p><textarea name="remarks" cols="35" rows="3">None.</textarea></p>
-</dd>
+     <dt>
+      <b>Your Name:</b> <i>(optional)</i>
+     </dt>
+     <dd>
+      <p>
+       <input name="name" size="45">
+      </p>
+     </dd>
 
-<dt><b>Your Name:</b> <i>(optional)</i></dt>
-<dd>
-<p><input name="name" size="45"></p>
-</dd>
+     <dt>&nbsp;</dt>
+     <dd>
+      <input type=submit value="Submit">
+     </dd>
 
-<dt>&nbsp;</dt>
-<dd>
-<input type=submit value="Submit">
-</dd>
+    </dl>
+   </form>
+  </div>
 
-</dl>
-</form>
-</p>
-
-</body>
+ </body>
 </html>
