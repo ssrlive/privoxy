@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.75 2002/09/04 12:19:33 oes Exp $
+dnl $Id: configure.in,v 1.76 2002/09/05 14:52:17 oes Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.76  2002/09/05 14:52:17  oes
+dnl Synced in some changes fromm the stable branch:
+dnl Fixed detection/inclusion of pcre.h, which is in a pcre subdir on RH
+dnl
 dnl Revision 1.75  2002/09/04 12:19:33  oes
 dnl Resurrected acconfig.h and removed double quotes from AC_DEFINE params to enable build on older systems
 dnl
@@ -400,7 +404,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.75 $)
+AC_REVISION($Revision: 1.76 $)
 AC_INIT(src/jcc.c)
 
 if test ! -f src/config.h.in; then
@@ -625,17 +629,10 @@ if test $have_pthread = yes; then
   if test "$GCC" = "yes"; then
     # Set a GCC specific switch:
     if test "$target_type" = "unix"; then
-      ac_jgf_save_CFLAGS=$CFLAGS
-      CFLAGS="$CFLAGS -pthread"
-      AC_TRY_LINK([#include <pthread.h>],
-        [void *p = pthread_create;],
-        [
-          # This compiler switch makes GCC on Linux thread-safe
-          # However, it's not supported on most other OS.
-          PTHREAD_LIB=
-          SPECIAL_CFLAGS="-pthread"
-        ])
-      CFLAGS=$ac_jgf_save_CFLAGS
+      # This compiler switch makes GCC on Linux thread-safe
+      # However, it's not supported on most other OS.
+      PTHREAD_LIB=
+      SPECIAL_CFLAGS="-pthread"
     fi
   fi
 else
