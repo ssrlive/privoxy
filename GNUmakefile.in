@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.111 2002/06/05 00:26:21 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.112 2002/06/28 18:30:10 jongfoster Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -43,6 +43,8 @@ VERSION_POINT = @VERSION_POINT@
 CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 RPM_VERSION   = $(VERSION)
+RPM_PACKAGEV  = ""
+SNAPVERSION   = $(RPM_VERSION)-$(shell date "+%Y%m%d")
 
 
 #############################################################################
@@ -98,7 +100,7 @@ TARGET_OS  = @host@
 PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
-
+DKPREFIX   = @DKPREFIX@
 
 #User Group paras
 USER       = @USER@
@@ -234,7 +236,7 @@ all: $(PROGRAM)
 #############################################################################
 # Phony targets
 #############################################################################
-.PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
+.PHONY: all inifiles redhat-dist redhat-upload redhat-test solaris-dist suse-dist \
 suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
 install conectiva-spec conectiva-dist conectiva-upload debian-dist \
 debian-upload ensure-wdump ensure-jadebin ensure-dkprefix
@@ -360,10 +362,18 @@ conectiva-upload: check-release
 # redhat distribution alpha and x86
 #############################################################################
 redhat-dist: rpm-stuff
-
+	echo $(CONFIG_FILES)
 	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
+	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+
+# For testing build issues only! Use redhat-dist for official releases.
+redhat-test: 
+	echo $(CONFIG_FILES)
+	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
+	$(RPMBUILD) --clean -tb  $(TAR_ARCH)
+	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
+	@echo "WARNING: This target is only for testing. Use redhat-dist for releases!!!"
 
 # anonymously ncftps the rpms to sourceforge
 redhat-upload: check-release
@@ -746,6 +756,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.112  2002/06/28 18:30:10  jongfoster
+# Fixing bugs compiling PCRE
+#
 # Revision 1.111  2002/06/05 00:26:21  hal9
 # Move all doc build stuff to doc/source/GNUmakefile, leaving a 'make dok'
 # target only in toplevel. Add DOC_STATUS variable so docs can be built without
