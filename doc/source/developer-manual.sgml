@@ -1,13 +1,12 @@
-<!DOCTYPE Article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
 <!--
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/developer-manual.sgml,v $
 
  Purpose     :  developer manual
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.4 2001/09/23 10:13:48 swa Exp $
+ $Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -21,13 +20,13 @@
   <artheader>
     <title>Junkbuster Developer Manual</title>
 
-    <pubdate>$Id: developer-manual.sgml,v 1.4 2001/09/23 10:13:48 swa Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $</pubdate>
 
     <authorgroup>
       <author>
-	<affiliation>
-	  <orgname>By: Junkbuster Developers</orgname>
-	</affiliation>
+        <affiliation>
+          <orgname>By: Junkbuster Developers</orgname>
+        </affiliation>
       </author>
     </authorgroup>
 
@@ -65,27 +64,27 @@ Please see the Contact section in the user-manual if you want to contact the dev
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="documentation"><title>Documentation Guidelines</title>
     <para>
-	All docs are in SGML format and located in the <computeroutput>doc/source</computeroutput> directory.
-	</para>
-	<para>
-	How do you update the webserver (i.e. the pages on sourceforge)?
-	<OrderedList Numeration="Arabic">
-		<ListItem><Para>
-	Run <computeroutput>make dok</computeroutput> (which uses the documents in <computeroutput>doc/source</computeroutput> to update all
-	text files in <computeroutput>doc/text</computeroutput> and to update
+        All docs are in SGML format and located in the <computeroutput>doc/source</computeroutput> directory.
+        </para>
+        <para>
+        How do you update the webserver (i.e. the pages on sourceforge)?
+        <orderedlist numeration="arabic">
+                <listitem><para>
+        Run <computeroutput>make dok</computeroutput> (which uses the documents in <computeroutput>doc/source</computeroutput> to update all
+        text files in <computeroutput>doc/text</computeroutput> and to update
 all web documents in <computeroutput>doc/webserver</computeroutput>.
-		</Para></ListItem>
-		<ListItem><Para>
-	Run <computeroutput>make webserver</computeroutput> which copies all files from
+                </para></listitem>
+                <listitem><para>
+        Run <computeroutput>make webserver</computeroutput> which copies all files from
 <computeroutput>doc/webserver</computeroutput> to the sourceforge webserver
 via scp.
-		</Para></ListItem>
-	</OrderedList>
-
+                </para></listitem>
+        </orderedlist>
+  </para>
  </sect1>
 
-<!--     <ListItem><Para>be consistent with the redirect script (i.e. the junkbuster program -->
-<!--       points via the redirect URL at sf to valid end-points in the document)</Para></ListItem> -->
+<!--     <listitem><para>be consistent with the redirect script (i.e. the junkbuster program -->
+<!--       points via the redirect URL at sf to valid end-points in the document)</para></listitem> -->
 
   <!--   ~~~~~       New section      ~~~~~     -->
   <sect1 id="coding"><title>Coding Guidelines</title>
@@ -110,7 +109,7 @@ via scp.
 
     <sect3 id="s3"><title>Comment, Comment, Comment</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Comment as much as possible without commenting the obvious.
     For example do not comment "aVariable is equal to bVariable".
@@ -125,7 +124,7 @@ via scp.
     If the comment describes something different than what the code
     is doing then maybe a programming error is occurring.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 /* if page size greater than 1k ... */
 if ( PageLength() > 1024 )
@@ -149,7 +148,7 @@ is actually being done.
 
     <sect3 id="s4"><title>Use blocks for comments</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Comments can help or they can clutter. They help when they
     are differentiated from the code they describe. One line
@@ -157,7 +156,7 @@ is actually being done.
     and the code. Block identifiers do, by surrounding the code
     with a clear, definable pattern.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 /*********************************************************************
  * This will stand out clearly in your code!
@@ -180,7 +179,7 @@ if ( thisVariable == thatVariable ) /* this may not either */
    DoSomethingVeryImportant();
 }</programlisting>
 
-    <para><emphasis>Exception:</></para>
+    <para><emphasis>Exception:</emphasis></para>
 
     <para>If you are trying to add a small logic comment and do not
     wish to "disrubt" the flow of the code, feel free to use a 1
@@ -192,7 +191,7 @@ if ( thisVariable == thatVariable ) /* this may not either */
 
     <sect3 id="s5"><title>Keep Comments on their own line</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>It goes back to the question of readability. If the comment
     is on the same line as the code it will be harder to read than
@@ -203,7 +202,7 @@ if ( thisVariable == thatVariable ) /* this may not either */
     at the end of closing braces, when used to comment
     parameters.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 /*********************************************************************
  * This will stand out clearly in your code,
@@ -233,8 +232,8 @@ if ( 1 == X )
 
 
 short DoSomethingVeryImportant(
-   short firstParam,   /* represents something */
-   short nextParam     /* represents something else */ )
+   short firstparam,   /* represents something */
+   short nextparam     /* represents something else */ )
 {
    ...code here...
 
@@ -245,7 +244,7 @@ short DoSomethingVeryImportant(
 
     <sect3 id="s6"><title>Comment each logical step</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Logical steps should be commented to help others follow the
     intent of the written code and comments will make the code more
@@ -265,7 +264,7 @@ short DoSomethingVeryImportant(
 
     <sect3 id="s7"><title>Comment All Functions Thoroughly</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>A reader of the code should be able to look at the comments
     just prior to the beginning of a function and discern the
@@ -287,7 +286,7 @@ short DoSomethingVeryImportant(
     <sect3 id="s8"><title>Comment at the end of braces if the
     content is more than one screen length</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Each closing brace should be followed on the same line by a
     comment that describes the origination of the brace if the
@@ -301,7 +300,7 @@ short DoSomethingVeryImportant(
     <para>use following a closing brace: } /* -END- if() or while ()
     or etc... */</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 if ( 1 == X )
 {
@@ -327,7 +326,7 @@ if ( 1 == X )
 
     <sect3 id="s10"><title>Variable Names</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Use all lowercase, and seperate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
@@ -336,11 +335,11 @@ if ( 1 == X )
     template, class, true, false, ...). This is in case we ever
     decide to port JunkBuster to C++.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 int ms_iis5_hack = 0;</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>
 <programlisting>
@@ -354,7 +353,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
 
     <sect3 id="s11"><title>Function Names</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Use all lowercase, and seperate words via an underscore
     ('_'). Do not start an identifier with an underscore. (ANSI C
@@ -363,11 +362,11 @@ int msiis5hack = 0; int msIis5Hack = 0;
     template, class, true, false, ...). This is in case we ever
     decide to port JunkBuster to C++.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 int load_some_file( struct client_state *csp )</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>
 <programlisting>
@@ -382,18 +381,18 @@ int loadSomeFile( struct client_state *csp )
 
     <sect3 id="s12"><title>Header file prototypes</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Use a descriptive parameter name in the function prototype
     in header files. Use the same parameter name in the header file
     that you use in the c file.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 (.h) extern int load_aclfile( struct client_state *csp );
 (.c) int load_aclfile( struct client_state *csp )</programlisting>
 
-    <para><emphasis>Instead of:</>
+    <para><emphasis>Instead of:</emphasis>
 <programlisting>
 (.h) extern int load_aclfile( struct client_state * ); or 
 (.h) extern int load_aclfile(); 
@@ -407,22 +406,22 @@ int loadSomeFile( struct client_state *csp )
 
     <sect3 id="s13"><title>Enumerations, and #defines</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Use all capital letters, with underscores between words. Do
     not start an identifier with an underscore. (ANSI C reserves
     these for use by the compiler and system headers.)</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 (enumeration) : enum Boolean { FALSE, TRUE };
 (#define) : #define DEFAULT_SIZE 100;</programlisting>
 
-    <para><emphasis>Note:</> We have a standard naming scheme for #defines
+    <para><emphasis>Note:</emphasis> We have a standard naming scheme for #defines
     that toggle a feature in the preprocessor: FEATURE_>, where
     > is a short (preferably 1 or 2 word) description.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 #define FEATURE_FORCE 1
 
@@ -435,7 +434,7 @@ int loadSomeFile( struct client_state *csp )
 
     <sect3 id="s14"><title>Constants</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Spell common words out entirely (do not remove vowels).</para>
 
@@ -445,11 +444,11 @@ int loadSomeFile( struct client_state *csp )
     <para>Use underscore (_) to separate adjacent acronyms and
     abbreviations. Never terminate a name with an underscore.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 #define USE_IMAGE_LIST 1</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>
 <programlisting>
@@ -473,7 +472,7 @@ int loadSomeFile( struct client_state *csp )
 
     <sect3 id="s16"><title>Put braces on a line by themselves.</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>The brace needs to be on a line all by itself, not at the
     end of the statement. Curly braces should line up with the
@@ -481,14 +480,14 @@ int loadSomeFile( struct client_state *csp )
     easier to identify the opening and closing braces for a
     block.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 if ( this == that )
 {
    ...
 }</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>if ( this == that ) { ... }</para>
 
@@ -496,15 +495,15 @@ if ( this == that )
 
     <para>if ( this == that ) { ... }</para>
 
-    <para><emphasis>Note:</> In the special case that the if-statement is
+    <para><emphasis>Note:</emphasis> In the special case that the if-statement is
     inside a loop, and it is trivial, i.e. it tests for a
     condidtion that is obvious from the purpose of the block,
     one-liners as above may optically preserve the loop structure
     and make it easier to read.</para>
 
-    <para><emphasis>Status:</> developer-discrection.</para>
+    <para><emphasis>Status:</emphasis> developer-discrection.</para>
 
-    <para><emphasis>Example exception:</></para>
+    <para><emphasis>Example exception:</emphasis></para>
 <programlisting>
 while ( more lines are read )
 {
@@ -520,13 +519,13 @@ while ( more lines are read )
     <sect3 id="s17"><title>ALL control statements should have a
     block</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Using braces to make a block will make your code more
     readable and less prone to error. All control statements should
     have a block defined.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 if ( this == that )
 {
@@ -534,7 +533,7 @@ if ( this == that )
    DoSomethingElse();
 }</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>if ( this == that ) DoSomething(); DoSomethingElse();</para>
 
@@ -542,7 +541,7 @@ if ( this == that )
 
     <para>if ( this == that ) DoSomething();</para>
 
-    <para><emphasis>Note:</> The first example in "Instead of" will execute
+    <para><emphasis>Note:</emphasis> The first example in "Instead of" will execute
     in a manner other than that which the developer desired (per
     indentation). Using code braces would have prevented this
     "feature". The "explanation" and "exception" from the point
@@ -555,16 +554,16 @@ if ( this == that )
     <sect3 id="s18"><title>Do not belabor/blow-up boolean
     expressions</title>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 structure->flag = ( condition );</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>if ( condition ) { structure->flag = 1; } else {
     structure->flag = 0; }</para>
 
-    <para><emphasis>Note:</> The former is readable and consice. The later
+    <para><emphasis>Note:</emphasis> The former is readable and consice. The later
     is wordy and inefficient. Please assume that any developer new
     to the project has at least a "good" knowledge of C/C++. (Hope
     I do not offend by that last comment ... 8-)</para>
@@ -576,12 +575,12 @@ structure->flag = ( condition );</programlisting>
     <sect3 id="s19"><title>Use white space freely because it is
     free</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Make it readable. The notable exception to using white space
     freely is listed in the next guideline.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 int firstValue   = 0;
 int someValue    = 0;
@@ -598,7 +597,7 @@ firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
     <sect3 id="s20"><title>Don't use white space around structure
     operators</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>- structure pointer operator ( "->" ) - member operator (
     "." ) - functions and parentheses</para>
@@ -608,13 +607,13 @@ firstValue = oldValue + ( ( someValue - anotherValue ) - whatever )
     connection between the object and variable/function name is not
     as clear.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 aStruct->aMember;
 aStruct.aMember;
 FunctionName();</programlisting>
 
-    <para><emphasis>Instead of:</> aStruct -> aMember; aStruct . aMember;
+    <para><emphasis>Instead of:</emphasis> aStruct -> aMember; aStruct . aMember;
     FunctionName ();</para>
 
     
@@ -624,7 +623,7 @@ FunctionName();</programlisting>
     <sect3 id="s21"><title>Make the last brace of a function stand
     out</title>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 int function1( ... )
 {
@@ -639,12 +638,12 @@ int function2( ... )
 }   /* -END- function2 */
 </programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>int function1( ... ) { ...code... return( retCode ); } int
     function2( ... ) { }</para>
 
-    <para><emphasis>Note:</> Use 1 blank line before the closing brace and 2
+    <para><emphasis>Note:</emphasis> Use 1 blank line before the closing brace and 2
     lines afterwards. This makes the end of function standout to
     the most casual viewer. Although function comments help
     seperate functions, this is still a good coding practice. In
@@ -652,7 +651,7 @@ int function2( ... )
     "do" loops, and long if {} statements too. After all whitespace
     is free!</para>
 
-    <para><emphasis>Status:</> developer-discrection on the number of blank
+    <para><emphasis>Status:</emphasis> developer-discrection on the number of blank
     lines. Enforced is the end of function comments.</para>
 
     
@@ -661,14 +660,14 @@ int function2( ... )
 
     <sect3 id="s22"><title>Use 3 character indentions</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>If some use 8 character TABs and some use 3 character TABs,
     the code can look *very* ragged. So use 3 character indentions
     only. If you like to use TABs, pass your code through a filter
     such as "expand -t3" before checking in your code.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 static const char * const url_code_map[256] =
 {
@@ -702,25 +701,25 @@ int function1( ... )
 
     <sect3 id="s24"><title>Initialize all variables</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Do not assume that the variables declared will not be used
     until after they have been assigned a value somewhere else in
     the code. Remove the chance of accidentally using an unassigned
     variable.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 short anShort = 0;
 float aFloat  = 0;
 struct *ptr = NULL;</programlisting>
 
-    <para><emphasis>Note:</> It is much easier to debug a SIGSEGV if the
+    <para><emphasis>Note:</emphasis> It is much easier to debug a SIGSEGV if the
     message says you are trying to access memory address 00000000
     and not 129FA012; or arrayPtr[20] causes a SIGSEV vs.
     arrayPtr[0].</para>
 
-    <para><emphasis>Status:</> developer-discrection if and only if the
+    <para><emphasis>Status:</emphasis> developer-discrection if and only if the
     variable is assigned a value "shortly after" declaration.</para>
 
   </sect3>
@@ -734,12 +733,12 @@ struct *ptr = NULL;</programlisting>
     <sect3 id="s26"><title>Name functions that return a boolean as a
     question.</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Value should be phrased as a question that would logically
     be answered as a true or false statement</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 ShouldWeBlockThis();
 ContainsAnImage();
@@ -751,7 +750,7 @@ IsWebPageBlank();
     <sect3 id="s27"><title>Always specify a return type for a
     function.</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>The default return for a function is an int. To avoid
     ambiguity, create a return for a function when the return has a
@@ -765,19 +764,19 @@ IsWebPageBlank();
     <sect3 id="s28"><title>Minimize function calls when iterating by
     using variables</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>It is easy to write the following code, and a clear argument
     can be made that the code is easy to understand:</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
-for ( size_t cnt = 0; cnt < blockListLength(); cnt ++ )
+for ( size_t cnt = 0; cnt &lt; blockListLength(); cnt ++ )
 {
    ....
 }</programlisting>
 
-    <para><emphasis>Note:</> Unfortunately, this makes a function call for
+    <para><emphasis>Note:</emphasis> Unfortunately, this makes a function call for
     each and every iteration. This increases the overhead in the
     program, because the compiler has to look up the function each
     time, call it, and return a value. Depending on what occurs in
@@ -791,16 +790,16 @@ for ( size_t cnt = 0; cnt < blockListLength(); cnt ++ )
     assign the value to a variable, and evaluate using the
     variable.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 size_t len = blockListLength();
 
-for ( size_t cnt = 0; cnt < len; cnt ++ )
+for ( size_t cnt = 0; cnt &lt; len; cnt ++ )
 {
    ....
 }</programlisting>
 
-    <para><emphasis>Exceptions:</> if the value of blockListLength() *may*
+    <para><emphasis>Exceptions:</emphasis> if the value of blockListLength() *may*
     change or could *potentially* change, then you must code the
     function call in the for/while loop.</para>
 
@@ -810,7 +809,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 
     <sect3 id="s29"><title>Pass and Return by Const Reference</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>This allows a developer to define a const pointer and call
     your function. If your function does not have the const
@@ -831,7 +830,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 
     <sect3 id="s30"><title>Pass and Return by Value</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Most structures cannot fit onto a normal stack entry (i.e.
     they are not 4 bytes or less). Aka, a function declaration
@@ -847,7 +846,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 
     <sect3 id="s31"><title>Names of include files</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Your include statements should contain the file name without
     a path. The path should be listed in the Makefile, using -I as
@@ -856,13 +855,13 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
     partial path to distinguish their header files from system or
     other header files.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 #include &lt;iostream.h&gt;     /* This is not a local include */
 #include "config.h"       /* This IS a local include */
 </programlisting>
 
-    <para><emphasis>Exception:</></para>
+    <para><emphasis>Exception:</emphasis></para>
 
     <para>
 <programlisting>
@@ -871,7 +870,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 </programlisting>
 </para>
 
-    <para><emphasis>Note:</> Please! do not add "-I." to the Makefile
+    <para><emphasis>Note:</emphasis> Please! do not add "-I." to the Makefile
     without a _very_ good reason. This duplicates the #include
     "file.h" behaviour.</para>
 
@@ -882,7 +881,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
     <sect3 id="s32"><title>Provide multiple inclusion
     protection</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Prevents compiler and linker errors resulting from
     redefinition of items.</para>
@@ -892,7 +891,7 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
     with your file name, with "." Changed to "_", and make it
     uppercase.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
@@ -904,13 +903,13 @@ for ( size_t cnt = 0; cnt < len; cnt ++ )
 
     <sect3 id="s33"><title>Use `extern "C"` when appropriate</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>If our headers are included from C++, they must declare our
     functions as `extern "C"`. This has no cost in C, but increases
     the potential re-usability of our code.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 #ifdef __cplusplus
 extern "C"
@@ -929,13 +928,13 @@ extern "C"
     <sect3 id="s34"><title>Where Possible, Use Forward Struct
     Declaration Instead of Includes</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Useful in headers that include pointers to other struct's.
     Modifications to excess header files may cause needless
     compiles.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 /*********************************************************************
  * We're avoiding an include statement here!
@@ -943,12 +942,12 @@ extern "C"
 struct file_list;
 extern file_list *xyz;</programlisting>
 
-    <para><emphasis>Note:</> If you declare "file_list xyz;" (without the
+    <para><emphasis>Note:</emphasis> If you declare "file_list xyz;" (without the
     pointer), then including the proper header file is necessary.
     If you only want to prototype a pointer, however, the header
     file is unneccessary.</para>
 
-    <para><emphasis>Status:</> Use with discrection.</para>
+    <para><emphasis>Status:</emphasis> Use with discrection.</para>
 
     
   </sect3>
@@ -960,7 +959,7 @@ extern file_list *xyz;</programlisting>
 
     <sect3 id="s36"><title>Turn on warnings</title>
 
-    <para><emphasis>Explanation</></para>
+    <para><emphasis>Explanation</emphasis></para>
 
     <para>Compiler warnings are meant to help you find bugs. You
     should turn on as many as possible. With GCC, the switch is
@@ -973,14 +972,14 @@ extern file_list *xyz;</programlisting>
     <sect3 id="s37"><title>Provide a default case for all switch
     statements</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>What you think is guaranteed is never really guaranteed. The
     value that you don't think you need to check is the one that
     someday will be passed. So, to protect yourself from the
     unknown, always have a default step in a switch statement.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 switch( hash_string( cmd ) )
 {
@@ -999,17 +998,17 @@ switch( hash_string( cmd ) )
 
 } /* end switch( hash_string( cmd ) ) */</programlisting>
 
-    <para><emphasis>Note:</> If you already have a default condition, you
+    <para><emphasis>Note:</emphasis> If you already have a default condition, you
     are obviously exempt from this point. Of note, most of the
     WIN32 code calls `DefWindowProc' after the switch statement.
     This API call *should* be included in a default statement.</para>
 
-    <para><emphasis>Another Note:</> This is not so much a readability issue
+    <para><emphasis>Another Note:</emphasis> This is not so much a readability issue
     as a robust programming issue. The "anomly code goes here" may
     be no more than a print to the STDERR stream (as in
     load_config). Or it may really be an ABEND condition.</para>
 
-    <para><emphasis>Status:</> Programmer discretion is advised.</para>
+    <para><emphasis>Status:</emphasis> Programmer discretion is advised.</para>
 
     
   </sect3>
@@ -1018,7 +1017,7 @@ switch( hash_string( cmd ) )
     <sect3 id="s38"><title>Try to avoid falling through cases in a
     switch statement.</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>In general, you will want to have a 'break' statement within
     each 'case' of a switch statement. This allows for the code to
@@ -1043,12 +1042,12 @@ switch( hash_string( cmd ) )
     <sect3 id="s39"><title>Use 'long' or 'short' Instead of
     'int'</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>On 32-bit platforms, int usually has the range of long. On
     16-bit platforms, int has the range of short.</para>
 
-    <para><emphasis>Status:</> open-to-debate. In the case of most FSF
+    <para><emphasis>Status:</emphasis> open-to-debate. In the case of most FSF
     projects (including X/GNU-Emacs), there are typedefs to int4,
     int8, int16, (or equivalence ... I forget the exact typedefs
     now). Should we add these to IJB now that we have a "configure"
@@ -1060,7 +1059,7 @@ switch( hash_string( cmd ) )
 
     <sect3 id="s40"><title>Don't mix size_t and other types</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>The type of size_t varies across platforms. Do not make
     assumptions about whether it is signed or unsigned, or about
@@ -1076,33 +1075,33 @@ switch( hash_string( cmd ) )
     <sect3 id="s41"><title>Declare each variable and struct on its
     own line.</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>It can be tempting to declare a series of variables all on
     one line. Don't.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 long a = 0;
 long b = 0;
 long c = 0;</programlisting>
 
-    <para><emphasis>Instead of:</></para>
+    <para><emphasis>Instead of:</emphasis></para>
 
     <para>long a, b, c;</para>
 
-    <para><emphasis>Explanation:</> - there is more room for comments on the
+    <para><emphasis>Explanation:</emphasis> - there is more room for comments on the
     individual variables - easier to add new variables without
     messing up the original ones - when searching on a variable to
     find its type, there is less clutter to "visually"
     eliminate</para>
 
-    <para><emphasis>Exceptions:</> when you want to declare a bunch of loop
+    <para><emphasis>Exceptions:</emphasis> when you want to declare a bunch of loop
     variables or other trivial variables; feel free to declare them
     on 1 line. You should, although, provide a good comment on
     their functions.</para>
 
-    <para><emphasis>Status:</> developer-discrection.</para>
+    <para><emphasis>Status:</emphasis> developer-discrection.</para>
 
     
   </sect3>
@@ -1110,7 +1109,7 @@ long c = 0;</programlisting>
 
     <sect3 id="s42"><title>Use malloc/zalloc sparingly</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>Create a local stuct (on the stack) if the variable will
     live and die within the context of one function call.</para>
@@ -1118,7 +1117,7 @@ long c = 0;</programlisting>
     <para>Only "malloc" a struct (on the heap) if the variable's life
     will extend beyond the context of one function call.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 If a function creates a struct and stores a pointer to it in a
 list, then it should definately be allocated via `malloc'.
@@ -1129,7 +1128,7 @@ list, then it should definately be allocated via `malloc'.
     <sect3 id="s43"><title>The Programmer Who Uses 'malloc' is
     Responsible for Ensuring 'free'</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>If you have to "malloc" an instance, you are responsible for
     insuring that the instance is `free'd, even if the deallocation
@@ -1139,18 +1138,18 @@ list, then it should definately be allocated via `malloc'.
     "good thing (tm)". You may need to offer a
     free/unload/destuctor type function to accomodate this.</para>
 
-    <para><emphasis>Example:</></para>
+    <para><emphasis>Example:</emphasis></para>
 <programlisting>
 int load_re_filterfile( struct client_state *csp ) { ... }
 static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
-    <para><emphasis>Exceptions:</></para>
+    <para><emphasis>Exceptions:</emphasis></para>
 
     <para>The developer cannot be expected to provide `free'ing
     functions for C run-time library functions ... such as
     `strdup'.</para>
 
-    <para><emphasis>Status:</> developer-discrection. The "main" use of this
+    <para><emphasis>Status:</emphasis> developer-discrection. The "main" use of this
     standard is for allocating and freeing data structures (complex
     or nested).</para>
 
@@ -1161,13 +1160,13 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     <sect3 id="s44"><title>Add loaders to the `file_list' structure
     and in order</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>I have ordered all of the "blocker" file code to be in alpha
     order. It is easier to add/read new blockers when you expect a
     certain order.</para>
 
-    <para><emphasis>Note:</> It may appear that the alpha order is broken in
+    <para><emphasis>Note:</emphasis> It may appear that the alpha order is broken in
     places by POPUP tests coming before PCRS tests. But since
     POPUPs can also be referred to as KILLPOPUPs, it is clear that
     it should come first.</para>
@@ -1179,7 +1178,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     <sect3 id="s45"><title>"Uncertain" new code and/or changes to
     exitinst code, use FIXME</title>
 
-    <para><emphasis>Explanation:</></para>
+    <para><emphasis>Explanation:</emphasis></para>
 
     <para>If you have enough confidence in new code or confidence in
     your changes, but are not *quite* sure of the reprocussions,
@@ -1199,7 +1198,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     <para>/* FIXME: new code that *may* break something else... */
     ...new code here...</para>
 
-    <para><emphasis>Note:</> If you make it clear that this may or may not
+    <para><emphasis>Note:</emphasis> If you make it clear that this may or may not
     be a "good thing (tm)", it will be easier to identify and
     include in the project (or conversly exclude from the
     project).</para>
@@ -1212,9 +1211,9 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
     <sect2 id="s46"><title>Addendum: Template for files and function
     comment blocks:</title>
 
-    <para><emphasis>Example for file comments:</></para>
+    <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.4 2001/09/23 10:13:48 swa Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1259,22 +1258,22 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.4 2001/09/23 10:13:4
 const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 </programlisting>
 
-    <para><emphasis>Note:</> This declares the rcs variables that should be
+    <para><emphasis>Note:</emphasis> This declares the rcs variables that should be
     added to the "show-proxy-args" page. If this is a brand new
     creation by you, you are free to change the "Copyright" section
     to represent the rights you wish to maintain.</para>
 
-    <para><emphasis>Note:</> The formfeed character that is present right
+    <para><emphasis>Note:</emphasis> The formfeed character that is present right
     after the comment flower box is handy for (X|GNU)Emacs users to
     skip the verbige and get to the heart of the code (via
     `forward-page' and `backward-page'). Please include it if you
     can.</para>
 
-    <para><emphasis>Example for file header comments:</></para>
+    <para><emphasis>Example for file header comments:</emphasis></para>
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.4 2001/09/23 10:13:48 swa Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.5 2001/10/31 18:16:51 swa Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1339,7 +1338,7 @@ extern const char FILENAME_h_rcs[];
 */
 </programlisting>
 
-    <para><emphasis>Example for function comments:</></para>
+    <para><emphasis>Example for function comments:</emphasis></para>
 <programlisting>
 /*********************************************************************
  *
@@ -1347,7 +1346,7 @@ extern const char FILENAME_h_rcs[];
  *
  * Description :  (Fill me in with a good description!)
  *
- * Parameters  :
+ * parameters  :
  *          1  :  param1 = pointer to an important thing
  *          2  :  x      = pointer to something else
  *
@@ -1362,7 +1361,7 @@ int FUNCTION_NAME( void *param1, const char *x )
 }
 </programlisting>
 
-    <para><emphasis>Note:</> If we all follow this practice, we should be
+    <para><emphasis>Note:</emphasis> If we all follow this practice, we should be
     able to parse our code to create a "self-documenting" web
     page.</para>
 
@@ -1387,29 +1386,29 @@ why you did it.
       <para>
 Explain release numbers. major, minor. developer releases. etc.
 
-<OrderedList Numeration="Arabic">
-	  <ListItem><Para>
+<orderedlist numeration="arabic">
+          <listitem><para>
 Remove any existing rpm with rpm -e
-</Para></ListItem>
-	  <ListItem><Para>
+</para></listitem>
+          <listitem><para>
 Remove any file that was left over. This includes (but is not limited to)
-      <ItemizedList>
-		<ListItem><Para>/var/log/junkbuster</Para></ListItem>
-		<ListItem><Para>/etc/junkbuster</Para></ListItem>
-		<ListItem><Para>/usr/sbin/junkbuster</Para></ListItem>
-		<ListItem><Para>/etc/init.d/junkbuster</Para></ListItem>
-		<ListItem><Para>/usr/doc/junkbuster*</Para></ListItem>
-	      </ItemizedList>
-</Para></ListItem>
-	  <ListItem><Para>
+      <itemizedlist>
+                <listitem><para>/var/log/junkbuster</para></listitem>
+                <listitem><para>/etc/junkbuster</para></listitem>
+                <listitem><para>/usr/sbin/junkbuster</para></listitem>
+                <listitem><para>/etc/init.d/junkbuster</para></listitem>
+                <listitem><para>/usr/doc/junkbuster*</para></listitem>
+              </itemizedlist>
+</para></listitem>
+          <listitem><para>
 Install the rpm. Any error messages?
-</Para></ListItem>
-	  <ListItem><Para>start,stop,status junkbuster with the specific script
+</para></listitem>
+          <listitem><para>start,stop,status junkbuster with the specific script
       (e.g. /etc/rc.d/init/junkbuster stop). Reboot your machine. Does
-      autostart work?</Para></ListItem>
-	  <ListItem><Para>Start browsing. Does the junkbuster work? Logfile written?</Para></ListItem>
-	  <ListItem><Para>Remove the rpm. Any error messages? All files removed?</Para></ListItem>
-	</OrderedList>
+      autostart work?</para></listitem>
+          <listitem><para>Start browsing. Does the junkbuster work? Logfile written?</para></listitem>
+          <listitem><para>Remove the rpm. Any error messages? All files removed?</para></listitem>
+        </orderedlist>
 </para>
     </sect2>
 
@@ -1418,15 +1417,15 @@ Install the rpm. Any error messages?
       <para>
 Please submit test reports only with the <ulink url="http://sourceforge.net/tracker/?func=add&amp;group_id=11118&amp;atid=395005">test form</ulink>
 at sourceforge. Three simple steps:
-	<ItemizedList>
-	  
-	  <ListItem><Para>Select category: the distribution you test on.</Para></ListItem>
-	  <ListItem><Para>Select group: the version of Junkbuster that we are about to release.</Para></ListItem>
-	  <ListItem><Para>Fill the Summary and Detailed Description with something
-	      intelligent (keep it short and precise).</Para>
-	  </ListItem>
-	</ItemizedList>
-	Do not mail to the mailinglist (we cannot keep track on issues there).
+        <itemizedlist>
+          
+          <listitem><para>Select category: the distribution you test on.</para></listitem>
+          <listitem><para>Select group: the version of Junkbuster that we are about to release.</para></listitem>
+          <listitem><para>Fill the Summary and Detailed Description with something
+              intelligent (keep it short and precise).</para>
+          </listitem>
+        </itemizedlist>
+        Do not mail to the mailinglist (we cannot keep track on issues there).
       </para>
     </sect2>
     
@@ -1471,6 +1470,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.5  2001/10/31 18:16:51  swa
+  documentation added: howto generate docs in text and html
+  format, howto move stuff to the webserver.
+
   Revision 1.4  2001/09/23 10:13:48  swa
   upload process established. run make webserver and
   the documentation is moved to the webserver. documents
