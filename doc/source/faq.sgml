@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.60 2002/05/22 17:17:48 oes Exp $
+ $Id: faq.sgml,v 1.61 2002/05/25 12:37:25 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -50,9 +50,7 @@
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation.
  ========================================================================
 
 
@@ -72,7 +70,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 1.60 2002/05/22 17:17:48 oes Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.61 2002/05/25 12:37:25 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1577,6 +1575,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.61  2002/05/25 12:37:25  hal9
+Various minor changes and edits.
+
 Revision 1.60  2002/05/22 17:17:48  oes
 Proofread & added more links into u-m
 

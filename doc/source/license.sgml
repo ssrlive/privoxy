@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: license.sgml,v 1.1 2002/05/05 20:20:00 hal9 Exp $
+ $Id: license.sgml,v 1.2 2002/05/10 01:48:20 hal9 Exp $
 
   Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
   See LICENSE.
@@ -21,7 +21,6 @@
   user-manual
   developer-manual
   faq
-  webserver/index.sgml
 
 -->
 

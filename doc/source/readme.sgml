@@ -17,16 +17,14 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 1.15 2002/05/05 17:35:32 hal9 Exp $
+ $Id: readme.sgml,v 1.16 2002/05/26 17:04:25 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation. 
  ========================================================================
 
  ===================================================================
@@ -44,18 +42,6 @@
  the para tag forces a linebreak. Tags need to be carefully placed as a result
  to avoid extra blank lines, etc. 
  ======================================================================
-
- For stable releases, change 
- 
-  entity % p-not-stable "INCLUDE" 
- 
- to 
- 
-  entity % p-not-stable "IGNORE" 
-  
- in the DTD at the top. This will toggle various text 'off'. BOTH
- MUST be toggled in this case or you will get both text referencing 
- stable and unstable versions. You only want one or the other!
 
 -->
 <article id="index">
@@ -158,7 +144,8 @@
  USER[.GROUP]] [config_file]
 </para>
 <para>
- See the man page or user-manual for a brief explanation of each option.
+ See the man page or User Manual for an explanation of each option, and 
+ other configuration and usage issues.
 </para>
 <para>
  If no config_file is specified on the command line, Privoxy will look for a
@@ -166,10 +153,13 @@
  for 'config.txt'). If no config_file is found, Privoxy will fail to start.
 </para>
 <para>
- Or for Red Hat: /etc/rc.d/init.d/privoxy start
+ Or for Red Hat based distributions: /etc/rc.d/init.d/privoxy start
 </para>
 <para>
  Or for SuSE:   /etc/rc.d/privoxy start
+</para>
+<para>
+ Or Debian: /etc/init.d/privoxy start
 </para>
 </sect1>
 
@@ -177,13 +167,13 @@
 <sect1 id="configuration"><title>CONFIGURATION</title>
 <para>
  See: 'config', 'default.action', 'user.action', and 'default.filter'.
- 'user.action' is for personal configuration. These are all well commented.
- Most of the magic is in '*.action' files. 'user.action' should be 
- used for any actions customizations. On Unix-like systems, these files
- are installed in /etc/privoxy.  On Windows, then wherever the executable
- itself is installed. There are many significant changes and advances since
- Junkbuster v2.0.x. The user-manual has a run down of configuration options,
- and examples: http://www.privoxy.org/user-manual/.
+ 'user.action' is for personal and local configuration preferences. These are
+ all well commented. Most of the magic is in '*.action' files. 'user.action'
+ should be used for any actions customizations. On Unix-like systems, these
+ files are installed in /etc/privoxy.  On Windows, then wherever the
+ executable itself is installed. There are many significant changes and
+ advances since Junkbuster v2.0.x. The User Manual has an explanation of
+ all configuration options, and examples: http://www.privoxy.org/user-manual/.
 </para>
 <para>
  Be sure to set your browser(s) for HTTP/HTTPS Proxy at &lt;IP&gt;:&lt;Port&gt;, or
@@ -206,8 +196,8 @@
 <sect1 id="documentation"><title>DOCUMENTATION</title>
 <para>
  There should be documentation in the 'doc' subdirectory<![%p-not-stable;[, but it
- is not completed at this point]]>. In particular, see the user-manual there,
- the faq, and those interested in Privoxy development, should look at
+ is not completed at this point]]>. In particular, see the User Manual there,
+ the FAQ, and those interested in Privoxy development, should look at
  developer-manual. 
 </para>
 <para>
@@ -238,7 +228,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 1.15 2002/05/05 17:35:32 hal9 Exp $ -->
+<!--  $Id: readme.sgml,v 1.16.2.1 2002/05/26 17:04:25 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>

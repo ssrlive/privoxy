@@ -9,6 +9,7 @@
 <!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
+<!entity % p-supp-userman "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
 <!entity % p-doc "IGNORE">         <!-- and never a text doc             -->
 <!entity % announce-big "IGNORE"> <!-- toggle for short vs long version -->
@@ -18,7 +19,7 @@
 
  Purpose     :  Announcement text
                 
- $Id: announce.sgml,v 1.0 2002/05/10 01:48:20 hal9 Exp $
+ $Id: announce.sgml,v 1.1 2002/05/27 22:03:51 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -37,7 +38,7 @@
  press release packages can contain both formats for those that might 
  prefer HTML ready announce text.
 
- This may require a small bit of hand editing before processing. 
+ This will probably require some hand editing before and after processing. 
  The intention is to minimize this as much as possible.
 
  To create: make announce
@@ -65,6 +66,10 @@
  &p-intro;
 <!-- end boilerplate -->
 
+<!-- Include supported.sgml boilerplate: -->
+ &supported;
+<!-- end boilerplate -->
+
 <para>
  In addition to the traditional features of <application>Internet
  Junkbuster</application>, such as ad and banner blocking, cookie
@@ -82,24 +87,17 @@
  <!-- &history; this doesn't work so well here --> 
 <!-- end boilerplate -->
 
-<para>
- <application>Junkbuster</application> was originally written by Anonymous
- Coders and Junkbusters Corporation, and was released as free open-source
- software under the GNU GPL. Stefan Waldherr made many improvements, and
- started the SourceForge project Privoxy to rekindle development. There are
- now several active developers contributing.
-</para>
 ]]>
 
 <para> 
  <literallayout>Download location: 
-  <ulink url="http://sourceforge.net/projects/ijbswa/">http://sourceforge.net/projects/ijbswa/</ulink>
+   <ulink url="http://sourceforge.net/projects/ijbswa/">http://sourceforge.net/projects/ijbswa/</ulink>
  </literallayout>
 </para>
 
 <para> 
  <literallayout>Home Page: 
-  <ulink url="http://www.privoxy.org/">http://www.privoxy.org/</ulink>
+   <ulink url="http://www.privoxy.org/">http://www.privoxy.org/</ulink>
  </literallayout>
 </para>
 

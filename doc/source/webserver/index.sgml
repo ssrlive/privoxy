@@ -5,8 +5,8 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.1.1">
-<!entity p-status "alpha">
+<!entity p-version "2.9.15">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 1.17 2002/05/28 02:31:38 hal9 Exp $
+ $Id: index.sgml,v 1.18 2002/05/28 02:31:38 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -36,7 +36,7 @@
  perl.
 
  Generates: index.html, for webserver home page.
-            privoxy-index.html, for packaging with docs
+            And privoxy-index.html, for packaging with docs.
  
 -->
 
@@ -244,7 +244,16 @@
  or write to the Free Software Foundation, Inc., 59
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- Revision 1.17  2002/05/26 17:40:02  hal9
+ $Log: index.sgml,v $
+ Revision 1.16.2.3  2002/05/28 02:31:38  hal9
+ New file, privoxy-index.html, for bundling with documentation. Built from
+ index.sgml, like homepage, but with content toggles more suitable for this use.
+
+ Revision 1.16.2.2  2002/05/26 22:04:46  hal9
+ Add several comments, and reworded 'most recent release', ie we don't officially
+ release odd numbered versions.
+
+ Revision 1.16.2.1  2002/05/26 17:40:02  hal9
  Make team pictures link absolute for docs.
 
  Revision 1.16  2002/05/24 10:06:31  oes

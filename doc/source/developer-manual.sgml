@@ -8,8 +8,8 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.1.1">
-<!entity p-status "alpha">
+<!entity p-version "2.9.15">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -23,16 +23,14 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $
+ $Id: developer-manual.sgml,v 1.51 2002/05/29 00:30:59 mal0rd Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
  NOTE: Please read developer-manual/documentation.html before touching 
- anything in this, or other Privoxy documentation. You have been warned!
- Failure to abide by this rule will result in the revocation of your license 
- to live a peaceful existence!
+ anything in this, or other Privoxy documentation. 
  ========================================================================
 
 -->
@@ -50,7 +48,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 1.51 2002/05/29 00:30:59 mal0rd Exp $</pubdate>
 
 <!--
 
@@ -191,8 +189,8 @@ Hal.
           </para></listitem>
           <listitem><para>
             If your changes span multiple files, and the code won't recompile unless
-            all changes are commited (e.g. when changing the signature of a function),
-            then commit all files one after another, without long delays in beween.
+            all changes are committed (e.g. when changing the signature of a function),
+            then commit all files one after another, without long delays in between.
             If necessary, prepare the commit messages in advance.
           </para></listitem>
           <listitem><para>
@@ -208,7 +206,7 @@ Hal.
         We don't have a too formal policy on this, just use common sense. Hints: If it is..
         <orderedlist numeration="arabic">
           <listitem><para>
-            ..a bugfix / clean-up / cosmetic thing: shoot
+            ..a bug-fix / clean-up / cosmetic thing: shoot
           </para></listitem>
           <listitem><para>
             ..a new feature that can be turned off: shoot
@@ -249,14 +247,29 @@ Hal.
     <ulink url="../faq/index.html"><citetitle>FAQ</citetitle></ulink>, and, of
     course this, the <citetitle>developer-manual</citetitle> in this format.
     The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle>
-    <citetitle>privoxy.1</citetitle> (man page) files are also now maintained
-    as Docbook SGML. The finished files are all in the top-level source
-    directory are generated files! Also, <filename>index.html</filename>, the
-    <application>Privoxy</application> home page, is maintained as SGML.
+    <citetitle>privoxy.1</citetitle> (man page), and
+    <citetitle>config</citetitle> files are also now maintained as Docbook
+    SGML. These files, when built, in the top-level source directory are
+    generated files! Also, the <application>Privoxy</application> <filename>index.html</filename> (and a 
+    variation on this file, <filename>privoxy-index.html</filename>, 
+    meant for inclusion with doc packages), are maintained as SGML as well.
     <emphasis>DO NOT edit these directly</emphasis>. Edit the SGML source, or
     contact someone involved in the documentation (at present Stefan and
     Hal).
     </para> 
+    <para>
+     <filename>config</filename> requires some special handling. The reason it
+     is maintained this way is so that the extensive comments in the file
+     mirror those in <citetitle>user-manual</citetitle>. But the conversion 
+     process requires going from SGML to HTML to text to special formatting 
+     required for the embedded comments. Some of this does not survive so
+     well. Especially some of the examples that are longer than 80 characters.
+     The build process for this file outputs to <filename>config.new</filename>, 
+     which should be reviewed for errors and mis-formatting. Once satisfied
+     that it is correct, then it should be hand copied to
+     <filename>config</filename>.
+
+    </para>
     <para>
      Other, less formal documents (e.g. <filename>LICENSE</filename>,
      <filename>INSTALL</filename>) are maintained as plain text files in the
@@ -1650,7 +1663,7 @@ list, then it should definitely be allocated via `malloc'.
     responsible for ensuring that deletion is timely (i.e. not too
     soon, not too late). This is known as "low-coupling" and is a
     "good thing (tm)". You may need to offer a
-    free/unload/destuctor type function to accommodate this.</para>
+    free/unload/destructor type function to accommodate this.</para>
 
     <para><emphasis>Example:</emphasis></para>
 <programlisting>
@@ -1727,7 +1740,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1787,7 +1800,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.47 2002/05/26 04:55:11 mal0rd Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 1.46.2.4 2002/05/29 00:30:59 mal0rd Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1932,7 +1945,7 @@ at sourceforge. Three simple steps:
               intelligent (keep it short and precise).</para>
           </listitem>
         </itemizedlist>
-        Do not mail to the mailinglist (we cannot keep track on issues there).
+        Do not mail to the mailing list (we cannot keep track on issues there).
       </para>
     </sect2>
     
@@ -1981,12 +1994,12 @@ at sourceforge. Three simple steps:
               Y, the version minor, represents the branch within the major version.
               At any point in time, there are two branches being maintained:
               The stable branch, with an even minor, say, 2N, in which no functionality is
-              being added and only bugfixes are made, and 2N+1, the development branch, in
+              being added and only bug-fixes are made, and 2N+1, the development branch, in
               which the further development of <application>Privoxy</application> takes
               place.
               This enables us to turn the code upside down and inside out, while at the same time
               providing and maintaining a stable version.
-              The minor is reset to zero (and one) when the major is inrcemented. When a development
+              The minor is reset to zero (and one) when the major is incremented. When a development
               branch has matured to the point where it can be turned into stable, the old stable branch
               2N is given up (i.e. no longer maintained), the former development branch 2N+1 becomes the
               new stable branch 2N+2, and a new development branch 2N+3 is opened.
@@ -2146,22 +2159,22 @@ at sourceforge. Three simple steps:
         </para>
         <simplelist>
          <member>
-          <filename>LICENSE</filename> (toplevel directory)
+          <filename>LICENSE</filename> (top-level directory)
          </member>
         </simplelist>
         <simplelist>
          <member>
-          <filename>README</filename> (toplevel directory)
+          <filename>README</filename> (top-level directory)
          </member>
         </simplelist>
         <simplelist>
          <member>
-          <filename>AUTHORS</filename> (toplevel directory)
+          <filename>AUTHORS</filename> (top-level directory)
          </member>
         </simplelist>
         <simplelist>
          <member>
-          <filename>man page</filename> (toplevel directory, Unix-like
+          <filename>man page</filename> (top-level directory, Unix-like
           platforms only)
          </member>
         </simplelist>
@@ -2177,8 +2190,8 @@ at sourceforge. Three simple steps:
         </simplelist>
         <para>
           Also suggested: <filename>Developer Manual</filename>
-          (doc/webserver/devel-manual) and <filename>ChangeLog</filename>
-          (toplevel directory). <filename>FAQ</filename> and the manuals are
+          (doc/webserver/developer-manual) and <filename>ChangeLog</filename>
+          (top-level directory). <filename>FAQ</filename> and the manuals are
           HTML docs. There are also text versions in
           <filename>doc/text/</filename> which could conceivably also be
           included.
@@ -2186,14 +2199,18 @@ at sourceforge. Three simple steps:
         <para>
          The documentation has been designed such that the manuals are linked
          to each other from parallel directories, and should be packaged 
-         that way. <filename>index.html</filename> can also be included and 
-         can serve as a focal point for docs and other links of interest.
-         This should be one level up from the manuals. There are two 
+         that way. <filename>privoxy-index.html</filename> can also be
+         included and can serve as a focal point for docs and other links of
+         interest (and possibly renamed to <filename>index.html</filename>).
+         This should be one level up from the manuals. There is a link also 
+         on this page to an HTMLized version of the man page. To avoid 404 for
+         this, it is in CVS as
+         <filename>doc/webserver/man-page/privoxy-man-page.html</filename>,
+         and should be included along with the manuals. There is also a
          css stylesheets that can be included for better presentation:
-         <filename>p_doc.css</filename> and <filename>p_web.css</filename>.
-         These should be in the same directory with
-         <filename>index.html</filename>, (i.e. one level up from the manual 
-         directories).
+         <filename>p_doc.css</filename>. This should be in the same directory
+         with <filename>privoxy-index.html</filename>, (i.e. one level up from
+         the manual directories).
         </para>
       </listitem> 
       <listitem>
@@ -2422,7 +2439,7 @@ at sourceforge. Three simple steps:
       </para>
       <para>
       <programlisting>
-        cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
+  cvs -z3  -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co winsetup
 </programlisting>
       </para>
       <para>
@@ -2432,8 +2449,8 @@ at sourceforge. Three simple steps:
       </para>
       <para>
       <programlisting>
-        cd winsetup
-        make
+  cd winsetup
+  make
 </programlisting>
       </para>
       <para>
@@ -2454,32 +2471,22 @@ at sourceforge. Three simple steps:
       </para>
       <para>
         <programlisting>
-        debchange -v &p-version;-&p-status;-1 "New upstream version"
-        </programlisting>
+  debchange -v &p-version;-&p-status;-1 "New upstream version"
+</programlisting>
       </para>
       <para>
-        After this simply run 
+        Then, run: 
       </para>
       <para>
         <programlisting>
-        dpkg-buildpackage -rfakeroot -us -uc -b
-        </programlisting>
+  dpkg-buildpackage -rfakeroot -us -uc -b
+</programlisting>
       </para>
       <para>
         This will create
         <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
-        which can be uploaded.
-      </para>
-      <para>
-        Then, run:
-      </para>
-      <para>
-	<programlisting>
-  make debian-dist
-</programlisting>
-      </para>
-      <para>
-        To upload the package to Sourceforge, simply issue
+        which can be uploaded.  To upload the package to Sourceforge, simply
+	issue
       </para>
       <para>
         <programlisting>
@@ -2522,7 +2529,7 @@ at sourceforge. Three simple steps:
 	</para>
 	<para>
 	<programlisting>
-zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
+  zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 </programlisting>
 	</para>
 	<para>
@@ -2535,7 +2542,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 
     <sect3 id="newrelease-freebsd"><title>FreeBSD</title>
       <para>
-	Login to Sourceforge's compilefarm via ssh:
+	Login to Sourceforge's compile-farm via ssh:
 	</para>
 	<para>
 	<programlisting>
@@ -2718,7 +2725,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   <sect1 id="webserver-update"><title>Update the Webserver</title>
    <para>
     When updating the webserver, please follow these steps to make
-    sure that no broken links, incosistent contents or permission
+    sure that no broken links, inconsistent contents or permission
     problems will occur:
    </para>
    <para>
@@ -2727,7 +2734,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
    </para>
    <para>
     <programlisting>
-  make dok # (or make redkat-dok if make dok doesn't work for you)
+  make dok # (or make redhat-dok if make dok doesn't work for you)
 </programlisting>
    </para>
    <para>
@@ -2828,6 +2835,18 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 1.51 2002/05/29 00:30:59  mal0rd
+  Fixed a little formatting.  Clarified debian section.
+
+  Revision 1.50  2002/05/28 04:32:45  hal9
+  Change hints on bundling index.html to privoxy-index.html
+
+  Revision 1.49  2002/05/26 17:04:24  hal9
+  -Spellcheck, very minor edits, and sync across branches
+
+  Revision 1.48  2002/05/26 12:48:31  roro
+  Add releasing information about Debian.
+
   Revision 1.47  2002/05/26 04:55:11  mal0rd
   Added debian-dist and debian-upload targets.  Also documented usage.
 

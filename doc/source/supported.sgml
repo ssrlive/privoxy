@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: supported.sgml,v 1.9 2002/05/10 01:48:20 hal9 Exp $
+ $Id: supported.sgml,v 1.10 2002/05/26 17:04:25 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -20,11 +20,12 @@
   user-manual
   faq
   newfeatures
+  announce
 
 -->
 <para>
  At present, <application>Privoxy</application> is known to run on
- Windows(95, 98, ME, 2000, XP), Linux (RedHat, Suse, Debian, Conectiva),
+ Windows(95, 98, ME, 2000, XP), Linux (RedHat, SuSE, Debian, Conectiva),
  Mac OSX, OS/2, AmigaOS, BeOS, FreeBSD, NetBSD, Solaris,  and many more 
  flavors of Unix.
 </para>

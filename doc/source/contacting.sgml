@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa//current/doc/source/contacting.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/contacting.sgml,v $
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.14 2002/05/17 13:32:12 oes Exp $
+ $Id: contacting.sgml,v 1.15 2002/05/26 17:04:24 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -19,6 +19,8 @@
   README
   user-manual
   webserver/index.sgml
+  privoxy-index.html
+  announce.sgml
 
 -->
 
@@ -57,7 +59,7 @@
 
 <para>
   Before doing so, please make sure that the bug has not already been submitted
-  and observe the aditional hints at the top of the <ulink
+  and observe the additional hints at the top of the <ulink
   url="http://sourceforge.net/tracker/?func=add&amp;group_id=11118&amp;atid=111118">submit
   form</ulink>.
 </para>
@@ -112,7 +114,7 @@
 <para>
 For any other issues, feel free to use the mailing lists. Technically interested users
 and people who wish to contribute to the project are also welcome on the developers list!
-You can find an overview of all <application>Prixoxy</application>-related mailing lists,
+You can find an overview of all <application>Privoxy</application>-related mailing lists,
 including list archives, at:
 <ulink url="http://sourceforge.net/mail/?group_id=11118">http://sourceforge.net/mail/?group_id=11118</ulink>.
 </para>
