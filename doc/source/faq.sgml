@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.41 2002/04/04 06:48:37 hal9 Exp $
+ $Id: faq.sgml,v 1.42 2002/04/04 18:46:47 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,6 +46,14 @@
   </QandAEntry>
  </QandASet>
 
+
+ ========================================================================
+ NOTE: Please read developer-manual/documentation.html before touching 
+ anything in this, or other Privoxy documentation. You have been warned!
+ Failure to abide by this rule will result in the revocation of your license 
+ to live a peaceful existence!
+ ========================================================================
+
 -->
 
 
@@ -53,7 +61,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.41 2002/04/04 06:48:37 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.42 2002/04/04 18:46:47 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -75,13 +83,13 @@
 ]]>
  <para>
  This FAQ gives users and developers alike answers to frequently asked
- questions about <ulink url="http://www.privoxy.org">Privoxy</ulink>. 
+ questions about <ulink url="http://www.privoxy.org">Privoxy</ulink> 
+ <![%p-stable;[ v.&p-version]]>.
  </para>
 
-<!--
- Include privoxy.sgml boilerplate:
--->
+<!-- Include privoxy.sgml boilerplate: -->
  &p-intro;
+<!-- end boilerplate -->
 
  <para>
   You can find the latest version of the document at <ulink
@@ -150,8 +158,8 @@
 <para>
  The developers also believed that there are so many changes from the original 
  code, that it was time to make a clean break from the past and make 
- a name in their own right, especially now with the pending release of 
- version 3.0.
+ a name in their own right<![%p-not-stable;[, especially now with the pending
+ release of version 3.0]]>.
 </para>
 </sect2>
 
@@ -167,10 +175,11 @@ from the old <application>Junkbuster?</application></title>
  </para>
  <para>
   The configuration has changed significantly as well. This is something that
-  users will notice right off the bat. The <quote>blocklist</quote> file does
-  not exist any more. This is replaced by <quote>actions</quote> files, such
-  as <filename>default.actions</filename>. This is where most of the per site
-  configuration is now.
+  users will notice right off the bat if you are upgrading from 
+  <application>Junkbuster</application> 2.0.x. The <quote>blocklist</quote>
+  file does not exist any more. This is replaced by <quote>actions</quote>
+  files, such as <filename>default.actions</filename>. This is where most of
+  the per site configuration is now.
  </para>
 </sect2>
 
@@ -362,8 +371,7 @@ Include supported.sgml here:
  <para>
   See the <ulink
   url="../user-manual/index.html">user-manual</ulink> for
-  platform specific installation instructions. [FIXME: This is meant for after
-  the name change for 3.0!]
+  platform specific installation instructions.
  </para>
  <para>
   Note: Some installers may automatically uninstall
@@ -870,6 +878,25 @@ see is a bright red square.</title>
 </para>
 </sect2>
 
+<sect2 id="srvany">
+<title>Can <application>Privoxy</application> run as a service 
+on Win2K/NT?</title>
+<para>
+ Yes, it can run as a system service using <command>srvany.exe</command>.
+ The only catch is that this will effectively disable the
+ <application>Privoxy</application> icon in the taskbar. You can have 
+ one or the other, but not both at this time :( 
+</para>
+<para>
+ There is a pending feature request for this functionality. See 
+ thread: <ulink
+ url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>, 
+ for details, and a sample configuration.
+
+</para>
+</sect2>
+
+
 <sect2 renderas="sect3" id="otherproxy">
 <title>How can I make <application>Privoxy</application> work with other 
 proxies like <application>Squid</application>?</title>
@@ -964,7 +991,7 @@ return a web page telling you you're not running
 <para>
 If you have version 2.0.2, then the equivalent is
 http://example.com/show-proxy-args (but you get far less information, and you
-should really consider upgrading to 2.9.x).
+should really consider upgrading to &p-version;).
 </para>
 </sect2>
 
@@ -987,9 +1014,10 @@ FIXME: commented out until we have data. HB 03/18/02.
 
 <sect2 renderas="sect3" id="blocklist"><title>Do you still maintain the blocklists?</title>
 <para>
-    No. The format of the blocklists has changed significantly in the versions
-    2.9.x. Once we have released the new stable version, v3.0, there will
-    again be blocklists that you can update automatically.
+    No. The format of the blocklists has changed significantly in versions
+    2.9.x and later. <![%p-not-stable;[Once we have released the new stable
+    version, v3.0, there will again be blocklists that you can update
+    automatically.]]>
 </para>
 </sect2>
 
@@ -1043,8 +1071,8 @@ more through Google.
 <para>
  <application>Privoxy</application> can remove various information about you,
  and allows <emphasis>you</emphasis> more freedom  to decide which sites 
- you can trust. But it's still possible that web sites can find out who you
- are. Here's one way this can happen.
+ you can trust, and what details you want to reveal. But it's still possible
+ that web sites can find out who you are. Here's one way this can happen.
 </para>
 <para>
  A few browsers disclose the user's email address in certain situations, such
@@ -1098,7 +1126,6 @@ being altered?</title>
  If you have problems with a site, you will have to adjust your configuration 
  accordingly. Cookies are probably the most likely adjustment that may 
  be required, but by no means the only one.
-
 </para>
 
 </sect2>
@@ -1205,6 +1232,22 @@ secure is it? Do I need to take any special precautions?</title>
  and select "Toggle Privoxy on or off" from that page.
 
 </para>
+</sect2>
+
+<sect2 renderas="sect3" id="seealso">
+<title>Where can I find more information about <application>Privoxy</application>
+and related issues?</title>
+<!-- Include seealso.sgml boilerplate: -->
+ &seealso;
+<!-- end boilerplate -->
+
+<!--
+<para>
+ Please see the 
+ <ulink url="../user-manual/seealso.html">user-manual</ulink> for 
+ others references.
+</para>
+-->
 </sect2>
 
 </sect1>
@@ -1353,13 +1396,18 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
 
   </sect1>
   
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="seealso"><title>See also</title>
+<!--   ~~~~~       New section      ~~~~~     -->
+<!--
+<sect1 id="seealso"><title>See also</title>
+-->
 <!-- Include seealso.sgml -->
- &seealso;
+<!--
+ &see;
+-->
 <!-- end  -->
-
-  </sect1>
+<!--
+</sect1>
+-->
 
 <!-- hhmts end -->
  <!--
@@ -1386,6 +1434,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.42  2002/04/04 18:46:47  swa
+consistent look. reuse of copyright, history et. al.
+
 Revision 1.41  2002/04/04 06:48:37  hal9
 Structural changes to allow for conditional inclusion/exclusion of content
 based on entity toggles, e.g. 'entity % p-not-stable  "INCLUDE"'. And
