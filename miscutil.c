@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.23 2001/10/29 03:48:10 david__schmidt Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.24 2001/11/05 21:41:43 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,15 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.23 2001/10/29 03:48:10 david__s
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.24  2001/11/05 21:41:43  steudten
+ *    Add changes to be a real daemon just for unix os.
+ *    (change cwd to /, detach from controlling tty, set
+ *    process group and session leader to the own process.
+ *    Add DBG() Macro.
+ *    Add some fatal-error log message for failed malloc().
+ *    Add '-d' if compiled with 'configure --with-debug' to
+ *    enable debug output.
+ *
  *    Revision 1.23  2001/10/29 03:48:10  david__schmidt
  *    OS/2 native needed a snprintf() routine.  Added one to miscutil, brackedted
  *    by and __OS2__ ifdef.
@@ -151,7 +160,6 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.23 2001/10/29 03:48:10 david__s
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
 #include <ctype.h>
 #include <assert.h>
 

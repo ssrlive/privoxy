@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.31 2001/10/26 17:39:01 oes Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.32 2001/11/07 00:02:13 steudten Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.31 2001/10/26 17:39:01 oes Exp $"
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.32  2001/11/07 00:02:13  steudten
+ *    Add line number in error output for lineparsing for
+ *    actionsfile and configfile.
+ *    Special handling for CLF added.
+ *
  *    Revision 1.31  2001/10/26 17:39:01  oes
  *    Removed csp->referrer
  *    Moved ijb_isspace and ijb_tolower to project.h
@@ -196,7 +201,6 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.31 2001/10/26 17:39:01 oes Exp $"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
-#include <malloc.h>
 #include <errno.h>
 #include <sys/stat.h>
 #include <ctype.h>

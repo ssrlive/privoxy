@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.2 2001/05/17 22:52:35 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.2  2001/05/17 22:52:35  oes
+ *     - Cleaned CRLF's from the sources and related files
+ *
  *    Revision 1.1.1.1  2001/05/15 13:58:51  oes
  *    Initial import of version 2.9.3 source tree
  *
@@ -43,8 +46,8 @@ const char encode_rcs[] = "$Id: encode.c,v 1.1.1.1 2001/05/15 13:58:51 oes Exp $
 #include "config.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
 
 #include "encode.h"
 

@@ -1,4 +1,4 @@
-const char killpopup_rcs[] = "$Id: killpopup.c,v 1.11 2001/10/07 15:42:41 oes Exp $";
+const char killpopup_rcs[] = "$Id: killpopup.c,v 1.12 2001/10/25 03:40:48 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/killpopup.c,v $
@@ -32,6 +32,12 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.11 2001/10/07 15:42:41 oes Ex
  *
  * Revisions   :
  *    $Log: killpopup.c,v $
+ *    Revision 1.12  2001/10/25 03:40:48  david__schmidt
+ *    Change in porting tactics: OS/2's EMX porting layer doesn't allow multiple
+ *    threads to call select() simultaneously.  So, it's time to do a real, live,
+ *    native OS/2 port.  See defines for __EMX__ (the porting layer) vs. __OS2__
+ *    (native). Both versions will work, but using __OS2__ offers multi-threading.
+ *
  *    Revision 1.11  2001/10/07 15:42:41  oes
  *    filter_popups now gets a csp pointer so it can raise the new
  *      CSP_FLAG_MODIFIED flag.
@@ -93,7 +99,6 @@ const char killpopup_rcs[] = "$Id: killpopup.c,v 1.11 2001/10/07 15:42:41 oes Ex
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
-#include <malloc.h>
 #include <errno.h>
 #include <sys/stat.h>
 #include <ctype.h>

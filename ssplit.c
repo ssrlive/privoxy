@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.3 2001/05/29 08:54:25 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -32,6 +32,11 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
  *
  * Revisions   :
  *    $Log: ssplit.c,v $
+ *    Revision 1.3  2001/05/29 08:54:25  jongfoster
+ *    Rewrote the innards of ssplit() to be easier to understand,
+ *    faster, and to use less memory.  Didn't change the interface
+ *    except to give the parameters meaningful names.
+ *
  *    Revision 1.2  2001/05/17 23:01:01  oes
  *     - Cleaned CRLF's from the sources and related files
  *
@@ -46,10 +51,6 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.2 2001/05/17 23:01:01 oes Exp $";
 
 #include <string.h>
 #include <stdlib.h>
-
-#ifdef _WIN32
-#include <malloc.h>
-#endif
 
 #include "ssplit.h"
 #include "miscutil.h"
