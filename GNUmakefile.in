@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.64 2002/04/04 22:14:51 oes Exp $
+# $Id: GNUmakefile.in,v 1.65 2002/04/06 05:16:39 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -88,6 +88,7 @@ DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
+PERL       = perl
 
 #User Group paras
 USER       = @USER@
@@ -100,7 +101,7 @@ GROUP	   = @GROUP@
 #   - Jon
 #DOSFILTER  = $(SED) -e $$'s,$$,\r,'
 #DOSFILTER  = gawk -v ORS='\r\n' '{print $0;}'
-DOSFILTER  = perl -p -e 's/\n/\r\n/'
+DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
 
 #############################################################################
 # Setup for make distribution rh and suse for now 
@@ -498,7 +499,7 @@ doc/source/ldpOK.dsl:
 
 # Otherwise we get plain groff conversion.
 groff2html:
-	$(G2H_CMD) ./privoxy.1 > doc/webserver/man-page/privoxy-man-page.html
+	$(G2H_CMD) ./privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
 
 # developer manual
 dok-devel: doc/source/ldpOK.dsl
@@ -525,14 +526,13 @@ dok-faq: doc/source/ldpOK.dsl
 dok-man: doc/source/ldpOK.dsl
 	rm -rf doc/man doc/webserver/man-page
 	mkdir -p doc/man -p doc/webserver/man-page
-	if [ "$(MAN2HTML)" != "false" ]; then \
-		$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html; \
-		man ./privoxy.1 | $(MAN2HTML) -bare \
-		 >> doc/webserver/man-page/privoxy-man-page.html; \
-		$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html; \
-     else \
-          $(MAKE) groff2html; \
-	fi
+ifneq ($(MAN2HTML),false)
+	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
+	man ./privoxy.1 | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
+	$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html
+else
+	$(MAKE) groff2html
+endif
 
 # readme page
 dok-readme: doc/source/ldpOK.dsl
@@ -577,36 +577,36 @@ redhat-dok: doc/source/ldpOK.dsl man2html
 # For those with man2html ala RH7's.
 man2html:
 	mkdir -p doc/webserver/man-page
-	if [ "$(MAN2HTML)" != "false" ]; then \
-		$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > doc/webserver/man-page/privoxy-man-page.html; \
-           perl -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' doc/webserver/man-page/privoxy-man-page.html; \
-     else \
-          $(MAKE) groff2html; \
-	fi
+ifneq ($(MAN2HTML),false)
+	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > doc/webserver/man-page/privoxy-man-page.html
+	$(PERL) -pi -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' doc/webserver/man-page/privoxy-man-page.html
+else
+	$(MAKE) groff2html
+endif
 
 ## Make README
 redhat-readme: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html && $(WDUMP) \
-          tmp.html > ../../README && rm -rf tmp.html
-     # kludge to force recreation on next run. Rodgrigo?
+	  tmp.html > ../../README && rm -rf tmp.html
+	# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
 #### WIP targets HB ##################
 ## Make AUTHORS file
 authors: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP) \
-          tmp.html > ../../AUTHORS && rm -f tmp.html
-     # kludge to force recreation on next run. Rodgrigo?
+	  tmp.html > ../../AUTHORS && rm -f tmp.html
+	# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
 # make a man page, and then (lousy) HTML version.
 man: doc/source/ldpOK.dsl
 	mkdir -p doc/source/man
 	cd doc/source/man && docbook2man ../privoxy-man-page.sgml &&\
-	perl -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
+	$(PERL) -pi -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1
 	cd doc/source/man && $(DB) ../privoxy-man-page.sgml &&\
-     mv -f index.html privoxy-man-page.html
-     # kludge to force recreation on next run. Rodgrigo?
+	mv -f index.html privoxy-man-page.html
+	# kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 
 #############################################################################
@@ -750,6 +750,10 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.65  2002/04/06 05:16:39  hal9
+# -Add 'authors' and 'man' targets for AUTHORS and man-page (WIP).
+# -Both of these will soon be generated files.
+#
 # Revision 1.64  2002/04/04 22:14:51  oes
 # No longer rely on find honoring -iname
 #
