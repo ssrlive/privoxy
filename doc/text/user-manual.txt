@@ -3,7 +3,7 @@ Privoxy User Manual
 
    By: Privoxy Developers
    
-   $Id: user-manual.sgml,v 1.57 2002/03/24 20:33:30 hal9 Exp $
+   $Id: user-manual.sgml,v 1.60 2002/03/27 01:57:34 hal9 Exp $
    
    The user manual gives users information on how to install, configure
    and use Privoxy. Privoxy is a web proxy with advanced filtering
@@ -84,16 +84,20 @@ Privoxy User Manual
 1. Introduction
 
    Privoxy is a web proxy with advanced filtering capabilities for
-   protecting privacy, filtering and modifying web page content, managing
-   cookies, controlling access, and removing ads, banners, pop-ups and
-   other obnoxious Internet Junk. Privoxy has a very flexible
-   configuration and can be customized to suit individual needs and
-   tastes. Privoxy has application for both stand-alone systems and
-   multi-user networks.
+   protecting privacy, filtering web page content, managing cookies,
+   controlling access, and removing ads, banners, pop-ups and other
+   obnoxious Internet junk. Privoxy has a very flexible configuration and
+   can be customized to suit individual needs and tastes. Privoxy has
+   application for both stand-alone systems and multi-user networks.
    
-   Privoxy is derived from Internet Junkbuster by Junkbusters
-   Corporation, which is no longer under development. Many enhancements
-   and new features have been added.
+   Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+   was originally written by JunkBusters Corporation, and was released as
+   free open-source software under the GNU GPL. Stefan Waldherr made many
+   improvements, and started the SourceForge project to continue
+   development.
+   
+   Privoxy continues the Junkbuster tradition, but adds many refinements
+   and enhancements.
    
    This documentation is included with the current BETA version of
    Privoxy and is mostly complete at this point. The most up to date
@@ -1964,13 +1968,43 @@ Please choose from the following options:
 
 
    Now the page displays ;-)
+   
+   But now what about a situation where we get no explicit matches like
+   we did with:
+   
+ { -block }
+  /adsl
+
+
+   That actually was very telling and pointed us quickly to where the
+   problem was. If you don't get this kind of match, then it means one of
+   the default rules in the first section is causing the problem. This
+   would require some guesswork, and maybe a little trial and error to
+   isolate the offending rule. One likely cause would be one of the
+   "{+filter}" actions. Try adding the URL for the site to one of aliases
+   that turn off "+filter":
+   
+ {shop}
+ .quietpc.com
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+ .forbes.com
+
+
+   "{shop}" is an "alias" that expands to "{ -filter -no-cookies
+   -no-cookies-keep }". Or you could do your own exception to negate
+   filtering:
+   
+ {-filter}
+ .forbes.com
 
 References
 
    Visible links
    1. http://www.privoxy.org/user-manual/
    2. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INTRODUCTION
-   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN31
+   3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN35
    4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION
    5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-SOURCE
    6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-RH
@@ -1979,30 +2013,30 @@ References
    9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-WIN
   10. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#INSTALLATION-OTHER
   11. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURATION
-  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN150
-  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN168
-  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN199
-  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN232
-  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN325
-  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN462
-  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN550
-  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN659
+  12. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN154
+  13. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN172
+  14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN203
+  15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN236
+  16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN329
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN466
+  18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#FORWARDING
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN663
   20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSFILE
-  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN758
-  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN832
-  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1149
+  21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN762
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN836
+  23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1153
   24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#FILTERFILE
-  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1208
+  25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1212
   26. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUICKSTART
-  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1264
+  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1268
   28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONTACT
   29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
-  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1323
-  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1329
+  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1327
+  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1333
   32. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
   33. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#APPENDIX
   34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#REGEX
-  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1517
+  35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1521
   36. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSANAT
   37. http://p.p/
   38. http://sourceforge.net/projects/ijbswa/
@@ -2027,7 +2061,7 @@ References
   57. http://sourceforge.net/mail/?group_id=11118
   58. http://sourceforge.net/mail/?group_id=11118
   59. http://www.gnu.org/copyleft/gpl.html
-  60. http://www.junkbusters.com/ht/en/ijbfaq.html
+  60. http://www.junkbusters.com/
   61. http://www.waldherr.org/junkbuster/
   62. http://sourceforge.net/projects/ijbswa/
   63. http://sourceforge.net/projects/ijbswa
@@ -2052,12 +2086,12 @@ References
   82. http://google.com/
 
    Hidden links:
-  83. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1389
-  84. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1397
-  85. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1400
-  86. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1403
-  87. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1406
-  88. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1411
-  89. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1414
-  90. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1417
-  91. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1423
+  83. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1393
+  84. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1401
+  85. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1404
+  86. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1407
+  87. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1410
+  88. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1415
+  89. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1418
+  90. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1421
+  91. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN1427

@@ -3,16 +3,23 @@ Privoxy Frequently Asked Questions
 
    By: Privoxy Developers
    
-   $Id: faq.sgml,v 1.30 2002/03/25 16:39:22 hal9 Exp $
+   $Id: faq.sgml,v 1.32 2002/03/27 00:57:03 hal9 Exp $
    
-   The FAQ document gives users and developers alike answers to
-   frequently asked questions about Privoxy. Privoxy is a web proxy with
-   advanced filtering capabilities for protecting privacy, filtering web
-   page content, managing cookies, controlling access, and removing ads,
-   banners, pop-ups and other obnoxious Internet Junk. Privoxy has a very
-   flexible configuration and can be customized to suit individual needs
-   and tastes. Privoxy has application for both stand-alone systems and
-   multi-user networks.
+   This FAQ gives users and developers alike answers to frequently asked
+   questions about Privoxy.
+   
+   Privoxy is a web proxy with advanced filtering capabilities for
+   protecting privacy, filtering web page content, managing cookies,
+   controlling access, and removing ads, banners, pop-ups and other
+   obnoxious Internet junk. Privoxy has a very flexible configuration and
+   can be customized to suit individual needs and tastes. Privoxy has
+   application for both stand-alone systems and multi-user networks.
+   
+   Privoxy is based on the code of the Internet Junkbuster. Junkbuster
+   was originally written by JunkBusters Corporation, and was released as
+   free open-source software under the GNU GPL. Stefan Waldherr made many
+   improvements, and started the SourceForge project to continue
+   development.
    
    You can find the latest version of the document at
    [1]http://www.privoxy.org/faq/. Please see the Contact section in the
@@ -802,7 +809,7 @@ References
    3. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#QUESTIONS
    4. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#GENERAL
    5. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWJB
-   6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN32
+   6. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN37
    7. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#DIFFERS
    8. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#FEATURES
    9. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#PROXYMORON
@@ -813,43 +820,43 @@ References
   14. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#WHICHBROWSERS
   15. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#WHICHOS
   16. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWINSTALL
-  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN146
+  17. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN151
   18. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LOCALHOST
-  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN171
+  19. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN176
   20. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURATION
   21. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWCONFIG
-  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN187
+  22. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN192
   23. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#ACTIONSS
-  24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN205
+  24. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN210
   25. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGFILES
   26. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BROWSECONFIG
-  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN322
-  28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN334
-  29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN346
-  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN357
-  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN362
+  27. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN327
+  28. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN339
+  29. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN351
+  30. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN362
+  31. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN367
   32. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#OTHERPROXY
   33. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#MISC
-  34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN381
+  34. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN386
   35. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#LOADINGTIMES
   36. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#CONFIGURL
   37. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#BLOCKLIST
   38. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#NEWADS
   39. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#IP
-  40. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN422
-  41. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN433
-  42. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN443
-  43. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN451
-  44. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN456
-  45. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN465
-  46. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN469
-  47. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN476
+  40. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN427
+  41. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN438
+  42. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN448
+  43. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN456
+  44. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN461
+  45. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN470
+  46. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN474
+  47. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN481
   48. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#TURNOFF
-  49. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN494
-  50. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN496
-  51. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN509
-  52. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN515
-  53. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN533
+  49. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN499
+  50. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN501
+  51. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN514
+  52. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN520
+  53. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#AEN538
   54. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#COPYRIGHT
   55. file://localhost/home/swa/sf/current-org/doc/source/tmp.html#SEEALSO
   56. http://www.junkbusters.com/

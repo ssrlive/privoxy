@@ -123,7 +123,7 @@
   ;; /DESC
   ;; AUTHOR N/A
   ;; /REFENTRY
-  "../ijb_docs.css")
+  "../p_doc.css")
 
 (define %stylesheet-type%
   ;; REFENTRY stylesheet-type
