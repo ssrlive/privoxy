@@ -6,7 +6,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.58 2002/03/26 22:29:55 swa Exp $
+ $Id: user-manual.sgml,v 1.59 2002/03/27 00:54:33 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -28,7 +28,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.58 2002/03/26 22:29:55 swa Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.59 2002/03/27 00:54:33 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -3942,6 +3942,59 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
 
 </para>
 
+<para>
+ But now what about a situation where we get no explicit matches like 
+ we did with:
+
+</para>
+
+<para>
+ <screen>
+
+ { -block }
+  /adsl
+ 
+ </screen>
+</para>
+
+<para>
+ That actually was very telling and pointed us quickly to where the problem
+ was. If you don't get this kind of match, then it means one of the default 
+ rules in the first section is causing the problem. This would require some 
+ guesswork, and maybe a little trial and error to isolate the offending rule.
+ One likely cause would be one of the <quote>{+filter}</quote> actions. Try 
+ adding the URL for the site to one of aliases that turn off <quote>+filter</quote>:
+</para>
+
+<para>
+ <screen>
+
+ {shop}
+ .quietpc.com
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+ .forbes.com
+ 
+ </screen>
+</para>
+
+<para>
+ <quote>{shop}</quote> is an <quote>alias</quote> that expands to 
+ <quote>{ -filter -no-cookies -no-cookies-keep }</quote>. Or you could do 
+ your own exception to negate filtering:
+
+</para>
+
+<para>
+ <screen>
+
+ {-filter}
+ .forbes.com
+ 
+ </screen>
+</para>
+
 </sect2>
 
 </sect1>
@@ -3967,6 +4020,9 @@ For any other issues, feel free to use the <ulink url="http://sourceforge.net/ma
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.59  2002/03/27 00:54:33  hal9
+ Touch up intro for new name.
+
  Revision 1.58  2002/03/26 22:29:55  swa
  we have a new homepage!
 
