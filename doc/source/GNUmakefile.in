@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.2 2002/06/05 04:17:19 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.3 2002/06/07 00:27:04 hal9 Exp $
 #
 # Location: doc/source/Makefile.in 
 # Purpose: Build documentation
@@ -82,7 +82,7 @@ DOC_FILES = AUTHORS LICENSE README ChangeLog \
 .PHONY: all dok webserver dok-webserver clean dok-clean clobber ensure-wdump \
 ensure-jadebin ensure-dkprefix user dok-user devel dok-devel faq dok-faq \
 readme dok-readme authors dok-authors index dok-index webserver dok-webserver \
-man dok-man man2html manuals dok-release dok-pdf dok-pdf2 announce config-file
+man dok-man man2html manuals dok-release dok-pdf dok-shtml announce config-file
 #############################################################################
 #
 # Documentation
@@ -261,12 +261,16 @@ dok-pdf: dok-release
 	cd ../pdf && db2pdf --pdf -s ldp.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf > /dev/null 2>&1
 	$(RM) ../pdf/*.sgml ../pdf/*.dsl ../pdf/*.out ../pdf/*.tex ../pdf/*.log ../pdf/*.aux
 
-# the layout and style with db2pdf sucks, here is an alternative
-dok-pdf2: dok-release 
-	mkdir -p $(DOC_TMP) # this directory not in cvs
-	$(DB) -V nochunks user-manual.sgml > $(DOC_TMP)/privoxy-user-manual.html
-	$(DB) -V nochunks developer-manual.sgml > $(DOC_TMP)/privoxy-developer-manual.html
-	$(DB) -V nochunks faq.sgml > $(DOC_TMP)/privoxy-faq.html
+# Generate single page html. Used only for creating pdf docs (ATM).
+# Currently using: See http://www.easysw.com/htmldoc/pdf-o-matic.php.
+# If using this generator, remember U-M has a couple of graphics in 
+# a parallel directory.
+#
+dok-shtml: dok-release 
+	mkdir -p doc/source/temp # this directory not in cvs
+	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > temp/privoxy-user-manual.html
+	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
+	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
 # one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
 
 # Create release announcement in text and html, with short and long versions.
@@ -346,6 +350,9 @@ coffee:
 #############################################################################
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.3  2002/06/07 00:27:04  hal9
+# Fixing man2html quirk that pulls in punctuation, and breaks URLs.
+#
 # Revision 1.2  2002/06/05 04:17:19  hal9
 # Add dok-man-test target as temp workaround for docbook2man ignoring -i command
 # line option.
