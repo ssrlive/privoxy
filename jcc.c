@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.41 2001/09/16 17:05:14 jongfoster Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.42 2001/09/21 23:02:02 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.41 2001/09/16 17:05:14 jongfoster Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.42  2001/09/21 23:02:02  david__schmidt
+ *    Cleaning up 2 compiler warnings on OS/2.
+ *
  *    Revision 1.41  2001/09/16 17:05:14  jongfoster
  *    Removing unused #include showarg.h
  *
@@ -505,7 +508,7 @@ static void chat(struct client_state *csp)
          csp->force = 0;
       }
 #endif /* def FEATURE_FORCE_LOAD */
-  
+
       parse_http_request(req, http, csp);
       freez(req);
       break;
@@ -636,9 +639,6 @@ static void chat(struct client_state *csp)
 
    /* We have a request. */
 
-   hdr = sed(client_patterns, add_client_headers, csp);
-   list_remove_all(csp->headers);
-
    /* 
     * Now, check to see if we need to intercept it, i.e.
     * If
@@ -685,7 +685,6 @@ static void chat(struct client_state *csp)
 
       /* Clean up and return */
       free_http_response(rsp);
-      freez(hdr);
       return;
    }
 
@@ -736,11 +735,12 @@ static void chat(struct client_state *csp)
       }
 
       free_http_response(rsp);
-      freez(hdr);
       return;
    }
 
    log_error(LOG_LEVEL_CONNECT, "OK");
+
+   hdr = sed(client_patterns, add_client_headers, csp);
 
    if (fwd->forward_host || (http->ssl == 0))
    {
