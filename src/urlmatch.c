@@ -1,7 +1,7 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 2.0 2002/06/04 14:34:21 jongfoster Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 2.1 2002/06/06 19:03:29 jongfoster Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/src/urlmatch.c,v $
+ * File        :  $Source: /cvsroot/ijbswa//current/src/urlmatch.c,v $
  *
  * Purpose     :  Declares functions to match URLs against URL
  *                patterns.
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 2.0 2002/06/04 14:34:21 jongfoste
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 2.1  2002/06/06 19:03:29  jongfoster
+ *    Adding support for proprietary Microsoft WebDAV extensions
+ *
  *    Revision 2.0  2002/06/04 14:34:21  jongfoster
  *    Moving source files to src/
  *
@@ -476,6 +479,7 @@ jb_err parse_http_request(const char *req,
       return JB_ERR_MEMORY;
    }
 
+   free(buf);
    return JB_ERR_OK;
 }
 
