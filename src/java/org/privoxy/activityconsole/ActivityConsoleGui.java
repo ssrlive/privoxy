@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/src/java/org/privoxy/activityconsole/ActivityConsoleGui.java,v $
  *
  * Purpose     :  Provide the central GUI for displaying Privoxy
  *                statistics.  It can be contacted either by the
@@ -33,7 +33,11 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log$
+ *    $Log: ActivityConsoleGui.java,v $
+ *    Revision 1.1  2003/01/18 14:37:24  david__schmidt
+ *    Initial checkin of directory structure and source code of the java Activity
+ *    Console
+ *
  *********************************************************************/
 
 package org.privoxy.activityconsole;
@@ -49,8 +53,8 @@ import javax.swing.table.*;
 
 /**
  * The main Activity Console GUI.
- * @author Last Modified By: $Author$
- * @version $Rev$-$Date$$State$
+ * @author Last Modified By: $Author: david__schmidt $
+ * @version $Rev$-$Date: 2003/01/18 14:37:24 $$State: Exp $
  */
 public final class ActivityConsoleGui extends JFrame implements ActionListener
 {
@@ -63,19 +67,22 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
 
   JTable _table;
 
+  JScrollPane _tableScroller = new JScrollPane();
+
   SortableTableModel _model;
 
-  Vector
-  _tableColumnMap = new Vector();
+  Vector _tableColumnMap = new Vector();
 
-  JPanel
-  mainPanel = new JPanel(new GridBagLayout());
+  JPanel _mainPanel = new JPanel(new GridBagLayout());
 
   JMenuItem _deleteItem, _quitItem, _configItem;
+  JCheckBoxMenuItem _viewWideItem;
 
   private DefaultTableCellRenderer _statRenderer = null;
 
   int _port = 0;
+
+  Properties _properties = null;
 
   /**
    * Constructor of the Activity Console GUI.
@@ -91,15 +98,24 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
 
     JMenu menuFile = new JMenu(resStrings.getString("menuFile"));
     MenuAction quitAction = new MenuAction(resStrings.getString("menuFileQuit"));
-    JMenu menuEdit = new JMenu(resStrings.getString("menuEdit"));
     _quitItem = menuFile.add(quitAction);
     menuBar.add(menuFile);
+
+    JMenu menuEdit = new JMenu(resStrings.getString("menuEdit"));
     _configItem = menuEdit.add(new MenuAction(resStrings.getString("menuEditConfig")));
-    menuBar.add(menuEdit);
     _deleteItem = menuEdit.add(new MenuAction(resStrings.getString("menuEditDelete")));
     menuBar.add(menuEdit);
+
+    JMenu menuView = new JMenu(resStrings.getString("menuView"));
+    _viewWideItem = new JCheckBoxMenuItem(resStrings.getString("menuViewWide"));
+    _viewWideItem.addActionListener(this);
+    menuView.add(_viewWideItem);
+    menuBar.add(menuView);
+
     this.setJMenuBar(menuBar);
     _deleteItem.setEnabled(false);
+
+    loadProperties();
 
     try
     {
@@ -146,38 +162,9 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
       }
     };
 
-    Vector data = new Vector();
-    _model = new SortableTableModel(data, getColumnNames());
-    _table = new JTable(_model);
-    _table.setPreferredScrollableViewportSize(new Dimension(800,50));
-    _table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    _table.setCellSelectionEnabled(false);
-    _table.setRowSelectionAllowed(false);
+    initTable();
 
-    /*
-     * The first column is normal and text-ish - the host address and
-     * port being served (i.e. 127.0.0.1:8118).  The rest need to have statistic
-     * renderers defined.
-     */
-    SortButtonRenderer _headerRenderer = new SortButtonRenderer();
-    TableColumnModel cm = _table.getColumnModel();
-    /* Make the first column twice the width of the others. It shows bigger stuff. */
-    cm.getColumn(0).setPreferredWidth(cm.getColumn(0).getPreferredWidth() * 2);
-    cm.getColumn(0).setHeaderRenderer(_headerRenderer);
-    for (i = 1;i<_model.getColumnCount();i++)
-    {
-      cm.getColumn(i).setPreferredWidth((int)(cm.getColumn(i).getPreferredWidth() * 1));
-      cm.getColumn(i).setCellRenderer(_statRenderer);
-      cm.getColumn(i).setHeaderRenderer(_headerRenderer);
-    }
-
-    JTableHeader header = _table.getTableHeader();
-    header.addMouseListener(new HeaderListener(header,_headerRenderer));
-
-    ListSelectionModel csm = _table.getSelectionModel();
-    csm.addListSelectionListener(new SelectedListener(csm));
-
-    ActivityConsoleGuiUtil.constrain(mainPanel, new JScrollPane(_table),
+    ActivityConsoleGuiUtil.constrain(_mainPanel, _tableScroller,
                                      1, 1, // X, Y Coordinates
                                      1, 1, // Grid width, height
                                      GridBagConstraints.BOTH,  // Fill value
@@ -185,7 +172,7 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
                                      1.0,1.0,  // Weight X, Y
                                      0, 0, 0, 0 ); // Top, left, bottom, right insets
 
-    this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+    this.getContentPane().add(_mainPanel, BorderLayout.CENTER);
 
     parent_ = this;
     this.pack();
@@ -216,6 +203,14 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
 
   public void actionPerformed(ActionEvent e)
   {
+    if (e.getSource() == _viewWideItem)
+    {
+      setProperty("AC.detailedColumnSet", _viewWideItem.isSelected());
+      initTable();
+      this.pack();
+      _table.setPreferredScrollableViewportSize(new Dimension(_table.getWidth(),50));
+      this.pack();
+    }
   }
 
   class MenuAction extends AbstractAction
@@ -234,6 +229,7 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
     {
       if (e.getSource() == _quitItem)
       {
+        saveProperties();
         parent_.setVisible(false);
         parent_.dispose();
         System.exit(0);
@@ -319,8 +315,40 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
   }
 
   /**
-   * Retrieves the names of the column headers.  This should be made to read a properties
-   * file. FIXME.
+   * Builds a new table with the requested columns.
+   */
+  public void initTable()
+  {
+    _model = new SortableTableModel(new Vector(), getColumnNames());
+    _table = new JTable(_model);
+    _table.setPreferredScrollableViewportSize(new Dimension(800,50));
+    _table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    _table.setCellSelectionEnabled(false);
+    _table.setRowSelectionAllowed(false);
+    SortButtonRenderer headerRenderer = new SortButtonRenderer();
+    TableColumnModel cm = _table.getColumnModel();
+    /* Make the first column twice the width of the others. It shows bigger stuff. */
+    cm.getColumn(0).setPreferredWidth(cm.getColumn(0).getPreferredWidth() * 2);
+    cm.getColumn(0).setHeaderRenderer(headerRenderer);
+    for (int i = 1;i<_model.getColumnCount();i++)
+    {
+      cm.getColumn(i).setPreferredWidth((int)(cm.getColumn(i).getPreferredWidth() * 1));
+      cm.getColumn(i).setCellRenderer(_statRenderer);
+      cm.getColumn(i).setHeaderRenderer(headerRenderer);
+    }
+
+    JTableHeader header = _table.getTableHeader();
+    header.addMouseListener(new HeaderListener(header,headerRenderer));
+
+    ListSelectionModel csm = _table.getSelectionModel();
+    csm.addListSelectionListener(new SelectedListener(csm));
+
+    _tableScroller.setViewportView(_table);
+
+  }
+
+  /**
+   * Retrieves the names of the column headers.
    * @return Vector the set of column names.  It also has the side-effect of adding
    * entries to the global column mapping Vector where we map the staus integer identifiers
    * to the column positions and names.  Should probably fix that too.
@@ -328,31 +356,58 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
   public Vector getColumnNames()
   {
     Vector names = new Vector();
+    _tableColumnMap = getUserColumnNames();
 
     names.addElement(resStrings.getString("guiDefaultColumn0"));
-    names.addElement(resStrings.getString("guiDefaultColumn1"));
-    names.addElement(resStrings.getString("guiDefaultColumn2"));
-    names.addElement(resStrings.getString("guiDefaultColumn3"));
-    names.addElement(resStrings.getString("guiDefaultColumn4"));
-    names.addElement(resStrings.getString("guiDefaultColumn5"));
-    names.addElement(resStrings.getString("guiDefaultColumn6"));
-    names.addElement(resStrings.getString("guiDefaultColumn7"));
-    names.addElement(resStrings.getString("guiDefaultColumn8"));
-    names.addElement(resStrings.getString("guiDefaultColumn9"));
-    names.addElement(resStrings.getString("guiDefaultColumn10"));
-
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn1"),1));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn2"),2));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn3"),3));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn4"),4));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn5"),5));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn6"),6));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn7"),7));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn8"),8));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn9"),9));
-    _tableColumnMap.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn10"),10));
+    for (int i = 0; i < _tableColumnMap.size(); i ++)
+    {
+      names.addElement(((ColumnRef)_tableColumnMap.elementAt(i)).getDescription());
+    }
 
     return names;
+  }
+
+  /**
+   * Builds a map of columns based on the properties file.
+   * If it is somehow unsuitable, the default table will be built.
+   * This should be made to read a properties file. FIXME.
+   * @return Vector The vector of column name-to-stat-ID mappings
+   */
+  public Vector getUserColumnNames()
+  {
+    Vector map;
+
+    map = getDefaultColumnNames();
+
+    return map;
+  }
+
+  /**
+   * Builds a default map of columns.
+   * @return Vector The vector of column name-to-stat-ID mappings
+   */
+  public Vector getDefaultColumnNames()
+  {
+    Vector map = new Vector();
+    boolean detailedList = getProperty("AC.detailedColumnSet", false);
+    // In case they didn't have the preference set... set it.
+    setProperty("AC.detailedColumnSet", detailedList);
+    _viewWideItem.setSelected(detailedList);
+
+    map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn1"),1));
+    map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn2"),2));
+    map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn3"),3));
+    if (detailedList)
+    {
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn4"),4));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn5"),5));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn6"),6));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn7"),7));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn8"),8));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn9"),9));
+      map.addElement(new ColumnRef(resStrings.getString("guiDefaultColumn10"),10));
+    }
+    return map;
   }
 
   /**
@@ -506,6 +561,91 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
   }
 
   /**
+   * Load up the properties
+   *
+   */
+  private void loadProperties()
+  {
+    _properties = new Properties();
+    try
+    {
+      _properties.load(new FileInputStream("ActivityConsole.properties"));
+    }
+    catch (Throwable t)
+    {
+      // System.out.println(t);
+      // No properties file... use hardcoded defaults.
+    }
+  }
+
+  /**
+   * Save the properties
+   *
+   */
+  private void saveProperties()
+  {
+    try
+    {
+      _properties.store(new FileOutputStream("ActivityConsole.properties"),resStrings.getString("guiPropertiesFileHeader"));
+    }
+    catch (Throwable t)
+    {
+      System.out.println(t);
+    }
+  }
+
+  /**
+   * Set a property
+   */
+  public void setProperty(String key, String value)
+  {
+    _properties.setProperty(key,value);
+  }
+
+  /**
+   * Set a boolean property
+   */
+  public void setProperty(String key, boolean value)
+  {
+    Boolean bVal = new Boolean(value);
+    _properties.setProperty(key,(String)bVal.toString());
+  }
+
+  /**
+   * Get a property
+   */
+  public String getProperty(String key, String defaultValue)
+  {
+    return _properties.getProperty(key,defaultValue);
+  }
+
+  /**
+   * Get a boolean property
+   */
+  public boolean getProperty(String key, boolean defaultValue)
+  {
+    String sDefaultValue;
+    String property;
+    if (defaultValue == false)
+      sDefaultValue = "false";
+    else
+      sDefaultValue = "true";
+    property = _properties.getProperty(key,sDefaultValue);
+    if (property.compareToIgnoreCase("true") == 0)
+      return true;
+    else
+      return false;
+  }
+
+  /**
+   * Remove a property
+   */
+  public void removeProperty(String key)
+  {
+    _properties.remove(key);
+  }
+
+  /**
    * Worker class to offer a clickable table header for sorting.
    */
   class HeaderListener extends MouseAdapter
@@ -557,7 +697,7 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
     public void mouseReleased(MouseEvent e)
     {
       int col = header.columnAtPoint(e.getPoint());
-      renderer.setPressedColumn(-1);                // clear
+      renderer.setPressedColumn(-1);
       header.repaint();
     }
   }
@@ -620,6 +760,7 @@ public final class ActivityConsoleGui extends JFrame implements ActionListener
   {
     public void windowClosing(WindowEvent e)
     {
+      saveProperties();
       Window w = e.getWindow();
       w.setVisible(false);
       w.dispose();

@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/src/java/org/privoxy/activityconsole/ActivityConsoleResources.java,v $
  *
  * Purpose     :  Default English text for all translatable strings.
  *
@@ -30,7 +30,11 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log$
+ *    $Log: ActivityConsoleResources.java,v $
+ *    Revision 1.1  2003/01/18 14:37:24  david__schmidt
+ *    Initial checkin of directory structure and source code of the java Activity
+ *    Console
+ *
  *********************************************************************/
 
 package org.privoxy.activityconsole;
@@ -39,8 +43,8 @@ import java.io.Serializable;
 
 /**
  * The default (English) language resources file for the Activity Console.
- * @author Last Modified By: $Author$
- * @version $Rev$-$Date$$State$
+ * @author Last Modified By: $Author: david__schmidt $
+ * @version $Rev$-$Date: 2003/01/18 14:37:24 $$State: Exp $
  */
 public class ActivityConsoleResources extends java.util.ListResourceBundle implements Serializable
 {
@@ -49,18 +53,21 @@ public class ActivityConsoleResources extends java.util.ListResourceBundle imple
 
   static final Object[][] contents =
   {
-    {"guiTitle", "Activity Console - serving port %1"},
+    {"guiTitle", "Privoxy Activity Console - serving port %1"},
     {"menuFile", "File"}, 
     {"menuFileQuit", "Quit"}, 
     {"menuEdit", "Edit"},
     {"menuEditDelete", "Delete selected row"},
     {"menuEditConfig", "Set port"},
+    {"menuView", "View"},
+    {"menuViewWide", "Detailed statistics"},
     {"guiNewPortTitle", "New port"},
     {"guiNewPortPrompt", "Currently serving port %1.\n\nPlease enter the new port to serve:"},
     {"guiNewPortErrorTitle", "Alert"},
     {"guiNewPortErrorPrompt", "New port must be positive."},
     {"guiDeleteConfirmTitle","Are you sure?"},
     {"guiDeleteConfirmPrompt","Are you sure you want to delete stats from host %1?"},
+    {"guiPropertiesFileHeader","Privoxy Activity Console properties file - edit only while the Activity Console is not running."},
 
     /* Headers and descriptions for statistics columns */
     {"guiDefaultColumn0","Host:Port"},
