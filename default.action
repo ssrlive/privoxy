@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.10 2002/04/02 06:22:16 oes Exp $
+#  $Id: default.action,v 1.11 2002/04/02 08:51:51 oes Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -121,7 +121,7 @@
 # regular expressions wouldn't fit here, but (FIXME) someone should paste
 # a concise intro to the regex language here.
 # 
-# If Junkbuster was compiled with pcre support (default), Perl compatible
+# If Privoxy was compiled with pcre support (default), Perl compatible
 # regular expressions are used. See the pcre/docs/ direcory or man perlre
 # (also available on http://www.perldoc.com/perl5.6/pod/perlre.html) for
 # details.
@@ -191,7 +191,7 @@
 # +downgrade
 #    Downgrade HTTP/1.1 client requests to HTTP/1.0 and downgrade the
 #    responses as well. Use this action for servers that use HTTP/1.1
-#    protocol features that Junkbuster currently can't handle yet.
+#    protocol features that Privoxy currently can't handle yet.
 #
 # +fast-redirects
 #    Many sites, like yahoo.com, don't just link to other sites.
@@ -291,7 +291,7 @@
 #   its connections to the cliant and to the remote proxy.
 #   This can be a big security hole, since CONNECT-enabled proxies can
 #   be abused as TCP relays very easily.
-#   By default, i.e. in the absence of a +limit-connect action, Junkbuster
+#   By default, i.e. in the absence of a +limit-connect action, Privoxy
 #   will only allow CONNECT requests to port 443, which is the standard port
 #   for https.
 #   If you want to allow CONNECT for more ports than that, or want to forbid
