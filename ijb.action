@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: actionsfile,v 1.9 2001/10/15 22:06:16 joergs Exp $
+# $Id: ijb.action,v 1.2 2001/11/30 23:34:08 jongfoster Exp $
 #
 #############################################################################
 # Syntax
@@ -1337,6 +1337,7 @@ rstrip.namezero.com
 include.ebay.com
 cpan.valueclick.com
 www.userfriendly.org/images/banners/banner_dp_heart\.gif
+advogato.org
 
 #Why were these in the Waldherr blockfile?
 #www.hitbox.com
