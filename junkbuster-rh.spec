@@ -1,4 +1,4 @@
-# $Id: junkbuster-rh.spec,v 1.6 2001/06/11 11:28:25 sarantis Exp $
+# $Id: junkbuster-rh.spec,v 1.7 2001/06/11 12:17:26 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -26,6 +26,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: junkbuster-rh.spec,v $
+# Revision 1.7  2001/06/11 12:17:26  sarantis
+# fix typo in %post
+#
 # Revision 1.6  2001/06/11 11:28:25  sarantis
 # Further optimizations and adaptations in the spec file.
 #
@@ -74,9 +77,10 @@ faster.
 %define ijbconf %{_sysconfdir}/junkbuster
 
 %prep
-%setup -c -n %{name}-%{version}-%{release}
+%setup -c -n ijbswa
+
 %build
-%configure
+./configure
 make
 strip junkbuster
 
@@ -100,8 +104,8 @@ cp -f trust $RPM_BUILD_ROOT%{ijbconf}/trust
 cp -f templates/default $RPM_BUILD_ROOT%{ijbconf}/templates/
 cp -f templates/show-status  $RPM_BUILD_ROOT%{ijbconf}/templates/
 cp -f templates/show-status-file  $RPM_BUILD_ROOT%{ijbconf}/templates/
-cp -f junkbuster.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/junkbuster
-install -m 755 junkbuster.init $RPM_BUILD_ROOT/etc/rc.d/init.d/junkbuster
+cp -f junkbuster.logrotate $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/junkbuster
+install -m 755 junkbuster.init $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/junkbuster
 install -m 744 -d $RPM_BUILD_ROOT/var/log/junkbuster
 
 # verify all file locations, etc. in the config file
@@ -115,7 +119,7 @@ cat config | \
 #    sed 's/^forward.*/forward \/etc\/junkbuster\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/junkbuster\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/junkbuster/g' > \
-    $RPM_BUILD_ROOT/etc/junkbuster/config
+    $RPM_BUILD_ROOT%{ijbconf}/config
 
 %post
 if [ "$1" = "1" ]; then
@@ -146,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %config %{_sysconfdir}/logrotate.d/junkbuster
 %attr(0744,junkbust,junkbust)/usr/sbin/junkbuster
 %{_mandir}/man8/*
-%config /etc/rc.d/init.d/junkbuster
+%config %{_sysconfdir}/rc.d/init.d/junkbuster
 
 
 %changelog

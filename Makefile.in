@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: Makefile.in,v 1.10 2001/06/07 17:27:45 swa Exp $
+# $Id: Makefile.in,v 1.11 2001/06/11 11:26:35 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,10 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: Makefile.in,v $
+# Revision 1.11  2001/06/11 11:26:35  sarantis
+# RPM version should be the same as ijbswa version.  The rpm release is
+# specified in the specfile.
+#
 # Revision 1.10  2001/06/07 17:27:45  swa
 # added suse build section
 #
@@ -71,7 +75,9 @@ VERSION_MAJOR = @VERSION_MAJOR@
 VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
+# will automatically be postfixed with -$(RPM_PACKAGEV) in the SPECfile
 RPM_VERSION   = $(VERSION)
+RPM_PACKAGEV  = 1
 
 # The version is currently specified in config.h, which is
 # written by "configure".
@@ -111,12 +117,12 @@ CFLAGS = @CFLAGS@ @CPPFLAGS@ \
 PROGRAM = junkbuster@EXEEXT@
 CC      = gcc
 ECHO    = echo
-GZIP    = gzip
+GZIP_PROG    = gzip
 INSTALL = cp -f
 LD      = gcc
 OBJEXT  = @OBJEXT@
 RM      = rm -f
-STRIP   = strip
+STRIP_PROG   = strip
 
 C_SRC  = actions.c encode.c errlog.c filters.c gateway.c jbsockets.c \
          jcc.c killpopup.c list.c loadcfg.c loaders.c miscutil.c \
@@ -216,9 +222,9 @@ redhat-dist:
 	@make clobber
 # verify that i'm root needs to be done
 	rm -f ../ijbswa.tar.gz
-	tar  --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
-#	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
+	cat junkbuster-rh.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-rh.spec
+	tar --exclude "CVS" --exclude "junkbuster-suse.spec" -cvzf ../ijbswa.tar.gz .
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
@@ -229,9 +235,9 @@ suse-dist:
 	@make clobber
 # verify that i'm root needs to be done
 	rm -f ../ijbswa.tar.gz
-	tar --exclude "junkbuster-rh.spec" -cvzf ../ijbswa.tar.gz .
 # verify all version strings, FLAGS, etc. in the spec file
-	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(VERSION_POINT)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-suse.spec
+	cat junkbuster-suse.spec | sed 's/^Version:.*/Version: $(RPM_VERSION)/g' | sed 's/^Release:.*/Release: $(RPM_PACKAGEV)/g' > /tmp/abc && cp -f /tmp/abc junkbuster-suse.spec
+	tar --exclude "CVS" --exclude "junkbuster-rh.spec" -cvzf ../ijbswa.tar.gz .
 # verify all files in their correct location needs to be done
 	cd .. && rpm -ta ijbswa.tar.gz
 
@@ -326,14 +332,14 @@ tags: $(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 
 install: all
-	$(STRIP) $(PROGRAM)
+	$(STRIP_PROG) $(PROGRAM)
 	$(INSTALL) $(PROGRAM) $(SBIN_DEST)
 	$(INSTALL) README README.TOO README.WIN README.re_filter README.cygwin $(DEST)
 	$(INSTALL) aclfile blocklist config cookiefile forward imagelist \
 		popup re_filterfile trust $(DEST)
 	# FIXME: On SuSE, these are not found.  Where do they go?
 	$(ECHO) junkbuster.logrotate junkbuster.monthly junkbuster.weekly
-	$(GZIP) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
+	$(GZIP_PROG) -c junkbuster.1 > $(MAN_DEST)/junkbuster.1.gz
 	$(INSTALL) junkbuster.init /sbin/init.d/junkbuster
 
 
