@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.35 2001/07/31 14:44:22 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.36 2001/09/10 10:56:15 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.35 2001/07/31 14:44:22 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.36  2001/09/10 10:56:15  oes
+ *    Silenced compiler warnings
+ *
  *    Revision 1.35  2001/07/31 14:44:22  oes
  *    Deleted unused size parameter from filter_popups()
  *
@@ -421,7 +424,6 @@ static void chat(struct client_state *csp)
 
    char buf[BUFFER_SIZE];
    char *hdr, *p, *req;
-   char *err = NULL;
    fd_set rfds;
    int n, maxfd, server_body;
    int ms_iis5_hack = 0;
