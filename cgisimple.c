@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.8 2001/11/13 00:14:07 jongfoster Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.9 2001/11/30 23:09:15 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.8 2001/11/13 00:14:07 jongfos
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.9  2001/11/30 23:09:15  jongfoster
+ *    Now reports on FEATURE_CGI_EDIT_ACTIONS
+ *    Removing FEATURE_DENY_GZIP from template
+ *
  *    Revision 1.8  2001/11/13 00:14:07  jongfoster
  *    Fixing stupid bug now I've figured out what || means.
  *    (It always returns 0 or 1, not one of it's paramaters.)
@@ -98,6 +102,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.8 2001/11/13 00:14:07 jongfos
 #include "miscutil.h"
 #include "loadcfg.h"
 #include "parsers.h"
+#include "urlmatch.h"
 
 const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
@@ -634,7 +639,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
                          struct http_response *rsp,
                          const struct map *parameters)
 {
-   const char *url_param_const;
+   char *url_param;
    char *host = NULL;
    struct map *exports;
 
@@ -647,9 +652,72 @@ jb_err cgi_show_url_info(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   url_param_const = lookup(parameters, "url");
-   if (*url_param_const == '\0')
+   /*
+    * Get the url= parameter (if present) and remove any leading/trailing spaces.
+    */
+   url_param = strdup(lookup(parameters, "url"));
+   if (url_param == NULL)
    {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+   chomp(url_param);
+
+   /*
+    * Handle prefixes.  4 possibilities:
+    * 1) "http://" or "https://" prefix present and followed by URL - OK
+    * 2) Only the "http://" or "https://" part is present, no URL - change
+    *    to empty string so it will be detected later as "no URL".
+    * 3) Parameter specified but doesn't contain "http(s?)://" - add a
+    *    "http://" prefix.
+    * 4) Parameter not specified or is empty string - let this fall through
+    *    for now, next block of code will handle it.
+    */
+   if (0 == strncmp(url_param, "http://", 7))
+   {
+      if (url_param[7] == '\0')
+      {
+         /*
+          * Empty URL (just prefix).
+          * Make it totally empty so it's caught by the next if()
+          */
+         url_param[0] = '\0';
+      }
+   }
+   else if (0 == strncmp(url_param, "https://", 8))
+   {
+      if (url_param[8] == '\0')
+      {
+         /*
+          * Empty URL (just prefix).
+          * Make it totally empty so it's caught by the next if()
+          */
+         url_param[0] = '\0';
+      }
+   }
+   else if (url_param[0] != '\0')
+   {
+      /*
+       * Unknown prefix - assume http://
+       */
+      char * url_param_prefixed = malloc(7 + 1 + strlen(url_param));
+      if (NULL == url_param_prefixed)
+      {
+         free(url_param);
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+      strcpy(url_param_prefixed, "http://");
+      strcpy(url_param_prefixed + 7, url_param);
+      free(url_param);
+      url_param = url_param_prefixed;
+   }
+
+
+   if (url_param[0] == '\0')
+   {
+      /* URL paramater not specified, display query form only. */
+      free(url_param);
       if (map_block_killer(exports, "url-given")
         || map(exports, "url", 1, "", 1))
       {
@@ -659,28 +727,17 @@ jb_err cgi_show_url_info(struct client_state *csp,
    }
    else
    {
-      char *url_param;
+      /* Given a URL, so query it. */
+      jb_err err;
       char *matches;
-      char *path;
       char *s;
-      int port = 80;
       int hits = 0;
       struct file_list *fl;
       struct url_actions *b;
-      struct url_spec url[1];
+      struct http_request url_to_query[1];
       struct current_action_spec action[1];
       
-      if (NULL == (url_param = strdup(url_param_const)))
-      {
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
-
-      host = url_param;
-      host += (strncmp(url_param, "http://", 7)) ? 0 : 7;
-
-      if (map(exports, "url", 1, host, 1)
-       || map(exports, "url-html", 1, html_encode(host), 0))
+      if (map(exports, "url", 1, html_encode(url_param), 0))
       {
          free(url_param);
          free_map(exports);
@@ -689,8 +746,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       init_current_action(action);
 
-      s = current_action_to_text(action);
-      if (map(exports, "default", 1, s , 0))
+      if (map(exports, "default", 1, current_action_to_text(action), 0))
       {
          free_current_action(action);
          free(url_param);
@@ -700,10 +756,8 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       if (((fl = csp->actions_list) == NULL) || ((b = fl->f) == NULL))
       {
-         jb_err err;
-
-         err = map(exports, "matches", 1, "none" , 1)
-            || map(exports, "final", 1, lookup(exports, "default"), 1);
+         err = map(exports, "matches", 1, "none" , 1);
+         if (!err) err = map(exports, "final", 1, lookup(exports, "default"), 1);
 
          free_current_action(action);
          free(url_param);
@@ -717,44 +771,23 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return template_fill_for_cgi(csp, "show-url-info", exports, rsp);
       }
 
-      s = strchr(host, '/');
-      if (s != NULL)
-      {
-         path = strdup(s);
-         *s = '\0';
-      }
-      else
-      {
-         path = strdup("");
-      }
-      if (NULL == path)
+      err = parse_http_url(url_param, url_to_query, csp);
+
+      free(url_param);
+
+      if (err == JB_ERR_MEMORY)
       {
          free_current_action(action);
-         free(url_param);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
-
-      s = strchr(host, ':');
-      if (s != NULL)
+      else if (err)
       {
-         *s++ = '\0';
-         port = atoi(s);
-         s = NULL;
-      }
+         /* Invalid URL */
 
-      *url = dsplit(host);
+         err = map(exports, "matches", 1, "<b>[Invalid URL specified!]</b>" , 1);
+         if (!err) err = map(exports, "final", 1, lookup(exports, "default"), 1);
 
-      /* if splitting the domain fails, punt */
-      if (url->dbuf == NULL)
-      {
-         jb_err err;
-         
-         err = map(exports, "matches", 1, "none" , 1)
-            || map(exports, "final", 1, lookup(exports, "default"), 1);
-
-         freez(url_param);
-         freez(path);
          free_current_action(action);
 
          if (err)
@@ -764,55 +797,49 @@ jb_err cgi_show_url_info(struct client_state *csp,
          }
 
          return template_fill_for_cgi(csp, "show-url-info", exports, rsp);
+      }
+
+      /*
+       * We have a warning about SSL paths.  Hide it for insecure sites.
+       */
+      if (!url_to_query->ssl)
+      {
+         if (map_block_killer(exports, "https"))
+         {
+            free_current_action(action);
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
       }
 
       matches = strdup("");
 
       for (b = b->next; NULL != b; b = b->next)
       {
-         if ((b->url->port == 0) || (b->url->port == port))
+         if (url_match(b->url, url_to_query))
          {
-            if ((b->url->domain[0] == '\0') || (domaincmp(b->url, url) == 0))
+            s = actions_to_text(b->action);
+            if (s == NULL)
             {
-               if ((b->url->path == NULL) ||
-#ifdef REGEX
-                  (regexec(b->url->preg, path, 0, NULL, 0) == 0)
-#else
-                  (strncmp(b->url->path, path, b->url->pathlen) == 0)
-#endif
-               )
-               {
-                  s = actions_to_text(b->action);
-                  if (s == NULL)
-                  {
-                     freez(url->dbuf);
-                     freez(url->dvec);
-
-                     free(url_param);
-                     free(path);
-                     free_current_action(action);
-                     free_map(exports);
-                     return JB_ERR_MEMORY;
-                  }
-                  string_append(&matches, "<b>{");
-                  string_append(&matches, s);
-                  string_append(&matches, " }</b><br>\n<code>");
-                  string_append(&matches, b->url->spec);
-                  string_append(&matches, "</code><br>\n<br>\n");
-                  free(s);
-
-                  merge_current_action(action, b->action); /* FIXME: Add error checking */
-                  hits++;
-               }
+               free_http_request(url_to_query);
+               free(url_param);
+               free_current_action(action);
+               free_map(exports);
+               return JB_ERR_MEMORY;
             }
+            string_append(&matches, "<b>{");
+            string_append(&matches, s);
+            string_append(&matches, " }</b><br>\n<code>");
+            string_append(&matches, b->url->spec);
+            string_append(&matches, "</code><br>\n<br>\n");
+            free(s);
+
+            merge_current_action(action, b->action); /* FIXME: Add error checking */
+            hits++;
          }
       }
 
-      freez(url->dbuf);
-      freez(url->dvec);
-
-      free(url_param);
-      free(path);
+      free_http_request(url_to_query);
 
       if (matches == NULL)
       {
