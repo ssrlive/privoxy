@@ -85,7 +85,7 @@
   #t)
 
 (define (toc-depth nd)
-  2)
+  3)
 
 </style-specification-body>
 </style-specification>
