@@ -7,6 +7,10 @@ ChangeLog for Internet JunkBuster
 - **READ**: The default listening PORT is NOW 8118!!! Changed from 
 8000 due to conflict with NAS (Network Audio Server, whatever that 
 is.)
+- More CGI actions editor fixes and improvements.
+- Win32 command line fix ups.
+- re_filterfile now has modular sections that can be activated on a 
+per site basis. Some new goodies there too.
 - +filter now takes arguments to match FILTER sections in re_filterfile
 for even more flexibility. 
 - Added a new image blocker option: +image-blocker{pattern}, which 
