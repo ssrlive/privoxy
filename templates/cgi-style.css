@@ -18,7 +18,9 @@ p,pre  { margin-left: 15px; }
 li { margin: 2px 15px; }
 dl { margin: 2px 15px; }
 
-:link { text-decoration: none; }
+a:link    { color: #0000dd; text-decoration: none; }
+a:visited { color: #330099; text-decoration: none; }
+a:active  { color: #3333ff; text-decoration: none; }
 
 /*
  * Boxen as Table elements:
