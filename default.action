@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action,v $
 # 
-#  $Id: default.action,v 1.24 2002/04/26 14:07:24 morcego Exp $
+#  $Id: default.action,v 1.25 2002/04/26 14:07:51 morcego Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/faq/questions.html#CONFIGFILES
@@ -508,5 +508,7 @@ advice.
 .uni-*.de
 www.ugu.com/sui/ugu/adv
 .*downloads.
+# So many download pages being blocked
+/downloads/
 # adv for globalintersec means advanced, not advertisement
 www.globalintersec.com/adv
