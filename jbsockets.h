@@ -1,12 +1,12 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.7 2002/03/24 13:25:43 swa Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.8 2002/03/26 22:29:54 swa Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
  *
  * Purpose     :  Contains wrappers for system-specific sockets code,
- *                so that the rest of JunkBuster can be more
+ *                so that the rest of Junkbuster can be more
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.8  2002/03/26 22:29:54  swa
+ *    we have a new homepage!
+ *
  *    Revision 1.7  2002/03/24 13:25:43  swa
  *    name change related issues
  *
