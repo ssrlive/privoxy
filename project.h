@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.54 2002/03/09 20:03:52 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.55 2002/03/12 01:42:50 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.55  2002/03/12 01:42:50  oes
+ *    Introduced modular filters
+ *
  *    Revision 1.54  2002/03/09 20:03:52  jongfoster
  *    - Making various functions return int rather than size_t.
  *      (Undoing a recent change).  Since size_t is unsigned on
@@ -633,10 +636,10 @@ struct iob
 #define IOB_PEEK(CSP) ((CSP->iob->cur > CSP->iob->eod) ? (CSP->iob->eod - CSP->iob->cur) : 0)
 #define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
 
-/* Keys for csp->content_type */
+/* Bits for csp->content_type */
 #define CT_TEXT   1 /* Suitable for pcrs filtering */
 #define CT_GIF    2 /* Suitable for GIF filtering */
-#define CT_TABOO  3 /* DONT filter */
+#define CT_TABOO  4 /* DONT filter */
 
 #define ACTION_MASK_ALL        (~0U)
 
