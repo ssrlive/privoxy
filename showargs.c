@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.16 2001/06/29 13:35:07 oes Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.17 2001/06/29 21:45:41 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.16 2001/06/29 13:35:07 oes Exp 
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.17  2001/06/29 21:45:41  oes
+ *    Indentation, CRLF->LF, Tab-> Space
+ *
  *    Revision 1.16  2001/06/29 13:35:07  oes
  *    - Adapted
  *    - Improved comments
@@ -386,7 +389,7 @@ char *show_defines(void)
 #endif /* ndef FORCE_LOAD */
 
 #ifdef DENY_GZIP
-   b = strsav(b, "  <li><code>#define <b>DENY_GZIP</b></code> - Prevents requests from being compressed - required for PCRS.</li>\n");
+   b = strsav(b, "  <li><code>#define <b>DENY_GZIP</b></code> - Prevents requests from being compressed - required for PCRS on some sites.</li>\n");
 #else /* ifndef DENY_GZIP */
    b = strsav(b, "  <li><code>#undef <b>DENY_GZIP</b></code> - Allows requests to be compressed if the browser and server support it.</li>\n");
 #endif /* ndef DENY_GZIP */
