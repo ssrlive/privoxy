@@ -59,9 +59,8 @@
  </simplelist>
  <simplelist>
   <member>
-    <ulink
-   url="http://www.privoxy.org/actions/">http://www.privoxy.org/actions/</ulink>, 
-   submit <quote>misses</quote> to the developers. 
+    <ulink url="http://p.p/">http://p.p/</ulink>, and select <ulink url="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>    
+   to submit <quote>misses</quote> to the developers. 
   </member>
  </simplelist>
  <simplelist>

@@ -22,7 +22,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 1.44 2002/04/07 21:24:29 hal9 Exp $
+ $Id: faq.sgml,v 1.45 2002/04/08 22:59:26 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -60,7 +60,7 @@
 <artheader>
 <title>Privoxy Frequently Asked Questions</title>
 
-<pubdate>$Id: faq.sgml,v 1.44 2002/04/07 21:24:29 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 1.45 2002/04/08 22:59:26 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -965,32 +965,34 @@ programmed to handle certain pages specially.
 </para>
 
 <para>
-With recent versions of <application>Privoxy</application> (version 2.9.x), you can get some
-information about <application>Privoxy</application> and change some settings by going to
-<ulink url="http://p.p/">http://p.p/</ulink> or, equivalently, <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
-(Note that p.p is far easier to type but may not work in some
-configurations. With the name change to <application>Privoxy</application>,
-this is changed from the previous http://i.j.b/ or earlier 2.9.x versions).
+ With recent versions of <application>Privoxy</application> (version 2.9.x and
+ greater), you can get some information about
+ <application>Privoxy</application> and change some settings by going to
+ <ulink url="http://p.p/">http://p.p/</ulink> or, equivalently, <ulink
+ url="http://config.privoxy.org/">http://config.privoxy.org/</ulink> (Note
+ that p.p is far easier to type but may not work in some configurations. With
+ the name change to <application>Privoxy</application>, this is changed from
+ the previous http://i.j.b/ and earlier 2.9.x versions).
 </para>
 
 <para>
-These pages are <emphasis>not</emphasis> forwarded to a server on the Internet
-- instead they are handled by a special web server which is built in to
-<application>Privoxy</application>.
+ These pages are <emphasis>not</emphasis> forwarded to a server on the
+ Internet - instead they are handled by a special web server which is built in to
+  <application>Privoxy</application>.
 </para>
 
 <para>
-If you are not running <application>Privoxy</application>, then <ulink
-url="http://p.p/">http://p.p/</ulink> will fail, and <ulink
-url="http://config.privoxy.org/">http://config.privoxy.org/</ulink> will
-return a web page telling you you're not running
-<application>Privoxy</application>.
+ If you are not running <application>Privoxy</application>, then <ulink
+ url="http://p.p/">http://p.p/</ulink> will fail, and <ulink
+ url="http://config.privoxy.org/">http://config.privoxy.org/</ulink> will
+ return a web page telling you you're not running
+ <application>Privoxy</application>.
 </para>
 
 <para>
-If you have version 2.0.2, then the equivalent is
-http://example.com/show-proxy-args (but you get far less information, and you
-should really consider upgrading to &p-version;).
+ If you have version 2.0.2, then the equivalent is
+ http://example.com/show-proxy-args (but you get far less information, and
+ you should really consider upgrading to &p-version;).
 </para>
 </sect2>
 
@@ -1003,35 +1005,34 @@ FIXME: commented out until we have data. HB 03/18/02.
 </para>
 </sect2>
 
-<sect2 renderas="sect3" id="proxy-chaining"><title>How do I chain <application>Privoxy</application> with other proxies
-(e.g. squid)?</title>
-<para>
-   Fillme.
-</para>
-</sect2>
 -->
 
 <sect2 renderas="sect3" id="blocklist"><title>Do you still maintain the blocklists?</title>
 <para>
-    No. The format of the blocklists has changed significantly in versions
-    2.9.x and later. <![%p-not-stable;[Once we have released the new stable
-    version, v3.0, there will again be blocklists that you can update
-    automatically.]]>
+    No, not by this name. The format of the blocklists has changed
+    significantly in versions 2.9.x and later. This functionality 
+    is done by the <quote>actions</quote> file now. See next question ...
 </para>
 </sect2>
 
 <sect2 renderas="sect3" id="newads"><title>How can I submit new ads?</title>
 <para>
-    As of now, please discontinue to submit new ad blocking infos. Once we
-    have released the new version, there will again be a form on the website,
-    which you can use to contribute new ads.
+ Beginning with <application>Privoxy v2.9.14</application>, missed ads and 
+ banners and other actions file problems, can be submitted by accessing
+ <ulink url="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
+ from <ulink url="http://p.p/">http://p.p/</ulink>
+ There will soon be an easy way to update your actions file as well.
+</para>
+<para>
+ This does not work with earlier versions of <application>Privoxy</application>
+ or <application>Junkbuster</application>.
 </para>
 </sect2>
 
 <sect2 renderas="sect3" id="ip"><title>How can I hide my IP address?</title>
 <para>
  You cannot hide your IP address with <application>Privoxy</application> or any other software, since
-the server needs to know your IP address to send the answer to you.
+the server needs to know your IP address to send the answers back to you.
 </para>
 <para>
 Fortunately there are many publicly usable anonymous proxies out there, which
@@ -1433,6 +1434,9 @@ FIXME: Commented out until we have something to put here. HB 03/18/02.
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 1.45  2002/04/08 22:59:26  hal9
+Version update. Spell chkconfig correctly :)
+
 Revision 1.44  2002/04/07 21:24:29  hal9
 Touch up on name change.
 

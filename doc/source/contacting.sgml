@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.4 2002/04/07 08:10:12 swa Exp $
+ $Id: contacting.sgml,v 1.5 2002/04/09 23:29:41 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -81,7 +81,7 @@ blocked images, popups and the like. Check back.
    <literallayout>
  Submit missed ads and banners, and incorrectly blocked images, popups, etc:
       
-      <ulink url="http://www.privoxy.org/actions/">http://www.privoxy.org/actions/</ulink>
+      <ulink url="http://p.p/">http://p.p/</ulink>, and select <ulink url="javascript:void(window.open('http://www.privoxy.org/actions','Feedback','width=600,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"><quote>actions file feedback system</quote></ulink>
    </literallayout>
    <para>
     This page can also be reached from many of the internal CGI pages.
