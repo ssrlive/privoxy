@@ -6,8 +6,9 @@ privoxy (2.9.15-beta-0) unstable; urgency=low
   * Exclude CVS files from dh_installdocs (when compiling from CVS).
   * Add user.action and standard.action to /etc/privoxy.
   * Install images for html version of documentation.
+  * Install p_doc.css in documentation directory.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 25 May 2002 23:30:39 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 26 May 2002 01:37:33 +0200
 
 privoxy (2.9.14-beta-3) unstable; urgency=low
 
