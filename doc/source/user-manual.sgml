@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.76 2002/04/16 04:25:51 hal9 Exp $
+ $Id: user-manual.sgml,v 1.77 2002/04/17 13:51:23 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -45,7 +45,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.76 2002/04/16 04:25:51 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.77 2002/04/17 13:51:23 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -2354,91 +2354,148 @@ Removed references to Win32. HB 09/23/01
 <title>The Actions File</title>
 
 <para>
- The <quote>default.action</quote> file (formerly
+ The actions file (<filename>default.action</filename>, formerly:
  <filename>actionsfile</filename> or <filename>ijb.action</filename>) is used
- to define what actions <application>Privoxy</application> takes, and thus
- determines how ad images, cookies and various other aspects of HTTP content
- and transactions are handled. These can be accepted or rejected for all
- sites, or just those sites you choose. See below for a complete list of 
- actions. 
+ to define what actions <application>Privoxy</application> takes for which
+ URLs, and thus determines how ad images, cookies and various other aspects
+ of HTTP content and transactions are handled on which sites (or even parts
+ thereof).
 </para>
+
 <para> 
  Anything you want can blocked, including ads, banners, or just some obnoxious
  URL that you would rather not see. Cookies can be accepted or rejected, or
- accepted only during the current browser session (i.e. not written to disk).
- Changes to <filename>default.action</filename> should be immediately visible
- to <application>Privoxy</application> without the need to restart.
+ accepted only during the current browser session (i.e. not written to disk),
+ content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
+ See below for a complete list of available actions.
+</para>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3>
+<title>Finding the Right Mix</title>
+<para>
+ Note that some actions like cookie suppression or script disabling may
+ render some sites unusable, which rely on these techniques to work properly.
+ Finding the right mix of actions is not easy and sure a matter of personal
+ taste. In general, it can be said that the more <quote>aggressive</quote>
+ your default settings (in the top section of the actions file) are,
+ the more exceptions for <quote>trustes</quote> sites you will have to
+ make later. If, for example, you want to kill popup windows per default, you'll
+ have to make exceptions from that rule for sites that you regularly use
+ and that require popups for actually useful content, like maybe your bank,
+ favourite shop, or newspaper.
 </para>
 
 <para>
- Note that some sites may misbehave, or possibly not work at all with some 
- actions. This may require some tinkering with the rules to get the most 
- mileage of <application>Privoxy's</application> features, and still be 
- able to see and enjoy just what you want to. There is no general rule of
- thumb on these things. There just are too many variables, and sites are 
- always changing.
-
+ We have tried to provide you with reasonable rules to start from in the
+ distribution actions file. But there is no general rule of thumb on these
+ things. There just are too many variables, and sites are constantly changing.
+ Sooner or later you will want to change the rules (and read this chapter).
 </para>
+</sect3>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3>
+<title>How to Edit</title>
 <para>
  The easiest way to edit the <quote>actions</quote> file is with a browser by
- loading <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
- (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>), and then select
- <quote>Edit Actions List</quote>. A text editor can also be used.
+ using our browser-based editor, which is available at <ulink
+ url="http://config.privoxy.org/edit-actions">http://config.privoxy.org/edit-actions</ulink>.
+</para>
+
+<para>
+ If you prefer plain text editing to GUIs, you can of course also directly edit the
+ <filename>default.action</filename> file.
+</para>
+</sect3>
+
+
+<sect3>
+<title>How Actions are Applied to URLs</title>
+<para>
+ The actions file is separated into sections. There are special sections,
+ like the alias sections which will be discussed later. For now let's
+ concentrate on regular sectiions: They have a heading line (often split
+ up to multiple lines for readability) which consist of a list of actions,
+ separated by whitespace and enclosed in curly braces. Below that, there
+ is a list of URL patterns, each on a separate line.
 </para>
 
 <para>
  To determine which actions apply to a request, the URL of the request is
  compared to all patterns in this file. Every time it matches, the list of
- applicable actions for the URL is incrementally updated. You can trace
- this process by visiting <ulink
- url="http://p.p/show-url-info">http://p.p/show-url-info</ulink>. 
+ applicable actions for the URL is incrementally updated, using the heading
+ of the section in which the pattern is located. If multiple matches for
+ the same URL set the same action differently, the last match wins.
 </para>
-
 
 <para>
- There are four types of lines in this file: comments (begin with a 
- <quote>#</quote> character), actions, aliases and patterns, all of which are
- explained below, as well as the configuration file syntax that 
- <application>Privoxy</application> understands.
-
+ You can trace this process by visiting <ulink
+ url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>.
 </para>
 
+<para>
+ More detail on this is provided in the Appendix <quote>Anatomy of an Action</quote>.
+</para>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3>
-<title>URL Domain and Path Syntax</title>
+<title>Patterns</title>
 <para>
  Generally, a pattern has the form &lt;domain&gt;/&lt;path&gt;, where both the
  &lt;domain&gt; and &lt;path&gt; part are optional. If you only specify a
  domain part, the <quote>/</quote> can be left out:
 </para>
 
-<para>
- <emphasis>www.example.com</emphasis> - is a domain only pattern and will match any request to
- <quote>www.example.com</quote>.
-</para>
+<variablelist>
+ <varlistentry>
+  <term><literal>www.example.com</literal></term>
+  <listitem>
+   <para>
+    is a domain only pattern and will match any request to <literal>www.example.com</literal>,
+    regardless of which document on that server is requested.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>www.example.com/</literal></term>
+  <listitem>
+   <para>
+    means exactly the same.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>www.example.com/index.html</literal></term>
+  <listitem>
+   <para>
+    matches only the single document <literal>/index.html</literal>
+    on <literal>www.example.com</literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>/index.html</literal></term>
+  <listitem>
+   <para>
+    matches the document <literal>/index.html</literal>, regardless of the domain,
+    i.e. on <emphasis>any</emphasis> web server.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>index.html</literal></term>
+  <listitem>
+   <para>
+    matches nothing, since it would be  interpreted as a domain name and
+    there is no top-level domain called <literal>.html</literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
 
-<para>
- <emphasis>www.example.com/</emphasis> - means exactly the same.
-</para>
-
-<para>
- <emphasis>www.example.com/index.html</emphasis> - matches only the single
- document <quote>/index.html</quote> on <quote>www.example.com</quote>.
-</para>
-
-<para>
- <emphasis>/index.html</emphasis> - matches the document <quote>/index.html</quote>, 
- regardless of the domain. So would match any page named <quote>index.html</quote>
- on any site.
-</para>
-
-<para>
- <emphasis>index.html</emphasis> - matches nothing, since it would be
- interpreted as a domain name and there is no top-level domain called
- <quote>.html</quote>.
-</para>
+<sect4><title>The Domain Pattern</title>
 
 <para>
  The matching of the domain part offers some flexible options: if the
@@ -2446,79 +2503,118 @@ Removed references to Win32. HB 09/23/01
  For example:
 </para>
 
-<para>
- <emphasis>.example.com</emphasis> - matches any domain or sub-domain that
- <emphasis>ENDS</emphasis> in <quote>.example.com</quote>.
-</para>
-
-<para>
- <emphasis>www.</emphasis> - matches any domain that <emphasis>STARTS</emphasis> with
- <quote>www</quote>.
-</para>
+<variablelist>
+ <varlistentry>
+  <term><literal>.example.com</literal></term>
+  <listitem>
+   <para>
+    matches any domain that <emphasis>ENDS</emphasis> in
+    <literal>.example.com</literal>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>www.</literal></term>
+  <listitem>
+   <para>
+    matches any domain that <emphasis>STARTS</emphasis> with
+    <literal>www.</literal>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.example.</literal></term>
+  <listitem>
+   <para>
+    matches any domain that <emphasis>CONTAINS</emphasis> <literal>.example.</literal>
+    (Correctly speaking: It matches any FQDN that contains <literal>example</literal> as a domain.)
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
 
 <para>
  Additionally, there are wild-cards that you can use in the domain names
  themselves. They work pretty similar to shell wild-cards: <quote>*</quote>
  stands for zero or more arbitrary characters, <quote>?</quote> stands for
- any single character. And you can define character classes in square
- brackets and they can be freely mixed:
+ any single character, you can define character classes in square
+ brackets and all of that can be freely mixed:
+</para>
+
+<variablelist>
+ <varlistentry>
+  <term><literal>ad*.example.com</literal></term>
+  <listitem>
+   <para>
+    matches <quote>adserver.example.com</quote>, 
+    <quote>ads.example.com</quote>, etc but not <quote>sfads.example.com</quote>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>*ad*.example.com</literal></term>
+  <listitem>
+   <para>
+    matches all of the above, and then some.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.?pix.com</literal></term>
+  <listitem>
+   <para>
+    matches <literal>www.ipix.com</literal>,
+    <literal>pictures.epix.com</literal>, <literal>a.b.c.d.e.upix.com</literal> etc. 
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>www[1-9a-ez].example.c*</literal></term>
+  <listitem>
+   <para>
+     matches <literal>www1.example.com</literal>, 
+     <literal>www4.example.cc</literal>, <literal>wwwd.example.cy</literal>, 
+     <literal>wwwz.example.com</literal> etc., but <emphasis>not</emphasis> 
+     <literal>wwww.example.com</literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4><title>The Path Pattern</title>
+
+<para>
+ <application>Privoxy</application> uses Perl compatible regular expressions
+ (through the <ulink url="http://www.pcre.org/">PCRE</ulink> library) for
+ matching the path.
 </para>
 
 <para>
- <emphasis>ad*.example.com</emphasis> - matches <quote>adserver.example.com</quote>, 
- <quote>ads.example.com</quote>, etc but not <quote>sfads.example.com</quote>.
+ There is an <link linkend="regex">Appendix</link> with a brief quickstart into regular
+ expressions, and full (very technical) documentation on PCRE regex syntax is available online
+ at <ulink url="http://www.pcre.org/man.txt">http://www.pcre.org/man.txt</ulink>.
+ You might also find the Perl man page on regular expressions (<literal>man perlre</literal>)
+ useful, which is available online at <ulink
+ url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>.
 </para>
 
 <para>
- <emphasis>*ad*.example.com</emphasis> - matches all of the above, and then some.
+ Note that the pattern is automatically left-anchored at the <quote>/</quote>,
+ i.e. it matches as if it would start with a <quote>^</quote>.
 </para>
 
 <para>
- <emphasis>.?pix.com</emphasis> - matches <quote>www.ipix.com</quote>,
- <quote>pictures.epix.com</quote>, <quote>a.b.c.d.e.upix.com</quote>, etc. 
-</para>
-
-<para>
- <emphasis>www[1-9a-ez].example.com</emphasis> - matches <quote>www1.example.com</quote>, 
- <quote>www4.example.com</quote>, <quote>wwwd.example.com</quote>, 
- <quote>wwwz.example.com</quote>, etc., but <emphasis>not</emphasis> 
- <quote>wwww.example.com</quote>.
-</para>
-
-<para>
- If <application>Privoxy</application> was compiled with
- <quote>pcre</quote> support (the default), Perl compatible regular expressions
- can be used. These are more flexible and powerful than other types 
- of <quote>regular expressions</quote>. See the <filename>pcre/docs/</filename> directory or <quote>man
- perlre</quote> (also available on  <ulink
- url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>)
- for details. A brief discussion of regular expressions is in the 
- <link linkend="regex">Appendix</link>. For instance:
-</para>
-
-<para>
- <emphasis>/.*/advert[0-9]+\.jpe?g</emphasis>  - would match a URL from any
- domain, with any path that includes <quote>advert</quote> followed
- immediately by one or more digits, then a <quote>.</quote> and ending in
- either <quote>jpeg</quote> or <quote>jpg</quote>. So we match
- <quote>example.com/ads/advert2.jpg</quote>, and
- <quote>www.example.com/ads/banners/advert39.jpeg</quote>, but not
- <quote>www.example.com/ads/banners/advert39.gif</quote> (no gifs in the
- example pattern).
-</para>
-
-<para>
- Please note that matching in the path is case
+ Please also note that matching in the path is case
  <emphasis>INSENSITIVE</emphasis> by default, but you can switch to case
  sensitive at any point in the pattern by using the 
  <quote>(?-i)</quote> switch:
-</para>
-
-<para>
- <emphasis>www.example.com/(?-i)PaTtErN.*</emphasis> - will match only
- documents whose path starts with <quote>PaTtErN</quote> in
+ <literal>www.example.com/(?-i)PaTtErN.*</literal> will match only
+ documents whose path starts with <literal>PaTtErN</literal> in
  <emphasis>exactly</emphasis> this capitalization.
 </para>
+</sect4>
 
 </sect3>
 
@@ -4338,6 +4434,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.77  2002/04/17 13:51:23  oes
+ Proofreading, part one
+
  Revision 1.76  2002/04/16 04:25:51  hal9
  -Added 'Note to Upgraders' and re-ordered the 'Quickstart' section.
  -Note about proxy may need requests to re-read config files.
