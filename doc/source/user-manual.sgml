@@ -7,7 +7,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.25 2002/01/09 18:20:30 hal9 Exp $
+ $Id: user-manual.sgml,v 1.26 2002/01/09 20:02:50 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  IJBSWA team.  http://ijbswa.sourceforge.net
@@ -30,7 +30,7 @@ Hal Burgiss <hal@foobox.net>
 <artheader>
 <title>Junkbuster User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.25 2002/01/09 18:20:30 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.26 2002/01/09 20:02:50 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -2722,7 +2722,29 @@ Removed references to Win32. HB 09/23/01
 
 </sect2>
 
+<!--  ~  End section  ~  -->
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2>
+<title>Templates</title>
+<para>
+ When <application>Junkbuster</application> displays one of its internal 
+ pages, such as a 404 Not Found error page, it uses the appropriate template.
+ On Linux, BSD, and Unix, these are locate in
+ <filename>/etc/junkbuster/templates</filename> by default. These may be
+ customized, if desired.
+
+</para>
+</sect2>
+
 </sect1>
+
+<!--  ~  End section  ~  -->
+
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="quickstart"><title>Quickstart to Using Junkbuster</title>
@@ -3216,6 +3238,9 @@ communication (bugs, feature requests, etc.)
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.26  2002/01/09 20:02:50  hal9
+ Fix bug re: auto-detect config file changes.
+
  Revision 1.25  2002/01/09 18:20:30  hal9
  Touch ups for *.action files.
 
