@@ -1,6 +1,6 @@
 #ifndef _PARSERS_H
 #define _PARSERS_H
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.3 2001/05/26 13:39:32 jongfoster Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.4 2001/05/27 13:19:06 oes Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.4  2001/05/27 13:19:06  oes
+ *    Patched Joergs solution for the content-length in.
+ *
  *    Revision 1.3  2001/05/26 13:39:32  jongfoster
  *    Only crunches Content-Length header if applying RE filtering.
  *    Without this fix, Microsoft Windows Update wouldn't work.
@@ -83,8 +86,6 @@ extern void (* const add_server_headers[])(struct client_state *);
 extern int flush_socket(int fd, struct client_state *csp);
 extern int add_to_iob(struct client_state *csp, char *buf, int n);
 extern char *get_header(struct client_state *csp);
-extern void enlist(struct list *h, const char *s);
-extern void destroy_list(struct list *h);
 
 extern char *sed(const struct parsers pats[], void (* const more_headers[])(struct client_state *), struct client_state *csp);
 

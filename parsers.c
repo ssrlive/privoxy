@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.11 2001/05/29 20:11:19 joergs Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.12 2001/05/31 17:33:13 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -41,6 +41,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.11 2001/05/29 20:11:19 joergs Exp
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.12  2001/05/31 17:33:13  oes
+ *
+ *    CRLF -> LF
+ *
  *    Revision 1.11  2001/05/29 20:11:19  joergs
  *    '/* inside comment' warning removed.
  *
@@ -179,6 +183,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.11 2001/05/29 20:11:19 joergs Exp
 #endif
 
 #include "project.h"
+#include "list.h"
 #include "parsers.h"
 #include "encode.h"
 #include "filters.h"
@@ -412,125 +417,6 @@ char *get_header(struct client_state *csp)
    {
       freez(ret);
       return(NULL);
-   }
-
-   return(ret);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  enlist
- *
- * Description :  Append a string into a specified string list.
- *
- * Parameters  :
- *          1  :  h = pointer to list 'dummy' header
- *          2  :  s = string to add to the list
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void enlist(struct list *h, const char *s)
-{
-   struct list *n = (struct list *)malloc(sizeof(*n));
-   struct list *l;
-
-   if (n)
-   {
-      n->str  = strdup(s);
-      n->next = NULL;
-
-      if ((l = h->last))
-      {
-         l->next = n;
-      }
-      else
-      {
-         h->next = n;
-      }
-
-      h->last = n;
-   }
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  destroy_list
- *
- * Description :  Destroy a string list (opposite of enlist)
- *
- * Parameters  :
- *          1  :  h = pointer to list 'dummy' header
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-void destroy_list(struct list *h)
-{
-   struct list *p, *n;
-
-   for (p = h->next; p ; p = n)
-   {
-      n = p->next;
-      freez(p->str);
-      freez(p);
-   }
-
-   memset(h, '\0', sizeof(*h));
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  list_to_text
- *
- * Description :  "Flaten" a string list into 1 long \r\n delimited string.
- *
- * Parameters  :
- *          1  :  h = pointer to list 'dummy' header
- *
- * Returns     :  NULL on malloc error, else new long string.
- *
- *********************************************************************/
-static char *list_to_text(struct list *h)
-{
-   struct list *p;
-   char *ret = NULL;
-   char *s;
-   int size;
-
-   size = 0;
-
-   for (p = h->next; p ; p = p->next)
-   {
-      if (p->str)
-      {
-         size += strlen(p->str) + 2;
-      }
-   }
-
-   if ((ret = (char *)malloc(size + 1)) == NULL)
-   {
-      return(NULL);
-   }
-
-   ret[size] = '\0';
-
-   s = ret;
-
-   for (p = h->next; p ; p = p->next)
-   {
-      if (p->str)
-      {
-         strcpy(s, p->str);
-         s += strlen(s);
-         *s++ = '\r'; *s++ = '\n';
-      }
    }
 
    return(ret);
@@ -883,6 +769,7 @@ char *content_length(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_referrer(const struct parsers *v, char *s, struct client_state *csp)
 {
+   const char * newval;
 #ifdef FORCE_LOAD
    /* Since the referrer can include the prefix even
     * even if the request itself is non-forced, we must
@@ -896,38 +783,33 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
 #endif /* def TRUST_FILES */
 
    /*
-    * Check permissionsfile.  If we have allowed this site to get the
-    * referer, then send it and we're done.
+    * Are we sending referer?
     */
-   if (csp->permissions & PERMIT_REFERER)
+   if ((csp->action->flags & ACTION_HIDE_REFERER) == 0)
    {
       return(strdup(s));
    }
 
+   newval = csp->action->string[ACTION_STRING_REFERER];
+
    /*
-    * Check configfile.  Are we blocking referer?
+    * Are we blocking referer?
     */
-   if ( (csp->config->referrer == NULL) 
-     || (*csp->config->referrer == '@') )
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
    /*
-    * Check configfile.  Are we always sending referer?
+    * Are we forging referer?
     */
-   if (*csp->config->referrer == '.')
+   if (0 == strcmpic(newval, "forge"))
    {
-      return(strdup(s));
-   }
-
-   /*
-    * New option § or L: Forge a referer as http://[hostname:port of REQUEST]/
-    * to fool stupid checks for in-site links
-    */
-   if (*csp->config->referrer == '§' || *csp->config->referrer == 'L')
-   {
+      /*
+       * Forge a referer as http://[hostname:port of REQUEST]/
+       * to fool stupid checks for in-site links
+       */
       log_error(LOG_LEVEL_HEADER, "crunch+forge!");
       s = strsav(NULL, "Referer: ");
       s = strsav(s, "http://");
@@ -937,15 +819,36 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
    }
 
    /*
-    * We have a specific (fixed) referer we want to send.
+    * Have we got a fixed referer?
     */
+   if (0 == strncmpic(newval, "http://", 7))
+   {
+      /*
+       * We have a specific (fixed) referer we want to send.
+       */
 
-   log_error(LOG_LEVEL_HEADER, "modified");
+      log_error(LOG_LEVEL_HEADER, "modified");
 
-   s = strsav( NULL, "Referer: " );
-   s = strsav( s, csp->config->referrer );
+      s = strsav( NULL, "Referer: " );
+      s = strsav( s, newval );
+      return(s);
+   }
+
+   /* Should never get here! */
+   log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
+
+   /*
+    * Forge is probably the best default.
+    *
+    * Forge a referer as http://[hostname:port of REQUEST]/
+    * to fool stupid checks for in-site links
+    */
+   log_error(LOG_LEVEL_HEADER, "crunch+forge!");
+   s = strsav(NULL, "Referer: ");
+   s = strsav(s, "http://");
+   s = strsav(s, csp->http->hostport);
+   s = strsav(s, "/");
    return(s);
-
 }
 
 
@@ -967,6 +870,8 @@ char *client_referrer(const struct parsers *v, char *s, struct client_state *csp
  *********************************************************************/
 char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
 {
+   const char * newval;
+
 #ifdef DETECT_MSIE_IMAGES
    if (strstr (s, "MSIE "))
    {
@@ -977,34 +882,21 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
    }
 #endif /* def DETECT_MSIE_IMAGES */
 
-   if (csp->config->uagent == NULL)
-   {
-      log_error(LOG_LEVEL_HEADER, "default");
-      return(strdup(DEFAULT_USER_AGENT));
-   }
-
-   if (*csp->config->uagent == '.')
+   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
    {
       return(strdup(s));
    }
 
-   if (*csp->config->uagent == '@')
+   newval = csp->action->string[ACTION_STRING_USER_AGENT];
+   if (newval == NULL)
    {
-      if (csp->permissions & PERMIT_USER_AGENT)
-      {
-         return(strdup(s));
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "default");
-         return(strdup(DEFAULT_USER_AGENT));
-      }
+      return(strdup(s));
    }
 
    log_error(LOG_LEVEL_HEADER, "modified");
 
    s = strsav( NULL, "User-Agent: " );
-   s = strsav( s, csp->config->uagent );
+   s = strsav( s, newval );
    return(s);
 
 }
@@ -1026,33 +918,15 @@ char *client_uagent(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (csp->config->uagent == NULL)
+   if ((csp->action->flags & ACTION_HIDE_USER_AGENT) == 0)
+   {
+      return(strdup(s));
+   }
+   else
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
-
-   if (*csp->config->uagent == '.')
-   {
-      return(strdup(s));
-   }
-
-   if (*csp->config->uagent == '@')
-   {
-      if (csp->permissions & PERMIT_USER_AGENT)
-      {
-         return(strdup(s));
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "crunch!");
-         return(NULL);
-      }
-   }
-
-   log_error(LOG_LEVEL_HEADER, "crunch!");
-   return(NULL);
-
 }
 
 
@@ -1074,22 +948,28 @@ char *client_ua(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_from(const struct parsers *v, char *s, struct client_state *csp)
 {
-   /* if not set, zap it */
-   if (csp->config->from == NULL)
+   const char * newval;
+
+   if ((csp->action->flags & ACTION_HIDE_FROM) == 0)
+   {
+      return(strdup(s));
+   }
+
+   newval = csp->action->string[ACTION_STRING_FROM];
+
+   /*
+    * Are we blocking referer?
+    */
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
       log_error(LOG_LEVEL_HEADER, "crunch!");
       return(NULL);
    }
 
-   if (*csp->config->from == '.')
-   {
-      return(strdup(s));
-   }
-
    log_error(LOG_LEVEL_HEADER, " modified");
 
    s = strsav( NULL, "From: " );
-   s = strsav( s, csp->config->from );
+   s = strsav( s, newval );
    return(s);
 
 }
@@ -1113,7 +993,7 @@ char *client_from(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 char *client_send_cookie(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (csp->permissions & PERMIT_COOKIE_READ)
+   if ((csp->action->flags & ACTION_NO_COOKIE_READ) == 0)
    {
       enlist(csp->cookie_list, s + v->len + 1);
    }
@@ -1148,8 +1028,9 @@ char *client_send_cookie(const struct parsers *v, char *s, struct client_state *
  *********************************************************************/
 char *client_x_forwarded(const struct parsers *v, char *s, struct client_state *csp)
 {
-   if (csp->config->add_forwarded)
+   if ((csp->action->flags & ACTION_HIDE_FORWARDED) == 0)
    {
+      /* Save it so we can re-add it later */
       csp->x_forwarded = strdup(s);
    }
 
@@ -1220,27 +1101,28 @@ char *client_accept(const struct parsers *v, char *s, struct client_state *csp)
  *********************************************************************/
 void client_cookie_adder(struct client_state *csp)
 {
-   struct list *l;
+   struct list *lst;
+   struct list_share *lsts;
    char *tmp = NULL;
    char *e;
 
-   for (l = csp->cookie_list->next; l ; l = l->next)
+   for (lst = csp->cookie_list->next; lst ; lst = lst->next)
    {
       if (tmp)
       {
          tmp = strsav(tmp, "; ");
       }
-      tmp = strsav(tmp, l->str);
+      tmp = strsav(tmp, lst->str);
    }
 
-   for (l = csp->config->wafer_list->next;  l ; l = l->next)
+   for (lsts = csp->action->multi[ACTION_MULTI_WAFER]->next;  lsts ; lsts = lsts->next)
    {
       if (tmp)
       {
          tmp = strsav(tmp, "; ");
       }
 
-      if ((e = cookie_encode(l->str)))
+      if ((e = cookie_encode(lsts->str)))
       {
          tmp = strsav(tmp, e);
          freez(e);
@@ -1276,9 +1158,9 @@ void client_cookie_adder(struct client_state *csp)
  *********************************************************************/
 void client_xtra_adder(struct client_state *csp)
 {
-   struct list *l;
+   struct list_share *l = csp->action->multi[ACTION_MULTI_ADD_HEADER];
 
-   for (l = csp->config->xtra_list->next; l ; l = l->next)
+   for (l = l->next; l ; l = l->next)
    {
       log_error(LOG_LEVEL_HEADER, "addh: %s", l->str);
       enlist(csp->headers, l->str);
@@ -1303,7 +1185,7 @@ void client_x_forwarded_adder(struct client_state *csp)
 {
    char *p = NULL;
 
-   if (csp->config->add_forwarded == 0)
+   if ((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
    {
       return;
    }
@@ -1351,7 +1233,7 @@ char *server_set_cookie(const struct parsers *v, char *s, struct client_state *c
    }
 #endif /* def JAR_FILES */
 
-   if (!(csp->permissions & PERMIT_COOKIE_SET))
+   if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
       return(crumble(v, s, csp));
    }
