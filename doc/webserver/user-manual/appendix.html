@@ -65,7 +65,7 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="APPENDIX"
->11. Appendix</A
+>15. Appendix</A
 ></H1
 ><DIV
 CLASS="SECT2"
@@ -73,7 +73,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="REGEX"
->11.1. Regular Expressions</A
+>15.1. Regular Expressions</A
 ></H2
 ><P
 > <SPAN
@@ -751,8 +751,8 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2545"
->11.2. <SPAN
+NAME="AEN2625"
+>15.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >'s Internal Pages</A
@@ -800,7 +800,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN2560"
+NAME="AEN2640"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -829,7 +829,7 @@ TARGET="_top"
     editing of actions files:
   </P
 ><A
-NAME="AEN2567"
+NAME="AEN2647"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -849,7 +849,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN2572"
+NAME="AEN2652"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -869,7 +869,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN2577"
+NAME="AEN2657"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -889,7 +889,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN2582"
+NAME="AEN2662"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -913,7 +913,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN2588"
+NAME="AEN2668"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -930,7 +930,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN2592"
+NAME="AEN2672"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -944,7 +944,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN2595"
+NAME="AEN2675"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -968,7 +968,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BOOKMARKLETS"
->11.2.1. Bookmarklets</A
+>15.2.1. Bookmarklets</A
 ></H3
 ><P
 > Below are some <SPAN
@@ -1075,7 +1075,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CHAIN"
->11.3. Chain of Events</A
+>15.3. Chain of Events</A
 ></H2
 ><P
 > Let's take a quick look at the basic sequence of events when a web page is 
@@ -1114,7 +1114,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > checks to see if the URL 
    matches any <A
-HREF="configuration.html#BLOCK"
+HREF="actions-file.html#BLOCK"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1123,7 +1123,7 @@ CLASS="QUOTE"
 > patterns. If
    so, the URL is then blocked, and the remote web server will not be contacted.
    <A
-HREF="configuration.html#HANDLE-AS-IMAGE"
+HREF="actions-file.html#HANDLE-AS-IMAGE"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1136,7 +1136,7 @@ CLASS="QUOTE"
 >"BLOCKED"</SPAN
 > page is sent back. Otherwise, if it does match,
    an image is returned. The type of image depends on the setting of <A
-HREF="configuration.html#SET-IMAGE-BLOCKER"
+HREF="actions-file.html#SET-IMAGE-BLOCKER"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1158,7 +1158,7 @@ CLASS="FILENAME"
 ><LI
 ><P
 >   If the URL pattern matches the <A
-HREF="configuration.html#FAST-REDIRECTS"
+HREF="actions-file.html#FAST-REDIRECTS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1172,7 +1172,7 @@ CLASS="QUOTE"
 ><P
 >   Now the rest of the client browser's request headers are processed. If any
    of these match any of the relevant actions (e.g. <A
-HREF="configuration.html#HIDE-USER-AGENT"
+HREF="actions-file.html#HIDE-USER-AGENT"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1195,7 +1195,7 @@ CLASS="QUOTE"
    things, the MIME type (document type) and encoding. The headers are then
    filtered as deterimed by the 
    <A
-HREF="configuration.html#PREVENT-SETTING-COOKIES"
+HREF="actions-file.html#PREVENT-SETTING-COOKIES"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1203,7 +1203,7 @@ CLASS="QUOTE"
 ></A
 >,
    <A
-HREF="configuration.html#SESSION-COOKIES-ONLY"
+HREF="actions-file.html#SESSION-COOKIES-ONLY"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1211,7 +1211,7 @@ CLASS="QUOTE"
 ></A
 >,
    and <A
-HREF="configuration.html#DOWNGRADE-HTTP-VERSION"
+HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1224,7 +1224,7 @@ CLASS="QUOTE"
 ><LI
 ><P
 >   If the <A
-HREF="configuration.html#KILL-POPUPS"
+HREF="actions-file.html#KILL-POPUPS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1238,7 +1238,7 @@ CLASS="QUOTE"
 ><LI
 ><P
 >   If a <A
-HREF="configuration.html#FILTER"
+HREF="actions-file.html#FILTER"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1246,7 +1246,7 @@ CLASS="QUOTE"
 ></A
 >
    or <A
-HREF="configuration.html#DEANIMATE-GIFS"
+HREF="actions-file.html#DEANIMATE-GIFS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1273,7 +1273,7 @@ CLASS="APPLICATION"
   </P
 ><P
 >   If neither <A
-HREF="configuration.html#FILTER"
+HREF="actions-file.html#FILTER"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1281,7 +1281,7 @@ CLASS="QUOTE"
 ></A
 >
    or <A
-HREF="configuration.html#DEANIMATE-GIFS"
+HREF="actions-file.html#DEANIMATE-GIFS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1314,7 +1314,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACTIONSANAT"
->11.4. Anatomy of an Action</A
+>15.4. Anatomy of an Action</A
 ></H2
 ><P
 > The way <SPAN
@@ -1322,7 +1322,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > applies 
  <A
-HREF="configuration.html#ACTIONS"
+HREF="actions-file.html#ACTIONS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1330,7 +1330,7 @@ CLASS="QUOTE"
 ></A
 >
  and <A
-HREF="configuration.html#FILTER"
+HREF="actions-file.html#FILTER"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1391,7 +1391,7 @@ CLASS="APPLICATION"
 > will tell us 
  how the current configuration will handle it. This will not
  help with filtering effects (i.e. the <A
-HREF="configuration.html#FILTER"
+HREF="actions-file.html#FILTER"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1461,7 +1461,7 @@ CLASS="SCREEN"
 ><P
 > This tells us how we have defined our 
  <A
-HREF="configuration.html#ACTIONS"
+HREF="actions-file.html#ACTIONS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1510,7 +1510,7 @@ CLASS="QUOTE"
 >".google.com"</SPAN
 >. The first is negating our previous cookie setting, 
  which was for <A
-HREF="configuration.html#SESSION-COOKIES-ONLY"
+HREF="actions-file.html#SESSION-COOKIES-ONLY"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1523,7 +1523,7 @@ CLASS="EMPHASIS"
 >off</I
 > any 
  <A
-HREF="configuration.html#FAST-REDIRECTS"
+HREF="actions-file.html#FAST-REDIRECTS"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1635,7 +1635,7 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"+imageblock"</SPAN
 >. (<A
-HREF="configuration.html#ALIASES"
+HREF="actions-file.html#ALIASES"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1654,7 +1654,7 @@ CLASS="QUOTE"
 >"ad.doubleclick.net"</SPAN
 >
  is done here -- as both a <A
-HREF="configuration.html#BLOCK"
+HREF="actions-file.html#BLOCK"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"
@@ -1666,7 +1666,7 @@ CLASS="EMPHASIS"
 >and</I
 > an 
  <A
-HREF="configuration.html#HANDLE-AS-IMAGE"
+HREF="actions-file.html#HANDLE-AS-IMAGE"
 TARGET="_top"
 ><SPAN
 CLASS="QUOTE"

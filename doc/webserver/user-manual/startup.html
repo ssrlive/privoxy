@@ -80,14 +80,14 @@ CLASS="APPLICATION"
 > Before launching <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> for the first time, you 
- will want to configure your browser(s) to use <SPAN
+> for the first time, you
+ will want to configure your browser(s) to use
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->
- as a HTTP and HTTPS proxy. The default is localhost for the proxy address,
- and port 8118 (earlier versions used port 8000). This is the one
- configuration step that must be done! </P
+> as a HTTP and HTTPS proxy. The default is
+ localhost for the proxy address, and port 8118 (earlier versions used port
+ 8000). This is the one configuration step that must be done!</P
 ><P
 > 
  With <SPAN
@@ -128,8 +128,34 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is typically started by specifying the
- main configuration file to be used on the command line. Example Unix startup
- command:</P
+ main configuration file to be used on the command line. If no configuration
+ file is specified on the command line, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ will look for a file named <TT
+CLASS="FILENAME"
+>config</TT
+> in the current
+ directory. Except on Win32 where it will try <TT
+CLASS="FILENAME"
+>config.txt</TT
+>.</P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-REDHATDEBIAN"
+>6.1. RedHat and Debian</A
+></H2
+><P
+>We use a script. Note that RedHat does not start Privoxy upon booting per
+default. It will use the file <TT
+CLASS="FILENAME"
+>/etc/privoxy/config</TT
+> as its
+main configuration file. FIXME: Debian??</P
 ><P
 > <TABLE
 BORDER="0"
@@ -139,212 +165,127 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-> 
- # /usr/sbin/privoxy /etc/privoxy/config</PRE
+> # /etc/rc.d/init.d/privoxy start</PRE
 ></TD
 ></TR
 ></TABLE
 ></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-SUSE"
+>6.2. SuSE</A
+></H2
 ><P
-> See <A
-HREF="startup.html#CMDOPTIONS"
->below</A
-> for other command line options.</P
+>We use a script. It will use the file <TT
+CLASS="FILENAME"
+>/etc/privoxy/config</TT
+>
+as its main configuration file. Note that SuSE starts Privoxy upon booting
+your PC.</P
 ><P
-> An init script is provided for SuSE and Red Hat.</P
-><P
-> For for SuSE: <B
-CLASS="COMMAND"
->rcprivoxy start</B
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> # rcprivoxy start</PRE
+></TD
+></TR
+></TABLE
 ></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-WINDOWS"
+>6.3. Windows</A
+></H2
 ><P
-> For Red Hat and Debian: <B
-CLASS="COMMAND"
->/etc/rc.d/init.d/privoxy start</B
-></P
-><P
-> If no configuration file is specified on the command line,
- <SPAN
+>Click on the Privoxy Icon to start Privoxy. If no configuration file is
+ specified on the command line, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will look for a file named
- <TT
-CLASS="FILENAME"
->config</TT
-> in the current directory. Except on Win32 where
- it will try <TT
+> will look
+ for a file named <TT
 CLASS="FILENAME"
 >config.txt</TT
->. If no file is specified on the
- command line and no default configuration file can be found, 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> will fail to start.</P
+>. Note that Windows will
+ automatically start Privoxy upon booting you PC.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-UNICES"
+>6.4. Solaris, NetBSD, FreeBSD, HP-UX and others</A
+></H2
 ><P
-> The included default configuration files should give a reasonable starting
- point. Most of the per site configuration is done in the
- <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> files. These are where various cookie actions are
- defined, ad and banner blocking, and other aspects of
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> configuration. There are several such
- files included, with varying levels of aggressiveness. </P
+>Example Unix startup command:</P
 ><P
-> You will probably want to keep an eye out for sites for which you may prefer
- persistent cookies, and add these to your actions configuration as needed. By
- default, most of these will be accepted only during the current browser
- session (aka <SPAN
-CLASS="QUOTE"
->"session cookies"</SPAN
->), unless you add them to the
- configuration. If you want the browser to handle this instead, you will need
- to edit <TT
-CLASS="FILENAME"
->user.action</TT
-> (or through the web based interface)
- and disable this feature. If you use more than one browser, it would make
- more sense to let <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> handle this. In which
- case, the browser(s) should be set to accept all cookies.</P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> # /usr/sbin/privoxy /etc/privoxy/config</PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-OS2"
+>6.5. OS/2</A
+></H2
 ><P
-> Another feature where you will probably want to define exceptions for trusted
- sites is the popup-killing (through the <TT
-CLASS="LITERAL"
->+popup</TT
-> and
- <TT
-CLASS="LITERAL"
->+filter{popups}</TT
-> actions), because your favorite shopping,
- banking, or leisure site may need popups (explained below). </P
+>FIXME.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-MACOSX"
+>6.6. MAX OSX</A
+></H2
 ><P
-> <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is HTTP/1.1 compliant,  but not all of
- the optional 1.1 features are as yet supported. In the unlikely event that
- you experience inexplicable problems with browsers that use HTTP/1.1 per default
- (like <SPAN
-CLASS="APPLICATION"
->Mozilla</SPAN
-> or recent versions of I.E.), you might
- try to force HTTP/1.0 compatibility. For Mozilla, look under <TT
-CLASS="LITERAL"
->Edit -&#62;
- Preferences -&#62; Debug -&#62; Networking</TT
->.
- Alternatively, set the <SPAN
-CLASS="QUOTE"
->"+downgrade-http-version"</SPAN
-> config option in
- <TT
-CLASS="FILENAME"
->default.action</TT
-> which will downgrade your browser's HTTP
- requests from HTTP/1.1 to HTTP/1.0 before processing them.</P
+>FIXME.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="START-AMIGAOS"
+>6.7. AmigaOS</A
+></H2
 ><P
-> After running <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> for a while, you can 
- start to fine tune the configuration to suit your personal, or site, 
- preferences and requirements. There are many, many aspects that can 
- be customized. <SPAN
-CLASS="QUOTE"
->"Actions"</SPAN
-> 
- can be adjusted by pointing your browser to 
- <A
-HREF="http://config.privoxy.org/"
-TARGET="_top"
->http://config.privoxy.org/</A
->
- (shortcut: <A
-HREF="http://p.p/"
-TARGET="_top"
->http://p.p/</A
->), 
- and then follow the link to <SPAN
-CLASS="QUOTE"
->"View &#38; Change the Current Configuration"</SPAN
->. 
- (This is an internal page and does not require Internet access.)</P
-><P
-> In fact, various aspects of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
- configuration can be viewed from this page, including 
- current configuration parameters, source code version numbers, 
- the browser's request headers, and <SPAN
-CLASS="QUOTE"
->"actions"</SPAN
-> that apply 
- to a given URL. In addition to the actions file 
- editor mentioned above, <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> can also 
- be turned <SPAN
-CLASS="QUOTE"
->"on"</SPAN
-> and <SPAN
-CLASS="QUOTE"
->"off"</SPAN
-> (toggled) from this page.</P
-><P
-> If you encounter problems, try loading the page without
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->. If that helps, enter the URL where
- you have the problems into <A
-HREF="http://p.p/show-url-info"
-TARGET="_top"
->the browser
- based rule tracing utility</A
->. See which rules apply and why, and
- then try turning them off for that site one after the other, until the problem
- is gone. When you have found the culprit, you might want to turn the rest on
- again.</P
-><P
-> If the above paragraph sounds gibberish to you, you might want to <A
-HREF="configuration.html#ACTIONSFILE"
-TARGET="_top"
->read more about the actions concept</A
->
- or even dive deep into the <A
-HREF="appendix.html#ACTIONSANAT"
-TARGET="_top"
->Appendix
- on actions</A
->.</P
-><P
-> If you can't get rid of the problem at all, think you've found a bug in
- Privoxy, want to propose a new feature or smarter rules, please see the 
- section <A
-HREF="contact.html"
-TARGET="_top"
-><SPAN
-CLASS="QUOTE"
->"Contacting the
- Developers"</SPAN
-></A
-> below. </P
+>FIXME.</P
+></DIV
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
 NAME="CMDOPTIONS"
->6.1. Command Line Options</A
+>6.8. Command Line Options</A
 ></H2
 ><P
 > <SPAN

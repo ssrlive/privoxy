@@ -822,8 +822,8 @@ Sourceforge.
 http://p.p/, access Privoxy from your browser. Alternately, http://            
 config.privoxy.org may work in some situations where the first does not.       
 
-http://p.p/, and select "actions file feedback system" to submit "misses" to   
-the developers.                                                                
+http://p.p/, and select "Privoxy - Submit Filter Feedback" to submit "misses"  
+to the developers.                                                             
 
 http://www.junkbusters.com/ht/en/cookies.html
 
@@ -910,7 +910,6 @@ note the following sections.
 To get support, use the Sourceforge Support Forum:
 
     http://sourceforge.net/tracker/?group_id=11118&atid=211118
-   
 
 -------------------------------------------------------------------------------
 
@@ -919,7 +918,6 @@ To get support, use the Sourceforge Support Forum:
 To submit bugs, use the Sourceforge Bug Forum:
 
     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-    
 
 Make sure that the bug has not already been submitted. Please try to verify
 that it is a Privoxy bug, and not a browser or site bug first. If you are using
@@ -937,7 +935,6 @@ reproduce the bug.
 To submit ideas on new features, use the Sourceforge feature request forum:
 
     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
-   
 
 -------------------------------------------------------------------------------
 
@@ -958,7 +955,6 @@ your feedback. These will be announced on the ijbswa-announce list.
 For any other issues, feel free to use the mailing lists:
  
     http://sourceforge.net/mail/?group_id=11118.
- 
 
 Anyone interested in actively participating in development and related
 discussions can also join the appropriate mailing list. Archives are available,

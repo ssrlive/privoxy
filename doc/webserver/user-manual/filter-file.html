@@ -1,0 +1,293 @@
+<HTML
+><HEAD
+><TITLE
+>The Filter File</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Privoxy User Manual"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Actions Files"
+HREF="actions-file.html"><LINK
+REL="NEXT"
+TITLE="Templates"
+HREF="templates.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy User Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="actions-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="templates.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FILTER-FILE"
+>10. The Filter File</A
+></H1
+><P
+> Any web page can be dynamically modified with the filter file. This
+ modification can be removal, or re-writing, of any web page content,
+ including tags and non-visible content. The default filter file is
+ oddly enough <TT
+CLASS="FILENAME"
+>default.filter</TT
+>, located in the config
+ directory. </P
+><P
+> This is potentially a very powerful feature, and requires knowledge of both 
+ <SPAN
+CLASS="QUOTE"
+>"regular expression"</SPAN
+> and HTML in order create custom 
+ filters. But, there are a number of useful filters included with 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> for many common situations.</P
+><P
+> The included example file is divided into sections. Each section begins 
+ with the <TT
+CLASS="LITERAL"
+>FILTER</TT
+> keyword, followed by the identifier 
+ for that section, e.g. <SPAN
+CLASS="QUOTE"
+>"FILTER: webbugs"</SPAN
+>. Each section performs
+ a similar type of filtering, such as <SPAN
+CLASS="QUOTE"
+>"html-annoyances"</SPAN
+>.</P
+><P
+> This file uses regular expressions to alter or remove any string in the
+ target page. The expressions can only operate on one line at a time. Some
+ examples from the included default <TT
+CLASS="FILENAME"
+>default.filter</TT
+>:</P
+><P
+> Stop web pages from displaying annoying messages in the status bar by
+ deleting such references:</P
+><P
+> <TT
+CLASS="LITERAL"
+>  <P
+CLASS="LITERALLAYOUT"
+>&nbsp;FILTER:&nbsp;html-annoyances<br>
+<br>
+&nbsp;#&nbsp;New&nbsp;browser&nbsp;windows&nbsp;should&nbsp;be&nbsp;resizeable&nbsp;and&nbsp;have&nbsp;a&nbsp;location&nbsp;and&nbsp;status<br>
+&nbsp;#&nbsp;bar.&nbsp;Make&nbsp;it&nbsp;so.<br>
+&nbsp;#<br>
+&nbsp;s/resizable="?(no|0)"?/resizable=1/ig&nbsp;s/noresize/yesresize/ig<br>
+&nbsp;s/location="?(no|0)"?/location=1/ig&nbsp;s/status="?(no|0)"?/status=1/ig<br>
+&nbsp;s/scrolling="?(no|0|Auto)"?/scrolling=1/ig<br>
+&nbsp;s/menubar="?(no|0)"?/menubar=1/ig&nbsp;<br>
+<br>
+&nbsp;#&nbsp;The&nbsp;&#60;BLINK&#62;&nbsp;tag&nbsp;was&nbsp;a&nbsp;crime!<br>
+&nbsp;#<br>
+&nbsp;s*&#60;blink&#62;|&#60;/blink&#62;**ig<br>
+<br>
+&nbsp;#&nbsp;Is&nbsp;this&nbsp;evil?&nbsp;<br>
+&nbsp;#<br>
+&nbsp;#s/framespacing="?(no|0)"?//ig<br>
+&nbsp;#s/margin(height|width)=[0-9]*//gi<br>
+&nbsp;&nbsp;&nbsp;</P
+> 
+ </TT
+></P
+><P
+> Just for kicks, replace any occurrence of <SPAN
+CLASS="QUOTE"
+>"Microsoft"</SPAN
+> with
+ <SPAN
+CLASS="QUOTE"
+>"MicroSuck"</SPAN
+>, and have a little fun with topical buzzwords: </P
+><P
+> <TT
+CLASS="LITERAL"
+>  <P
+CLASS="LITERALLAYOUT"
+>&nbsp;FILTER:&nbsp;fun<br>
+<br>
+&nbsp;s/microsoft(?!.com)/MicroSuck/ig<br>
+<br>
+&nbsp;#&nbsp;Buzzword&nbsp;Bingo:<br>
+&nbsp;#<br>
+&nbsp;s/industry-leading|cutting-edge|award-winning/&#60;font&nbsp;color=red&#62;&#60;b&#62;BINGO!&#60;/b&#62;&#60;/font&#62;/ig<br>
+&nbsp;&nbsp;&nbsp;</P
+> 
+ </TT
+></P
+><P
+> Kill those pesky little web-bugs:</P
+><P
+> <TT
+CLASS="LITERAL"
+>  <P
+CLASS="LITERALLAYOUT"
+>&nbsp;#&nbsp;webbugs:&nbsp;Squish&nbsp;WebBugs&nbsp;(1x1&nbsp;invisible&nbsp;GIFs&nbsp;used&nbsp;for&nbsp;user&nbsp;tracking)<br>
+&nbsp;FILTER:&nbsp;webbugs<br>
+<br>
+&nbsp;s/&#60;img\s+[^&#62;]*?(width|height)\s*=\s*['"]?1\D[^&#62;]*?(width|height)\s*=\s*['"]?1(\D[^&#62;]*?)?&#62;/&#60;!--&nbsp;Squished&nbsp;WebBug&nbsp;--&#62;/sig<br>
+&nbsp;&nbsp;&nbsp;</P
+> 
+ </TT
+></P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN2339"
+>10.1. The <I
+CLASS="EMPHASIS"
+>+filter</I
+> Action</A
+></H2
+><P
+> Filters are enabled with the <A
+HREF="actions-file.html#FILTER"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+></A
+> action from within 
+ one of the actions files. <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+> requires one parameter, which 
+ should match one of the section identifiers in the filter file itself. Example:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  +filter{html-annoyances}</PRE
+></TD
+></TR
+></TABLE
+><P
+> This would activate that particular filter. Similarly, <SPAN
+CLASS="QUOTE"
+>"+filter"</SPAN
+>
+ can be turned off for selected sites as:
+ <SPAN
+CLASS="QUOTE"
+>"-filter{html-annoyances}"</SPAN
+>. Remember too, all actions are off by
+ default, unless they are explicity enabled in one of the actions files.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="actions-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="templates.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Actions Files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Templates</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -2,7 +2,7 @@ Privoxy User Manual
 
 By: Privoxy Developers
 
-$Id: user-manual.sgml,v 1.95 2002/04/26 17:23:29 swa Exp $
+$Id: user-manual.sgml,v 1.99 2002/04/28 16:59:05 swa Exp $
 
 The user manual gives users information on how to install, configure and use 
 Privoxy.
@@ -41,117 +41,126 @@ Table of Contents
 5. Quickstart to Using Privoxy
 6. Starting Privoxy
    
-    6.1. Command Line Options
+    6.1. RedHat and Debian
+    6.2. SuSE
+    6.3. Windows
+    6.4. Solaris, NetBSD, FreeBSD, HP-UX and others
+    6.5. OS/2
+    6.6. MAX OSX
+    6.7. AmigaOS
+    6.8. Command Line Options
    
 7. Privoxy Configuration
    
     7.1. Controlling Privoxy with Your Web Browser
     7.2. Configuration Files Overview
-    7.3. The Main Configuration File
-       
-        7.3.1. Configuration and Log File Locations
-           
-            7.3.1.1. confdir
-            7.3.1.2. logdir
-            7.3.1.3. actionsfile
-            7.3.1.4. filterfile
-            7.3.1.5. logfile
-            7.3.1.6. jarfile
-            7.3.1.7. trustfile
-           
-        7.3.2. Local Set-up Documentation
-           
-            7.3.2.1. trust-info-url
-            7.3.2.2. admin-address
-            7.3.2.3. proxy-info-url
-           
-        7.3.3. Debugging
-           
-            7.3.3.1. debug
-            7.3.3.2. single-threaded
-           
-        7.3.4. Access Control and Security
-           
-            7.3.4.1. listen-address
-            7.3.4.2. toggle
-            7.3.4.3. enable-remote-toggle
-            7.3.4.4. enable-edit-actions
-            7.3.4.5. ACLs: permit-access and deny-access
-            7.3.4.6. buffer-limit
-           
-        7.3.5. Forwarding
-           
-            7.3.5.1. forward
-            7.3.5.2. forward-socks4 and forward-socks4a
-            7.3.5.3. Advanced Forwarding Examples
-           
-        7.3.6. Windows GUI Options
-       
-    7.4. Actions Files
-       
-        7.4.1. Finding the Right Mix
-        7.4.2. How to Edit
-        7.4.3. How Actions are Applied to URLs
-        7.4.4. Patterns
-           
-            7.4.4.1. The Domain Pattern
-            7.4.4.2. The Path Pattern
-           
-        7.4.5. Actions
-           
-            7.4.5.1. +add-header
-            7.4.5.2. +block
-            7.4.5.3. +deanimate-gifs
-            7.4.5.4. +downgrade-http-version
-            7.4.5.5. +fast-redirects
-            7.4.5.6. +filter
-            7.4.5.7. +hide-forwarded-for-headers
-            7.4.5.8. +hide-from-header
-            7.4.5.9. +hide-referer
-            7.4.5.10. +hide-user-agent
-            7.4.5.11. +handle-as-image
-            7.4.5.12. +set-image-blocker
-            7.4.5.13. +limit-connect
-            7.4.5.14. +prevent-compression
-            7.4.5.15. +session-cookies-only
-            7.4.5.16. +prevent-reading-cookies
-            7.4.5.17. +prevent-setting-cookies
-            7.4.5.18. +kill-popups
-            7.4.5.19. +send-vanilla-wafer
-            7.4.5.20. +send-wafer
-            7.4.5.21. Actions Examples
-           
-        7.4.6. Aliases
-       
-    7.5. The Filter File
-       
-        7.5.1. The +filter Action
-       
-    7.6. Templates
    
-8. Contacting the Developers, Bug Reporting and Feature Requests
+8. The Main Configuration File
    
-    8.1. Get Support
-    8.2. Report bugs
-    8.3. Request new features
-    8.4. Report ads or other filter problems
-    8.5. Other
-   
-9. Copyright and History
-   
-    9.1. Copyright
-    9.2. History
-   
-10. See Also
-11. Appendix
-   
-    11.1. Regular Expressions
-    11.2. Privoxy's Internal Pages
+    8.1. Configuration and Log File Locations
        
-        11.2.1. Bookmarklets
+        8.1.1. confdir
+        8.1.2. logdir
+        8.1.3. actionsfile
+        8.1.4. filterfile
+        8.1.5. logfile
+        8.1.6. jarfile
+        8.1.7. trustfile
+        8.1.8. user-manual
        
-    11.3. Chain of Events
-    11.4. Anatomy of an Action
+    8.2. Local Set-up Documentation
+       
+        8.2.1. trust-info-url
+        8.2.2. admin-address
+        8.2.3. proxy-info-url
+       
+    8.3. Debugging
+       
+        8.3.1. debug
+        8.3.2. single-threaded
+       
+    8.4. Access Control and Security
+       
+        8.4.1. listen-address
+        8.4.2. toggle
+        8.4.3. enable-remote-toggle
+        8.4.4. enable-edit-actions
+        8.4.5. ACLs: permit-access and deny-access
+        8.4.6. buffer-limit
+       
+    8.5. Forwarding
+       
+        8.5.1. forward
+        8.5.2. forward-socks4 and forward-socks4a
+        8.5.3. Advanced Forwarding Examples
+       
+    8.6. Windows GUI Options
+   
+9. Actions Files
+   
+    9.1. Finding the Right Mix
+    9.2. How to Edit
+    9.3. How Actions are Applied to URLs
+    9.4. Patterns
+       
+        9.4.1. The Domain Pattern
+        9.4.2. The Path Pattern
+       
+    9.5. Actions
+       
+        9.5.1. +add-header
+        9.5.2. +block
+        9.5.3. +deanimate-gifs
+        9.5.4. +downgrade-http-version
+        9.5.5. +fast-redirects
+        9.5.6. +filter
+        9.5.7. +hide-forwarded-for-headers
+        9.5.8. +hide-from-header
+        9.5.9. +hide-referer
+        9.5.10. +hide-user-agent
+        9.5.11. +handle-as-image
+        9.5.12. +set-image-blocker
+        9.5.13. +limit-connect
+        9.5.14. +prevent-compression
+        9.5.15. +session-cookies-only
+        9.5.16. +prevent-reading-cookies
+        9.5.17. +prevent-setting-cookies
+        9.5.18. +kill-popups
+        9.5.19. +send-vanilla-wafer
+        9.5.20. +send-wafer
+        9.5.21. Summary
+        9.5.22. Sample Actions Files
+       
+    9.6. Aliases
+   
+10. The Filter File
+   
+    10.1. The +filter Action
+   
+11. Templates
+12. Contacting the Developers, Bug Reporting and Feature Requests
+   
+    12.1. Get Support
+    12.2. Report bugs
+    12.3. Request new features
+    12.4. Report ads or other filter problems
+    12.5. Other
+   
+13. Copyright and History
+   
+    13.1. Copyright
+    13.2. History
+   
+14. See Also
+15. Appendix
+   
+    15.1. Regular Expressions
+    15.2. Privoxy's Internal Pages
+       
+        15.2.1. Bookmarklets
+       
+    15.3. Chain of Events
+    15.4. Anatomy of an Action
    
 -------------------------------------------------------------------------------
 
@@ -355,10 +364,10 @@ A quick list of things to be aware of before upgrading:
     can be done here, including temporarily disabling Privoxy.
    
   * The primary configuration file for cookie management, ad and banner
-    blocking, and many other aspects of Privoxy configuration is in the
-    "actions" files. It is strongly recommended to become familiar with the new
-    actions concept below, before modifying these files. Locally defined rules
-    should go into user.action.
+    blocking, and many other aspects of Privoxy configuration is in the actions
+    files. It is strongly recommended to become familiar with the new actions
+    concept below, before modifying these files. Locally defined rules should
+    go into user.action.
    
   * Some installers may not automatically start Privoxy after installation.
    
@@ -398,80 +407,66 @@ re-reading of all pages and to get rid of any ads that may be cached. You are
 now ready to start enjoying the benefits of using Privoxy!
 
 Privoxy is typically started by specifying the main configuration file to be
-used on the command line. Example Unix startup command:
-
- # /usr/sbin/privoxy /etc/privoxy/config                                       
-
-See below for other command line options.
-
-An init script is provided for SuSE and Red Hat.
-
-For for SuSE: rcprivoxy start
-
-For Red Hat and Debian: /etc/rc.d/init.d/privoxy start
-
-If no configuration file is specified on the command line, Privoxy will look
-for a file named config in the current directory. Except on Win32 where it will
-try config.txt. If no file is specified on the command line and no default
-configuration file can be found, Privoxy will fail to start.
-
-The included default configuration files should give a reasonable starting
-point. Most of the per site configuration is done in the "actions" files. These
-are where various cookie actions are defined, ad and banner blocking, and other
-aspects of Privoxy configuration. There are several such files included, with
-varying levels of aggressiveness.
-
-You will probably want to keep an eye out for sites for which you may prefer
-persistent cookies, and add these to your actions configuration as needed. By
-default, most of these will be accepted only during the current browser session
-(aka "session cookies"), unless you add them to the configuration. If you want
-the browser to handle this instead, you will need to edit user.action (or
-through the web based interface) and disable this feature. If you use more than
-one browser, it would make more sense to let Privoxy handle this. In which
-case, the browser(s) should be set to accept all cookies.
-
-Another feature where you will probably want to define exceptions for trusted
-sites is the popup-killing (through the +popup and +filter{popups} actions),
-because your favorite shopping, banking, or leisure site may need popups
-(explained below).
-
-Privoxy is HTTP/1.1 compliant, but not all of the optional 1.1 features are as
-yet supported. In the unlikely event that you experience inexplicable problems
-with browsers that use HTTP/1.1 per default (like Mozilla or recent versions of
-I.E.), you might try to force HTTP/1.0 compatibility. For Mozilla, look under
-Edit -> Preferences -> Debug -> Networking. Alternatively, set the
-"+downgrade-http-version" config option in default.action which will downgrade
-your browser's HTTP requests from HTTP/1.1 to HTTP/1.0 before processing them.
-
-After running Privoxy for a while, you can start to fine tune the configuration
-to suit your personal, or site, preferences and requirements. There are many,
-many aspects that can be customized. "Actions" can be adjusted by pointing your
-browser to http://config.privoxy.org/ (shortcut: http://p.p/), and then follow
-the link to "View & Change the Current Configuration". (This is an internal
-page and does not require Internet access.)
-
-In fact, various aspects of Privoxy configuration can be viewed from this page,
-including current configuration parameters, source code version numbers, the
-browser's request headers, and "actions" that apply to a given URL. In addition
-to the actions file editor mentioned above, Privoxy can also be turned "on" and
-"off" (toggled) from this page.
-
-If you encounter problems, try loading the page without Privoxy. If that helps,
-enter the URL where you have the problems into the browser based rule tracing
-utility. See which rules apply and why, and then try turning them off for that
-site one after the other, until the problem is gone. When you have found the
-culprit, you might want to turn the rest on again.
-
-If the above paragraph sounds gibberish to you, you might want to read more
-about the actions concept or even dive deep into the Appendix on actions.
-
-If you can't get rid of the problem at all, think you've found a bug in
-Privoxy, want to propose a new feature or smarter rules, please see the section
-"Contacting the Developers" below.
+used on the command line. If no configuration file is specified on the command
+line, Privoxy will look for a file named config in the current directory.
+Except on Win32 where it will try config.txt.
 
 -------------------------------------------------------------------------------
 
-6.1. Command Line Options
+6.1. RedHat and Debian
+
+We use a script. Note that RedHat does not start Privoxy upon booting per
+default. It will use the file /etc/privoxy/config as its main configuration
+file. FIXME: Debian??
+
+ # /etc/rc.d/init.d/privoxy start                                              
+
+-------------------------------------------------------------------------------
+
+6.2. SuSE
+
+We use a script. It will use the file /etc/privoxy/config as its main
+configuration file. Note that SuSE starts Privoxy upon booting your PC.
+
+ # rcprivoxy start                                                             
+
+-------------------------------------------------------------------------------
+
+6.3. Windows
+
+Click on the Privoxy Icon to start Privoxy. If no configuration file is
+specified on the command line, Privoxy will look for a file named config.txt.
+Note that Windows will automatically start Privoxy upon booting you PC.
+
+-------------------------------------------------------------------------------
+
+6.4. Solaris, NetBSD, FreeBSD, HP-UX and others
+
+Example Unix startup command:
+
+ # /usr/sbin/privoxy /etc/privoxy/config                                       
+
+-------------------------------------------------------------------------------
+
+6.5. OS/2
+
+FIXME.
+
+-------------------------------------------------------------------------------
+
+6.6. MAX OSX
+
+FIXME.
+
+-------------------------------------------------------------------------------
+
+6.7. AmigaOS
+
+FIXME.
+
+-------------------------------------------------------------------------------
+
+6.8. Command Line Options
 
 Privoxy may be invoked with the following command-line options:
 
@@ -524,11 +519,11 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
  Privoxy Menu                                                                  
-        ?  View & change the current configuration                             
-        ?  View the source code version numbers                                
-        ?  View the request headers.                                           
-        ?  Look up which actions apply to a URL and why                        
-        ?  Toggle Privoxy on or off                                            
+        ??  View & change the current configuration                            
+        ??  View the source code version numbers                               
+        ??  View the request headers.                                          
+        ??  Look up which actions apply to a URL and why                       
+        ??  Toggle Privoxy on or off                                           
                                                                                
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -604,7 +599,7 @@ configuration files on important issues.
 
 -------------------------------------------------------------------------------
 
-7.3. The Main Configuration File
+8. The Main Configuration File
 
 Again, the main configuration file is named config on Linux/Unix/BSD and OS/2,
 and config.txt on Windows. Configuration lines consist of an initial keyword
@@ -626,15 +621,15 @@ surfing).
 
 -------------------------------------------------------------------------------
 
-7.3.1. Configuration and Log File Locations
+8.1. Configuration and Log File Locations
 
 Privoxy can (and normally does) use a number of other files for additional
-configuration and logging. This section of the configuration file tells Privoxy
-where to find those other files.
+configuration, help and logging. This section of the configuration file tells
+Privoxy where to find those other files.
 
 -------------------------------------------------------------------------------
 
-7.3.1.1. confdir
+8.1.1. confdir
 
 Specifies:
    
@@ -664,7 +659,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.1.2. logdir
+8.1.2. logdir
 
 Specifies:
    
@@ -689,7 +684,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.1.3. actionsfile
+8.1.3. actionsfile
 
 Specifies:
    
@@ -713,18 +708,20 @@ Effect if unset:
    
 Notes:
    
-    Multiple actionsfile lines are OK and are in fact recommended!
+    Multiple actionsfile lines are permitted, and are in fact recommended!
    
     The default values include standard.action, which is used for internal
     purposes and should be loaded, default.action, which is the "main" actions
     file maintained by the developers, and user.action, where you can make your
     personal additions.
    
-    There is no point in using Privoxy without an actions file.
+    Actions files are where all the per site and per URL configuration is done
+    for ad blocking, cookie management, privacy considerations, etc. There is
+    no point in using Privoxy without at least one actions file.
    
 -------------------------------------------------------------------------------
 
-7.3.1.4. filterfile
+8.1.4. filterfile
 
 Specifies:
    
@@ -753,7 +750,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.1.5. logfile
+8.1.5. logfile
 
 Specifies:
    
@@ -791,7 +788,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.1.6. jarfile
+8.1.6. jarfile
 
 Specifies:
    
@@ -815,7 +812,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.1.7. trustfile
+8.1.7. trustfile
 
 Specifies:
    
@@ -850,7 +847,37 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.2. Local Set-up Documentation
+8.1.8. user-manual
+
+Specifies:
+   
+    Location of the Privoxy User Manual.
+   
+Type of value:
+   
+    A fully qualified URI
+   
+Default value:
+   
+    http://www.privoxy.org/user-manual/
+   
+Effect if unset:
+   
+    The default will be used.
+   
+Notes:
+   
+    The User Manual is used for help hints from some of the internal CGI pages.
+    It is normally packaged with the binary distributions, and would make more
+    sense to have this pointed at a locally installed copy.
+   
+    A more useful example (Unix):
+   
+      user-manual  file:///usr/share/doc/privoxy-2.9.14/user-manual/
+   
+-------------------------------------------------------------------------------
+
+8.2. Local Set-up Documentation
 
 If you intend to operate Privoxy for more users that just yourself, it might be
 a good idea to let them know how to reach you, what you block and why you do
@@ -858,7 +885,7 @@ that, your policies etc.
 
 -------------------------------------------------------------------------------
 
-7.3.2.1. trust-info-url
+8.2.1. trust-info-url
 
 Specifies:
    
@@ -892,7 +919,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.2.2. admin-address
+8.2.2. admin-address
 
 Specifies:
    
@@ -917,7 +944,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.2.3. proxy-info-url
+8.2.3. proxy-info-url
 
 Specifies:
    
@@ -946,7 +973,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.3. Debugging
+8.3. Debugging
 
 These options are mainly useful when tracing a problem. Note that you might
 also want to invoke Privoxy with the --no-daemon command line option when
@@ -954,7 +981,7 @@ debugging.
 
 -------------------------------------------------------------------------------
 
-7.3.3.1. debug
+8.3.1. debug
 
 Specifies:
    
@@ -1007,7 +1034,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.3.2. single-threaded
+8.3.2. single-threaded
 
 Specifies:
    
@@ -1033,14 +1060,14 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.4. Access Control and Security
+8.4. Access Control and Security
 
 This section of the config file controls the security-relevant aspects of
 Privoxy's configuration.
 
 -------------------------------------------------------------------------------
 
-7.3.4.1. listen-address
+8.4.1. listen-address
 
 Specifies:
    
@@ -1084,7 +1111,7 @@ Example:
    
 -------------------------------------------------------------------------------
 
-7.3.4.2. toggle
+8.4.2. toggle
 
 Specifies:
    
@@ -1107,14 +1134,14 @@ Notes:
     If set to 0, Privoxy will start in "toggled off" mode, i.e. behave like a
     normal, content-neutral proxy. See enable-remote-toggle below. This is not
     really useful anymore, since toggling is much easier via the web interface
-    then via editing the conf file.
+    than via editing the conf file.
    
     The windows version will only display the toggle icon in the system tray if
     this option is present.
    
 -------------------------------------------------------------------------------
 
-7.3.4.3. enable-remote-toggle
+8.4.3. enable-remote-toggle
 
 Specifies:
    
@@ -1148,7 +1175,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.4.4. enable-edit-actions
+8.4.4. enable-edit-actions
 
 Specifies:
    
@@ -1179,7 +1206,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.4.5. ACLs: permit-access and deny-access
+8.4.5. ACLs: permit-access and deny-access
 
 Specifies:
    
@@ -1257,7 +1284,7 @@ Examples:
    
 -------------------------------------------------------------------------------
 
-7.3.4.6. buffer-limit
+8.4.6. buffer-limit
 
 Specifies:
    
@@ -1291,7 +1318,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.3.5. Forwarding
+8.5. Forwarding
 
 This feature allows routing of HTTP requests through a chain of multiple
 proxies. It can be used to better protect privacy and confidentiality when
@@ -1306,7 +1333,7 @@ Also specified here are SOCKS proxies. Privoxy supports the SOCKS 4 and SOCKS
 
 -------------------------------------------------------------------------------
 
-7.3.5.1. forward
+8.5.1. forward
 
 Specifies:
    
@@ -1354,7 +1381,7 @@ Examples:
    
 -------------------------------------------------------------------------------
 
-7.3.5.2. forward-socks4 and forward-socks4a
+8.5.2. forward-socks4 and forward-socks4a
 
 Specifies:
    
@@ -1408,7 +1435,7 @@ Examples:
    
 -------------------------------------------------------------------------------
 
-7.3.5.3. Advanced Forwarding Examples
+8.5.3. Advanced Forwarding Examples
 
 If you have links to multiple ISPs that provide various special content only to
 their subscribers, you can configure multiple Privoxies which have connections
@@ -1456,7 +1483,7 @@ squid.conf.
 
 -------------------------------------------------------------------------------
 
-7.3.6. Windows GUI Options
+8.6. Windows GUI Options
 
 Privoxy has a number of options specific to the Windows GUI interface:
 
@@ -1524,7 +1551,7 @@ console.
 
 -------------------------------------------------------------------------------
 
-7.4. Actions Files
+9. Actions Files
 
 The actions files are used to define what actions Privoxy takes for which URLs,
 and thus determines how ad images, cookies and various other aspects of HTTP
@@ -1549,17 +1576,17 @@ defined universal policies.
 
 -------------------------------------------------------------------------------
 
-7.4.1. Finding the Right Mix
+9.1. Finding the Right Mix
 
-Note that some actions like cookie suppression or script disabling may render
-some sites unusable, which rely on these techniques to work properly. Finding
-the right mix of actions is not easy and certainly a matter of personal taste.
-In general, it can be said that the more "aggressive" your default settings (in
-the top section of the actions file) are, the more exceptions for "trusted"
-sites you will have to make later. If, for example, you want to kill popup
-windows per default, you'll have to make exceptions from that rule for sites
-that you regularly use and that require popups for actually useful content,
-like maybe your bank, favorite shop, or newspaper.
+Note that some actions, like cookie suppression or script disabling, may render
+some sites unusable that rely on these techniques to work properly. Finding the
+right mix of actions is not always easy and certainly a matter of personal
+taste. In general, it can be said that the more "aggressive" your default
+settings (in the top section of the actions file) are, the more exceptions for
+"trusted" sites you will have to make later. If, for example, you want to kill
+popup windows per default, you'll have to make exceptions from that rule for
+sites that you regularly use and that require popups for actually useful
+content, like maybe your bank, favorite shop, or newspaper.
 
 We have tried to provide you with reasonable rules to start from in the
 distribution actions files. But there is no general rule of thumb on these
@@ -1569,7 +1596,7 @@ Sooner or later you will want to change the rules (and read this chapter again
 
 -------------------------------------------------------------------------------
 
-7.4.2. How to Edit
+9.2. How to Edit
 
 The easiest way to edit the "actions" files is with a browser by using our
 browser-based editor, which can be reached from http://config.privoxy.org/
@@ -1580,7 +1607,7 @@ the the actions files.
 
 -------------------------------------------------------------------------------
 
-7.4.3. How Actions are Applied to URLs
+9.3. How Actions are Applied to URLs
 
 Actions files are divided into sections. There are special sections, like the "
 alias" sections which will be discussed later. For now let's concentrate on
@@ -1603,7 +1630,7 @@ More detail on this is provided in the Appendix, Anatomy of an Action.
 
 -------------------------------------------------------------------------------
 
-7.4.4. Patterns
+9.4. Patterns
 
 Generally, a pattern has the form <domain>/<path>, where both the <domain> and
 <path> are optional. (This is why the pattern / matches all URLs).
@@ -1634,7 +1661,7 @@ index.html
    
 -------------------------------------------------------------------------------
 
-7.4.4.1. The Domain Pattern
+9.4.1. The Domain Pattern
 
 The matching of the domain part offers some flexible options: if the domain
 starts or ends with a dot, it becomes unanchored at that end. For example:
@@ -1678,7 +1705,7 @@ www[1-9a-ez].example.c*
    
 -------------------------------------------------------------------------------
 
-7.4.4.2. The Path Pattern
+9.4.2. The Path Pattern
 
 Privoxy uses Perl compatible regular expressions (through the PCRE library) for
 matching the path.
@@ -1700,7 +1727,7 @@ path starts with PaTtErN in exactly this capitalization.
 
 -------------------------------------------------------------------------------
 
-7.4.5. Actions
+9.5. Actions
 
 All actions are disabled by default, until they are explicitly enabled
 somewhere in an actions file. Actions are turned on if preceded with a "+", and
@@ -1750,7 +1777,7 @@ The list of valid Privoxy "actions" are:
 
 -------------------------------------------------------------------------------
 
-7.4.5.1. +add-header
+9.5.1. +add-header
 
 Type:
    
@@ -1778,7 +1805,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.2. +block
+9.5.2. +block
 
 Type:
    
@@ -1821,7 +1848,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.3. +deanimate-gifs
+9.5.3. +deanimate-gifs
 
 Type:
    
@@ -1853,7 +1880,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.4. +downgrade-http-version
+9.5.4. +downgrade-http-version
 
 Type:
    
@@ -1883,7 +1910,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.5. +fast-redirects
+9.5.5. +fast-redirects
 
 Type:
    
@@ -1926,7 +1953,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.6. +filter
+9.5.6. +filter
 
 Type:
    
@@ -1991,7 +2018,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.7. +hide-forwarded-for-headers
+9.5.7. +hide-forwarded-for-headers
 
 Type:
    
@@ -2017,7 +2044,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.8. +hide-from-header
+9.5.8. +hide-from-header
 
 Type:
    
@@ -2045,7 +2072,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.9. +hide-referer
+9.5.9. +hide-referer
 
 Type:
    
@@ -2080,7 +2107,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.10. +hide-user-agent
+9.5.10. +hide-user-agent
 
 Type:
    
@@ -2109,7 +2136,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.11. +handle-as-image
+9.5.11. +handle-as-image
 
 Type:
    
@@ -2142,7 +2169,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.12. +set-image-blocker
+9.5.12. +set-image-blocker
 
 Type:
    
@@ -2181,7 +2208,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.13. +limit-connect
+9.5.13. +limit-connect
 
 Type:
    
@@ -2225,7 +2252,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.14. +prevent-compression
+9.5.14. +prevent-compression
 
 Type:
    
@@ -2254,7 +2281,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.15. +session-cookies-only
+9.5.15. +session-cookies-only
 
 Type:
    
@@ -2289,7 +2316,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.16. +prevent-reading-cookies
+9.5.16. +prevent-reading-cookies
 
 Type:
    
@@ -2321,7 +2348,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.17. +prevent-setting-cookies
+9.5.17. +prevent-setting-cookies
 
 Type:
    
@@ -2348,7 +2375,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.18. +kill-popups
+9.5.18. +kill-popups
 
 Type:
    
@@ -2377,7 +2404,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.19. +send-vanilla-wafer
+9.5.19. +send-vanilla-wafer
 
 Type:
    
@@ -2406,7 +2433,7 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.20. +send-wafer
+9.5.20. +send-wafer
 
 Type:
    
@@ -2433,31 +2460,56 @@ Notes:
    
 -------------------------------------------------------------------------------
 
-7.4.5.21. Actions Examples
+9.5.21. Summary
 
-Note that the meaning of any of the above examples is reversed by preceding the
-action with a "-", in place of the "+". Also, that some actions are turned on
-in the default section of the actions file, and require little to no additional
-configuration. These are just "on". But, other actions that are turned on the
-default section do typically require exceptions to be listed in the latter
-sections of one of our actions file. For instance, by default no URLs are
-"blocked" (i.e. in the default definitions of default.action). We need
-exceptions to this in order to enable ad blocking in the lower sections. But we
-need to be very selective about what we do block.
+Note that many of these actions have the potential to cause a page to
+misbehave, possibly even not to display at all. There are many ways a site
+designer may choose to design his site, and what HTTP header content, and other
+criteria, he may depend on. There is no way to have hard and fast rules for all
+sites. See the Appendix for a brief example on troubleshooting actions.
 
-Below is a liberally commented default.action file to demonstrate the pieces
-all come together. And to show how exceptions to the default policies can be
-handled. This is followed by a user.action with similar examples.
+-------------------------------------------------------------------------------
+
+9.5.22. Sample Actions Files
+
+Remember that the meaning of any of the above references is reversed by
+preceding the action with a "-", in place of the "+". Also, that some actions
+are turned on in the default section of the actions file, and require little to
+no additional configuration. These are just "on".
+
+But, other actions that are turned on in the default section do typically
+require exceptions to be listed in the latter sections of one of our actions
+file. For instance, by default no URLs are "blocked" (i.e. in the default
+definitions of default.action). We need exceptions to this in order to enable
+ad blocking in the lower sections. But we need to be very selective about what
+we do block. Thus, the default is "off" for blocking.
+
+Below is a liberally commented sample default.action file to demonstrate how
+all the pieces come together. And to show how exceptions to the default
+policies can be handled. This is followed by a brief user.action with similar
+examples.
+
+# Sample default.action file <developers@privoxy.org>
+
+# Settings -- Don't change! For internal Privoxy use ONLY.
+{{settings}}
+for-privoxy-version=3.0
 
 
 ##########################################################################
 # Aliases must be defined *before* they are used. These are
-# easier to remember, and combine several actions into one:
+# easier to remember, and can combine several actions into one. Once 
+# defined they can be used just like any built-in action -- but within 
+# this file only! Aliases do not require a + or - sign.
 ##########################################################################
 
 # Some useful aliases.
- +prevent-cookies = +prevent-setting-cookies +prevent-reading-cookies
- -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
+# Alias to turn off cookie handling, ie allow all cookies unmolested.
+ -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
+                    -session-cookies-only
+
+# Alias to both block and treat as if an image for ad blocking
+# purposes.
  +imageblock      = +block +handle-as-image
 
 # Fragile sites should have the minimum changes:
@@ -2465,15 +2517,17 @@ handled. This is followed by a user.action with similar examples.
                -prevent-cookies -kill-popups
 
 # Shops should be allowed to set persistent cookies
- shop        = -filter -prevent-cookies -prevent-keeping-cookies
+ shop        = -filter -prevent-cookies -session-cookies-only
 
 
 ##########################################################################
 # Begin default action settings. Anything in this section will match 
-# all URLs -- UNLESS we have exceptions defined below this section. 
-# We will show all potential actions here whether they are on or off. 
-# We could omit any disabled action if we wanted, since all actions are 
-# 'off' by default anyway. Shown for completeness only.
+# all URLs -- UNLESS we have exceptions that also match, defined below this 
+# section. We will show all potential actions here whether they are on 
+# or off. We could omit any disabled action if we wanted, since all 
+# actions are 'off' by default anyway. Shown for completeness only.
+# Actions are enabled if preceded by a '+', otherwise they are disabled 
+# (unless an alias has been defined without this).
 ##########################################################################
  { \
  -add-header \
@@ -2507,22 +2561,24 @@ handled. This is followed by a user.action with similar examples.
  -send-vanilla-wafer \
  -send-wafer \
  }
- / # forward slash will match all potential URLs patterns. 
+ / # forward slash will match *all* potential URL patterns. 
 
 ##########################################################################
-# Default behavior is now set. Time for some exceptions to our 
-# default actions.
+# Default behavior is now set. Now we will define some exceptions to our 
+# default action policies.
 ##########################################################################
 
 # These sites are very complex and require very minimal interference.
-# We'll disable most actions with our 'fragile' alias.
- {fragile}
- .office.microsoft.com
+# We'll disable most actions with our 'fragile' alias:
+ { fragile }
+ .office.microsoft.com           # surprise, surprise!
  .windowsupdate.microsoft.com
 
 
-# Shopping sites - not as fragile. We still want to block ads.
- {shop}
+# Shopping sites - not as fragile but require some special 
+# handling. We still want to block ads, and we will allow 
+# persistant cookies via the 'shop' alias:
+ { shop }
  .quietpc.com 
  .worldpay.com   # for quietpc.com
  .jungle.com
@@ -2531,15 +2587,14 @@ handled. This is followed by a user.action with similar examples.
 
 # These sites require pop-ups too :(  We'll combine our 'shop' 
 # alias with two other actions into one rule to allow all popups.
- {shop -no-popups -filter{popups}}
+ { shop -kill-popups -filter{popups} }
  .dabs.com
  .overclockers.co.uk
 
 
 # The 'Fast-redirects' action breaks some sites. Disable this action
-# for these known sensitive sites.
- {-fast-redirects}
- www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+# for these known sensitive sites:
+ { -fast-redirects }
  login.yahoo.com
  edit.europe.yahoo.com
  .google.com
@@ -2550,16 +2605,16 @@ handled. This is followed by a user.action with similar examples.
 
 # Define which file types will be treated as images. Important
 # for ad blocking.
- {+handle-as-image}
+ { +handle-as-image }
  /.*\.(gif|jpe?g|png|bmp|ico)
 
 
 # Now lets list some domains that are known ad generators. And
-# our alias here will block these as well as force them to be 
-# treated as images. This combination of actions is important 
-# for ad blocking. What the browser will show instead is 
+# our alias that we use here will block these as well as force 
+# them to be treated as images. This combination of actions is 
+# important for ad blocking. What the browser will show instead is 
 # determined by the setting of "+set-image-blocker"
- {+imageblock}
+ { +imageblock }
  ar.atwola.com 
  .ad.doubleclick.net
  .a.yimg.com/(?:(?!/i/).)*$
@@ -2572,8 +2627,8 @@ handled. This is followed by a user.action with similar examples.
 
 # These will just simply be blocked. They will generate the BLOCKED
 # banner page, if matched. Heavy use of wildcards and regular 
-# expressions in this example.
- {+block}
+# expressions in this example. Enable block action:
+ { +block }
  ad*.
  .*ads.
  banner?.
@@ -2583,121 +2638,91 @@ handled. This is followed by a user.action with similar examples.
  .hitbox.com 
 
 
-# The above block section will catch some sites we DO NOT want 
-# blocked via wildcards and regular expressions. Now set exceptions 
-# to the exceptions so the good guys get better treatment.
- {-block}
+# The above block section will probably inadvertantly catch some 
+# sites we DO NOT want blocked via the wildcards and regular expressions. 
+# Now let's set exceptions to the exceptions so the good guys get better 
+# treatment. Disable block action:
+ { -block }
  advogato.org
  adsl.
  ad[ud]*.
  advice.
-# Let's just trust universities
+# Let's just trust all .edu top level domains.
  .edu
  www.ugu.com/sui/ugu/adv
 # We'll need to access to path names containing 'download' 
  .*downloads.
  /downloads/
-# 'adv' is for globalintersec means advanced, not advertisement
+# 'adv' is for globalintersec and means advanced, not advertisement
  www.globalintersec.com/adv
 
 
 # Don't filter *anything* from our friends at sourceforge.
 # Notice we don't have to name the individual filter 
-# identifiers -- we just turn them all off.
- {-filter}
+# identifiers -- we just turn them all off in one fell swoop.
+# Disable all filters for this one site:
+ { -filter }
  .sourceforge.net
-
    
 
-Some examples:
+So far we are painting with a broad brush by setting general policies. The
+above would be a reasonable starting point for many situations. Now, we want to
+be more specific and have customized rules that are more suitable to our
+personal habits and preferences. These would be for narrowly defined situations
+like your ISP or your bank, and should be placed in user.action, which is
+parsed after all other actions files and should not be clobbered by upgrades.
+So any settings here, will have the last word and over-ride any previously
+defined actions.
 
-Turn off cookies by default, then allow a few through for specified sites
-(showing an excerpt from the "default" section of an actions file ONLY):
+Now a few examples of some things that one might do with a user.action file.
 
- # Excerpt only:
- # Allow cookies to and from the server, but
- # for this browser session ONLY
- { 
-   # other actions normally listed here...
-   -prevent-setting-cookies \
-   -prevent-reading-cookies \
-   +session-cookies-only   \  
- }
- / # match all URLs
+# Sample user.action file.
 
- # Exceptions to the above, sites that benefit from persistent cookies
- # that are saved from one browser session to the next.
- { -session-cookies-only }
-  .javasoft.com
-  .sun.com
-  .yahoo.com
-  .msdn.microsoft.com
-  .redhat.com
+# Any aliases you want to use need to be re-defined here.
+# Alias to turn off cookie handling, ie allow all cookies unmolested.
+ -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies \
+                    -session-cookies-only
 
+# Fragile sites should have the minimum changes:
+ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
+               -prevent-cookies -kill-popups
+
+# Allow persistent cookies for a few regular sites that we 
+# trust via our above alias. These will be saved from one browser session 
+# to the next. We are explicity turning off any and all cookie handling, 
+# even though the prevent-*-cookie settings were disabled in our above 
+# default.action anyway. So cookies from these domains will come through 
+# unmolested.
+ { -prevent-cookies }
+ .sun.com
+ .yahoo.com
+ .msdn.microsoft.com
+ .redhat.com
+
+
+# My ISP uses obnoxious self promoting images on many pages.
+# Nuke them :) Note that "+handle-as-image" need not be specified,
+# since all URLs ending in .gif will be tagged as images by the
+# general rules in default.action anyway.
+ { +block }
+ www.my-isp-example.com/logo[0-9].gif
+
+# Say the site where you do your homebanking needs to open
+# popup windows, but you have chosen to kill popups by
+# default. This will allow it for your-example-bank.com:
+#
+ { -filter{popups} -kill-popups }
+ .my-example-bank.com
+
+# This site is delicate, and requires kid-glove 
+# treatment.
+ { fragile }
+ .forbes.com
    
-
-Now turn off "fast redirects", and then we allow two exceptions:
-
- # Turn them off (excerpt only)!
- {
-  # other actions normally listed here...
-  +fast-redirects
- }
- / # match all URLs
- 
- # Reverse it for these two sites, which don't work right without it.
- {-fast-redirects}
-  www.ukc.ac.uk/cgi-bin/wac\.cgi\?
-  login.yahoo.com
-   
-
-Turn on page filtering according to rules in the defined sections of
-default.filter, and make one exception for Sourceforge:
-
- # Run everything through the filter file, using only certain
- # specified sections:
- {
-  # other actions normally listed here...
-  +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}\
-  +filter{webbugs} +filter{nimda} +filter{banners-by-size}
- }
- / #match all URLs
-              
- # Then disable filtering of code from all sourceforge domains!
- {-filter}
-  .sourceforge.net
-   
-
-Now some URLs that we want "blocked" (normally generates the "blocked" banner).
-Typically, the "block" action is off by default in the upper section of an
-actions file, then enabled against certain URLs and patterns in the lower part
-of the file. Many of these use regular expressions that will expand to match
-multiple URLs:
-
-  # Blocklist:
-  {+block}
-  ad*.
-  .*ads.
-  banner?.
-  count*.
-  /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
-  /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
-  .hitbox.com 
-  /.*/(ng)?adclient\.cgi
-  /.*/(plain|live|rotate)[-_.]?ads?/
-  /.*/abanners/
-  /autoads/
-   
-
-Note that many of these actions have the potential to cause a page to
-misbehave, possibly even not to display at all. There are many ways a site
-designer may choose to design his site, and what HTTP header content, and other
-criteria, he may depend on. There is no way to have hard and fast rules for all
-sites. See the Appendix for a brief example on troubleshooting actions.
 
 -------------------------------------------------------------------------------
 
-7.4.6. Aliases
+9.6. Aliases
 
 Custom "actions", known to Privoxy as "aliases", can be defined by combining
 other "actions". These can in turn be invoked just like the built-in "actions".
@@ -2705,7 +2730,8 @@ Currently, an alias can contain any character except space, tab, "=", "{" or "}
 ". But please use only "a"- "z", "0"-"9", "+", and "-". Alias names are not
 case sensitive, and must be defined before other actions in the actions file!
 And there can only be one set of "aliases" defined per file. Each actions file
-may have its own aliases, but they are only visible within that file.
+may have its own aliases, but they are only visible within that file. Aliases
+do not requir a "+" or "-" sign in front, since they are merely expanded.
 
 Now let's define a few aliases:
 
@@ -2753,12 +2779,12 @@ require most actions to be disabled in order to function properly.
 
 -------------------------------------------------------------------------------
 
-7.5. The Filter File
+10. The Filter File
 
 Any web page can be dynamically modified with the filter file. This
 modification can be removal, or re-writing, of any web page content, including
-tags and non-visible content. The default filter file is default.filter,
-located in the config directory.
+tags and non-visible content. The default filter file is oddly enough
+default.filter, located in the config directory.
 
 This is potentially a very powerful feature, and requires knowledge of both
 "regular expression" and HTML in order create custom filters. But, there are a
@@ -2820,57 +2846,55 @@ Kill those pesky little web-bugs:
 
 -------------------------------------------------------------------------------
 
-7.5.1. The +filter Action
+10.1. The +filter Action
 
 Filters are enabled with the "+filter" action from within one of the actions
 files. "+filter" requires one parameter, which should match one of the section
 identifiers in the filter file itself. Example:
 
   +filter{html-annoyances}                                                     
-                                                                               
 
 This would activate that particular filter. Similarly, "+filter" can be turned
-off for selected sites as: "-filter{html-annoyances}". Remember, all actions
-are off by default, unless they are explicity enabled in one of the actions
-files.
+off for selected sites as: "-filter{html-annoyances}". Remember too, all
+actions are off by default, unless they are explicity enabled in one of the
+actions files.
 
 -------------------------------------------------------------------------------
 
-7.6. Templates
+11. Templates
 
 When Privoxy displays one of its internal pages, such as a 404 Not Found error
-page, it uses the appropriate template. On Linux, BSD, and Unix, these are
-located in /etc/privoxy/templates by default. These may be customized, if
-desired. cgi-style.css is used to control the HTML attributes (fonts, etc).
+page (Privoxy must be running for link to work as intended), it uses the
+appropriate template. On Linux, BSD, and Unix, these are located in /etc/
+privoxy/templates by default. These may be customized, if desired.
+cgi-style.css is used to control the HTML attributes (fonts, etc).
 
-The default "Blocked" banner page with the bright red top banner, is called
-just "blocked". This may be customized or replaced with something else if
-desired. 
+The default Blocked (Privoxy needs to be running for page to display) banner
+page with the bright red top banner, is called just "blocked". This may be
+customized or replaced with something else if desired. 
 
 -------------------------------------------------------------------------------
 
-8. Contacting the Developers, Bug Reporting and Feature Requests
+12. Contacting the Developers, Bug Reporting and Feature Requests
 
 We value your feedback. However, to provide you with the best support, please
 note the following sections.
 
 -------------------------------------------------------------------------------
 
-8.1. Get Support
+12.1. Get Support
 
 To get support, use the Sourceforge Support Forum:
 
     http://sourceforge.net/tracker/?group_id=11118&atid=211118
-   
 
 -------------------------------------------------------------------------------
 
-8.2. Report bugs
+12.2. Report bugs
 
 To submit bugs, use the Sourceforge Bug Forum:
 
     http://sourceforge.net/tracker/?group_id=11118&atid=111118. 
-    
 
 Make sure that the bug has not already been submitted. Please try to verify
 that it is a Privoxy bug, and not a browser or site bug first. If you are using
@@ -2883,16 +2907,15 @@ reproduce the bug.
 
 -------------------------------------------------------------------------------
 
-8.3. Request new features
+12.3. Request new features
 
 To submit ideas on new features, use the Sourceforge feature request forum:
 
     http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse.
-   
 
 -------------------------------------------------------------------------------
 
-8.4. Report ads or other filter problems
+12.4. Report ads or other filter problems
 
 You can also send feedback on websites that Privoxy has problems with. Please
 bookmark the following link: "Privoxy - Submit Filter Feedback". Once you surf
@@ -2904,12 +2927,11 @@ your feedback. These will be announced on the ijbswa-announce list.
 
 -------------------------------------------------------------------------------
 
-8.5. Other
+12.5. Other
 
 For any other issues, feel free to use the mailing lists:
  
     http://sourceforge.net/mail/?group_id=11118.
- 
 
 Anyone interested in actively participating in development and related
 discussions can also join the appropriate mailing list. Archives are available,
@@ -2917,9 +2939,9 @@ too. See the page on Sourceforge.
 
 -------------------------------------------------------------------------------
 
-9. Copyright and History
+13. Copyright and History
 
-9.1. Copyright
+13.1. Copyright
 
 Privoxy is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -2938,7 +2960,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA.
 
 -------------------------------------------------------------------------------
 
-9.2. History
+13.2. History
 
 Privoxy is evolved, and derived from, the Internet Junkbuster, with many
 improvments and enhancements over the original.
@@ -2952,7 +2974,7 @@ grown whiskers ;-).
 
 -------------------------------------------------------------------------------
 
-10. See Also
+14. See Also
 
 Other references and sites of interest to Privoxy users:
 
@@ -2964,8 +2986,8 @@ Sourceforge.
 http://p.p/, access Privoxy from your browser. Alternately, http://            
 config.privoxy.org may work in some situations where the first does not.       
 
-http://p.p/, and select "actions file feedback system" to submit "misses" to   
-the developers.                                                                
+http://p.p/, and select "Privoxy - Submit Filter Feedback" to submit "misses"  
+to the developers.                                                             
 
 http://www.junkbusters.com/ht/en/cookies.html
 
@@ -2979,9 +3001,9 @@ http://www.squid-cache.org/
 
 -------------------------------------------------------------------------------
 
-11. Appendix
+15. Appendix
 
-11.1. Regular Expressions
+15.1. Regular Expressions
 
 Privoxy can use "regular expressions" in various config files. Assuming support
 for "pcre" (Perl Compatible Regular Expressions) is compiled in, which is the
@@ -3120,7 +3142,7 @@ perl5.6/pod/perlre.html
 
 -------------------------------------------------------------------------------
 
-11.2. Privoxy's Internal Pages
+15.2. Privoxy's Internal Pages
 
 Since Privoxy proxies each requested web page, it is easy for Privoxy to trap
 certain special URLs. In this way, we can talk directly to Privoxy, and see how
@@ -3171,7 +3193,7 @@ These may be bookmarked for quick reference. See next.
 
 -------------------------------------------------------------------------------
 
-11.2.1. Bookmarklets
+15.2.1. Bookmarklets
 
 Below are some "bookmarklets" to allow you to easily access a "mini" version of
 some of Privoxy's special pages. They are designed for MS Internet Explorer,
@@ -3201,7 +3223,7 @@ www.bookmarklets.com. They have more information about bookmarklets.
 
 -------------------------------------------------------------------------------
 
-11.3. Chain of Events
+15.3. Chain of Events
 
 Let's take a quick look at the basic sequence of events when a web page is
 requested by your browser and Privoxy is on duty:
@@ -3264,7 +3286,7 @@ requested by your browser and Privoxy is on duty:
    
 -------------------------------------------------------------------------------
 
-11.4. Anatomy of an Action
+15.4. Anatomy of an Action
 
 The way Privoxy applies "actions" and "filters" to any given URL can be
 complex, and not always so easy to understand what is happening. And sometimes
@@ -3349,7 +3371,7 @@ Then, for our user.action file, we again have no hits.
 And finally we pull it all together in the bottom section and summarize how
 Privoxy is applying all its "actions" to "google.com": 
 
- Final results:                                                                    
+  Final results:                                                                   
  -add-header -block +deanimate-gifs{last} -downgrade-http-version -fast-redirects  
  -filter{popups} -filter{fun} -filter{shockwave-flash} -filter{crude-parental}     
  +filter{html-annoyances} +filter{js-annoyances} +filter{content-cookies}          
@@ -3364,7 +3386,7 @@ and "session-cookies-only".
 
 Now another example, "ad.doubleclick.net":
 
- { +block +handle-as-image }                                                   
+  { +block +handle-as-image }                                                  
   .ad.doubleclick.net                                                          
                                                                                
  { +block +handle-as-image }                                                   
@@ -3390,7 +3412,7 @@ and make it more readable.
 One last example. Let's try "http://www.rhapsodyk.net/adsl/HOWTO/". This one is
 giving us problems. We are getting a blank page. Hmmm...
 
- Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                   
+  Matches for http://www.rhapsodyk.net/adsl/HOWTO/:                                  
                                                                                      
  { -add-header -block +deanimate-gifs -downgrade-http-version +fast-redirects        
    +filter{html-annoyances} +filter{js-annoyances} +filter{kill-popups}              
@@ -3409,7 +3431,7 @@ see why we get the blank page. We could now add a new action below this that
 explicitly does not block ("{-block}") paths with "adsl". There are various
 ways to handle such exceptions. Example:
 
- { -block }                                                                    
+  { -block }                                                                   
   /adsl                                                                        
 
 Now the page displays ;-) Be sure to flush your browser's caches when making
@@ -3418,7 +3440,7 @@ such changes. Or, try using Shift+Reload.
 But now what about a situation where we get no explicit matches like we did
 with:
 
- { +block +handle-as-image }                                                   
+  { +block +handle-as-image }                                                  
  /ads                                                                          
 
 That actually was very telling and pointed us quickly to where the problem was.
@@ -3428,7 +3450,7 @@ and maybe a little trial and error to isolate the offending rule. One likely
 cause would be one of the "{+filter}" actions. Try adding the URL for the site
 to one of aliases that turn off "+filter":
 
- {shop}                                                                        
+  {shop}                                                                       
  .quietpc.com                                                                  
  .worldpay.com   # for quietpc.com                                             
  .jungle.com                                                                   
@@ -3438,7 +3460,7 @@ to one of aliases that turn off "+filter":
 "{shop}" is an "alias" that expands to "{ -filter -session-cookies-only }". Or
 you could do your own exception to negate filtering: 
 
- {-filter}                                                                     
+  {-filter}                                                                    
  .forbes.com                                                                   
 
 This would probably be most appropriately put in user.action, for local site
