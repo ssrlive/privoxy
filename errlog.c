@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.6 2001/05/25 21:55:08 jongfoster Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.7 2001/05/26 15:21:28 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.6 2001/05/25 21:55:08 jongfoster Ex
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.7  2001/05/26 15:21:28  jongfoster
+ *    Activity animation in Win32 GUI now works even if debug==0
+ *
  *    Revision 1.6  2001/05/25 21:55:08  jongfoster
  *    Now cleans up properly on FATAL (removes taskbar icon etc)
  *
@@ -127,13 +130,11 @@ const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
 
 /*
- * LOG_LEVEL_FATAL, LOG_LEVEL_ERROR and LOG_LEVEL_INFO
- * cannot be turned off.  (There are some exceptional situations
- * where we need to get a message to the user).
- *
- * FIXME: Do we need LOG_LEVEL_INFO here?
+ * LOG_LEVEL_FATAL cannot be turned off.  (There are
+ * some exceptional situations where we need to get a
+ * message to the user).
  */
-#define LOG_LEVEL_MINIMUM  (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO)
+#define LOG_LEVEL_MINIMUM  LOG_LEVEL_FATAL
 
 /* where to log (default: stderr) */
 static FILE *logfp = NULL;
@@ -142,7 +143,7 @@ static FILE *logfp = NULL;
 static char * logfilename = NULL;
 
 /* logging detail level.  */
-static int debug = LOG_LEVEL_MINIMUM;  
+static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
 
 static void fatal_error(const char * error_message);
 
@@ -268,7 +269,7 @@ void log_error(int loglevel, char *fmt, ...)
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
    /* verify if loglevel applies to current settings and bail out if negative */
-   if(!(loglevel & debug))
+   if ((loglevel & debug) == 0)
    {
       return;
    }
@@ -278,7 +279,6 @@ void log_error(int loglevel, char *fmt, ...)
 
    switch (loglevel)
    {
-      /* FIXME: What about LOG_LEVEL_LOG ??? */
       case LOG_LEVEL_ERROR:
          outc = sprintf(outbuf, "IJB(%d) Error: ", this_thread);
          break;
@@ -290,6 +290,9 @@ void log_error(int loglevel, char *fmt, ...)
          break;
       case LOG_LEVEL_CONNECT:
          outc = sprintf(outbuf, "IJB(%d) Connect: ", this_thread);
+         break;
+      case LOG_LEVEL_LOG:
+         outc = sprintf(outbuf, "IJB(%d) Writing: ", this_thread);
          break;
       case LOG_LEVEL_HEADER:
          outc = sprintf(outbuf, "IJB(%d) Header: ", this_thread);
@@ -312,6 +315,10 @@ void log_error(int loglevel, char *fmt, ...)
          outc = sprintf(outbuf, "IJB(%d) Redirect: ", this_thread);
          break;
 #endif /* def FAST_REDIRECTS */
+      case LOG_LEVEL_CLF:
+         outc = 0;
+         outbuf[0] = '\0';
+         break;
       default:
          outc = sprintf(outbuf, "IJB(%d) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
          break;
@@ -431,6 +438,27 @@ void log_error(int loglevel, char *fmt, ...)
                outbuf[oldoutc] = '\0';
             }
             break;
+         case 'N':
+            /* Non-standard: Print a counted string.  Takes 2 parameters:
+             * int length, const char * string
+             */
+            ival = va_arg( ap, int );
+            sval = va_arg( ap, char * );
+            if (ival < 0)
+            {
+               ival = 0;
+            }
+            oldoutc = outc;
+            outc += ival;
+            if (outc < BUFSIZ-1)
+            {
+               memcpy(outbuf + oldoutc, sval, ival);
+            }
+            else
+            {
+               outbuf[oldoutc] = '\0';
+            }
+            break;
          case 'E':
             /* Non-standard: Print error code from errno */
             ival = errno;
@@ -449,6 +477,39 @@ void log_error(int loglevel, char *fmt, ...)
             if (outc < BUFSIZ-1) 
             {
                strcpy(outbuf + oldoutc, sval);
+            }
+            else
+            {
+               outbuf[oldoutc] = '\0';
+            }
+            break;
+         case 'T':
+            /* Non-standard: Print a Common Log File timestamp */
+            {
+               /*
+                * Write timestamp into tempbuf.
+                *
+                * Complex because not all OSs have tm_gmtoff or
+                * the %z field in strftime()
+                */
+               time_t now; 
+               struct tm *tm_now; 
+               struct tm gmt; 
+               int days, hrs, mins; 
+               time (&now); 
+               gmt = *gmtime (&now); 
+               tm_now = localtime (&now); 
+               days = tm_now->tm_yday - gmt.tm_yday; 
+               hrs = ((days < -1 ? 24 : 1 < days ? -24 : days * 24) + tm_now->tm_hour - gmt.tm_hour); 
+               mins = hrs * 60 + tm_now->tm_min - gmt.tm_min; 
+               strftime (tempbuf, BUFSIZ-6, "%d/%b/%Y:%H:%M:%S ", tm_now); 
+               sprintf (tempbuf + strlen(tempbuf), "%+03d%02d", mins / 60, abs(mins) % 60); 
+            }
+            oldoutc = outc;
+            outc += strlen(tempbuf);
+            if (outc < BUFSIZ-1) 
+            {
+               strcpy(outbuf + oldoutc, tempbuf);
             }
             else
             {

@@ -1,7 +1,7 @@
 #  Sample Configuration file for the Internet Junkbuster 2.0
 
 #
-# $Id: config,v 1.4 2001/05/22 17:43:35 oes Exp $
+# $Id: config,v 1.5 2001/05/23 10:39:05 oes Exp $
 #
 
 #  Table of Contents
@@ -397,15 +397,28 @@ fast-redirects
 #   debug        32 # FRC  = debug force feature
 #   debug        64 # REF  = debug regular expression filter 
 #   debug       128 # RED  = debug fast redirects
+#   debug       256 # CLF  = Common Log Format
+#   debug      4096 # INFO = Startup banner and warnings.
+#   debug      8192 # ERROR = Non-fatal errors
+#
+#  It is *highly recommended* that you enable ERROR
+#  reporting.  (debug 8192).
+#
+#  The reporting of FATAL errors (i.e. ones which crash 
+#  JunkBuster) is always on and cannot be disabled.
+#
+#  If you want to use CLF, you should set "debug 256" ONLY,
+#  do not enable anything else.
 #
 #  Multiple "debug" directives, are OK - they're logical-OR'd
 #  together. 
 #
 #   debug         15 # same as setting the first 4 listed above
 #
-#  Default: 0, i.e. log nothing but errors and infos
+#  Default: 0, i.e. log nothing but fatal errors
 #
 debug   1
+debug   8192 # Errors - *we highly recommended enabling this*
 
 #
 #  Junkbuster normally uses "multi-threading", a software technique
