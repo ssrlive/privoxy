@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.85 2002/04/14 01:05:34 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.86 2002/04/15 04:30:27 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -641,6 +641,14 @@ else
 	rm -fr doc/source/*bak doc/source/*/*bak
 endif
 
+dok-pdf: doc/source/ldpOK.dsl dok-release 
+	cp doc/source/*.sgml doc/pdf
+	cp doc/source/*.dsl doc/pdf
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl user-manual.sgml && mv user-manual.pdf privoxy-user-manual.pdf
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl developer-manual.sgml && mv developer-manual.pdf privoxy-developer-manual.pdf
+	cd doc/pdf && db2pdf --pdf -s ldpOK.dsl faq.sgml && mv faq.pdf privoxy-faq.pdf
+	rm -f doc/pdf/*.sgml doc/pdf/*.dsl doc/pdf/*.out doc/pdf/*.tex doc/pdf/*.log doc/pdf/*.aux
+
 #############################################################################
 #
 # Webserver
@@ -787,6 +795,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.86  2002/04/15 04:30:27  hal9
+# Missed two -pi.bak's on perl/cygwin problem.
+#
 # Revision 1.85  2002/04/14 01:05:34  hal9
 # Revert dok-webserver change for SF logo.
 #
