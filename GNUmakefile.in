@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.10 2002/03/06 14:19:35 sarantis Exp $
+# $Id: GNUmakefile.in,v 1.11 2002/03/06 14:33:18 sarantis Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # IJBSWA team.  http://ijbswa.sourceforge.net
@@ -28,6 +28,9 @@
 # Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # $Log: GNUmakefile.in,v $
+# Revision 1.11  2002/03/06 14:33:18  sarantis
+# Use proper temp file, not "abc".
+#
 # Revision 1.10  2002/03/06 14:19:35  sarantis
 # Cleanup PID_FILE_PATH from redhat-dist target
 #
@@ -416,6 +419,8 @@ redhat-dist:
 	@for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
 		if [ ! -w $(RPM_BASE)/$$dir ]; then \
 			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
+			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
+			$(ECHO) "%_topdir /home/foo/rpm-build"; \
 			exit; \
 		fi; \
 	done ; \
