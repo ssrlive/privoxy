@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.94 2002/04/26 05:24:36 hal9 Exp $
+ $Id: user-manual.sgml,v 1.95 2002/04/26 17:23:29 swa Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.94 2002/04/26 05:24:36 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.95 2002/04/26 17:23:29 swa Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -454,7 +454,6 @@ automatically start Privoxy in the boot process.
 
 <para>
  <screen>
- 
  # /usr/sbin/privoxy /etc/privoxy/config
 </screen>
 </para>
@@ -978,11 +977,11 @@ automatically start Privoxy in the boot process.
 </sect4>
 
 <sect4 id="actionsfile"><title>
+actionsfile
+</title>
 <anchor id="default.action">
 <anchor id="standard.action">
 <anchor id="user.action">
-actionsfile
-</title>
 
 <variablelist>
  <varlistentry>
@@ -1043,7 +1042,8 @@ actionsfile
 </variablelist>
 </sect4>
 
-<sect4 id="filterfile"><title><anchor id="default.filter">filterfile</title>
+<sect4 id="filterfile"><title>filterfile</title>
+<anchor id="default.filter">
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1793,9 +1793,9 @@ actionsfile
 </sect4>
 
 <sect4 id="acls"><title>
+ACLs: permit-access and deny-access</title>
 <anchor id="permit-acces">
 <anchor id="deny-acces">
-ACLs: permit-access and deny-access</title>
 
 <variablelist>
  <varlistentry>
@@ -2081,9 +2081,9 @@ ACLs: permit-access and deny-access</title>
 </sect4>
 
 <sect4 id="socks"><title>
+forward-socks4 and forward-socks4a</title>
 <anchor id="forward-socks4">
 <anchor id="forward-socks4a">
-forward-socks4 and forward-socks4a</title>
 
 <variablelist>
  <varlistentry>
@@ -2458,7 +2458,7 @@ forward-socks4 and forward-socks4a</title>
  </para>
 
 <para> 
- Anything you want can blocked, including ads, banners, or just some obnoxious
+ Anything you want can be blocked, including ads, banners, or just some obnoxious
  URL that you would rather not see is done here. Cookies can be accepted or rejected, or
  accepted only during the current browser session (i.e. not written to disk),
  content can be modified, JavaScripts tamed, user-tracking fooled, and much more.
@@ -2822,12 +2822,13 @@ forward-socks4 and forward-socks4a</title>
 
 <para>
  Later defined actions always over-ride earlier ones.  So exceptions 
- to any rules you make, should come in the latter part of the file. For
- multi-valued actions, the actions are applied in the order they are
- specified. Actions files are processed in the order they are defined 
- in <filename>config</filename> (the default installation has three 
- actions files). It also quite possible for any given URL pattern to 
- match more than one action!
+ to any rules you make, should come in the latter part of the file (or 
+ in a file that is processed later when using multiple actions files). For
+ multi-valued actions, the actions are applied in the order they are specified.
+ Actions files are processed in the order they are defined in
+ <filename>config</filename> (the default installation has three actions
+ files). It also quite possible for any given URL pattern to match more than
+ one action!
 </para>
 
 <!-- start actions listing -->
@@ -2846,7 +2847,7 @@ forward-socks4 and forward-socks4a</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect4 id="add-header">
-<title><emphasis>+add-header{Name: value}</emphasis></title>
+<title><emphasis>+add-header</emphasis></title>
 
 <variablelist>
  <varlistentry>
@@ -2950,8 +2951,8 @@ forward-socks4 and forward-socks4a</title>
     will intercept the URL and display its special <quote>BLOCKED</quote> page
     instead. If there is sufficient space, a large red banner will appear with
     a friendly message about why the page was blocked, and a way to go there
-    anyway. If there is insufficient space a smaller blocked page will appear
-    without the red banner. 
+    anyway. If there is insufficient space a smaller <quote>BLOCKED</quote>
+    page will appear without the red banner. 
     <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html">Click here</ulink>
     to view the default blocked HTML page (<application>Privoxy</application> must be running 
     for this to work as intended!).
@@ -3418,9 +3419,8 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect4 id="hide-referer">
-<title><emphasis><anchor id="hide-referrer">+hide-referer</emphasis></title>
-
-
+<title><emphasis>+hide-referer</emphasis></title>
+<anchor id="hide-referrer">
 <variablelist>
  <varlistentry>
   <term>Type:</term>
@@ -4182,12 +4182,215 @@ forward-socks4 and forward-socks4a</title>
  that some actions are turned on in the default section of the actions file, 
  and require little to no additional configuration. These are just <quote>on</quote>.
  But, other actions that are turned on the default section <emphasis>do
- typically require</emphasis> exceptions to be listed in the lower sections of
- actions file. E.g. by default no URLs are <quote>blocked</quote> (i.e. in 
- the default definitions of <filename>default.action</filename>). We need 
- exceptions to this in order to enable ad blocking.
+ typically require</emphasis> exceptions to be listed in the latter sections of 
+ one of our actions file. For instance, by default no URLs are
+ <quote>blocked</quote> (i.e. in the default definitions of
+ <filename>default.action</filename>). We need exceptions to this in order to
+ enable ad blocking in the lower sections. But we need to be very selective
+ about what we do block.
 </para>
 
+<para>
+ Below is a liberally commented <filename>default.action</filename> file  to 
+ demonstrate how all the pieces come together. And to show how exceptions to
+ the default policies can be handled. This is followed by a
+ <filename>user.action</filename> with similar examples.
+</para>
+
+<para>
+ <literal>
+  <msgtext> 
+   <literallayout>
+
+# Settings -- Don't change! For internal Privoxy use ONLY.
+{{settings}}
+for-privoxy-version=3.0
+
+
+##########################################################################
+# <ulink url="configuration.html#ALIASES">Aliases</ulink> must be defined *before* they are used. These are
+# easier to remember, and combine several actions into one. Once defined
+# they can be used just like any built-in action.
+##########################################################################
+
+# Some useful aliases.
+ -prevent-cookies = -prevent-setting-cookies -prevent-reading-cookies
+ +imageblock      = +block +handle-as-image
+
+# Fragile sites should have the minimum changes:
+ fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer \
+               -prevent-cookies -kill-popups
+
+# Shops should be allowed to set persistent cookies
+ shop        = -filter -prevent-cookies -session-cookies-only
+
+
+##########################################################################
+# Begin default action settings. Anything in this section will match 
+# all URLs -- UNLESS we have exceptions that match defined below this 
+# section. We will show all potential actions here whether they are on 
+# or off. We could omit any disabled action if we wanted, since all 
+# actions are 'off' by default anyway. Shown for completeness only.
+# Actions are enabled if preceded by a '+', otherwise they are disabled.
+##########################################################################
+ { \
+ <ulink url="configuration.html#ADD-HEADER">-add-header</ulink> \
+ <ulink url="configuration.html#BLOCK">-block</ulink> \
+ <ulink url="configuration.html#DEANIMATE-GIFS">-deanimate-gifs</ulink> \
+ <ulink url="configuration.html#DOWNGRADE-HTTP-VERSION">-downgrade-http-version</ulink> \
+ <ulink url="configuration.html#FAST-REDIRECTS">+fast-redirects</ulink> \
+ <ulink url="configuration.html#FILTER">+filter{html-annoyances}</ulink> \
+ <ulink url="configuration.html#FILTER">+filter{js-annoyances}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{content-cookies}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{popups}</ulink> \
+ <ulink url="configuration.html#FILTER">+filter{webbugs}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{refresh-tags}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{fun}</ulink> \
+ <ulink url="configuration.html#FILTER">+filter{nimda}</ulink> \
+ <ulink url="configuration.html#FILTER">+filter{banners-by-size}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{shockwave-flash}</ulink> \
+ <ulink url="configuration.html#FILTER">-filter{crude-prental}</ulink> \
+ <ulink url="configuration.html#HIDE-FORWARDED-FOR-HEADERS">+hide-forwarded-for-headers</ulink> \
+ <ulink url="configuration.html#HIDE-FROM-HEADER">+hide-from-header{block}</ulink> \
+ <ulink url="configuration.html#HIDE-REFERER">-hide-referrer</ulink> \
+ <ulink url="configuration.html#HIDE-USER-AGENT">-hide-user-agent</ulink> \
+ <ulink url="configuration.html#HANDLE-AS-IMAGE">-handle-as-image</ulink> \
+ <ulink url="configuration.html#SET-IMAGE-BLOCKER">+set-image-blocker{pattern}</ulink> \
+ <ulink url="configuration.html#LIMIT-CONNECT">-limit-connect</ulink> \
+ <ulink url="configuration.html#PREVENT-COMPRESSION">+prevent-compression</ulink> \
+ <ulink url="configuration.html#SESSION-COOKIES-ONLY">-session-cookies-only</ulink> \
+ <ulink url="configuration.html#PREVENT-READING-COOKIES">-prevent-reading-cookies</ulink> \
+ <ulink url="configuration.html#PREVENT-SETTING-COOKIES">-prevent-setting-cookies</ulink> \
+ <ulink url="configuration.html#KILL-POPUPS">-kill-popups</ulink> \
+ <ulink url="configuration.html#SEND-VANILLA-WAFER">-send-vanilla-wafer</ulink> \
+ <ulink url="configuration.html#SEND-WAFER">-send-wafer</ulink> \
+ }
+ / # forward slash will match *all* potential URL patterns. 
+
+##########################################################################
+# Default behavior is now set. Time for some exceptions to our 
+# default actions.
+##########################################################################
+
+# These sites are very complex and require very minimal interference.
+# We'll disable most actions with our 'fragile' alias.
+ {fragile}
+ .office.microsoft.com           # surprise, surprise!
+ .windowsupdate.microsoft.com
+
+
+# Shopping sites - not as fragile but require some special 
+# handling. We still want to block ads, and we will allow 
+# persistant cookies via the 'shop' alias.
+ {shop}
+ .quietpc.com 
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+
+
+# These sites require pop-ups too :(  We'll combine our 'shop' 
+# alias with two other actions into one rule to allow all popups.
+ {shop -no-popups -filter{popups}}
+ .dabs.com
+ .overclockers.co.uk
+
+
+# The 'Fast-redirects' action breaks some sites. Disable this action
+# for these known sensitive sites.
+ {-fast-redirects}
+ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+ login.yahoo.com
+ edit.europe.yahoo.com
+ .google.com
+ .altavista.com/.*(like|url|link):http
+ .altavista.com/trans.*urltext=http
+ .nytimes.com
+
+
+# Define which file types will be treated as images. Important
+# for ad blocking.
+ {+handle-as-image}
+ /.*\.(gif|jpe?g|png|bmp|ico)
+
+
+# Now lets list some domains that are known ad generators. And
+# our alias here will block these as well as force them to be 
+# treated as images. This combination of actions is important 
+# for ad blocking. What the browser will show instead is 
+# determined by the setting of <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+ {+imageblock}
+ ar.atwola.com 
+ .ad.doubleclick.net
+ .a.yimg.com/(?:(?!/i/).)*$
+ .a[0-9].yimg.com/(?:(?!/i/).)*$
+ bs*.gsanet.com
+ bs*.einets.com
+ .qkimg.net
+ ad.*.doubleclick.net
+
+
+# These will just simply be blocked. They will generate the BLOCKED
+# banner page, if matched. Heavy use of wildcards and regular 
+# expressions in this example.
+ {+block}
+ ad*.
+ .*ads.
+ banner?.
+ count*.
+ /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
+ /(?:.*/)?(publicite|werbung|rekla(ma|me|am)|annonse|maino(kset|nta|s)?)/
+ .hitbox.com 
+
+
+# The above block section will catch some sites we DO NOT want 
+# blocked via the wildcards and regular expressions. Now let's set 
+# exceptions to the exceptions so the good guys get better treatment.
+ {-block}
+ advogato.org
+ adsl.
+ ad[ud]*.
+ advice.
+# Let's just trust all .edu top level domains.
+ .edu
+ www.ugu.com/sui/ugu/adv
+# We'll need to access to path names containing 'download' 
+ .*downloads.
+ /downloads/
+# 'adv' is for globalintersec and means advanced, not advertisement
+ www.globalintersec.com/adv
+
+
+# Don't filter *anything* from our friends at sourceforge.
+# Notice we don't have to name the individual filter 
+# identifiers -- we just turn them all off in one fell swoop.
+ {-filter}
+ .sourceforge.net
+
+   </literallayout>
+  </msgtext> 
+ </literal>
+</para>
+
+<para>
+ So far we are painting with a broad brush by setting general policies. 
+ The above would be a reasonable starting point for many situations. Now, 
+ we want to be more specific and have customized rules that are more suitable
+ to our personal habits and preferences. These should be placed in 
+ <filename>user.action</filename>, which is parsed after all other 
+ actions files. So any settings here, will have the last word.
+</para>
+
+<para>
+ Now an example of a few things that one might do with a <filename>user.action</filename>
+ file. This is where user preferences are defined.
+</para>
+
+<!-- brief sample user.action here -->
+
+
+<!-- This is the old stuff. Left in temporarily for reference -->
+<!-- To be deleted when above is finished -->
 <para>
  Some examples:
 </para>
@@ -4512,6 +4715,32 @@ forward-socks4 and forward-socks4a</title>
   </msgtext> 
  </literal>
 </para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3>
+<title>The +filter Action</title>
+<para>
+ Filters are enabled with the <ulink
+ url="configuration.html#FILTER"><quote>+filter</quote></ulink> action from within 
+ one of the actions files. <quote>+filter</quote> requires one parameter, which 
+ should match one of the section identifiers in the filter file itself. Example:
+</para>
+
+<para>
+ <screen>
+  +filter{html-annoyances}
+ </screen>
+</para>
+
+<para>
+ This would activate that particular filter. Similarly, <quote>+filter</quote>
+ can be turned off for selected sites as:
+ <quote>-filter{html-annoyances}</quote>. Remember, all actions are off by
+ default, unless they are explicity enabled in one of the actions files.
+</para>
+
+</sect3>
 
 </sect2>
 
@@ -5471,6 +5700,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.95  2002/04/26 17:23:29  swa
+ bookmarks cleaned, changed structure of user manual, screen and programlisting cleanups, and numerous other changes that I forgot
+
  Revision 1.94  2002/04/26 05:24:36  hal9
  -Add most of Andreas suggestions to Chain of Events section.
  -A few other minor corrections and touch up.
