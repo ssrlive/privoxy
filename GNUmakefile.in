@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.36 2002/03/27 14:58:08 swa Exp $
+# $Id: GNUmakefile.in,v 1.37 2002/03/27 15:30:26 swa Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -76,7 +76,7 @@ DB         = $(JADEBIN) -t sgml -ihtml -D.. -d ldpOK.dsl\#html
 DB2HTML    = @DB2HTML@
 DKPREFIX   = @DKPREFIX@
 MAN2HTML   = @MAN2HTML@
-TARGET_OS  = foobar
+TARGET_OS  = @host@
 
 # Program to do LF->CRLF
 #
@@ -268,10 +268,10 @@ redhat-upload:
      # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
 
 #############################################################################
-# sun solaris  distribution
+# generic distribution
 #############################################################################
 
-solaris-dist:
+gen-dist:
 	@$(ECHO) ""
 	@$(ECHO) "You have run autoconf && autoheader && ./configure right?"
 	@$(ECHO) ""
@@ -294,7 +294,7 @@ solaris-dist:
 	@$(ECHO) Distribution with binary created.
 
 # anonymously ncftps the tarball to sourceforge
-solaris-upload:
+gen-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
@@ -303,8 +303,20 @@ solaris-upload:
 	@$(ECHO) -------------------------------------------------------
 
 # use with care
-solaris-clean:
+gen-clean:
 	$(RM) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar*
+
+#############################################################################
+# solaris distribution
+#############################################################################
+solaris-dist: gen-dist
+	@$(ECHO) Done.
+# anonymously ncftps the tarball to sourceforge
+solaris-upload: gen-upload
+	@$(ECHO) Done.
+# use with care
+solaris-clean: gen-clean
+	@$(ECHO) Done.
 
 #############################################################################
 # hpux distribution
@@ -620,6 +632,9 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.37  2002/03/27 15:30:26  swa
+# have a consistent appearance
+#
 # Revision 1.36  2002/03/27 14:58:08  swa
 # can be used by mutilple targets
 #
