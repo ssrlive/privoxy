@@ -33,6 +33,14 @@
 # 
 #  Revisions   :
 #     $Log: junkbuster.init,v $
+#     Revision 1.11  2001/12/30 14:07:32  steudten
+#     - Add signal handling (unix)
+#     - Add SIGHUP handler (unix)
+#     - Add creation of pidfile (unix)
+#     - Add action 'top' in rc file (RH)
+#     - Add entry 'SIGNALS' to manpage
+#     - Add exit message to logfile (unix)
+#
 #     Revision 1.10  2001/11/05 21:30:23  steudten
 #     Make JB startup without & due to be a 'real' daemon right now.
 #     Make the script easy to change.
@@ -101,7 +109,7 @@ JB="$JB_BIN $JB_CONF"
 start () {
 	# start daemon
 	echo -n $"Starting $JB_PRG: "
-	daemon --user $JB_USER $JB 
+	daemon --user $JB_USER $JB --pidfile $JB_PID
 	RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && touch /var/lock/subsys/$JB_PRG
