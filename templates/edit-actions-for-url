@@ -1,262 +1,258 @@
+##############################################################################
+#
+# File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+#
+# Purpose     :  Template used to edit the actions associated with a
+#                particular section in an actions file.
+# 
+#
+# Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#                IJBSWA team.  http://ijbswa.sourceforge.net
+#
+#                Original Author: Copyright (C) 2001 Jonathan Foster
+#                http://www.jon-foster.co.uk/
+#
+#                This program is free software; you can redistribute it 
+#                and/or modify it under the terms of the GNU General
+#                Public License as published by the Free Software
+#                Foundation; either version 2 of the License, or (at
+#                your option) any later version.
+#
+#                This program is distributed in the hope that it will
+#                be useful, but WITHOUT ANY WARRANTY; without even the
+#                implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                PARTICULAR PURPOSE.  See the GNU General Public
+#                License for more details.
+#
+#                The GNU General Public License should be included with
+#                this file.  If not, you can view it at
+#                http://www.gnu.org/copyleft/gpl.html
+#                or write to the Free Software Foundation, Inc., 59
+#                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# Revisions   :
+#    $Log$
+#
+##############################################################################
+#
+# Browser support for the JavaScript on this page:
+#   MS Internet Explorer 5.5 - Tested,   Yes
+#   Netscape 6.0             - Tested,   Yes
+#   Netscape 4.75            - Tested,   NO
+#   Opera 5.12               - Tested,   NO
+#   MS Internet Explorer 4+  - Untested, Yes
+#   MS IE 3.x, NS3.x         - Untested, NO
+#   Mozilla >=0.6            - Untested, Yes
+#
+# All browsers should work, you just might not get the pretty DHTML effects.
+#
+# The effects that only work under the browsers marked "Yes" above are:
+#  - Text edit boxes that won't have any effect are disabled.
+#  - Table rows containing additional settings are hidden if the feature in
+#    question is disabled.
+#
+# There are major kludges to get around these problems with NS4, but they
+# screw up the HTML too much for other browsers.  If anyone wants to try,
+# here's some descriptions of the kludges:
+#    http://www.webreference.com/js/tips/991114.html
+#    http://www.webreference.com/dhtml/column12/outDisplay.html
+#
+# If you're favorite browser isn't listed, please test and add it.
+#
+#
+#############################################################################
+#
+# Standard support:
+#
+# This file currently produces valid HTML 4.01 Strict.
+#
+# If you change it, please save the generated page from your web browser
+# and then upload it to http://validator.w3.org/ for checking.
+#
+#############################################################################
+#
+# Available variables include:
+#
+# action-name-y
+# action-name-n
+# action-name-x
+#
+# deanimate-gifs-param-first
+# deanimate-gifs-param-last
+# hide-from-param-block
+# hide-from-param-custom
+# hide-from-param
+# hide-referer-param-forge
+# hide-referer-param-block
+# hide-referer-param-custom
+# hide-referer-param
+# hide-user-agent-param
+# image-blocker-param-logo
+# image-blocker-param-blank
+# image-blocker-param-custom
+# image-blocker-param-logo
+#
+#
+#############################################################################
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
 <title>JunkBuster: Edit actions</title>
 
 <style type="text/css">
-body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif }
-td.action    { font-weight: bold; font-style: italic; white-space: nowrap }
-th           { font-weight: bold; background-color: #999999 }
+body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
+               background-color: #ffffff;
+               color: #000000            }
+td.action    { font-weight: bold;
+               font-style: italic;
+               white-space: nowrap       }
+th           { font-weight: bold;        }
 # This is the key to the color names below:
-# bg=background, en="Enable", dis="Disable", noc="No Change"
+# bg=background, en="Enable", dis="Disable", noc="No Change", hdr=header
 # 1=odd rows, 2=even rows, h=Table header
-tr.bg1       { background-color: #EEEEEE }
-td.en1       { background-color: #EEFFEE }
-td.dis1      { background-color: #FFEEEE }
-td.noc1      { background-color: #EEEEFF }
-tr.bg2       { background-color: #DDDDDD }
-td.en2       { background-color: #DDFFDD }
-td.dis2      { background-color: #FFDDDD }
-td.noc2      { background-color: #DDDDFF }
-th.enh       { background-color: #99FF99 }
-th.dish      { background-color: #FF9999 }
-th.noch      { background-color: #9999FF }
+tr.hdr       { background-color: #999999 }
+tr.bg1       { background-color: #eeeeee }
+td.en1       { background-color: #eeffee }
+td.dis1      { background-color: #ffeeee }
+td.noc1      { background-color: #eeeeff }
+tr.bg2       { background-color: #dddddd }
+td.en2       { background-color: #ddffdd }
+td.dis2      { background-color: #ffdddd }
+td.noc2      { background-color: #ddddff }
+th.enh       { background-color: #99ff99 }
+th.dish      { background-color: #ff9999 }
+th.noch      { background-color: #9999ff }
+table.wide   { border-color: white;
+               border-style: solid;
+               border-left-width: 10px;
+               border-right-width: 10px;
+               border-top-width: 0px;
+               border-bottom-width: 0px  }
+td.light     { background-color: #eeeeee }
+td.dark      { background-color: #dddddd }
+td.green     { background-color: #ddffdd }
 </style>
 
 <script type="text/javascript">
 <!--
-//function show_more(target, tf)
-//{
-//   if (tf)
-//   { target.style.display = ""; }
-//   else
-//   { target.style.display = "none"; }
-//}
 
-function from_param_disable(tf)
+function hide_from_param_disable(tf)
 {
-  if (document.layers) {
-    document.myform.from_param.disabled = tf;
-  }
-  else if (document.getElementById) {
-    document.getElementById("from_param").disabled = tf;
-  }
-  else if (document.all) {
-    document.myform.from_param.disabled = tf;
-  }
+    if (document.getElementById) {
+    	// NS6 or IE5
+        document.getElementById("hide_from_param").disabled = tf;
+    } else if (document.all) {
+        // IE4
+        document.myform.hide_from_param.disabled = tf;
+    }
 }
 
 function hide_referer_param_disable(tf)
 {
-  if (document.layers) {
-    document.myform.hide_referer_param.disabled = tf;
-  }
-  else if (document.getElementById) {
-    document.getElementById("hide_referer_param").disabled = tf;
-  }
-  else if (document.all) {
-    document.myform.hide_referer_param.disabled = tf;
-  }
+    if (document.getElementById) {
+        document.getElementById("hide_referer_param").disabled = tf;
+    } else if (document.all) {
+        document.myform.hide_referer_param.disabled = tf;
+    }
 }
 
 function image_blocker_param_disable(tf)
 {
-  if (document.layers) {
-    document.myform.image_blocker_param.disabled = tf;
-  }
-  else if (document.getElementById) {
-    document.getElementById("image_blocker_param").disabled = tf;
-  }
-  else if (document.all) {
-    document.myform.image_blocker_param.disabled = tf;
-  }
+    if (document.getElementById) {
+        document.getElementById("image_blocker_param").disabled = tf;
+    } else if (document.all) {
+        document.myform.image_blocker_param.disabled = tf;
+    }
 }
 
 function show_add_header_opts(tf)
 {
-  if (document.layers) {
-    target = document.add_header_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("add_header_opts");
-  }
-  else if (document.all) {
-    target = document.add_header_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("add_header_opts");
+    } else if (document.all) {
+        target = document.add_header_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_deanimate_opts(tf)
 {
-  if (document.layers) {
-    target = document.deanimate_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("deanimate_opts");
-  }
-  else if (document.all) {
-    target = document.deanimate_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("deanimate_opts");
+    } else if (document.all) {
+        target = document.deanimate_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_hide_from_opts(tf)
 {
-  if (document.layers) {
-    target = document.hide_from_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("hide_from_opts");
-  }
-  else if (document.all) {
-    target = document.hide_from_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("hide_from_opts");
+    } else if (document.all) {
+        target = document.hide_from_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_hide_referer_opts(tf)
 {
-  if (document.layers) {
-    target = document.hide_referer_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("hide_referer_opts");
-  }
-  else if (document.all) {
-    target = document.hide_referer_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("hide_referer_opts");
+    } else if (document.all) {
+        target = document.hide_referer_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_user_agent_opts(tf)
 {
-  if (document.layers) {
-    target = document.user_agent_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("user_agent_opts");
-  }
-  else if (document.all) {
-    target = document.user_agent_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("user_agent_opts");
+    } else if (document.all) {
+        target = document.user_agent_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_image_blocker_opts(tf)
 {
-  if (document.layers) {
-    target = document.image_blocker_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("image_blocker_opts");
-  }
-  else if (document.all) {
-    target = document.image_blocker_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("image_blocker_opts");
+    } else if (document.all) {
+        target = document.image_blocker_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 function show_wafer_opts(tf)
 {
-  if (document.layers) {
-    target = document.wafer_opts;
-  }
-  else if (document.getElementById) {
-    target = document.getElementById("wafer_opts");
-  }
-  else if (document.all) {
-    target = document.wafer_opts;
-  }
-  else
-  {
-    return;
-  }
-
-  if (tf)
-  {
-    target.style.display = "";
-  }
-  else
-  {
-    target.style.display = "none";
-  }
+    if (document.getElementById) {
+        target = document.getElementById("wafer_opts");
+    } else if (document.all) {
+        target = document.wafer_opts;
+    } else {
+        return;
+    }
+    target.style.display = (tf ? "" : "none");
 }
 
 //-->
@@ -265,14 +261,50 @@ function show_wafer_opts(tf)
 
 <body>
 
-<p>&nbsp;</p>
 <form method="GET" action="http://i.j.b/edit-actions-submit" id="myform" name="myform">
-  <input type="hidden" name="filename" value="@filename@">
-  <input type="hidden" name="ver" value="@ver@">
-  <input type="hidden" name="section" value="@section@">
-  <table border="0" width="100%" cellspacing="0">
-    <tr align="left">
-      <th>Action</th>
+
+  <table cellpadding="20" cellspacing="10" border="0" width="100%">
+    <tr>
+      <td class="dark">
+        <p><b><big><big>This is the Internet 
+          J</big>UNK</big><i style="color: #ff0000">BUSTER</i><big><big>
+          @version@ on @my-hostname@ (@my-ip-address@),
+          port @my-port@, 
+          @if-enabled-display-then@Enabled@else-not-enabled-display@Disabled@endif-enabled-display@</big></big></b></p>
+      </td>
+    </tr>
+
+<!-- @if-unstable-start -->
+# This will only appear if CODE_STATUS is "alpha" or "beta". See configure.in
+    <tr>
+      <td style="background-color: #ffdddd" >
+        <p><b>Please note that this <span style="color: #ff0000">@code-status@</span> release
+          of the proxy software is not intended for production systems!
+          <br>Use at your own risk. See the <a href="http://www.gnu.org/copyleft/gpl.html">license</a> for details.</b>
+        </p>
+
+        <p>Feel free to <a href="mailto:ijbswa-developers@lists.sourceforge.net">mail the developers</a>
+          with any problems you encounter.
+        </p>
+      </td>
+    </tr>
+<!-- if-unstable-end@ -->
+
+    <tr>
+      <td class="light">
+        <h2>Edit Actions
+          <input type="hidden" name="filename" value="@filename@">
+          <input type="hidden" name="ver" value="@ver@">
+          <input type="hidden" name="section" value="@section@">
+        </h2>
+      </td>
+    </tr>
+  </table>
+
+  <table border="0" width="100%" cellspacing="0" class="wide">
+    <tr class="hdr" align="left">
+      <th>Action
+      </th>
       <th>Description</th>
       <th class="enh" align="center">Enable</th>
       <th class="dish" align="center">Disable</th>
@@ -282,19 +314,19 @@ function show_wafer_opts(tf)
       <td class="action">+add-header</td>
       <td>Adds HTTP headers.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="add-header" id="add_header_y" value="Y" @add-header-y@
+        name="add_header" id="add_header_y" value="Y" @add-header-y@
         onclick="show_add_header_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="add-header" value="N" @add-header-n@
+        name="add_header" value="N" @add-header-n@
         onclick="show_add_header_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="add-header" value="X" @add-header-x@
+        name="add_header" value="X" @add-header-x@
         onclick="show_add_header_opts(false)"></td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="add_header_opts">
       <td>&nbsp;</td>
       <td colspan="4">To edit the settings for this option, <input
-        type="checkbox" name="add-header-edit" id="add_header_edit"
+        type="checkbox" name="add_header_edit" id="add_header_edit"
         value="ON"><label for="add_header_edit">check here</label> and then
         click &quot;Submit&quot;.</td>
     </tr>
@@ -315,21 +347,21 @@ function show_wafer_opts(tf)
       <td class="action">+deanimate-gifs</td>
       <td>Replace animated GIFs with their (first/last) frame.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="deanimate-gifs" id="deanimate_gifs_y" value="Y" @deanimate-gifs-y@
+        name="deanimate_gifs" id="deanimate_gifs_y" value="Y" @deanimate-gifs-y@
         onclick="show_deanimate_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="deanimate-gifs" value="N" @deanimate-gifs-n@
+        name="deanimate_gifs" value="N" @deanimate-gifs-n@
         onclick="show_deanimate_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="deanimate-gifs" value="X" @deanimate-gifs-x@
+        name="deanimate_gifs" value="X" @deanimate-gifs-x@
         onclick="show_deanimate_opts(false)"></td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="deanimate_opts">
       <td>&nbsp;</td>
-      <td colspan="4">Use the <input type="radio" name="deanimate-gifs-mode"
+      <td colspan="4">Use the <input type="radio" name="deanimate_gifs_mode"
         value="first" id="deanimate_first" @deanimate-gifs-param-first@><label
         for="deanimate_first">first frame</label>&nbsp;&nbsp; <input
-        type="radio" name="deanimate-gifs-mode" value="last" 
+        type="radio" name="deanimate_gifs_mode" value="last" 
         id="deanimate_last" @deanimate-gifs-param-last@><label
         for="deanimate_last">last frame</label></td>
     </tr>
@@ -337,13 +369,13 @@ function show_wafer_opts(tf)
       <td class="action">+fast-redirects</td>
       <td>Bypass some tracking URLs.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="fast-redirects" value="Y" @fast-redirects-y@
+        name="fast_redirects" value="Y" @fast-redirects-y@
         ></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="fast-redirects" value="N" @fast-redirects-n@
+        name="fast_redirects" value="N" @fast-redirects-n@
         ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="fast-redirects" value="X" @fast-redirects-x@
+        name="fast_redirects" value="X" @fast-redirects-x@
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
@@ -363,13 +395,13 @@ function show_wafer_opts(tf)
       <td class="action">+hide-forwarded</td>
       <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="hide-forwarded" value="Y" @hide-forwarded-y@
+        name="hide_forwarded" value="Y" @hide-forwarded-y@
         ></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="hide-forwarded" value="N" @hide-forwarded-n@
+        name="hide_forwarded" value="N" @hide-forwarded-n@
         ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="hide-forwarded" value="X" @hide-forwarded-x@
+        name="hide_forwarded" value="X" @hide-forwarded-x@
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
@@ -377,26 +409,26 @@ function show_wafer_opts(tf)
       <td>Stop old web browsers from sending the user's e-mail address with
         every request.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="hide-from" id="hide_from_y" value="Y" @hide-from-y@
+        name="hide_from" id="hide_from_y" value="Y" @hide-from-y@
         onclick="show_hide_from_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="hide-from" value="N" @hide-from-n@
+        name="hide_from" value="N" @hide-from-n@
         onclick="show_hide_from_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="hide-from" value="X" @hide-from-x@
+        name="hide_from" value="X" @hide-from-x@
         onclick="show_hide_from_opts(false)"></td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="hide_from_opts">
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="hide-from-mode" value="block"
-        onclick="from_param_disable(true);"
+      <td colspan="4"><input type="radio" name="hide_from_mode" value="block"
+        onclick="hide_from_param_disable(true);"
         @hide-from-param-block@ id="from_mode_block"><label
         for="from_mode_block">Remove completely</label><br>
-        <input type="radio" name="hide-from-mode" value="CUSTOM" 
-        onclick="from_param_disable(false);"
+        <input type="radio" name="hide_from_mode" value="CUSTOM" 
+        onclick="hide_from_param_disable(false);"
         @hide-from-param-custom@ id="from_mode_set"><label
         for="from_mode_set">Fake e-mail address:</label><br>
-        <input type="text" name="hide-from-param" id="from_param"
+        <input type="text" name="hide_from_param" id="hide_from_param"
         size="40" value="@hide-from-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
@@ -404,33 +436,33 @@ function show_wafer_opts(tf)
       <td>Helps prevent tracking by not sending the URL of the previous web
         page.&nbsp;</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="hide-referer" id="hide_referer_y" value="Y" @hide-referer-y@
+        name="hide_referer" id="hide_referer_y" value="Y" @hide-referer-y@
         onclick="show_hide_referer_opts(true)"></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="hide-referer" id="hide_referer_n" value="N" @hide-referer-n@
+        name="hide_referer" id="hide_referer_n" value="N" @hide-referer-n@
         onclick="show_hide_referer_opts(false)"></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="hide-referer" id="hide_referer_x" value="X" @hide-referer-x@
+        name="hide_referer" id="hide_referer_x" value="X" @hide-referer-x@
         onclick="show_hide_referer_opts(false)"
         ></td>
     </tr>
     <tr class="bg2" align="left" valign="top" id="hide_referer_opts">
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="hide-referer-mode" value="block"
+      <td colspan="4"><input type="radio" name="hide_referer_mode" value="block"
         onclick="hide_referer_param_disable(true)"
         @hide-referer-param-block@ id="referer_mode_block"><label
         for="referer_mode_block">Remove completely</label> (breaks images
         on some free web hosts).<br>
-        <input type="radio" name="hide-referer-mode" value="forge"
+        <input type="radio" name="hide_referer_mode" value="forge"
         onclick="hide_referer_param_disable(true)"
         @hide-referer-param-forge@ id="referer_mode_forge"><label
         for="referer_mode_forge">Fake as the root directory of the
         site</label> (fools checks for in-site links.)<br>
-        <input type="radio" name="hide-referer-mode" value="CUSTOM"
+        <input type="radio" name="hide_referer_mode" value="CUSTOM"
         onclick="hide_referer_param_disable(false)"
         @hide-referer-param-custom@ id="referer_mode_set"><label
         for="referer_mode_set">Fake as this web address:</label><br>
-        <input type="text" name="hide-referer-param" 
+        <input type="text" name="hide_referer_param" 
         id="hide_referer_param" size="40"
         value="@hide-referer-param@"></td>
     </tr>
@@ -439,19 +471,19 @@ function show_wafer_opts(tf)
       <td>Pretend to be using a different web browser.&nbsp; (Breaks many web
         sites).</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="hide-user-agent" id="hide_user_agent_y" value="Y" @hide-user-agent-y@
+        name="hide_user_agent" id="hide_user_agent_y" value="Y" @hide-user-agent-y@
         onclick="show_user_agent_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="hide-user-agent" value="N" @hide-user-agent-n@
+        name="hide_user_agent" value="N" @hide-user-agent-n@
         onclick="show_user_agent_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="hide-user-agent" value="X" @hide-user-agent-x@
+        name="hide_user_agent" value="X" @hide-user-agent-x@
         onclick="show_user_agent_opts(false)"></td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="user_agent_opts">
       <td>&nbsp;</td>
       <td colspan="4">User Agent string to send:<br>
-        <input type="text" name="hide-user-agent-mode" size="40"
+        <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
@@ -473,57 +505,57 @@ function show_wafer_opts(tf)
       <td>Specifies how to block images.&nbsp; Disable to always send a HTML
         &quot;blocked&quot; page.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="image-blocker" id="image_blocker_y" value="Y" @image-blocker-y@
+        name="image_blocker" id="image_blocker_y" value="Y" @image-blocker-y@
         onclick="show_image_blocker_opts(true)"></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="image-blocker" value="N" @image-blocker-n@
+        name="image_blocker" value="N" @image-blocker-n@
         onclick="show_image_blocker_opts(false)"></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="image-blocker" value="X" @image-blocker-x@
+        name="image_blocker" value="X" @image-blocker-x@
         onclick="show_image_blocker_opts(false)"></td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="image_blocker_opts">
       <td>&nbsp;</td>
-      <td colspan="4"><input type="radio" name="image-blocker-mode"
+      <td colspan="4"><input type="radio" name="image_blocker_mode"
         onclick="image_blocker_param_disable(true)"
         value="logo" id="image_blocker_mode_logo" @image-blocker-param-logo@><label
         for="image_blocker_mode_logo">Send Junkbuster logo</label><br>
-        <input type="radio" name="image-blocker-mode" value="blank"
+        <input type="radio" name="image_blocker_mode" value="blank"
         onclick="image_blocker_param_disable(true)"
         id="image_blocker_mode_blank" @image-blocker-param-blank@><label 
         for="image_blocker_mode_blank">Send a 1x1 transparent GIF</label><br>
-        <input type="radio" name="image-blocker-mode" value="CUSTOM"
+        <input type="radio" name="image_blocker_mode" value="CUSTOM"
         onclick="image_blocker_param_disable(false)"
         id="image_blocker_mode_set" @image-blocker-param-custom@><label
         for="image_blocker_mode_set">Redirect
         the browser to this image URL:</label><br>
-        <input type="text" name="image-blocker-param" id="image_blocker_param"
+        <input type="text" name="image_blocker_param" id="image_blocker_param"
         size="40" value="@image-blocker-param@"></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
       <td class="action">+no-cookies-read</td>
       <td>Prevent the website from reading cookies</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="no-cookies-read" value="Y" @no-cookies-read-y@
+        name="no_cookies_read" value="Y" @no-cookies-read-y@
         ></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="no-cookies-read" value="N" @no-cookies-read-n@
+        name="no_cookies_read" value="N" @no-cookies-read-n@
         ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="no-cookies-read" value="X" @no-cookies-read-x@
+        name="no_cookies_read" value="X" @no-cookies-read-x@
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="action">+no-cookies-set</td>
       <td>Prevent the website from setting cookies</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="no-cookies-set" value="Y" @no-cookies-set-y@
+        name="no_cookies_set" value="Y" @no-cookies-set-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="no-cookies-set" value="N" @no-cookies-set-n@
+        name="no_cookies_set" value="N" @no-cookies-set-n@
         ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="no-cookies-set" value="X" @no-cookies-set-x@
+        name="no_cookies_set" value="X" @no-cookies-set-x@
         ></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
@@ -531,26 +563,26 @@ function show_wafer_opts(tf)
       <td>Filter the website through a built-in filter to disable JavaScript
         pop-up windows.</td>
       <td class="en2" align="center" valign="middle"><input type="radio"
-        name="no-popups" value="Y" @no-popups-y@
+        name="no_popups" value="Y" @no-popups-y@
         ></td>
       <td class="dis2" align="center" valign="middle"><input type="radio"
-        name="no-popups" value="N" @no-popups-n@
+        name="no_popups" value="N" @no-popups-n@
         ></td>
       <td class="noc2" align="center" valign="middle"><input type="radio"
-        name="no-popups" value="X" @no-popups-x@
+        name="no_popups" value="X" @no-popups-x@
         ></td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="action">+vanilla-wafer</td>
       <td>If you use a jarfile, automatically adds a special wafer.</td>
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="vanilla-wafer" value="Y" @vanilla-wafer-y@
+        name="vanilla_wafer" value="Y" @vanilla-wafer-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="vanilla-wafer" value="N" @vanilla-wafer-n@
+        name="vanilla_wafer" value="N" @vanilla-wafer-n@
         ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="vanilla-wafer" value="X" @vanilla-wafer-x@
+        name="vanilla_wafer" value="X" @vanilla-wafer-x@
         ></td>
     </tr>
     <tr class="bg2" align="left" valign="top">
@@ -569,65 +601,92 @@ function show_wafer_opts(tf)
     <tr class="bg2" align="left" valign="top" id="wafer_opts">
       <td>&nbsp;</td>
       <td colspan="4">To edit the settings for this option, <input
-        type="checkbox" name="wafer-edit" id="wafer_edit" value="ON"><label
+        type="checkbox" name="wafer_edit" id="wafer_edit" value="ON"><label
         for="wafer_edit">check here</label> and then click
         &quot;Submit&quot;.</td>
     </tr>
   </table>
+
+
 <script type="text/javascript">
 <!--
 
-if (document.layers) {
-  document.from_param[0].disabled = !(document.from_mode_set[0].checked);
-  document.hide_referer_param[0].disabled = !(document.referer_mode_set[0].checked);
-  document.image_blocker_param.disabled = !(document.image_blocker_mode_set.checked);
-}
-else if (document.getElementById) {
-  document.getElementById("from_param").disabled = !(document.getElementById("from_mode_set").checked);
-  document.getElementById("hide_referer_param").disabled = !(document.getElementById("referer_mode_set").checked);
-  document.getElementById("image_blocker_param").disabled = !(document.getElementById("image_blocker_mode_set").checked);
-}
-else if (document.all) {
-  document.myform.from_param.disabled = !(document.myform.from_mode_set.checked);
-  document.myform.hide_referer_param.disabled = !(document.myform.referer_mode_set.checked);
-  document.myform.image_blocker_param.disabled = !(document.myform.image_blocker_mode_set.checked);
-}
+if (document.getElementById) {
+    // alert("Netscape 6 or IE5");
+    document.getElementById("hide_from_param").disabled = !(document.getElementById("from_mode_set").checked);
+    document.getElementById("hide_referer_param").disabled = !(document.getElementById("referer_mode_set").checked);
+    document.getElementById("image_blocker_param").disabled = !(document.getElementById("image_blocker_mode_set").checked);
 
-show_add_header_opts    (document.myform.add_header_y.checked);
-show_deanimate_opts     (document.myform.deanimate_gifs_y.checked);
-show_hide_from_opts     (document.myform.hide_from_y.checked);
-show_hide_referer_opts  (document.myform.hide_referer_y.checked);
-show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
-show_image_blocker_opts (document.myform.image_blocker_y.checked);
-show_wafer_opts         (document.myform.wafer_y.checked);
+    show_add_header_opts    (document.getElementById("add_header_y").checked);
+    show_deanimate_opts     (document.getElementById("deanimate_gifs_y").checked);
+    show_hide_from_opts     (document.getElementById("hide_from_y").checked);
+    show_hide_referer_opts  (document.getElementById("hide_referer_y").checked);
+    show_user_agent_opts    (document.getElementById("hide_user_agent_y").checked);
+    show_image_blocker_opts (document.getElementById("image_blocker_y").checked);
+    show_wafer_opts         (document.getElementById("wafer_y").checked);
+} else if (document.all) {
+    // alert("IE4");
+    document.myform.hide_from_param.disabled = !(document.myform.from_mode_set.checked);
+    document.myform.hide_referer_param.disabled = !(document.myform.referer_mode_set.checked);
+    document.myform.image_blocker_param.disabled = !(document.myform.image_blocker_mode_set.checked);
+
+    show_add_header_opts    (document.myform.add_header_y.checked);
+    show_deanimate_opts     (document.myform.deanimate_gifs_y.checked);
+    show_hide_from_opts     (document.myform.hide_from_y.checked);
+    show_hide_referer_opts  (document.myform.hide_referer_y.checked);
+    show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
+    show_image_blocker_opts (document.myform.image_blocker_y.checked);
+    show_wafer_opts         (document.myform.wafer_y.checked);
+} else if (document.layers) {
+    // alert("Netscape 4");
+}
 //-->
 </script>
-  <p><input type="submit" value="Submit" name="Submit"></p>
+
+  <table cellpadding="20" cellspacing="10" border="0" width="100%">
+    <tr>
+      <td class="green" align="center">
+        <p><input type="submit" value="Submit" name="Submit"></p>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="dark">
+        <h2>More Junkbuster:</h2>
+        <ul>@menu@</ul>
+      </td>
+    </tr>
+
+<!-- @if-have-help-info-start -->
+    <tr>
+      <td class="light">
+        <h2>Local Junkbuster support:</h2>
+
+<!-- @if-have-proxy-info-start -->
+        <p>You can consult the <a href="@proxy-info-url@">online documentation</a> for more information about this Junkbuster installation.
+<!-- if-have-proxy-info-end@ -->
+
+<!-- @if-have-adminaddr-info-start -->
+        <p>Address e-mail questions about this service to
+          <a href="mailto:@admin-address@"><code>@admin-address@</code></a>,
+          who will be glad to help you.
+<!-- if-have-adminaddr-info-end@ -->
+
+        </p>
+      </td>
+    </tr>
+<!-- if-have-help-info-end@ -->
+    
+    <tr>
+      <td>
+        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
+      </td>
+    </tr>
+
+  </table>
 </form>
-<p>&nbsp;</p>
 
 </body>
 
 </html>
-#
-# GPL2+
-#
-# Available variables:
-#
-# deanimate-gifs-param-first
-# deanimate-gifs-param-last
-# hide-from-param-block
-# hide-from-param-custom
-# hide-from-param
-# hide-referer-param-forge
-# hide-referer-param-block
-# hide-referer-param-custom
-# hide-referer-param
-# hide-user-agent-param
-# image-blocker-param-logo
-# image-blocker-param-blank
-# image-blocker-param-custom
-# image-blocker-param-logo
-#
-#
 

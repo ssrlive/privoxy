@@ -1,9 +1,53 @@
-    <tr class="url@url-1-2@" valign="top">
-      <td align="left">&nbsp;</td>
-      <td align="center"><nobr><a name="s@sectionid@url@urlid@"></a><input
-        type="button" onclick="remove_pattern(@sectionid@,@urlid@,'@url@');" value="Remove">
-        <input type="button" onclick="edit_pattern(@sectionid@,@urlid@,'@url@');" value="Edit"
-        ></nobr></td>
-      <td class="url" align="left">@url@</td>
-    </tr>
+##############################################################################
+#
+# File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+#
+# Purpose     :  Template which forms part of edit-actions-list
+# 
+#
+# Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#                IJBSWA team.  http://ijbswa.sourceforge.net
+#
+#                Original Author: Copyright (C) 2001 Jonathan Foster
+#                http://www.jon-foster.co.uk/
+#
+#                This program is free software; you can redistribute it 
+#                and/or modify it under the terms of the GNU General
+#                Public License as published by the Free Software
+#                Foundation; either version 2 of the License, or (at
+#                your option) any later version.
+#
+#                This program is distributed in the hope that it will
+#                be useful, but WITHOUT ANY WARRANTY; without even the
+#                implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                PARTICULAR PURPOSE.  See the GNU General Public
+#                License for more details.
+#
+#                The GNU General Public License should be included with
+#                this file.  If not, you can view it at
+#                http://www.gnu.org/copyleft/gpl.html
+#                or write to the Free Software Foundation, Inc., 59
+#                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# Revisions   :
+#    $Log$
+#
+#############################################################################
+#
+# Available variables include:
+#
+# filename
+# ver
+# sectionid
+# urls
+#
+#############################################################################
+<tr class="url@url-1-2@" valign="top">
+<td align="left">&nbsp;</td>
+<td align="center" class="nobreak"><a name="s@sectionid@url@urlid@"></a
+><a class="cmd" href="http://i.j.b/edit-actions-remove-url-form?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@&amp;pattern=@urlid@&amp;oldval=@url@"
+onclick="return remove_pattern(@sectionid@,@urlid@,'@url@');">Remove</a>&nbsp;&nbsp;&nbsp;<a
+class="cmd" href="http://i.j.b/edit-actions-url-form?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@&amp;pattern=@urlid@&amp;oldval=@url@">Edit</a>&nbsp;</td>
+<td class="url" align="left">@url-html@</td>
+</tr>
 

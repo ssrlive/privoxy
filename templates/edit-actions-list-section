@@ -1,51 +1,91 @@
-<form action="http://i.j.b/">
-  <table border="0" width="100%" cellspacing="0">
-    <tr class="actions" valign="top">
-      <td class="header" align="right"><a name="s@sectionid@"></a>Actions:</td>
-      <td align="center"><input type="button" onclick="edit_actions(@sectionid@)"
-        value="Edit"></td>
-      <td class="action" align="left">@actions@</td>
-    </tr>
-    <tr class="rule">
-      <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
-        height="1" alt="----"></td>
-    </tr>
-    <tr class="url1" valign="top">
-      <td class="header" align="right"><a name="s@sectionid@urls">URLs:</a></td>
-      <td align="center"><input type="button" onclick="add_pattern(@sectionid@)"
-        value="Add"></td>
-      <td align="left">&nbsp;</td>
-    </tr>
+##############################################################################
+#
+# File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
+#
+# Purpose     :  Template which forms part of edit-actions-list
+# 
+#
+# Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+#                IJBSWA team.  http://ijbswa.sourceforge.net
+#
+#                Original Author: Copyright (C) 2001 Jonathan Foster
+#                http://www.jon-foster.co.uk/
+#
+#                This program is free software; you can redistribute it 
+#                and/or modify it under the terms of the GNU General
+#                Public License as published by the Free Software
+#                Foundation; either version 2 of the License, or (at
+#                your option) any later version.
+#
+#                This program is distributed in the hope that it will
+#                be useful, but WITHOUT ANY WARRANTY; without even the
+#                implied warranty of MERCHANTABILITY or FITNESS FOR A
+#                PARTICULAR PURPOSE.  See the GNU General Public
+#                License for more details.
+#
+#                The GNU General Public License should be included with
+#                this file.  If not, you can view it at
+#                http://www.gnu.org/copyleft/gpl.html
+#                or write to the Free Software Foundation, Inc., 59
+#                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# Revisions   :
+#    $Log$
+#
+#############################################################################
+#
+# Available variables include:
+#
+# filename
+# ver
+# sectionid
+# urls
+#
+#############################################################################
+<table border="0" width="100%" cellspacing="0" cellpadding="3" class="wide">
+<tr class="actions" valign="top">
+  <td class="header" align="right"><a name="s@sectionid@"></a>Actions:</td>
+  <td align="center"><a class="cmd" href="http://i.j.b/edit-actions-for-url?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
+    >Edit</a></td>
+  <td class="action" align="left">@actions@</td>
+</tr>
+<tr class="rule">
+  <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
+    height="1" alt="----"></td>
+</tr>
+<tr class="url1" valign="top">
+  <td class="header" align="right"><a name="s@sectionid@urls">URLs:</a></td>
+  <td align="center"><a class="cmd" href="http://i.j.b/edit-actions-add-url-form?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
+  >Add</a></td>
+  <td align="left">&nbsp;</td>
+</tr>
 
 @urls@
 
-    <tr class="rule">
-      <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
-        height="1" alt="----"></td>
-    </tr>
-    <tr class="adv" valign="top">
-      <td class="header" align="right"><b>Advanced:</b></td>
-      <td colspan="2">
-        <table border="0" cellspacing="0" cellpadding="4">
-          <tr valign="middle" align="center">
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_up(@sectionid@)"
-              value="Move section up">&nbsp;&nbsp;&nbsp;</td>
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_add(@sectionid@)"
-              value="Insert new section below">&nbsp;&nbsp;&nbsp;</td>
-          </tr>
-          <tr valign="middle" align="center">
-            <td>&nbsp;&nbsp;&nbsp;<input type="button" onclick="section_down(@sectionid@)"
-              value="Move section down">&nbsp;&nbsp;&nbsp;</td>
-            <td><!-- @if-empty-section-start -->&nbsp;&nbsp;&nbsp;<input
-              type="button" onclick="section_remove(@sectionid@)" value="Delete whole section"
-              >&nbsp;&nbsp;<!-- if-empty-section-end@ -->&nbsp;</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</form>
-<p>&nbsp;</p>
+<tr class="rule">
+  <td colspan="3"><img src="http://i.j.b/send-banner?type=trans" width="2"
+    height="1" alt="-"></td>
+</tr>
+<tr class="adv" valign="top">
+  <td class="header" align="right"><b>Advanced:</b></td>
+  <td colspan="2">
+    <table border="0" cellspacing="0" cellpadding="4">
+      <tr valign="middle" align="center">
+        <td class="nobreak"> &nbsp; <a class="cmd" href="javascript:not_yet()">Move section up</a> &nbsp; </td>
+        <td class="nobreak"> &nbsp; 
+        <a class="cmd" href="http://i.j.b/edit-actions-section-add?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
+        >Insert new section below</a> &nbsp; </td>
+      </tr>
+      <tr valign="middle" align="center">
+        <td class="nobreak"> &nbsp; <a class="cmd" href="javascript:not_yet()">Move section down</a> &nbsp; </td>
+        <td class="nobreak"><!-- @if-empty-section-start --> &nbsp; 
+        <a class="cmd" href="http://i.j.b/edit-actions-section-remove?filename=@filename@&amp;ver=@ver@&amp;section=@sectionid@"
+        >Delete whole section</a><!-- if-empty-section-end@ --> &nbsp; </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
 <p>&nbsp;</p>
 
 

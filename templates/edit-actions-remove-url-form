@@ -2,7 +2,9 @@
 #
 # File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
 #
-# Purpose     :  Template used to edit the actions file.
+# Purpose     :  Template used to confirm removal of a particular URL
+#                pattern from an actions file.  Only used on browsers that
+#                don't support JavaScript.
 # 
 #
 # Copyright   :  Written by and Copyright (C) 2001 the SourceForge
@@ -34,24 +36,6 @@
 #
 ##############################################################################
 #
-# Browser support for the CSS on this page:
-#   MS Internet Explorer 5.5 - Yes - everything works.
-#   Netscape 6.2             - Yes - everything works.
-#   Netscape 4.75            - No  - CSS buttons look really bad, but they are
-#                                    usable.  Everything else works.
-#   Opera 5.12               - Yes - everything works.
-#   MS Internet Explorer 4+  - Untested
-#   MS IE 3.x, NS3.x         - Untested (Don't support CSS, so everything
-#                              should work, but will look ugly).
-#   Mozilla >=0.6            - Untested
-#
-# All browsers should work, you just might not get the pretty CSS buttons.
-#
-# If you're favorite browser isn't listed/tested, please test and add it.
-#
-#
-#############################################################################
-#
 # Standard support:
 #
 # This file currently produces valid HTML 4.01 Strict.
@@ -65,7 +49,9 @@
 #
 # filename
 # ver
-#
+# section
+# pattern
+# oldval
 #
 #############################################################################
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -77,71 +63,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="robots" content="noindex,nofollow">
 
-<title>JunkBuster: Edit actions file - @filename@.action</title>
+<title>JunkBuster: Remove URL Pattern</title>
 
 <style type="text/css">
 body         { font-family: Helvetica, Helv, Arial, Sans-Serif, sans-serif;
                background-color: #ffffff;
-               color: #000000;            }
-td.light     { background-color: #eeeeee; }
-td.dark      { background-color: #dddddd; }
-table.wide   { border-color: white;
-               border-style: solid;
-               border-left-width: 10px;
-               border-right-width: 10px;
-               border-top-width: 0px;
-               border-bottom-width: 0px;  }
-tr.actions   { background-color: #eeffee; }
-tr.url1      { background-color: #d0d0ff; }
-tr.url2      { background-color: #eeeeff; }
-tr.rule      { background-color: #c0c0c0;
-               height: 3px;
-               max-height: 3px;
-               font-size: 1px             }
-tr.adv       { background-color: #FFFFD0; }
-td.header    { font-weight: bold;         }
-td.url       { font-weight: bold;         }
-td.action    { font-weight: bold;
-               font-style: italic;        }
-td.nobreak   { white-space: nowrap; }
-a.cmd        { white-space: nowrap;
-               width: auto;
-               padding: 2px;
-               background-color: #dddddd;
-               color:            #000000;
-               text-decoration: none;
-               border-top:    1px solid #ffffff;
-               border-left:   1px solid #ffffff;
-               border-bottom: 1px solid #000000;
-               border-right:  1px solid #000000; }
-a.cmd:hover  { background-color: #eeeeee;        }
-a.cmd:active { border-top:    1px solid #000000;
-               border-left:   1px solid #000000;
-               border-bottom: 1px solid #ffffff;
-               border-right:  1px solid #ffffff; }
-
+               color: #000000            }
+td.light     { background-color: #eeeeee }
+td.dark      { background-color: #dddddd }
 </style>
 
-<script type="text/javascript">
-<!--
-function not_yet()
-{
-   window.alert("The feature you are trying to use has not been implemented yet.");
-}
-
-// Non-JS capable browsers will follow the link to a HTML "are you sure?" page
-// JavaScript-capable browsers will call this function, which does a
-// client-side prompt for speed.  It may kick off the delete directly.
-// It always returns false to cancel following the link.
-function remove_pattern(section,pattern,curtext)
-{
-   if (window.confirm("Are you sure you want to delete this URL pattern?\nPattern is: "+unescape(curtext)))
-   { window.location.href="http://i.j.b/edit-actions-remove-url?filename=@filename@&ver=@ver@&section="+section+"&pattern="+pattern+"#s"+section+"urls"; }
-   return false;
-}
-
-//-->
-</script>
 </head>
 
 <body>
@@ -175,17 +106,17 @@ function remove_pattern(section,pattern,curtext)
 
   <tr>
     <td class="light">
-      <h2>Editing Actions File - @filename@.action</h2>
+      <h2>Remove URL Pattern</h2>
+      <p>Are you sure you want to delete this URL pattern?  The pattern is:</p>
+      <p><b>@oldval@</b></p>
       <p>
-        <span><a class="cmd" href="http://i.j.b/edit-actions-section-add?filename=@filename@&amp;ver=@ver@&amp;section=0">Insert new section at top</a></span>
+        <a href="http://i.j.b/edit-actions-remove-url?filename=@filename@&amp;ver=@ver@&amp;section=@section@&amp;pattern=@pattern@">OK</a>
+        &nbsp;
+        <a href="http://i.j.b/edit-actions-list?filename=@filename@">Cancel</a>
       </p>
     </td>
   </tr>
-</table>
 
-@sections@
-
-<table cellpadding="20" cellspacing="10" border="0" width="100%">
   <tr>
     <td class="dark">
       <h2>More Junkbuster:</h2>
@@ -224,3 +155,4 @@ function remove_pattern(section,pattern,curtext)
 </body>
 
 </html>
+
