@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.108 2002/05/14 15:29:12 oes Exp $
+ $Id: user-manual.sgml,v 1.109 2002/05/14 17:23:11 oes Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,7 +53,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.108 2002/05/14 15:29:12 oes Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.109 2002/05/14 17:23:11 oes Exp $</pubdate>
 
 <!--
 
@@ -3280,6 +3280,144 @@ forward-socks4 and forward-socks4a</title>
 </variablelist>
 </sect3>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="crunch-incoming-cookies">
+<title><emphasis>crunch-incoming-cookies</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Prevent the web server from setting any cookies on your system
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any <quote>Set-Cookie:</quote> HTTP headers from server replies.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action is only concerned with <emphasis>incoming</emphasis> cookies. For
+    <emphasis>outgoing</emphasis> cookies, use
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>.
+    Use <emphasis>both</emphasis> to disable cookies completely.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
+    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
+    since it would prevent the session cookies from being set.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen>+crunch-incoming-cookies</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="crunch-outgoing-cookies">
+<title><emphasis>crunch-outgoing-cookies</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Prevent the web server from reading any cookies from your system
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes any <quote>Cookie:</quote> HTTP headers from client requests.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action is only concerned with <emphasis>outgoing</emphasis> cookies. For
+    <emphasis>incoming</emphasis> cookies, use
+    <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal>.
+    Use <emphasis>both</emphasis> to disable cookies completely.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
+    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
+    since it would prevent the session cookies from being read.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen>+crunch-outgoing-cookies</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="deanimate-gifs">
@@ -4265,226 +4403,6 @@ www.pclinuxonline.com</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="crunch-outgoing-cookies">
-<title><emphasis>crunch-outgoing-cookies</emphasis></title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-    Prevent the web server from reading any cookies from your system
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Deletes any <quote>Cookie:</quote> HTTP headers from client requests.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    This action is only concerned with <emphasis>outgoing</emphasis> cookies. For
-    <emphasis>incoming</emphasis> cookies, use
-    <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal>.
-    Use <emphasis>both</emphasis> to disable cookies completely.
-   </para>
-   <para>
-    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
-    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
-    since it would prevent the session cookies from being read.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para>
-    <screen>+crunch-outgoing-cookies</screen>
-   </para>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="crunch-incoming-cookies">
-<title><emphasis>crunch-incoming-cookies</emphasis></title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-    Prevent the web server from setting any cookies on your system
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Deletes any <quote>Set-Cookie:</quote> HTTP headers from server replies.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    This action is only concerned with <emphasis>incoming</emphasis> cookies. For
-    <emphasis>outgoing</emphasis> cookies, use
-    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>.
-    Use <emphasis>both</emphasis> to disable cookies completely.
-   </para>
-   <para>
-    It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
-    with the <literal><link linkend="session-cookies-only">session-cookies-only</link></literal> action,
-    since it would prevent the session cookies from being set.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para>
-    <screen>+crunch-incoming-cookies</screen>
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="session-cookies-only">
-<title><emphasis>session-cookies-only</emphasis></title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-    Allow only temporary <quote>session</quote> cookies (for the current browser session <emphasis>only</emphasis>).
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Deletes the <quote>expires</quote> field from <quote>Set-Cookie:</quote> server headers.
-    Most browsers will not store such cookies permanently and forget them in between sessions.
-   </para>
-  </listitem>
- </varlistentry>
-
-<varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    This is less strict than <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> / 
-    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal> and allows you to browse
-    websites that insist or rely on setting cookies, without compromising your privacy too badly.
-   </para>
-   <para>
-    Most browsers will not permanently store cookies that have been processed by
-    <literal>session-cookies-only</literal> and will forget about them between sessions.
-    This makes profiling cookies useless, but won't break sites which require cookies so
-    that you can log in for transactions. This is generally turned on for all 
-    sites, and is the recommended setting.
-   </para>
-   <para>
-    It makes <emphasis>no sense at all</emphasis> to use <literal>session-cookies-only</literal>
-    together with <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> or
-    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>. If you do, cookies
-    will be plainly killed.
-   </para>
-   <para>
-    Note that it is up to the browser how it handles such cookies without an <quote>expires</quote>
-    field. If you use an exotic browser, you might want to try it out to be sure.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para>
-     <screen>+session-cookies-only</screen>
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="send-vanilla-wafer">
 <title><emphasis>send-vanilla-wafer</emphasis></title>
 
@@ -4609,6 +4527,87 @@ www.pclinuxonline.com</screen>
    <para>
     <screen>{+send-wafer{UsingPrivoxy=true}}
 my-internal-testing-server.void</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="session-cookies-only">
+<title><emphasis>session-cookies-only</emphasis></title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Allow only temporary <quote>session</quote> cookies (for the current browser session <emphasis>only</emphasis>).
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>expires</quote> field from <quote>Set-Cookie:</quote> server headers.
+    Most browsers will not store such cookies permanently and forget them in between sessions.
+   </para>
+  </listitem>
+ </varlistentry>
+
+<varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This is less strict than <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> / 
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal> and allows you to browse
+    websites that insist or rely on setting cookies, without compromising your privacy too badly.
+   </para>
+   <para>
+    Most browsers will not permanently store cookies that have been processed by
+    <literal>session-cookies-only</literal> and will forget about them between sessions.
+    This makes profiling cookies useless, but won't break sites which require cookies so
+    that you can log in for transactions. This is generally turned on for all 
+    sites, and is the recommended setting.
+   </para>
+   <para>
+    It makes <emphasis>no sense at all</emphasis> to use <literal>session-cookies-only</literal>
+    together with <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal> or
+    <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>. If you do, cookies
+    will be plainly killed.
+   </para>
+   <para>
+    Note that it is up to the browser how it handles such cookies without an <quote>expires</quote>
+    field. If you use an exotic browser, you might want to try it out to be sure.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+     <screen>+session-cookies-only</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -6242,6 +6241,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.109  2002/05/14 17:23:11  oes
+ Renamed the prevent-*-cookies actions, extended aliases section and moved it before the example AFs
+
  Revision 1.108  2002/05/14 15:29:12  oes
  Completed proofreading the actions chapter
 
