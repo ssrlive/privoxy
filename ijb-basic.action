@@ -1,14 +1,16 @@
 ######################################################################
 # 
-#  File        :  $Source: /cvsroot/ijbswa/current/README,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/ijb-basic.action,v $
 # 
-#  $Id: README,v 1.9 2001/12/01 21:52:34 hal9 Exp $
+#  $Id: ijb-basic.action,v 1.1 2001/12/02 15:26:49 swa Exp $
 #
 #  Purpose     :  Very basic actions file, it provides
-#                 - ad filtering
-#                 -
-#                 -
-#                 -
+#                 - not too agressive ad filtering
+#                 - ads are replace with a blank image
+#                 - gif images are de-animated
+#                 - persistant cookies (i.e. cookies work for only one
+#                   browser session)
+#                 - referer forging
 # 
 #  To report bugs, please use the forms at
 #
@@ -23,22 +25,309 @@
 ######################################################################
 # Aliases
 ######################################################################
+{{alias}}
++imageblock = +block +image
 
 ######################################################################
 # Defaults
 ######################################################################
+{\
++deanimate-gifs{last} \
++image-blocker{trans} \
++hide-referer{forge} \
++no-cookies-keep \
+-filter \
+}
+/ # Match all URLs
+
 
 ######################################################################
 # Specials
 ######################################################################
+{+image}
+#############################################################################
+/.*\.gif
+/.*\.jpe?g
+/.*\.png
 
-######################################################################
-# Imagelist:
-######################################################################
+#############################################################################
+{+imageblock}
+#############################################################################
+.ad.doubleclick.net
+.adforce.imgis.com
+.focalink.com
 
 ######################################################################
 # Blocklist:
 ######################################################################
+{+block}
+#############################################################################
+
+# generic hosts (probably most effective)
+ad*.
+.*ads.
+banner.
+
+/.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
+/.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
+/.*/(ng)?adclient\.cgi
+/.*/(plain|live|rotate)[-_.]?ads?/
+/.*/(sponsor)s?[0-9]?/
+/?.*/_?(plain|live)?ads?(-banners)?/
+/?.*/abanners/
+/?.*/ad(sdna_image|gifs?)/
+/?.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+/?.*/adbanners/
+/?.*/adserver
+/?.*/adstream\.cgi
+/?.*/adv((er)?ts?|ertis(ing|ements?))?/
+/?.*/anzei(gen)?/?
+/?.*/ban[-_]cgi/
+/?.*/banner_?ads/
+/?.*/banner_?anzeigen
+/?.*/bannerimage/
+/?.*/banners?/
+/?.*/banners?\.cgi/
+/?.*/cgi-bin/centralad/getimage
+/?.*/images/addver\.gif
+/?.*/images/advert\.gif
+/?.*/images/marketing/.*\.(gif|jpe?g)
+/?.*/place-ads
+/?.*/popupads/
+/?.*/promobar.*
+/?.*/publicite/
+/?.*/randomads/.*\.(gif|jpe?g)
+/?.*/rekla(ma|me|am)/.*\.(gif|jpe?g)
+/?.*/siteads/
+/?.*/sponsor.*\.gif
+/?.*/sponsors?[0-9]?/
+/?.*/ucbandeimg/
+/?.*/werb\..*
+/?.*/werbebanner/
+/?.*/werbung/.*\.(gif|jpe?g)
+/?.*/adv\.   # www.telegraaf.nl
+/?.*/advert[0-9]+\.jpg
+/?.*bann\.gif
+/?.*/ads/
+/_banner/
+/ad_images/
+/adgenius/
+/adimages/
+/viewad/
+/adserve/
+/adverts/
+/annonser?/
+/bando/
+/bannerad/
+/bannerfarm/
+/bin/getimage.cgi/...\?AD
+/bin/nph-oma.count/ct/default.shtml
+/bin/nph-oma.count/ix/default.html
+/cgi-bin/getimage.cgi/....\?GROUP=
+/cgi-bin/nph-load
+/cgi-bin/webad.dll/ad
+/cwmail/acc\.gif
+/cwmail/amzn-bm1\.gif
+/db_area/banrgifs/
+/gif/teasere/
+/grafikk/annonse/
+/graphics/defaultAd/
+/grf/annonif
+/htmlad/
+/image\.ng/AdType
+/image\.ng/transactionID
+/images/.*/.*_anim\.gif # alvin brattli
+/ip_img/.*\.(gif|jpe?g)
+/marketpl*/
+/minibanners/
+/netscapeworld/nw-ad/
+/promotions/houseads/
+/rotads/ 
+/rotateads/
+/rotations/ 
+/torget/jobline/.*\.gif
+/viewad/
+/werbung/
+/worldnet/ad\.cgi
+/zhp/auktion/img/
+/cgi-bin/nph-adclick.exe/
+/?.*/Image/BannerAdvertising/
+/?.*/ad-bin/
+/?.*/adlib/server\.cgi
+/?.*/gsa_bs/gsa_bs.cmdl
+/autoads/
+/anz/pics/
+# for our finnish friends, by Kai Puolamaki <Kai.Puolamaki@iki.fi>
+/?.*/mainos/*.*/.*\.gif
+/?.*/mainos/*.*/.*\.jpe?g
+# more from a finnish friend Petri Haapio <pha@iki.fi>
+/?.*/(.*[-_.].*)?maino(kset|nta|s).*(/|\.(gif|html?|jpe?g|png))
+/?.*/(ilm(oitus)?|kampanja)(hallinta|kuvat?)(/|\.(gif|html?|jpe?g|png))
+# <jwz@jwz.org>
+/?.*/adfinity
+/?.*/[?]adserv
+/?.*/bizgrphx/
+/?.*/smallad2\.gif
+/?.*/ana2ad\.gif
+/?.*/adimg/
+/?.*/.*counter\.pl
+/?.*/spin_html/
+/?.*/images/topics/topicgimp\.gif
+.discovery.com/.*banner_id
+/?.*/.*bannr\.gif
+.cruel.com/images/
+.idrink.com/frm_bottom.htm
+/?.*/.*pb_ihtml\.gif
+/?.*/ph-ad.*\.focalink\.com
+/cgi-bin/adjuggler
+
+# ms sucks !
+/.*(ms)?backoff(ice)?.*\.(gif|jpe?g)
+/.*(/ie4|/ie3|msie|sqlbans|powrbybo|activex|backoffice|explorer|netnow|getpoint|ntbutton|hmlink).*\.(gif|jpe?g)
+/.*activex.*(gif|jpe?g)
+/.*explorer?.(gif|jpe?g)
+/.*freeie\.(gif|jpe?g)
+/.*/ie_?(buttonlogo|static?|anim.*)?\.(gif|jpe?g)
+/.*ie_sm\.(gif|jpe?g)
+/.*msie(30)?\.(gif|jpe?g)
+/.*msnlogo\.(gif|jpe?g)
+/.*office97_ad1\.(gif|jpe?g)
+/.*pbbobansm\.(gif|jpe?g)
+/.*powrbybo\.(gif|jpe?g)
+/.*sqlbans\.(gif|jpe?g)
+/.*exc_ms\.gif
+/.*ie4get_animated\.gif
+/.*ie4_animated\.gif
+/.*n_iemap\.gif
+/.*ieget\.gif
+/.*logo_msnhm_*
+/.*mcsp2\.gif
+/.*msn2\.gif
+/.*add_active\.gif
+/.*n_msnmap\.gif
+/.*Ad00\.gif
+/.*s_msn\.gif
+/.*addchannel\.gif
+/.*adddesktop\.gif
+/?.*/ns4\.gif
+/?.*/v3sban\.gif
+/?.*/?FPCreated\.gif
+/?.*/opera35\.gif
+/?.*/opera13\.gif
+/?.*/opera_b\.gif
+/?.*/ie_horiz\.gif
+/?.*/ie_logo\.gif
+# ... and even more!
+/?.*/favicon\.ico
+
+/?.*/images/na/us/brand/
+/?.*/advantage\.(gif|jpg)
+/?.*/advanbar\.(gif|jpg)
+/?.*/advanbtn\.(gif|jpg)
+/?.*/biznetsmall\.(gif|jpg)
+/?.*/utopiad\.(gif|jpg)
+/?.*/epipo\.(gif|jpg)
+/?.*/amazon([a-zA-Z0-9]+)\.(gif|jpg)
+/?.*/bnlogo.(gif|jpg)
+/?.*/buynow([a-zA-Z0-9]+)\.(gif|jpg)
+
+# for the dutch folks by a dutch friend gertjan@west.nl
+/?.*/Advertenties/
+/?.*/Adverteerders/
+.netdirect.nl/nd_servlet/___
+
+.admaximize.com
+.imgis.com
+
+# wayne@staff.msen.com
+a*.*.*.yimg.com/([0-9]*|\/)*us.yimg.com/*
+
+####################################################
+# Jon's addition:
+#
+# The Register ads - oh, and all images in Register stories (sigh).
+www.theregister.co.uk/media/
+
+# Used on http://www.theregister.co.uk/
+# Sample advert URL:
+# http://secure.webconnect.net/cgi-bin/webconnecthome.dll?F467
+.webconnect.net
+
+# Dilbert:
+www.dilbert.com/comics/dilbert/images/.*_140x800.*\.gif
+
+# stattrack.com
+# Uses URL: http://www.stattrack.com/cgi-bin/stats/image.cgi
+/cgi-bin/stats/
+# And loads JavaScript from http://www.stattrack.com/stats/code
+www.stattrack.com/stats/
+
+#Now they're Yahoo GeoCities, their junk is in a different place.
+##geo.yahoo.com/serv
+##visit.geocities.com/visit.gif
+.yimg.com/?.*/www.geocities.com/js_source
+#http://us.toto.geo.yahoo.com/toto?s=76001086
+.geo.yahoo.com
+.visit.geocities.com
+.yimg.com/?.*/www.geocities.com/
+
+.exitexchange.com
+
+#SourceForge ads.
+sfads.osdn.com
+
+#This site traps the browser
+.webhideout.com
+
+#privacy.net runs ads
+.a.consumer.net
+
+#Lindsay.Marshall@newcastle.ac.uk suggested these, to kill Opera adverts:
+www.qksrv.net
+mirror.qkimg.net
+
+#js
+dinoadserver*.roka.net
+logout.gmx.net
+logout.tvspielfilm.de
+gmx.tvspielfilm.de
+www.freenet.de/customerindex\.html
+/?.*/phpAds
+.fxweb.com/v2-trackrun\.cgi
+rtldating.peopleunited.de
+.advertising.com
+www.zdnet.com/fcgi-bin/
+service.bfast.com/bfast/serve
+199.172.144.25
+fourohfour.nbci.com/Members404Error.php3
+.adtech.de
+.adlink.de
+www.fair-ist-mehr.de/cgi-bin/bt.pl
+.linkexchange.
+/?.*/adpage.asp
+/ADS
+.net-on.net
+rstrip.namezero.com
+62.26.220.2
+.doubleclick.net
+.adserver.yahoo.com
+
+#############################################################################
+{-block}
+#############################################################################
+.admin.
+.edu
+.ac.uk    # English Universities too! - Jon
+.uni-*.de # What about Germany? --oes
+# my banking stuff => no ads.
+.comdirekt.de
+.comdirect.de
+.teledata.de
+# Jon's addition: MSDN
+.msdn.microsoft.com
+# .*ads. matches prdownloads.sourceforge.net and many other download sites
+# The fix is:
+.*downloads.
 
 ######################################################################
 # 
