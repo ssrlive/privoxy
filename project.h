@@ -1,6 +1,6 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-#define PROJECT_H_VERSION "$Id: project.h,v 1.30 2001/09/13 23:52:00 jongfoster Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.31 2001/09/16 13:20:29 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.31  2001/09/16 13:20:29  jongfoster
+ *    Rewrite of list library.  Now has seperate header and list_entry
+ *    structures.  Also added a large sprinking of assert()s to the list
+ *    code.
+ *
  *    Revision 1.30  2001/09/13 23:52:00  jongfoster
  *    Support for both static and dynamically generated CGI pages
  *
@@ -718,7 +723,7 @@ struct forward_spec
    /* For the linked list */
    struct forward_spec *next;
 };
-#define FORWARD_SPEC_INITIALIZER { URL_SPEC_INITIALIZER, 0, NULL, 0, NULL, 0, NULL }
+#define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
 
 struct re_filterfile_spec
