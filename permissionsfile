@@ -3,7 +3,7 @@
 #
 # For information, see http://ijbswa.sourceforge.net/
 #
-# $Id: permissionsfile,v 1.8 2001/06/01 17:05:32 jongfoster Exp $
+# $Id: permissionsfile,v 1.9 2001/06/01 20:08:59 jongfoster Exp $
 #
 #############################################################################
 # Syntax
@@ -194,7 +194,7 @@ c3 = +no-cookies-set -no-cookies-read
 +hide-referer{forge} \
 -hide-user-agent \
 -image \
-+image-blocker{logo} \
++image-blocker{blank} \
 +no-cookies-read \
 +no-cookies-set \
 +no-popups \
