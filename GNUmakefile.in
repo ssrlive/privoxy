@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.128 2002/10/18 05:36:32 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.129 2002/10/20 07:15:12 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -93,10 +93,12 @@ PROGRAM    = privoxy@EXEEXT@
 CC         = @CC@
 ECHO       = echo
 GZIP_PROG  = gzip
+# Install usage should be compatible with install-sh.
 INSTALL    = @INSTALL@
 INSTALL_P  = -m 0755  
-INSTALL_T  = -m 0644 
+INSTALL_T  = -m 0664 
 INSTALL_D  = -m 0755 -d
+INSTALL_R  = 0660
 # install options for superuser install
 #INSTALL_S  = -g @GROUP@ -o @USER@ 
 # id -u is not universal. FIXME: need to set from configure. Breaks on
@@ -118,21 +120,13 @@ TOUCH      = touch
 KILL       = kill
 CHMOD      = chmod
 CHOWN      = chown
-WDUMP      = @WDUMP@ -dump
-JADECAT    = @JADECAT@
-JADEBIN    = @JADEBIN@
 DOC_STATUS = @DOC_STATUS@
 # Note: Please make sure that -d ldp.dsl\#html stays the last option to
 #       $(JADEBIN), because for some targets "-notoc" will be appended
 #       to it (--> "ldp.dsl\#html-notoc"). 
-DB         = $(JADEBIN) $(JADECAT) -i$(DOC_STATUS) -ihtml -t sgml  -D.. -d ldp.dsl\#html
-MAN2HTML   = @MAN2HTML@
-G2H_CMD    = groff -mandoc -Thtml
 TARGET_OS  = @host@
 PERL       = perl
 DOC_DIR    = doc/source
-DOC_TMP    = $(DOC_DIR)/tmp
-DKPREFIX   = @DKPREFIX@
 
 #User Group paras
 USER       = @USER@
@@ -902,6 +896,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
 	fi
+	# Not all platforms support gzipped man pages.
 	$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1
 	-$(INSTALL) $(INSTALL_T) privoxy.1  $(MAN_DEST)/privoxy.1
 
@@ -955,29 +950,28 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	for i in $(CONFIGS); do \
 		if [ -s "$(CONF_DEST)/$$i" ] ; then \
 			$(ECHO) Installing $$i as $$i.new ;\
-			$(INSTALL) $$i $(CONF_DEST)/$$i.new || exit 1;\
+			$(INSTALL) -m $(INSTALL_R) $$i $(CONF_DEST)/$$i.new || exit 1;\
 			NEW=1;\
 		else \
 			if test "$$i" = "config" || test "$$i" = "default.filter"; then \
-				$(INSTALL)  $$i $(CONF_DEST) || exit 1;\
-				$(CHMOD) 0640 $(CONF_DEST)/$$i ;\
+				$(INSTALL) -m $(INSTALL_R) $$i $(CONF_DEST) || exit 1;\
 			else \
-				$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
+				$(INSTALL) -m $(INSTALL_R) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
 			fi;\
 		fi ;\
 	done ;\
 	if [ -n "$$NEW" ]; then \
-		$(CHMOD) 0640 $(CONF_DEST)/*.new || exit 1 ;\
+		$(CHMOD) $(INSTALL_R) $(CONF_DEST)/*.new || exit 1 ;\
 		$(ECHO) "Warning: Older config files are preserved. Check new versions for changes!" ;\
 	fi ;\
-	! test -f $(LOG_DEST)/logfile && $(ECHO) Creating logfiles in $(LOG_DEST) || \
+	[ ! -f $(LOG_DEST)/logfile ] && $(ECHO) Creating logfiles in $(LOG_DEST) || \
 		$(ECHO) Checking logfiles in $(LOG_DEST) ;\
 	$(TOUCH) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
 	if [ x$$USER != x ]; then \
 		$(CHOWN) $$USER:$$GROUP_T $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
-	$(CHMOD) 0640 $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
+	$(CHMOD) $(INSTALL_R) $(LOG_DEST)/logfile $(LOG_DEST)/jarfile || exit 1 ;\
 	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
@@ -1010,7 +1004,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
 
 # rmdir is used as a precaution since it will not remove non-empty
-# directories. RH creates lock file and pid file.
+# directories. RH init script creates lock file and pid file.
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	$(ECHO) Starting Privoxy uninstallation
 	# KILL privoxy if running
@@ -1101,6 +1095,14 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.129  2002/10/20 07:15:12  hal9
+# Getting near the end (I hope) of install target updates:
+# - Rewrite RH init script to reflect configured values.
+# - Test for USER=root as well as UID=0
+# - Test for invalid group (probably needs more work).
+# - Add /usr to /usr/local test for when to install init scripts, etc.
+# - More testing on previous changes.
+#
 # Revision 1.128  2002/10/18 05:36:32  hal9
 # More install target fixes:
 # - Quick fix of log ownership on root install (lightly tested). If this goes
