@@ -1,9 +1,9 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.1 2001/05/13 21:57:07 administrator Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.1.1.1 2001/05/15 13:59:03 oes Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/project.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
  *
  * Purpose     :  Defines data structures which are widely used in the
  *                project.  Does not define any variables or functions
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:03  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 

@@ -1,7 +1,7 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.1.1.1 2001/05/15 13:58:54 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/jbsockets.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
  *
  * Purpose     :  Contains wrappers for system-specific sockets code,
  *                so that the rest of JunkBuster can be more
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.1 2001/05/13 21:57:06 adminis
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:54  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 

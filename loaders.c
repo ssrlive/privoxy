@@ -1,7 +1,7 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.1.1.1 2001/05/15 13:58:59 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/loaders.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.1 2001/05/13 21:57:06 administrat
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:59  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 

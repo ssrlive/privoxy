@@ -1,7 +1,7 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1 2001/05/13 21:57:07 administrator Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1.1.1 2001/05/15 13:59:04 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/ssplit.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
  *
  * Purpose     :  A function to split a string at specified deliminters.
  *
@@ -32,6 +32,9 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.1 2001/05/13 21:57:07 administrator
  *
  * Revisions   :
  *    $Log: ssplit.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:04  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 

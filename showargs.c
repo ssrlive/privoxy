@@ -1,7 +1,7 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.1 2001/05/13 21:57:07 administrator Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.1.1.1 2001/05/15 13:59:03 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/showargs.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
  *
  * Purpose     :  Contains various utility routines needed to 
  *                generate the show-proxy-args page.
@@ -33,6 +33,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.1 2001/05/13 21:57:07 administr
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:59:03  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 

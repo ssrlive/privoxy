@@ -1,7 +1,7 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.1 2001/05/13 21:57:06 administrator Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.1.1.1 2001/05/15 13:58:58 oes Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /home/administrator/cvs/ijb/loadcfg.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
  *
  * Purpose     :  Loads settings from the configuration file into
  *                global variables.  This file contains both the 
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.1 2001/05/13 21:57:06 administrat
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.1.1.1  2001/05/15 13:58:58  oes
+ *    Initial import of version 2.9.3 source tree
+ *
  *
  *********************************************************************/
 
