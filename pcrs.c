@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.4 2001/05/25 14:12:40 oes Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.6 2001/06/03 11:03:48 oes Exp $";
 
 /*********************************************************************
  *
@@ -43,6 +43,83 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.4 2001/05/25 14:12:40 oes Exp $";
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.6  2001/06/03 11:03:48  oes
+ *    Makefile/in
+ *
+ *    introduced cgi.c
+ *
+ *    actions.c:
+ *
+ *    adapted to new enlist_unique arg format
+ *
+ *    conf loadcfg.c
+ *
+ *    introduced confdir option
+ *
+ *    filters.c filtrers.h
+ *
+ *     extracted-CGI relevant stuff
+ *
+ *    jbsockets.c
+ *
+ *     filled comment
+ *
+ *    jcc.c
+ *
+ *     support for new cgi mechansim
+ *
+ *    list.c list.h
+ *
+ *    functions for new list type: "map"
+ *    extended enlist_unique
+ *
+ *    miscutil.c .h
+ *    introduced bindup()
+ *
+ *    parsers.c parsers.h
+ *
+ *    deleted const struct interceptors
+ *
+ *    pcrs.c
+ *    added FIXME
+ *
+ *    project.h
+ *
+ *    added struct map
+ *    added struct http_response
+ *    changes struct interceptors to struct cgi_dispatcher
+ *    moved HTML stuff to cgi.h
+ *
+ *    re_filterfile:
+ *
+ *    changed
+ *
+ *    showargs.c
+ *    NO TIME LEFT
+ *
+ *    Revision 1.5  2001/05/29 09:50:24  jongfoster
+ *    Unified blocklist/imagelist/permissionslist.
+ *    File format is still under discussion, but the internal changes
+ *    are (mostly) done.
+ *
+ *    Also modified interceptor behaviour:
+ *    - We now intercept all URLs beginning with one of the following
+ *      prefixes (and *only* these prefixes):
+ *        * http://i.j.b/
+ *        * http://ijbswa.sf.net/config/
+ *        * http://ijbswa.sourceforge.net/config/
+ *    - New interceptors "home page" - go to http://i.j.b/ to see it.
+ *    - Internal changes so that intercepted and fast redirect pages
+ *      are not replaced with an image.
+ *    - Interceptors now have the option to send a binary page direct
+ *      to the client. (i.e. ijb-send-banner uses this)
+ *    - Implemented show-url-info interceptor.  (Which is why I needed
+ *      the above interceptors changes - a typical URL is
+ *      "http://i.j.b/show-url-info?url=www.somesite.com/banner.gif".
+ *      The previous mechanism would not have intercepted that, and
+ *      if it had been intercepted then it then it would have replaced
+ *      it with an image.)
+ *
  *    Revision 1.4  2001/05/25 14:12:40  oes
  *    Fixed bug: Empty substitutes now detected
  *
@@ -518,6 +595,9 @@ pcrs_job *create_pcrs_job(pcre *pattern, pcre_extra *hints, int options, int glo
  *                It is the caller's responsibility to free the result when
  *                it's no longer needed.
  *
+ *                FIXME: MUST HANDLE SUBJECTS THAT ARE LONGER THAN subject_length
+                         CORRECTLY! --oes
+ *
  * Parameters  :
  *          1  :  job = the pcrs_job to be executed
  *          2  :  subject = the subject (== original) string
@@ -536,6 +616,7 @@ int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, cha
    pcrs_match matches[PCRS_MAX_MATCHES];
    char *result_offset;
 
+
    /* Sanity first */
    if (job == NULL || job->pattern == NULL || job->substitute == NULL)
    {
@@ -544,6 +625,7 @@ int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, cha
    }
 
    newsize=subject_length;
+
 
    /* Find.. */
    while ((submatches = pcre_exec(job->pattern, job->hints, subject, subject_length, offset, 0, offsets, 99)) > 0)
@@ -573,11 +655,13 @@ int pcrs_exec_substitution(pcrs_job *job, char *subject, int subject_length, cha
    if (submatches < -1) return submatches;   /* Pass pcre error through */
    matches_found = i;
 
+
    /* ..get memory ..*/
    if ((*result = (char *)malloc(newsize)) == NULL)   /* must be free()d by caller */
    {
       return PCRS_ERR_NOMEM;
    }
+
 
    /* ..and replace */
    offset = 0;
