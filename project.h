@@ -1,6 +1,6 @@
 #ifndef _PROJECT_H
 #define _PROJECT_H
-#define PROJECT_H_VERSION "$Id: project.h,v 1.11 2001/06/01 10:32:47 oes Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.12 2001/06/01 18:49:17 jongfoster Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.12  2001/06/01 18:49:17  jongfoster
+ *    Replaced "list_share" with "list" - the tiny memory gain was not
+ *    worth the extra complexity.
+ *
  *    Revision 1.11  2001/06/01 10:32:47  oes
  *    Added constants for anchoring selection bitmap
  *
@@ -310,19 +314,21 @@ struct iob
 #define ACTION_HIDE_REFERER    0x0020U /* sic - follow HTTP, not English */
 #define ACTION_HIDE_USER_AGENT 0x0040U
 #define ACTION_IMAGE           0x0080U
-#define ACTION_NO_COOKIE_READ  0x0100U
-#define ACTION_NO_COOKIE_SET   0x0200U
-#define ACTION_NO_POPUPS       0x0400U
-#define ACTION_VANILLA_WAFER   0x0800U
+#define ACTION_IMAGE_BLOCKER   0x0100U
+#define ACTION_NO_COOKIE_READ  0x0200U
+#define ACTION_NO_COOKIE_SET   0x0400U
+#define ACTION_NO_POPUPS       0x0800U
+#define ACTION_VANILLA_WAFER   0x1000U
 
-#define ACTION_STRING_FROM       0
-#define ACTION_STRING_REFERER    1
-#define ACTION_STRING_USER_AGENT 2
-#define ACTION_STRING_COUNT      3
+#define ACTION_STRING_FROM          0
+#define ACTION_STRING_IMAGE_BLOCKER 1
+#define ACTION_STRING_REFERER       2
+#define ACTION_STRING_USER_AGENT    3
+#define ACTION_STRING_COUNT         4
 
-#define ACTION_MULTI_ADD_HEADER  0
-#define ACTION_MULTI_WAFER       1
-#define ACTION_MULTI_COUNT       2
+#define ACTION_MULTI_ADD_HEADER     0
+#define ACTION_MULTI_WAFER          1
+#define ACTION_MULTI_COUNT          2
 
 
 struct current_action_spec
@@ -610,11 +616,6 @@ struct configuration_spec
 {
    int debug;
    int multi_threaded;
-
-#ifdef IMAGE_BLOCKING
-   int tinygif;              /* FIXME Should be an action */
-   const char *tinygifurl;   /* FIXME Should be an action */
-#endif /* def IMAGE_BLOCKING */
 
    const char *logfile;
 
