@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.114 2002/09/05 11:58:30 oes Exp $
+# $Id: GNUmakefile.in,v 1.115 2002/09/05 19:13:04 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -663,10 +663,15 @@ webserver: tidy
 	@$(ECHO) it will not remove obsolete documents.
 	@$(ECHO) -------------------------------------------------------
 
-	@$(ECHO) Uploading 
+	@$(ECHO) Uploading html
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
           $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
+
+	@$(ECHO) Uploading pdf
+	@cd doc/pdf;\
+          zip privoxy-pdf-docs *.pdf  ;\
+		scp -q privoxy-pdf-docs.zip ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/pdf
 
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
@@ -814,6 +819,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.115  2002/09/05 19:13:04  hal9
+# Migrate Karstens make snapshot stuff (not tested).
+#
 # Revision 1.114  2002/09/05 11:58:30  oes
 # Synced in some changes fromm the stable branch:
 #   From Revision 1.104.2.14  2002/08/10 11:19:37  oes:
