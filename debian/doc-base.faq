@@ -1,0 +1,11 @@
+Document: privoxy-faq
+Title: Privoxy Frequently Asked Questions
+Author: Privoxy Developers
+Abstract: The FAQ document gives users and developers alike answers to
+ frequently asked questions about Privoxy.  Privoxy is a filtering web
+ proxy.
+Section: Apps/Net
+
+Format: HTML
+Index: /usr/share/doc/privoxy/faq/index.html
+Files: /usr/share/doc/privoxy/faq/*.html

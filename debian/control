@@ -1,0 +1,21 @@
+Source: privoxy
+Section: web
+Priority: optional
+Maintainer: Roland Rosenfeld <roland@debian.org>
+Build-Depends: debhelper (>> 3.0.0), autoconf, libpcre3-dev
+Standards-Version: 3.5.6
+
+Package: privoxy
+Architecture: any
+Depends: ${shlibs:Depends}, logrotate, adduser
+Description: Privacy enhancing HTTP Proxy
+ Privoxy is an instrumentable HTTP proxy that filters the HTTP data
+ stream between web servers and browsers.  Privoxy can be used to
+ protect privacy, manage cookies, filter web page content, manage
+ access restrictions, and to discard such annoying Internet junk as
+ ads, banners, and pop-ups.  Or whatever other annoyances strike your
+ fancy.
+ .
+ Privoxy is a derivate of junkbuster, but it uses a different name
+ space and a different port (8118), so junkbuster and privoxy can
+ coexist on one system.

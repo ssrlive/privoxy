@@ -1,0 +1,4 @@
+etc/privoxy
+usr/sbin
+usr/share/doc/privoxy
+var/log/privoxy

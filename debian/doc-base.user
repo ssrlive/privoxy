@@ -1,0 +1,10 @@
+Document: privoxy-user
+Title: Privoxy User Manual
+Author: Privoxy Developers
+Abstract: The user manual gives users information on how to install,
+ configure and use Privoxy.  Privoxy is a filtering web proxy.
+Section: Apps/Net
+
+Format: HTML
+Index: /usr/share/doc/privoxy/user-manual/index.html
+Files: /usr/share/doc/privoxy/user-manual/*.html
