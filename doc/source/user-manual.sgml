@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.96 2002/04/27 05:32:00 hal9 Exp $
+ $Id: user-manual.sgml,v 1.97 2002/04/27 21:04:42 hal9 Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.96 2002/04/27 05:32:00 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.97 2002/04/27 21:04:42 hal9 Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -308,15 +308,15 @@ automatically start Privoxy in the boot process.
  configuration files will not migrate. The functionality of the old
  <filename>blockfile</filename>, <filename>cookiefile</filename> and
  <filename>imagelist</filename>, are now combined into the
- <quote>actions files</quote>.  <filename>default.action</filename>, 
- is the main actions file. Local exceptions should best be put into 
- <filename>user.action</filename>.
+ <ulink url="actions-file.html"><quote>actions files</quote></ulink>.  
+ <filename>default.action</filename>, is the main actions file. Local
+ exceptions should best be put into <filename>user.action</filename>.
 </para>
 <para>
- A <quote>filter file</quote> (typically <filename>default.filter</filename>)
- is new as of <application>Privoxy 2.9.x</application>, and provides some
- of the new sophistication (explained below). <filename>config</filename> is 
- much the same as before.
+ A <ulink url="filter-file.html"><quote>filter file</quote></ulink> (typically
+ <filename>default.filter</filename>) is new as of <application>Privoxy
+ 2.9.x</application>, and provides some of the new sophistication (explained
+ below). <filename>config</filename> is much the same as before.
 </para>
 <para>
  If upgrading from a 2.0.x version, you will have to use the new config 
@@ -359,9 +359,9 @@ automatically start Privoxy in the boot process.
   <para>
    The primary configuration file for cookie management, ad and banner 
    blocking, and many other aspects of <application>Privoxy</application>
-   configuration is in the <quote>actions</quote> files. It is strongly
-   recommended to become familiar with the new actions concept below, 
-   before modifying these files. Locally defined rules 
+   configuration is in the <ulink url="actions-file.html">actions
+   files</ulink>. It is strongly recommended to become familiar with the new
+   actions concept below, before modifying these files. Locally defined rules 
    should go into <filename>user.action</filename>.
   </para>
  </listitem> 
@@ -488,10 +488,10 @@ automatically start Privoxy in the boot process.
 <para>
  The included default configuration files should give a reasonable starting
  point. Most of the per site configuration is done in the
- <quote>actions</quote> files. These are where various cookie actions are
- defined, ad and banner blocking, and other aspects of
- <application>Privoxy</application> configuration. There are several such
- files included, with varying levels of aggressiveness. 
+ <ulink url="actions-file.html"><quote>actions</quote></ulink> files. These are
+ where various cookie actions are defined, ad and banner blocking, and other
+ aspects of <application>Privoxy</application> configuration. There are several
+ such files included, with varying levels of aggressiveness. 
 </para>
 
 <para>
@@ -508,9 +508,12 @@ automatically start Privoxy in the boot process.
 
 <para>
  Another feature where you will probably want to define exceptions for trusted
- sites is the popup-killing (through the <literal>+popup</literal> and
- <literal>+filter{popups}</literal> actions), because your favorite shopping,
- banking, or leisure site may need popups (explained below). 
+ sites is the popup-killing (through the <ulink
+ url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>and
+ <ulink
+ url="actions-file.html#FILTER-POPUPS"><quote>+filter{popups}</quote></ulink>
+ actions), because your favorite shopping, banking, or leisure site may need
+ popups (explained below). 
 </para>
 
 <para>
@@ -559,7 +562,7 @@ automatically start Privoxy in the boot process.
 
 <para>
  If the above paragraph sounds gibberish to you, you might want to <ulink
- url="configuration.html#ACTIONSFILE">read more about the actions concept</ulink>
+ url="actions-file.html#ACTIONSFILE">read more about the actions concept</ulink>
  or even dive deep into the <ulink url="appendix.html#ACTIONSANAT">Appendix
  on actions</ulink>.
 </para>
@@ -832,13 +835,17 @@ automatically start Privoxy in the boot process.
  please check all your configuration files on important issues.
 </para>
 ]]>
+
 </sect2>
+</sect1>
+<!--  ~  End section  ~  -->
 
 
-<!--   ~~~~~       New section      ~~~~~     -->
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 
-<sect2 id="config">
+<sect1 id="config">
 <title>The Main Configuration File</title>
+
 <para>
  Again, the main configuration file is named <filename>config</filename> on
  Linux/Unix/BSD and OS/2, and <filename>config.txt</filename> on Windows.
@@ -878,7 +885,7 @@ automatically start Privoxy in the boot process.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="conf-log-loc">
+<sect2 id="conf-log-loc">
 <title>Configuration and Log File Locations</title>
 
 <para>
@@ -889,7 +896,7 @@ automatically start Privoxy in the boot process.
 </para>
 
 
-<sect4 id="confdir"><title>confdir</title>
+<sect3 renderas="sect4" id="confdir"><title>confdir</title>
 
 <variablelist>
  <varlistentry>
@@ -932,10 +939,10 @@ automatically start Privoxy in the boot process.
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
 
-<sect4 id="logdir"><title>logdir</title>
+<sect3 renderas="sect4" id="logdir"><title>logdir</title>
 
 <variablelist>
  <varlistentry>
@@ -974,15 +981,15 @@ automatically start Privoxy in the boot process.
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="actionsfile"><title>
+<sect3 renderas="sect4" id="actionsfile"><title>
 actionsfile
 </title>
 <anchor id="default.action">
 <anchor id="standard.action">
 <anchor id="user.action">
-
+<!-- Note: slightly modified this section 04/28/02, hal. See NOTE. -->
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1026,7 +1033,7 @@ actionsfile
   <term>Notes:</term>
   <listitem>
    <para>
-    Multiple <literal>actionsfile</literal> lines are OK and are in fact recommended!
+    Multiple <literal>actionsfile</literal> lines are permitted, and are in fact recommended!
    </para>
    <para> 
     The default values include standard.action, which is used for internal
@@ -1035,14 +1042,17 @@ actionsfile
     <filename>user.action</filename>, where you can make your personal additions.
    </para>
    <para> 
-    There is no point in using <application>Privoxy</application> without an actions file.
+    Actions files are where all the per site and per URL configuration is done for 
+    ad blocking, cookie management, privacy considerations, etc.
+    There is no point in using <application>Privoxy</application> without at 
+    least one actions file.
    </para>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="filterfile"><title>filterfile</title>
+<sect3 renderas="sect4" id="filterfile"><title>filterfile</title>
 <anchor id="default.filter">
 <variablelist>
  <varlistentry>
@@ -1089,9 +1099,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="logfile"><title>logfile</title>
+<sect3 renderas="sect4" id="logfile"><title>logfile</title>
 
 <variablelist>
  <varlistentry>
@@ -1150,9 +1160,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="jarfile"><title>jarfile</title>
+<sect3 renderas="sect4" id="jarfile"><title>jarfile</title>
 
 <variablelist>
  <varlistentry>
@@ -1192,9 +1202,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="trustfile"><title>trustfile</title>
+<sect3 renderas="sect4" id="trustfile"><title>trustfile</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1246,9 +1256,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="user-manual"><title>user-manual</title>
+<sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1295,9 +1305,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
-
 </sect3>
+
+</sect2>
 
 <!--  ~  End section  ~  -->
 
@@ -1305,7 +1315,7 @@ actionsfile
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="local-set-up">
+<sect2 id="local-set-up">
 <title>Local Set-up Documentation</title>
 
   <para>
@@ -1314,7 +1324,7 @@ actionsfile
     you, what you block and why you do that, your policies etc.
    </para>
 
-<sect4 id="trust-info-url"><title>trust-info-url</title>
+<sect3 renderas="sect4" id="trust-info-url"><title>trust-info-url</title>
 
 <variablelist>
  <varlistentry>
@@ -1364,9 +1374,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="admin-address"><title>admin-address</title>
+<sect3 renderas="sect4" id="admin-address"><title>admin-address</title>
 
 <variablelist>
  <varlistentry>
@@ -1408,9 +1418,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="proxy-info-url"><title>proxy-info-url</title>
+<sect3 renderas="sect4" id="proxy-info-url"><title>proxy-info-url</title>
 
 <variablelist>
  <varlistentry>
@@ -1456,14 +1466,14 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
-
 </sect3>
+
+</sect2>
 <!--  ~  End section  ~  -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="debugging">
+<sect2 id="debugging">
 <title>Debugging</title>
 
  <para>
@@ -1473,7 +1483,7 @@ actionsfile
   command line option when debugging.
  </para>
 
-<sect4 id="debug"><title>debug</title>
+<sect3 renderas="sect4" id="debug"><title>debug</title>
 
 <variablelist>
  <varlistentry>
@@ -1550,9 +1560,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="single-threaded"><title>single-threaded</title>
+<sect3 renderas="sect4" id="single-threaded"><title>single-threaded</title>
 
 <variablelist>
  <varlistentry>
@@ -1594,13 +1604,13 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
-
 </sect3>
+
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="access-control">
+<sect2 id="access-control">
 <title>Access Control and Security</title>
 
  <para>
@@ -1608,7 +1618,7 @@ actionsfile
   of <application>Privoxy</application>'s configuration.
  </para>
 
-<sect4 id="listen-address"><title>listen-address</title>
+<sect3 renderas="sect4" id="listen-address"><title>listen-address</title>
 
 <variablelist>
  <varlistentry>
@@ -1626,6 +1636,7 @@ actionsfile
    <para>[<replaceable class="parameter">IP-Address</replaceable>]:<replaceable class="parameter">Port</replaceable></para>
   </listitem>
  </varlistentry>
+
  <varlistentry>
   <term>Default value:</term>
   <listitem>
@@ -1678,9 +1689,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="toggle"><title>toggle</title>
+<sect3 renderas="sect4" id="toggle"><title>toggle</title>
 
 <variablelist>
  <varlistentry>
@@ -1720,7 +1731,7 @@ actionsfile
     proxy. See <literal>enable-remote-toggle</literal>
     below. This is not really useful anymore, since toggling is much easier
     via <ulink url="http://config.privoxy.org/toggle">the web
-    interface</ulink> then via editing the <filename>conf</filename> file.
+    interface</ulink> than via editing the <filename>conf</filename> file.
    </para>
    <para>
     The windows version will only display the toggle icon in the system tray
@@ -1729,10 +1740,10 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
 
-<sect4 id="enable-remote-toggle"><title>enable-remote-toggle</title>
+<sect3 renderas="sect4" id="enable-remote-toggle"><title>enable-remote-toggle</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1786,10 +1797,10 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
 
-<sect4 id="enable-edit-actions"><title>enable-edit-actions</title>
+<sect3 renderas="sect4" id="enable-edit-actions"><title>enable-edit-actions</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -1838,9 +1849,9 @@ actionsfile
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="acls"><title>
+<sect3 renderas="sect4" id="acls"><title>
 ACLs: permit-access and deny-access</title>
 <anchor id="permit-acces">
 <anchor id="deny-acces">
@@ -1963,9 +1974,9 @@ ACLs: permit-access and deny-access</title>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="buffer-limit"><title>buffer-limit</title>
+<sect3 renderas="sect4" id="buffer-limit"><title>buffer-limit</title>
 
 <variablelist>
  <varlistentry>
@@ -2018,16 +2029,16 @@ ACLs: permit-access and deny-access</title>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
-
 </sect3>
+
+</sect2>
 
 <!--  ~  End section  ~  -->
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="forwarding">
+<sect2 id="forwarding">
 <title>Forwarding</title>
 
 <para>
@@ -2047,7 +2058,7 @@ ACLs: permit-access and deny-access</title>
  supports the SOCKS 4 and SOCKS 4A protocols.
 </para>
 
-<sect4 id="forward"><title>forward</title>
+<sect3 renderas="sect4" id="forward"><title>forward</title>
 <variablelist>
  <varlistentry>
   <term>Specifies:</term>
@@ -2126,9 +2137,9 @@ ACLs: permit-access and deny-access</title>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="socks"><title>
+<sect3 renderas="sect4" id="socks"><title>
 forward-socks4 and forward-socks4a</title>
 <anchor id="forward-socks4">
 <anchor id="forward-socks4a">
@@ -2218,9 +2229,9 @@ forward-socks4 and forward-socks4a</title>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
-<sect4 id="advanced-forwarding-examples"><title>Advanced Forwarding Examples</title>
+<sect3 renderas="sect4" id="advanced-forwarding-examples"><title>Advanced Forwarding Examples</title>
 
 <para>
  If you have links to multiple ISPs that provide various special content 
@@ -2294,16 +2305,16 @@ forward-socks4 and forward-socks4a</title>
  Squid normally uses port 3128. If unsure consult <literal>http_port</literal> in <filename>squid.conf</filename>.
 </para>
 
-</sect4>
-
 </sect3>
+
+</sect2>
 
 <!--  ~  End section  ~  -->
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="windows-gui">
+<sect2 id="windows-gui">
 <title>Windows GUI Options</title>
 <para>
  <application>Privoxy</application> has a number of options specific to the
@@ -2475,20 +2486,22 @@ forward-socks4 and forward-socks4a</title>
  <literal>
   <msgtext> 
    <literallayout>
-  #hide-console
+  #<emphasis>hide-console</emphasis>
    </literallayout>
   </msgtext> 
  </literal>
 </para>
 
-</sect3>
 </sect2>
+</sect1>
 
 <!--  ~  End section  ~  -->
 
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="actions-file"><title>Actions Files</title>
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+
+<sect1 id="actions-file"><title>Actions Files</title>
 
 <para>
  The actions files are used to define what actions
@@ -2516,18 +2529,18 @@ forward-socks4 and forward-socks4a</title>
 <para>
  An actions file typically has sections. Near the top, <quote>aliases</quote> are 
  optionally defined (discussed <ulink
- url="configuration.html#ALIASES">below</ulink>), then the default set of rules
+ url="actions-file.html#ALIASES">below</ulink>), then the default set of rules
  which will apply universally to all sites and pages. And then below that,
  exceptions to the defined universal policies. 
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
+<sect2>
 <title>Finding the Right Mix</title>
 <para>
- Note that some <link linkend="actions">actions</link> like cookie suppression
- or script disabling may render some sites unusable, which rely on these
- techniques to work properly. Finding the right mix of actions is not easy and
+ Note that some <link linkend="actions">actions</link>, like cookie suppression
+ or script disabling, may render some sites unusable that rely on these
+ techniques to work properly. Finding the right mix of actions is not always easy and
  certainly a matter of personal taste. In general, it can be said that the more
  <quote>aggressive</quote> your default settings (in the top section of the
  actions file) are, the more exceptions for <quote>trusted</quote> sites you
@@ -2543,10 +2556,10 @@ forward-socks4 and forward-socks4a</title>
  things. There just are too many variables, and sites are constantly changing.
  Sooner or later you will want to change the rules (and read this chapter again :).
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
+<sect2>
 <title>How to Edit</title>
 <para>
  The easiest way to edit the <quote>actions</quote> files is with a browser by
@@ -2558,10 +2571,10 @@ forward-socks4 and forward-socks4a</title>
  If you prefer plain text editing to GUIs, you can of course also directly edit the
  the actions files.
 </para>
-</sect3>
+</sect2>
 
 
-<sect3>
+<sect2>
 <title>How Actions are Applied to URLs</title>
 <para>
  Actions files are divided into sections. There are special sections,
@@ -2579,8 +2592,8 @@ forward-socks4 and forward-socks4a</title>
  of the section in which the pattern is located. If multiple matches for
  the same URL set the same action differently, the last match wins. If not, 
  the effects are aggregated (e.g. a URL might match both the 
- <ulink url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
- and <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink> actions).
+ <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>
+ and <ulink url="actions-file.html#BLOCK"><quote>+block</quote></ulink> actions).
  
 </para>
 
@@ -2593,10 +2606,10 @@ forward-socks4 and forward-socks4a</title>
  More detail on this is provided in the Appendix, <link linkend="ACTIONSANAT">
  Anatomy of an Action</link>.
 </para>
-</sect3>
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
+<sect2>
 <title>Patterns</title>
 <para>
  Generally, a pattern has the form <literal>&lt;domain&gt;/&lt;path&gt;</literal>,
@@ -2652,7 +2665,9 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 </variablelist>
 
-<sect4><title>The Domain Pattern</title>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3><title>The Domain Pattern</title>
 
 <para>
  The matching of the domain part offers some flexible options: if the
@@ -2738,9 +2753,13 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 </variablelist>
 
-</sect4>
+</sect3>
 
-<sect4><title>The Path Pattern</title>
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3><title>The Path Pattern</title>
 
 <para>
  <application>Privoxy</application> uses Perl compatible regular expressions
@@ -2772,16 +2791,16 @@ forward-socks4 and forward-socks4a</title>
  documents whose path starts with <literal>PaTtErN</literal> in
  <emphasis>exactly</emphasis> this capitalization.
 </para>
-</sect4>
-
 </sect3>
+
+</sect2>
 
 <!--  ~  End section  ~  -->
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect3 id="actions">
+<sect2 id="actions">
 <title>Actions</title>
 <para>
  All actions are disabled by default, until they are explicitly enabled
@@ -2894,7 +2913,7 @@ forward-socks4 and forward-socks4a</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect4 id="add-header">
+<sect3 renderas="sect4" id="add-header">
 <title><emphasis>+add-header</emphasis></title>
 
 <variablelist>
@@ -2946,11 +2965,11 @@ forward-socks4 and forward-socks4a</title>
   </listitem>
  </varlistentry>
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="block">
+<sect3 renderas="sect4" id="block">
 <title><emphasis>+block</emphasis></title>
 
 <variablelist>
@@ -3009,15 +3028,15 @@ forward-socks4 and forward-socks4a</title>
    <para> 
     A very important exception is if the URL <emphasis>matches both</emphasis>
     <quote>+block</quote> and <ulink
-    url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
+    url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
     then it will be handled by 
-    <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+    <ulink url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
     (see below). It is important to understand this process, in order 
     to understand how <application>Privoxy</application> is able to deal with 
     ads and other objectionable content.
    </para>
    <para>
-    The <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+    The <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
     action can also perform some of the 
     same functionality as <quote>+block</quote>, but by virtue of very 
     different programming techniques, and is most often used for different 
@@ -3027,11 +3046,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="deanimate-gifs">
+<sect3 renderas="sect4" id="deanimate-gifs">
 <title><emphasis>+deanimate-gifs</emphasis></title>
 
 <variablelist>
@@ -3087,10 +3106,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="downgrade-http-version">
+<sect3 renderas="sect4" id="downgrade-http-version">
 <title><emphasis>+downgrade-http-version</emphasis></title>
 
 <variablelist>
@@ -3144,10 +3163,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="fast-redirects">
+<sect3 renderas="sect4" id="fast-redirects">
 <title><emphasis>+fast-redirects</emphasis></title>
 
 <variablelist>
@@ -3217,11 +3236,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="filter">
+<sect3 renderas="sect4" id="filter">
 <title><emphasis>+filter</emphasis></title>
 
 <variablelist>
@@ -3351,7 +3370,7 @@ forward-socks4 and forward-socks4a</title>
    </para>
    <para>
     Filtering can achieve some of the effects as the 
-    <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink>
+    <ulink url="actions-file#BLOCK"><quote>+block</quote></ulink>
     action, i.e. it can be used to block ads and banners. In the overall 
     scheme of things, filtering is one of the first things <quote>Privoxy</quote> 
     does with a web page. So other most other actions are applied to the 
@@ -3361,11 +3380,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-forwarded-for-headers">
+<sect3 renderas="sect4" id="hide-forwarded-for-headers">
 <title><emphasis>+hide-forwarded-for-headers</emphasis></title>
 
 <variablelist>
@@ -3415,11 +3434,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-from-header">
+<sect3 renderas="sect4" id="hide-from-header">
 <title><emphasis>+hide-from-header</emphasis></title>
 
 <variablelist>
@@ -3466,7 +3485,7 @@ forward-socks4 and forward-socks4a</title>
    <para>
     The keyword <quote>block</quote> will completely remove the header 
     (not to be confused with the <ulink
-    url="configuration.html#BLOCK"><quote>+block</quote></ulink> action).
+    url="actions-file.html#BLOCK"><quote>+block</quote></ulink> action).
     Alternately, you can specify any value you prefer to send to the web
     server.
    </para>
@@ -3474,11 +3493,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-referer">
+<sect3 renderas="sect4" id="hide-referer">
 <title><emphasis>+hide-referer</emphasis></title>
 <anchor id="hide-referrer">
 <variablelist>
@@ -3539,11 +3558,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="hide-user-agent">
+<sect3 renderas="sect4" id="hide-user-agent">
 <title><emphasis>+hide-user-agent</emphasis></title>
 
 <variablelist>
@@ -3596,10 +3615,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="handle-as-image">
+<sect3 renderas="sect4" id="handle-as-image">
 <title><emphasis>+handle-as-image</emphasis></title>
 
 <variablelist>
@@ -3649,10 +3668,10 @@ forward-socks4 and forward-socks4a</title>
     <quote>+block</quote>ed, in which case a user definable image can
     be sent rather than a HTML page. This is integral to the whole concept of
     ad blocking: the URL must match <emphasis>both</emphasis> a <ulink
-    url="configuration.html#BLOCK"><quote>+block</quote></ulink> rule,
+    url="actions-file.html#BLOCK"><quote>+block</quote></ulink> rule,
     <emphasis>and</emphasis> <quote>+handle-as-image</quote>.
     (See <ulink
-    url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+    url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
     below for control over what will actually be displayed by the browser.)
    </para>
    <para>
@@ -3662,11 +3681,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="set-image-blocker">
+<sect3 renderas="sect4" id="set-image-blocker">
 <title><emphasis>+set-image-blocker</emphasis></title>
 
 <variablelist>
@@ -3683,9 +3702,9 @@ forward-socks4 and forward-socks4a</title>
   <listitem>
    <para>
     Decide what to do with URLs that end up tagged with <emphasis>both</emphasis> 
-    <ulink url="configuration.html#BLOCK"><quote>+block</quote></ulink>
+    <ulink url="actions-file.html#BLOCK"><quote>+block</quote></ulink>
     and <ulink
-    url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
+    url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>,
     e.g an advertisement.
    </para>
   </listitem>
@@ -3737,10 +3756,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="limit-connect">
+<sect3 renderas="sect4" id="limit-connect">
 <title><emphasis>+limit-connect</emphasis></title>
 
 <variablelist>
@@ -3812,10 +3831,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="prevent-compression">
+<sect3 renderas="sect4" id="prevent-compression">
 <title><emphasis>+prevent-compression</emphasis></title>
 
 <variablelist>
@@ -3861,10 +3880,10 @@ forward-socks4 and forward-socks4a</title>
    <para>
     Some websites do this, which can be a problem for
     <application>Privoxy</application>, since 
-    <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>,
-    <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+    <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>,
+    <ulink url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
     and <ulink
-    url="configuration.html#GIF-DEANIMATE"><quote>+gif-deanimate</quote></ulink>
+    url="actions-file.html#GIF-DEANIMATE"><quote>+gif-deanimate</quote></ulink>
     will not work on compressed data. This will slow down connections to those
     websites, though. Default typically is to turn
     <quote>prevent-compression</quote> on.
@@ -3873,10 +3892,10 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="session-cookies-only">
+<sect3 renderas="sect4" id="session-cookies-only">
 <title><emphasis>+session-cookies-only</emphasis></title>
 
 <variablelist>
@@ -3936,11 +3955,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="prevent-reading-cookies">
+<sect3 renderas="sect4" id="prevent-reading-cookies">
 <title><emphasis>+prevent-reading-cookies</emphasis></title>
 
 <variablelist>
@@ -3987,7 +4006,7 @@ forward-socks4 and forward-socks4a</title>
    <para>
     Often used in conjunction with <quote>+prevent-setting-cookies</quote> to 
     disable cookies completely. Note that 
-    <ulink url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
+    <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
     requires these to both be disabled (or else it never gets any cookies to cache).
    </para>
    <para>
@@ -3999,11 +4018,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="prevent-setting-cookies">
+<sect3 renderas="sect4" id="prevent-setting-cookies">
 <title><emphasis>+prevent-setting-cookies</emphasis></title>
 
 <variablelist>
@@ -4055,11 +4074,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
-<!--   ~~~~~       Nvarlistentryew section      ~~~~~     -->
-<sect4 id="kill-popup">
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="kill-popup">
 <title><emphasis>+kill-popups<anchor id="kill-popups"></emphasis></title>
 <variablelist>
  <varlistentry>
@@ -4118,11 +4137,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="send-vanilla-wafer">
+<sect3 renderas="sect4" id="send-vanilla-wafer">
 <title><emphasis>+send-vanilla-wafer</emphasis></title>
 
 <variablelist>
@@ -4175,11 +4194,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="send-wafer">
+<sect3 renderas="sect4" id="send-wafer">
 <title><emphasis>+send-wafer</emphasis></title>
 
 <variablelist>
@@ -4230,11 +4249,11 @@ forward-socks4 and forward-socks4a</title>
  </varlistentry>
 
 </variablelist>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4>
+<sect3>
 <title>Summary</title>
 <para>
  Note that many of these actions have the potential to cause a page to
@@ -4245,11 +4264,11 @@ forward-socks4 and forward-socks4a</title>
  linkend="ACTIONSANAT">Appendix</link> for a brief example on troubleshooting
  actions.
 </para>
-</sect4>
+</sect3>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect4 id="act-examples" renderas="sect3">
+<sect3 renderas="sect2" id="act-examples">
 <title>Sample Actions Files</title>
 <para>
  Remember that the meaning of any of the above references is reversed by preceding
@@ -4288,7 +4307,7 @@ for-privoxy-version=3.0
 
 
 ##########################################################################
-# <ulink url="configuration.html#ALIASES">Aliases</ulink> must be defined *before* they are used. These are
+# <ulink url="actions-file.html#ALIASES">Aliases</ulink> must be defined *before* they are used. These are
 # easier to remember, and can combine several actions into one. Once 
 # defined they can be used just like any built-in action -- but within 
 # this file only! Aliases do not require a + or - sign.
@@ -4321,36 +4340,36 @@ for-privoxy-version=3.0
 # (unless an alias has been defined without this).
 ##########################################################################
  { \
- <ulink url="configuration.html#ADD-HEADER">-add-header</ulink> \
- <ulink url="configuration.html#BLOCK">-block</ulink> \
- <ulink url="configuration.html#DEANIMATE-GIFS">-deanimate-gifs</ulink> \
- <ulink url="configuration.html#DOWNGRADE-HTTP-VERSION">-downgrade-http-version</ulink> \
- <ulink url="configuration.html#FAST-REDIRECTS">+fast-redirects</ulink> \
- <ulink url="configuration.html#FILTER-HTML-ANNOYANCES">+filter{html-annoyances}</ulink> \
- <ulink url="configuration.html#FILTER-JS-ANNOYANCES">+filter{js-annoyances}</ulink> \
- <ulink url="configuration.html#FILTER-CONTENT-COOKIES">-filter{content-cookies}</ulink> \
- <ulink url="configuration.html#FILTER-POPUPS">-filter{popups}</ulink> \
- <ulink url="configuration.html#FILTER-WEBBUGS">+filter{webbugs}</ulink> \
- <ulink url="configuration.html#FILTER-REFRESH-TAGS">-filter{refresh-tags}</ulink> \
- <ulink url="configuration.html#FILTER-FUN">-filter{fun}</ulink> \
- <ulink url="configuration.html#FILTER-NIMDA">+filter{nimda}</ulink> \
- <ulink url="configuration.html#FILTER-BANNERS-BY-SIZE">+filter{banners-by-size}</ulink> \
- <ulink url="configuration.html#FILTER-SHOCKWAVE-FLASH">-filter{shockwave-flash}</ulink> \
- <ulink url="configuration.html#FILTER-CRUDE-PARENTAL">-filter{crude-prental}</ulink> \
- <ulink url="configuration.html#HIDE-FORWARDED-FOR-HEADERS">+hide-forwarded-for-headers</ulink> \
- <ulink url="configuration.html#HIDE-FROM-HEADER">+hide-from-header{block}</ulink> \
- <ulink url="configuration.html#HIDE-REFERER">-hide-referrer</ulink> \
- <ulink url="configuration.html#HIDE-USER-AGENT">-hide-user-agent</ulink> \
- <ulink url="configuration.html#HANDLE-AS-IMAGE">-handle-as-image</ulink> \
- <ulink url="configuration.html#SET-IMAGE-BLOCKER">+set-image-blocker{pattern}</ulink> \
- <ulink url="configuration.html#LIMIT-CONNECT">-limit-connect</ulink> \
- <ulink url="configuration.html#PREVENT-COMPRESSION">+prevent-compression</ulink> \
- <ulink url="configuration.html#SESSION-COOKIES-ONLY">-session-cookies-only</ulink> \
- <ulink url="configuration.html#PREVENT-READING-COOKIES">-prevent-reading-cookies</ulink> \
- <ulink url="configuration.html#PREVENT-SETTING-COOKIES">-prevent-setting-cookies</ulink> \
- <ulink url="configuration.html#KILL-POPUPS">-kill-popups</ulink> \
- <ulink url="configuration.html#SEND-VANILLA-WAFER">-send-vanilla-wafer</ulink> \
- <ulink url="configuration.html#SEND-WAFER">-send-wafer</ulink> \
+ <ulink url="actions-file.html#ADD-HEADER">-add-header</ulink> \
+ <ulink url="actions-file.html#BLOCK">-block</ulink> \
+ <ulink url="actions-file.html#DEANIMATE-GIFS">-deanimate-gifs</ulink> \
+ <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION">-downgrade-http-version</ulink> \
+ <ulink url="actions-file.html#FAST-REDIRECTS">+fast-redirects</ulink> \
+ <ulink url="actions-file.html#FILTER-HTML-ANNOYANCES">+filter{html-annoyances}</ulink> \
+ <ulink url="actions-file.html#FILTER-JS-ANNOYANCES">+filter{js-annoyances}</ulink> \
+ <ulink url="actions-file.html#FILTER-CONTENT-COOKIES">-filter{content-cookies}</ulink> \
+ <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> \
+ <ulink url="actions-file.html#FILTER-WEBBUGS">+filter{webbugs}</ulink> \
+ <ulink url="actions-file.html#FILTER-REFRESH-TAGS">-filter{refresh-tags}</ulink> \
+ <ulink url="actions-file.html#FILTER-FUN">-filter{fun}</ulink> \
+ <ulink url="actions-file.html#FILTER-NIMDA">+filter{nimda}</ulink> \
+ <ulink url="actions-file.html#FILTER-BANNERS-BY-SIZE">+filter{banners-by-size}</ulink> \
+ <ulink url="actions-file.html#FILTER-SHOCKWAVE-FLASH">-filter{shockwave-flash}</ulink> \
+ <ulink url="actions-file.html#FILTER-CRUDE-PARENTAL">-filter{crude-prental}</ulink> \
+ <ulink url="actions-file.html#HIDE-FORWARDED-FOR-HEADERS">+hide-forwarded-for-headers</ulink> \
+ <ulink url="actions-file.html#HIDE-FROM-HEADER">+hide-from-header{block}</ulink> \
+ <ulink url="actions-file.html#HIDE-REFERER">-hide-referrer</ulink> \
+ <ulink url="actions-file.html#HIDE-USER-AGENT">-hide-user-agent</ulink> \
+ <ulink url="actions-file.html#HANDLE-AS-IMAGE">-handle-as-image</ulink> \
+ <ulink url="actions-file.html#SET-IMAGE-BLOCKER">+set-image-blocker{pattern}</ulink> \
+ <ulink url="actions-file.html#LIMIT-CONNECT">-limit-connect</ulink> \
+ <ulink url="actions-file.html#PREVENT-COMPRESSION">+prevent-compression</ulink> \
+ <ulink url="actions-file.html#SESSION-COOKIES-ONLY">-session-cookies-only</ulink> \
+ <ulink url="actions-file.html#PREVENT-READING-COOKIES">-prevent-reading-cookies</ulink> \
+ <ulink url="actions-file.html#PREVENT-SETTING-COOKIES">-prevent-setting-cookies</ulink> \
+ <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> \
+ <ulink url="actions-file.html#SEND-VANILLA-WAFER">-send-vanilla-wafer</ulink> \
+ <ulink url="actions-file.html#SEND-WAFER">-send-wafer</ulink> \
  }
  / # forward slash will match *all* potential URL patterns. 
 
@@ -4378,14 +4397,14 @@ for-privoxy-version=3.0
 
 # These sites require pop-ups too :(  We'll combine our 'shop' 
 # alias with two other actions into one rule to allow all popups.
- { shop <ulink url="configuration.html#KILL-POPUPS">-kill-popups</ulink> <ulink url="configuration.html#FILTER-POPUPS">-filter{popups}</ulink> }
+ { shop <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> }
  .dabs.com
  .overclockers.co.uk
 
 
 # The 'Fast-redirects' action breaks some sites. Disable this action
 # for these known sensitive sites:
- { <ulink url="configuration.html#FAST-REDIRECTS">-fast-redirects</ulink> }
+ { <ulink url="actions-file.html#FAST-REDIRECTS">-fast-redirects</ulink> }
  login.yahoo.com
  edit.europe.yahoo.com
  .google.com
@@ -4396,7 +4415,7 @@ for-privoxy-version=3.0
 
 # Define which file types will be treated as images. Important
 # for ad blocking.
- { <ulink url="configuration.html#HANDLE-AS-IMAGE">+handle-as-image</ulink> }
+ { <ulink url="actions-file.html#HANDLE-AS-IMAGE">+handle-as-image</ulink> }
  /.*\.(gif|jpe?g|png|bmp|ico)
 
 
@@ -4404,7 +4423,7 @@ for-privoxy-version=3.0
 # our alias that we use here will block these as well as force 
 # them to be treated as images. This combination of actions is 
 # important for ad blocking. What the browser will show instead is 
-# determined by the setting of <ulink url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+# determined by the setting of <ulink url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
  { +imageblock }
  ar.atwola.com 
  .ad.doubleclick.net
@@ -4419,7 +4438,7 @@ for-privoxy-version=3.0
 # These will just simply be blocked. They will generate the BLOCKED
 # banner page, if matched. Heavy use of wildcards and regular 
 # expressions in this example. Enable block action:
- { <ulink url="configuration.html#BLOCK">+block</ulink> }
+ { <ulink url="actions-file.html#BLOCK">+block</ulink> }
  ad*.
  .*ads.
  banner?.
@@ -4433,7 +4452,7 @@ for-privoxy-version=3.0
 # sites we DO NOT want blocked via the wildcards and regular expressions. 
 # Now let's set exceptions to the exceptions so the good guys get better 
 # treatment. Disable block action:
- { <ulink url="configuration.html#BLOCK">-block</ulink> }
+ { <ulink url="actions-file.html#BLOCK">-block</ulink> }
  advogato.org
  adsl.
  ad[ud]*.
@@ -4452,7 +4471,7 @@ for-privoxy-version=3.0
 # Notice we don't have to name the individual filter 
 # identifiers -- we just turn them all off in one fell swoop.
 # Disable all filters for this one site:
- { <ulink url="configuration.html#FILTER">-filter</ulink> }
+ { <ulink url="actions-file.html#FILTER">-filter</ulink> }
  .sourceforge.net
    </literallayout>
   </msgtext> 
@@ -4506,17 +4525,17 @@ for-privoxy-version=3.0
 
 
 # My ISP uses obnoxious self promoting images on many pages.
-# Nuke them :) Note that <ulink url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> need not be specified,
+# Nuke them :) Note that <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> need not be specified,
 # since all URLs ending in .gif will be tagged as images by the
 # general rules in default.action anyway.
- { <ulink url="configuration.html#BLOCK">+block</ulink> }
+ { <ulink url="actions-file.html#BLOCK">+block</ulink> }
  www.my-isp-example.com/logo[0-9].gif
 
 # Say the site where you do your homebanking needs to open
 # popup windows, but you have chosen to kill popups by
 # default. This will allow it for your-example-bank.com:
 #
- { <ulink url="configuration.html#FILTER-POPUPS">-filter{popups}</ulink> <ulink url="configuration.html#KILL-POPUPS">-kill-popups</ulink> }
+ { <ulink url="actions-file.html#FILTER-POPUPS">-filter{popups}</ulink> <ulink url="actions-file.html#KILL-POPUPS">-kill-popups</ulink> }
  .my-example-bank.com
 
 # This site is delicate, and requires kid-glove 
@@ -4528,14 +4547,14 @@ for-privoxy-version=3.0
  </literal>
 </para>
 
-</sect4>
 </sect3>
+</sect2>
 
 <!--  ~  End section  ~  -->
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="aliases">
+<sect2 id="aliases">
 <title>Aliases</title>
 <para>
  Custom <quote>actions</quote>, known to <application>Privoxy</application>
@@ -4618,14 +4637,16 @@ for-privoxy-version=3.0
 
 </para>
 
-</sect3>
 </sect2>
+</sect1>
 
 <!--  ~  End section  ~  -->
 
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="filter-file">
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+
+<sect1 id="filter-file">
 <title>The Filter File</title>
 <para>
  Any web page can be dynamically modified with the filter file. This
@@ -4727,11 +4748,11 @@ for-privoxy-version=3.0
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
-<title>The +filter Action</title>
+<sect2>
+<title>The <emphasis>+filter</emphasis> Action</title>
 <para>
  Filters are enabled with the <ulink
- url="configuration.html#FILTER"><quote>+filter</quote></ulink> action from within 
+ url="actions-file.html#FILTER"><quote>+filter</quote></ulink> action from within 
  one of the actions files. <quote>+filter</quote> requires one parameter, which 
  should match one of the section identifiers in the filter file itself. Example:
 </para>
@@ -4747,9 +4768,9 @@ for-privoxy-version=3.0
  default, unless they are explicity enabled in one of the actions files.
 </para>
 
-</sect3>
-
 </sect2>
+
+</sect1>
 
 <!--  ~  End section  ~  -->
 
@@ -4757,7 +4778,7 @@ for-privoxy-version=3.0
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2>
+<sect1 id="templates">
 <title>Templates</title>
 <para>
  When <application>Privoxy</application> displays one of its internal 
@@ -4777,8 +4798,6 @@ for-privoxy-version=3.0
  may be customized or replaced with something else if desired.
 
 </para>
-</sect2>
-
 </sect1>
 
 <!--  ~  End section  ~  -->
@@ -5293,13 +5312,13 @@ Requests</title>
   <para>
    Next, <application>Privoxy</application> checks to see if the URL 
    matches any <ulink
-   url="configuration.html#BLOCK"><quote>+block</quote></ulink> patterns. If
+   url="actions-file.html#BLOCK"><quote>+block</quote></ulink> patterns. If
    so, the URL is then blocked, and the remote web server will not be contacted.
-   <ulink url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> 
+   <ulink url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink> 
    is then checked and if it does not match, an 
    HTML <quote>BLOCKED</quote> page is sent back. Otherwise, if it does match,
    an image is returned. The type of image depends on the setting of <ulink
-   url="configuration.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
+   url="actions-file.html#SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></ulink>
    (blank, checkerboard pattern, or an HTTP redirect to an image elsewhere).
   </para>
  </listitem> 
@@ -5312,7 +5331,7 @@ Requests</title>
  <listitem>
   <para>
    If the URL pattern matches the <ulink
-   url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink> action,
+   url="actions-file.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink> action,
    it is then processed. Unwanted parts of the requested URL are stripped.
   </para>
  </listitem> 
@@ -5320,7 +5339,7 @@ Requests</title>
   <para>
    Now the rest of the client browser's request headers are processed. If any
    of these match any of the relevant actions (e.g. <ulink
-   url="configuration.html#HIDE-USER-AGENT"><quote>+hide-user-agent</quote></ulink>,
+   url="actions-file.html#HIDE-USER-AGENT"><quote>+hide-user-agent</quote></ulink>,
    etc.), headers are suppressed or forged as determined by these actions and
    their parameters.
   </para>
@@ -5336,24 +5355,24 @@ Requests</title>
    First, the server headers are read and processed to determine, among other
    things, the MIME type (document type) and encoding. The headers are then
    filtered as deterimed by the 
-   <ulink url="configuration.html#PREVENT-SETTING-COOKIES"><quote>+prevent-setting-cookies</quote></ulink>,
-   <ulink url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
-   and <ulink url="configuration.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
+   <ulink url="actions-file.html#PREVENT-SETTING-COOKIES"><quote>+prevent-setting-cookies</quote></ulink>,
+   <ulink url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>,
+   and <ulink url="actions-file.html#DOWNGRADE-HTTP-VERSION"><quote>+downgrade-http-version</quote></ulink>
    actions.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If the <ulink url="configuration.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
+   If the <ulink url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink>
    action applies, and it is an HTML or JavaScript document, the popup-code in the
    response is filtered on-the-fly as it is received.
   </para>
  </listitem> 
  <listitem>
   <para>
-   If a <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+   If a <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
    or <ulink
-   url="configuration.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   url="actions-file.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
    action applies (and the document type fits the action), the rest of the page is
    read into memory (up to a configurable limit). Then the filter rules (from
    <filename>default.filter</filename>) are processed against the buffered
@@ -5364,9 +5383,9 @@ Requests</title>
    <application>Privoxy</application> back to your browser. 
   </para>
   <para>
-   If neither <ulink url="configuration.html#FILTER"><quote>+filter</quote></ulink>
+   If neither <ulink url="actions-file.html#FILTER"><quote>+filter</quote></ulink>
    or <ulink
-   url="configuration.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
+   url="actions-file.html#DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></ulink>
    matches, then <application>Privoxy</application> passes the raw data through 
    to the client browser as it becomes available.
   </para>
@@ -5394,8 +5413,8 @@ Requests</title>
 
 <para>
  The way <application>Privoxy</application> applies 
- <ulink url="configuration.html#ACTIONS"><quote>actions</quote></ulink>
- and <ulink url="configuration.html#FILTER"><quote>filters</quote></ulink>
+ <ulink url="actions-file.html#ACTIONS"><quote>actions</quote></ulink>
+ and <ulink url="actions-file.html#FILTER"><quote>filters</quote></ulink>
  to any given URL can be complex, and not always so
  easy to understand what is happening. And sometimes we need to be able to
  <emphasis>see</emphasis> just what <application>Privoxy</application> is
@@ -5425,7 +5444,7 @@ Requests</title>
  <application>Privoxy</application> will tell us 
  how the current configuration will handle it. This will not
  help with filtering effects (i.e. the <ulink
- url="configuration.html#FILTER"><quote>+filter</quote></ulink> action) from
+ url="actions-file.html#FILTER"><quote>+filter</quote></ulink> action) from
  the <filename>default.filter</filename> file since this is handled very
  differently and not so easy to trap! It also will not tell you about any other
  URLs that may be embedded within the URL you are testing. For instance, images
@@ -5474,7 +5493,7 @@ Requests</title>
 
 <para>
  This tells us how we have defined our 
- <ulink url="configuration.html#ACTIONS"><quote>actions</quote></ulink>, and
+ <ulink url="actions-file.html#ACTIONS"><quote>actions</quote></ulink>, and
  which ones match for our example, <quote>google.com</quote>. The first listing
  is any matches for the <filename>standard.action</filename> file. No hits at
  all here on <quote>standard</quote>. Then next is <quote>default</quote>, or
@@ -5492,11 +5511,11 @@ Requests</title>
  apply to. Last match wins. Just below this then are two explicit matches for
  <quote>.google.com</quote>. The first is negating our previous cookie setting, 
  which was for <ulink
- url="configuration.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
+ url="actions-file.html#SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></ulink>
  (i.e. not persistent). So we will allow persistent cookies for google. The
  second turns <emphasis>off</emphasis> any 
  <ulink
- url="configuration.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
+ url="actions-file.html#FAST-REDIRECTS"><quote>+fast-redirects</quote></ulink>
  action, allowing this to take place unmolested. Note that there is a leading
  dot here -- <quote>.google.com</quote>. This will match any hosts and
  sub-domains, in the google.com domain also, such as
@@ -5560,7 +5579,7 @@ Requests</title>
  matched three different times. Each as an <quote>+block +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
  <quote>+imageblock</quote>. (<ulink
- url="configuration.html#ALIASES"><quote>Aliases</quote></ulink> are defined in
+ url="actions-file.html#ALIASES"><quote>Aliases</quote></ulink> are defined in
  the first section of the actions file and typically used to combine more 
  than one action.)
 </para>
@@ -5572,10 +5591,10 @@ Requests</title>
  though ;-) Note that if you want an ad or obnoxious 
  URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
  is done here -- as both a <ulink
- url="configuration.html#BLOCK"><quote>+block</quote></ulink>
+ url="actions-file.html#BLOCK"><quote>+block</quote></ulink>
  <emphasis>and</emphasis> an 
  <ulink
- url="configuration.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>.
+ url="actions-file.html#HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></ulink>.
  The custom alias <quote>+imageblock</quote> just simplifies the process and make 
  it more readable.
 </para>
@@ -5711,6 +5730,10 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.97  2002/04/27 21:04:42  hal9
+ -Rewrite of Actions File example.
+ -Add section for user-manual directive in config.
+
  Revision 1.96  2002/04/27 05:32:00  hal9
  -Add short section to Filter Files to tie in with +filter action.
  -Start rewrite of examples in Actions Examples (not finished).
