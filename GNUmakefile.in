@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.66 2002/04/06 20:28:21 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.67 2002/04/07 05:31:42 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -539,7 +539,11 @@ dok-readme: doc/source/ldpOK.dsl
 	cd doc/source && $(DB) -V nochunks readme.sgml > tmp.html &&\
 	$(WDUMP) tmp.html > ../../README && rm -rf tmp.html
 
-dok: dok-devel dok-user dok-faq dok-man dok-readme
+# webserver files
+dok-webserver: doc/source/ldpOK.dsl
+	cd doc/source/webserver && $(DB) -V nochunks index.sgml > ../../webserver/index2.html
+
+dok: dok-devel dok-user dok-faq dok-man dok-readme dok-webserver
 # kludge to force recreation on next run. Rodgrigo?
 	@rm -f doc/source/ldpOK.dsl
 	@$(ECHO) Documentation created.
@@ -773,6 +777,14 @@ install: all
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.67  2002/04/07 05:31:42  hal9
+# Add 'dok-release' target:
+# -Set doc entities to VERSION and CODE_STATUS during make.
+# -Set doc conditional content flags (stable vs non-stable).
+# A separate target for the time being but needs to be incorporated into
+# dok build at some point.
+# -Filter out a spurious ^G from new man page > html converion in man2html.
+#
 # Revision 1.66  2002/04/06 20:28:21  jongfoster
 # Prettifying groff2html.
 # Using GNU Make's conditional makefile feature rather than shell "if"s.
