@@ -89,29 +89,14 @@
 #    Junkbuster was compiled with pcrs support
 #  trust-support:
 #    Junkbuster was compiled with trust support
-#  split-args:
-#    Junkbuster was compiled with #define SPLIT_PROXY_ARGS
-#    In this case, the following symbols are available:
-#    actions-filename:
-#      The path to the actions file.
-#    re-filter-filename:
-#      The path to the re_filter file. Only available if
-#      pcrs-support is set
-#    trust-filename:
-#      The path to the trust file.Only available if
-#      trust-support is set
-#  no-split-args:
-#    Junkbuster was not compiled with #define SPLIT_PROXY_ARGS
-#    In this case, the following symbols are available:
-#    alist:
-#      The contents of the actionsfile
-#    rlist:
-#      The contents of the re_filterfile. Only available if
-#      pcrs-support is set    
-#    tlist:
-#      The contents of the trustfile. Only available if
-#      trust-support is set
-#
+#  actions-filename:
+#    The path to the actions file.
+#  re-filter-filename:
+#    The path to the re_filter file. Only available if
+#    pcrs-support is set
+#  trust-filename:
+#    The path to the trust file.Only available if
+#    trust-support is set
 <html>
 
 <head>
@@ -168,7 +153,7 @@
         <blockquote>
 <!-- @if-have-stats-start -->
         @requests-blocked@ out of @requests-received@ requests have been blocked,
-        which equals a block rate of @percent-blocked@.
+        which equals a block rate of @percent-blocked@%.
 <!-- if-have-stats-end@ -->
 <!-- @if-have-no-stats-start -->
         There haven't been any requests so far.
@@ -177,7 +162,6 @@
     </tr>
 <!-- if-statistics-end@ -->
 
-<!-- @if-split-args-start -->
     <tr>
       <td bgcolor=#eeeeee>
         <h2>The following files are in use:</h2>
@@ -193,46 +177,109 @@
         </ul>
       </td>
     </tr>
-<!-- if-split-args-end@ -->
 
-<!-- @if-no-split-args-start -->
     <tr>
       <td bgcolor=#eeeeee>
-        <h2>Actions List:</h2>
-        <blockquote><pre>@alist@</pre></blockquote>
+        <h2>Conditional #defines:</h2>
+          <table border=1>
+          <tr> 
+            <th>#define</th> <th>Enabled?</th> <th>Effects when enabled</th>
+          </tr>
+          <tr>
+             <td><code>FEATURE_PTHREAD</code></td>
+             <td>@if-FEATURE_PTHREAD-then@ Yes @else-not-FEATURE_PTHREAD@ No @endif-FEATURE_PTHREAD@</td>
+             <td>Use POSIX threads rather than native threads</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_ACL</code></td>
+             <td>@if-FEATURE_ACL-then@ Yes @else-not-FEATURE_ACL@ No @endif-FEATURE_ACL@</td>
+             <td>Allows the use of an ACL to control access to the proxy by IP address.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_COOKIE_JAR</code></td>
+             <td>@if-FEATURE_COOKIE_JAR-then@ Yes @else-not-FEATURE_COOKIE_JAR@ No @endif-FEATURE_COOKIE_JAR@</td>
+             <td>Allows the use of a "cookie jar" file to capture cookies.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_DENY_GZIP</code></td>
+             <td>@if-FEATURE_DENY_GZIP-then@ Yes @else-not-FEATURE_DENY_GZIP@ No @endif-FEATURE_DENY_GZIP@</td>
+             <td>Prevents requests from being compressed.  This means that all 
+                 sites can be filtered through +filter and +no-popups, but it
+                 wastes bandwidth.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_FAST_REDIRECTS</code></td>
+             <td>@if-FEATURE_FAST_REDIRECTS-then@ Yes @else-not-FEATURE_FAST_REDIRECTS@ No @endif-FEATURE_FAST_REDIRECTS@</td>
+             <td>Allows the +fast-redirects action, to bypass redirect and logging scripts.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_FORCE_LOAD</code></td>
+             <td>@if-FEATURE_FORCE_LOAD-then@ Yes @else-not-FEATURE_FORCE_LOAD@ No @endif-FEATURE_FORCE_LOAD@</td>
+             <td>Allows bypassing all filtering for a single page using the prefix "<code>@FORCE_PREFIX@</code>".</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_IMAGE_BLOCKING</code></td>
+             <td>@if-FEATURE_IMAGE_BLOCKING-then@ Yes @else-not-FEATURE_IMAGE_BLOCKING@ No @endif-FEATURE_IMAGE_BLOCKING@</td>
+             <td>Allows the +image ation, to send "blocked" images instead of HTML.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_IMAGE_DETECT_MSIE</code></td>
+             <td>@if-FEATURE_IMAGE_DETECT_MSIE-then@ Yes @else-not-FEATURE_IMAGE_DETECT_MSIE@ No @endif-FEATURE_IMAGE_DETECT_MSIE@</td>
+             <td>Enables automatic detection of image and HTML requests from
+             Microsoft Internet Explorer users, overriding the setting of 
+             +image in the actions file.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_KILL_POPUPS</code></td>
+             <td>@if-FEATURE_KILL_POPUPS-then@ Yes @else-not-FEATURE_KILL_POPUPS@ No @endif-FEATURE_KILL_POPUPS@</td>
+             <td>Allows the +no-popups action, to block JavaScript popups.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_STATISTICS</code></td>
+             <td>@if-FEATURE_STATISTICS-then@ Yes @else-not-FEATURE_STATISTICS@ No @endif-FEATURE_STATISTICS@</td>
+             <td>Enables the statistics function.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_TOGGLE</code></td>
+             <td>@if-FEATURE_TOGGLE-then@ Yes @else-not-FEATURE_TOGGLE@ No @endif-FEATURE_TOGGLE@</td>
+             <td>Allow JunkBuster to be "disabled" so it is just a normal non-blocking non-anonymizing proxy.</td>
+          </tr>
+          <tr>
+             <td><code>FEATURE_TRUST</code></td>
+             <td>@if-FEATURE_TRUST-then@ Yes @else-not-FEATURE_TRUST@ No @endif-FEATURE_TRUST@</td>
+             <td>Allows the use of trust files.</td>
+          </tr>
+          <tr>
+             <td><code>REGEX_GNU</code></td>
+             <td>@if-REGEX_GNU-then@ Yes @else-not-REGEX_GNU@ No @endif-REGEX_GNU@</td>
+             <td rowspan="2">Changes the type of pattern matching done on URL paths.  PCRE is by far the best.
+             The old GNU style will slow down JunkBuster and increase the executable's size.  If both of
+             these are disabled, simple prefix matching is done, but this is very inflexible.</td>
+          </tr>
+          <tr>
+             <td><code>REGEX_PCRE</code></td>
+             <td>@if-REGEX_PCRE-then@ Yes @else-not-REGEX_PCRE@ No @endif-REGEX_PCRE@</td>
+          </tr>
+          <tr>
+             <td><code>STATIC_PCRE</code></td>
+             <td>@if-STATIC_PCRE-then@ Yes @else-not-STATIC_PCRE@ No @endif-STATIC_PCRE@</td>
+             <td>Use the supplied statically-linked PCRE library.  This is set automatically
+             by <code>./configure</code> if you do not have the libpcre installed.</td>
+          </tr>
+          <tr>
+             <td><code>STATIC_PCRS</code></td>
+             <td>@if-STATIC_PCRS-then@ Yes @else-not-STATIC_PCRS@ No @endif-STATIC_PCRS@</td>
+             <td>Use the supplied statically-linked PCRS library.  This is set automatically
+             by <code>./configure</code> if you do not have the libpcrs installed.</td>
+          </tr>
+        </table>
       </td>
     </tr>
-
-<!-- @if-pcrs-support-start -->
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Regex Filter List:</h2>
-        <blockquote><pre>@rlist@</pre></blockquote>
-      </td>
-    </tr>
-<!-- if-pcrs-support-end@ -->
-
-<!-- @if-trust-support-start -->
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Trust List:</h2>
-        <blockquote><pre>@tlist@</pre></blockquote>
-      </td>
-    </tr>
-<!-- if-trust-support-end@ -->
-<!-- if-no-split-args-end@ -->
 
     <tr>
       <td bgcolor=#eeeeee>
         <h2>Source code versions:</h2>
         <blockquote><pre>@sourceversions@</pre></blockquote>
-      </td>
-    </tr>
-
-    <tr>
-      <td bgcolor=#eeeeee>
-        <h2>Conditional #defines:</h2>
-        <ul>@defines@</ul>
       </td>
     </tr>
 
