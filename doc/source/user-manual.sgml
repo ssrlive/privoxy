@@ -25,7 +25,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: user-manual.sgml,v 1.88 2002/04/23 05:37:54 hal9 Exp $
+ $Id: user-manual.sgml,v 1.89 2002/04/23 21:05:28 oes Exp $
 
  Written by and Copyright (C) 2001 the SourceForge
  Privoxy team. http://www.privoxy.org/
@@ -46,7 +46,7 @@
 <artheader>
 <title>Privoxy User Manual</title>
 
-<pubdate>$Id: user-manual.sgml,v 1.88 2002/04/23 05:37:54 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 1.89 2002/04/23 21:05:28 oes Exp $</pubdate>
 
 <authorgroup>
  <author>
@@ -195,8 +195,9 @@
 </para>
 
 <para>
- Note that on Red Hat, Privoxy will not be automatically started on system
- boot. You will need to enable that using linuxconf.
+ Note that on Red Hat, <application>Privoxy</application> will not be
+ automatically started on system boot. You will need to enable that using
+ <command>chkconfig</command>, <command>ntsysv</command>, or similar method.
 </para>
 
 <para>
@@ -2434,8 +2435,8 @@ Please choose from the following options:
 <title>How Actions are Applied to URLs</title>
 <para>
  The actions file is divided into sections. There are special sections,
- like the alias sections which will be discussed later. For now let's
- concentrate on regular sections: They have a heading line (often split
+ like the <quote>alias</quote> sections which will be discussed later. For now
+ let's concentrate on regular sections: They have a heading line (often split
  up to multiple lines for readability) which consist of a list of actions,
  separated by whitespace and enclosed in curly braces. Below that, there
  is a list of URL patterns, each on a separate line.
@@ -2649,10 +2650,17 @@ Please choose from the following options:
 <title>Actions</title>
 <para>
  Actions are enabled if preceded with a <quote>+</quote>, and disabled if 
- preceded with a <quote>-</quote>. Actions are invoked by enclosing the 
- action name in curly braces (e.g. {+some_action}), followed by a list of 
- URLs (or patterns that match URLs) to which the action applies. There are
- three classes of actions: 
+ preceded with a <quote>-</quote>. So a <quote>+action</quote> means 
+ <quote>do that action</quote>, e.g. <quote>+block</quote> means please 
+ <quote>block the following URLs and/or patterns</quote>. All actions are
+ disabled by default, until they are explicitly enabled somewhere in an actions
+ file.
+</para>
+
+<para> 
+ Actions are invoked by enclosing the action name in curly braces (e.g.
+ {+some_action}), followed by a list of URLs (or patterns that match URLs) to
+ which the action applies. There are three classes of actions: 
 </para>
 
 <para>
@@ -5230,6 +5238,9 @@ Requests</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 1.89  2002/04/23 21:05:28  oes
+ Added hint for startup on Red Hat
+
  Revision 1.88  2002/04/23 05:37:54  hal9
  Add AmigaOS install stuff.
 
