@@ -32,7 +32,6 @@ configure-stamp:
 		./configure --prefix=/usr --sysconfdir=/etc \
 		--mandir=/usr/share/man	$(WITHDEBUG) \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
-
 	touch configure-stamp
 
 build: build-stamp
@@ -40,8 +39,6 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	$(MAKE)
-	$(MAKE) dok-devel dok-user dok-faq
-
 	touch build-stamp
 
 clean:
@@ -114,6 +111,11 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
+# Use this target on Debian because we need to make sure configure
+# was run with docbook's correct path (see configure-stamp above)
+debian-dok: configure-stamp
+	$(MAKE) dok
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure

@@ -1,3 +1,13 @@
+privoxy (3.1.1-alpha-0) unstable; urgency=low
+
+  * Added debian-dist and debian-upload targets to the top level makefile.
+    debian-dist runs "dpkg-buildpackage -rfakeroot -us -uc" so that
+    any debian user can build it.
+  * Removed build dependency on docbook, leaving generation of docs to
+    another target or makefile.
+  
+ -- Devin John Bayer <devin@debian>  Sat, 25 May 2002 22:49:30 -0400
+
 privoxy (2.9.15-beta-0) unstable; urgency=low
 
   * New upstream version.
