@@ -1,1558 +1,1594 @@
+output is user-manual Using catalogs: /etc/sgml/sgml-docbook-3.1.cat Using
+stylesheet: /usr/share/sgml/docbook/utils-0.6/docbook-utils.dsl#html Working
+on: /home/hal/junkbuster/current/doc/source/user-manual.sgml Junkbuster User Manual
 
-   output  is  user-manual Using catalogs: /etc/sgml/sgml-docbook-3.1.cat
-   Using stylesheet:
-   /usr/share/sgml/docbook/utils-0.6/docbook-utils.dsl#html  Working  on:
-   /home/hal/junkbuster/current/doc/source/user-manual.sgml
+By: Junkbuster Developers
+Abstract                               
+The user manual gives the users        
+information on how to install and      
+configure Internet Junkbuster. Internet
+Junkbuster is an application that      
+provides privacy and security to users 
+of the World Wide Web.                 
+                                       
+You can find the latest version of the 
+user manual at http://                 
+ijbswa.sourceforge.net/user-manual/.   
+                                       
+Feel free to send a note to the        
+developers at                          
+ijbswa-developers@lists.sourceforge.net
+.                                      
+                                       
+          -----------------------------------------------------------          
 
-Junkbuster User Manual
-
-   By: Junkbuster Developers
-
-                                  Abstract
-
-     The user manual gives the users information on how to install and
-    configure Internet Junkbuster. Internet Junkbuster is an application
-     that provides privacy and security to users of the World Wide Web.
-
-           You can find the latest version of the user manual at
-               [1]http://ijbswa.sourceforge.net/user-manual/.
-
-               Feel free to send a note to the developers at
-
-   ijbswa-developers@lists.sourceforge.net
-
-                                     .
-            ____________________________________________________
-
-   Table of Contents
-   [2]Introduction
-   [3]Installation
-   [4]Junkbuster Configuration
-   [5]Quickstart to Using Junkbuster
-   [6]Contact the Developers
-   [7]Copyright and History
-   [8]See also
-   [9]Appendix
+Table of Contents
+Introduction
+Installation
+Junkbuster Configuration
+Quickstart to Using Junkbuster
+Contact the Developers
+Copyright and History
+See also
+Appendix
 
 Introduction
 
-   Internet   Junkbuster   is   a   web  proxy  with  advanced  filtering
-   capabilities  for  protecting  privacy,  filtering  web  page content,
-   managing  cookies,  controlling  access,  and  removing  ads, banners,
-   pop-ups  and  other  obnoxious  Internet  Junk.  Junkbuster has a very
-   flexible  configuration and can be customized to suit individual needs
-   and  tastes.  Internet Junkbuster has application for both stand-alone
-   systems and multi-user networks.
+Internet Junkbuster is a web proxy with advanced filtering capabilities for
+protecting privacy, filtering web page content, managing cookies, controlling
+access, and removing ads, banners, pop-ups and other obnoxious Internet Junk.
+Junkbuster has a very flexible configuration and can be customized to suit
+individual needs and tastes. Internet Junkbuster has application for both
+stand-alone systems and multi-user networks.
 
-   This documentation is included with the current development version of
-   Internet  Junkbuster  and  is incomplete at this point. The most up to
-   date  reference for the time being is still the comments in the source
-   files  and  in  the  individual  configuration  files.  Development of
-   version  3.0  is  currently  underway,  and  includes many significant
-   changes and enhancements over earlier verions. The target release date
-   for stable v3.0 is December 2001.
+This documentation is included with the current development version of Internet
+Junkbuster and is incomplete at this point. The most up to date reference for
+the time being is still the comments in the source files and in the individual
+configuration files. Development of version 3.0 is currently underway, and
+includes many significant changes and enhancements over earlier verions. The
+target release date for stable v3.0 is December 2001.
 
-   Since  this is a development version, some features are in the process
-   of  being  implemented. This documentation may be slightly out of sync
-   as a result. And there are bugs, though hopefully not many!
-     _________________________________________________________________
+Since this is a development version, some features are in the process of being
+implemented. This documentation may be slightly out of sync as a result. And
+there are bugs, though hopefully not many!
+
+-------------------------------------------------------------------------------
 
 New Features
 
-   In  addition  to  Junkbuster's  traditional  features of ad and banner
-   blocking  and  cookie  management,  this  is  a  list  of new features
-   currently under development:
+In addition to Junkbuster's traditional features of ad and banner blocking and
+cookie management, this is a list of new features currently under development:
 
-     * Modularized   configuration   that  will  allow  for  system  wide
-       settings, and individual user settings.
-     * A browser based GUI configuration utility (not finished).
-     * Blocking  of annoying pop-up browser windows (previously available
-       as a patch).
-     * Partial support for HTTP/1.1.
-     * Support   for   Perl   Compatible   Regular   Expressions  in  the
-       configuration   files,   and   generally   a   more  sophisticated
-       configuration syntax over previous versions.
-     * Web page content filtering.
-     * Multi-threaded.
-     _________________________________________________________________
+  * Modularized configuration that will allow for system wide settings, and
+    individual user settings.
+   
+  * A browser based GUI configuration utility (not finished).
+   
+  * Blocking of annoying pop-up browser windows (previously available as a
+    patch).
+   
+  * Partial support for HTTP/1.1.
+   
+  * Support for Perl Compatible Regular Expressions in the configuration files,
+    and generally a more sophisticated configuration syntax over previous
+    versions.
+   
+  * Web page content filtering.
+   
+  * Multi-threaded.
+   
+-------------------------------------------------------------------------------
 
 Installation
 
-   Junkbuster  is available as raw source code, or pre-compiled binaries.
-   See  the [10]Junkbuster Home Page for current release info. Junkbuster
-   is  also  available  via  [11]CVS. This is the recommended approach at
-   this time. But please be aware that CVS is constantly changing, and it
-   may break in mysterious ways.
-     _________________________________________________________________
+Junkbuster is available as raw source code, or pre-compiled binaries. See the 
+Junkbuster Home Page for current release info. Junkbuster is also available via
+CVS. This is the recommended approach at this time. But please be aware that
+CVS is constantly changing, and it may break in mysterious ways.
+
+-------------------------------------------------------------------------------
 
 Source
 
-   For gzipped tar archives, unpack the source:
+For gzipped tar archives, unpack the source:
 
- tar zxvf ijb_source_2.9*
- cd ijb_source_2.9*
+ tar zxvf ijb_source_2.9*                                                      
+ cd ijb_source_2.9*                                                            
+                                                                               
 
-   For  retrieving  the  current CVS sources, you'll need the CVS package
-   installed first. To download CVS source:
+For retrieving the current CVS sources, you'll need the CVS package installed
+first. To download CVS source:
 
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co cu
-rrent
-  cd current
+  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login          
+  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa co current 
+  cd current                                                                         
+                                                                                     
 
-   This  will  create  a directory named current/, which will contain the
-   source tree.
+This will create a directory named current/, which will contain the source
+tree.
 
-   Then, in either case, to build from source:
+Then, in either case, to build from source:
 
- autoconf       #recommended for CVS source
- ./configure
- make
- su
- make install
+ autoconf       #recommended for CVS source                                    
+ ./configure                                                                   
+ make                                                                          
+ su                                                                            
+ make install                                                                  
+                                                                               
 
-   For Redhat and SuSE Linux RPM packages, see below.
-     _________________________________________________________________
+For Redhat and SuSE Linux RPM packages, see below.
+
+-------------------------------------------------------------------------------
 
 Red Hat
 
-   To build Redhat RPM packages, install source as above. Then:
+To build Redhat RPM packages, install source as above. Then:
 
- autoconf       #recommended for CVS source
- ./configure
- make redhat-dist
+ autoconf       #recommended for CVS source                                    
+ ./configure                                                                   
+ make redhat-dist                                                              
+                                                                               
 
-   This  will  create  both  binary  and  src  RPMs  in the usual places.
-   Example:
+This will create both binary and src RPMs in the usual places. Example:
 
-      /usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
+   /usr/src/redhat/RPMS/i686/junkbuster-2.9.8-1.i686.rpm
 
-      /usr/src/redhat/SRPMS/junkbuster-2.9.9-1.src.rpm
+   /usr/src/redhat/SRPMS/junkbuster-2.9.9-1.src.rpm
 
-   To install, of course:
+To install, of course:
 
- rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ rpm -Uvv /usr/src/redhat/RPMS/i686/junkbuster-2.9.9-1.i686.rpm                
+                                                                               
 
-   This    will    place    the   Junkbuster   configuration   files   in
-   /etc/junkbuster/, and log files in /var/log/junkbuster/.
-     _________________________________________________________________
+This will place the Junkbuster configuration files in /etc/junkbuster/, and log
+files in /var/log/junkbuster/.
+
+-------------------------------------------------------------------------------
 
 SuSE
 
-   To build SuSE RPM packages, install source as above. Then:
+To build SuSE RPM packages, install source as above. Then:
 
- autoconf       #recommended for CVS source
- ./configure
- make suse-dist
+ autoconf       #recommended for CVS source                                    
+ ./configure                                                                   
+ make suse-dist                                                                
+                                                                               
 
-   This  will  create  both  binary  and  src  RPMs  in the usual places.
-   Example:
+This will create both binary and src RPMs in the usual places. Example:
 
-      /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+   /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
 
-      /usr/src/suse/SRPMS/junkbuster-2.9.9-1.src.rpm
+   /usr/src/suse/SRPMS/junkbuster-2.9.9-1.src.rpm
 
-   To install, of course:
+To install, of course:
 
- rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm
+ rpm -Uvv /usr/src/suse/RPMS/i686/junkbuster-2.9.9-1.i686.rpm                  
+                                                                               
 
-   This    will    place    the   Junkbuster   configuration   files   in
-   /etc/junkbuster/, and log files in /var/log/junkbuster/.
-     _________________________________________________________________
+This will place the Junkbuster configuration files in /etc/junkbuster/, and log
+files in /var/log/junkbuster/.
+
+-------------------------------------------------------------------------------
 
 OS/2
 
-   The  OS/2 version of Junkbuster requires the EMX runtime library to be
-   installed.  The  EMX  runtime  library is available on the hobbes OS/2
-   archive, among many other locations:
-   [12]http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&button=Search&key=emx
-   rt.zip&stype=all&sort=type&dir=%2Fpub%2Fos2%2Fdev%2Femx%2Fv0.9d
+The OS/2 version of Junkbuster requires the EMX runtime library to be
+installed. The EMX runtime library is available on the hobbes OS/2 archive,
+among many other locations: http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&button
+=Search&key=emxrt.zip&stype=all&sort=type&dir=%2Fpub%2Fos2%2Fdev%2Femx%2Fv0.9d
 
-   Junkbuster  is  packaged  in  a  WarpIN  self- installing archive. The
-   self-installing  program  will  be  named  depending  on  the  release
-   version,  something like: ijbos123.exe. In order to install it, simply
-   run  this executable or double-click on its icon and follow the WarpIN
-   installation  panels.  A  shadow  of the Junkbuster executable will be
-   placed  in your startup folder so it will start automatically whenever
-   OS/2 starts.
+Junkbuster is packaged in a WarpIN self- installing archive. The
+self-installing program will be named depending on the release version,
+something like: ijbos123.exe. In order to install it, simply run this
+executable or double-click on its icon and follow the WarpIN installation
+panels. A shadow of the Junkbuster executable will be placed in your startup
+folder so it will start automatically whenever OS/2 starts.
 
-   The  directory  you choose to install Junkbuster into will contain all
-   of the configuration files.
+The directory you choose to install Junkbuster into will contain all of the
+configuration files.
 
-   If  you  would  like to build binary images on OS/2 yourself, you will
-   need  a working EMX/GCC environment, plus several Unix-like tools. The
-   Hobbes  OS/2  archive  is  a good place to start when building such an
-   environment.  A  set of Unix-like tools named gnupack is located here:
-   [13]http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&key=gnupack&stype=all
-   &sort=type&dir=%2Fpub%2Fos2%2Fapps
+If you would like to build binary images on OS/2 yourself, you will need a
+working EMX/GCC environment, plus several Unix-like tools. The Hobbes OS/2
+archive is a good place to start when building such an environment. A set of
+Unix-like tools named gnupack is located here: http://hobbes.nmsu.edu/cgi-bin/
+h-search?sh=1&key=gnupack&stype=all&sort=type&dir=%2Fpub%2Fos2%2Fapps
 
-   Once  you  have  the  source code unpacked as above, you can build the
-   binaries from the current/ directory:
+Once you have the source code unpacked as above, you can build the binaries
+from the current/ directory:
 
- autoconf
- sh configure
- make
-     _________________________________________________________________
+ autoconf                                                                      
+ sh configure                                                                  
+ make                                                                          
+                                                                               
+
+-------------------------------------------------------------------------------
 
 Windows
 
-   Click-click.  (I  need  help  on  this.  Not  a  clue  here.  Also for
-   configuration section below. HB.)
-     _________________________________________________________________
+Click-click. (I need help on this. Not a clue here. Also for configuration
+section below. HB.)
+
+-------------------------------------------------------------------------------
 
 Other
 
-   Some quick notes on other Operating Systems.
+Some quick notes on other Operating Systems.
 
-   For  FreeBSD  (and other *BSDs?), the build will need gmake instead of
-   the included make. gmake is available from [14]http://www.gnu.org. The
-   rest should be the same as above for Linux/Unix.
-     _________________________________________________________________
+For FreeBSD (and other *BSDs?), the build will need gmake instead of the
+included make. gmake is available from http://www.gnu.org. The rest should be
+the same as above for Linux/Unix.
+
+-------------------------------------------------------------------------------
 
 Junkbuster Configuration
 
-   For  Unix,  *BSD  and  Linux,  all  configuraton  files are located in
-   /etc/junkbuster/ by default. For MS Windows and OS/2, these are all in
-   the  same  directory as the Junkbuster executable. The name and number
-   of  configuration  files  has  changed  from previous versions, and is
-   subject to change as development progresses.
+For Unix, *BSD and Linux, all configuraton files are located in /etc/junkbuster
+/ by default. For MS Windows and OS/2, these are all in the same directory as
+the Junkbuster executable. The name and number of configuration files has
+changed from previous versions, and is subject to change as development
+progresses.
 
-   The  installed  defaults  provide a reasonable starting point. For the
-   time  being,  there  are  only three default configuration files (this
-   will change in time):
+The installed defaults provide a reasonable starting point. For the time being,
+there are only three default configuration files (this will change in time):
 
-     * The  main  configuration file is named config on Linux, Unix, BSD,
-       and   OS/2,   and  junkbustr.txt  on  Windows.  On  Amiga,  it  is
-       AmiTCP:db/junkbuster/config.
-     * The actionsfile file is used to define various actions relating to
-       images,  banners,  pop-ups,  banners  and  cookies. There is a CGI
-       based   editor   for   this   file   that   can  be  accessed  via
-       [15]http://ijbswa.sourceforge.net/config/.   (Still  under  active
-       development.)
-     * The  re_filterfile  file  can  be  used  to  rewrite  the raw page
-       content, including text as well as embedded HTML and JavaScript.
+  * The main configuration file is named config on Linux, Unix, BSD, and OS/2,
+    and junkbustr.txt on Windows. On Amiga, it is AmiTCP:db/junkbuster/config.
+   
+  * The actionsfile file is used to define various actions relating to images,
+    banners, pop-ups, banners and cookies. There is a CGI based editor for this
+    file that can be accessed via http://ijbswa.sourceforge.net/config/. (Still
+    under active development.)
+   
+  * The re_filterfile file can be used to rewrite the raw page content,
+    including text as well as embedded HTML and JavaScript.
+   
+actionsfile and re_filterfile can use Perl style regular expressions for
+maximum flexibility. All files use the "#" character to denote a comment. Such
+lines are not processed by Junkbuster. After making any changes, restart
+Junkbuster in order for the changes to take effect.
 
-   actionsfile  and  re_filterfile can use Perl style regular expressions
-   for  maximum  flexibility. All files use the "#" character to denote a
-   comment.  Such lines are not processed by Junkbuster. After making any
-   changes, restart Junkbuster in order for the changes to take effect.
-     _________________________________________________________________
+-------------------------------------------------------------------------------
 
 The Main Configuration File
 
-   Again,  the  main configuration file is named config on Linux/Unix/BSD
-   and OS/2, and junkbustr.txt on Windows. Configuration lines consist of
-   an  initial  keyword  followed  by  a list of values, all separated by
-   whitespace (any number of spaces or tabs). For example:
+Again, the main configuration file is named config on Linux/Unix/BSD and OS/2,
+and junkbustr.txt on Windows. Configuration lines consist of an initial keyword
+followed by a list of values, all separated by whitespace (any number of spaces
+or tabs). For example:
 
-     blockfile blocklist.ini
+  blockfile blocklist.ini
+   
 
-   Indicates that the blockfile is named "blocklist.ini".
+Indicates that the blockfile is named "blocklist.ini".
 
-   A  "#"  indicates  a  comment.  Any  part of a line following a "#" is
-   ignored, except if the "#" is preceded by a "\".
+A "#" indicates a comment. Any part of a line following a "#" is ignored,
+except if the "#" is preceded by a "\".
 
-   Thus, by placing a "#" at the start of an existing configuration line,
-   you  can  make  it  a  comment and it will be treated as if it weren't
-   there.  This is called "commenting out" an option and can be useful to
-   turn  off  features: If you comment out the "logfile" line, junkbuster
-   will  not  log  to  a file at all. Watch for the "default:" section in
-   each  explanation  to see what happens if the option is left unset (or
-   commented out).
+Thus, by placing a "#" at the start of an existing configuration line, you can
+make it a comment and it will be treated as if it weren't there. This is called
+"commenting out" an option and can be useful to turn off features: If you
+comment out the "logfile" line, junkbuster will not log to a file at all. Watch
+for the "default:" section in each explanation to see what happens if the
+option is left unset (or commented out).
 
-   Long  lines  can  be  continued on the next line by using a "\" as the
-   very last character.
+Long lines can be continued on the next line by using a "\" as the very last
+character.
 
-   There are various aspects of Junkbuster behavior that can be tuned.
-     _________________________________________________________________
+There are various aspects of Junkbuster behavior that can be tuned.
+
+-------------------------------------------------------------------------------
 
 Defining Other Configuration Files
 
-   Junkbuster  can  use  a  number  of other files to tell it what ads to
-   block,  what cookies to accept, etc. This section of the configuration
-   file tells Junkbuster where to find all those other files.
+Junkbuster can use a number of other files to tell it what ads to block, what
+cookies to accept, etc. This section of the configuration file tells Junkbuster
+where to find all those other files.
 
-   On  Windows, Junkbuster looks for these files in the same directory as
-   the  executable. On Unix and OS/2, Junkbuster looks for these files in
-   the  current  working directory. In either case, an absolute path name
-   can be used to avoid problems.
+On Windows, Junkbuster looks for these files in the same directory as the
+executable. On Unix and OS/2, Junkbuster looks for these files in the current
+working directory. In either case, an absolute path name can be used to avoid
+problems.
 
-   When  development goes modular and multiuser, the blocker, filter, and
-   per-user  config  will  be  stored in subdirectories of "confdir". For
-   now, only confdir/templates is used for storing HTML templates for CGI
-   results.
+When development goes modular and multiuser, the blocker, filter, and per-user
+config will be stored in subdirectories of "confdir". For now, only confdir/
+templates is used for storing HTML templates for CGI results.
 
-   The location of the configuration files:
+The location of the configuration files:
 
-     confdir /etc/junkbuster       # No trailing /, please.
+  confdir /etc/junkbuster       # No trailing /, please.
+   
 
-   The  directory  where  all  logging  (i.e.  logfile and jarfile) takes
-   place. No trailing "/", please:
+The directory where all logging (i.e. logfile and jarfile) takes place. No
+trailing "/", please:
 
-     logdir /var/log/junkbuster
+  logdir /var/log/junkbuster
+   
 
-   Note  that all file specifications below are relative to the above two
-   directories!
+Note that all file specifications below are relative to the above two
+directories!
 
-   The "actionsfile" contains patterns to specify the actions to apply to
-   requests  for each site. Default: Cookies to and from all destinations
-   are  filtered.  Popups  are  disabled  for  all  sites.  All sites are
-   filtered  if  re_filterfile  specified. No sites are blocked. An empty
-   image  is  displayed  for  filtered  ads  and  other  images (formerly
-   "tinygif"). The syntax of this file is explained in detail [16]below.
+The "actionsfile" contains patterns to specify the actions to apply to requests
+for each site. Default: Cookies to and from all destinations are filtered.
+Popups are disabled for all sites. All sites are filtered if re_filterfile
+specified. No sites are blocked. An empty image is displayed for filtered ads
+and other images (formerly "tinygif"). The syntax of this file is explained in
+detail below.
 
-     actionsfile actionsfile
+  actionsfile actionsfile
+   
 
-   The  "re_filterfile"  file  contains content modification rules. These
-   rules  permit  powerful changes on the content of Web pages, e.g., you
-   could disable your favourite JavaScript annoyances, rewrite the actual
-   content,  or just have some fun replacing "Microsoft" with "MicroSuck"
-   wherever  it  appears on a Web page. Default: No content modification,
-   or whatever the developers are playing with :-/
+The "re_filterfile" file contains content modification rules. These rules
+permit powerful changes on the content of Web pages, e.g., you could disable
+your favourite JavaScript annoyances, rewrite the actual content, or just have
+some fun replacing "Microsoft" with "MicroSuck" wherever it appears on a Web
+page. Default: No content modification, or whatever the developers are playing
+with :-/
 
-     re_filterfile re_filterfile
+  re_filterfile re_filterfile
+   
 
-   The  logfile  is where all logging and error messages are written. The
-   logfile  can  be  useful  for  tracking down a problem with Junkbuster
-   (e.g.,  it's not blocking an ad you think it should block) but in most
-   cases you probably will never look at it.
+The logfile is where all logging and error messages are written. The logfile
+can be useful for tracking down a problem with Junkbuster (e.g., it's not
+blocking an ad you think it should block) but in most cases you probably will
+never look at it.
 
-   Your  logfile  will  grow  indefinitely, and you will probably want to
-   periodically  remove  it. On Unix systems, you can do this with a cron
-   job  (see  "man  cron").  For  Redhat,  a  logrotate  script  has been
-   included.
+Your logfile will grow indefinitely, and you will probably want to periodically
+remove it. On Unix systems, you can do this with a cron job (see "man cron").
+For Redhat, a logrotate script has been included.
 
-   On    SuSE    Linux    systems,    you   can   place   a   line   like
-   "/var/log/junkbuster.*  +1024k  644  nobody.nogroup" in /etc/logfiles,
-   with  the effect that cron.daily will automatically archive, gzip, and
-   empty the log, when it exceeds 1M size.
+On SuSE Linux systems, you can place a line like "/var/log/junkbuster.* +1024k
+644 nobody.nogroup" in /etc/logfiles, with the effect that cron.daily will
+automatically archive, gzip, and empty the log, when it exceeds 1M size.
 
-   Default:  Log  to  the  a  file  named logfile. Comment out to disable
-   logging.
+Default: Log to the a file named logfile. Comment out to disable logging.
 
-     logfile logfile
+  logfile logfile
+   
 
-   The   "jarfile"   defines  where  Junkbuster  stores  the  cookies  it
-   intercepts. Note that if you use a "jarfile", it may grow quite large.
-   Default: Don't store intercepted cookies.
+The "jarfile" defines where Junkbuster stores the cookies it intercepts. Note
+that if you use a "jarfile", it may grow quite large. Default: Don't store
+intercepted cookies.
 
-     #jarfile jarfile
+  #jarfile jarfile
+   
 
-   If  you  specify  a  "trustfile", Junkbuster will only allow access to
-   sites  that  are  named  in  the trustfile. You can also mark sites as
-   trusted referrers, with the effect that access to untrusted sites will
-   be  granted,  if  a  link  from  a trusted referrer was used. The link
-   target  will  then  be  added  to  the  "trustfile".  This  is  a very
-   restrictive  feature  that  typical  users most propably want to leave
-   disabled. Default: Disabled, don't use the trust mechanism.
+If you specify a "trustfile", Junkbuster will only allow access to sites that
+are named in the trustfile. You can also mark sites as trusted referrers, with
+the effect that access to untrusted sites will be granted, if a link from a
+trusted referrer was used. The link target will then be added to the
+"trustfile". This is a very restrictive feature that typical users most
+propably want to leave disabled. Default: Disabled, don't use the trust
+mechanism.
 
-     #trustfile trust
+  #trustfile trust
+   
 
-   If  you  use  the  trust mechanism, it is a good idea to write up some
-   online  documentation  about  your  blocking policy and to specify the
-   URL(s) here. They will appear on the page that your users receive when
-   they  try to access untrusted content. Use multiple times for multiple
-   URLs. Default: Don't display links on the "untrusted" info page.
+If you use the trust mechanism, it is a good idea to write up some online
+documentation about your blocking policy and to specify the URL(s) here. They
+will appear on the page that your users receive when they try to access
+untrusted content. Use multiple times for multiple URLs. Default: Don't display
+links on the "untrusted" info page.
 
-     trust-info-url http://www.your-site.com/why_we_block.html
-     trust-info-url http://www.your-site.com/what_we_allow.html
-     _________________________________________________________________
+  trust-info-url http://www.your-site.com/why_we_block.html
+  trust-info-url http://www.your-site.com/what_we_allow.html
+   
+
+-------------------------------------------------------------------------------
 
 Other Configuration Options
 
-   This  part of the configuration file contains options that control how
-   Junkbuster operates.
+This part of the configuration file contains options that control how
+Junkbuster operates.
 
-   "Admin-address"  should  be  set  to  the  email  address of the proxy
-   administrator.  It  is  used  in  many  of  the proxy-generated pages.
-   Default: fill@me.in.please.
+"Admin-address" should be set to the email address of the proxy administrator.
+It is used in many of the proxy-generated pages. Default: fill@me.in.please.
 
-     #admin-address fill@me.in.please
+  #admin-address fill@me.in.please
+   
 
-   "Proxy-info-url"  can  be  set  to a URL that contains more info about
-   this  Junkbuster  installation, it's configuration and policies. It is
-   used  in  many  of  the  proxy-generated  pages  and its use is highly
-   recommended in multi-user installations, since your users will want to
-   know why certain content is blocked or modified. Default: Don't show a
-   link to online documentation.
+"Proxy-info-url" can be set to a URL that contains more info about this
+Junkbuster installation, it's configuration and policies. It is used in many of
+the proxy-generated pages and its use is highly recommended in multi-user
+installations, since your users will want to know why certain content is
+blocked or modified. Default: Don't show a link to online documentation.
 
-     proxy-info-url http://www.your-site.com/proxy.html
+  proxy-info-url http://www.your-site.com/proxy.html
+   
 
-   "Listen-address"  specifies the address and port where Junkbuster will
-   listen for connections from your Web browser. The default is to listen
-   on  the  localhost port 8000, and this is suitable for most users. (In
-   your  web browser, under proxy configuration, list the proxy server as
-   "localhost" and the port as "8000").
+"Listen-address" specifies the address and port where Junkbuster will listen
+for connections from your Web browser. The default is to listen on the
+localhost port 8000, and this is suitable for most users. (In your web browser,
+under proxy configuration, list the proxy server as "localhost" and the port as
+"8000").
 
-   If  you  already  have another service running on port 8000, or if you
-   want  to  serve  requests  from  other  machines  (e.g.  on your local
-   network) as well, you will need to override the default. The syntax is
-   "listen-address  [<ip-address>]:<port>".  If  you  leave  out  the  IP
-   adress,  junkbuster  will  bind  to all interfaces (addresses) on your
-   machine  and  may  become  reachable  from the internet. In that case,
-   consider using access control lists (acl's) (see "aclfile" above).
+If you already have another service running on port 8000, or if you want to
+serve requests from other machines (e.g. on your local network) as well, you
+will need to override the default. The syntax is "listen-address
+[<ip-address>]:<port>". If you leave out the IP adress, junkbuster will bind to
+all interfaces (addresses) on your machine and may become reachable from the
+internet. In that case, consider using access control lists (acl's) (see
+"aclfile" above).
 
-   For example, suppose you are running Junkbuster on a machine which has
-   the  address  192.168.0.1  on your local private network (192.168.0.0)
-   and  has another outside connection with a different address. You want
-   it to serve requests from inside only:
+For example, suppose you are running Junkbuster on a machine which has the
+address 192.168.0.1 on your local private network (192.168.0.0) and has another
+outside connection with a different address. You want it to serve requests from
+inside only:
 
-     listen-address 192.168.0.1:8000
+  listen-address 192.168.0.1:8000
+   
 
-   If  you  want  it  to  listen  on all addresses (including the outside
-   connection):
+If you want it to listen on all addresses (including the outside connection):
 
-     listen-address :8000
+  listen-address :8000
+   
 
-   If  you  do this, consider using ACLs (see "aclfile" above). Note: you
-   will  need  to  point your browser(s) to the address and port that you
-   have configured here. Default: localhost:8000 (127.0.0.1:8000).
+If you do this, consider using ACLs (see "aclfile" above). Note: you will need
+to point your browser(s) to the address and port that you have configured here.
+Default: localhost:8000 (127.0.0.1:8000).
 
-   The debug option sets the level of debugging information to log in the
-   logfile  (and to the console in the Windows version). A debug level of
-   1  is informative because it will show you each request as it happens.
-   Higher levels of debug are probably only of interest to developers.
+The debug option sets the level of debugging information to log in the logfile
+(and to the console in the Windows version). A debug level of 1 is informative
+because it will show you each request as it happens. Higher levels of debug are
+probably only of interest to developers.
 
-     debug         1 # GPC   = show each GET/POST/CONNECT request
-     debug         2 # CONN  = show each connection status
-     debug         4 # IO    = show I/O status
-     debug         8 # HDR   = show header parsing
-     debug        16 # LOG   = log all data into the logfile
-     debug        32 # FRC   = debug force feature
-     debug        64 # REF   = debug regular expression filter
-     debug       128 #       = debug fast redirects
-     debug       256 #       = debug GIF deanimation
-     debug       512 # CLF   = Common Log Format
-     debug      1024 #       = debug kill popups
-     debug      4096 # INFO  = Startup banner and warnings.
-     debug      8192 # ERROR = Non-fatal errors
+  debug         1 # GPC   = show each GET/POST/CONNECT request
+  debug         2 # CONN  = show each connection status
+  debug         4 # IO    = show I/O status
+  debug         8 # HDR   = show header parsing
+  debug        16 # LOG   = log all data into the logfile
+  debug        32 # FRC   = debug force feature
+  debug        64 # REF   = debug regular expression filter 
+  debug       128 #       = debug fast redirects
+  debug       256 #       = debug GIF deanimation
+  debug       512 # CLF   = Common Log Format
+  debug      1024 #       = debug kill popups
+  debug      4096 # INFO  = Startup banner and warnings.
+  debug      8192 # ERROR = Non-fatal errors
+    
 
-   It is highly recommended that you enable ERROR reporting (debug 8192),
-   at least until the next stable release.
+It is highly recommended that you enable ERROR reporting (debug 8192), at least
+until the next stable release.
 
-   The  reporting  of  FATAL errors (i.e. ones which crash JunkBuster) is
-   always on and cannot be disabled.
+The reporting of FATAL errors (i.e. ones which crash JunkBuster) is always on
+and cannot be disabled.
 
-   If you want to use CLF (Common Log Format), you should set "debug 512"
-   ONLY, do not enable anything else.
+If you want to use CLF (Common Log Format), you should set "debug 512" ONLY, do
+not enable anything else.
 
-   Multiple "debug" directives, are OK - they're logical-OR'd together.
+Multiple "debug" directives, are OK - they're logical-OR'd together.
 
-     debug 15 # same as setting the first 4 listed above
+  debug 15 # same as setting the first 4 listed above
+   
 
-   Default:
+Default:
 
-     debug 1 # URLs
-     debug 4096 # Info
-     debug 8192 # Errors - *we highly recommended enabling this*
+  debug 1 # URLs
+  debug 4096 # Info
+  debug 8192 # Errors - *we highly recommended enabling this*
+   
 
-   Junkbuster  normally uses "multi-threading", a software technique that
-   permits  it  to handle many different requests simultaneously. In some
-   cases you may wish to disable this -- particularly if you're trying to
-   debug  a  problem.  The  "single-threaded" option forces Junkbuster to
-   handle requests sequentially. Default: Multi-threaded mode.
+Junkbuster normally uses "multi-threading", a software technique that permits
+it to handle many different requests simultaneously. In some cases you may wish
+to disable this -- particularly if you're trying to debug a problem. The
+"single-threaded" option forces Junkbuster to handle requests sequentially.
+Default: Multi-threaded mode.
 
-     #single-threaded
+  #single-threaded
+   
 
-   "toggle" allows you to temporarily disable all Junkbuster's filtering.
-   Just set "toggle 0".
+"toggle" allows you to temporarily disable all Junkbuster's filtering. Just set
+"toggle 0".
 
-   The  Windows  version  of  Junkbuster puts an icon in the system tray,
-   which  allows  you  to  change this option without having to edit this
-   file.  If you right-click on that icon (or select the "Options" menu),
-   one  choice  is "Enable". Clicking on enable toggles Junkbuster on and
-   off.  This  is  useful  if you want to temporarily disable Junkbuster,
-   e.g.,  to  access a site that requires cookies which you normally have
-   blocked.
+The Windows version of Junkbuster puts an icon in the system tray, which allows
+you to change this option without having to edit this file. If you right-click
+on that icon (or select the "Options" menu), one choice is "Enable". Clicking
+on enable toggles Junkbuster on and off. This is useful if you want to
+temporarily disable Junkbuster, e.g., to access a site that requires cookies
+which you normally have blocked.
 
-   "toggle  1"  means  Junkbuster  runs  normally,  "toggle 0" means that
-   Junkbuster becomes a non-anonymizing non-blocking proxy. Default: 1.
+"toggle 1" means Junkbuster runs normally, "toggle 0" means that Junkbuster
+becomes a non-anonymizing non-blocking proxy. Default: 1.
 
-     toggle 1
+  toggle 1
+   
 
-   For   content  filtering,  i.e.  the  "+filter"  and  "+deanimate-gif"
-   actions,  it  is  neccessary  that  Junkbuster  buffers  up the entire
-   document body. This can be potentially dangerous, since a server could
-   just keep sending data indefinitely and wait for your RAM to exhaust.
+For content filtering, i.e. the "+filter" and "+deanimate-gif" actions, it is
+neccessary that Junkbuster buffers up the entire document body. This can be
+potentially dangerous, since a server could just keep sending data indefinitely
+and wait for your RAM to exhaust.
 
-   The  buffer-limit  option lets you set the maximum size in Kbytes that
-   each  buffer  may use. When the documents buffer exceeds this size, it
-   is  flushed  to the client unfiltered and no further attempt to filter
-   the  rest  of  it  is  made.  Remember that there may multiple threads
-   running,  which  might  require  increasing  the "buffer-limit" Kbytes
-   each, unless you have enabled "single-threaded" above.
+The buffer-limit option lets you set the maximum size in Kbytes that each
+buffer may use. When the documents buffer exceeds this size, it is flushed to
+the client unfiltered and no further attempt to filter the rest of it is made.
+Remember that there may multiple threads running, which might require
+increasing the "buffer-limit" Kbytes each, unless you have enabled
+"single-threaded" above.
 
-     buffer-limit 4069
+  buffer-limit 4069
+   
 
-   To  enable the web-based actionsfile editor set enable-edit-actions to
-   1,  or  0 to disable. Note that you must have compiled JunkBuster with
-   support  for  this  feature, otherwise this option has no effect. This
-   internal page can be reached at
-   [17]http://ijbswa.sourceforge.net/config/.
+To enable the web-based actionsfile editor set enable-edit-actions to 1, or 0
+to disable. Note that you must have compiled JunkBuster with support for this
+feature, otherwise this option has no effect. This internal page can be reached
+at http://ijbswa.sourceforge.net/config/.
 
-   Security  note:  If  this is enabled, anyone who can use the proxy can
-   edit  the  actions  file, and their changes will affect all users. For
-   shared proxies, you probably want to disable this. Default: enabled.
+Security note: If this is enabled, anyone who can use the proxy can edit the
+actions file, and their changes will affect all users. For shared proxies, you
+probably want to disable this. Default: enabled.
 
-     enable-edit-actions 1
+  enable-edit-actions 1
+   
 
-   Allow  JunkBuster  to  be  toggled on and off remotely, using your web
-   browser.  Set  "enable-remote-toggle"to 1 to enable, and 0 to disable.
-   Note  that  you  must  have  compiled JunkBuster with support for this
-   feature, otherwise this option has no effect.
+Allow JunkBuster to be toggled on and off remotely, using your web browser. Set
+"enable-remote-toggle"to 1 to enable, and 0 to disable. Note that you must have
+compiled JunkBuster with support for this feature, otherwise this option has no
+effect.
 
-   Security  note:  If  this is enabled, anyone who can use the proxy can
-   toggle  it  on  or  off,  and their changes will affect all users. For
-   shared proxies, you probably want to disable this. Default: enabled.
+Security note: If this is enabled, anyone who can use the proxy can toggle it
+on or off, and their changes will affect all users. For shared proxies, you
+probably want to disable this. Default: enabled.
 
-     enable-remote-toggle 1
-     _________________________________________________________________
+  enable-remote-toggle 1
+   
+
+-------------------------------------------------------------------------------
 
 Access Control List (ACL)
 
-   Access  controls  are included at the request of some ISPs and systems
-   administrators, and are not usually needed by individual users. Please
-   note  the  warnings in the FAQ that this proxy is not intended to be a
-   substitute  for  a firewall or to encourage anyone to defer addressing
-   basic security weaknesses.
+Access controls are included at the request of some ISPs and systems
+administrators, and are not usually needed by individual users. Please note the
+warnings in the FAQ that this proxy is not intended to be a substitute for a
+firewall or to encourage anyone to defer addressing basic security weaknesses.
 
-   If  no  access  settings are specified, the proxy talks to anyone that
-   connects.  If  any  access settings file are specified, then the proxy
-   talks  only  to  IP addresses permitted somewhere in this file and not
-   denied later in this file.
+If no access settings are specified, the proxy talks to anyone that connects.
+If any access settings file are specified, then the proxy talks only to IP
+addresses permitted somewhere in this file and not denied later in this file.
 
-   Summary -- if using an ACL:
+Summary -- if using an ACL:
 
-   Client must have permission to receive service.
+Client must have permission to receive service.
 
-   LAST match in ACL wins.
+LAST match in ACL wins.
 
-   Default behavior is to deny service.
+Default behavior is to deny service.
 
-   The syntax for an entry in the Access Control List is:
+The syntax for an entry in the Access Control List is:
 
-     ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
+  ACTION    SRC_ADDR[/SRC_MASKLEN]    [ DST_ADDR[/DST_MASKLEN] ]
+   
 
-   Where the individual fields are:
+Where the individual fields are:
 
-    ACTION      = "permit-access" or "deny-access"
-    SRC_ADDR    = client hostname or dotted IP address
-    SRC_MASKLEN = number of bits in the subnet mask for the source
-    DST_ADDR    = server or forwarder hostname or dotted IP address
-    DST_MASKLEN = number of bits in the subnet mask for the target
+ ACTION      = "permit-access" or "deny-access"
 
-   The field separator (FS) is whitespace (space or tab).
+ SRC_ADDR    = client hostname or dotted IP address
+ SRC_MASKLEN = number of bits in the subnet mask for the source
 
-   IMPORTANT  NOTE: If the junkbuster is using a forwarder (see below) or
-   a  gateway  for  a  particular  destination  URL, the DST_ADDR that is
-   examined  is  the  address of the forwarder or the gateway and NOT the
-   address  of  the  ultimate target. This is necessary because it may be
-   impossible  for  the  local Junkbuster to determine the address of the
-   ultimate target (that's often what gateways are used for).
+ DST_ADDR    = server or forwarder hostname or dotted IP address
+ DST_MASKLEN = number of bits in the subnet mask for the target
+   
 
-   Here are a few examples to show how the ACL features work:
+The field separator (FS) is whitespace (space or tab).
 
-   "localhost"  is  OK  --  no  DST_ADDR  implies  that  ALL  destination
-   addresses are OK:
+IMPORTANT NOTE: If the junkbuster is using a forwarder (see below) or a gateway
+for a particular destination URL, the DST_ADDR that is examined is the address
+of the forwarder or the gateway and NOT the address of the ultimate target.
+This is necessary because it may be impossible for the local Junkbuster to
+determine the address of the ultimate target (that's often what gateways are
+used for).
 
-     permit-access localhost
+Here are a few examples to show how the ACL features work:
 
-   A  silly  example  to  illustrate  permitting  any host on the class-C
-   subnet with Junkbuster to go anywhere:
+"localhost" is OK -- no DST_ADDR implies that ALL destination addresses are OK:
 
-     permit-access www.junkbusters.com/24
+  permit-access localhost
+   
 
-   Except deny one particular IP address from using it at all:
+A silly example to illustrate permitting any host on the class-C subnet with
+Junkbuster to go anywhere:
 
-     deny-access ident.junkbusters.com
+  permit-access www.junkbusters.com/24
+   
 
-   You  can  also  specify  an  explicit network address and subnet mask.
-   Explicit addresses do not have to be resolved to be used.
+Except deny one particular IP address from using it at all:
 
-     permit-access 207.153.200.0/24
+  deny-access ident.junkbusters.com
+   
 
-   A  subnet  mask  of  0  matches  anything,  so  the  next line permits
-   everyone.
+You can also specify an explicit network address and subnet mask. Explicit
+addresses do not have to be resolved to be used.
 
-     permit-access 0.0.0.0/0
+  permit-access 207.153.200.0/24
+   
 
-   Note, you cannot say:
+A subnet mask of 0 matches anything, so the next line permits everyone.
 
-     permit-access .org
+  permit-access 0.0.0.0/0
+   
 
-   to  allow  all  *.org  domains.  Every  IP address listed must resolve
-   fully.
+Note, you cannot say:
 
-   An  ISP  may  want  to provide a Junkbuster that is accessible by "the
-   world"  and yet restrict use of some of their private content to hosts
-   on  its internal network (i.e. its own subscribers). Say, for instance
-   the  ISP  owns  the  Class-B  IP  address  block 123.124.0.0 (a 16 bit
-   netmask). This is how they could do it:
+  permit-access .org
+   
 
-    permit-access 0.0.0.0/0 0.0.0.0/0   # other clients can go anywhere
-                                          # with the following exceptions
-   :
+to allow all *.org domains. Every IP address listed must resolve fully.
 
-    deny-access   0.0.0.0/0   123.124.0.0/16 # block all external request
-   s for
-                                             # sites on the ISP's network
-    permit 0.0.0.0/0 www.my_isp.com        # except for the ISP's main
-                                             # web site
-    permit 123.124.0.0/16 0.0.0.0/0          # the ISP's clients can go
-                                             # anywhere
+An ISP may want to provide a Junkbuster that is accessible by "the world" and
+yet restrict use of some of their private content to hosts on its internal
+network (i.e. its own subscribers). Say, for instance the ISP owns the Class-B
+IP address block 123.124.0.0 (a 16 bit netmask). This is how they could do it:
 
-   Note that if some hostnames are listed with multiple IP addresses, the
-   primary  value returned by DNS (via gethostbyname()) is used. Default:
-   Anyone can access the proxy.
-     _________________________________________________________________
+ permit-access 0.0.0.0/0 0.0.0.0/0   # other clients can go anywhere 
+                                       # with the following exceptions:
+ 
+ deny-access   0.0.0.0/0   123.124.0.0/16 # block all external requests for
+                                          # sites on the ISP's network
+
+ permit 0.0.0.0/0 www.my_isp.com        # except for the ISP's main 
+                                          # web site
+
+ permit 123.124.0.0/16 0.0.0.0/0          # the ISP's clients can go 
+                                          # anywhere
+   
+
+Note that if some hostnames are listed with multiple IP addresses, the primary
+value returned by DNS (via gethostbyname()) is used. Default: Anyone can access
+the proxy.
+
+-------------------------------------------------------------------------------
 
 Forwarding
 
-   This feature allows chaining of HTTP requests via multiple proxies. It
-   can  be  used  to  better  protect  privacy  and  confidentiality when
-   accessing  specific  domains by routing requests to those domains to a
-   special  purpose filtering proxy such as lpwa.com. Or to use a caching
-   proxy to speed up browsing.
+This feature allows chaining of HTTP requests via multiple proxies. It can be
+used to better protect privacy and confidentiality when accessing specific
+domains by routing requests to those domains to a special purpose filtering
+proxy such as lpwa.com. Or to use a caching proxy to speed up browsing.
 
-   It  can also be used in an environment with multiple networks to route
-   requests via multiple gateways allowing transparent access to multiple
-   networks without having to modify browser configurations.
+It can also be used in an environment with multiple networks to route requests
+via multiple gateways allowing transparent access to multiple networks without
+having to modify browser configurations.
 
-   Also  specified  here  are SOCKS proxies. Junkbuster SOCKS 4 and SOCKS
-   4A.  The  difference is that SOCKS 4A will resolve the target hostname
-   using DNS on the SOCKS server, not our local DNS client.
+Also specified here are SOCKS proxies. Junkbuster SOCKS 4 and SOCKS 4A. The
+difference is that SOCKS 4A will resolve the target hostname using DNS on the
+SOCKS server, not our local DNS client.
 
-   The syntax of each line is:
+The syntax of each line is:
 
-    forward target_domain[:port] http_proxy_host[:port]
-    forward-socks4      target_domain[:port]      socks_proxy_host[:port]
-   http_proxy_host[:port]
-    forward-socks4a      target_domain[:port]     socks_proxy_host[:port]
-   http_proxy_host[:port]
+ forward target_domain[:port] http_proxy_host[:port]
+ forward-socks4 target_domain[:port] socks_proxy_host[:port] http_proxy_host[:
+port]
+ forward-socks4a target_domain[:port] socks_proxy_host[:port] http_proxy_host[:
+port]
+   
 
-   If  http_proxy_host  is ".", then requests are not forwarded to a HTTP
-   proxy but are made directly to the web servers.
+If http_proxy_host is ".", then requests are not forwarded to a HTTP proxy but
+are made directly to the web servers.
 
-   Lines are checked in sequence, and the last match wins.
+Lines are checked in sequence, and the last match wins.
 
-   There is an implicit line equivalent to the following, which specifies
-   that  anything  not  finding  a match on the list is to go out without
-   forwarding or gateway protocol, like so:
+There is an implicit line equivalent to the following, which specifies that
+anything not finding a match on the list is to go out without forwarding or
+gateway protocol, like so:
 
-     forward .* . # implicit
+  forward .* . # implicit
+   
 
-   In  the  following  common  configuration, everything goes to Lucent's
-   LPWA, except SSL on port 443 (which it doesn't handle):
+In the following common configuration, everything goes to Lucent's LPWA, except
+SSL on port 443 (which it doesn't handle):
 
-    forward .* lpwa.com:8000
-    forward :443 .
+ forward .* lpwa.com:8000
+ forward :443 .
+   
 
-   See  the  FAQ  for instructions on how to automate the login procedure
-   for  LPWA. Some users have reported difficulties related to LPWA's use
-   of  "." as the last element of the domain, and have said that this can
-   be fixed with this:
+See the FAQ for instructions on how to automate the login procedure for LPWA.
+Some users have reported difficulties related to LPWA's use of "." as the last
+element of the domain, and have said that this can be fixed with this:
 
-     forward lpwa. lpwa.com:8000
+  forward lpwa. lpwa.com:8000
+   
 
-   (NOTE:  the syntax for specifiying target_domain has changed since the
-   previous  paragraph  was  written  --  it  will  not  work  now.  More
-   information is welcome.)
+(NOTE: the syntax for specifiying target_domain has changed since the previous
+paragraph was written -- it will not work now. More information is welcome.)
 
-   In  this  fictitious  example,  everything  goes  via an ISP's caching
-   proxy, except requests to that ISP:
+In this fictitious example, everything goes via an ISP's caching proxy, except
+requests to that ISP:
 
-    forward .* caching.myisp.net:8000
-    forward myisp.net .
+ forward .* caching.myisp.net:8000
+ forward myisp.net .
+   
 
-   For  the  @home  network,  we're  told the forwarding configuration is
-   this:
+For the @home network, we're told the forwarding configuration is this:
 
-     forward .* proxy:8080
+  forward .* proxy:8080
+   
 
-   Also, we're told they insist on getting cookies and JavaScript, so you
-   need  to  add  home.com  to  the cookie file. We consider JavaScript a
-   security risk. Java need not be enabled.
+Also, we're told they insist on getting cookies and JavaScript, so you need to
+add home.com to the cookie file. We consider JavaScript a security risk. Java
+need not be enabled.
 
-   In this example direct connections are made to all "internal" domains,
-   but everything else goes through Lucent's LPWA by way of the company's
-   SOCKS gateway to the Internet.
+In this example direct connections are made to all "internal" domains, but
+everything else goes through Lucent's LPWA by way of the company's SOCKS
+gateway to the Internet.
 
-    forward_socks4 .* lpwa.com:8000 firewall.my_company.com:1080
-    forward my_company.com .
+ forward_socks4 .* lpwa.com:8000 firewall.my_company.com:1080
+ forward my_company.com .
+   
 
-   This  is  how  you  could  set up a site that always uses SOCKS but no
-   forwarders:
+This is how you could set up a site that always uses SOCKS but no forwarders:
 
-     forward_socks4a .* . firewall.my_company.com:1080
+  forward_socks4a .* . firewall.my_company.com:1080
+   
 
-   An advanced example for network administrators:
+An advanced example for network administrators:
 
-   If  you  have  links  to  multiple  ISPs  that provide various special
-   content  to  their  subscribers,  you can configure forwarding to pass
-   requests  to  the  specific  host that's connected to that ISP so that
-   everybody can see all of the content on all of the ISPs.
+If you have links to multiple ISPs that provide various special content to
+their subscribers, you can configure forwarding to pass requests to the
+specific host that's connected to that ISP so that everybody can see all of the
+content on all of the ISPs.
 
-   This is a bit tricky, but here's an example:
+This is a bit tricky, but here's an example:
 
-   host-a  has  a  PPP  connection  to  isp-a.com.  And  host-b has a PPP
-   connection  to  isp-b.com.  host-a  can  run  a  Junkbuster proxy with
-   forwarding like this:
+host-a has a PPP connection to isp-a.com. And host-b has a PPP connection to
+isp-b.com. host-a can run a Junkbuster proxy with forwarding like this:
 
-    forward .* .
-    forward isp-b.com host-b:8000
+ forward .* .
+ forward isp-b.com host-b:8000
+   
 
-   host-b can run a Junkbuster proxy with forwarding like this:
+host-b can run a Junkbuster proxy with forwarding like this:
 
-    forward .* .
-    forward isp-a.com host-a:8000
+ forward .* .
+ forward isp-a.com host-a:8000
+   
 
-   Now, anyone on the Internet (including users on host-a and host-b) can
-   set  their  browser's  proxy to either host-a or host-b and be able to
-   browse the content on isp-a or isp-b.
+Now, anyone on the Internet (including users on host-a and host-b) can set
+their browser's proxy to either host-a or host-b and be able to browse the
+content on isp-a or isp-b.
 
-   Here's another practical example, for University of Kent at Canterbury
-   students  with a network connection in their room, who need to use the
-   University's Squid web cache.
+Here's another practical example, for University of Kent at Canterbury students
+with a network connection in their room, who need to use the University's Squid
+web cache.
 
-    forward *. ssbcache.ukc.ac.uk:3128  # Use the proxy, except for:
-    forward .ukc.ac.uk .  # Anything on the same domain as us
-    forward * .  # Host with no domain specified
-    forward 129.12.*.* .  # A dotted IP on our /16 network.
-    forward 127.*.*.* .  # Loopback address
-    forward localhost.localdomain .  # Loopback address
-    forward www.ukc.mirror.ac.uk .  # Specific host
+ forward *. ssbcache.ukc.ac.uk:3128  # Use the proxy, except for:
+ forward .ukc.ac.uk .  # Anything on the same domain as us
+ forward * .  # Host with no domain specified
+ forward 129.12.*.* .  # A dotted IP on our /16 network.
+ forward 127.*.*.* .  # Loopback address
+ forward localhost.localdomain .  # Loopback address
+ forward www.ukc.mirror.ac.uk .  # Specific host
+   
 
-   If  you  intend  to  chain Junkbuster and squid locally, then chain as
-   browser -> squid -> junkbuster is the recommended way.
+If you intend to chain Junkbuster and squid locally, then chain as browser ->
+squid -> junkbuster is the recommended way.
 
-   Your squid configuration could then look like this:
+Your squid configuration could then look like this:
 
-     # Define junkbuster as parent cache
+  # Define junkbuster as parent cache 
+  
+  cache_peer 127.0.0.1 parent 8000 0 no-query
+  
+  # Define ACL for protocol FTP 
+  acl FTP proto FTP 
 
-     cache_peer 127.0.0.1 parent 8000 0 no-query
+  # Do not forward ACL FTP to junkbuster 
+  always_direct allow FTP 
 
-     # Define ACL for protocol FTP
-     acl FTP proto FTP
-     # Do not forward ACL FTP to junkbuster
-     always_direct allow FTP
-     # Do not forward ACL CONNECT (https) to junkbuster
-     always_direct allow CONNECT
-     # Forward the rest to junkbuster
-     never_direct allow all
-     _________________________________________________________________
+  # Do not forward ACL CONNECT (https) to junkbuster 
+  always_direct allow CONNECT 
+
+  # Forward the rest to junkbuster 
+  never_direct allow all 
+   
+
+-------------------------------------------------------------------------------
 
 Windows GUI Options
 
-   Junkbuster  has  a  number  of  options  specific  to  the Windows GUI
-   interface:
+Junkbuster has a number of options specific to the Windows GUI interface:
 
-   If  "activity-animation" is set to 1, the Junkbuster icon will animate
-   when "Junkbuster" is active. To turn off, set to 0.
+If "activity-animation" is set to 1, the Junkbuster icon will animate when
+"Junkbuster" is active. To turn off, set to 0.
 
-     activity-animation 1
+  activity-animation 1
+   
 
-   If  "log-messages"  is  set  to 1, Junkbuster will log messages to the
-   console window:
+If "log-messages" is set to 1, Junkbuster will log messages to the console
+window:
 
-     log-messages 1
+  log-messages 1
+   
 
-   If "log-buffer-size" is set to 1, the size of the log buffer, i.e. the
-   amount  of  memory  used for the log messages displayed in the console
-   window, will be limited to "log-max-lines" (see below).
+If "log-buffer-size" is set to 1, the size of the log buffer, i.e. the amount
+of memory used for the log messages displayed in the console window, will be
+limited to "log-max-lines" (see below).
 
-   Warning:  Setting  this  to  0  will  result  in  the  buffer  to grow
-   infinitely and eat up all your memory!
+Warning: Setting this to 0 will result in the buffer to grow infinitely and eat
+up all your memory!
 
-     log-buffer-size 1
+  log-buffer-size 1
+   
 
-   log-max-lines  is  the maximum number of lines held in the log buffer.
-   See above.
+log-max-lines is the maximum number of lines held in the log buffer. See above.
 
-     log-max-lines 200
+  log-max-lines 200
+   
 
-   If  "log-highlight-messages"  is  set  to 1, Junkbuster will highlight
-   portions of the log messages with a bold-faced font:
+If "log-highlight-messages" is set to 1, Junkbuster will highlight portions of
+the log messages with a bold-faced font:
 
-     log-highlight-messages 1
+  log-highlight-messages 1
+   
 
-   The font used in the console window:
+The font used in the console window:
 
-     log-font-name Comic Sans MS
+  log-font-name Comic Sans MS
+   
 
-   Font size used in the console window:
+Font size used in the console window:
 
-     log-font-size 8
+  log-font-size 8
+   
 
-   "show-on-task-bar" controls whether or not Junkbuster will appear as a
-   button on the Task bar when minimized:
+"show-on-task-bar" controls whether or not Junkbuster will appear as a button
+on the Task bar when minimized:
 
-     show-on-task-bar 0
+  show-on-task-bar 0
+   
 
-   If "close-button-minimizes" is set to 1, the Windows close button will
-   minimize  Junkbuster  instead  of  closing the program (close with the
-   exit option on the File menu).
+If "close-button-minimizes" is set to 1, the Windows close button will minimize
+Junkbuster instead of closing the program (close with the exit option on the
+File menu).
 
-     close-button-minimizes 1
+  close-button-minimizes 1
+   
 
-   The "hide-console" option is specific to the MS-Win console version of
-   JunkBuster.  If  this  option is used, Junkbuster will disconnect from
-   and hide the command console.
+The "hide-console" option is specific to the MS-Win console version of
+JunkBuster. If this option is used, Junkbuster will disconnect from and hide
+the command console.
 
-     #hide-console
-     _________________________________________________________________
+  #hide-console
+   
+
+-------------------------------------------------------------------------------
 
 The Actions File
 
-   The "actionsfile" is used to define what actions Junkbuster takes, and
-   thus  determines how images, cookies and various other aspects of HTTP
-   content and transactions are handled. Images can be anything you want,
-   including  ads,  banners,  or just some obnoxious image that you would
-   rather  not see. Cookies can be accepted or rejected. The default file
-   is in fact named actionsfile.
+The "actionsfile" is used to define what actions Junkbuster takes, and thus
+determines how images, cookies and various other aspects of HTTP content and
+transactions are handled. Images can be anything you want, including ads,
+banners, or just some obnoxious image that you would rather not see. Cookies
+can be accepted or rejected. The default file is in fact named actionsfile.
 
-   To  determine which actions apply to a request, the URL of the request
-   is  compared  to all patterns in this file. Every time it matches, the
-   list  of  applicable actions for the URL is incrementally updated. You
-   can trace this process by visiting [18]http://i.j.b/show-url-info.
+To determine which actions apply to a request, the URL of the request is
+compared to all patterns in this file. Every time it matches, the list of
+applicable actions for the URL is incrementally updated. You can trace this
+process by visiting http://i.j.b/show-url-info.
 
-   There are four types of lines in this file: comments (begin with a "#"
-   character),  actions, aliases and patterns, all of which are explained
-   below.
-     _________________________________________________________________
+There are four types of lines in this file: comments (begin with a "#"
+character), actions, aliases and patterns, all of which are explained below.
+
+-------------------------------------------------------------------------------
 
 URL Domain and Path Syntax
 
-   Generally,  a  pattern  has  the  form <domain>/<path>, where both the
-   <domain>  and  <path>  part are optional. If you only specify a domain
-   part, the "/" can be left out:
+Generally, a pattern has the form <domain>/<path>, where both the <domain> and
+<path> part are optional. If you only specify a domain part, the "/" can be
+left out:
 
-   www.example.com  - is a domain only pattern and will match any request
-   to "www.example.com".
+www.example.com - is a domain only pattern and will match any request to
+"www.example.com".
 
-   www.example.com/ - means exactly the same.
+www.example.com/ - means exactly the same.
 
-   www.example.com/index.html   -   matches   only  the  single  document
-   "/index.html" on "www.example.com".
+www.example.com/index.html - matches only the single document "/index.html" on
+"www.example.com".
 
-   /index.html  -  matches  the document "/index.html", regardless of the
-   domain.
+/index.html - matches the document "/index.html", regardless of the domain.
 
-   index.html  -  matches  nothing,  since  it  would be interpreted as a
-   domain name and there is no top-level domain called ".html".
+index.html - matches nothing, since it would be interpreted as a domain name
+and there is no top-level domain called ".html".
 
-   The  matching  of the domain part offers some flexible options: if the
-   domain  starts  or ends with a dot, it becomes unanchored at that end.
-   For example:
+The matching of the domain part offers some flexible options: if the domain
+starts or ends with a dot, it becomes unanchored at that end. For example:
 
-   .example.com - matches any domain that ENDS in ".example.com".
+.example.com - matches any domain that ENDS in ".example.com".
 
-   www. - matches any domain that STARTS with "www".
+www. - matches any domain that STARTS with "www".
 
-   Additionally, there are wildcards that you can use in the domain names
-   themselves.  They  work  pretty similar to shell wildcards: "*" stands
-   for  zero  or  more  arbitrary  characters,  "?" stands for any single
-   character.  And  you  can define charachter classes in square brackets
-   and they can be freely mixed:
+Additionally, there are wildcards that you can use in the domain names
+themselves. They work pretty similar to shell wildcards: "*" stands for zero or
+more arbitrary characters, "?" stands for any single character. And you can
+define charachter classes in square brackets and they can be freely mixed:
 
-   ad*.example.com  -  matches "adserver.example.com", "ads.example.com",
-   etc but not "sfads.example.com".
+ad*.example.com - matches "adserver.example.com", "ads.example.com", etc but
+not "sfads.example.com".
 
-   *ad*.example.com - matches all of the above, and then some.
+*ad*.example.com - matches all of the above, and then some.
 
-   .?pix.com     -     matches    "www.ipix.com",    "pictures.epix.com",
-   "a.b.c.d.e.upix.com", etc.
+.?pix.com - matches "www.ipix.com", "pictures.epix.com", "a.b.c.d.e.upix.com",
+etc.
 
-   www[1-9a-ez].example.com       -      matches      "www1.example.com",
-   "www4.example.com",  "wwwd.example.com", "wwwz.example.com", etc., but
-   not "wwww.example.com".
+www[1-9a-ez].example.com - matches "www1.example.com", "www4.example.com",
+"wwwd.example.com", "wwwz.example.com", etc., but not "wwww.example.com".
 
-   If  Junkbuster  was  compiled  with  "pcre"  support  (default),  Perl
-   compatible  regular  expressions  can  be  used.  See  the  pcre/docs/
-   direcory or "man perlre" (also available on
-   [19]http://www.perldoc.com/perl5.6/pod/perlre.html)   for  details.  A
-   brief  discussion  of  regular expressions is in the [20]Appendix. For
-   instance:
+If Junkbuster was compiled with "pcre" support (default), Perl compatible
+regular expressions can be used. See the pcre/docs/ direcory or "man perlre"
+(also available on http://www.perldoc.com/perl5.6/pod/perlre.html) for details.
+A brief discussion of regular expressions is in the Appendix. For instance:
 
-   /.*/advert[0-9]+\.jpe?g  - would match a URL from any domain, with any
-   path  that  includes  "advert"  followed  immediately  by  one or more
-   digits,  then  a "." and ending in either "jpeg" or "jpg". So we match
-   "example.com/ads/advert2.jpg", and
-   "www.example.com/ads/banners/advert39.jpeg",          but          not
-   "www.example.com/ads/banners/advert39.gif"  (no  gifs  in  the example
-   pattern).
+/.*/advert[0-9]+\.jpe?g - would match a URL from any domain, with any path that
+includes "advert" followed immediately by one or more digits, then a "." and
+ending in either "jpeg" or "jpg". So we match "example.com/ads/advert2.jpg",
+and "www.example.com/ads/banners/advert39.jpeg", but not "www.example.com/ads/
+banners/advert39.gif" (no gifs in the example pattern).
 
-   Please  note that matching in the path is case INSENSITIVE by default,
-   but  you  can  switch to case sensitive at any point in the pattern by
-   using the "(?-i)" switch:
+Please note that matching in the path is case INSENSITIVE by default, but you
+can switch to case sensitive at any point in the pattern by using the "(?-i)"
+switch:
 
-   www.example.com/(?-i)PaTtErN.*  - will match only documents whose path
-   starts with "PaTtErN" in exactly this capitalization.
-     _________________________________________________________________
+www.example.com/(?-i)PaTtErN.* - will match only documents whose path starts
+with "PaTtErN" in exactly this capitalization.
+
+-------------------------------------------------------------------------------
 
 Actions
 
-   Actions  are  enabled if preceded with a "+", and disabled if preceded
-   with  a "-". Actions are invoked by enclosing the action name in curly
-   braces  (e.g. {+some_action}), followed by a list of URLs to which the
-   action applies. There are three classes of actions:
+Actions are enabled if preceded with a "+", and disabled if preceded with a
+"-". Actions are invoked by enclosing the action name in curly braces (e.g.
+{+some_action}), followed by a list of URLs to which the action applies. There
+are three classes of actions:
 
-     * Boolean (e.g. "+/-block"):
-         {+name}        # enable this action
-         {-name}        # disable this action
+  * Boolean (e.g. "+/-block"):
+   
+      {+name}        # enable this action
+      {-name}        # disable this action
+         
+   
+  * Parameterized (e.g. "+/-hide-user-agent"):
+   
+      {+name{param}}  # enable action and set parameter to "param"
+      {-name}         # disable action
+         
+   
+  * Multi-value (e.g. "{+/-add-header{Name: value}}", "{+/-wafer{name=value}}
+    "):
+   
+      {+name{param}}   # enable action and add parameter "param"
+      {-name{param}}   # remove the parameter "param"
+      {-name}          # disable this action totally
+         
+   
+If nothing is specified in this file, no "actions" are taken. So in this case
+JunkBuster would just be a normal, non-blocking, non-anonymizing proxy. You
+must specifically enable the privacy and blocking features you need (although
+the provided default actionsfile file will give a good starting point).
 
-     * Parameterized (e.g. "+/-hide-user-agent"):
-         {+name{param}}  # enable action and set parameter to "param"
-         {-name}         # disable action
+Later defined actions always over-ride earlier ones. For multi-valued actions,
+the actions are applied in the order they are specified.
 
-     * Multi-value       (e.g.       "{+/-add-header{Name:      value}}",
-       "{+/-wafer{name=value}}"):
-         {+name{param}}   # enable action and add parameter "param"
-         {-name{param}}   # remove the parameter "param"
-         {-name}          # disable this action totally
+The list of valid Junkbuster "actions" are:
 
-   If  nothing  is  specified in this file, no "actions" are taken. So in
-   this   case   JunkBuster   would   just  be  a  normal,  non-blocking,
-   non-anonymizing  proxy.  You  must specifically enable the privacy and
-   blocking  features you need (although the provided default actionsfile
-   file will give a good starting point).
+  * Add the specified HTTP header, which is not checked for validity. You may
+    specify this many times to specify many different headers:
+   
+      +add-header{Name: value}
+         
+   
+  * Block this URL totally.
+   
+      +block
+         
+   
+  * De-animate all animated GIF images, i.e. reduce them to their last frame.
+    This will also shrink the images considerably (in bytes, not pixels!). If
+    the option "first" is given, the first frame of the animation is used as
+    the replacement. If "last" is given, the last frame of the animation is
+    used instead, which propably makes more sense for most banner animations,
+    but also has the risk of not showing the entire last frame (if it is only a
+    delta to an earlier frame).
+   
+      +deanimate-gifs{last}
+      +deanimate-gifs{first}
+         
+   
+  * "+downgrade" will downgrade HTTP/1.1 client requests to HTTP/1.0 and
+    downgrade the responses as well. Use this action for servers that use HTTP/
+    1.1 protocol features that Junkbuster doesn't handle well yet. HTTP/1.1 is
+    only partially implemented. Default is not to downgrade requests.
+   
+      +downgrade
+         
+   
+  * Many sites, like yahoo.com, don't just link to other sites. Instead, they
+    will link to some script on their own server, giving the destination as a
+    parameter, which will then redirect you to the final target. URLs resulting
+    from this scheme typically look like: http://some.place/some_script?http://
+    some.where-else.
+   
+    Sometimes, there are even multiple consecutive redirects encoded in the
+    URL. These redirections via scripts make your web browing more traceable,
+    since the server from which you follow such a link can see where you go to.
+    Apart from that, valuable bandwidth and time is wasted, while your browser
+    ask the server for one redirect after the other. Plus, it feeds the
+    advertisers.
+   
+    The "+fast-redirects" option enables interception of these requests by
+    Junkbuster, who will cut off all but the last valid URL in the request and
+    send a local redirect back to your browser without contacting the remote
+    site.
+   
+      +fast-redirects
+         
+   
+  * Filter the website through the re_filterfile:
+   
+     +filter{filename}
+         
+   
+  * Block any existing X-Forwarded-for header, and do not add a new one:
+   
+      +hide-forwarded
+         
+   
+  * If the browser sends a "From:" header containing your e-mail address, this
+    either completely removes the header ("block"), or changes it to the
+    specified e-mail address.
+   
+      +hide-from{block}
+      +hide-from{spam@sittingduck.xqq}
+         
+   
+  * Don't send the "Referer:" (sic) header to the web site. You can block it,
+    forge a URL to the same server as the request (which is preferred because
+    some sites will not send images otherwise) or set it to a constant string
+    of your choice.
+   
+      +hide-referer{block}
+      +hide-referer{forge}
+      +hide-referer{http://nowhere.com}
+         
+   
+  * Alternative spelling of "+hide-referer". It has the same parameters, and
+    can be freely mixed with, "+hide-referer". ("referrer" is the correct
+    English spelling, however the HTTP specification has a bug - it requires it
+    to be spelled "referer".)
+   
+      +hide-referrer{...}
+         
+   
+  * Change the "User-Agent:" header so web servers can't tell your browser
+    type. Warning! This breaks many web sites. Specify the user-agent value you
+    want. Example, pretend to be using Netscape on Linux:
+   
+      +hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}
+         
+   
+  * Treat this URL as an image. This only matters if it's also "+block"ed, in
+    which case a "blocked" image can be sent rather than a HTML page. See
+    "+image-blocker{}" below for the control over what is actually sent.
+   
+      +image
+         
+   
+  * Decides what to do with URLs that end up tagged with "{+block +image}".
+    There are 4 options. "-image-blocker" will send a HTML "blocked" page,
+    usually resulting in a "broken image" icon. "+image-blocker{logo}" will
+    send a "JunkBuster" image. "+image-blocker{blank}" will send a 1x1
+    transparent GIF image. And finally, "+image-blocker{http://xyz.com}" will
+    send a HTTP temporary redirect to the specified image. This has the
+    advantage of the icon being being cached by the browser, which will speed
+    up the display.
+   
+      +image-blocker{logo}
+      +image-blocker{blank}
+      +image-blocker{http://i.j.b/send-banner}
+         
+   
+  * By default (i.e. in the absence of a "+limit-connect" action), Junkbuster
+    will only allow CONNECT requests to port 443, which is the standard port
+    for https as a precaution.
+   
+    The CONNECT methods exists in HTTP to allow access to secure websites
+    (https:// URLs) through proxies. It works very simply: the proxy connects
+    to the server on the specified port, and then short-circuits its
+    connections to the client and to the remote proxy. This can be a big
+    security hole, since CONNECT-enabled proxies can be abused as TCP relays
+    very easily.
+   
+    If you want to allow CONNECT for more ports than this, or want to forbid
+    CONNECT altogether, you can specify a comma separated list of ports and
+    port ranges (the latter using dashes, with the minimum defaulting to 0 and
+    max to 65K):
+   
+      +limit-connect{443} # This is the default and need no be specified.
+      +limit-connect{80,443} # Ports 80 and 443 are OK.
+      +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100
+       #and above 500 are OK.
+         
+   
+  * "+no-compression" prevents the website from compressing the data. Some
+    websites do this, which can be a problem for Junkbuster, since "+filter",
+    "+no-popup" and "+gif-deanimate" will not work on compressed data. This
+    will slow down connections to those websites, though. Default is
+    "nocompression" is turned on.
+   
+      +nocompression
+         
+   
+  * Prevent the website from reading cookies:
+   
+      +no-cookies-read
+         
+   
+  * Prevent the website from setting cookies:
+   
+      +no-cookies-set
+         
+   
+  * Filter the website through a built-in filter to disable those obnoxious
+    JavaScript pop-up windows via window.open(), etc. The two alternative
+    spellings are equivalent.
+   
+      +no-popup
+      +no-popups
+         
+   
+  * This action only applies if you are using a jarfile for saving cookies. It
+    sends a cookie to every site stating that you do not accept any copyright
+    on cookies sent to you, and asking them not to track you. Of course, this
+    is a (relatively) unique header they could use to track you.
+   
+      +vanilla-wafer
+         
+   
+  * This allows you to add an arbitrary cookie. It can be specified multiple
+    times in order to add as many cookies as you like.
+   
+      +wafer{name=value}
+         
+   
+The meaning of any of the above is reversed by preceding the action with a "-",
+in place of the "+".
 
-   Later  defined actions always over-ride earlier ones. For multi-valued
-   actions, the actions are applied in the order they are specified.
+Some examples:
 
-   The list of valid Junkbuster "actions" are:
+Turn off cookies by default, then allow a few through for specified sites:
 
-     * Add  the specified HTTP header, which is not checked for validity.
-       You may specify this many times to specify many different headers:
-         +add-header{Name: value}
+ # Turn off all cookies
+ { +no-cookies-read }
+ { +no-cookies-set }
 
-     * Block this URL totally.
-         +block
+ # Execeptions to the above, sites that need cookies
+ { -no-cookies-read }
+ { -no-cookies-set }
+ .javasoft.com
+ .sun.com
+ .yahoo.com
+ .msdn.microsoft.com
+ .redhat.com
 
-     * De-animate all animated GIF images, i.e. reduce them to their last
-       frame.  This  will  also shrink the images considerably (in bytes,
-       not  pixels!).  If the option "first" is given, the first frame of
-       the  animation is used as the replacement. If "last" is given, the
-       last  frame of the animation is used instead, which propably makes
-       more  sense  for  most banner animations, but also has the risk of
-       not  showing  the  entire  last frame (if it is only a delta to an
-       earlier frame).
-         +deanimate-gifs{last}
-         +deanimate-gifs{first}
+ # Alternative way of saying the same thing
+ {-no-cookies-set -no-cookies-read}
+ .sourceforge.net
+ .sf.net
+   
 
-     * "+downgrade"  will  downgrade HTTP/1.1 client requests to HTTP/1.0
-       and  downgrade  the responses as well. Use this action for servers
-       that use HTTP/1.1 protocol features that Junkbuster doesn't handle
-       well  yet.  HTTP/1.1 is only partially implemented. Default is not
-       to downgrade requests.
-         +downgrade
+Now turn off "fast redirects", and then we allow two exceptions:
 
-     * Many  sites,  like  yahoo.com,  don't  just  link  to other sites.
-       Instead, they will link to some script on their own server, giving
-       the  destination  as  a parameter, which will then redirect you to
-       the  final  target. URLs resulting from this scheme typically look
-       like: http://some.place/some_script?http://some.where-else.
-       Sometimes,  there  are even multiple consecutive redirects encoded
-       in  the  URL. These redirections via scripts make your web browing
-       more traceable, since the server from which you follow such a link
-       can  see  where you go to. Apart from that, valuable bandwidth and
-       time is wasted, while your browser ask the server for one redirect
-       after the other. Plus, it feeds the advertisers.
-       The   "+fast-redirects"   option  enables  interception  of  these
-       requests  by  Junkbuster,  who will cut off all but the last valid
-       URL  in the request and send a local redirect back to your browser
-       without contacting the remote site.
-         +fast-redirects
+ # Turn them off!
+ {+fast-redirects}
+ 
+ # Reverse it for these two sites, which don't work right without it.
+ {-fast-redirects}
+ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
+ login.yahoo.com
+   
 
-     * Filter the website through the re_filterfile:
-        +filter{filename}
+Turn on page filtering, with one exception for sourceforge:
 
-     * Block  any  existing  X-Forwarded-for header, and do not add a new
-       one:
-         +hide-forwarded
+ # Run everything through the default filter file (re_filterfile):
+ {+filter}
+ 
+ # But please don't re_filter code from sourceforge!
+ {-filter}
+ .cvs.sourceforge.net
+   
 
-     * If  the  browser  sends  a  "From:"  header containing your e-mail
-       address,  this  either completely removes the header ("block"), or
-       changes it to the specified e-mail address.
-         +hide-from{block}
-         +hide-from{spam@sittingduck.xqq}
+Now some URLs that we want "blocked", ie we won't see them. Many of these use
+regular expressions that will expand to match multiple URLs:
 
-     * Don't  send  the  "Referer:" (sic) header to the web site. You can
-       block  it, forge a URL to the same server as the request (which is
-       preferred  because  some  sites will not send images otherwise) or
-       set it to a constant string of your choice.
-         +hide-referer{block}
-         +hide-referer{forge}
-         +hide-referer{http://nowhere.com}
+  # Blocklist:
+  {+block}
+  /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
+  /.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
+  /.*/(ng)?adclient\.cgi
+  /.*/(plain|live|rotate)[-_.]?ads?/
+  /.*/(sponsor)s?[0-9]?/
+  /.*/_?(plain|live)?ads?(-banners)?/
+  /.*/abanners/
+  /.*/ad(sdna_image|gifs?)/
+  /.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+  /.*/adbanners/
+  /.*/adserver
+  /.*/adstream\.cgi
+  /.*/adv((er)?ts?|ertis(ing|ements?))?/
+  /.*/banner_?ads/
+  /.*/banners?/
+  /.*/banners?\.cgi/
+  /.*/cgi-bin/centralad/getimage
+  /.*/images/addver\.gif
+  /.*/images/marketing/.*\.(gif|jpe?g)
+  /.*/popupads/
+  /.*/siteads/
+  /.*/sponsor.*\.gif
+  /.*/sponsors?[0-9]?/
+  /.*/advert[0-9]+\.jpg
+  /Media/Images/Adds/
+  /ad_images/
+  /adimages/
+  /.*/ads/
+  /bannerfarm/
+  /grafikk/annonse/
+  /graphics/defaultAd/
+  /image\.ng/AdType
+  /image\.ng/transactionID
+  /images/.*/.*_anim\.gif # alvin brattli
+  /ip_img/.*\.(gif|jpe?g)
+  /rotateads/
+  /rotations/ 
+  /worldnet/ad\.cgi
+  /cgi-bin/nph-adclick.exe/
+  /.*/Image/BannerAdvertising/
+  /.*/ad-bin/
+  /.*/adlib/server\.cgi
+  /autoads/
+   
 
-     * Alternative   spelling   of   "+hide-referer".  It  has  the  same
-       parameters,   and  can  be  freely  mixed  with,  "+hide-referer".
-       ("referrer"  is  the  correct  English  spelling, however the HTTP
-       specification has a bug - it requires it to be spelled "referer".)
-         +hide-referrer{...}
-
-     * Change  the  "User-Agent:"  header  so web servers can't tell your
-       browser  type.  Warning!  This  breaks many web sites. Specify the
-       user-agent  value  you want. Example, pretend to be using Netscape
-       on Linux:
-         +hide-user-agent{Mozilla (X11; I; Linux 2.0.32 i586)}
-
-     * Treat  this  URL  as  an  image.  This  only  matters if it's also
-       "+block"ed,  in  which  case  a "blocked" image can be sent rather
-       than  a  HTML  page.  See "+image-blocker{}" below for the control
-       over what is actually sent.
-         +image
-
-     * Decides  what  to  do  with  URLs that end up tagged with "{+block
-       +image}".  There  are 4 options. "-image-blocker" will send a HTML
-       "blocked"  page,  usually  resulting  in  a  "broken  image" icon.
-       "+image-blocker{logo}"    will    send   a   "JunkBuster"   image.
-       "+image-blocker{blank}" will send a 1x1 transparent GIF image. And
-       finally,   "+image-blocker{http://xyz.com}"   will   send  a  HTTP
-       temporary  redirect to the specified image. This has the advantage
-       of the icon being being cached by the browser, which will speed up
-       the display.
-         +image-blocker{logo}
-         +image-blocker{blank}
-         +image-blocker{http://i.j.b/send-banner}
-
-     * By  default  (i.e.  in  the absence of a "+limit-connect" action),
-       Junkbuster  will only allow CONNECT requests to port 443, which is
-       the standard port for https as a precaution.
-       The  CONNECT  methods  exists  in  HTTP  to allow access to secure
-       websites  (https://  URLs)  through proxies. It works very simply:
-       the  proxy  connects to the server on the specified port, and then
-       short-circuits  its  connections  to  the client and to the remote
-       proxy.  This  can  be  a  big security hole, since CONNECT-enabled
-       proxies can be abused as TCP relays very easily.
-       If  you want to allow CONNECT for more ports than this, or want to
-       forbid  CONNECT altogether, you can specify a comma separated list
-       of  ports  and  port  ranges  (the  latter  using dashes, with the
-       minimum defaulting to 0 and max to 65K):
-         +limit-connect{443}  #  This  is  the  default  and  need  no be
-       specified.
-         +limit-connect{80,443} # Ports 80 and 443 are OK.
-         +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to
-       100
-          #and above 500 are OK.
-
-     * "+no-compression"  prevents the website from compressing the data.
-       Some  websites  do  this,  which  can be a problem for Junkbuster,
-       since "+filter", "+no-popup" and "+gif-deanimate" will not work on
-       compressed   data.  This  will  slow  down  connections  to  those
-       websites, though. Default is "nocompression" is turned on.
-         +nocompression
-
-     * Prevent the website from reading cookies:
-         +no-cookies-read
-
-     * Prevent the website from setting cookies:
-         +no-cookies-set
-
-     * Filter  the  website  through  a  built-in filter to disable those
-       obnoxious  JavaScript  pop-up  windows via window.open(), etc. The
-       two alternative spellings are equivalent.
-         +no-popup
-         +no-popups
-
-     * This  action  only  applies  if you are using a jarfile for saving
-       cookies.  It  sends a cookie to every site stating that you do not
-       accept  any  copyright on cookies sent to you, and asking them not
-       to track you. Of course, this is a (relatively) unique header they
-       could use to track you.
-         +vanilla-wafer
-
-     * This  allows  you  to add an arbitrary cookie. It can be specified
-       multiple times in order to add as many cookies as you like.
-         +wafer{name=value}
-
-   The  meaning  of  any of the above is reversed by preceding the action
-   with a "-", in place of the "+".
-
-   Some examples:
-
-   Turn  off  cookies  by default, then allow a few through for specified
-   sites:
-
-    # Turn off all cookies
-    { +no-cookies-read }
-    { +no-cookies-set }
-    # Execeptions to the above, sites that need cookies
-    { -no-cookies-read }
-    { -no-cookies-set }
-    .javasoft.com
-    .sun.com
-    .yahoo.com
-    .msdn.microsoft.com
-    .redhat.com
-    # Alternative way of saying the same thing
-    {-no-cookies-set -no-cookies-read}
-    .sourceforge.net
-    .sf.net
-
-   Now turn off "fast redirects", and then we allow two exceptions:
-
-    # Turn them off!
-    {+fast-redirects}
-
-    # Reverse it for these two sites, which don't work right without it.
-    {-fast-redirects}
-    www.ukc.ac.uk/cgi-bin/wac\.cgi\?
-    login.yahoo.com
-
-   Turn on page filtering, with one exception for sourceforge:
-
-    # Run everything through the default filter file (re_filterfile):
-    {+filter}
-
-    # But please don't re_filter code from sourceforge!
-    {-filter}
-    .cvs.sourceforge.net
-
-   Now  some  URLs  that we want "blocked", ie we won't see them. Many of
-   these use regular expressions that will expand to match multiple URLs:
-
-     # Blocklist:
-     {+block}
-     /.*/(.*[-_.])?ads?[0-9]?(/|[-_.].*|\.(gif|jpe?g))
-     /.*/(.*[-_.])?count(er)?(\.cgi|\.dll|\.exe|[?/])
-     /.*/(ng)?adclient\.cgi
-     /.*/(plain|live|rotate)[-_.]?ads?/
-     /.*/(sponsor)s?[0-9]?/
-     /.*/_?(plain|live)?ads?(-banners)?/
-     /.*/abanners/
-     /.*/ad(sdna_image|gifs?)/
-     /.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
-     /.*/adbanners/
-     /.*/adserver
-     /.*/adstream\.cgi
-     /.*/adv((er)?ts?|ertis(ing|ements?))?/
-     /.*/banner_?ads/
-     /.*/banners?/
-     /.*/banners?\.cgi/
-     /.*/cgi-bin/centralad/getimage
-     /.*/images/addver\.gif
-     /.*/images/marketing/.*\.(gif|jpe?g)
-     /.*/popupads/
-     /.*/siteads/
-     /.*/sponsor.*\.gif
-     /.*/sponsors?[0-9]?/
-     /.*/advert[0-9]+\.jpg
-     /Media/Images/Adds/
-     /ad_images/
-     /adimages/
-     /.*/ads/
-     /bannerfarm/
-     /grafikk/annonse/
-     /graphics/defaultAd/
-     /image\.ng/AdType
-     /image\.ng/transactionID
-     /images/.*/.*_anim\.gif # alvin brattli
-     /ip_img/.*\.(gif|jpe?g)
-     /rotateads/
-     /rotations/
-     /worldnet/ad\.cgi
-     /cgi-bin/nph-adclick.exe/
-     /.*/Image/BannerAdvertising/
-     /.*/ad-bin/
-     /.*/adlib/server\.cgi
-     /autoads/
-     _________________________________________________________________
+-------------------------------------------------------------------------------
 
 Aliases
 
-   Custom  "actions", known to Junkbuster as "aliases", can be defined by
-   combining  other "actions". These can in turn be invoked just like the
-   built-in  "actions".  Currently,  an  alias  can contain any character
-   except  space,  tab,  "=",  "{"  or "}". But please use only "a"- "z",
-   "0"-"9", "+", and "-". Alias names are not case sensitive, and must be
-   defined before anything else in actionsfile! And there can only be one
-   set of "aliases" defined.
+Custom "actions", known to Junkbuster as "aliases", can be defined by combining
+other "actions". These can in turn be invoked just like the built-in "actions".
+Currently, an alias can contain any character except space, tab, "=", "{" or "}
+". But please use only "a"- "z", "0"-"9", "+", and "-". Alias names are not
+case sensitive, and must be defined before anything else in actionsfile! And
+there can only be one set of "aliases" defined.
 
-   Now let's define a few aliases:
+Now let's define a few aliases:
 
-    # Useful customer aliases we can use later. These must come first!
-    {{alias}}
-    +no-cookies = +no-cookies-set +no-cookies-read
-    -no-cookies = -no-cookies-set -no-cookies-read
-    fragile     = -block -no-cookies -filter -fast-redirects -hide-refere
-   r -no-popups
-    shop        = -no-cookies -filter -fast-redirects
-    +imageblock = +block +image
-    #For people who don't like to type too much:  ;-)
-    c0 = +no-cookies
-    c1 = -no-cookies
-    c2 = -no-cookies-set +no-cookies-read
-    c3 = +no-cookies-set -no-cookies-read
-    #... etc.  Customize to your heart's content.
+ # Useful customer aliases we can use later. These must come first!
+ {{alias}}
+ +no-cookies = +no-cookies-set +no-cookies-read
+ -no-cookies = -no-cookies-set -no-cookies-read
+ fragile     =
+ -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
+ shop        = -no-cookies -filter -fast-redirects
+ +imageblock = +block +image
 
-   Some examples using our "shop" and "fragile" aliases from above:
+ #For people who don't like to type too much:  ;-)
+ c0 = +no-cookies
+ c1 = -no-cookies
+ c2 = -no-cookies-set +no-cookies-read
+ c3 = +no-cookies-set -no-cookies-read
+ #... etc.  Customize to your heart's content.
+   
 
-    # These sites are very complex and require
-    # minimal interference.
-    {fragile}
-    .office.microsoft.com
-    .windowsupdate.microsoft.com
-    .nytimes.com
-    # Shopping sites - still want to block ads.
-    {shop}
-    .quietpc.com
-    .worldpay.com   # for quietpc.com
-    .jungle.com
-    .scan.co.uk
-    # These shops require pop-ups
-    {shop -no-popups}
-    .dabs.com
-    .overclockers.co.uk
-     _________________________________________________________________
+Some examples using our "shop" and "fragile" aliases from above:
+
+ # These sites are very complex and require
+ # minimal interference.
+ {fragile}
+ .office.microsoft.com
+ .windowsupdate.microsoft.com
+ .nytimes.com
+
+ # Shopping sites - still want to block ads.
+ {shop}
+ .quietpc.com
+ .worldpay.com   # for quietpc.com
+ .jungle.com
+ .scan.co.uk
+
+ # These shops require pop-ups
+ {shop -no-popups}
+ .dabs.com
+ .overclockers.co.uk
+   
+
+-------------------------------------------------------------------------------
 
 The Filter File
 
-   The  filter  file defines what filtering of web pages Junkbuster does.
-   The  default  filter  file  is  re_filterfile,  located  in the config
-   directory.  In  this file, any document content, whether viewable text
-   or embedded non-visible content, can be changed.
+The filter file defines what filtering of web pages Junkbuster does. The
+default filter file is re_filterfile, located in the config directory. In this
+file, any document content, whether viewable text or embedded non-visible
+content, can be changed.
 
-   This  file  uses  regular expressions to alter or remove any string in
-   the   target   page.   Some   examples   from   the  included  default
-   re_filterfile:
+This file uses regular expressions to alter or remove any string in the target
+page. Some examples from the included default re_filterfile:
 
-   Stop  web pages from displaying annoying messages in the status bar by
-   deleting such references:
+Stop web pages from displaying annoying messages in the status bar by deleting
+such references:
 
-    # The status bar is for displaying link targets, not pointless buzzwo
-   rds.
-    # Again, check it out on http://www.airport-cgn.de/.
-    s/status='.*?';*//ig
+ # The status bar is for displaying link targets, not pointless buzzwords.
+ # Again, check it out on http://www.airport-cgn.de/.
+ s/status='.*?';*//ig
+   
 
-   Just   for   kicks,   replace   any  occurrence  of  "Microsoft"  with
-   "MicroSuck":
+Just for kicks, replace any occurrence of "Microsoft" with "MicroSuck":
 
-    s/microsoft(?!.com)/MicroSuck/ig
+ s/microsoft(?!.com)/MicroSuck/ig
+   
 
-   Kill those auto-refresh tags:
+Kill those auto-refresh tags:
 
-    # Kill refresh tags. I like to refresh myself. Manually.
-    # check it out on http://www.airport-cgn.de/ and go to the arrivals p
-   age.
-    #
-    s/<meta[^>]*http-equiv[^>]*refresh.*URL=([^>]*?)"?>/<link rev="x-refr
-   esh" href=$1>/i
-    s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!--no page
-   enter for me-->/i
-     _________________________________________________________________
+ # Kill refresh tags. I like to refresh myself. Manually.
+ # check it out on http://www.airport-cgn.de/ and go to the arrivals page.
+ #
+ s/<meta[^>]*http-equiv[^>]*refresh.*URL=([^>]*?)"?>/<link rev="x-refresh" href
+=$1>/i
+ s/<meta[^>]*http-equiv="?page-enter"?[^>]*content=[^>]*>/<!
+--no page enter for me-->/i
+   
+
+-------------------------------------------------------------------------------
 
 Quickstart to Using Junkbuster
 
-   Install  package,  then  run  and  enjoy!  Junbuster  accepts only one
-   command line option -- the configuration file to be used. Example Unix
-   startup command:
+Install package, then run and enjoy! Junbuster accepts only one command line
+option -- the configuration file to be used. Example Unix startup command:
 
+                                                                               
+ # /usr/sbin/junkbuster /etc/junkbuster/config &                               
+                                                                               
+                                                                               
 
- # /usr/sbin/junkbuster /etc/junkbuster/config &
+If no configuration file is specified on the command line, Junkbuster will look
+for a file named config in the current directory. Except on Amiga where it will
+look for AmiTCP:db/junkbuster/config and Win32 where it will try junkbstr.txt.
+If no file is specified on the command line and no default configuration file
+can be found, Junkbuster will fail to start.
 
+Be sure your browser is set to use the proxy which is by default at localhost,
+port 8000. With Netscape (and Mozilla), this can be set under Edit ->
+Preferences -> Advanced -> Proxies -> HTTP Proxy. For Internet Explorer: Tools
+> Internet Properties -> Connections -> LAN Setting. Then, check "Use Proxy"
+and fill in the appropriate info (Address: localhost, Port: 8000). Include if
+HTTPS proxy support too.
 
-   If  no configuration file is specified on the command line, Junkbuster
-   will  look for a file named config in the current directory. Except on
-   Amiga  where  it  will  look for AmiTCP:db/junkbuster/config and Win32
-   where it will try junkbstr.txt. If no file is specified on the command
-   line  and  no default configuration file can be found, Junkbuster will
-   fail to start.
+The included default configuration files should give a reasonable starting
+point, though may be somewhat aggressive in blocking junk. You will probably
+want to keep an eye out for sites that require cookies, and add these to
+actionsfile as needed. By default, most of these will be blocked until you add
+them to the configuration. If you want the browser to handle this instead, you
+will need to edit actionsfile and disable this feature. If you use more than
+one browser, it would make more sense to let Junkbuster handle this. In which
+case, the browser(s) should be set to accept all cookies.
 
-   Be  sure  your  browser is set to use the proxy which is by default at
-   localhost,  port  8000.  With  Netscape (and Mozilla), this can be set
-   under  Edit  ->  Preferences -> Advanced -> Proxies -> HTTP Proxy. For
-   Internet  Explorer:  Tools > Internet Properties -> Connections -> LAN
-   Setting.  Then,  check  "Use  Proxy"  and fill in the appropriate info
-   (Address: localhost, Port: 8000). Include if HTTPS proxy support too.
+If a particular site shows problems loading properly, try adding it to the
+{fragile} section of actionsfile. This will turn off most actions for this
+site.
 
-   The  included  default  configuration  files  should give a reasonable
-   starting  point,  though  may be somewhat aggressive in blocking junk.
-   You  will  probably  want  to  keep  an eye out for sites that require
-   cookies,  and  add these to actionsfile as needed. By default, most of
-   these  will be blocked until you add them to the configuration. If you
-   want  the  browser  to  handle  this  instead,  you  will need to edit
-   actionsfile  and  disable  this  feature.  If  you  use  more than one
-   browser,  it  would  make more sense to let Junkbuster handle this. In
-   which case, the browser(s) should be set to accept all cookies.
+HTTP/1.1 support is not fully implemented. If browsers that support HTTP/1.1
+(like Mozilla or recent versions of I.E.) experience problems, you might try to
+force HTTP/1.0 compatiblity. For Mozilla, look under Edit -> Preferences ->
+Debug -> Networking. Or set the "+downgrade" config option in actionsfile.
 
-   If a particular site shows problems loading properly, try adding it to
-   the  {fragile} section of actionsfile. This will turn off most actions
-   for this site.
+After running Junkbuster for a while, you can start to fine tune the
+configuration to suit your personal, or site, preferences and requirements.
+There are many, many aspects that can be customized. "Actions" (from
+actionsfile) can be adjusted by pointing your browser to http://
+ijbswa.sourceforge.net/config/, and then follow the link to "edit the actions
+list". (This is an internal page and does not require Internet access.)
 
-   HTTP/1.1  support  is  not fully implemented. If browsers that support
-   HTTP/1.1   (like  Mozilla  or  recent  versions  of  I.E.)  experience
-   problems,  you  might try to force HTTP/1.0 compatiblity. For Mozilla,
-   look  under  Edit  ->  Preferences  -> Debug -> Networking. Or set the
-   "+downgrade" config option in actionsfile.
+In fact, various aspects of Junkbuster configuration can be viewed from this
+page, including current configuration parameters, source code version numbers,
+the browser's request headers, and "actions" that apply to a given URL. In
+addition to the actionsfile editor mentioned above, Junkbuster can also be
+turned "on" and "off" from this page.
 
-   After  running  Junkbuster for a while, you can start to fine tune the
-   configuration   to  suit  your  personal,  or  site,  preferences  and
-   requirements.  There  are  many,  many aspects that can be customized.
-   "Actions"  (from actionsfile) can be adjusted by pointing your browser
-   to [21]http://ijbswa.sourceforge.net/config/, and then follow the link
-   to  "edit  the  actions  list". (This is an internal page and does not
-   require Internet access.)
+If you encounter problems, please verify it is a Junkbuster bug, by disabling
+Junkbuster, and then trying the same page. Also, try another browser if
+possible to eliminate browser or site problems. Before reporting it as a bug,
+see if there is not a configuration option that is enabled that is causing the
+page not to load. You can then add an exception for that page or site. If a
+bug, please report it to the developers (see below).
 
-   In  fact,  various  aspects  of Junkbuster configuration can be viewed
-   from  this  page,  including  current configuration parameters, source
-   code  version  numbers,  the  browser's request headers, and "actions"
-   that  apply  to  a  given  URL.  In addition to the actionsfile editor
-   mentioned  above,  Junkbuster  can  also be turned "on" and "off" from
-   this page.
-
-   If  you  encounter  problems, please verify it is a Junkbuster bug, by
-   disabling Junkbuster, and then trying the same page. Also, try another
-   browser  if  possible  to  eliminate  browser or site problems. Before
-   reporting it as a bug, see if there is not a configuration option that
-   is  enabled  that is causing the page not to load. You can then add an
-   exception  for  that  page  or site. If a bug, please report it to the
-   developers (see below).
-     _________________________________________________________________
+-------------------------------------------------------------------------------
 
 Contact the Developers
 
-   Feature   requests  and  other  questions  should  be  posted  to  the
-   [22]Feature  request  page  at  SourceForge.  There is also an archive
-   there.
+Feature requests and other questions should be posted to the Feature request
+page at SourceForge. There is also an archive there.
 
-   Anyone interested in actively participating in development and related
-   discussions  can  join the appropriate mailing list [23]here. Archives
-   are available here too.
+Anyone interested in actively participating in development and related
+discussions can join the appropriate mailing list here. Archives are available
+here too.
 
-   Please  report  bugs, using the form at [24]Sourceforge. Please try to
-   verify  that  it  is  a  Junkbuster bug, and not a browser or site bug
-   first. Also, check to make sure this is not already a known bug.
-     _________________________________________________________________
+Please report bugs, using the form at Sourceforge. Please try to verify that it
+is a Junkbuster bug, and not a browser or site bug first. Also, check to make
+sure this is not already a known bug.
+
+-------------------------------------------------------------------------------
 
 Copyright and History
 
 License
 
-   Internet  Junkbuster  is free software; you can redistribute it and/or
-   modify  it  under  the  terms  of  the  GNU  General Public License as
-   published  by  the  Free  Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+Internet Junkbuster is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) any
+later version.
 
-   This  program  is  distributed in the hope that it will be useful, but
-   WITHOUT   ANY   WARRANTY;   without   even  the  implied  warranty  of
-   MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE. See the GNU
-   General  Public  License  for  more  details,  which is available from
-   [25]the  Free  Software  Foundation, Inc, 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-     _________________________________________________________________
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details, which
+is available from the Free Software Foundation, Inc, 59 Temple Place - Suite
+330, Boston, MA 02111-1307, USA.
+
+-------------------------------------------------------------------------------
 
 History
 
-   Junkbuster   was   originally   written   by   Anonymous   Coders  and
-   [26]JunkBusters  Corporation,  and  was  released  as free open-source
-   software   under   the   GNU   GPL.   [27]Stefan  Waldherr  made  many
-   improvements,  and  started  the  [28]SourceForge  project to rekindle
-   development.  The  last stable release was v2.0.2, which has now grown
-   whiskers ;-).
-     _________________________________________________________________
+Junkbuster was originally written by Anonymous Coders and JunkBusters
+Corporation, and was released as free open-source software under the GNU GPL. 
+Stefan Waldherr made many improvements, and started the SourceForge project to
+rekindle development. The last stable release was v2.0.2, which has now grown
+whiskers ;-).
+
+-------------------------------------------------------------------------------
 
 See also
 
-     [29]http://sourceforge.net/projects/ijbswa
+  http://sourceforge.net/projects/ijbswa
 
-     [30]http://ijbswa.sourceforge.net/
+  http://ijbswa.sourceforge.net/
 
-     [31]http://ijbswa.sourceforge.net/config/
+  http://ijbswa.sourceforge.net/config/
 
-     [32]http://www.junkbusters.com/ht/en/cookies.html
+  http://www.junkbusters.com/ht/en/cookies.html
 
-     [33]http://www.waldherr.org/junkbuster/
+  http://www.waldherr.org/junkbuster/
 
-     [34]http://privacy.net/analyze/
+  http://privacy.net/analyze/
 
-    [35]http://www.squid-cache.org/
-     _________________________________________________________________
+ http://www.squid-cache.org/
+
+ 
+
+-------------------------------------------------------------------------------
 
 Appendix
 
 Regular Expressions
 
-   Junkbuster  can  use  "regular  expressions"  in various config files.
-   Assuming  support  for "pcre" (Perl Compatible Regular Expressions) is
-   compiled  in,  which  is the default. Such configuration directives do
-   not  require  regular  expressions,  but  they can be used to increase
-   flexibility by matching a pattern with wildcards against URLs.
+Junkbuster can use "regular expressions" in various config files. Assuming
+support for "pcre" (Perl Compatible Regular Expressions) is compiled in, which
+is the default. Such configuration directives do not require regular
+expressions, but they can be used to increase flexibility by matching a pattern
+with wildcards against URLs.
 
-   If  you  are reading this, you probably don't understand what "regular
-   expressions"  are,  or  what they can do. So this will be a very brief
-   introduction only. A full explanation would require a book ;-)
+If you are reading this, you probably don't understand what "regular
+expressions" are, or what they can do. So this will be a very brief
+introduction only. A full explanation would require a book ;-)
 
-   "Regular  expressions"  is  a way of matching one character expression
-   against  another to see if it matches or not. One of the "expressions"
-   is a literal string of readable characters (letter, numbers, etc), and
-   the  other  is  a  complex  string of literal characters combined with
-   wildcards,  and  other  special characters, called metacharacters. The
-   "metacharacters"  have  special  meanings  and  are  used to build the
-   complex  pattern  to  be  matched  against.  Perl  Compatible  Regular
-   Expressions  is  an  enhanced  form of the regular expression language
-   with backward compatibility.
+"Regular expressions" is a way of matching one character expression against
+another to see if it matches or not. One of the "expressions" is a literal
+string of readable characters (letter, numbers, etc), and the other is a
+complex string of literal characters combined with wildcards, and other special
+characters, called metacharacters. The "metacharacters" have special meanings
+and are used to build the complex pattern to be matched against. Perl
+Compatible Regular Expressions is an enhanced form of the regular expression
+language with backward compatibility.
 
-   To make a simple analogy, we do something similar when we use wildcard
-   characters when listing files with the dir command in DOS. *.* matches
-   all  filenames.  The  "special"  character  here  is the asterik which
-   matches  any  and all characters. We can be more specific and use ? to
-   match  just  individual  characters.  So  "dir file?.text" would match
-   "file1.txt",  "file2.txt",  etc.  We  are  pattern  matching,  using a
-   similar technique to "regular expressions"!
+To make a simple analogy, we do something similar when we use wildcard
+characters when listing files with the dir command in DOS. *.* matches all
+filenames. The "special" character here is the asterik which matches any and
+all characters. We can be more specific and use ? to match just individual
+characters. So "dir file?.text" would match "file1.txt", "file2.txt", etc. We
+are pattern matching, using a similar technique to "regular expressions"!
 
-   Regular  expressions do essentially the same thing, but are much, much
-   more  powerful.  There  are many more "special characters" and ways of
-   building  complex  patterns however. Let's look at a few of the common
-   ones, and then some examples:
+Regular expressions do essentially the same thing, but are much, much more
+powerful. There are many more "special characters" and ways of building complex
+patterns however. Let's look at a few of the common ones, and then some
+examples:
 
-   . - Matches any single character, e.g. "a", "A", "4", ":", or "@".
+. - Matches any single character, e.g. "a", "A", "4", ":", or "@".
 
-   ?  -  The  preceding  character  or  expression is matched ZERO or ONE
-   times. Either/or.
+? - The preceding character or expression is matched ZERO or ONE times. Either/
+or.                                                                            
 
-   +  -  The  preceding  character  or  expression is matched ONE or MORE
-   times.
++ - The preceding character or expression is matched ONE or MORE times.
 
-   *  -  The  preceding  character  or expression is matched ZERO or MORE
-   times.
+* - The preceding character or expression is matched ZERO or MORE times.
 
-   \ - The "escape" character denotes that the following character should
-   be  taken  literally. This is used where one of the special characters
-   (e.g.  ".")  needs  to  be  taken  literally  and  not  as  a  special
-   metacharacter.
+\ - The "escape" character denotes that the following character should be taken
+literally. This is used where one of the special characters (e.g. ".") needs to
+be taken literally and not as a special metacharacter.                         
 
-   []  -  Characters  enclosed  in brackets will be matched if any of the
-   enclosed characters are encountered.
+[] - Characters enclosed in brackets will be matched if any of the enclosed    
+characters are encountered.                                                    
 
-   ()  -  Pararentheses  are  used to group a sub-expression, or multiple
-   sub-expressions.
+() - Pararentheses are used to group a sub-expression, or multiple             
+sub-expressions.                                                               
 
-   |  -  The  "bar" character works like an "or" conditional statement. A
-   match  is  successful  if  the  sub-expression  on  either side of "|"
-   matches.
+| - The "bar" character works like an "or" conditional statement. A match is   
+successful if the sub-expression on either side of "|" matches.                
 
-   s/string1/string2/g  -  This  is  used  to  rewrite  strings  of text.
-   "string1" is replaced by "string2" in this example.
+s/string1/string2/g - This is used to rewrite strings of text. "string1" is    
+replaced by "string2" in this example.                                         
 
-   These  are  just  some of the ones you are likely to use when matching
-   URLs  with  Junkbuster, and is a long way from a definitive list. This
-   is  enough  to  get us started with a few simple examples which may be
-   more illuminating:
+These are just some of the ones you are likely to use when matching URLs with
+Junkbuster, and is a long way from a definitive list. This is enough to get us
+started with a few simple examples which may be more illuminating:
 
-   /.*/banners/.*  - A simple example that uses the common combination of
-   "."  and  "*"  to  denote  any character, zero or more times. In other
-   words,  any  string  at all. So we start with a literal forward slash,
-   then  our  regular  expression  pattern (".*") another literal forward
-   slash, the string "banners", another forward slash, and lastly another
-   ".*".  We are building a directory path here. This will match any file
-   with  the  path  that  has a directory named "banners" in it. The ".*"
-   matches  any  characters,  and  this could conceivably be more forward
-   slashes,  so  it  might  expand  into  a much longer looking path. For
-   example, this could match:
-   "/eye/hate/spammers/banners/annoy_me_please.gif",        or       just
-   "/banners/annoying.html",  or  almost  an  infinite  number  of  other
-   possible combinations, just so it has "banners" in the path somewhere.
+/.*/banners/.* - A simple example that uses the common combination of "." and "
+*" to denote any character, zero or more times. In other words, any string at
+all. So we start with a literal forward slash, then our regular expression
+pattern (".*") another literal forward slash, the string "banners", another
+forward slash, and lastly another ".*". We are building a directory path here.
+This will match any file with the path that has a directory named "banners" in
+it. The ".*" matches any characters, and this could conceivably be more forward
+slashes, so it might expand into a much longer looking path. For example, this
+could match: "/eye/hate/spammers/banners/annoy_me_please.gif", or just "/
+banners/annoying.html", or almost an infinite number of other possible
+combinations, just so it has "banners" in the path somewhere.
 
-   A now something a little more complex:
+A now something a little more complex:
 
-   /.*/adv((er)?ts?|ertis(ing|ements?))?/   -  We  have  several  literal
-   forward  slashes  again  ("/"),  so we are building another expression
-   that  is  a  file  path  statement.  We  have  another ".*", so we are
-   matching  against  any  conceivable  sub-path,  just so it matches our
-   expression.  The only true literal that must match our pattern is adv,
-   together  with  the forward slashes. What comes after the "adv" string
-   is the interesting part.
+/.*/adv((er)?ts?|ertis(ing|ements?))?/ - We have several literal forward
+slashes again ("/"), so we are building another expression that is a file path
+statement. We have another ".*", so we are matching against any conceivable
+sub-path, just so it matches our expression. The only true literal that must
+match our pattern is adv, together with the forward slashes. What comes after
+the "adv" string is the interesting part.
 
-   Remember  the  "?"  means  the  preceding expression (either a literal
-   character  or anything grouped with "(...)" in this case) can exist or
-   not,    since    this   means   either   zero   or   one   match.   So
-   "((er)?ts?|ertis(ing|ements?))"  is  optional,  as  are the individual
-   sub-expressions:  "(er)",  "(ing|ements?)", and the "s". The "|" means
-   "or".  We have two of those. For instance, "(ing|ements?)", can expand
-   to  match  either  "ing"  OR "ements?". What is being done here, is an
-   attempt  at  matching  as  many  variations  of  "advertisement",  and
-   similar,  as  possible.  So  this would expand to match just "adv", or
-   "advert",  or  "adverts",  or  "advertising",  or  "advertisement", or
-   "advertisements".   You   get   the  idea.  But  it  would  not  match
-   "advertizements"  (with  a  "z").  We  could  fix that by changing our
-   regular  expression  to: "/.*/adv((er)?ts?|erti(s|z)(ing|ements?))?/",
-   which would then match either spelling.
+Remember the "?" means the preceding expression (either a literal character or
+anything grouped with "(...)" in this case) can exist or not, since this means
+either zero or one match. So "((er)?ts?|ertis(ing|ements?))" is optional, as
+are the individual sub-expressions: "(er)", "(ing|ements?)", and the "s". The "
+|" means "or". We have two of those. For instance, "(ing|ements?)", can expand
+to match either "ing" OR "ements?". What is being done here, is an attempt at
+matching as many variations of "advertisement", and similar, as possible. So
+this would expand to match just "adv", or "advert", or "adverts", or
+"advertising", or "advertisement", or "advertisements". You get the idea. But
+it would not match "advertizements" (with a "z"). We could fix that by changing
+our regular expression to: "/.*/adv((er)?ts?|erti(s|z)(ing|ements?))?/", which
+would then match either spelling.
 
-   /.*/advert[0-9]+\.(gif|jpe?g)  -  Again  another  path  statement with
-   forward  slashes. Anything in the square brackets "[]" can be matched.
-   This  is  using  "0-9" as a shorthand expression to mean any digit one
-   through  nine.  It  is  the  same as saying "0123456789". So any digit
-   matches. The "+" means one or more of the preceding expression must be
-   included.  The  preceding  expression  here  is  what is in the square
-   brackets  --  in  this  case, any digit one through nine. Then, at the
-   end,  we  have a grouping: "(gif|jpe?g)". This includes a "|", so this
-   needs  to  match  the  expression on either side of that bar character
-   also.  A  simple  "gif"  on  one side, and the other side will in turn
-   match  either  "jpeg"  or "jpg", since the "?" means the letter "e" is
-   optional  and can be matched once or not at all. So we are building an
-   expression  here  to  match image GIF or JPEG type image file. It must
-   include  the  literal  string "advert", then one or more digits, and a
-   "."  (which is now a literal, and not a special character, since it is
-   escaped  with "\"), and lastly either "gif", or "jpeg", or "jpg". Some
-   possible       matches       would      include:      "//advert1.jpg",
-   "/nasty/ads/advert1234.gif",   "/banners/from/hell/advert99.jpg".   It
-   would not match "advert1.gif" (no leading slash), or "/adverts232.jpg"
-   (the  expression does not include an "s"), or "/advert1.jsp" ("jsp" is
-   not in the expression anywhere).
+/.*/advert[0-9]+\.(gif|jpe?g) - Again another path statement with forward
+slashes. Anything in the square brackets "[]" can be matched. This is using
+"0-9" as a shorthand expression to mean any digit one through nine. It is the
+same as saying "0123456789". So any digit matches. The "+" means one or more of
+the preceding expression must be included. The preceding expression here is
+what is in the square brackets -- in this case, any digit one through nine.
+Then, at the end, we have a grouping: "(gif|jpe?g)". This includes a "|", so
+this needs to match the expression on either side of that bar character also. A
+simple "gif" on one side, and the other side will in turn match either "jpeg"
+or "jpg", since the "?" means the letter "e" is optional and can be matched
+once or not at all. So we are building an expression here to match image GIF or
+JPEG type image file. It must include the literal string "advert", then one or
+more digits, and a "." (which is now a literal, and not a special character,
+since it is escaped with "\"), and lastly either "gif", or "jpeg", or "jpg".
+Some possible matches would include: "//advert1.jpg", "/nasty/ads/
+advert1234.gif", "/banners/from/hell/advert99.jpg". It would not match
+"advert1.gif" (no leading slash), or "/adverts232.jpg" (the expression does not
+include an "s"), or "/advert1.jsp" ("jsp" is not in the expression anywhere).
 
-   s/microsoft(?!.com)/MicroSuck/i  - This is a substitution. "MicroSuck"
-   will  replace  any occurence of "microsoft". The "i" at the end of the
-   expression  means  ignore  case. The "(?!.com)" means the match should
-   fail  if  "microsoft" is followed by ".com". In other words, this acts
-   like  a  "NOT" modifier. In case this is a hyperlink, we don't want to
-   break it ;-).
+s/microsoft(?!.com)/MicroSuck/i - This is a substitution. "MicroSuck" will
+replace any occurence of "microsoft". The "i" at the end of the expression
+means ignore case. The "(?!.com)" means the match should fail if "microsoft" is
+followed by ".com". In other words, this acts like a "NOT" modifier. In case
+this is a hyperlink, we don't want to break it ;-).
 
-   We  are  barely  scratching the surface of regular expressions here so
-   that  you  can  understand the default Junkbuster configuration files,
-   and maybe use this knowledge to customize your own installation. There
-   is much, much more that can be done with regular expressions. Now that
-   you know enough to get started, you can learn more on your own :/
+We are barely scratching the surface of regular expressions here so that you
+can understand the default Junkbuster configuration files, and maybe use this
+knowledge to customize your own installation. There is much, much more that can
+be done with regular expressions. Now that you know enough to get started, you
+can learn more on your own :/
 
-   More    reading    on    Perl    Compatible    Regular    expressions:
-   [36]http://www.perldoc.com/perl5.6/pod/perlre.html
+More reading on Perl Compatible Regular expressions: http://www.perldoc.com/
+perl5.6/pod/perlre.html
 
-   Done.
-
-References
-
-   1. http://ijbswa.sourceforge.net/user-manual/
-   2. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#INTRODUCTION
-   3. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#INSTALLATION
-   4. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#CONFIGURATION
-   5. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#QUICKSTART
-   6. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#CONTACT
-   7. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#COPYRIGHT
-   8. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#SEEALSO
-   9. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#APPENDIX
-  10. http://sourceforge.net/projects/ijbswa/
-  11. http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/
-  12. http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&button=Search&key=emxrt.zip&stype=all&sort=type&dir=%2Fpub%2Fos2%2Fdev%2Femx%2Fv0.9d
-  13. http://hobbes.nmsu.edu/cgi-bin/h-search?sh=1&key=gnupack&stype=all&sort=type&dir=%2Fpub%2Fos2%2Fapps
-  14. http://www.gnu.org/
-  15. http://ijbswa.sourceforge.net/config/
-  16. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#ACTIONSFILE
-  17. http://ijbswa.sourceforge.net/config/
-  18. http://i.j.b/show-url-info
-  19. http://www.perldoc.com/perl5.6/pod/perlre.html
-  20. file://localhost/home/hal/junkbuster/current/doc/source/tmp.html#REGEX
-  21. http://ijbswa.sourceforge.net/config/
-  22. http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
-  23. http://sourceforge.net/mail/?group_id=11118
-  24. http://sourceforge.net/tracker/?group_id=11118&atid=111118
-  25. http://www.gnu.org/copyleft/gpl.html
-  26. http://www.junkbusters.com/ht/en/ijbfaq.html
-  27. http://www.waldherr.org/junkbuster/
-  28. http://sourceforge.net/projects/ijbswa/
-  29. http://sourceforge.net/projects/ijbswa
-  30. http://ijbswa.sourceforge.net/
-  31. http://ijbswa.sourceforge.net/config/
-  32. http://www.junkbusters.com/ht/en/cookies.html
-  33. http://www.waldherr.org/junkbuster/
-  34. http://privacy.net/analyze/
-  35. http://www.squid-cache.org/
-  36. http://www.perldoc.com/perl5.6/pod/perlre.html
+Done.
