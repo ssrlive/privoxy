@@ -1,9 +1,9 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.20 2002/04/02 14:56:16 oes Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/filters.h,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -12,7 +12,7 @@
  *                   `ij_untrusted_url', `intercept_url', `re_process_buffer',
  *                   `show_proxy_args', and `trust_url'
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001, 2004 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.20  2002/04/02 14:56:16  oes
  *    Bugfix: is_untrusted_url() and trust_url() now depend on FEATURE_TRUST, not FEATURE_COOKIE_JAR
  *
@@ -257,6 +260,7 @@ extern const struct forward_spec *forward_url(struct http_request *http, struct 
  */
 extern char *pcrs_filter_response(struct client_state *csp);
 extern char *gif_deanimate_response(struct client_state *csp);
+extern char *jpeg_inspect_response(struct client_state *csp);
 extern int remove_chunked_transfer_coding(char *buffer, const size_t size);
 
 /*

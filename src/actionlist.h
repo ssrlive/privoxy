@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 2.2  2002/09/12 14:05:14  oes
+ *    Added more aliases for prehistoric action names
+ *
  *    Revision 2.1  2002/09/04 14:52:18  oes
  *    Synced with the stable branch:
  *       Revision 1.17.2.1  2002/08/02 12:50:47  oes
@@ -132,6 +135,7 @@ DEFINE_CGI_PARAM_RADIO   ("hide-referrer",              ACTION_HIDE_REFERER,    
 DEFINE_CGI_PARAM_CUSTOM  ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.google.com/")
 DEFINE_ACTION_STRING     ("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
 DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy/3.0 (Anonymous)")
+DEFINE_ACTION_BOOL       ("inspect-jpegs",              ACTION_JPEG_INSPECT)
 DEFINE_ACTION_BOOL       ("kill-popups",                ACTION_NO_POPUPS)
 DEFINE_ACTION_STRING     ("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
 DEFINE_CGI_PARAM_NO_RADIO("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT,  "443")

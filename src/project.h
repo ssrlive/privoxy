@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 2.4 2002/12/28 03:58:19 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 2.5 2003/09/22 00:33:01 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 2.5  2003/09/22 00:33:01  david__schmidt
+ *    Enable sending a custom 'blocked' image.  Shows up as
+ *    "image-blocker-custom-file" parameter in config, and
+ *    "+set-image-blocker{custom}" in action files.
+ *
  *    Revision 2.4  2002/12/28 03:58:19  david__schmidt
  *    Initial drop of dashboard instrumentation - enabled with
  *    --enable-activity-console
@@ -831,6 +836,8 @@ struct iob
                          Suitable for GIF filtering.  */
 #define CT_TABOO  4 /**< csp->content_type bitmask:
                          DO NOT filter, irrespective of other flags. */
+#define CT_JPEG   8 /**< csp->content_type bitmask:
+                         Suitable for JPEG filtering.  */
 
 /**
  * The mask which includes all actions.
@@ -876,6 +883,8 @@ struct iob
 #define ACTION_VANILLA_WAFER   0x00008000UL
 /** Action bitmap: Limit CONNECT requests to safe ports. */
 #define ACTION_LIMIT_CONNECT   0x00010000UL
+/** Action bitmap: Inspect if it's a JPEG. */
+#define ACTION_JPEG_INSPECT    0x00020000UL
 
 /** Action string index: How to deanimate GIFs */
 #define ACTION_STRING_DEANIMATE     0

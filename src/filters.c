@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 2.5 2003/09/22 00:33:01 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 2.6 2003/09/25 02:37:32 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/filters.c,v $
@@ -9,9 +9,10 @@ const char filters_rcs[] = "$Id: filters.c,v 2.5 2003/09/22 00:33:01 david__schm
  *                   `block_url', `url_actions', `domain_split',
  *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `pcrs_filter_respose',
- *                   'ijb_send_banner', and `trust_url'
+ *                   `ijb_send_banner', `trust_url', `gif_deanimate_response',
+ *                   `jpeg_inspect_response'
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001, 2004 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -38,6 +39,9 @@ const char filters_rcs[] = "$Id: filters.c,v 2.5 2003/09/22 00:33:01 david__schm
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 2.6  2003/09/25 02:37:32  david__schmidt
+ *    Feature request 595948: Re-Filter logging in single line
+ *
  *    Revision 2.5  2003/09/22 00:33:01  david__schmidt
  *    Enable sending a custom 'blocked' image.  Shows up as
  *    "image-blocker-custom-file" parameter in config, and
@@ -1305,7 +1309,7 @@ int is_untrusted_url(struct client_state *csp)
  *
  * Function    :  pcrs_filter_response
  *
- * Description :  Ecexute all text substitutions from all applying
+ * Description :  Execute all text substitutions from all applying
  *                +filter actions on the text buffer that's been accumulated
  *                in csp->iob->buf. If this changes the contents, set
  *                csp->content_length to the modified size and raise the
@@ -1486,6 +1490,80 @@ char *gif_deanimate_response(struct client_state *csp)
 #endif /* def FEATURE_ACTIVITY_CONSOLE */
          log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
       }
+      csp->content_length = out->offset;
+      csp->flags |= CSP_FLAG_MODIFIED;
+      p = out->buffer;
+      free(in);
+      free(out);
+      return(p);
+   }
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  jpeg_inspect_response
+ *
+ * Description :  
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  a pointer to the (newly allocated) modified buffer
+ *                or NULL in case something went wrong.
+ *
+ *********************************************************************/
+char *jpeg_inspect_response(struct client_state *csp)
+{
+   struct binbuffer *in = NULL, *out = NULL;
+   char *p = NULL;
+   size_t size = csp->iob->eod - csp->iob->cur;
+
+   /*
+    * If the body has a "chunked" transfer-encoding,
+    * get rid of it first, adjusting size and iob->eod
+    */
+   if (csp->flags & CSP_FLAG_CHUNKED)
+   {
+      log_error(LOG_LEVEL_DEANIMATE, "Need to de-chunk first");
+      if (0 == (size = remove_chunked_transfer_coding(csp->iob->cur, size)))
+      {
+         return(NULL);
+      }
+      csp->iob->eod = csp->iob->cur + size;
+      csp->flags |= CSP_FLAG_MODIFIED;
+   }
+
+   if (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
+   {
+      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg no mem 1)");
+      return NULL;
+   }
+
+   if (NULL == (out = (struct binbuffer *)zalloc(sizeof *out)))
+   {
+      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg no mem 2)");
+      return NULL;
+   }
+
+   in->buffer = csp->iob->cur;
+   in->size = size;
+
+   /*
+    * Calling jpeg_inspect has the side-effect of creating and 
+    * modifying the image buffer of "out" directly.
+    */
+   if (jpeg_inspect(in, out))
+   {
+      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg parsing)");
+      free(in);
+      buf_free(out);
+      return(NULL);
+
+   }
+   else
+   {
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
       p = out->buffer;

@@ -32,6 +32,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.31  2003/09/22 00:33:01  david__schmidt
+#    Enable sending a custom 'blocked' image.  Shows up as
+#    "image-blocker-custom-file" parameter in config, and
+#    "+set-image-blocker{custom}" in action files.
+#
 #    Revision 1.30  2002/09/05 16:12:02  oes
 #    Synced with stable branch:
 #       Revision 1.29.2.3  2002/08/23 02:22:53  hal9
@@ -667,6 +672,19 @@ function show_send_wafer_opts(tf)
       <td>User Agent string to send:<br>
         <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="inspect-jpegs" value="Y" @inspect-jpegs-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="inspect-jpegs" value="N" @inspect-jpegs-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="inspect-jpegs" value="X" @inspect-jpegs-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@INSPECT-JPEGS">inspect-jpegs</a></td>
+      <td>Checks jpeg images for malicious content.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"

@@ -1,17 +1,21 @@
 #ifndef DEANIMATE_H_INCLUDED
 #define DEANIMATE_H_INCLUDED
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.8 2002/03/26 22:29:54 swa Exp $"
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 2.0 2002/06/04 14:34:21 jongfoster Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/src/deanimate.h,v $
  *
- * Purpose     :  Declares functions to deanimate GIF images on the fly.
+ * Purpose     :  Declares functions to manipulate binary images on the
+ *                fly.  High-level functions include:
+ *                  - Deanimation of GIF images
+ *                  - Fixup of malformed comment block in JPEG headers
  *                
- *                Functions declared include: gif_deanimate, buf_free
+ *                Functions declared include: gif_deanimate, buf_free,
+ *                jpeg_inspect
  *                
  *
- * Copyright   :  Written by and Copyright (C) 2001 Andreas S. Oesterhelt
- *                for the Privoxy team. http://www.privoxy.org/
+ * Copyright   :  Written by and Copyright (C) 2001 - 2004 by the the
+ *                SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on ideas from the Image::DeAnim Perl module by
  *                Ken MacFarlane, <ksm+cpan@universal.dca.net>
@@ -40,6 +44,9 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 2.0  2002/06/04 14:34:21  jongfoster
+ *    Moving source files to src/
+ *
  *    Revision 1.8  2002/03/26 22:29:54  swa
  *    we have a new homepage!
  *
@@ -84,6 +91,7 @@ struct binbuffer
  * Function prototypes
  */
 extern int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_image);
+extern int jpeg_inspect(struct binbuffer *src, struct binbuffer *dst);
 extern void buf_free(struct binbuffer *buf);
 
 /* 

@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 2.5 2003/09/25 01:44:33 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 2.6 2003/10/02 19:41:23 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/parsers.c,v $
@@ -40,6 +40,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 2.5 2003/09/25 01:44:33 david__schm
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 2.6  2003/10/02 19:41:23  david__schmidt
+ *    Updated header debug logging to show the header text that is
+ *    being crunched; refactored functions in parsers.c to have a
+ *    single, common exit point
+ *
  *    Revision 2.5  2003/09/25 01:44:33  david__schmidt
  *    Resyncing HEAD with v_3_0_branch for two OSX fixes:
  *    Making thread IDs look sane in the logfile for Mach kernels,
@@ -844,6 +849,8 @@ jb_err server_content_type(struct client_state *csp, char **header)
          csp->content_type = CT_TEXT;
       else if (strstr(*header, " image/gif"))
          csp->content_type = CT_GIF;
+      else if (strstr(*header, " image/jpeg"))
+         csp->content_type = CT_JPEG;
       else
          csp->content_type = 0;
    }

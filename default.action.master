@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.7 2003/02/20 14:00:55 hal9 Exp $
+#  $Id: default.action.master,v 1.8 2003/09/22 00:33:01 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -283,6 +283,9 @@
 #    in which case a "blocked" image can be sent rather than a HTML page.
 #    See +set-image-blocker{} for the control over what is actually sent.
 #
+# +inspect-jpegs
+#    Scan jpeg headers for malformed comment blocks and correct them.
+#
 # +set-image-blocker{blank}
 # +set-image-blocker{pattern}
 # +set-image-blocker{custom}
@@ -443,6 +446,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 +hide-from-header{block} \
 +hide-referrer{forge} \
 -hide-user-agent \
++inspect-jpegs \
 -kill-popups \
 -limit-connect \
 +prevent-compression \

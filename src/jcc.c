@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 2.6 2003/06/24 12:24:24 oes Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 2.7 2003/09/25 01:44:33 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/src/jcc.c,v $
@@ -33,6 +33,13 @@ const char jcc_rcs[] = "$Id: jcc.c,v 2.6 2003/06/24 12:24:24 oes Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 2.7  2003/09/25 01:44:33  david__schmidt
+ *    Resyncing HEAD with v_3_0_branch for two OSX fixes:
+ *    Making thread IDs look sane in the logfile for Mach kernels,
+ *    and fixing multithreading crashes due to thread-unsafe
+ *    system calls.
+ *    and
+ *
  *    Revision 2.6  2003/06/24 12:24:24  oes
  *    Added a line plus Fix-me as a reminder to fix broken force handling in trunk. Thanks to lionel for the hint
  *
@@ -1726,6 +1733,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
 
    int pcrs_filter;        /* bool, 1==will filter through pcrs */
    int gif_deanimate;      /* bool, 1==will deanimate gifs */
+   int jpeg_inspect;       /* bool, 1==will inspect jpegs */
 
 #ifdef FEATURE_KILL_POPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
@@ -1736,6 +1744,7 @@ static jb_err relay_server_traffic( struct client_state *csp )
 
    gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
 
+   jpeg_inspect               = ((csp->action->flags & ACTION_JPEG_INSPECT) != 0);
 
    fflush (0);
    len = read_socket (csp->sfd, buf, sizeof (buf) - 1);
@@ -2029,6 +2038,16 @@ static jb_err relay_server_traffic( struct client_state *csp )
       {
          csp->content_filter = gif_deanimate_response;
       }
+
+      /* Buffer and jpg_inspect this if appropriate. */
+
+      if ((csp->content_type & CT_JPEG)  &&      /* It's an image/jpeg MIME-Type */
+          !csp->http->ssl &&                     /* We talk plaintext */
+          jpeg_inspect)                          /* Policy allows */
+      {
+         csp->content_filter = jpeg_inspect_response;
+      }
+
       /*
        * Only write if we're not buffering for content modification
        */
