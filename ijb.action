@@ -32,7 +32,7 @@
 #   is a domain-only pattern and will match any request to www.yahoo.com
 # 
 # www.example.com/
-#   means exactly the same
+#   means exactly the same (but is slightly less efficient)
 # 
 # www.example.com/index.html
 #   matches only the document /index.html on www.example.com
@@ -92,12 +92,16 @@
 # details.
 # 
 # Please note that matching in the path is CASE INSENSITIVE by default, but
-# you can switch to case sensitive at any point in the pattern by using
-# the "(?-i)" switch:
+# you can switch to case sensitive by starting the pattern with the "(?-i)"
+# switch:
 # 
 # www.example.com/(?-i)PaTtErN.*
 #   will match only documents whose path starts with PaTtErN in exactly this
 #   capitalization.
+#
+# Partially case-sensetive and partially case-insensitive patterns are
+# possible, but the rules about splitting them up are extremely complex
+# - see the PCRE documentation for more information.
 # 
 #############################################################################
 # Action Syntax
@@ -253,6 +257,12 @@
 #    and +gif-deanimate will not work on compressed data. Will slow down
 #    connections to those websites, though.
 #
+# +no-cookies-keep
+#    If the website sets cookies, make sure they are erased when you exit
+#    and restart your web browser.  This makes profiling cookies useless,
+#    but won't break sites which require cookies so that you can log in
+#    or for transactions.
+#
 # +no-cookies-read
 #    Prevent the website from reading cookies
 #
@@ -305,10 +315,14 @@
 # Useful aliases
 +no-cookies = +no-cookies-set +no-cookies-read
 -no-cookies = -no-cookies-set -no-cookies-read
-fragile     = -block -no-cookies -filter -fast-redirects -hide-referer -no-popups
-shop        = -no-cookies -filter -fast-redirects
 +imageblock = +block +image
 +filter-all = +filter +no-compression
+
+# Fragile sites should have the minimum changes
+fragile     = -block -deanimate-gifs -fast-redirects -filter -hide-referer -no-cookies -no-popups
+
+# Shops should be allowed to set persistent cookies
+shop        = -filter -no-cookies -no-cookies-keep
 
 #... etc.  Customize to your heart's content.
 
@@ -316,92 +330,111 @@ shop        = -no-cookies -filter -fast-redirects
 # Defaults
 #############################################################################
 {\
+-add-header \
 -block \
+-deanimate-gifs \
 -downgrade \
 +fast-redirects \
 +filter \
 +no-compression \
++no-cookies-keep \
 +hide-forwarded \
 +hide-from{block} \
 +hide-referer{forge} \
 -hide-user-agent \
 -image \
 +image-blocker{http://i.j.b/send-banner} \
-+no-cookies-read \
-+no-cookies-set \
++no-cookies-keep \
+-no-cookies-read \
+-no-cookies-set \
 +no-popups \
-+vanilla-wafer \
+-vanilla-wafer \
+-wafer \
 }
 / # Match all URLs
+
 
 #############################################################################
 # A useful site for testing - shows all headers:
 # http://privacy.net/analyze/
 #############################################################################
-{+add-header{X-Privacy: Yes please} #-add-header{*} \
+{+add-header{X-Privacy: Yes please} \
 +add-header{X-User-Tracking: No thanks!} -filter}
 privacy.net
 
-#############################################################################
-# Permissions list
-#############################################################################
 
+#############################################################################
+# Test for new GIF deanimation feature.
+# Just try http://www.oesterhelt.org/deanimate-demo with and without it.
+#############################################################################
+{+deanimate-gifs{last}}
+www.oesterhelt.org/deanimate-demo
+
+
+#############################################################################
 # Sites that need cookies
-{-no-cookies}
-.javasoft.com
-.sun.com
-.yahoo.com
-.msdn.microsoft.com
-.sourceforge.net
-.sf.net
-www.nexgo.de
-.myrealbox.com
-mail.uni.de
-e-tools.freenet.de
-office.freenet.de
+#
+# FIXME: Now cookies are allowed by default, do any of these sites
+# need persistent cookies?
+#############################################################################
 
+#{-no-cookies}
+#.javasoft.com
+#.sun.com
+#.yahoo.com
+#.msdn.microsoft.com
+#.sourceforge.net
+#.sf.net
+#www.nexgo.de
+#.myrealbox.com
+#mail.uni.de
+#e-tools.freenet.de
+#office.freenet.de
+
+#############################################################################
 # These sites are very complex and require
 # minimal interference.
+#############################################################################
 {fragile}
 .office.microsoft.com
 .windowsupdate.microsoft.com
 .deutsche-bank-24.de
 
+#############################################################################
 # Shopping sites - still want to block ads.
+#############################################################################
 {shop}
 .quietpc.com
 .worldpay.com   # for quietpc.com
 .jungle.com
 .scan.co.uk
 
+#############################################################################
 # These shops require pop-ups
+#############################################################################
 {shop -no-popups}
 .dabs.com
 .overclockers.co.uk
 
+#############################################################################
+# Sometimes fast-redirects catches things by mistake
+#############################################################################
 {-fast-redirects}
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 login.yahoo.com
 edit.europe.yahoo.com
-.translate.google.com
-images.google.com
+.google.com
 .altavista.com/.*(like|url|link):http
 .altavista.com/trans.*urltext=http
 .speedfind.de
-
-# Please don't re_filter code!
-{-filter}
-.cvs.sourceforge.net
-
-# Hal reported that fast-redirects break this site
-{-no-cookies -fast-redirects}
 .nytimes.com
 
-# Test for new GIF deanimation feature.
-# Just try http://www.oesterhelt.org/deanimate-demo with and without it.
-#
-{+deanimate-gifs{last}}
-www.oesterhelt.org/deanimate-demo
+#############################################################################
+# Please don't re_filter code!
+#############################################################################
+{-filter}
+.sourceforge.net
+
 
 #############################################################################
 # Imagelist:
@@ -457,49 +490,47 @@ pixel.intares.net/cgi-bin/janus
 ###/*.*/(sponsor|banner)s?[0-9]?/
 ###/*.*/.*banner([-_]?[a-z0-9]+)?\.(gif|jpg)
 
-/.*/_?(plain|live)?ads?(-banners)?/
-/.*/abanners/
-/.*/ad(sdna_image|gifs?)/
-/.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
-/.*/adbanners/
-/.*/adserver
-/.*/adstream\.cgi
-/.*/adv((er)?ts?|ertis(ing|ements?))?/
-/.*/anzei(gen)?/?
-/.*/ban[-_]cgi/
-/.*/banner_?ads/
-/.*/banner_?anzeigen
-/.*/bannerimage/
-/.*/banners?/
-/.*/banners?\.cgi/
-/.*/cgi-bin/centralad/getimage
-/.*/images/addver\.gif
-/.*/images/advert\.gif
-/.*/images/marketing/.*\.(gif|jpe?g)
-/.*/place-ads
-/.*/popupads/
-/.*/promobar.*
-/.*/publicite/
-/.*/randomads/.*\.(gif|jpe?g)
-/.*/reklama/.*\.(gif|jpe?g)
-/.*/reklame/.*\.(gif|jpe?g)
-/.*/reklaam/.*\.(gif|jpe?g)
-/.*/siteads/
-/.*/sponsor.*\.gif
-/.*/sponsors?[0-9]?/
-/.*/ucbandeimg/
-/.*/werb\..*
-/.*/werbebanner/
-/.*/werbung/.*\.(gif|jpe?g)
-/.*/adv\.   # www.telegraaf.nl
-/.*/advert[0-9]+\.jpg
-/.*bann\.gif
+/?.*/_?(plain|live)?ads?(-banners)?/
+/?.*/abanners/
+/?.*/ad(sdna_image|gifs?)/
+/?.*/ad(server|stream|juggler)\.(cgi|pl|dll|exe)
+/?.*/adbanners/
+/?.*/adserver
+/?.*/adstream\.cgi
+/?.*/adv((er)?ts?|ertis(ing|ements?))?/
+/?.*/anzei(gen)?/?
+/?.*/ban[-_]cgi/
+/?.*/banner_?ads/
+/?.*/banner_?anzeigen
+/?.*/bannerimage/
+/?.*/banners?/
+/?.*/banners?\.cgi/
+/?.*/cgi-bin/centralad/getimage
+/?.*/images/addver\.gif
+/?.*/images/advert\.gif
+/?.*/images/marketing/.*\.(gif|jpe?g)
+/?.*/place-ads
+/?.*/popupads/
+/?.*/promobar.*
+/?.*/publicite/
+/?.*/randomads/.*\.(gif|jpe?g)
+/?.*/rekla(ma|me|am)/.*\.(gif|jpe?g)
+/?.*/siteads/
+/?.*/sponsor.*\.gif
+/?.*/sponsors?[0-9]?/
+/?.*/ucbandeimg/
+/?.*/werb\..*
+/?.*/werbebanner/
+/?.*/werbung/.*\.(gif|jpe?g)
+/?.*/adv\.   # www.telegraaf.nl
+/?.*/advert[0-9]+\.jpg
+/?.*bann\.gif
+/?.*/ads/
 /Media/Images/Adds/
 /_banner/
 /ad_images/
 /adgenius/
 /adimages/
-/.*/ads/
 /viewad/
 /adserve/
 /adverts/
@@ -538,24 +569,24 @@ pixel.intares.net/cgi-bin/janus
 /worldnet/ad\.cgi
 /zhp/auktion/img/
 /cgi-bin/nph-adclick.exe/
-/.*/Image/BannerAdvertising/
-/.*/ad-bin/
-/.*/adlib/server\.cgi
-/.*/gsa_bs/gsa_bs.cmdl
+/?.*/Image/BannerAdvertising/
+/?.*/ad-bin/
+/?.*/adlib/server\.cgi
+/?.*/gsa_bs/gsa_bs.cmdl
 /autoads/
 /anz/pics/
 
 # for our finnish friends, by Kai Puolamaki <Kai.Puolamaki@iki.fi>
-/.*/mainos/*.*/.*\.gif
-/.*/mainos/*.*/.*\.jpe?g
+/?.*/mainos/*.*/.*\.gif
+/?.*/mainos/*.*/.*\.jpe?g
 
 # more from a finnish friend Petri Haapio <pha@iki.fi>
 cgi.tietovalta.fi
 .keltaisetsivut.fi/web/img/\.*gif
 .haku.net/pics/pana\.*gif
 .www.fi/guvat/\.*gif
-/.*/(.*[-_.].*)?maino(kset|nta|s).*(/|\.(gif|html?|jpe?g|png))
-/.*/(ilm(oitus)?|kampanja)(hallinta|kuvat?)(/|\.(gif|html?|jpe?g|png))
+/?.*/(.*[-_.].*)?maino(kset|nta|s).*(/|\.(gif|html?|jpe?g|png))
+/?.*/(ilm(oitus)?|kampanja)(hallinta|kuvat?)(/|\.(gif|html?|jpe?g|png))
 
 # and even more from a finnish friend Hannu Napari <Hannu.Napari@hut.fi>
 194.251.243.50/cgi-bin/banner
@@ -566,21 +597,21 @@ www.iltalehti.fi/ilmkuvat
 www.mtv3.fi/mainoskuvat
 
 # <jwz@jwz.org>
-/.*/adfinity
-/.*/[?]adserv
-/.*/bizgrphx/
-/.*/smallad2\.gif
-/.*/ana2ad\.gif
-/.*/adimg/
-/.*/.*counter\.pl
-/.*/spin_html/
-/.*/images/topics/topicgimp\.gif
+/?.*/adfinity
+/?.*/[?]adserv
+/?.*/bizgrphx/
+/?.*/smallad2\.gif
+/?.*/ana2ad\.gif
+/?.*/adimg/
+/?.*/.*counter\.pl
+/?.*/spin_html/
+/?.*/images/topics/topicgimp\.gif
 .discovery.com/.*banner_id
-/.*/.*bannr\.gif
+/?.*/.*bannr\.gif
 .cruel.com/images/
 .idrink.com/frm_bottom.htm
-/.*/.*pb_ihtml\.gif
-/.*/ph-ad.*\.focalink\.com
+/?.*/.*pb_ihtml\.gif
+/?.*/ph-ad.*\.focalink\.com
 /cgi-bin/adjuggler
 
 /we_ba/ # hausfrauenseite.de *bwhahahaaaaa*
@@ -613,38 +644,38 @@ www.mtv3.fi/mainoskuvat
 /.*s_msn\.gif
 /.*addchannel\.gif
 /.*adddesktop\.gif
-/.*/ns4\.gif
-/.*/v3sban\.gif
-/.*/?FPCreated\.gif
-/.*/opera35\.gif
-/.*/opera13\.gif
-/.*/opera_b\.gif
-/.*/ie_horiz\.gif
-/.*/ie_logo\.gif
+/?.*/ns4\.gif
+/?.*/v3sban\.gif
+/?.*/?FPCreated\.gif
+/?.*/opera35\.gif
+/?.*/opera13\.gif
+/?.*/opera_b\.gif
+/?.*/ie_horiz\.gif
+/?.*/ie_logo\.gif
 
 # ... and even more!
-/.*/favicon\.ico
+/?.*/favicon\.ico
 
 # generally useless information and promo stuff (commented out)
 #/.*/(counter|getpcbutton|BuiltByNOF|netscape|hotmail|vcr(rated)?|rsaci(rated)?|freeloader|cache_now(_anim)?|apache_pb|now_(anim_)?button|ie_?(buttonlogo|static?|.*ani.*)?)\.(gif|jpe?g)
 
-/.*/images/na/us/brand/
-/.*/advantage\.(gif|jpg)
-/.*/advanbar\.(gif|jpg)
-/.*/advanbtn\.(gif|jpg)
-/.*/biznetsmall\.(gif|jpg)
-/.*/utopiad\.(gif|jpg)
-/.*/epipo\.(gif|jpg)
-/.*/amazon([a-zA-Z0-9]+)\.(gif|jpg)
-/.*/bnlogo.(gif|jpg)
-/.*/buynow([a-zA-Z0-9]+)\.(gif|jpg)
+/?.*/images/na/us/brand/
+/?.*/advantage\.(gif|jpg)
+/?.*/advanbar\.(gif|jpg)
+/?.*/advanbtn\.(gif|jpg)
+/?.*/biznetsmall\.(gif|jpg)
+/?.*/utopiad\.(gif|jpg)
+/?.*/epipo\.(gif|jpg)
+/?.*/amazon([a-zA-Z0-9]+)\.(gif|jpg)
+/?.*/bnlogo.(gif|jpg)
+/?.*/buynow([a-zA-Z0-9]+)\.(gif|jpg)
 
 /p/d/publicid
 
 
 # for the dutch folks by a dutch friend gertjan@west.nl
-/.*/Advertenties/
-/.*/Adverteerders/
+/?.*/Advertenties/
+/?.*/Adverteerders/
 .netdirect.nl/nd_servlet/___
 
 # --------------------------------------------------------------------------
@@ -953,8 +984,8 @@ www.forbes.com/tool/images/frontend/
 www.zserver.com
 www.spinbox.com
 .pathfinder.com/shopping/marketplace/images/
-/.*/adbanner*
-/.*/adgraphic*
+/?.*/adbanner*
+/?.*/adgraphic*
 static.wired.com/images
 .perso.estat.com/cgi-bin/perso/
 #dinoadserver1.roka.net
@@ -1000,11 +1031,11 @@ home.talkcity.com/homepopup.html.*
 # Banners from Freeserve
 #banner.freeservers.com/cgi-bin/fs_adbar # fixed by above regexp
 # And those nasty va-popups !
-/.*/?va_banner.html
+/?.*/?va_banner.html
 # And an all-around hit against advert*.jpg
-/.*/advert[0-9]+\.jpg
+/?.*/advert[0-9]+\.jpg
 # And yet another Internet Explorer gif ...
-/.*/ie_horiz\.gif
+/?.*/ie_horiz\.gif
 # Some uninteresting buttons I think...
 .mircx.com/images/buttons/
 services.mircx.com/.*\.gif
@@ -1223,6 +1254,10 @@ www.linux-magazin.de/banner
 # The Register ads - oh, and all images in Register stories (sigh).
 www.theregister.co.uk/media/
 
+# Used on http://www.theregister.co.uk/
+# Sample advert URL:
+# http://secure.webconnect.net/cgi-bin/webconnecthome.dll?F467
+.webconnect.net
 
 # Dilbert:
 www.dilbert.com/comics/dilbert/images/.*_140x800.*\.gif
@@ -1236,11 +1271,11 @@ www.stattrack.com/stats/
 #Now they're Yahoo GeoCities, their junk is in a different place.
 ##geo.yahoo.com/serv
 ##visit.geocities.com/visit.gif
-.yimg.com/.*/www.geocities.com/js_source
+.yimg.com/?.*/www.geocities.com/js_source
 #http://us.toto.geo.yahoo.com/toto?s=76001086
 .geo.yahoo.com
 .visit.geocities.com
-.yimg.com/.*/www.geocities.com/
+.yimg.com/?.*/www.geocities.com/
 
 #http://counter16.bravenet.com/counter.php
 counter*.
@@ -1276,7 +1311,7 @@ logout.gmx.net
 logout.tvspielfilm.de
 gmx.tvspielfilm.de
 www.freenet.de/customerindex\.html
-/.*/phpAds
+/?.*/phpAds
 .fxweb.com/v2-trackrun\.cgi
 rtldating.peopleunited.de
 .advertising.com
@@ -1288,7 +1323,7 @@ fourohfour.nbci.com/Members404Error.php3
 .adlink.de
 www.fair-ist-mehr.de/cgi-bin/bt.pl
 .linkexchange.
-/.*/adpage.asp
+/?.*/adpage.asp
 /ADS
 .net-on.net
 rstrip.namezero.com
@@ -1415,6 +1450,8 @@ foggy.sda.t-online.de
 .us.i1.yimg.com/us.yimg.com/i/pim/ad2.gif
 www.nexgo.de/.*/bg_banner.jpg
 
-prdownloads.sourceforge.net
+# .*ads. matches prdownloads.sourceforge.net and many other download sites
+# The fix is:
+.*downloads.
 
 # End of file
