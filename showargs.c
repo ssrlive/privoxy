@@ -1,4 +1,4 @@
-const char showargs_rcs[] = "$Id: showargs.c,v 1.21 2001/07/30 22:08:36 jongfoster Exp $";
+const char showargs_rcs[] = "$Id: showargs.c,v 1.22 2001/08/01 00:20:57 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/showargs.c,v $
@@ -34,6 +34,9 @@ const char showargs_rcs[] = "$Id: showargs.c,v 1.21 2001/07/30 22:08:36 jongfost
  *
  * Revisions   :
  *    $Log: showargs.c,v $
+ *    Revision 1.22  2001/08/01 00:20:57  jongfoster
+ *    Changing show_defines so that it doesn't contain any HTML.
+ *
  *    Revision 1.21  2001/07/30 22:08:36  jongfoster
  *    Tidying up #defines:
  *    - All feature #defines are now of the form FEATURE_xxx
@@ -408,7 +411,7 @@ struct map * show_defines(struct map *exports)
 #ifdef FEATURE_IMAGE_BLOCKING
    exports = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
 #else /* ifndef FEATURE_IMAGE_BLOCKING */
-   exports = map_conditional(exports, "FEATURE_IMAGE_BLOCKING, 0);
+   exports = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
 #endif /* ndef FEATURE_IMAGE_BLOCKING */
 
 #ifdef FEATURE_IMAGE_DETECT_MSIE
