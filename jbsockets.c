@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.11 2001/06/29 21:45:41 oes Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.12 2001/07/01 17:04:11 oes Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.11 2001/06/29 21:45:41 oes Ex
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.12  2001/07/01 17:04:11  oes
+ *    Bugfix: accept_connection no longer uses the obsolete hstrerror() function
+ *
  *    Revision 1.11  2001/06/29 21:45:41  oes
  *    Indentation, CRLF->LF, Tab-> Space
  *
@@ -446,7 +449,6 @@ int accept_connection(struct client_state * csp, int fd)
    struct sockaddr_in *lap = (struct sockaddr_in *) &laddr;
    struct hostent *host = NULL;
    int   afd, raddrlen, laddrlen;
-   char *p;
 
    raddrlen = sizeof raddr;
    do
