@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.30 2002/04/10 13:38:35 oes Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.31 2002/04/18 19:21:08 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,12 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.30 2002/04/10 13:38:35 oes Exp $"
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.31  2002/04/18 19:21:08  jongfoster
+ *    Added code to detect "conventional" action files, that start
+ *    with a set of actions for all URLs (the pattern "/").
+ *    These are special-cased in the "edit-actions-list" CGI, so
+ *    that a special UI can be written for them.
+ *
  *    Revision 1.30  2002/04/10 13:38:35  oes
  *    load_template signature changed
  *
@@ -767,11 +773,7 @@ jb_err edit_write_file(struct editable_file * file)
    assert(file);
    assert(file->filename);
 
-#if defined(AMIGA) || defined(__OS2__)
-   if (NULL == (fp = fopen(file->filename, "w")))
-#else
-   if (NULL == (fp = fopen(file->filename, "wt")))
-#endif /* def AMIGA */
+   if (NULL == (fp = fopen(file->filename, "wb")))
    {
       return JB_ERR_FILE;
    }
@@ -1598,11 +1600,7 @@ jb_err edit_read_file(struct client_state *csp,
       }
    }
 
-#if defined(AMIGA) || defined(__OS2__)
-   if (NULL == (fp = fopen(filename,"r")))
-#else
-   if (NULL == (fp = fopen(filename,"rt")))
-#endif /* def AMIGA */
+   if (NULL == (fp = fopen(filename,"rb")))
    {
       free(filename);
       return JB_ERR_FILE;
