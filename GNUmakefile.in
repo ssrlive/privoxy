@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.110 2002/06/04 14:51:48 jongfoster Exp $
+# $Id: GNUmakefile.in,v 1.111 2002/06/05 00:26:21 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -185,7 +185,7 @@ PCRE_HDRS    = @STATIC_PCRE_ONLY@$(DIR_PRIVOXY_SRC_PCRE)/config.h $(DIR_PRIVOXY_
 REGEX_SRC    =
 @STATIC_PCRE_ONLY@REGEX_SRC = $(DIR_PRIVOXY_SRC_PCRE)/pcreposix.c
 
-REGEX_OBJS   = $(REGEX_SRC:$(DIR_PRIVOXY_SRC_PCRE)/%.c=%.@OBJEXT@)
+REGEX_OBJS   = $(REGEX_SRC:$(DIR_PRIVOXY_SRC_PCRE)/%.c=$(DIR_PRIVOXY_OBJ)/%.@OBJEXT@)
 REGEX_HDRS   = $(REGEX_SRC:.c=.h)
 
 # Dependencies introduced by #include "project.h".
@@ -652,7 +652,7 @@ $(DIR_PRIVOXY_OBJ)/study.@OBJEXT@:      $(DIR_PRIVOXY_SRC_PCRE)/study.c      $(D
 
 # An auxiliary program makes the PCRE default character table source
 
-$(DIR_PRIVOXY_SRC_PCRE)/chartables.c:   $(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@
+$(DIR_PRIVOXY_SRC_PCRE)/chartables.c:   $(DIR_PRIVOXY_OBJ)/dftables@EXEEXT@
 		$(DIR_PRIVOXY_SRC_PCRE)/dftables@EXEEXT@ >$(DIR_PRIVOXY_SRC_PCRE)/chartables.c
 
 $(DIR_PRIVOXY_OBJ)/dftables@EXEEXT@:       $(DIR_PRIVOXY_SRC_PCRE)/dftables.c $(DIR_PRIVOXY_SRC_PCRE)/maketables.c $(DIR_PRIVOXY_SRC_PCRE)/pcre.h $(DIR_PRIVOXY_SRC_PCRE)/internal.h $(DIR_PRIVOXY_SRC_PCRE)/config.h
@@ -746,6 +746,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.111  2002/06/05 00:26:21  hal9
+# Move all doc build stuff to doc/source/GNUmakefile, leaving a 'make dok'
+# target only in toplevel. Add DOC_STATUS variable so docs can be built without
+# touching sgml source.
+#
 # Revision 1.110  2002/06/04 14:51:48  jongfoster
 # Updating for new paths:
 # - Source files in src/
