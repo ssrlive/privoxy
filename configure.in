@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.55 2002/04/03 03:54:38 gliptak Exp $
+dnl $Id: configure.in,v 1.56 2002/04/03 22:28:03 gliptak Exp $
 dnl 
 dnl Written by and Copyright (C) 2001, 2002 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.56  2002/04/03 22:28:03  gliptak
+dnl Removed references to gnu_regex
+dnl
 dnl Revision 1.55  2002/04/03 03:54:38  gliptak
 dnl Checking pcre version
 dnl
@@ -321,7 +324,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.55 $)
+AC_REVISION($Revision: 1.56 $)
 AC_INIT(jcc.c)
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
@@ -965,14 +968,6 @@ dnl pcre/pcrs is needed for CGI anyway, so
 dnl the choice is only between static and
 dnl dynamic:
 
-AC_ARG_ENABLE(regex-matching,
-[  --enable-regex-matching=pcre  Use perl-compatible regex for actionsfile
-                                pattern matching (default)
-  --disable-regex-matching      Don't use regex matching, compare URL
-                                prefix instead (won't shrink birary)],
-[ regex_matching=$enableval ],
-[ regex_matching=pcre ])
-
 AC_ARG_ENABLE(dynamic-pcre,
 [  --disable-dynamic-pcre        Use the built-in, static pcre, even if
                                 libpcre is available],
@@ -984,24 +979,15 @@ AC_ARG_ENABLE(dynamic-pcrs,
 [ if test $enableval = "no"; then have_pcrs=no; fi ])
 
 
-# Is the regex URL matching based on libpcreposix, but we
-# don't have that library?
-#
-if test $have_pcreposix = "yes" -o $regex_matching != "pcre"; then
-  dont_miss_pcreposix=yes
-else
-  dont_miss_pcreposix=no
-fi
-
 # If we have libpcre and either we also have pcreposix or
 # we don't need pcreposix, then link pcre dynamically; else
 # build it and link statically
 #
-if test $have_pcre = "yes" -a $dont_miss_pcreposix = "yes"; then
+if test $have_pcre = "yes"; then
   echo "using libpcre"
   pcre_dyn=yes
   STATIC_PCRE_ONLY=#
-  LIBS="$LIBS -lpcre"
+  LIBS="$LIBS -lpcre -lpcreposix"
 else
   echo "using built-in static pcre"
   pcre_dyn=no
@@ -1023,22 +1009,6 @@ else
   STATIC_PCRS_ONLY=
 fi
 
-# Which method should be used for URL matching?
-# pcre or prefix matching?
-#
-if test $regex_matching = "pcre"; then
-  echo "using pcre regex for URL matching"
-  AC_DEFINE(REGEX_PCRE)
-  PCRE_REGEX_ONLY=
-  if test $pcre_dyn = "yes"; then
-    LIBS="$LIBS -lpcreposix"
-  fi
-else
-  echo -e "using prefix matching for URLs\nHint: This does NOT make the executable any smaller!"
-  PCRE_REGEX_ONLY=#
-fi
-
-AC_SUBST(PCRE_REGEX_ONLY)
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)
 

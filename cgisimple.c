@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.24 2002/04/02 16:12:47 oes Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.25 2002/04/03 22:28:03 gliptak Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.24 2002/04/02 16:12:47 oes Ex
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.25  2002/04/03 22:28:03  gliptak
+ *    Removed references to gnu_regex
+ *
  *    Revision 1.24  2002/04/02 16:12:47  oes
  *    Fix: moving misplaced lines into #ifdef FEATURE_FORCE
  *
@@ -1173,12 +1176,6 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_TRUST */
    if (!err) err = map_conditional(exports, "FEATURE_TRUST", 0);
 #endif /* ndef FEATURE_TRUST */
-
-#ifdef REGEX_PCRE
-   if (!err) err = map_conditional(exports, "REGEX_PCRE", 1);
-#else /* ifndef REGEX_PCRE */
-   if (!err) err = map_conditional(exports, "REGEX_PCRE", 0);
-#endif /* def REGEX_PCRE */
 
 #ifdef STATIC_PCRE
    if (!err) err = map_conditional(exports, "STATIC_PCRE", 1);

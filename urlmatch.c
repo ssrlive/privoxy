@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.7 2002/03/26 22:29:55 swa Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.8 2002/04/03 23:32:47 jongfoster Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.7 2002/03/26 22:29:55 swa Exp $
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.8  2002/04/03 23:32:47  jongfoster
+ *    Fixing memory leak on error
+ *
  *    Revision 1.7  2002/03/26 22:29:55  swa
  *    we have a new homepage!
  *
@@ -635,7 +638,6 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
       url->path    = NULL;
       url->pathlen = 0;
    }
-#ifdef REGEX
    if (url->path)
    {
       int errcode;
@@ -674,7 +676,6 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          return JB_ERR_PARSE;
       }
    }
-#endif
    if ((p = strchr(buf, ':')) == NULL)
    {
       url->port = 0;
@@ -707,10 +708,8 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
       {
          freez(url->spec);
          freez(url->path);
-#ifdef REGEX
          regfree(url->preg);
          freez(url->preg);
-#endif /* def REGEX */
          return JB_ERR_MEMORY;
       }
 
@@ -727,10 +726,8 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
       {
          freez(url->spec);
          freez(url->path);
-#ifdef REGEX
          regfree(url->preg);
          freez(url->preg);
-#endif /* def REGEX */
          freez(url->dbuffer);
          url->dcount = 0;
          return JB_ERR_MEMORY;
@@ -746,10 +743,8 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          {
             freez(url->spec);
             freez(url->path);
-#ifdef REGEX
             regfree(url->preg);
             freez(url->preg);
-#endif /* def REGEX */
             freez(url->dbuffer);
             url->dcount = 0;
             return JB_ERR_MEMORY;
@@ -785,14 +780,11 @@ void free_url_spec(struct url_spec *url)
    freez(url->dbuffer);
    freez(url->dvec);
    freez(url->path);
-#ifdef REGEX
    if (url->preg)
    {
       regfree(url->preg);
       freez(url->preg);
    }
-#endif
-
 }
 
 
@@ -815,11 +807,7 @@ int url_match(const struct url_spec *pattern,
    return ((pattern->port == 0) || (pattern->port == url->port))
        && ((pattern->dbuffer == NULL) || (domain_match(pattern, url) == 0))
        && ((pattern->path == NULL) ||
-#ifdef REGEX
             (regexec(pattern->preg, url->path, 0, NULL, 0) == 0)
-#else
-            (strncmp(pattern->path, url->path, pattern->pathlen) == 0)
-#endif
       );
 }
 
