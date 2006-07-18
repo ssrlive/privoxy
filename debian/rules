@@ -1,6 +1,8 @@
 #!/usr/bin/make -f
+#
+# (C) 2002-2006 Roland Rosenfeld <roland@debian.org>, based on
 # Sample debian/rules that uses debhelper.
-# GNU copyright 1997 to 1999 by Joey Hess.
+# This file is public domain software, originally written by Joey Hess. 
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -19,72 +21,54 @@ else
         OPTIMIZE=-O2
 endif
 
-configure: configure-stamp
-configure-stamp:
+build: build-stamp
+build-stamp: patch-stamp
 	dh_testdir
 
 	autoheader
 	autoconf
 	env CFLAGS="$(OPTIMIZE) -g" \
 		./configure --prefix=/usr --sysconfdir=/etc \
-		--mandir=/usr/share/man	$(WITHDEBUG)
-
-	touch configure-stamp
-
-build: build-stamp
-build-stamp: configure-stamp 
-	dh_testdir
-
+		--mandir=/usr/share/man	$(WITHDEBUG) \
+		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 	$(MAKE)
+#       create missing doc/pdf directory if necessary:
+	[ -d doc/pdf ] || mkdir doc/pdf
+	$(MAKE) dok-pdf
+	$(MAKE) dok
+	env -u LANG $(MAKE) man
+	$(MAKE) man2html
 
-# 	backup formatted upstream documentation:
-	for x in text webserver pdf; do \
-		if [ ! -d doc/$$x.dist ]; then \
-			cp -a doc/$$x doc/$$x.dist; \
-		fi; \
+# 	remove trailing whitespaces:
+	for x in developer-manual user-manual faq; do \
+		sed -e 's/[ 	]*$$//' < doc/text/$$x.txt > doc/text/$$x.nws;\
+		mv -f doc/text/$$x.nws doc/text/$$x.txt; \
 	done
-	for x in INSTALL README privoxy.1; do \
-		if [ ! -f $$x.dist ]; then \
-			cp -a $$x $$x.dist; \
-		fi; \
-	done
-
-	(cd doc/source; $(MAKE) pdf)
-	(cd doc/source; $(MAKE) all)
 
 	touch build-stamp
 
-clean:
+clean: clean1 unpatch
+clean1:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
 	-$(MAKE) clean
 	-$(MAKE) distclean
-	rm -f privoxy 
-	rm -f configure config.h GNUmakefile 
-	rm -f doc/source/ldp.dsl
+	rm -f configure config.h GNUmakefile
+	rm -f privoxy.8
+
 	rm -rf obj
 	rm -f ActivityConsole.jar
 	rm -f src/java/org/privoxy/activityconsole/*.class
 
-# 	restore formatted upstream documentation:
-	for x in text webserver pdf; do \
-		if [ -d doc/$$x.dist ]; then \
-			rm -rf doc/$$x; \
-			mv doc/$$x.dist doc/$$x; \
-		fi; \
-	done
-	for x in INSTALL README privoxy.1; do \
-		if [ -f $$x.dist ]; then \
-			rm -f $$x; \
-			mv $$x.dist $$x; \
-		fi; \
-	done
+	rm -f doc/source/ldp.dsl
+	rm -rf doc/source/temp
+	rm -rf doc/pdf
 
 	dh_clean
 
-install: build
+install: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -92,14 +76,7 @@ install: build
 
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
 
-	sed -e 's/^\(\(trust\|proxy\)-info-url\|admin-address\)/#\1/'  \
-	    -e 's/^\(enable-\(edit-actions\|remote-toggle\)\)[ 	]*1/\1 0/' \
-	    -e 's#^confdir .*#confdir /etc/privoxy#' \
-	    -e 's#^logdir .*#logdir /var/log/privoxy#' \
-	    -e 's%^#\(user-manual\).*%\1 /usr/share/doc/privoxy/user-manual%' \
-	    -e 's/\(Sample Configuration File for Privoxy\).*/\1/' \
-	    -e 's/Id: config,v.*/Id: config,v $$/' \
-		< config > $(DEBDIR)/etc/privoxy/config
+	install -m 644 config $(DEBDIR)/etc/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
 	install -m 0644 standard.action $(DEBDIR)/etc/privoxy/standard.action
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
@@ -110,13 +87,23 @@ install: build
 	rm -f $(DEBDIR)/etc/privoxy/templates/*~
 	rm -rf $(DEBDIR)/etc/privoxy/templates/CVS
 
+#	Remove CVS tags and trailing spaces from config files:
+	find $(DEBDIR)/etc/privoxy -type f \
+	| xargs grep -l '\$$[A-Z][^$$]*:[^$$]*\$$' \
+	| while read f; do \
+	    sed -e 's/\$$\(Id: [^$$]*,v\)[^$$]*\$$/\1/' \
+		-e 's/\$$\(Source: [^$$]*\)\$$/\1/' \
+		-e 's/\$$\(Log: [^$$]*\)\$$/\1/' \
+		-e 's/ *$$//' < $$f > $$f.new; \
+	    mv -f $$f.new $$f; \
+	done
 
 # Build architecture-independent files here.
-binary-indep: build install
+binary-indep: build-stamp install
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
-binary-arch: build install
+binary-arch: build-stamp install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf	
@@ -147,5 +134,17 @@ binary-arch: build install
 	dh_md5sums
 	dh_builddeb
 
+patch: patch-stamp
+patch-stamp:
+	dpatch apply-all
+	touch patch-stamp
+	#dpatch call-all -a=pkg-info >patch-stamp
+
+unpatch:
+	dpatch deapply-all
+	rm -rf patch-stamp debian/patched
+
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+
+.PHONY: build clean binary-indep binary-arch binary install patch unpatch \
+	clean1

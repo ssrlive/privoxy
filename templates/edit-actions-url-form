@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-url-form,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-url-form,v $
 #
 # Purpose     :  Template used to edit a URL pattern in an actions file.
 #
@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-url-form,v $
+#    Revision 1.14.2.2  2002/08/23 02:22:53  hal9
+#    Fix a perl brain fart with <li> in comments.
+#
 #    Revision 1.14  2002/05/21 19:14:10  oes
 #    Added button style and jumptarget "cancel" link
 #

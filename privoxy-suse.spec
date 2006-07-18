@@ -1,6 +1,6 @@
-# $Id: privoxy-suse.spec,v 1.22 2002/09/03 23:42:21 hal9 Exp $
+# $Id: privoxy-suse.spec,v 1.20.2.10 2004/01/30 17:09:29 oes Exp $
 #
-# Written by and Copyright (C) 2001,2002 the SourceForge
+# Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -36,7 +36,7 @@ Summary:      Privoxy - privacy enhancing proxy
 Vendor:       Privoxy.Org
 Name:         privoxy-suse
 Distribution: defineme
-Version: 3.0.0
+Version: 3.0.3
 Release: 1
 # Needs makefile change: Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}-%{status}-src.tar.gz
 Source: http://prdownloads.sourceforge.net/ijbswa/privoxy-%{version}.tar.gz
@@ -55,13 +55,13 @@ Conflicts: junkbuster-raw junkbuster-blank junkbuster-suse junkbuster privoxy
 #
 %description
 Privoxy is a web proxy with advanced filtering capabilities for
-protecting privacy, filtering web page content, managing cookies,
+protecting privacy, modifying web page content, managing cookies,
 controlling access, and removing ads, banners, pop-ups and other
 obnoxious Internet junk. Privoxy has a very flexible configuration and
 can be customized to suit individual needs and tastes. Privoxy has 
 application for both stand-alone systems and multi-user networks.
 
-Privoxy is based on the  Internet Junkbuster.
+Privoxy is based on the Internet Junkbuster.
 
 Authors:
 --------
@@ -198,60 +198,13 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
 %doc doc/webserver/p_doc.css
-%doc doc/webserver/p_web.css
 %doc doc/webserver/privoxy-index.html
 %doc doc/webserver/images
-#%doc privoxy.weekly privoxy.monthly AUTHORS
+%doc doc/webserver/man-page
+
 %dir %{privoxyconf}
-#%config %{privoxyconf}/*
-# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
-# We should not use wildchars here. This could mask missing files problems
-# -- morcego
-# WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
-%config(noreplace) %{privoxyconf}/config
-%config %{privoxyconf}/standard.action
-%config(noreplace) %{privoxyconf}/user.action
-%config %{privoxyconf}/default.action
-%config %{privoxyconf}/default.filter
-%config %{privoxyconf}/trust
-
-# Please keep these alphabetized so its easier to find one that 
-# is not included.
-%config %{privoxyconf}/templates/blocked
-%config %{privoxyconf}/templates/cgi-error-404
-%config %{privoxyconf}/templates/cgi-error-bad-param
-%config %{privoxyconf}/templates/cgi-error-disabled
-%config %{privoxyconf}/templates/cgi-error-file
-%config %{privoxyconf}/templates/cgi-error-file-read-only
-%config %{privoxyconf}/templates/cgi-error-modified
-%config %{privoxyconf}/templates/cgi-error-parse
-%config %{privoxyconf}/templates/cgi-style.css
-%config %{privoxyconf}/templates/connect-failed
-%config %{privoxyconf}/templates/default
-%config %{privoxyconf}/templates/edit-actions-add-url-form
-%config %{privoxyconf}/templates/edit-actions-for-url
-%config %{privoxyconf}/templates/edit-actions-for-url-filter
-%config %{privoxyconf}/templates/edit-actions-list
-%config %{privoxyconf}/templates/edit-actions-list-button
-%config %{privoxyconf}/templates/edit-actions-list-section
-%config %{privoxyconf}/templates/edit-actions-list-url
-%config %{privoxyconf}/templates/edit-actions-remove-url-form
-%config %{privoxyconf}/templates/edit-actions-url-form
-%config %{privoxyconf}/templates/mod-local-help
-%config %{privoxyconf}/templates/mod-support-and-service
-%config %{privoxyconf}/templates/mod-title
-%config %{privoxyconf}/templates/mod-unstable-warning
-%config %{privoxyconf}/templates/no-such-domain
-%config %{privoxyconf}/templates/show-request
-%config %{privoxyconf}/templates/show-status
-%config %{privoxyconf}/templates/show-status-file
-%config %{privoxyconf}/templates/show-url-info
-%config %{privoxyconf}/templates/show-version
-%config %{privoxyconf}/templates/toggle
-%config %{privoxyconf}/templates/toggle-mini
-%config %{privoxyconf}/templates/untrusted
-
-%attr(0744,privoxy,privoxy) %dir /var/log/privoxy
+%config %{privoxyconf}/*
+%attr(0740,privoxy,privoxy) %dir /var/log/privoxy
 %config %{_sysconfdir}/logrotate.d/privoxy
 %attr(0755,root,root)/usr/sbin/privoxy
 %{_mandir}/man8/*
@@ -262,17 +215,35 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 # -----------------------------------------------------------------------------
 #
 %changelog
-* Thu Sep 05 2002 Hal Burgiss <hal@foobox.net>
-- Sync changes with 3.0 branch.
+* Wed Mar 26 2003 Andreas Oesterhelt <andreas@oesterhelt.org>
+- Bump version for 3.0.2.
 
-* Tue Sep 03 2002 Hal Burgiss <hal@foobox.net>
-+ privoxy-3.1.1-1
-- Explicitly list %%config files, and set noreplace flag for config and 
-user.action. Note: no way I can test this change! Bump version while here.
+* Wed Mar 19 2003 Hal Burgiss <hal@foobox.net>
+- Bump version for 3.0.1.
+
+* Tue Aug 25 2002 Hal Burgiss <hal@foobox.net>
+- Bump version for 3.0.0 :) 
+
+* Tue Aug 06 2002 Hal Burgiss <hal@foobox.net>
+- Reset version for 2.9.18. 
+
+* Wed Jul 30 2002 Hal Burgiss <hal@foobox.net>
+- Reset version for 2.9.17.
+
+* Sat Jul 27 2002 Hal Burgiss <hal@foobox.net>
+- Reset version and release for 2.9.16.
 
 * Mon May 27 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
-- Index.html is now privoxy-index.html.
+- Index.html is now privoxy-index.html for doc usage.
+
+* Mon May 27 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-1
+- Index.html is now privoxy-index.html for doc usage.
+
+* Sat May 25 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-1
+- Add html man page so index.html does not 404.
 
 * Fri May 24 2002 Hal Burgiss <hal@foobox.net>
 + privoxy-2.9.15-1
@@ -378,13 +349,35 @@ user.action. Note: no way I can test this change! Bump version while here.
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
-# Revision 1.22  2002/09/03 23:42:21  hal9
-# Explicitly list all %config files, like RH spec. Set noreplace flag for config
-# and user.action (only). Bump version. Note: I have no way to test this change,
-# but am aiming for consistency among spec files.
+# Revision 1.20.2.10  2004/01/30 17:09:29  oes
+# Bumped version for 3.0.3
 #
-# Revision 1.21  2002/05/28 03:56:59  hal9
-# Index.html re-vamped as privoxy-index.html for docs.
+# Revision 1.20.2.9  2003/03/26 00:24:58  oes
+# Bump version for 3.0.2
+#
+# Revision 1.20.2.8  2003/03/20 03:27:11  hal9
+# Bump version for 3.0.1 pending release.
+#
+# Revision 1.20.2.7  2002/08/25 23:36:03  hal9
+# Bump version for 3.0.0.
+#
+# Revision 1.20.2.6  2002/08/10 11:28:50  oes
+# Bumped version
+#
+# Revision 1.20.2.5  2002/08/07 01:08:49  hal9
+# Bumped version to 2.9.18.
+#
+# Revision 1.20.2.4  2002/07/30 21:51:19  hal9
+# Bump version to 2.9.17.
+#
+# Revision 1.20.2.3  2002/07/27 15:47:10  hal9
+# Reset version and release for 2.9.16.
+#
+# Revision 1.20.2.2  2002/05/28 02:39:38  hal9
+# Replace index.html with privoxy-index.html for docs.
+#
+# Revision 1.20.2.1  2002/05/26 17:20:23  hal9
+# Add images to doc dirs.
 #
 # Revision 1.20  2002/05/25 02:08:23  hal9
 # Add doc/images directory.

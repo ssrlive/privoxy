@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 02_linkcolor.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Run htmldoc with --linkcolor #0000ff and --no-embedfonts
+
+@DPATCH@
+diff -urNad privoxy~/utils/ldp_print/ldp_print privoxy/utils/ldp_print/ldp_print
+--- privoxy~/utils/ldp_print/ldp_print	2006-02-05 22:03:58.000000000 +0100
++++ privoxy/utils/ldp_print/ldp_print	2006-02-05 22:12:43.000000000 +0100
+@@ -54,7 +54,7 @@
+ 
+ my($cmd) = "htmldoc --size universal --bodyfont helvetica --fontsize 8 " .
+            "-t pdf -f ${fname_wo_ext}.pdf --firstpage p1 --titlefile title.html" .
+-           " body.html --footer c.1";
++           " body.html --footer c.1 --linkcolor #0000ff --no-embedfonts";
+ 
+ # For postscript output; append onto the above cmd string:
+ #

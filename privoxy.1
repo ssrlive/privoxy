@@ -3,12 +3,12 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "05 September 2002" "Privoxy 3.1.1 alpha" ""
+.TH "PRIVOXY" "1" "31 Januar 2004" "Privoxy 3.0.3" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
 
-\fBprivoxy\fR [\fB--help\fR ] [\fB--version\fR ] [\fB--no-daemon\fR ] [\fB--pidfile \fIpidfile\fB\fR ] [\fB--user \fIuser[.group]\fB\fR ] [\fB\fIconfigfile\fB\fR ]\fB (UNIX)\fR
+\fBprivoxy\fR [\fB--help\fR ] [\fB--version\fR ] [\fB--no-daemon\fR ] [\fB--pidfile \fIpidfile\fB\fR ] [\fB--user \fIuser[.group]\fB\fR ] [\fB--chroot\fR ] [\fB\fIconfigfile\fB\fR ]\fB (UNIX)\fR
 
 
 \fBprivoxy.exe\fR [\fB\fIconfigfile\fB\fR ]\fB (Windows)\fR
@@ -41,6 +41,14 @@ After (optionally) writing the PID file, assume the user ID of
 \fIgroup\fR was not given, the default group of
 \fIuser\fR. Exit if the privileges are not
 sufficient to do so.
+.TP
+\fB--chroot\fR
+Before changing to the user ID given in the --user option, chroot to
+that user's home directory, i.e. make the kernel pretend to the
+\fBPrivoxy\fR process that the directory tree starts
+there. If set up carefully, this can limit the impact of possible
+vulnerabilities in \fBPrivoxy\fR to the files contained in
+that hierarchy. 
 .PP
 If the \fIconfigfile\fR is not specified on  the  command  line,
 \fBPrivoxy\fR  will  look for a file named
@@ -51,7 +59,7 @@ fail to start.
 .SH "DESCRIPTION"
 .PP
 \fBPrivoxy\fR is a web proxy with advanced filtering
-capabilities for protecting privacy, filtering web page content, managing
+capabilities for protecting privacy, modifying web page content, managing
 cookies, controlling access, and removing ads, banners, pop-ups and other
 obnoxious Internet junk. \fBPrivoxy\fR has a very
 flexible configuration and can be customized to suit individual needs and
@@ -93,8 +101,7 @@ these files are in the same directory as the \fBPrivoxy\fR
 executable.
 .PP
 The name and number of configuration files has changed from previous
-versions, and is subject to change as development
-progresses. In fact, the configuration itself is changed  and  much more
+versions. In fact, the configuration itself is changed  and  much more
 sophisticated. See the user-manual for a complete
 explanation of all configuration options and general usage, and notes for 
 upgrading from \fBJunkbuster\fR and earlier \fBPrivoxy\fR
@@ -228,9 +235,6 @@ config file changes by \fBSIGHUP\fR -- it will detect them
 automatically. 
 .SH "NOTES"
 .PP
-This is a alpha version of \fBPrivoxy\fR. Not 
-all features are well tested.
-.PP
 Please see the \fIUser Manual\fR on how to contact the
 developers for feature requests, reporting problems, and other questions.
 .SH "SEE ALSO"
@@ -279,29 +283,36 @@ the \fBPrivoxy\fR developer manual.
 .SH "DEVELOPMENT TEAM"
 
 .nf
- Jon Foster
+ Hal Burgiss (docs)
  Andreas Oesterhelt
- Stefan Waldherr
- Thomas Steudten
- Rodney Stromlund
+ David Schmidt (OS/2, Mac OSX ports)
+
+ Johny Agotnes 
  Rodrigo Barbosa (RPM specfiles)
  Moritz Barsnick
- Hal Burgiss (docs)
+ Brian Dessent
+ Mattes Dolak 
+ Jon Foster
  Karsten Hopp (Red Hat)
  Alexander Lazic
+ Daniel Leite
  Gábor Lipták
- Guy
+ Adam Lock (Win32)
+ Guy Laroche
  Haroon Rafique
  Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
- David Schmidt (OS/2, Mac OSX ports)
+ Thomas Steudten
  Joerg Strohmayer (Amiga)
+ Rodney Stromlund
+ Sviatoslav Sviridov
  Sarantis Paskalis
+ Stefan Waldherr
 .fi
 .SH "COPYRIGHT AND LICENSE"
 .SS "COPYRIGHT"
 .PP
-Copyright (C) 2001, 2002 by Privoxy Developers <developers@privoxy.org>
+Copyright (C) 2001 - 2004 by Privoxy Developers <developers@privoxy.org>
 .PP
 Some source code is based on code Copyright (C) 1997 by Anonymous Coders
 and Junkbusters, Inc. and licensed under the \fIGNU General Public

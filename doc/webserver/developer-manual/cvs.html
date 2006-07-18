@@ -1,11 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
 >The CVS Repository</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
 REL="HOME"
 TITLE="Privoxy Developer Manual"
 HREF="index.html"><LINK
@@ -73,18 +73,23 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="CVS">2. The CVS Repository</H1
+NAME="CVS"
+>2. The CVS Repository</A
+></H1
 ><P
->      If you intend to help us with programming, documentation or packaging
-      you will need write access to our holy grail, the CVS repository.
-      Please read this chapter completely before accessing via CVS.
+>      If you become part of the active development team, you will eventually
+      need write access to our holy grail, the CVS repository. One of the 
+      team members will need to set this up for you. Please read
+      this chapter completely before accessing via CVS.
     </P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSACCESS">2.1. Access to CVS</H2
+NAME="CVSACCESS"
+>2.1. Access to CVS</A
+></H2
 ><P
 >        The project's CVS repository is hosted on
         <A
@@ -100,17 +105,17 @@ TARGET="_top"
         documentation</A
 > for the technical access details for your
         operating system. For historical reasons, the CVS server is
-        called <TT
+        called <VAR
 CLASS="LITERAL"
->cvs.ijbswa.sourceforge.net</TT
+>cvs.ijbswa.sourceforge.net</VAR
 >, the repository is
-        called <TT
+        called <VAR
 CLASS="LITERAL"
->ijbswa</TT
+>ijbswa</VAR
 >, and the source tree module is called
-        <TT
+        <VAR
 CLASS="LITERAL"
->current</TT
+>current</VAR
 >.
       </P
 ></DIV
@@ -119,12 +124,14 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSBRANCHES">2.2. Branches</H2
+NAME="CVSBRANCHES"
+>2.2. Branches</A
+></H2
 ><P
 >       Within the CVS repository, there are modules and branches. As
-       mentioned, the sources are in the <TT
+       mentioned, the sources are in the <VAR
 CLASS="LITERAL"
->current</TT
+>current</VAR
 >
        <SPAN
 CLASS="QUOTE"
@@ -139,9 +146,9 @@ TARGET="_top"
      </P
 ><P
 >       Branches are used to fork a sub-development path from the main trunk.
-       Within the <TT
+       Within the <VAR
 CLASS="LITERAL"
->current</TT
+>current</VAR
 > module where the sources are, there
        is always at least one <SPAN
 CLASS="QUOTE"
@@ -149,22 +156,36 @@ CLASS="QUOTE"
 > from the main trunk
        devoted to a stable release series. The main trunk is where active
        development takes place for the next stable series (e.g. 3.2.x).
-       And for testing bugfixes for the stable series. Just prior to each
-       stable series (e.g. 3.0.x), a branch is created just for stable series
-       releases (e.g. 3.0.0 -&#62; 3.0.1 -&#62; 3.0.2, etc). Once the initial stable
-       release of any stable branch has taken place, this branch is
-       <SPAN
+       So just prior to each stable series (e.g. 3.0.x), a branch is created
+       just for stable series releases (e.g. 3.0.0 -&#62; 3.0.1 -&#62; 3.0.2, etc).
+       Once the initial stable release of any stable branch has taken place,
+       this branch is <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >only used for bugfixes</I
 ></SPAN
->, which have had prior
-       testing before being committed to CVS. (See <A
+>, which have
+       had prior testing before being committed to CVS. (See <A
 HREF="newrelease.html#VERSIONNUMBERS"
 >Version Numbers</A
 > below for details on
        versioning.)
+     </P
+><P
+>       This will result in at least two active branches, which means there may
+       be occasions that require the same (or similar) item to be 
+       checked into to two different places (assuming its a bugfix and needs 
+       fixing in both the stable and unstable trees). This also means that in
+       order to have access to both trees, both will have to be checked out 
+       separately. Use the <VAR
+CLASS="LITERAL"
+>cvs -r</VAR
+> flag to check out a 
+       branch, e.g: <VAR
+CLASS="LITERAL"
+>cvs co -r v_3_0_branch current</VAR
+>.
      </P
 ></DIV
 ><DIV
@@ -172,7 +193,9 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSCOMMIT">2.3. CVS Commit Guidelines</H2
+NAME="CVSCOMMIT"
+>2.3. CVS Commit Guidelines</A
+></H2
 ><P
 >        The source tree is the heart of every software project. Every effort must
         be made to ensure that it is readable, compilable and consistent at all
@@ -255,10 +278,13 @@ TARGET="_top"
 >
       </P
 ><P
->       Stable branches are handled with decidedly more care, especially after
-       the initial *.*.0 release, and we are just in bugfix mode. In addition
-       to the above, the below applies only to the stable branch (currently
-       the v_3_0_branchpoint branch):
+>       Stable branches are handled with more care, especially after the 
+       initial *.*.0 release, and we are just in bugfix mode. In addition to 
+       the above, the below applies only to the stable branch (currently the 
+       <VAR
+CLASS="LITERAL"
+>v_3_0_branch</VAR
+> branch):
       </P
 ><P
 >       <P
@@ -266,17 +292,17 @@ TARGET="_top"
 ><UL
 ><LI
 ><P
->          Do <SPAN
+>           Do not commit <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->not commit anything</I
+>anything</I
 ></SPAN
-> into the stable branch,
-          unless immediately before a new release! There needs to be testing 
-          done before it hits CVS, and to ensure that all changes are
-          appropriate just to fix whatever the problem is.
-        </P
+> unless your proposed
+           changes have been well tested first, preferably by other members of the
+           project, or have prior approval of the project leaders or consensus
+           of the devel list.
+         </P
 ></LI
 ><LI
 ><P
@@ -295,20 +321,6 @@ TARGET="_top"
 >.
           Then ask for peer review. 
         </P
-></LI
-><LI
-><P
->           Do not commit <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->anything</I
-></SPAN
-> unless your proposed
-           changes have been well tested first, by other members of the
-           project, and have prior approval of the project leaders or consensus
-           of the devel list.
-         </P
 ></LI
 ><LI
 ><P

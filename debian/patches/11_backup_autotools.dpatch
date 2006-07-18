@@ -1,0 +1,25 @@
+#! /bin/sh -e
+## 11_backup_autotools.dpatch by Ralf Treinen <treinen@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: replace all config.{guess,sub} by the vesion installed in
+## DP: /usr/share/misc
+
+dpatch_patch ()
+{
+	find . -name config.guess -o -name config.sub \
+	 	| tar cf debian/patched/config.guess+sub.tar -T -
+	find . -name config.guess \
+		-exec ln -sf /usr/share/misc/config.guess '{}' \;
+	find . -name config.sub \
+		-exec ln -sf /usr/share/misc/config.sub '{}' \;
+}
+
+dpatch_unpatch ()
+{
+	tar xf debian/patched/config.guess+sub.tar
+}
+
+DPATCH_LIB_NO_DEFAULT=1
+
+. /usr/share/dpatch/dpatch.lib.sh

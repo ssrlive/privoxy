@@ -3,7 +3,7 @@
 #
 # ********************************************************************
 # 
-#  File        :  $Source: /cvsroot/ijbswa//current/privoxy.logrotate,v $
+#  File        :  $Source: /cvsroot/ijbswa/current/privoxy.logrotate,v $
 # 
 #  Purpose     :  Rotates all potential Privoxy logfiles
 #                 
@@ -35,6 +35,9 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.logrotate,v $
+#     Revision 1.4.2.1  2002/06/25 17:33:07  kick_
+#     Avoid error messages if privoxy hasn't run at all and there is no logfile yet by adding missingok to the logrotate script
+#
 #     Revision 1.4  2002/03/26 22:29:55  swa
 #     we have a new homepage!
 #

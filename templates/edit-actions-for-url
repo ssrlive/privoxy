@@ -32,27 +32,17 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
-#    Revision 1.32  2004/10/05 02:03:19  david__schmidt
+#    Revision 1.29.2.5  2004/10/05 03:17:26  david__schmidt
+#    Typo: inspect_jpegs, not inspect-jpegs in form
+#
+#    Revision 1.29.2.4  2004/10/03 12:53:46  david__schmidt
 #    Add the ability to check jpeg images for invalid
 #    lengths of comment blocks.  Defensive strategy
 #    against the exploit:
-#    Microsoft Security Bulletin MS04-028
+#       Microsoft Security Bulletin MS04-028
 #       Buffer Overrun in JPEG Processing (GDI+) Could
 #       Allow Code Execution (833987)
 #    Enabled with +inspect-jpegs in actions files.
-#
-#    Revision 1.31  2003/09/22 00:33:01  david__schmidt
-#    Enable sending a custom 'blocked' image.  Shows up as
-#    "image-blocker-custom-file" parameter in config, and
-#    "+set-image-blocker{custom}" in action files.
-#
-#    Revision 1.30  2002/09/05 16:12:02  oes
-#    Synced with stable branch:
-#       Revision 1.29.2.3  2002/08/23 02:22:53  hal9
-#       Fix a perl brain fart with <li> in comments.
-#
-#       Revision 1.29.2.1  2002/08/02 12:51:42  oes
-#       Added top submit button; Consistency with docs: Change default name for action from hide-referer to hide-referrer
 #
 #    Revision 1.29.2.3  2002/08/23 02:22:53  hal9
 #    Fix a perl brain fart with <li> in comments.
@@ -528,6 +518,19 @@ function show_send_wafer_opts(tf)
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
+        name="inspect_jpegs" value="Y" @inspect-jpegs-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="inspect_jpegs" value="N" @inspect-jpegs-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="inspect_jpegs" value="X" @inspect-jpegs-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@INSPECT-JPEGS">inspect-jpegs</a></td>
+      <td>Checks jpeg images for malicious content.</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
         name="downgrade_http_version" value="Y" @downgrade-http-version-y@></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
         name="downgrade_http_version" value="N" @downgrade-http-version-n@></td>
@@ -684,19 +687,6 @@ function show_send_wafer_opts(tf)
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="Y" @inspect-jpegs-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="N" @inspect-jpegs-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="X" @inspect-jpegs-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@INSPECT-JPEGS">inspect-jpegs</a></td>
-      <td>Checks jpeg images for malicious content.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
         name="kill_popups" value="Y" @kill-popups-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
@@ -832,11 +822,7 @@ function show_send_wafer_opts(tf)
         <input type="radio" name="set_image_blocker_mode" value="blank"
         onclick="set_image_blocker_param_disable(true)"
         id="set_image_blocker_mode_blank" @set-image-blocker-param-blank@><label 
-        for="set_image_blocker_mode_blank">Send a 1x1 transparent image</label><br>
-        <input type="radio" name="set_image_blocker_mode" value="custom"
-        onclick="set_image_blocker_param_disable(true)"
-        id="set_image_blocker_mode_custom" @set-image-blocker-param-custom@><label 
-        for="set_image_blocker_mode_custom">Send a custom image</label><br>
+        for="set_image_blocker_mode_blank">Send a 1x1 transparent GIF</label><br>
         <input type="radio" name="set_image_blocker_mode" value="CUSTOM"
         onclick="set_image_blocker_param_disable(false)"
         id="set_image_blocker_mode_set" @set-image-blocker-param-custom@><label

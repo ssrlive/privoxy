@@ -25,8 +25,15 @@ set -e
 
 case "$1" in
     configure)
-        adduser --quiet --system --home /etc/privoxy --ingroup nogroup \
-                --disabled-password privoxy
+        if ! adduser --quiet --system --home /etc/privoxy --no-create-home \
+		     --ingroup nogroup --disabled-password privoxy
+        then
+	    # user privoxy seems to exist
+	    # -> remove him before newly adding him.
+	    deluser --quiet privoxy
+	    adduser --quiet --system --home /etc/privoxy --no-create-home \
+		    --ingroup nogroup --disabled-password privoxy
+	fi
         chown -R privoxy.adm /var/log/privoxy
         chmod 750 /var/log/privoxy
 	chown privoxy /etc/privoxy/*.action /etc/privoxy/trust

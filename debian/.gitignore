@@ -1,7 +1,0 @@
-files
-privoxy
-privoxy.postinst.debhelper
-privoxy.postrm.debhelper
-privoxy.prerm.debhelper
-privoxy.substvars
-

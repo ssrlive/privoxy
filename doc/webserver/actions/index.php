@@ -2,15 +2,36 @@
 <html>
  <!--
 
-  File :  $Source: /cvsroot/ijbswa//current/doc/webserver/actions/index.php,v $
+  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/index.php,v $
 
   Purpose  :  Submit form for actions file feedback (step 1)
               This file belongs in
               ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.25 2002/04/29 17:30:20 oes Exp $
+  $Id: index.php,v 1.25.2.7 2004/01/30 17:16:44 oes Exp $
 
   $Log: index.php,v $
+  Revision 1.25.2.7  2004/01/30 17:16:44  oes
+  Require AF 1.8
+
+  Revision 1.25.2.6  2003/11/30 11:39:52  oes
+  Fixed typo
+
+  Revision 1.25.2.5  2003/09/01 15:20:45  oes
+  Require AF 1.7
+
+  Revision 1.25.2.4  2003/03/19 14:00:20  oes
+  Require AF 1.6
+
+  Revision 1.25.2.3  2002/08/27 16:33:39  oes
+  Require AF 1.5 & Privoxy 3.0
+
+  Revision 1.25.2.2  2002/08/06 08:39:09  oes
+  Require AF 1.4; link to new AF download location
+
+  Revision 1.25.2.1  2002/07/27 18:47:49  oes
+  Require Privoxy 2.9.16 and AF 1.3
+
   Revision 1.25  2002/04/29 17:30:20  oes
   Fixed BML link text
 
@@ -126,9 +147,9 @@
 /*
  * Config:
  */
-$required_actions_file_version = "1.5";
+$required_actions_file_version = "1.8";
 $required_privoxy_version = "3.0";
-$actions_file_download = "http://sourceforge.net/project/showfiles.php?group_id=11118&release_id=107430";
+$actions_file_download = "http://sourceforge.net/project/showfiles.php?group_id=11118&release_id=147447";
 $submit_target = "http://www.oesterhelt.org/actions/step2.php";
 
 
@@ -199,16 +220,17 @@ $headers = getallheaders();
 if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Version"] != $required_actions_file_version)
 {
 
-   error_abort("invalid", "<p>As much as we welcome your feedback, please note that
-               we can only accept problem reports based on:
+   error_abort("invalid", "<p><b>Thank you for using <a href=\"http://www.privoxy.org/\" target=\"_blank\">Privoxy</a>'s
+               feedback reporting mechanism!</b> However, in order to make optimal use of our limited development resources,
+               we regret that we can at this time only accept problem reports based on:
                </p>
                <ul>
                 <li><a href=\"http://www.privoxy.org/\" target=\"_blank\">Privoxy</a> version $required_privoxy_version or later</li>
-                <li><a href=\"$actions_file_download\">Actionsfile</a> version $required_actions_file_version</li>
+                <li><a href=\"$actions_file_download\">Actionsfile</a> version version $required_actions_file_version</li>
                </ul>
                <p>We hope you will understand that we feel unable to maintain concurrent versions of the file.</p>
-               <p><i>Hint: To upgrade your actions file, follow the above link, then save as default.action, overwriting 
-                  the old copy in your Privoxy config directory</i>
+               <p><i>Hint: To upgrade your actions file, follow the above link to download the file, then save as
+                  default.action in your Privoxy config directory</i>
                </p>");
 }
 
@@ -262,7 +284,7 @@ if (!isset($headers["X-Actions-File-Version"]) || $headers["X-Actions-File-Versi
         <option selected value="INVALID">Please select...</option>
         <option value="P1">An advertisment was NOT blocked</option>
         <option value="P2">An innocent image WAS blocked</option>
-        <option value="P3">The whole page was erraneously blocked</option>
+        <option value="P3">The whole page was erroneously blocked</option>
         <option value="P4">The page needs popups but they don't work</option>
         <option value="P5">Other problem</option>
        </select>

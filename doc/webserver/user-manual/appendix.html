@@ -1,13 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
 >Appendix</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
 REL="HOME"
-TITLE="Privoxy 3.1.1 User Manual"
+TITLE="Privoxy 3.0.3 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="See Also"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.1.1 User Manual</TH
+>Privoxy 3.0.3 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -66,13 +66,17 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="APPENDIX">14. Appendix</H1
+NAME="APPENDIX"
+>14. Appendix</A
+></H1
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="REGEX">14.1. Regular Expressions</H2
+NAME="REGEX"
+>14.1. Regular Expressions</A
+></H2
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -131,17 +135,17 @@ CLASS="QUOTE"
 CLASS="COMMAND"
 >dir</B
 > command in DOS. 
- <TT
+ <VAR
 CLASS="LITERAL"
->*.*</TT
+>*.*</VAR
 > matches all filenames. The <SPAN
 CLASS="QUOTE"
 >"special"</SPAN
 >
  character here is the asterisk which matches any and all characters. We can be
- more specific and use <TT
+ more specific and use <VAR
 CLASS="LITERAL"
->?</TT
+>?</VAR
 > to match just individual
  characters. So <SPAN
 CLASS="QUOTE"
@@ -424,9 +428,9 @@ CLASS="APPLICATION"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><TT
+><VAR
 CLASS="LITERAL"
->/.*/banners/.*</TT
+>/.*/banners/.*</VAR
 ></I
 ></SPAN
 > - A  simple example
@@ -481,9 +485,9 @@ CLASS="QUOTE"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><TT
+><VAR
 CLASS="LITERAL"
->/.*/adv((er)?ts?|ertis(ing|ements?))?/</TT
+>/.*/adv((er)?ts?|ertis(ing|ements?))?/</VAR
 ></I
 ></SPAN
 > - 
@@ -605,9 +609,9 @@ CLASS="QUOTE"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><TT
+><VAR
 CLASS="LITERAL"
->/.*/advert[0-9]+\.(gif|jpe?g)</TT
+>/.*/advert[0-9]+\.(gif|jpe?g)</VAR
 ></I
 ></SPAN
 > - Again 
@@ -740,10 +744,12 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3474">14.2. <SPAN
+NAME="AEN3815"
+>14.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->'s Internal Pages</H2
+>'s Internal Pages</A
+></H2
 ><P
 > Since <SPAN
 CLASS="APPLICATION"
@@ -787,7 +793,9 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN3489"><BLOCKQUOTE
+NAME="AEN3830"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -818,7 +826,9 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN3497"><BLOCKQUOTE
+NAME="AEN3838"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -836,7 +846,9 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN3502"><BLOCKQUOTE
+NAME="AEN3843"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -854,7 +866,9 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN3507"><BLOCKQUOTE
+NAME="AEN3848"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -872,7 +886,9 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN3512"><BLOCKQUOTE
+NAME="AEN3853"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -894,7 +910,9 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN3518"><BLOCKQUOTE
+NAME="AEN3859"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -909,7 +927,9 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN3522"><BLOCKQUOTE
+NAME="AEN3863"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -921,7 +941,9 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN3525"><BLOCKQUOTE
+NAME="AEN3866"
+></A
+><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
 ><P
 > 
@@ -942,7 +964,9 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="BOOKMARKLETS">14.2.1. Bookmarklets</H3
+NAME="BOOKMARKLETS"
+>14.2.1. Bookmarklets</A
+></H3
 ><P
 > Below are some <SPAN
 CLASS="QUOTE"
@@ -1056,7 +1080,9 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CHAIN">14.3. Chain of Events</H2
+NAME="CHAIN"
+>14.3. Chain of Events</A
+></H2
 ><P
 > Let's take a quick look at the basic sequence of events when a web page is 
  requested by your browser and <SPAN
@@ -1280,7 +1306,9 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="ACTIONSANAT">14.4. Anatomy of an Action</H2
+NAME="ACTIONSANAT"
+>14.4. Anatomy of an Action</A
+></H2
 ><P
 > The way <SPAN
 CLASS="APPLICATION"
@@ -1791,9 +1819,9 @@ CLASS="SCREEN"
 ></P
 ><P
 > Now the page displays ;-) Be sure to flush your browser's caches when 
- making such changes. Or, try using <TT
+ making such changes. Or, try using <VAR
 CLASS="LITERAL"
->Shift+Reload</TT
+>Shift+Reload</VAR
 >.</P
 ><P
 > But now what about a situation where we get no explicit matches like 

@@ -7,5 +7,16 @@ privoxy for Debian
   want to use these features, you can enable them in
   /etc/privoxy/config and do a "/etc/init.d/privoxy restart".
 
+- A patch was applied to access the local copy of the user manual
+  (/usr/share/doc/privoxy/user-manual/*) was applied.  With the option
+   user-manual /usr/share/doc/privoxy/user-manual
+  in /etc/privoxy/config this is activated and the manual can be
+  accessed as http://config.privoxy.org/user-manual
+
+- A patch was applied to use multiple filter files.  So you can leave
+  /etc/privoxy/default.filter untouched and use a local file like
+  /etc/privoxy/user.filter for your local changes (you have to enable
+  this file using a second filterfile directive in /etc/privoxy/config).
+
 Roland Rosenfeld <roland@debian.org>
-$Id$
+$Id: README.Debian,v 1.1.2.3 2006/07/02 11:06:24 roro Exp $

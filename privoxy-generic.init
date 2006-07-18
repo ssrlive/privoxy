@@ -39,6 +39,13 @@
 # 
 #  Revisions   :
 #     $Log: privoxy-generic.init,v $
+#     Revision 1.5.2.1  2002/10/17 17:04:22  hal9
+#     Add from main trunk. Will be needed for make install.
+#
+#     Revision 1.5  2002/10/17 17:01:29  hal9
+#     Set paths to match the defaults for a root install. Force remove PIDFILE on
+#     stop.
+#
 #     Revision 1.4  2002/09/11 01:15:02  hal9
 #     Fix typo in variable. Now tested on Solaris and Linux, with defaults.
 #

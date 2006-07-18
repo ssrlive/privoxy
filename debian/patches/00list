@@ -1,0 +1,14 @@
+01_local_usermanual.dpatch
+02_linkcolor.dpatch
+04_nomultiproxy.dpatch
+05_defaut_action.dpatch
+06_8bit_manual.dpatch
+07_typos.dpatch
+08_log_pthread.dpatch
+09_no_identity.dpatch
+10_backup_doc.dpatch
+11_backup_autotools.dpatch
+12_multiple-filters.dpatch
+13_memory.dpatch
+14_config.dpatch
+15_mansection8.dpatch

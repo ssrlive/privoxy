@@ -33,6 +33,12 @@
 # 
 #  Revisions   :
 #     $Log: privoxy.init.suse,v $
+#     Revision 1.3.2.1  2003/03/17 14:04:16  oes
+#     No longer use obsolete rc.config
+#
+#     Revision 1.3  2002/03/26 22:29:55  swa
+#     we have a new homepage!
+#
 #     Revision 1.2  2002/03/24 11:40:14  swa
 #     name change
 #
@@ -72,7 +78,7 @@
 # Description:    Starts Privoxy
 ### END INIT INFO
 
-. /etc/rc.config
+. /etc/rc.status
 rc_reset  
 
 case "$1" in

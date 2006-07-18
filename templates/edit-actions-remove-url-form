@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa//current/templates/edit-actions-remove-url-form,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-remove-url-form,v $
 #
 # Purpose     :  Template used to confirm removal of a particular URL
 #                pattern from an actions file.  Only used on browsers that

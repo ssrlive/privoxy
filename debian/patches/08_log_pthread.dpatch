@@ -1,0 +1,259 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 08_log_pthread.dpatch by Jindrich Makovicka <makovick@kmlinux.fjfi.cvut.cz>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix race conditions in log writing functions (Closes: #299662).
+
+@DPATCH@
+diff -urNad privoxy-dpatch~/errlog.c privoxy-dpatch/errlog.c
+--- privoxy-dpatch~/errlog.c	2006-02-05 16:17:43.000000000 +0100
++++ privoxy-dpatch/errlog.c	2006-02-05 16:18:06.000000000 +0100
+@@ -292,6 +292,30 @@
+ static char *os2_socket_strerr(int errcode, char *tmp_buf);
+ #endif
+ 
++#ifdef FEATURE_PTHREAD
++static inline void lock_logfile()
++{
++    pthread_mutex_lock(&log_mutex);
++}
++static inline void unlock_logfile()
++{
++    pthread_mutex_unlock(&log_mutex);
++}
++static inline void lock_loginit()
++{
++    pthread_mutex_lock(&log_init_mutex);
++}
++static inline void unlock_loginit()
++{
++    pthread_mutex_unlock(&log_init_mutex);
++}
++#else /* ! FEATURE_PTHREAD */
++static inline void lock_logfile() {}
++static inline void unlock_logfile() {}
++static inline void lock_loginit() {}
++static inline void unlock_loginit() {}
++#endif
++
+ /*********************************************************************
+  *
+  * Function    :  fatal_error
+@@ -346,7 +370,7 @@
+ {
+    FILE *fp;
+ 
+-   /* FIXME RACE HAZARD: should start critical section error_log_use here */
++   lock_loginit();
+ 
+    /* set the logging detail level */
+    debug = debuglevel | LOG_LEVEL_MINIMUM;
+@@ -354,9 +378,13 @@
+    if ((logfp != NULL) && (logfp != stderr))
+    {
+       log_error(LOG_LEVEL_INFO, "(Re-)Open logfile %s", logfname ? logfname : "none");
++      lock_logfile();
+       fclose(logfp);
++   } else {
++      lock_logfile();
+    }
+    logfp = stderr;
++   unlock_logfile();
+ 
+    /* set the designated log file */
+    if( logfname )
+@@ -369,7 +397,9 @@
+       /* set logging to be completely unbuffered */
+       setbuf(fp, NULL);
+ 
++      lock_logfile();
+       logfp = fp;
++      unlock_logfile();
+    }
+ 
+    log_error(LOG_LEVEL_INFO, "Privoxy version " VERSION);
+@@ -378,7 +408,7 @@
+       log_error(LOG_LEVEL_INFO, "Program name: %s", prog_name);
+    }
+ 
+-   /* FIXME RACE HAZARD: should end critical section error_log_use here */
++   unlock_loginit();
+ 
+ } /* init_error_log */
+ 
+@@ -428,6 +458,9 @@
+       return;
+    }
+ 
++   /* protect the whole function because of the static buffer (outbuf) */
++   lock_logfile();
++
+    /* FIXME get current thread id */
+ #ifdef FEATURE_PTHREAD
+    this_thread = (long)pthread_self();
+@@ -480,41 +513,41 @@
+    switch (loglevel)
+    {
+       case LOG_LEVEL_ERROR:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Error: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Error: ", this_thread);
+          break;
+       case LOG_LEVEL_FATAL:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Fatal error: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Fatal error: ", this_thread);
+          break;
+       case LOG_LEVEL_GPC:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Request: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Request: ", this_thread);
+          break;
+       case LOG_LEVEL_CONNECT:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Connect: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Connect: ", this_thread);
+          break;
+       case LOG_LEVEL_LOG:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Writing: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Writing: ", this_thread);
+          break;
+       case LOG_LEVEL_HEADER:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Header: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Header: ", this_thread);
+          break;
+       case LOG_LEVEL_INFO:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Info: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Info: ", this_thread);
+          break;
+       case LOG_LEVEL_RE_FILTER:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Re-Filter: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Re-Filter: ", this_thread);
+          break;
+ #ifdef FEATURE_FORCE_LOAD
+       case LOG_LEVEL_FORCE:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Force: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Force: ", this_thread);
+          break;
+ #endif /* def FEATURE_FORCE_LOAD */
+ #ifdef FEATURE_FAST_REDIRECTS
+       case LOG_LEVEL_REDIRECTS:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Redirect: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Redirect: ", this_thread);
+          break;
+ #endif /* def FEATURE_FAST_REDIRECTS */
+       case LOG_LEVEL_DEANIMATE:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Gif-Deanimate: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Gif-Deanimate: ", this_thread);
+          break;
+       case LOG_LEVEL_CLF:
+          outbuf = outbuf_save;
+@@ -523,14 +556,14 @@
+          break;
+ #ifdef FEATURE_KILL_POPUPS
+       case LOG_LEVEL_POPUPS:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) Kill-Popups: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) Kill-Popups: ", this_thread);
+          break;
+ #endif /* def FEATURE_KILL_POPUPS */
+       case LOG_LEVEL_CGI:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) CGI: ", this_thread);
++         outc = sprintf(outbuf, "Privoxy(%08lx) CGI: ", this_thread);
+          break;
+       default:
+-         outc = sprintf(outbuf, "Privoxy(%05ld) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
++         outc = sprintf(outbuf, "Privoxy(%08lx) UNKNOWN LOG TYPE(%d): ", this_thread, loglevel);
+          break;
+    }
+    
+@@ -605,16 +638,14 @@
+             else
+             {
+                /* Error */
+-               sprintf(outbuf, "Privoxy(%ld) Error: log_error(): Bad format string:\n"
++               sprintf(outbuf, "Privoxy(%08lx) Error: log_error(): Bad format string:\n"
+                                "Format = \"%s\"\n"
+                                "Exiting.", this_thread, fmt);
+-               /* FIXME RACE HAZARD: should start critical section error_log_use here */
+                if( !logfp )
+                {
+                   logfp = stderr;
+                }
+                fputs(outbuf, logfp);
+-               /* FIXME RACE HAZARD: should end critical section error_log_use here */
+                fatal_error(outbuf);
+                /* Never get here */
+                break;
+@@ -768,16 +799,15 @@
+             }
+             break;
+          default:
+-            sprintf(outbuf, "Privoxy(%ld) Error: log_error(): Bad format string:\n"
++            sprintf(outbuf, "Privoxy(%08lx) Error: log_error(): Bad format string:\n"
+                             "Format = \"%s\"\n"
+                             "Exiting.", this_thread, fmt);
+-            /* FIXME RACE HAZARD: should start critical section error_log_use here */
+             if( !logfp )
+             {
+                logfp = stderr;
+             }
+             fputs(outbuf_save, logfp);
+-            /* FIXME RACE HAZARD: should end critical section error_log_use here */
++            unlock_logfile();
+             fatal_error(outbuf_save);
+             /* Never get here */
+             break;
+@@ -814,8 +844,6 @@
+       outbuf[outc] = '\0';
+    }
+ 
+-   /* FIXME RACE HAZARD: should start critical section error_log_use here */
+-
+    /* deal with glibc stupidity - it won't let you initialize logfp */
+    if( !logfp )
+    {
+@@ -830,7 +858,7 @@
+       /* Never get here */
+    }
+ 
+-   /* FIXME RACE HAZARD: should end critical section error_log_use here */
++   unlock_logfile();
+ 
+ #if defined(_WIN32) && !defined(_WIN_CONSOLE)
+    /* Write to display */
+diff -urNad privoxy-dpatch~/jcc.c privoxy-dpatch/jcc.c
+--- privoxy-dpatch~/jcc.c	2006-02-05 16:17:43.000000000 +0100
++++ privoxy-dpatch/jcc.c	2006-02-05 16:18:06.000000000 +0100
+@@ -722,6 +722,10 @@
+ pthread_mutex_t gethostbyaddr_mutex;
+ pthread_mutex_t gethostbyname_mutex;
+ #endif /* def OSX_DARWIN */
++#ifdef FEATURE_PTHREAD
++pthread_mutex_t log_mutex;
++pthread_mutex_t log_init_mutex;
++#endif /* FEATURE_PTHREAD */
+ 
+ #if defined(unix) || defined(__EMX__)
+ const char *basedir = NULL;
+@@ -1923,7 +1927,10 @@
+    pthread_mutex_init(&gethostbyaddr_mutex,0);
+    pthread_mutex_init(&gethostbyname_mutex,0);
+ #endif /* def OSX_DARWIN */
+-
++#ifdef FEATURE_PTHREAD
++	pthread_mutex_init(&log_mutex,0);
++	pthread_mutex_init(&log_init_mutex,0);
++#endif /* FEATURE_PTHREAD */
+    /*
+     * Unix signal handling
+     *
+diff -urNad privoxy-dpatch~/jcc.h privoxy-dpatch/jcc.h
+--- privoxy-dpatch~/jcc.h	2006-02-05 16:17:43.000000000 +0100
++++ privoxy-dpatch/jcc.h	2006-02-05 16:18:06.000000000 +0100
+@@ -127,6 +127,10 @@
+ extern pthread_mutex_t gethostbyaddr_mutex;
+ extern pthread_mutex_t gethostbyname_mutex;
+ #endif /* def OSX_DARWIN */
++#ifdef FEATURE_PTHREAD
++extern pthread_mutex_t log_mutex;
++extern pthread_mutex_t log_init_mutex;
++#endif /* FEATURE_PTHREAD */
+ 
+ /* Functions */
+ 

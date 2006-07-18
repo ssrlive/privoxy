@@ -37,12 +37,18 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
- *    Revision 1.30  2002/09/06 12:14:12  oes
- *    Added missing preproc symbols PCRE*_H_IN_SUBDIR
+ *    Revision 1.27.2.4  2003/12/17 16:34:40  oes
+ *    Cosmetics
  *
- *    Revision 1.29  2002/09/04 12:03:18  oes
- *    re-enable build on older setups
+ *    Revision 1.27.2.3  2003/03/27 16:03:19  oes
+ *    Another shot at Bug #707467
  *
+ *    Revision 1.27.2.2  2003/03/21 14:39:12  oes
+ *    Presumably fixed Bug #707467 by defining unix ifdef __unix__
+ *
+ *    Revision 1.27.2.1  2002/08/10 11:22:31  oes
+ *    - Add two AC_DEFINEs that indicate if the pcre*.h headers
+ *      are located in a pcre/ subdir to the include path.
  *
  *    Revision 1.27  2002/04/25 19:13:57  morcego
  *    Removed RPM release number declaration on configure.in
@@ -258,16 +264,6 @@
  */
 #undef STATIC_PCRS
 
-/* 
- * Does pcre.h need to be included as <pcre/pcre.h>?
- */
-#undef PCRE_H_IN_SUBDIR
-
-/* 
- * Does pcreposix.h need to be included as <pcre/pcre.h>?
- */
-#undef PCREPOSIX_H_IN_SUBDIR
-
 /*
  * Allows the use of an ACL to control access to the proxy by IP address.
  */
@@ -399,7 +395,7 @@
 #undef HAVE_GETHOSTBYADDR_R_7_ARGS
 #undef HAVE_GETHOSTBYADDR_R_5_ARGS
 
-/* Define if you have gmtime_r and localtime_r with a signature
+/* Defined if you have gmtime_r and localtime_r with a signature
  * of (struct time *, struct tm *)
  */
 #undef HAVE_GMTIME_R
@@ -409,6 +405,13 @@
  */
 #undef socklen_t
 
+/* Define if pcre.h must be included as <pcre/pcre.h>
+ */
+#undef PCRE_H_IN_SUBDIR
+
+/* Define if pcreposix.h must be included as <pcre/pcreposix.h>
+ */
+#undef PCREPOSIX_H_IN_SUBDIR
 
 @BOTTOM@
 
@@ -440,9 +443,9 @@
 
 /*
  * On OpenBSD and maybe also FreeBSD, gcc doesn't define the cpp
- * symbol unix; it defines __unix__
+ * symbol unix; it defines __unix__ and sometimes not even that:
  */
-#if defined(__unix__) && !defined(unix)
+#if ( defined(__unix__) || defined(__NetBSD__) ) && !defined(unix)
 #define unix 1
 #endif
 

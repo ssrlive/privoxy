@@ -1,0 +1,38 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 09_no_identity.dpatch by Michael Shields <shields@msrl.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: After dechunking remove the "chunked"-header instead of replacing it
+## DP: by an "identity" header. (#318683).
+
+@DPATCH@
+diff -urNad privoxy~/parsers.c privoxy/parsers.c
+--- privoxy~/parsers.c	2006-02-05 16:23:12.000000000 +0100
++++ privoxy/parsers.c	2006-02-05 16:25:49.000000000 +0100
+@@ -871,8 +871,7 @@
+  *
+  * Description :  - Prohibit filtering (CT_TABOO) if transfer coding compresses
+  *                - Raise the CSP_FLAG_CHUNKED flag if coding is "chunked"
+- *                - Change from "chunked" to "identity" if body was chunked
+- *                  but has been de-chunked for filtering.
++ *                - Remove if chunked body was de-chunked for filtering.
+  *
+  * Parameters  :
+  *          1  :  csp = Current client state (buffers, headers, etc...)
+@@ -904,13 +903,13 @@
+ 
+       /*
+        * If the body was modified, it has been
+-       * de-chunked first, so adjust the header:
++       * de-chunked first, so remove the header.
++       * Don't use "identity" encoding, which was included in
++       * RFC 2616 by mistake (http://purl.org/NET/http-errata#identity).
+        */
+       if (csp->flags & CSP_FLAG_MODIFIED)
+       {
+          freez(*header);
+-         *header = strdup("Transfer-Encoding: identity");
+-         return (header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+       }
+    }
+ 

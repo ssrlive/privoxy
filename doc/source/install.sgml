@@ -1,10 +1,10 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity % dummy "IGNORE"> 
 <!entity buildsource SYSTEM "buildsource.sgml">
-<!entity p-version SYSTEM "doc_version.tmp">
-<!entity p-status SYSTEM "doc_status.tmp">
+<!entity p-version "0.0.0">
+<!entity p-status "UNRELEASED">
 <!entity % p-stable "IGNORE">
-<!entity % p-not-stable "IGNORE">  <!-- beta or alpha -->
+<!entity % p-not-stable "INCLUDE">
 <!entity % p-alpha "IGNORE">
 <!entity % p-beta "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
@@ -16,7 +16,7 @@
 
  Purpose     :  INSTALL file for Privoxy
                 
- $Id: install.sgml,v .0 2002/09/05 17:58:29 hal9 Exp $
+ $Id: install.sgml,v 2.1.2.1 2002/10/24 22:07:39 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -34,27 +34,6 @@
  markup is not suitable for other formats. Build from Makefile with 'make
  dok-readme'.
  ===================================================================
-
- READ:
-
- ======================================================================
- NOTE: The left margin spacing is *important* when using 'literallayout'
- WYSISWYG!!! Don't mess this up!!! Careful with linebreaks too, ie 
- the para tag forces a linebreak. Tags need to be carefully placed as a result
- to avoid extra blank lines, etc. 
- ======================================================================
-
- For stable releases, change 
- 
-  entity % p-not-stable "INCLUDE" 
- 
- to 
- 
-  entity % p-not-stable "IGNORE" 
-  
- in the DTD at the top. This will toggle various text 'off'. BOTH
- MUST be toggled in this case or you will get both text referencing 
- stable and unstable versions. You only want one or the other!
 
 -->
 <article id="index">

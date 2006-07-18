@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.3 2002/10/09 01:45:05 hal9 Exp $
+ $Id: p-config.sgml,v 1.1.2.10 2003/02/20 13:50:37 hal9 Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.3 2002/10/09 01:45:05 hal9 Exp $
+ $Id: p-config.sgml,v 1.1.2.10 2003/02/20 13:50:37 hal9 Exp $
 </para>
 <para>
 Copyright (C) 2001, 2002 Privoxy Developers http://privoxy.org
@@ -468,12 +468,13 @@ actionsfile
  <varlistentry>
   <term>Notes:</term>
   <listitem>
-<!--  HB removed per bug report 688728 02/20/03
-
+ <!--
+  removed per bug report 688728 02/20/03 HB
+  
    <para>
     The windows version will additionally log to the console.
    </para>
--->   
+  --> 
    <para>
     The logfile is where all logging and error messages are written. The level
     of detail and number of messages are set with the <literal>debug</literal>
@@ -578,7 +579,7 @@ actionsfile
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    The whole trust mechanism is turned off.
+    The entire trust mechanism is turned off.
    </para>
   </listitem>
  </varlistentry>
@@ -621,6 +622,7 @@ actionsfile
    <para>
     Possible applications include limiting Internet access for children.
    </para>
+   
   </listitem>
  </varlistentry>
 </variablelist>
@@ -687,31 +689,29 @@ actionsfile
    <para>
     Examples:
    </para>
-  <!-- The below needs checking after a rebuild due to long file names -->
   <para>
    Unix, in local filesystem:
   </para>
   <para>
-   <screen>&nbsp;user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/index.html</screen>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</screen>
   </para>
   <para>
-   Windows, in local filesystem, <emphasis>must</emphasis> use forward slash notation, and <literal>%20</literal> to denote
-   spaces in path names:
+   Windows, in local filesystem, <emphasis>must</emphasis> use forward slash notation:
   </para>
   <para>
-   <screen>&nbsp;user-manual&nbsp;&nbsp;file:///c:/some%20dir/privoxy/user-manual/index.html</screen>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:/c:/some-dir/privoxy-&p-version;/user-manual/</screen>
   </para>
   <para>
-   Windows, UNC notation (forward slashes required again):
+   Windows, UNC notation (with forward slashes):
   </para>
   <para>
-   <screen>&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy/user-manual/index.html</screen>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy-&p-version;/user-manual/</screen>
   </para>
   <para>
    Any platform, on local webserver (called <quote>local-webserver</quote>):
   </para>
   <para>
-   <screen>&nbsp;user-manual&nbsp;&nbsp;http://local-webserver/privoxy-user-manual/</screen>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;http://local-webserver/privoxy-user-manual/</screen>
   </para>
   <![%user-man;[
    <!-- this gets hammered in conversion to config. Text repeated below. -->

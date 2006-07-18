@@ -1,0 +1,59 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 04_multiproxy.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: emove comment from config file and FAQ, which points to list of
+## DP: open proxies at multiproxy.org (Closes: #198953).
+
+@DPATCH@
+diff -urNad privoxy~/config privoxy/config
+--- privoxy~/config	2006-02-05 16:23:12.000000000 +0100
++++ privoxy/config	2006-02-05 16:25:45.000000000 +0100
+@@ -889,11 +889,10 @@
+ #  This feature allows routing of HTTP requests through a chain
+ #  of multiple proxies. It can be used to better protect privacy
+ #  and confidentiality when accessing specific domains by routing
+-#  requests to those domains through an anonymous public proxy (see
+-#  e.g. http://www.multiproxy.org/anon_list.htm) Or to use a caching
+-#  proxy to speed up browsing. Or chaining to a parent proxy may be
+-#  necessary because the machine that Privoxy runs on has no direct
+-#  Internet access.
++#  requests to those domains through an anonymous public proxy 
++#  or to use a caching proxy to speed up browsing. Or chaining to
++#  a parent proxy may be necessary because the machine that Privoxy
++#  runs on has no direct Internet access.
+ #  
+ #  Also specified here are SOCKS proxies. Privoxy supports the SOCKS
+ #  4 and SOCKS 4A protocols.
+diff -urNad privoxy~/doc/source/faq.sgml privoxy/doc/source/faq.sgml
+--- privoxy~/doc/source/faq.sgml	2006-02-05 16:23:12.000000000 +0100
++++ privoxy/doc/source/faq.sgml	2006-02-05 16:25:45.000000000 +0100
+@@ -1255,13 +1255,6 @@
+  on (those suspicious) people with a more than average preference for privacy.
+ </para>
+ <para>
+- You can find a list of anonymous public proxies at <ulink
+- url="http://www.multiproxy.org/anon_list.htm">multiproxy.org</ulink> and many
+- more through Google. A particularly interesting project is the JAP service
+- offered by the Technical University of Dresden (<ulink
+- url="http://anon.inf.tu-dresden.de/index_en.html">http://anon.inf.tu-dresden.de/index_en.html</ulink>).
+-</para>
+-<para>
+  There is, however, even in the single-machine case the possibility to make the
+  server believe that your machine is in fact a shared proxy serving a whole big
+  LAN, and we are looking into that.
+diff -urNad privoxy~/doc/source/p-config.sgml privoxy/doc/source/p-config.sgml
+--- privoxy~/doc/source/p-config.sgml	2006-02-05 16:23:12.000000000 +0100
++++ privoxy/doc/source/p-config.sgml	2006-02-05 16:25:45.000000000 +0100
+@@ -1519,9 +1519,8 @@
+  multiple proxies.
+  It can be used to better protect privacy and confidentiality when
+  accessing specific domains by routing requests to those domains
+- through an anonymous public proxy (see e.g. <ulink
+- url="http://www.multiproxy.org/anon_list.htm">http://www.multiproxy.org/anon_list.htm</ulink>)
+- Or to use a caching proxy to speed up browsing. Or chaining to a parent
++ through an anonymous public proxy
++ or to use a caching proxy to speed up browsing. Or chaining to a parent
+  proxy may be necessary because the machine that <application>Privoxy</application>
+  runs on has no direct Internet access.
+ </para>

@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.5 2002/10/20 19:33:07 hal9 Exp $
+#  $Id: standard.action,v 1.2.2.9 2003/04/01 09:49:50 oes Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -14,8 +14,7 @@
 
 ######################################################################
 #
-# CAUTION: MODYFING THIS FILE IS *NOT* RECOMMENDED for the average
-#          user.
+# CAUTION: THIS FILE IS *NOT* THE PLACE TO CUSTOMIZE YOUR CONFIGURATION!
 #
 #          If you want to customize Privoxy to suit your needs, 
 #          you can alter the default section in default.action and/or
@@ -36,21 +35,26 @@
 -downgrade-http-version \
 -fast-redirects \
 +filter{js-annoyances} \
+-filter{js-events} \
 +filter{html-annoyances} \
 -filter{content-cookies} \
-+filter{webbugs} \
--filter{popups} \
--filter{frameset-borders} \
 -filter{refresh-tags} \
++filter{unsolicited-popups} \
+-filter{all-popups} \
 -filter{img-reorder} \
 +filter{banners-by-size} \
 -filter{banners-by-link} \
--filter{fun} \
-+filter{nimda} \
++filter{webbugs} \
+-filter{tiny-textforms} \
+-filter{jumping-windows} \
+-filter{frameset-borders} \
+-filter{demoronizer} \
 -filter{shockwave-flash} \
 -filter{quicktime-kioskmode} \
--filter{js-events} \
+-filter{fun} \
 -filter{crude-parental} \
+-filter{ie-exploits} \
+-filter{site-specifics} \
 -handle-as-image \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
@@ -79,21 +83,26 @@ standard.Cautious
 -downgrade-http-version \
 -fast-redirects \
 +filter{js-annoyances} \
+-filter{js-events} \
 +filter{html-annoyances} \
-+filter{content-cookies} \
-+filter{webbugs} \
-+filter{popups} \
--filter{frameset-borders} \
--filter{refresh-tags} \
--filter{img-reorder} \
+-filter{content-cookies} \
++filter{refresh-tags} \
++filter{unsolicited-popups} \
+-filter{all-popups} \
++filter{img-reorder} \
 +filter{banners-by-size} \
 -filter{banners-by-link} \
--filter{fun} \
-+filter{nimda} \
++filter{webbugs} \
+-filter{tiny-textforms} \
++filter{jumping-windows} \
+-filter{frameset-borders} \
+-filter{demoronizer} \
 -filter{shockwave-flash} \
-+filter{quicktime-kioskmode} \
--filter{js-events} \
+-filter{quicktime-kioskmode} \
+-filter{fun} \
 -filter{crude-parental} \
++filter{ie-exploits} \
+-filter{site-specifics} \
 -handle-as-image \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
@@ -122,21 +131,26 @@ standard.Medium
 -downgrade-http-version \
 +fast-redirects \
 +filter{js-annoyances} \
+-filter{js-events} \
 +filter{html-annoyances} \
 +filter{content-cookies} \
-+filter{webbugs} \
-+filter{popups} \
-+filter{frameset-borders} \
--filter{refresh-tags} \
++filter{refresh-tags} \
++filter{unsolicited-popups} \
+-filter{all-popups} \
 +filter{img-reorder} \
 +filter{banners-by-size} \
 +filter{banners-by-link} \
-+filter{fun} \
-+filter{nimda} \
++filter{webbugs} \
+-filter{tiny-textforms} \
++filter{jumping-windows} \
++filter{frameset-borders} \
++filter{demoronizer} \
 -filter{shockwave-flash} \
 +filter{quicktime-kioskmode} \
--filter{js-events} \
++filter{fun} \
 -filter{crude-parental} \
+-filter{ie-exploits} \
+-filter{site-specifics} \
 -handle-as-image \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
@@ -150,4 +164,4 @@ standard.Medium
 -session-cookies-only \
 +set-image-blocker{pattern} \
 }
-standard.Advanced
+standard.Adventuresome

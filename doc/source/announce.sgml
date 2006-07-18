@@ -5,10 +5,10 @@
 <!entity contacting SYSTEM "../contacting.sgml">
 <!entity history SYSTEM "../history.sgml">
 <!entity newfeatures SYSTEM "../newfeatures.sgml">
-<!entity p-version SYSTEM "doc_version.tmp">
-<!entity p-status SYSTEM "doc_status.tmp">
+<!entity p-version "3.0.0">
+<!entity p-status "stable">
 <!entity % p-not-stable "IGNORE">
-<!entity % p-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-supp-userman "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
 <!entity % p-doc "IGNORE">         <!-- and never a text doc             -->

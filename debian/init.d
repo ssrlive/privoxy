@@ -17,13 +17,14 @@ case "$1" in
 	echo -n "Starting $DESC: "
 	start-stop-daemon --oknodo --start --quiet --pidfile $PIDFILE \
 	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE \
-	    2>/dev/null
+	    2>> /var/log/privoxy/errorfile
  	echo "$NAME."
 	;;
   stop)
 	echo -n "Stopping $DESC: "
 	start-stop-daemon --oknodo --stop --quiet --pidfile $PIDFILE \
 		--exec $DAEMON
+	rm -f $PIDFILE
 	echo "$NAME."
 	;;
   #reload)
@@ -44,12 +45,14 @@ case "$1" in
 	#	option to the "reload" entry above. If not, "force-reload" is
 	#	just the same as "restart".
 	#
-	echo "Restarting $DESC: "
+	echo -n "Restarting $DESC: "
 	start-stop-daemon --oknodo --stop --quiet --pidfile $PIDFILE \
 		--exec $DAEMON
 	sleep 1
 	start-stop-daemon --oknodo --start --quiet --pidfile $PIDFILE \
-	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE
+	    --exec $DAEMON -- --pidfile $PIDFILE --user $OWNER $CONFIGFILE \
+	    2>> /var/log/privoxy/errorfile
+	echo "$NAME."
 	;;
   *)
 	N=/etc/init.d/$NAME

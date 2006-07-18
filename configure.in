@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.88 2003/03/23 02:15:51 hal9 Exp $
+dnl $Id: configure.in,v 1.68.2.20 2004/01/31 16:31:46 oes Exp $
 dnl 
-dnl Written by and Copyright (C) 2001, 2002 the SourceForge
+dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
 dnl
 dnl Based on the Internet Junkbuster originally written
@@ -28,78 +28,69 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
-dnl Revision 1.88  2003/03/23 02:15:51  hal9
-dnl Apply Docbook/FreeBSD patch from a.go at tiscali.nl. Thanks!
+dnl Revision 1.68.2.20  2004/01/31 16:31:46  oes
+dnl Resetting version info to 0.0.0 UNRELEASED
 dnl
-dnl Revision 1.87  2002/12/28 04:10:22  david__schmidt
-dnl Initial drop of dashboard instrumentation - enabled with
-dnl --enable-activity-console
+dnl Revision 1.68.2.19  2004/01/30 09:26:03  oes
+dnl Added docbook paths for debian sarge; set status for release
 dnl
-dnl Revision 1.86  2002/12/13 23:47:10  hal9
-dnl Add openbsd special flags per gunner at styx2002.no-ip.org
+dnl Revision 1.68.2.18  2003/12/08 15:10:29  oes
+dnl Bugfix: --with-docbook now correctly accepts its path parameter. Thanks, Roland!
 dnl
-dnl Revision 1.85  2002/11/27 12:40:54  oes
+dnl Revision 1.68.2.17  2003/10/18 18:41:26  david__schmidt
+dnl Update to remain buildable on OS/2 - remove the failures
+dnl due to missing unixisms
+dnl
+dnl Revision 1.68.2.16  2003/03/26 16:05:14  oes
+dnl Marked as 0.0.0 UNRELEASED
+dnl
+dnl Revision 1.68.2.15  2003/03/26 00:25:00  oes
+dnl Bump version for 3.0.2
+dnl
+dnl Revision 1.68.2.14  2003/03/25 13:27:12  hal9
+dnl Manually apply Docbook/FreeBSD patch #708081 from a.go at tiscali.nl.
+dnl
+dnl Revision 1.68.2.13  2003/03/18 19:38:57  oes
+dnl Set version info for 3.0.1 release
+dnl
+dnl Revision 1.68.2.12  2003/03/07 03:41:04  david__schmidt
+dnl Wrapping all *_r functions (the non-_r versions of them) with mutex semaphores for OSX.  Hopefully this will take care of all of those pesky crash reports.
+dnl
+dnl Revision 1.68.2.11  2003/03/06 15:22:37  oes
+dnl Fixed minor shell syntax bug
+dnl
+dnl Revision 1.68.2.10  2003/01/08 16:39:41  oes
+dnl Changing default to exclude FEATURE_IMAGE_DETECT_MSIE because of problem reports with recent IEs
+dnl
+dnl Revision 1.68.2.9  2002/12/13 23:47:45  hal9
+dnl Add openbsd $specialflags per gunner at styx2002.no-ip.org
+dnl
+dnl Revision 1.68.2.8  2002/11/27 12:55:26  oes
 dnl Fixed broken handling of pre-set CFLAGS
 dnl
-dnl Revision 1.84  2002/10/24 22:24:57  hal9
-dnl Make install: Minor clean up for variable handling.
+dnl Revision 1.68.2.7  2002/10/25 02:44:22  hal9
+dnl Port of make install, etc from main trunk. Needs testing! Add Slackware
+dnl support, and other related changes. Update related docs.
 dnl
-dnl Revision 1.83  2002/10/24 16:32:41  hal9
-dnl echo -n does not work with true /bin/sh. Use AC_MSG_CHECKING for docbook stuff.
+dnl Revision 1.68.2.6  2002/09/25 15:35:15  oes
+dnl Marking as non-release
 dnl
-dnl Revision 1.82  2002/09/27 04:24:07  hal9
-dnl Minor change of "! test" to "test -ne" for Solaris.
+dnl Revision 1.68.2.5  2002/08/25 23:37:00  hal9
+dnl Getting ready for 3.0 release.
 dnl
-dnl Revision 1.81  2002/09/27 00:38:44  hal9
-dnl Some general cleanup of the user/group stuff. Including remove up to ':' to
-dnl make Linux (?) compatible with other *nix. Better AC output stuff.
+dnl Revision 1.68.2.4  2002/08/10 11:21:57  oes
+dnl - Set Version to 2.9.20 (beta)
+dnl - Add two AC_DEFINEs that indicate if the pcre*.h headers
+dnl   are located in a pcre/ subdir to the include path.
 dnl
-dnl Revision 1.80  2002/09/26 18:47:46  hal9
-dnl This is most of Al's patch for --with-user and --with-group which tests that
-dnl these are valid values, if specified. If not specified, they are left empty.
-dnl
-dnl Revision 1.79  2002/09/07 02:11:06  hal9
-dnl Remove some testing stuff inadvertantly left in.
-dnl
-dnl Revision 1.78  2002/09/06 23:18:08  hal9
-dnl Migrate PCRE_H_IN_SUBDIR from 3.0 branch for pcre/pcre.h on RH, etc.
-dnl
-dnl Revision 1.77  2002/09/06 13:23:03  oes
-dnl Removed non-functional test for gcc support for -pthread
-dnl
-dnl Revision 1.76  2002/09/05 14:52:17  oes
-dnl Synced in some changes fromm the stable branch:
+dnl Revision 1.68.2.3  2002/08/06 11:29:36  oes
 dnl Fixed detection/inclusion of pcre.h, which is in a pcre subdir on RH
 dnl
-dnl Revision 1.75  2002/09/04 12:19:33  oes
-dnl Resurrected acconfig.h and removed double quotes from AC_DEFINE params to enable build on older systems
+dnl Revision 1.68.2.2  2002/07/30 19:36:09  hal9
+dnl Bump version to 2.9.17.
 dnl
-dnl Revision 1.74  2002/09/03 17:31:33  oes
-dnl Added workaround for very strange behaviour of AC_PROG_CC, which sets CFLAGS to -g -O2 if empty
-dnl
-dnl Revision 1.73  2002/06/05 00:26:21  hal9
-dnl Move all doc build stuff to doc/source/GNUmakefile, leaving a 'make dok'
-dnl target only in toplevel. Add DOC_STATUS variable so docs can be built without
-dnl touching sgml source.
-dnl
-dnl Revision 1.72  2002/06/04 15:52:25  jongfoster
-dnl Removing need for acconfig.h (apparently using acconfig.h is an
-dnl obsolete coding style).
-dnl Moving the DocBook stuff together
-dnl
-dnl Revision 1.71  2002/06/04 14:51:49  jongfoster
-dnl Updating for new paths:
-dnl - Source files in src/
-dnl - Object files in obj/
-dnl
-dnl Revision 1.70  2002/05/27 23:26:34  mal0rd
-dnl Made doc-generation configuration automatic.
-dnl References to DB2HTML were removed, not used.
-dnl --with-docbook now only needed if in odd path.
-dnl
-dnl Revision 1.69  2002/05/25 18:11:49  jongfoster
-dnl Wahay!!! 3.0.x has branched!
-dnl New development version is 3.1.1 alpha
+dnl Revision 1.68.2.1  2002/07/26 15:21:12  oes
+dnl  Bumped version number for 2.9.16 freeze
 dnl
 dnl Revision 1.68  2002/05/25 16:54:54  jongfoster
 dnl Detect if the compiler supports -pthread.
@@ -443,9 +434,10 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.88 $)
-AC_INIT(src/jcc.c)
-if test ! -f src/config.h.in; then
+AC_REVISION($Revision: 1.68.2.20 $)
+AC_INIT(jcc.c)
+
+if test ! -f config.h.in; then
    echo "You need to run autoheader first. "
    echo -n "Shall I do this for you now? (y/n) "
    read answer
@@ -456,21 +448,44 @@ if test ! -f src/config.h.in; then
   fi
 fi  
 
-AC_CONFIG_HEADER([src/config.h])
+AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
 
+dodk=auto
+DKPREFIX=none
+AC_ARG_WITH(docbook, dnl
+  --with-docbook=[[yes|no|directory]]	
+                           Enable docbook documentation creation 
+			   (default = yes, for gnu and linux),[dnl
+case "$with_docbook" in
+yes) dodk=yes;;
+no) dodk=no;;
+*) 
+	dodk=yes
+	DKPREFIX=$withval
+	;;
+esac
+])
+DB2HTML=false
+AC_ARG_WITH(db2html, dnl
+  --with-db2html=<path/executable>
+                          Set the location of the docbook to html converter
+                          (default = search),[dnl
+DB2HTML=$withval
+])
 
 dnl =================================================================
 dnl Application version number
 dnl =================================================================
 
-VERSION_MAJOR=3
-VERSION_MINOR=1
-VERSION_POINT=1
-CODE_STATUS="alpha"
+VERSION_MAJOR=0
+VERSION_MINOR=0
+VERSION_POINT=0
+CODE_STATUS="UNRELEASED"
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
-dnl used for CGI output
+dnl used for CGI output. Set version to 0.0.0 and status to "UNRELEASED"
+dnl whenever CVS in a stable branch differs from the last release.
 
 dnl =================================================================
 dnl Substitute the version numbers
@@ -480,19 +495,13 @@ AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_POINT)
 AC_SUBST(CODE_STATUS)
-AC_SUBST(SYSCONFDIR)
 
 dnl
-AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR},
-  [Version number - Major (X._._).])
-AC_DEFINE_UNQUOTED(VERSION_MINOR,${VERSION_MINOR},
-  [Version number - Minor (_.X._).])
-AC_DEFINE_UNQUOTED(VERSION_POINT,${VERSION_POINT},
-  [Version number - Point (_._.X).])
-AC_DEFINE_UNQUOTED(VERSION,"${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_POINT}",
-  [Version number, as a string.])
-AC_DEFINE_UNQUOTED(CODE_STATUS,"${CODE_STATUS}",
-  [Status of the code: "alpha", "beta" or "stable".])
+AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR})
+AC_DEFINE_UNQUOTED(VERSION_MINOR,${VERSION_MINOR})
+AC_DEFINE_UNQUOTED(VERSION_POINT,${VERSION_POINT})
+AC_DEFINE_UNQUOTED(VERSION,"${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_POINT}")
+AC_DEFINE_UNQUOTED(CODE_STATUS,"${CODE_STATUS}")
 
 dnl =================================================================
 dnl Checks for programs needed to build.
@@ -500,7 +509,7 @@ dnl =================================================================
 
 dnl Keep AC_PROG_CC from setting its own defaults:
 if test "X$CFLAGS" = "X"; then
-   CFLAGS = " "
+   CFLAGS=" "
 fi
 
 AC_PROG_CC
@@ -551,17 +560,23 @@ dnl =================================================================
 dnl Check for user and group validity
 dnl =================================================================
 
-$ID privoxy >/dev/null 2>/dev/null
-if test $? -ne 0 ; then
- AC_MSG_WARN(There is no user 'privoxy' on this system)
-fi
-AC_MSG_CHECKING([for user])
-AC_ARG_WITH(user,
+
+if test "$EMXOS2" = yes; then
+  echo "Skipping user and group validity stuff.";
+
+else
+
+  $ID privoxy >/dev/null 2>/dev/null
+  if test $? -ne 0 ; then
+   AC_MSG_WARN(There is no user 'privoxy' on this system)
+  fi
+  AC_MSG_CHECKING([for user])
+  AC_ARG_WITH(user,
         [  --with-user=privoxy          Set user under which privoxy will run],
         [
                 if test "x$withval" != "xyes"; then
                   if test $ID = no ; then
-                    AC_MSG_WARN(There is no 'id' program on this system)
+                    AC_MSG_ERROR(There is no 'id' program on this system)
                   else
                     AC_MSG_RESULT($with_user)
                     $ID $with_user 2>/dev/null >/dev/null
@@ -577,17 +592,17 @@ AC_ARG_WITH(user,
         ],
         [
           if test $ID = no ; then
-            AC_MSG_WARN(There is no 'id' program on this system)
+            AC_MSG_ERROR(There is no 'id' programm on this system)
           else
             AC_MSG_RESULT(none specified)
             USER=$with_user
           fi
         ]
-)
-AC_SUBST(USER)
+  )
+  AC_SUBST(USER)
 
-AC_MSG_CHECKING([for group])
-AC_ARG_WITH(group,
+  AC_MSG_CHECKING([for group])
+  AC_ARG_WITH(group,
         [  --with-group=privoxy         Set group for privoxy],
         [ 
                 if test "x$withval" != "xyes"; then
@@ -614,14 +629,16 @@ AC_ARG_WITH(group,
         ],
         [
           if test $BGROUPS = no ; then
-            AC_MSG_WARN(There is no 'groups' program on this system)
+            AC_MSG_ERROR(There is no 'groups' programm on this system)
           else
             AC_MSG_RESULT(none specified)
             GROUP=$with_group;
           fi
         ]
-)
-AC_SUBST(GROUP)
+  )
+  AC_SUBST(GROUP)
+
+fi
 
 dnl =================================================================
 dnl additional gcc flags
@@ -658,6 +675,17 @@ else
   fi
 fi
 
+if test $dodk = auto; then
+	dodk=no
+	if test $target_type = unix; then
+		case "$host_os" in
+		linux* | gnu*)
+			dodk=yes
+		;;
+		esac
+	fi
+fi
+
 dnl Decide what to do based on target_type
 dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
 dnl This is because we don't know yet whether pthread is enabled.
@@ -686,6 +714,90 @@ else
 fi
 AC_SUBST(WIN_ONLY)
 
+dnl Checking which text html browser we have avaliable
+if test $dodk != no; then
+	AC_CHECK_PROGS(WDUMP,w3m lynx links,false)
+	if test "$WDUMP" = false; then
+		AC_MSG_WARN(You need some kind of text browser to build documentation \(w3m, lynx and links are supported\))
+	fi
+	if test $DB2HTML = false; then
+		dnl We need to clean the variable, otherwise AC_CHECK_PROGS
+		dnl will fail	
+		DB2HTML=""
+		AC_CHECK_PROGS(DB2HTML,db2html docbook2html,false)
+	fi
+fi
+AC_SUBST(WDUMP)
+AC_SUBST(DB2HTML)
+
+dnl If we use rpm, we need to check where %_topdir is
+AC_CHECK_PROGS(RPMBIN,rpm,false)
+if test $RPMBIN != false; then
+		RPM_BASE=`rpm --eval "%{_topdir}"`
+		if test "$RPM_BASE" = ""; then
+			RPM_BASE=/usr/src/redhat
+		fi
+fi
+AC_SUBST(RPM_BASE)
+
+dnl Check for jade, so we can build the documentation
+AC_CHECK_PROGS(JADEBIN,jade openjade,false)
+AC_SUBST(JADEBIN)
+
+dnl Check for man2html for docs.
+AC_CHECK_PROGS(MAN2HTML,man2html,false)
+AC_SUBST(MAN2HTML)
+
+dnl Set doc status flag for conditional content inclusions
+DOC_STATUS=p-not-stable
+if  test $CODE_STATUS = stable; then
+     DOC_STATUS="p-stable"
+fi
+AC_SUBST(DOC_STATUS)
+
+dnl Checking for the docbook.dsl stylesheet file
+dnl It is still not portable (directory slash)
+JADECAT=""
+if test $dodk = yes; then
+  if test $DKPREFIX = none; then
+    for i in /usr/share/sgml/docbook/dsssl-stylesheets \
+             /usr/share/sgml/docbkdsl /usr/share/sgml/docbook-dsssl \
+             /usr/local/share/sgml/docbook/dsssl/modular \
+             /usr/share/sgml/docbook/stylesheet/dsssl/modular/ \
+             ; do
+dnl  echo -n does not fly with /bin/sh.
+dnl      echo -n "checking for $i/html/docbook.dsl..."
+      AC_MSG_CHECKING([for $i])
+      if test -f $i/html/docbook.dsl; then
+        echo "yes"
+        DKPREFIX=$i
+        break
+      else
+        echo "no"
+      fi
+    done
+# where are the catalogs?
+    for i in /usr/share/sgml/CATALOG.docbk30 \
+             /usr/share/sgml/CATALOG.docbk31 \
+             /usr/share/sgml/CATALOG.docbk31 \
+             /usr/local/share/sgml/docbook/3.0/docbook.cat \
+             /usr/local/share/sgml/docbook/3.1/docbook.cat \
+             /usr/share/sgml/docbook/dtd/3.1/docbook.cat \
+             ; do
+dnl     echo -n "checking for $i..."
+      AC_MSG_CHECKING([for $i])
+      if test -f $i; then
+        echo "yes"
+        JADECAT="$JADECAT -c $i"
+      else
+        echo "no"
+      fi
+    done
+  fi
+fi
+AC_SUBST(JADECAT)
+AC_SUBST(DKPREFIX)
+
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
 old_CFLAGS_nospecial=$CFLAGS
 CFLAGS="$CFLAGS $SPECIAL_CFLAGS"
@@ -713,16 +825,22 @@ fi])
 
 if test $have_pthread = yes; then
   PTHREAD_ONLY=
-  AC_DEFINE(FEATURE_PTHREAD,1,
-  [Define to use POSIX threads instead of native threads.])
+  AC_DEFINE(FEATURE_PTHREAD)
   echo Using POSIX threads
   if test "$GCC" = "yes"; then
     # Set a GCC specific switch:
     if test "$target_type" = "unix"; then
-      # This compiler switch makes GCC on Linux thread-safe
-      # However, it's not supported on most other OS.
-      PTHREAD_LIB=
-      SPECIAL_CFLAGS="-pthread"
+      ac_jgf_save_CFLAGS=$CFLAGS
+      CFLAGS="$CFLAGS -pthread"
+      AC_TRY_LINK([#include <pthread.h>],
+        [void *p = pthread_create;],
+        [
+          # This compiler switch makes GCC on Linux thread-safe
+          # However, it's not supported on most other OS.
+          PTHREAD_LIB=
+          SPECIAL_CFLAGS="-pthread"
+        ])
+      CFLAGS=$ac_jgf_save_CFLAGS
     fi
   fi
 else
@@ -750,8 +868,7 @@ AC_CHECK_FUNC(gethostbyaddr_r, [
     int l, bl, t, e;
     (void) gethostbyaddr_r(a, l, t, h, b, bl, &hp, &e)
   ], [
-    AC_DEFINE(HAVE_GETHOSTBYADDR_R_8_ARGS,1,
-      [Define if gethostbyaddr_r() exists and takes 8 arguments])
+    AC_DEFINE(HAVE_GETHOSTBYADDR_R_8_ARGS)
     AC_MSG_RESULT([8 args])
   ], [
     AC_TRY_COMPILE([
@@ -762,8 +879,7 @@ AC_CHECK_FUNC(gethostbyaddr_r, [
       int l, bl, t, e;
       (void) gethostbyaddr_r(a, l, t, h, b, bl, &e)
     ], [
-      AC_DEFINE(HAVE_GETHOSTBYADDR_R_7_ARGS,1,
-      [Define if gethostbyaddr_r() exists and takes 7 arguments])
+      AC_DEFINE(HAVE_GETHOSTBYADDR_R_7_ARGS)
       AC_MSG_RESULT([7 args])
     ], [
       AC_TRY_COMPILE([
@@ -775,8 +891,7 @@ AC_CHECK_FUNC(gethostbyaddr_r, [
         int l, t;
         (void) gethostbyaddr_r(a, l, t, h, d)
       ], [
-        AC_DEFINE(HAVE_GETHOSTBYADDR_R_5_ARGS,1,
-      [Define if gethostbyaddr_r() exists and takes 5 arguments])
+        AC_DEFINE(HAVE_GETHOSTBYADDR_R_5_ARGS)
         AC_MSG_RESULT([5 args])
       ], [
         AC_MSG_RESULT(unrecognised)
@@ -797,8 +912,7 @@ AC_CHECK_FUNC(gethostbyname_r, [
     int bl, e;
     (void) gethostbyname_r(n, h, b, bl, &r, &e)
   ], [
-    AC_DEFINE(HAVE_GETHOSTBYNAME_R_6_ARGS,1,
-      [Define if gethostbyname_r() exists and takes 6 arguments])
+    AC_DEFINE(HAVE_GETHOSTBYNAME_R_6_ARGS)
     AC_MSG_RESULT([6 args])
   ], [
     AC_TRY_COMPILE([
@@ -809,8 +923,7 @@ AC_CHECK_FUNC(gethostbyname_r, [
       int bl, e;
       (void) gethostbyname_r(n, h, b, bl, &e)
     ], [
-      AC_DEFINE(HAVE_GETHOSTBYNAME_R_5_ARGS,1,
-      [Define if gethostbyname_r() exists and takes 5 arguments])
+      AC_DEFINE(HAVE_GETHOSTBYNAME_R_5_ARGS)
       AC_MSG_RESULT([5 args])
     ], [
       AC_TRY_COMPILE([
@@ -821,8 +934,7 @@ AC_CHECK_FUNC(gethostbyname_r, [
         char *n,
         (void) gethostbyname_r(n, h, d)
       ], [
-        AC_DEFINE(HAVE_GETHOSTBYNAME_R_3_ARGS,1,
-      [Define if gethostbyname_r() exists and takes 3 arguments])
+        AC_DEFINE(HAVE_GETHOSTBYNAME_R_3_ARGS)
         AC_MSG_RESULT([3 args])
       ], [
         AC_MSG_RESULT(unrecognised)
@@ -843,8 +955,7 @@ AC_CHECK_FUNC(gmtime_r, [
     (void) gmtime_r(t, tm)
   ], [
     AC_MSG_RESULT(ok)
-    AC_DEFINE(HAVE_GMTIME_R,1,
-      [Define if gmtime_r(struct time *, struct tm *) exists])
+    AC_DEFINE(HAVE_GMTIME_R)
   ], [
     AC_MSG_RESULT(unrecognised)
   ])
@@ -862,8 +973,7 @@ AC_CHECK_FUNC(localtime_r, [
     (void) localtime_r(t, tm)
   ], [
     AC_MSG_RESULT(ok)
-    AC_DEFINE(HAVE_LOCALTIME_R,1,
-      [Define if localtime_r(struct time *, struct tm *) exists])
+    AC_DEFINE(HAVE_LOCALTIME_R)
   ], [
     AC_MSG_RESULT(unrecognised)
   ])
@@ -875,9 +985,9 @@ dnl =================================================================
 dnl Solaris specific
 dnl FIXME: Not tested on Solaris yet...
 dnl ISFIXED: Have tested it on Solaris, but there are other ways to
-dnl     make these checks generic, e.g.:
+dnl 	make these checks generic, e.g.:
 dnl AC_CHECK_FUNC(getsockopt, , AC_CHECK_LIB(socket, getsockopt))
-dnl     (Moritz Barsnick <moritz@barsnick.net>)
+dnl	(Moritz Barsnick <moritz@barsnick.net>)
 dnl =================================================================
 
 
@@ -885,8 +995,7 @@ SOCKET_LIB=
 
 case "$host" in
 *-solaris*) SOCKET_LIB="-lsocket -lnsl"
-            AC_DEFINE(__EXTENSIONS__,1,
-              [Define to 1 on Solaris.  Do not define on other platforms.])
+            AC_DEFINE(__EXTENSIONS__)
             if test "$GCC" = "yes"; then
               # Set a GCC specific switch:
               # This compiler switch makes Solaris thread-safe
@@ -907,9 +1016,9 @@ dnl =================================================================
 
 AC_MSG_CHECKING([for socklen_t])
 AC_EGREP_HEADER(socklen_t, sys/socket.h, AC_MSG_RESULT([yes]),
-        AC_MSG_RESULT([no])
-        AC_DEFINE(socklen_t,int,
-                [ Define to 'int' if <sys/socket.h> doesn't have it. ]))
+	AC_MSG_RESULT([no])
+	AC_DEFINE(socklen_t,int,
+		[ Define to 'int' if <sys/socket.h> doesn't have it. ]))
 
 
 dnl =================================================================
@@ -1025,8 +1134,7 @@ dnl =================================================================
 dnl Always defined
 dnl =================================================================
 
-AC_DEFINE(__MT__,1,
-  [Always define this, for thread safety on some platforms.])
+AC_DEFINE(__MT__)
 
 dnl =================================================================
 dnl Features
@@ -1034,161 +1142,86 @@ dnl =================================================================
 
 AC_ARG_ENABLE(toggle,
 [  --disable-toggle         Don't support temporary disable],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_TOGGLE,1,
-    [ Allow Privoxy to be "disabled" so it is just a normal non-blocking
-      non-anonymizing proxy.  This is useful if you're trying to access a
-      blocked or broken site - just change the setting in the config file,
-      or use the handy "Disable" menu option in the Windows GUI. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_TOGGLE)
+fi],AC_DEFINE(FEATURE_TOGGLE))
 
 AC_ARG_ENABLE(force,
 [  --disable-force          Don't allow single-page disable],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_FORCE_LOAD,1,
-    [ Bypass filtering for 1 page only. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_FORCE_LOAD)
+fi],AC_DEFINE(FEATURE_FORCE_LOAD))
 
 AC_ARG_ENABLE(fast-redirects,
 [  --disable-fast-redirects Don't support fast redirects],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_FAST_REDIRECTS,1,
-    [ Locally redirect remote script-redirect URLs. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_FAST_REDIRECTS)
+fi], AC_DEFINE(FEATURE_FAST_REDIRECTS))
 
 AC_ARG_ENABLE(killpopup,
 [  --disable-killpopup      Never block popups],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_KILL_POPUPS,1,
-    [ Kills JavaScript popups - window.open, onunload, etc. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_KILL_POPUPS)
+fi],AC_DEFINE(FEATURE_KILL_POPUPS))
 
 AC_ARG_ENABLE(stats,
 [  --disable-stats          Don't keep statistics],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_STATISTICS,1,
-    [ Enables statistics function. ])
-fi
-
-AC_ARG_ENABLE(activity-console,
-[  --enable-activity-console    Gather and send extended statistics to the activity console],
-[enableval2=$enableval],
-[enableval2=no])
-if test $enableval2 = yes; then
-  ACTIVITY_ONLY=
-  AC_DEFINE(FEATURE_ACTIVITY_CONSOLE,1,
-    [ Enables sending statistics to the activity console. This is currently
-      experimental, and will require some porting work for a few more platforms. ])
-  else
-    ACTIVITY_ONLY=#
-fi
-AC_SUBST(ACTIVITY_ONLY)
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_STATISTICS)
+fi],AC_DEFINE(FEATURE_STATISTICS))
 
 AC_ARG_ENABLE(ie-images,
-[  --enable-ie-images      Don't auto-detect whether a request from MS Internet
-                           Explorer is for an image or HTML.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_IMAGE_DETECT_MSIE,1,
-    [ Detect image requests automatically for MSIE.  Will fall back to
-      other image-detection methods (i.e. 创+image创 action) for other
-      browsers.
-
-      You must also define FEATURE_IMAGE_BLOCKING to use this feature.
-
-      It detects the following header pair as an image request:
-      创User-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)创,
-      创Accept: * / *创.
-
-      And the following as a HTML request:
-      User-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0),
-      Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, * / *.
-
-      And no, I haven't got that backwards - IE is being wierd.
-
-      Known limitations: 
-      1) If you press shift-reload on a blocked HTML page, you get
-         the image blocked page, not the HTML 创blocked创 page.
-      2) Once an image 创blocked创 page has been sent, viewing it 
-         in it's own browser window *should* bring up the HTML
-         创blocked创 page, but it doesn't.  You need to clear the 
-         browser cache to get the HTML version again.
-
-      These limitations are due to IE making inconsistent choices
-      about which 创Accept:创 header to send. ])
-fi
+[  --enable-ie-images       Enable a quick but not always reliable auto-detect whether requests from
+                           MS Internet Explorer are for an image or not.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_IMAGE_DETECT_MSIE)
+fi],)
 
 AC_ARG_ENABLE(image-blocking,
 [  --disable-image-blocking Don't try to figure out whether a request is 
                            for an image or HTML - assume HTML.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_IMAGE_BLOCKING,1,
-    [ Allow blocking using images as well as HTML.
-      If you do not define this then everything is blocked as HTML.
-      Note that this is required if you want to use FEATURE_IMAGE_DETECT_MSIE. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_IMAGE_BLOCKING)
+fi],
+AC_DEFINE(FEATURE_IMAGE_BLOCKING))
 
 AC_ARG_ENABLE(acl-files,
 [  --disable-acl-files      Prevents the use of ACL files to control access to
                            the proxy by IP address.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_ACL,1,
-    [ Define to 1 to allow the use of an ACL to control access to the proxy by IP address. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_ACL)
+fi],
+AC_DEFINE(FEATURE_ACL))
 
 AC_ARG_ENABLE(trust-files,
 [  --disable-trust-files    Prevents the use of trust files.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_TRUST,1,
-    [ Define to 1 to allow the use of trust files. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_TRUST)
+fi],
+AC_DEFINE(FEATURE_TRUST))
 
 AC_ARG_ENABLE(jar-files,
 [  --disable-jar-files      Prevents the use of jar files to capture cookies.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_COOKIE_JAR,1,
-    [ Define to 1 to allow the user to capture cookies. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_COOKIE_JAR)
+fi],
+AC_DEFINE(FEATURE_COOKIE_JAR))
 
 AC_ARG_ENABLE(editor,
 [  --disable-editor         Prevents the use of the web-based actions file
                            editor and web-based temporary disable setting.],
-[enableval2=$enableval],
-[enableval2=yes])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_CGI_EDIT_ACTIONS,1,
-    [ Define to 1 to enable the web-based configuration (actions file) editor.
-      If you have a shared proxy, you might want to turn this off. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_CGI_EDIT_ACTIONS)
+fi],
+AC_DEFINE(FEATURE_CGI_EDIT_ACTIONS))
 
 AC_ARG_ENABLE(no-gifs,
 [  --enable-no-gifs         Use politically correct PNG format instead of GIF
                            for built-in images. May not work with all browsers.],
-[enableval2=$enableval],
-[enableval2=no])
-if test $enableval2 = yes; then
-  AC_DEFINE(FEATURE_NO_GIFS,1,
-    [ Define to 1 to use PNG instead of GIF for built-in images. ])
-fi
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_NO_GIFS)
+fi])
+
 
 dnl pcre/pcrs is needed for CGI anyway, so
 dnl the choice is only between static and
@@ -1217,12 +1250,7 @@ if test $have_pcre = "yes"; then
 else
   echo "using built-in static pcre"
   pcre_dyn=no
-  AC_DEFINE(STATIC_PCRE,1,
-    [Define to 1 if PCRE should be statically built in instead of linking
-     with libpcre.
-     (This is determined by configure depending on the availiability of
-     libpcre and user preferences). The name is ugly, but pcre needs it.
-     Don't try to change this here! Use configure instead.])
+  AC_DEFINE(STATIC_PCRE)
   STATIC_PCRE_ONLY=
 fi
 
@@ -1236,128 +1264,12 @@ if test $have_pcrs = "yes" -a $pcre_dyn = "yes"; then
   LIBS="$LIBS -lpcrs"
 else
   echo "using built-in static pcrs"
-  AC_DEFINE(STATIC_PCRS,1,
-    [Define to 1 if PCRS should be statically built in instead of linking
-     with libpcrs.
-     (This is determined by configure depending on the availiability of
-     libpcrs and user preferences).
-     Don't try to change this here! Use configure instead.])
+  AC_DEFINE(STATIC_PCRS)
   STATIC_PCRS_ONLY=
 fi
 
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)
-
-dnl =================================================================
-dnl DocBook stuff
-dnl =================================================================
-
-AC_ARG_WITH(docbook, dnl
-  --with-docbook=<directory>    
-                           Set the location of the dsssl stylesheet
-                           (default = search),[dnl
-DKPREFIX=$withval
-])
-
-dnl Check for jade, so we can build the documentation
-dnl Openjade is preferred according to docs, but jade
-dnl is *much* faster.
-AC_CHECK_PROGS(JADEBIN,jade openjade,false)
-AC_SUBST(JADEBIN)
-
-dnl Checking for the docbook.dsl stylesheet file
-dnl It is still not portable (directory slash)
-dnl   ^ Why not?  All systems use / don't they?
-dnl   Windows certainly can.  Is this a Mac or
-dnl   Amiga issue?  -- Jon  /dsssl/docbook/html/docbook.dsl
-DKPREFIXCOPY=$DKPREFIX
-DKPREFIX=false
-for i in $DKPREFIXCOPY /usr/share/sgml/docbook/stylesheet/dsssl/modular \
-        /usr/share/sgml/docbook/dsssl-stylesheets /usr/share/sgml/docbkdsl \
-        /usr/share/sgml/docbook-dsssl /usr/local/share/sgml/docbook/dsssl/modular; do
-dnl  echo -n does not fly with /bin/sh.
-dnl      echo -n "checking for $i/html/docbook.dsl..."
-      AC_MSG_CHECKING([for $i])
-        if test -f $i/html/docbook.dsl; then
-                echo "yes"
-                DKPREFIX=$i
-                break 
-        else
-                echo "no"
-        fi
-done
-AC_SUBST(DKPREFIX)
-
-JADECAT=""
-dnl where are the catalogs?
-for i in /usr/share/sgml/CATALOG.docbk30 \
-         /usr/share/sgml/CATALOG.docbk31 \
-	 /usr/local/share/sgml/docbook/3.0/docbook.cat \
-	 /usr/local/share/sgml/docbook/3.1/docbook.cat \
-	 ; do
-dnl     echo -n "checking for $i..."
-      AC_MSG_CHECKING([for $i])
-        if test -f $i; then
-                echo "yes"
-                JADECAT="$JADECAT -c $i"
-        else
-                echo "no"
-        fi
-done
-AC_SUBST(JADECAT)
-
-dnl NOT USED?
-dnl DB2HTML=false
-dnl AC_ARG_WITH(db2html, dnl
-dnl  --with-db2html=<path/executable>
-dnl                          Set the location of the docbook to html converter
-dnl                           (default = search),[dnl
-dnl DB2HTML=$withval
-dnl ])
-dnl if ! test -x $DB2HTML; then
-dnl     DB2HTML=""
-dnl fi
-dnl 
-dnl Check for a docbook -> HTML converter
-dnl AC_CHECK_PROGS(DB2HTML,db2html docbook2html,false)
-dnl AC_SUBST(DB2HTML)
-
-dnl Check for a text browser that supports -dump
-AC_CHECK_PROGS(WDUMP,w3m lynx links,false)
-AC_SUBST(WDUMP)
-
-dnl Check for man2html for docs.
-AC_CHECK_PROGS(MAN2HTML,man2html,false)
-AC_SUBST(MAN2HTML)
-
-dnl Set doc status, used for conditional content inclusions
-DOC_STATUS=""
-if  test $CODE_STATUS = alpha; then
-     DOC_STATUS="-ip-alpha -ip-not-stable"
-fi
-if  test $CODE_STATUS = beta; then
-     DOC_STATUS="-ip-beta -ip-not-stable"
-fi
-if  test $CODE_STATUS = stable; then
-     DOC_STATUS="-ip-stable"
-fi
-echo "checking for doc status flags... $DOC_STATUS"
-AC_SUBST(DOC_STATUS)
-
-dnl =================================================================
-dnl RPM stuff
-dnl =================================================================
-
-dnl If we use rpm, we need to check where %_topdir is
-AC_CHECK_PROGS(RPMBIN,rpm,false)
-if test $RPMBIN != false; then
-                RPM_BASE=`rpm --eval "%{_topdir}"`
-                if test "$RPM_BASE" = ""; then
-                        RPM_BASE=/usr/src/redhat
-                fi
-fi
-AC_SUBST(RPM_BASE)
-
 
 dnl =================================================================
 dnl Final cleanup and output
@@ -1370,5 +1282,4 @@ AC_SUBST(SPECIAL_CFLAGS)
 
 AC_SUBST(PTHREAD_LIB)
 
-AC_OUTPUT(GNUmakefile doc/source/ldp.dsl doc/source/GNUmakefile)
-
+AC_OUTPUT(GNUmakefile doc/source/ldp.dsl)

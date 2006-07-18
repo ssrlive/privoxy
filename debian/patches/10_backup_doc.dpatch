@@ -1,0 +1,21 @@
+#! /bin/sh -e
+## 10_backup_doc.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Backup the upstream versions of all generated documentation
+
+dpatch_patch ()
+{
+    tar cf debian/patched/doc.bak.tar \
+	doc/source doc/text doc/webserver \
+	INSTALL README AUTHORS privoxy.1
+}
+
+dpatch_unpatch ()
+{
+	tar xf debian/patched/doc.bak.tar
+}
+
+DPATCH_LIB_NO_DEFAULT=1
+
+. /usr/share/dpatch/dpatch.lib.sh

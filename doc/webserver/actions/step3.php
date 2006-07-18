@@ -2,7 +2,7 @@
 <html>
  <!--
 
-  File :  $Source: /cvsroot/ijbswa//current/doc/webserver/actions/step3.php,v $
+  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/actions/step3.php,v $
 
   Purpose  :  Submit form for actions file feedback (step 1)
               This file belongs in
@@ -11,6 +11,12 @@
   $Id: step3.php,v 1.16.2.2 2002/08/23 16:46:05 oes Exp $
 
   $Log: step3.php,v $
+  Revision 1.16.2.2  2002/08/23 16:46:05  oes
+  Adapt to master file format
+
+  Revision 1.16.2.1  2002/08/23 12:25:31  oes
+  Fixed Typo
+
   Revision 1.16  2002/04/13 14:34:59  oes
   Include unique ID in tracker and log; Include URL in tracker summary; add more newlines in tracker
 

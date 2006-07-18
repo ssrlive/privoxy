@@ -1,0 +1,36 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 06_8bit_manual.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Stop converting 8bit chars in the documentation (#203697)
+
+@DPATCH@
+diff -urNad privoxy-dpatch~/doc/source/ldp.dsl.in privoxy-dpatch/doc/source/ldp.dsl.in
+--- privoxy-dpatch~/doc/source/ldp.dsl.in	2006-02-05 16:17:43.000000000 +0100
++++ privoxy-dpatch/doc/source/ldp.dsl.in	2006-02-05 16:17:46.000000000 +0100
+@@ -47,9 +47,9 @@
+ 
+ ;; this is necessary because right now jadetex does not understand
+ ;; symbolic entities, whereas things work well with numeric entities.
+-(declare-characteristic preserve-sdata?
+-  "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
+-  #f)
++;(declare-characteristic preserve-sdata?
++;  "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
++;  #f)
+ 
+ ;; put the legal notice in a separate file
+ (define %generate-legalnotice-link%
+@@ -257,9 +257,9 @@
+ 
+ ;; this is necessary because right now jadetex does not understand
+ ;; symbolic entities, whereas things work well with numeric entities.
+-(declare-characteristic preserve-sdata?
+-  "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
+-  #f)
++;(declare-characteristic preserve-sdata?
++;  "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
++;  #f)
+ 
+ ;; put the legal notice in a separate file
+ (define %generate-legalnotice-link%

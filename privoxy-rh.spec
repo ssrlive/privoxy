@@ -1,6 +1,6 @@
-# $Id: privoxy-rh.spec,v 1.43 2002/07/05 17:15:56 morcego Exp $
+# $Id: privoxy-rh.spec,v 1.33.2.22 2004/01/30 17:09:29 oes Exp $
 #
-# Written by and Copyright (C) 2001, 2002 the SourceForge
+# Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -37,7 +37,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 3.1.1
+Version: 3.0.3
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -68,8 +68,8 @@ Privoxy is based on the Internet Junkbuster.
 
 # We check to see if versions match
 VERSION_MAJOR=3
-VERSION_MINOR=1
-VERSION_POINT=1
+VERSION_MINOR=0
+VERSION_POINT=0
 
 CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
 if [ "%{version}" != "${CONFIG_VERSION}" ]; then
@@ -316,10 +316,24 @@ fi
 
 %{_mandir}/man1/%{name}.*
 
-
 %changelog
-* Thu Sep 05 2002 Hal Burgiss <hal@foobox.net>
-- Import changes from 3.0.0 to main trunk.
+* Wed Mar 26 2003 Andreas Oesterhelt <andreas@oesterhelt.org>
+- Bump version for 3.0.2.
+
+* Wed Mar 19 2003 Hal Burgiss <hal@foobox.net>
+- Bump version for 3.0.1.
+
+* Tue Aug 25 2002 Hal Burgiss <hal@foobox.net>
+- Bump version for 3.0.0 :)
+
+* Tue Aug 06 2002 Hal Burgiss <hal@foobox.net>
+- Reset version for 2.9.20.
+
+* Tue Jul 30 2002 Hal Burgiss <hal@foobox.net>
+- Reset version for 2.9.18.
+
+* Sat Jul 27 2002 Hal Burgiss <hal@foobox.net>
+- Reset version and release for 2.9.16.
 
 * Fri Jul 12 2002 Karsten Hopp <karsten@redhat.de>
 - don't use ghost files for rcX.d/*, using chkconfig is the 
@@ -327,7 +341,7 @@ fi
 
 * Fri Jul 05 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-8
-- Changing delete order for groups and users (users should be first) 
+- Changing delete order for groups and users (users should be first)
 
 * Wed Jul 03 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-7
@@ -341,6 +355,11 @@ fi
 
 * Tue Jul 02 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
 + privoxy-2.9.15-5
+- Bumping Release number (which should be changed every time the specfile
+  is)
+
+* Tue Jul 02 2002 Hal Burgiss <hal@foobox.net>
++ privoxy-2.9.15-4
 - Fix typo in templates creation.
 
 * Wed Jun 26 2002 Rodrigo Barbosa <rodrigob@tisbrasil.com.br>
@@ -715,6 +734,15 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.33.2.22  2004/01/30 17:09:29  oes
+# Bumped version for 3.0.3
+#
+# Revision 1.33.2.21  2003/03/26 00:25:00  oes
+# Bump version for 3.0.2
+#
+# Revision 1.33.2.20  2003/03/20 03:27:11  hal9
+# Bump version for 3.0.1 pending release.
+#
 # Revision 1.33.2.19  2002/08/25 23:36:03  hal9
 # Bump version for 3.0.0.
 #
@@ -745,25 +773,25 @@ fi
 # Revision 1.33.2.10  2002/07/12 09:14:26  kick_
 # don't use ghost files for rcX.d/*, chkconfig is available to do this job. Enable translation of error messge
 #
-# Revision 1.43  2002/07/05 17:15:56  morcego
+# Revision 1.33.2.9  2002/07/05 17:16:19  morcego
 # - Changing delete order for groups and users (users should be first)
 #
-# Revision 1.42  2002/07/03 20:46:38  morcego
+# Revision 1.33.2.8  2002/07/03 20:46:24  morcego
 # - Changing sed expression that removed CR from the end of the lines. This
 #   new one removes any control caracter, and should work with older versions
 #   of sed
 #
-# Revision 1.41  2002/07/02 18:16:28  morcego
+# Revision 1.33.2.7  2002/07/02 18:16:48  morcego
 # - Fixing defattr values. File and directory modes where swapped
 #
-# Revision 1.40  2002/07/02 17:37:24  morcego
+# Revision 1.33.2.6  2002/07/02 17:38:10  morcego
+# Bumping Release number
+#
+# Revision 1.33.2.5  2002/07/02 11:43:20  hal9
 # Fix typo in templates creation.
 #
-# Revision 1.39  2002/06/26 17:32:04  morcego
-# Fixing issues created by sync between the branches
-#
-# Revision 1.38  2002/06/24 21:44:44  hal9
-# Sync with Karsten's update in 3.0 branch. See changelog.
+# Revision 1.33.2.4  2002/06/26 17:32:45  morcego
+# Integrating fixed from the main branch.
 #
 # Revision 1.33.2.3  2002/06/24 12:13:34  kick_
 # shut up rpmlint. btw: The vendor tag should be set in you .rpmmacros file, not in the spec file!
