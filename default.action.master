@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.1.2.39 2004/10/03 14:03:33 david__schmidt Exp $
+#  $Id: default.action.master,v 1.10 2006/07/18 14:48:45 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -505,6 +505,8 @@ adsl.
 ad[udmw]*.
 adbl*.
 adam*.
+adob*.
+adtp*.
 adv[oia]*.
 .*road*.
 .olympiad*.
@@ -1170,6 +1172,7 @@ www.baycitybaptist.org/images/Banner.jpg
 .office.microsoft.com
 .windowsupdate.microsoft.com
 .apple.com
+.yahoo.com
 
 #----------------------------------------------------------------------------
 # Shopping and banking sites - allow cookies and pop-ups
