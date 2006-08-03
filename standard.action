@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.2.2.9 2003/04/01 09:49:50 oes Exp $
+#  $Id: standard.action,v 1.7 2006/07/18 14:48:47 david__schmidt Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -129,7 +129,7 @@ standard.Medium
 +crunch-incoming-cookies \
 +deanimate-gifs{last} \
 -downgrade-http-version \
-+fast-redirects \
++fast-redirects{check-decoded-url} \
 +filter{js-annoyances} \
 -filter{js-events} \
 +filter{html-annoyances} \

@@ -1,7 +1,7 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.70.2.13 2004/02/17 13:30:23 oes Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.72 2006/07/18 14:48:45 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/cgi.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.70.2.13 2004/02/17 13:30:23 oes Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.72  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.70.2.13  2004/02/17 13:30:23  oes
  *    Moved cgi_error_disabled() from cgiedit.c to
  *    cgi.c to re-enable build with --disable-editor.
@@ -1763,16 +1767,31 @@ struct http_response *finish_http_response(struct http_response *rsp)
    else
    {
       /*
-       * Compliant browsers should not cache this due to the "Cache-Control"
-       * setting.  However, to be certain, we also set both "Last-Modified"
-       * and "Expires" to the current time.
+       * Setting "Cache-Control" to "no-cache" and  "Expires" to
+       * the current time doesn't exactly forbid caching, it just
+       * requires the client to revalidate the cached copy.
+       *
+       * If a temporary problem occurres and the user tries again after
+       * getting Privoxy's error message, a compliant browser may set the
+       * If-Modified-Since header with the content of the error page's
+       * Last-Modified header. More often than not, the document on the server
+       * is older than Privoxy's error message, the server would send status code
+       * 304 and the browser would display the outdated error message again and again.
+       *
+       * As a last resort we set "Last-Modified" to Tim Berners-Lee's birthday,
+       * which predates the age of any page on the web and can be safely used to
+       * "revalidate" without getting a status code 304.
+       *
+       * There is no need to let the useless If-Modified-Since header reach the
+       * server, it is therefore stripped by client_if_modified_since in parsers.c.
        */
       if (!err) err = enlist_unique_header(rsp->headers, "Cache-Control", "no-cache");
 
       get_http_time(0, buf);
       if (!err) err = enlist_unique_header(rsp->headers, "Date", buf);
-      if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", buf);
+      if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", "Wed, 08 Jun 1955 12:00:00 GMT");
       if (!err) err = enlist_unique_header(rsp->headers, "Expires", "Sat, 17 Jun 2000 12:00:00 GMT");
+      if (!err) err = enlist_unique_header(rsp->headers, "Pragma", "no-cache");
    }
 
 

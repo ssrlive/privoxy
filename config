@@ -2,7 +2,7 @@
 #  
 #  Copyright (C) 2001-2004 Privoxy Developers http://privoxy.org
 #  
-#  $Id: config,v 1.39.2.17 2006/01/31 11:52:32 david__schmidt Exp $
+#  $Id: config,v 1.47 2006/07/18 14:48:45 david__schmidt Exp $
 #  
 ####################################################################
 #                                                                  #
@@ -660,7 +660,7 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #  
 #        listen-address  192.168.0.1:8118
 #  
-listen-address  :8118
+listen-address  :8119
 
 #  
 #  4.2. toggle

@@ -1,10 +1,10 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.72.2.7 2006/01/29 23:10:56 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.74 2006/07/18 14:48:47 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/project.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
  *
  * Purpose     :  Defines data structures which are widely used in the
  *                project.  Does not define any variables or functions
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.74  2006/07/18 14:48:47  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.72.2.7  2006/01/29 23:10:56  david__schmidt
  *    Multiple filter file support
  *
@@ -880,19 +884,74 @@ struct iob
 #define ACTION_JPEG_INSPECT    0x00020000UL
 
 /** Action string index: How to deanimate GIFs */
-#define ACTION_STRING_DEANIMATE     0
+#define ACTION_STRING_DEANIMATE             0
 /** Action string index: Replacement for "From:" header */
-#define ACTION_STRING_FROM          1
+#define ACTION_STRING_FROM                  1
 /** Action string index: How to block images */
-#define ACTION_STRING_IMAGE_BLOCKER 2
+#define ACTION_STRING_IMAGE_BLOCKER         2
 /** Action string index: Replacement for "Referer:" header */
-#define ACTION_STRING_REFERER       3
+#define ACTION_STRING_REFERER               3
 /** Action string index: Replacement for "User-Agent:" header */
-#define ACTION_STRING_USER_AGENT    4
+#define ACTION_STRING_USER_AGENT            4
 /** Action string index: Legal CONNECT ports. */
-#define ACTION_STRING_LIMIT_CONNECT 5
+#define ACTION_STRING_LIMIT_CONNECT         5
+/** Action string index: Server headers containing this pattern are crunched*/
+#define ACTION_STRING_SERVER_HEADER         6
+/** Action string index: Client headers containing this pattern are crunched*/
+#define ACTION_STRING_CLIENT_HEADER         7
+/** Action string index: Replacement for the "Accept-Language:" header*/
+#define ACTION_STRING_LANGUAGE              8
+/** Action string index: Replacement for the "Content-Type:" header*/
+#define ACTION_STRING_CONTENT_TYPE          9
+/** Action string index: Replacement for the "content-dispostion:" header*/
+#define ACTION_STRING_CONTENT_DISPOSITION  10
+/** Action string index: Replacement for the "If-Modified-Since:" header*/
+#define ACTION_STRING_IF_MODIFIED_SINCE    11
+/** Action string index: Replacement for the "Last-Modified:" header. */
+#define ACTION_STRING_LAST_MODIFIED        12
+/** Action string index: Redirect URL */
+#define ACTION_STRING_REDIRECT             13
+/** Action string index: Decode before redirect? */
+#define ACTION_STRING_FAST_REDIRECTS       14
 /** Number of string actions. */
-#define ACTION_STRING_COUNT         6
+#define ACTION_STRING_COUNT                15
+
+/*
+ * These defines really belong a few lines higher,
+ * but moving them down here makes this patch apply
+ * against Privoxy 3.0.3 as well.
+ */
+/** Action bitmap: Crunch or modify "if-modified-since" header. */
+#define ACTION_HIDE_IF_MODIFIED_SINCE                0x00040000UL
+/** Action bitmap: Overwrite Content-Type header. */
+#define ACTION_CONTENT_TYPE_OVERWRITE                0x00080000UL
+/** Action bitmap: Crunch specified server header. */
+#define ACTION_CRUNCH_SERVER_HEADER                  0x00100000UL
+/** Action bitmap: Crunch specified client header */
+#define ACTION_CRUNCH_CLIENT_HEADER                  0x00200000UL
+/** Action bitmap: Enable text mode by force */
+#define ACTION_FORCE_TEXT_MODE                       0x00400000UL
+/** Action bitmap: Enable text mode by force */
+#define ACTION_CRUNCH_IF_NONE_MATCH                  0x00800000UL
+/** Action bitmap: Enable content-dispostion crunching */
+#define ACTION_HIDE_CONTENT_DISPOSITION              0x01000000UL
+/** Action bitmap: Replace or block Last-Modified header */
+#define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
+/** Action bitmap: Replace or block Accept-Language header */
+#define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
+/** Action bitmap: Block as empty document */
+#define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
+/** Action bitmap: Redirect request. */
+#define  ACTION_REDIRECT                             0x10000000UL
+/** Action bitmap: Answer blocked Connects verbosely */
+#define ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS  0x20000000UL
+/** Action bitmap: Filter headers with pcre */
+#define ACTION_FILTER_HEADERS                        0x40000000UL
+
+
+/*To make the ugly hack in sed easier to understand*/
+#define CHECK_EVERY_HEADER_REMAINING 0
+
 
 /** Index into current_action_spec::multi[] for headers to add. */
 #define ACTION_MULTI_ADD_HEADER     0

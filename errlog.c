@@ -1,7 +1,7 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.40.2.4 2005/04/03 20:10:50 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.42 2006/07/18 14:48:46 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/errlog.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
  *
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.40.2.4 2005/04/03 20:10:50 david__s
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.42  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.40.2.4  2005/04/03 20:10:50  david__schmidt
  *    Thanks to Jindrich Makovicka for a race condition fix for the log
  *    file.  The race condition remains for non-pthread implementations.
@@ -288,7 +292,7 @@ const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 static FILE *logfp = NULL;
 
 /* logging detail level.  */
-static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
+int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
 
 /* static functions */
 static void fatal_error(const char * error_message);

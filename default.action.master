@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.10 2006/07/18 14:48:45 david__schmidt Exp $
+#  $Id: default.action.master,v 1.11 2006/08/02 17:36:19 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -201,7 +201,7 @@
 #    responses as well. Use this action for servers that use HTTP/1.1
 #    protocol features that Privoxy currently can't handle yet.
 #
-# +fast-redirects
+# +fast-redirects{check-decoded-url}
 #    Many sites, like yahoo.com, don't just link to other sites.
 #    Instead, they will link to some script on their own server,
 #    giving the destination as a parameter, which will then redirect
@@ -217,7 +217,7 @@
 #    time is wasted, while your browser aks the server for one redirect
 #    after the other. Plus, it feeds the advertisers.
 #
-#    The +fast-redirects option enables interception of these requests
+#    The +fast-redirects{check-decoded-url} option enables interception of these requests
 #    by Privoxy, who will cut off all but the last valid URL in the
 #    request and send a local redirect back to your browser without
 #    contacting the intermediate sites.
@@ -1609,7 +1609,7 @@ cf.nbc4.com/
 #MASTER# PROBLEM-URL: http://www.hh.schule.de/ak/nt/
 www.hh.schule.de/ak/nt/
 
-{+fast-redirects -block}
+{+fast-redirects{check-decoded-url} -block}
 #MASTER# PROBLEM-URL: http://isbn.nu/0596001088/price/2.html
 www.commission-junction.com/track/
 #MASTER# PROBLEM-URL: http://uk.rd.yahoo.com/M=200059723.200849546.202365062.200414073/D=ukhmpg/S=15426100:TEAR/A=200396897/R=1119/id=img1_nocap_dial/*http://ad.uk.doubleclick.net/clk;5982435;8261020;g?http://www.lunnpoly.com

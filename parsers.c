@@ -1,7 +1,7 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.56.2.10 2006/01/21 16:16:08 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.58 2006/07/18 14:48:47 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/parsers.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *                Functions declared include:
@@ -40,6 +40,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.56.2.10 2006/01/21 16:16:08 david
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.58  2006/07/18 14:48:47  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.56.2.10  2006/01/21 16:16:08  david__schmidt
  *    Thanks to  Edward Carrel for his patch to modernize OSX'spthreads support.  See bug #1409623.
  *
@@ -444,6 +448,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.56.2.10 2006/01/21 16:16:08 david
 #include <ctype.h>
 #include <assert.h>
 #include <string.h>
+#include <time.h>
 
 #if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
@@ -482,37 +487,50 @@ const char parsers_h_rcs[] = PARSERS_H_VERSION;
 
 
 const struct parsers client_patterns[] = {
-   { "referer:",                 8,    client_referrer },
+   { "referer:",                  8,   client_referrer },
    { "user-agent:",              11,   client_uagent },
-   { "ua-",                      3,    client_ua },
-   { "from:",                    5,    client_from },
-   { "cookie:",                  7,    client_send_cookie },
+   { "ua-",                       3,   client_ua },
+   { "from:",                     5,   client_from },
+   { "cookie:",                   7,   client_send_cookie },
    { "x-forwarded-for:",         16,   client_x_forwarded },
    { "Accept-Encoding:",         16,   client_accept_encoding },
    { "TE:",                       3,   client_te },
    { "Host:",                     5,   client_host },
-/* { "if-modified-since:",       18,   crumble }, */
+   { "if-modified-since:",       18,   client_if_modified_since },
    { "Keep-Alive:",              11,   crumble },
    { "connection:",              11,   crumble },
    { "proxy-connection:",        17,   crumble },
    { "max-forwards:",            13,   client_max_forwards },
-   { NULL,                       0,    NULL }
+   { "Accept-Language:",         16,   client_accept_language },
+   { "if-none-match:",           14,   client_if_none_match },
+   { "X-Filter:",                 9,   client_x_filter },
+   { "*",                         0,   crunch_client_header },
+   { "*",                         0,   filter_header },
+   { NULL,                        0,   NULL }
 };
 
-
 const struct parsers server_patterns[] = {
-   { "HTTP",                4, server_http },
-   { "set-cookie:",        11, server_set_cookie },
-   { "connection:",        11, crumble },
-   { "Content-Type:",      13, server_content_type },
-   { "Content-Length:",    15, server_content_length },
-   { "Content-MD5:",       12, server_content_md5 },
-   { "Content-Encoding:",  17, server_content_encoding },
-   { "Transfer-Encoding:", 18, server_transfer_coding },
-   { "Keep-Alive:",        11, crumble },
+   { "HTTP",                      4, server_http },
+   { "set-cookie:",              11, server_set_cookie },
+   { "connection:",              11, crumble },
+   { "Content-Type:",            13, server_content_type },
+   { "Content-Length:",          15, server_content_length },
+   { "Content-MD5:",             12, server_content_md5 },
+   { "Content-Encoding:",        17, server_content_encoding },
+   { "Transfer-Encoding:",       18, server_transfer_coding },
+   { "Keep-Alive:",              11, crumble },
+   { "content-disposition:",     20, server_content_disposition },
+   { "Last-Modified:",           14, server_last_modified },
+   { "*",                         0, crunch_server_header },
+   { "*",                         0, filter_header },
    { NULL, 0, NULL }
 };
 
+const struct parsers server_patterns_light[] = {
+   { "Content-Length:",          15, server_content_length },
+   { "Transfer-Encoding:",       18, server_transfer_coding },
+   { NULL, 0, NULL }
+};
 
 const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
@@ -529,7 +547,6 @@ const add_header_func_ptr add_server_headers[] = {
    connection_close_adder,
    NULL
 };
-
 
 /*********************************************************************
  *
@@ -779,27 +796,62 @@ char *sed(const struct parsers pats[],
    const struct parsers *v;
    const add_header_func_ptr *f;
    jb_err err = JB_ERR_OK;
+   int first_run;
 
-   for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
+   /*
+    * If filtering is enabled, sed is run twice,
+    * but most of the work needs to be done only once.
+    */
+   first_run = (more_headers != NULL ) ? 1 : 0;
+
+   if (first_run) /* Parse and print */
    {
-      for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
+      for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
       {
-         /* Header crunch()ed in previous run? -> ignore */
-         if (p->str == NULL) continue;
-
-         if (v == pats) log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
-
-         if (strncmpic(p->str, v->str, v->len) == 0)
+         for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
          {
-            err = v->parser(csp, (char **)&(p->str));
+            /* Header crunch()ed in previous run? -> ignore */
+            if (p->str == NULL) continue;
+
+            if (v == pats) log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
+
+            /* Does the current parser handle this header? */
+            if ((strncmpic(p->str, v->str, v->len) == 0) || (v->len == CHECK_EVERY_HEADER_REMAINING))
+            {
+               err = v->parser(csp, (char **)&(p->str));
+            }
          }
       }
+      /* place any additional headers on the csp->headers list */
+      for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
+      {
+         err = (*f)(csp);
+      }
    }
-
-   /* place any additional headers on the csp->headers list */
-   for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
+   else /* Parse only */
    {
-      err = (*f)(csp);
+      /*
+       * The second run is only needed if the body was modified
+       * and the content-lenght has changed.
+       */
+      if (strncmpic(csp->http->cmd, "HEAD", 4))
+      {
+         /*XXX: Code duplication*/
+         for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
+         {
+            for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
+            {
+               /* Header crunch()ed in previous run? -> ignore */
+               if (p->str == NULL) continue;
+
+               /* Does the current parser handle this header? */
+               if (strncmpic(p->str, v->str, v->len) == 0)
+               {
+                  err = v->parser(csp, (char **)&(p->str));
+               }
+            }
+         }
+      }
    }
 
    if (err != JB_ERR_OK)
@@ -812,6 +864,148 @@ char *sed(const struct parsers pats[],
 
 
 /* here begins the family of parser functions that reformat header lines */
+
+
+/*********************************************************************
+ *
+ * Function    :  filter_header
+ *
+ * Description :  Executes all text substitutions from all applying
+ *                +filter actions on the header.
+ *                Most of the code was copied from pcrs_filter_response,
+ *                including the rather short variable names
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success and always succeeds
+ *
+ *********************************************************************/
+jb_err filter_header(struct client_state *csp, char **header)
+{
+   int hits=0;
+   int matches;
+   size_t size = strlen(*header);
+
+   char *newheader = NULL;
+   pcrs_job *job;
+
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
+   struct list_entry *filtername;
+
+   int i, found_filters = 0;
+
+#ifndef  MAX_AF_FILES
+# define MAX_AF_FILES 1
+# define INDEX_OR_NOT
+#else
+# define INDEX_OR_NOT [i] 
+#endif
+
+   if (!(csp->action->flags & ACTION_FILTER_HEADERS))
+   {
+      return(JB_ERR_OK);
+   }
+   log_error(LOG_LEVEL_RE_FILTER, "Entered filter_headers");
+   /*
+    * Need to check the set of re_filterfiles...
+    */
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      fl = csp->rlist INDEX_OR_NOT;
+      if (NULL != fl)
+      {
+         if (NULL != fl->f)
+         {
+           found_filters = 1;
+           break;
+         }
+      }
+   }
+
+   if (0 == found_filters)
+   {
+      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+         return(JB_ERR_OK);
+   }
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      fl = csp->rlist INDEX_OR_NOT;
+      if ((NULL == fl) || (NULL == fl->f))
+         break;
+      /*
+       * For all applying +filter actions, look if a filter by that
+       * name exists and if yes, execute it's pcrs_joblist on the
+       * buffer.
+       */
+      for (b = fl->f; b; b = b->next)
+      {
+         for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
+              filtername ; filtername = filtername->next)
+         {
+            if (strcmp(b->name, filtername->str) == 0)
+            {
+               int current_hits = 0;
+
+               if ( NULL == b->joblist )
+               {
+                  log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
+                  continue;
+               }
+
+               log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s (size %d) with filter %s...",
+                         *header, size, b->name);
+
+               /* Apply all jobs from the joblist */
+               for (job = b->joblist; NULL != job; job = job->next)
+               {
+                  matches = pcrs_execute(job, *header, size, &newheader, &size);
+                  if ( 0 < matches )
+                  {
+                     current_hits += matches; 
+                     log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
+                     freez(*header);
+                     *header = newheader;
+                  }
+                  else if ( 0 == matches )
+                  {
+                     /* Filter doesn't change header */
+                     freez(newheader);
+                  }
+                  else
+                  {
+                     /* RegEx failure */
+                     log_error(LOG_LEVEL_ERROR, "Filtering \'%s\' with \'%s\' didn't work out: %s",
+                        *header, b->name, pcrs_strerror(matches));
+                     if( newheader != NULL)
+                     {
+                        log_error(LOG_LEVEL_ERROR, "Freeing what's left: %s", newheader);
+                        freez(newheader);
+                     }
+                  }
+               }
+               log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
+               hits += current_hits;
+            }
+         }
+      }
+   }
+
+   if ( 0 == size )
+   {
+	   log_error(LOG_LEVEL_HEADER, "Removing empty header %s", *header);
+      freez(*header);
+   }
+   log_error(LOG_LEVEL_RE_FILTER, "Leaving filter headers");
+   return(JB_ERR_OK);
+
+}
 
 
 /*********************************************************************
@@ -833,12 +1027,47 @@ char *sed(const struct parsers pats[],
  *********************************************************************/
 jb_err crumble(struct client_state *csp, char **header)
 {
-   log_error(LOG_LEVEL_HEADER, "crunch!");
+   log_error(LOG_LEVEL_HEADER, "crumble crunched: %s!", *header);
    freez(*header);
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  crunch_server_header
+ *
+ * Description :  Crunch server header if it matches a string supplied by the
+ *                user. Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success and always succeeds
+ *
+ *********************************************************************/
+jb_err crunch_server_header(struct client_state *csp, char **header)
+{
+   const char *crunch_pattern;
+   /*Is there a header to crunch*/
 
+   if ((csp->action->flags & ACTION_CRUNCH_SERVER_HEADER))
+   {
+      crunch_pattern = csp->action->string[ACTION_STRING_SERVER_HEADER];
+
+      /*Is the current header the lucky one?*/
+      if (strstr(*header, crunch_pattern))
+      {
+         log_error(LOG_LEVEL_HEADER, "Crunching server header: %s (contains: %s)", *header, crunch_pattern);  
+         freez(*header);
+      }
+   }
+
+   return JB_ERR_OK;
+}
 /*********************************************************************
  *
  * Function    :  server_content_type
@@ -863,9 +1092,14 @@ jb_err crumble(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_content_type(struct client_state *csp, char **header)
 {
+   const char *newval;
+   
+   newval = csp->action->string[ACTION_STRING_CONTENT_TYPE]; 
+
    if (csp->content_type != CT_TABOO)
    {
       if ((strstr(*header, " text/") && !strstr(*header, "plain"))
+       || strstr(*header, "xml")
        || strstr(*header, "application/x-javascript"))
          csp->content_type = CT_TEXT;
       else if (strstr(*header, " image/gif"))
@@ -875,7 +1109,52 @@ jb_err server_content_type(struct client_state *csp, char **header)
       else
          csp->content_type = 0;
    }
-
+   /*
+    * Are we enabling text mode by force?
+    */
+   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+   {
+     /*
+      * Do we really have to?
+      */
+      if (csp->content_type == CT_TEXT)
+      {
+         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
+      }
+      else
+      {
+         csp->content_type = CT_TEXT;
+         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
+      }
+   }
+   /*
+    * Are we messing with the content type?
+    */ 
+   if (csp->action->flags & ACTION_CONTENT_TYPE_OVERWRITE)
+   { 
+     /*
+      * Make sure the user doesn't accidently
+      * change the content type of binary documents. 
+      */ 
+     if (csp->content_type == CT_TEXT)
+     { 
+        freez(*header);
+        *header = strdup("Content-Type: ");
+        string_append(header, newval);
+        
+        if (header == NULL)
+        { 
+           log_error(LOG_LEVEL_HEADER, "Insufficient memory. Conten-Type crunched without replacement!");
+           return JB_ERR_MEMORY;
+        }
+        log_error(LOG_LEVEL_HEADER, "Modified: %s!", *header);
+     }
+     else
+     {
+        log_error(LOG_LEVEL_HEADER, "%s not replaced. It doesn't look like text. "
+                 "Enable force-text-mode if you know what you're doing.", *header);   
+     }
+   }  
    return JB_ERR_OK;
 }
 
@@ -925,6 +1204,7 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
       {
          freez(*header);
          *header = strdup("Transfer-Encoding: identity");
+         log_error(LOG_LEVEL_HEADER, "Set: %s", *header);
          return (header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
       }
    }
@@ -985,8 +1265,12 @@ jb_err server_content_encoding(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_content_length(struct client_state *csp, char **header)
 {
-   if (csp->content_length != 0) /* Content length has been modified */
+   if (csp->content_length != 0) /* Content length could have been modified */
    {
+      /*
+       * XXX: Shouldn't we check if csp->content_length
+       * is different than the original value?
+       */
       freez(*header);
       *header = (char *) zalloc(100);
       if (*header == NULL)
@@ -1032,6 +1316,189 @@ jb_err server_content_md5(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  server_content_disposition
+ *
+ * Description :  If enabled, blocks or modifies the "content-disposition" header.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err server_content_disposition(struct client_state *csp, char **header)
+{
+   const char *newval;
+
+   /*
+    * Are we messing with the content-disposition header?
+    */
+   if ((csp->action->flags & ACTION_HIDE_CONTENT_DISPOSITION) == 0)
+   {
+      /*Me tinks not*/
+      return JB_ERR_OK;
+   }
+
+   newval = csp->action->string[ACTION_STRING_CONTENT_DISPOSITION];
+
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   {
+      /*
+       * Blocking content-disposition header
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching %s!", *header);
+      freez(*header);
+      return JB_ERR_OK;
+   }
+   else
+   {  
+      /*
+       * Replacing content-disposition header
+       */
+      freez(*header);
+      *header = strdup("content-disposition: ");
+      string_append(header, newval);   
+
+      if (*header == NULL)
+      {
+         log_error(LOG_LEVEL_HEADER, "Insufficent memory. content-disposition header not fully replaced.");  
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "content-disposition header crunched and replaced with: %s", *header);
+      }
+   }
+   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+}
+
+/*********************************************************************
+ *
+ * Function    :  server_last_modified
+ *
+ * Description :  Changes Last-Modified header to the actual date
+ *                to help hide-if-modified-since.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err server_last_modified(struct client_state *csp, char **header)
+{
+   const char *newval;
+   char buf[BUFFER_SIZE];
+
+   char newheader[50];
+   struct tm *timeptr;
+   time_t now, last_modified;                  
+   long int rtime;
+   long int days, hours, minutes, seconds;
+   
+   /*
+    * Are we messing with the Last-Modified header?
+    */
+   if ((csp->action->flags & ACTION_OVERWRITE_LAST_MODIFIED) == 0)
+   {
+      /*Nope*/
+      return JB_ERR_OK;
+   }
+
+   newval = csp->action->string[ACTION_STRING_LAST_MODIFIED];
+
+   if (0 == strcmpic(newval, "block") )
+   {
+      /*
+       * Blocking Last-Modified header. Useless but why not.
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching %s!", *header);
+      freez(*header);
+      return JB_ERR_OK;
+   }
+   else if (0 == strcmpic(newval, "reset-to-request-time"))
+   {  
+      /*
+       * Setting Last-Modified Header to now.
+       */
+      get_http_time(0, buf);
+      freez(*header);
+      *header = strdup("Last-Modified: ");
+      string_append(header, buf);   
+
+      if (*header == NULL)
+      {
+         log_error(LOG_LEVEL_HEADER, "Insufficent memory. Last-Modified header got lost, boohoo.");  
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "Reset to present time: %s", *header);
+      }
+   }
+   else if (0 == strcmpic(newval, "randomize"))
+   {
+      log_error(LOG_LEVEL_HEADER, "Randomizing: %s", *header);
+      now = time(NULL);
+      timeptr = gmtime(&now);
+      if (strptime(*header, "Last-Modified: %a, %d %b %Y %T", timeptr) == NULL)
+      {
+          log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
+          freez(*header);
+      }
+      else
+      {
+         last_modified = timegm(timeptr);
+         rtime = difftime(now, last_modified);
+         if (rtime)
+         {
+            rtime = random() % rtime + 1; 
+            last_modified += rtime;
+            timeptr = gmtime(&last_modified);
+            strftime(newheader, sizeof(newheader), "%a, %d %b %Y %T GMT", timeptr);
+            freez(*header);
+            *header = strdup("Last-Modified: ");
+            string_append(header, newheader);
+
+            if (*header == NULL)
+            {
+               log_error(LOG_LEVEL_ERROR, " Insufficent memory, header crunched without replacement.");
+               return JB_ERR_MEMORY;  
+            }
+
+            if(LOG_LEVEL_HEADER & debug) /* Save cycles if the user isn't interested. */
+            {
+               days    = rtime / (3600 * 24);
+               hours   = rtime / 3600 % 24;
+               minutes = rtime / 60 % 60;
+               seconds = rtime % 60;            
+
+               log_error(LOG_LEVEL_HEADER, "Randomized:  %s (added %d da%s %d hou%s %d minut%s %d second%s",
+                  *header, days, (days == 1) ? "y" : "ys", hours, (hours == 1) ? "r" : "rs",
+                  minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
+            }
+         }
+         else
+         {
+            log_error(LOG_LEVEL_HEADER, "Randomized ... or not. No time difference to work with.");
+         }
+      }
+   }
+
+   return JB_ERR_OK;
+}
 
 /*********************************************************************
  *
@@ -1129,10 +1596,13 @@ jb_err client_te(struct client_state *csp, char **header)
 jb_err client_referrer(struct client_state *csp, char **header)
 {
    const char *newval;
-
+   const char *host;
+   char *referer;
+   int hostlenght;
+ 
 #ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
-    * even if the request itself is non-forced, we must
+    * if the request itself is non-forced, we must
     * clean it unconditionally
     */
    strclean(*header, FORCE_PREFIX);
@@ -1146,27 +1616,73 @@ jb_err client_referrer(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
-   freez(*header);
-
    newval = csp->action->string[ACTION_STRING_REFERER];
 
+   if ((0 != strcmpic(newval, "conditional-block")))
+   {  
+      freez(*header);
+   }
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
       /*
        * Blocking referer
        */
-      log_error(LOG_LEVEL_HEADER, "crunch!");
+      log_error(LOG_LEVEL_HEADER, "Referer crunched!");
       return JB_ERR_OK;
    }
-   else if (0 == strncmpic(newval, "http://", 7))
+   else if (0 == strcmpic(newval, "conditional-block"))
+   {
+      /*
+       * Block referer if host has changed.
+       */
+
+      if (NULL == (host = strdup(csp->http->hostport)))
+      {
+         freez(*header);
+         log_error(LOG_LEVEL_HEADER, "Referer crunched! Couldn't allocate memory for temporary host copy.");
+         return JB_ERR_MEMORY;
+      }
+      if (NULL == (referer = strdup(*header)))
+      {
+         freez(*header);
+         freez(host);
+         log_error(LOG_LEVEL_HEADER, "Referer crunched! Couldn't allocate memory for temporary referer copy.");
+         return JB_ERR_MEMORY;
+      }
+      hostlenght = strlen(host);
+      if ( hostlenght < (strlen(referer)-17) ) /*referer begins with 'Referer: http[s]://'*/
+      {
+         /*Shorten referer to make sure the referer is blocked
+          *if www.example.org/www.example.com-shall-see-the-referer/
+          *links to www.example.com/
+          */
+         referer[hostlenght+17] = '\n';
+      }
+      if ( 0 == strstr(referer, host)) /*Host has changed*/
+      {
+         log_error(LOG_LEVEL_HEADER, "New host is: %s. Crunching %s!", host, *header);
+         freez(*header);
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "%s (not modified, still on %s)", *header, host);
+      }
+      freez(referer);
+      freez(host);
+      return JB_ERR_OK;    
+   }
+   else if (0 != strcmpic(newval, "forge"))
    {
       /*
        * We have a specific (fixed) referer we want to send.
        */
-      log_error(LOG_LEVEL_HEADER, "modified");
-
+      if ((0 != strncmpic(newval, "http://", 7)) && (0 != strncmpic(newval, "https://", 8)))
+      {
+         log_error(LOG_LEVEL_HEADER, "Parameter: +referrer{%s} is a bad idea, but I don't care.", newval);
+      }
       *header = strdup("Referer: ");
       string_append(header, newval);
+      log_error(LOG_LEVEL_HEADER, "Referer overwritten with: %s", *header);
 
       return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
    }
@@ -1176,21 +1692,113 @@ jb_err client_referrer(struct client_state *csp, char **header)
        * Forge a referer as http://[hostname:port of REQUEST]/
        * to fool stupid checks for in-site links
        */
-      if (0 != strcmpic(newval, "forge"))
-      {
-         /*
-          * Invalid choice - but forge is probably the best default.
-          */
-         log_error(LOG_LEVEL_ERROR, "Bad parameter: +referer{%s}", newval);
-      }
 
       *header = strdup("Referer: http://");
       string_append(header, csp->http->hostport);
       string_append(header, "/");
-      log_error(LOG_LEVEL_HEADER, "crunch+forge to %s", *header);
+      log_error(LOG_LEVEL_HEADER, "Referer forged to: %s", *header);
       
       return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
    }
+}
+
+/*********************************************************************
+ *
+ * Function    :  client_accept_language
+ *
+ * Description :  Handle the "Accept-Language" config setting properly.
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err client_accept_language(struct client_state *csp, char **header)
+{
+   const char *newval;
+
+   /*
+    * Are we messing with the Accept-Language?
+    */
+   if ((csp->action->flags & ACTION_HIDE_ACCEPT_LANGUAGE) == 0)
+   {
+      /*I don't think so*/
+      return JB_ERR_OK;
+   }
+
+   newval = csp->action->string[ACTION_STRING_LANGUAGE];
+
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   {
+      /*
+       * Blocking Accept-Language header
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching Accept-Language!");
+      freez(*header);
+      return JB_ERR_OK;
+   }
+   else
+   {  
+      /*
+       * Replacing Accept-Language header
+       */
+      freez(*header);
+      *header = strdup("Accept-Language: ");
+      string_append(header, newval);   
+
+      if (*header == NULL)
+      {
+         log_error(LOG_LEVEL_ERROR, " Insufficent memory. Accept-Language header crunched without replacement.");  
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "Accept-Language header crunched and replaced with: %s", *header);
+      }
+   }
+   return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+}
+
+/*********************************************************************
+ *
+ * Function    :  crunch_client_header
+ *
+ * Description :  Crunch client header if it matches a string supplied by the
+ *                user. Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success and always succeeds
+ *
+ *********************************************************************/
+jb_err crunch_client_header(struct client_state *csp, char **header)
+{
+   const char *crunch_pattern;
+   /*Is there a header to crunch*/
+   
+   if ((csp->action->flags & ACTION_CRUNCH_CLIENT_HEADER))
+   {
+      crunch_pattern = csp->action->string[ACTION_STRING_CLIENT_HEADER];
+
+      /*Is the current header the lucky one?*/
+      if (strstr(*header, crunch_pattern))
+      {
+         log_error(LOG_LEVEL_HEADER, "Crunching client header: %s (contains: %s)", *header, crunch_pattern);  
+         freez(*header);
+      }
+   }
+   return JB_ERR_OK;
 }
 
 
@@ -1228,15 +1836,14 @@ jb_err client_uagent(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
-   log_error(LOG_LEVEL_HEADER, "modified");
-
    freez(*header);
    *header = strdup("User-Agent: ");
    string_append(header, newval);
 
+   log_error(LOG_LEVEL_HEADER, "Modified: %s", *header);
+
    return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
 }
-
 
 /*********************************************************************
  *
@@ -1259,7 +1866,7 @@ jb_err client_ua(struct client_state *csp, char **header)
 {
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) != 0)
    {
-      log_error(LOG_LEVEL_HEADER, "crunch!");
+      log_error(LOG_LEVEL_HEADER, "crunched User-Agent!");
       freez(*header);
    }
 
@@ -1303,7 +1910,7 @@ jb_err client_from(struct client_state *csp, char **header)
     */
    if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
    {
-      log_error(LOG_LEVEL_HEADER, "crunch!");
+      log_error(LOG_LEVEL_HEADER, "crunched From!");
       return JB_ERR_OK;
    }
 
@@ -1394,7 +2001,7 @@ jb_err client_x_forwarded(struct client_state *csp, char **header)
    else
    {
       freez(*header);
-      log_error(LOG_LEVEL_HEADER, " crunch!");
+      log_error(LOG_LEVEL_HEADER, "crunched x-forwarded-for!");
    }
 
    return JB_ERR_OK;
@@ -1520,6 +2127,179 @@ jb_err client_host(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  client_if_modified_since
+ *
+ * Description :  Remove or modify the If-Modified-Since header.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err client_if_modified_since(struct client_state *csp, char **header)
+{
+   char newheader[50];
+   struct tm *timeptr;
+   time_t tm = 0;                  
+   const char *newval;
+   time_t rtime;
+   time_t hours, minutes, seconds;
+   int negative = 0;
+   char * endptr;
+   
+   if ( 0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
+   {
+      /* 
+       * The client got an error message because of a temporary problem,
+       * the problem is gone and the client now tries to revalidate our
+       * error message on the real server. The revalidation would always
+       * end with the transmission of the whole document and there is
+       * no need to expose the bogus If-Modified-Since header.
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching useless If-Modified-Since header.");
+      freez(*header);
+   }
+   else if (csp->action->flags & ACTION_HIDE_IF_MODIFIED_SINCE)
+   {
+      newval = csp->action->string[ACTION_STRING_IF_MODIFIED_SINCE];
+
+      if ((0 == strcmpic(newval, "block")))
+      {
+         log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
+         freez(*header);
+      }
+      else /* add random value */
+      {
+         /*
+          * tm must be initinalized to prevent segmentation faults.
+          */
+         timeptr = gmtime(&tm);
+         if (strptime(*header, "If-Modified-Since: %a, %d %b %Y %T", timeptr) == NULL)
+         {
+            log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
+            freez(*header);
+         }
+         else
+         {
+            rtime = strtol(newval, &endptr, 0);
+
+            log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d hou%s)",
+               *header, rtime, (rtime == 1 || rtime == -1) ? "r": "rs");
+
+            rtime *= 3600;
+            rtime = random() % rtime; 
+
+            if(newval[0] == '-')
+            {
+               rtime *= -1;      
+            }
+            tm = timegm(timeptr) + rtime;
+            timeptr = gmtime(&tm);
+            strftime(newheader, sizeof(newheader), "%a, %d %b %Y %T GMT", timeptr);
+
+            freez(*header);
+            *header = strdup("If-Modified-Since: ");
+            string_append(header, newheader);
+
+            if (*header == NULL)
+            {
+               log_error(LOG_LEVEL_HEADER, " Insufficent memory, header crunched without replacement.");
+               return JB_ERR_MEMORY;  
+            }
+
+            if(LOG_LEVEL_HEADER & debug) /* Save cycles if the user isn't interested. */
+            {
+               if(rtime < 0)
+               {
+                  rtime *= -1; 
+                  negative = 1;
+               }
+               hours   = rtime / 3600 % 24;
+               minutes = rtime / 60 % 60;
+               seconds = rtime % 60;            
+
+               log_error(LOG_LEVEL_HEADER, "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
+                  *header, (negative) ? "subtracted" : "added", hours, (hours == 1) ? "r" : "rs",
+                  minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
+            }
+         }
+      }
+   }
+
+   return JB_ERR_OK;
+}
+
+/*********************************************************************
+ *
+ * Function    :  client_if_none_match
+ *
+ * Description :  Remove the If-None-Match header.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err client_if_none_match(struct client_state *csp, char **header)
+{
+   if (csp->action->flags & ACTION_CRUNCH_IF_NONE_MATCH)
+   {  
+      log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
+      freez(*header);
+   }
+
+   return JB_ERR_OK;
+}
+
+/*********************************************************************
+ *
+ * Function    :  client_x_filter
+ *
+ * Description :  Disables filtering if the client set "X-Filter: No".
+ *                Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *
+ *********************************************************************/
+jb_err client_x_filter(struct client_state *csp, char **header)
+{
+   if ( 0 == strcmpic(*header, "X-Filter: No"))
+   {
+      if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+      {
+         log_error(LOG_LEVEL_HEADER, "force-text-mode overruled the client's request to disable filtering!");
+      }
+      else
+      {  
+         csp->content_type = CT_TABOO;
+         log_error(LOG_LEVEL_HEADER, "Disabled filter mode on behalf of the client.");
+      }
+      log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
+      freez(*header);
+   }
+   return JB_ERR_OK; 
+}
 
 /* the following functions add headers directly to the header list */
 
@@ -1761,6 +2541,7 @@ jb_err client_x_forwarded_adder(struct client_state *csp)
  *********************************************************************/
 jb_err connection_close_adder(struct client_state *csp)
 {
+   log_error(LOG_LEVEL_HEADER, "Adding: Connection: close");
    return enlist(csp->headers, "Connection: close");
 }
 
