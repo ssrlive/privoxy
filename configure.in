@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.68.2.20 2004/01/31 16:31:46 oes Exp $
+dnl $Id: configure.in,v 1.90 2006/07/18 14:48:45 david__schmidt Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.90  2006/07/18 14:48:45  david__schmidt
+dnl Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+dnl with what was really the latest development (the v_3_0_branch branch)
+dnl
 dnl Revision 1.68.2.20  2004/01/31 16:31:46  oes
 dnl Resetting version info to 0.0.0 UNRELEASED
 dnl
@@ -434,7 +438,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.68.2.20 $)
+AC_REVISION($Revision: 1.90 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1099,7 +1103,7 @@ AC_FUNC_SETPGRP
 AC_TYPE_SIGNAL
 dnl uncommenting does not work for swa. suse linux
 dnl AC_FUNC_STAT
-AC_CHECK_FUNCS([atexit getcwd gethostbyaddr gethostbyname inet_ntoa localtime_r memchr memmove memset regcomp select setlocale socket strchr strdup strerror strftime strstr strtoul])
+AC_CHECK_FUNCS([atexit getcwd gethostbyaddr gethostbyname inet_ntoa localtime_r memchr memmove memset random regcomp select setlocale socket strchr strdup strerror strftime strptime strstr strtoul])
 
 
 dnl =================================================================
