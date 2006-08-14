@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 1.123.2.43 2005/05/23 09:59:10 hal9 Exp $
+ $Id: user-manual.sgml,v 2.11 2006/07/18 14:48:51 david__schmidt Exp $
 
  Copyright (C) 2001- 2003 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 1.123.2.43 2005/05/23 09:59:10 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.11 2006/07/18 14:48:51 david__schmidt Exp $</pubdate>
 
 <!--
 
@@ -2226,6 +2226,279 @@ must find a better place for this paragraph
 </variablelist>
 </sect3>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="content-type-overwrite">
+<title>content-type-overwrite</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Stop useless download menus from popping up, or change the browser's rendering mode</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Replaces the <quote>Content-Type:</quote> HTTP server header.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Any string. 
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The <quote>Content-Type:</quote> HTTP server header is used by the
+    browser to decide what to do with the document. The value of this
+    header can cause the browser to open a download menu instead of
+    displaying the document by itself, even if the document's format is
+    supported by the browser. 
+   </para>
+   <para>
+    The declared content type can also affect which rendering mode
+    the browser chooses. If XHTML is delivered as <quote>text/html</quote>,
+    many browsers treat it as yet another broken HTML document.
+    If it is send as <quote>application/xml</quote>, browsers with
+    XHTML support will only display it, if the syntax is correct.
+   </para>
+   <para>
+    If you see a web site that proudly uses XHTML buttons, but sets
+    <quote>Content-Type: text/html</quote>, you can use Privoxy
+    to overwrite it with <quote>application/xml</quote> and validate
+    the web master's claim inside your XHTML-supporting browser.
+    If the syntax is incorrect, the browser will complain loudly. 
+   </para>
+   <para>
+    You can also go the opposite direction: if your browser prints
+    error messages instead of rendering a document falsely declared
+    as XHTML, you can overwrite the content type with
+    <quote>text/html</quote> and have it rendered as broken HTML document. 
+   </para>
+   <para>
+    By default <literal>content-type-overwrite</literal> only replaces
+    <quote>Content-Type:</quote> headers that look like some kind of text.
+    If you want to overwrite it unconditionally, you have to combine it with
+    <literal><link linkend="force-text-mode">force-text-mode</link></literal>.
+    This limitation exists for a reason, think twice before circumventing it.
+   </para>
+   <para>
+    Most of the time it's easier to enable
+    <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
+    and replace this action with a custom regular expression. It allows you
+    to activate it for every document of a certain site and it will still
+    only replace the content types you aimed at.
+   </para>
+   <para>
+    Of course you can apply <literal>content-type-overwrite</literal>
+    to a whole site and then make URL based exceptions, but it's a lot
+    more work to get the same precision. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (sections):</term>
+  <listitem>
+    <para>
+     <screen># Check if www.example.net/ really uses valid XHTML
+{+content-type-overwrite {application/xml}}
+www.example.net/
+# but leave the content type unmodified if the URL looks like a style sheet
+{-content-type-overwrite}
+www.example.net/*.\.css$
+www.example.net/*.style
+</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="crunch-client-header">
+<title>crunch-server-header</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Remove a client header <application>Privoxy</application> has no dedicated action for.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes every header send by the client that contains the string the user supplied as parameter.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Any string.
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action allows you to block client headers for which no dedicated
+    <application>Privoxy</application> action exists.
+    <application>Privoxy</application> will remove every client header that
+    contains the string you supplied as parameter.
+   </para>
+   <para>
+    Regular expressions are <emphasis>not supported</emphasis> and you can't
+    use this action to block different headers in the same request, unless
+    they contain the same string.
+   </para>
+   <para>
+    <literal>crunch-client-header</literal> is only meant for quick tests.
+    If you have to block several different headers, or only want to modify
+    parts of them, you should enable
+    <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
+    and create your own filter.
+   </para>
+   <para>
+    <warning>
+     Don't block any header without understanding the consequences.
+    </warning>
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen># Block the non-existent "Privacy-Violation:" client header 
+{+crunch-client-header {Privacy-Violation:}}
+/
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="crunch-if-none-match">
+<title>crunch-if-none-match</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Prevent yet another way to track the user's steps between sessions.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>If-None-Match:</quote> HTTP client header.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Removing the <quote>If-None-Match:</quote> HTTP client header
+    is useful for filter testing, where you want to force a real
+    reload instead of getting status code <quote>304</quote> which
+    would cause the browser to use a cached copy of the page.
+   </para>
+   <para>
+    It is also useful to make sure the header isn't used as a cookie
+    replacement.
+   </para>
+   <para>
+    Blocking the <quote>If-None-Match:</quote> header shouldn't cause any
+    caching problems, as long as the <quote>If-Modified-Since:</quote> header
+    isn't blocked as well.
+   </para>
+   <para>
+    It is recommended to use this action together with
+    <literal><link linkend="hide-if-modified-since">hide-if-modified-since</link></literal>
+    and
+    <literal><link linkend="overwrite-last-modified">overwrite-last-modified</link></literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen># Let the browser revalidate cached documents without being tracked across sessions
+{+hide-if-modified-since {-1} \
++overwrite-last-modified {randomize} \
++crunch-if-none-match}
+/   </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-incoming-cookies">
 <title>crunch-incoming-cookies</title>
@@ -2289,6 +2562,86 @@ must find a better place for this paragraph
   <listitem>
    <para>
     <screen>+crunch-incoming-cookies</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="crunch-server-header">
+<title>crunch-server-header</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Remove a server header <application>Privoxy</application> has no dedicated action for.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes every header send by the server that contains the string the user supplied as parameter.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Any string.
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action allows you to block server headers for which no dedicated
+    <application>Privoxy</application> action exists. <application>Privoxy</application>
+    will remove every server header that contains the string you supplied as parameter.
+   </para>
+   <para>
+    Regular expressions are <emphasis>not supported</emphasis> and you can't
+    use this action to block different headers in the same request, unless
+    they contain the same string.
+   </para>
+   <para>
+    <literal>crunch-server-header</literal> is only meant for quick tests.
+    If you have to block several different headers, or only want to modify
+    parts of them, you should enable
+    <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
+    and create your own filter.
+   </para>
+   <para>
+    <warning>
+     Don't block any header without understanding the consequences.
+    </warning>
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen># Crunch server headers that try to prevent caching
+{+crunch-server-header {no-cache}}
+/   </screen>
    </para>
   </listitem>
  </varlistentry>
@@ -2506,7 +2859,7 @@ problem-host.example.com</screen>
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Fool some click-tracking scripts and speed up indirect links</para>
+   <para>Fool some click-tracking scripts and speed up indirect links.</para>
   </listitem>
  </varlistentry>
 
@@ -2514,7 +2867,8 @@ problem-host.example.com</screen>
   <term>Effect:</term>
   <listitem>
    <para>
-    Cut off all but the last valid URL from requests.
+    Detects redirection URLs and redirects the browser without contacting
+    the redirection server first.
    </para>
   </listitem>
  </varlistentry>
@@ -2523,16 +2877,27 @@ problem-host.example.com</screen>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Boolean.</para>
+   <para>Parameterized.</para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
   <term>Parameter:</term>
   <listitem>
-   <para>
-    N/A
-   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <quote>simple-check</quote> to just search for the string <quote>http://</quote>
+      to detect redirection URLs.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>check-decoded-url</quote> to decode URLs (if necessary) before searching
+      for redirection URLs.
+     </para>
+    </listitem>
+   </itemizedlist>
   </listitem>
  </varlistentry>
 
@@ -2544,22 +2909,50 @@ problem-host.example.com</screen>
     will link to some script on their own servers, giving the destination as a
     parameter, which will then redirect you to the final target. URLs
     resulting from this scheme typically look like:
-    <emphasis>http://some.place/click-tracker.cgi?target=http://some.where.else</emphasis>.
+    <quote>http://www.example.org/click-tracker.cgi?target=http%3a//www.example.net/</quote>.
   </para>
    <para>
     Sometimes, there are even multiple consecutive redirects encoded in the
     URL. These redirections via scripts make your web browsing more traceable,
     since the server from which you follow such a link can see where you go
     to. Apart from that, valuable bandwidth and time is wasted, while your
-    browser ask the server for one redirect after the other. Plus, it feeds
+    browser asks the server for one redirect after the other. Plus, it feeds
     the advertisers.
    </para>
    <para>
     This feature is currently not very smart and is scheduled for improvement.
-    It is likely to break some sites. You should expect to need possibly 
-    many exceptions to this action, if it is enabled by default in
-    <filename>default.action</filename>. Some sites just don't work without 
-    it.
+    If it is enabled by default, you will have to create some exceptions to
+    this action. It can lead to failures in several ways: 
+   </para>
+   <para>
+    Not every URLs with other URLs as parameters is evil.
+    Some sites offer a real service that requires this information to work.
+    For example a validation service needs to know, which document to validate.
+    <literal>fast-redirects</literal> assumes that every URL parameter that
+    looks like another URL is a redirection target, and will always redirect to
+    the last one. Most of the time the assumption is correct, but if it isn't,
+    the user gets redirected anyway.
+   </para>
+   <para>
+    Another failure occurs if the URL contains other parameters after the URL parameter.
+    The URL:
+    <quote>http://www.example.org/?redirect=http%3a//www.example.net/&amp;foo=bar</quote>.
+    contains the redirection URL <quote>http://www.example.net/</quote>,
+    followed by another parameter. <literal>fast-redirects</literal> doesn't know that
+    and will cause a redirect to <quote>http://www.example.net/&amp;foo=bar</quote>.
+    Depending on the target server configuration, the parameter will be silently ignored
+    or lead to a <quote>page not found</quote> error. It is possible to fix these redirected
+    requests with <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
+    but it requires a little effort.
+   </para>
+   <para>
+    To detect a redirection URL, <literal>fast-redirects</literal> only
+    looks for the string <quote>http://</quote>, either in plain text
+    (invalid but often used) or encoded as <quote>http%3a//</quote>.
+    Some sites use their own URL encoding scheme, encrypt the address
+    of the target server or replace it with a database id. In theses cases
+    <literal>fast-redirects</literal> is fooled and the request reaches the
+    redirection server where it probably gets logged.
    </para>
   </listitem>
  </varlistentry>
@@ -2568,7 +2961,10 @@ problem-host.example.com</screen>
   <term>Example usage:</term>
   <listitem>
     <para>
-     <screen>{+fast-redirects}</screen>
+     <screen>+fast-redirects{simple-check}</screen>
+    </para>
+    <para>
+     <screen>+fast-redirects{check-decoded-url}</screen>
     </para>
   </listitem>
  </varlistentry>
@@ -2778,6 +3174,152 @@ problem-host.example.com</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="force-text-mode">
+<title>force-text-mode</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Force <application>Privoxy</application> to treat a document as if it was in some kind of text format.</emphasis></para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Declares a document as text, even if the <quote>Content-Type:</quote> isn't detected as such.
+   </para>    
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    As explained <literal><link linkend="filter">above</link></literal>,
+    <application>Privoxy</application> tries to only filter files that are
+    in some kind of text format. The same restrictions apply to
+    <literal><link linkend="content-type-overwrite">content-type-overwrite</link></literal>.
+    <literal>force-text-mode</literal> declares a document as text,
+    without looking at the <quote>Content-Type:</quote> first.
+   </para>
+   <warning> 
+    <para>
+     Think twice before activating this action. Filtering binary data
+     with regular expressions can cause file damages.
+    </para>
+   </warning>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+     <screen>
++force-text-mode
+     </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="handle-as-empty-document">
+<title>handle-as-empty-document</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Mark URLs that should be replaced by empty documents <emphasis>if they get blocked</emphasis></para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    This action alone doesn't do anything noticeable. It just marks URLs.
+    If the <literal><link linkend="block">block</link></literal> action <emphasis>also applies</emphasis>,
+    the presence or absence of this mark decides whether an HTML <quote>blocked</quote>
+    page, or an empty document will be sent to the client as a substitute for the blocked content.
+    The <q>empty</q> document isn't literally empty, but actually contains a single space.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Some browsers complain about syntax errors if JavaScript documents
+    are blocked with <application>Privoxy's</application>
+    default HTML page; this option can be used to silence them.
+   </para>
+   <para>
+    The content type for the empty document can be specified with
+    <literal><link linkend="content-type-overwrite">content-type-overwrite{}</link></literal>,
+    but usually this isn't necessary.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+     <screen># Block all documents on example.org that end with ".js",
+# but send an empty document instead of the usual HTML message. 
+{+block +handle-as-empty-document}
+example.org/.*\.js$
+     </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="handle-as-image">
 <title>handle-as-image</title>
 
@@ -2785,7 +3327,7 @@ problem-host.example.com</screen>
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Mark URLs as belonging to images (so they'll be replaced by images <emphasis>if they get blocked</emphasis>)</para>
+   <para>Mark URLs as belonging to images (so they'll be replaced by imagee <emphasis>if they get blocked</emphasis>)</para>
   </listitem>
  </varlistentry>
 
@@ -2860,6 +3402,260 @@ some.nasty-banner-server.com/junk.cgi?output=trash
 # Banner source! Who cares if they also have non-image content?
 ad.doubleclick.net 
 </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="hide-accept-language">
+<title>hide-accept-language</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Pretend to use different language settings.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes or replaces the <quote>Accept-Language:</quote> HTTP header in client requests.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Keyword: <quote>block</quote>, or any user defined value.
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Faking the browser's language settings can be useful to make a
+    foreign User-Agent set with
+    <literal><link linkend="hide-user-agent">hide-user-agent</link></literal>
+    more believable.
+   </para>
+   <para>
+    However some sites with content in different languages check the
+    <quote>Accept-Language:</quote> to decide which one to take by default.
+    Sometimes it isn't possible to later switch to another language without
+    changing the <quote>Accept-Language:</quote> header first.
+   </para>
+   <para>
+    Therefore it's a good idea to either only change the
+    <quote>Accept-Language:</quote> header to languages you understand,
+    or to languages that aren't widely spread.
+   </para>
+   <para>
+    Before setting the <quote>Accept-Language:</quote> header
+    to a rare language, you should consider that it helps to
+    make your requests unique and thus easier to trace.
+    If you don't plan to change this header frequently,
+    you should stick to a common language. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen># Pretend to use Canadian language settings.
+{+hide-accept-language{en-ca} \
++hide-user-agent{Mozilla/5.0 (X11; U; OpenBSD i386; en-CA; rv:1.8.0.4) Gecko/20060628 Firefox/1.5.0.4} \
+}
+/   </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="hide-content-disposition">
+<title>hide-content-disposition</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Prevent download menus for content you prefer to view inside the browser.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes or replaces the <quote>Content-Disposition:</quote> HTTP header set by some servers.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Keyword: <quote>block</quote>, or any user defined value.
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Some servers set the <quote>Content-Disposition:</quote> HTTP header for
+    documents they assume you want to safe locally before viewing them.
+    The <quote>Content-Disposition:</quote> header contains the file name
+    the browser is supposed to use by default.
+   </para>
+   <para>
+    In most browser that understand this header, it makes it impossible to
+    <emphasis>just view</emphasis> the document, without downloading it first,
+    even if it's just a simple text file or an image.
+   </para>
+   <para>
+    Removing the <quote>Content-Disposition:</quote> header helps
+    to prevent this annoyance, but some browser additionally check the
+    <quote>Content-Type:</quote> header, before they decide if the can
+    display a document without saving it first. In these cases you have
+    to change this header as well, before the browser stops displaying
+    download menus.
+   </para>
+   <para>
+    It is also possible to change the server's file name suggestion
+    to another one, but in most cases it isn't worth the time to set
+    it up.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen># Disarm the download link in Sourceforge's patch tracker
+{-filter\
++content-type-overwrite {text/plain}\
++hide-content-disposition {block} }
+.sourceforge.net/tracker/download.php</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="hide-if-modified-since">
+<title>hide-if-modified-since</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Prevent yet another way to track the user's steps between sessions.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>If-Modified-Since:</quote> HTTP client header or modifies its value. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Keyword: <quote>block</quote>, or a user defined value that specifies a range of hours.
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Removing this header is useful for filter testing, where you want to force a real
+    reload instead of getting status code <quote>304</quote>, which would cause the
+    browser to use a cached copy of the page.
+   </para>
+   <para>
+    Instead of removing the header, <literal>hide-if-modified-since<literal> can
+    also add or substract a random amount of time to/from the headers value.
+    You specify a range of hours were the random factor should be chosen from and
+    <application>Privoxy</application> does the rest. A negative value means
+    subtracting, a positive value adding.
+   </para>
+   <para>
+    Randomizing the value of the <quote>If-Modified-Since:</quote> makes
+    sure it isn't used as a cookie replacement, but you will run into
+    caching problems if the random range is to high.  
+   </para>
+   <para>
+    It is a good idea to only use a small negative value and let
+    <literal><link linkend="overwrite-last-modified">overwrite-last-modified</link></literal>
+    handle the greater changes.
+   </para>
+   <para>
+    It is also recommended to use this action together with
+    <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen># Let the browser revalidate without being tracked across sessions
+{+hide-if-modified-since {-1}\
++overwrite-last-modified {randomize}\
++crunch-if-none-match}
+/</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -3040,7 +3836,10 @@ ad.doubleclick.net
   <listitem>
    <itemizedlist>
     <listitem>
-     <para><quote>block</quote> to delete the header completely.</para>
+     <para><quote>conditional-block</quote> to delete the header completely if the host has changed.</para>
+    </listitem>
+    <listitem>
+     <para><quote>block</quote> to delete the header unconditionally.</para>
     </listitem>
     <listitem>
      <para><quote>forge</quote> to pretend to be coming from the homepage of the server we are talking to.</para>
@@ -3056,18 +3855,37 @@ ad.doubleclick.net
   <term>Notes:</term>
   <listitem>
    <para>
-    <quote>forge</quote> is the preferred option here, since some servers will
-    not send images back otherwise, in an attempt to prevent their valuable
-    content from being embedded elsewhere (and hence, without being surrounded
-    by <emphasis>their</emphasis> banners).
+    <literal>conditional-block</literal> is the only parameter,
+    that isn't easily detected in the server's log file. If it blocks the
+    referrer, the request will look like the visitor used a bookmark or
+    typed in the address directly.
    </para>
-  <para>  
-   <literal>hide-referer</literal> is an alternate spelling of
-   <literal>hide-referrer</literal> and the two can be can be freely
-   substituted with each other. (<quote>referrer</quote> is the
-   correct English spelling, however the HTTP specification has a bug - it
-   requires it to be spelled as <quote>referer</quote>.) 
-  </para>
+   <para>
+    Leaving the referrer unmodified for requests on the same host
+    allows the server owner to see the visitor's <quote>click path</quote>,
+    but in most cases she could also get that information by comparing
+    other parts of the log file: for example the User-Agent if it isn't
+    a very common one, or the user's IP address if it doesn't change between
+    different requests.
+   </para>
+   <para>
+    Always blocking the referrer, or using a custom one, can lead to
+    failures on servers that check the referrer before they answer any
+    requests, in an attempt to prevent their valuable content from being
+    embedded or linked to elsewhere.
+   </para>
+   <para>
+    Both <literal>conditional-block</literal> and <literal>forge</literal>
+    will work with referrer checks, as long as content and valid referring page
+    are on the same host. Most of the time that's the case.
+   </para>
+   <para>  
+    <literal>hide-referer</literal> is an alternate spelling of
+    <literal>hide-referrer</literal> and the two can be can be freely
+    substituted with each other. (<quote>referrer</quote> is the
+    correct English spelling, however the HTTP specification has a bug - it
+    requires it to be spelled as <quote>referer</quote>.) 
+   </para>
   </listitem>
  </varlistentry>
 
@@ -3128,11 +3946,14 @@ ad.doubleclick.net
   <listitem>
    <warning> 
     <para>
-     This breaks many web sites that depend on looking at this header in order
-     to customize their content for different browsers (which, by the
-     way, is <emphasis>NOT</emphasis> a <ulink
-     url="http://www.javascriptkit.com/javaindex.shtml">smart way to do
+     This can lead to problems on web sites that depend on looking at this header in
+     order to customize their content for different browsers (which, by the
+     way, is <emphasis>NOT</emphasis> the right thing to do: good web sites
+     work browser-independently). 
+     <!-- 
+     <ulink url="http://www.javascriptkit.com/javaindex.shtml">smart way to do
      that</ulink>!).
+     -->
     </para>
    </warning>
    <para>
@@ -3269,7 +4090,7 @@ ad.doubleclick.net
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Prevent abuse of <application>Privoxy</application> as a TCP proxy relay</para>
+   <para>Prevent abuse of <application>Privoxy</application> as a TCP proxy relay or disable SSL for untrusted sites</para>
   </listitem>
  </varlistentry>
 
@@ -3319,8 +4140,12 @@ ad.doubleclick.net
     abused as TCP relays very easily.
   </para>
   <para>
-   If you don't know what any of this means, there probably is no reason to 
-   change this one, since the default is already very restrictive.
+   <application>Privoxy</application> relays HTTPS traffic without seeing
+   the decoded content. Websites can leverage this limitation to circumvent Privoxy's
+   filters. By specifying an invalid port range you can disable HTTPS entirely.
+   If you plan to disable SSL by default, consider enabling 
+   <literal><link linkend="treat-forbidden-connects-like-blocks ">treat-forbidden-connects-like-blocks</link></literal>
+   as well, to be able to quickly create exceptions.
   </para>
   </listitem>
  </varlistentry>
@@ -3335,7 +4160,8 @@ ad.doubleclick.net
      <screen>+limit-connect{443}                   # This is the default and need not be specified.
 +limit-connect{80,443}                # Ports 80 and 443 are OK.
 +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
-+limit-connect{-}                     # All ports are OK (gaping security hole!)</screen>
++limit-connect{-}                     # All ports are OK
++limit-connect{,}                     # No HTTPS traffic is allowed</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -3352,7 +4178,7 @@ ad.doubleclick.net
   <listitem>
    <para>
     Ensure that servers send the content uncompressed, so it can be
-    passed through <literal><link linkend="filter">filter</link></literal>s
+    passed through <literal><link linkend="filter">filter</link></literal>s.
    </para>
   </listitem>
  </varlistentry>
@@ -3361,7 +4187,7 @@ ad.doubleclick.net
   <term>Effect:</term>
   <listitem>
    <para>
-    Adds a header to the request that asks for uncompressed transfer.
+    Removes the Accept-Encoding header which can be used to ask for compressed transfer.
    </para>
   </listitem>
  </varlistentry>
@@ -3423,6 +4249,179 @@ ad.doubleclick.net
 {-prevent-compression}
 www.debianhelp.org
 www.pclinuxonline.com</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="overwrite-last-modified">
+<title>overwrite-last-modified</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Prevent yet another way to track the user's steps between sessions.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>Last-Modified:</quote> HTTP server header or modifies its value. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    One of the keywords: <quote>block</quote>, <quote>reset-to-request-time</quote>
+    and <quote>randomize</quote>
+   </para>    
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Removing the <quote>Last-Modified:</quote> header is useful for filter
+    testing, where you want to force a real reload instead of getting status
+    code <quote>304</quote>, which would cause the browser to reuse the old
+    version of the page.
+   </para>
+   <para>
+    The <quote>randomize</quote> option overwrites the value of the
+    <quote>Last-Modified:</quote> header with a randomly chosen time
+    between the original value and the current time. In theory the server
+    could send each document with a different <quote>Last-Modified:</quote>
+    header to track visits without using cookies. <quote>Randomize</quote>
+    makes it impossible and the browser can still revalidate cached documents. 
+   </para>
+   <para>
+    <quote>reset-to-request-time</quote> overwrites the value of the
+    <quote>Last-Modified:</quote> header with the current time. You could use
+    this option together with
+    <literal><link linkend="hide-if-modified-since">hided-if-modified-since</link></literal>
+    to further customize your random range.
+   </para>
+   <para>
+    The preferred parameter here is <quote>randomize</quote>. It is safe
+    to use, as long as the time settings are more or less correct.
+    If the server sets the <quote>Last-Modified:</quote> header to the time
+    of the request, the random range becomes zero and the value stays the same.
+    Therefore you should later randomize it a second time with
+    <literal><link linkend="hide-if-modified-since">hided-if-modified-since</link></literal>,
+    just to be sure. 
+   </para>
+   <para>
+    It is also recommended to use this action together with
+    <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen># Let the browser revalidate without being tracked across sessions
+{+hide-if-modified-since {-1}\
++overwrite-last-modified {randomize}\
++crunch-if-none-match}
+/</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="redirect">
+<title>redirect</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Redirect requests to other sites.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Convinces the browser that the requested document has been moved
+    to another location and the browser should get it from there.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    Any URL.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action is useful to replace whole documents with your own
+    ones. For that to work, they have to be available on another server.
+   </para>
+   <para>
+    You can do the same by combining the actions
+    <literal><link linkend="block">block</link></literal>,
+    <literal><link linkend="handle-as-image">handle-as-image</link></literal> and
+    <literal><link linkend="set-image-blocker">set-image-blocker{URL}</link></literal>.
+    It doesn't sound right for non-image documents, and that's why this action
+    was created.
+   </para>
+   <para>
+    This action will be ignored if you use it together with
+    <literal><link linkend="block">block</link></literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen># Replace example.com's style sheet with another one
+{+redirect{http://localhost/css-replacements/example.com.css}}
+example.com/stylesheet.css</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -3764,6 +4763,86 @@ my-internal-testing-server.void</screen>
    </para>
    <para>
     <screen>+set-image-blocker{http://config.privoxy.org/send-banner?type=pattern}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="treat-forbidden-connects-like-blocks">
+<title>treat-forbidden-connects-like-blocks</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Block forbidden connects with an easy to find error message.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    If this action is enabled, <application>Privoxy</application> no longer
+    makes a difference between forbidden connects and ordinary blocks. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>N/A</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    By default <application>Privoxy</application> answers
+    <link linkend="limit-connect">forbidden <quote>Connect</quote> requests</link>
+    with a short error message inside the headers. If the browser doesn't display
+    headers (most don't), you just see an empty page.
+   </para>
+   <para>
+    With this action enabled, <application>Privoxy</application> displays
+    the message that is used for ordinary blocks instead. If you decide
+    to make an exception for the page in question, you can do so by
+    following the <quote>See why</quote> link.
+   </para>
+   <para>
+    For <quote>Connect</quote> requests the clients tell
+    <application>Privoxy</application> which host they are interested
+    in, but not which document they plan to get later. As a result, the
+    <quote>Go there anyway</quote> link becomes rather useless:
+    it lets the client request the home page of the forbidden host
+    through unencrypted HTTP, still using the port of the last request.
+   </para>
+   <para>
+    If you previously configured <application>Privoxy</application> to do the
+    request through a SSL tunnel, everything will work. Most likely you haven't
+    and the server will responds with an error message because it is expecting
+    HTTPS.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+   <para>
+    <screen>+treat-forbidden-connects-like-blocks</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -6295,6 +7374,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.11  2006/07/18 14:48:51  david__schmidt
+ Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ with what was really the latest development (the v_3_0_branch branch)
+
  Revision 1.123.2.43  2005/05/23 09:59:10  hal9
  Fix typo 'loose'
 
