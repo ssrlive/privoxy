@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.28 2006/07/18 14:48:47 david__schmidt Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.29 2006/08/03 02:46:41 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.29  2006/08/03 02:46:41  david__schmidt
+ *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+ *
  *    Revision 1.28  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -203,6 +206,7 @@ extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf);
+time_t parse_header_time(char *header, struct tm *timeptr);
 
 extern jb_err crumble                (struct client_state *csp, char **header);
 extern jb_err client_referrer        (struct client_state *csp, char **header);
@@ -220,6 +224,8 @@ extern jb_err client_accept_language  (struct client_state *csp, char **header);
 extern jb_err client_if_none_match    (struct client_state *csp, char **header);
 extern jb_err crunch_client_header    (struct client_state *csp, char **header);
 extern jb_err filter_header           (struct client_state *csp, char **header);
+extern jb_err filter_client_header    (struct client_state *csp, char **header);
+extern jb_err filter_server_header    (struct client_state *csp, char **header);
 extern jb_err client_x_filter         (struct client_state *csp, char **header);
 
 

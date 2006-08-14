@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.74 2006/07/18 14:48:47 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.75 2006/08/03 02:46:41 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.75  2006/08/03 02:46:41  david__schmidt
+ *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+ *
  *    Revision 1.74  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -945,8 +948,10 @@ struct iob
 #define  ACTION_REDIRECT                             0x10000000UL
 /** Action bitmap: Answer blocked Connects verbosely */
 #define ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS  0x20000000UL
-/** Action bitmap: Filter headers with pcre */
-#define ACTION_FILTER_HEADERS                        0x40000000UL
+/** Action bitmap: Filter server headers with pcre */
+#define ACTION_FILTER_SERVER_HEADERS                 0x40000000UL
+/** Action bitmap: Filter client headers with pcre */
+#define ACTION_FILTER_CLIENT_HEADERS                 0x80000000UL
 
 
 /*To make the ugly hack in sed easier to understand*/
