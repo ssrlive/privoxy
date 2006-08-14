@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.35  2006/08/03 02:46:42  david__schmidt
+#    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+#
 #    Revision 1.34  2006/07/18 14:49:13  david__schmidt
 #    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 #    with what was really the latest development (the v_3_0_branch branch)
@@ -558,7 +561,6 @@ function show_send_wafer_opts(tf)
       <td class="action"><a href="@user-manual@@actions-help-prefix@FAST-REDIRECTS">fast-redirects</a></td>
       <td>Bypass some click-tracking URLs.</td>
     </tr>
-<!--TODO: Document-->
     <tr class="bg1" align="left" valign="top" id="fast-redirects_opts">
       <td class="en1">&nbsp;</td>
       <td class="dis1">&nbsp;</td>
@@ -573,7 +575,6 @@ function show_send_wafer_opts(tf)
         id="fast_redirects_check_decoded_url" @fast-redirects-param-check-decoded-url@><label
         for="fast_redirects_check_decoded_url">Decode URL before checking.</label></td>
     </tr>
-<!--TODO: Document-->
     <tr class="bg1" align="left" valign="top">
       <td class="en1">&nbsp;</td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
@@ -614,7 +615,6 @@ function show_send_wafer_opts(tf)
       <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</a></td>
       <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
     </tr>
-<!--TODO: Document-->
    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_if_modified_since" value="Y" @hide-if-modified-since-y@
@@ -625,7 +625,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="hide_if_modified_since" value="X" @hide-if-modified-since-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@HIDE_IF_MODIFIED_SINCE">-->hide-if-modified-since<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE_IF_MODIFIED_SINCE">hide-if-modified-since</a></td>
       <td>Remove or randomize If-Modified-Since header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="hide_if-modifed-since_opts">
@@ -650,7 +650,6 @@ function show_send_wafer_opts(tf)
 	to keep track of your visits.
      </td>
     </tr>
-   <!--   -->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="overwrite_last_modified" value="Y" @overwrite-last-modified-y@
@@ -661,7 +660,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="overwrite_last_modified" value="X" @overwrite-last-modified-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@OVERWRITE_LAST_MODIFIED">-->overwrite-last-modified<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@OVERWRITE_LAST_MODIFIED">overwrite-last-modified</a></td>
       <td>Remove or randomize If-Modified-Since header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="overwrite_last_modified_opts">
@@ -710,7 +709,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="crunch_if_none_match" value="X" @crunch-if-none-match-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@CRUNCH_IF_NONE_MATCH">-->crunch-if-none-match<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CRUNCH_IF_NONE_MATCH">crunch-if-none-match</a></td>
       <td>Remove If-None-Match header to circumvent browser cache. Useful for filter testing,
          but hurts performance.</td>
     </tr>
@@ -724,7 +723,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="content_type_overwrite" value="X" @content-type-overwrite-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@CONTENT_TYPE_OVERWRITE">-->content-type-overwrite<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CONTENT_TYPE_OVERWRITE">content-type-overwrite</a></td>
       <td>Replace Content-Type header. Useful to let the browser render broken
          <abbr title="EXtensible HyperText Markup Language">XHTML</abbr> as broken
          <abbr title="HyperText Markup Language">HTML</abbr>. By default it only applies to
@@ -751,7 +750,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="force_text_mode" value="X" @force-text-mode-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@FORCE_TEXT_MODE">-->force-text-mode<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@FORCE_TEXT_MODE">force-text-mode</a></td>
       <td>
        Enable filtering on documents whose Content-Type wasn't recognized as text.
        Do think twice, nothing is alright.
@@ -767,7 +766,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="handle_as_empty_document" value="X" @handle-as-empty-document-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@HANDLE_AS_EMPTY_DOCUMENT">-->handle-as-empty-document<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HANDLE_AS_EMPTY_DOCUMENT">handle-as-empty-document</a></td>
       <td>
        Block with an <em>empty</em> document instead of an Image or HTML message.
        The <em>empty</em> document contains only a space and can safely be parsed
@@ -775,6 +774,7 @@ function show_send_wafer_opts(tf)
        Content-Type, default is <q>test/html</q>.
      </td>
     </tr>
+<!--TODO: Document-->
    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="treat_forbidden_connects_like_blocks" value="Y" @treat-forbidden-connects-like-blocks-y@
@@ -785,13 +785,13 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="treat_forbidden_connects_like_blocks" value="X" @treat-forbidden-connects-like-blocks-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS">-->treat-forbidden-connects-like-blocks<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS">treat-forbidden-connects-like-blocks</a></td>
       <td>
        Answer forbidden Connect requests with the usual block message.
        May be a protocol violation, but makes unblocking easier.
      </td>
     </tr>
-<!--crunch-client-header-->
+<!--/TODO: Document-->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="crunch_client_header" id="crunch_client_header_y" value="Y" @crunch-client-header-y@
@@ -802,7 +802,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="crunch_client_header" value="X" @crunch-client-header-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@CRUNCH-CLIENT-HEADER">-->crunch-client-header<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CRUNCH-CLIENT-HEADER">crunch-client-header</a></td>
       <td>Remove header(s) matching the supplied pattern. Together with add-header you can
           build a custom header replacement action.</td>
     </tr>
@@ -815,8 +815,6 @@ function show_send_wafer_opts(tf)
         <input type="text" name="crunch_client_header_mode" size="40"
         value="@crunch-client-header-param@"></td>
     </tr>
-<!--/crunch-client-header-->
-<!--crunch-server-header-->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="crunch_server_header" id="crunch_server_header_y" value="Y" @crunch-server-header-y@
@@ -827,7 +825,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="crunch_server_header" value="X" @crunch-server-header-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@CRUNCH-SERVER-HEADER">-->crunch-server-header<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CRUNCH-SERVER-HEADER">crunch-server-header</a></td>
       <td>Remove server header(s) matching the supplied pattern.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="crunch_server_header_opts">
@@ -839,7 +837,6 @@ function show_send_wafer_opts(tf)
         <input type="text" name="crunch_server_header_mode" size="40"
         value="@crunch-server-header-param@"></td>
     </tr>
-<!--/crunch-server-header-->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_accept_language" id="hide_accept_language_y" value="Y" @hide-accept-language-y@
@@ -851,7 +848,7 @@ function show_send_wafer_opts(tf)
         name="hide_accept_language" id="hide_accept_language_x" value="X" @hide-accept-language-x@
         onclick="show_hide_accept_language_opts(false)"
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@HIDE-ACCEPT-LANGUAGE">-->hide-accept-language<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-ACCEPT-LANGUAGE">hide-accept-language</a></td>
       <td>Pretend to have different language settings. (Makes a fake User-Agent more believable,
           but can lead to foreign content.)</td>
     </tr>
@@ -873,8 +870,8 @@ function show_send_wafer_opts(tf)
         id="hide_accept_language_param" size="40"
         value="@hide-accept-language-param@"><br>
      </td>
-<!--content-dispostion-->
-    </tr>    <tr class="bg1" align="left" valign="top">
+    </tr>
+    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_content_disposition" id="hide_content_disposition_y" value="Y" @hide-content-disposition-y@
         onclick="show_hide_content_disposition_opts(true)"></td>
@@ -885,7 +882,7 @@ function show_send_wafer_opts(tf)
         name="hide_content_disposition" id="hide_content_disposition_x" value="X" @hide-content-disposition-x@
         onclick="show_hide_content_disposition_opts(false)"
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@HIDE-CONTENT-DISPOSITION">-->hide-content-disposition<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-CONTENT-DISPOSITION">hide-content-disposition</a></td>
       <td>Block or overwrite the content-disposition header. Useful to view a document inside the browser,
        even if you were supposed to save it first, or to change the suggested file name.</td>
     </tr>
@@ -918,7 +915,7 @@ function show_send_wafer_opts(tf)
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="redirect" value="X" @redirect-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@REDIRECT">-->redirect<!--</a>--></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@REDIRECT">redirect</a></td>
       <td>Redirect to another address.
     </tr>
     <tr class="bg1" align="left" valign="top" id="redirect_opts">
@@ -930,24 +927,32 @@ function show_send_wafer_opts(tf)
         <input type="text" name="redirect_mode" size="40"
         value="@redirect-param@"></td>
     </tr>
-
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
-        name="filter_headers" value="Y" @filter-headers-y@
+        name="filter_client_headers" value="Y" @filter-client-headers-y@
         ></td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="filter_headers" value="N" @filter-headers-n@
+        name="filter_client_headers" value="N" @filter-client-headers-n@
         ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="filter_headers" value="X" @filter-headers-x@
+        name="filter_client_headers" value="X" @filter-client-headers-x@
         ></td>
-      <td class="action"><!--<a href="@user-manual@@actions-help-prefix@FILTER-HEADERS">-->filter-headers<!--</a>--></td>
-      <td>Apply filters to the headers as well. <strong>Only enable this if you know what you're doing.</strong></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@FILTER-CLIENT-HEADERS">filter-client-headers</a></td>
+      <td>Apply filters to the client headers as well. <strong>Only enable this if you know what you're doing.</strong></td>
     </tr>
-
-
-
-<!--TODO: Document-->
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="filter_server_headers" value="Y" @filter-server-headers-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="filter_server_headers" value="N" @filter-server-headers-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="filter_server_headers" value="X" @filter-server-headers-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@FILTER-SERVER-HEADERS">filter-server-headers</a></td>
+      <td>Apply filters to the server headers as well. <strong>Only enable this if you know what you're doing.</strong></td>
+    </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_from_header" id="hide_from_header_y" value="Y" @hide-from-header-y@
@@ -1015,14 +1020,12 @@ function show_send_wafer_opts(tf)
         <input type="text" name="hide_referrer_param" 
         id="hide_referrer_param" size="40"
         value="@hide-referrer-param@"><br>
-<!--TODO: Document-->
         <input type="radio" name="hide_referrer_mode" value="conditional-block"
         onclick="hide_referrer_param_disable(true)"
         @hide-referrer-param-conditional-block@ id="hide_referrer_mode_conditional-block"><label
         for="hide_referrer_mode_conditional-block">Remove completely if host has changed,
         but don't touch in-site referrers.
         Less suspicious than the options above.</label><br></td>
-<!--TODO: Document-->
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
