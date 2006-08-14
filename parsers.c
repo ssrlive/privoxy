@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.61 2006/08/14 08:25:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.62 2006/08/14 08:58:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.61 2006/08/14 08:25:19 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.62  2006/08/14 08:58:42  fabiankeil
+ *    Changed include from strptime.c to strptime.h
+ *
  *    Revision 1.61  2006/08/14 08:25:19  fabiankeil
  *    Split filter-headers{} into filter-client-headers{}
  *    and filter-server-headers{}.
@@ -1529,7 +1532,7 @@ jb_err server_last_modified(struct client_state *csp, char **header)
 #if !defined(_WIN32) && !defined(__OS2__)
             rtime = random() % rtime + 1; 
 #else
-            rtime = rand() % rtime + 1; 
+            rtime = rand() % (long int)(rtime + 1);
 #endif /* (ifndef _WIN32 || __OS2__) */
             last_modified += rtime;
             timeptr = localtime(&last_modified);
@@ -2260,7 +2263,7 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
 #if !defined(_WIN32) && !defined(__OS2__)
                rtime = random() % rtime + 1; 
 #else
-               rtime = rand() % rtime + 1; 
+               rtime = rand() % (long int)(rtime + 1);
 #endif /* (_WIN32 || __OS2__) */
                if(newval[0] == '-')
                {
@@ -2293,9 +2296,9 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
                   rtime *= -1; 
                   negative = 1;
                }
-               hours   = rtime / 3600 % 24;
-               minutes = rtime / 60 % 60;
-               seconds = rtime % 60;            
+               hours   = (int)rtime / 3600 % 24;
+               minutes = (int)rtime / 60 % 60;
+               seconds = (int)rtime % 60;            
 
                log_error(LOG_LEVEL_HEADER, "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
                   *header, (negative) ? "subtracted" : "added", hours, (hours == 1) ? "r" : "rs",
