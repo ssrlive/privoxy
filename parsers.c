@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.60 2006/08/12 03:54:37 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.61 2006/08/14 08:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.60 2006/08/12 03:54:37 david__sch
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.61  2006/08/14 08:25:19  fabiankeil
+ *    Split filter-headers{} into filter-client-headers{}
+ *    and filter-server-headers{}.
+ *    Added parse_header_time() to share some code.
+ *    Replaced timegm() with mktime().
+ *
  *    Revision 1.60  2006/08/12 03:54:37  david__schmidt
  *    Windows service integration
  *
@@ -477,7 +483,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.60 2006/08/12 03:54:37 david__sch
 #include "list.h"
 
 #ifndef HAVE_STRPTIME
-#include "strptime.c"
+#include "strptime.h"
 #endif
 
 const char parsers_h_rcs[] = PARSERS_H_VERSION;
