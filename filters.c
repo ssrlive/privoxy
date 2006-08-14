@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.60 2006/07/18 14:48:46 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.61 2006/08/03 02:46:41 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -39,6 +39,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.60 2006/07/18 14:48:46 david__sch
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.61  2006/08/03 02:46:41  david__schmidt
+ *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+ *
  *    Revision 1.60  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -1390,7 +1393,7 @@ int is_untrusted_url(struct client_state *csp)
 char *pcrs_filter_response(struct client_state *csp)
 {
    int hits=0;
-   size_t size;
+   size_t size, prev_size;
 
    char *old = csp->iob->cur, *new = NULL;
    pcrs_job *job;
@@ -1472,9 +1475,7 @@ char *pcrs_filter_response(struct client_state *csp)
                continue;
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s...",
-                      csp->http->hostport, csp->http->path, size, b->name);
-
+            prev_size = size;
             /* Apply all jobs from the joblist */
             for (job = b->joblist; NULL != job; job = job->next)
             {
@@ -1483,7 +1484,9 @@ char *pcrs_filter_response(struct client_state *csp)
                old=new;
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
+            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s produced %d hits (new size %d).",
+                      csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
+
             hits += current_hits;
          }
       }
