@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.62 2006/08/14 08:58:42 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.63 2006/08/14 13:18:08 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.62 2006/08/14 08:58:42 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.63  2006/08/14 13:18:08  david__schmidt
+ *    OS/2 compilation compatibility fixups
+ *
  *    Revision 1.62  2006/08/14 08:58:42  fabiankeil
  *    Changed include from strptime.c to strptime.h
  *
@@ -970,20 +973,13 @@ jb_err filter_header(struct client_state *csp, char **header)
 
    int i, found_filters = 0;
 
-#ifndef  MAX_AF_FILES
-# define MAX_AF_FILES 1
-# define INDEX_OR_NOT
-#else
-# define INDEX_OR_NOT [i] 
-#endif
-
    log_error(LOG_LEVEL_RE_FILTER, "Entered filter_headers");
    /*
     * Need to check the set of re_filterfiles...
     */
    for (i = 0; i < MAX_AF_FILES; i++)
    {
-      fl = csp->rlist INDEX_OR_NOT;
+      fl = csp->rlist[i];
       if (NULL != fl)
       {
          if (NULL != fl->f)
@@ -1002,12 +998,12 @@ jb_err filter_header(struct client_state *csp, char **header)
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {
-      fl = csp->rlist INDEX_OR_NOT;
+      fl = csp->rlist[i];
       if ((NULL == fl) || (NULL == fl->f))
          break;
       /*
        * For all applying +filter actions, look if a filter by that
-       * name exists and if yes, execute it's pcrs_joblist on the
+       * name exists and if yes, execute its pcrs_joblist on the
        * buffer.
        */
       for (b = fl->f; b; b = b->next)
@@ -1519,23 +1515,19 @@ jb_err server_last_modified(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER, "Randomizing: %s", *header);
       now = time(NULL);
       timeptr = gmtime(&now);
-      if ( (last_modified = parse_header_time(*header, timeptr)) < 0 )
+      if ((timeptr = parse_header_time(*header, &last_modified)) == NULL)
       {
-          log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
-          freez(*header);
+         log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
+         freez(*header);
       }
       else
       {
          rtime = difftime(now, last_modified);
          if (rtime)
          {
-#if !defined(_WIN32) && !defined(__OS2__)
-            rtime = random() % rtime + 1; 
-#else
-            rtime = rand() % (long int)(rtime + 1);
-#endif /* (ifndef _WIN32 || __OS2__) */
+            rtime = pick_from_range(rtime);
             last_modified += rtime;
-            timeptr = localtime(&last_modified);
+            timeptr = gmtime(&last_modified);
             strftime(newheader, sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr);
             freez(*header);
             *header = strdup("Last-Modified: ");
@@ -1543,7 +1535,7 @@ jb_err server_last_modified(struct client_state *csp, char **header)
 
             if (*header == NULL)
             {
-               log_error(LOG_LEVEL_ERROR, " Insufficent memory, header crunched without replacement.");
+               log_error(LOG_LEVEL_ERROR, "Insufficent memory, header crunched without replacement.");
                return JB_ERR_MEMORY;  
             }
 
@@ -2219,8 +2211,8 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
    struct tm *timeptr = NULL;
    time_t tm = 0;                  
    const char *newval;
-   time_t rtime;
-   time_t hours, minutes, seconds;
+   long int rtime;
+   long int hours, minutes, seconds;
    int negative = 0;
    char * endptr;
    
@@ -2247,28 +2239,25 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
       }
       else /* add random value */
       {
-         if ( (tm = parse_header_time(*header, timeptr)) < 0 )
+         if ((timeptr = parse_header_time(*header, &tm)) == NULL)
          {
             log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
             freez(*header);
          }
          else
          {
-            rtime = (time_t) strtol(newval, &endptr, 0);
+            rtime = strtol(newval, &endptr, 0);
+            if(rtime < 0)
+            {
+                rtime *= -1; 
+                negative = 1;
+            }
             if(rtime)
             {
                log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d hou%s)",
                   *header, rtime, (rtime == 1 || rtime == -1) ? "r": "rs");
                rtime *= 3600;
-#if !defined(_WIN32) && !defined(__OS2__)
-               rtime = random() % rtime + 1; 
-#else
-               rtime = rand() % (long int)(rtime + 1);
-#endif /* (_WIN32 || __OS2__) */
-               if(newval[0] == '-')
-               {
-                  rtime *= -1;      
-               }
+               rtime = pick_from_range(rtime);
             }
             else
             {
@@ -2276,7 +2265,7 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
                   *header);
             }
             tm += rtime;
-            timeptr = localtime(&tm);
+            timeptr = gmtime(&tm);
             strftime(newheader, sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr);
 
             freez(*header);
@@ -2285,20 +2274,15 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
 
             if (*header == NULL)
             {
-               log_error(LOG_LEVEL_HEADER, " Insufficent memory, header crunched without replacement.");
+               log_error(LOG_LEVEL_HEADER, "Insufficent memory, header crunched without replacement.");
                return JB_ERR_MEMORY;  
             }
 
             if(LOG_LEVEL_HEADER & debug) /* Save cycles if the user isn't interested. */
             {
-               if(rtime < 0)
-               {
-                  rtime *= -1; 
-                  negative = 1;
-               }
-               hours   = (int)rtime / 3600 % 24;
-               minutes = (int)rtime / 60 % 60;
-               seconds = (int)rtime % 60;            
+               hours   = rtime / 3600;
+               minutes = rtime / 60 % 60;
+               seconds = rtime % 60;            
 
                log_error(LOG_LEVEL_HEADER, "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
                   *header, (negative) ? "subtracted" : "added", hours, (hours == 1) ? "r" : "rs",
@@ -2832,26 +2816,30 @@ int strclean(const char *string, const char *substring)
  *
  * Parameters  :
  *          1  :  header = header to parse
- *          2  :  timeptr = storage for the resulting time structure 
+ *          2  :  tm = storage for the resulting time in seconds 
  *
- * Returns     :  Time in seconds since Unix epoch or -1 for failure.
+ * Returns     :  Time struct containing the header time, or
+ *                NULL in case of a parsing problem.
  *
  *********************************************************************/
-time_t parse_header_time(char *header, struct tm *timeptr) {
+struct tm *parse_header_time(char *header, time_t *tm) {
 
    char * timestring;
-   time_t tm;
-
-   tm = time(NULL);
-   timeptr = localtime(&tm);
+   struct tm * timeptr;
+   
+   *tm = 0;
+   timeptr = localtime(tm);
    /* Skipping header name */
    timestring = strstr(header, ": ");
    if (strptime(timestring, ": %a, %d %b %Y %H:%M:%S", timeptr) == NULL)
    {
-      return(-1);
+      timeptr = NULL;
    }
-   tm = mktime(timeptr);
-   return(tm);
+   else
+   {
+      *tm = timegm(timeptr);
+   }
+   return(timeptr);
 }
 
 

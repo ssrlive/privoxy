@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.29 2006/08/03 02:46:41 david__schmidt Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.30 2006/08/14 08:25:19 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,12 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.30  2006/08/14 08:25:19  fabiankeil
+ *    Split filter-headers{} into filter-client-headers{}
+ *    and filter-server-headers{}.
+ *    Added parse_header_time() to share some code.
+ *    Replaced timegm() with mktime().
+ *
  *    Revision 1.29  2006/08/03 02:46:41  david__schmidt
  *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
  *
@@ -206,7 +212,7 @@ extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf);
-time_t parse_header_time(char *header, struct tm *timeptr);
+struct tm *parse_header_time(char *header, time_t *tm);
 
 extern jb_err crumble                (struct client_state *csp, char **header);
 extern jb_err client_referrer        (struct client_state *csp, char **header);

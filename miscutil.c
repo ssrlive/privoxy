@@ -1,7 +1,7 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.37.2.4 2003/12/01 14:45:14 oes Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.39 2006/07/18 14:48:46 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/miscutil.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
  *
  * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
  *                strncmpic, chomp, and MinGW32 strdup
@@ -36,6 +36,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.37.2.4 2003/12/01 14:45:14 oes 
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.39  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.37.2.4  2003/12/01 14:45:14  oes
  *    Fixed two more problems with wildcarding in simplematch()
  *
@@ -228,6 +232,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.37.2.4 2003/12/01 14:45:14 oes 
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
+
+#ifndef HAVE_TIMEGM
+#include <time.h>
+#endif /* #ifndef HAVE_TIMEGM */
 
 #include "project.h"
 #include "miscutil.h"
@@ -1015,6 +1023,98 @@ char * make_path(const char * dir, const char * file)
    }
 #endif /* ndef AMIGA */
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  pick_from_range
+ *
+ * Description :  Pick a positive number out of a given range.
+ *                Should only be used if randomness would be nice,
+ *                but isn't really necessary.
+ *
+ * Parameters  :
+ *          1  :  range: Highest possible number to pick.
+ *
+ * Returns     :  Picked number. 
+ *
+ *********************************************************************/
+
+long int pick_from_range(long int range)
+{
+   long int number;
+#ifndef HAVE_RANDOM
+   unsigned int weak_seed;
+
+   weak_seed = (unsigned int)(time(NULL) | range);
+   srand(weak_seed);
+   /*
+    * Some rand implementations aren't that random and return mostly
+    * lower numbers. Low entropy doesn't matter for the header times, 
+    * but higher "random" factors are prefered.
+    */
+   number = (rand() * 12345) % (long int)(range + 1);
+   /* Overflows don't matter either, positive numbers do. */
+   if(number<0)
+   {
+      number*= -1;
+   }
+#else
+   number = random() % range + 1; 
+#endif /* (ifndef HAVE_RANDOM) */
+   return (number);
+}
+
+
+#ifndef HAVE_TIMEGM
+/*********************************************************************
+ *
+ * Function    :  timegm
+ *
+ * Description :  libc replacement function for the inverse of gmtime()
+ *                Copyright (C) 2004 Free Software Foundation, Inc.
+ *                Code copied from GnuPG with minor style changes.
+ *
+ * Parameters  :
+ *          1  :  tm: Broken-down time struct.
+ *
+ * Returns     :  tm converted into time_t seconds. 
+ *
+ *********************************************************************/
+
+time_t timegm(struct tm *tm)
+{
+   time_t answer;
+   char *zone;
+
+   zone=getenv("TZ");
+   putenv("TZ=UTC");
+   tzset();
+   answer=mktime(tm);
+   if(zone)
+   {
+      char *old_zone;
+
+      old_zone=malloc(3+strlen(zone)+1);
+      if(old_zone)
+      {
+         strcpy(old_zone,"TZ=");
+         strcat(old_zone,zone);
+         putenv(old_zone);	
+      }
+   }
+   else
+   {
+#ifdef HAVE_UNSETENV
+      unsetenv("TZ");
+#else
+      putenv("TZ");
+#endif
+   }
+   tzset();
+   return answer;
+}
+#endif /* (ifndef HAVE_TIMEGM) */
 
 
 /*
