@@ -2,12 +2,17 @@
 ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.3 ***
+- Windows version can be installed/started as a service
+- W32 icon stays blue when Privoxy is idle.
+- Integrated Fabian Keil's extensive patch.  See:
+  http://www.fabiankeil.de/sourcecode/privoxy/
 - Multiple filter files can now be specified in config.
 - Added jpeg filtering to defend against MS jpeg vulnerability MS04-028
 - Removed the "arbitrary" 1000 filter limit - addresses tracker #911950
 - Thanks to Jindrich Makovicka for a race condition fix for the log 
   file.  The race condition remains for non-pthread implementations.
   Reference patch #1175720.
+- A pile of assorted bug fixes, memory leaks, etc.
 
 *** Version 3.0.3 ***
 
