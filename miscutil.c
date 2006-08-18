@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.39 2006/07/18 14:48:46 david__schmidt Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.40 2006/08/17 17:15:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,22 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.39 2006/07/18 14:48:46 david__s
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.40  2006/08/17 17:15:10  fabiankeil
+ *    - Back to timegm() using GnuPG's replacement if necessary.
+ *      Using mktime() and localtime() could add a on hour offset if
+ *      the randomize factor was big enough to lead to a summer/wintertime
+ *      switch.
+ *
+ *    - Removed now-useless Privoxy 3.0.3 compatibility glue.
+ *
+ *    - Moved randomization code into pick_from_range().
+ *
+ *    - Changed parse_header_time definition.
+ *      time_t isn't guaranteed to be signed and
+ *      if it isn't, -1 isn't available as error code.
+ *      Changed some variable types in client_if_modified_since()
+ *      because of the same reason.
+ *
  *    Revision 1.39  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -1046,7 +1062,7 @@ long int pick_from_range(long int range)
 #ifndef HAVE_RANDOM
    unsigned int weak_seed;
 
-   weak_seed = (unsigned int)(time(NULL) | range);
+   weak_seed = (unsigned int)((unsigned int)time(NULL) | (unsigned int)range);
    srand(weak_seed);
    /*
     * Some rand implementations aren't that random and return mostly
