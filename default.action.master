@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.11 2006/08/02 17:36:19 david__schmidt Exp $
+#  $Id: default.action.master,v 1.12 2006/08/03 02:46:41 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -1579,6 +1579,11 @@ www.geocities.com/js_source
 #MASTER# PROBLEM-URL: http://www.dn.se/
 #MASTER# REMARKS: Can't catch by size or location
 www.dn.se
+
+{-filter{img-reorder}}
+#MASTER# PROBLEM-URL: http://images.google.com
+#MASTER# REMARKS: Google images don't show up with img-reorder on
+images.google.com
 
 {-filter{js-annoyances}}
 #MASTER# PROBLEM-URL: http://www.munichre.com/
