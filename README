@@ -31,8 +31,10 @@
  *
  *********************************************************************/
 
-This README is included with Privoxy 3.0.3. See http://www.privoxy.org/ for
-more information. The current code maturity level is "stable".
+This README is included with Privoxy 3.0.4-beta. The current code maturity
+level is "beta". Various changes and improvements are underway, and
+preparations are being made for an update of Privoxy. Please report any
+problems to the developers.
 
 -------------------------------------------------------------------------------
 
@@ -182,20 +184,6 @@ bug, but this is not required for reporting.
 You are welcome to submit ideas on new features or other proposals for
 improvement through our feature request tracker at http://sourceforge.net/
 tracker/?atid=361118&group_id=11118.
-
--------------------------------------------------------------------------------
-
-6.4. Report Ads or Other Actions-Related Problems
-
-Please send feedback on ads that slipped through, innocent images that were
-blocked, and any other problems relating to the default.action file through our
-actions feedback mechanism located at http://www.privoxy.org/actions/. On this
-page, you will also find a bookmark which will take you back there from any
-troubled site and even pre-fill the form!
-
-New, improved default.action files will occasionally be made available based on
-your feedback. These will be announced on the ijbswa-announce list and
-available from our the files section of our project page.
 
 -------------------------------------------------------------------------------
 
