@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.43 2006/08/03 02:46:41 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.44 2006/08/18 16:03:16 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.43 2006/08/03 02:46:41 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.44  2006/08/18 16:03:16  david__schmidt
+ *    Tweak for OS/2 build happiness.
+ *
  *    Revision 1.43  2006/08/03 02:46:41  david__schmidt
  *    Incorporate Fabian Keil's patch work:
  *    http://www.fabiankeil.de/sourcecode/privoxy/
@@ -271,6 +274,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.43 2006/08/03 02:46:41 david__schmi
 #include "w32log.h"
 #endif /* ndef _WIN_CONSOLE */
 #endif /* def _WIN32 */
+#ifdef _MSC_VER
+#define inline __inline
+#endif /* def _MSC_VER */
 
 #ifdef __OS2__
 #include <sys/socket.h> /* For sock_errno */
