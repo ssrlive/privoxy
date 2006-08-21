@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.75 2006/08/03 02:46:41 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.76 2006/08/14 08:25:19 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,8 +37,14 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.76  2006/08/14 08:25:19  fabiankeil
+ *    Split filter-headers{} into filter-client-headers{}
+ *    and filter-server-headers{}.
+ *    Added parse_header_time() to share some code.
+ *    Replaced timegm() with mktime().
+ *
  *    Revision 1.75  2006/08/03 02:46:41  david__schmidt
- *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+ *    Incorporate Fabian Keil's patch work: *    http://www.fabiankeil.de/sourcecode/privoxy/
  *
  *    Revision 1.74  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
@@ -847,44 +853,73 @@ struct iob
 /**
  * The most compatible set of actions - i.e. none.
  */
-#define ACTION_MOST_COMPATIBLE 0x00000000UL
+#define ACTION_MOST_COMPATIBLE                       0x00000000UL
 
 /** Action bitmap: Block the request. */
-#define ACTION_BLOCK           0x00000001UL
+#define ACTION_BLOCK                                 0x00000001UL
 /** Action bitmap: Deanimate if it's a GIF. */
-#define ACTION_DEANIMATE       0x00000002UL
+#define ACTION_DEANIMATE                             0x00000002UL
 /** Action bitmap: Downgrade HTTP/1.1 to 1.0. */
-#define ACTION_DOWNGRADE       0x00000004UL
+#define ACTION_DOWNGRADE                             0x00000004UL
 /** Action bitmap: Fast redirects. */
-#define ACTION_FAST_REDIRECTS  0x00000008UL
+#define ACTION_FAST_REDIRECTS                        0x00000008UL
 /** Action bitmap: Remove existing "Forwarded" header, and do not add another. */
-#define ACTION_HIDE_FORWARDED  0x00000010UL
+#define ACTION_HIDE_FORWARDED                        0x00000010UL
 /** Action bitmap: Hide "From" header. */
-#define ACTION_HIDE_FROM       0x00000020UL
+#define ACTION_HIDE_FROM                             0x00000020UL
 /** Action bitmap: Hide "Referer" header.  (sic - follow HTTP, not English). */
-#define ACTION_HIDE_REFERER    0x00000040UL
+#define ACTION_HIDE_REFERER                          0x00000040UL
 /** Action bitmap: Hide "User-Agent" and similar headers. */
-#define ACTION_HIDE_USER_AGENT 0x00000080UL
+#define ACTION_HIDE_USER_AGENT                       0x00000080UL
 /** Action bitmap: This is an image. */
-#define ACTION_IMAGE           0x00000100UL
+#define ACTION_IMAGE                                 0x00000100UL
 /** Action bitmap: Sets the image blocker. */
-#define ACTION_IMAGE_BLOCKER   0x00000200UL
+#define ACTION_IMAGE_BLOCKER                         0x00000200UL
 /** Action bitmap: Prevent compression. */
-#define ACTION_NO_COMPRESSION  0x00000400UL
+#define ACTION_NO_COMPRESSION                        0x00000400UL
 /** Action bitmap: Change cookies to session only cookies. */
-#define ACTION_NO_COOKIE_KEEP  0x00000800UL
+#define ACTION_NO_COOKIE_KEEP                        0x00000800UL
 /** Action bitmap: Block rending cookies. */
-#define ACTION_NO_COOKIE_READ  0x00001000UL
+#define ACTION_NO_COOKIE_READ                        0x00001000UL
 /** Action bitmap: Block setting cookies. */
-#define ACTION_NO_COOKIE_SET   0x00002000UL
+#define ACTION_NO_COOKIE_SET                         0x00002000UL
 /** Action bitmap: Filter out popups. */
-#define ACTION_NO_POPUPS       0x00004000UL
+#define ACTION_NO_POPUPS                             0x00004000UL
 /** Action bitmap: Send a vanilla wafer. */
-#define ACTION_VANILLA_WAFER   0x00008000UL
+#define ACTION_VANILLA_WAFER                         0x00008000UL
 /** Action bitmap: Limit CONNECT requests to safe ports. */
-#define ACTION_LIMIT_CONNECT   0x00010000UL
+#define ACTION_LIMIT_CONNECT                         0x00010000UL
 /** Action bitmap: Inspect if it's a JPEG. */
-#define ACTION_JPEG_INSPECT    0x00020000UL
+#define ACTION_JPEG_INSPECT                          0x00020000UL
+/** Action bitmap: Crunch or modify "if-modified-since" header. */
+#define ACTION_HIDE_IF_MODIFIED_SINCE                0x00040000UL
+/** Action bitmap: Overwrite Content-Type header. */
+#define ACTION_CONTENT_TYPE_OVERWRITE                0x00080000UL
+/** Action bitmap: Crunch specified server header. */
+#define ACTION_CRUNCH_SERVER_HEADER                  0x00100000UL
+/** Action bitmap: Crunch specified client header */
+#define ACTION_CRUNCH_CLIENT_HEADER                  0x00200000UL
+/** Action bitmap: Enable text mode by force */
+#define ACTION_FORCE_TEXT_MODE                       0x00400000UL
+/** Action bitmap: Enable text mode by force */
+#define ACTION_CRUNCH_IF_NONE_MATCH                  0x00800000UL
+/** Action bitmap: Enable content-dispostion crunching */
+#define ACTION_HIDE_CONTENT_DISPOSITION              0x01000000UL
+/** Action bitmap: Replace or block Last-Modified header */
+#define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
+/** Action bitmap: Replace or block Accept-Language header */
+#define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
+/** Action bitmap: Block as empty document */
+#define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
+/** Action bitmap: Redirect request. */
+#define  ACTION_REDIRECT                             0x10000000UL
+/** Action bitmap: Answer blocked Connects verbosely */
+#define ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS  0x20000000UL
+/** Action bitmap: Filter server headers with pcre */
+#define ACTION_FILTER_SERVER_HEADERS                 0x40000000UL
+/** Action bitmap: Filter client headers with pcre */
+#define ACTION_FILTER_CLIENT_HEADERS                 0x80000000UL
+
 
 /** Action string index: How to deanimate GIFs */
 #define ACTION_STRING_DEANIMATE             0
@@ -918,40 +953,6 @@ struct iob
 #define ACTION_STRING_FAST_REDIRECTS       14
 /** Number of string actions. */
 #define ACTION_STRING_COUNT                15
-
-/*
- * These defines really belong a few lines higher,
- * but moving them down here makes this patch apply
- * against Privoxy 3.0.3 as well.
- */
-/** Action bitmap: Crunch or modify "if-modified-since" header. */
-#define ACTION_HIDE_IF_MODIFIED_SINCE                0x00040000UL
-/** Action bitmap: Overwrite Content-Type header. */
-#define ACTION_CONTENT_TYPE_OVERWRITE                0x00080000UL
-/** Action bitmap: Crunch specified server header. */
-#define ACTION_CRUNCH_SERVER_HEADER                  0x00100000UL
-/** Action bitmap: Crunch specified client header */
-#define ACTION_CRUNCH_CLIENT_HEADER                  0x00200000UL
-/** Action bitmap: Enable text mode by force */
-#define ACTION_FORCE_TEXT_MODE                       0x00400000UL
-/** Action bitmap: Enable text mode by force */
-#define ACTION_CRUNCH_IF_NONE_MATCH                  0x00800000UL
-/** Action bitmap: Enable content-dispostion crunching */
-#define ACTION_HIDE_CONTENT_DISPOSITION              0x01000000UL
-/** Action bitmap: Replace or block Last-Modified header */
-#define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
-/** Action bitmap: Replace or block Accept-Language header */
-#define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
-/** Action bitmap: Block as empty document */
-#define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
-/** Action bitmap: Redirect request. */
-#define  ACTION_REDIRECT                             0x10000000UL
-/** Action bitmap: Answer blocked Connects verbosely */
-#define ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS  0x20000000UL
-/** Action bitmap: Filter server headers with pcre */
-#define ACTION_FILTER_SERVER_HEADERS                 0x40000000UL
-/** Action bitmap: Filter client headers with pcre */
-#define ACTION_FILTER_CLIENT_HEADERS                 0x80000000UL
 
 
 /*To make the ugly hack in sed easier to understand*/
