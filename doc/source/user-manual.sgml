@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.11 2006/07/18 14:48:51 david__schmidt Exp $
+ $Id: user-manual.sgml,v 2.12 2006/08/14 08:40:39 fabiankeil Exp $
 
  Copyright (C) 2001- 2003 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.11 2006/07/18 14:48:51 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.12 2006/08/14 08:40:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2395,11 +2395,11 @@ www.example.net/*.style
     <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
     and create your own filter.
    </para>
-   <para>
     <warning>
-     Don't block any header without understanding the consequences.
+     <para>
+      Don't block any header without understanding the consequences.
+     </para>
     </warning>
-   </para>
   </listitem>
  </varlistentry>
 
@@ -2627,11 +2627,11 @@ www.example.net/*.style
     <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
     and create your own filter.
    </para>
-   <para>
     <warning>
+     <para>
      Don't block any header without understanding the consequences.
+     </para>
     </warning>
-   </para>
   </listitem>
  </varlistentry>
 
@@ -3181,7 +3181,7 @@ problem-host.example.com</screen>
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Force <application>Privoxy</application> to treat a document as if it was in some kind of text format.</emphasis></para>
+   <para>Force <application>Privoxy</application> to treat a document as if it was in some kind of <emphasis>text</emphasis> format.   </para>
   </listitem>
  </varlistentry>
 
@@ -3265,7 +3265,7 @@ problem-host.example.com</screen>
     If the <literal><link linkend="block">block</link></literal> action <emphasis>also applies</emphasis>,
     the presence or absence of this mark decides whether an HTML <quote>blocked</quote>
     page, or an empty document will be sent to the client as a substitute for the blocked content.
-    The <q>empty</q> document isn't literally empty, but actually contains a single space.
+    The <emphasis>empty</emphasis> document isn't literally empty, but actually contains a single space.
    </para>
   </listitem>
  </varlistentry>
@@ -3624,7 +3624,7 @@ ad.doubleclick.net
     browser to use a cached copy of the page.
    </para>
    <para>
-    Instead of removing the header, <literal>hide-if-modified-since<literal> can
+    Instead of removing the header, <literal>hide-if-modified-since</literal> can
     also add or substract a random amount of time to/from the headers value.
     You specify a range of hours were the random factor should be chosen from and
     <application>Privoxy</application> does the rest. A negative value means
@@ -4841,6 +4841,7 @@ my-internal-testing-server.void</screen>
 
  <varlistentry>
   <term>Example usage:</term>
+  <listitem>
    <para>
     <screen>+treat-forbidden-connects-like-blocks</screen>
    </para>
@@ -6265,6 +6266,22 @@ pre-defined filters for your convenience:
   </listitem>
  </varlistentry>
 
+ <varlistentry id="filter-server-headers">
+  <term><emphasis>filter-server-headers</emphasis></term>
+  <listitem>
+   <para>
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry id="filter-client-headers">
+  <term><emphasis>filter-client-headers</emphasis></term>
+  <listitem>
+   <para>
+   </para>
+  </listitem>
+ </varlistentry>
+
 <!--
  <varlistentry>
   <term><emphasis> </emphasis></term>
@@ -7374,6 +7391,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.12  2006/08/14 08:40:39  fabiankeil
+ Documented new actions that were part of
+ the "minor Privoxy improvements".
+
  Revision 2.11  2006/07/18 14:48:51  david__schmidt
  Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  with what was really the latest development (the v_3_0_branch branch)
