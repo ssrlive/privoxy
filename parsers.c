@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.63 2006/08/14 13:18:08 david__schmidt Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.64 2006/08/17 17:15:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,22 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.63 2006/08/14 13:18:08 david__sch
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.64  2006/08/17 17:15:10  fabiankeil
+ *    - Back to timegm() using GnuPG's replacement if necessary.
+ *      Using mktime() and localtime() could add a on hour offset if
+ *      the randomize factor was big enough to lead to a summer/wintertime
+ *      switch.
+ *
+ *    - Removed now-useless Privoxy 3.0.3 compatibility glue.
+ *
+ *    - Moved randomization code into pick_from_range().
+ *
+ *    - Changed parse_header_time definition.
+ *      time_t isn't guaranteed to be signed and
+ *      if it isn't, -1 isn't available as error code.
+ *      Changed some variable types in client_if_modified_since()
+ *      because of the same reason.
+ *
  *    Revision 1.63  2006/08/14 13:18:08  david__schmidt
  *    OS/2 compilation compatibility fixups
  *
@@ -1659,7 +1675,7 @@ jb_err client_referrer(struct client_state *csp, char **header)
    const char *newval;
    const char *host;
    char *referer;
-   int hostlenght;
+   size_t hostlenght;
  
 #ifdef FEATURE_FORCE_LOAD
    /* Since the referrer can include the prefix even
@@ -1717,7 +1733,7 @@ jb_err client_referrer(struct client_state *csp, char **header)
           *if www.example.org/www.example.com-shall-see-the-referer/
           *links to www.example.com/
           */
-         referer[hostlenght+17] = '\n';
+         referer[hostlenght+17] = '\0';
       }
       if ( 0 == strstr(referer, host)) /*Host has changed*/
       {
