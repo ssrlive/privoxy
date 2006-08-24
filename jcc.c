@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.96 2006/08/15 20:12:36 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.97 2006/08/18 15:23:17 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,27 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.96 2006/08/15 20:12:36 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.97  2006/08/18 15:23:17  david__schmidt
+ *    Windows service (re-)integration
+ *
+ *    The new args are:
+ *
+ *    --install[:service_name]
+ *    --uninstall[:service_name]
+ *    --service
+ *
+ *    They work as follows:
+ *    --install will create a service for you and then terminate.
+ *    By default the service name will be "privoxy" (without the quotes).
+ *    However you can run multiple services if you wish, just by adding
+ *    a colon and then a name (no spaces).
+ *
+ *    --uninstall follows the exact same rules a --install.
+ *
+ *    --service is used when the program is executed by the service
+ *    control manager, and in normal circumstances would never be
+ *    used as a command line argument.
+ *
  *    Revision 1.96  2006/08/15 20:12:36  david__schmidt
  *    Windows service integration
  *
@@ -2135,7 +2156,7 @@ int main(int argc, const char *argv[])
    
    if (NULL != pw)
    {
-      if (((NULL != grp) && setgid(grp->gr_gid)) || (setgid(pw->pw_gid)))
+      if (setgid((NULL != grp) ? grp->gr_gid : pw->pw_gid))
       {
          log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
       }
