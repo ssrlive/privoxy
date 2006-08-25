@@ -3,19 +3,22 @@
 
 Current Developement Team:
 
- Hal Burgiss (docs)
- Andreas Oesterhelt
- David Schmidt (OS/2, Mac OSX ports)
+ David Schmidt
+ Fabian Keil
  
+Current Contributors:
 
-
-Current and Former Project Contributors:
-
+ Hal Burgiss
  Johny Agotnes 
- Rodrigo Barbosa (RPM specfiles)
  Moritz Barsnick
- Brian Dessent
  Mattes Dolak 
+ Roland Rosenfeld
+
+Former Project Developers and Contributors:
+
+ Andreas Oesterhelt
+ Rodrigo Barbosa (RPM specfiles)
+ Brian Dessent
  Jon Foster
  Karsten Hopp (Red Hat)
  Alexander Lazic
@@ -24,7 +27,6 @@ Current and Former Project Contributors:
  Adam Lock (Win32)
  Guy Laroche
  Haroon Rafique
- Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
  Thomas Steudten
  Joerg Strohmayer (Amiga)
@@ -47,7 +49,6 @@ suggestions. These include (in alphabetical order):
  Andrew J. Caines
  Clifford Caoile
  Michael T. Davis
- Brian Dessent
  Peter E
  Aaron Hamid
  Magnus Holmgren
