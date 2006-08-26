@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 1.13.2.7 2003/03/26 02:06:21 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 2.5 2006/07/18 14:48:51 david__schmidt Exp $
 
  Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -42,10 +42,10 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version "3.0.2">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-version "3.0.4">
+<!entity p-status "BETA">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
 <!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
 <!entity my-copy "(C)">               <!-- db2man barfs on copyright symbol  -->
@@ -53,7 +53,7 @@
 
 <refentry id="privoxy">
 <refentryinfo>
- <date>2002-05-14</date>
+ <date>2006-08-24</date>
 </refentryinfo>
 <refmeta>
  <refentrytitle>privoxy</refentrytitle> 
@@ -223,21 +223,18 @@
  <filename>default.filter</filename>, and
  <filename>default.action</filename>. <filename>user.action</filename> should 
  be used for locally defined exceptions to the default rules of
- <filename>default.action</filename> These are all well commented.  On Unix
+ <filename>default.action</filename>, and <filename>user.filter</filename> for 
+ locally defined filters. These are well commented.  On Unix
  and Unix-like systems, these are located in
  <filename>/etc/privoxy/</filename> by default. On Windows, OS/2 and AmigaOS,
  these files are in the same directory as the <command>Privoxy</command>
  executable.
 </para>
 <para>
- The name and number of configuration files has changed from previous
- versions<![%p-not-stable;[, and is subject to change as development
- progresses]]>. In fact, the configuration itself is changed  and  much more
- sophisticated. See the <ulink
+ See the <ulink
  url="http://www.privoxy.org/user-manual/">user-manual</ulink> for a complete
- explanation of all configuration options and general usage, and notes for 
- upgrading from <command>Junkbuster</command> and earlier <command>Privoxy</command>
- versions.
+ explanation of general usage, configuration options, new features and notes for 
+ upgrading.
 </para>
 <para>
  The actions list (ad blocks, etc) can also be configured with your
@@ -273,25 +270,38 @@
  { \
  -add-header \
  -block \
+ -content-type-overwrite \
+ -crunch-if-none-match \
+ +crunch-incoming-cookies \
+ +crunch-outgoing-cookies \
+ +crunch-server-header {no-cache} \
  +deanimate-gifs{last} \
  -downgrade-http-version \
  -fast-redirects \
- +filter{html-annoyances} \
- +filter{js-annoyances} \
+ -force-text-mode \
+ -filter{html-annoyances} \
+ -filter{js-annoyances} \
  +filter{content-cookies} \
  +filter{webbugs} \
- +filter{banners-by-size} \
+ -filter{banners-by-size} \
+ -handle-as-empty-document \
+ +hide-accept-language{en-ca} \
+ +hide-content-disposition {block} \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \
+ +hide-if-modified-since {-1} \
  +hide-referrer{forge} \
  -hide-user-agent \
  -handle-as-image \
+ -inspect-jpegs \
+ -kill-popups \
  +set-image-blocker{pattern} \
  -limit-connect \
+ +overwrite-last-modified {randomize} \
  +prevent-compression \
  +session-cookies-only \
+ +treat-forbidden-connects-like-blocks \
  -crunch-cookies \
- -kill-popups \
  }
  /   # '/' Matches *all* URL patterns
  
@@ -365,6 +375,7 @@
  <filename>/etc/privoxy/standard.action</filename>
  <filename>/etc/privoxy/user.action</filename>
  <filename>/etc/privoxy/default.filter</filename>
+ <filename>/etc/privoxy/user.filter</filename>
  <filename>/etc/privoxy/trust</filename>
  <filename>/etc/privoxy/templates/*</filename>
  <filename>/var/log/privoxy/logfile</filename>
@@ -403,7 +414,7 @@
 </para>]]>
 <para>
  Please see the <citetitle>User Manual</citetitle> on how to contact the
- developers for feature requests, reporting problems, and other questions.
+ developers, for feature requests, reporting problems, and other questions.
 </para>
 
 </refsect1>

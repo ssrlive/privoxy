@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "31 Januar 2004" "Privoxy 3.0.3" ""
+.TH "PRIVOXY" "1" "25 August 2006" "Privoxy 3.0.4 BETA" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -94,18 +94,16 @@ files. The default configuration files are: \fIconfig\fR,
 \fIdefault.filter\fR, and
 \fIdefault.action\fR. \fIuser.action\fR should 
 be used for locally defined exceptions to the default rules of
-\fIdefault.action\fR These are all well commented.  On Unix
+\fIdefault.action\fR, and \fIuser.filter\fR for 
+locally defined filters. These are well commented.  On Unix
 and Unix-like systems, these are located in
 \fI/etc/privoxy/\fR by default. On Windows, OS/2 and AmigaOS,
 these files are in the same directory as the \fBPrivoxy\fR
 executable.
 .PP
-The name and number of configuration files has changed from previous
-versions. In fact, the configuration itself is changed  and  much more
-sophisticated. See the user-manual for a complete
-explanation of all configuration options and general usage, and notes for 
-upgrading from \fBJunkbuster\fR and earlier \fBPrivoxy\fR
-versions.
+See the user-manual for a complete
+explanation of general usage, configuration options, new features and notes for 
+upgrading.
 .PP
 The actions list (ad blocks, etc) can also be configured with your
 web browser at http://config.privoxy.org/.
@@ -134,25 +132,38 @@ configuration might look like:
  { \\
  -add-header \\
  -block \\
+ -content-type-overwrite \\
+ -crunch-if-none-match \\
+ +crunch-incoming-cookies \\
+ +crunch-outgoing-cookies \\
+ +crunch-server-header {no-cache} \\
  +deanimate-gifs{last} \\
  -downgrade-http-version \\
  -fast-redirects \\
- +filter{html-annoyances} \\
- +filter{js-annoyances} \\
+ -force-text-mode \\
+ -filter{html-annoyances} \\
+ -filter{js-annoyances} \\
  +filter{content-cookies} \\
  +filter{webbugs} \\
- +filter{banners-by-size} \\
+ -filter{banners-by-size} \\
+ -handle-as-empty-document \\
+ +hide-accept-language{en-ca} \\
+ +hide-content-disposition {block} \\
  +hide-forwarded-for-headers \\
  +hide-from-header{block} \\
+ +hide-if-modified-since {-1} \\
  +hide-referrer{forge} \\
  -hide-user-agent \\
  -handle-as-image \\
+ -inspect-jpegs \\
+ -kill-popups \\
  +set-image-blocker{pattern} \\
  -limit-connect \\
+ +overwrite-last-modified {randomize} \\
  +prevent-compression \\
  +session-cookies-only \\
+ +treat-forbidden-connects-like-blocks \\
  -crunch-cookies \\
- -kill-popups \\
  }
  /   # '/' Matches *all* URL patterns
  
@@ -216,6 +227,7 @@ configuration options.
  \fI/etc/privoxy/standard.action\fR
  \fI/etc/privoxy/user.action\fR
  \fI/etc/privoxy/default.filter\fR
+ \fI/etc/privoxy/user.filter\fR
  \fI/etc/privoxy/trust\fR
  \fI/etc/privoxy/templates/*\fR
  \fI/var/log/privoxy/logfile\fR
@@ -235,8 +247,11 @@ config file changes by \fBSIGHUP\fR -- it will detect them
 automatically. 
 .SH "NOTES"
 .PP
+This is a BETA version of \fBPrivoxy\fR. Not 
+all features are well tested.
+.PP
 Please see the \fIUser Manual\fR on how to contact the
-developers for feature requests, reporting problems, and other questions.
+developers, for feature requests, reporting problems, and other questions.
 .SH "SEE ALSO"
 .PP
 Other references and sites of interest to \fBPrivoxy\fR
@@ -283,15 +298,13 @@ the \fBPrivoxy\fR developer manual.
 .SH "DEVELOPMENT TEAM"
 
 .nf
- Hal Burgiss (docs)
- Andreas Oesterhelt
- David Schmidt (OS/2, Mac OSX ports)
+ David Schmidt
+ Fabian Keil
 
- Johny Agotnes 
+
+ Andreas Oesterhelt
  Rodrigo Barbosa (RPM specfiles)
- Moritz Barsnick
  Brian Dessent
- Mattes Dolak 
  Jon Foster
  Karsten Hopp (Red Hat)
  Alexander Lazic
@@ -300,7 +313,6 @@ the \fBPrivoxy\fR developer manual.
  Adam Lock (Win32)
  Guy Laroche
  Haroon Rafique
- Roland Rosenfeld (Debian)
  Georg Sauthoff (Gentoo)
  Thomas Steudten
  Joerg Strohmayer (Amiga)
@@ -312,7 +324,7 @@ the \fBPrivoxy\fR developer manual.
 .SH "COPYRIGHT AND LICENSE"
 .SS "COPYRIGHT"
 .PP
-Copyright (C) 2001 - 2004 by Privoxy Developers <developers@privoxy.org>
+Copyright (C) 2001 - 2006 by Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
 .PP
 Some source code is based on code Copyright (C) 1997 by Anonymous Coders
 and Junkbusters, Inc. and licensed under the \fIGNU General Public
