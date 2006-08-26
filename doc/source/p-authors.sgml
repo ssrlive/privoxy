@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 1.8.2.14 2003/12/03 13:02:51 hal9 Exp $
+ $Id: p-authors.sgml,v 2.9 2006/07/18 14:48:51 david__schmidt Exp $
 
- Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001, 2002-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ======================================================================
@@ -24,47 +24,52 @@
 -->
 <![%p-authors-formal;[
 <para>
- Current Developement Team:
+Current Developement Team:
 </para>
 ]]>
 
 <literallayout>
- Hal Burgiss (docs)
- Andreas Oesterhelt
- David Schmidt (OS/2, Mac OSX ports)
-<![%p-authors-formal;[
- ]]>
+ David Schmidt
+ Fabian Keil
 
 <![%p-authors-formal;[
+Current Contributors:
+]]>
+
+ Hal Burgiss
+ Johny Agotnes 
+ Moritz Barsnick
+ Mattes Dolak 
+ Roland Rosenfeld
+<![%p-authors-formal;[
+
 </literallayout>
 
 <para>
- Current and Former Project Contributors:
+ Former Project Developers and Contributors:
 </para>
 
 <literallayout>
-]]>
- Johny Agotnes 
- Rodrigo Barbosa (RPM specfiles)
- Moritz Barsnick
+ 
+ Andreas Oesterhelt
+ Rodrigo Barbosa
  Brian Dessent
- Mattes Dolak 
  Jon Foster
- Karsten Hopp (Red Hat)
+ Karsten Hopp
  Alexander Lazic
  Daniel Leite
  Gábor Lipták
- Adam Lock (Win32)
+ Adam Lock
  Guy Laroche
  Haroon Rafique
- Roland Rosenfeld (Debian)
- Georg Sauthoff (Gentoo)
+ Georg Sauthoff
  Thomas Steudten
- Joerg Strohmayer (Amiga)
+ Joerg Strohmayer
  Rodney Stromlund
  Sviatoslav Sviridov
  Sarantis Paskalis
  Stefan Waldherr
+]]>
 </literallayout>
 
 <![%p-authors-formal;[
