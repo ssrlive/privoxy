@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.3 2006/07/18 14:48:50 david__schmidt Exp $
+ $Id: contacting.sgml,v 2.4 2006/08/27 15:04:14 hal9 Exp $
 
  Copyright (C) 2001 - 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -49,7 +49,50 @@
 
 </sect2>
 
-<sect2 id="contact-bugs"><title>Report Bugs</title>
+<sect2 id="reporting"><title>Reporting Problems</title>
+<para>
+<quote>Problems</quote> for our purposes, come in two forms:
+</para>
+ <itemizedlist>
+
+  <listitem>
+   <para>
+    Configuration issues, such as ads that slip through, or sites that 
+    don't function properly due to one <application>Privoxy</application> 
+    <quote>action</quote> or another being turned <quote>on</quote>.
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    <quote>Bugs</quote> in the programming code that makes up 
+    <application>Privoxy</application>, such as that might cause a crash.
+   </para>
+  </listitem> 
+</itemizedlist>
+
+
+<sect3 id="contact-ads"><title>Reporting Ads or Other Configuration Problems</title>
+<para>
+ Please send feedback on ads that slipped through, innocent images that were
+ blocked, and any other configuration related problem of 
+ <filename>default.action</filename> file, to the 
+ <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers mailing 
+ list</ulink>.
+</para> 
+
+<para>
+ New, improved <filename>default.action</filename> files may occasionally be made
+ available based on your feedback. These will be announced on the <ulink
+ url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
+ list and available from our the <ulink
+ url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
+ our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
+</para>
+</sect3>
+
+
+<sect3 id="contact-bugs"><title>Reporting Bugs</title>
 <para>
  Please report all bugs <emphasis>only</emphasis> through our
  bug tracker: 
@@ -109,14 +152,6 @@ Please be sure to provide the following information:
 
   <listitem>
    <para>
-    Any other pertinent information to help identify the problem such as config
-    or log file excerpts (yes, you should have log file entries for each
-    action taken).
-   </para>
-  </listitem> 
-
-  <listitem>
-   <para>
     The URL where the problem occurred, or some way for us to duplicate the
     problem (e.g. <literal>http://somesite.example.com?somethingelse=123</literal>). 
    </para>
@@ -130,6 +165,28 @@ Please be sure to provide the following information:
    </para>
   </listitem> 
 
+  <listitem>
+   <para>
+    Whether you are using <application>Privoxy</application> in tandem with 
+    another proxy such as <application>TOR</application>. If so, please try 
+    disabling the other proxy.
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    Whether you are using a personal firewall product. If so, does 
+    <application>Privoxy</application> work without it?
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    Any other pertinent information to help identify the problem such as config
+    or log file excerpts (yes, you should have log file entries for each
+    action taken).
+   </para>
+  </listitem> 
 
   <listitem>
    <para>
@@ -138,7 +195,6 @@ Please be sure to provide the following information:
    </para>
   </listitem> 
 
-
 </itemizedlist>
 </para>
 <para>
@@ -146,6 +202,7 @@ Please be sure to provide the following information:
   of the user manual</ulink> also has helpful information 
   on understanding <literal>actions</literal>, and <literal>action</literal> debugging. 
 </para>
+</sect3>
 </sect2>
 
 <sect2 id="contact-feature"><title>Request New Features</title>
@@ -153,25 +210,6 @@ Please be sure to provide the following information:
  You are welcome to submit ideas on new features or other proposals
  for improvement through our feature request tracker at
  <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118">http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118</ulink>.
-</para>
-</sect2>
-
-<sect2 id="contact-ads"><title>Report Ads or Other Actions-Related Problems</title>
-<para>
- Please send feedback on ads that slipped through, innocent images that were
- blocked, and any other configuration related problems of 
- <filename>default.action</filename> file, to the 
- <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers mailing 
- list</ulink>.
-</para> 
-
-<para>
- New, improved <filename>default.action</filename> files may occasionally be made
- available based on your feedback. These will be announced on the <ulink
- url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
- list and available from our the <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
- our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
 </para>
 </sect2>
 
