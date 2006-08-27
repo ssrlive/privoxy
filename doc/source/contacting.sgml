@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 1.15.2.3 2004/01/30 12:34:33 oes Exp $
+ $Id: contacting.sgml,v 2.3 2006/07/18 14:48:50 david__schmidt Exp $
 
- Copyright (C) 2001 - 2004 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001 - 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ======================================================================
@@ -57,7 +57,7 @@
 </para>
 
 <para>
-  Before doing so, please make sure that the bug has not already been submitted
+  Before doing so, please make sure that the bug has <emphasis>not already been submitted</emphasis>
   and observe the additional hints at the top of the <ulink
   url="http://sourceforge.net/tracker/?func=add&amp;group_id=11118&amp;atid=111118">submit
   form</ulink>.
@@ -68,18 +68,83 @@
   and not a browser or site bug first. If unsure,
   try <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&amp;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">toggling
   off</ulink> <application>Privoxy</application>, and see if the problem persists.
-  The <ulink url="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
-  of the user manual</ulink> also has helpful information 
-  on action debugging. If you are using your own custom configuration, please try
+  If you are using your own custom configuration, please try
   the stock configs to see if the problem is configuration related.
 </para>
 
 <para>
-  If not using the latest version, chances are that the bug has been found
+  If not using the latest version, the bug may have been found
   and fixed in the meantime. We would appreciate if you could take the time
   to <ulink url="http://www.privoxy.org/user-manual/installation.html">upgrade
   to the latest version</ulink> (or  even the latest CVS snapshot) and verify
-  your bug, but this is not required for reporting.
+  your bug.
+</para>
+<para>
+Please be sure to provide the following information:
+</para>
+<para>
+ <itemizedlist>
+
+  <listitem>
+   <para>
+    The exact <application>Privoxy</application> version of the proxy software
+(if you got the source from CVS, please also give the date).
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    The operating system and verions you run
+    <application>Privoxy</application> on, (e.g. <application>Windows
+    XP</application>).
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    The name, platform, and version of the <application>browser</application> 
+    you were using (e.g. <application>Internet Explorer v5.5</application> for Mac).
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+    Any other pertinent information to help identify the problem such as config
+    or log file excerpts (yes, you should have log file entries for each
+    action taken).
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    The URL where the problem occurred, or some way for us to duplicate the
+    problem (e.g. <literal>http://somesite.example.com?somethingelse=123</literal>). 
+   </para>
+  </listitem> 
+
+  <listitem>
+   <para>
+    Whether your version of <application>Privoxy</application> is one supplied
+    by the developers of <application>Privoxy</application> via SourceForge,
+    or somewhere else.
+   </para>
+  </listitem> 
+
+
+  <listitem>
+   <para>
+    <emphasis>Please provide your SF login, or email address</emphasis>, in case we 
+    need to contact you.
+   </para>
+  </listitem> 
+
+
+</itemizedlist>
+</para>
+<para>
+  The <ulink url="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
+  of the user manual</ulink> also has helpful information 
+  on understanding <literal>actions</literal>, and <literal>action</literal> debugging. 
 </para>
 </sect2>
 
@@ -93,16 +158,15 @@
 
 <sect2 id="contact-ads"><title>Report Ads or Other Actions-Related Problems</title>
 <para>
- Please send feedback on ads that slipped through, innocent images that were blocked,
- and any other problems relating to the <filename>default.action</filename> file through
- our actions feedback mechanism located at
- <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">http://www.privoxy.org/actions/</ulink>.
- On this page, you will also find a bookmark which will take you back there from
- any troubled site and even pre-fill the form!
+ Please send feedback on ads that slipped through, innocent images that were
+ blocked, and any other configuration related problems of 
+ <filename>default.action</filename> file, to the 
+ <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers mailing 
+ list</ulink>.
 </para> 
 
 <para>
- New, improved <filename>default.action</filename> files will occasionally be made
+ New, improved <filename>default.action</filename> files may occasionally be made
  available based on your feedback. These will be announced on the <ulink
  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
  list and available from our the <ulink
