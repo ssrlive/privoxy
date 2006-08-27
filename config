@@ -2,7 +2,7 @@
 #  
 #  Copyright (C) 2001-2004 Privoxy Developers http://privoxy.org
 #  
-#  $Id: config,v 1.48 2006/08/03 02:46:41 david__schmidt Exp $
+#  $Id: config,v 1.49 2006/08/12 04:03:40 david__schmidt Exp $
 #  
 ####################################################################
 #                                                                  #
@@ -277,17 +277,21 @@ logfile logfile
 #  
 #  Default value:
 #  
-#      jarfile (Unix) or privoxy.jar (Windows)
+#      Unset (commented out). When activated: jarfile (Unix)
+#      or privoxy.jar (Windows)
 #  
 #  Effect if unset:
 #  
-#      Intercepted cookies are not stored at all.
+#      Intercepted cookies are not stored in a dedicated file.
 #  
 #  Notes:
 #  
 #      The jarfile may grow to ridiculous sizes over time.
+#
+#      If debug 8 (show header parsing) is enabled, cookies are
+#      written to the logfile with the rest of the headers.
 #  
-jarfile jarfile
+#jarfile jarfile
 
 #  
 #  1.7. trustfile
@@ -660,7 +664,7 @@ debug   8192 # Errors - *we highly recommended enabling this*
 #  
 #        listen-address  192.168.0.1:8118
 #  
-listen-address  :8118
+listen-address  127.0.0.1:8118
 
 #  
 #  4.2. toggle
@@ -1007,7 +1011,28 @@ buffer-limit 4096
 #      HTTP parent looks like this:
 #  
 #        forward-socks4   /               socks-gw.example.com:1080  .
+#
+#      To chain Privoxy and Tor, both running on the same system,
+#      you should use the rule:
 #  
+#        forward-socks4a             /     127.0.0.1:9050 .
+#
+#      The public Tor network can't be used to reach your local network,
+#      therefore it's a good idea to make some exceptions:
+#
+#        forward         192.168.*.*/     .
+#        forward            10.*.*.*/     .
+#        forward           127.*.*.*/     .
+#
+#      Unencrypted connections to systems in these address ranges will
+#      be as (un)secure as the local network is, but the alternative is
+#      that you can't reach the network at all.
+#
+#      If you also want to be able to reach servers in your local
+#      network by using their names, you will need additional
+#      exceptions that look like this:
+#
+#        forward           localhost/     .
 
 #  
 #  6. WINDOWS GUI OPTIONS
