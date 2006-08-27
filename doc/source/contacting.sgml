@@ -75,10 +75,11 @@
 <sect3 id="contact-ads"><title>Reporting Ads or Other Configuration Problems</title>
 <para>
  Please send feedback on ads that slipped through, innocent images that were
- blocked, and any other configuration related problem of 
+ blocked, sites that don't work properly, and other configuration related problem of 
  <filename>default.action</filename> file, to the 
- <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers mailing 
- list</ulink>.
+ <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">
+ http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>,
+ the Actions File Tracker.
 </para> 
 
 <para>
@@ -96,14 +97,15 @@
 <para>
  Please report all bugs <emphasis>only</emphasis> through our
  bug tracker: 
- <ulink url="http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118">http://sourceforge.net/tracker/?group_id=11118&#38;atid=111118</ulink>. 
+ <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118">http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118</ulink>. 
 </para>
 
 <para>
   Before doing so, please make sure that the bug has <emphasis>not already been submitted</emphasis>
   and observe the additional hints at the top of the <ulink
   url="http://sourceforge.net/tracker/?func=add&amp;group_id=11118&amp;atid=111118">submit
-  form</ulink>.
+  form</ulink>. If already submitted, please feel free to add any info to the 
+  original report that might help solve the issue.
 </para>
 
 <para> 
