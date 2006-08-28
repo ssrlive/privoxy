@@ -5,13 +5,33 @@ ChangeLog for Privoxy
 - Windows version can be installed/started as a service
 - W32 icon stays blue when Privoxy is idle.
 - Integrated Fabian Keil's extensive patch.  See:
-  http://www.fabiankeil.de/sourcecode/privoxy/
+  http://www.fabiankeil.de/sourcecode/privoxy/. Includes the 
+  following new actions (among many other improvements):
+
+     crunch-client-header{string}
+     crunch-server-header{string}
+     hide-accept-language{}
+     content-type-overwrite{}
+     force-text-mode
+     hide-content-disposition{}
+     overwrite-last-modified{}
+     hide-if-modified-since
+     crunch-if-none-match
+     hide-referrer{conditional-block}
+     redirect{URL}
+     handle-as-empty-document
+     fast-redirects{check-decoded-url}
+     treat-forbidden-connects-like-blocks
+     filter-headers
+
+- Error messages are no longer be cached
+- Improved DNS error handling
 - Multiple filter files can now be specified in config.
 - Added jpeg filtering to defend against MS jpeg vulnerability MS04-028
 - Removed the "arbitrary" 1000 filter limit - addresses tracker #911950
 - Thanks to Jindrich Makovicka for a race condition fix for the log 
   file.  The race condition remains for non-pthread implementations.
-  Reference patch #1175720.
+  Reference patch #1175720. Various other logging enhancements.
 - A pile of assorted bug fixes, memory leaks, etc.
 
 *** Version 3.0.3 ***
