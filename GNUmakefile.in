@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.140 2006/07/18 14:48:45 david__schmidt Exp $
+# $Id: GNUmakefile.in,v 1.141 2006/08/12 03:54:37 david__schmidt Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -166,7 +166,7 @@ RPM_BASE = @RPM_BASE@
 #############################################################################
 # We include these files in our distributions
 #############################################################################
-CONFIGS = config trust default.action standard.action user.action default.filter
+CONFIGS = config trust default.action standard.action user.action default.filter user.filter
 # take care that no CVS .cvsignore or other crappy files
 # are included here
 # and escape every '#' in the find. doh.
@@ -1345,6 +1345,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.141  2006/08/12 03:54:37  david__schmidt
+# Windows service integration
+#
 # Revision 1.140  2006/07/18 14:48:45  david__schmidt
 # Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 # with what was really the latest development (the v_3_0_branch branch)
