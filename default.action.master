@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.13 2006/08/19 03:13:00 david__schmidt Exp $
+#  $Id: default.action.master,v 1.14 2006/08/29 00:39:54 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -454,7 +454,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
--prevent-compression \
++prevent-compression \
 -send-vanilla-wafer \
 -send-wafer \
 +session-cookies-only \
