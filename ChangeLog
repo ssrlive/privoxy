@@ -2,8 +2,8 @@
 ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.3 ***
-- Windows version can be installed/started as a service
-- W32 icon stays blue when Privoxy is idle.
+- Windows version can be installed/started as a service.
+- Windows icon stays blue when Privoxy is idle, green when busy.
 - Integrated Fabian Keil's extensive patch.  See:
   http://www.fabiankeil.de/sourcecode/privoxy/. Includes the 
   following new actions (among many other improvements):
@@ -24,8 +24,8 @@ ChangeLog for Privoxy
      treat-forbidden-connects-like-blocks
      filter-headers
 
-- Error messages are no longer be cached
-- Improved DNS error handling
+- Error messages are no longer be cached.
+- Improved DNS error handling.
 - Multiple filter files can now be specified in config.
 - Added jpeg filtering to defend against MS jpeg vulnerability MS04-028
 - Removed the "arbitrary" 1000 filter limit - addresses tracker #911950

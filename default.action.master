@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.12 2006/08/03 02:46:41 david__schmidt Exp $
+#  $Id: default.action.master,v 1.13 2006/08/19 03:13:00 david__schmidt Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -413,8 +413,6 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{all-popups
 # Allow ads for selected useful free sites:
 #
 allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
-#... etc.  Customize to your heart's content.
-
 
 #############################################################################
 # Defaults
@@ -456,7 +454,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
-+prevent-compression \
+-prevent-compression \
 -send-vanilla-wafer \
 -send-wafer \
 +session-cookies-only \

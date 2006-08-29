@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/user.action,v $
 # 
-#  $Id: user.action,v 1.1.2.3 2004/01/30 16:48:26 oes Exp $
+#  $Id: user.action,v 1.4 2006/07/18 14:48:47 david__schmidt Exp $
 #
 #  Purpose     :  User-maintained actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -57,6 +57,7 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{popups}\
 # Allow ads for selected useful free sites:
 #
 allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
+#... etc.  Customize to your heart's content.
 
 ## end aliases ########################################################
 #######################################################################
