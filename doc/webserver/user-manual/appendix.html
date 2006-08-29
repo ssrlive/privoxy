@@ -1,13 +1,13 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
 >Appendix</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.3 User Manual"
+TITLE="Privoxy 3.0.4 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="See Also"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.3 User Manual</TH
+>Privoxy 3.0.4 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -67,16 +67,16 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="APPENDIX"
->14. Appendix</A
-></H1
+></A
+>14. Appendix</H1
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
 NAME="REGEX"
->14.1. Regular Expressions</A
-></H2
+></A
+>14.1. Regular Expressions</H2
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -98,10 +98,9 @@ HREF="http://www.pcre.org/"
 TARGET="_top"
 >PCRE</A
 > and
- <A
-HREF="http://www.oesterhelt.org/pcrs/"
-TARGET="_top"
->PCRS</A
+ <SPAN
+CLASS="APPLICATION"
+>PCRS</SPAN
 > libraries.</P
 ><P
 > If you are reading this, you probably don't understand what <SPAN
@@ -135,17 +134,17 @@ CLASS="QUOTE"
 CLASS="COMMAND"
 >dir</B
 > command in DOS. 
- <VAR
+ <TT
 CLASS="LITERAL"
->*.*</VAR
+>*.*</TT
 > matches all filenames. The <SPAN
 CLASS="QUOTE"
 >"special"</SPAN
 >
  character here is the asterisk which matches any and all characters. We can be
- more specific and use <VAR
+ more specific and use <TT
 CLASS="LITERAL"
->?</VAR
+>?</TT
 > to match just individual
  characters. So <SPAN
 CLASS="QUOTE"
@@ -428,9 +427,9 @@ CLASS="APPLICATION"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><VAR
+><TT
 CLASS="LITERAL"
->/.*/banners/.*</VAR
+>/.*/banners/.*</TT
 ></I
 ></SPAN
 > - A  simple example
@@ -485,9 +484,9 @@ CLASS="QUOTE"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><VAR
+><TT
 CLASS="LITERAL"
->/.*/adv((er)?ts?|ertis(ing|ements?))?/</VAR
+>/.*/adv((er)?ts?|ertis(ing|ements?))?/</TT
 ></I
 ></SPAN
 > - 
@@ -609,9 +608,9 @@ CLASS="QUOTE"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
-><VAR
+><TT
 CLASS="LITERAL"
->/.*/advert[0-9]+\.(gif|jpe?g)</VAR
+>/.*/advert[0-9]+\.(gif|jpe?g)</TT
 ></I
 ></SPAN
 > - Again 
@@ -744,12 +743,12 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3815"
+NAME="AEN4558"
+></A
 >14.2. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->'s Internal Pages</A
-></H2
+>'s Internal Pages</H2
 ><P
 > Since <SPAN
 CLASS="APPLICATION"
@@ -793,7 +792,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN3830"
+NAME="AEN4573"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -826,7 +825,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN3838"
+NAME="AEN4581"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -846,7 +845,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN3843"
+NAME="AEN4586"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -866,7 +865,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN3848"
+NAME="AEN4591"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -886,7 +885,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN3853"
+NAME="AEN4596"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -910,7 +909,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN3859"
+NAME="AEN4602"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -927,7 +926,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN3863"
+NAME="AEN4606"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -941,7 +940,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN3866"
+NAME="AEN4609"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -965,8 +964,8 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BOOKMARKLETS"
->14.2.1. Bookmarklets</A
-></H3
+></A
+>14.2.1. Bookmarklets</H3
 ><P
 > Below are some <SPAN
 CLASS="QUOTE"
@@ -1048,15 +1047,6 @@ TARGET="_top"
 ><LI
 ><P
 >    <A
-HREF="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions/index.php?url='+escape(location.href),'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
-TARGET="_top"
->Privoxy - Submit Actions File Feedback</A
->
-   </P
-></LI
-><LI
-><P
->    <A
 HREF="javascript:void(window.open('http://config.privoxy.org/show-url-info?url='+escape(location.href),'Why').focus());"
 TARGET="_top"
 >Privoxy - Why?</A
@@ -1081,8 +1071,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CHAIN"
->14.3. Chain of Events</A
-></H2
+></A
+>14.3. Chain of Events</H2
 ><P
 > Let's take a quick look at the basic sequence of events when a web page is 
  requested by your browser and <SPAN
@@ -1254,11 +1244,8 @@ CLASS="QUOTE"
 CLASS="FILENAME"
 >default.filter</TT
 >) are processed against the buffered
-   content. Filters are applied in the order they are specified in the
-   <TT
-CLASS="FILENAME"
->default.filter</TT
-> file. Animated GIFs, if present, are
+   content. Filters are applied in the order they are specified in one of the
+   filter files. Animated GIFs, if present, are
    reduced to either the first or last frame, depending on the action
    setting.The entire page, which is now filtered, is then sent by
    <SPAN
@@ -1307,8 +1294,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACTIONSANAT"
->14.4. Anatomy of an Action</A
-></H2
+></A
+>14.4. Anatomy of an Action</H2
 ><P
 > The way <SPAN
 CLASS="APPLICATION"
@@ -1385,10 +1372,7 @@ CLASS="QUOTE"
 >"+filter"</SPAN
 ></A
 > action) from
- the <TT
-CLASS="FILENAME"
->default.filter</TT
-> file since this is handled very
+ one of the filter files since this is handled very
  differently and not so easy to trap! It also will not tell you about any other
  URLs that may be embedded within the URL you are testing. For instance, images
  such as ads are expressed as URLs within the raw page source of HTML pages. So
@@ -1638,7 +1622,8 @@ CLASS="QUOTE"
 > and <SPAN
 CLASS="QUOTE"
 >"session-cookies-only"</SPAN
->.</P
+>,
+ which are actived specifically for this site in our configuration.</P
 ><P
 > Now another example, <SPAN
 CLASS="QUOTE"
@@ -1819,9 +1804,9 @@ CLASS="SCREEN"
 ></P
 ><P
 > Now the page displays ;-) Be sure to flush your browser's caches when 
- making such changes. Or, try using <VAR
+ making such changes. Or, try using <TT
 CLASS="LITERAL"
->Shift+Reload</VAR
+>Shift+Reload</TT
 >.</P
 ><P
 > But now what about a situation where we get no explicit matches like 

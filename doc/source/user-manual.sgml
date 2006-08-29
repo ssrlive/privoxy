@@ -11,11 +11,11 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.3">
-<!entity p-status "stable">
+<!entity p-version "3.0.4">
+<!entity p-status "BETA">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -32,9 +32,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.12 2006/08/14 08:40:39 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.13 2006/08/22 11:04:59 hal9 Exp $
 
- Copyright (C) 2001- 2003 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.12 2006/08/14 08:40:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.13 2006/08/22 11:04:59 hal9 Exp $</pubdate>
 
 <!--
 
@@ -339,9 +339,13 @@ automatically start Privoxy in the boot process.
  If you like to live on the bleeding edge and are not afraid of using
  possibly unstable development versions, you can check out the up-to-the-minute
  version directly from <ulink url="http://sourceforge.net/cvs/?group_id=11118">the
- CVS repository</ulink> or simply download <ulink
+ CVS repository</ulink>. 
+<!-- 
+ deprecated...out of business.
+ or simply download <ulink
  url="http://cvs.sourceforge.net/cvstarballs/ijbswa-cvsroot.tar.bz2">the nightly CVS
  tarball.</ulink>
+-->
 </para>
 
 <!-- include buildsource.sgml boilerplate: -->
@@ -382,76 +386,157 @@ automatically start Privoxy in the boot process.
 <!--  ~  End section  ~  -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="upgradersnote">
+<sect1 id="whatsnew">
+<title>What's New in this Release</title>
+<para>
+ There are many new features in <application>Privoxy</application> &p-version;
+ :
+</para>
+
+<para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Mulitiple <link linkend="filter-file">filter files</link> can now be specifed in <filename>config</filename>.
+   </para>
+  </listitem>
+ 
+ <listitem>
+  <para>  
+   There are a number of new <link linkend="actions-file">actions</link>:
+  </para>
+  
+  <para>
+  <itemizedlist>
+     
+     <listitem>
+      <para>
+       <literal><link linkend="content-type-overwrite">content-type-overwrite</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="crunch-client-header">crunch-client-header</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="crunch-server-header">crunch-server-header</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="fast-redirects">fast-redirects</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="force-text-mode">force-text-mode</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="handle-as-empty-document">handle-as-empty-document</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="hide-accept-language">hide-accept-language</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="hide-content-disposition">hide-content-disposition</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="hide-if-modified-since">hide-if-modified-since</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="hide-referrer">hide-referrer</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="inspect-jpegs">inspect-jpegs</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="overwrite-last-modified">overwrite-last-modified</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="redirect">redirect</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="treat-forbidden-connects-like-blocks">treat-forbidden-connects-like-blocks</link></literal>
+      </para>
+     </listitem>
+
+  </itemizedlist>
+  </para>
+
+ </listitem>
+
+  <listitem>
+   <para>
+    <application>MS-Windows</application> versions can now be installed and 
+    started as a <emphasis>service</emphasis>.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+    In addition, there are various bug fixes and enhancements, including 
+    error pages are no longer cached, better DNS error handling, and logging 
+    improvements.
+   </para>
+  </listitem>
+
+
+ </itemizedlist>
+</para>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect2 id="upgradersnote">
 <title>Note to Upgraders</title>
+
 <para>
- There are very significant changes from earlier 
- <application>Junkbuster</application> versions to the current
- <application>Privoxy</application>. The number, names, syntax, and
- purposes of configuration files have substantially  changed.
- <application>Junkbuster 2.0.x</application> configuration
- files will not migrate, <application>Junkbuster 2.9.x</application>
- and <application>Privoxy</application> configurations will need to be
- ported. The functionalities of the old <filename>blockfile</filename>,
- <filename>cookiefile</filename> and <filename>imagelist</filename> 
- are now combined into the <link linkend="actions-file"><quote>actions
- files</quote></link>.  
- <filename>default.action</filename>, is the main actions file. Local
- exceptions should best be put into <filename>user.action</filename>.
-</para>
-<para>
- A <link linkend="filter-file"><quote>filter file</quote></link> (typically
- <filename>default.filter</filename>) is new as of <application>Privoxy
- 2.9.x</application>, and provides some of the new sophistication (explained
- below). <filename>config</filename> is much the same as before.
-</para>
-<para>
- If upgrading from a 2.0.x version, you will have to use the new config 
- files, and possibly adapt any personal rules from your older files.
- When porting personal rules over from the old <filename>blockfile</filename>
- to the new actions files, please note that even the pattern syntax has
- changed. If upgrading from 2.9.x development versions, it is still
- recommended to use the new configuration files.
-</para>
-<para>
- A quick list of things to be aware of before upgrading: 
+ A quick list of things to be aware of before upgrading from earlier 
+ versions of <application>Privoxy</application>:
 </para>
 
 <para>
  <itemizedlist>
 
  <listitem>
-  <para>
-   The default listening port is now 8118 due to a conflict with another 
-   service (NAS).
-  </para>
- </listitem>  
- <listitem>
   <para>  
-    Some installers may remove earlier versions completely. Save any 
-    important configuration files!
+    Some installers may remove earlier versions completely, including 
+    configuration files. Save any important configuration files!
   </para>
  </listitem>
  <listitem>
-  <para>
-   <application>Privoxy</application> is controllable with a web browser 
-   at the special URL: <ulink
-   url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
-   (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>). Many
-   aspects of configuration can be done here, including temporarily disabling
-   <application>Privoxy</application>.
+  <para>  
+   What constitutes a <quote>default</quote> configuration has changed, 
+   and you may want to review which actions are <quote>on</quote> by 
+   default. This is primarily a matter of emphasis, but some features 
+   you may have been used to, may now be <quote>off</quote> by default.
   </para>
- </listitem> 
- <listitem>
-  <para>
-   The primary configuration files for cookie management, ad and banner 
-   blocking, and many other aspects of <application>Privoxy</application>
-   configuration are the <link linkend="actions-file">actions
-   files</link>. It is strongly recommended to become familiar with the new
-   actions concept below, before modifying these files. Locally defined rules 
-   should go into <filename>user.action</filename>.
-  </para>
- </listitem> 
+ </listitem>
+ 
   <listitem>
   <para>
 <!-- I think it is best to keep this somewhat vague, in case  -->
@@ -463,19 +548,13 @@ automatically start Privoxy in the boot process.
 
  </itemizedlist>
 </para>
+</sect2>
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="quickstart"><title>Quickstart to Using <application>Privoxy</application></title>
 <para>
  <itemizedlist>
-
- <listitem>
-  <para>
-   If upgrading, from versions before 2.9.16, please back up any configuration
-   files. See the <link linkend="upgradersnote">Note to Upgraders</link> Section.
- </para>
-</listitem> 
 
  <listitem>
   <para>
@@ -573,7 +652,7 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-   Now enjoy surfing with enhanced comfort and privacy!
+   Now enjoy surfing with enhanced control, comfort and privacy!
   </para>
  </listitem> 
  
@@ -857,11 +936,32 @@ automatically start Privoxy in the boot process.
   </figure>
  </para>
  
+
+<para> 
+ With <application>Firefox</application>, this can be set under:
+</para>
+ 
+<literallayout>
+<!-- Mix ascii and gui art, something for everybody -->
+<!-- spacing on this is tricky -->
+ <guibutton>Tools</guibutton>
+   |_   
+         <guibutton>Options</guibutton>
+                |_       
+                        <guibutton>General</guibutton>
+                              |_     
+                                    <guibutton>Connection Settings</guibutton>
+                                         |_       
+                                                <guibutton>Manual Proxy Configuration</guibutton>
+</literallayout>
+
+
 <para> 
  With <application>Netscape</application> (and
  <application>Mozilla</application>), this can be set under:
 </para>
- 
+
+
 <literallayout>
 <!-- Mix ascii and gui art, something for everybody -->
 <!-- spacing on this is tricky -->
@@ -906,7 +1006,7 @@ automatically start Privoxy in the boot process.
 </para>
 
 <para>
- <application>Privoxy</application> is typically started by specifying the
+ <application>Privoxy</application> itself is typically started by specifying the
  main configuration file to be used on the command line. If no configuration
  file is specified on the command line, <application>Privoxy</application>
  will look for a file named <filename>config</filename> in the current
@@ -1285,7 +1385,8 @@ must find a better place for this paragraph
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/toggle">Toggle Privoxy on or off</ulink>
  </member>
  <member>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://www.privoxy.org/&p-version;/user-manual/">Documentation</ulink>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://www.privoxy.org/
+  &p-version;/user-manual/">Documentation</ulink>
  </member>
  </simplelist>
  </msgtext>
@@ -1381,12 +1482,17 @@ must find a better place for this paragraph
 
   <listitem>
    <para>
-    <filename>default.filter</filename> (the <link linkend="filter-file">filter
+    <quote>Filter files</quote> (the <link linkend="filter-file">filter
     file</link>) can be used to re-write the raw page content, including
     viewable text as well as embedded HTML and JavaScript, and whatever else
     lurks on any given web page. The filtering jobs are only pre-defined here;
-    whether to apply them or not is up to the actions files. Only one filter 
-    file may be defined.
+    whether to apply them or not is up to the actions files. 
+    <filename>default.filter</filename> includes various filters made 
+    available for use by the developers. Some are much more intrusive than 
+    others, and all should be used with caution. You may define additional 
+    filter files in <filename>config</filename> as you can with 
+    actions files. We suggest <filename>user.filter</filename> for any 
+    locally defined filters or customizations.
    </para>
   </listitem> 
 
@@ -1404,7 +1510,7 @@ must find a better place for this paragraph
 </para>
 
 <para>
- The actions files and <filename>default.filter</filename> 
+ The actions files and filter files  
  can use Perl style <link linkend="regex">regular expressions</link> for
  maximum flexibility. 
 </para>
@@ -2229,6 +2335,9 @@ must find a better place for this paragraph
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="content-type-overwrite">
+<!-- 
+new action 
+-->
 <title>content-type-overwrite</title>
 
 <variablelist>
@@ -2338,6 +2447,9 @@ www.example.net/*.style
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-client-header">
+<!--
+new action
+-->
 <title>crunch-server-header</title>
 
 <variablelist>
@@ -2421,7 +2533,9 @@ www.example.net/*.style
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-if-none-match">
 <title>crunch-if-none-match</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -2572,7 +2686,9 @@ www.example.net/*.style
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="crunch-server-header">
 <title>crunch-server-header</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -2585,7 +2701,7 @@ www.example.net/*.style
   <term>Effect:</term>
   <listitem>
    <para>
-    Deletes every header send by the server that contains the string the user supplied as parameter.
+    Deletes every header sent by the server that contains the string the user supplied as parameter.
    </para>
   </listitem>
  </varlistentry>
@@ -3006,17 +3122,23 @@ problem-host.example.com</screen>
    <para>Parameterized.</para>
   </listitem>
  </varlistentry>
-
+ 
  <varlistentry>
   <term>Parameter:</term>
   <listitem>
    <para>
-    The name of a filter, as defined in the <link linkend="filter-file">filter file</link>
-    (typically <filename>default.filter</filename>, set by the
+    The name of a filter, as defined in the <link linkend="filter-file">filter file</link>.
+    Filters can be defined in one or more  files as defined by the 
     <literal><link linkend="filterfile">filterfile</link></literal>
-    option in the <link linkend="config">config file</link>). When used in its negative form,
-    and without parameters, filtering is completely disabled.
+    option in the <link linkend="config">config file</link>. 
+    <filename>default.filter</filename> is the collection of filters 
+    supplied by the developers. Locally defined filters should go 
+    in their own file, such as <filename>user.filter</filename>.
    </para>
+   <para>
+     When used in its negative form,
+     and without parameters, filtering is completely disabled.
+  </para>
   </listitem>
  </varlistentry>
  
@@ -3036,7 +3158,7 @@ problem-host.example.com</screen>
     noticeable on slower connections.
    </para>
    <para>
-    This is very powerful feature, but <quote>rolling your own</quote>
+    This is very powerful feature, and <quote>rolling your own</quote>
     filters requires a knowledge of regular expressions and HTML.
    </para>
    <para>
@@ -3176,7 +3298,9 @@ problem-host.example.com</screen>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="force-text-mode">
 <title>force-text-mode</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3225,7 +3349,7 @@ problem-host.example.com</screen>
    <warning> 
     <para>
      Think twice before activating this action. Filtering binary data
-     with regular expressions can cause file damages.
+     with regular expressions can cause file damage.
     </para>
    </warning>
   </listitem>
@@ -3248,7 +3372,9 @@ problem-host.example.com</screen>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="handle-as-empty-document">
 <title>handle-as-empty-document</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3412,7 +3538,9 @@ ad.doubleclick.net
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-accept-language">
 <title>hide-accept-language</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3465,7 +3593,7 @@ ad.doubleclick.net
    <para>
     Therefore it's a good idea to either only change the
     <quote>Accept-Language:</quote> header to languages you understand,
-    or to languages that aren't widely spread.
+    or to languages that aren't wide spread.
    </para>
    <para>
     Before setting the <quote>Accept-Language:</quote> header
@@ -3496,7 +3624,9 @@ ad.doubleclick.net
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-content-disposition">
 <title>hide-content-disposition</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3536,20 +3666,20 @@ ad.doubleclick.net
   <listitem>
    <para>
     Some servers set the <quote>Content-Disposition:</quote> HTTP header for
-    documents they assume you want to safe locally before viewing them.
+    documents they assume you want to save locally before viewing them.
     The <quote>Content-Disposition:</quote> header contains the file name
     the browser is supposed to use by default.
    </para>
    <para>
-    In most browser that understand this header, it makes it impossible to
+    In most browsers that understand this header, it makes it impossible to
     <emphasis>just view</emphasis> the document, without downloading it first,
     even if it's just a simple text file or an image.
    </para>
    <para>
     Removing the <quote>Content-Disposition:</quote> header helps
-    to prevent this annoyance, but some browser additionally check the
-    <quote>Content-Type:</quote> header, before they decide if the can
-    display a document without saving it first. In these cases you have
+    to prevent this annoyance, but some browsers additionally check the
+    <quote>Content-Type:</quote> header, before they decide if they can
+    display a document without saving it first. In these cases, you have
     to change this header as well, before the browser stops displaying
     download menus.
    </para>
@@ -3580,7 +3710,9 @@ ad.doubleclick.net
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-if-modified-since">
 <title>hide-if-modified-since</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3633,7 +3765,7 @@ ad.doubleclick.net
    <para>
     Randomizing the value of the <quote>If-Modified-Since:</quote> makes
     sure it isn't used as a cookie replacement, but you will run into
-    caching problems if the random range is to high.  
+    caching problems if the random range is too high.  
    </para>
    <para>
     It is a good idea to only use a small negative value and let
@@ -3666,7 +3798,9 @@ ad.doubleclick.net
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-forwarded-for-headers">
 <title>hide-forwarded-for-headers</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -3988,6 +4122,73 @@ ad.doubleclick.net
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="inspect-jpegs">
+<title>inspect-jpegs</title>
+<!--
+new action
+-->
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>To protect against the MS buffer over-run in JPEG processing</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    To protect against a known exploit
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    See Microsoft Security Bulletin MS04-028. JPEG images are one of the most 
+    common image types found across the Internet. The exploit as described can 
+    allow execution of code on the target system, giving an attacker access 
+    to the system in question by merely planting an altered JPEG image, which 
+    would have no obvious indications of what lurks inside. This action
+    prevents unwanted intrusion.
+   </para>
+  
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para><screen>+inspect-jpegs</screen></para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="kill-popups">
 <title>kill-popups<anchor id="kill-popup"></title>
 
@@ -4260,7 +4461,9 @@ www.pclinuxonline.com</screen>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="overwrite-last-modified">
 <title>overwrite-last-modified</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -4355,7 +4558,9 @@ www.pclinuxonline.com</screen>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="redirect">
 <title>redirect</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -4773,7 +4978,9 @@ my-internal-testing-server.void</screen>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="treat-forbidden-connects-like-blocks">
 <title>treat-forbidden-connects-like-blocks</title>
-
+<!--
+new action
+-->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
@@ -4978,7 +5185,9 @@ my-internal-testing-server.void</screen>
  in order to function properly.
 </para>
 </sect2>
-
+<!--
+hal stop here
+-->
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="act-examples">
 <title>Actions Files Tutorial</title>
@@ -4999,7 +5208,7 @@ Every config file should start with a short comment stating its purpose:
 </para>
 
 <para>
- <screen># Sample default.action file &lt;developers@privoxy.org&gt;</screen>
+ <screen># Sample default.action file &lt;ijbswa-developers@lists.sourceforge.net&gt;</screen>
 </para>
 
 <para>
@@ -5626,20 +5835,24 @@ ar.atwola.com/</screen>
 <!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 
 <sect1 id="filter-file">
-<title>The Filter File</title>
+<title>Filter Files</title>
 
 <para>
  All text substitutions that can be invoked through the
- <literal><link linkend="filter">filter</link></literal> action
- must first be defined in the filter file, which is typically
- called <filename>default.filter</filename> and which can be
- selected through the <literal>
+ <literal><link linkend="filter">filter</link></literal> action which 
+ must first be defined in a <quote>filter file</quote>, such as 
+ <filename>default.filter</filename>. Mulitple filter files can be
+ defined through the <literal>
  <link linkend="filterfile">filterfile</link></literal> config
- option.
+ option. The filters as supplied by the developers will be found in 
+ <filename>default.filter</filename>. It is recommended that any locally
+ defined or modified filters go in a separately defined file such as 
+ <filename>user.filter</filename>.
+ 
 </para>
 
 <para>
- Typical reasons for doing such substitutions are to eliminate
+ Typical reasons for doing these kinds of substitutions are to eliminate
  common annoyances in HTML and JavaScript, such as pop-up windows,
  exit consoles, crippled windows without navigation tools, the
  infamous &lt;BLINK&gt; tag etc, to suppress images with certain
@@ -5691,10 +5904,9 @@ ar.atwola.com/</screen>
  in a syntax that imitates <ulink url="http://www.perl.org/">Perl</ulink>'s
  <literal>s///</literal> operator. If you are familiar with Perl, you
  will find this to be quite intuitive, and may want to look at the
- <ulink url="http://www.oesterhelt.org/pcrs/pcrs.3.html">PCRS man page</ulink>
- for the subtle differences to Perl behaviour. Most notably, the non-standard
- option letter <literal>U</literal> is supported, which turns the default
- to ungreedy matching.
+ PCRS documentation for the subtle differences to Perl behaviour. Most
+ notably, the non-standard option letter <literal>U</literal> is supported,
+ which turns the default to ungreedy matching.
 </para>
 
 <para>
@@ -6181,7 +6393,7 @@ pre-defined filters for your convenience:
   <listitem>
    <para>
     Many Microsoft products that generate HTML use non-standard extensions (read:
-    violations) of the ISO 8859-1 aka Latin-1 character set. This causes those
+    violations) of the ISO 8859-1 aka Latin-1 character set. This can cause those
     HTML documents to display with errors on standard-compliant platforms. 
    </para>
    <para>
@@ -6189,7 +6401,13 @@ pre-defined filters for your convenience:
     It is not necessary when using MS products, and will cause corruption of  
     all documents that use 8-bit character sets other than Latin-1. It's mostly
     worthwhile for Europeans on non-MS platforms, if wierd garbage characters
-    sometimes appear on some pages.
+    sometimes appear on some pages, or user agents that don't correct for this on 
+    the fly.
+<!--
+    My version of Mozilla (ancient) shows litte square boxes for quote
+    characters, and apostrophes on moronized pages. So many pages have this, I
+    can read them fine now. HB 08/27/06
+--> 
    </para>
   </listitem>
  </varlistentry>
@@ -6459,7 +6677,11 @@ Requests</title>
  expressions</quote> in its <link linkend="actions-file">actions
  files</link> and <link linkend="filter-file">filter file</link>,
  through the <ulink url="http://www.pcre.org/">PCRE</ulink> and
+<!-- 
+ dead 08/27/06
  <ulink url="http://www.oesterhelt.org/pcrs/">PCRS</ulink> libraries.
+-->
+ <application>PCRS</application> libraries.
 </para>
 
 <para>
@@ -6847,12 +7069,13 @@ Requests</title>
     url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y','ijbstatus','width=250,height=2,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy- View Status</ulink>
    </para>
   </listitem> 
-
+<!--
   <listitem>
    <para>
     <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions/index.php?url='+escape(location.href),'Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">Privoxy - Submit Actions File Feedback</ulink>
    </para>
   </listitem> 
+ --> 
   <listitem>
    <para>
     <ulink url="javascript:void(window.open('http://config.privoxy.org/show-url-info?url='+escape(location.href),'Why').focus());">Privoxy - Why?</ulink>
@@ -6965,8 +7188,8 @@ Requests</title>
    action applies (and the document type fits the action), the rest of the page is
    read into memory (up to a configurable limit). Then the filter rules (from
    <filename>default.filter</filename>) are processed against the buffered
-   content. Filters are applied in the order they are specified in the
-   <filename>default.filter</filename> file. Animated GIFs, if present, are
+   content. Filters are applied in the order they are specified in one of the
+   filter files. Animated GIFs, if present, are
    reduced to either the first or last frame, depending on the action
    setting.The entire page, which is now filtered, is then sent by
    <application>Privoxy</application> back to your browser. 
@@ -7034,7 +7257,7 @@ Requests</title>
  how the current configuration will handle it. This will not
  help with filtering effects (i.e. the <link
  linkend="FILTER"><quote>+filter</quote></link> action) from
- the <filename>default.filter</filename> file since this is handled very
+ one of the filter files since this is handled very
  differently and not so easy to trap! It also will not tell you about any other
  URLs that may be embedded within the URL you are testing. For instance, images
  such as ads are expressed as URLs within the raw page source of HTML pages. So
@@ -7184,7 +7407,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  Notice the only difference here to the previous listing, is to 
- <quote>fast-redirects</quote> and <quote>session-cookies-only</quote>.
+ <quote>fast-redirects</quote> and <quote>session-cookies-only</quote>,
+ which are actived specifically for this site in our configuration.
 </para>
 
 <para>
@@ -7391,6 +7615,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.13  2006/08/22 11:04:59  hal9
+ Silence warnings and errors. This should build now. New filters were only
+ stubbed in. More to be done.
+
  Revision 2.12  2006/08/14 08:40:39  fabiankeil
  Documented new actions that were part of
  the "minor Privoxy improvements".

@@ -1,0 +1,425 @@
+<HTML
+><HEAD
+><TITLE
+>What's New in this Release</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="HOME"
+TITLE="Privoxy 3.0.4 User Manual"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="NEXT"
+TITLE="Quickstart to Using Privoxy"
+HREF="quickstart.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy 3.0.4 User Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="installation.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="quickstart.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="WHATSNEW"
+></A
+>3. What's New in this Release</H1
+><P
+> There are many new features in <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 3.0.4
+ :</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>    Mulitiple <A
+HREF="filter-file.html"
+>filter files</A
+> can now be specifed in <TT
+CLASS="FILENAME"
+>config</TT
+>.
+   </P
+></LI
+><LI
+><P
+>  
+   There are a number of new <A
+HREF="actions-file.html"
+>actions</A
+>:
+  </P
+><P
+>  <P
+></P
+><UL
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#CONTENT-TYPE-OVERWRITE"
+>content-type-overwrite</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#CRUNCH-CLIENT-HEADER"
+>crunch-client-header</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#CRUNCH-IF-NONE-MATCH"
+>crunch-if-none-match</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#CRUNCH-SERVER-HEADER"
+>crunch-server-header</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FAST-REDIRECTS"
+>fast-redirects</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FORCE-TEXT-MODE"
+>force-text-mode</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
+>handle-as-empty-document</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HIDE-ACCEPT-LANGUAGE"
+>hide-accept-language</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HIDE-CONTENT-DISPOSITION"
+>hide-content-disposition</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HIDE-IF-MODIFIED-SINCE"
+>hide-if-modified-since</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HIDE-REFERRER"
+>hide-referrer</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#INSPECT-JPEGS"
+>inspect-jpegs</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#OVERWRITE-LAST-MODIFIED"
+>overwrite-last-modified</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#REDIRECT"
+>redirect</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
+>treat-forbidden-connects-like-blocks</A
+></TT
+>
+      </P
+></LI
+></UL
+>
+  </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>MS-Windows</SPAN
+> versions can now be installed and 
+    started as a <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>service</I
+></SPAN
+>.
+   </P
+></LI
+><LI
+><P
+>    In addition, there are various bug fixes and enhancements, including 
+    error pages are no longer cached, better DNS error handling, and logging 
+    improvements.
+   </P
+></LI
+></UL
+></P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="UPGRADERSNOTE"
+></A
+>3.1. Note to Upgraders</H2
+><P
+> A quick list of things to be aware of before upgrading from earlier 
+ versions of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>:</P
+><P
+> <P
+></P
+><UL
+><LI
+><P
+>  
+    Some installers may remove earlier versions completely, including 
+    configuration files. Save any important configuration files!
+  </P
+></LI
+><LI
+><P
+>  
+   What constitutes a <SPAN
+CLASS="QUOTE"
+>"default"</SPAN
+> configuration has changed, 
+   and you may want to review which actions are <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+> by 
+   default. This is primarily a matter of emphasis, but some features 
+   you may have been used to, may now be <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+> by default.
+  </P
+></LI
+><LI
+><P
+>   
+   Some installers may not automatically start
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> after installation.
+  </P
+></LI
+></UL
+></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="installation.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="quickstart.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Quickstart to Using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
