@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.9 2006/07/18 14:48:51 david__schmidt Exp $
+ $Id: p-authors.sgml,v 2.10 2006/08/26 10:39:26 hal9 Exp $
 
  Copyright (C) 2001, 2002-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -29,16 +29,16 @@ Current Developement Team:
 ]]>
 
 <literallayout>
- David Schmidt
  Fabian Keil
+ David Schmidt
 
 <![%p-authors-formal;[
 Current Contributors:
 ]]>
 
- Hal Burgiss
  Johny Agotnes 
  Moritz Barsnick
+ Hal Burgiss
  Mattes Dolak 
  Roland Rosenfeld
 <![%p-authors-formal;[
@@ -51,7 +51,6 @@ Current Contributors:
 
 <literallayout>
  
- Andreas Oesterhelt
  Rodrigo Barbosa
  Brian Dessent
  Jon Foster
@@ -61,6 +60,7 @@ Current Contributors:
  Gábor Lipták
  Adam Lock
  Guy Laroche
+ Andreas Oesterhelt
  Haroon Rafique
  Georg Sauthoff
  Thomas Steudten
