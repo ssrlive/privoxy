@@ -77,7 +77,7 @@ NAME="WHATSNEW"
 ></A
 >3. What's New in this Release</H1
 ><P
-> There are many new features in <SPAN
+> There are many improvements and new features in <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > 3.0.4
@@ -94,7 +94,9 @@ HREF="filter-file.html"
 > can now be specifed in <TT
 CLASS="FILENAME"
 >config</TT
->.
+>. This allows for 
+    locally defined filters that can be maintained separately from the filters as
+    supplied by the developers.
    </P
 ></LI
 ><LI
@@ -158,8 +160,19 @@ HREF="actions-file.html#CRUNCH-SERVER-HEADER"
 >       <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#FAST-REDIRECTS"
->fast-redirects</A
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
+>filter-client-headers</A
+></TT
+>
+      </P
+></LI
+><LI
+><P
+>       <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
+>filter-server-headers</A
 ></TT
 >
       </P
@@ -224,17 +237,6 @@ HREF="actions-file.html#HIDE-IF-MODIFIED-SINCE"
 >       <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#HIDE-REFERRER"
->hide-referrer</A
-></TT
->
-      </P
-></LI
-><LI
-><P
->       <TT
-CLASS="LITERAL"
-><A
 HREF="actions-file.html#INSPECT-JPEGS"
 >inspect-jpegs</A
 ></TT
@@ -277,6 +279,29 @@ HREF="actions-file.html#TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
 ></UL
 >
   </P
+><P
+>     In addition, <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FAST-REDIRECTS"
+>fast-redirects</A
+></TT
+>
+     has been significantly improved with enhanced syntax.
+  </P
+><P
+>     And <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HIDE-REFERRER"
+>hide-referrer</A
+></TT
+>
+     has a new option, <TT
+CLASS="LITERAL"
+>conditional block</TT
+>.
+   </P
 ></LI
 ><LI
 ><P
@@ -295,8 +320,8 @@ CLASS="EMPHASIS"
 ></LI
 ><LI
 ><P
->    In addition, there are various bug fixes and enhancements, including 
-    error pages are no longer cached, better DNS error handling, and logging 
+>    In addition, there are various bug fixes and significant enhancements, including 
+    error pages are no longer cached, better DNS error handling, and various logging 
     improvements.
    </P
 ></LI
@@ -326,6 +351,27 @@ CLASS="APPLICATION"
     Some installers may remove earlier versions completely, including 
     configuration files. Save any important configuration files!
   </P
+></LI
+><LI
+><P
+>     See the full documentation on 
+     <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FAST-REDIRECTS"
+>fast-redirects</A
+></TT
+>
+     which has changed syntax, and may require adjustments to local configs.
+   </P
+></LI
+><LI
+><P
+>     The <TT
+CLASS="FILENAME"
+>jarfile</TT
+>, cookie logger, is off by default now.
+    </P
 ></LI
 ><LI
 ><P

@@ -156,7 +156,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN1784"
+NAME="AEN1798"
 ></A
 ><P
 ><B
@@ -579,7 +579,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1883"
+NAME="AEN1897"
 ></A
 >8.1. Finding the Right Mix</H2
 ><P
@@ -613,7 +613,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1890"
+NAME="AEN1904"
 ></A
 >8.2. How to Edit</H2
 ><P
@@ -869,7 +869,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1964"
+NAME="AEN1978"
 ></A
 >8.4.1. The Domain Pattern</H3
 ><P
@@ -1055,7 +1055,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2026"
+NAME="AEN2040"
 ></A
 >8.4.2. The Path Pattern</H3
 ><P
@@ -1783,7 +1783,7 @@ HREF="actions-file.html#FORCE-TEXT-MODE"
     <TT
 CLASS="LITERAL"
 ><A
-HREF="filter-file.html#FILTER-SERVER-HEADERS"
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
 >filter-server-headers</A
 ></TT
 >
@@ -1835,7 +1835,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-CLIENT-HEADER"
 ></A
->8.5.4. crunch-server-header</H4
+>8.5.4. crunch-client-header</H4
 ><P
 ></P
 ><DIV
@@ -1906,7 +1906,7 @@ CLASS="LITERAL"
     <TT
 CLASS="LITERAL"
 ><A
-HREF="filter-file.html#FILTER-CLIENT-HEADERS"
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
 >filter-client-headers</A
 ></TT
 >
@@ -2280,7 +2280,7 @@ CLASS="LITERAL"
     <TT
 CLASS="LITERAL"
 ><A
-HREF="filter-file.html#FILTER-SERVER-HEADERS"
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
 >filter-server-headers</A
 ></TT
 >
@@ -2746,7 +2746,7 @@ CLASS="QUOTE"
     requests with <TT
 CLASS="LITERAL"
 ><A
-HREF="filter-file.html#FILTER-CLIENT-HEADERS"
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
 >filter-client-headers</A
 ></TT
 >
@@ -2842,7 +2842,8 @@ CLASS="VARIABLELIST"
 CLASS="LITERAL"
 >text/plain</TT
 > MIME type for all files whose type they
-    don't know.)
+    don't know.) By default, filtering works only on the document content 
+    itself, not the headers.
    </P
 ></DD
 ><DT
@@ -3387,9 +3388,251 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="FILTER-CLIENT-HEADERS"
+></A
+>8.5.13. filter-client-headers</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   To apply filtering to the client's (browser's) headers
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>Extend filtering capabilities to the client's headers, which 
+   by default applies only to the document itself.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Regular expressions can be used to filter headers as well. Check your
+    filters closely before activating this action, as it can easily lead to broken
+    requests.
+   </P
+><P
+> 
+    These filters are applied to each header on its own, not to them
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is
+    z.
+   </P
+><P
+>    The filters are used after the other header actions have finished and can
+    use their output as input.
+   </P
+><P
+>    Whenever possible one should specify <TT
+CLASS="LITERAL"
+>^</TT
+>,
+    <TT
+CLASS="LITERAL"
+>$</TT
+>, the whole header name and the colon, to make sure
+    the filter doesn't cause havoc to other headers or the
+    page itself. For example if you want to transform
+    <SPAN
+CLASS="APPLICATION"
+>Galeon</SPAN
+> User-Agents to 
+    <SPAN
+CLASS="APPLICATION"
+>Firefox</SPAN
+> User-Agents you
+    shouldn't use:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>s@Galeon/\d\.\d\.\d @@</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>    but:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>s@^(User-Agent:.*) Galeon/\d\.\d\.\d (Firefox/\d\.\d\.\d\.\d)$@$1 $2@</PRE
+></TD
+></TR
+></TABLE
+></P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{+filter-client-headers +filter{test_filter}}
+problem-host.example.com
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="FILTER-SERVER-HEADERS"
+></A
+>8.5.14. filter-server-headers</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   To apply filtering to the server's headers
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>Extend filtering capabilities to the server's headers, which 
+   by default applies only to the document itself.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Boolean.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    N/A
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Similar to <TT
+CLASS="LITERAL"
+>filter-client-headers</TT
+>, but works on 
+    the server instead. To filter both server and client, use both.
+   </P
+><P
+>    As with <TT
+CLASS="LITERAL"
+>filter-client-headers</TT
+>, check your
+    filters before activating this action, as it can easily lead to broken
+    requests.
+   </P
+><P
+> 
+    These filters are applied to each header on its own, not to them
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is
+    z.
+   </P
+><P
+>    The filters are used after the other header actions have finished and can
+    use their output as input.
+   </P
+><P
+>    Remember too, whenever possible one should specify <TT
+CLASS="LITERAL"
+>^</TT
+>,
+    <TT
+CLASS="LITERAL"
+>$</TT
+>, the whole header name and the colon, to make sure
+    the filter doesn't cause havoc to other headers or the
+    page itself. See above for example.
+   </P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{+filter-server-headers +filter{test_filter}}
+problem-host.example.com
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="FORCE-TEXT-MODE"
 ></A
->8.5.13. force-text-mode</H4
+>8.5.15. force-text-mode</H4
 ><P
 ></P
 ><DIV
@@ -3522,7 +3765,7 @@ CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-EMPTY-DOCUMENT"
 ></A
->8.5.14. handle-as-empty-document</H4
+>8.5.16. handle-as-empty-document</H4
 ><P
 ></P
 ><DIV
@@ -3641,7 +3884,7 @@ CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-IMAGE"
 ></A
->8.5.15. handle-as-image</H4
+>8.5.17. handle-as-image</H4
 ><P
 ></P
 ><DIV
@@ -3777,7 +4020,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-ACCEPT-LANGUAGE"
 ></A
->8.5.16. hide-accept-language</H4
+>8.5.18. hide-accept-language</H4
 ><P
 ></P
 ><DIV
@@ -3894,7 +4137,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-CONTENT-DISPOSITION"
 ></A
->8.5.17. hide-content-disposition</H4
+>8.5.19. hide-content-disposition</H4
 ><P
 ></P
 ><DIV
@@ -4011,7 +4254,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-IF-MODIFIED-SINCE"
 ></A
->8.5.18. hide-if-modified-since</H4
+>8.5.20. hide-if-modified-since</H4
 ><P
 ></P
 ><DIV
@@ -4136,7 +4379,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-FORWARDED-FOR-HEADERS"
 ></A
->8.5.19. hide-forwarded-for-headers</H4
+>8.5.21. hide-forwarded-for-headers</H4
 ><P
 ></P
 ><DIV
@@ -4217,7 +4460,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-FROM-HEADER"
 ></A
->8.5.20. hide-from-header</H4
+>8.5.22. hide-from-header</H4
 ><P
 ></P
 ><DIV
@@ -4328,7 +4571,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-REFERRER"
 ></A
->8.5.21. hide-referrer</H4
+>8.5.23. hide-referrer</H4
 ><A
 NAME="HIDE-REFERER"
 ></A
@@ -4496,7 +4739,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-USER-AGENT"
 ></A
->8.5.22. hide-user-agent</H4
+>8.5.24. hide-user-agent</H4
 ><P
 ></P
 ><DIV
@@ -4631,7 +4874,7 @@ CLASS="SECT3"
 ><A
 NAME="INSPECT-JPEGS"
 ></A
->8.5.23. inspect-jpegs</H4
+>8.5.25. inspect-jpegs</H4
 ><P
 ></P
 ><DIV
@@ -4703,7 +4946,7 @@ CLASS="SECT3"
 ><A
 NAME="KILL-POPUPS"
 ></A
->8.5.24. kill-popups<A
+>8.5.26. kill-popups<A
 NAME="KILL-POPUP"
 ></A
 ></H4
@@ -4871,7 +5114,7 @@ CLASS="SECT3"
 ><A
 NAME="LIMIT-CONNECT"
 ></A
->8.5.25. limit-connect</H4
+>8.5.27. limit-connect</H4
 ><P
 ></P
 ><DIV
@@ -4988,7 +5231,7 @@ CLASS="SECT3"
 ><A
 NAME="PREVENT-COMPRESSION"
 ></A
->8.5.26. prevent-compression</H4
+>8.5.28. prevent-compression</H4
 ><P
 ></P
 ><DIV
@@ -5119,7 +5362,7 @@ CLASS="SECT3"
 ><A
 NAME="OVERWRITE-LAST-MODIFIED"
 ></A
->8.5.27. overwrite-last-modified</H4
+>8.5.29. overwrite-last-modified</H4
 ><P
 ></P
 ><DIV
@@ -5283,7 +5526,7 @@ CLASS="SECT3"
 ><A
 NAME="REDIRECT"
 ></A
->8.5.28. redirect</H4
+>8.5.30. redirect</H4
 ><P
 ></P
 ><DIV
@@ -5392,7 +5635,7 @@ CLASS="SECT3"
 ><A
 NAME="SEND-VANILLA-WAFER"
 ></A
->8.5.29. send-vanilla-wafer</H4
+>8.5.31. send-vanilla-wafer</H4
 ><P
 ></P
 ><DIV
@@ -5465,7 +5708,7 @@ CLASS="SECT3"
 ><A
 NAME="SEND-WAFER"
 ></A
->8.5.30. send-wafer</H4
+>8.5.32. send-wafer</H4
 ><P
 ></P
 ><DIV
@@ -5552,7 +5795,7 @@ CLASS="SECT3"
 ><A
 NAME="SESSION-COOKIES-ONLY"
 ></A
->8.5.31. session-cookies-only</H4
+>8.5.33. session-cookies-only</H4
 ><P
 ></P
 ><DIV
@@ -5720,7 +5963,7 @@ CLASS="SECT3"
 ><A
 NAME="SET-IMAGE-BLOCKER"
 ></A
->8.5.32. set-image-blocker</H4
+>8.5.34. set-image-blocker</H4
 ><P
 ></P
 ><DIV
@@ -5979,7 +6222,7 @@ CLASS="SECT3"
 ><A
 NAME="TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
 ></A
->8.5.33. treat-forbidden-connects-like-blocks</H4
+>8.5.35. treat-forbidden-connects-like-blocks</H4
 ><P
 ></P
 ><DIV
@@ -6098,9 +6341,9 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3543"
+NAME="AEN3633"
 ></A
->8.5.34. Summary</H3
+>8.5.36. Summary</H3
 ><P
 > Note that many of these actions have the potential to cause a page to
  misbehave, possibly even not to display at all. There are many ways 
@@ -6402,7 +6645,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3608"
+NAME="AEN3698"
 ></A
 >8.7.1. default.action</H3
 ><P
@@ -7245,7 +7488,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3774"
+NAME="AEN3864"
 ></A
 >8.7.2. user.action</H3
 ><P

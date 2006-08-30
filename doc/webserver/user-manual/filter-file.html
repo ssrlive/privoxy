@@ -77,21 +77,21 @@ NAME="FILTER-FILE"
 ></A
 >9. Filter Files</H1
 ><P
-> All text substitutions that can be invoked through the
+> On-the-fly text substitutions that can be invoked through the
  <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#FILTER"
 >filter</A
 ></TT
-> action which 
- must first be defined in a <SPAN
+> action need
+ to be defined in a <SPAN
 CLASS="QUOTE"
 >"filter file"</SPAN
->, such as 
- <TT
-CLASS="FILENAME"
->default.filter</TT
+>. Once defined, they 
+ can then be invoked as an <SPAN
+CLASS="QUOTE"
+>"action"</SPAN
 >. Mulitple filter files can be
  defined through the <TT
 CLASS="LITERAL"
@@ -99,13 +99,13 @@ CLASS="LITERAL"
 HREF="config.html#FILTERFILE"
 >filterfile</A
 ></TT
-> config
- option. The filters as supplied by the developers will be found in 
+> config directive. The filters
+ as supplied by the developers will be found in
  <TT
 CLASS="FILENAME"
 >default.filter</TT
 >. It is recommended that any locally
- defined or modified filters go in a separately defined file such as 
+ defined or modified filters go in a separately defined file such as
  <TT
 CLASS="FILENAME"
 >user.filter</TT
@@ -138,7 +138,18 @@ CLASS="LITERAL"
 CLASS="QUOTE"
 >"roll
  your own"</SPAN
-> filters, you should be familiar with HTML syntax.</P
+> filters, you should first be familiar with HTML syntax, 
+ and, of course, regular expressions. By default, filters are only applied 
+ to the document content, but can be extended to the headers with 
+ the supplemental actions: 
+ <A
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
+>filter-client-headers</A
+>  and 
+ <A
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
+>filter-server-headers</A
+>.</P
 ><P
 > Just like the <A
 HREF="actions-file.html"
@@ -292,7 +303,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN3902"
+NAME="AEN3994"
 ></A
 >9.1. Filter File Tutorial</H2
 ><P
@@ -1292,36 +1303,6 @@ CLASS="FILENAME"
 > file does. Users shouldn't need to change
     anything regarding this filter.
    </P
-></DD
-><DT
-><A
-NAME="FILTER-SERVER-HEADERS"
-></A
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->filter-server-headers</I
-></SPAN
-></DT
-><DD
-><P
->   </P
-></DD
-><DT
-><A
-NAME="FILTER-CLIENT-HEADERS"
-></A
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->filter-client-headers</I
-></SPAN
-></DT
-><DD
-><P
->   </P
 ></DD
 ></DL
 ></DIV

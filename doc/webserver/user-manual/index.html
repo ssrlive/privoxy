@@ -45,7 +45,7 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: user-manual.sgml,v 2.13 2006/08/22 11:04:59 hal9 Exp $<BR></P
+>$Id: user-manual.sgml,v 2.14 2006/08/29 10:59:36 hal9 Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -308,7 +308,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >6.1. <A
-HREF="configuration.html#AEN711"
+HREF="configuration.html#AEN725"
 >Controlling <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -499,12 +499,12 @@ HREF="actions-file.html"
 ><DL
 ><DT
 >8.1. <A
-HREF="actions-file.html#AEN1883"
+HREF="actions-file.html#AEN1897"
 >Finding the Right Mix</A
 ></DT
 ><DT
 >8.2. <A
-HREF="actions-file.html#AEN1890"
+HREF="actions-file.html#AEN1904"
 >How to Edit</A
 ></DT
 ><DT
@@ -521,12 +521,12 @@ HREF="actions-file.html#AF-PATTERNS"
 ><DL
 ><DT
 >8.4.1. <A
-HREF="actions-file.html#AEN1964"
+HREF="actions-file.html#AEN1978"
 >The Domain Pattern</A
 ></DT
 ><DT
 >8.4.2. <A
-HREF="actions-file.html#AEN2026"
+HREF="actions-file.html#AEN2040"
 >The Path Pattern</A
 ></DT
 ></DL
@@ -556,7 +556,7 @@ HREF="actions-file.html#CONTENT-TYPE-OVERWRITE"
 ><DT
 >8.5.4. <A
 HREF="actions-file.html#CRUNCH-CLIENT-HEADER"
->crunch-server-header</A
+>crunch-client-header</A
 ></DT
 ><DT
 >8.5.5. <A
@@ -600,61 +600,71 @@ HREF="actions-file.html#FILTER"
 ></DT
 ><DT
 >8.5.13. <A
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
+>filter-client-headers</A
+></DT
+><DT
+>8.5.14. <A
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
+>filter-server-headers</A
+></DT
+><DT
+>8.5.15. <A
 HREF="actions-file.html#FORCE-TEXT-MODE"
 >force-text-mode</A
 ></DT
 ><DT
->8.5.14. <A
+>8.5.16. <A
 HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
 >handle-as-empty-document</A
 ></DT
 ><DT
->8.5.15. <A
+>8.5.17. <A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
 >handle-as-image</A
 ></DT
 ><DT
->8.5.16. <A
+>8.5.18. <A
 HREF="actions-file.html#HIDE-ACCEPT-LANGUAGE"
 >hide-accept-language</A
 ></DT
 ><DT
->8.5.17. <A
+>8.5.19. <A
 HREF="actions-file.html#HIDE-CONTENT-DISPOSITION"
 >hide-content-disposition</A
 ></DT
 ><DT
->8.5.18. <A
+>8.5.20. <A
 HREF="actions-file.html#HIDE-IF-MODIFIED-SINCE"
 >hide-if-modified-since</A
 ></DT
 ><DT
->8.5.19. <A
+>8.5.21. <A
 HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
 >hide-forwarded-for-headers</A
 ></DT
 ><DT
->8.5.20. <A
+>8.5.22. <A
 HREF="actions-file.html#HIDE-FROM-HEADER"
 >hide-from-header</A
 ></DT
 ><DT
->8.5.21. <A
+>8.5.23. <A
 HREF="actions-file.html#HIDE-REFERRER"
 >hide-referrer</A
 ></DT
 ><DT
->8.5.22. <A
+>8.5.24. <A
 HREF="actions-file.html#HIDE-USER-AGENT"
 >hide-user-agent</A
 ></DT
 ><DT
->8.5.23. <A
+>8.5.25. <A
 HREF="actions-file.html#INSPECT-JPEGS"
 >inspect-jpegs</A
 ></DT
 ><DT
->8.5.24. <A
+>8.5.26. <A
 HREF="actions-file.html#KILL-POPUPS"
 >kill-popups<A
 NAME="KILL-POPUP"
@@ -662,53 +672,53 @@ NAME="KILL-POPUP"
 ></A
 ></DT
 ><DT
->8.5.25. <A
+>8.5.27. <A
 HREF="actions-file.html#LIMIT-CONNECT"
 >limit-connect</A
 ></DT
 ><DT
->8.5.26. <A
+>8.5.28. <A
 HREF="actions-file.html#PREVENT-COMPRESSION"
 >prevent-compression</A
 ></DT
 ><DT
->8.5.27. <A
+>8.5.29. <A
 HREF="actions-file.html#OVERWRITE-LAST-MODIFIED"
 >overwrite-last-modified</A
 ></DT
 ><DT
->8.5.28. <A
+>8.5.30. <A
 HREF="actions-file.html#REDIRECT"
 >redirect</A
 ></DT
 ><DT
->8.5.29. <A
+>8.5.31. <A
 HREF="actions-file.html#SEND-VANILLA-WAFER"
 >send-vanilla-wafer</A
 ></DT
 ><DT
->8.5.30. <A
+>8.5.32. <A
 HREF="actions-file.html#SEND-WAFER"
 >send-wafer</A
 ></DT
 ><DT
->8.5.31. <A
+>8.5.33. <A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
 >session-cookies-only</A
 ></DT
 ><DT
->8.5.32. <A
+>8.5.34. <A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
 >set-image-blocker</A
 ></DT
 ><DT
->8.5.33. <A
+>8.5.35. <A
 HREF="actions-file.html#TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
 >treat-forbidden-connects-like-blocks</A
 ></DT
 ><DT
->8.5.34. <A
-HREF="actions-file.html#AEN3543"
+>8.5.36. <A
+HREF="actions-file.html#AEN3633"
 >Summary</A
 ></DT
 ></DL
@@ -727,12 +737,12 @@ HREF="actions-file.html#ACT-EXAMPLES"
 ><DL
 ><DT
 >8.7.1. <A
-HREF="actions-file.html#AEN3608"
+HREF="actions-file.html#AEN3698"
 >default.action</A
 ></DT
 ><DT
 >8.7.2. <A
-HREF="actions-file.html#AEN3774"
+HREF="actions-file.html#AEN3864"
 >user.action</A
 ></DT
 ></DL
@@ -748,7 +758,7 @@ HREF="filter-file.html"
 ><DL
 ><DT
 >9.1. <A
-HREF="filter-file.html#AEN3902"
+HREF="filter-file.html#AEN3994"
 >Filter File Tutorial</A
 ></DT
 ><DT
@@ -819,7 +829,7 @@ CLASS="APPLICATION"
 ><DL
 ><DT
 >12.1. <A
-HREF="copyright.html#AEN4312"
+HREF="copyright.html#AEN4394"
 >License</A
 ></DT
 ><DT
@@ -853,7 +863,7 @@ HREF="appendix.html#REGEX"
 ></DT
 ><DT
 >14.2. <A
-HREF="appendix.html#AEN4558"
+HREF="appendix.html#AEN4640"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
