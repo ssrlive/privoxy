@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.13 2006/08/22 11:04:59 hal9 Exp $
+ $Id: user-manual.sgml,v 2.14 2006/08/29 10:59:36 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.13 2006/08/22 11:04:59 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.14 2006/08/29 10:59:36 hal9 Exp $</pubdate>
 
 <!--
 
@@ -389,7 +389,7 @@ automatically start Privoxy in the boot process.
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- There are many new features in <application>Privoxy</application> &p-version;
+ There are many improvements and new features in <application>Privoxy</application> &p-version;
  :
 </para>
 
@@ -397,7 +397,9 @@ automatically start Privoxy in the boot process.
  <itemizedlist>
   <listitem>
    <para>
-    Mulitiple <link linkend="filter-file">filter files</link> can now be specifed in <filename>config</filename>.
+    Mulitiple <link linkend="filter-file">filter files</link> can now be specifed in <filename>config</filename>. This allows for 
+    locally defined filters that can be maintained separately from the filters as
+    supplied by the developers.
    </para>
   </listitem>
  
@@ -431,7 +433,12 @@ automatically start Privoxy in the boot process.
      </listitem>
      <listitem>
       <para>
-       <literal><link linkend="fast-redirects">fast-redirects</link></literal>
+       <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
       </para>
      </listitem>
      <listitem>
@@ -459,12 +466,7 @@ automatically start Privoxy in the boot process.
        <literal><link linkend="hide-if-modified-since">hide-if-modified-since</link></literal>
       </para>
      </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="hide-referrer">hide-referrer</link></literal>
-      </para>
-     </listitem>
-     <listitem>
+    <listitem>
       <para>
        <literal><link linkend="inspect-jpegs">inspect-jpegs</link></literal>
       </para>
@@ -487,7 +489,15 @@ automatically start Privoxy in the boot process.
 
   </itemizedlist>
   </para>
-
+  <para>
+     In addition, <literal><link linkend="fast-redirects">fast-redirects</link></literal>
+     has been significantly improved with enhanced syntax.
+  </para>
+   <para>
+     And <literal><link linkend="hide-referrer">hide-referrer</link></literal>
+     has a new option, <literal>conditional block</literal>.
+   </para>
+ 
  </listitem>
 
   <listitem>
@@ -499,8 +509,8 @@ automatically start Privoxy in the boot process.
 
   <listitem>
    <para>
-    In addition, there are various bug fixes and enhancements, including 
-    error pages are no longer cached, better DNS error handling, and logging 
+    In addition, there are various bug fixes and significant enhancements, including 
+    error pages are no longer cached, better DNS error handling, and various logging 
     improvements.
    </para>
   </listitem>
@@ -528,6 +538,19 @@ automatically start Privoxy in the boot process.
     configuration files. Save any important configuration files!
   </para>
  </listitem>
+ <listitem>
+    <para>
+     See the full documentation on 
+     <literal><link linkend="fast-redirects">fast-redirects</link></literal>
+     which has changed syntax, and may require adjustments to local configs.
+   </para>
+  </listitem>
+ <listitem>
+    <para>
+     The <filename>jarfile</filename>, cookie logger, is off by default now.
+    </para>
+  </listitem>
+
  <listitem>
   <para>  
    What constitutes a <quote>default</quote> configuration has changed, 
@@ -2450,7 +2473,7 @@ www.example.net/*.style
 <!--
 new action
 -->
-<title>crunch-server-header</title>
+<title>crunch-client-header</title>
 
 <variablelist>
  <varlistentry>
@@ -3110,7 +3133,8 @@ problem-host.example.com</screen>
     based substitutions. (Note: as of version 3.0.3 plain text documents 
     are exempted from filtering, because web servers often use the
     <literal>text/plain</literal> MIME type for all files whose type they
-    don't know.)
+    don't know.) By default, filtering works only on the document content 
+    itself, not the headers.
    </para>
   </listitem>
  </varlistentry>
@@ -3291,6 +3315,192 @@ problem-host.example.com</screen>
    </para>
   </listitem>
  </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="filter-client-headers">
+<title>filter-client-headers</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   To apply filtering to the client's (browser's) headers
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>Extend filtering capabilities to the client's headers, which 
+   by default applies only to the document itself.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Regular expressions can be used to filter headers as well. Check your
+    filters closely before activating this action, as it can easily lead to broken
+    requests.
+   </para>
+   <para> 
+    These filters are applied to each header on its own, not to them
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is
+    z.
+   </para>
+   <para>
+    The filters are used after the other header actions have finished and can
+    use their output as input.
+   </para>
+  
+   <para>
+    Whenever possible one should specify <literal>^</literal>,
+    <literal>$</literal>, the whole header name and the colon, to make sure
+    the filter doesn't cause havoc to other headers or the
+    page itself. For example if you want to transform
+    <application>Galeon</application> User-Agents to 
+    <application>Firefox</application> User-Agents you
+    shouldn't use:
+</para>
+<para>
+<screen>
+s@Galeon/\d\.\d\.\d @@
+</screen>
+</para><para>
+    but:
+</para><para>
+<screen>
+s@^(User-Agent:.*) Galeon/\d\.\d\.\d (Firefox/\d\.\d\.\d\.\d)$@$1 $2@
+</screen>
+</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+{+filter-client-headers +filter{test_filter}}
+problem-host.example.com
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="filter-server-headers">
+<title>filter-server-headers</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   To apply filtering to the server's headers
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>Extend filtering capabilities to the server's headers, which 
+   by default applies only to the document itself.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Similar to <literal>filter-client-headers</literal>, but works on 
+    the server instead. To filter both server and client, use both.
+   </para>
+   <para>
+    As with <literal>filter-client-headers</literal>, check your
+    filters before activating this action, as it can easily lead to broken
+    requests.
+   </para>
+   <para> 
+    These filters are applied to each header on its own, not to them
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is
+    z.
+   </para>
+   <para>
+    The filters are used after the other header actions have finished and can
+    use their output as input.
+   </para>
+   <para>
+    Remember too, whenever possible one should specify <literal>^</literal>,
+    <literal>$</literal>, the whole header name and the colon, to make sure
+    the filter doesn't cause havoc to other headers or the
+    page itself. See above for example.
+   </para>
+
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+{+filter-server-headers +filter{test_filter}}
+problem-host.example.com
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
 </variablelist>
 </sect3>
 
@@ -5838,15 +6048,15 @@ ar.atwola.com/</screen>
 <title>Filter Files</title>
 
 <para>
- All text substitutions that can be invoked through the
- <literal><link linkend="filter">filter</link></literal> action which 
- must first be defined in a <quote>filter file</quote>, such as 
- <filename>default.filter</filename>. Mulitple filter files can be
- defined through the <literal>
- <link linkend="filterfile">filterfile</link></literal> config
- option. The filters as supplied by the developers will be found in 
+ On-the-fly text substitutions that can be invoked through the
+ <literal><link linkend="filter">filter</link></literal> action need
+ to be defined in a <quote>filter file</quote>. Once defined, they 
+ can then be invoked as an <quote>action</quote>. Mulitple filter files can be
+ defined through the <literal> <link
+ linkend="filterfile">filterfile</link></literal> config directive. The filters
+ as supplied by the developers will be found in
  <filename>default.filter</filename>. It is recommended that any locally
- defined or modified filters go in a separately defined file such as 
+ defined or modified filters go in a separately defined file such as
  <filename>user.filter</filename>.
  
 </para>
@@ -5865,7 +6075,12 @@ ar.atwola.com/</screen>
  HTML, JavaScript, CSS etc. (all <literal>text/*</literal>
  MIME types, <emphasis>except</emphasis> <literal>text/plain</literal>).
  Substitutions are made at the source level, so if you want to <quote>roll
- your own</quote> filters, you should be familiar with HTML syntax.
+ your own</quote> filters, you should first be familiar with HTML syntax, 
+ and, of course, regular expressions. By default, filters are only applied 
+ to the document content, but can be extended to the headers with 
+ the supplemental actions: 
+ <link linkend="filter-client-headers">filter-client-headers</link>  and 
+ <link linkend="filter-server-headers">filter-server-headers</link>.
 </para>
 
 <para>
@@ -6480,22 +6695,6 @@ pre-defined filters for your convenience:
     to the sites they were intended for, which is what the supplied
     <filename>default.action</filename> file does. Users shouldn't need to change
     anything regarding this filter.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry id="filter-server-headers">
-  <term><emphasis>filter-server-headers</emphasis></term>
-  <listitem>
-   <para>
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry id="filter-client-headers">
-  <term><emphasis>filter-client-headers</emphasis></term>
-  <listitem>
-   <para>
    </para>
   </listitem>
  </varlistentry>
@@ -7615,6 +7814,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.14  2006/08/29 10:59:36  hal9
+ Add a "Whats New in this release" Section. Further work on multiple filter
+ files, and assorted other minor changes.
+
  Revision 2.13  2006/08/22 11:04:59  hal9
  Silence warnings and errors. This should build now. New filters were only
  stubbed in. More to be done.
