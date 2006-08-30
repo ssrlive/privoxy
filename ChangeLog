@@ -26,7 +26,7 @@ ChangeLog for Privoxy
      redirect{URL}
      treat-forbidden-connects-like-blocks
 
-- Privoxy's default error pages are no longer be cached.
+- Privoxy's default error pages are no longer cached.
 - Improved DNS error handling.
 - Multiple filter files can now be specified in config.
 - Added jpeg filtering to defend against MS jpeg vulnerability MS04-028
