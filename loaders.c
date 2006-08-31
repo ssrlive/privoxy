@@ -1,7 +1,7 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.50.2.8 2006/01/30 15:16:25 david__schmidt Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.52 2006/07/18 14:48:46 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/loaders.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.50.2.8 2006/01/30 15:16:25 david_
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.52  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.50.2.8  2006/01/30 15:16:25  david__schmidt
  *    Remove a little residual debugging info
  *
@@ -1096,6 +1100,7 @@ int load_trustfile(struct client_state *csp)
    int reject, trusted;
    struct file_list *fs;
    unsigned long linenum = 0;
+   int trusted_referrers = 0;
 
    if (!check_file_changed(current_trustfile, csp->config->trustfile, &fs))
    {
@@ -1177,8 +1182,24 @@ int load_trustfile(struct client_state *csp)
        */
       if (trusted)
       {
-         *tl++ = b->url;
-         /* FIXME BUFFER OVERFLOW if >=64 entries */
+         if(++trusted_referrers < MAX_TRUSTED_REFERRERS)
+         {
+            *tl++ = b->url;
+         }
+         else
+         {
+           /*
+            * FIXME: csp->config->trust_list is only needed 
+            * to print the trusted referrers in Privoxy's blocking
+            * message. Not printing all of them is certainly better
+            * than writing them into memory that doesn't belong to us,
+            * but when Privoxy 3.0.4 is out, we should look for a real
+            * solution. 
+            */
+            log_error(LOG_LEVEL_ERROR,
+              "Too many trusted referrers, %s will not show up in the blocking message.",
+              *b->url);
+         }
       }
    }
 

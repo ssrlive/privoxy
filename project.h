@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.76 2006/08/14 08:25:19 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.77 2006/08/21 12:50:51 david__schmidt Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.77  2006/08/21 12:50:51  david__schmidt
+ *    Formatting cleanup
+ *
  *    Revision 1.76  2006/08/14 08:25:19  fabiankeil
  *    Split filter-headers{} into filter-client-headers{}
  *    and filter-server-headers{}.
@@ -1276,6 +1279,12 @@ struct block_spec
    struct block_spec *next;  /**< Next entry in linked list    */
 };
 
+/**
+ * Arbitrary limit for the number of trusted referrers
+ * Privoxy can print in its blocking message.
+ */
+#define MAX_TRUSTED_REFERRERS 64
+
 #endif /* def FEATURE_TRUST */
 
 
@@ -1457,7 +1466,7 @@ struct configuration_spec
    struct list trust_info[1];
 
    /** FIXME: DOCME: Document this. */
-   struct url_spec *trust_list[64];
+   struct url_spec *trust_list[MAX_TRUSTED_REFERRERS];
 
 #endif /* def FEATURE_TRUST */
 
