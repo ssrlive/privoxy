@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.61 2006/08/03 02:46:41 david__schmidt Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.62 2006/08/14 00:27:47 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -39,6 +39,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.61 2006/08/03 02:46:41 david__sch
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.62  2006/08/14 00:27:47  david__schmidt
+ *    Feature request 595948: Re-Filter logging in single line
+ *
  *    Revision 1.61  2006/08/03 02:46:41  david__schmidt
  *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
  *
@@ -1019,7 +1022,7 @@ struct http_response *trust_url(struct client_state *csp)
    }
    else
    {
-      if (!err) err = map(exports, "referrer", 1, "unknown", 1);
+      if (!err) err = map(exports, "referrer", 1, "none set", 1);
    }
 
    if (err)
@@ -1039,7 +1042,6 @@ struct http_response *trust_url(struct client_state *csp)
       string_append(&p, buf);
    }
    err = map(exports, "trusted-referrers", 1, p, 0);
-   freez(p);
 
    if (err)
    {
@@ -1062,7 +1064,6 @@ struct http_response *trust_url(struct client_state *csp)
          string_append(&p, buf);
       }
       err = map(exports, "trust-info", 1, p, 0);
-      freez(p);
    }
    else
    {
