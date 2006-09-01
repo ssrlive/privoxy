@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.15 2006/08/29 01:46:23 david__schmidt Exp $
+#  $Id: default.action.master,v 1.16 2006/09/01 14:36:58 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -537,7 +537,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -filter-client-headers \
 -filter-server-headers \
 -force-text-mode \
--handle-as-empty-document
+-handle-as-empty-document \
 -handle-as-image \
 -hide-accept-language \
 -hide-content-disposition \
