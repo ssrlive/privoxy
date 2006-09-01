@@ -2,23 +2,24 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.7 2006/07/18 14:48:47 david__schmidt Exp $
+#  $Id: standard.action,v 1.8 2006/08/03 02:46:41 david__schmidt Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
 #
-#  Copyright   :  Written by and Copyright
+#  Copyright   :  Written by and Copyright 2002-2006
 #                 Privoxy team. http://www.privoxy.org/
 #
 ######################################################################
 
 ######################################################################
 #
-# CAUTION: THIS FILE IS *NOT* THE PLACE TO CUSTOMIZE YOUR CONFIGURATION!
+# WARNING: THIS FILE IS *NOT* THE PLACE TO CUSTOMIZE YOUR CONFIGURATION!
 #
-#          If you want to customize Privoxy to suit your needs, 
-#          you can alter the default section in default.action and/or
-#          add your personal exceptions and extensions to user.action
+#          This is not a user modifiable configuration file!
+#          Local customizations and preferences should go in 
+#          user.action  and/or user.filter. Or use the custom editor at
+#          http://p.p/. Thanks.
 #
 ######################################################################
 
@@ -29,8 +30,12 @@
 { \
 -add-header \
 -block \
+-content-type-overwrite \
+-crunch-client-header \
+-crunch-if-none-match \
 -crunch-outgoing-cookies \
 -crunch-incoming-cookies \
+-crunch-server-header \
 -deanimate-gifs \
 -downgrade-http-version \
 -fast-redirects \
@@ -55,18 +60,29 @@
 -filter{crude-parental} \
 -filter{ie-exploits} \
 -filter{site-specifics} \
+-filter-client-headers \
+-filter-server-headers \
+-force-text-mode \
+-handle-as-empty-document \
 -handle-as-image \
+-hide-accept-language \
+-hide-content-disposition \
+-hide-if-modified-since \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
 -hide-referrer \
 -hide-user-agent \
+-inspect-jpegs \
 -kill-popups \
 -limit-connect \
 +prevent-compression \
+-overwrite-last-modified \
+-redirect \
 -send-vanilla-wafer \
 -send-wafer \
 -session-cookies-only \
 +set-image-blocker{pattern} \
+-treat-forbidden-connects-like-blocks \
 }
 standard.Cautious
 
@@ -77,8 +93,12 @@ standard.Cautious
 { \
 -add-header \
 -block \
+-content-type-overwrite \
+-crunch-client-header \
+-crunch-if-none-match \
 -crunch-outgoing-cookies \
 -crunch-incoming-cookies \
+-crunch-server-header \
 +deanimate-gifs{last} \
 -downgrade-http-version \
 -fast-redirects \
@@ -103,18 +123,29 @@ standard.Cautious
 -filter{crude-parental} \
 +filter{ie-exploits} \
 -filter{site-specifics} \
+-filter-client-headers \
+-filter-server-headers \
+-force-text-mode \
+-handle-as-empty-document \
 -handle-as-image \
+-hide-accept-language \
+-hide-content-disposition \
+-hide-if-modified-since \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{forge} \
 -hide-user-agent \
+-inspect-jpegs \
 -kill-popups \
 -limit-connect \
 +prevent-compression \
+-overwrite-last-modified \
+-redirect \
 -send-vanilla-wafer \
 -send-wafer \
 +session-cookies-only \
 +set-image-blocker{pattern} \
+-treat-forbidden-connects-like-blocks \
 }
 standard.Medium
 
@@ -125,8 +156,12 @@ standard.Medium
 { \
 +add-header{X-User-Tracking: sucks} \
 -block \
+-content-type-overwrite \
+-crunch-client-header \
+-crunch-if-none-match \
 +crunch-outgoing-cookies \
 +crunch-incoming-cookies \
+-crunch-server-header \
 +deanimate-gifs{last} \
 -downgrade-http-version \
 +fast-redirects{check-decoded-url} \
@@ -151,17 +186,28 @@ standard.Medium
 -filter{crude-parental} \
 -filter{ie-exploits} \
 -filter{site-specifics} \
+-filter-client-headers \
+-filter-server-headers \
+-force-text-mode \
+-handle-as-empty-document \
 -handle-as-image \
+-hide-accept-language \
+-hide-content-disposition \
+-hide-if-modified-since \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{forge} \
 -hide-user-agent \
+-inspect-jpegs \
 -kill-popups \
 -limit-connect \
 +prevent-compression \
+-overwrite-last-modified \
+-redirect \
 -send-vanilla-wafer \
 -send-wafer \
 -session-cookies-only \
 +set-image-blocker{pattern} \
+-treat-forbidden-connects-like-blocks \
 }
 standard.Adventuresome
