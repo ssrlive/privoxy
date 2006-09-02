@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.17 2006/09/01 16:37:49 hal9 Exp $
+#  $Id: default.action.master,v 1.18 2006/09/02 14:03:46 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -1430,6 +1430,8 @@ swscan.apple.com
 #MASTER# REMARKS: Popular bug-tracking system - likely to contain code
 bugzilla.
 .tldp.org
+#MASTER# REMARKS: all the world is wikified 09/02/06. Generic wiki un-filterer.
+.wiki*.
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
