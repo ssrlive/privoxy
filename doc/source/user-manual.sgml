@@ -12,7 +12,7 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.4">
-<!entity p-status "BETA">
+<!entity p-status "beta">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.14 2006/08/29 10:59:36 hal9 Exp $
+ $Id: user-manual.sgml,v 2.15 2006/08/30 11:15:22 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.14 2006/08/29 10:59:36 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.15 2006/08/30 11:15:22 hal9 Exp $</pubdate>
 
 <!--
 
@@ -116,10 +116,9 @@ Hal.
  <application>Privoxy</application>, v.&p-version;<![%p-not-stable;[, 
  and is mostly complete at this point. The most up to date reference for the
  time being is still the comments in the source files and in the individual
- configuration files. Development of version 3.0 is currently nearing
- completion, and includes many significant changes and enhancements over
- earlier versions. The target release date for
- stable v3.0 is <quote>soon</quote> ;-)]]>.
+ configuration files. Development of a new version is currently nearing
+ completion, and includes significant changes and enhancements over
+ earlier versions. ]]>.
 </para>
 
 <!-- include only in non-stable versions -->
@@ -135,10 +134,11 @@ Hal.
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="features"><title>Features</title>
 <para>
- In addition to <application>Internet Junkbuster's</application> traditional
- features of ad and banner blocking and cookie management,
- <application>Privoxy</application> provides new features<![%p-not-stable;[,
- some of them currently under development]]>:
+ In addition to the core 
+ features of ad blocking and cookie management,
+ <application>Privoxy</application> provides many supplemental
+ features<![%p-not-stable;[, some of them currently under development]]>, 
+ that give the end-user more control, more privacy and more freedom:
 </para>
 <!-- Include newfeatures.sgml boilerplate here: -->
  &newfeatures;
@@ -373,8 +373,9 @@ automatically start Privoxy in the boot process.
 <para>
  In order not to lose your personal changes and adjustments when updating
  to the latest <literal>default.action</literal> file we <emphasis>strongly
- recommend</emphasis> that you use <literal>user.action</literal> for your
- customization of <application>Privoxy</application>. See the <link
+ recommend</emphasis> that you use <literal>user.action</literal> and 
+ <literal>user.filter</literal> for your local
+ customizations of <application>Privoxy</application>. See the <link
  linkend="actions-file">Chapter on actions files</link> for details.
 </para>
 
@@ -1580,12 +1581,19 @@ must find a better place for this paragraph
 <sect1 id="actions-file"><title>Actions Files</title>
 
 <para>
- The actions files are used to define what actions
- <application>Privoxy</application> takes for which URLs, and thus determine
+ The actions files are used to define what <emphasis>actions</emphasis>
+ <application>Privoxy</application> takes for which URLs, and thus determines
  how ad images, cookies and various other aspects of HTTP content and
- transactions are handled, and on which sites (or even parts thereof). There 
- are three such files included with <application>Privoxy</application>
- with differing purposes:
+ transactions are handled, and on which sites (or even parts thereof). 
+ There are a number of such actions, with a wide range of functionality.
+ Each action does something a little different.
+ These actions give us a veritable arsenal of tools with which to exert 
+ our control, preferences and independence.
+</para> 
+<para>
+ There 
+ are three action files included with <application>Privoxy</application> with
+ differing purposes:
  </para>
  
  <para>
@@ -2487,7 +2495,7 @@ new action
   <term>Effect:</term>
   <listitem>
    <para>
-    Deletes every header send by the client that contains the string the user supplied as parameter.
+    Deletes every header sent by the client that contains the string the user supplied as parameter.
    </para>
   </listitem>
  </varlistentry>
@@ -3336,8 +3344,10 @@ problem-host.example.com</screen>
  <varlistentry>
   <term>Effect:</term>
   <listitem>
-   <para>Extend filtering capabilities to the client's headers, which 
-   by default applies only to the document itself.
+   <para>
+    By default, <application>Privoxy's</application> filters only apply 
+    to the document content itself. This will extend those filters to 
+    include the client's headers as well.
    </para>
   </listitem>
  </varlistentry>
@@ -3434,8 +3444,10 @@ problem-host.example.com
  <varlistentry>
   <term>Effect:</term>
   <listitem>
-   <para>Extend filtering capabilities to the server's headers, which 
-   by default applies only to the document itself.
+   <para>
+    By default, <application>Privoxy's</application> filters only apply 
+    to the document content itself. This will extend those filters to 
+    include the server's headers as well.
    </para>
   </listitem>
  </varlistentry>
@@ -4349,7 +4361,7 @@ new action
   <term>Effect:</term>
   <listitem>
    <para>
-    To protect against a known exploit
+    Protect against a known exploit
    </para>
   </listitem>
  </varlistentry>
@@ -4813,7 +4825,8 @@ new action
   <listitem>
    <para>
     This action is useful to replace whole documents with your own
-    ones. For that to work, they have to be available on another server.
+    ones. For that to work, they have to be available on another server, 
+    and both should resolve.
    </para>
    <para>
     You can do the same by combining the actions
@@ -5250,7 +5263,7 @@ new action
    <para>
     If you previously configured <application>Privoxy</application> to do the
     request through a SSL tunnel, everything will work. Most likely you haven't
-    and the server will responds with an error message because it is expecting
+    and the server will respond with an error message because it is expecting
     HTTPS.
    </para>
   </listitem>
@@ -5500,11 +5513,15 @@ that also explains why and how aliases are used:
  { \
  -<link linkend="ADD-HEADER">add-header</link> \
  -<link linkend="BLOCK">block</link> \
+ -<link linkend="CONTENT-TYPE-OVERWRITE">content-type-overwrite</link> \
+ -<link linkend="CRUNCH-CLIENT-HEADER">crunch-client-header</link> \
+ -<link linkend="CRUNCH-IF-NONE-MATCH">crunch-if-none-match</link> \
  -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> \
+ -<link linkend="CRUNCH-SERVER-HEADER">crunch-server-header</link> \
  -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link> \
  +<link linkend="DEANIMATE-GIFS">deanimate-gifs</link> \
  -<link linkend="DOWNGRADE-HTTP-VERSION">downgrade-http-version</link> \
- +<link linkend="FAST-REDIRECTS">fast-redirects</link> \
+ +<link linkend="FAST-REDIRECTS">fast-redirects{check-decoded-url}</link> \
  +<link linkend="FILTER-JS-ANNOYANCES">filter{js-annoyances}</link> \
  -<link linkend="FILTER-JS-EVENTS">filter{js-events}</link> \
  +<link linkend="FILTER-HTML-ANNOYANCES">filter{html-annoyances}</link> \
@@ -5525,18 +5542,29 @@ that also explains why and how aliases are used:
  -<link linkend="FILTER-FUN">filter{fun}</link> \
  -<link linkend="FILTER-CRUDE-PARENTAL">filter{crude-parental}</link> \
  +<link linkend="FILTER-IE-EXPLOITS">filter{ie-exploits}</link> \     
+ -<link linkend="FILTER-CLIENT-HEADERS">filter-client-headers</link> \
+ -<link linkend="FILTER-SERVER-HEADERS">filter-server-headers</link> \
+ -<link linkend="FORCE-TEXT-MODE">force-text-mode</link> \
+ -<link linkend="HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</link> \
  -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
+ -<link linkend="HIDE-ACCEPT-LANGUAGE">hide-accept-language</link> \
+ -<link linkend="HIDE-CONTENT-DISPOSITION">hide-content-disposition</link> \
+ -<link linkend="HIDE-IF-MODIFIED-SINCE">hide-if-modified-since</link> \
  +<link linkend="HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</link> \
  +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
  +<link linkend="HIDE-REFERER">hide-referrer{forge}</link> \
  -<link linkend="HIDE-USER-AGENT">hide-user-agent</link> \
+ -<link linkend="INSPECT-JPEGS">inspect-jpegs</link> \
  -<link linkend="KILL-POPUPS">kill-popups</link> \
  -<link linkend="LIMIT-CONNECT">limit-connect</link> \
  +<link linkend="PREVENT-COMPRESSION">prevent-compression</link> \
+ -<link linkend="OVERWRITE-LAST-MODIFIED">overwrite-last-modified</link> \
+ -<link linkend="REDIRECT">redirect</link> \
  -<link linkend="SEND-VANILLA-WAFER">send-vanilla-wafer</link> \
  -<link linkend="SEND-WAFER">send-wafer</link> \
  +<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> \
  +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
+ -<link linkend="TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS">treat-forbidden-connects-like-blocks</link> \
  }
  / # forward slash will match *all* potential URL patterns.</screen>
 </para>
@@ -5691,7 +5719,7 @@ bs*.einets.com
 
 <para>
  One of the most important jobs of <application>Privoxy</application>
- is to block banners. A huge bunch of them are already <quote>blocked</quote>
+ is to block banners. A huge bunch of them can be <quote>blocked</quote>
  by the <literal><link linkend="filter">filter</link>{banners-by-size}</literal>
  action, which we enabled above, and which deletes the references to banner
  images from the pages while they are loaded, so the browser doesn't request
@@ -5799,7 +5827,7 @@ www.ugu.com/sui/ugu/adv</screen>
 </para>
 
 <para>
- The actual <filename>default.action</filename> is of course more
+ The actual <filename>default.action</filename> is of course much more
  comprehensive, but we hope this example made clear how it works.
 </para>
 
@@ -5866,9 +5894,12 @@ shop        = -crunch-all-cookies allow-popups
 
 # Allow ads for selected useful free sites:
 #
-allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}</screen>
+allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 
- 
+# Alias for specific file types that are text, but might have conflicting
+# MIME types. We want the browser to force these to be text documents.
+handle-as-text = -<link linkend="FILTER">filter</link> +-<link linkend="content-type-overwrite">content-type-overwrite{text/plain}</link> +-<link linkend="FORCE-TEXT-MODE">force-text-mode</link> -<link linkend="HIDE-CONTENT-DISPOSITION">hide-content-disposition</link></screen>
+
 </para>
 
 <para>
@@ -6015,6 +6046,19 @@ ar.atwola.com/</screen>
  <literal>-<link linkend="block">block</link></literal>, 
  <literal>-<link linkend="filter-banners-by-size">filter{banners-by-size}</link></literal>, and 
  <literal>-<link linkend="filter-banners-by-link">filter{banners-by-link}</link></literal> above.
+</para>
+
+<para>
+ Invoke another alias here to force an over-ride of the MIME type <literal>
+ application/x-sh</literal> which typically would open a download type 
+ dialog. In my case, I want to look at the shell script, and then I can save
+ it should I choose to.
+</para>
+
+<para>
+<screen>
+{ handle-as-text }
+/.*\.sh$</screen>   
 </para>
 
 <para>
@@ -7386,10 +7430,10 @@ Requests</title>
    linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
    action applies (and the document type fits the action), the rest of the page is
    read into memory (up to a configurable limit). Then the filter rules (from
-   <filename>default.filter</filename>) are processed against the buffered
-   content. Filters are applied in the order they are specified in one of the
-   filter files. Animated GIFs, if present, are
-   reduced to either the first or last frame, depending on the action
+   <filename>default.filter</filename> and any other filter files) are
+   processed against the buffered content. Filters are applied in the order
+   they are specified in one of the filter files. Animated GIFs, if present,
+   are reduced to either the first or last frame, depending on the action
    setting.The entire page, which is now filtered, is then sent by
    <application>Privoxy</application> back to your browser. 
   </para>
@@ -7469,7 +7513,8 @@ Requests</title>
 
 <para>
  Let's try an example, <ulink url="http://google.com">google.com</ulink>, 
- and look at it one section at a time:
+ and look at it one section at a time in a sample configuration (your real 
+ configuration may vary):
 </para>
 
 <para>
@@ -7478,38 +7523,63 @@ Requests</title>
 
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
-{-add-header 
- -block 
- -crunch-outgoing-cookies 
- -crunch-incoming-cookies 
- +deanimate-gifs{last} 
- -downgrade-http-version 
- +fast-redirects 
- -filter{popups} 
- -filter{fun} 
- -filter{shockwave-flash} 
- -filter{crude-parental} 
- +filter{html-annoyances} 
- +filter{js-annoyances} 
- +filter{content-cookies} 
- +filter{webbugs} 
- +filter{refresh-tags} 
- +filter{nimda} 
- +filter{banners-by-size} 
- +hide-forwarded-for-headers 
- +hide-from-header{block} 
- +hide-referer{forge} 
- -hide-user-agent 
- -handle-as-image 
- -kill-popups 
- -limit-connect 
- +prevent-compression 
- -send-vanilla-wafer 
- -send-wafer 
- +session-cookies-only 
- +set-image-blocker{pattern} }
+ {-add-header
+ -block
+ -content-type-overwrite
+ -crunch-client-header
+ -crunch-if-none-match
+ -crunch-incoming-cookies
+ -crunch-outgoing-cookies
+ -crunch-server-header
+ +deanimate-gifs {last}
+ -downgrade-http-version
+ +fast-redirects {check-decoded-url}
+ -filter {js-events}
+ -filter {content-cookies}
+ -filter {all-popups}
+ -filter {banners-by-link}
+ -filter {tiny-textforms}
+ -filter {frameset-borders}
+ -filter {demoronizer}
+ -filter {shockwave-flash}
+ -filter {quicktime-kioskmode}
+ -filter {fun}
+ -filter {crude-parental}
+ -filter {site-specifics}
+ +filter {js-annoyances}
+ +filter {html-annoyances}
+ +filter {refresh-tags}
+ +filter {unsolicited-popups}
+ +filter {img-reorder}
+ +filter {banners-by-size}
+ +filter {webbugs}
+ +filter {jumping-windows}
+ +filter {ie-exploits}
+ -filter-client-headers
+ -filter-server-headers
+ -force-text-mode
+ -handle-as-empty-document
+ -handle-as-image
+ -hide-accept-language
+ -hide-content-disposition
+ +hide-forwarded-for-headers
+ +hide-from-header {block}
+ -hide-if-modified-since
+ +hide-referrer {forge}
+ -hide-user-agent
+ -inspect-jpegs
+ -kill-popups
+ -limit-connect
+ -overwrite-last-modified
+ +prevent-compression
+ -redirect
+ -send-vanilla-wafer
+ -send-wafer
+ +session-cookies-only
+ +set-image-blocker {pattern}
+ -treat-forbidden-connects-like-blocks }
 /
-
+ 
  { -session-cookies-only }
  .google.com
 
@@ -7522,9 +7592,17 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- This tells us how we have defined our 
+ This is telling us how we have defined our 
  <link linkend="ACTIONS"><quote>actions</quote></link>, and
- which ones match for our example, <quote>google.com</quote>. The first listing
+ which ones match for our test case, <quote>google.com</quote>. 
+ Displayed is all the actions that are available to us. Remember,
+ the <literal>+</literal> sign denotes <quote>on</quote>. <literal>-</literal>
+ denotes <quote>off</quote>. So some are <quote>on</quote> here, but many 
+ are <quote>off</quote>. Each example we try may provide a slightly different
+ end result, depending on our configuration directives.
+</para>
+<para>
+ The first listing
  is any matches for the <filename>standard.action</filename> file. No hits at
  all here on <quote>standard</quote>. Then next is <quote>default</quote>, or
  our <filename>default.action</filename> file. The large, multi-line listing,
@@ -7542,8 +7620,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  <quote>.google.com</quote>. The first is negating our previous cookie setting, 
  which was for <link
  linkend="SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></link>
- (i.e. not persistent). So we will allow persistent cookies for google. The
- second turns <emphasis>off</emphasis> any 
+ (i.e. not persistent). So we will allow persistent cookies for google, at
+ least that is how it is in this example. The second turns
+ <emphasis>off</emphasis> any 
  <link
  linkend="FAST-REDIRECTS"><quote>+fast-redirects</quote></link>
  action, allowing this to take place unmolested. Note that there is a leading
@@ -7557,6 +7636,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  Then, for our <filename>user.action</filename> file, we again have no hits.
+ So there is nothing google-specific that we might have added to our own, local
+ configuration.
 </para>
 
 <para>
@@ -7571,43 +7652,56 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
  Final results:
  
- -add-header 
- -block 
- -crunch-outgoing-cookies 
- -crunch-incoming-cookies 
- +deanimate-gifs{last} 
- -downgrade-http-version 
- -fast-redirects 
- -filter{popups} 
- -filter{fun} 
- -filter{shockwave-flash} 
- -filter{crude-parental} 
- +filter{html-annoyances} 
- +filter{js-annoyances} 
- +filter{content-cookies} 
- +filter{webbugs} 
- +filter{refresh-tags} 
- +filter{nimda} 
- +filter{banners-by-size} 
- +hide-forwarded-for-headers 
- +hide-from-header{block} 
- +hide-referer{forge} 
- -hide-user-agent 
- -handle-as-image 
- -kill-popups 
- -limit-connect 
- +prevent-compression 
- -send-vanilla-wafer 
+ -add-header
+ -block
+ -content-type-overwrite
+ -crunch-client-header
+ -crunch-if-none-match
+ -crunch-incoming-cookies
+ -crunch-outgoing-cookies
+ -crunch-server-header
+ +deanimate-gifs {last}
+ -downgrade-http-version
+ -fast-redirects
+ +filter {js-annoyances}
+ +filter {html-annoyances}
+ +filter {refresh-tags}
+ +filter {unsolicited-popups}
+ +filter {img-reorder}
+ +filter {banners-by-size}
+ +filter {webbugs}
+ +filter {jumping-windows}
+ +filter {ie-exploits}
+ -filter-client-headers
+ -filter-server-headers
+ -force-text-mode
+ -handle-as-empty-document
+ -handle-as-image
+ -hide-accept-language
+ -hide-content-disposition
+ +hide-forwarded-for-headers
+ +hide-from-header {block}
+ -hide-if-modified-since
+ +hide-referrer {forge}
+ -hide-user-agent
+ -inspect-jpegs
+ -kill-popups
+ -limit-connect
+ -overwrite-last-modified
+ +prevent-compression
+ -redirect
+ -send-vanilla-wafer
  -send-wafer
- -session-cookies-only 
- +set-image-blocker{pattern} 
-</screen>
+ -session-cookies-only
+ +set-image-blocker {pattern}
+ -treat-forbidden-connects-like-blocks </screen>
 </para>
 
 <para>
  Notice the only difference here to the previous listing, is to 
  <quote>fast-redirects</quote> and <quote>session-cookies-only</quote>,
- which are actived specifically for this site in our configuration.
+ which are actived specifically for this site in our configuration, 
+ and thus show in the <quote>Final Results</quote>.
 </para>
 
 <para>
@@ -7666,12 +7760,16 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
  {-add-header 
-  -block 
-  -crunch-incoming-cookies 
-  -crunch-outgoing-cookies 
+  -block
+  -content-type-overwrite
+  -crunch-client-header
+  -crunch-if-none-match
+  -crunch-incoming-cookies
+  -crunch-outgoing-cookies
+  -crunch-server-header
   +deanimate-gifs 
   -downgrade-http-version 
-  +fast-redirects 
+  +fast-redirects{check-decoded-url}
   +filter{html-annoyances} 
   +filter{js-annoyances} 
   +filter{kill-popups} 
@@ -7680,17 +7778,27 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   +filter{banners-by-size} 
   +filter{hal} 
   +filter{fun} 
+  -filter-client-headers
+  -filter-server-headers
+  -force-text-mode
+  -handle-as-empty-document
+  -handle-as-image 
+  -hide-accept-language
+  -hide-content-disposition  
   +hide-forwarded-for-headers 
   +hide-from-header{block} 
   +hide-referer{forge} 
   -hide-user-agent 
-  -handle-as-image 
+  -inspect-jpegs
   +kill-popups 
+  -overwrite-last-modified
   +prevent-compression 
+  -redirect
   -send-vanilla-wafer 
   -send-wafer 
   +session-cookies-only 
-  +set-image-blocker{blank} }
+  +set-image-blocker{blank} 
+  -treat-forbidden-connects-like-blocks }
    /
 
  { +block +handle-as-image }
@@ -7699,11 +7807,12 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- Ooops, the <quote>/adsl/</quote> is matching <quote>/ads</quote>! But 
- we did not want this at all! Now we see why we get the blank page. We could
- now add a new action below this that explicitly does <emphasis>not</emphasis>
- block (<quote>{-block}</quote>) paths with <quote>adsl</quote>. There are
- various ways to handle such exceptions. Example:
+ Ooops, the <quote>/adsl/</quote> is matching <quote>/ads</quote> in our 
+ configuration! But we did not want this at all! Now we see why we get the
+ blank page. We could now add a new action below this that explicitly 
+ <emphasis>un</emphasis> blocks (<quote>{-block}</quote>) paths with
+ <quote>adsl</quote> in them (remember, last match in the configuration wins).
+ There are various ways to handle such exceptions. Example:
 </para>
 
 <para>
@@ -7814,6 +7923,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.15  2006/08/30 11:15:22  hal9
+ More work on the new actions, especially filter-*-headers, and What's New
+ section. User Manual is close to final form for 3.0.4 release. Some tinkering
+ and proof reading left to do.
+
  Revision 2.14  2006/08/29 10:59:36  hal9
  Add a "Whats New in this release" Section. Further work on multiple filter
  files, and assorted other minor changes.

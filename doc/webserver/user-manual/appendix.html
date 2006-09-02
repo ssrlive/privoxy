@@ -743,7 +743,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN4640"
+NAME="AEN4670"
 ></A
 >14.2. <SPAN
 CLASS="APPLICATION"
@@ -792,7 +792,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN4655"
+NAME="AEN4685"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -825,7 +825,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN4663"
+NAME="AEN4693"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -845,7 +845,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN4668"
+NAME="AEN4698"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -865,7 +865,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN4673"
+NAME="AEN4703"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -885,7 +885,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN4678"
+NAME="AEN4708"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -909,7 +909,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN4684"
+NAME="AEN4714"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -926,7 +926,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN4688"
+NAME="AEN4718"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -940,7 +940,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN4691"
+NAME="AEN4721"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1243,10 +1243,10 @@ CLASS="QUOTE"
    <TT
 CLASS="FILENAME"
 >default.filter</TT
->) are processed against the buffered
-   content. Filters are applied in the order they are specified in one of the
-   filter files. Animated GIFs, if present, are
-   reduced to either the first or last frame, depending on the action
+> and any other filter files) are
+   processed against the buffered content. Filters are applied in the order
+   they are specified in one of the filter files. Animated GIFs, if present,
+   are reduced to either the first or last frame, depending on the action
    setting.The entire page, which is now filtered, is then sent by
    <SPAN
 CLASS="APPLICATION"
@@ -1390,7 +1390,8 @@ HREF="http://google.com"
 TARGET="_top"
 >google.com</A
 >, 
- and look at it one section at a time:</P
+ and look at it one section at a time in a sample configuration (your real 
+ configuration may vary):</P
 ><P
 > <TABLE
 BORDER="0"
@@ -1410,38 +1411,63 @@ CLASS="GUIBUTTON"
 >[ Edit ]</SPAN
 >
 
-{-add-header 
- -block 
- -crunch-outgoing-cookies 
- -crunch-incoming-cookies 
- +deanimate-gifs{last} 
- -downgrade-http-version 
- +fast-redirects 
- -filter{popups} 
- -filter{fun} 
- -filter{shockwave-flash} 
- -filter{crude-parental} 
- +filter{html-annoyances} 
- +filter{js-annoyances} 
- +filter{content-cookies} 
- +filter{webbugs} 
- +filter{refresh-tags} 
- +filter{nimda} 
- +filter{banners-by-size} 
- +hide-forwarded-for-headers 
- +hide-from-header{block} 
- +hide-referer{forge} 
- -hide-user-agent 
- -handle-as-image 
- -kill-popups 
- -limit-connect 
- +prevent-compression 
- -send-vanilla-wafer 
- -send-wafer 
- +session-cookies-only 
- +set-image-blocker{pattern} }
+ {-add-header
+ -block
+ -content-type-overwrite
+ -crunch-client-header
+ -crunch-if-none-match
+ -crunch-incoming-cookies
+ -crunch-outgoing-cookies
+ -crunch-server-header
+ +deanimate-gifs {last}
+ -downgrade-http-version
+ +fast-redirects {check-decoded-url}
+ -filter {js-events}
+ -filter {content-cookies}
+ -filter {all-popups}
+ -filter {banners-by-link}
+ -filter {tiny-textforms}
+ -filter {frameset-borders}
+ -filter {demoronizer}
+ -filter {shockwave-flash}
+ -filter {quicktime-kioskmode}
+ -filter {fun}
+ -filter {crude-parental}
+ -filter {site-specifics}
+ +filter {js-annoyances}
+ +filter {html-annoyances}
+ +filter {refresh-tags}
+ +filter {unsolicited-popups}
+ +filter {img-reorder}
+ +filter {banners-by-size}
+ +filter {webbugs}
+ +filter {jumping-windows}
+ +filter {ie-exploits}
+ -filter-client-headers
+ -filter-server-headers
+ -force-text-mode
+ -handle-as-empty-document
+ -handle-as-image
+ -hide-accept-language
+ -hide-content-disposition
+ +hide-forwarded-for-headers
+ +hide-from-header {block}
+ -hide-if-modified-since
+ +hide-referrer {forge}
+ -hide-user-agent
+ -inspect-jpegs
+ -kill-popups
+ -limit-connect
+ -overwrite-last-modified
+ +prevent-compression
+ -redirect
+ -send-vanilla-wafer
+ -send-wafer
+ +session-cookies-only
+ +set-image-blocker {pattern}
+ -treat-forbidden-connects-like-blocks }
 /
-
+ 
  { -session-cookies-only }
  .google.com
 
@@ -1461,7 +1487,7 @@ CLASS="GUIBUTTON"
 ></TABLE
 ></P
 ><P
-> This tells us how we have defined our 
+> This is telling us how we have defined our 
  <A
 HREF="actions-file.html#ACTIONS"
 ><SPAN
@@ -1469,10 +1495,35 @@ CLASS="QUOTE"
 >"actions"</SPAN
 ></A
 >, and
- which ones match for our example, <SPAN
+ which ones match for our test case, <SPAN
 CLASS="QUOTE"
 >"google.com"</SPAN
->. The first listing
+>. 
+ Displayed is all the actions that are available to us. Remember,
+ the <TT
+CLASS="LITERAL"
+>+</TT
+> sign denotes <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+>. <TT
+CLASS="LITERAL"
+>-</TT
+>
+ denotes <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+>. So some are <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+> here, but many 
+ are <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+>. Each example we try may provide a slightly different
+ end result, depending on our configuration directives.</P
+><P
+> The first listing
  is any matches for the <TT
 CLASS="FILENAME"
 >standard.action</TT
@@ -1517,8 +1568,9 @@ CLASS="QUOTE"
 >"+session-cookies-only"</SPAN
 ></A
 >
- (i.e. not persistent). So we will allow persistent cookies for google. The
- second turns <SPAN
+ (i.e. not persistent). So we will allow persistent cookies for google, at
+ least that is how it is in this example. The second turns
+ <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
@@ -1555,7 +1607,9 @@ CLASS="QUOTE"
 > Then, for our <TT
 CLASS="FILENAME"
 >user.action</TT
-> file, we again have no hits.</P
+> file, we again have no hits.
+ So there is nothing google-specific that we might have added to our own, local
+ configuration.</P
 ><P
 > And finally we pull it all together in the bottom section and summarize how
  <SPAN
@@ -1580,36 +1634,49 @@ WIDTH="100%"
 CLASS="SCREEN"
 >&#13; Final results:
  
- -add-header 
- -block 
- -crunch-outgoing-cookies 
- -crunch-incoming-cookies 
- +deanimate-gifs{last} 
- -downgrade-http-version 
- -fast-redirects 
- -filter{popups} 
- -filter{fun} 
- -filter{shockwave-flash} 
- -filter{crude-parental} 
- +filter{html-annoyances} 
- +filter{js-annoyances} 
- +filter{content-cookies} 
- +filter{webbugs} 
- +filter{refresh-tags} 
- +filter{nimda} 
- +filter{banners-by-size} 
- +hide-forwarded-for-headers 
- +hide-from-header{block} 
- +hide-referer{forge} 
- -hide-user-agent 
- -handle-as-image 
- -kill-popups 
- -limit-connect 
- +prevent-compression 
- -send-vanilla-wafer 
+ -add-header
+ -block
+ -content-type-overwrite
+ -crunch-client-header
+ -crunch-if-none-match
+ -crunch-incoming-cookies
+ -crunch-outgoing-cookies
+ -crunch-server-header
+ +deanimate-gifs {last}
+ -downgrade-http-version
+ -fast-redirects
+ +filter {js-annoyances}
+ +filter {html-annoyances}
+ +filter {refresh-tags}
+ +filter {unsolicited-popups}
+ +filter {img-reorder}
+ +filter {banners-by-size}
+ +filter {webbugs}
+ +filter {jumping-windows}
+ +filter {ie-exploits}
+ -filter-client-headers
+ -filter-server-headers
+ -force-text-mode
+ -handle-as-empty-document
+ -handle-as-image
+ -hide-accept-language
+ -hide-content-disposition
+ +hide-forwarded-for-headers
+ +hide-from-header {block}
+ -hide-if-modified-since
+ +hide-referrer {forge}
+ -hide-user-agent
+ -inspect-jpegs
+ -kill-popups
+ -limit-connect
+ -overwrite-last-modified
+ +prevent-compression
+ -redirect
+ -send-vanilla-wafer
  -send-wafer
- -session-cookies-only 
- +set-image-blocker{pattern} </PRE
+ -session-cookies-only
+ +set-image-blocker {pattern}
+ -treat-forbidden-connects-like-blocks </PRE
 ></TD
 ></TR
 ></TABLE
@@ -1623,7 +1690,11 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"session-cookies-only"</SPAN
 >,
- which are actived specifically for this site in our configuration.</P
+ which are actived specifically for this site in our configuration, 
+ and thus show in the <SPAN
+CLASS="QUOTE"
+>"Final Results"</SPAN
+>.</P
 ><P
 > Now another example, <SPAN
 CLASS="QUOTE"
@@ -1730,12 +1801,16 @@ CLASS="GUIBUTTON"
 >
 
  {-add-header 
-  -block 
-  -crunch-incoming-cookies 
-  -crunch-outgoing-cookies 
+  -block
+  -content-type-overwrite
+  -crunch-client-header
+  -crunch-if-none-match
+  -crunch-incoming-cookies
+  -crunch-outgoing-cookies
+  -crunch-server-header
   +deanimate-gifs 
   -downgrade-http-version 
-  +fast-redirects 
+  +fast-redirects{check-decoded-url}
   +filter{html-annoyances} 
   +filter{js-annoyances} 
   +filter{kill-popups} 
@@ -1744,17 +1819,27 @@ CLASS="GUIBUTTON"
   +filter{banners-by-size} 
   +filter{hal} 
   +filter{fun} 
+  -filter-client-headers
+  -filter-server-headers
+  -force-text-mode
+  -handle-as-empty-document
+  -handle-as-image 
+  -hide-accept-language
+  -hide-content-disposition  
   +hide-forwarded-for-headers 
   +hide-from-header{block} 
   +hide-referer{forge} 
   -hide-user-agent 
-  -handle-as-image 
+  -inspect-jpegs
   +kill-popups 
+  -overwrite-last-modified
   +prevent-compression 
+  -redirect
   -send-vanilla-wafer 
   -send-wafer 
   +session-cookies-only 
-  +set-image-blocker{blank} }
+  +set-image-blocker{blank} 
+  -treat-forbidden-connects-like-blocks }
    /
 
  { +block +handle-as-image }
@@ -1770,23 +1855,24 @@ CLASS="QUOTE"
 > is matching <SPAN
 CLASS="QUOTE"
 >"/ads"</SPAN
->! But 
- we did not want this at all! Now we see why we get the blank page. We could
- now add a new action below this that explicitly does <SPAN
+> in our 
+ configuration! But we did not want this at all! Now we see why we get the
+ blank page. We could now add a new action below this that explicitly 
+ <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->not</I
+>un</I
 ></SPAN
->
- block (<SPAN
+> blocks (<SPAN
 CLASS="QUOTE"
 >"{-block}"</SPAN
->) paths with <SPAN
+>) paths with
+ <SPAN
 CLASS="QUOTE"
 >"adsl"</SPAN
->. There are
- various ways to handle such exceptions. Example:</P
+> in them (remember, last match in the configuration wins).
+ There are various ways to handle such exceptions. Example:</P
 ><P
 > <TABLE
 BORDER="0"

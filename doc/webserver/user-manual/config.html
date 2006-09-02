@@ -465,7 +465,7 @@ CLASS="VARIABLELIST"
 ><P
 >    The <A
 HREF="filter-file.html"
->filter file</A
+>filter file(s)</A
 > to use
    </P
 ></DD
@@ -514,24 +514,31 @@ CLASS="REPLACEABLE"
 >Notes:</DT
 ><DD
 ><P
+>    Multiple <TT
+CLASS="LITERAL"
+>filterfiles</TT
+> lines are permitted.
+   </P
+><P
 >    The <A
 HREF="filter-file.html"
->filter file</A
-> contains content modification
+>filter files</A
+> contain content modification
     rules that use <A
 HREF="appendix.html#REGEX"
 >regular expressions</A
 >. These rules permit
-    powerful changes on the content of Web pages, e.g., you could disable your favorite
-    JavaScript annoyances, re-write the actual displayed text, or just have some
-    fun replacing <SPAN
+    powerful changes on the content of Web pages, and optionally the headers
+    as well, e.g., you could disable your favorite JavaScript annoyances,
+    re-write the actual displayed text, or just have some fun replacing
+    <SPAN
 CLASS="QUOTE"
 >"Microsoft"</SPAN
 > with <SPAN
 CLASS="QUOTE"
 >"MicroSuck"</SPAN
-> wherever
-    it appears on a Web page.
+> wherever it appears
+    on a Web page.
    </P
 ><P
 >    The
@@ -553,14 +560,14 @@ CLASS="REPLACEABLE"
 >name</I
 ></TT
 >)
-    to be defined in the filter file!
+    to be defined in a filter file!
    </P
 ><P
 >    A pre-defined filter file called <TT
 CLASS="FILENAME"
 >default.filter</TT
 > that contains
-    a bunch of handy filters for common problems is included in the distribution.
+    a number of useful filters for common problems is included in the distribution.
     See the section on the <TT
 CLASS="LITERAL"
 ><A
@@ -569,6 +576,13 @@ HREF="actions-file.html#FILTER"
 ></TT
 >
     action for a list.
+   </P
+><P
+>    It is recommended to place any locally adapted filters into a separate
+    file, such as <TT
+CLASS="FILENAME"
+>user.filter</TT
+>.
    </P
 ></DD
 ></DL

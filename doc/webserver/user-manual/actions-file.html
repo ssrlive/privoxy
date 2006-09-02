@@ -77,18 +77,30 @@ NAME="ACTIONS-FILE"
 ></A
 >8. Actions Files</H1
 ><P
-> The actions files are used to define what actions
+> The actions files are used to define what <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>actions</I
+></SPAN
+>
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> takes for which URLs, and thus determine
+> takes for which URLs, and thus determines
  how ad images, cookies and various other aspects of HTTP content and
- transactions are handled, and on which sites (or even parts thereof). There 
- are three such files included with <SPAN
+ transactions are handled, and on which sites (or even parts thereof). 
+ There are a number of such actions, with a wide range of functionality.
+ Each action does something a little different.
+ These actions give us a veritable arsenal of tools with which to exert 
+ our control, preferences and independence.</P
+><P
+> There 
+ are three action files included with <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->
- with differing purposes:
+> with
+ differing purposes:
  </P
 ><P
 >  <P
@@ -156,7 +168,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN1798"
+NAME="AEN1803"
 ></A
 ><P
 ><B
@@ -579,7 +591,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1897"
+NAME="AEN1902"
 ></A
 >8.1. Finding the Right Mix</H2
 ><P
@@ -613,7 +625,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN1904"
+NAME="AEN1909"
 ></A
 >8.2. How to Edit</H2
 ><P
@@ -869,7 +881,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN1978"
+NAME="AEN1983"
 ></A
 >8.4.1. The Domain Pattern</H3
 ><P
@@ -1055,7 +1067,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2040"
+NAME="AEN2045"
 ></A
 >8.4.2. The Path Pattern</H3
 ><P
@@ -1854,7 +1866,7 @@ CLASS="APPLICATION"
 >Effect:</DT
 ><DD
 ><P
->    Deletes every header send by the client that contains the string the user supplied as parameter.
+>    Deletes every header sent by the client that contains the string the user supplied as parameter.
    </P
 ></DD
 ><DT
@@ -3407,8 +3419,12 @@ CLASS="VARIABLELIST"
 >Effect:</DT
 ><DD
 ><P
->Extend filtering capabilities to the client's headers, which 
-   by default applies only to the document itself.
+>    By default, <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> filters only apply 
+    to the document content itself. This will extend those filters to 
+    include the client's headers as well.
    </P
 ></DD
 ><DT
@@ -3542,8 +3558,12 @@ CLASS="VARIABLELIST"
 >Effect:</DT
 ><DD
 ><P
->Extend filtering capabilities to the server's headers, which 
-   by default applies only to the document itself.
+>    By default, <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> filters only apply 
+    to the document content itself. This will extend those filters to 
+    include the server's headers as well.
    </P
 ></DD
 ><DT
@@ -4890,7 +4910,7 @@ CLASS="VARIABLELIST"
 >Effect:</DT
 ><DD
 ><P
->    To protect against a known exploit
+>    Protect against a known exploit
    </P
 ></DD
 ><DT
@@ -5565,7 +5585,8 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    This action is useful to replace whole documents with your own
-    ones. For that to work, they have to be available on another server.
+    ones. For that to work, they have to be available on another server, 
+    and both should resolve.
    </P
 ><P
 >    You can do the same by combining the actions
@@ -6310,7 +6331,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > to do the
     request through a SSL tunnel, everything will work. Most likely you haven't
-    and the server will responds with an error message because it is expecting
+    and the server will respond with an error message because it is expecting
     HTTPS.
    </P
 ></DD
@@ -6341,7 +6362,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3633"
+NAME="AEN3640"
 ></A
 >8.5.36. Summary</H3
 ><P
@@ -6645,7 +6666,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3698"
+NAME="AEN3705"
 ></A
 >8.7.1. default.action</H3
 ><P
@@ -6840,8 +6861,24 @@ HREF="actions-file.html#BLOCK"
 >block</A
 > \
  -<A
+HREF="actions-file.html#CONTENT-TYPE-OVERWRITE"
+>content-type-overwrite</A
+> \
+ -<A
+HREF="actions-file.html#CRUNCH-CLIENT-HEADER"
+>crunch-client-header</A
+> \
+ -<A
+HREF="actions-file.html#CRUNCH-IF-NONE-MATCH"
+>crunch-if-none-match</A
+> \
+ -<A
 HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
 >crunch-incoming-cookies</A
+> \
+ -<A
+HREF="actions-file.html#CRUNCH-SERVER-HEADER"
+>crunch-server-header</A
 > \
  -<A
 HREF="actions-file.html#CRUNCH-OUTGOING-COOKIES"
@@ -6857,7 +6894,7 @@ HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
 > \
  +<A
 HREF="actions-file.html#FAST-REDIRECTS"
->fast-redirects</A
+>fast-redirects{check-decoded-url}</A
 > \
  +<A
 HREF="actions-file.html#FILTER-JS-ANNOYANCES"
@@ -6940,8 +6977,36 @@ HREF="actions-file.html#FILTER-IE-EXPLOITS"
 >filter{ie-exploits}</A
 > \     
  -<A
+HREF="actions-file.html#FILTER-CLIENT-HEADERS"
+>filter-client-headers</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-SERVER-HEADERS"
+>filter-server-headers</A
+> \
+ -<A
+HREF="actions-file.html#FORCE-TEXT-MODE"
+>force-text-mode</A
+> \
+ -<A
+HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
+>handle-as-empty-document</A
+> \
+ -<A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
 >handle-as-image</A
+> \
+ -<A
+HREF="actions-file.html#HIDE-ACCEPT-LANGUAGE"
+>hide-accept-language</A
+> \
+ -<A
+HREF="actions-file.html#HIDE-CONTENT-DISPOSITION"
+>hide-content-disposition</A
+> \
+ -<A
+HREF="actions-file.html#HIDE-IF-MODIFIED-SINCE"
+>hide-if-modified-since</A
 > \
  +<A
 HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
@@ -6960,6 +7025,10 @@ HREF="actions-file.html#HIDE-USER-AGENT"
 >hide-user-agent</A
 > \
  -<A
+HREF="actions-file.html#INSPECT-JPEGS"
+>inspect-jpegs</A
+> \
+ -<A
 HREF="actions-file.html#KILL-POPUPS"
 >kill-popups</A
 > \
@@ -6970,6 +7039,14 @@ HREF="actions-file.html#LIMIT-CONNECT"
  +<A
 HREF="actions-file.html#PREVENT-COMPRESSION"
 >prevent-compression</A
+> \
+ -<A
+HREF="actions-file.html#OVERWRITE-LAST-MODIFIED"
+>overwrite-last-modified</A
+> \
+ -<A
+HREF="actions-file.html#REDIRECT"
+>redirect</A
 > \
  -<A
 HREF="actions-file.html#SEND-VANILLA-WAFER"
@@ -6986,6 +7063,10 @@ HREF="actions-file.html#SESSION-COOKIES-ONLY"
  +<A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
 >set-image-blocker{pattern}</A
+> \
+ -<A
+HREF="actions-file.html#TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
+>treat-forbidden-connects-like-blocks</A
 > \
  }
  / # forward slash will match *all* potential URL patterns.</PRE
@@ -7229,7 +7310,7 @@ bs*.einets.com
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
- is to block banners. A huge bunch of them are already <SPAN
+ is to block banners. A huge bunch of them can be <SPAN
 CLASS="QUOTE"
 >"blocked"</SPAN
 >
@@ -7480,7 +7561,7 @@ HREF="actions-file.html#FILTER"
 > The actual <TT
 CLASS="FILENAME"
 >default.action</TT
-> is of course more
+> is of course much more
  comprehensive, but we hope this example made clear how it works.</P
 ></DIV
 ><DIV
@@ -7488,7 +7569,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3864"
+NAME="AEN3886"
 ></A
 >8.7.2. user.action</H3
 ><P
@@ -7584,13 +7665,27 @@ shop        = -crunch-all-cookies allow-popups
 
 # Allow ads for selected useful free sites:
 #
-allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}</PRE
+allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
+
+# Alias for specific file types that are text, but might have conflicting
+# MIME types. We want the browser to force these to be text documents.
+handle-as-text = -<A
+HREF="actions-file.html#FILTER"
+>filter</A
+> +-<A
+HREF="actions-file.html#CONTENT-TYPE-OVERWRITE"
+>content-type-overwrite{text/plain}</A
+> +-<A
+HREF="actions-file.html#FORCE-TEXT-MODE"
+>force-text-mode</A
+> -<A
+HREF="actions-file.html#HIDE-CONTENT-DISPOSITION"
+>hide-content-disposition</A
+></PRE
 ></TD
 ></TR
 ></TABLE
->
-
- </P
+>&#13;</P
 ><P
 > Say you have accounts on some sites that you visit regularly, and
  you don't want to have to log in manually each time. So you'd like
@@ -7879,6 +7974,28 @@ HREF="actions-file.html#FILTER-BANNERS-BY-LINK"
 >filter{banners-by-link}</A
 ></TT
 > above.</P
+><P
+> Invoke another alias here to force an over-ride of the MIME type <TT
+CLASS="LITERAL"
+> application/x-sh</TT
+> which typically would open a download type 
+ dialog. In my case, I want to look at the shell script, and then I can save
+ it should I choose to.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{ handle-as-text }
+/.*\.sh$</PRE
+></TD
+></TR
+></TABLE
+>   </P
 ><P
 > <TT
 CLASS="FILENAME"
