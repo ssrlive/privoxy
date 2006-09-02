@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.16 2006/09/01 14:36:58 hal9 Exp $
+#  $Id: default.action.master,v 1.17 2006/09/01 16:37:49 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -928,10 +928,15 @@ www.allosponsor.com/images/ban
 #MASTER# BLOCK-REFERRER: http://discussion.brighthand.com/forumdisplay.php?s=fee44a5b2a6fc2e9e79d6472bc8fbe94&forumid=197
 *[0-9].tribalfusion.com/
 #MASTER# BLOCK-REFERRER: http://www.sf.net/
-ads.osdn.com/?ad
+#MASTER# REMARKS: broadening scope from previous: ads.osdn.com/?ad 09/02/06 per tracker 
+ads.osdn.com
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/
 kt*.kliptracker.com/
 gfx.dvlabs.com/klipmart/
+#MASTER# REMARKS: Actions file tracker 1547656 09/02/06
+img.mediaplex.com
+#MASTER# REMARKS: Actions file tracker 1152563 09/02/06
+ads.monster.com
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1269,6 +1274,8 @@ www.baycitybaptist.org/images/Banner.jpg
 .windowsupdate.microsoft.com
 .apple.com
 .yahoo.com
+#MASTER# REMARKS: Actions Tracker 1293057 09/02/06
+.update.microsoft.com
 
 #----------------------------------------------------------------------------
 # Shopping and banking sites - allow cookies and pop-ups
@@ -1567,6 +1574,8 @@ www.amazon.de/exec/obidos/clipserve/
 #MASTER# PROBLEM-URL: http://www.mandrakelinux.com/en/ftp.php3
 #MASTER# REMARKS: Link to download page breaks
 www.mandrakelinux.com/en/ftp.php3
+#MASTER# REMARKS: Actions Tracker 1313157
+validator.w3.org/check\?uri=referer
 
 #----------------------------------------------------------------------------
 # These animated gifs are either useful or nice:
