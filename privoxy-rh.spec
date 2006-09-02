@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.33.2.22 2004/01/30 17:09:29 oes Exp $
+# $Id: privoxy-rh.spec,v 1.45 2006/07/18 14:48:47 david__schmidt Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -270,7 +270,8 @@ fi
 %config(noreplace) %{privoxyconf}/user.action
 %config %{privoxyconf}/default.action
 %config %{privoxyconf}/default.filter
-%config %{privoxyconf}/trust
+%config(noreplace) %{privoxyconf}/user.filter
+%config(noreplace) %{privoxyconf}/trust
 
 # Please keep these alphabetized so its easier to find one that 
 # is not included.
@@ -317,6 +318,10 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sat Sep 02 2006 Hal Burgiss <hal@foobox.net>
+- Include new file, user.filter. Do not overwrite "trust" file 
+  (does anyone use this?).
+
 * Wed Mar 26 2003 Andreas Oesterhelt <andreas@oesterhelt.org>
 - Bump version for 3.0.2.
 
@@ -734,6 +739,10 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.45  2006/07/18 14:48:47  david__schmidt
+# Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+# with what was really the latest development (the v_3_0_branch branch)
+#
 # Revision 1.33.2.22  2004/01/30 17:09:29  oes
 # Bumped version for 3.0.3
 #
