@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.141 2006/08/12 03:54:37 david__schmidt Exp $
+# $Id: GNUmakefile.in,v 1.142 2006/08/29 01:46:24 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1074,7 +1074,7 @@ install-strip:
 # FIXME: id handling needs help, probably via configure, since 'id -u' is not 
 # universally reliable (eg Solaris). Group handling could be better. 
 # Perhaps the whole user/group validation should be done here, and simplified.
-PROGRAM_V = Privoxy $(VERSION)
+PROGRAM_V = Privoxy $(VERSION) $(CODE_STATUS)
 install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	@# Quick test for valid USER.
 	@if [ -n "$(USER)" ]; then \
@@ -1345,6 +1345,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.142  2006/08/29 01:46:24  hal9
+# Add user.filter to $CONFIGS.
+#
 # Revision 1.141  2006/08/12 03:54:37  david__schmidt
 # Windows service integration
 #
