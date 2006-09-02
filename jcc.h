@@ -1,9 +1,9 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.12.2.3 2006/01/21 16:16:08 david__schmidt Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.14 2006/07/18 14:48:46 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/jcc.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
  *
  * Purpose     :  Main file.  Contains main() method, main loop, and 
  *                the main connection-handling function.
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.14  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.12.2.3  2006/01/21 16:16:08  david__schmidt
  *    Thanks to  Edward Carrel for his patch to modernize OSX'spthreads support.  See bug #1409623.
  *
@@ -131,8 +135,11 @@ extern int no_daemon;
 extern int g_terminate;
 #endif
 
-#ifdef OSX_DARWIN
+#if defined(OSX_DARWIN) || defined(__OpenBSD__)
 #include <pthread.h>
+#endif /* defined(OSX_DARWIN) || defined(__OpenBSD__) */
+
+#ifdef OSX_DARWIN
 extern pthread_mutex_t gmtime_mutex;
 extern pthread_mutex_t localtime_mutex;
 extern pthread_mutex_t gethostbyaddr_mutex;
