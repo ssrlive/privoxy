@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.14 2006/07/18 14:48:46 david__schmidt Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.15 2006/09/02 10:24:30 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,14 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.15  2006/09/02 10:24:30  fabiankeil
+ *    Include pthread.h for OpenBSD to make Privoxy build again.
+ *
+ *    Tested shortly on OpenBSD 3.9 without problems, but the OpenBSD
+ *    port has additional patches to use the mutexes OSX_DARWIN needs,
+ *    and it should be investigated if they are still required for
+ *    reliable operation.
+ *
  *    Revision 1.14  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -137,14 +145,13 @@ extern int g_terminate;
 
 #if defined(OSX_DARWIN) || defined(__OpenBSD__)
 #include <pthread.h>
-#endif /* defined(OSX_DARWIN) || defined(__OpenBSD__) */
-
 #ifdef OSX_DARWIN
 extern pthread_mutex_t gmtime_mutex;
 extern pthread_mutex_t localtime_mutex;
+#endif /* def OSX_DARWIN */
 extern pthread_mutex_t gethostbyaddr_mutex;
 extern pthread_mutex_t gethostbyname_mutex;
-#endif /* def OSX_DARWIN */
+#endif /* defined(OSX_DARWIN) || defined(__OpenBSD__) */
 
 #ifdef FEATURE_PTHREAD
 extern pthread_mutex_t log_mutex;
