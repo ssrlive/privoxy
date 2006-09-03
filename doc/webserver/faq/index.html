@@ -1,11 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
 >Privoxy Frequently Asked Questions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="NEXT"
 TITLE="General Information"
 HREF="general.html"><LINK
@@ -27,15 +27,15 @@ CLASS="TITLEPAGE"
 CLASS="TITLE"
 ><A
 NAME="AEN2"
->Privoxy Frequently Asked Questions</A
-></H1
+></A
+>Privoxy Frequently Asked Questions</H1
 ><P
 CLASS="PUBDATE"
 > <SUB
 > <A
 HREF="copyright.html"
 >Copyright</A
-> © 2001-2004 by 
+> © 2001-2006 by 
  <A
 HREF="http://www.privoxy.org"
 TARGET="_top"
@@ -45,15 +45,15 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: index.html,v 1.15.2.10 2004/01/31 00:05:43 oes Exp $<BR></P
+>$Id: faq.sgml,v 2.11 2006/07/18 14:48:50 david__schmidt Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
-><P
-></P
 ><A
 NAME="AEN9"
 ></A
+><P
+></P
 ><P
 > This FAQ gives quick answers to frequently asked  questions about
  <A
@@ -77,7 +77,7 @@ CLASS="CITETITLE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is a web proxy with advanced filtering
- capabilities for protecting privacy, modifying web page content, managing
+ capabilities for protecting privacy, modifying web page data, managing
  cookies, controlling access, and removing ads, banners, pop-ups and other
  obnoxious Internet junk. <SPAN
 CLASS="APPLICATION"
@@ -99,8 +99,8 @@ CLASS="APPLICATION"
  Junkbuster</SPAN
 > (tm).</P
 ><P
->  Please note that this document is constantly evolving. This copy represents
-  the state at the release of version 3.0.3.
+>  Please note that this document is a work in progress. This copy represents
+  the state at the release of version 3.0.4.
   You can find the latest version of the document at <A
 HREF="http://www.privoxy.org/faq/"
 TARGET="_top"
@@ -136,7 +136,7 @@ HREF="general.html"
 HREF="general.html#NEWJB"
 >What is this new version of <SPAN
 CLASS="APPLICATION"
->Privoxy</SPAN
+>Junkbuster</SPAN
 >?</A
 ></DT
 ><DT
@@ -145,7 +145,11 @@ HREF="general.html#AEN45"
 >Why <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
->? Why a name change at all?</A
+>? Why change the name from
+<SPAN
+CLASS="APPLICATION"
+>Junkbuster</SPAN
+> at all?</A
 ></DT
 ><DT
 >1.3. <A
@@ -182,7 +186,7 @@ an ad, and what is not?</A
 ></DT
 ><DT
 >1.6. <A
-HREF="general.html#AEN136"
+HREF="general.html#AEN138"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -191,7 +195,7 @@ This does not sound very scientific.</A
 ></DT
 ><DT
 >1.7. <A
-HREF="general.html#AEN143"
+HREF="general.html#AEN145"
 >Will I have to configure <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -227,7 +231,7 @@ HREF="general.html#JOINTEAM"
 ><DT
 >1.10.1. <A
 HREF="general.html#JOINTEAM-MONEY"
->Money Money Money</A
+>Contribute!</A
 ></DT
 ><DT
 >1.10.2. <A
@@ -237,7 +241,7 @@ HREF="general.html#JOINTEAM-SOFTWARE"
 ><DT
 >1.10.3. <A
 HREF="general.html#JOINTEAM-WORK"
->You want to work with us?</A
+>Would you like to participate?</A
 ></DT
 ></DL
 ></DD
@@ -285,7 +289,7 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >2.5. <A
-HREF="installation.html#AEN226"
+HREF="installation.html#AEN231"
 >I just installed <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -342,7 +346,7 @@ HREF="configuration.html#NEWCONFIG"
 ></DT
 ><DT
 >3.3. <A
-HREF="configuration.html#AEN312"
+HREF="configuration.html#AEN319"
 >What is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -362,13 +366,13 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.5. <A
-HREF="configuration.html#AEN331"
+HREF="configuration.html#AEN338"
 >How are actions files configured? What is the easiest
 way to do this?</A
 ></DT
 ><DT
 >3.6. <A
-HREF="configuration.html#AEN339"
+HREF="configuration.html#AEN346"
 >There are several different <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -378,7 +382,7 @@ the differences?</A
 ><DT
 >3.7. <A
 HREF="configuration.html#YAHOO"
->How can I make my Yahoo/Hotmail/GMX account work?</A
+>How can I make my Yahoo/Hotmail/Gmail account work?</A
 ></DT
 ><DT
 >3.8. <A
@@ -403,7 +407,7 @@ with a browser? Does that not raise security issues?</A
 ></DT
 ><DT
 >3.10. <A
-HREF="configuration.html#AEN404"
+HREF="configuration.html#AEN411"
 >What is the <TT
 CLASS="FILENAME"
 >default.filter</TT
@@ -414,7 +418,7 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.11. <A
-HREF="configuration.html#AEN420"
+HREF="configuration.html#AEN429"
 >How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -423,17 +427,17 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >3.12. <A
-HREF="configuration.html#AEN446"
+HREF="configuration.html#AEN455"
 >Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></DT
 ><DT
 >3.13. <A
-HREF="configuration.html#AEN463"
+HREF="configuration.html#AEN472"
 >Why would anybody want to see a checkerboard pattern?</A
 ></DT
 ><DT
 >3.14. <A
-HREF="configuration.html#AEN468"
+HREF="configuration.html#AEN477"
 >I see some images being replaced by a text
 instead of the checkerboard image. Why and how do I get rid of this?</A
 ></DT
@@ -456,6 +460,9 @@ CLASS="APPLICATION"
 proxies like <SPAN
 CLASS="APPLICATION"
 >Squid</SPAN
+> or <SPAN
+CLASS="APPLICATION"
+>TOR</SPAN
 >?</A
 ></DT
 ><DT
@@ -500,6 +507,23 @@ HREF="configuration.html#OUTLOOK-MORE"
 HREF="configuration.html#ALLOW-COOKIES"
 >How can I allow permanent cookies for my trusted sites?</A
 ></DT
+><DT
+>3.22. <A
+HREF="configuration.html#MULTIPLES"
+>Can I have separate configurations for different users?</A
+></DT
+><DT
+>3.23. <A
+HREF="configuration.html#WHITELISTS"
+>Can I set-up <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as a whitelist of
+<SPAN
+CLASS="QUOTE"
+>"good"</SPAN
+> sites?</A
+></DT
 ></DL
 ></DD
 ><DT
@@ -511,7 +535,7 @@ HREF="misc.html"
 ><DL
 ><DT
 >4.1. <A
-HREF="misc.html#AEN537"
+HREF="misc.html#AEN570"
 >How much does <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -526,42 +550,53 @@ delays in page requests compared to the old Junkbuster. What's wrong?</A
 ></DT
 ><DT
 >4.3. <A
+HREF="misc.html#SLOWCRAWL"
+>I just installed <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, and all my
+browsing has slowed to a crawl. What gives?</A
+></DT
+><DT
+>4.4. <A
 HREF="misc.html#CONFIGURL"
 >What are "http://config.privoxy.org/" and
 "http://p.p/"?</A
 ></DT
 ><DT
->4.4. <A
-HREF="misc.html#BLOCKLIST"
->Do you still maintain the blocklists?</A
-></DT
-><DT
 >4.5. <A
 HREF="misc.html#NEWADS"
->How can I submit new ads?</A
+>How can I submit new ads, or report
+problems?</A
 ></DT
 ><DT
 >4.6. <A
+HREF="misc.html#NOONECARES"
+>Why doesn't anyone answer my support 
+request?</A
+></DT
+><DT
+>4.7. <A
 HREF="misc.html#IP"
 >How can I hide my IP address?</A
 ></DT
 ><DT
->4.7. <A
-HREF="misc.html#AEN598"
+>4.8. <A
+HREF="misc.html#AEN634"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > guarantee I am anonymous?</A
 ></DT
 ><DT
->4.8. <A
-HREF="misc.html#AEN609"
+>4.9. <A
+HREF="misc.html#AEN645"
 >Might some things break because header information or
 content is being altered?</A
 ></DT
 ><DT
->4.9. <A
-HREF="misc.html#AEN620"
+>4.10. <A
+HREF="misc.html#AEN656"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -572,30 +607,30 @@ CLASS="QUOTE"
 speed up web browsing?</A
 ></DT
 ><DT
->4.10. <A
-HREF="misc.html#AEN630"
+>4.11. <A
+HREF="misc.html#AEN666"
 >What about as a firewall? Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > protect me?</A
 ></DT
 ><DT
->4.11. <A
-HREF="misc.html#AEN636"
+>4.12. <A
+HREF="misc.html#AEN672"
 >I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</A
 ></DT
 ><DT
->4.12. <A
-HREF="misc.html#AEN641"
+>4.13. <A
+HREF="misc.html#AEN677"
 >How can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > filter Secure (HTTPS) URLs?</A
 ></DT
 ><DT
->4.13. <A
-HREF="misc.html#AEN656"
+>4.14. <A
+HREF="misc.html#AEN692"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -606,7 +641,7 @@ CLASS="QUOTE"
 secure is it? Do I need to take any special precautions?</A
 ></DT
 ><DT
->4.14. <A
+>4.15. <A
 HREF="misc.html#TURNOFF"
 >How can I temporarily disable <SPAN
 CLASS="APPLICATION"
@@ -614,7 +649,7 @@ CLASS="APPLICATION"
 >?</A
 ></DT
 ><DT
->4.15. <A
+>4.16. <A
 HREF="misc.html#REALLYOFF"
 >When <SPAN
 CLASS="QUOTE"
@@ -626,7 +661,7 @@ CLASS="APPLICATION"
 out of the picture?</A
 ></DT
 ><DT
->4.16. <A
+>4.17. <A
 HREF="misc.html#CRUNCH"
 >My logs show <SPAN
 CLASS="APPLICATION"
@@ -641,7 +676,7 @@ CLASS="QUOTE"
 >?</A
 ></DT
 ><DT
->4.17. <A
+>4.18. <A
 HREF="misc.html#DOWNLOADS"
 >Can <SPAN
 CLASS="APPLICATION"
@@ -650,7 +685,7 @@ CLASS="APPLICATION"
 from a webserver? FTP server?</A
 ></DT
 ><DT
->4.18. <A
+>4.19. <A
 HREF="misc.html#DOWNLOADS2"
 >I just downloaded a Perl script, and <SPAN
 CLASS="APPLICATION"
@@ -659,7 +694,7 @@ CLASS="APPLICATION"
 altered it! Yikes, what is wrong!</A
 ></DT
 ><DT
->4.19. <A
+>4.20. <A
 HREF="misc.html#SEEALSO"
 >Where can I find more information about <SPAN
 CLASS="APPLICATION"
@@ -668,7 +703,7 @@ CLASS="APPLICATION"
 and related issues?</A
 ></DT
 ><DT
->4.20. <A
+>4.21. <A
 HREF="misc.html#MICROSUCK"
 >I've noticed that Privoxy changes <SPAN
 CLASS="QUOTE"
@@ -690,8 +725,8 @@ HREF="trouble.html"
 ><DL
 ><DT
 >5.1. <A
-HREF="trouble.html#AEN801"
->I just upgraded and am getting <SPAN
+HREF="trouble.html#AEN829"
+>I am getting <SPAN
 CLASS="QUOTE"
 >"connection refused"</SPAN
 >
@@ -699,7 +734,7 @@ with every web page?</A
 ></DT
 ><DT
 >5.2. <A
-HREF="trouble.html#AEN814"
+HREF="trouble.html#AEN842"
 >I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></DT
@@ -751,9 +786,9 @@ HREF="trouble.html#OSXUNINSTALL"
 HREF="trouble.html#OSXIMAGES"
 >In Mac OSX Panther (10.3), images often fail to load and/or I
  experience random delays in page loading. I'm using
- <VAR
+ <TT
 CLASS="LITERAL"
->localhost</VAR
+>localhost</TT
 > as my browser's proxy setting.</A
 ></DT
 ><DT
@@ -829,6 +864,27 @@ CLASS="QUOTE"
 >"PrivoxyWindowOpen()"</SPAN
 > in raw source code?</A
 ></DT
+><DT
+>5.17. <A
+HREF="trouble.html#DNSERRORS"
+>I am getting too many DNS errors like <SPAN
+CLASS="QUOTE"
+>"404 No Such Domain"</SPAN
+>. Why
+ can't <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> do this better?</A
+></DT
+><DT
+>5.18. <A
+HREF="trouble.html#ALLCPU"
+>At one site <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> just hangs, and starts taking 
+ all CPU. Why is this?</A
+></DT
 ></DL
 ></DD
 ><DT
@@ -845,9 +901,23 @@ HREF="contact.html#CONTACT-SUPPORT"
 ></DT
 ><DT
 >6.2. <A
-HREF="contact.html#CONTACT-BUGS"
->Report Bugs</A
+HREF="contact.html#REPORTING"
+>Reporting Problems</A
 ></DT
+><DD
+><DL
+><DT
+>6.2.1. <A
+HREF="contact.html#CONTACT-ADS"
+>Reporting Ads or Other Configuration Problems</A
+></DT
+><DT
+>6.2.2. <A
+HREF="contact.html#CONTACT-BUGS"
+>Reporting Bugs</A
+></DT
+></DL
+></DD
 ><DT
 >6.3. <A
 HREF="contact.html#CONTACT-FEATURE"
@@ -855,11 +925,6 @@ HREF="contact.html#CONTACT-FEATURE"
 ></DT
 ><DT
 >6.4. <A
-HREF="contact.html#CONTACT-ADS"
->Report Ads or Other Actions-Related Problems</A
-></DT
-><DT
->6.5. <A
 HREF="contact.html#CONTACT-OTHER"
 >Other</A
 ></DT
@@ -874,12 +939,12 @@ HREF="copyright.html"
 ><DL
 ><DT
 >7.1. <A
-HREF="copyright.html#AEN1014"
+HREF="copyright.html#AEN1113"
 >License</A
 ></DT
 ><DT
 >7.2. <A
-HREF="copyright.html#AEN1030"
+HREF="copyright.html#AEN1129"
 >History</A
 ></DT
 ></DL

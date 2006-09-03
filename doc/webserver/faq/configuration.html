@@ -1,11 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
 >Configuration</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
 REL="HOME"
 TITLE="Privoxy Frequently Asked Questions"
 HREF="index.html"><LINK
@@ -74,16 +74,16 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONFIGURATION"
->3. Configuration</A
-></H1
+></A
+>3. Configuration</H1
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
 NAME="GETUPDATES"
->3.1. Where can I get updated Actions Files?</A
-></H3
+></A
+>3.1. Where can I get updated Actions Files?</H3
 ><P
 >   Based on your feedback and the continuing development, updated actions files will be
    made available on the <A
@@ -116,14 +116,14 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="NEWCONFIG"
->3.2. Can I use my old config files?</A
-></H3
+></A
+>3.2. Can I use my old config files?</H3
 ><P
 >   The syntax, number, and purpose of configuration files has substantially
    changed from <SPAN
 CLASS="APPLICATION"
 >Junkbuster</SPAN
-> and earlier versions
+> and early versions
    of <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -137,18 +137,26 @@ CLASS="FILENAME"
    will need to be adapted, as configuration syntax has been very much in flow
    in the 2.9.x series.
  </P
+><P
+>  Refer to the <A
+HREF="../user-manual/whatsnew.html"
+TARGET="_top"
+>What's New</A
+> 
+ page for information on configuration changes that may occur from one release to another.
+ </P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN312"
+NAME="AEN319"
+></A
 >3.3. What is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> file?</A
-></H3
+> file?</H3
 ><P
 > <A
 HREF="../user-manual/actions-file.html"
@@ -188,6 +196,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACTIONSS"
+></A
 >3.4. The <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -195,8 +204,7 @@ CLASS="QUOTE"
 some of these <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
->.</A
-></H3
+>.</H3
 ><P
 > For a comprehensive discussion of the actions concept, please refer
  to the <A
@@ -226,10 +234,10 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN331"
+NAME="AEN338"
+></A
 >3.5. How are actions files configured? What is the easiest
-way to do this?</A
-></H3
+way to do this?</H3
 ><P
 > Actions files are just text files in a special syntax and can be edited
  with a text editor. But probably the easiest way is to access
@@ -262,13 +270,13 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN339"
+NAME="AEN346"
+></A
 >3.6. There are several different <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
 > files. What are
-the differences?</A
-></H3
+the differences?</H3
 ><P
 > As of <SPAN
 CLASS="APPLICATION"
@@ -328,8 +336,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="YAHOO"
->3.7. How can I make my Yahoo/Hotmail/GMX account work?</A
-></H3
+></A
+>3.7. How can I make my Yahoo/Hotmail/Gmail account work?</H3
 ><P
 >  The default configuration shouldn't impact the usability of any of these services.
   It will, however, make all cookies temporary, so that your browser will forget your
@@ -378,6 +386,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONFIGFILES"
+></A
 >3.8. What's the difference between the
 <SPAN
 CLASS="QUOTE"
@@ -388,8 +397,7 @@ CLASS="QUOTE"
 > and <SPAN
 CLASS="QUOTE"
 >"Adventuresome"</SPAN
-> defaults?</A
-></H3
+> defaults?</H3
 ><P
 >  Configuring <SPAN
 CLASS="APPLICATION"
@@ -452,9 +460,9 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="BROWSECONFIG"
+></A
 >3.9. Why can I change the configuration 
-with a browser? Does that not raise security issues?</A
-></H3
+with a browser? Does that not raise security issues?</H3
 ><P
 >  It may seem strange that regular users can edit the config files with their
   browsers, although the whole <TT
@@ -489,25 +497,25 @@ CLASS="APPLICATION"
   a LAN), you will probably want to turn the web-based editor and remote toggle
   features off by setting <SPAN
 CLASS="QUOTE"
->"<VAR
+>"<TT
 CLASS="LITERAL"
 ><A
 HREF="../user-manual/config.html#ENABLE-EDIT-ACTIONS"
 TARGET="_top"
 >enable-edit-actions</A
 >
-  0</VAR
+  0</TT
 >"</SPAN
 > and <SPAN
 CLASS="QUOTE"
->"<VAR
+>"<TT
 CLASS="LITERAL"
 ><A
 HREF="../user-manual/config.html#ENABLE-REMOTE-TOGGLE"
 TARGET="_top"
 >enable-remote-toggle</A
 >
-  0</VAR
+  0</TT
 >"</SPAN
 > in the <A
 HREF="../user-manual/config.html"
@@ -532,15 +540,15 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN404"
+NAME="AEN411"
+></A
 >3.10. What is the <TT
 CLASS="FILENAME"
 >default.filter</TT
 > file? What is a <SPAN
 CLASS="QUOTE"
 >"filter"</SPAN
->?</A
-></H3
+>?</H3
 ><P
 > The <A
 HREF="../user-manual/filter-file.html"
@@ -556,7 +564,8 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >filters</I
 ></SPAN
-> are defined, which can be used to modify or
+> as supplied by the developers are defined. 
+ Filters are a special subset of actions that can be used to modify or
  remove, web page content on the fly. Filters apply to <SPAN
 CLASS="emphasis"
 ><I
@@ -564,15 +573,16 @@ CLASS="EMPHASIS"
 >anything</I
 ></SPAN
 >
- in the page source, including HTML tags, and JavaScript. Regular expressions are used
- to accomplish this. There are a number of pre-defined filters to deal with common
- annoyances. The filters are only defined here, to invoke them, you need to use the
+ in the page source (and optionally both client and server headers), including
+ HTML tags, and JavaScript. Regular expressions are used to accomplish this.
+ There are a number of pre-defined filters to deal with common annoyances. The
+ filters are only defined here, to invoke them, you need to use the
  <A
 HREF="../user-manual/actions-file.html#FILTER"
 TARGET="_top"
-><VAR
+><TT
 CLASS="LITERAL"
->filter</VAR
+>filter</TT
 >
  action</A
 > in one of the actions files. Filtering is automatically
@@ -584,9 +594,19 @@ CLASS="FILENAME"
 >default.filter</TT
 > with a text editor and define
  your own filters.  This is potentially a very powerful feature, but
- requires some expertise in both regular expressions and HTML/HTTP. </P
+ requires some expertise in both regular expressions and HTML/HTTP. You should 
+ place any modifications to the default filters, or any new ones you create 
+ in a separate file, such as <TT
+CLASS="FILENAME"
+>user.filter</TT
+>, so they won't 
+ be overwritten during upgrades. The ability to define multiple filter files 
+ in <TT
+CLASS="FILENAME"
+>config</TT
+> is a new feature as of v. 3.0.4.</P
 ><P
-> Presently, there is no GUI editor option for this part of the configuration, 
+> There is no GUI editor option for this part of the configuration, 
  but you can disable/enable the various pre-defined filters of the included 
  <TT
 CLASS="FILENAME"
@@ -602,34 +622,34 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN420"
+NAME="AEN429"
+></A
 >3.11. How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to act as a proxy for my 
- LAN?</A
-></H3
+ LAN?</H3
 ><P
 > By default, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > only responds to requests 
- from <VAR
+ from <TT
 CLASS="LITERAL"
->127.0.0.1</VAR
+>127.0.0.1</TT
 > (localhost). To have it act as a server for
  a network, this needs to be changed in the <A
 HREF="../user-manual/config.html"
 TARGET="_top"
 >main configuration file</A
 >. Look for
- the <VAR
+ the <TT
 CLASS="LITERAL"
 ><A
 HREF="../user-manual/config.html#LISTEN-ADDRESS"
 TARGET="_top"
 >listen-address</A
-></VAR
+></TT
 >
  option, which may be commented out with a <SPAN
 CLASS="QUOTE"
@@ -714,16 +734,16 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN446"
->3.12. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
-></H3
+NAME="AEN455"
+></A
+>3.12. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</H3
 ><P
 > The replacement for blocked images can be controlled with the <A
 HREF="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"
 TARGET="_top"
-><VAR
+><TT
 CLASS="LITERAL"
->set-image-blocker</VAR
+>set-image-blocker</TT
 >
  action</A
 >. You have the choice of a checkerboard pattern, a transparent 1x1 GIF
@@ -732,13 +752,13 @@ CLASS="QUOTE"
 >"blank"</SPAN
 >), or a redirect to a custom image of your choice.
  Note that this choice only has effect for images which are blocked as images, i.e.
- whose URLs match both a <VAR
+ whose URLs match both a <TT
 CLASS="LITERAL"
 ><A
 HREF="../user-manual/actions-file.html#HANDLE-AS-IMAGE"
 TARGET="_top"
 >handle-as-image</A
-></VAR
+></TT
 >
  <SPAN
 CLASS="emphasis"
@@ -746,21 +766,21 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >and</I
 ></SPAN
-> <VAR
+> <TT
 CLASS="LITERAL"
 ><A
 HREF="../user-manual/actions-file.html#BLOCK"
 TARGET="_top"
 >block</A
-></VAR
+></TT
 > action.</P
 ><P
 > If you want to see nothing, then change the <A
 HREF="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"
 TARGET="_top"
-><VAR
+><TT
 CLASS="LITERAL"
->set-image-blocker</VAR
+>set-image-blocker</TT
 >
  action</A
 > to <SPAN
@@ -781,9 +801,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN463"
->3.13. Why would anybody want to see a checkerboard pattern?</A
-></H3
+NAME="AEN472"
+></A
+>3.13. Why would anybody want to see a checkerboard pattern?</H3
 ><P
 > Remember that <A
 HREF="general.html#WHATSANAD"
@@ -807,10 +827,10 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN468"
+NAME="AEN477"
+></A
 >3.14. I see some images being replaced by a text
-instead of the checkerboard image. Why and how do I get rid of this?</A
-></H3
+instead of the checkerboard image. Why and how do I get rid of this?</H3
 ><P
 > This happens when the banners are not embedded in the HTML code of the
  page itself, but in separate HTML (sub)documents that are loaded into (i)frames
@@ -839,14 +859,14 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="SRVANY"
+></A
 >3.15. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a service 
-on Win2K/NT?</A
-></H3
+on Win2K/NT?</H3
 ><P
-> Yes, it can run as a system service using <B
+> Earlier versions could run as a system service using <B
 CLASS="COMMAND"
 >srvany.exe</B
 >.
@@ -859,6 +879,12 @@ TARGET="_top"
 ><P
 > Version 3.0.1 fixes the problem where the icon and menu where not available
  in the taskbar for this usage.</P
+><P
+> Version 3.0.4, introduces full Windows service functionality, thus elimating
+ the <B
+CLASS="COMMAND"
+>srvany.exe</B
+> requirement.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -866,6 +892,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="OTHERPROXY"
+></A
 >3.16. How can I make <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -873,14 +900,16 @@ CLASS="APPLICATION"
 proxies like <SPAN
 CLASS="APPLICATION"
 >Squid</SPAN
->?</A
-></H3
+> or <SPAN
+CLASS="APPLICATION"
+>TOR</SPAN
+>?</H3
 ><P
 > This can be done and is often useful to combine the benefits of
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> with those of a caching proxy.
+> with those of a another proxy.
  See the <A
 HREF="../user-manual/config.html#FORWARDING"
 TARGET="_top"
@@ -899,12 +928,12 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="PORT-80"
+></A
 >3.17. Can I just set <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to use port 80
-and thus avoid individual browser configuration?</A
-></H3
+and thus avoid individual browser configuration?</H3
 ><P
 > No, its more complicated than that. This only works with special kinds 
  of proxies known as <SPAN
@@ -918,14 +947,14 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="TRANSPARENT"
+></A
 >3.18. Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a <SPAN
 CLASS="QUOTE"
 >"transparent"</SPAN
-> proxy?</A
-></H3
+> proxy?</H3
 ><P
 > No, <SPAN
 CLASS="APPLICATION"
@@ -966,6 +995,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="OUTLOOK"
+></A
 >3.19. How can I configure <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -973,8 +1003,7 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Outlook
  Express</SPAN
->?</A
-></H3
+>?</H3
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -996,8 +1025,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="OUTLOOK-MORE"
->3.20. How can I have separate rules just for HTML mail?</A
-></H3
+></A
+>3.20. How can I have separate rules just for HTML mail?</H3
 ><P
 > The short answer is, you can't. <SPAN
 CLASS="APPLICATION"
@@ -1034,8 +1063,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ALLOW-COOKIES"
->3.21. How can I allow permanent cookies for my trusted sites?</A
-></H3
+></A
+>3.21. How can I allow permanent cookies for my trusted sites?</H3
 ><P
 >  There are several actions that relate to cookies. The default behavior is to 
   allow only <SPAN
@@ -1046,9 +1075,9 @@ CLASS="QUOTE"
   to cookies. But there may be cases where we want cookies to last.</P
 ><P
 >  To disable all cookie actions, so that cookies are allowed unrestricted,
-  both in and out, for <VAR
+  both in and out, for <TT
 CLASS="LITERAL"
->example.com</VAR
+>example.com</TT
 >: </P
 ><P
 > <TABLE
@@ -1076,10 +1105,112 @@ CLASS="FILENAME"
 >user.action</TT
 >
  includes an alias for this situation, called
- <VAR
+ <TT
 CLASS="LITERAL"
->allow-cookies</VAR
+>allow-all-cookies</TT
 >.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="MULTIPLES"
+></A
+>3.22. Can I have separate configurations for different users?</H3
+><P
+> Each instance of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has its own
+ configuration, including such attributes as the TCP port that it listens on.
+ What you can do is run multiple instances of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, each with 
+ a unique <TT
+CLASS="LITERAL"
+>listen-address</TT
+> and configuration path, and then
+ each of these can have their own configurations. Think of it as per-port
+ configuration.</P
+><P
+> 
+ Simple enough for a few users, but for large installations, consider having
+ groups of users that might share like configurations.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="WHITELISTS"
+></A
+>3.23. Can I set-up <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as a whitelist of
+<SPAN
+CLASS="QUOTE"
+>"good"</SPAN
+> sites?</H3
+><P
+> Sure. There are a couple of things you can do for simple whitelisting.
+ Here's one real easy one:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> ############################################################
+ # Blacklist
+ ############################################################
+ { +block }
+ / # Block *all* URLs
+ 
+ ############################################################
+ # Whitelist
+ ############################################################
+ { -block }
+  kids.example.com
+  toys.example.com
+  games.example.com</PRE
+></TD
+></TR
+></TABLE
+><P
+> This allows access to only those three sites.</P
+><P
+> A more interesting approach is <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> 
+ <TT
+CLASS="LITERAL"
+>trustfile</TT
+> concept, which incorporates the notion of 
+ <SPAN
+CLASS="QUOTE"
+>"trusted referrers"</SPAN
+>. See the <A
+HREF="../user-manual/config.html#TRUSTFILE"
+TARGET="_top"
+>User Manual Trust</A
+>
+ documentation.</P
+><P
+> These are fairly simple approaches and are not completely foolproof. There
+ are various other configuration options that should be disabled (described
+ elsewhere here and in <A
+HREF="../user-manual/"
+TARGET="_top"
+>the User Manual</A
+>)
+ so that users can't modify their own configuration and easily circumvent the
+ whitelist.</P
 ></DIV
 ></DIV
 ><DIV
