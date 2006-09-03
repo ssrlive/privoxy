@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.98 2006/08/24 11:01:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.99 2006/09/02 15:36:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.98 2006/08/24 11:01:34 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.99  2006/09/02 15:36:42  fabiankeil
+ *    Follow the OpenBSD port's lead and protect the resolve
+ *    functions on OpenBSD as well.
+ *
  *    Revision 1.98  2006/08/24 11:01:34  fabiankeil
  *    --user fix. Only use the user as group if no group is specified.
  *    Solves BR 1492612. Thanks to Spinor S. and David Laight.
@@ -1887,6 +1891,9 @@ int main(int argc, const char *argv[])
 #endif
 {
    int argc_pos = 0;
+#ifdef HAVE_RANDOM
+   unsigned int random_seed;
+#endif /* ifdef HAVE_RANDOM */
 #ifdef unix
    struct passwd *pw = NULL;
    struct group *grp = NULL;
@@ -2047,6 +2054,11 @@ int main(int argc, const char *argv[])
    pthread_mutex_init(&log_mutex,0);
    pthread_mutex_init(&log_init_mutex,0);
 #endif /* FEATURE_PTHREAD */
+
+#ifdef HAVE_RANDOM
+   random_seed = (unsigned int)time(NULL);
+   srandom(random_seed);
+#endif /* ifdef HAVE_RANDOM */
 
    /*
     * Unix signal handling
