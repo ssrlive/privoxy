@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.8 2006/08/03 02:46:41 david__schmidt Exp $
+#  $Id: standard.action,v 1.9 2006/09/01 16:41:39 hal9 Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -151,14 +151,21 @@ standard.Medium
 
 ################
 #
-# Advanced settings -- fun but risky (and include new filters)
+# Advanced settings -- reasonable privacy protection but
+# require some exceptions for trusted sites, most likely
+# because of cookies or SSL. Also testing ground for
+# new options.
+#
+# CAUTION: These settings can still be subverted by a
+# misconfigured client that executes code from untrusted
+# sources.
 #
 { \
-+add-header{X-User-Tracking: sucks} \
+-add-header \
 -block \
 -content-type-overwrite \
 -crunch-client-header \
--crunch-if-none-match \
++crunch-if-none-match \
 +crunch-outgoing-cookies \
 +crunch-incoming-cookies \
 -crunch-server-header \
@@ -182,7 +189,7 @@ standard.Medium
 +filter{demoronizer} \
 -filter{shockwave-flash} \
 +filter{quicktime-kioskmode} \
-+filter{fun} \
+-filter{fun} \
 -filter{crude-parental} \
 -filter{ie-exploits} \
 -filter{site-specifics} \
@@ -193,21 +200,21 @@ standard.Medium
 -handle-as-image \
 -hide-accept-language \
 -hide-content-disposition \
--hide-if-modified-since \
++hide-if-modified-since{-1} \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
-+hide-referrer{forge} \
++hide-referrer{conditional-block} \
 -hide-user-agent \
 -inspect-jpegs \
 -kill-popups \
--limit-connect \
++limit-connect{,} \
 +prevent-compression \
--overwrite-last-modified \
++overwrite-last-modified{randomize} \
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
 -session-cookies-only \
 +set-image-blocker{pattern} \
--treat-forbidden-connects-like-blocks \
++treat-forbidden-connects-like-blocks \
 }
 standard.Adventuresome
