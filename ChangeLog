@@ -26,7 +26,9 @@ ChangeLog for Privoxy
      redirect{URL}
      treat-forbidden-connects-like-blocks
 
-- Privoxy's default error pages are no longer cached.
+- Standard-compliant clients are prevented from displaying cached
+  copies of Privoxy's error messages after the cause of the problem
+  has gone.
 - Improved DNS error handling.
 - Multiple filter files can now be specified in config.
 - Added jpeg filtering to defend against MS jpeg vulnerability MS04-028
@@ -36,6 +38,7 @@ ChangeLog for Privoxy
   file.  The race condition remains for non-pthread implementations.
   Reference patch #1175720. Various other logging enhancements.
 - A pile of assorted bug fixes, memory leaks, etc.
+- Moved Actions file reporting mechanism to SF tracker.
 
 *** Version 3.0.3 ***
 
