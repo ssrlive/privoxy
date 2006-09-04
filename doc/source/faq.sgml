@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.11 2006/07/18 14:48:50 david__schmidt Exp $
+ $Id: faq.sgml,v 2.12 2006/09/03 14:15:30 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -75,7 +75,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.11 2006/07/18 14:48:50 david__schmidt Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.12 2006/09/03 14:15:30 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1274,43 +1274,61 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  to you. 
 </para>
 <para>
- Fortunately there are many publicly usable anonymous proxies out there, which
- solve the problem by providing a further level of indirection between you and
- the web server, shared by many people, and thus letting your requests "drown"
- in white noise of unrelated requests as far as user tracking is concerned.
+ There are many publicly usable "anonymous" proxies out there, which
+ provide a further level of indirection between you and the web server.
 </para>
 <para>
- Most of them will, however, log your IP address and make it available to the
- authorities in case you abuse that anonymity for criminal purposes. In fact
+ However, these proxies are called "anonymous" because you don't need
+ a password, not because they would offer any real anonymity.
+ Most of them will log your IP address and make it available to the
+ authorities in case you violate the law of the country they run in. In fact
  you can't even rule out that some of them only exist to *collect* information
  on (those suspicious) people with a more than average preference for privacy.
 </para>
 <para>
- You can find a list of anonymous public proxies at <ulink
- url="http://www.multiproxy.org/anon_proxy.htm">multiproxy.org</ulink> and many
- more through Google. A particularly interesting project is the JAP service
- offered by the Technical University of Dresden (<ulink
- url="http://anon.inf.tu-dresden.de/index_en.html">http://anon.inf.tu-dresden.de/index_en.html</ulink>).
+ Your best bet is to chain <application>Privoxy</application>
+ with <ulink url="http://tor.eff.org/">Tor</ulink>,
+ an  <ulink url="http://www.eff.org/">EFF</ulink> supported onion routing system.
+ The configuration details can be found in
+ <ulink url="#TOR">How do I use <application>Privoxy</application> together with <application>Tor</application>?</ulink>.
 </para>
+<!-- 
 <para>
  There is, however, even in the single-machine case the possibility to make the
  server believe that your machine is in fact a shared proxy serving a large
  LAN, and we are looking into that.
 </para>
+ I assume this is about sending fake forward IP addresses?
+ David and I looked into it and considered it a waste of time to implement.
+ Fabian 2006-09-04 
+-->
 </sect2>
 
 <sect2 renderas="sect3">
 <title id="anonforsure">Can <application>Privoxy</application> guarantee I am anonymous?</title>
 <para>
  No. Your chances of remaining anonymous are greatly improved, but unless you
- are an expert on Internet security it would be safest to assume that
- everything you do on the Web can be traced back to you.
+ <ulink url="#TOR">chain <application>Privoxy</application> with <application>Tor</application></ulink>
+ or a similar system and know what you're doing when it comes to configuring
+ the rest of your system, it would be safest to assume that everything you do
+ on the Web can be traced back to you.
 </para>
 <para>
  <application>Privoxy</application> can remove various information about you,
  and allows <emphasis>you</emphasis> more freedom  to decide which sites 
- you can trust, and what details you want to reveal. But it's still possible
- that web sites can find out who you are. Here's one way this can happen.
+ you can trust, and what details you want to reveal. But it neither 
+ hides your ip address, nor can it guarantee that the rest of the system
+ behaves correctly. There are several possibilities how a web sites can find
+ out who you are, even if you are using a strict <application>Privoxy</application>
+ configuration and chained it with <application>Tor</application>.
+</para>
+<para>
+ Most of <application>Privoxy's</application> protection can be easily subverted
+ by an insecure browser configuration, therefore you should use a browser that can
+ be configured to only execute code from trusted sites, and be careful which sites you trust.
+ For example there is no point in having <application>Privoxy</application>
+ modify the User-Agent header, if websites can get all the information they want
+ through JavaScript, ActiveX, Flash, Java etc.
 </para>
 <para>
  A few browsers disclose the user's email address in certain situations, such
@@ -1328,6 +1346,93 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Luke!
 </para>
 
+</sect2>
+
+<sect2 renderas="sect3" id="tor"><title>How do I use <application>Privoxy</application>
+ together with <application>Tor</application>?</title>
+<para>
+ Before you configure <application>Privoxy</application> to use <application>Tor</application>
+ (<ulink url="http://tor.eff.org/">http://tor.eff.org/</ulink>),
+ please follow the User Manual chapters
+ <ulink url="../user-manual/installation.html">2. Installation</ulink> and
+ <ulink url="../user-manual/startup.html">5. Startup</ulink> to make sure
+ <application>Privoxy</application> itself is setup correctly.
+</para>
+<para> 
+ If it is, refer to <ulink url="http://tor.eff.org/documentation.html.en">Tor's
+ extensive documentation</ulink> to learn how to install <application>Tor</application>,
+ and make sure <application>Tor</application>'s logfile says that
+ <quote>Tor has successfully opened a circuit</quote> and it
+ <quote>[l]ooks like client functionality is working</quote>.
+</para>
+<para>
+ If either <application>Tor</application> or <application>Privoxy</application>
+ isn't working, their combination most likely will neither. Testing them on their
+ own will also help you to direct problem reports to the right audience.
+ If <application>Privoxy</application> isn't working, don't bother the
+ <application>Tor</application> developers. If <application>Tor</application>
+ isn't working, don't send bug reports to the <application>Privoxy</application> Team.
+</para>
+<para>
+ If you verified that <application>Privoxy</application> and <application>Tor</application>
+ are working, it is time to connect them. As far as <application>Privoxy</application>
+ is concerned, <application>Tor</application> is just another proxy that can be reached
+ by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
+ to increase your anonymity level, therefore you should use socks4a,
+ to make sure <application>Privoxy's</application> DNS requests are
+ done through <application>Tor</application> and thus invisible to your local network.
+</para>
+<para>
+ Since <application>Privoxy</application> 3.0.4, its configuration (section 5.2)
+ is already prepared for <application>Tor</application>, if you are using a
+ default <application>Tor</application> configuration and run it on the same
+ system as Privoxy, you just have to uncomment the line:
+</para>
+<para>
+ <screen>
+#        forward-socks4a             /     127.0.0.1:9050 .
+ </screen>
+</para>
+<para>
+ This is enough to reach the internet, but additionally you should
+ uncomment the following forward rules, to make sure your local network is still
+ reachable through Privoxy:
+</para>
+<para>
+ <screen>
+#        forward         192.168.*.*/     .
+#        forward            10.*.*.*/     .
+#        forward           127.*.*.*/     .
+ </screen>
+</para>
+<para>
+ Unencrypted connections to systems in these address ranges will
+ be as (un)secure as the local network is, but the alternative is
+ that you can't reach the network at all.
+ If you also want to be able to reach servers in your local
+ network by using their names, you will need additional
+ exceptions that look like this:
+</para>
+<para>
+ <screen>
+#        forward           localhost/     .
+ </screen>
+</para>
+<para>
+ Save the modified configuration file and open
+ <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status/</ulink>
+ in your browser, confirm that <application>Privoxy</application> has reloaded its configuration
+ and that there are no other forward lines, unless you know that you need them. I everything looks good,
+ refer to
+ <ulink url="http://wiki.noreply.org/noreply/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
+ Faq 4.2</a> to learn how to verify that you are really using <application>Tor</application>.
+</para>
+<para>
+ Afterwards, please take the time to at least skim through the rest
+ of <application>Tor's</application> documentation. Make sure you understand
+ what <application>Tor</application> does, why it is no replacement for
+ application level security, and why you shouldn't use it for unencrypted logins.
+</para>
 </sect2>
 
 <sect2 renderas="sect3">
@@ -1636,9 +1741,9 @@ and related issues?</title>
  in the default configuration as shipped. You have either manually
  activated the <quote><literal>fun</literal></quote> filter which
  is clearly labeled <quote>Text replacements for subversive browsing
- fun!</quote> or you have implicitly activated it by choosing the
- <quote>Adventuresome</quote> profile in the web-based editor (formerly known 
- as the <application>Advanced</application> profile).
+ fun!</quote> or you are using an older Privoxy version and have implicitly
+ activated it by choosing the  <quote>Adventuresome</quote> profile in the
+ web-based editor.
 </para>
 </sect2>
 
@@ -2151,6 +2256,11 @@ Why?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.12  2006/09/03 14:15:30  hal9
+Various updates, including 7 or 8 new FAQs, and updates/changes to various
+other ones to better reflect improvements, additions and changes for the
+upcoming release. This is close to final form for 3.0.4 IMHO.
+
 Revision 2.11  2006/07/18 14:48:50  david__schmidt
 Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 with what was really the latest development (the v_3_0_branch branch)
