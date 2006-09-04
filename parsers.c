@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.65 2006/08/22 10:55:56 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.66 2006/09/03 19:38:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.65 2006/08/22 10:55:56 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.66  2006/09/03 19:38:28  fabiankeil
+ *    Use gmtime_r if available, fallback to gmtime with mutex
+ *    protection for MacOSX and use vanilla gmtime for the rest.
+ *
  *    Revision 1.65  2006/08/22 10:55:56  fabiankeil
  *    Changed client_referrer to use the right type (size_t) for
  *    hostlenght and to shorten the temporary referrer string with
@@ -1248,8 +1252,8 @@ jb_err server_content_type(struct client_state *csp, char **header)
  *
  * Description :  - Prohibit filtering (CT_TABOO) if transfer coding compresses
  *                - Raise the CSP_FLAG_CHUNKED flag if coding is "chunked"
- *                - Change from "chunked" to "identity" if body was chunked
- *                  but has been de-chunked for filtering.
+ *                - Remove header if body was chunked but has been
+ *                  de-chunked for filtering.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1280,15 +1284,13 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
       csp->flags |= CSP_FLAG_CHUNKED;
 
       /*
-       * If the body was modified, it has been
-       * de-chunked first, so adjust the header:
+       * If the body was modified, it has been de-chunked first
+       * and the header must be removed. 
        */
       if (csp->flags & CSP_FLAG_MODIFIED)
       {
+         log_error(LOG_LEVEL_HEADER, "Removing: %s", *header);
          freez(*header);
-         *header = strdup("Transfer-Encoding: identity");
-         log_error(LOG_LEVEL_HEADER, "Set: %s", *header);
-         return (header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
       }
    }
 
@@ -2876,19 +2878,18 @@ int strclean(const char *string, const char *substring)
 struct tm *parse_header_time(char *header, time_t *tm) {
 
    char * timestring;
+   struct tm gmt;
    struct tm * timeptr;
-   
-   *tm = 0;
-   timeptr = localtime(tm);
+
    /* Skipping header name */
    timestring = strstr(header, ": ");
-   if (strptime(timestring, ": %a, %d %b %Y %H:%M:%S", timeptr) == NULL)
+   if (strptime(timestring, ": %a, %d %b %Y %H:%M:%S", &gmt) == NULL)
    {
       timeptr = NULL;
    }
    else
    {
-      *tm = timegm(timeptr);
+      *tm = timegm(&gmt);
    }
    return(timeptr);
 }
