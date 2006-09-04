@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.18 2006/09/02 14:03:46 hal9 Exp $
+#  $Id: default.action.master,v 1.19 2006/09/02 20:55:40 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -21,8 +21,9 @@
 #  
 #  * Use the support forum to get help:
 #    http://sourceforge.net/tracker/?group_id=11118&atid=211118
-#  * Submit feedback for this actions file only through our
-#    actions file feedback script: http://www.privoxy.org/actions
+#  * Submit feedback for this actions file only through the 
+#    SF actions file feedback tracker: 
+#    http://sourceforge.net/tracker/?group_id=11118&atid=460288
 #  * Submit bugs only through our bug forum:
 #    http://sourceforge.net/tracker/?group_id=11118&atid=111118 
 #    Make sure that the bug has not already been submitted. Please try
@@ -559,13 +560,6 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -treat-forbidden-connects-like-blocks \
 }
 / # Match all URLs
-
-#############################################################################
-# Needed for automatic feedback evaluation; Please don't change or delete!
-#############################################################################
-{+add-header{X-Actions-File-Version: 1.8} -filter -kill-popups}
-.privoxy.org
-.oesterhelt.org/actions
 
 #############################################################################
 # These extensions belong to images:
@@ -1430,8 +1424,13 @@ swscan.apple.com
 #MASTER# REMARKS: Popular bug-tracking system - likely to contain code
 bugzilla.
 .tldp.org
-#MASTER# REMARKS: all the world is wikified 09/02/06. Generic wiki un-filterer.
+#MASTER# REMARKS: all the world is wikified 09/02/06. Generic wiki un-filterers.
 .wiki*.
+.*wiki.
+#MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
+maps.google.com
+.google.com/calendar
+code.google.com
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;

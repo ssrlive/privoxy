@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 2.3 2006/07/18 14:48:51 david__schmidt Exp $
+ $Id: seealso.sgml,v 2.4 2006/08/26 10:46:27 hal9 Exp $
 
- Copyright (C) 2001, 2002-2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ======================================================================
@@ -63,7 +63,8 @@
  </simplelist>
  <simplelist>
   <member>
-   <ulink url="javascript:w=Math.floor(screen.width/2);h=Math.floor(screen.height*0.9);void(window.open('http://www.privoxy.org/actions','Feedback','screenx='+w+',width='+w+',height='+h+',scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">http://www.privoxy.org/actions/</ulink>, to submit <quote>misses</quote> to the developers. 
+   <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>, to submit <quote>misses</quote> and other
+   configuration related suggestions to the developers. 
   </member>
  </simplelist>
 <!-- 
@@ -108,6 +109,13 @@ dead link 08/26/06
   <member>
    <ulink url="http://www.squid-cache.org/">http://www.squid-cache.org/</ulink>, a very popular
    caching proxy, which is often used together with <application>Privoxy</application>.
+  </member>
+ </simplelist>
+ <simplelist>
+  <member>
+   <ulink url="http://tor.eff.org/">http://tor.eff.org/</ulink>, 
+   <application>TOR</application> can help anonymize web browsing, 
+   web publishing, instant messaging, IRC, SSH, and other applications.
   </member>
  </simplelist>
  <simplelist>
