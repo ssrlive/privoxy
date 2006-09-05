@@ -1,8 +1,13 @@
+#MASTER# COMMENT:   
+#MASTER# COMMENT:   Anyone adding specific rules to this file,
+#MASTER# COMMENT:   wherever possible please include a *full* URL 
+#MASTER# COMMENT:   which can be used to verify the problem.  
+#MASTER# COMMENT:   
 ######################################################################
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.19 2006/09/02 20:55:40 hal9 Exp $
+#  $Id: default.action.master,v 1.20 2006/09/04 12:39:55 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -657,16 +662,10 @@ www.max.de/_teaser/partner/
 #MASTER# BLOCK-REFERRER: http://search.atomz.com/search/?sp-k=&sp-p=any&sp-a=sp1001395b&sp-q=linux
 search.atomz.com/search/i/tagw1c.gif
 www.intelligentx.com/newsletters/.*\.gif
-#MASTER# BLOCK-REFERRER: http://www.whowhere.lycos.com/ThreeD/explain.html
-www.whowhere.lycos.com/images/ebay_bst.gif
-www.whowhere.lycos.com/images/find_books.gif
-www.whowhere.lycos.com/images/1800/advppl1.gif
 #MASTER# BLOCK-REFERRER: http://realguide.real.com/games/
 i.real.com/g/pics/games/gamepass_120x600_2.gif
 #MASTER# BLOCK-REFERRER: http://www1.chathouse.com/roomplan.html
 www*.chathouse.com/chatimages/whopersonal.gif
-#MASTER# BLOCK-REFERRER: http://www.beseen.com/
-www.beseen.com/images/website3.gif
 #MASTER# BLOCK-REFERRER: http://www.planetspiele.de/
 .planetspiele.de/gfx/partner
 #MASTER# BLOCK-REFERRER: http://www.hot.ee/toptools/
@@ -862,7 +861,6 @@ imp*.tradedoubler.com
 #MASTER# BLOCK-REFERRER: http://www.physlink.com/Education/AskExperts/ae353.cfm
 /.*affiliate.*120x90
 #MASTER# BLOCK-REFERRER:  http://www.amayita.com/imagenes/index.php?currDir=./Hall_of_Fame&pageType=image&image=img_0265.jpg
-www.spanishbanner.com/cgi/bserve.cgi
 #MASTER# BLOCK-REFERRER: http://www.macgamer.com/
 .qksrv.net
 #MASTER# BLOCK-REFERRER: http://www.drudgereport.com/
@@ -967,8 +965,6 @@ s*.sitemeter.com/meter\.asp
 fastcounter.bcentral.com/
 #MASTER# BLOCK-REFERRER: http://osnews.com/
 bilbo.counted.com/
-#MASTER# BLOCK-REFERRER: http://www.slovio.com/
-ww2.fce.vutbr.cz/bin/counter.gif
 #MASTER# BLOCK-REFERRER: http://enciclopedia.us.es/
 p[0-9].nedstatbasic.net/
 #MASTER# BLOCK-REFERRER: http://www.vencor.narod.ru/films/inolv.htm
@@ -1021,8 +1017,6 @@ www.usatoday.com/sponsors/
 ads.jpost.com
 #MASTER# BLOCK-REFERRER: http://www.jpost.com/servlet/Satellite?pagename=JPost/A/JPArticle/ShowFull&cid=1038889003183
 /.*/images/\d+/promos/
-#MASTER# BLOCK-REFERRER: http://astalavista.box.sk/
-www.subteran.ro/adult/adult20.jpg
 #MASTER# BLOCK-REFERRER: http://www.kuro5hin.org/
 #www.kuro5hin.org/images/[^/]+\.gif
 #MASTER# BLOCK-REFERRER: http://www.uolsinectis.com.ar/
@@ -1070,8 +1064,6 @@ b.i.bol.com.br/b/catho/a_
 www.independent.co.uk/img/commercial/
 #MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/epdf/
 a.rn11.com/
-#MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/
-www.planetgamecube.com/ad.swf
 #MASTER# BLOCK-REFERRER: http://www.dinside.no/
 www.dinside.no/annonsorer/
 #MASTER# BLOCK-REFERRER: http://www.computrabajo.es/
@@ -1219,16 +1211,11 @@ ad.debka.com/(css|images)
 #MASTER# UNBLOCK-REFERRER: http://www.directv.com/DTVAPP/index.jsp
 #MASTER# REMARKS: Yuck!
 realmedia*./.*/DIRECTV/
-www.directv.com/includes/jvs/BannerHome.js
 oascentral.directv.com/
 #MASTER# UNBLOCK-REFERRER: http://source.bungie.org/
 source.bungie.org/
 #MASTER# UNBLOCK-REFERRER: http://adonthell.linuxgames.com/
 adonthell.linuxgames.com/
-#MASTER# UNBLOCK-REFERRER: http://www.meine-erste-homepage.com/bannergenerator/formbanner.php
-www.meine-erste-homepage.com/bannergenerator/
-#MASTER# UNBLOCK-REFERRER: http://www.france-histoire.com/russie/visarussie.htm
-www.france-histoire.com/russie/ad/uts.htm
 #MASTER# UNBLOCK-REFERRER: http://news.bbc.co.uk/furniture/chinese/banner/bbccantonese_600.gif
 #MASTER# REMARKS: Banner-free site(s).
 .bbc.co.uk/
@@ -1252,8 +1239,8 @@ www.qualcomm.com/brew/developer/resources/ad/
 www.ad.tomshardware.com/cgi-bin/logo2.m?
 #MASTER# UNBLOCK-REFERRER:  http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem&item=2959829594&category=30018#ebayphotohosting
 .ebayimg.com/
-#MASTER# UNBLOCK-REFERRER: http://www.baycitybaptist.org/
-www.baycitybaptist.org/images/Banner.jpg
+#MASTER# UNBLOCK-REFERRER: http://upgrade.bitdefender.com/update71/avx/Plugins/adsntfs.xmd.gzip 09/04/06
+/update/.*adsnt.*
 
 #############################################################################
 # Site-specific special rules:
@@ -1314,9 +1301,6 @@ www*.chathouse.com/games/
 #MASTER# PROBLEM-URL: http://www.tagesschau.de/
 #MASTER# REMARKS: Search results come in a popup
 www.tagesschau.de
-#MASTER# PROBLEM-URL: http://www.reuters.com/
-#MASTER# REMARKS: Printer friendly versions pop up
-www.reuters.com/news_article.jhtml
 #MASTER# PROBLEM-URL: http://www.xmms.org/skins.html?num=15&sort=daily_download&order=desc
 www.xmms.org
 #MASTER# PROBLEM-URL: http://www.bild.de/
@@ -1353,7 +1337,7 @@ www.rosettaproject.org
 {-fast-redirects}
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 #MASTER# PROBLEM-URL: http://www.google.com/search?q=foo
-.google.com
+.google.
 #MASTER# PROBLEM-URL: http://de.altavista.com/q?pg=q&q=foo&kl=XX&search.x=28&search.y=8&what=web
 .altavista.com/(.*(like|url|link):|trans.*urltext=)http
 #MASTER# PROBLEM-URL: http://www.speedfind.de/cgi-bin/search?q=foo&t=STANDARD
@@ -1428,7 +1412,7 @@ bugzilla.
 .wiki*.
 .*wiki.
 #MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
-maps.google.com
+maps.google.
 .google.com/calendar
 code.google.com
 
@@ -1655,8 +1639,6 @@ www.webreference.com/js/column8/property.html
 #MASTER# PROBLEM-URL: http://www.valueclick.com/html/
 #MASTER# REMARKS: Know your enemy ;-)
 www.valueclick.com
-{-block}
-www.valueclick.com/html/img/advertiser_top.gif
 
 {-filter{banners-by-size} -deanimate-gifs}
 #MASTER# PROBLEM-URL: http://realguide.real.com/games/
