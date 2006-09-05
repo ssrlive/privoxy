@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.15 2006/08/30 11:15:22 hal9 Exp $
+ $Id: user-manual.sgml,v 2.16 2006/09/02 12:49:37 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -53,12 +53,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001 - 2004 by 
+ <link linkend="copyright">Copyright</link> &my-copy; 2001 - 2006 by 
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.15 2006/08/30 11:15:22 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.16 2006/09/02 12:49:37 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1086,7 +1086,41 @@ your PC.
 Click on the Privoxy Icon to start Privoxy. If no configuration file is
  specified on the command line, <application>Privoxy</application> will look
  for a file named <filename>config.txt</filename>. Note that Windows will
- automatically start Privoxy upon booting you PC.
+ automatically start Privoxy when the system starts if you chose that option
+ when installing.
+</para>
+<para>
+<!--
+New check this hal
+-->
+ Version 3.0.4 introduces full Windows service functionality.
+ On Windows only, the Privoxy program has two new command line arguments
+ to install and uninstall Privoxy as a service.
+ <variablelist>
+  <varlistentry>
+   <term>Arguments:</term>
+   <listitem>
+    <para>
+     <replaceable class="parameter">--install</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <replaceable class="parameter">--uninstall</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+ </para>
+<para>
+ After invoking Privoxy with <command>--install</command>,
+ you will need to bring up the Windows service console to assign the user you
+ want Privoxy to run under, and whether or not you want it to run whenever the
+ system starts. You can start the Windows services console with the following command:
+ <command>services.msc</command>  If you do not take the manual step of modifying
+ Privoxy's service settings, it will not start.  Note too that you will need to
+ give Privoxy a user account that actually exists, or it will not be permitted to 
+ write its log files.
 </para>
 </sect2>
 
@@ -7923,6 +7957,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.16  2006/09/02 12:49:37  hal9
+ Various small updates for new actions, filterfiles, etc.
+
  Revision 2.15  2006/08/30 11:15:22  hal9
  More work on the new actions, especially filter-*-headers, and What's New
  section. User Manual is close to final form for 3.0.4 release. Some tinkering

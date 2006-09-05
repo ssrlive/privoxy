@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.12 2006/09/03 14:15:30 hal9 Exp $
+ $Id: faq.sgml,v 2.13 2006/09/04 19:20:33 fabiankeil Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -75,7 +75,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.12 2006/09/03 14:15:30 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.13 2006/09/04 19:20:33 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -939,21 +939,47 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 <title>Can <application>Privoxy</application> run as a service 
 on Win2K/NT?</title>
 <para>
+<!--
+New check this hal
+-->
+ Version 3.0.4 introduces full Windows service functionality.
+ On Windows only, the Privoxy program has two new command line arguments
+ to install and uninstall Privoxy as a service.
+ <variablelist>
+  <varlistentry>
+   <term>Arguments:</term>
+   <listitem>
+    <para>
+     <replaceable class="parameter">--install</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <replaceable class="parameter">--uninstall</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+ </para>
+<para>
+ After invoking Privoxy with <command>--install</command>,
+ you will need to bring up the Windows service console to assign the user you
+ want Privoxy to run under, and whether or not you want it to run whenever the
+ system starts. You can start the Windows services console with the following command:
+ <command>services.msc</command>  If you do not take the manual step of modifying
+ Privoxy's service settings, it will not start.  Note too that you will need to
+ give Privoxy a user account that actually exists, or it will not be permitted to 
+ write its log files.
+</para>
+<para>
  Earlier versions could run as a system service using <command>srvany.exe</command>.
  See the discussion at <ulink
  url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
  for details, and a sample configuration.
 </para>
 <para>
- Version 3.0.1 fixes the problem where the icon and menu where not available
+ Version 3.0.1 fixed the problem where the icon and menu where not available
  in the taskbar for this usage.
-</para>
-<para>
-<!--
-New check this hal
--->
- Version 3.0.4, introduces full Windows service functionality, thus elimating
- the <command>srvany.exe</command> requirement.
 </para>
 </sect2>
 
@@ -2256,6 +2282,10 @@ Why?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.13  2006/09/04 19:20:33  fabiankeil
+Adjusted anonymity related sections to match reality.
+Added a section about using Privoxy with Tor.
+
 Revision 2.12  2006/09/03 14:15:30  hal9
 Various updates, including 7 or 8 new FAQs, and updates/changes to various
 other ones to better reflect improvements, additions and changes for the
