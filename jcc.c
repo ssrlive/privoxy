@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.100 2006/09/03 19:42:59 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.101 2006/09/06 09:23:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.100 2006/09/03 19:42:59 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.101  2006/09/06 09:23:37  fabiankeil
+ *    Make number of retries in case of forwarded-connect problems
+ *    a config file option (forwarded-connect-retries) and use 0 as
+ *    default.
+ *
  *    Revision 1.100  2006/09/03 19:42:59  fabiankeil
  *    Set random(3) seed.
  *
@@ -987,6 +992,18 @@ static void chat(struct client_state *csp)
       write_socket(csp->cfd, buf, strlen(buf));
 
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 400 0", csp->ip_addr_str);
+
+      free_http_request(http);
+      return;
+   }
+
+   if (!strncmpic(http->cmd, "GET ftp://", 10))
+   {
+      strcpy(buf, FTP_RESPONSE);
+      write_socket(csp->cfd, buf, strlen(buf));
+
+      log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as FTP proxy: %s",
+         csp->ip_addr_str, http->cmd);
 
       free_http_request(http);
       return;
