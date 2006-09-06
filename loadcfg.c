@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.51 2006/09/06 09:23:37 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.52 2006/09/06 10:43:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.51 2006/09/06 09:23:37 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.52  2006/09/06 10:43:32  fabiankeil
+ *    Added config option enable-remote-http-toggle
+ *    to specify if Privoxy should recognize special
+ *    headers (currently only X-Filter) to change its
+ *    behaviour. Disabled by default.
+ *
  *    Revision 1.51  2006/09/06 09:23:37  fabiankeil
  *    Make number of retries in case of forwarded-connect problems
  *    a config file option (forwarded-connect-retries) and use 0 as
@@ -1635,7 +1641,17 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
     * link to it's section in the user-manual
     */
    buf = strdup("\n<br><a href=\"");
-   string_append(&buf, config->usermanual);
+   if (!strncmpic(config->usermanual, "file://", 7) ||
+       !strncmpic(config->usermanual, "http", 4))
+   {
+      string_append(&buf, config->usermanual);
+   }
+   else
+   {
+      string_append(&buf, "http://");
+      string_append(&buf, CGI_SITE_2_HOST);
+      string_append(&buf, "/user-manual/");
+   }
    string_append(&buf, CONFIG_HELP_PREFIX);
    string_join  (&buf, string_toupper(command));
    string_append(&buf, "\">");

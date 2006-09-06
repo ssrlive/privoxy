@@ -1,7 +1,7 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.35.2.7 2006/01/29 23:10:56 david__schmidt Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.37 2006/07/18 14:48:45 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/cgisimple.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
  *
  * Purpose     :  Simple CGIs to get information about Privoxy's
  *                status.
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.35.2.7 2006/01/29 23:10:56 da
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.37  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.35.2.7  2006/01/29 23:10:56  david__schmidt
  *    Multiple filter file support
  *
@@ -655,6 +659,91 @@ jb_err cgi_send_stylesheet(struct client_state *csp,
 
    return JB_ERR_OK;
 
+}
+/*********************************************************************
+ *
+ * Function    :  cgi_send_user_manual
+ *
+ * Description :  CGI function that sends a user manual HTML file
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : file=name.html, the name of the HTML file
+ *                  (relative to user-manual from config)
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_send_user_manual(struct client_state *csp,
+                            struct http_response *rsp,
+                            const struct map *parameters)
+{
+   const char * filename;
+   char *full_path;
+   FILE *fp;
+   char buf[BUFFER_SIZE];
+   jb_err err = JB_ERR_OK;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   get_string_param(parameters, "file", &filename);
+   /* Check paramter for hack attempts */
+   if (filename && strchr(filename, '/'))
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+   if (filename && strstr(filename, ".."))
+   {
+      return JB_ERR_CGI_PARAMS;
+   }
+
+   full_path = make_path(csp->config->usermanual, filename ? filename : "index.html");
+   if (full_path == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   /* Allocate buffer */
+   rsp->body = strdup("");
+   if (rsp->body == NULL)
+   {
+      free(full_path);
+      return JB_ERR_MEMORY;
+   }
+
+   /* Open user-manual file */
+   if (NULL == (fp = fopen(full_path, "r")))
+   {
+      log_error(LOG_LEVEL_ERROR, "Cannot open user-manual file %s: %E", full_path);
+      err = cgi_error_no_template(csp, rsp, full_path);
+      free(full_path);
+      return err;
+   }
+   free(full_path);
+
+   /* Read file and write it out */
+   while (fgets(buf, BUFFER_SIZE, fp))
+   {
+      if (string_append(&rsp->body, buf))
+      {
+         fclose(fp);
+         return JB_ERR_MEMORY;
+      }
+   }
+   fclose(fp);
+
+   if (enlist(rsp->headers, "Content-Type: text/html"))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
 }
 
 
