@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.99 2006/09/02 15:36:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.100 2006/09/03 19:42:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.99 2006/09/02 15:36:42 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.100  2006/09/03 19:42:59  fabiankeil
+ *    Set random(3) seed.
+ *
  *    Revision 1.99  2006/09/02 15:36:42  fabiankeil
  *    Follow the OpenBSD port's lead and protect the resolve
  *    functions on OpenBSD as well.
@@ -905,7 +908,8 @@ static void chat(struct client_state *csp)
    int server_body;
    int ms_iis5_hack = 0;
    int byte_count = 0;
-   unsigned int socks_retries = 0;
+   unsigned int forwarded_connect_retries = 0;
+   unsigned int max_forwarded_connect_retries = csp->config->forwarded_connect_retries;
    const struct forward_spec * fwd;
    struct http_request *http;
    int len; /* for buffer sizes */
@@ -1265,10 +1269,10 @@ static void chat(struct client_state *csp)
    /* here we connect to the server, gateway, or the forwarder */
 
    while ( (csp->sfd = forwarded_connect(fwd, http, csp))
-         && (errno == EINVAL) && (socks_retries++ < 3))
+         && (errno == EINVAL) && (forwarded_connect_retries++ < max_forwarded_connect_retries))
    {
 		log_error(LOG_LEVEL_ERROR, "failed request #%u to connect to %s. Trying again.",
-                socks_retries, http->hostport);
+                forwarded_connect_retries, http->hostport);
    }
 
    if (csp->sfd == JB_INVALID_SOCKET)

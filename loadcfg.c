@@ -1,7 +1,7 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.48.2.7 2006/02/02 17:29:16 david__schmidt Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.50 2006/07/18 14:48:46 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/loadcfg.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
  *
  * Purpose     :  Loads settings from the configuration file into
  *                global variables.  This file contains both the
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.48.2.7 2006/02/02 17:29:16 david_
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.50  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.48.2.7  2006/02/02 17:29:16  david__schmidt
  *    Don't forget to malloc space for the null terminator...
  *
@@ -434,6 +438,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward                      2029845ul /* "forward" */
 #define hash_forward_socks4            3963965521ul /* "forward-socks4" */
 #define hash_forward_socks4a           2639958518ul /* "forward-socks4a" */
+#define hash_forwarded_connect_retries  101465292ul /* "forwarded-connect-retries" */
 #define hash_jarfile                      2046641ul /* "jarfile" */
 #define hash_listen_address            1255650842ul /* "listen-address" */
 #define hash_logdir                        422889ul /* "logdir" */
@@ -632,11 +637,12 @@ struct configuration_spec * load_config(void)
    /*
     * Set to defaults
     */
-   config->multi_threaded    = 1;
-   config->hport             = HADDR_PORT;
-   config->buffer_limit      = 4096 * 1024;
-   config->usermanual        = strdup(USER_MANUAL_URL);
-   config->proxy_args        = strdup("");
+   config->multi_threaded            = 1;
+   config->hport                     = HADDR_PORT;
+   config->buffer_limit              = 4096 * 1024;
+   config->usermanual                = strdup(USER_MANUAL_URL);
+   config->proxy_args                = strdup("");
+   config->forwarded_connect_retries = 0;
 
    if ((configfp = fopen(configfile, "r")) == NULL)
    {
@@ -1113,6 +1119,13 @@ struct configuration_spec * load_config(void)
             cur_fwd->next = config->forward;
             config->forward = cur_fwd;
 
+            continue;
+
+/* *************************************************************************
+ * forwarded-connect-retries n
+ * *************************************************************************/
+         case hash_forwarded_connect_retries :
+            config->forwarded_connect_retries = atoi(arg);
             continue;
 
 /* *************************************************************************

@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.77 2006/08/21 12:50:51 david__schmidt Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.78 2006/08/31 16:25:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.78  2006/08/31 16:25:06  fabiankeil
+ *    Work around a buffer overflow that caused Privoxy to
+ *    segfault if too many trusted referrers were used. Good
+ *    enough for now, but should be replaced with a real
+ *    solution after the next release.
+ *
  *    Revision 1.77  2006/08/21 12:50:51  david__schmidt
  *    Formatting cleanup
  *
@@ -1398,6 +1404,9 @@ struct configuration_spec
    
    /** Nonzero to enable multithreading. */
    int multi_threaded;
+
+   /** Number of retries in case a forwarded connection attempt fails */
+   int         forwarded_connect_retries;
 
    /**
     * Bitmask of features that can be enabled/disabled through the config
