@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.6 2006/08/26 02:37:27 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 2.7 2006/09/01 15:10:45 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -78,14 +78,8 @@
   <arg><option>--user </option><replaceable class="parameter">user[.group]</replaceable></arg> 
   <arg><option>--chroot</option></arg>
   <arg><replaceable class="parameter">configfile</replaceable></arg>        
-  <command>&nbsp;(UNIX)</command>
  </cmdsynopsis>
 
- <cmdsynopsis> 
-  <command>privoxy.exe</command>              
-  <arg><replaceable class="parameter">configfile</replaceable></arg>
-  <command>&nbsp;(Windows)</command>
- </cmdsynopsis>                                      
 </refsynopsisdiv>
 
 
@@ -170,8 +164,7 @@
  <para>
   If the <filename>configfile</filename> is not specified on  the  command  line,
   <command>Privoxy</command>  will  look for a file named
-  <filename>config</filename> in the current directory (except on Win32 where
-  it will try <filename>config.txt</filename>). If no
+  <filename>config</filename> in the current directory . If no
   <filename>configfile</filename> is found, <command>Privoxy</command> will 
   fail to start.
  </para>
@@ -197,6 +190,12 @@
  <command>Preferences</command>;  <command>Advanced</command>;
  <command>Proxies</command>;  <command>Manual Proxy Configuration</command>;
  <command>View</command>. 
+</para>
+<para>
+ For Firefox, go through: <command>Tools</command>; 
+ <command>Options</command>; <command>General</command>;
+ <command>Connection Settings</command>;
+ <command>Manual Proxy Configuration</command>. 
 </para>
 <para>
  For Internet Explorer, go through: <command>Tools</command>; 
@@ -228,13 +227,11 @@
  <filename>default.action</filename>, and <filename>user.filter</filename> for 
  locally defined filters. These are well commented.  On Unix
  and Unix-like systems, these are located in
- <filename>/etc/privoxy/</filename> by default. On Windows, OS/2 and AmigaOS,
- these files are in the same directory as the <command>Privoxy</command>
- executable.
+ <filename>/etc/privoxy/</filename> by default. 
 </para>
 <para>
  See the <ulink
- url="http://www.privoxy.org/user-manual/">user-manual</ulink> for a complete
+ url="http://www.privoxy.org/user-manual/"><citetitle>User Manual</citetitle></ulink> for a detailed
  explanation of installation, general usage, all configuration options, new
  features and notes on upgrading.
 </para>
@@ -384,8 +381,8 @@
 
 <para>
  See the comments in the configuration files themselves, or the 
- <citetitle>user-manual</citetitle>
- for explanations of the above syntax, and other <command>Privoxy</command>
+ <citetitle>User Manual</citetitle>
+ for full explanations of the above syntax, and other <command>Privoxy</command>
  configuration options.
 </para>
 
