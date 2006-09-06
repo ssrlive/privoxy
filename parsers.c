@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.67 2006/09/04 11:01:26 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.68 2006/09/06 10:43:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.67 2006/09/04 11:01:26 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.68  2006/09/06 10:43:32  fabiankeil
+ *    Added config option enable-remote-http-toggle
+ *    to specify if Privoxy should recognize special
+ *    headers (currently only X-Filter) to change its
+ *    behaviour. Disabled by default.
+ *
  *    Revision 1.67  2006/09/04 11:01:26  fabiankeil
  *    After filtering de-chunked instances, remove
  *    "Transfer-Encoding" header entirely instead of changing
@@ -2906,6 +2912,7 @@ struct tm *parse_header_time(char *header, time_t *tm) {
    else
    {
       *tm = timegm(&gmt);
+      timeptr=&gmt;
    }
    return(timeptr);
 }
