@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.66 2006/09/03 19:38:28 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.67 2006/09/04 11:01:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,15 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.66 2006/09/03 19:38:28 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.67  2006/09/04 11:01:26  fabiankeil
+ *    After filtering de-chunked instances, remove
+ *    "Transfer-Encoding" header entirely instead of changing
+ *    it to "Transfer-Encoding: identity", which is invalid.
+ *    Thanks Michael Shields <shields@msrl.com>. Fixes PR 1318658.
+ *
+ *    Don't use localtime in parse_header_time. An empty time struct
+ *    is good enough, it gets overwritten by strptime anyway.
+ *
  *    Revision 1.66  2006/09/03 19:38:28  fabiankeil
  *    Use gmtime_r if available, fallback to gmtime with mutex
  *    protection for MacOSX and use vanilla gmtime for the rest.
@@ -2397,17 +2406,24 @@ jb_err client_x_filter(struct client_state *csp, char **header)
 {
    if ( 0 == strcmpic(*header, "X-Filter: No"))
    {
-      if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+      if (!(csp->config->feature_flags & RUNTIME_FEATURE_HTTP_TOGGLE))
       {
-         log_error(LOG_LEVEL_HEADER, "force-text-mode overruled the client's request to disable filtering!");
+         log_error(LOG_LEVEL_INFO, "Ignored the client's request to fetch without filtering.");
       }
-      else
-      {  
-         csp->content_type = CT_TABOO;
-         log_error(LOG_LEVEL_HEADER, "Disabled filter mode on behalf of the client.");
+		else
+      {
+         if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+         {
+            log_error(LOG_LEVEL_HEADER, "force-text-mode overruled the client's request to fetch without filtering!");
+         }
+         else
+         {  
+            csp->content_type = CT_TABOO;
+            log_error(LOG_LEVEL_HEADER, "Accepted the client's request to fetch without filtering.");
+         }
+         log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
+         freez(*header);
       }
-      log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
-      freez(*header);
    }
    return JB_ERR_OK; 
 }
