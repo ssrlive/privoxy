@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.4
 #
-#  $Id: p-config.sgml,v 2.6 2006/09/02 12:49:37 hal9 Exp $
+#  $Id: config,v 1.51 2006/09/04 18:09:05 hal9 Exp $
 #
 #  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
 #
@@ -219,7 +219,7 @@ actionsfile user      # User customizations
 #      separate file, such as user.filter.
 #
 filterfile default.filter
-filterfile user.filter      # User customizations
+#filterfile user.filter      # User customizations
 
 #
 #  1.5. logfile
