@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.20 2006/09/04 12:39:55 hal9 Exp $
+#  $Id: default.action.master,v 1.21 2006/09/05 01:21:06 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -1386,6 +1386,11 @@ www.translate.ru/url/
 #MASTER# PROBLEM-URL: http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/
 cvs.
 /.*(cvs(view|web)|viewcvs)
+#MASTER# REMARKS: The same for Subversion
+#MASTER# PROBLEM-URL: http://svn.sourceforge.net/
+svn.
+/(.*/)?svn/
+
 #MASTER# PROBLEM-URL: http://liveupdate.symantec.com/ennlu.x86
 #MASTER# REMARKS: Jeez, could you please stay with one of them?
 liveupdate.symantec.com
@@ -1411,10 +1416,37 @@ bugzilla.
 #MASTER# REMARKS: all the world is wikified 09/02/06. Generic wiki un-filterers.
 .wiki*.
 .*wiki.
+/.*wiki/
 #MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
 maps.google.
 .google.com/calendar
-code.google.com
+#MASTER# REMARKS: A lot of code and docs on these sites:
+code.google.
+.mozdev.org
+.mozilla.org
+.perl.org
+.cpan.org
+.webdeveloper.com
+.ibm.com/developerworks
+.apache.org/docs
+.comptechdoc.org
+.webmonkey.com
+.webreference.com
+docs.sun.com
+java.sun.com
+.thescripts.com
+.php.net
+.phpdeveloper.org
+.oreillynet.com/pub
+.devshed.com
+.htmlgoodies.com
+.javascript.com
+developer.yahoo.com
+javascript.internet.com
+.w3schools.com
+.devguru.com
+javascriptkit.com
+.xulplanet.com
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
