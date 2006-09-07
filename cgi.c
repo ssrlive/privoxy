@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.73 2006/08/03 02:46:41 david__schmidt Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.74 2006/09/06 18:45:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,15 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.73 2006/08/03 02:46:41 david__schmidt Exp
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.74  2006/09/06 18:45:03  fabiankeil
+ *    Incorporate modified version of Roland Rosenfeld's patch to
+ *    optionally access the user-manual via Privoxy. Closes patch 679075.
+ *
+ *    Formatting changed to Privoxy style, added call to
+ *    cgi_error_no_template if the requested file doesn't
+ *    exist and modified check whether or not Privoxy itself
+ *    should serve the manual. Should work cross-platform now.
+ *
  *    Revision 1.73  2006/08/03 02:46:41  david__schmidt
  *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
  *
@@ -618,7 +627,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          NULL, TRUE /* Send a transparent image (short name) */ },
    { "user-manual",
           cgi_send_user_manual,
-          NULL /* Send user-manual */ },
+          NULL, TRUE /* Send user-manual */ },
    { NULL, /* NULL Indicates end of list and default page */
          cgi_error_404,
          NULL, TRUE /* Unknown CGI page */ }
