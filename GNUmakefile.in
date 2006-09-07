@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.142 2006/08/29 01:46:24 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.143 2006/09/02 15:59:40 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1012,7 +1012,7 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action `find . -name TAGS -o -name tags` 
+	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action `find . -name TAGS -o -name tags` config.base
 
 tidy:
 	$(RM) `find . -name "*~"`
@@ -1021,7 +1021,7 @@ tidy:
 
 clobber: tidy
 	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
-              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl
+              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl config.new
 	$(RM) -r autom4te.cache
 
 #
@@ -1345,6 +1345,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.143  2006/09/02 15:59:40  hal9
+# Add to code status to make install output.
+#
 # Revision 1.142  2006/08/29 01:46:24  hal9
 # Add user.filter to $CONFIGS.
 #
