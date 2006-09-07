@@ -37,8 +37,11 @@ ChangeLog for Privoxy
 - Thanks to Jindrich Makovicka for a race condition fix for the log 
   file.  The race condition remains for non-pthread implementations.
   Reference patch #1175720. Various other logging enhancements.
-- A pile of assorted bug fixes, memory leaks, etc.
+- A pile of assorted bug fixes, memory leaks, enhancements, etc.
 - Moved Actions file reporting mechanism to SF tracker.
+- Two new options for config: enable-remote-http-toggle and 
+  forwarded-connect-retries.
+- Trap unsupported FTP requests.
 
 *** Version 3.0.3 ***
 
