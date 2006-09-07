@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.4
 #
-#  $Id: config,v 1.51 2006/09/04 18:09:05 hal9 Exp $
+#  $Id: p-config.sgml,v 2.9 2006/09/06 11:38:33 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
 #
@@ -11,8 +11,8 @@
 #        I. INTRODUCTION                                           #
 #       II. FORMAT OF THE CONFIGURATION FILE                       #
 #                                                                  #
-#        1. CONFIGURATION AND LOG FILE LOCATIONS                   #
-#        2. LOCAL SET-UP DOCUMENTATION                             #
+#        1. LOCAL SET-UP DOCUMENTATION                             #
+#        2. CONFIGURATION AND LOG FILE LOCATIONS                   #
 #        3. DEBUGGING                                              #
 #        4. ACCESS CONTROL AND SECURITY                            #
 #        5. FORWARDING                                             #
@@ -62,7 +62,169 @@
 #
 
 #
-#  1. CONFIGURATION AND LOG FILE LOCATIONS
+#  1. LOCAL SET-UP DOCUMENTATION
+#  =============================
+#
+#  If you intend to operate Privoxy for more users than just yourself,
+#  it might be a good idea to let them know how to reach you, what
+#  you block and why you do that, your policies, etc.
+#
+
+#
+#  1.1. user-manual
+#  ================
+#
+#  Specifies:
+#
+#      Location of the Privoxy User Manual.
+#
+#  Type of value:
+#
+#      A fully qualified URI
+#
+#  Default value:
+#
+#      Unset
+#
+#  Effect if unset:
+#
+#      http://www.privoxy.org/version/user-manual/ will be used,
+#      where version is the Privoxy version.
+#
+#  Notes:
+#
+#      The User Manual URI is the single best source of information on
+#      Privoxy, and is used for help links from some of the internal
+#      CGI pages. The manual itself is normally packaged with the
+#      binary distributions, so you probably want to set this to
+#      a locally installed copy. For multi-user setups, you could
+#      provide a copy on a local webserver for all your users and use
+#      the corresponding URL here.
+#
+#      Examples:
+#
+#      The best all purpose solution is simply to put the full local
+#      PATH to where the User Manual is located:
+#
+#        user-manual  /usr/share/doc/privoxy/user-manual
+#
+#      The User Manual is then available to anyone with
+#      access to the proxy, by following the built-in URL:
+#      http://config.privoxy.org/user-manual/ (or the shortcut:
+#      http://p.p/user-manual/).
+#
+#      If the documentation is not on the local system, it can be
+#      accessed from a remote server, as:
+#
+#        user-manual  http://example.com/privoxy/user-manual/
+#
+#      WARNING!!!
+#
+#          If set, this option should be the first option in the config
+#          file, because it is used while the config file is being read.
+#
+#user-manual http://www.privoxy.org/user-manual/
+
+#
+#  1.2. trust-info-url
+#  ===================
+#
+#  Specifies:
+#
+#      A URL to be displayed in the error page that users will see if
+#      access to an untrusted page is denied.
+#
+#  Type of value:
+#
+#      URL
+#
+#  Default value:
+#
+#      Two example URL are provided
+#
+#  Effect if unset:
+#
+#      No links are displayed on the "untrusted" error page.
+#
+#  Notes:
+#
+#      The value of this option only matters if the experimental trust
+#      mechanism has been activated. (See trustfile above.)
+#
+#      If you use the trust mechanism, it is a good idea to write
+#      up some on-line documentation about your trust policy and to
+#      specify the URL(s) here. Use multiple times for multiple URLs.
+#
+#      The URL(s) should be added to the trustfile as well, so users
+#      don't end up locked out from the information on why they were
+#      locked out in the first place!
+#
+trust-info-url  http://www.example.com/why_we_block.html
+trust-info-url  http://www.example.com/what_we_allow.html
+
+#
+#  1.3. admin-address
+#  ==================
+#
+#  Specifies:
+#
+#      An email address to reach the proxy administrator.
+#
+#  Type of value:
+#
+#      Email address
+#
+#  Default value:
+#
+#      Unset
+#
+#  Effect if unset:
+#
+#      No email address is displayed on error pages and the CGI user
+#      interface.
+#
+#  Notes:
+#
+#      If both admin-address and proxy-info-url are unset, the whole
+#      "Local Privoxy Support" box on all generated pages will not
+#      be shown.
+#
+#admin-address privoxy-admin@example.com
+
+#
+#  1.4. proxy-info-url
+#  ===================
+#
+#  Specifies:
+#
+#      A URL to documentation about the local Privoxy setup,
+#      configuration or policies.
+#
+#  Type of value:
+#
+#      URL
+#
+#  Default value:
+#
+#      Unset
+#
+#  Effect if unset:
+#
+#      No link to local documentation is displayed on error pages and
+#      the CGI user interface.
+#
+#  Notes:
+#
+#      If both admin-address and proxy-info-url are unset, the whole
+#      "Local Privoxy Support" box on all generated pages will not
+#      be shown.
+#
+#      This URL shouldn't be blocked ;-)
+#
+#proxy-info-url http://www.example.com/proxy-service.html
+
+#
+#  2. CONFIGURATION AND LOG FILE LOCATIONS
 #  =======================================
 #
 #  Privoxy can (and normally does) use a number of other files for
@@ -75,7 +237,7 @@
 #
 
 #
-#  1.1. confdir
+#  2.1. confdir
 #  ============
 #
 #  Specifies:
@@ -107,7 +269,7 @@
 confdir .
 
 #
-#  1.2. logdir
+#  2.2. logdir
 #  ===========
 #
 #  Specifies:
@@ -134,7 +296,7 @@ confdir .
 logdir .
 
 #
-#  1.3. actionsfile
+#  2.3. actionsfile
 #  ================
 #
 #  Specifies:
@@ -177,7 +339,7 @@ actionsfile default   # Main actions file
 actionsfile user      # User customizations
 
 #
-#  1.4. filterfile
+#  2.4. filterfile
 #  ===============
 #
 #  Specifies:
@@ -199,7 +361,7 @@ actionsfile user      # User customizations
 #
 #  Notes:
 #
-#      Multiple filterfiles lines are permitted.
+#      Multiple filterfile lines are permitted.
 #
 #      The filter files contain content modification rules that use
 #      regular expressions. These rules permit powerful changes on
@@ -222,7 +384,7 @@ filterfile default.filter
 #filterfile user.filter      # User customizations
 
 #
-#  1.5. logfile
+#  2.5. logfile
 #  ============
 #
 #  Specifies:
@@ -266,7 +428,7 @@ filterfile default.filter
 logfile logfile
 
 #
-#  1.6. jarfile
+#  2.6. jarfile
 #  ============
 #
 #  Specifies:
@@ -296,7 +458,7 @@ logfile logfile
 #jarfile jarfile
 
 #
-#  1.7. trustfile
+#  2.7. trustfile
 #  ==============
 #
 #  Specifies:
@@ -350,169 +512,6 @@ logfile logfile
 #trustfile trust
 
 #
-#  2. LOCAL SET-UP DOCUMENTATION
-#  =============================
-#
-#  If you intend to operate Privoxy for more users than just yourself,
-#  it might be a good idea to let them know how to reach you, what
-#  you block and why you do that, your policies, etc.
-#
-
-#
-#  2.1. user-manual
-#  ================
-#
-#  Specifies:
-#
-#      Location of the Privoxy User Manual.
-#
-#  Type of value:
-#
-#      A fully qualified URI
-#
-#  Default value:
-#
-#      Unset
-#
-#  Effect if unset:
-#
-#      http://www.privoxy.org/version/user-manual/ will be used,
-#      where version is the Privoxy version.
-#
-#  Notes:
-#
-#      The User Manual URI is used for help links from some of the
-#      internal CGI pages. The manual itself is normally packaged
-#      with the binary distributions, so you probably want to set this
-#      to a locally installed copy. For multi-user setups, you could
-#      provide a copy on a local webserver for all your users and use
-#      the corresponding URL here.
-#
-#      Examples:
-#
-#      Unix, in local filesystem:
-#
-#        user-manual  file:///usr/share/doc/privoxy-3.0.4/user-manual/
-#
-#      Windows, in local filesystem, must use forward slash notation:
-#
-#        user-manual  file:/c:/some-dir/privoxy-3.0.4/user-manual/
-#
-#      Windows, UNC notation (with forward slashes):
-#
-#        user-manual
-#        file://///some-server/some-path/privoxy-3.0.4/user-manual/
-#
-#      Any platform, on local webserver (called "local-webserver"):
-#
-#        user-manual  http://local-webserver/privoxy-user-manual/
-#
-#      WARNING!!!
-#
-#          If set, this option should be the first option in the config
-#          file, because it is used while the config file is being read.
-#
-#user-manual http://www.privoxy.org/user-manual/
-
-#
-#  2.2. trust-info-url
-#  ===================
-#
-#  Specifies:
-#
-#      A URL to be displayed in the error page that users will see if
-#      access to an untrusted page is denied.
-#
-#  Type of value:
-#
-#      URL
-#
-#  Default value:
-#
-#      Two example URL are provided
-#
-#  Effect if unset:
-#
-#      No links are displayed on the "untrusted" error page.
-#
-#  Notes:
-#
-#      The value of this option only matters if the experimental trust
-#      mechanism has been activated. (See trustfile above.)
-#
-#      If you use the trust mechanism, it is a good idea to write
-#      up some on-line documentation about your trust policy and to
-#      specify the URL(s) here. Use multiple times for multiple URLs.
-#
-#      The URL(s) should be added to the trustfile as well, so users
-#      don't end up locked out from the information on why they were
-#      locked out in the first place!
-#
-trust-info-url  http://www.example.com/why_we_block.html
-trust-info-url  http://www.example.com/what_we_allow.html
-
-#
-#  2.3. admin-address
-#  ==================
-#
-#  Specifies:
-#
-#      An email address to reach the proxy administrator.
-#
-#  Type of value:
-#
-#      Email address
-#
-#  Default value:
-#
-#      Unset
-#
-#  Effect if unset:
-#
-#      No email address is displayed on error pages and the CGI user
-#      interface.
-#
-#  Notes:
-#
-#      If both admin-address and proxy-info-url are unset, the whole
-#      "Local Privoxy Support" box on all generated pages will not
-#      be shown.
-#
-#admin-address privoxy-admin@example.com
-
-#
-#  2.4. proxy-info-url
-#  ===================
-#
-#  Specifies:
-#
-#      A URL to documentation about the local Privoxy setup,
-#      configuration or policies.
-#
-#  Type of value:
-#
-#      URL
-#
-#  Default value:
-#
-#      Unset
-#
-#  Effect if unset:
-#
-#      No link to local documentation is displayed on error pages and
-#      the CGI user interface.
-#
-#  Notes:
-#
-#      If both admin-address and proxy-info-url are unset, the whole
-#      "Local Privoxy Support" box on all generated pages will not
-#      be shown.
-#
-#      This URL shouldn't be blocked ;-)
-#
-#proxy-info-url http://www.example.com/proxy-service.html
-
-#
 #  3. DEBUGGING
 #  ============
 #
@@ -545,21 +544,21 @@ trust-info-url  http://www.example.com/what_we_allow.html
 #  Notes:
 #
 #      The available debug levels are:
-#
-#        debug         1 # show each GET/POST/CONNECT request 
-#        debug         2 # show each connection status 
-#        debug         4 # show I/O status 
-#        debug         8 # show header parsing 
-#        debug        16 # log all data into the logfile 
-#        debug        32 # debug force feature 
-#        debug        64 # debug regular expression filter
-#        debug       128 # debug fast redirects 
-#        debug       256 # debug GIF de-animation 
-#        debug       512 # Common Log Format
-#        debug      1024 # debug kill pop-ups 
-#        debug      2048 # CGI user interface 
-#        debug      4096 # Startup banner and warnings.
-#        debug      8192 # Non-fatal errors
+#  
+#          debug         1 # show each GET/POST/CONNECT request 
+#          debug         2 # show each connection status 
+#          debug         4 # show I/O status 
+#          debug         8 # show header parsing 
+#          debug        16 # log all data into the logfile 
+#          debug        32 # debug force feature 
+#          debug        64 # debug regular expression filter
+#          debug       128 # debug fast redirects 
+#          debug       256 # debug GIF de-animation 
+#          debug       512 # Common Log Format
+#          debug      1024 # debug kill pop-ups 
+#          debug      2048 # CGI user interface 
+#          debug      4096 # Startup banner and warnings.
+#          debug      8192 # Non-fatal errors
 #
 #      To select multiple debug levels, you can either add them or
 #      use multiple debug lines.
@@ -739,7 +738,42 @@ toggle  1
 enable-remote-toggle  1
 
 #
-#  4.4. enable-edit-actions
+#  4.4. enable-remote-http-toggle
+#  ==============================
+#
+#  Specifies:
+#
+#      Whether or not Privoxy recognizes special HTTP headers to change
+#      its behaviour.
+#
+#  Type of value:
+#
+#      0 or 1
+#
+#  Default value:
+#
+#      1
+#
+#  Effect if unset:
+#
+#      Privoxy ignores special HTTP headers.
+#
+#  Notes:
+#
+#      When toggled on, the client can change Privoxy's behaviour by
+#      setting special HTTP headers. Currently the only supported
+#      special header is "X-Filter: No", to disable filtering for
+#      the ongoing request, even if it is enabled in one of the
+#      action files.
+#
+#      If you are using Privoxy in a multi-user environment or with
+#      untrustworthy clients and want to enforce filtering, you will
+#      have to disable this option, otherwise you can ignore it.
+#
+enable-remote-http-toggle  1
+
+#
+#  4.5. enable-edit-actions
 #  ========================
 #
 #  Specifies:
@@ -772,7 +806,7 @@ enable-remote-toggle  1
 enable-edit-actions 1
 
 #
-#  4.5. ACLs: permit-access and deny-access
+#  4.6. ACLs: permit-access and deny-access
 #  ========================================
 #
 #  Specifies:
@@ -844,7 +878,7 @@ enable-edit-actions 1
 #      Allow any host on the same class C subnet as www.privoxy.org
 #      access to nothing but www.example.com:
 #
-#        permit-access  www.privoxy.org/24 www.example.com/32
+#        permit-access  www.privoxy.org/24   www.example.com/32
 #
 #      Allow access from any host on the 26-bit subnet 192.168.45.64
 #      to anywhere, with the exception that 192.168.45.73 may not
@@ -855,7 +889,7 @@ enable-edit-actions 1
 #
 
 #
-#  4.6. buffer-limit
+#  4.7. buffer-limit
 #  =================
 #
 #  Specifies:
@@ -1006,36 +1040,79 @@ buffer-limit 4096
 #      ISP's proxy by way of example.com's corporate SOCKS 4A gateway
 #      to the Internet.
 #
-#        forward-socks4a  /             socks-gw.example.com:1080    www-cache.example-isp.net:8080 
-#        forward          .example.com  .
-#
+#        forward-socks4a   /              socks-gw.example.com:1080   www-cache.example-isp.net:8080 
+#        forward           .example.com   .
+#  
 #      A rule that uses a SOCKS 4 gateway for all destinations but no
 #      HTTP parent looks like this:
-#
-#        forward-socks4   /             socks-gw.example.com:1080  .
+#  
+#        forward-socks4   /               socks-gw.example.com:1080  .
 #
 #      To chain Privoxy and Tor, both running on the same system,
 #      you should use the rule:
-#
-#        forward-socks4   /               127.0.0.1:9050 .
+#  
+#        forward-socks4a             /     127.0.0.1:9050 .
 #
 #      The public Tor network can't be used to reach your local network,
 #      therefore it's a good idea to make some exceptions:
 #
-#        forward         192.168.*.*/     .  
-#        forward           10.*.*.*/      .  
-#        forward          127.*.*.*/      .
+#        forward         192.168.*.*/     .
+#        forward            10.*.*.*/     .
+#        forward           127.*.*.*/     .
 #
 #      Unencrypted connections to systems in these address ranges will
-#      be as (un)secure as the local network is, but the alternative
-#      is that you can't reach the network at all.
+#      be as (un)secure as the local network is, but the alternative is
+#      that you can't reach the network at all.
 #
 #      If you also want to be able to reach servers in your local
-#      network by using their names, you will need additional exceptions
-#      that look like this:
+#      network by using their names, you will need additional
+#      exceptions that look like this:
 #
-#       forward           localhost/     .
+#        forward           localhost/     .
 #
+
+#
+#  5.3. forwarded-connect-retries
+#  ==============================
+#
+#  Specifies:
+#
+#      How often Privoxy retries if a forwarded connection request
+#      fails.
+#
+#  Type of value:
+#
+#      Number of retries.
+#
+#  Default value:
+#
+#      0
+#
+#  Effect if unset:
+#
+#      Forwarded connections are treated like direct connections and
+#      no retry attempts are made.
+#
+#  Notes:
+#
+#      forwarded-connect-retries is mainly interesting for socks4a
+#      connections, where Privoxy can't detect why the connections
+#      failed. The connection might have failed because of a DNS timeout
+#      in which case a retry makes sense, but it might also have failed
+#      because the server doesn't exist or isn't reachable. In this
+#      case the retry will just delay the appearance of Privoxy's
+#      error message.
+#
+#      Only use this option, if you are getting many forwarding related
+#      error messages, that go away when you try again manually. Start
+#      with a small value and check Privoxy's logfile from time to time,
+#      to see how many retries are usually needed.
+#
+#  Examples:
+#
+#      forwarded-connect-retries 1
+#
+forwarded-connect-retries  0
 
 #
 #  6. WINDOWS GUI OPTIONS

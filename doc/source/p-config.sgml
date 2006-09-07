@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.8 2006/09/06 02:17:53 hal9 Exp $
+ $Id: p-config.sgml,v 2.9 2006/09/06 11:38:33 fabiankeil Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.8 2006/09/06 02:17:53 hal9 Exp $
+ $Id: p-config.sgml,v 2.9 2006/09/06 11:38:33 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
@@ -110,8 +110,8 @@ Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
       I. INTRODUCTION                                           #
      II. FORMAT OF THE CONFIGURATION FILE                       #
                                                                 #
-      1. CONFIGURATION AND LOG FILE LOCATIONS                   #
-      2. LOCAL SET-UP DOCUMENTATION                             #
+      1. LOCAL SET-UP DOCUMENTATION                             #
+      2. CONFIGURATION AND LOG FILE LOCATIONS                   #
       3. DEBUGGING                                              #
       4. ACCESS CONTROL AND SECURITY                            #
       5. FORWARDING                                             #
@@ -178,6 +178,298 @@ II. FORMAT OF THE CONFIGURATION FILE
 <!-- ************************************************ -->
 <!-- The following is common to both outputs (mostly) -->
 <!-- ************************************************ -->
+
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 id="local-set-up">
+<title>Local Set-up Documentation</title>
+
+  <para>
+    If you intend to operate <application>Privoxy</application> for more users
+    than just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies, etc.
+   </para>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Location of the <application>Privoxy</application> User Manual.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>A fully qualified URI</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    <ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/<replaceable class="parameter">version</replaceable>/user-manual/</ulink>
+    will be used, where <replaceable class="parameter">version</replaceable> is the <application>Privoxy</application> version.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+    <para>
+    The User Manual URI is the single best source of information on 
+    <application>Privoxy</application>, and is used for help links from some
+    of the internal CGI pages. The manual itself is normally packaged with the
+    binary distributions, so you probably want to set this to a locally
+    installed copy. For multi-user setups, you could provide a copy on a local
+    webserver for all your users and use the corresponding URL here.
+   </para>
+   <para>
+    Examples:
+   </para>
+  <!--
+  <para>
+   Unix, in local filesystem (may not work with all browsers):
+  </para>
+  <para>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</screen>
+  </para>
+  <para>
+   Windows, in local filesystem, <emphasis>must</emphasis> use forward slash notation:
+  </para>
+  <para>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:/c:/some-dir/privoxy-&p-version;/user-manual/</screen>
+  </para>
+  <para>
+   Windows, UNC notation (with forward slashes):
+  </para>
+  <para>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy-&p-version;/user-manual/</screen>
+  </para>
+ --> 
+  <para>
+   The best all purpose solution is simply to put the full local
+   <literal>PATH</literal> to where the <citetitle>User Manual</citetitle> is
+   located:
+  </para>
+<para>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;/usr/share/doc/privoxy/user-manual</screen>
+  </para>
+  <para>
+   The User Manual is then available to anyone with access to the proxy, by 
+   following the built-in URL: <literal>http://config.privoxy.org/user-manual/</literal>
+   (or the shortcut: <literal>http://p.p/user-manual/</literal>).
+  </para>
+  <para>
+   If the documentation is not on the local system, it can be accessed 
+   from a remote server, as:
+  </para>
+  <para>
+   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;http://example.com/privoxy/user-manual/</screen>
+  </para>
+  <![%user-man;[
+   <!-- this gets hammered in conversion to config. Text repeated below. -->
+  <warning>
+   <para>
+     If set, this option should be <emphasis>the first option in the config
+     file</emphasis>, because it is used while the config file is being read
+     on start-up.
+   </para>
+  </warning>     
+  ]]>
+
+  <![%config-file;[
+   <!-- alternate -->
+   <para>
+    WARNING!!!
+   </para>
+   <blockquote>
+    <para> 
+     If set, this option should be the first option in the config
+     file, because it is used while the config file is being read.
+    </para>
+   </blockquote>
+  ]]>
+
+ </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#user-manual http://www.privoxy.org/user-manual/</literallayout>]]>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="trust-info-url"><title>trust-info-url</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>Two example URL are provided</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No links are displayed on the "untrusted" error page.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    The value of this option only matters if the experimental trust mechanism has been
+    activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> above.)
+   </para>
+   <para>
+    If you use the trust mechanism, it is a good idea to write up some on-line
+    documentation about your trust policy and to specify the URL(s) here.
+    Use multiple times for multiple URLs.
+   </para>
+   <para>
+    The URL(s) should be added to the trustfile as well, so users don't end up
+    locked out from the information on why they were locked out in the first place!
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@trust-info-url  http://www.example.com/why_we_block.html</literallayout>]]>
+<![%config-file;[<literallayout>@@trust-info-url  http://www.example.com/what_we_allow.html</literallayout>]]>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="admin-address"><title>admin-address</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    An email address to reach the proxy administrator.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Email address</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No email address is displayed on error pages and the CGI user interface.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+    <para>
+    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </para>  
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#admin-address privoxy-admin@example.com</literallayout>]]>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="proxy-info-url"><title>proxy-info-url</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A URL to documentation about the local <application>Privoxy</application> setup,
+    configuration or policies.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No link to local documentation is displayed on error pages and the CGI user interface.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </para>  
+   <para>
+    This URL shouldn't be blocked ;-)
+   </para> 
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#proxy-info-url http://www.example.com/proxy-service.html</literallayout>]]>
+</sect3>
+
+</sect2>
+<!--  ~  End section  ~  -->
+
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -643,276 +935,6 @@ actionsfile
 </sect3>
 </sect2>
 
-<!--  ~  End section  ~  -->
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="local-set-up">
-<title>Local Set-up Documentation</title>
-
-  <para>
-    If you intend to operate <application>Privoxy</application> for more users
-    than just yourself, it might be a good idea to let them know how to reach
-    you, what you block and why you do that, your policies, etc.
-   </para>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="user-manual"><title>user-manual</title>
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    Location of the <application>Privoxy</application> User Manual.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>A fully qualified URI</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para><emphasis>Unset</emphasis></para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    <ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/<replaceable class="parameter">version</replaceable>/user-manual/</ulink>
-    will be used, where <replaceable class="parameter">version</replaceable> is the <application>Privoxy</application> version.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-    <para>
-    The User Manual URI is used for help links from some of the internal CGI pages. 
-    The manual itself is normally packaged with the binary distributions, so you probably want
-    to set this to a locally installed copy. For multi-user setups, you could provide a copy on
-    a local webserver for all your users and use the corresponding URL here.
-   </para>
-   <para>
-    Examples:
-   </para>
-  <para>
-   Unix, in local filesystem:
-  </para>
-  <para>
-   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</screen>
-  </para>
-  <para>
-   Windows, in local filesystem, <emphasis>must</emphasis> use forward slash notation:
-  </para>
-  <para>
-   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:/c:/some-dir/privoxy-&p-version;/user-manual/</screen>
-  </para>
-  <para>
-   Windows, UNC notation (with forward slashes):
-  </para>
-  <para>
-   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy-&p-version;/user-manual/</screen>
-  </para>
-  <para>
-   Any platform, on local webserver (called <quote>local-webserver</quote>):
-  </para>
-  <para>
-   <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;http://local-webserver/privoxy-user-manual/</screen>
-  </para>
-  <![%user-man;[
-   <!-- this gets hammered in conversion to config. Text repeated below. -->
-  <warning>
-   <para>
-     If set, this option should be <emphasis>the first option in the config
-     file</emphasis>, because it is used while the config file is being read.
-   </para>
-  </warning>     
-  ]]>
-
-  <![%config-file;[
-   <!-- alternate -->
-   <para>
-    WARNING!!!
-   </para>
-   <blockquote>
-    <para> 
-     If set, this option should be the first option in the config
-     file, because it is used while the config file is being read.
-    </para>
-   </blockquote>
-  ]]>
-
- </listitem>
- </varlistentry>
-</variablelist>
-
-<![%config-file;[<literallayout>@@#user-manual http://www.privoxy.org/user-manual/</literallayout>]]>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="trust-info-url"><title>trust-info-url</title>
-
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>URL</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para>Two example URL are provided</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    No links are displayed on the "untrusted" error page.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    The value of this option only matters if the experimental trust mechanism has been
-    activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> above.)
-   </para>
-   <para>
-    If you use the trust mechanism, it is a good idea to write up some on-line
-    documentation about your trust policy and to specify the URL(s) here.
-    Use multiple times for multiple URLs.
-   </para>
-   <para>
-    The URL(s) should be added to the trustfile as well, so users don't end up
-    locked out from the information on why they were locked out in the first place!
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-
-<![%config-file;[<literallayout>@@trust-info-url  http://www.example.com/why_we_block.html</literallayout>]]>
-<![%config-file;[<literallayout>@@trust-info-url  http://www.example.com/what_we_allow.html</literallayout>]]>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="admin-address"><title>admin-address</title>
-
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    An email address to reach the proxy administrator.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>Email address</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para><emphasis>Unset</emphasis></para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    No email address is displayed on error pages and the CGI user interface.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-    <para>
-    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
-    are unset, the whole "Local Privoxy Support" box on all generated pages will
-    not be shown.
-   </para>  
-  </listitem>
- </varlistentry>
-</variablelist>
-
-<![%config-file;[<literallayout>@@#admin-address privoxy-admin@example.com</literallayout>]]>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="proxy-info-url"><title>proxy-info-url</title>
-
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    A URL to documentation about the local <application>Privoxy</application> setup,
-    configuration or policies.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>URL</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para><emphasis>Unset</emphasis></para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    No link to local documentation is displayed on error pages and the CGI user interface.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
-    are unset, the whole "Local Privoxy Support" box on all generated pages will
-    not be shown.
-   </para>  
-   <para>
-    This URL shouldn't be blocked ;-)
-   </para> 
-  </listitem>
- </varlistentry>
-</variablelist>
-
-<![%config-file;[<literallayout>@@#proxy-info-url http://www.example.com/proxy-service.html</literallayout>]]>
-</sect3>
-
-</sect2>
 <!--  ~  End section  ~  -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
