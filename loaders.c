@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.52 2006/07/18 14:48:46 david__schmidt Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.53 2006/08/31 16:25:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,12 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.52 2006/07/18 14:48:46 david__sch
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.53  2006/08/31 16:25:06  fabiankeil
+ *    Work around a buffer overflow that caused Privoxy to
+ *    segfault if too many trusted referrers were used. Good
+ *    enough for now, but should be replaced with a real
+ *    solution after the next release.
+ *
  *    Revision 1.52  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -1186,21 +1192,24 @@ int load_trustfile(struct client_state *csp)
          {
             *tl++ = b->url;
          }
-         else
-         {
-           /*
-            * FIXME: csp->config->trust_list is only needed 
-            * to print the trusted referrers in Privoxy's blocking
-            * message. Not printing all of them is certainly better
-            * than writing them into memory that doesn't belong to us,
-            * but when Privoxy 3.0.4 is out, we should look for a real
-            * solution. 
-            */
-            log_error(LOG_LEVEL_ERROR,
-              "Too many trusted referrers, %s will not show up in the blocking message.",
-              *b->url);
-         }
       }
+   }
+
+   if(trusted_referrers >= MAX_TRUSTED_REFERRERS) 
+   {
+      /*
+       * FIXME: csp->config->trust_list is only needed 
+       * to print the trusted referrers in Privoxy's blocking
+       * message. Not printing all of them is certainly better
+       * than writing them into memory that doesn't belong to us,
+       * but when Privoxy 3.0.4 is out, we should look for a real
+       * solution. 
+       */
+       log_error(LOG_LEVEL_ERROR, "Too many trusted referrers for Privoxy's webinterface to handle.\n"
+          "  Current limit is %d, you are using %d. Additonal trusted referrers are recognized, "
+          "but will not show up in the blocking message.\n"
+          "  (You can increase this limit by changing MAX_TRUSTED_REFERRERS in project.h and recompiling).",
+          MAX_TRUSTED_REFERRERS, trusted_referrers);
    }
 
    *tl = NULL;
