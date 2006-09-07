@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.53 2006/08/31 16:25:06 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.54 2006/09/07 10:22:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,12 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.53 2006/08/31 16:25:06 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.54  2006/09/07 10:22:20  fabiankeil
+ *    If too many trusted referrers are used,
+ *    print only one error message instead of logging
+ *    every single trusted referrer above the arbitrary
+ *    limit.
+ *
  *    Revision 1.53  2006/08/31 16:25:06  fabiankeil
  *    Work around a buffer overflow that caused Privoxy to
  *    segfault if too many trusted referrers were used. Good
@@ -1206,7 +1212,7 @@ int load_trustfile(struct client_state *csp)
        * solution. 
        */
        log_error(LOG_LEVEL_ERROR, "Too many trusted referrers for Privoxy's webinterface to handle.\n"
-          "  Current limit is %d, you are using %d. Additonal trusted referrers are recognized, "
+          "  Current limit is %d, you are using %d. Additional trusted referrers are recognized, "
           "but will not show up in the blocking message.\n"
           "  (You can increase this limit by changing MAX_TRUSTED_REFERRERS in project.h and recompiling).",
           MAX_TRUSTED_REFERRERS, trusted_referrers);
