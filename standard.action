@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.10 2006/09/04 14:07:21 fabiankeil Exp $
+#  $Id: standard.action,v 1.11 2006/09/04 17:18:42 hal9 Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -200,7 +200,7 @@ standard.Medium
 -handle-as-image \
 -hide-accept-language \
 -hide-content-disposition \
-+hide-if-modified-since{-1} \
++hide-if-modified-since{-60} \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{conditional-block} \

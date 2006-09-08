@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.17 2006/09/05 13:25:12 david__schmidt Exp $
+ $Id: user-manual.sgml,v 2.18 2006/09/08 02:38:57 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.17 2006/09/05 13:25:12 david__schmidt Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.18 2006/09/08 02:38:57 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2720,7 +2720,7 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate cached documents without being tracked across sessions
-{+hide-if-modified-since {-1} \
+{+hide-if-modified-since {-60} \
 +overwrite-last-modified {randomize} \
 +crunch-if-none-match}
 /   </screen>
@@ -4066,8 +4066,8 @@ new action
    </para>
    <para>
     Instead of removing the header, <literal>hide-if-modified-since</literal> can
-    also add or substract a random amount of time to/from the headers value.
-    You specify a range of hours were the random factor should be chosen from and
+    also add or substract a random amount of time to/from the header's value.
+    You specify a range of minutes where the random factor should be chosen from and
     <application>Privoxy</application> does the rest. A negative value means
     subtracting, a positive value adding.
    </para>
@@ -4093,7 +4093,7 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-1}\
+{+hide-if-modified-since {-60}\
 +overwrite-last-modified {randomize}\
 +crunch-if-none-match}
 /</screen>
@@ -4853,7 +4853,7 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-1}\
+{+hide-if-modified-since {-60}\
 +overwrite-last-modified {randomize}\
 +crunch-if-none-match}
 /</screen>
@@ -8010,6 +8010,14 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.18  2006/09/08 02:38:57  hal9
+ Various changes:
+  -Fix a number of broken links.
+  -Migrate the new Windows service command line options, and reference as
+   needed.
+  -Rebuild so that can be used with the new "user-manual" config capabilities.
+  -Etc.
+
  Revision 2.17  2006/09/05 13:25:12  david__schmidt
  Add Windows service invocation stuff (duplicated) in FAQ and in user manual under Windows startup.  One probably ought to reference the other.
 
