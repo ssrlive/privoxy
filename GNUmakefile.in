@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.144 2006/09/07 22:53:20 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.145 2006/09/08 02:32:00 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -827,7 +827,7 @@ dok-pdf: dok-shtml
 	if htmldoc --version ; then : ; \
 	   else $(ECHO) "WARNING: could not get htmldoc version" ; fi
 	cd utils/ldp_print && $(RM) *html *bak *jpg *tmp *pdf *zip
-	cp -f doc/source/temp/*html doc/webserver/images/*jpg utils/ldp_print
+	cp -f doc/source/temp/*html doc/webserver/user-manual/*jpg utils/ldp_print
 	cd utils/ldp_print ;\
 	$(PERL) -pi.bak -e 's/\.\.\/images\///; s/(<\/?)SUB/$$1small/i;\
 	                    s/\.\.\/user-manual\/index\.html/privoxy-user-manual.pdf/;\
@@ -1101,6 +1101,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(INSTALL) $(INSTALL_P) $(STRIP) $(PROGRAM) $(SBIN_DEST)
      
 	@# Install the DOCS and man page. install-sh only does one file at a time.
+	@# FIXME: only handles jpegs.
 	-@if [ $(check_doc) = 0 ]; then \
 		DOC=$(DOC_DEST) ;\
 	else \
@@ -1115,8 +1116,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
                     $(INSTALL) $(INSTALL_T) $$ii $$DOC/$$i;\
                done ;\
           done ;\
-          for i in $(DOK_WEB)/images/*jpg; do \
-               $(INSTALL) $(INSTALL_T) $$i $$DOC/images;\
+		for i in $(DOK_WEB)/user-manual/*jpg; do \
+               $(INSTALL) $(INSTALL_T) $$i $$DOC/user-manual;\
           done ;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/man-page/*html $$DOC/man-page;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/privoxy-index.html $$DOC/index.html;\
@@ -1356,6 +1357,15 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.145  2006/09/08 02:32:00  hal9
+# Various changes to implement building and installing docs to be compatible
+# with the new "user-manual" settings in config from Roland. Docbook does not
+# seem to like dealing with more than one css file, so workaround that here.
+# Change 'make install' so it provides p_doc.css in the user-manual doc
+# directory so that functions well, and lastly modify 'make install' so that the
+# PATH is automatically set, and the 'user-manual' directive should done during
+# the install.
+#
 # Revision 1.144  2006/09/07 22:53:20  hal9
 # Make sure config sgml build related artifacts are cleaned out.
 #
