@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.37 2006/07/18 14:48:45 david__schmidt Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.38 2006/09/06 18:45:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,15 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.37 2006/07/18 14:48:45 david_
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.38  2006/09/06 18:45:03  fabiankeil
+ *    Incorporate modified version of Roland Rosenfeld's patch to
+ *    optionally access the user-manual via Privoxy. Closes patch 679075.
+ *
+ *    Formatting changed to Privoxy style, added call to
+ *    cgi_error_no_template if the requested file doesn't
+ *    exist and modified check whether or not Privoxy itself
+ *    should serve the manual. Should work cross-platform now.
+ *
  *    Revision 1.37  2006/07/18 14:48:45  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -687,6 +696,7 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    FILE *fp;
    char buf[BUFFER_SIZE];
    jb_err err = JB_ERR_OK;
+   size_t length = 0;
 
    assert(csp);
    assert(rsp);
@@ -738,12 +748,21 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    }
    fclose(fp);
 
-   if (enlist(rsp->headers, "Content-Type: text/html"))
+   /* Guess correct Content-Type based on the filename's ending */
+   if (filename)
    {
-      return JB_ERR_MEMORY;
+      length = strlen(filename);
+   }
+   if((length>=4)  && !strcmp(&filename[length-4], ".css"))
+   {
+      err = enlist(rsp->headers, "Content-Type: text/css");
+   }
+   else
+   {
+      err = enlist(rsp->headers, "Content-Type: text/html");
    }
 
-   return JB_ERR_OK;
+   return err;
 }
 
 
