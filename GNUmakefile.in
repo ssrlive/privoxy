@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.143 2006/09/02 15:59:40 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.144 2006/09/07 22:53:20 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -678,6 +678,10 @@ dok-user:
 	$(RM) -r doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
 	cd doc/source/user-manual && $(DB) -iuser-man ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/
+	@#FIXME: temp fix so same stylesheet gets in more than one place so it works \
+	@# for all doc set-ups, including the 'user manual' config option in local \
+	@#system where it MUST be in same directory as html.
+	$(PERL) -pi.bak -e 's/<\/head/\n<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"p_doc.css\">\n<\/head/i' doc/webserver/user-manual/*html
 	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > tmp.html && $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
 # faq
@@ -1012,7 +1016,7 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 
 clean:
-	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action `find . -name TAGS -o -name tags` config.base
+	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action `find . -name TAGS -o -name tags` config.base config.tmp
 
 tidy:
 	$(RM) `find . -name "*~"`
@@ -1121,6 +1125,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) README $$DOC;\
 		$(INSTALL) $(INSTALL_T) ChangeLog $$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC;\
+		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC/user-manual;\
 	fi
 	@# Not all platforms support gzipped man pages.
 	@$(ECHO) Installing man page to $(MAN_DEST)/privoxy.1
@@ -1133,7 +1138,12 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(MV) config.base config ;\
 	fi
 	$(SED) 's+confdir .+confdir $(CONF_DEST)+' config | \
-	$(SED) 's+logdir .+logdir $(LOG_DEST)+' >config.updated
+	$(SED) 's+logdir .+logdir $(LOG_DEST)+' >config.tmp
+	-@if [ $(check_doc) = 0 ]; then \
+      $(SED) 's+^#\?user-manual .*+user-manual $(DOC_DEST)/user-manual/+' config.tmp >config.updated ;\
+	else \
+      $(SED) 's+^#\?user-manual .*+user-manual $(prefix)/doc/privoxy/user-manual/+' config.tmp >config.updated ;\
+	fi;\
 	$(MV) config config.base
 	$(MV) config.updated config 
 
@@ -1233,6 +1243,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	else \
 		$(ECHO) "No init script installed, install it manually if needed" ;\
 	fi
+	$(RM) config.base config.tmp
 	@# mmmmm, good.
 	@$(ECHO) "$(PROGRAM_V) installation succeeded!"
 	@$(ECHO) "The Privoxy configuration files have been installed in $(CONF_DEST)"
@@ -1345,6 +1356,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.144  2006/09/07 22:53:20  hal9
+# Make sure config sgml build related artifacts are cleaned out.
+#
 # Revision 1.143  2006/09/02 15:59:40  hal9
 # Add to code status to make install output.
 #
