@@ -45,7 +45,7 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: faq.sgml,v 2.11 2006/07/18 14:48:50 david__schmidt Exp $<BR></P
+>$Id: faq.sgml,v 2.14 2006/09/05 13:25:12 david__schmidt Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -224,24 +224,24 @@ warranty? Registration?</A
 ><DT
 >1.10. <A
 HREF="general.html#JOINTEAM"
->I would like to help you, what do I do?</A
+>I would like to help you, what can I do?</A
 ></DT
 ><DD
 ><DL
 ><DT
 >1.10.1. <A
+HREF="general.html#JOINTEAM-WORK"
+>Would you like to participate?</A
+></DT
+><DT
+>1.10.2. <A
 HREF="general.html#JOINTEAM-MONEY"
 >Contribute!</A
 ></DT
 ><DT
->1.10.2. <A
+>1.10.3. <A
 HREF="general.html#JOINTEAM-SOFTWARE"
 >Software</A
-></DT
-><DT
->1.10.3. <A
-HREF="general.html#JOINTEAM-WORK"
->Would you like to participate?</A
 ></DT
 ></DL
 ></DD
@@ -289,7 +289,7 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >2.5. <A
-HREF="installation.html#AEN231"
+HREF="installation.html#AEN235"
 >I just installed <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -346,7 +346,7 @@ HREF="configuration.html#NEWCONFIG"
 ></DT
 ><DT
 >3.3. <A
-HREF="configuration.html#AEN319"
+HREF="configuration.html#AEN332"
 >What is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -366,13 +366,13 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.5. <A
-HREF="configuration.html#AEN338"
+HREF="configuration.html#AEN351"
 >How are actions files configured? What is the easiest
 way to do this?</A
 ></DT
 ><DT
 >3.6. <A
-HREF="configuration.html#AEN346"
+HREF="configuration.html#AEN359"
 >There are several different <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -407,7 +407,7 @@ with a browser? Does that not raise security issues?</A
 ></DT
 ><DT
 >3.10. <A
-HREF="configuration.html#AEN411"
+HREF="configuration.html#AEN424"
 >What is the <TT
 CLASS="FILENAME"
 >default.filter</TT
@@ -418,7 +418,7 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.11. <A
-HREF="configuration.html#AEN429"
+HREF="configuration.html#AEN442"
 >How can I set up <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -427,17 +427,17 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >3.12. <A
-HREF="configuration.html#AEN455"
+HREF="configuration.html#AEN468"
 >Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></DT
 ><DT
 >3.13. <A
-HREF="configuration.html#AEN472"
+HREF="configuration.html#AEN485"
 >Why would anybody want to see a checkerboard pattern?</A
 ></DT
 ><DT
 >3.14. <A
-HREF="configuration.html#AEN477"
+HREF="configuration.html#AEN490"
 >I see some images being replaced by a text
 instead of the checkerboard image. Why and how do I get rid of this?</A
 ></DT
@@ -448,7 +448,7 @@ HREF="configuration.html#SRVANY"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a service 
-on Win2K/NT?</A
+on Win2K/NT/XP?</A
 ></DT
 ><DT
 >3.16. <A
@@ -462,7 +462,7 @@ CLASS="APPLICATION"
 >Squid</SPAN
 > or <SPAN
 CLASS="APPLICATION"
->TOR</SPAN
+>Tor</SPAN
 >?</A
 ></DT
 ><DT
@@ -535,7 +535,7 @@ HREF="misc.html"
 ><DL
 ><DT
 >4.1. <A
-HREF="misc.html#AEN570"
+HREF="misc.html#AEN584"
 >How much does <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -545,7 +545,7 @@ has to add extra time to browsing.</A
 ><DT
 >4.2. <A
 HREF="misc.html#LOADINGTIMES"
->I noticed considerable
+>I notice considerable
 delays in page requests compared to the old Junkbuster. What's wrong?</A
 ></DT
 ><DT
@@ -582,7 +582,7 @@ HREF="misc.html#IP"
 ></DT
 ><DT
 >4.8. <A
-HREF="misc.html#AEN634"
+HREF="misc.html#AEN651"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -590,13 +590,25 @@ CLASS="APPLICATION"
 ></DT
 ><DT
 >4.9. <A
-HREF="misc.html#AEN645"
+HREF="misc.html#TOR"
+>How do I use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ together with <SPAN
+CLASS="APPLICATION"
+>Tor</SPAN
+>?</A
+></DT
+><DT
+>4.10. <A
+HREF="misc.html#AEN722"
 >Might some things break because header information or
 content is being altered?</A
 ></DT
 ><DT
->4.10. <A
-HREF="misc.html#AEN656"
+>4.11. <A
+HREF="misc.html#AEN733"
 >Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -607,30 +619,30 @@ CLASS="QUOTE"
 speed up web browsing?</A
 ></DT
 ><DT
->4.11. <A
-HREF="misc.html#AEN666"
+>4.12. <A
+HREF="misc.html#AEN743"
 >What about as a firewall? Can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > protect me?</A
 ></DT
 ><DT
->4.12. <A
-HREF="misc.html#AEN672"
+>4.13. <A
+HREF="misc.html#AEN749"
 >I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</A
 ></DT
 ><DT
->4.13. <A
-HREF="misc.html#AEN677"
+>4.14. <A
+HREF="misc.html#AEN754"
 >How can <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > filter Secure (HTTPS) URLs?</A
 ></DT
 ><DT
->4.14. <A
-HREF="misc.html#AEN692"
+>4.15. <A
+HREF="misc.html#AEN769"
 ><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -641,7 +653,7 @@ CLASS="QUOTE"
 secure is it? Do I need to take any special precautions?</A
 ></DT
 ><DT
->4.15. <A
+>4.16. <A
 HREF="misc.html#TURNOFF"
 >How can I temporarily disable <SPAN
 CLASS="APPLICATION"
@@ -649,7 +661,7 @@ CLASS="APPLICATION"
 >?</A
 ></DT
 ><DT
->4.16. <A
+>4.17. <A
 HREF="misc.html#REALLYOFF"
 >When <SPAN
 CLASS="QUOTE"
@@ -661,7 +673,7 @@ CLASS="APPLICATION"
 out of the picture?</A
 ></DT
 ><DT
->4.17. <A
+>4.18. <A
 HREF="misc.html#CRUNCH"
 >My logs show <SPAN
 CLASS="APPLICATION"
@@ -670,13 +682,13 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"crunches"</SPAN
 > 
-ads, but also its own CGI pages. What is a <SPAN
+ads, but also its own internal CGI pages. What is a <SPAN
 CLASS="QUOTE"
 >"crunch"</SPAN
 >?</A
 ></DT
 ><DT
->4.18. <A
+>4.19. <A
 HREF="misc.html#DOWNLOADS"
 >Can <SPAN
 CLASS="APPLICATION"
@@ -685,7 +697,7 @@ CLASS="APPLICATION"
 from a webserver? FTP server?</A
 ></DT
 ><DT
->4.19. <A
+>4.20. <A
 HREF="misc.html#DOWNLOADS2"
 >I just downloaded a Perl script, and <SPAN
 CLASS="APPLICATION"
@@ -694,7 +706,15 @@ CLASS="APPLICATION"
 altered it! Yikes, what is wrong!</A
 ></DT
 ><DT
->4.20. <A
+>4.21. <A
+HREF="misc.html#HOSTSFILE"
+>Should I continue to use a <SPAN
+CLASS="QUOTE"
+>"HOSTS"</SPAN
+> file for ad-blocking?</A
+></DT
+><DT
+>4.22. <A
 HREF="misc.html#SEEALSO"
 >Where can I find more information about <SPAN
 CLASS="APPLICATION"
@@ -703,7 +723,7 @@ CLASS="APPLICATION"
 and related issues?</A
 ></DT
 ><DT
->4.21. <A
+>4.23. <A
 HREF="misc.html#MICROSUCK"
 >I've noticed that Privoxy changes <SPAN
 CLASS="QUOTE"
@@ -725,7 +745,7 @@ HREF="trouble.html"
 ><DL
 ><DT
 >5.1. <A
-HREF="trouble.html#AEN829"
+HREF="trouble.html#AEN925"
 >I am getting <SPAN
 CLASS="QUOTE"
 >"connection refused"</SPAN
@@ -734,7 +754,7 @@ with every web page?</A
 ></DT
 ><DT
 >5.2. <A
-HREF="trouble.html#AEN842"
+HREF="trouble.html#AEN938"
 >I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></DT
@@ -939,12 +959,12 @@ HREF="copyright.html"
 ><DL
 ><DT
 >7.1. <A
-HREF="copyright.html#AEN1113"
+HREF="copyright.html#AEN1209"
 >License</A
 ></DT
 ><DT
 >7.2. <A
-HREF="copyright.html#AEN1129"
+HREF="copyright.html#AEN1225"
 >History</A
 ></DT
 ></DL

@@ -81,7 +81,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN829"
+NAME="AEN925"
 ></A
 >5.1. I am getting <SPAN
 CLASS="QUOTE"
@@ -102,7 +102,7 @@ CLASS="APPLICATION"
 > Early <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> versions (and also
+> 2.x versions (and also
  <SPAN
 CLASS="APPLICATION"
 >Junkbuster</SPAN
@@ -132,7 +132,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN842"
+NAME="AEN938"
 ></A
 >5.2. I just added a new rule, but the steenkin ad is 
 still getting through. How?</H3
@@ -340,19 +340,21 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"proxy"</SPAN
 >
-  setting, which will silently enable <SPAN
+  setting, which will silently various protocols, including
+  <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >both</I
 ></SPAN
-> HTTP and FTP
-  proxying! So it is possible to accidentally enable FTP proxying in these
-  cases. And of course, if this happens, <SPAN
+> HTTP and FTP proxying! So it is possible to
+  accidentally enable FTP proxying in these cases. And of course, if this
+  happens, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->
-  will indeed cause problems since it does not know FTP.
+> will indeed cause problems since
+  it does not know FTP. Newer version will give a sane error message if a FTP 
+  connection is attempted.
  </P
 ><P
 >  Will <SPAN

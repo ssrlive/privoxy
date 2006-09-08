@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.13 2006/09/04 19:20:33 fabiankeil Exp $
+ $Id: faq.sgml,v 2.14 2006/09/05 13:25:12 david__schmidt Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -75,7 +75,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.13 2006/09/04 19:20:33 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.14 2006/09/05 13:25:12 david__schmidt Exp $</pubdate>
 
 <!--
 
@@ -350,7 +350,33 @@ warranty? Registration?</title>
 
 </sect2>
 
-<sect2 renderas="sect3" id="jointeam"><title>I would like to help you, what do I do?</title>
+<sect2 renderas="sect3" id="jointeam"><title>I would like to help you, what can I do?</title>
+
+<sect3 renderas="sect4" id="jointeam-work"><title>Would you like to participate?</title>
+<para>
+   Well, we <emphasis>always</emphasis> need help. There is something for
+   everybody who wants to help us. We welcome new developers, packagers,
+   testers, documentation writers or really anyone with a desire to help in
+   any way. You <emphasis>DO NOT</emphasis> need to be a
+   <quote>programmer</quote>. There are many other tasks available. In fact,
+   the programmers often can't spend as much time programming because of some
+   of the other, more mundane things that need to be done, like checking the
+   Tracker feedback sections. 
+ </para>
+ <para>
+  So first thing, <ulink
+   url="https://sourceforge.net/account/register.php">get an account on SourceForge.net</ulink>
+   and mail your id to the <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers
+   mailing list</ulink>. Then, please read the <ulink
+   url="../developer-manual/index.html">Developer's Manual</ulink>, at least
+   the pertinent sections.
+</para>
+<para>
+ Once we have added you to the team, you'll have access to the <ulink
+ url="http://sourceforge.net/cvs/?group_id=11118">CVS repository</ulink>, and
+ together we'll find a suitable task for you.
+</para>
+</sect3>
 
 <sect3 renderas="sect4" id="jointeam-money"><title>Contribute!</title>
 <para>
@@ -372,30 +398,6 @@ warranty? Registration?</title>
 </para>
 </sect3>
 
-<sect3 renderas="sect4" id="jointeam-work"><title>Would you like to participate?</title>
-<para>
-   Well, helping the team is always a good idea. We welcome new developers,
-   packagers, testers, documentation writers or really anyone with a desire to help in 
-   any way. You 
-   <emphasis>DO NOT</emphasis> need to be a <quote>programmer</quote>. There
-   are many other tasks available. In fact, the programmers often can't spend
-   as much time programming because of some of the other, more mundane things
-   that need to be done, like checking the Tracker feedback sections. 
- </para>
- <para>
-  So first thing, <ulink
-   url="https://sourceforge.net/account/register.php">get an account on SourceForge.net</ulink>
-   and mail your id to the <ulink url="mailto:ijbswa-developers@lists.sourceforge.net">developers
-   mailing list</ulink>. Then, please read the <ulink
-   url="../developer-manual/index.html">Developer's Manual</ulink>, at least
-   the pertinent sections.
-</para>
-<para>
- Once we have added you to the team, you'll have access to the <ulink
- url="http://sourceforge.net/cvs/?group_id=11118">CVS repository</ulink>, and
- together we'll find a suitable task for you.
-</para>
-</sect3>
 
 </sect2>
 
@@ -410,9 +412,12 @@ warranty? Registration?</title>
 <title>Which browsers are supported by <application>Privoxy</application>?</title>
 <para>
  Any browser that can be configured to use a proxy, which 
- should be virtually all browsers. Direct browser support is not necessary
- since <application>Privoxy</application> runs as a separate application and
- talks to the browser in the standardized HTTP protocol, just like a web server
+ should be virtually all browsers, including
+ <application>Firefox</application>, <application>Internet
+ Explorer</application>, and <application>Opera</application> among others.
+ Direct browser support is not an absolute requirement since
+ <application>Privoxy</application> runs as a separate application and talks
+ to the browser in the standardized HTTP protocol, just like a web server
  does.
 </para>
 </sect2>
@@ -508,7 +513,8 @@ special I have to do now?</title>
  </para>
  <para>
   <application>Privoxy</application> does not currently handle
-  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc. 
+  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc. Be sure that
+  proxying any of these other protocols is not activated.
  </para>
 </sect2>
 
@@ -565,12 +571,17 @@ All the ads are there. What's wrong?</title>
 </para>
 
 <para>
- The procedure for clearing the cache varies from browser to browser. As an
- example, <application>Mozilla</application> users would click 
+ The procedure for clearing the cache varies from browser to browser. For
+ example, <application>Mozilla/Netscape</application> users would click 
  <guibutton>Edit</guibutton> --> <guibutton>Preferences</guibutton> -->
  <guibutton>Advanced</guibutton> --> <guibutton>Cache</guibutton> and
  then click both <quote><guibutton>Clear Memory Cache</guibutton></quote>
  and <quote><guibutton>Clear Disk Cache</guibutton></quote>.
+ And, <application>Firefox</application> users would click 
+ <guibutton>Tools</guibutton> --> <guibutton>Options</guibutton> -->
+ <guibutton>Privacy</guibutton> --> <guibutton>Cache</guibutton> and
+ then click <quote><guibutton>Clear Cache Now</guibutton></quote>.
+
 </para>
 </sect2>
 
@@ -600,14 +611,16 @@ All the ads are there. What's wrong?</title>
 
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
-   The syntax, number, and purpose of configuration files has substantially
-   changed from <application>Junkbuster</application> and early versions
-   of <application>Privoxy</application>. The old files, like <filename>blocklist</filename>
-   will not work at all. If you are upgrading from a 2.0.x version, you will
-   need to port your configuration data to the new format. Note that even the
-   pattern syntax has changed! Even configuration files from the 2.9.x versions
-   will need to be adapted, as configuration syntax has been very much in flow
-   in the 2.9.x series.
+  The syntax and purpose of configuration files has remained the same
+  throughout the 3.x series. Although each release contains updated, 
+  <quote>improved</quote> versions and it is recommended to use the newer
+  configuration files.
+ </para>
+ <para>
+   But all configuration files have substantially
+   changed from the <application>Junkbuster</application> days, and early
+   versions of <application>Privoxy 2.x</application>. The old files, like
+   <filename>blocklist</filename> will not work at all. 
  </para>
  <para>
   Refer to the <ulink url="../user-manual/whatsnew.html">What's New</ulink> 
@@ -621,9 +634,11 @@ All the ads are there. What's wrong?</title>
 <para>
  <ulink url="../user-manual/actions-file.html">Actions files</ulink>
  are where various <ulink url="../user-manual/actions-file.html#ACTIONS">actions</ulink>
- that <application>Privoxy</application> might take while processing a certain
+ that <application>Privoxy</application> could take while processing a certain
  request, are configured. Typically, you would define a set of default actions
  that apply to all URLs, then add exceptions to these defaults where needed.
+ There is a wide array of actions available that give the user a high degree
+ of control and flexibility on how to process each and every web page.
 </para>
  
 <para>
@@ -937,39 +952,12 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 
 <sect2 renderas="sect3" id="srvany">
 <title>Can <application>Privoxy</application> run as a service 
-on Win2K/NT?</title>
+on Win2K/NT/XP?</title>
 <para>
-<!--
-New check this hal
--->
- Version 3.0.4 introduces full Windows service functionality.
- On Windows only, the Privoxy program has two new command line arguments
- to install and uninstall Privoxy as a service.
- <variablelist>
-  <varlistentry>
-   <term>Arguments:</term>
-   <listitem>
-    <para>
-     <replaceable class="parameter">--install</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     <replaceable class="parameter">--uninstall</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
-    </para>
-   </listitem>
-  </varlistentry>
- </variablelist>
- </para>
-<para>
- After invoking Privoxy with <command>--install</command>,
- you will need to bring up the Windows service console to assign the user you
- want Privoxy to run under, and whether or not you want it to run whenever the
- system starts. You can start the Windows services console with the following command:
- <command>services.msc</command>  If you do not take the manual step of modifying
- Privoxy's service settings, it will not start.  Note too that you will need to
- give Privoxy a user account that actually exists, or it will not be permitted to 
- write its log files.
+ Yes. Version 3.0.4 introduces full <application>Windows</application> service
+ functionality. See <ulink url="../user-manual/installation.html#installation-pack-win">
+ the User Manual</ulink> for details on how to install and configure 
+ <application>Privoxy</application> as a service.
 </para>
 <para>
  Earlier versions could run as a system service using <command>srvany.exe</command>.
@@ -977,16 +965,12 @@ New check this hal
  url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
  for details, and a sample configuration.
 </para>
-<para>
- Version 3.0.1 fixed the problem where the icon and menu where not available
- in the taskbar for this usage.
-</para>
 </sect2>
 
 
 <sect2 renderas="sect3" id="otherproxy">
 <title>How can I make <application>Privoxy</application> work with other 
-proxies like <application>Squid</application> or <application>TOR</application>?</title>
+proxies like <application>Squid</application> or <application>Tor</application>?</title>
 <para>
  This can be done and is often useful to combine the benefits of
  <application>Privoxy</application> with those of a another proxy.
@@ -1013,7 +997,7 @@ and thus avoid individual browser configuration?</title>
 </quote> proxy?</title>
 <para>
  No, <application>Privoxy</application> currently does not have this ability, 
- though it is planned for a future release. Transparent proxies require 
+ though it may be added in a future release. Transparent proxies require 
  special handling of the request headers beyond what
  <application>Privoxy</application> is now capable of.
 </para>
@@ -1025,7 +1009,7 @@ and thus avoid individual browser configuration?</title>
  url="../user-manual/config.html#FORWARDING">forwarding chapter</ulink>
  in the <ulink url="../user-manual/index.html">user manual</ulink>. As
  a transparent proxy to be used for chaining we recommend Transproxy
- (<ulink url="http://www.transproxy.nlc.net.au/">http://www.transproxy.nlc.net.au/</ulink>).
+ (<ulink url="http://transproxy.sourceforge.net/">http://transproxy.sourceforge.net/</ulink>).
 </para>
 
 </sect2>
@@ -1157,7 +1141,8 @@ and thus avoid individual browser configuration?</title>
 has to add extra time to browsing.</title>
 <para>
  How much of an impact depends on many things, including the CPU of the host
- system, how agressive the configuration is, which specific actions are being triggered, etc.
+ system, how agressive the configuration is, which specific actions are being triggered, 
+ the size of the page, etc.
 </para>
 <para>
  Overall, it should not slow you down any in real terms, and may actually help 
@@ -1173,16 +1158,17 @@ has to add extra time to browsing.</title>
  url="../user-manual/actions-file.html#FILTER">filter</ulink></literal> or
  <literal><ulink
  url="../user-manual/actions-file.html#DEANIMATE-GIFS">deanimate-gifs</ulink></literal>
- actions will cause a perceived slowdown, since the entire document needs to be buffered
- before displaying. On very large documents, there may be some impact. How
- much depends on the page size, the actual definition of the filter(s), etc. See below.
- Most other actions have little to no impact on speed.
+ actions will certainly cause a perceived slowdown, since the entire document
+ needs to be buffered before displaying. And on very large documents, there may be
+ some impact. How much depends on the page size, the actual definition of the
+ filter(s), etc. See below. Most other actions have little to no impact on
+ speed.
 </para>
 
 </sect2>
 
 
-<sect2 renderas="sect3" id="loadingtimes"><title>I noticed considerable
+<sect2 renderas="sect3" id="loadingtimes"><title>I notice considerable
 delays in page requests compared to the old Junkbuster. What's wrong?</title>
 <para>
  If you use any <literal><ulink
@@ -1197,9 +1183,9 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  the feeling is different, because most browsers are able to start rendering
  incomplete content, giving the user a feeling of "it works". This effect is
  more noticeable on slower dialup connections. Extremely large documents
- may have some impact on the time to load the page. But the overall difference
- should be very minimal. If there is a big impact, then probably some other
- problem is contributing.
+ may have some impact on the time to load the page where there is filtering
+ being done. But overall, the difference should be very minimal. If there is a
+ big impact, then probably some other problem is contributing.
  </para>
 <para>
  Filtering is automatically disabled for inappropriate MIME types. But note 
@@ -1296,8 +1282,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <para>
  If you run both the browser and the proxy locally, you cannot hide your IP
  address with <application>Privoxy</application> or ultimately any other
- software. The server needs to know your IP address to send the answers back
- to you. 
+ software. The server needs to know your IP address so that it knows where to
+ send the responses back. 
 </para>
 <para>
  There are many publicly usable "anonymous" proxies out there, which
@@ -1451,7 +1437,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  and that there are no other forward lines, unless you know that you need them. I everything looks good,
  refer to
  <ulink url="http://wiki.noreply.org/noreply/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
- Faq 4.2</a> to learn how to verify that you are really using <application>Tor</application>.
+ Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
 </para>
 <para>
  Afterwards, please take the time to at least skim through the rest
@@ -1529,27 +1515,6 @@ speed up web browsing?</title>
  and recommended to use <emphasis>both</emphasis>.
 </para>
 </sect2>
-
-<!-- No longer needed
-<sect2 renderas="sect3">
-<title id="logo">The <application>Privoxy</application> logo that replaces ads is very blocky 
-and ugly looking. Can't a better font be used?</title>
-
-<para>
- This is not a font problem. The logo is an image that is created by 
- <application>Privoxy</application> on the fly. So as to not waste 
- memory, the image is rather small. The blockiness comes when the 
- image is scaled to fill a largish area. There is not much to be done 
- about this, other than to use one of the other
- <quote>imageblock</quote> directives: <emphasis>pattern</emphasis>, 
- <emphasis>blank</emphasis>, or a URL of your choosing.
-</para>
-<para>
-Given the above problem, we have decided to remove the logo option entirely 
-[as of v2.9.13].
-</para>
-</sect2>
--->
 
 <sect2 renderas="sect3">
 <title id="wasted">I have large empty spaces / a checkerboard pattern now where
@@ -1657,7 +1622,7 @@ out of the picture?</title>
 
 <sect2 renderas="sect3" id="crunch">
 <title>My logs show <application>Privoxy</application> <quote>crunches</quote> 
-ads, but also its own CGI pages. What is a <quote>crunch</quote>?</title>
+ads, but also its own internal CGI pages. What is a <quote>crunch</quote>?</title>
 <para>
  A <quote>crunch</quote> simply means <application>Privoxy</application> intercepted 
  <emphasis>something</emphasis>, nothing more. Often this is indeed ads or
@@ -1706,7 +1671,7 @@ from a webserver? FTP server?</title>
  altered by filtering, will be saved too, for these (probably rare) cases.
 </para>
 <para>
- Note that versions later than 3.0.2 do NOT filter document types of
+ Note that versions later than 3.0.2 do NOT filter document types reported as 
  <quote>text/plain</quote>. Prior to this, <application>Privoxy</application>
  did filter this document type.
 </para>
@@ -1729,7 +1694,7 @@ from a webserver? FTP server?</title>
 </para>
 <para>
  <application>Privoxy</application> does not do FTP at all, only HTTP 
-  protocols, so please don't even try.
+  protocols, so please don't try.
 </para>
 </sect2>
 
@@ -1741,6 +1706,33 @@ altered it! Yikes, what is wrong!</title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="hostsfile">
+<title>Should I continue to use a <quote>HOSTS</quote> file for ad-blocking?</title>
+<para>
+ One time-tested technique to defeat common ads is to trick the local DNS
+ system by giving a phony IP address for the ad generator in the local 
+ <filename>HOSTS</filename> file, typically using <literal>127.0.0.1</literal>, aka 
+ <literal>localhost</literal>. This effectively blocks the ad.
+</para>
+<para>
+ There is no reason to use this technique in conjunction with 
+ <application>Privoxy</application>. <application>Privoxy</application>
+ does essentially the same thing, much more elegantly and with much more 
+ flexibility. A large <filename>HOSTS</filename> file, in fact, not only
+ duplicates effort, but may get in the way. It is recommended to remove 
+ such entries from your <filename>HOSTS</filename> file. If you think 
+ your hosts list is neglected by <application>Privoxy's </application> 
+ configuration, consider adding your list to your <filename>user.action</filename> file:
+</para>
+<para>
+ <screen>
+  { +block }
+   www.ad.example1.com
+   ad.example2.com
+   ads.galore.example.com
+   etc.example.com</screen>
+</para>
+</sect2>
 
 <sect2 renderas="sect3" id="seealso">
 <title>Where can I find more information about <application>Privoxy</application>
@@ -1791,7 +1783,7 @@ with every web page?</title>
 </para>
 
 <para>
- Early <application>Privoxy</application> versions (and also
+ Early <application>Privoxy</application> 2.x versions (and also
  <application>Junkbuster</application>) used port 8000 by 
  default. This has been changed to port 8118 now, due to a conflict 
  with NAS (Network Audio Service), which uses port 8000. If you haven't, 
@@ -1944,10 +1936,12 @@ every time I start IE. What gives?</title>
  </para>
  <para>
   To complicate matters, some systems may have a generic <quote>proxy</quote>
-  setting, which will silently enable <emphasis>both</emphasis> HTTP and FTP
-  proxying! So it is possible to accidentally enable FTP proxying in these
-  cases. And of course, if this happens, <application>Privoxy</application>
-  will indeed cause problems since it does not know FTP.
+  setting, which will silently various protocols, including
+  <emphasis>both</emphasis> HTTP and FTP proxying! So it is possible to
+  accidentally enable FTP proxying in these cases. And of course, if this
+  happens, <application>Privoxy</application> will indeed cause problems since
+  it does not know FTP. Newer version will give a sane error message if a FTP 
+  connection is attempted.
  </para>
  <para>
   Will <application>Privoxy</application> ever proxy FTP traffic? Unlikely.
@@ -2282,6 +2276,9 @@ Why?</title>
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Log: faq.sgml,v $
+Revision 2.14  2006/09/05 13:25:12  david__schmidt
+Add Windows service invocation stuff (duplicated) in FAQ and in user manual under Windows startup.  One probably ought to reference the other.
+
 Revision 2.13  2006/09/04 19:20:33  fabiankeil
 Adjusted anonymity related sections to match reality.
 Added a section about using Privoxy with Tor.

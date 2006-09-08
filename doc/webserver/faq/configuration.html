@@ -119,23 +119,28 @@ NAME="NEWCONFIG"
 ></A
 >3.2. Can I use my old config files?</H3
 ><P
->   The syntax, number, and purpose of configuration files has substantially
-   changed from <SPAN
+>  The syntax and purpose of configuration files has remained the same
+  throughout the 3.x series. Although each release contains updated, 
+  <SPAN
+CLASS="QUOTE"
+>"improved"</SPAN
+> versions and it is recommended to use the newer
+  configuration files.
+ </P
+><P
+>   But all configuration files have substantially
+   changed from the <SPAN
 CLASS="APPLICATION"
 >Junkbuster</SPAN
-> and early versions
-   of <SPAN
+> days, and early
+   versions of <SPAN
 CLASS="APPLICATION"
->Privoxy</SPAN
->. The old files, like <TT
+>Privoxy 2.x</SPAN
+>. The old files, like
+   <TT
 CLASS="FILENAME"
 >blocklist</TT
->
-   will not work at all. If you are upgrading from a 2.0.x version, you will
-   need to port your configuration data to the new format. Note that even the
-   pattern syntax has changed! Even configuration files from the 2.9.x versions
-   will need to be adapted, as configuration syntax has been very much in flow
-   in the 2.9.x series.
+> will not work at all. 
  </P
 ><P
 >  Refer to the <A
@@ -151,7 +156,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN319"
+NAME="AEN332"
 ></A
 >3.3. What is an <SPAN
 CLASS="QUOTE"
@@ -171,9 +176,11 @@ TARGET="_top"
  that <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> might take while processing a certain
+> could take while processing a certain
  request, are configured. Typically, you would define a set of default actions
- that apply to all URLs, then add exceptions to these defaults where needed.</P
+ that apply to all URLs, then add exceptions to these defaults where needed.
+ There is a wide array of actions available that give the user a high degree
+ of control and flexibility on how to process each and every web page.</P
 ><P
 > Actions can be defined on a <A
 HREF="../user-manual/actions-file.html#AF-PATTERNS"
@@ -234,7 +241,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN338"
+NAME="AEN351"
 ></A
 >3.5. How are actions files configured? What is the easiest
 way to do this?</H3
@@ -270,7 +277,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN346"
+NAME="AEN359"
 ></A
 >3.6. There are several different <SPAN
 CLASS="QUOTE"
@@ -540,7 +547,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN411"
+NAME="AEN424"
 ></A
 >3.10. What is the <TT
 CLASS="FILENAME"
@@ -622,7 +629,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN429"
+NAME="AEN442"
 ></A
 >3.11. How can I set up <SPAN
 CLASS="APPLICATION"
@@ -734,7 +741,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN455"
+NAME="AEN468"
 ></A
 >3.12. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</H3
 ><P
@@ -801,7 +808,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN472"
+NAME="AEN485"
 ></A
 >3.13. Why would anybody want to see a checkerboard pattern?</H3
 ><P
@@ -827,7 +834,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN477"
+NAME="AEN490"
 ></A
 >3.14. I see some images being replaced by a text
 instead of the checkerboard image. Why and how do I get rid of this?</H3
@@ -864,7 +871,21 @@ NAME="SRVANY"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > run as a service 
-on Win2K/NT?</H3
+on Win2K/NT/XP?</H3
+><P
+> Yes. Version 3.0.4 introduces full <SPAN
+CLASS="APPLICATION"
+>Windows</SPAN
+> service
+ functionality. See <A
+HREF="../user-manual/installation.html#installation-pack-win"
+TARGET="_top"
+> the User Manual</A
+> for details on how to install and configure 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as a service.</P
 ><P
 > Earlier versions could run as a system service using <B
 CLASS="COMMAND"
@@ -876,15 +897,6 @@ TARGET="_top"
 >http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</A
 >,
  for details, and a sample configuration.</P
-><P
-> Version 3.0.1 fixes the problem where the icon and menu where not available
- in the taskbar for this usage.</P
-><P
-> Version 3.0.4, introduces full Windows service functionality, thus elimating
- the <B
-CLASS="COMMAND"
->srvany.exe</B
-> requirement.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -902,7 +914,7 @@ CLASS="APPLICATION"
 >Squid</SPAN
 > or <SPAN
 CLASS="APPLICATION"
->TOR</SPAN
+>Tor</SPAN
 >?</H3
 ><P
 > This can be done and is often useful to combine the benefits of
@@ -960,7 +972,7 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > currently does not have this ability, 
- though it is planned for a future release. Transparent proxies require 
+ though it may be added in a future release. Transparent proxies require 
  special handling of the request headers beyond what
  <SPAN
 CLASS="APPLICATION"
@@ -984,9 +996,9 @@ TARGET="_top"
 >. As
  a transparent proxy to be used for chaining we recommend Transproxy
  (<A
-HREF="http://www.transproxy.nlc.net.au/"
+HREF="http://transproxy.sourceforge.net/"
 TARGET="_top"
->http://www.transproxy.nlc.net.au/</A
+>http://transproxy.sourceforge.net/</A
 >).</P
 ></DIV
 ><DIV
