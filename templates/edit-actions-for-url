@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.37  2006/09/05 18:20:14  fabiankeil
+#    Sorted alphabetically, fixed spelling mistakes
+#    and shortened some descriptions.
+#
 #    Revision 1.36  2006/08/14 08:29:17  fabiankeil
 #    Split filter-headers{} into filter-client-headers{}
 #    and filter-server-headers{}.
@@ -880,7 +884,7 @@ function show_send_wafer_opts(tf)
         for="hide_if_modified_since_mode_set">Add random amount of seconds in the range of</label>
         <input type="text" name="hide_if_modified_since_param" 
         id="hide_if_modified_since_param" size="4"
-        value="@hide-if-modified-since-param@"> hour(s).
+        value="@hide-if-modified-since-param@"> minute(s).
         To appreciate this option a small amount of paranoia is required,
         but at least in theory the If-Modified-Since header could be used
 	to keep track of your visits.
