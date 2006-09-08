@@ -17,7 +17,9 @@ TITLE="Quickstart to Using Privoxy"
 HREF="quickstart.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
-HREF="../p_doc.css"></HEAD
+HREF="../p_doc.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="p_doc.css">
+</head
 ><BODY
 CLASS="SECT1"
 BGCOLOR="#EEEEEE"
@@ -308,21 +310,60 @@ CLASS="LITERAL"
 >    <SPAN
 CLASS="APPLICATION"
 >MS-Windows</SPAN
-> versions can now be installed and 
+> versions can now be 
+    <A
+HREF="installation.html#INSTALLATION-PACK-WIN"
+>installed and 
     started as a <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->service</I
+>Windows service</I
 ></SPAN
+></A
 >.
    </P
 ></LI
 ><LI
 ><P
+>    <TT
+CLASS="FILENAME"
+>config</TT
+> has two new options: 
+    <A
+HREF="config.html#ENABLE-REMOTE-HTTP-TOGGLE"
+>enable-remote-http-toggle</A
+>, 
+    and <A
+HREF="config.html#FORWARDED-CONNECT-RETRIES"
+>forwarded-connect-retries</A
+>.
+   </P
+><P
+>    And there is improved handling of the <A
+HREF="config.html#USER-MANUAL"
+>user-manual</A
+>
+    option, for placing documentation and help files on the local system.
+   </P
+></LI
+><LI
+><P
+>    Actions files problems and suggestions are now being directed to: <A
+HREF="http://sourceforge.net/tracker/?group_id=11118&atid=460288"
+TARGET="_top"
+>http://sourceforge.net/tracker/?group_id=11118&#38;atid=460288</A
+>.
+    Please use this to report such configuration related problems as missed
+    ads, sites that don't function properly due to one action or another, 
+    innocent images being blocked, etc.
+   </P
+></LI
+><LI
+><P
 >    In addition, there are various bug fixes and significant enhancements, including 
-    error pages are no longer cached, better DNS error handling, and various logging 
-    improvements.
+    error pages should no longer be cached if the problem is fixed, better DNS
+    error handling, and various logging improvements.
    </P
 ></LI
 ></UL
@@ -350,6 +391,17 @@ CLASS="APPLICATION"
 >  
     Some installers may remove earlier versions completely, including 
     configuration files. Save any important configuration files!
+  </P
+></LI
+><LI
+><P
+>  
+   On the other hand, some installers may not overwrite any existing configuration 
+   files, thinking you will want to do that. You may want to manually check 
+   your saved files against the newer versions to see if the improvements have
+   merit, or whether there are new options that you may want to consider.
+   There are a number of new features, but most won't be available unless 
+   these features are incorporated into your configuration somehow.
   </P
 ></LI
 ><LI

@@ -17,7 +17,9 @@ TITLE="What's New in this Release"
 HREF="whatsnew.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
-HREF="../p_doc.css"></HEAD
+HREF="../p_doc.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="p_doc.css">
+</head
 ><BODY
 CLASS="SECT1"
 BGCOLOR="#EEEEEE"
@@ -90,27 +92,18 @@ TARGET="_top"
  Page</A
 >.</P
 ><P
-> Note: If you have a previous <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> or
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> installation on your system, you
- will need to remove it.  On some platforms, this may be done for you as part
- of their installation procedure. (See below for your platform). In any case
- <SPAN
+> Note: 
+ On some platforms, the installer may remove previously installed versions, if 
+ found. (See below for your platform). In any case <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->be sure to backup your old configuration if it is valuable to
- you.</I
+>be sure to backup
+ your old configuration if it is valuable to you.</I
 ></SPAN
 > See the <A
 HREF="whatsnew.html#UPGRADERSNOTE"
->note to
- upgraders</A
+>note to upgraders</A
 > section below.</P
 ><DIV
 CLASS="SECT2"
@@ -178,7 +171,7 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Junkbuster</SPAN
 >
- automatically, before installing <SPAN
+ automatically if found, before installing <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >.</P
@@ -213,7 +206,100 @@ NAME="INSTALLATION-PACK-WIN"
 ><P
 > Just double-click the installer, which will guide you through
  the installation process. You will find the configuration files
- in the same directory as you installed Privoxy in. </P
+ in the same directory as you installed <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> in. </P
+><P
+> Version 3.0.4 introduces full <SPAN
+CLASS="APPLICATION"
+>Windows</SPAN
+> service
+ functionality. On Windows only, the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ program has two new command line arguments to install and uninstall
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as a <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>service</I
+></SPAN
+>.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Arguments:</DT
+><DD
+><P
+>     <TT
+CLASS="REPLACEABLE"
+><I
+>--install</I
+></TT
+>[:<TT
+CLASS="REPLACEABLE"
+><I
+>service_name</I
+></TT
+>]
+    </P
+><P
+>     <TT
+CLASS="REPLACEABLE"
+><I
+>--uninstall</I
+></TT
+>[:<TT
+CLASS="REPLACEABLE"
+><I
+>service_name</I
+></TT
+>]
+    </P
+></DD
+></DL
+></DIV
+><P
+> After invoking <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with
+ <B
+CLASS="COMMAND"
+>--install</B
+>, you will need to bring up the
+ <SPAN
+CLASS="APPLICATION"
+>Windows</SPAN
+> service console to assign the user you
+ want <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to run under, and whether or not you
+ want it to run whenever the system starts. You can start the
+ <SPAN
+CLASS="APPLICATION"
+>Windows</SPAN
+> services console with the following
+ command: <B
+CLASS="COMMAND"
+>services.msc</B
+>  If you do not take the manual step
+ of modifying <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> service settings, it will
+ not start.  Note too that you will need to give Privoxy a user account that
+ actually exists, or it will not be permitted to 
+ write to its log and configuration files.</P
 ></DIV
 ><DIV
 CLASS="SECT3"

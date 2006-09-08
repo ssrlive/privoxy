@@ -17,7 +17,9 @@ TITLE="Actions Files"
 HREF="actions-file.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
-HREF="../p_doc.css"></HEAD
+HREF="../p_doc.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="p_doc.css">
+</head
 ><BODY
 CLASS="SECT1"
 BGCOLOR="#EEEEEE"
@@ -138,9 +140,403 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
+NAME="LOCAL-SET-UP"
+></A
+>7.1. Local Set-up Documentation</H2
+><P
+>    If you intend to operate <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> for more users
+    than just yourself, it might be a good idea to let them know how to reach
+    you, what you block and why you do that, your policies, etc.
+   </P
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="USER-MANUAL"
+></A
+>7.1.1. user-manual</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Location of the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> User Manual.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>A fully qualified URI</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    <A
+HREF="http://www.privoxy.org/user-manual/"
+TARGET="_top"
+>http://www.privoxy.org/<TT
+CLASS="REPLACEABLE"
+><I
+>version</I
+></TT
+>/user-manual/</A
+>
+    will be used, where <TT
+CLASS="REPLACEABLE"
+><I
+>version</I
+></TT
+> is the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The User Manual URI is the single best source of information on 
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, and is used for help links from some
+    of the internal CGI pages. The manual itself is normally packaged with the
+    binary distributions, so you probably want to set this to a locally
+    installed copy. For multi-user setups, you could provide a copy on a local
+    webserver for all your users and use the corresponding URL here.
+   </P
+><P
+>    Examples:
+   </P
+><P
+>   The best all purpose solution is simply to put the full local
+   <TT
+CLASS="LITERAL"
+>PATH</TT
+> to where the <I
+CLASS="CITETITLE"
+>User Manual</I
+> is
+   located:
+  </P
+><P
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  user-manual  /usr/share/doc/privoxy/user-manual</PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>   The User Manual is then available to anyone with access to the proxy, by 
+   following the built-in URL: <TT
+CLASS="LITERAL"
+>http://config.privoxy.org/user-manual/</TT
+>
+   (or the shortcut: <TT
+CLASS="LITERAL"
+>http://p.p/user-manual/</TT
+>).
+  </P
+><P
+>   If the documentation is not on the local system, it can be accessed 
+   from a remote server, as:
+  </P
+><P
+>   <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  user-manual  http://example.com/privoxy/user-manual/</PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="90%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>     If set, this option should be <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>the first option in the config
+     file</I
+></SPAN
+>, because it is used while the config file is being read
+     on start-up.
+   </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="TRUST-INFO-URL"
+></A
+>7.1.2. trust-info-url</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>URL</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>Two example URL are provided</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No links are displayed on the "untrusted" error page.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    The value of this option only matters if the experimental trust mechanism has been
+    activated. (See <A
+HREF="config.html#TRUSTFILE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>trustfile</I
+></SPAN
+></A
+> above.)
+   </P
+><P
+>    If you use the trust mechanism, it is a good idea to write up some on-line
+    documentation about your trust policy and to specify the URL(s) here.
+    Use multiple times for multiple URLs.
+   </P
+><P
+>    The URL(s) should be added to the trustfile as well, so users don't end up
+    locked out from the information on why they were locked out in the first place!
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="ADMIN-ADDRESS"
+></A
+>7.1.3. admin-address</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    An email address to reach the proxy administrator.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Email address</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No email address is displayed on error pages and the CGI user interface.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If both <TT
+CLASS="LITERAL"
+>admin-address</TT
+> and <TT
+CLASS="LITERAL"
+>proxy-info-url</TT
+>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="PROXY-INFO-URL"
+></A
+>7.1.4. proxy-info-url</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    A URL to documentation about the local <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> setup,
+    configuration or policies.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>URL</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    No link to local documentation is displayed on error pages and the CGI user interface.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If both <TT
+CLASS="LITERAL"
+>admin-address</TT
+> and <TT
+CLASS="LITERAL"
+>proxy-info-url</TT
+>
+    are unset, the whole "Local Privoxy Support" box on all generated pages will
+    not be shown.
+   </P
+><P
+>    This URL shouldn't be blocked ;-)
+   </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
 NAME="CONF-LOG-LOC"
 ></A
->7.1. Configuration and Log File Locations</H2
+>7.2. Configuration and Log File Locations</H2
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -166,7 +562,7 @@ CLASS="SECT3"
 ><A
 NAME="CONFDIR"
 ></A
->7.1.1. confdir</H4
+>7.2.1. confdir</H4
 ><P
 ></P
 ><DIV
@@ -250,7 +646,7 @@ CLASS="SECT3"
 ><A
 NAME="LOGDIR"
 ></A
->7.1.2. logdir</H4
+>7.2.2. logdir</H4
 ><P
 ></P
 ><DIV
@@ -326,7 +722,7 @@ CLASS="SECT3"
 ><A
 NAME="ACTIONSFILE"
 ></A
->7.1.3. actionsfile</H4
+>7.2.3. actionsfile</H4
 ><A
 NAME="DEFAULT.ACTION"
 ></A
@@ -450,7 +846,7 @@ CLASS="SECT3"
 ><A
 NAME="FILTERFILE"
 ></A
->7.1.4. filterfile</H4
+>7.2.4. filterfile</H4
 ><A
 NAME="DEFAULT.FILTER"
 ></A
@@ -516,7 +912,7 @@ CLASS="REPLACEABLE"
 ><P
 >    Multiple <TT
 CLASS="LITERAL"
->filterfiles</TT
+>filterfile</TT
 > lines are permitted.
    </P
 ><P
@@ -530,15 +926,8 @@ HREF="appendix.html#REGEX"
 >. These rules permit
     powerful changes on the content of Web pages, and optionally the headers
     as well, e.g., you could disable your favorite JavaScript annoyances,
-    re-write the actual displayed text, or just have some fun replacing
-    <SPAN
-CLASS="QUOTE"
->"Microsoft"</SPAN
-> with <SPAN
-CLASS="QUOTE"
->"MicroSuck"</SPAN
-> wherever it appears
-    on a Web page.
+    re-write the actual displayed text, or just have some fun 
+    playing buzzword bingo with web pages.
    </P
 ><P
 >    The
@@ -595,7 +984,7 @@ CLASS="SECT3"
 ><A
 NAME="LOGFILE"
 ></A
->7.1.5. logfile</H4
+>7.2.5. logfile</H4
 ><P
 ></P
 ><DIV
@@ -700,7 +1089,7 @@ CLASS="SECT3"
 ><A
 NAME="JARFILE"
 ></A
->7.1.6. jarfile</H4
+>7.2.6. jarfile</H4
 ><P
 ></P
 ><DIV
@@ -726,7 +1115,7 @@ CLASS="LITERAL"
 >Default value:</DT
 ><DD
 ><P
->jarfile (Unix) <SPAN
+>Unset (commented out). When activated: jarfile (Unix) <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
@@ -738,7 +1127,7 @@ CLASS="EMPHASIS"
 >Effect if unset:</DT
 ><DD
 ><P
->    Intercepted cookies are not stored at all.
+>    Intercepted cookies are not stored in a dedicated log file.
    </P
 ></DD
 ><DT
@@ -746,6 +1135,10 @@ CLASS="EMPHASIS"
 ><DD
 ><P
 >    The jarfile may grow to ridiculous sizes over time.
+   </P
+><P
+>    If debug 8 (show header parsing) is enabled, cookies are
+    written to the logfile with the rest of the headers.
    </P
 ></DD
 ></DL
@@ -758,7 +1151,7 @@ CLASS="SECT3"
 ><A
 NAME="TRUSTFILE"
 ></A
->7.1.7. trustfile</H4
+>7.2.7. trustfile</H4
 ><P
 ></P
 ><DIV
@@ -888,419 +1281,6 @@ CLASS="LITERAL"
    </P
 ><P
 >    Possible applications include limiting Internet access for children.
-   </P
-></DD
-></DL
-></DIV
-></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="LOCAL-SET-UP"
-></A
->7.2. Local Set-up Documentation</H2
-><P
->    If you intend to operate <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> for more users
-    than just yourself, it might be a good idea to let them know how to reach
-    you, what you block and why you do that, your policies, etc.
-   </P
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="USER-MANUAL"
-></A
->7.2.1. user-manual</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Specifies:</DT
-><DD
-><P
->    Location of the <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> User Manual.
-   </P
-></DD
-><DT
->Type of value:</DT
-><DD
-><P
->A fully qualified URI</P
-></DD
-><DT
->Default value:</DT
-><DD
-><P
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Unset</I
-></SPAN
-></P
-></DD
-><DT
->Effect if unset:</DT
-><DD
-><P
->    <A
-HREF="http://www.privoxy.org/user-manual/"
-TARGET="_top"
->http://www.privoxy.org/<TT
-CLASS="REPLACEABLE"
-><I
->version</I
-></TT
->/user-manual/</A
->
-    will be used, where <TT
-CLASS="REPLACEABLE"
-><I
->version</I
-></TT
-> is the <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> version.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    The User Manual URI is used for help links from some of the internal CGI pages. 
-    The manual itself is normally packaged with the binary distributions, so you probably want
-    to set this to a locally installed copy. For multi-user setups, you could provide a copy on
-    a local webserver for all your users and use the corresponding URL here.
-   </P
-><P
->    Examples:
-   </P
-><P
->   Unix, in local filesystem:
-  </P
-><P
->   <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  user-manual  file:///usr/share/doc/privoxy-3.0.4/user-manual/</PRE
-></TD
-></TR
-></TABLE
->
-  </P
-><P
->   Windows, in local filesystem, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->must</I
-></SPAN
-> use forward slash notation:
-  </P
-><P
->   <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  user-manual  file:/c:/some-dir/privoxy-3.0.4/user-manual/</PRE
-></TD
-></TR
-></TABLE
->
-  </P
-><P
->   Windows, UNC notation (with forward slashes):
-  </P
-><P
->   <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  user-manual  file://///some-server/some-path/privoxy-3.0.4/user-manual/</PRE
-></TD
-></TR
-></TABLE
->
-  </P
-><P
->   Any platform, on local webserver (called <SPAN
-CLASS="QUOTE"
->"local-webserver"</SPAN
->):
-  </P
-><P
->   <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  user-manual  http://local-webserver/privoxy-user-manual/</PRE
-></TD
-></TR
-></TABLE
->
-  </P
-><DIV
-CLASS="WARNING"
-><P
-></P
-><TABLE
-CLASS="WARNING"
-BORDER="1"
-WIDTH="90%"
-><TR
-><TD
-ALIGN="CENTER"
-><B
->Warning</B
-></TD
-></TR
-><TR
-><TD
-ALIGN="LEFT"
-><P
->     If set, this option should be <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->the first option in the config
-     file</I
-></SPAN
->, because it is used while the config file is being read.
-   </P
-></TD
-></TR
-></TABLE
-></DIV
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="TRUST-INFO-URL"
-></A
->7.2.2. trust-info-url</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Specifies:</DT
-><DD
-><P
->    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
-   </P
-></DD
-><DT
->Type of value:</DT
-><DD
-><P
->URL</P
-></DD
-><DT
->Default value:</DT
-><DD
-><P
->Two example URL are provided</P
-></DD
-><DT
->Effect if unset:</DT
-><DD
-><P
->    No links are displayed on the "untrusted" error page.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    The value of this option only matters if the experimental trust mechanism has been
-    activated. (See <A
-HREF="config.html#TRUSTFILE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->trustfile</I
-></SPAN
-></A
-> above.)
-   </P
-><P
->    If you use the trust mechanism, it is a good idea to write up some on-line
-    documentation about your trust policy and to specify the URL(s) here.
-    Use multiple times for multiple URLs.
-   </P
-><P
->    The URL(s) should be added to the trustfile as well, so users don't end up
-    locked out from the information on why they were locked out in the first place!
-   </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="ADMIN-ADDRESS"
-></A
->7.2.3. admin-address</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Specifies:</DT
-><DD
-><P
->    An email address to reach the proxy administrator.
-   </P
-></DD
-><DT
->Type of value:</DT
-><DD
-><P
->Email address</P
-></DD
-><DT
->Default value:</DT
-><DD
-><P
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Unset</I
-></SPAN
-></P
-></DD
-><DT
->Effect if unset:</DT
-><DD
-><P
->    No email address is displayed on error pages and the CGI user interface.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    If both <TT
-CLASS="LITERAL"
->admin-address</TT
-> and <TT
-CLASS="LITERAL"
->proxy-info-url</TT
->
-    are unset, the whole "Local Privoxy Support" box on all generated pages will
-    not be shown.
-   </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="PROXY-INFO-URL"
-></A
->7.2.4. proxy-info-url</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Specifies:</DT
-><DD
-><P
->    A URL to documentation about the local <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> setup,
-    configuration or policies.
-   </P
-></DD
-><DT
->Type of value:</DT
-><DD
-><P
->URL</P
-></DD
-><DT
->Default value:</DT
-><DD
-><P
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Unset</I
-></SPAN
-></P
-></DD
-><DT
->Effect if unset:</DT
-><DD
-><P
->    No link to local documentation is displayed on error pages and the CGI user interface.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    If both <TT
-CLASS="LITERAL"
->admin-address</TT
-> and <TT
-CLASS="LITERAL"
->proxy-info-url</TT
->
-    are unset, the whole "Local Privoxy Support" box on all generated pages will
-    not be shown.
-   </P
-><P
->    This URL shouldn't be blocked ;-)
    </P
 ></DD
 ></DL
@@ -1857,9 +1837,76 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="ENABLE-REMOTE-HTTP-TOGGLE"
+></A
+>7.4.4. enable-remote-http-toggle</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether or not Privoxy recognizes special HTTP headers to change its behaviour.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>0 or 1</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>1</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Privoxy ignores special HTTP headers.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    When toggled on, the client can change <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+    behaviour by setting special HTTP headers. Currently the only supported
+    special header is <SPAN
+CLASS="QUOTE"
+>"X-Filter: No"</SPAN
+>, to disable filtering for
+    the ongoing request, even if it is enabled in one of the action files.
+   </P
+><P
+>    If you are using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> in a
+    multi-user environment or with untrustworthy clients and want to
+    enforce filtering, you will have to disable this option,
+    otherwise you can ignore it. 
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="ENABLE-EDIT-ACTIONS"
 ></A
->7.4.4. enable-edit-actions</H4
+>7.4.5. enable-edit-actions</H4
 ><P
 ></P
 ><DIV
@@ -1949,7 +1996,7 @@ CLASS="SECT3"
 ><A
 NAME="ACLS"
 ></A
->7.4.5. ACLs: permit-access and deny-access</H4
+>7.4.6. ACLs: permit-access and deny-access</H4
 ><A
 NAME="PERMIT-ACCESS"
 ></A
@@ -2239,7 +2286,7 @@ CLASS="SECT3"
 ><A
 NAME="BUFFER-LIMIT"
 ></A
->7.4.6. buffer-limit</H4
+>7.4.7. buffer-limit</H4
 ><P
 ></P
 ><DIV
@@ -2720,6 +2767,74 @@ CLASS="SCREEN"
 ></TABLE
 >
    </P
+><P
+>    To chain Privoxy and Tor, both running on the same system, you should use 
+    the rule:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward-socks4   /               127.0.0.1:9050 .</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    The public <SPAN
+CLASS="APPLICATION"
+>Tor</SPAN
+> network can't be used to reach your local network,
+    therefore it's a good idea to make some exceptions:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  forward         192.168.*.*/     .
+  forward            10.*.*.*/     .
+  forward           127.*.*.*/     .</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    Unencrypted connections to systems in these address ranges will
+    be as (un)secure as the local network is, but the alternative is that you
+    can't reach the network at all.
+   </P
+><P
+>    If you also want to be able to reach servers in your local network by
+    using their names, you will need additional exceptions that look like
+    this:
+   </P
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> forward           localhost/     .</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
 ></DD
 ></DL
 ></DIV
@@ -2873,6 +2988,88 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 > </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="FORWARDED-CONNECT-RETRIES"
+></A
+>7.5.4. forwarded-connect-retries</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    How often Privoxy retries if a forwarded connection request fails. 
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Number of retries.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Forwarded connections are treated like direct connections and no retry attempts are made.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>forwarded-connect-retries</I
+></TT
+> is mainly interesting
+    for socks4a connections, where Privoxy can't detect why the connections failed.
+    The connection might have failed because of a DNS timeout in which case a retry makes sense,
+    but it might also have failed because the server doesn't exist or isn't reachable. In this
+    case the retry will just delay the appearance of Privoxy's error message.
+   </P
+><P
+>    Only use this option, if you are getting many forwarding related error messages,
+    that go away when you try again manually. Start with a small value and check Privoxy's
+    logfile from time to time, to see how many retries are usually needed.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    forwarded-connect-retries 1
+   </P
+></DD
+></DL
+></DIV
 ></DIV
 ></DIV
 ><DIV

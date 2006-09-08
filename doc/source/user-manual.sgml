@@ -32,7 +32,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.16 2006/09/02 12:49:37 hal9 Exp $
+ $Id: user-manual.sgml,v 2.17 2006/09/05 13:25:12 david__schmidt Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +58,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.16 2006/09/02 12:49:37 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.17 2006/09/05 13:25:12 david__schmidt Exp $</pubdate>
 
 <!--
 
@@ -162,13 +162,11 @@ Hal.
 </para>
 
 <para>
- Note: If you have a previous <application>Junkbuster</application> or
- <application>Privoxy</application> installation on your system, you
- will need to remove it.  On some platforms, this may be done for you as part
- of their installation procedure. (See below for your platform). In any case
- <emphasis>be sure to backup your old configuration if it is valuable to
- you.</emphasis> See the <link linkend="upgradersnote">note to
- upgraders</link> section below.
+ Note: 
+ On some platforms, the installer may remove previously installed versions, if 
+ found. (See below for your platform). In any case <emphasis>be sure to backup
+ your old configuration if it is valuable to you.</emphasis> See the <link
+ linkend="upgradersnote">note to upgraders</link> section below.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     --> 
@@ -204,7 +202,7 @@ automatically start Privoxy in the boot process.
  Also note that if you have a <application>Junkbuster</application> RPM installed
  on your system, you need to remove it first, because the packages conflict.
  Otherwise, RPM will try to remove <application>Junkbuster</application>
- automatically, before installing <application>Privoxy</application>.
+ automatically if found, before installing <application>Privoxy</application>.
 </para>
 </sect3>
 
@@ -223,8 +221,41 @@ automatically start Privoxy in the boot process.
 <para>
  Just double-click the installer, which will guide you through
  the installation process. You will find the configuration files
- in the same directory as you installed Privoxy in. 
+ in the same directory as you installed <application>Privoxy</application> in. 
 </para>
+<para>
+ Version 3.0.4 introduces full <application>Windows</application> service
+ functionality. On Windows only, the <application>Privoxy</application>
+ program has two new command line arguments to install and uninstall
+ <application>Privoxy</application> as a <emphasis>service</emphasis>.
+</para>
+ <variablelist>
+  <varlistentry>
+   <term>Arguments:</term>
+   <listitem>
+    <para>
+     <replaceable class="parameter">--install</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+    <para>
+     <replaceable class="parameter">--uninstall</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
+    </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+ <para>
+ After invoking <application>Privoxy</application> with
+ <command>--install</command>, you will need to bring up the
+ <application>Windows</application> service console to assign the user you
+ want <application>Privoxy</application> to run under, and whether or not you
+ want it to run whenever the system starts. You can start the
+ <application>Windows</application> services console with the following
+ command: <command>services.msc</command>  If you do not take the manual step
+ of modifying <application>Privoxy's</application> service settings, it will
+ not start.  Note too that you will need to give Privoxy a user account that
+ actually exists, or it will not be permitted to 
+ write to its log and configuration files.
+</para>
+
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -503,16 +534,42 @@ automatically start Privoxy in the boot process.
 
   <listitem>
    <para>
-    <application>MS-Windows</application> versions can now be installed and 
-    started as a <emphasis>service</emphasis>.
+    <application>MS-Windows</application> versions can now be 
+    <link
+    linkend="installation-pack-win">installed and 
+    started as a <emphasis>Windows service</emphasis></link>.
    </para>
   </listitem>
 
   <listitem>
    <para>
+    <filename>config</filename> has two new options: 
+    <link
+    linkend="enable-remote-http-toggle">enable-remote-http-toggle</link>, 
+    and <link
+    linkend="forwarded-connect-retries">forwarded-connect-retries</link>.
+   </para>
+   <para>
+    And there is improved handling of the <link
+    linkend="user-manual">user-manual</link>
+    option, for placing documentation and help files on the local system.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+    Actions files problems and suggestions are now being directed to: <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>.
+    Please use this to report such configuration related problems as missed
+    ads, sites that don't function properly due to one action or another, 
+    innocent images being blocked, etc.
+   </para>
+  </listitem>
+  
+  <listitem>
+   <para>
     In addition, there are various bug fixes and significant enhancements, including 
-    error pages are no longer cached, better DNS error handling, and various logging 
-    improvements.
+    error pages should no longer be cached if the problem is fixed, better DNS
+    error handling, and various logging improvements.
    </para>
   </listitem>
 
@@ -537,6 +594,16 @@ automatically start Privoxy in the boot process.
   <para>  
     Some installers may remove earlier versions completely, including 
     configuration files. Save any important configuration files!
+  </para>
+ </listitem>
+ <listitem>
+  <para>  
+   On the other hand, some installers may not overwrite any existing configuration 
+   files, thinking you will want to do that. You may want to manually check 
+   your saved files against the newer versions to see if the improvements have
+   merit, or whether there are new options that you may want to consider.
+   There are a number of new features, but most won't be available unless 
+   these features are incorporated into your configuration somehow.
   </para>
  </listitem>
  <listitem>
@@ -611,10 +678,8 @@ automatically start Privoxy in the boot process.
    Set your browser to use <application>Privoxy</application> as HTTP and
    HTTPS (SSL) proxy by setting the proxy configuration for address of
    <literal>127.0.0.1</literal> and port <literal>8118</literal>.
-   (<application>Junkbuster</application> and earlier versions of
-   <application>Privoxy</application> used port 8000.) See the section <link
-   linkend="startup">Starting <application>Privoxy</application></link> below
-   for more details on this.
+   <emphasis>DO NOT</emphasis> activate proxying for <literal>FTP</literal> or 
+   any protocols besides HTTP and HTTPS (SSL)! It won't work!
   </para>
  </listitem>  
 
@@ -669,7 +734,7 @@ automatically start Privoxy in the boot process.
  <listitem>
   <para>
    Please see the section <link linkend="contact">Contacting the
-   Developers</link> on how to report bugs or problems with websites or to get
+   Developers</link> on how to report bugs, problems with websites or to get
    help. 
   </para>
  </listitem> 
@@ -1083,44 +1148,18 @@ your PC.
 <sect2 id="start-windows">
 <title>Windows</title>
 <para>
-Click on the Privoxy Icon to start Privoxy. If no configuration file is
+Click on the Privoxy Icon to start <application>Privoxy</application>. If no configuration file is
  specified on the command line, <application>Privoxy</application> will look
  for a file named <filename>config.txt</filename>. Note that Windows will
  automatically start Privoxy when the system starts if you chose that option
  when installing.
 </para>
 <para>
-<!--
-New check this hal
--->
- Version 3.0.4 introduces full Windows service functionality.
+ <application>Privoxy</application> can run with full Windows service functionality.
  On Windows only, the Privoxy program has two new command line arguments
- to install and uninstall Privoxy as a service.
- <variablelist>
-  <varlistentry>
-   <term>Arguments:</term>
-   <listitem>
-    <para>
-     <replaceable class="parameter">--install</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     <replaceable class="parameter">--uninstall</replaceable>[:<replaceable class="parameter">service_name</replaceable>]
-    </para>
-   </listitem>
-  </varlistentry>
- </variablelist>
- </para>
-<para>
- After invoking Privoxy with <command>--install</command>,
- you will need to bring up the Windows service console to assign the user you
- want Privoxy to run under, and whether or not you want it to run whenever the
- system starts. You can start the Windows services console with the following command:
- <command>services.msc</command>  If you do not take the manual step of modifying
- Privoxy's service settings, it will not start.  Note too that you will need to
- give Privoxy a user account that actually exists, or it will not be permitted to 
- write its log files.
+ to install and uninstall Privoxy as a service. See the 
+ <link linkend="installation-pack-win">Windows Installation
+ instructions</link> for details.
 </para>
 </sect2>
 
@@ -1391,6 +1430,14 @@ must find a better place for this paragraph
  </itemizedlist>
 </para>
 
+<para>
+ On <application>MS Windows</application> only there are two addition 
+ options to allow <application>Privoxy</application> to install and 
+ run as a <emphasis>service</emphasis>. See the 
+<link linkend="installation-pack-win">Window Installation section</link> 
+for details.
+</para>
+
 </sect2>
 
 </sect1>
@@ -1555,6 +1602,12 @@ must find a better place for this paragraph
   </listitem> 
 
  </itemizedlist>
+</para>
+
+<para>
+ The syntax of all configuration files has remained the same throughout the
+ 3.x series. There have been enhancements, but no changes that would preclude
+ the use of any configuration file from one version to the next.
 </para>
 
 <para>
@@ -2091,7 +2144,7 @@ must find a better place for this paragraph
  at <ulink url="http://www.pcre.org/man.txt">http://www.pcre.org/man.txt</ulink>.
  You might also find the Perl man page on regular expressions (<literal>man perlre</literal>)
  useful, which is available on-line at <ulink
- url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>.
+ url="http://perldoc.perl.org/perlre.html">http://perldoc.perl.org/perlre.html</ulink>.
 </para>
 
 <para>
@@ -6205,11 +6258,11 @@ ar.atwola.com/</screen>
 <para>
  If you are new to regular expressions, you might want to take a look at
  the <link linkend="regex">Appendix on regular expressions</link>, and
- see the <ulink url="http://perldoc.com/perl5.6.1/pod/perl.html">Perl
+ see the <ulink url="http://perldoc.perl.org/perlre.html">Perl
  manual</ulink> for
- <ulink url="http://perldoc.com/perl5.6.1/pod/perlop.html#s-PATTERN-REPLACEMENT-egimosx">the 
+ <ulink url="http://perldoc.perl.org/perlop.html">the 
  <literal>s///</literal> operator's syntax</ulink> and <ulink
- url="http://perldoc.com/perl5.6.1/pod/perlre.html">Perl-style regular
+ url="http://perldoc.perl.org/perlre.html">Perl-style regular
  expressions</ulink> in general.
  The below examples might also help to get you started.
 </para>
@@ -7038,7 +7091,7 @@ Requests</title>
 
 <para><simplelist>
  <member>
-  <emphasis>[]</emphasis> - Characters enclosed in brackets will be matched if
+  <emphasis>[ ]</emphasis> - Characters enclosed in brackets will be matched if
   any of the enclosed characters are encountered. For instance, <quote>[0-9]</quote>
   matches any numeric digit (zero through nine). As an example, we can combine 
   this with <quote>+</quote> to match any digit one of more times: <quote>[0-9]+</quote>.
@@ -7047,7 +7100,7 @@ Requests</title>
 
 <para><simplelist>
  <member>
-  <emphasis>()</emphasis> - parentheses are used to group a sub-expression,
+  <emphasis>( )</emphasis> - parentheses are used to group a sub-expression,
   or multiple sub-expressions.
  </member>
 </simplelist></para>
@@ -7089,7 +7142,7 @@ Requests</title>
 </para>
 
 <para>
- A now something a little more complex:
+ And now something a little more complex:
 </para>
 
 <para>
@@ -7127,7 +7180,7 @@ Requests</title>
 <para>
  <emphasis><literal>/.*/advert[0-9]+\.(gif|jpe?g)</literal></emphasis> - Again 
  another path statement with forward slashes. Anything in the square brackets 
- <quote>[]</quote> can be matched. This is using <quote>0-9</quote> as a
+ <quote>[ ]</quote> can be matched. This is using <quote>0-9</quote> as a
  shorthand expression to mean any digit one through nine. It is the same as
  saying <quote>0123456789</quote>. So any digit matches. The <quote>+</quote>
  means one or more of the preceding expression must be included. The preceding 
@@ -7163,7 +7216,7 @@ Requests</title>
 
 <para>
  More reading on Perl Compatible Regular expressions: 
- <ulink url="http://www.perldoc.com/perl5.6/pod/perlre.html">http://www.perldoc.com/perl5.6/pod/perlre.html</ulink>
+ <ulink url="http://perldoc.perl.org/perlre.html">http://perldoc.perl.org/perlre.html</ulink>
 </para>
 
 <para>
@@ -7394,7 +7447,7 @@ Requests</title>
  <listitem>
   <para>
    <application>Privoxy</application> traps any request for its own internal CGI 
-   pages (e.g http://p.p/) and sends the CGI page back to the browser.
+   pages (e.g <ulink url="http://p.p/">http://p.p/</ulink>) and sends the CGI page back to the browser.
   </para>
  </listitem> 
  <listitem>
@@ -7481,7 +7534,7 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   As the browser receives the now (probably filtered) page content, it 
+   As the browser receives the now (possibly filtered) page content, it 
    reads and then requests any URLs that may be embedded within the page
    source, e.g. ad images, stylesheets, JavaScript, other HTML documents (e.g.
    frames), sounds, etc. For each of these objects, the browser issues a new
@@ -7734,7 +7787,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  Notice the only difference here to the previous listing, is to 
  <quote>fast-redirects</quote> and <quote>session-cookies-only</quote>,
- which are actived specifically for this site in our configuration, 
+ which are activated specifically for this site in our configuration, 
  and thus show in the <quote>Final Results</quote>.
 </para>
 
@@ -7782,14 +7835,14 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- One last example. Let's try <quote>http://www.rhapsodyk.net/adsl/HOWTO/</quote>.
+ One last example. Let's try <quote>http://www.example.net/adsl/HOWTO/</quote>.
  This one is giving us problems. We are getting a blank page. Hmmm ...
 </para>
 
 <para>
  <screen>
 
- Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
+ Matches for http://www.example.net/adsl/HOWTO/:
 
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
@@ -7957,6 +8010,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: user-manual.sgml,v $
+ Revision 2.17  2006/09/05 13:25:12  david__schmidt
+ Add Windows service invocation stuff (duplicated) in FAQ and in user manual under Windows startup.  One probably ought to reference the other.
+
  Revision 2.16  2006/09/02 12:49:37  hal9
  Various small updates for new actions, filterfiles, etc.
 

@@ -14,7 +14,9 @@ TITLE="See Also"
 HREF="seealso.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
-HREF="../p_doc.css"></HEAD
+HREF="../p_doc.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="p_doc.css">
+</head
 ><BODY
 CLASS="SECT1"
 BGCOLOR="#EEEEEE"
@@ -324,7 +326,7 @@ BORDER="0"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->[]</I
+>[ ]</I
 ></SPAN
 > - Characters enclosed in brackets will be matched if
   any of the enclosed characters are encountered. For instance, <SPAN
@@ -358,7 +360,7 @@ BORDER="0"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->()</I
+>( )</I
 ></SPAN
 > - parentheses are used to group a sub-expression,
   or multiple sub-expressions.
@@ -478,7 +480,7 @@ CLASS="QUOTE"
 > in the path
  somewhere.</P
 ><P
-> A now something a little more complex:</P
+> And now something a little more complex:</P
 ><P
 > <SPAN
 CLASS="emphasis"
@@ -617,7 +619,7 @@ CLASS="LITERAL"
  another path statement with forward slashes. Anything in the square brackets 
  <SPAN
 CLASS="QUOTE"
->"[]"</SPAN
+>"[ ]"</SPAN
 > can be matched. This is using <SPAN
 CLASS="QUOTE"
 >"0-9"</SPAN
@@ -726,9 +728,9 @@ CLASS="APPLICATION"
 ><P
 > More reading on Perl Compatible Regular expressions: 
  <A
-HREF="http://www.perldoc.com/perl5.6/pod/perlre.html"
+HREF="http://perldoc.perl.org/perlre.html"
 TARGET="_top"
->http://www.perldoc.com/perl5.6/pod/perlre.html</A
+>http://perldoc.perl.org/perlre.html</A
 ></P
 ><P
 > For information on regular expression based substitutions and their applications
@@ -743,7 +745,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN4670"
+NAME="AEN4783"
 ></A
 >14.2. <SPAN
 CLASS="APPLICATION"
@@ -792,7 +794,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN4685"
+NAME="AEN4798"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -825,7 +827,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN4693"
+NAME="AEN4806"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -845,7 +847,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN4698"
+NAME="AEN4811"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -865,7 +867,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN4703"
+NAME="AEN4816"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -885,7 +887,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN4708"
+NAME="AEN4821"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -909,7 +911,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN4714"
+NAME="AEN4827"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -926,7 +928,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN4718"
+NAME="AEN4831"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -940,7 +942,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN4721"
+NAME="AEN4834"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1100,7 +1102,11 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > traps any request for its own internal CGI 
-   pages (e.g http://p.p/) and sends the CGI page back to the browser.
+   pages (e.g <A
+HREF="http://p.p/"
+TARGET="_top"
+>http://p.p/</A
+>) and sends the CGI page back to the browser.
   </P
 ></LI
 ><LI
@@ -1277,7 +1283,7 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->   As the browser receives the now (probably filtered) page content, it 
+>   As the browser receives the now (possibly filtered) page content, it 
    reads and then requests any URLs that may be embedded within the page
    source, e.g. ad images, stylesheets, JavaScript, other HTML documents (e.g.
    frames), sounds, etc. For each of these objects, the browser issues a new
@@ -1690,7 +1696,7 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"session-cookies-only"</SPAN
 >,
- which are actived specifically for this site in our configuration, 
+ which are activated specifically for this site in our configuration, 
  and thus show in the <SPAN
 CLASS="QUOTE"
 >"Final Results"</SPAN
@@ -1778,7 +1784,7 @@ CLASS="QUOTE"
 ><P
 > One last example. Let's try <SPAN
 CLASS="QUOTE"
->"http://www.rhapsodyk.net/adsl/HOWTO/"</SPAN
+>"http://www.example.net/adsl/HOWTO/"</SPAN
 >.
  This one is giving us problems. We are getting a blank page. Hmmm ...</P
 ><P
@@ -1790,7 +1796,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->&#13; Matches for http://www.rhapsodyk.net/adsl/HOWTO/:
+>&#13; Matches for http://www.example.net/adsl/HOWTO/:
 
  In file: default.action <SPAN
 CLASS="GUIBUTTON"

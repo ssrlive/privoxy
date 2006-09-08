@@ -17,7 +17,9 @@ TITLE="Privoxy Configuration"
 HREF="configuration.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
-HREF="../p_doc.css"></HEAD
+HREF="../p_doc.css">
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="p_doc.css">
+</head
 ><BODY
 CLASS="SECT1"
 BGCOLOR="#EEEEEE"
@@ -101,7 +103,7 @@ CLASS="APPLICATION"
 >  <DIV
 CLASS="FIGURE"
 ><A
-NAME="AEN571"
+NAME="AEN604"
 ></A
 ><P
 ><B
@@ -343,7 +345,10 @@ NAME="START-WINDOWS"
 ></A
 >5.4. Windows</H2
 ><P
->Click on the Privoxy Icon to start Privoxy. If no configuration file is
+>Click on the Privoxy Icon to start <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. If no configuration file is
  specified on the command line, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -352,7 +357,20 @@ CLASS="APPLICATION"
 CLASS="FILENAME"
 >config.txt</TT
 >. Note that Windows will
- automatically start Privoxy upon booting you PC.</P
+ automatically start Privoxy when the system starts if you chose that option
+ when installing.</P
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can run with full Windows service functionality.
+ On Windows only, the Privoxy program has two new command line arguments
+ to install and uninstall Privoxy as a service. See the 
+ <A
+HREF="installation.html#INSTALLATION-PACK-WIN"
+>Windows Installation
+ instructions</A
+> for details.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -721,6 +739,27 @@ CLASS="APPLICATION"
 ></LI
 ></UL
 ></P
+><P
+> On <SPAN
+CLASS="APPLICATION"
+>MS Windows</SPAN
+> only there are two addition 
+ options to allow <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to install and 
+ run as a <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>service</I
+></SPAN
+>. See the 
+<A
+HREF="installation.html#INSTALLATION-PACK-WIN"
+>Window Installation section</A
+> 
+for details.</P
 ></DIV
 ></DIV
 ><DIV
