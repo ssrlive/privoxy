@@ -7,7 +7,7 @@
 dpatch_patch ()
 {
     tar cf debian/patched/doc.bak.tar \
-	doc/source doc/text doc/webserver \
+	doc/source doc/text doc/webserver doc/pdf \
 	INSTALL README AUTHORS privoxy.1
 }
 
