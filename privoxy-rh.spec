@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.45 2006/07/18 14:48:47 david__schmidt Exp $
+# $Id: privoxy-rh.spec,v 1.46 2006/09/02 22:22:59 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -37,7 +37,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 3.0.3
+Version: 3.0.4
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -53,7 +53,7 @@ Conflicts: junkbuster-raw junkbuster-blank junkbuster
 
 %description 
 Privoxy is a web proxy with advanced filtering capabilities for
-protecting privacy, filtering web page content, managing cookies,
+protecting privacy, filtering web page data, managing cookies,
 controlling access, and removing ads, banners, pop-ups and other
 obnoxious Internet junk. Privoxy has a very flexible configuration and
 can be customized to suit individual needs and tastes. Privoxy has application
@@ -69,7 +69,7 @@ Privoxy is based on the Internet Junkbuster.
 # We check to see if versions match
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=0
+VERSION_POINT=4
 
 CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
 if [ "%{version}" != "${CONFIG_VERSION}" ]; then
@@ -318,6 +318,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Fri Sep 08 2006 Hal Burgiss <hal@foobox.net>
+- Bump version to 3.0.4
+
 * Sat Sep 02 2006 Hal Burgiss <hal@foobox.net>
 - Include new file, user.filter. Do not overwrite "trust" file 
   (does anyone use this?).
@@ -739,6 +742,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.46  2006/09/02 22:22:59  hal9
+# Include user.filter, and do not overwrite trust file on updates.
+#
 # Revision 1.45  2006/07/18 14:48:47  david__schmidt
 # Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 # with what was really the latest development (the v_3_0_branch branch)
