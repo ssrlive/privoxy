@@ -7,9 +7,9 @@
 
 @DPATCH@
 diff -urNad privoxy~/cgi.c privoxy/cgi.c
---- privoxy~/cgi.c	2006-02-11 23:44:26.000000000 +0100
-+++ privoxy/cgi.c	2006-02-11 23:44:34.000000000 +0100
-@@ -609,6 +609,9 @@
+--- privoxy~/cgi.c
++++ privoxy/cgi.c
+@@ -616,6 +616,9 @@
     { "t",
           cgi_transparent_image, 
           NULL, TRUE /* Send a transparent image (short name) */ },
@@ -19,7 +19,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
     { NULL, /* NULL Indicates end of list and default page */
           cgi_error_404,
           NULL, TRUE /* Unknown CGI page */ }
-@@ -821,21 +824,28 @@
+@@ -828,21 +831,28 @@
     {
        return cgi_error_memory();
     }
@@ -57,7 +57,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
     }
  
     /*
-@@ -1597,7 +1607,13 @@
+@@ -1604,7 +1614,13 @@
     if (!item) return NULL;
  
     result = strdup("<a href=\"");
@@ -72,7 +72,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
     string_append(&result, ACTIONS_HELP_PREFIX);
     string_join  (&result, string_toupper(item));
     string_append(&result, "\">");
-@@ -2171,7 +2187,11 @@
+@@ -2193,7 +2209,11 @@
     if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
     if (!err) err = map(exports, "menu",          1, make_menu(caller), 0);
     if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
@@ -86,9 +86,9 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
  #ifdef FEATURE_TOGGLE
     if (!err) err = map_conditional(exports, "enabled-display", global_toggle_state);
 diff -urNad privoxy~/cgisimple.c privoxy/cgisimple.c
---- privoxy~/cgisimple.c	2006-02-11 23:44:26.000000000 +0100
-+++ privoxy/cgisimple.c	2006-02-11 23:44:34.000000000 +0100
-@@ -642,6 +642,89 @@
+--- privoxy~/cgisimple.c
++++ privoxy/cgisimple.c
+@@ -660,6 +660,89 @@
     return JB_ERR_OK;
  
  }
@@ -179,9 +179,9 @@ diff -urNad privoxy~/cgisimple.c privoxy/cgisimple.c
  
  /*********************************************************************
 diff -urNad privoxy~/cgisimple.h privoxy/cgisimple.h
---- privoxy~/cgisimple.h	2006-02-11 23:44:26.000000000 +0100
-+++ privoxy/cgisimple.h	2006-02-11 23:44:34.000000000 +0100
-@@ -128,6 +128,9 @@
+--- privoxy~/cgisimple.h
++++ privoxy/cgisimple.h
+@@ -132,6 +132,9 @@
  extern jb_err cgi_send_stylesheet(struct client_state *csp,
                                    struct http_response *rsp,
                                    const struct map *parameters);
@@ -192,9 +192,9 @@ diff -urNad privoxy~/cgisimple.h privoxy/cgisimple.h
  #ifdef FEATURE_GRACEFUL_TERMINATION
  extern jb_err cgi_die (struct client_state *csp,
 diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
---- privoxy~/loadcfg.c	2006-02-11 23:44:26.000000000 +0100
-+++ privoxy/loadcfg.c	2006-02-11 23:44:34.000000000 +0100
-@@ -1579,7 +1579,13 @@
+--- privoxy~/loadcfg.c
++++ privoxy/loadcfg.c
+@@ -1605,7 +1605,13 @@
      * link to it's section in the user-manual
      */
     buf = strdup("\n<br><a href=\"");

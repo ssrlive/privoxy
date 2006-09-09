@@ -1,8 +1,40 @@
+privoxy (3.0.4.cvs20060909-1) UNRELEASED; urgency=low
+
+  * New upstream CVS snapshot as of 2006-09-09.
+  * Adapted all patches to this version.
+  * The following patches are incorporated upstream now, so they are no
+    longer needed: 01_local_usermanual.dpatch, 08_log_pthread.dpatch,
+    09_no_identity.dpatch, 12_multiple-filters.dpatch, 13_memory.dpatch,
+    18_dns_retry.dpatch.
+  * 20_makefile_fixup.dpatch: Fix a syntax error in the GNUmakefile.in.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat,  9 Sep 2006 15:26:34 +0200
+
+privoxy (3.0.3-2-2) unstable; urgency=low
+
+  * Upgrade to Standards-Version 3.7.2 (no changes).
+  * 17_502_no_such_domain.dpatch: Changes the 404 HTTP status code of the
+    "No such Domain" template to 502 Bad Gateway, which seems to be more
+    correct according to http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+    (Closes: #380389).
+  * Disable filter{js-annoyances} and filter{unsolicited-popups} for
+    .cnrs.fr and blogs.msdn.com, because these sites consume very much CPU
+    time otherwise (Closes: #377843).
+  * 18_dns_retry.dpatch by Fabian Keil <fk@fabiankeil.de>: 10 retries
+    before giving up DNS lookup. This hopefully Closes: #335660.
+  * 19_manpage_fixup.dpatch:
+    - Convert Latin-1 char á to groff eqivalent in man page.
+    - Quote minus signs to differenciate them from hyphens.
+  * Do not filter{banners-by-size} on .w3.org pages, because these often
+    contain validator icons (Closes: #319025).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat,  5 Aug 2006 15:15:17 +0200
+
 privoxy (3.0.3-2-1) unstable; urgency=low
 
   * New upstream version 3.0.3-2.
   * Add debian/watch file.
-  * Remove parts of 13_memory.dpatch, which seem to be free too much
+  * Remove parts of 13_memory.dpatch, which seems to free too much
     memory (Closes: #353110, #354611).
 
  -- Roland Rosenfeld <roland@debian.org>  Mon, 27 Feb 2006 23:28:52 +0100

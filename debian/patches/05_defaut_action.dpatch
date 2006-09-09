@@ -6,32 +6,38 @@
 
 @DPATCH@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
---- privoxy~/default.action.master	2006-02-05 16:23:12.000000000 +0100
-+++ privoxy/default.action.master	2006-02-05 16:25:47.000000000 +0100
-@@ -1444,6 +1444,8 @@
- .microsoft.com
- #MASTER# PROBLEM-URL: http://javabog.dk/ijk/
- javabog.dk/ijk/
-+#MASTER# PROBLEM-URL: http://validator.w3.org/
-+/valid-
- 
- #----------------------------------------------------------------------------
- # These don't work without the referrer information:
-@@ -1464,6 +1466,8 @@
- #MASTER# PROBLEM-URL: http://www.mandrakelinux.com/en/ftp.php3
- #MASTER# REMARKS: Link to download page breaks
+--- privoxy~/default.action.master
++++ privoxy/default.action.master
+@@ -1593,6 +1593,8 @@
  www.mandrakelinux.com/en/ftp.php3
+ #MASTER# REMARKS: Actions Tracker 1313157
+ validator.w3.org/check\?uri=referer
 +#MASTER# PROBLEM-URL: http://www.petitiononline.com/mod_perl/signed.cgi?eldred&2901
 +www.petitiononline.com/mod_perl/signed.cgi
  
  #----------------------------------------------------------------------------
  # These animated gifs are either useful or nice:
-@@ -1601,6 +1605,8 @@
+@@ -1714,6 +1716,10 @@
+ #MASTER# PROBLEM-URL: http://www.nasa.gov
+ #MASTER# REMARKS: No progress past main page without js-annoyances
+ .nasa.gov
++#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
++.cnrs.fr
++#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
++blogs.msdn.com
+ 
+ {-filter{unsolicited-popups}}
+ #MASTER# DONT-VERIFY
+@@ -1733,6 +1739,12 @@
  cf.nbc4.com/
  #MASTER# PROBLEM-URL: http://www.hh.schule.de/ak/nt/
  www.hh.schule.de/ak/nt/
 +#MASTER# PROBLEM-URL: http://www.perl.com/language/newdocs/pod/perlop.html#Regexp_Quote_Like_Operators
 +www.perl.com/language/newdocs/pod/
++#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
++.cnrs.fr
++#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
++blogs.msdn.com
  
- {+fast-redirects -block}
+ {+fast-redirects{check-decoded-url} -block}
  #MASTER# PROBLEM-URL: http://isbn.nu/0596001088/price/2.html

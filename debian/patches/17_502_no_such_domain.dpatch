@@ -1,0 +1,30 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 17_502_no_such_domain.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Changes the 404 HTTP status code of the "No such Domain" template
+## DP: to 502 Bad Gateway, which seems to be more correct according to 
+## DP: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+
+@DPATCH@
+diff -urNad privoxy~/templates/no-such-domain privoxy/templates/no-such-domain
+--- privoxy~/templates/no-such-domain
++++ privoxy/templates/no-such-domain
+@@ -79,7 +79,7 @@
+ <html>
+ 
+ <head>
+-  <title>404 - No such Domain (Privoxy@@my-hostname@)</title>
++  <title>502 - Bad Gateway (Privoxy@@my-hostname@)</title>
+   <meta http-equiv="Content-Style-Type" content="text/css">
+   <meta http-equiv="Content-Script-Type" content="text/javascript">
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+@@ -92,7 +92,7 @@
+   <table cellpadding="20" cellspacing="10" border="0" width="100%">
+     <tr>
+       <td class="status">
+-        404
++        502
+       </td>     
+       <td class="title" style="width: 100%">
+ 

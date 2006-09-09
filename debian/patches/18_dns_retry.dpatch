@@ -1,0 +1,58 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 18_dns_retry.dpatch by Fabian Keil <fk@fabiankeil.de>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Retries DNS queries 10 times before giving up.
+## DP: Extracted from http://www.fabiankeil.de/sourcecode/privoxy/
+
+@DPATCH@
+diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
+--- privoxy~/jbsockets.c
++++ privoxy/jbsockets.c
+@@ -780,6 +780,7 @@
+ {
+    struct sockaddr_in inaddr;
+    struct hostent *hostp;
++   unsigned int dns_retries = 0;
+ #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS) || defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
+    struct hostent result;
+ #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
+@@ -800,8 +801,13 @@
+    if ((inaddr.sin_addr.s_addr = inet_addr(host)) == -1)
+    {
+ #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS)
+-      gethostbyname_r(host, &result, hbuf,
+-                      HOSTENT_BUFFER_SIZE, &hostp, &thd_err);
++		while ( gethostbyname_r(host, &result, hbuf,
++										HOSTENT_BUFFER_SIZE, &hostp, &thd_err)
++				  && (thd_err == TRY_AGAIN) && (dns_retries++ < 10) )
++		{   
++		  log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
++						dns_retries, host);
++      }
+ #elif defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
+       hostp = gethostbyname_r(host, &result, hbuf,
+                       HOSTENT_BUFFER_SIZE, &thd_err);
+@@ -816,10 +822,20 @@
+       }
+ #elif OSX_DARWIN
+       pthread_mutex_lock(&gethostbyname_mutex);
+-      hostp = gethostbyname(host);
++		while ( NULL == (hostp = gethostbyname(host))
++				  && (h_errno == TRY_AGAIN) && (dns_retries++ < 10) )
++		{   
++		  log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
++						dns_retries, host);
++      }
+       pthread_mutex_unlock(&gethostbyname_mutex);
+ #else
+-      hostp = gethostbyname(host);
++      while ( NULL == (hostp = gethostbyname(host))
++            && (h_errno == TRY_AGAIN) && (dns_retries++ < 10) )
++      {
++         log_error(LOG_LEVEL_ERROR, "%u. timeout while trying to resolve %s. Trying again.",
++                                                dns_retries, host);
++      }
+ #endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
+       /*
+        * On Mac OSX, if a domain exists but doesn't have a type A

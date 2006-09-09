@@ -5,9 +5,9 @@
 ## DP: Stop converting 8bit chars in the documentation (#203697)
 
 @DPATCH@
-diff -urNad privoxy-dpatch~/doc/source/ldp.dsl.in privoxy-dpatch/doc/source/ldp.dsl.in
---- privoxy-dpatch~/doc/source/ldp.dsl.in	2006-02-05 16:17:43.000000000 +0100
-+++ privoxy-dpatch/doc/source/ldp.dsl.in	2006-02-05 16:17:46.000000000 +0100
+diff -urNad privoxy~/doc/source/ldp.dsl.in privoxy/doc/source/ldp.dsl.in
+--- privoxy~/doc/source/ldp.dsl.in
++++ privoxy/doc/source/ldp.dsl.in
 @@ -47,9 +47,9 @@
  
  ;; this is necessary because right now jadetex does not understand

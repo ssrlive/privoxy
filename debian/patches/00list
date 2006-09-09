@@ -1,14 +1,21 @@
-01_local_usermanual.dpatch
+# 01_local_usermanual.dpatch # now upstream
 02_linkcolor.dpatch
+# 03_ipv6.dpatch # incompatible with 18_dns_retry.dpatch
 04_nomultiproxy.dpatch
 05_defaut_action.dpatch
 06_8bit_manual.dpatch
 07_typos.dpatch
-08_log_pthread.dpatch
-09_no_identity.dpatch
+# 08_log_pthread.dpatch # now upstream
+# 09_no_identity.dpatch # now upstream
 10_backup_doc.dpatch
 11_backup_autotools.dpatch
-12_multiple-filters.dpatch
-13_memory.dpatch
+# 12_multiple-filters.dpatch # now upstream
+# 13_memory.dpatch # new upstream
 14_config.dpatch
 15_mansection8.dpatch
+# 16_gzip.dpatch # still broken.
+17_502_no_such_domain.dpatch 
+# 18_dns_retry.dpatch # now upstream
+19_manpage_fixup.dpatch
+20_makefile_fixup.dpatch
+21_version_3.0.4.dpatch

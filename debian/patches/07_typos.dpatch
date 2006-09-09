@@ -7,9 +7,9 @@
 
 @DPATCH@
 diff -urNad privoxy~/doc/source/privoxy-man-page.sgml privoxy/doc/source/privoxy-man-page.sgml
---- privoxy~/doc/source/privoxy-man-page.sgml	2006-02-05 22:03:58.000000000 +0100
-+++ privoxy/doc/source/privoxy-man-page.sgml	2006-02-11 18:32:40.000000000 +0100
-@@ -333,7 +333,7 @@
+--- privoxy~/doc/source/privoxy-man-page.sgml
++++ privoxy/doc/source/privoxy-man-page.sgml
+@@ -367,7 +367,7 @@
   
   # Set personal exceptions to the policies in default.action #######
  
@@ -18,33 +18,3 @@ diff -urNad privoxy~/doc/source/privoxy-man-page.sgml privoxy/doc/source/privoxy
   {-crunch-cookies -session-cookies-only}
    .redhat.com
    .sun.com
-diff -urNad privoxy~/doc/source/user-manual.sgml privoxy/doc/source/user-manual.sgml
---- privoxy~/doc/source/user-manual.sgml	2004-01-31 10:49:48.000000000 +0100
-+++ privoxy/doc/source/user-manual.sgml	2006-02-11 18:34:24.000000000 +0100
-@@ -368,7 +368,7 @@
- </para>
- 
- <para>
-- In order not to loose your personal changes and adjustments when updating
-+ In order not to lose your personal changes and adjustments when updating
-  to the latest <literal>default.action</literal> file we <emphasis>strongly
-  recommend</emphasis> that you use <literal>user.action</literal> for your
-  customization of <application>Privoxy</application>. See the <link
-@@ -1720,7 +1720,7 @@
- 
- <para>
-  To determine which actions apply to a request, the URL of the request is
-- compared to all patterns in each action file file. Every time it matches, the list of
-+ compared to all patterns in each <quote>action file</quote> file. Every time it matches, the list of
-  applicable actions for the URL is incrementally updated, using the heading
-  of the section in which the pattern is located. If multiple matches for
-  the same URL set the same action differently, the last match wins. If not, 
-@@ -5251,7 +5251,7 @@
-  blocks of HTML code disappear when a specific symbol is set. We use this
-  for many purposes, one of them being to include the beta warning in all
-  our user interface (CGI) pages when <application>Privoxy</application>
-- in in an alpha or beta development stage:
-+ is in an alpha or beta development stage:
- </para>
- 
- <para>

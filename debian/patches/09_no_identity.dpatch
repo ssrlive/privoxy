@@ -7,9 +7,9 @@
 
 @DPATCH@
 diff -urNad privoxy~/parsers.c privoxy/parsers.c
---- privoxy~/parsers.c	2006-02-05 16:23:12.000000000 +0100
-+++ privoxy/parsers.c	2006-02-05 16:25:49.000000000 +0100
-@@ -871,8 +871,7 @@
+--- privoxy~/parsers.c
++++ privoxy/parsers.c
+@@ -1248,8 +1248,7 @@
   *
   * Description :  - Prohibit filtering (CT_TABOO) if transfer coding compresses
   *                - Raise the CSP_FLAG_CHUNKED flag if coding is "chunked"
@@ -19,7 +19,7 @@ diff -urNad privoxy~/parsers.c privoxy/parsers.c
   *
   * Parameters  :
   *          1  :  csp = Current client state (buffers, headers, etc...)
-@@ -904,13 +903,13 @@
+@@ -1281,14 +1280,13 @@
  
        /*
         * If the body was modified, it has been
@@ -32,6 +32,7 @@ diff -urNad privoxy~/parsers.c privoxy/parsers.c
        {
           freez(*header);
 -         *header = strdup("Transfer-Encoding: identity");
+-         log_error(LOG_LEVEL_HEADER, "Set: %s", *header);
 -         return (header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
        }
     }

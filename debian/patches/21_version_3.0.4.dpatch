@@ -1,0 +1,22 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 21_version_3.0.4.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Bump version to 3.0.4 otherwise privoxy complains in the version check.
+
+@DPATCH@
+diff -urNad privoxy~/configure.in privoxy/configure.in
+--- privoxy~/configure.in
++++ privoxy/configure.in
+@@ -488,9 +488,9 @@
+ dnl Application version number
+ dnl =================================================================
+ 
+-VERSION_MAJOR=0
++VERSION_MAJOR=3
+ VERSION_MINOR=0
+-VERSION_POINT=0
++VERSION_POINT=4
+ CODE_STATUS="UNRELEASED"
+ 
+ dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
