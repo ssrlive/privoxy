@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.40 2006/08/17 17:15:10 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.41 2006/08/18 16:03:17 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.40 2006/08/17 17:15:10 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.41  2006/08/18 16:03:17  david__schmidt
+ *    Tweak for OS/2 build happiness.
+ *
  *    Revision 1.40  2006/08/17 17:15:10  fabiankeil
  *    - Back to timegm() using GnuPG's replacement if necessary.
  *      Using mktime() and localtime() could add a on hour offset if
@@ -878,9 +881,20 @@ int simplematch(char *pattern, char *text)
       else if (pat != fallback)
       {
          /*
+          * Increment text pointer if in char range matching
+          */
+         if (*pat == ']')
+         {
+            txt++;
+         }
+         /*
           * Wildcard mode && nonmatch beyond fallback: Rewind pattern
           */
          pat = fallback;
+         /*
+          * Restart matching from current text pointer
+          */
+         continue;
       }
       txt++;
    }
