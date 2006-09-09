@@ -66,7 +66,7 @@ clean1:
 	rm -rf doc/source/temp
 	rm -rf doc/pdf
 
-	dh_clean
+	dh_clean -Xrc.privoxy.orig
 
 install: build-stamp
 	dh_testdir
