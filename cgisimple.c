@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.38 2006/09/06 18:45:03 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.39 2006/09/08 09:49:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.38 2006/09/06 18:45:03 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.39  2006/09/08 09:49:23  fabiankeil
+ *    Deliver documents in the user-manual directory
+ *    with "Content-Type text/css" if their filename
+ *    ends with ".css".
+ *
  *    Revision 1.38  2006/09/06 18:45:03  fabiankeil
  *    Incorporate modified version of Roland Rosenfeld's patch to
  *    optionally access the user-manual via Privoxy. Closes patch 679075.
@@ -673,7 +678,8 @@ jb_err cgi_send_stylesheet(struct client_state *csp,
  *
  * Function    :  cgi_send_user_manual
  *
- * Description :  CGI function that sends a user manual HTML file
+ * Description :  CGI function that sends a file in the user
+ *                manual directory.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -694,9 +700,8 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    const char * filename;
    char *full_path;
    FILE *fp;
-   char buf[BUFFER_SIZE];
    jb_err err = JB_ERR_OK;
-   size_t length = 0;
+   size_t length;
 
    assert(csp);
    assert(rsp);
@@ -719,14 +724,6 @@ jb_err cgi_send_user_manual(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   /* Allocate buffer */
-   rsp->body = strdup("");
-   if (rsp->body == NULL)
-   {
-      free(full_path);
-      return JB_ERR_MEMORY;
-   }
-
    /* Open user-manual file */
    if (NULL == (fp = fopen(full_path, "r")))
    {
@@ -735,27 +732,50 @@ jb_err cgi_send_user_manual(struct client_state *csp,
       free(full_path);
       return err;
    }
-   free(full_path);
 
-   /* Read file and write it out */
-   while (fgets(buf, BUFFER_SIZE, fp))
+   /* Get file length */
+   fseek(fp, 0, SEEK_END);
+   length = ftell(fp);
+   fseek(fp, 0, SEEK_SET);
+
+   /* Allocate memory and load the file directly into the body */
+   rsp->body = (char *)malloc(length+1);
+   if (!rsp->body)
    {
-      if (string_append(&rsp->body, buf))
-      {
-         fclose(fp);
-         return JB_ERR_MEMORY;
-      }
+      fclose(fp);
+      free(full_path);
+      return JB_ERR_MEMORY;
+   }
+   if (!fread(rsp->body, length, 1, fp))
+   {
+      /*
+       * Why should this happen? If it does, we just log
+       * it and serve what we got, most likely padded with garbage.
+       */
+      log_error(LOG_LEVEL_ERROR, "Couldn't completely read user-manual file %s.", full_path);
    }
    fclose(fp);
+   free(full_path);
+
+   /* Privoxy only gets it right for non-binary content. */
+   rsp->content_length = (int)length;
 
    /* Guess correct Content-Type based on the filename's ending */
    if (filename)
    {
       length = strlen(filename);
    }
-   if((length>=4)  && !strcmp(&filename[length-4], ".css"))
+   else
+   {
+      length = 0;
+   } 
+   if((length>=4) && !strcmp(&filename[length-4], ".css"))
    {
       err = enlist(rsp->headers, "Content-Type: text/css");
+   }
+   else if((length>=4) && !strcmp(&filename[length-4], ".jpg"))
+   {
+      err = enlist(rsp->headers, "Content-Type: image/jpeg");
    }
    else
    {
