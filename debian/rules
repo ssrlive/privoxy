@@ -64,7 +64,7 @@ clean1:
 
 	rm -f doc/source/ldp.dsl
 	rm -rf doc/source/temp
-	rm -rf doc/pdf
+#	rm -rf doc/pdf
 
 	dh_clean -Xrc.privoxy.orig
 
