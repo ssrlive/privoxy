@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.11 2006/09/04 17:18:42 hal9 Exp $
+#  $Id: standard.action,v 1.12 2006/09/08 12:19:02 fabiankeil Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -39,17 +39,17 @@
 -deanimate-gifs \
 -downgrade-http-version \
 -fast-redirects \
-+filter{js-annoyances} \
+-filter{js-annoyances} \
 -filter{js-events} \
-+filter{html-annoyances} \
+-filter{html-annoyances} \
 -filter{content-cookies} \
 -filter{refresh-tags} \
-+filter{unsolicited-popups} \
+-filter{unsolicited-popups} \
 -filter{all-popups} \
 -filter{img-reorder} \
-+filter{banners-by-size} \
+-filter{banners-by-size} \
 -filter{banners-by-link} \
-+filter{webbugs} \
+-filter{webbugs} \
 -filter{tiny-textforms} \
 -filter{jumping-windows} \
 -filter{frameset-borders} \
@@ -75,7 +75,7 @@
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
-+prevent-compression \
+-prevent-compression \
 -overwrite-last-modified \
 -redirect \
 -send-vanilla-wafer \
@@ -102,12 +102,12 @@ standard.Cautious
 +deanimate-gifs{last} \
 -downgrade-http-version \
 -fast-redirects \
-+filter{js-annoyances} \
+-filter{js-annoyances} \
 -filter{js-events} \
-+filter{html-annoyances} \
+-filter{html-annoyances} \
 -filter{content-cookies} \
 +filter{refresh-tags} \
-+filter{unsolicited-popups} \
+-filter{unsolicited-popups} \
 -filter{all-popups} \
 +filter{img-reorder} \
 +filter{banners-by-size} \
