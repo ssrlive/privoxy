@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.4
 #
-#  $Id: p-config.sgml,v 2.9 2006/09/06 11:38:33 fabiankeil Exp $
+#  $Id: config,v 1.53 2006/09/07 02:02:56 hal9 Exp $
 #
 #  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
 #
@@ -931,11 +931,10 @@ buffer-limit 4096
 #  This feature allows routing of HTTP requests through a chain
 #  of multiple proxies. It can be used to better protect privacy
 #  and confidentiality when accessing specific domains by routing
-#  requests to those domains through an anonymous public proxy (see
-#  e.g. http://www.multiproxy.org/anon_list.htm) Or to use a caching
-#  proxy to speed up browsing. Or chaining to a parent proxy may be
-#  necessary because the machine that Privoxy runs on has no direct
-#  Internet access.
+#  requests to those domains through an anonymous public proxy.
+#  Or to use a caching proxy to speed up browsing. Or chaining to 
+#  a parent proxy may be necessary because the machine that Privoxy 
+#  runs on has no direct Internet access.
 #
 #  Also specified here are SOCKS proxies. Privoxy supports the SOCKS
 #  4 and SOCKS 4A protocols.
