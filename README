@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/README,v $
  *
  * Purpose     :  README file to give a short intro.
  *
@@ -26,8 +26,9 @@
  *                The GNU General Public License should be included with
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *                or write to the Free Software Foundation, Inc., 
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 ,
+ *                USA
  *
  *********************************************************************/
 
