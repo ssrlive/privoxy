@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.21 2006/09/05 01:21:06 hal9 Exp $
+#  $Id: default.action.master,v 1.22 2006/09/07 22:53:59 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -929,6 +929,10 @@ gfx.dvlabs.com/klipmart/
 img.mediaplex.com
 #MASTER# REMARKS: Actions file tracker 1152563 09/02/06
 ads.monster.com
+#MASTER# REMARKS: Support request 1312362 09/08/06
+adserver.itsfogo.com
+#MASTER# BLOCK-REFERRER: http://www.multiproxy.org/anon_proxy.htm 09/10/06
+view.atdmt.com
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1265,12 +1269,9 @@ www.ad.tomshardware.com/cgi-bin/logo2.m?
 .quietpc.com
 .worldpay.com   # for quietpc.com
 .jungle.com
-.scan.co.uk
 .dabs.com
 .overclockers.co.uk
-.deutsche-bank-24.de
 .db24.de
-.deutsche-bank.de
 .ebay.
 .mobile.de
 www.fondationlejeu.com
@@ -1389,6 +1390,7 @@ cvs.
 #MASTER# REMARKS: The same for Subversion
 #MASTER# PROBLEM-URL: http://svn.sourceforge.net/
 svn.
+websvn.
 /(.*/)?svn/
 
 #MASTER# PROBLEM-URL: http://liveupdate.symantec.com/ennlu.x86
@@ -1421,7 +1423,8 @@ bugzilla.
 maps.google.
 .google.com/calendar
 #MASTER# REMARKS: A lot of code and docs on these sites:
-code.google.
+code.
+developer.
 .mozdev.org
 .mozilla.org
 .perl.org
@@ -1441,12 +1444,12 @@ java.sun.com
 .devshed.com
 .htmlgoodies.com
 .javascript.com
-developer.yahoo.com
 javascript.internet.com
 .w3schools.com
 .devguru.com
 javascriptkit.com
 .xulplanet.com
+.perl.com/language/newdocs/pod/
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
@@ -1571,6 +1574,8 @@ www.thinkgeek.com/
 .microsoft.com
 #MASTER# PROBLEM-URL: http://javabog.dk/ijk/
 javabog.dk/ijk/
+#MASTER# REMARK: Per Debian bug report #319025
+.w3.org
 
 #----------------------------------------------------------------------------
 # These don't work without the referrer information:
@@ -1593,6 +1598,9 @@ www.amazon.de/exec/obidos/clipserve/
 www.mandrakelinux.com/en/ftp.php3
 #MASTER# REMARKS: Actions Tracker 1313157
 validator.w3.org/check\?uri=referer
+#MASTER# REMARKS: Fixes Debian Bug #250407
+.petitiononline.com/mod_perl/signed.cgi
+
 
 #----------------------------------------------------------------------------
 # These animated gifs are either useful or nice:
@@ -1714,6 +1722,9 @@ www.munichre.com
 #MASTER# PROBLEM-URL: http://www.nasa.gov
 #MASTER# REMARKS: No progress past main page without js-annoyances
 .nasa.gov
+#MASTER# REMARKS: Excclude per Debian bug report #377843
+.cnrs.fr 
+blogs.msdn.com
 
 {-filter{unsolicited-popups}}
 #MASTER# DONT-VERIFY
@@ -1733,6 +1744,9 @@ www.mcmaster.com/products.html
 cf.nbc4.com/
 #MASTER# PROBLEM-URL: http://www.hh.schule.de/ak/nt/
 www.hh.schule.de/ak/nt/
+#MASTER# REMARKS: Excclude per Debian bug report #377843
+.cnrs.fr 
+blogs.msdn.com
 
 {+fast-redirects{check-decoded-url} -block}
 #MASTER# PROBLEM-URL: http://isbn.nu/0596001088/price/2.html
