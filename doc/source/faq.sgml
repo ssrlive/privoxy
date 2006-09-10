@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.14 2006/09/05 13:25:12 david__schmidt Exp $
+ $Id: faq.sgml,v 2.15 2006/09/08 23:05:07 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -75,7 +75,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.14 2006/09/05 13:25:12 david__schmidt Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.15 2006/09/08 23:05:07 hal9 Exp $</pubdate>
 
 <!--
 
@@ -148,7 +148,8 @@ Hal.
 
 <sect1 id="general"><title>General Information</title>
 
-<sect2 renderas="sect3" id="newjb"><title>What is this new version of <application>Junkbuster</application>?</title>
+<sect2 renderas="sect3" id="newjb"><title>What is this new version of 
+<emphasis>Junkbuster</emphasis>?</title>
 
 <!-- Include history.sgml -->
  &history;
@@ -159,7 +160,7 @@ Hal.
 
 <sect2 renderas="sect3">
 <title id="whyprivoxy">Why <quote>Privoxy</quote>? Why change the name from
-<application>Junkbuster</application> at all?</title>
+Junkbuster at all?</title>
 <para>
  <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>
  continues to offer their original version of the <application>Internet
@@ -190,8 +191,8 @@ Hal.
 </sect2>
 
 
-<sect2 renderas="sect3" id="differs"><title>How does <application>Privoxy</application> differ
-from the old <application>Junkbuster?</application></title> 
+<sect2 renderas="sect3" id="differs"><title>How does Privoxy differ
+from the old Junkbuster?</title> 
 <para>
  <application>Privoxy</application> picks up where
  <application>Junkbuster</application> left off. All the old features remain.
@@ -219,7 +220,7 @@ from the old <application>Junkbuster?</application></title>
 </sect2>
 
 <sect2 renderas="sect3" id="proxymoron"><title>What is a <quote>proxy</quote>? How does
-<application>Privoxy</application> work? </title>
+Privoxy work? </title>
  <para>
   A web proxy is a service, based on a software such as <application>Privoxy</application>,
   that clients (i.e. browsers) can use instead of connecting directly to the web
@@ -245,7 +246,7 @@ from the old <application>Junkbuster?</application></title>
 
 
 <sect2 renderas="sect3" id="whatsanad">
-<title id="knows">How does <application>Privoxy</application> know what is
+<title id="knows">How does Privoxy know what is
 an ad, and what is not?</title>
 <para>
  <application>Privoxy</application>'s approach to blocking ads is twofold:
@@ -274,7 +275,7 @@ an ad, and what is not?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="mistakes">Can <application>Privoxy</application> make mistakes? 
+<title id="mistakes">Can Privoxy make mistakes? 
 This does not sound very scientific.</title>
 <para>
  Actually, it's a black art ;-) And yes, it is always possible to have a broad
@@ -295,7 +296,7 @@ This does not sound very scientific.</title>
 
 
 <sect2 renderas="sect3">
-<title id="configornot">Will I have to configure <application>Privoxy</application>
+<title id="configornot">Will I have to configure Privoxy
  before I can use it?</title>
 <para>
  No, not really. The default installation should give you a good starting
@@ -313,8 +314,8 @@ This does not sound very scientific.</title>
 </sect2>
 
 <sect2 renderas="sect3" id="browsers2"><title>My browser does the same things as
-<application>Privoxy</application>. Why should I use
-<application>Privoxy</application> at all?</title>
+Privoxy. Why should I use
+Privoxy at all?</title>
  <para>
   Modern browsers do indeed have <emphasis>some</emphasis> of the same
   functionality as <application>Privoxy</application>. Maybe this is
@@ -409,7 +410,7 @@ warranty? Registration?</title>
 <sect1  id="installation"><title>Installation</title>
 
 <sect2 renderas="sect3" id="whichbrowsers">
-<title>Which browsers are supported by <application>Privoxy</application>?</title>
+<title>Which browsers are supported by Privoxy?</title>
 <para>
  Any browser that can be configured to use a proxy, which 
  should be virtually all browsers, including
@@ -431,7 +432,7 @@ Include supported.sgml here:
 </sect2>
 
 <sect2 renderas="sect3" id="email-client">
-<title>Can I use <application>Privoxy</application> with my email client?</title>
+<title>Can I use Privoxy with my email client?</title>
 <para>
  As long as there is some way to set a HTTP proxy for the client, then yes,
  any application can be used, whether it is strictly speaking a
@@ -450,7 +451,7 @@ Include supported.sgml here:
 </sect2>
 
 <sect2 renderas="sect3" id="newinstall"><title>Can I install  
- <application>Privoxy</application> over <application>Junkbuster</application>?</title>
+ Privoxy over Junkbuster?</title>
  <para>
    We recommend you un-install <application>Junkbuster</application>
    first to minimize conflicts and confusion. You may want to 
@@ -469,7 +470,7 @@ Include supported.sgml here:
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="firststep">I just installed <application>Privoxy</application>. Is there anything 
+<title id="firststep">I just installed Privoxy. Is there anything 
 special I have to do now?</title>
 
 <para>
@@ -484,7 +485,7 @@ special I have to do now?</title>
 </sect2>
 
 
-<sect2 renderas="sect3" id="localhost"><title>What is the proxy address of <application>Privoxy</application>?</title>
+<sect2 renderas="sect3" id="localhost"><title>What is the proxy address of Privoxy?</title>
  <para>
   If you set up the <application>Privoxy</application> to run on
   the computer you browse from (rather than your ISP's server or some
@@ -519,7 +520,7 @@ special I have to do now?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="nothing">
-<title>I just installed <application>Privoxy</application>, and nothing is happening.
+<title>I just installed Privoxy, and nothing is happening.
 All the ads are there. What's wrong?</title>
 
 <para>
@@ -550,7 +551,7 @@ All the ads are there. What's wrong?</title>
 
 <sect2 renderas="sect3" id="notused">
 <title>I get a <quote>Privoxy is not being used</quote> dummy page although
-<application>Privoxy</application> is running and being used.</title>
+Privoxy is running and being used.</title>
 
 <para>
  First, make sure that Privoxy is <emphasis>really</emphasis> running and
@@ -747,7 +748,7 @@ the differences?</title>
  general, the more aggressive your default settings are, the more exceptions
  you will have to make later. See the <ulink
  url="../user-manual/index.html"><citetitle>User Manual</citetitle></ulink>
- for a more deatiled discussion.
+ for a more detailed discussion.
 </para>
 
 <para>
@@ -827,7 +828,7 @@ with a browser? Does that not raise security issues?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="lanconfig">How can I set up <application>Privoxy</application> to act as a proxy for my 
+<title id="lanconfig">How can I set up Privoxy to act as a proxy for my 
  LAN?</title>
 <para>
  By default, <application>Privoxy</application> only responds to requests 
@@ -917,7 +918,7 @@ with a browser? Does that not raise security issues?</title>
  is rather smart, it can and will make errors. The checkerboard image is visually
  decent, but it shows you that and where images were blocked, which can be very
  helpful in case some navigation aid or otherwise innocent image was
- erraneously blocked. Some people might also enjoy seeing how many banners
+ erroneously blocked. Some people might also enjoy seeing how many banners
  they <emphasis>don't</emphasis> have to see..
 </para>
 
@@ -951,7 +952,7 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 
 
 <sect2 renderas="sect3" id="srvany">
-<title>Can <application>Privoxy</application> run as a service 
+<title>Can Privoxy run as a service 
 on Win2K/NT/XP?</title>
 <para>
  Yes. Version 3.0.4 introduces full <application>Windows</application> service
@@ -969,8 +970,8 @@ on Win2K/NT/XP?</title>
 
 
 <sect2 renderas="sect3" id="otherproxy">
-<title>How can I make <application>Privoxy</application> work with other 
-proxies like <application>Squid</application> or <application>Tor</application>?</title>
+<title>How can I make Privoxy work with other 
+proxies like Squid or Tor?</title>
 <para>
  This can be done and is often useful to combine the benefits of
  <application>Privoxy</application> with those of a another proxy.
@@ -982,7 +983,7 @@ proxies like <application>Squid</application> or <application>Tor</application>?
 </sect2>
 
 <sect2 renderas="sect3" id="port-80">
-<title>Can I just set <application>Privoxy</application> to use port 80
+<title>Can I just set Privoxy to use port 80
 and thus avoid individual browser configuration?</title>
 
 <para>
@@ -993,7 +994,7 @@ and thus avoid individual browser configuration?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="transparent">
-<title>Can <application>Privoxy</application> run as a <quote>transparent
+<title>Can Privoxy run as a <quote>transparent
 </quote> proxy?</title>
 <para>
  No, <application>Privoxy</application> currently does not have this ability, 
@@ -1015,8 +1016,8 @@ and thus avoid individual browser configuration?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="outlook">
-<title>How can I configure <application>Privoxy</application> for use with <application>Outlook
- Express</application>?</title>
+<title>How can I configure Privoxy for use with Outlook
+ Express?</title>
 <para>
  <application>Outlook Express</application> uses <application>Internet Explorer</application> 
  components to both render HTML, and fetch any HTTP requests that may be embedded in an HTML email.
@@ -1088,7 +1089,7 @@ and thus avoid individual browser configuration?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="whitelists">
-<title>Can I set-up <application>Privoxy</application> as a whitelist of
+<title>Can I set-up Privoxy as a whitelist of
 <quote>good</quote> sites?</title>
 <para>
  Sure. There are a couple of things you can do for simple whitelisting.
@@ -1098,13 +1099,13 @@ and thus avoid individual browser configuration?</title>
  ############################################################
  # Blacklist
  ############################################################
- { +block }
+ { <ulink url="../user-manual/actions-file.html#BLOCK">+block</ulink> }
  / # Block *all* URLs
  
  ############################################################
  # Whitelist
  ############################################################
- { -block }
+ { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
   kids.example.com
   toys.example.com
   games.example.com</screen>
@@ -1137,11 +1138,11 @@ and thus avoid individual browser configuration?</title>
 <sect1 id="misc"><title>Miscellaneous</title>
 
 <sect2 renderas="sect3">
-<title id="slowsme">How much does <application>Privoxy</application> slow my browsing down? This 
+<title id="slowsme">How much does Privoxy slow my browsing down? This 
 has to add extra time to browsing.</title>
 <para>
  How much of an impact depends on many things, including the CPU of the host
- system, how agressive the configuration is, which specific actions are being triggered, 
+ system, how aggressive the configuration is, which specific actions are being triggered, 
  the size of the page, etc.
 </para>
 <para>
@@ -1199,7 +1200,7 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="slowcrawl">
-<title>I just installed <application>Privoxy</application>, and all my
+<title>I just installed Privoxy, and all my
 browsing has slowed to a crawl. What gives? </title>
 <para>
  This should not happen, and for the overwhelming number of users world-wide,
@@ -1270,7 +1271,7 @@ request?</title>
 <para>
 Rest assured that it has been read and considered. Why it is not answered,
 could be for various reasons, including no one has a good answer for it, no
-one has had time to yet investigate it thorougly, it has been reported
+one has had time to yet investigate it thoroughly, it has been reported
 numerous times already, or because not enough information was provided to help
 us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
@@ -1317,7 +1318,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="anonforsure">Can <application>Privoxy</application> guarantee I am anonymous?</title>
+<title id="anonforsure">Can Privoxy guarantee I am anonymous?</title>
 <para>
  No. Your chances of remaining anonymous are greatly improved, but unless you
  <ulink url="#TOR">chain <application>Privoxy</application> with <application>Tor</application></ulink>
@@ -1360,8 +1361,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 
 </sect2>
 
-<sect2 renderas="sect3" id="tor"><title>How do I use <application>Privoxy</application>
- together with <application>Tor</application>?</title>
+<sect2 renderas="sect3" id="tor"><title>How do I use Privoxy
+ together with Tor?</title>
 <para>
  Before you configure <application>Privoxy</application> to use <application>Tor</application>
  (<ulink url="http://tor.eff.org/">http://tor.eff.org/</ulink>),
@@ -1406,7 +1407,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  </screen>
 </para>
 <para>
- This is enough to reach the internet, but additionally you should
+ This is enough to reach the Internet, but additionally you should
  uncomment the following forward rules, to make sure your local network is still
  reachable through Privoxy:
 </para>
@@ -1440,7 +1441,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
 </para>
 <para>
- Afterwards, please take the time to at least skim through the rest
+ Afterward, please take the time to at least skim through the rest
  of <application>Tor's</application> documentation. Make sure you understand
  what <application>Tor</application> does, why it is no replacement for
  application level security, and why you shouldn't use it for unencrypted logins.
@@ -1493,7 +1494,7 @@ content is being altered?</title>
 
 
 <sect2 renderas="sect3">
-<title id="caching">Can <application>Privoxy</application> act as a <quote>caching</quote> proxy to 
+<title id="caching">Can Privoxy act as a <quote>caching</quote> proxy to 
 speed up web browsing?</title>
 <para>
  No, it does not have this ability at all. You want something like 
@@ -1507,7 +1508,7 @@ speed up web browsing?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="firewall">What about as a firewall? Can <application>Privoxy</application> protect me?</title>
+<title id="firewall">What about as a firewall? Can Privoxy protect me?</title>
 <para>
  Not in the way you mean, or in the way a true firewall can. 
  <application>Privoxy</application> can help protect your privacy, but not
@@ -1540,7 +1541,7 @@ ads used to be. Why?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="ssl">How can <application>Privoxy</application> filter Secure (HTTPS) URLs?</title>
+<title id="ssl">How can Privoxy filter Secure (HTTPS) URLs?</title>
 <para>
  Since secure HTTP connections are encrypted SSL sessions between your browser
  and the secure site, and are meant to be reliably <emphasis>secure</emphasis>,
@@ -1572,7 +1573,7 @@ ads used to be. Why?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="secure"><application>Privoxy</application> runs as a <quote>server</quote>. How 
+<title id="secure">Privoxy runs as a <quote>server</quote>. How 
 secure is it? Do I need to take any special precautions?</title>
 <para>
  There are no known exploits that might affect
@@ -1597,7 +1598,7 @@ secure is it? Do I need to take any special precautions?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="turnoff">
-<title>How can I temporarily disable <application>Privoxy</application>?</title>
+<title>How can I temporarily disable Privoxy?</title>
 <para>
  The easiest way is to access <application>Privoxy</application> with your 
  browser by using the remote toggle URL: <ulink
@@ -1609,7 +1610,7 @@ secure is it? Do I need to take any special precautions?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="reallyoff">
-<title>When <quote>disabled</quote> is <application>Privoxy</application> totally 
+<title>When <quote>disabled</quote> is Privoxy totally 
 out of the picture?</title>
 <para>
  No, this just means all filtering and actions are disabled.
@@ -1621,7 +1622,7 @@ out of the picture?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="crunch">
-<title>My logs show <application>Privoxy</application> <quote>crunches</quote> 
+<title>My logs show Privoxy <quote>crunches</quote> 
 ads, but also its own internal CGI pages. What is a <quote>crunch</quote>?</title>
 <para>
  A <quote>crunch</quote> simply means <application>Privoxy</application> intercepted 
@@ -1637,7 +1638,7 @@ ads, but also its own internal CGI pages. What is a <quote>crunch</quote>?</titl
 </sect2>
 
 <sect2 renderas="sect3" id="downloads">
-<title>Can <application>Privoxy</application> effect files that I download
+<title>Can Privoxy effect files that I download
 from a webserver? FTP server?</title>
 <para>
  From the webserver's perspective, there is no difference between
@@ -1699,7 +1700,7 @@ from a webserver? FTP server?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="downloads2">
-<title>I just downloaded a Perl script, and <application>Privoxy</application>
+<title>I just downloaded a Perl script, and Privoxy
 altered it! Yikes, what is wrong!</title>
 <para>
  Please read above.
@@ -1735,7 +1736,7 @@ altered it! Yikes, what is wrong!</title>
 </sect2>
 
 <sect2 renderas="sect3" id="seealso">
-<title>Where can I find more information about <application>Privoxy</application>
+<title>Where can I find more information about Privoxy
 and related issues?</title>
 <!-- Include seealso.sgml boilerplate: -->
  &seealso;
@@ -1818,7 +1819,7 @@ still getting through. How?</title>
 </sect2>
 
 <sect2 id="badsite" renderas="sect3">
-<title >One of my favorite sites does not work with <application>Privoxy</application>.
+<title >One of my favorite sites does not work with Privoxy.
 What can I do?</title>
 
 <para>
@@ -1869,7 +1870,7 @@ What can I do?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="dun" renderas="sect3">
-<title>After installing <application>Privoxy</application>, I have to log in
+<title>After installing Privoxy, I have to log in
 every time I start IE. What gives?</title>
 
 <para>
@@ -1919,13 +1920,13 @@ every time I start IE. What gives?</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="ftp" renderas="sect3">
-<title>I cannot connect to any FTP sites. <application>Privoxy</application>
- seems to be blocking me.</title>
+<title>I cannot connect to any FTP sites. Privoxy
+ is blocking me.</title>
  <para>
   <application>Privoxy</application> cannot act as a proxy for FTP traffic, 
   so do not configure your browser to use <application>Privoxy</application>
   as an FTP proxy. The same is true for <emphasis>any protocol other than HTTP
-  or HTTPS</emphasis>. 
+  or HTTPS (SSL)</emphasis>. 
  </para>
  <para>
   Most browsers understand FTP as well as HTTP. If you connect to a site, with
@@ -1953,7 +1954,7 @@ every time I start IE. What gives?</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="osxie" renderas="sect3">
 <title>In Mac OSX, I can't configure Microsoft Internet Explorer to use 
- <application>Privoxy</application> as the HTTP proxy.</title>
+ Privoxy as the HTTP proxy.</title>
  <para>
   Microsoft Internet Explorer (in versions like 5.1) respects system-wide
   network settings.  In order to change the HTTP proxy, open System
@@ -2002,7 +2003,7 @@ every time I start IE. What gives?</title>
 <sect2 renderas="sect3" id="blankpage">
 <title>I get a completely blank page at one site. <quote>View Source</quote>
  shows only: <markup><![CDATA[<html><body></body></html>]]></markup>. Without
- <application>Privoxy</application> the page loads fine.</title>
+ Privoxy the page loads fine.</title>
  <para>
   Chances are that the site suffers from a bug in
   <ulink url="http://www.php.net/"><application>PHP</application></ulink>,
@@ -2059,7 +2060,7 @@ Why?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="inuse">
-<title>When I try to launch <application>Privoxy</application>, I get an 
+<title>When I try to launch Privoxy, I get an 
 error message <quote>port 8118 is already in use</quote> (or similar wording).
 Why?</title>
 <para>
@@ -2089,7 +2090,7 @@ Why?</title>
 
 <sect2 renderas="sect3" id="demoronizer2">
 <title>
- Why are binary files (such as images) corrupted when <application>Privoxy</application>
+ Why are binary files (such as images) corrupted when Privoxy
  is used?
 </title>
 <para>
@@ -2154,7 +2155,7 @@ Why?</title>
 <sect2 renderas="sect3" id="dnserrors">
 <title>
  I am getting too many DNS errors like <quote>404 No Such Domain</quote>. Why
- can't <application>Privoxy</application> do this better?
+ can't Privoxy do this better?
 </title>
 <para>
  There are potentially several factors here. First of all, the DNS resolution
@@ -2163,7 +2164,7 @@ Why?</title>
  merely initiates the process and hands it off, and then later reports
  whatever the outcome was. And tries to give a coherent message if there seems
  to be a problem. In some cases, this might otherwise be mitigated by the
- browser itself which might try some work-arounds and alernate approaches (e.g
+ browser itself which might try some work-arounds and alternate approaches (e.g
  adding <quote>www.</quote> to the URL). In other cases, if
  <application>Privoxy</application> is being chained with another proxy, this
  could complicate the issue, and cause undue
@@ -2180,7 +2181,7 @@ Why?</title>
 
 <sect2 renderas="sect3" id="allcpu">
 <title>
- At one site <application>Privoxy</application> just hangs, and starts taking 
+ At one site Privoxy just hangs, and starts taking 
  all CPU. Why is this?
 </title>
 <para>
@@ -2272,10 +2273,14 @@ Why?</title>
  The GNU General Public License should be included with
  this file.  If not, you can view it at
  http://www.gnu.org/copyleft/gpl.html
- or write to the Free Software Foundation, Inc., 59
- Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ or write to the Free Software Foundation, Inc., 
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.15  2006/09/08 23:05:07  hal9
+Fix broken links. Add faq on hosts files. Move most of new windows service
+feature to user manual and reference in faq. Various other small changes.
+
 Revision 2.14  2006/09/05 13:25:12  david__schmidt
 Add Windows service invocation stuff (duplicated) in FAQ and in user manual under Windows startup.  One probably ought to reference the other.
 

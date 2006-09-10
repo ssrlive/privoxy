@@ -1,11 +1,11 @@
               Authors of Privoxy v2.9.x and 3.x
 ===========================================================================
 
-Current Developement Team:
+Current Development Team:
 
  David Schmidt
  Fabian Keil
- 
+
 Current Contributors:
 
  Hal Burgiss
@@ -13,23 +13,25 @@ Current Contributors:
  Moritz Barsnick
  Mattes Dolak 
  Roland Rosenfeld
+ 
 
 Former Project Developers and Contributors:
 
+ 
  Andreas Oesterhelt
- Rodrigo Barbosa (RPM specfiles)
+ Rodrigo Barbosa
  Brian Dessent
  Jon Foster
- Karsten Hopp (Red Hat)
+ Karsten Hopp
  Alexander Lazic
  Daniel Leite
  Gábor Lipták
- Adam Lock (Win32)
+ Adam Lock
  Guy Laroche
  Haroon Rafique
- Georg Sauthoff (Gentoo)
+ Georg Sauthoff
  Thomas Steudten
- Joerg Strohmayer (Amiga)
+ Joerg Strohmayer
  Rodney Stromlund
  Sviatoslav Sviridov
  Sarantis Paskalis
@@ -49,6 +51,7 @@ suggestions. These include (in alphabetical order):
  Andrew J. Caines
  Clifford Caoile
  Michael T. Davis
+ Brian Dessent
  Peter E
  Aaron Hamid
  Magnus Holmgren

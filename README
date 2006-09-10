@@ -53,7 +53,7 @@ Privoxy is based on Internet Junkbuster (tm).
 
 BIG NEWS! 2006, Privoxy 3.0.4 is released. This is a significant upgrade with
 many new and enhanced features, and many bugs fixed. There are fifteen new
-actions available, and several actions have enhanced capabilites. Multiple
+actions available, and several actions have enhanced capabilities. Multiple
 filter files are now supported as well. See the "What's New" section and the
 "Upgrader's Notes" in the User Manual for details and specifics.
 
@@ -142,7 +142,7 @@ The most up to date source of information on the current development version,
 may still be either comments in the source code, or the included configuration
 files. The source and configuration files are all well commented. The main
 configuration files are: 'config', 'default.action', and 'default.filter' in
-the toplevel source directory.
+the top-level source directory.
 
 Included documentation may vary according to platform and packager. All
 documentation is posted on http://www.privoxy.org, in case you don't have it,
@@ -217,7 +217,7 @@ Please be sure to provide the following information:
   * The exact Privoxy version of the proxy software (if you got the source from
     CVS, please also give the date).
    
-  * The operating system and verions you run Privoxy on, (e.g. Windows XP).
+  * The operating system and versions you run Privoxy on, (e.g. Windows XP).
    
   * The name, platform, and version of the browser you were using (e.g.
     Internet Explorer v5.5 for Mac).

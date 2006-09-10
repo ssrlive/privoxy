@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.5 2006/07/18 14:48:51 david__schmidt Exp $
+ $Id: readme.sgml,v 2.6 2006/09/03 14:49:12 hal9 Exp $
 
  Copyright (C) 2001 - 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -102,8 +102,9 @@
  *                The GNU General Public License should be included with
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *                or write to the Free Software Foundation, Inc., 
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, 
+ *                USA
  *
  *********************************************************************/
 </literallayout>
@@ -130,7 +131,7 @@
  BIG NEWS! 2006, Privoxy 3.0.4 is released. This is a significant upgrade 
  with many new and enhanced features, and many bugs fixed. There 
  are fifteen new actions available, and several actions have enhanced 
- capabilites. Multiple filter files are now supported as well. See the "What's
+ capabilities. Multiple filter files are now supported as well. See the "What's
  New" section and the "Upgrader's Notes" in <citetitle>the User
  Manual</citetitle> for details and specifics. 
 </para>
@@ -245,7 +246,7 @@
  may still be either comments in the source code, or the included
  configuration files. ]]>The source and configuration files are all well
  commented. The main configuration files are: 'config', 'default.action', and
- 'default.filter'<![%p-not-stable;[ in the toplevel source directory]]>. 
+ 'default.filter'<![%p-not-stable;[ in the top-level source directory]]>. 
 </para>
 
 <para>
@@ -269,7 +270,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.5 2006/07/18 14:48:51 david__schmidt Exp $ -->
+<!--  $Id: readme.sgml,v 2.6 2006/09/03 14:49:12 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>
