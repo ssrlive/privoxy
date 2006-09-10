@@ -19,3 +19,4 @@
 19_manpage_fixup.dpatch
 20_makefile_fixup.dpatch
 21_version_3.0.4.dpatch
+22_user_action.dpatch

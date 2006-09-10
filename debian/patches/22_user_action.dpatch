@@ -1,0 +1,28 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 22_user_action.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix popup filter name in user.action (see #385886).
+
+@DPATCH@
+diff -urNad privoxy~/user.action privoxy/user.action
+--- privoxy~/user.action
++++ privoxy/user.action
+@@ -39,7 +39,7 @@
+ +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
+ -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+  allow-all-cookies  = -crunch-all-cookies -session-cookies-only -filter{content-cookies}
+- allow-popups       = -filter{popups} -kill-popups
++ allow-popups       = -filter{all-popups} -kill-popups
+ +block-as-image     = +block +handle-as-image
+ -block-as-image     = -block
+ 
+@@ -51,7 +51,7 @@
+ 
+ # Your favourite blend of filters:
+ #
+-myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{popups}\
++myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{all-popups}\
+               +filter{webbugs} +filter{banners-by-size} +filter{fun}
+ 
+ # Allow ads for selected useful free sites:
