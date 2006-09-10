@@ -24,6 +24,7 @@
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 <!entity  my-copy "&copy;">         <!-- kludge for docbook2man           -->
 <!entity % draft "IGNORE">          <!-- WIP stuff    -->
+<!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
@@ -32,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.18 2006/09/08 02:38:57 hal9 Exp $
+ $Id: user-manual.sgml,v 2.19 2006/09/08 12:19:02 fabiankeil Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -58,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.18 2006/09/08 02:38:57 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.19 2006/09/08 12:19:02 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -88,7 +89,7 @@ Hal.
  <para>
   The <citetitle>User Manual</citetitle> gives users information on how to
   install, configure and use <ulink
-  url="http://www.privoxy.org/"><application>Privoxy</application></ulink>.
+  url="http://www.privoxy.org/">Privoxy</ulink>.
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
@@ -188,8 +189,7 @@ How to install the binary packages depends on your operating system:
  Note that on Red Hat, <application>Privoxy</application> will
  <emphasis>not</emphasis> be automatically started on system boot. You will
  need to enable that using <command>chkconfig</command>,
- <command>ntsysv</command>, or similar methods. Note that SuSE will 
-automatically start Privoxy in the boot process.
+ <command>ntsysv</command>, or similar methods. 
 </para>
 
 <para>
@@ -429,7 +429,7 @@ automatically start Privoxy in the boot process.
  <itemizedlist>
   <listitem>
    <para>
-    Mulitiple <link linkend="filter-file">filter files</link> can now be specifed in <filename>config</filename>. This allows for 
+    Multiple <link linkend="filter-file">filter files</link> can now be specified in <filename>config</filename>. This allows for 
     locally defined filters that can be maintained separately from the filters as
     supplied by the developers.
    </para>
@@ -568,7 +568,7 @@ automatically start Privoxy in the boot process.
   <listitem>
    <para>
     In addition, there are various bug fixes and significant enhancements, including 
-    error pages should no longer be cached if the problem is fixed, better DNS
+    error pages should no longer be cached if the problem is fixed, much better DNS
     error handling, and various logging improvements.
    </para>
   </listitem>
@@ -643,7 +643,7 @@ automatically start Privoxy in the boot process.
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="quickstart"><title>Quickstart to Using <application>Privoxy</application></title>
+<sect1 id="quickstart"><title>Quickstart to Using Privoxy</title>
 <para>
  <itemizedlist>
 
@@ -725,7 +725,7 @@ automatically start Privoxy in the boot process.
 
  <listitem>
   <para>
-   For easy access to Privoxy's most important controls, drag the provided
+   For easy access to &my-app;'s most important controls, drag the provided
    <link linkend="bookmarklets">Bookmarklets</link> into your browser's
    personal toolbar.
   </para>
@@ -931,7 +931,7 @@ automatically start Privoxy in the boot process.
   <figure pgwide="0" float="0"><title>Actions Files in Use</title>
    <mediaobject>
      <imageobject>
-      <imagedata  fileref="../images/files-in-use.jpg" format="jpg">
+      <imagedata  fileref="files-in-use.jpg" format="jpg">
        </imageobject> 
        <textobject>
         <phrase>[ Screenshot of Actions Files in Use ]</phrase>
@@ -998,13 +998,14 @@ automatically start Privoxy in the boot process.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="startup">
-<title>Starting <application>Privoxy</application></title>
+<title>Starting Privoxy</title>
 <para>
  Before launching <application>Privoxy</application> for the first time, you
  will want to configure your browser(s) to use
- <application>Privoxy</application> as a HTTP and HTTPS proxy. The default is
+ <application>Privoxy</application> as a HTTP and HTTPS (SSL) proxy. The default is
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
- used port 8000). This is the one configuration step that must be done!
+ used port 8000). This is the one configuration step <emphasis>that must be done
+</emphasis>!
 </para>
 <para>
  Please note that <application>Privoxy</application> can only proxy HTTP and 
@@ -1013,10 +1014,11 @@ automatically start Privoxy in the boot process.
 
  <!-- image of Mozilla Proxy configuration -->
  <para>
-  <figure pgwide="0" float="0"><title>Proxy Configuration (Mozilla)</title>
+  <figure pgwide="0" float="0"><title>Proxy Configuration Showing
+  Mozilla/Netscape HTTP and HTTPS (SSL) Settings</title>
    <mediaobject>
      <imageobject>
-      <imagedata  fileref="../images/proxy_setup.jpg" format="jpg">
+      <imagedata  fileref="proxy_setup.jpg" format="jpg">
        </imageobject> 
        <textobject>
         <phrase>[ Screenshot of Mozilla Proxy Configuration ]</phrase>
@@ -1031,17 +1033,8 @@ automatically start Privoxy in the boot process.
 </para>
  
 <literallayout>
-<!-- Mix ascii and gui art, something for everybody -->
-<!-- spacing on this is tricky -->
- <guibutton>Tools</guibutton>
-   |_   
-         <guibutton>Options</guibutton>
-                |_       
-                        <guibutton>General</guibutton>
-                              |_     
-                                    <guibutton>Connection Settings</guibutton>
-                                         |_       
-                                                <guibutton>Manual Proxy Configuration</guibutton>
+ <guibutton>Tools</guibutton> -> <guibutton>Options</guibutton> -> <guibutton>General</guibutton> -> <guibutton>Connection Settings</guibutton> -> <guibutton>Manual Proxy Configuration</guibutton>
+
 </literallayout>
 
 
@@ -1054,42 +1047,46 @@ automatically start Privoxy in the boot process.
 <literallayout>
 <!-- Mix ascii and gui art, something for everybody -->
 <!-- spacing on this is tricky -->
- <guibutton>Edit</guibutton>
-   |_   
-         <guibutton>Preferences</guibutton>
-                |_       
-                        <guibutton>Advanced</guibutton>
-                              |_     
-                                    <guibutton>Proxies</guibutton>
-                                         |_       
-                                                <guibutton>HTTP Proxy</guibutton>
+ <guibutton>Edit</guibutton> -> <guibutton>Preferences</guibutton> -> <guibutton>Advanced</guibutton> -> <guibutton>Proxies</guibutton> -> <guibutton>HTTP Proxy</guibutton>
+
 </literallayout>
 
 <para>
- For <application>Internet Explorer</application>: 
+ For <application>Internet Explorer v.5-6</application>: 
 </para>
 
 <literallayout>
-<!-- Mix ascii and gui art, something for everybody -->
-<!-- spacing on this is tricky -->
- <guibutton>Tools</guibutton>
-     |_   
-         <guibutton>Internet Properties</guibutton>
-                            |_       
-                                      <guibutton>Connections</guibutton>
-                                               |_     
-                                                            <guibutton>LAN Settings</guibutton>
+ <guibutton>Tools</guibutton> -> <guibutton>Internet Options</guibutton> -> <guibutton>Connections</guibutton> -> <guibutton>LAN Settings</guibutton>
 </literallayout>
 
 <para>
  Then, check <quote>Use Proxy</quote> and fill in the appropriate info
  (Address: 127.0.0.1, Port: 8118). Include HTTPS (SSL), if you want HTTPS
- proxy support too. 
+ proxy support too (sometimes labeled <quote>Secure</quote>. Make sure any
+ checkboxes like <quote>Use the same proxy server for all protocols</quote> is
+ <emphasis>UNCHECKED</emphasis>. You want only HTTP and HTTPS (SSL)!
 </para>
+
+ <!-- image of IE Proxy configuration -->
+ <para>
+  <figure pgwide="0" float="0"><title>Proxy Configuration Showing
+  Internet Explorer HTTP and HTTPS (Secure) Settings</title>
+   <mediaobject>
+     <imageobject>
+      <imagedata  fileref="proxy2.jpg" format="jpg">
+       </imageobject> 
+       <textobject>
+        <phrase>[ Screenshot of IE Proxy Configuration ]</phrase>
+      </textobject>
+   </mediaobject>
+  </figure>
+ </para>
+
 
 <para>
  After doing this, flush your browser's disk and memory caches to force a
- re-reading of all pages and to get rid of any ads that may be cached. You 
+ re-reading of all pages and to get rid of any ads that may be cached. Remove 
+ any cookies, if you want <application>Privoxy</application> to manage that. You 
  are now ready to start enjoying the benefits of using
  <application>Privoxy</application>!
 </para>
@@ -1103,15 +1100,23 @@ automatically start Privoxy in the boot process.
 </para>
 
 <sect2 id="start-redhat">
-<title>Red Hat and Conectiva</title>
+<title>Red Hat, Fedora and Conectiva</title>
 <para>
- We use a script. Note that Red Hat does not start Privoxy upon booting per
- default. It will use the file <filename>/etc/privoxy/config</filename> as
- its main configuration file.
+ A default Red Hat installation may not start &my-app; upon boot. It will use
+ the file <filename>/etc/privoxy/config</filename> as its main configuration
+ file.
 </para>
 <para>
  <screen>
  # /etc/rc.d/init.d/privoxy start
+</screen>
+</para>
+<para>
+ Or ...
+</para>
+<para>
+ <screen>
+ # service privoxy start
 </screen>
 </para>
 </sect2>
@@ -1119,7 +1124,7 @@ automatically start Privoxy in the boot process.
 <sect2 id="start-debian">
 <title>Debian</title>
 <para>
- We use a script. Note that Debian starts Privoxy upon booting per
+ We use a script. Note that Debian typically starts &my-app; upon booting per
  default.  It will use the file
  <filename>/etc/privoxy/config</filename> as its main configuration
  file.
@@ -1148,16 +1153,16 @@ your PC.
 <sect2 id="start-windows">
 <title>Windows</title>
 <para>
-Click on the Privoxy Icon to start <application>Privoxy</application>. If no configuration file is
+Click on the &my-app; Icon to start <application>Privoxy</application>. If no configuration file is
  specified on the command line, <application>Privoxy</application> will look
  for a file named <filename>config.txt</filename>. Note that Windows will
- automatically start Privoxy when the system starts if you chose that option
+ automatically start &my-app; when the system starts if you chose that option
  when installing.
 </para>
 <para>
  <application>Privoxy</application> can run with full Windows service functionality.
- On Windows only, the Privoxy program has two new command line arguments
- to install and uninstall Privoxy as a service. See the 
+ On Windows only, the &my-app; program has two new command line arguments
+ to install and uninstall &my-app; as a service. See the 
  <link linkend="installation-pack-win">Windows Installation
  instructions</link> for details.
 </para>
@@ -1189,7 +1194,7 @@ Example Unix startup command:
 <title>Mac OSX</title>
 <para>
  During installation, <application>Privoxy</application> is configured to
- start automatically when the system restarts.  To start Privoxy by hand,
+ start automatically when the system restarts.  To start &my-app; manually,
  double-click on the <literal>StartPrivoxy.command</literal> icon in the
  <literal>/Library/Privoxy</literal> folder.  Or, type this command
  in the Terminal:
@@ -1407,9 +1412,9 @@ must find a better place for this paragraph
   </para>
   <para>
    Before changing to the user ID given in the <emphasis>--user</emphasis> option, 
-   chroot to that user's home directory, i.e. make the kernel pretend to the Privoxy
+   chroot to that user's home directory, i.e. make the kernel pretend to the &my-app;
    process that the directory tree starts there. If set up carefully, this can limit 
-   the impact of possible vulnerabilities in Privoxy to the files contained in that hierarchy.
+   the impact of possible vulnerabilities in &my-app; to the files contained in that hierarchy.
    Unix only.
   </para>
  </listitem>
@@ -1446,7 +1451,7 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="configuration"><title><application>Privoxy</application> Configuration</title>
+<sect1 id="configuration"><title>Privoxy Configuration</title>
  <para>
   All <application>Privoxy</application> configuration is stored  
   in text files. These files can be edited with a text editor.
@@ -1458,7 +1463,7 @@ for details.
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect2>
-<title>Controlling <application>Privoxy</application> with Your Web Browser</title>
+<title>Controlling Privoxy with Your Web Browser</title>
 <para>
  <application>Privoxy</application>'s user interface can be reached through the special 
  URL <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
@@ -1694,6 +1699,10 @@ for details.
      a set of broad rules that should work reasonably well for users everywhere.
      This is the file that the developers are keeping updated, and <link
      linkend="installation-keepupdated">making available to users</link>.
+     It is also the file that keeps track of the user's preferences 
+     as set in <filename>standard.action</filename>, e.g. either 
+     <literal>cautious</literal>, <literal>medium</literal>, or 
+     <literal>adventuresome</literal>.
     </para>
    </listitem> 
    <listitem>
@@ -1706,12 +1715,36 @@ for details.
   </listitem> 
    <listitem>
     <para>
-     <filename>standard.action</filename> - is used by the web based editor, 
+     <filename>standard.action</filename> - is used by the web based editor
+     at <ulink url="http://config.privoxy.org/edit-actions-list?f=default">
+     http://config.privoxy.org/edit-actions-list?f=default</ulink>, 
      to set various pre-defined sets of rules for the default actions section
-     in <filename>default.action</filename>. These have increasing levels of
-     aggressiveness <emphasis>and have no influence on your browsing unless
-     you select them explicitly in the editor</emphasis>. It is not recommend
-     to edit this file.
+     in <filename>default.action</filename>. 
+     </para>
+     <para>
+     <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Adventuresome</guibutton>
+     </para>
+     <para>
+     These have increasing levels of aggressiveness <emphasis>and have no
+     influence on your browsing unless you select them explicitly in the
+     editor</emphasis>. 
+     </para>
+     <para>
+      The <guibutton>Edit</guibutton> button allows you to turn each 
+      action on/off individually for fine-tuning. The <guibutton>Cautious</guibutton>
+      button changes the actions list to low/safe settings which will activate 
+      a minimal set of &my-app;'s features, and subsequently there will be
+      less of a chance for accidental problems. The <guibutton>Medium</guibutton>
+      button sets the list to a medium level of ad blocking and a low level set of
+      privacy features. The <guibutton>Adventuresome</guibutton> button 
+      sets the list to a high level of ad blocking and medium level of
+      privacy. See the chart below. The latter three buttons over-ride 
+      any changes via with the <guibutton>Edit</guibutton> button. More 
+      fine-tuning can be done in the lower sections of this internal page.
+     </para>
+     <para>
+     It is not recommend to edit the <filename>standard.action</filename> file
+     itself.
     </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
@@ -1743,31 +1776,37 @@ for details.
     <tbody>
 
     <row>
-      <entry>Ad-blocking by URL</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
+      <entry>Ad-blocking Aggressiveness</entry>
+      <entry>low</entry>
+      <entry>medium</entry>
+      <entry>high</entry>
     </row>
 
     <row>
       <entry>Ad-filtering by size</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
-    </row>
-
-    <row>
-      <entry>GIF de-animation</entry>
       <entry>no</entry>
       <entry>yes</entry>
       <entry>yes</entry>
     </row>
 
     <row>
-      <entry>Referer forging</entry>
+      <entry>Ad-filtering by link</entry>
+      <entry>no</entry>
       <entry>no</entry>
       <entry>yes</entry>
-      <entry>yes</entry>
+    </row>
+    <row>
+      <entry>Pop-up killing</entry>
+      <entry>no</entry>
+      <entry>unsolicited</entry>
+      <entry>all</entry>
+    </row>
+    
+    <row>
+      <entry>Privacy Features</entry>
+      <entry>none</entry>
+      <entry>low</entry>
+      <entry>medium</entry>
     </row>
 
     <row>
@@ -1778,11 +1817,20 @@ for details.
     </row>
 
     <row>
-      <entry>Pop-up killing</entry>
-      <entry>unsolicited</entry>
-      <entry>unsolicited</entry>
-      <entry>all</entry>
+      <entry>Referer forging</entry>
+      <entry>no</entry>
+      <entry>yes</entry>
+      <entry>yes</entry>
     </row>
+
+
+    <row>
+      <entry>GIF de-animation</entry>
+      <entry>no</entry>
+      <entry>yes</entry>
+      <entry>yes</entry>
+    </row>
+
 
     <row>
       <entry>Fast redirects</entry>
@@ -1793,29 +1841,22 @@ for details.
 
     <row>
       <entry>HTML taming</entry>
-      <entry>yes</entry>
+      <entry>no</entry>
       <entry>yes</entry>
       <entry>yes</entry>
     </row>
 
     <row>
       <entry>JavaScript taming</entry>
-      <entry>yes</entry>
+      <entry>no</entry>
       <entry>yes</entry>
       <entry>yes</entry>
     </row>
 
     <row>
       <entry>Web-bug killing</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
-      <entry>yes</entry>
-    </row>
-
-    <row>
-      <entry>Fun text replacements</entry>
       <entry>no</entry>
-      <entry>no</entry>
+      <entry>yes</entry>
       <entry>yes</entry>
     </row>
 
@@ -1825,21 +1866,6 @@ for details.
       <entry>no</entry>
       <entry>yes</entry>
     </row>
-
-    <row>
-      <entry>Ad-filtering by link</entry>
-      <entry>no</entry>
-      <entry>no</entry>
-      <entry>yes</entry>
-    </row>
-
-    <row>
-      <entry>Demoronizer</entry>
-      <entry>no</entry>
-      <entry>no</entry>
-      <entry>yes</entry>
-    </row>
-
 
     </tbody>
     </tgroup>
@@ -1895,7 +1921,7 @@ for details.
  actions file) are, the more exceptions for <quote>trusted</quote> sites you
  will have to make later. If, for example, you want to crunch all cookies per
  default, you'll have to make exceptions from that rule for sites that you
- regularly use and that require cookies for actually useful puposes, like maybe
+ regularly use and that require cookies for actually useful purposes, like maybe
  your bank, favorite shop, or newspaper. 
 </para>
 
@@ -2364,7 +2390,7 @@ for details.
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Block ads or other obnoxious content</para>
+   <para>Block ads or other unwanted content</para>
   </listitem>
  </varlistentry>
 
@@ -2511,7 +2537,7 @@ new action
    </para>
    <para>
     If you see a web site that proudly uses XHTML buttons, but sets
-    <quote>Content-Type: text/html</quote>, you can use Privoxy
+    <quote>Content-Type: text/html</quote>, you can use &my-app;
     to overwrite it with <quote>application/xml</quote> and validate
     the web master's claim inside your XHTML-supporting browser.
     If the syntax is incorrect, the browser will complain loudly. 
@@ -3382,7 +3408,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-frameset-borders">
-    <screen>+filter{frameset-borders}    # Give frames a border and make them resizable</screen>
+    <screen>+filter{frameset-borders}    # Give frames a border and make them resizeable</screen>
    </para>
    <para>
     <anchor id="filter-demoronizer">
@@ -3394,7 +3420,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-quicktime-kioskmode">
-    <screen>+filter{quicktime-kioskmode} # Make Quicktime movies saveable</screen>
+    <screen>+filter{quicktime-kioskmode} # Make Quicktime movies savable</screen>
    </para>
    <para>
     <anchor id="filter-fun">
@@ -3762,7 +3788,7 @@ example.org/.*\.js$
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Mark URLs as belonging to images (so they'll be replaced by imagee <emphasis>if they get blocked</emphasis>)</para>
+   <para>Mark URLs as belonging to images (so they'll be replaced by images <emphasis>if they do get blocked</emphasis>, rather than HTML pages)</para>
   </listitem>
  </varlistentry>
 
@@ -4066,7 +4092,7 @@ new action
    </para>
    <para>
     Instead of removing the header, <literal>hide-if-modified-since</literal> can
-    also add or substract a random amount of time to/from the header's value.
+    also add or subtract a random amount of time to/from the header's value.
     You specify a range of minutes where the random factor should be chosen from and
     <application>Privoxy</application> does the rest. A negative value means
     subtracting, a positive value adding.
@@ -4651,7 +4677,7 @@ new action
   </para>
   <para>
    <application>Privoxy</application> relays HTTPS traffic without seeing
-   the decoded content. Websites can leverage this limitation to circumvent Privoxy's
+   the decoded content. Websites can leverage this limitation to circumvent &my-app;'s
    filters. By specifying an invalid port range you can disable HTTPS entirely.
    If you plan to disable SSL by default, consider enabling 
    <literal><link linkend="treat-forbidden-connects-like-blocks ">treat-forbidden-connects-like-blocks</link></literal>
@@ -4671,7 +4697,7 @@ new action
 +limit-connect{80,443}                # Ports 80 and 443 are OK.
 +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
 +limit-connect{-}                     # All ports are OK
-+limit-connect{,}                     # No HTTPS traffic is allowed</screen>
++limit-connect{,}                     # No HTTPS/SSL traffic is allowed</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5351,7 +5377,7 @@ new action
     If you previously configured <application>Privoxy</application> to do the
     request through a SSL tunnel, everything will work. Most likely you haven't
     and the server will respond with an error message because it is expecting
-    HTTPS.
+    HTTPS (SSL).
    </para>
   </listitem>
  </varlistentry>
@@ -6182,7 +6208,7 @@ ar.atwola.com/</screen>
  On-the-fly text substitutions that can be invoked through the
  <literal><link linkend="filter">filter</link></literal> action need
  to be defined in a <quote>filter file</quote>. Once defined, they 
- can then be invoked as an <quote>action</quote>. Mulitple filter files can be
+ can then be invoked as an <quote>action</quote>. Multiple filter files can be
  defined through the <literal> <link
  linkend="filterfile">filterfile</link></literal> config directive. The filters
  as supplied by the developers will be found in
@@ -6411,9 +6437,9 @@ s/window\.status\s*=\s*(['"]).*?\1/dUmMy=1/ig</screen>
  makes this matching of arbitrary text ungreedy. (Note that the <literal>U</literal>
  option is not set). The <literal>['"]</literal> construct means: <quote>a single
  <emphasis>or</emphasis> a double quote</quote>. Finally, <literal>\1</literal> is
- a backreference to the first parenthesis just like <literal>$1</literal> above,
+ a back-reference to the first parenthesis just like <literal>$1</literal> above,
  with the difference that in the <emphasis>pattern</emphasis>, a backslash indicates
- a backreference, whereas in the <emphasis>substitute</emphasis>, it's the dollar.
+ a back-reference, whereas in the <emphasis>substitute</emphasis>, it's the dollar.
 </para>
 
 <para>
@@ -6538,7 +6564,7 @@ pre-defined filters for your convenience:
     <listitem>
      <para>
       removes code that causes new windows to be opened with undesired properties, such as being
-      full-screen, non-resizable, without location, status or menu bar etc.
+      full-screen, non-resizeable, without location, status or menu bar etc.
      </para>
     </listitem>
    </itemizedlist>
@@ -6571,7 +6597,7 @@ pre-defined filters for your convenience:
    <para>
     The <literal>BLINK</literal> and <literal>MARQUEE</literal> tags 
     are neutralized (yeah baby!), and browser windows will be created as
-    resizable (as of course they should be!), and will have location,
+    resizeable (as of course they should be!), and will have location,
     scroll and menu bars -- even if specified otherwise.
    </para>
   </listitem>
@@ -6581,7 +6607,7 @@ pre-defined filters for your convenience:
   <term><emphasis>content-cookies</emphasis></term>
   <listitem>
    <para>
-    Most cookies are set in the HTTP dialogue, where they can be intercepted
+    Most cookies are set in the HTTP dialog, where they can be intercepted
     by the
     <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal>
     and <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>
@@ -6619,7 +6645,7 @@ pre-defined filters for your convenience:
    <para>
     Technical note: The filter works by redefining the window.open JavaScript
     function to a dummy function during the loading and rendering phase of each
-    HTML page access, and restoring the function afterwards.
+    HTML page access, and restoring the function afterward.
    </para>
   </listitem>
  </varlistentry>
@@ -6746,7 +6772,7 @@ pre-defined filters for your convenience:
     This filter translates the MS-only characters into Latin-1 equivalents. 
     It is not necessary when using MS products, and will cause corruption of  
     all documents that use 8-bit character sets other than Latin-1. It's mostly
-    worthwhile for Europeans on non-MS platforms, if wierd garbage characters
+    worthwhile for Europeans on non-MS platforms, if weird garbage characters
     sometimes appear on some pages, or user agents that don't correct for this on 
     the fly.
 <!--
@@ -6952,7 +6978,7 @@ Requests</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect1 id="copyright"><title><application>Privoxy</application> Copyright, License and History</title>
+<sect1 id="copyright"><title>Privoxy Copyright, License and History</title>
 
 <!-- Include copyright.sgml: -->
  &copyright;
@@ -7231,7 +7257,7 @@ Requests</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2>
-<title><application>Privoxy</application>'s Internal Pages</title>
+<title>Privoxy's Internal Pages</title>
 
 <para>
  Since <application>Privoxy</application> proxies each requested 
@@ -8006,10 +8032,15 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  The GNU General Public License should be included with
  this file.  If not, you can view it at
  http://www.gnu.org/copyleft/gpl.html
- or write to the Free Software Foundation, Inc., 59
- Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ or write to the Free Software Foundation, Inc., 
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, 
+ USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.19  2006/09/08 12:19:02  fabiankeil
+ Adjust hide-if-modified-since example values
+ to reflect the recent changes.
+
  Revision 2.18  2006/09/08 02:38:57  hal9
  Various changes:
   -Fix a number of broken links.

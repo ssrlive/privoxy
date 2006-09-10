@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.4 2006/08/27 15:04:14 hal9 Exp $
+ $Id: contacting.sgml,v 2.6 2006/08/27 22:01:55 hal9 Exp $
 
  Copyright (C) 2001 - 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -76,7 +76,7 @@
 <para>
  Please send feedback on ads that slipped through, innocent images that were
  blocked, sites that don't work properly, and other configuration related problem of 
- <filename>default.action</filename> file, to the 
+ <filename>default.action</filename> file, to 
  <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">
  http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>,
  the Actions File Tracker.
@@ -139,7 +139,7 @@ Please be sure to provide the following information:
 
   <listitem>
    <para>
-    The operating system and verions you run
+    The operating system and versions you run
     <application>Privoxy</application> on, (e.g. <application>Windows
     XP</application>).
    </para>
