@@ -3,20 +3,21 @@ privoxy (3.0.4.cvs20060910-1) UNRELEASED; urgency=low
   * New upstream CVS snapshot as of 2006-09-10.
   * hide-referrer{foo} now allows everything as a forged referrer not 
     only http/https URLs and ignoring invalid URLs (Closes: #258193).  
+  * Fixes the name of the filter from "popups" to "all-popups" in
+    user.action. (Closes: #385886).
   * Adapted all patches to this version.
   * The following patches are incorporated upstream now, so they are no
-    longer needed: 01_local_usermanual.dpatch, 08_log_pthread.dpatch,
-    09_no_identity.dpatch, 12_multiple-filters.dpatch, 13_memory.dpatch,
-    18_dns_retry.dpatch.
+    longer needed: 01_local_usermanual.dpatch, 04_nomultiproxy.dpatch,
+    08_log_pthread.dpatch, 09_no_identity.dpatch,
+    12_multiple-filters.dpatch, 13_memory.dpatch, 18_dns_retry.dpatch.
   * 20_makefile_fixup.dpatch: Fix a syntax error in the GNUmakefile.in.
+  * 05_default_action.dpatch: main parts are incorporated upstream now.
   * 05_default_action.dpatch: disable filter ie-eploits for amazon.de,
     cause they use %01 and %02 as delimiters for multipage results
     (Closes: #243245).
   * 05_default_action.dpatch: block http://www.google-analytics.com/urchin.js
     because this is used for cross site user tracking according to 
     http://www.google.com/analytics/ (Closes: #340913).
-  * 22_user_action.dpatch: the popup filter is named "all-popups" not
-    "popups", fix this in user.action. (Closes: #385886).
 
  -- Roland Rosenfeld <roland@debian.org>  Sun, 10 Sep 2006 12:30:49 +0200
 
