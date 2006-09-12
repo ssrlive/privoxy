@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.22 2006/09/07 22:53:59 hal9 Exp $
+#  $Id: default.action.master,v 1.23 2006/09/10 14:09:16 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -629,6 +629,7 @@ countr*.
 /.*ad(sl|v(i[cs]|o|an|ertencia|ent|.*search)) # advice/advisories/advan*/advertencia (spanish)
 /.*(lo|thre|he|d|gr|l|ro|re|squ)ads
 /.*account
+support./(.*/)?track
 
 #############################################################################
 # Exceptions for academia
@@ -753,6 +754,9 @@ www.dshield.org/.*anner.gif
 #MASTER# REMARKS: di.image.eshop.msn.com
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/2003/12/18/politics/campaigns/18BRAU.html?hp
 xlonhcld.xlontech.net/
+#MASTER# REMARKS: Actionsfile feedback 1555719 09/10/06, and Debian Bug report 
+#MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
+.google-analytics.com/urchin.js
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -788,6 +792,8 @@ y.ibsys.com/event.ng/
 /bandeaux/
 #MASTER# BLOCK-REFERRER: http://www.usatoday.com/
 /sponsors/.*\.gif
+#MASTER# REMARKS: 09/11/06 example: img.webads.nl
+.webads.
 
 #############################################################################
 # Site-specific block-as-image patterns:
@@ -867,6 +873,11 @@ imp*.tradedoubler.com
 #MASTER# BLOCK-REFERRER: http://www.rpmseek.com/index.html
 #MASTER# BLOCK-REFERRER: http://www.funnyjunk.com/pages/cooties.htm
 .instacontent.net/fastclick/
+#MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
+#MASTER# BLOCK-REFERRER:  http://stanford.facebook.com/home.php 
+.fastclick.net
+#MASTER# BLOCK-REFERRER: http://www.math.com/school/subject2/lessons/S2U3L6DP.html 09/11/06
+.casalemedia.com
 #MASTER# BLOCK-REFERRER: http://www.macnn.com/
 kermit.macnn.com/
 #MASTER# BLOCK-REFERRER: http://www.sdtimes.com/news/
@@ -933,6 +944,28 @@ ads.monster.com
 adserver.itsfogo.com
 #MASTER# BLOCK-REFERRER: http://www.multiproxy.org/anon_proxy.htm 09/10/06
 view.atdmt.com
+#MASTER# REMARKS: Actionsfile feedback 09/11/06 http://matrix.mediavantage.de/mx.one?                                              p=210&pa=1060&pb=1906&pd=10944&aid=399&x=120&y=240&ts=2005.06.27.21.38.08
+#MASTER# BLOCK-REFERRER:  http://www.heise.de/newsticker/meldung/61067
+matrix.mediavantage.de
+#MASTER# REMARKS Ad generator, user tracker 09/11/06
+.cibleclick.com
+MASTER# REMARKS: Ad generator 09/11/06  http://c1.netshelter.net/campaigns/ITTTech/itttech09_728x90.gif
+#MASTER# BLOCK-REFERRER:  http://www.osnews.com/ 09/11/06
+.netracker.net
+#MASTER# REMARKS: ad generator domain per sf tracker 09/11/06
+.interclick.com
+MASTER# REMARKS: Ad generator http://c4.maxserving.com/iserver/site=5314/area=ad728x90/aamfmt=normal/aamsz=banner/PageID=
+#MASTER# BLOCK-REFERRER: http://www.imdb.com/name/nm0000168/bio 09/12/06
+.maxserving.com
+MASTER# REMARKS: Ad generator http://partner.gonamic.de/Affiliate/ViewCounter/index.cfm?trackingID=368232&bIsAffiliate=0
+#MASTER# BLOCK-REFERRER:  http://torrent.to/torrent/ 09/12/06
+.gonamic.de
+MASTER# REMARKS: Ad generator http://media.adlegend.com/centrport/20060/511290/GM_emplyee_300x250.gif
+#MASTER# BLOCK-REFERRER:  http://news.yahoo.com/news?tmpl=story&cid=534&e=1&u=/ap/20050613/ap_on_he_me/cancer_research
+.adlegend.com
+MASTER# REMARKS: Ad generator 09/12/06 http://dist.belnk.com//4/placement/1738/alt_offer/static.jpg
+#MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/louisianaandmardigra/messages/1?viscount=100
+.belnk.com
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1245,6 +1278,20 @@ www.ad.tomshardware.com/cgi-bin/logo2.m?
 .ebayimg.com/
 #MASTER# UNBLOCK-REFERRER: http://upgrade.bitdefender.com/update71/avx/Plugins/adsntfs.xmd.gzip 09/04/06
 /update/.*adsnt.*
+#MASTER# UNBLOCK-REFERRER: http://msdn.microsoft.com/
+msdn.microsoft.com/.*masthead
+#MASTER# UNBLOCK-REFERRER: http://indymedia.org adfree site 09/11/06
+.indymedia.org
+#MASTER# UNBLOCK-REFERRER: http://www.seanbaby.com/stupid/comicads05.shtml 09/11/06
+.seanbaby.com
+#MASTER# UNBLOCK-REFERRER:  http://www.cels.org/db/keep-track.pl?cat:1 09/11/06
+cels.org/.*track
+#MASTER# UNBLOCK-REFERRER: http://www.nic.ad.jp/ See http://jprs.co.jp/en/jpdomain.html 09/11/06
+.nic.ad.jp
+#MASTER# UNBLOCK-REFERRER: http://www.flickr.com/photo_zoom.gne?id=32594118&size=l 09/11/06
+#MASTER# REMARKS: creativecommons.org worthwhile organization 09/11/06
+/(.*/)?somerights20.gif
+.creativecommons.org
 
 #############################################################################
 # Site-specific special rules:
@@ -1331,6 +1378,9 @@ my.aol.com
 i.cnn.net/cnn/.*/clickability/button
 #MASTER# PROBLEM-URL: http://www.rosettaproject.org:8080/live/search/contribute/swadesh/view?ethnocode=SPN
 www.rosettaproject.org
+#MASTER# PROBLEM-URL: http://www.quantum.com requires popups for downloads, etc. 09/11/06
+.quantum.com
+
 
 #----------------------------------------------------------------------------
 # Sometimes (i.e. often!) fast-redirects catches things by mistake
@@ -1576,6 +1626,8 @@ www.thinkgeek.com/
 javabog.dk/ijk/
 #MASTER# REMARK: Per Debian bug report #319025
 .w3.org
+#MASTER# UNBLOCK-REFERRER: http://indymedia.org adfree site 09/11/06
+.indymedia.org
 
 #----------------------------------------------------------------------------
 # These don't work without the referrer information:
@@ -1722,8 +1774,11 @@ www.munichre.com
 #MASTER# PROBLEM-URL: http://www.nasa.gov
 #MASTER# REMARKS: No progress past main page without js-annoyances
 .nasa.gov
-#MASTER# REMARKS: Excclude per Debian bug report #377843
+#MASTER# REMARKS: Exclude per Debian bug report #377843
+#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
 .cnrs.fr 
+#MASTER# REMARKS: Exclude per Debian bug report #377843
+#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 blogs.msdn.com
 
 {-filter{unsolicited-popups}}
@@ -1744,8 +1799,11 @@ www.mcmaster.com/products.html
 cf.nbc4.com/
 #MASTER# PROBLEM-URL: http://www.hh.schule.de/ak/nt/
 www.hh.schule.de/ak/nt/
-#MASTER# REMARKS: Excclude per Debian bug report #377843
+#MASTER# REMARKS: Exclude per Debian bug report #377843
+#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
 .cnrs.fr 
+#MASTER# REMARKS: Exclude per Debian bug report #377843
+#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 blogs.msdn.com
 
 {+fast-redirects{check-decoded-url} -block}
