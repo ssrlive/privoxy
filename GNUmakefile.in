@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.145 2006/09/08 02:32:00 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.146 2006/09/08 23:57:19 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1193,7 +1193,11 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	fi ;\
 	$(ECHO) Installing configuration files to $(CONF_DEST);\
 	for i in $(CONFIGS); do \
-		if [ -s "$(CONF_DEST)/$$i" ] ; then \
+		if [ "$$i" == "default.action" ] || [ "$$i" == "default.filter" ] || [ "$$i" == "standard.action" ]; then \
+			$(RM) $(CONF_DEST)/$$i ;\
+			$(ECHO) Installing fresh $$i;\
+			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
+		elif [ -s "$(CONF_DEST)/$$i" ]; then \
 			$(ECHO) Installing $$i as $$i.new ;\
 			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST)/$$i.new || exit 1;\
 			NEW=1;\
@@ -1357,6 +1361,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.146  2006/09/08 23:57:19  hal9
+# User manual images are now user-manual doc directory, and fix make install
+# target accordingly.
+#
 # Revision 1.145  2006/09/08 02:32:00  hal9
 # Various changes to implement building and installing docs to be compatible
 # with the new "user-manual" settings in config from Roland. Docbook does not
