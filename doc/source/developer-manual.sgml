@@ -9,7 +9,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.4">
-<!entity p-status "BETA">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -23,9 +23,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.7 2006/07/18 14:48:50 david__schmidt Exp $
+ $Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $
 
- Copyright (C) 2001, 2002 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
 
  ========================================================================
@@ -44,13 +44,13 @@
      <subscript>
     <!-- Completely the wrong markup, but very little is allowed  -->
     <!-- in this part of an article. FIXME -->
-      <link linkend="copyright">Copyright</link> &my-copy; 2001, 2002 by 
+      <link linkend="copyright">Copyright</link> &my-copy; 2001-2006 by 
       <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
      </subscript>
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.7 2006/07/18 14:48:50 david__schmidt Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1832,7 +1832,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.7 2006/07/18 14:48:50 david__schmidt Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1861,8 +1861,8 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.7 2006/07/18 14:48:5
  *                The GNU General Public License should be included with
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *                or write to the Free Software Foundation, Inc., 
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  *
  * Revisions   :
  *    $L<!-- Break CVS Substitution -->og$
@@ -1892,7 +1892,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.7 2006/07/18 14:48:50 david__schmidt Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2272,8 +2272,8 @@ at sourceforge. Three simple steps:
       <programlisting>
   mkdir dist # delete or choose different name if it already exists
   cd dist
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
+  cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
 </programlisting>
     </para>
   
@@ -2284,6 +2284,17 @@ at sourceforge. Three simple steps:
      on exactly the same code.
     </para>
   
+    <warning>
+     <para>
+      Every significant release of Privoxy has included at least one 
+      package that either had incorrect versions of files, missing files, 
+      or incidental leftovers from a previous build process that gave 
+      unknown numbers of users headaches to try to figure out what was 
+      wrong. PLEASE, make sure you are using pristene sources, and are
+      following the prescribed process!
+     </para>
+    </warning>
+
     <para>
      Please find additional instructions for the source tarball and the
      individual platform dependent binary packages below. And details 
@@ -2368,15 +2379,22 @@ at sourceforge. Three simple steps:
       </listitem> 
       <listitem>
        <para>
-        <filename>user.action</filename> is designed for local preferences. 
-        Make sure this does not get overwritten!
+        <filename>user.action</filename> and <filename>user.filter</filename>
+        are designed for local preferences. Make sure these do not get overwritten!
+        <filename>config</filename> should not be overwritten either. This 
+        has especially important configuration data in it.
+        <filename>trust</filename> should be left in tact as well.
        </para>
       </listitem> 
       <listitem>
        <para>
-        Other configuration files should be installed as the new defaults, 
-        but all previously installed configuration files should be preserved
-        as backups. This is just good manners :-)
+        Other configuration files (<filename>default.action</filename>,
+        <filename>default.filter</filename> and
+        <filename>standard.action</filename>) should be installed as the new
+        defaults, but all previously installed configuration files should be
+        preserved as backups. This is just good manners :-) These files are
+        likely to change between releases and contain important new features
+        and bug fixes.
        </para>
      </listitem> 
      <listitem>
@@ -2879,7 +2897,8 @@ at sourceforge. Three simple steps:
       <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">download
       location</ulink>, the release notes and the Changelog. Also, post an
       updated News item on the project page Sourceforge, and update the Home 
-      page and docs linked from the Home page (see below).
+      page and docs linked from the Home page (see below). Other news sites
+      and release oriented sites, such as Freshmeat, should also be notified.
      </para>
    </sect2>
 
@@ -3004,6 +3023,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.8  2006/08/22 23:35:01  hal9
+  Fix email address, cvs URI, address branching changes and various other
+  small updates.
+
   Revision 2.7  2006/07/18 14:48:50  david__schmidt
   Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
   with what was really the latest development (the v_3_0_branch branch)
