@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.23 2006/09/10 14:09:16 hal9 Exp $
+#  $Id: default.action.master,v 1.24 2006/09/12 11:15:56 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -35,8 +35,7 @@
 #    to verify that it is a Privoxy bug, and not a browser or site
 #    bug first. If you are using your own custom configuration, please
 #    try the stock configs to see if the problem is a configuration
-#    related bug. And if not using the latest development snapshot,
-#    please try the latest one. Or even better, CVS sources.
+#    related bug. And if possible please try the latest CVS sources.
 #  * Submit feature requests only through our feature request forum:
 #    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
 #      
@@ -71,8 +70,9 @@
 # -----------------------
 #
 # Generally, a pattern has the form <domain>/<path>, where both the <domain>
-# and <path> part are optional. If you only specify a domain part, the "/"
-# can be left out:
+# and <path> part are optional. The pattern matching syntax is different for
+# each. If you only specify a domain part, the "/" can be left out, but it is
+# required for the path part.
 # 
 # www.example.com 
 #   is a domain-only pattern and will match any request to www.example.com
@@ -132,13 +132,13 @@
 # 2. Path Syntax
 # --------------
 # 
-# Paths are specified as regular expressions. A comprehensive discussion of
-# regular expressions wouldn't fit here, but (FIXME) someone should paste
-# a concise intro to the regex language here.
+# Paths are specified as full regular expressions, and are more flexible than
+# the domain syntax above. A comprehensive discussion of regular expressions
+# wouldn't fit here.
 # 
 # Perl compatible regular expressions are used. See the pcre/docs/ direcory or
-# man perlre (also available on http://www.perldoc.com/perl5.6/pod/perlre.html)
-# for details. The appendix to the user manual also has some detail.
+# man perlre (also available at http://perldoc.perl.org/perlre.html) for
+# details. The appendix to our User Manual also has some detail.
 # 
 # Please note that matching in the path is CASE INSENSITIVE by default, but
 # you can switch to case sensitive by starting the pattern with the "(?-i)"
@@ -189,7 +189,8 @@
 #    You may specify this many times to specify many headers.
 #
 # +block
-#    Block this URL
+#    Block this URL. Privoxy will ignore this URL completely, and not request
+#    it.
 #
 # +content-type-overwrite
 #    Replaces the "Content-Type:" HTTP server header, so that unwanted
@@ -609,13 +610,14 @@ adv[oia]*.
 .*[epu]ad*.
 county*.
 countr*.
+adrenaline.
 
 #############################################################################
 # Generic block patterns by path:
 #############################################################################
 {+block}
 #MASTER# DONT-VERIFY (generic)
-/(.*/)?ad(/|s|v|images|cycle|rotate|mentor|click|frame)
+/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame)
 /.*ads/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
@@ -754,9 +756,13 @@ www.dshield.org/.*anner.gif
 #MASTER# REMARKS: di.image.eshop.msn.com
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/2003/12/18/politics/campaigns/18BRAU.html?hp
 xlonhcld.xlontech.net/
-#MASTER# REMARKS: Actionsfile feedback 1555719 09/10/06, and Debian Bug report 
-#MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
-.google-analytics.com/urchin.js
+#MASTER# REMARKS: Actionsfile tracker 1559740 09/16/06 See http://www.vibrantmedia.com/whatisIntelliTXT.asp
+#MASTER# BLOCK-REFERRER: http://www.hartware.de/news_40795.html
+/.*intellitxt/
+.intellitxt.com
+#MASTER# REMARKS: Video advertizer, owned by doubleclick.net.
+#MASTER# BLOCK-REFERRER: http://www.ign.com/ 09/17/06
+.klipmart.com
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -769,7 +775,7 @@ mediamgr.ugo.com
 #MASTER# REMARKS: Unanimis Advertising
 awrz.net/
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
-pagead*.googlesyndication.com/.*\.js
+pagead*.googlesyndication./.*\.js
 a.tfag.de/js.ng/
 #MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html
 y.nbc4.com/js.ng
@@ -780,7 +786,11 @@ y.ibsys.com/event.ng/
 #############################################################################
 {+block-as-image}
 #MASTER# BLOCK-REFERRER: http://experts-exchange.com/os2gen/
-/.*adimage\.(php|cgi)
+/.*ad_?image\.(php|cgi)
+#MASTER# COMMENT: SF tracker 09/15/06
+/.*client_?ad\.(php|cgi)
+#MASTER# COMMENT: SF tracker 09/15/06
+/.*AIM_UAC.adp
 #MASTER# BLOCK-REFERRER: http://flashhentai.com/Tgp/28-09-2002/index4.html
 #MASTER# BLOCK-REFERRER: http://www.thughosting.com/www/ixix/a912/912s2.html
 #MASTER# BLOCK-REFERRER: http://www.fantasiegirl.com/cumshots/3/spunkpatrolgirl302.htm
@@ -792,8 +802,6 @@ y.ibsys.com/event.ng/
 /bandeaux/
 #MASTER# BLOCK-REFERRER: http://www.usatoday.com/
 /sponsors/.*\.gif
-#MASTER# REMARKS: 09/11/06 example: img.webads.nl
-.webads.
 
 #############################################################################
 # Site-specific block-as-image patterns:
@@ -949,21 +957,23 @@ view.atdmt.com
 matrix.mediavantage.de
 #MASTER# REMARKS Ad generator, user tracker 09/11/06
 .cibleclick.com
-MASTER# REMARKS: Ad generator 09/11/06  http://c1.netshelter.net/campaigns/ITTTech/itttech09_728x90.gif
+#MASTER# REMARKS: Ad generator 09/11/06  http://c1.netshelter.net/campaigns/ITTTech/itttech09_728x90.gif
 #MASTER# BLOCK-REFERRER:  http://www.osnews.com/ 09/11/06
 .netracker.net
 #MASTER# REMARKS: ad generator domain per sf tracker 09/11/06
 .interclick.com
-MASTER# REMARKS: Ad generator http://c4.maxserving.com/iserver/site=5314/area=ad728x90/aamfmt=normal/aamsz=banner/PageID=
+#MASTER# REMARKS: Ad generator http://c4.maxserving.com/iserver/site=5314/area=ad728x90/aamfmt=normal/aamsz=banner/PageID=
 #MASTER# BLOCK-REFERRER: http://www.imdb.com/name/nm0000168/bio 09/12/06
 .maxserving.com
-MASTER# REMARKS: Ad generator http://partner.gonamic.de/Affiliate/ViewCounter/index.cfm?trackingID=368232&bIsAffiliate=0
+#MASTER# REMARKS: Ad generator http://partner.gonamic.de/Affiliate/ViewCounter/index.cfm?trackingID=368232&bIsAffiliate=0
 #MASTER# BLOCK-REFERRER:  http://torrent.to/torrent/ 09/12/06
 .gonamic.de
-MASTER# REMARKS: Ad generator http://media.adlegend.com/centrport/20060/511290/GM_emplyee_300x250.gif
+#MASTER# REMARKS: 09/11/06 example: img.webads.nl
+.webads.
+#MASTER# REMARKS: Ad generator http://media.adlegend.com/centrport/20060/511290/GM_emplyee_300x250.gif
 #MASTER# BLOCK-REFERRER:  http://news.yahoo.com/news?tmpl=story&cid=534&e=1&u=/ap/20050613/ap_on_he_me/cancer_research
 .adlegend.com
-MASTER# REMARKS: Ad generator 09/12/06 http://dist.belnk.com//4/placement/1738/alt_offer/static.jpg
+#MASTER# REMARKS: Ad generator 09/12/06 http://dist.belnk.com//4/placement/1738/alt_offer/static.jpg
 #MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/louisianaandmardigra/messages/1?viscount=100
 .belnk.com
 
@@ -992,6 +1002,17 @@ www.xml.eshop.msn.com/tracksponsorimpression.asp
 stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
 #MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/
 .imrworldwide.com
+#MASTER# REMARKS: Actionsfile feedback 1555719 09/10/06, and Debian Bug report 
+#MASTER# BLOCK-REFERRER: http://www.nrc.nl/ 09/12/06
+.clicktracks.com
+#MASTER# REMARK: Actionsfile tracker 1159072 09/12/06
+.etracker.
+#MASTER# REMARK: Actionsfile tracker 1243494 09/12/06
+#MASTER# BLOCK-REFERRER: http://www.spanked-slaves.com/movies14/bdsm14c.html
+.x-traceur.com
+#MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
+.google-analytics.
+
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1292,6 +1313,15 @@ cels.org/.*track
 #MASTER# REMARKS: creativecommons.org worthwhile organization 09/11/06
 /(.*/)?somerights20.gif
 .creativecommons.org
+#MASTER# UNBLOCK-REFERRER: http://www.ups.com/WebTracking/track?loc=en_US
+.ups.com/.*/track
+#MASTER# UNBLOCK-REFERRER: http://adju.st
+.adju.
+#MASTER# REMARKS: Ad-free art site 09/12/06
+.rubberslug.com
+.freebsd.org
+#MASTER# REMARKS: SF tracker 09/15/06
+adiumx.com
 
 #############################################################################
 # Site-specific special rules:
@@ -1308,6 +1338,8 @@ cels.org/.*track
 .yahoo.com
 #MASTER# REMARKS: Actions Tracker 1293057 09/02/06
 .update.microsoft.com
+#MASTER# REMARKS: Various reports 09/16/06
+mail.google.
 
 #----------------------------------------------------------------------------
 # Shopping and banking sites - allow cookies and pop-ups
@@ -1442,7 +1474,6 @@ cvs.
 svn.
 websvn.
 /(.*/)?svn/
-
 #MASTER# PROBLEM-URL: http://liveupdate.symantec.com/ennlu.x86
 #MASTER# REMARKS: Jeez, could you please stay with one of them?
 liveupdate.symantec.com
@@ -1500,6 +1531,16 @@ javascript.internet.com
 javascriptkit.com
 .xulplanet.com
 .perl.com/language/newdocs/pod/
+.freebsd.org
+.watson.org
+.netbsd.org
+.openbsd.org
+.dragonflybsd.org
+.freedesktop.org
+#MASTER# REMARKS: Bug trackers like Flyspray and Mailinglist interfaces like Mailman:
+/(.*/)?flyspray/
+/(.*/)?mailman/
+
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
@@ -1682,6 +1723,8 @@ images.newsx.cc/news9albany_media/weather/
 www.stanford.edu/group/pandegroup/folding/villin/
 #MASTER# PROBLEM-URL: http://www.teamquest.com/html/gunther/laquiz.shtml
 www.teamquest.com/gifs/gunther/
+#MASTER# REMARKS: 09/12/06 Art site, and ad-free
+.rubberslug.com
 
 #----------------------------------------------------------------------------
 # These sites are so abusive that we need to kill all JS event bindings (and
@@ -1763,7 +1806,7 @@ www.dn.se
 {-filter{img-reorder}}
 #MASTER# PROBLEM-URL: http://images.google.com
 #MASTER# REMARKS: Google images don't show up with img-reorder on
-images.google.com
+images.google.
 
 {-filter{js-annoyances}}
 #MASTER# PROBLEM-URL: http://www.munichre.com/
