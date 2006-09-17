@@ -81,27 +81,25 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN584"
+NAME="AEN637"
 ></A
->4.1. How much does <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> slow my browsing down? This 
+>4.1. How much does Privoxy slow my browsing down? This 
 has to add extra time to browsing.</H3
 ><P
 > How much of an impact depends on many things, including the CPU of the host
- system, how agressive the configuration is, which specific actions are being triggered, 
+ system, how aggressive the configuration is, which specific actions are being triggered, 
  the size of the page, etc.</P
 ><P
 > Overall, it should not slow you down any in real terms, and may actually help 
- speed things up since ads, banners and other junk are not typically being displayed.
- The actual processing time required by <SPAN
+ speed things up since ads, banners and other junk are not typically being
+ retrieved and displayed. The actual processing time required by
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> 
- itself for each page, is relatively small in the overall scheme of things,
- and happens very quickly. This is typically more than offset by time saved
- not downloading and rendering ad images (if ad blocking is being used).</P
+> itself for each page, is relatively small
+ in the overall scheme of things, and happens very quickly. This is typically
+ more than offset by time saved not downloading and rendering ad images (if ad
+ blocking is being used).</P
 ><P
 > <SPAN
 CLASS="QUOTE"
@@ -181,28 +179,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="SLOWCRAWL"
-></A
->4.3. I just installed <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, and all my
-browsing has slowed to a crawl. What gives?</H3
-><P
-> This should not happen, and for the overwhelming number of users world-wide,
- it does not happen. I would suspect some inadvertent interaction of software
- components such as anti-virus software, spyware protectors, personal
- firewalls or similar components. Try disabling (or uninstalling) these one
- at a time and see if that helps.</P
-></DIV
-><DIV
-CLASS="SECT2"
-><H3
-CLASS="SECT2"
-><A
 NAME="CONFIGURL"
 ></A
->4.4. What are "http://config.privoxy.org/" and
+>4.3. What are "http://config.privoxy.org/" and
 "http://p.p/"?</H3
 ><P
 > <A
@@ -286,7 +265,7 @@ CLASS="SECT2"
 ><A
 NAME="NEWADS"
 ></A
->4.5. How can I submit new ads, or report
+>4.4. How can I submit new ads, or report
 problems?</H3
 ><P
 >Please see the <A
@@ -302,12 +281,12 @@ CLASS="SECT2"
 ><A
 NAME="NOONECARES"
 ></A
->4.6. Why doesn't anyone answer my support 
+>4.5. Why doesn't anyone answer my support 
 request?</H3
 ><P
 >Rest assured that it has been read and considered. Why it is not answered,
 could be for various reasons, including no one has a good answer for it, no
-one has had time to yet investigate it thorougly, it has been reported
+one has had time to yet investigate it thoroughly, it has been reported
 numerous times already, or because not enough information was provided to help
 us help you. Your efforts are not wasted, and we do appreciate them.</P
 ></DIV
@@ -318,7 +297,7 @@ CLASS="SECT2"
 ><A
 NAME="IP"
 ></A
->4.7. How can I hide my IP address?</H3
+>4.6. How can I hide my IP address?</H3
 ><P
 > If you run both the browser and the proxy locally, you cannot hide your IP
  address with <SPAN
@@ -362,20 +341,18 @@ CLASS="APPLICATION"
 > together with <SPAN
 CLASS="APPLICATION"
 >Tor</SPAN
->?</A
->.</P
+> section</A
+>
+ just below.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN651"
+NAME="AEN699"
 ></A
->4.8. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> guarantee I am anonymous?</H3
+>4.7. Can Privoxy guarantee I am anonymous?</H3
 ><P
 > No. Your chances of remaining anonymous are greatly improved, but unless you
  <A
@@ -453,16 +430,22 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="AEN717"
+></A
+>4.8. A test site says I am not using a Proxy.</H3
+><P
+> Good! Actually, they are probably testing for some other kinds of proxies.
+ Hiding yourself completely would require additional steps.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="TOR"
 ></A
->4.9. How do I use <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
- together with <SPAN
-CLASS="APPLICATION"
->Tor</SPAN
->?</H3
+>4.9. How do I use Privoxy
+ together with Tor?</H3
 ><P
 > Before you configure <SPAN
 CLASS="APPLICATION"
@@ -512,7 +495,7 @@ CLASS="QUOTE"
 > and it
  <SPAN
 CLASS="QUOTE"
->"[l]ooks like client functionality is working"</SPAN
+>"looks like client functionality is working"</SPAN
 >.</P
 ><P
 > If either <SPAN
@@ -598,7 +581,7 @@ CLASS="SCREEN"
 ></TABLE
 ></P
 ><P
-> This is enough to reach the internet, but additionally you should
+> This is enough to reach the Internet, but additionally you should
  uncomment the following forward rules, to make sure your local network is still
  reachable through Privoxy:</P
 ><P
@@ -663,7 +646,7 @@ CLASS="APPLICATION"
 >Tor</SPAN
 >.</P
 ><P
-> Afterwards, please take the time to at least skim through the rest
+> Afterward, please take the time to at least skim through the rest
  of <SPAN
 CLASS="APPLICATION"
 >Tor's</SPAN
@@ -679,7 +662,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN722"
+NAME="AEN770"
 ></A
 >4.10. Might some things break because header information or
 content is being altered?</H3
@@ -729,12 +712,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN733"
+NAME="AEN781"
 ></A
->4.11. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> act as a <SPAN
+>4.11. Can Privoxy act as a <SPAN
 CLASS="QUOTE"
 >"caching"</SPAN
 > proxy to 
@@ -771,12 +751,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN743"
+NAME="AEN790"
 ></A
->4.12. What about as a firewall? Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> protect me?</H3
+>4.12. What about as a firewall? Can Privoxy protect me?</H3
 ><P
 > Not in the way you mean, or in the way a true firewall can. 
  <SPAN
@@ -797,7 +774,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN749"
+NAME="AEN795"
 ></A
 >4.13. I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</H3
@@ -822,12 +799,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN754"
+NAME="AEN800"
 ></A
->4.14. How can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> filter Secure (HTTPS) URLs?</H3
+>4.14. How can Privoxy filter Secure (HTTPS) URLs?</H3
 ><P
 > Since secure HTTP connections are encrypted SSL sessions between your browser
  and the secure site, and are meant to be reliably <SPAN
@@ -884,12 +858,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN769"
+NAME="AEN814"
 ></A
->4.15. <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> runs as a <SPAN
+>4.15. Privoxy runs as a <SPAN
 CLASS="QUOTE"
 >"server"</SPAN
 >. How 
@@ -947,10 +918,7 @@ CLASS="SECT2"
 ><A
 NAME="TURNOFF"
 ></A
->4.16. How can I temporarily disable <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->?</H3
+>4.16. How can I temporarily disable Privoxy?</H3
 ><P
 > The easiest way is to access <SPAN
 CLASS="APPLICATION"
@@ -982,10 +950,7 @@ NAME="REALLYOFF"
 >4.17. When <SPAN
 CLASS="QUOTE"
 >"disabled"</SPAN
-> is <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> totally 
+> is Privoxy totally 
 out of the picture?</H3
 ><P
 > No, this just means all filtering and actions are disabled.
@@ -1010,10 +975,7 @@ CLASS="SECT2"
 ><A
 NAME="CRUNCH"
 ></A
->4.18. My logs show <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> <SPAN
+>4.18. My logs show Privoxy <SPAN
 CLASS="QUOTE"
 >"crunches"</SPAN
 > 
@@ -1063,10 +1025,7 @@ CLASS="SECT2"
 ><A
 NAME="DOWNLOADS"
 ></A
->4.19. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> effect files that I download
+>4.19. Can Privoxy effect files that I download
 from a webserver? FTP server?</H3
 ><P
 > From the webserver's perspective, there is no difference between
@@ -1088,7 +1047,7 @@ TARGET="_top"
 > Filtering is potentially more of a concern since the results are not always
  so obvious, and the effects of filtering are there whether the file is simply
  viewed, or downloaded. And potentially whether the content is some obnoxious
- advertizement, or Mr. Jimmy's latest/greatest source code jewel. Of course,
+ advertisement, or Mr. Jimmy's latest/greatest source code jewel. Of course,
  one of these presumably is <SPAN
 CLASS="QUOTE"
 >"bad"</SPAN
@@ -1196,7 +1155,7 @@ CLASS="EMPHASIS"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > does not do FTP at all, only HTTP 
-  protocols, so please don't try.</P
+ and  HTTPS (SSL) protocols, so please don't try.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -1205,10 +1164,7 @@ CLASS="SECT2"
 ><A
 NAME="DOWNLOADS2"
 ></A
->4.20. I just downloaded a Perl script, and <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
+>4.20. I just downloaded a Perl script, and Privoxy
 altered it! Yikes, what is wrong!</H3
 ><P
 > Please read above.</P
@@ -1291,10 +1247,7 @@ CLASS="SECT2"
 ><A
 NAME="SEEALSO"
 ></A
->4.22. Where can I find more information about <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
+>4.22. Where can I find more information about Privoxy
 and related issues?</H3
 ><P
 > Other references and sites of interest to <SPAN
@@ -1527,7 +1480,7 @@ TARGET="_top"
 >, 
    <SPAN
 CLASS="APPLICATION"
->TOR</SPAN
+>Tor</SPAN
 > can help anonymize web browsing, 
    web publishing, instant messaging, IRC, SSH, and other applications.
   </TD

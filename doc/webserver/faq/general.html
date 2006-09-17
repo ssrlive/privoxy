@@ -81,11 +81,155 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="WHO_USES"
+></A
+>1.1. Who should use Privoxy?</H3
+><P
+>  Anyone that is interested in security, privacy, or in 
+  finer-grained control over their web and Internet experience.
+  Everyone is encouraged to try <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="BESTCHOICE"
+></A
+>1.2. Is Privoxy the best choice for
+me?</H3
+><P
+>  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is certainly a good choice, especially for those who want more 
+  control and security. Those that have the ability to fine-tune their installation
+  will benefit the most. One of <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+  strength's is that it is highly configurable giving you the ability to
+  completely personalize your installation. Being familiar with, or at least
+  having an interest in learning about <A
+HREF="http://en.wikipedia.org/wiki/Http"
+TARGET="_top"
+>HTTP</A
+> and other networking
+  protocols, <A
+HREF="http://en.wikipedia.org/wiki/Html"
+TARGET="_top"
+>HTML</A
+>, 
+  <A
+HREF="http://en.wikipedia.org/wiki/Internet_Protocol"
+TARGET="_top"
+>IP (Internet
+  Protocol)</A
+>, and 
+  <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+  Expressions"</SPAN
+></A
+>
+  will be a big plus and will help you get the most out 
+  of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+ </P
+><P
+>  Much of <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> configuration can be done 
+  with a  <A
+HREF="http://en.wikipedia.org/wiki/Web_browser"
+TARGET="_top"
+>Web browser</A
+>.
+  But there are areas where configuration is done using a 
+  <A
+HREF="http://en.wikipedia.org/wiki/Text_editors"
+TARGET="_top"
+>text editor</A
+>
+  to edit configuration files.
+  </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="PROXYMORON"
+></A
+>1.3. What is a <SPAN
+CLASS="QUOTE"
+>"proxy"</SPAN
+>? How does
+Privoxy work?</H3
+><P
+>  A  <A
+HREF="http://en.wikipedia.org/wiki/Proxy_server"
+TARGET="_top"
+>web proxy</A
+>
+  is a service, based on a software such as
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, that clients (i.e. browsers) can use
+  instead of connecting directly to web servers on the Internet. The
+  clients then ask the proxy to fetch the objects they need (web pages,
+  images, movies etc) on their behalf, and when the proxy has done so, it
+  hands the results back to the client. It is a <SPAN
+CLASS="QUOTE"
+>"go-between"</SPAN
+>. See
+  the <A
+HREF="http://en.wikipedia.org/wiki/Proxy_server"
+TARGET="_top"
+>Wikipedia proxy
+  definition</A
+> for more.
+ </P
+><P
+>  There are many reasons to use web proxies, such as security (firewalling),
+  efficiency (caching) and others, and there are any number of proxies
+  to accommodate those needs.
+ </P
+><P
+>  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is a proxy that is primarily focused on privacy
+  protection, ad and junk elimination and freeing the user from restrictions placed on his 
+  activities. Sitting between your browser(s) and the Internet,
+  it is in a perfect position to filter outbound personal information that your
+  browser is leaking, as well as inbound junk. It uses a variety of techniques to do
+  this, all of which are under your complete control via the various configuration
+  files and options.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="NEWJB"
 ></A
->1.1. What is this new version of <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
+>1.4. What is this new version of 
+<SPAN
+CLASS="QUOTE"
+>"Junkbuster"</SPAN
 >?</H3
 ><P
 > Along time ago, there was the
@@ -171,16 +315,13 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN45"
+NAME="AEN74"
 ></A
->1.2. Why <SPAN
+>1.5. Why <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
 >? Why change the name from
-<SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
-> at all?</H3
+Junkbuster at all?</H3
 ><P
 > <A
 HREF="http://junkbusters.com/"
@@ -259,14 +400,8 @@ CLASS="SECT2"
 ><A
 NAME="DIFFERS"
 ></A
->1.3. How does <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> differ
-from the old <SPAN
-CLASS="APPLICATION"
->Junkbuster?</SPAN
-></H3
+>1.6. How does Privoxy differ
+from the old Junkbuster?</H3
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -280,8 +415,13 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > still blocks ads and banners,
- still manages cookies, and still helps protect your privacy. But, these are
- all greatly enhanced, and many, many new features have been added, all in the same vein.
+ still manages <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+>, and still
+ helps protect your privacy. But, these are all greatly enhanced, and many,
+ many new features have been added, all in the same vein.
  </P
 ><P
 > The configuration has changed significantly as well. This is something that
@@ -304,7 +444,7 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"actions"</SPAN
 > files, with a completely different
- syntax. See the <A
+ syntax.  See the <A
 HREF="../user-manual/whatsnew.html"
 TARGET="_top"
 >What's New</A
@@ -416,55 +556,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="PROXYMORON"
-></A
->1.4. What is a <SPAN
-CLASS="QUOTE"
->"proxy"</SPAN
->? How does
-<SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> work?</H3
-><P
->  A web proxy is a service, based on a software such as <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->,
-  that clients (i.e. browsers) can use instead of connecting directly to the web
-  servers on the Internet. The clients then ask the proxy to fetch the objects
-  they need (web pages, images, movies etc) on their behalf, and when the proxy
-  has done so, it hands the results back to the client.
- </P
-><P
->  There are many reasons to use web proxies, such as security (firewalling),
-  efficiency (caching) and others, and there are just as many different proxies
-  to accommodate those needs.
- </P
-><P
->  <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is a proxy that is primarily focused on privacy
-  protection, junk elimination and freeing the user from restrictions placed on his 
-  activities. Sitting between your browser(s) and the Internet,
-  it is in a perfect position to filter outbound personal information that your
-  browser is leaking, as well as inbound junk. It uses a variety of techniques to do
-  this, all of which are under your control via the various configuration
-  files and options.
- </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H3
-CLASS="SECT2"
-><A
 NAME="WHATSANAD"
 ></A
->1.5. How does <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> know what is
+>1.7. How does Privoxy know what is
 an ad, and what is not?</H3
 ><P
 > <SPAN
@@ -494,7 +588,8 @@ HREF="../user-manual/actions-file.html#AF-PATTERNS"
 TARGET="_top"
 >URL
  patterns</A
-> to sort out and block the requests for banners.</P
+> to sort out and block the requests for things that sound 
+ like they would be ads or banners.</P
 ><P
 > Second, banners tend to come in certain <SPAN
 CLASS="emphasis"
@@ -513,19 +608,16 @@ CLASS="APPLICATION"
  your browser doesn't request them anymore in the first place.</P
 ><P
 > Both of this involves a certain amount of guesswork and is, of course, freely
- configurable.</P
+ and readily configurable.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN138"
+NAME="AEN155"
 ></A
->1.6. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> make mistakes? 
+>1.8. Can Privoxy make mistakes? 
 This does not sound very scientific.</H3
 ><P
 > Actually, it's a black art ;-) And yes, it is always possible to have a broad
@@ -550,12 +642,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN145"
+NAME="AEN161"
 ></A
->1.7. Will I have to configure <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
+>1.9. Will I have to configure Privoxy
  before I can use it?</H3
 ><P
 > No, not really. The default installation should give you a good starting
@@ -579,6 +668,12 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > lies!</P
+><P
+> You will have to tell your browser about <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 
+ (see the Installation section below).</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -587,15 +682,9 @@ CLASS="SECT2"
 ><A
 NAME="BROWSERS2"
 ></A
->1.8. My browser does the same things as
-<SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->. Why should I use
-<SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> at all?</H3
+>1.10. My browser does the same things as
+Privoxy. Why should I use
+Privoxy at all?</H3
 ><P
 >  Modern browsers do indeed have <SPAN
 CLASS="emphasis"
@@ -626,9 +715,44 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="WHYTRUST"
+></A
+>1.11. Why should I trust Privoxy?</H3
+><P
+>  The most important reason is because you have access to
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>everything</I
+></SPAN
+>, and you can control everything. You can
+  check every line of every configuration file yourself. You can check every
+  last bit of source code should you desire. And even if you can't read code, 
+  there should be some comfort in knowing that thousands of other people can, 
+  and do read it. You can build the software from scratch, if you want, so
+  that you know the executable is clean, and that it is
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>yours</I
+></SPAN
+>. In fact, we encourage this level of scrutiny. It
+  is one reason we use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> ourselves.
+ </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="LICENSE"
 ></A
->1.9. Is there is a license or fee? What about a 
+>1.12. Is there is a license or fee? What about a 
 warranty? Registration?</H3
 ><P
 >  <SPAN
@@ -677,9 +801,51 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="SPYWARE"
+></A
+>1.13. Can Privoxy remove spyware? Adware? Viruses?</H3
+><P
+> No. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> cannot remove anything. It is not a removal tool. It is a
+ preventative. <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can help prevent contact from sites 
+ that use such tactics, and thus could conceivably prevent contamination from
+ such sites.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="OTHERADS"
+></A
+>1.14. Can I use Privoxy with other ad-blocking software?</H3
+><P
+> <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> should work fine with other proxies and other software in general.</P
+><P
+> But it is probably not necessary to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> in conjunction with other
+ ad-blocking products, and this could conceivably cause undesirable results.
+ It would be better to choose one software or the other and work a little to
+ tweak its configuration to your liking.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="JOINTEAM"
 ></A
->1.10. I would like to help you, what can I do?</H3
+>1.15. I would like to help you, what can I do?</H3
 ><DIV
 CLASS="SECT3"
 ><H4
@@ -687,7 +853,7 @@ CLASS="SECT3"
 ><A
 NAME="JOINTEAM-WORK"
 ></A
->1.10.1. Would you like to participate?</H4
+>1.15.1. Would you like to participate?</H4
 ><P
 >   Well, we <SPAN
 CLASS="emphasis"
@@ -745,7 +911,7 @@ CLASS="SECT3"
 ><A
 NAME="JOINTEAM-MONEY"
 ></A
->1.10.2. Contribute!</H4
+>1.15.2. Contribute!</H4
 ><P
 > We, of course, welcome donations and could use money for domain registering,
  buying software to test <SPAN
@@ -766,7 +932,7 @@ CLASS="SECT3"
 ><A
 NAME="JOINTEAM-SOFTWARE"
 ></A
->1.10.3. Software</H4
+>1.15.3. Software</H4
 ><P
 > If you are a vendor of a web-related software like a browser, web server
  or proxy, and would like us to ensure that <SPAN

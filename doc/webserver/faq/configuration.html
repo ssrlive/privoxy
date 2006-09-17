@@ -85,8 +85,12 @@ NAME="GETUPDATES"
 ></A
 >3.1. Where can I get updated Actions Files?</H3
 ><P
->   Based on your feedback and the continuing development, updated actions files will be
-   made available on the <A
+>   Based on your feedback and the continuing development, updates of 
+   <TT
+CLASS="FILENAME"
+>default.action</TT
+> will be
+   made available from   time to time on the <A
 HREF="http://sourceforge.net/project/showfiles.php?group_id=11118"
 TARGET="_top"
 >files section</A
@@ -156,9 +160,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN332"
+NAME="AEN358"
 ></A
->3.3. What is an <SPAN
+>3.3. What exactly is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
 > file?</H3
@@ -190,9 +194,14 @@ TARGET="_top"
  for single URLs, whole web sites, groups or parts thereof etc. Actions can also be
  grouped together and then applied to requests matching one or more patterns.
  There are many possible actions that might apply to any given site. As an example,
- if you are blocking cookies as one of your default actions, but need to accept
- cookies from a given site, you would need to define an exception for this
- site in one of your actions files, preferably in <TT
+ if you are blocking <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+>
+ as one of your default actions, but need to accept cookies from a given site,
+ you would need to define an exception for this site in one of your actions
+ files, preferably in <TT
 CLASS="FILENAME"
 >user.action</TT
 >.</P
@@ -241,7 +250,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN351"
+NAME="AEN378"
 ></A
 >3.5. How are actions files configured? What is the easiest
 way to do this?</H3
@@ -277,7 +286,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN359"
+NAME="AEN386"
 ></A
 >3.6. There are several different <SPAN
 CLASS="QUOTE"
@@ -322,7 +331,7 @@ TARGET="_top"
  in the <A
 HREF="../user-manual/index.html"
 TARGET="_top"
->user manual</A
+>User Manual</A
 > for a more
  detailed explanation.</P
 ><P
@@ -347,7 +356,12 @@ NAME="YAHOO"
 >3.7. How can I make my Yahoo/Hotmail/Gmail account work?</H3
 ><P
 >  The default configuration shouldn't impact the usability of any of these services.
-  It will, however, make all cookies temporary, so that your browser will forget your
+  It will, however, make all <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+> 
+  temporary, so that your browser will forget your
   login credentials in between browser sessions. If you would like not to have to log
   in manually each time you access those websites, simply turn off all cookie handling
   for them in the <TT
@@ -385,6 +399,67 @@ TARGET="_top"
 ></TR
 ></TABLE
 >
+ </P
+><P
+>  These kinds of sites are often quite complex and heavy with 
+  <A
+HREF="http://en.wikipedia.org/wiki/Javascript"
+TARGET="_top"
+>Javascript</A
+> and 
+  thus <SPAN
+CLASS="QUOTE"
+>"fragile"</SPAN
+>. So if <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>still</I
+></SPAN
+> a problem, 
+  we have an <A
+HREF="../user-manual/actions-file.html#ALIASES"
+TARGET="_top"
+>alias</A
+> just for such
+  sticky situations:
+ </P
+><P
+>  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+># Gmail is a _fragile_ site:
+#
+{ <TT
+CLASS="LITERAL"
+>fragile</TT
+> }
+ mail.google.com</PRE
+></TD
+></TR
+></TABLE
+>
+ </P
+><P
+>  Be sure to flush your browser's caches whenever making these kinds of
+  changes, just to make sure the changes <SPAN
+CLASS="QUOTE"
+>"take"</SPAN
+>.
+ </P
+><P
+>  Make sure the domain, host and path are appropriate as well. Your browser can
+  tell you where you are specifically and you should use that information for 
+  your configuration settings. Note that above it is not referenced as 
+  <TT
+CLASS="LITERAL"
+>gmail.com</TT
+>, which is a valid domain name.
  </P
 ></DIV
 ><DIV
@@ -445,7 +520,7 @@ CLASS="CITETITLE"
 >User Manual</I
 ></A
 >
- for a more deatiled discussion.</P
+ for a more detailed discussion.</P
 ><P
 > It should be noted that the <SPAN
 CLASS="QUOTE"
@@ -547,7 +622,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN424"
+NAME="AEN464"
 ></A
 >3.10. What is the <TT
 CLASS="FILENAME"
@@ -601,13 +676,15 @@ CLASS="FILENAME"
 >default.filter</TT
 > with a text editor and define
  your own filters.  This is potentially a very powerful feature, but
- requires some expertise in both regular expressions and HTML/HTTP. You should 
+ requires some expertise in both regular expressions and HTML/HTTP. 
+  You should 
  place any modifications to the default filters, or any new ones you create 
  in a separate file, such as <TT
 CLASS="FILENAME"
 >user.filter</TT
 >, so they won't 
- be overwritten during upgrades. The ability to define multiple filter files 
+ be overwritten during upgrades. 
+ The ability to define multiple filter files 
  in <TT
 CLASS="FILENAME"
 >config</TT
@@ -629,12 +706,9 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN442"
+NAME="AEN482"
 ></A
->3.11. How can I set up <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to act as a proxy for my 
+>3.11. How can I set up Privoxy to act as a proxy for my 
  LAN?</H3
 ><P
 > By default, <SPAN
@@ -741,7 +815,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN468"
+NAME="AEN507"
 ></A
 >3.12. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</H3
 ><P
@@ -808,7 +882,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN485"
+NAME="AEN524"
 ></A
 >3.13. Why would anybody want to see a checkerboard pattern?</H3
 ><P
@@ -820,7 +894,7 @@ HREF="general.html#WHATSANAD"
  is rather smart, it can and will make errors. The checkerboard image is visually
  decent, but it shows you that and where images were blocked, which can be very
  helpful in case some navigation aid or otherwise innocent image was
- erraneously blocked. Some people might also enjoy seeing how many banners
+ erroneously blocked. Some people might also enjoy seeing how many banners
  they <SPAN
 CLASS="emphasis"
 ><I
@@ -834,7 +908,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN490"
+NAME="AEN529"
 ></A
 >3.14. I see some images being replaced by a text
 instead of the checkerboard image. Why and how do I get rid of this?</H3
@@ -867,10 +941,7 @@ CLASS="SECT2"
 ><A
 NAME="SRVANY"
 ></A
->3.15. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> run as a service 
+>3.15. Can Privoxy run as a service 
 on Win2K/NT/XP?</H3
 ><P
 > Yes. Version 3.0.4 introduces full <SPAN
@@ -887,7 +958,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > as a service.</P
 ><P
-> Earlier versions could run as a system service using <B
+> Earlier 3.x versions could run as a system service using <B
 CLASS="COMMAND"
 >srvany.exe</B
 >.
@@ -905,17 +976,8 @@ CLASS="SECT2"
 ><A
 NAME="OTHERPROXY"
 ></A
->3.16. How can I make <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> work with other 
-proxies like <SPAN
-CLASS="APPLICATION"
->Squid</SPAN
-> or <SPAN
-CLASS="APPLICATION"
->Tor</SPAN
->?</H3
+>3.16. How can I make Privoxy work with other 
+proxies like Squid or Tor?</H3
 ><P
 > This can be done and is often useful to combine the benefits of
  <SPAN
@@ -930,9 +992,13 @@ TARGET="_top"
  in the <A
 HREF="../user-manual/index.html"
 TARGET="_top"
->user manual</A
+>User Manual</A
 > which
- describes how to do this.</P
+ describes how to do this, and the <A
+HREF="misc.html#TOR"
+> How do I use Privoxy together with 
+ Tor</A
+> section below.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -941,10 +1007,7 @@ CLASS="SECT2"
 ><A
 NAME="PORT-80"
 ></A
->3.17. Can I just set <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to use port 80
+>3.17. Can I just set Privoxy to use port 80
 and thus avoid individual browser configuration?</H3
 ><P
 > No, its more complicated than that. This only works with special kinds 
@@ -960,10 +1023,7 @@ CLASS="SECT2"
 ><A
 NAME="TRANSPARENT"
 ></A
->3.18. Can <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> run as a <SPAN
+>3.18. Can Privoxy run as a <SPAN
 CLASS="QUOTE"
 >"transparent"</SPAN
 > proxy?</H3
@@ -992,7 +1052,7 @@ TARGET="_top"
  in the <A
 HREF="../user-manual/index.html"
 TARGET="_top"
->user manual</A
+>User Manual</A
 >. As
  a transparent proxy to be used for chaining we recommend Transproxy
  (<A
@@ -1008,14 +1068,8 @@ CLASS="SECT2"
 ><A
 NAME="OUTLOOK"
 ></A
->3.19. How can I configure <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> for use with <SPAN
-CLASS="APPLICATION"
->Outlook
- Express</SPAN
->?</H3
+>3.19. How can I configure Privoxy for use with Outlook
+ Express?</H3
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -1074,9 +1128,104 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
+NAME="SNEAKY-COOKIES"
+></A
+>3.21. I sometimes notice cookies sneaking through. How?</H3
+><P
+> <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>Cookies</A
+> can be 
+ set in several ways. The classic method is via the 
+ <TT
+CLASS="LITERAL"
+>Set-Cookie</TT
+> HTTP header. This is straightforward, and an
+ easy one to manipulate, such as the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> concept of 
+ <A
+HREF="../user-manual/actions-file.html#SESSION-COOKIES-ONLY"
+TARGET="_top"
+>session-cookies-only</A
+>.
+ There is also the possibility of using 
+  <A
+HREF="http://en.wikipedia.org/wiki/Javascript"
+TARGET="_top"
+>Javascript</A
+> to
+ set cookies (<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> calls these <TT
+CLASS="LITERAL"
+>content-cookies</TT
+>). This
+ is trickier because the syntax can vary widely, and thus requires a certain
+ amount of guesswork. It is not realistic to catch all of these short of
+ disabling Javascript, which would break many sites. And lastly, if the
+ cookies are embedded in a HTTPS/SSL secure session via Javascript, they are beyond
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> reach.</P
+><P
+> All in all, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can help manage cookies in general, can help minimize
+ the loss of privacy posed by cookies, but can't realistically stop all
+ cookies.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="EVIL-COOKIES"
+></A
+>3.22. Are all cookies bad? Why?</H3
+><P
+> No, in fact there are many beneficial uses of 
+ <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+>. Cookies are just a
+ method that browsers can use to store data between pages, or between browser
+ sessions. Sometimes there is a good reason for this, and the user's life is a
+ bit easier as a result. But there is a long history of some websites taking
+ advantage of this layer of trust, and using the data they glean from you  and 
+ your browsing habits for their own purposes, and maybe to your potential
+ detriment. Such sites are using you and storing their data on your system.
+ That is why the security conscious watch from whom those cookies come, and why
+ they really <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>need</I
+></SPAN
+> to be there.</P
+><P
+>  See the 
+   <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>Wikipedia cookie
+  definition</A
+> for more.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
 NAME="ALLOW-COOKIES"
 ></A
->3.21. How can I allow permanent cookies for my trusted sites?</H3
+>3.23. How can I allow permanent cookies for my trusted sites?</H3
 ><P
 >  There are several actions that relate to cookies. The default behavior is to 
   allow only <SPAN
@@ -1129,7 +1278,7 @@ CLASS="SECT2"
 ><A
 NAME="MULTIPLES"
 ></A
->3.22. Can I have separate configurations for different users?</H3
+>3.24. Can I have separate configurations for different users?</H3
 ><P
 > Each instance of <SPAN
 CLASS="APPLICATION"
@@ -1158,10 +1307,7 @@ CLASS="SECT2"
 ><A
 NAME="WHITELISTS"
 ></A
->3.23. Can I set-up <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> as a whitelist of
+>3.25. Can I set-up Privoxy as a whitelist of
 <SPAN
 CLASS="QUOTE"
 >"good"</SPAN
@@ -1180,13 +1326,21 @@ CLASS="SCREEN"
 > ############################################################
  # Blacklist
  ############################################################
- { +block }
+ { <A
+HREF="../user-manual/actions-file.html#BLOCK"
+TARGET="_top"
+>+block</A
+> }
  / # Block *all* URLs
  
  ############################################################
  # Whitelist
  ############################################################
- { -block }
+ { <A
+HREF="../user-manual/actions-file.html#BLOCK"
+TARGET="_top"
+>-block</A
+> }
   kids.example.com
   toys.example.com
   games.example.com</PRE

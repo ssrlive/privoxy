@@ -81,7 +81,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN925"
+NAME="AEN963"
 ></A
 >5.1. I am getting <SPAN
 CLASS="QUOTE"
@@ -132,7 +132,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN938"
+NAME="AEN976"
 ></A
 >5.2. I just added a new rule, but the steenkin ad is 
 still getting through. How?</H3
@@ -162,10 +162,7 @@ CLASS="SECT2"
 ><A
 NAME="BADSITE"
 ></A
->5.3. One of my favorite sites does not work with <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->.
+>5.3. One of my favorite sites does not work with Privoxy.
 What can I do?</H3
 ><P
 > First verify that it is indeed a <SPAN
@@ -226,7 +223,7 @@ CLASS="QUOTE"
 > Troubleshooting actions is discussed in more detail in the <A
 HREF="../user-manual/appendix.html#ACTIONSANAT"
 TARGET="_top"
->user-manual appendix</A
+>User Manual appendix</A
 >.
  There is also an <A
 HREF="../user-manual/actions-file.html#ACT-EXAMPLES"
@@ -241,10 +238,7 @@ CLASS="SECT2"
 ><A
 NAME="DUN"
 ></A
->5.4. After installing <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, I have to log in
+>5.4. After installing Privoxy, I have to log in
 every time I start IE. What gives?</H3
 ><P
 > This is a quirk that effects the installation of
@@ -299,11 +293,8 @@ CLASS="SECT2"
 ><A
 NAME="FTP"
 ></A
->5.5. I cannot connect to any FTP sites. <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
- seems to be blocking me.</H3
+>5.5. I cannot connect to any FTP sites. Privoxy
+ is blocking me.</H3
 ><P
 >  <SPAN
 CLASS="APPLICATION"
@@ -318,7 +309,7 @@ CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >any protocol other than HTTP
-  or HTTPS</I
+  or HTTPS (SSL)</I
 ></SPAN
 >. 
  </P
@@ -353,8 +344,8 @@ CLASS="EMPHASIS"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > will indeed cause problems since
-  it does not know FTP. Newer version will give a sane error message if a FTP 
-  connection is attempted.
+  it does not know FTP. Newer version will give a sane error
+  message if a FTP connection is attempted.
  </P
 ><P
 >  Will <SPAN
@@ -373,10 +364,7 @@ CLASS="SECT2"
 NAME="OSXIE"
 ></A
 >5.6. In Mac OSX, I can't configure Microsoft Internet Explorer to use 
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> as the HTTP proxy.</H3
+ Privoxy as the HTTP proxy.</H3
 ><P
 >  Microsoft Internet Explorer (in versions like 5.1) respects system-wide
   network settings.  In order to change the HTTP proxy, open System
@@ -469,10 +457,7 @@ CLASS="QUOTE"
 CLASS="MARKUP"
 >&#60;html&#62;&#60;body&#62;&#60;/body&#62;&#60;/html&#62;</SPAN
 >. Without
- <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> the page loads fine.</H3
+ Privoxy the page loads fine.</H3
 ><P
 >  Chances are that the site suffers from a bug in
   <A
@@ -583,6 +568,13 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > on
  some platforms due to DNS timeouts.</P
+><P
+> This can be caused by a problem with the local <TT
+CLASS="FILENAME"
+>HOSTS</TT
+>
+ file. If this file has been changed from the original, try reverting it to
+ see if that helps.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -591,10 +583,7 @@ CLASS="SECT2"
 ><A
 NAME="INUSE"
 ></A
->5.12. When I try to launch <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->, I get an 
+>5.12. When I try to launch Privoxy, I get an 
 error message <SPAN
 CLASS="QUOTE"
 >"port 8118 is already in use"</SPAN
@@ -656,10 +645,7 @@ CLASS="SECT2"
 ><A
 NAME="DEMORONIZER2"
 ></A
->5.14. Why are binary files (such as images) corrupted when <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
+>5.14. Why are binary files (such as images) corrupted when Privoxy
  is used?</H3
 ><P
 > This may also be caused by the <SPAN
@@ -741,7 +727,12 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is attempting to disable malicious 
- Javascript in this case, with the <TT
+  <A
+HREF="http://en.wikipedia.org/wiki/Javascript"
+TARGET="_top"
+>Javascript</A
+> 
+  in this case, with the <TT
 CLASS="LITERAL"
 >unsolicited-popups</TT
 >
@@ -774,10 +765,7 @@ NAME="DNSERRORS"
 CLASS="QUOTE"
 >"404 No Such Domain"</SPAN
 >. Why
- can't <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> do this better?</H3
+ can't Privoxy do this better?</H3
 ><P
 > There are potentially several factors here. First of all, the DNS resolution
  is done by the underlying operating system -- not
@@ -791,7 +779,7 @@ CLASS="APPLICATION"
  merely initiates the process and hands it off, and then later reports
  whatever the outcome was. And tries to give a coherent message if there seems
  to be a problem. In some cases, this might otherwise be mitigated by the
- browser itself which might try some work-arounds and alernate approaches (e.g
+ browser itself which might try some work-arounds and alternate approaches (e.g
  adding <SPAN
 CLASS="QUOTE"
 >"www."</SPAN
@@ -828,10 +816,7 @@ CLASS="SECT2"
 ><A
 NAME="ALLCPU"
 ></A
->5.18. At one site <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> just hangs, and starts taking 
+>5.18. At one site Privoxy just hangs, and starts taking 
  all CPU. Why is this?</H3
 ><P
 > This is probably a manifestation of the <SPAN
@@ -855,6 +840,22 @@ CLASS="LITERAL"
 >unsolicited-popups</TT
 >
  filters.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="SLOWCRAWL"
+></A
+>5.19. I just installed Privoxy, and all my
+browsing has slowed to a crawl. What gives?</H3
+><P
+> This should not happen, and for the overwhelming number of users world-wide,
+ it does not happen. I would suspect some inadvertent interaction of software
+ components such as anti-virus software, spyware protectors, personal
+ firewalls or similar components. Try disabling (or uninstalling) these one
+ at a time and see if that helps.</P
 ></DIV
 ></DIV
 ><DIV
