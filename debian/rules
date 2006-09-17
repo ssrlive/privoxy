@@ -71,7 +71,7 @@ clean1:
 install: build-stamp
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_clean -k -Xrc.privoxy.orig
 	dh_installdirs
 
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy

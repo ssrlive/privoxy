@@ -8,16 +8,7 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -959,6 +959,8 @@
- stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
- #MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/
- .imrworldwide.com
-+#MASTER# BLOCK-REFERRER: http://www.google.com/analytics/
-+www.google-analytics.com/urchin.js
- 
- #----------------------------------------------------------------------------
- # Specific counters (see above for generic patterns)
-@@ -1786,3 +1788,8 @@
+@@ -1844,3 +1844,8 @@
  { +filter{js-events} }
  #MASTER# PROBLEM-URL: http://www.pharmcast.com/WarningLetters/Yr2002/December2002/J&J1202.htm
  www.pharmcast.com/

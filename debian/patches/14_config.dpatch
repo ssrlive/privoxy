@@ -12,7 +12,7 @@ diff -urNad privoxy~/config privoxy/config
 -#        Sample Configuration File for Privoxy v3.0.4
 +#        Sample Configuration File for Privoxy
  #
- #  $Id: config,v 1.53 2006/09/07 02:02:56 hal9 Exp $
+ #  $Id: config,v 1.54 2006/09/10 14:57:25 hal9 Exp $
  #
 @@ -123,7 +123,7 @@
  #          If set, this option should be the first option in the config

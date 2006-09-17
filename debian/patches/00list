@@ -1,6 +1,6 @@
 # 01_local_usermanual.dpatch # now upstream
 02_linkcolor.dpatch
-# 03_ipv6.dpatch # incompatible with 18_dns_retry.dpatch
+03_ipv6.dpatch
 # 04_nomultiproxy.dpatch # now upstream
 05_defaut_action.dpatch
 06_8bit_manual.dpatch

@@ -73,7 +73,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  	@# Change the config file default directories according to the configured ones
  	@$(ECHO) Rewriting config for this installation
-@@ -1286,7 +1286,7 @@
+@@ -1290,7 +1290,7 @@
  
  	@# man page and docs
  	@$(ECHO) Removing $(PROGRAM) docs
