@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.11 2006/08/30 00:31:50 hal9 Exp $
+ $Id: p-authors.sgml,v 2.12 2006/09/10 14:53:54 hal9 Exp $
 
- Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
 
  ======================================================================
@@ -24,33 +24,32 @@
 -->
 <![%p-authors-formal;[
 <para>
-Current Development Team:
+Current Privoxy Team:
 </para>
 ]]>
 
 <literallayout>
- Fabian Keil
- David Schmidt
-
+ Fabian Keil, developer
+ David Schmidt, developer
 <![%p-authors-formal;[
-Current Contributors:
 ]]>
-
- Johny Agotnes 
+ 
  Moritz Barsnick
  Hal Burgiss
  Mattes Dolak 
+ Ulrich Drepper
+ Félix Rauch
  Roland Rosenfeld
+ Oliver Yeoh
 <![%p-authors-formal;[
-
 </literallayout>
 
 <para>
- Former Project Developers and Contributors:
+ Former Privoxy Team Members:
 </para>
 
 <literallayout>
- 
+ Johny Agotnes 
  Rodrigo Barbosa
  Brian Dessent
  Jon Foster
@@ -60,6 +59,7 @@ Current Contributors:
  Gábor Lipták
  Adam Lock
  Guy Laroche
+ Mark Martinec 
  Andreas Oesterhelt
  Haroon Rafique
  Georg Sauthoff
@@ -71,22 +71,11 @@ Current Contributors:
  Stefan Waldherr
 ]]>
 </literallayout>
-
 <![%p-authors-formal;[
 <para>
- Based in part on code originally developed by:
+ Thanks to the many people who have tested Privoxy, reported bugs, made
+ suggestions or contributed in some way. These include (in alphabetical order):
 </para>
-
-<literallayout>
- Junkbusters Corp.
- Anonymous Coders
-</literallayout>
-
-<para>
- Thanks to the many people who have tested Privoxy, reported bugs, or made
- suggestions. These include (in alphabetical order):
-</para>
-
 <literallayout>
  Ken Arromdee
  Devin Bayer
@@ -105,7 +94,18 @@ Current Contributors:
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
+ Bobby G. Vinyard
  Darren Wiebe
+ Jörg Weinmann 
  Jamie Zawinski
+</literallayout>
+
+<para>
+ Privoxy is based in part on code originally developed by:
+</para>
+
+<literallayout>
+ Junkbusters Corp.
+ Anonymous Coders
 </literallayout>
 ]]>

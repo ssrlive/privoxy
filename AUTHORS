@@ -1,24 +1,22 @@
               Authors of Privoxy v2.9.x and 3.x
 ===========================================================================
 
-Current Development Team:
+Current Privoxy Team:
 
- David Schmidt
- Fabian Keil
-
-Current Contributors:
-
- Hal Burgiss
- Johny Agotnes 
+ Fabian Keil, developer
+ David Schmidt, developer
+ 
  Moritz Barsnick
+ Hal Burgiss
  Mattes Dolak 
+ Ulrich Drepper
+ Félix Rauch
  Roland Rosenfeld
- 
+ Oliver Yeoh
 
-Former Project Developers and Contributors:
+Former Privoxy Team Members:
 
- 
- Andreas Oesterhelt
+ Johny Agotnes 
  Rodrigo Barbosa
  Brian Dessent
  Jon Foster
@@ -28,6 +26,8 @@ Former Project Developers and Contributors:
  Gábor Lipták
  Adam Lock
  Guy Laroche
+ Mark Martinec 
+ Andreas Oesterhelt
  Haroon Rafique
  Georg Sauthoff
  Thomas Steudten
@@ -37,13 +37,8 @@ Former Project Developers and Contributors:
  Sarantis Paskalis
  Stefan Waldherr
 
-Based in part on code originally developed by:
-
- Junkbusters Corp.
- Anonymous Coders
-
-Thanks to the many people who have tested Privoxy, reported bugs, or made
-suggestions. These include (in alphabetical order):
+Thanks to the many people who have tested Privoxy, reported bugs, made
+suggestions or contributed in some way. These include (in alphabetical order):
 
  Ken Arromdee
  Devin Bayer
@@ -62,8 +57,15 @@ suggestions. These include (in alphabetical order):
  Roberto Ragusa
  Maynard Riley
  Bart Schelstraete
+ Bobby G. Vinyard
  Darren Wiebe
+ Jörg Weinmann 
  Jamie Zawinski
+
+Privoxy is based in part on code originally developed by:
+
+ Junkbusters Corp.
+ Anonymous Coders
 
 If we've missed you off this list, please let us know!
 
