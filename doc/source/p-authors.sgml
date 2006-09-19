@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.12 2006/09/10 14:53:54 hal9 Exp $
+ $Id: p-authors.sgml,v 2.13 2006/09/17 16:27:31 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -34,13 +34,9 @@ Current Privoxy Team:
 <![%p-authors-formal;[
 ]]>
  
- Moritz Barsnick
  Hal Burgiss
- Mattes Dolak 
- Ulrich Drepper
  Félix Rauch
  Roland Rosenfeld
- Oliver Yeoh
 <![%p-authors-formal;[
 </literallayout>
 
@@ -51,6 +47,7 @@ Current Privoxy Team:
 <literallayout>
  Johny Agotnes 
  Rodrigo Barbosa
+ Moritz Barsnick
  Brian Dessent
  Jon Foster
  Karsten Hopp
@@ -83,7 +80,8 @@ Current Privoxy Team:
  Andrew J. Caines
  Clifford Caoile
  Michael T. Davis
- Brian Dessent
+ Mattes Dolak 
+ Ulrich Drepper
  Peter E
  Aaron Hamid
  Magnus Holmgren
@@ -97,6 +95,7 @@ Current Privoxy Team:
  Bobby G. Vinyard
  Darren Wiebe
  Jörg Weinmann 
+ Oliver Yeoh
  Jamie Zawinski
 </literallayout>
 

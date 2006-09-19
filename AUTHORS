@@ -6,18 +6,15 @@ Current Privoxy Team:
  Fabian Keil, developer
  David Schmidt, developer
  
- Moritz Barsnick
  Hal Burgiss
- Mattes Dolak 
- Ulrich Drepper
  Félix Rauch
  Roland Rosenfeld
- Oliver Yeoh
 
 Former Privoxy Team Members:
 
  Johny Agotnes 
  Rodrigo Barbosa
+ Moritz Barsnick
  Brian Dessent
  Jon Foster
  Karsten Hopp
@@ -46,7 +43,8 @@ suggestions or contributed in some way. These include (in alphabetical order):
  Andrew J. Caines
  Clifford Caoile
  Michael T. Davis
- Brian Dessent
+ Mattes Dolak 
+ Ulrich Drepper
  Peter E
  Aaron Hamid
  Magnus Holmgren
@@ -60,6 +58,7 @@ suggestions or contributed in some way. These include (in alphabetical order):
  Bobby G. Vinyard
  Darren Wiebe
  Jörg Weinmann 
+ Oliver Yeoh
  Jamie Zawinski
 
 Privoxy is based in part on code originally developed by:
