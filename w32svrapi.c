@@ -1,7 +1,7 @@
-const char w32_svrapi_rcs[] = "$Id$";
+const char w32_svrapi_rcs[] = "$Id: w32svrapi.c,v 1.1 2006/08/12 03:54:37 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/w32svrapi.c,v $
  *
  * Purpose     :  Win32 Services API for Privoxy.
  *                Provides the implementation of an Win32 service to
@@ -16,7 +16,7 @@ const char w32_svrapi_rcs[] = "$Id$";
  *                a little more complexity to the code, but it is worth
  *                doing to provide that isolation.
  *
- * Copyright   :  Written by and Copyright (C) 2003 members of
+ * Copyright   :  Written by and Copyright (C) 2003, 2006 members of
  *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Written by and Copyright (C) 2003 Ian Cummings
@@ -45,7 +45,10 @@ const char w32_svrapi_rcs[] = "$Id$";
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * Revisions   :
- *    $Log$
+ *    $Log: w32svrapi.c,v $
+ *    Revision 1.1  2006/08/12 03:54:37  david__schmidt
+ *    Windows service integration
+ *
  *
  *
  *********************************************************************/
@@ -488,13 +491,13 @@ SERVICE_STATUS_HANDLE w32_register_service_ctrl_handler(
    HMODULE     hDll = NULL;
    FARPROC     pFunc = NULL;
    DWORD       dwLastErr = 0;
-   BOOL        bRet;
+   SERVICE_STATUS_HANDLE hServStat = (SERVICE_STATUS_HANDLE)0;
 
    /* Load the DLL with the SCM functions or return a failure status */
    hDll = LoadLibrary("Advapi32.dll");
    if (hDll == NULL)
    {
-      return FALSE;
+      return hServStat;
    }
 
    /* Get the address of the RegisterServiceCtrlHandler function, or return a failure status */
@@ -502,11 +505,11 @@ SERVICE_STATUS_HANDLE w32_register_service_ctrl_handler(
    if (pFunc == NULL)
    {
       FreeLibrary(hDll);
-      return FALSE;
+      return hServStat;
    }
 
    /* Close the handle, and save the error code */
-   bRet = (BOOL)(*pFunc)(lpServiceName, lpHandlerProc);
+   hServStat = (SERVICE_STATUS_HANDLE)(*pFunc)(lpServiceName, lpHandlerProc);
    dwLastErr = GetLastError();
 
    /* Release the library and then restore the last error
@@ -515,7 +518,7 @@ SERVICE_STATUS_HANDLE w32_register_service_ctrl_handler(
    FreeLibrary(hDll);
    SetLastError(dwLastErr);
 
-   return bRet;
+   return hServStat;
 
 } /* -END- w32_register_service_ctrl_handler */
 
