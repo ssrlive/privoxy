@@ -44,6 +44,8 @@ ChangeLog for Privoxy
 - Trap unsupported FTP requests.
 - Let text/xml be filtered.
 - Numerous updates to default.action
+- Increase the compiled in limit of trusted referrers from 64 to 512 
+  (for trustfile users).
 
 *** Version 3.0.3 ***
 
