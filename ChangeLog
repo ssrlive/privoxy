@@ -42,6 +42,8 @@ ChangeLog for Privoxy
 - Two new options for config: enable-remote-http-toggle and 
   forwarded-connect-retries.
 - Trap unsupported FTP requests.
+- Let text/xml be filtered.
+- Numerous updates to default.action
 
 *** Version 3.0.3 ***
 
