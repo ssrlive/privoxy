@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.24 2006/09/12 11:15:56 hal9 Exp $
+#  $Id: default.action.master,v 1.25 2006/09/17 14:58:00 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -15,11 +15,11 @@
 #  Copyright   :  Written by and Copyright (C) 2001 - 2006 the
 #                 Privoxy team. http://www.privoxy.org/
 #
-# Note: Updated versions of this file will be made available from time
-#       to time. Check http://sourceforge.net/project/showfiles.php?group_id=11118
-#       for updates and/or subscribe to the announce mailing list
-#       (http://lists.sourceforge.net/lists/listinfo/ijbswa-announce) if you
-#       wish to receive an email notice whenever updates are released.
+#  Note: Updated versions of this file will be made available from time
+#        to time. Check http://sourceforge.net/project/showfiles.php?group_id=11118
+#        for updates and/or subscribe to the announce mailing list
+#        (http://lists.sourceforge.net/lists/listinfo/ijbswa-announce) if you
+#        wish to receive an email notice whenever updates are released.
 #
 # We value your feedback. However, to provide you with the best support,
 # please note:
@@ -517,29 +517,29 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -crunch-outgoing-cookies \
 -crunch-incoming-cookies \
 -crunch-server-header \
-+deanimate-gifs{last} \
+-deanimate-gifs \
 -downgrade-http-version \
 -fast-redirects \
-+filter{js-annoyances} \
+-filter{js-annoyances} \
 -filter{js-events} \
-+filter{html-annoyances} \
+-filter{html-annoyances} \
 -filter{content-cookies} \
-+filter{refresh-tags} \
-+filter{unsolicited-popups} \
+-filter{refresh-tags} \
+-filter{unsolicited-popups} \
 -filter{all-popups} \
-+filter{img-reorder} \
-+filter{banners-by-size} \
+-filter{img-reorder} \
+-filter{banners-by-size} \
 -filter{banners-by-link} \
-+filter{webbugs} \
+-filter{webbugs} \
 -filter{tiny-textforms} \
-+filter{jumping-windows} \
+-filter{jumping-windows} \
 -filter{frameset-borders} \
 -filter{demoronizer} \
 -filter{shockwave-flash} \
 -filter{quicktime-kioskmode} \
 -filter{fun} \
 -filter{crude-parental} \
-+filter{ie-exploits} \
+-filter{ie-exploits} \
 -filter{site-specifics} \
 -filter-client-headers \
 -filter-server-headers \
@@ -551,17 +551,17 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -hide-if-modified-since \
 +hide-forwarded-for-headers \
 +hide-from-header{block} \
-+hide-referrer{forge} \
+-hide-referrer \
 -hide-user-agent \
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
+-prevent-compression \
 -overwrite-last-modified \
 -redirect \
-+prevent-compression \
 -send-vanilla-wafer \
 -send-wafer \
-+session-cookies-only \
+-session-cookies-only \
 +set-image-blocker{pattern} \
 -treat-forbidden-connects-like-blocks \
 }
@@ -578,7 +578,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 # These don't:
 #############################################################################
 {-handle-as-image}
-/.*\.(js|php|css|.?html)
+/.*\.(js|php|css|.?html?)
 
 #############################################################################
 # Generic block patterns by host:
@@ -602,6 +602,7 @@ ad[udmw]*.
 adbl*.
 adam*.
 adob*.
+adrenaline.
 adtp*.
 adv[oia]*.
 .*road*.
@@ -610,14 +611,13 @@ adv[oia]*.
 .*[epu]ad*.
 county*.
 countr*.
-adrenaline.
 
 #############################################################################
 # Generic block patterns by path:
 #############################################################################
 {+block}
 #MASTER# DONT-VERIFY (generic)
-/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame)
+/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame|_?server|script|stream)
 /.*ads/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
@@ -640,8 +640,10 @@ support./(.*/)?track
 .ac.*/
 .uni-*.de
 .tu-*.de
-
 .gov
+#MASTER# REMARKS: 09/18/06 Tracker request
+.hs-*.de 
+.fh-*.de
 
 #############################################################################
 # Site-specific block patterns;
@@ -684,12 +686,6 @@ fosi.ural.net/.*\.jpg
 #MASTER# BLOCK-REFERRER: http://dest.travelocity.com/DestGuides/geo_frontdoor/0,,TRAVELOCITY,00.html?HPTRACK=icon_dest
 dest.travelocity.com/website/destinations/images/partner_frommers.gif
 dest.travelocity.com/website/destinations/images/travelex_logo.gif
-#MASTER# BLOCK-REFERRER: http://cobolreport.com/
-cobolreport.com/images/canam1.gif
-cobolreport.com/images/Acucorp1.gif
-cobolreport.com/images/netcobol.jpg
-cobolreport.com/images/NetCOBOL-banner.gif
-objectz.com/images/Landmark%20120x240.gif
 #MASTER# BLOCK-REFERRER: http://www.dpreview.com/reviews/canons40/
 tribalfusion.speedera.net
 .tribalfusion.com/media/
@@ -976,6 +972,9 @@ matrix.mediavantage.de
 #MASTER# REMARKS: Ad generator 09/12/06 http://dist.belnk.com//4/placement/1738/alt_offer/static.jpg
 #MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/louisianaandmardigra/messages/1?viscount=100
 .belnk.com
+.euros4click./.+
+#MASTER# BLOCK-REFERRER: http://www.planet3dnow.de/cgi-bin/newspub/viewnews.cgi?id=1129904195
+ads-*.quarterserver.de/adserver
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1011,6 +1010,7 @@ stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
 #MASTER# BLOCK-REFERRER: http://www.spanked-slaves.com/movies14/bdsm14c.html
 .x-traceur.com
 #MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
+#MASTER# REMARKS: There is a ssl.google-analytics as well.
 .google-analytics.
 
 
@@ -1496,6 +1496,8 @@ swscan.apple.com
 #MASTER# REMARKS: Popular bug-tracking system - likely to contain code
 bugzilla.
 .tldp.org
+#MASTER# REMARKS: mail should not be filtered 09/18/06
+webmail.
 #MASTER# REMARKS: all the world is wikified 09/02/06. Generic wiki un-filterers.
 .wiki*.
 .*wiki.
@@ -1530,7 +1532,7 @@ javascript.internet.com
 .devguru.com
 javascriptkit.com
 .xulplanet.com
-.perl.com/language/newdocs/pod/
+.perl.com/language/newdocs
 .freebsd.org
 .watson.org
 .netbsd.org
@@ -1539,8 +1541,10 @@ javascriptkit.com
 .freedesktop.org
 #MASTER# REMARKS: Bug trackers like Flyspray and Mailinglist interfaces like Mailman:
 /(.*/)?flyspray/
-/(.*/)?mailman/
-
+/(.*/)?mail(man|archive|inglists?)/
+bugs.
+#MASTER# REMARKS: Actionsfile tracker 1555909 09/17/06, various problems with cpu and logging in.
+quoka.de
 
 #----------------------------------------------------------------------------
 # These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
