@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.46 2006/09/02 22:22:59 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.47 2006/09/09 00:35:10 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -37,7 +37,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 3.0.4
+Version: 3.0.5
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -69,7 +69,7 @@ Privoxy is based on the Internet Junkbuster.
 # We check to see if versions match
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=4
+VERSION_POINT=5
 
 CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
 if [ "%{version}" != "${CONFIG_VERSION}" ]; then
@@ -318,6 +318,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Wed Sep 20 2006 Hal Burgiss <hal@foobox.net>
+- Bump version to 3.0.5
+
 * Fri Sep 08 2006 Hal Burgiss <hal@foobox.net>
 - Bump version to 3.0.4
 
@@ -742,6 +745,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.47  2006/09/09 00:35:10  hal9
+# Bumped versions to 3.0.4. Both files should be checked further.
+#
 # Revision 1.46  2006/09/02 22:22:59  hal9
 # Include user.filter, and do not overwrite trust file on updates.
 #
