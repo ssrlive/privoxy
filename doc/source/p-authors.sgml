@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.14 2006/09/19 22:42:28 hal9 Exp $
+ $Id: p-authors.sgml,v 2.15 2006/09/20 01:41:40 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -88,6 +88,7 @@ Current Privoxy Team:
  Magnus Holmgren
  Don Libes  
  Paul Lieverse
+ Jindrich Makovicka 
  David Mediavilla 
  Oliver Stoeneberg
  Roberto Ragusa
