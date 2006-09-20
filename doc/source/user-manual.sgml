@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.19 2006/09/08 12:19:02 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.20 2006/09/10 14:53:54 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.19 2006/09/08 12:19:02 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.20 2006/09/10 14:53:54 hal9 Exp $</pubdate>
 
 <!--
 
@@ -249,7 +249,7 @@ How to install the binary packages depends on your operating system:
  want <application>Privoxy</application> to run under, and whether or not you
  want it to run whenever the system starts. You can start the
  <application>Windows</application> services console with the following
- command: <command>services.msc</command>  If you do not take the manual step
+ command: <command>services.msc</command>.  If you do not take the manual step
  of modifying <application>Privoxy's</application> service settings, it will
  not start.  Note too that you will need to give Privoxy a user account that
  actually exists, or it will not be permitted to 
@@ -8037,6 +8037,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.20  2006/09/10 14:53:54  hal9
+ Results of spell check. User manual has some updates to standard.actions file
+ info.
+
  Revision 2.19  2006/09/08 12:19:02  fabiankeil
  Adjust hide-if-modified-since example values
  to reflect the recent changes.
