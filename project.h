@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.80 2006/09/06 10:43:32 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.81 2006/09/06 13:03:04 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.81  2006/09/06 13:03:04  fabiankeil
+ *    Respond with 400 and a short text message
+ *    if the client tries to use Privoxy as FTP proxy.
+ *
  *    Revision 1.80  2006/09/06 10:43:32  fabiankeil
  *    Added config option enable-remote-http-toggle
  *    to specify if Privoxy should recognize special
@@ -653,7 +657,12 @@ typedef int jb_err;
  * load balancing. W3C's wwwlib uses 1K, so that should be
  * good enough for us, too.
  */
-#define HOSTENT_BUFFER_SIZE 1024
+/**
+ * XXX: Temporary doubled, for some configurations
+ * 1K is still too small and we didn't get the
+ * real fix ready for inclusion.
+ */
+#define HOSTENT_BUFFER_SIZE 2048
 
 /**
  * Do not use.  Originally this was so that you can
@@ -1300,7 +1309,7 @@ struct block_spec
  * Arbitrary limit for the number of trusted referrers
  * Privoxy can print in its blocking message.
  */
-#define MAX_TRUSTED_REFERRERS 64
+#define MAX_TRUSTED_REFERRERS 512
 
 #endif /* def FEATURE_TRUST */
 
