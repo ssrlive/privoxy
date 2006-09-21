@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.75 2006/09/07 11:56:39 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.76 2006/09/07 14:06:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.75 2006/09/07 11:56:39 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.76  2006/09/07 14:06:38  fabiankeil
+ *    Only predate the Last-Modified header for cgi responses
+ *    that are delivered with status code 404 or 503.
+ *
  *    Revision 1.75  2006/09/07 11:56:39  fabiankeil
  *    Mark cgi_send_user_manual as harmless,
  *    to fix the access denied problem Hal spotted.
@@ -1769,10 +1773,19 @@ struct http_response *finish_http_response(struct http_response *rsp)
       err = enlist(rsp->headers, buf);
    }
 
-   /* 
-    * Fill in the default headers:
+   if (strncmpic(rsp->status, "302", 3))
+   {
+     /*
+      * If it's not a redirect without any content,
+      * set the Content-Type to text/html if it's
+      * not already specified.
+      */
+     if (!err) err = enlist_unique(rsp->headers, "Content-Type: text/html", 13);
+   }
+
+   /*
+    * Fill in the rest of the default headers:
     *
-    * Content-Type: default to text/html if not already specified.
     * Date: set to current date/time.
     * Last-Modified: set to date/time the page was last changed.
     * Expires: set to date/time page next needs reloading.
@@ -1780,8 +1793,6 @@ struct http_response *finish_http_response(struct http_response *rsp)
     * 
     * See http://www.w3.org/Protocols/rfc2068/rfc2068
     */
-   if (!err) err = enlist_unique(rsp->headers, "Content-Type: text/html", 13);
-
    if (rsp->is_static)
    {
       /*
@@ -1803,6 +1814,11 @@ struct http_response *finish_http_response(struct http_response *rsp)
          get_http_time(10 * 60, buf); /* 10 * 60sec = 10 minutes */
          err = enlist_unique_header(rsp->headers, "Expires", buf);
       }
+   }
+   else if (!strncmpic(rsp->status, "302", 3))
+   {
+      get_http_time(0, buf);
+      if (!err) err = enlist_unique_header(rsp->headers, "Date", buf);
    }
    else
    {
@@ -1829,7 +1845,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
 
       get_http_time(0, buf);
       if (!err) err = enlist_unique_header(rsp->headers, "Date", buf);
-      if(!strncmpic(rsp->status, "404", 3) || !strncmpic(rsp->status, "503", 3))
+      if (!strncmpic(rsp->status, "404", 3) || !strncmpic(rsp->status, "503", 3))
       {
          if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", "Wed, 08 Jun 1955 12:00:00 GMT");
       }
@@ -1841,6 +1857,13 @@ struct http_response *finish_http_response(struct http_response *rsp)
       if (!err) err = enlist_unique_header(rsp->headers, "Pragma", "no-cache");
    }
 
+   /*
+    * Quoting RFC 2616:
+    *
+    * HTTP/1.1 applications that do not support persistent connections MUST
+    * include the "close" connection option in every message.
+    */
+   if (!err) err = enlist_unique_header(rsp->headers, "Connection", "close");
 
    /* 
     * Write the head
