@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.101 2006/09/06 09:23:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.102 2006/09/06 13:03:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.101 2006/09/06 09:23:37 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.102  2006/09/06 13:03:04  fabiankeil
+ *    Respond with 400 and a short text message
+ *    if the client tries to use Privoxy as FTP proxy.
+ *
  *    Revision 1.101  2006/09/06 09:23:37  fabiankeil
  *    Make number of retries in case of forwarded-connect problems
  *    a config file option (forwarded-connect-retries) and use 0 as
@@ -1235,8 +1239,7 @@ static void chat(struct client_state *csp)
 
           /* ..or a fast redirect kicked in */
 #ifdef FEATURE_FAST_REDIRECTS
-          || (((csp->action->flags & ACTION_FAST_REDIRECTS) != 0) &&
-                (NULL != (rsp = redirect_url(csp))))
+          || ( NULL != (rsp = redirect_url(csp)))
 #endif /* def FEATURE_FAST_REDIRECTS */
           ))
       )

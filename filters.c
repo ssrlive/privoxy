@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.63 2006/08/31 10:11:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.64 2006/08/31 10:55:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -39,6 +39,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.63 2006/08/31 10:11:28 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.64  2006/08/31 10:55:49  fabiankeil
+ *    Block requests for untrusted URLs with status
+ *    code 403 instead of 200.
+ *
  *    Revision 1.63  2006/08/31 10:11:28  fabiankeil
  *    Don't free p which is still in use and will be later
  *    freed by free_map(). Don't claim the referrer is unknown
@@ -1139,7 +1143,7 @@ struct http_response *redirect_url(struct client_state *csp)
    {
       q = csp->action->string[ACTION_STRING_REDIRECT];
    }
-   else
+   else if ((csp->action->flags & ACTION_FAST_REDIRECTS))
    {
       redirect_mode = csp->action->string[ACTION_STRING_FAST_REDIRECTS];
       if (0 == strcmpic(redirect_mode, "check-decoded-url"))
@@ -1180,6 +1184,11 @@ struct http_response *redirect_url(struct client_state *csp)
       {
          q = p++;
       }
+   }
+   else
+   {
+      /* All redirection actions are disabled */
+      return NULL;
    }
    /*
     * if there was any, generate and return a HTTP redirect
