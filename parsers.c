@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.69 2006/09/06 16:25:51 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.70 2006/09/08 12:06:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.69 2006/09/06 16:25:51 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.70  2006/09/08 12:06:34  fabiankeil
+ *    Have hide-if-modified-since interpret the random
+ *    range value as minutes instead of hours. Allows
+ *    more fine-grained configuration.
+ *
  *    Revision 1.69  2006/09/06 16:25:51  fabiankeil
  *    Always have parse_header_time return a pointer
  *    that actual makes sense, even though we currently
@@ -2312,15 +2317,15 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
          else
          {
             rtime = strtol(newval, &endptr, 0);
-            if(rtime < 0)
-            {
-                rtime *= -1; 
-                negative = 1;
-            }
             if(rtime)
             {
                log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d minut%s)",
                   *header, rtime, (rtime == 1 || rtime == -1) ? "e": "es");
+               if(rtime < 0)
+               {
+                  rtime *= -1; 
+                  negative = 1;
+               }
                rtime *= 60;
                rtime = pick_from_range(rtime);
             }
@@ -2329,7 +2334,7 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
                log_error(LOG_LEVEL_ERROR, "Random range is 0. Assuming time transformation test.",
                   *header);
             }
-            tm += rtime;
+            tm += rtime * (negative ? -1 : 1);
 #ifdef HAVE_GMTIME_R
             timeptr = gmtime_r(&tm, &gmt);
 #elif OSX_DARWIN
