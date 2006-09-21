@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.76 2006/09/07 14:06:38 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.77 2006/09/21 15:17:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.76 2006/09/07 14:06:38 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.77  2006/09/21 15:17:23  fabiankeil
+ *    Adjusted headers for Privoxy's cgi responses:
+ *    Don't set Last-Modified, Expires and Cache-Control
+ *    headers for redirects; always set "Connection: close".
+ *
  *    Revision 1.76  2006/09/07 14:06:38  fabiankeil
  *    Only predate the Last-Modified header for cgi responses
  *    that are delivered with status code 404 or 503.
@@ -908,7 +913,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
           */
          if (d->harmless
              || ((NULL != (referrer = grep_cgi_referrer(csp)))
-                 && (0 == strncmp(referrer, "http://config.privoxy.org/", 26)))
+                 && (0 == strncmp(referrer, CGI_PREFIX, sizeof(CGI_PREFIX)-1)))
              )
          {
             err = (d->handler)(csp, rsp, param_list);
