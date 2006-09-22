@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.7 2006/09/10 14:53:54 hal9 Exp $
+ $Id: contacting.sgml,v 2.8 2006/09/22 01:27:55 hal9 Exp $
 
  Copyright (C) 2001 - 2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -105,13 +105,13 @@
   and observe the additional hints at the top of the <ulink
   url="http://sourceforge.net/tracker/?func=add&amp;group_id=11118&amp;atid=111118">submit
   form</ulink>. If already submitted, please feel free to add any info to the 
-  original report that might help solve the issue.
+  original report that might help to solve the issue.
 </para>
 
 <para> 
   Please try to verify that it is a <application>Privoxy</application> bug,
   and not a browser or site bug first. If unsure,
-  try <ulink url="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&amp;set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());">toggling
+  try <ulink url="http://config.privoxy.org/toggle?set=disable">toggling
   off</ulink> <application>Privoxy</application>, and see if the problem persists.
   If you are using your own custom configuration, please try
   the stock configs to see if the problem is configuration related.
@@ -133,7 +133,8 @@ Please be sure to provide the following information:
   <listitem>
    <para>
     The exact <application>Privoxy</application> version of the proxy software
-(if you got the source from CVS, please also give the date).
+    (if you got the source from CVS, please also provide the source code revisions
+     as shown in <ulink url="http://config.privoxy.org/show-version">http://config.privoxy.org/show-version</ulink>).
    </para>
   </listitem> 
 
@@ -141,7 +142,8 @@ Please be sure to provide the following information:
    <para>
     The operating system and versions you run
     <application>Privoxy</application> on, (e.g. <application>Windows
-    XP</application>).
+    XP SP2</application>), if you are using some kind of Unix flavour,
+    sending the output of <quote>uname -a</quote> should do.
    </para>
   </listitem> 
 
@@ -155,7 +157,7 @@ Please be sure to provide the following information:
   <listitem>
    <para>
     The URL where the problem occurred, or some way for us to duplicate the
-    problem (e.g. <literal>http://somesite.example.com?somethingelse=123</literal>). 
+    problem (e.g. <literal>http://somesite.example.com/?somethingelse=123</literal>). 
    </para>
   </listitem> 
 
@@ -170,7 +172,7 @@ Please be sure to provide the following information:
   <listitem>
    <para>
     Whether you are using <application>Privoxy</application> in tandem with 
-    another proxy such as <application>TOR</application>. If so, please try 
+    another proxy such as <application>Tor</application>. If so, please try 
     disabling the other proxy.
    </para>
   </listitem> 
