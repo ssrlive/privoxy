@@ -240,7 +240,7 @@ TARGET="_top"
 >submit
   form</A
 >. If already submitted, please feel free to add any info to the 
-  original report that might help solve the issue.</P
+  original report that might help to solve the issue.</P
 ><P
 > 
   Please try to verify that it is a <SPAN
@@ -249,7 +249,7 @@ CLASS="APPLICATION"
 > bug,
   and not a browser or site bug first. If unsure,
   try <A
-HREF="javascript:void(window.open('http://config.privoxy.org/toggle?mini=y&set=disabled','ijbstatus','width=250,height=100,resizable=yes,scrollbars=no,toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no').focus());"
+HREF="http://config.privoxy.org/toggle?set=disable"
 TARGET="_top"
 >toggling
   off</A
@@ -281,7 +281,12 @@ TARGET="_top"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > version of the proxy software
-(if you got the source from CVS, please also give the date).
+    (if you got the source from CVS, please also provide the source code revisions
+     as shown in <A
+HREF="http://config.privoxy.org/show-version"
+TARGET="_top"
+>http://config.privoxy.org/show-version</A
+>).
    </P
 ></LI
 ><LI
@@ -293,8 +298,12 @@ CLASS="APPLICATION"
 > on, (e.g. <SPAN
 CLASS="APPLICATION"
 >Windows
-    XP</SPAN
->).
+    XP SP2</SPAN
+>), if you are using some kind of Unix flavour,
+    sending the output of <SPAN
+CLASS="QUOTE"
+>"uname -a"</SPAN
+> should do.
    </P
 ></LI
 ><LI
@@ -314,7 +323,7 @@ CLASS="APPLICATION"
 >    The URL where the problem occurred, or some way for us to duplicate the
     problem (e.g. <TT
 CLASS="LITERAL"
->http://somesite.example.com?somethingelse=123</TT
+>http://somesite.example.com/?somethingelse=123</TT
 >). 
    </P
 ></LI
@@ -339,7 +348,7 @@ CLASS="APPLICATION"
 > in tandem with 
     another proxy such as <SPAN
 CLASS="APPLICATION"
->TOR</SPAN
+>Tor</SPAN
 >. If so, please try 
     disabling the other proxy.
    </P

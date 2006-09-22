@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 Copyright © 2001-2006 by Privoxy Developers
 
-$Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $
+$Id: faq.sgml,v 2.19 2006/09/22 10:54:32 hal9 Exp $
 
 This FAQ gives quick answers to frequently asked questions about Privoxy. It is
 not a substitute for the Privoxy User Manual.
@@ -1881,7 +1881,7 @@ tracker/?group_id=11118&atid=111118.
 Before doing so, please make sure that the bug has not already been submitted
 and observe the additional hints at the top of the submit form. If already
 submitted, please feel free to add any info to the original report that might
-help solve the issue.
+help to solve the issue.
 
 Please try to verify that it is a Privoxy bug, and not a browser or site bug
 first. If unsure, try toggling off Privoxy, and see if the problem persists. If
@@ -1895,20 +1895,23 @@ latest version (or even the latest CVS snapshot) and verify your bug.
 Please be sure to provide the following information:
 
   * The exact Privoxy version of the proxy software (if you got the source from
-    CVS, please also give the date).
+    CVS, please also provide the source code revisions as shown in http://
+    config.privoxy.org/show-version).
    
-  * The operating system and versions you run Privoxy on, (e.g. Windows XP).
+  * The operating system and versions you run Privoxy on, (e.g. Windows XP
+    SP2), if you are using some kind of Unix flavour, sending the output of
+    "uname -a" should do.
    
   * The name, platform, and version of the browser you were using (e.g.
     Internet Explorer v5.5 for Mac).
    
   * The URL where the problem occurred, or some way for us to duplicate the
-    problem (e.g. http://somesite.example.com?somethingelse=123).
+    problem (e.g. http://somesite.example.com/?somethingelse=123).
    
   * Whether your version of Privoxy is one supplied by the developers of
     Privoxy via SourceForge, or somewhere else.
    
-  * Whether you are using Privoxy in tandem with another proxy such as TOR. If
+  * Whether you are using Privoxy in tandem with another proxy such as Tor. If
     so, please try disabling the other proxy.
    
   * Whether you are using a personal firewall product. If so, does Privoxy work

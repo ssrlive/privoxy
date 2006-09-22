@@ -2,7 +2,7 @@ Privoxy 3.0.5 User Manual
 
 Copyright © 2001 - 2006 by Privoxy Developers
 
-$Id: user-manual.sgml,v 2.21 2006/09/20 03:21:36 david__schmidt Exp $
+$Id: user-manual.sgml,v 2.22 2006/09/22 01:27:55 hal9 Exp $
 
 The Privoxy User Manual gives users information on how to install, configure
 and use Privoxy.
@@ -415,10 +415,10 @@ When building from a source tarball, first unpack the source:
  tar xzvf privoxy-3.0.5-beta-src* [.tgz or .tar.gz]                            
  cd privoxy-3.0.5-beta                                                         
 
-For retrieving the current CVS sources, you'll need CVS installed. Note that
-sources from CVS are development quality, and may not be stable, or well
-tested. To download CVS source, check the Sourceforge documentation, which
-might give commands like:
+For retrieving the current CVS sources, you'll need a CVS client installed.
+Note that sources from CVS are typicially development quality, and may not be
+stable, or well tested. To download CVS source, check the Sourceforge
+documentation, which might give commands like:
 
   cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login          
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co current 
@@ -506,14 +506,15 @@ user to determine how and where to start Privoxy. The init script should be
 checked for correct paths and values, if anything other than a default install
 is done.
 
-If install finds previous versions of any configuration files, these will not
-be overwritten, and the new ones will be installed with a "new" extension. You
-will then need to manually update the installed configuration files as needed.
-All template files will be overwritten. If you have customized, local
+If install finds previous versions of any local configuration files, these will
+not be overwritten, and the new ones will be installed with a "new" extension.
+default.action, default.filter, and standard.action will be overwritten. You
+will then need to manually update the other installed configuration files as
+needed. All template files will be overwritten. If you have customized, local
 templates, you should save these first. If a previous version of Privoxy is
 already running, you will have to restart it manually.
 
-For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
+For more detailed instructions on how to build Redhat RPMs, Windows
 self-extracting installers, building on platforms with special requirements
 etc, please consult the developer manual.
 
@@ -5406,7 +5407,7 @@ tracker/?group_id=11118&atid=111118.
 Before doing so, please make sure that the bug has not already been submitted
 and observe the additional hints at the top of the submit form. If already
 submitted, please feel free to add any info to the original report that might
-help solve the issue.
+help to solve the issue.
 
 Please try to verify that it is a Privoxy bug, and not a browser or site bug
 first. If unsure, try toggling off Privoxy, and see if the problem persists. If
@@ -5420,20 +5421,23 @@ latest version (or even the latest CVS snapshot) and verify your bug.
 Please be sure to provide the following information:
 
   * The exact Privoxy version of the proxy software (if you got the source from
-    CVS, please also give the date).
+    CVS, please also provide the source code revisions as shown in http://
+    config.privoxy.org/show-version).
    
-  * The operating system and versions you run Privoxy on, (e.g. Windows XP).
+  * The operating system and versions you run Privoxy on, (e.g. Windows XP
+    SP2), if you are using some kind of Unix flavour, sending the output of
+    "uname -a" should do.
    
   * The name, platform, and version of the browser you were using (e.g.
     Internet Explorer v5.5 for Mac).
    
   * The URL where the problem occurred, or some way for us to duplicate the
-    problem (e.g. http://somesite.example.com?somethingelse=123).
+    problem (e.g. http://somesite.example.com/?somethingelse=123).
    
   * Whether your version of Privoxy is one supplied by the developers of
     Privoxy via SourceForge, or somewhere else.
    
-  * Whether you are using Privoxy in tandem with another proxy such as TOR. If
+  * Whether you are using Privoxy in tandem with another proxy such as Tor. If
     so, please try disabling the other proxy.
    
   * Whether you are using a personal firewall product. If so, does Privoxy work
