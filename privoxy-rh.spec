@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.47 2006/09/09 00:35:10 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.48 2006/09/20 23:51:26 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -71,6 +71,9 @@ VERSION_MAJOR=3
 VERSION_MINOR=0
 VERSION_POINT=5
 
+# find CVS files and remove it.
+find -name CVS | xargs rm -rf
+
 CONFIG_VERSION=`cat configure.in | sed -n -e 's/^VERSION_MAJOR=\([0-9]*\)/\1./p' -e 's/^VERSION_MINOR=\([0-9]*\)/\1./p' -e 's/^VERSION_POINT=\([0-9]*\)/\1/p' | awk '{printf $1}'`
 if [ "%{version}" != "${CONFIG_VERSION}" ]; then
 	echo "The version declared on the specfile does not match the version"
@@ -116,6 +119,7 @@ do
        cat $i | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/$i
 done
 cat default.filter | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/default.filter
+cat user.filter | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/user.filter
 cat trust | sed -e 's/[[:cntrl:]]*$//' > %{buildroot}%{privoxyconf}/trust
 (
 cd templates
@@ -318,6 +322,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Thu Sep 21 2006 Hal Burgiss <hal@foobox.net>
+- Fix user.filter install section and clean up CVS cruft in tarball.
+
 * Wed Sep 20 2006 Hal Burgiss <hal@foobox.net>
 - Bump version to 3.0.5
 
@@ -745,6 +752,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.48  2006/09/20 23:51:26  hal9
+# Bump versions to 3.0.5
+#
 # Revision 1.47  2006/09/09 00:35:10  hal9
 # Bumped versions to 3.0.4. Both files should be checked further.
 #
